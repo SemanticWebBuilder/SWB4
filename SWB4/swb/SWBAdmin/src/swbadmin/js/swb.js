@@ -1508,6 +1508,8 @@ function replaceChars4Id(value, lowercase)
 
     RETURNS: true si es vacía, de lo contrario false.
     *************************************************/
+        if(!strValue)
+            return true;
         var strTemp = new String(strValue);
         strTemp = strTemp.trim();
         if(strTemp.length > 0){
