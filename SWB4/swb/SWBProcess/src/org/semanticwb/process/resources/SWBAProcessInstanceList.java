@@ -241,13 +241,25 @@ public class SWBAProcessInstanceList extends GenericResource {
                 out.println("Detalle de Proceso");
                 out.println("</legend>");
 
-                out.println("<ul>");
+                out.println("<table>");
+
+                out.println("<tr>");
+                out.print("<th>Activity</th>");
+                out.print("<th>Creator</th>");
+                out.print("<th>Created</th>");
+                out.print("<th>Ended by</th>");
+                out.print("<th>Ended</th>");
+                out.print("<th>Action</th>");
+                out.print("<th>Status</th>");
+                out.print("<th>&nbsp;</th>");
+                out.println("</tr>");
+
                 Iterator<FlowNodeInstance> actit = SWBComparator.sortByCreated(pi.listFlowNodeInstances());
                 while (actit.hasNext()) {
                     FlowNodeInstance obj = actit.next();
-                    printActivityInstance(obj, out, paramRequest);
+                    printActivityInstance(obj, out, paramRequest,0);
                 }
-                out.println("</ul>");
+                out.println("</table>");
                 out.println("</fieldset>");
                 out.println("<fieldset>");
                 SWBResourceURL urlbck = paramRequest.getRenderUrl();
@@ -258,57 +270,6 @@ public class SWBAProcessInstanceList extends GenericResource {
                 out.println("</div>");
             }
 
-
-//                out.println("<h3>Tareas del usuario (" + user.getFullName() + ")</h3>");
-//                out.println("<ul>");
-//                Iterator<FlowNodeInstance> utkit = SWBProcessMgr.getUserTaskInstances(pi, user).iterator();
-//                while (utkit.hasNext()) {
-//                    FlowNodeInstance tkinst = utkit.next();
-//                    out.println("<li>User Task: " + tkinst.getFlowNodeType().getTitle() + " " + tkinst.getId() + " Status: " + tkinst.getStatus() + " <a href=\"?id=" + tkinst.getId() + "&act=accept&user=" + user.getLogin() + "\">accept</a> <a href=\"?id=" + tkinst.getId() + "&act=reject&user=" + user.getLogin() + "\">reject</a></li>");
-//                }
-//                out.println("</ul>");
-
-
-//            out.println("<h3>Process Observer</h3>");
-//            out.println("<h4>SignalObserverInstances</h4>");
-//
-//            out.println("<ul>");
-//            Iterator<FlowNodeInstance> actit = site.getProcessObserver().listSignalObserverInstances();
-//            while (actit.hasNext()) {
-//                FlowNodeInstance obj = actit.next();
-//                printActivityInstance(obj, out);
-//            }
-//            out.println("</ul>");
-//
-//            out.println("<h4>SignalObserverNodes</h4>");
-//
-//            out.println("<ul>");
-//            Iterator<StartEvent> sigit = site.getProcessObserver().listSignalObserverNodes();
-//            while (sigit.hasNext()) {
-//                StartEvent obj = sigit.next();
-//                out.println("StartEvent:" + obj + "<BR>");
-//            }
-//            out.println("</ul>");
-//
-//            out.println("<h4>TimeObserverInstances</h4>");
-//
-//            out.println("<ul>");
-//            Iterator<FlowNodeInstance> timit = site.getProcessObserver().listTimeObserverInstances();
-//            while (timit.hasNext()) {
-//                FlowNodeInstance obj = timit.next();
-//                printActivityInstance(obj, out);
-//            }
-//            out.println("</ul>");
-//
-//            out.println("<h4>TimeObserverNodes</h4>");
-//
-//            out.println("<ul>");
-//            Iterator<StartEvent> timnit = site.getProcessObserver().listTimeObserverNodes();
-//            while (timnit.hasNext()) {
-//                StartEvent obj = timnit.next();
-//                out.println("StartEvent:" + obj + "<BR>");
-//            }
-//            out.println("</ul>");
 
 
         }
@@ -347,23 +308,48 @@ public class SWBAProcessInstanceList extends GenericResource {
     }
 
 
-    public void printActivityInstance(FlowNodeInstance ai, PrintWriter out, SWBParamRequest paramRequest) throws IOException {
-        out.println("<li>");
-        out.print("Activity: <b>" + ai.getFlowNodeType().getTitle() + "</b> " + ai.getId());
+    public void printActivityInstance(FlowNodeInstance ai, PrintWriter out, SWBParamRequest paramRequest,int espacios) throws IOException {
+        out.println("<tr>");
+
+        String space = "=";
+        for(int i=0;i<=espacios;i++)
+        {
+            space += "=";
+        }
+        space += ">";
+
+        out.print("<td>"+space+"<b>" + ai.getFlowNodeType().getTitle() + "</b> " + ai.getId()+"</td>");
+        out.print("<td>");
         if(ai.getCreator()!=null)
         {
-            out.print(", Creator: " + ai.getCreator().getLogin());
+            out.print(ai.getCreator().getLogin());
         }
+        out.print("</td>");
+        out.print("<td>");
+        if(ai.getCreated()!=null)
+        {
+            out.print(ai.getCreated());
+        }
+        out.print("</td>");
+        out.print("<td>");
         if(ai.getEndedby()!=null)
         {
-            out.print(", Ended by: " + ai.getEndedby().getLogin());
+            out.print(ai.getEndedby().getLogin());
         }
+        out.print("</td>");
+        out.print("<td>");
+        if(ai.getEnded()!=null)
+        {
+            out.print(ai.getEnded());
+        }
+        out.print("</td>");
+        out.print("<td>");
         if(ai.getAction()!=null)
         {
-            out.print(", Action: " + ai.getAction());
+            out.print(ai.getAction());
         }
-
-        out.print(", Status: <b>");
+        out.print("</td>");
+        out.print("<td><b>");
         switch(ai.getStatus())
         {
             case FlowNodeInstance.STATUS_ABORTED:
@@ -385,10 +371,9 @@ public class SWBAProcessInstanceList extends GenericResource {
                 out.print("Stoped");
                 break;
         }
-        out.println("</b>");
+        out.println("</b></td>");
 
-        //out.println("<a href=\"#\"  onclick=\"addNewTab('" + ai.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(ai.getSemanticObject().getDisplayName()),25) + "');return false;\">" + ai.getSemanticObject().getDisplayName() + "</a>");
-
+        out.println("<td>");
         if(ai.getFlowNodeType() instanceof Task && (ai.getStatus()==FlowNodeInstance.STATUS_PROCESSING || ai.getStatus()==FlowNodeInstance.STATUS_OPEN))
         {
             // Validación por status de FlowNodeInstance en relacion a las acciones posibles a realizar
@@ -410,17 +395,19 @@ public class SWBAProcessInstanceList extends GenericResource {
             
             out.println(" <a href=\"#\" onclick=\"submitUrl('" + urlaccept + "',this); return false;\">accept</a> <a href=\"#\" onclick=\"submitUrl('"+ urlreject + "',this); return false;\">reject</a></li>");
         }
-        out.println("</li>");
+        out.println("</td>");
+        out.println("</tr>");
         if (ai instanceof SubProcessInstance) {
+            espacios++;
             SubProcessInstance pi = (SubProcessInstance) ai;
             Iterator<FlowNodeInstance> acit = SWBComparator.sortByCreated(pi.listFlowNodeInstances());
             if (acit.hasNext()) {
-                out.println("<ul>");
+                //out.println("<table>");
                 while (acit.hasNext()) {
                     FlowNodeInstance actinst = acit.next();
-                    printActivityInstance(actinst, out, paramRequest);
+                    printActivityInstance(actinst, out, paramRequest,espacios);
                 }
-                out.println("</ul>");
+                //out.println("</table>");
             }
         }
     }
