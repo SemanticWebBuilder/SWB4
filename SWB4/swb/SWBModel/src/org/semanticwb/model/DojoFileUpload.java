@@ -118,7 +118,7 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
         filts.append("']]");
 
         if (prop.getCardinality() != 1) {
-            buffer.append("        <button onclick=\"fileUpload_addNewUpload('" + pname + "','" + filts.toString() + "','" + url + "')\">" + agregar + "</button>\n");
+            buffer.append("        <button onclick=\"fileUpload_addNewUpload('" + pname + "','" + filts.toString() + "','" + url + "');return false;\">" + agregar + "</button>\n");
             buffer.append("	<br><br>\n");
             buffer.append("	<div id=\"" + pname + "_dynamic\"></div>\n");
         } else {
