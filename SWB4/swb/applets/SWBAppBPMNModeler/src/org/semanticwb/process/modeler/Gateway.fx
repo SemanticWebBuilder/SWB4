@@ -39,6 +39,7 @@ public class Gateway extends FlowNode
             points: [w/2,0,w,h/2,w/2,h,0,h/2]
             styleClass: "gateway"
             onKeyPressed: onKeyPressed
+            onKeyReleased: onKeyReleased
         };
 
         return Group

@@ -115,10 +115,16 @@ public class SubMenu extends CustomNode
                 if(modeler.tempNode==null)modeler.disablePannable=false;
                 ModelerUtils.clickedNode=null;
             }
-            onKeyTyped: function( e: KeyEvent ):Void
+            onKeyPressed: function( e: KeyEvent ):Void
             {
-                 action();
+                 if(e.code==e.code.VK_SPACE)action();
+                 modeler.keyPressed(e);
             }
+            onKeyReleased: function( e: KeyEvent ):Void
+            {
+                 modeler.keyReleased(e);
+            }
+
         }
 
          subBar=Group

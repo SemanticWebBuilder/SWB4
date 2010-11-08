@@ -50,6 +50,8 @@ public class GroupArtifact extends Artifact
             translateY:bind y-h/2
             strokeDashArray: [20,5,3,5]
             onKeyPressed: onKeyPressed
+            onKeyReleased: onKeyReleased
+
         };
 
         return Group

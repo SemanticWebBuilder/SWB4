@@ -84,6 +84,7 @@ public class Event extends FlowNode
             radius: bind w/2
             strokeDashArray: bind if (isInterrupting and cancelActivity) [2, 5] else null
             onKeyPressed: onKeyPressed
+            onKeyReleased: onKeyReleased
         }
 
         setType(type);

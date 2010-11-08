@@ -355,6 +355,7 @@ public class GraphicalElement extends CustomNode
     override var onKeyPressed = function( e: KeyEvent )
     {
         keyPressed(e);
+        modeler.keyPressed(e);
     }
 
     public function keyPressed( e: KeyEvent )
@@ -364,6 +365,17 @@ public class GraphicalElement extends CustomNode
             remove(true);
         }
     }
+
+    override var onKeyReleased = function( e: KeyEvent )
+    {
+        keyReleased(e);
+        modeler.keyReleased(e);
+    }
+
+    public function keyReleased( e: KeyEvent )
+    {
+    }
+
 
     public function remove(validate:Boolean) : Void
     {

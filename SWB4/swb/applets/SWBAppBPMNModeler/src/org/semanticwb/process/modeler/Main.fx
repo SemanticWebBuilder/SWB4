@@ -11,6 +11,9 @@ import javafx.scene.Scene;
 import javafx.scene.Cursor;
 import org.semanticwb.process.modeler.ModelerUtils;
 import javafx.util.StringLocalizer;
+import java.util.Locale;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
 
 /**
@@ -19,8 +22,13 @@ import javafx.scene.paint.Color;
 
 var maxx : Number = bind scene.width; //on replace{ modeler.organizeMap();};
 var maxy : Number = bind scene.height; //on replace{ modeler.organizeMap();};
-var localizer: StringLocalizer = StringLocalizer {}
 
+var lang : String = FX.getArgument("lang") as String;
+//var lang : String = "es";
+println("Lang:{lang} {Locale.getDefault()}");
+if(lang!=null)Locale.setDefault(new Locale(lang));
+println("Locale:{Locale.getDefault()}");
+var localizer: StringLocalizer = StringLocalizer{}
 //public-read var inBrowser = "true".equals(FX.getArgument("isApplet") as String);
 
 ModelerUtils.setLocalizer(localizer);
@@ -111,7 +119,6 @@ var scene : Scene = Scene {
 //                //cursor:Cursor.DEFAULT
 //            }
         ModelerUtils.splash
-
     ]
     width: 600
     height: 300

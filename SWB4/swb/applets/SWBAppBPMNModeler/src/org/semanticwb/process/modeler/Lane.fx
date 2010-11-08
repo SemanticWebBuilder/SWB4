@@ -51,6 +51,7 @@ public class Lane extends GraphicalElement
             height: bind h-1
             styleClass: "pool"
             onKeyPressed: onKeyPressed
+            onKeyReleased: onKeyReleased
         };
 
         return Group

@@ -84,6 +84,7 @@ public class ConnectionObject  extends CustomNode
                 styleClass: "connObject"
                 strokeDashArray: strokeDash
                 onKeyPressed: onKeyPressed
+                onKeyReleased: onKeyReleased
             };
         }else
         {
@@ -97,6 +98,7 @@ public class ConnectionObject  extends CustomNode
                 styleClass: "connObject"
                 strokeDashArray: strokeDash
                 onKeyPressed: onKeyPressed
+                onKeyReleased: onKeyReleased
             };
         }
 
@@ -220,6 +222,7 @@ public class ConnectionObject  extends CustomNode
     override var onKeyPressed = function( e: KeyEvent )
     {
         keyPressed(e);
+        modeler.keyPressed(e);
     }
 
     public function keyPressed( e: KeyEvent )
@@ -229,6 +232,17 @@ public class ConnectionObject  extends CustomNode
             remove();
         }
     }
+
+    override var onKeyReleased = function( e: KeyEvent )
+    {
+        keyReleased(e);
+        modeler.keyReleased(e);
+    }
+
+    public function keyReleased( e: KeyEvent )
+    {
+    }
+
 
     protected bound function getConnectionX(ini: GraphicalElement, end: GraphicalElement): Number
     {

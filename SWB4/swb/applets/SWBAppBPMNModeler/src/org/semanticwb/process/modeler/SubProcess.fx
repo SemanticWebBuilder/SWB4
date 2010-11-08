@@ -109,6 +109,7 @@ public class SubProcess extends Activity
             strokeDashArray: bind strokeDash
             styleClass: "task"
             onKeyPressed: onKeyPressed
+            onKeyReleased: onKeyReleased
         };
 
         setType(type);
