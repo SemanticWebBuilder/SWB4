@@ -5,8 +5,8 @@
     <admdbconnmgr defconn="true"/>
     <fieldset legend="Configuración de contenido">
         <input type="radio" id="local0" name="local" label="Publicar un video local" value="0" checked="true" moreattr="onclick='if(this.checked){dojo.byId(&#34;code&#34;).disabled=true;dojo.byId(&#34;preview&#34;).disabled=true;dojo.byId(&#34;video&#34;).disabled=false; }'" />
-
         <input type="file" id="video" name="video" label="Video (flv, swf, avi, wmv, mov, rm, mp1, mp2, mp4):" showfile="true" filetype="flv|swf|avi|wmv|mov|rm|mp1|mp2|mp4" isshowfiletype="true" isremovefile="true" removemsg="Quitar video" size="40" />
+        <input type="file" id="preview" name="preview" label="Imagen de previsualización:" showfile="true" filetype="gif|jpg|bmp|png" isshowfiletype="true" isremovefile="true" removemsg="Quitar Imagen" size="40" />
         <statictext name="auto">Iniciar automáticamente:</statictext>
         <input type="radio" id="automatic0" name="automatic" label="Si" value="true" checked="true" />
         <input type="radio" id="automatic1" name="automatic" label="No" value="false" />
@@ -32,7 +32,6 @@
     <fieldset legend="You Tube">
         <input type="radio" id="local1" name="local" label="Publicar un video de YouTube" value="1" moreattr="onclick='if(this.checked){dojo.byId(&#34;code&#34;).disabled=false;dojo.byId(&#34;preview&#34;).disabled=false;dojo.byId(&#34;video&#34;).disabled=true; }'" />
         <textarea id="code" name="code" label="Código youTube:" rows="5" cols="50" promptMessage="Código youTube" />
-        <input type="text" id="preview"  name="preview" label="Url del previo del video:" maxlength="9" promptMessage="Url que provee YouTube del previo del video" />
     </fieldset>
 
     <fieldset>
