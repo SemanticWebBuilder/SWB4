@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -1819,6 +1820,25 @@ public class TemplateImp extends Template
      */
     public void setContentType(String contentType) {
         this.contentType = contentType;
+    }
+
+    public String getDate(HashMap map)
+    {
+        String ret=null;
+        try
+        {
+            String lang=(String)map.get("language");
+            String format=(String)map.get("format");
+            if(format==null)
+            {
+                ret=SWBUtils.TEXT.getStrDate(new Date(), lang);
+            }else
+            {
+                ret=SWBUtils.TEXT.getStrDate(new Date(), lang, format);
+            }
+            return ret;
+        }catch(Exception e){log.error(e);}
+        return "";
     }
     
 }
