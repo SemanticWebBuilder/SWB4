@@ -85,7 +85,7 @@ public class SemanticModel
     private String m_nameSpace;
     
     /** The m_model object. */
-    private SemanticObject m_modelObject;
+    private String m_modelObject;
     
     /** The m_trace. */
     private boolean m_trace=true;
@@ -475,9 +475,9 @@ public SemanticObject getSemanticObject(String uri)
     {
         if(m_modelObject==null)
         {
-            m_modelObject=getSemanticObject(getObjectUri(getName(), null));
+            m_modelObject=getObjectUri(getName(), null);
         }
-        return m_modelObject;
+        return getSemanticObject(m_modelObject);
     }
 
     /**
