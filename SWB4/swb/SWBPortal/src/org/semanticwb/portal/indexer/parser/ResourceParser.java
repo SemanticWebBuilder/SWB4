@@ -246,9 +246,10 @@ public class ResourceParser extends GenericParser {
         WebPage page = getWebPage((Resource) gen);
         if (page != null) {
             ret = super.getUrl(page);
-        } else if (((Resource)gen).getResourceType().getResourceCollection() != null ) {
-            ret = ((Resource)gen).getResourceType().getResourceCollection().getDisplayWebPage() +
-                    "?uri=" + ((Resource)gen).getEncodedURI();
+        } else if (((Resource)gen).getResourceType().getResourceCollection() != null ) 
+        {
+            WebPage wp=((Resource)gen).getResourceType().getResourceCollection().getDisplayWebPage();
+            if(wp!=null)ret =  wp.getUrl()+"?id=" + ((Resource)gen).getId();
         }
         return ret;
     }

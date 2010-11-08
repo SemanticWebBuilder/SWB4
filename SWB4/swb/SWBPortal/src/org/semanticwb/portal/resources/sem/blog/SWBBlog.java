@@ -2038,11 +2038,11 @@ public class SWBBlog extends GenericResource
                         Comment ocomment = ocomments.next();
                         Element comment = new Element("comment");
                         comment.setAttribute("date", new SimpleDateFormat(this.getResourceBase().getAttribute("format_comments", defaultFormat)).format(ocomment.getFec_altaComment()));
-                        String userid = ocomment.getUserComment().getId();
+                        User recuser = ocomment.getUserComment();
 
-                        String uid = userid.substring(0, userid.indexOf("_"));
-                        String repid = userid.substring(userid.indexOf("_") + 1);
-                        User recuser = UserRepository.ClassMgr.getUserRepository(repid).getUser(uid);
+//                        String uid = userid.substring(0, userid.indexOf("_"));
+//                        String repid = userid.substring(userid.indexOf("_") + 1);
+//                        User recuser = UserRepository.ClassMgr.getUserRepository(repid).getUser(uid);
 
                         //System.out.println("getComments: recuser: "+recuser);
 
