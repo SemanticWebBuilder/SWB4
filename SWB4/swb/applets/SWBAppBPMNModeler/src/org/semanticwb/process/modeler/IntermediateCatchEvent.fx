@@ -45,6 +45,7 @@ public class IntermediateCatchEvent extends CatchEvent
             styleClass: "interEvent"
             strokeDashArray: bind if (isInterrupting and cancelActivity) [2, 5] else null
             onKeyPressed: onKeyPressed
+            onKeyReleased: onKeyReleased
         };
 
         setType(type);

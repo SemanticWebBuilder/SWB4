@@ -116,11 +116,13 @@ public function renderToImage(node:Node, minx:Integer, miny:Integer, width:Integ
     var sgNode = (getFXNode.invoke(context.mirrorOf(node)) as FXLocal.ObjectValue).asObject();
     var g2dClass = (context.findClass("java.awt.Graphics2D") as FXLocal.ClassType).getJavaImplementationClass();
     var boundsClass=(context.findClass("com.sun.javafx.geom.Bounds2D") as FXLocal.ClassType).getJavaImplementationClass();
-    var affineClass=(context.findClass("com.sun.javafx.geom.transform.Affine2D") as FXLocal.ClassType).getJavaImplementationClass();
+    //var affineClass=(context.findClass("com.sun.javafx.geom.transform.Affine2D") as FXLocal.ClassType).getJavaImplementationClass();
+    var affineClass=(context.findClass("com.sun.javafx.geom.transform.BaseTransform") as FXLocal.ClassType).getJavaImplementationClass();
 
     // getContentBounds() method have different signature in JavaFX 1.2
     var getBounds = sgNode.getClass().getMethod("getContentBounds",boundsClass,affineClass);
     var bounds = getBounds.invoke(sgNode, new com.sun.javafx.geom.Bounds2D(), new com.sun.javafx.geom.transform.Affine2D()) as com.sun.javafx.geom.Bounds2D;
+    //var bounds=node.impl_getPGNode().getContentBounds(new com.sun.javafx.geom.Bounds2D(), new com.sun.javafx.geom.transform.Affine2D());
 
     // Same with render() method
     var paintMethod = sgNode.getClass().getMethod("render", g2dClass, boundsClass, affineClass);

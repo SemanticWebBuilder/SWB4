@@ -28,6 +28,7 @@ public class ExclusiveStartEventGateway extends EventBasedGateway
             points: [w/2,0,w,h/2,w/2,h,0,h/2]
             styleClass: "gateway"
             onKeyPressed: onKeyPressed
+            onKeyReleased: onKeyReleased
         };
 
         var colorAdjust=ColorAdjust

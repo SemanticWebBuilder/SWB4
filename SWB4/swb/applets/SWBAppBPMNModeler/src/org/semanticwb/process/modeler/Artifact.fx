@@ -61,6 +61,7 @@ public class Artifact extends GraphicalElement
             translateY:bind y-h/2
             styleClass: "dataObject"
             onKeyPressed: onKeyPressed
+            onKeyReleased: onKeyReleased
         };
 
         return Group

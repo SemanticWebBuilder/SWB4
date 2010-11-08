@@ -36,6 +36,8 @@ import java.io.BufferedOutputStream;
 import org.semanticwb.process.modeler.GraphicalElement;
 import org.semanticwb.process.modeler.ModelerUtils;
 import java.lang.Class;
+import java.lang.UnsupportedOperationException;
+import java.lang.String;
 
 public var counter: Integer;
 public var conn:WBConnection = new WBConnection(FX.getArgument(WBConnection.PRM_JSESS).toString(),FX.getArgument(WBConnection.PRM_CGIPATH).toString(),FX.getProperty("javafx.application.codebase"));
@@ -70,6 +72,13 @@ public class ToolBar extends CustomNode
     }
     def imgBottomBar: Image = Image {
         url: "{__DIR__}images/barra_bottom.png"
+    }
+
+    def undoMgr: UndoMgr = UndoMgr
+    {
+       override public function getState () : String {
+           return getProcess();
+       }
     }
 
     public function openProcess(): Void
@@ -169,6 +178,7 @@ public class ToolBar extends CustomNode
             var json=conn.getData(comando);
             //println("json:{json}");
             delete modeler.contents;
+            modeler.containerElement=null;
             createProcess(json);
         }catch(e:Exception){println(e);}
 
@@ -1804,6 +1814,29 @@ public class ToolBar extends CustomNode
 
         return ret;
     }
+
+    public function undo() : Void
+    {
+        var aux=undoMgr.undo();
+        if(aux!=null)
+        {
+            delete modeler.contents;
+            //modeler.containerElement=null;
+            createProcess(aux);
+        }
+    }
+
+    public function redo() : Void
+    {
+        var aux=undoMgr.redo();
+        if(aux!=null)
+        {
+            delete modeler.contents;
+            //modeler.containerElement=null;
+            createProcess(aux);
+        }
+    }
+
 }
 
 class FileFilter extends javax.swing.filechooser.FileFilter {

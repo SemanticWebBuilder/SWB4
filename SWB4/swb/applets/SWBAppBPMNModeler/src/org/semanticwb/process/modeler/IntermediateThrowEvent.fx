@@ -46,6 +46,7 @@ public class IntermediateThrowEvent extends ThrowEvent
             radius: bind w/2
             styleClass: "interEvent"
             onKeyPressed: onKeyPressed
+            onKeyReleased: onKeyReleased
         };
 
         setType(type);

@@ -55,6 +55,7 @@ public class Pool extends GraphicalElement
             height: bind h
             styleClass: "pool"
             onKeyPressed: onKeyPressed
+            onKeyReleased: onKeyReleased
         };
 
         return Group

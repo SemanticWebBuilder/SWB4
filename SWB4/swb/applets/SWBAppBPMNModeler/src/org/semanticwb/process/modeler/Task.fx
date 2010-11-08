@@ -100,6 +100,7 @@ public class Task extends Activity
             height: bind h
             styleClass: "task"
             onKeyPressed: onKeyPressed
+            onKeyReleased: onKeyReleased
         }
 
         var actions: Action[] = [

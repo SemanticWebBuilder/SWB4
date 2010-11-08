@@ -17,6 +17,7 @@ import javafx.scene.control.ScrollView;
 import javafx.scene.layout.LayoutInfo;
 import javafx.scene.Cursor;
 import javafx.util.Sequences;
+import javafx.scene.input.KeyEvent;
 
 /**
  * @author javier.solis
@@ -209,6 +210,16 @@ public class Modeler extends CustomNode
                  }
 
              }
+
+             onKeyPressed: function (e: KeyEvent): Void
+             {
+                 this.keyPressed(e);
+             }
+             onKeyReleased: function (e: KeyEvent): Void
+             {
+                 this.keyReleased(e);
+             }
+
          };
          return scrollView;
     }
@@ -372,6 +383,26 @@ public class Modeler extends CustomNode
         //println("{bounds.minX} {bounds.minY} {bounds.maxX} {bounds.maxY} {bounds.width} {bounds.height}");
         var bufferedImage = new ModelerUtils().renderToImage(content,minx-margin,miny-margin,maxx-minx+margin*2, maxy-miny+margin*2);
         return bufferedImage;
+    }
+
+
+    public function keyPressed( e: KeyEvent ) : Void
+    {
+        println("Modeler:{e.char} {e.CHAR_UNDEFINED} {e.code} {e.text} {e.metaDown} {e.shiftDown} {e.controlDown} {e.altDown}");
+        if(e.text.toLowerCase().equals("z") and e.controlDown==true)
+        {
+            toolBar.undo();
+        }
+        if(e.text.toLowerCase().equals("y") and e.controlDown==true)
+        {
+            toolBar.redo();
+        }
+
+    }
+
+    public function keyReleased( e: KeyEvent ) : Void
+    {
+        //println("Modeler:{e.char} {e.CHAR_UNDEFINED} {e.char} {e.code} {e.text} {e.metaDown} {e.shiftDown} {e.controlDown} {e.altDown}");
     }
 
 }
