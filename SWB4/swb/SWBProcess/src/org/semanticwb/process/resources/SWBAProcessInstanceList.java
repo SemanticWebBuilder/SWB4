@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
@@ -27,6 +28,7 @@ import org.semanticwb.process.model.ProcessObject;
 import org.semanticwb.process.model.ProcessSite;
 import org.semanticwb.process.model.SWBProcessMgr;
 import org.semanticwb.process.model.SubProcessInstance;
+import org.semanticwb.process.model.Task;
 
 /**
  *
@@ -114,7 +116,7 @@ public class SWBAProcessInstanceList extends GenericResource {
                 out.println("</thead>");
 
                 out.println("<tbody>");
-                Iterator<ProcessInstance> pit = process.listProcessInstances();
+                Iterator<ProcessInstance> pit = SWBComparator.sortByCreated(process.listProcessInstances(),false);
                 while (pit.hasNext()) {
                     ProcessInstance pi = pit.next();
 
@@ -144,9 +146,9 @@ public class SWBAProcessInstanceList extends GenericResource {
                     out.println("<td>");
                     out.println(getStatusName(pi.getStatus())); 
                     out.println("</td>");
-                    User usrtmp = pi.getCreator().getCreator();
+                    User usrtmp = pi.getCreator();
                     out.println("<td>");
-                    out.println(usrtmp.getFullName());
+                    if(usrtmp!=null)out.println(usrtmp.getFullName());
                     out.println("</td>");
                     out.println("<td>");
                     usrtmp = pi.getAssignedto();
@@ -240,7 +242,7 @@ public class SWBAProcessInstanceList extends GenericResource {
                 out.println("</legend>");
 
                 out.println("<ul>");
-                Iterator<FlowNodeInstance> actit = pi.listFlowNodeInstances();
+                Iterator<FlowNodeInstance> actit = SWBComparator.sortByCreated(pi.listFlowNodeInstances());
                 while (actit.hasNext()) {
                     FlowNodeInstance obj = actit.next();
                     printActivityInstance(obj, out, paramRequest);
@@ -347,33 +349,71 @@ public class SWBAProcessInstanceList extends GenericResource {
 
     public void printActivityInstance(FlowNodeInstance ai, PrintWriter out, SWBParamRequest paramRequest) throws IOException {
         out.println("<li>");
-        out.println("Activity: " + ai.getFlowNodeType().getTitle() + " " + ai.getId());
-        out.println("Status:" + ai.getStatus());
-        out.println("Action:" + ai.getAction());
-        out.println("<a href=\"#\"  onclick=\"addNewTab('" + ai.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(ai.getSemanticObject().getDisplayName()),25) + "');return false;\">" + ai.getSemanticObject().getDisplayName() + "</a>");
+        out.print("Activity: <b>" + ai.getFlowNodeType().getTitle() + "</b> " + ai.getId());
+        if(ai.getCreator()!=null)
+        {
+            out.print(", Creator: " + ai.getCreator().getLogin());
+        }
+        if(ai.getEndedby()!=null)
+        {
+            out.print(", Ended by: " + ai.getEndedby().getLogin());
+        }
+        if(ai.getAction()!=null)
+        {
+            out.print(", Action: " + ai.getAction());
+        }
 
-        // Validación por status de FlowNodeInstance en relacion a las acciones posibles a realizar
-        SWBResourceURL urlaccept = paramRequest.getActionUrl();
-        urlaccept.setParameter("act","accept");
-        urlaccept.setParameter("id",ai.getId());
-        urlaccept.setParameter("user", paramRequest.getUser().getLogin());
-        urlaccept.setParameter("suri",ai.getProcessInstance().getProcessType().getURI());
-        urlaccept.setParameter("suripi", ai.getProcessInstance().getURI());
-        urlaccept.setParameter("ract", "pidetail");
+        out.print(", Status: <b>");
+        switch(ai.getStatus())
+        {
+            case FlowNodeInstance.STATUS_ABORTED:
+                out.print("Aborted");
+                break;
+            case FlowNodeInstance.STATUS_CLOSED:
+                out.print("Closed");
+                break;
+            case FlowNodeInstance.STATUS_INIT:
+                out.print("Init");
+                break;
+            case FlowNodeInstance.STATUS_OPEN:
+                out.print("Open");
+                break;
+            case FlowNodeInstance.STATUS_PROCESSING:
+                out.print("Processing");
+                break;
+            case FlowNodeInstance.STATUS_STOPED:
+                out.print("Stoped");
+                break;
+        }
+        out.println("</b>");
 
-        SWBResourceURL urlreject = paramRequest.getActionUrl();
-        urlreject.setParameter("act","reject");
-        urlreject.setParameter("id",ai.getId());
-        urlreject.setParameter("user", paramRequest.getUser().getLogin());
-        urlreject.setParameter("suri",ai.getProcessInstance().getProcessType().getURI());
-        urlreject.setParameter("suripi", ai.getProcessInstance().getURI());
-        urlreject.setParameter("ract", "pidetail");
-        
-        out.println(" <a href=\"#\" onclick=\"submitUrl('" + urlaccept + "',this); return false;\">accept</a> <a href=\"#\" onclick=\"submitUrl('"+ urlreject + "',this); return false;\">reject</a></li>");
+        //out.println("<a href=\"#\"  onclick=\"addNewTab('" + ai.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(ai.getSemanticObject().getDisplayName()),25) + "');return false;\">" + ai.getSemanticObject().getDisplayName() + "</a>");
+
+        if(ai.getFlowNodeType() instanceof Task && (ai.getStatus()==FlowNodeInstance.STATUS_PROCESSING || ai.getStatus()==FlowNodeInstance.STATUS_OPEN))
+        {
+            // Validación por status de FlowNodeInstance en relacion a las acciones posibles a realizar
+            SWBResourceURL urlaccept = paramRequest.getActionUrl();
+            urlaccept.setParameter("act","accept");
+            urlaccept.setParameter("id",ai.getId());
+            urlaccept.setParameter("user", paramRequest.getUser().getLogin());
+            urlaccept.setParameter("suri",ai.getProcessInstance().getProcessType().getURI());
+            urlaccept.setParameter("suripi", ai.getProcessInstance().getURI());
+            urlaccept.setParameter("ract", "pidetail");
+
+            SWBResourceURL urlreject = paramRequest.getActionUrl();
+            urlreject.setParameter("act","reject");
+            urlreject.setParameter("id",ai.getId());
+            urlreject.setParameter("user", paramRequest.getUser().getLogin());
+            urlreject.setParameter("suri",ai.getProcessInstance().getProcessType().getURI());
+            urlreject.setParameter("suripi", ai.getProcessInstance().getURI());
+            urlreject.setParameter("ract", "pidetail");
+            
+            out.println(" <a href=\"#\" onclick=\"submitUrl('" + urlaccept + "',this); return false;\">accept</a> <a href=\"#\" onclick=\"submitUrl('"+ urlreject + "',this); return false;\">reject</a></li>");
+        }
         out.println("</li>");
         if (ai instanceof SubProcessInstance) {
             SubProcessInstance pi = (SubProcessInstance) ai;
-            Iterator<FlowNodeInstance> acit = pi.listFlowNodeInstances();
+            Iterator<FlowNodeInstance> acit = SWBComparator.sortByCreated(pi.listFlowNodeInstances());
             if (acit.hasNext()) {
                 out.println("<ul>");
                 while (acit.hasNext()) {
