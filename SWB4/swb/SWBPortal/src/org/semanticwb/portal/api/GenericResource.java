@@ -39,6 +39,7 @@ import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticObject;
 
 // TODO: Auto-generated Javadoc
 /** Recurso gen�rico utilizado como plantilla para la generaci�n de nuevos recursos para
@@ -53,7 +54,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
 {
     
     /** The base. */
-    private Resource base;
+    private String baseUri;
     
     /**
      * Creates a new instance of GenericResource.
@@ -77,7 +78,10 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
      */    
     public Resource getResourceBase()
     {
-        return base;
+        Resource ret=null;
+        SemanticObject obj=SemanticObject.createSemanticObject(baseUri);
+        if(obj!=null)ret=(Resource)obj.createGenericInstance();
+        return ret;
     }
     
     /**
@@ -282,7 +286,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
      */    
     public void setResourceBase(Resource base) throws SWBResourceException
     {
-        this.base=base;
+        baseUri=base.getURI();
     }
     
     /**

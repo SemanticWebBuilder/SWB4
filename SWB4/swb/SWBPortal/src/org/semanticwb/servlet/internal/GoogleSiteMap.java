@@ -47,10 +47,11 @@ public class GoogleSiteMap implements InternalServlet {
         String lang = "es";
         String host = "http://"+req.getServerName();
         if (req.getServerPort()!=80) host += ":"+req.getServerPort();
-        resp.setHeader("Content-Encoding", "gzip");
+        //resp.setHeader("Content-Encoding", "gzip");
         resp.setContentType("text/xml");
-        java.util.zip.GZIPOutputStream garr = new java.util.zip.GZIPOutputStream(resp.getOutputStream());
-        OutputStreamWriter os = new OutputStreamWriter(garr, "UTF-8");
+        //java.util.zip.GZIPOutputStream garr = new java.util.zip.GZIPOutputStream(resp.getOutputStream());
+        //OutputStreamWriter os = new OutputStreamWriter(garr, "UTF-8");
+        OutputStreamWriter os = new OutputStreamWriter(resp.getOutputStream(), "UTF-8");
         PrintWriter out = new PrintWriter(os, true);
         out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         out.println("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">");
