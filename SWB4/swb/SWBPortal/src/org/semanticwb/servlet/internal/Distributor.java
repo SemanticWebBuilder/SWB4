@@ -76,7 +76,7 @@ public class Distributor implements InternalServlet
     boolean secure = false;
     
     /** The adm map. */
-    WebSite admMap=null;
+    String admMap=null;
     
     /* (non-Javadoc)
      * @see org.semanticwb.servlet.internal.InternalServlet#init(javax.servlet.ServletContext)
@@ -88,7 +88,7 @@ public class Distributor implements InternalServlet
         agzip = SWBPlatform.getEnv("swb/responseGZIPEncoding", "true").equalsIgnoreCase("true");
         admin = SWBPlatform.getEnv("swb/administration", "true").equalsIgnoreCase("true");
         secure = SWBPlatform.getEnv("swb/secureAdmin", "false").equalsIgnoreCase("true");
-        admMap=SWBContext.getAdminWebSite();
+        admMap=SWBContext.WEBSITE_ADMIN;
     }
     
     /* (non-Javadoc)
@@ -143,7 +143,7 @@ public class Distributor implements InternalServlet
                 log.trace("*****************************");
             }
 
-            if (secure && webpage!=null && webpage.getWebSite().equals(admMap))
+            if (secure && webpage!=null && webpage.getWebSiteId().equals(admMap))
             {
                 if (!request.isSecure()) 
                 {

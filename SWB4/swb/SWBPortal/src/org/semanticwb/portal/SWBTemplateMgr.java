@@ -93,7 +93,7 @@ public class SWBTemplateMgr
     {
         //TODO:revisar cache para eliminar elementos o reparsear
         TemplateImp ret=templates.get(tpl.getURI());
-        if(ret==null)
+        if(ret==null || ret.getSemanticObject()!=tpl.getSemanticObject())
         {
             ret=new TemplateImp(tpl);
             templates.put(tpl.getURI(), ret);
