@@ -165,6 +165,12 @@ public class WebPage extends WebPageBase
                 url=SWBPlatform.getContextPath()+url;
             }else if(getWebPageURLType()==1) //Redirect
             {
+                //TODO:Mejorar funcion
+                if(url.indexOf('&')>-1)
+                {
+                    url=url.replace("&amp;", "&");
+                    url=url.replace("&", "&amp;");
+                }
                 if(url.startsWith("//"))
                 {
                     url=url.substring(1);

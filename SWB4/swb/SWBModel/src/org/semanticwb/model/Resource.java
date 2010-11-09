@@ -52,7 +52,7 @@ public class Resource extends org.semanticwb.model.base.ResourceBase {
     protected int randpriority;
 //    private Document m_dom=null;
     /** The m_filter. */
-private Document m_filter = null;
+    private Document m_filter = null;
     
     /** The m_filternode. */
     private NodeList m_filternode = null;
@@ -600,4 +600,14 @@ private Document m_filter = null;
             //System.out.println((char)7);
         }
     }
+
+    @Override
+    public boolean isValid() {
+        boolean ret=super.isValid();
+        Resourceable resourceable=getResourceable();
+        if(ret && resourceable!=null && resourceable instanceof SWBClass) ret=((SWBClass)resourceable).isValid();
+        return ret;
+    }
+
+
 }
