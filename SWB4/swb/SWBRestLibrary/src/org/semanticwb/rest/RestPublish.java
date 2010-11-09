@@ -96,7 +96,7 @@ public class RestPublish {
             {
                 port=":"+request.getServerPort();
             }
-            link=request.getScheme()+port+"//"+request.getServerName()+request.getContextPath()+uuid;
+            link=request.getScheme()+"//"+request.getServerName()+port+"/"+request.getContextPath()+uuid;
             service.setAttributeNS("http://www.w3.org/1999/xlink", "href", link);
             service.setAttribute("name",provider.getServiceInfo().getName());
             service.appendChild(doc.createTextNode(provider.getServiceInfo().getName()));
@@ -118,6 +118,7 @@ public class RestPublish {
         response.setContentType("application/xml; charset=utf-8");
         String xml=SWBUtils.XML.domToXml(doc, "utf-8", true);
         out.print(xml);
+
         out.close();
     }
     public void service(HttpServletRequest request,HttpServletResponse response) throws IOException
