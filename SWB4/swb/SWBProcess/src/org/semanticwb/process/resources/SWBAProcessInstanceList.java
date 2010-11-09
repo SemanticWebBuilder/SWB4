@@ -241,7 +241,7 @@ public class SWBAProcessInstanceList extends GenericResource {
                 out.println("Detalle de Proceso");
                 out.println("</legend>");
 
-                out.println("<table>");
+                out.println("<table width=\"100%\">");
 
                 out.println("<tr>");
                 out.print("<th>Activity</th>");
