@@ -419,16 +419,17 @@ public class RestSource {
     public static void main(String[] args)
     {
         //String url="http://www.thomas-bayer.com/sqlrest/";
-        //String url="http://www.thomas-bayer.com/sqlrest/INVOICE/";
-        String url="https://api.del.icio.us/v1/posts/get";
+        String url="http://www.thomas-bayer.com/sqlrest/INVOICE/";
+        //String url="https://api.del.icio.us/v1/posts/get";
         //http://www.thomas-bayer.com/sqlrest/CUSTOMER/18/
 
         try
-        {
-            
+        { 
             RestSource source=new RestSource(new URL(url));
-            Interpreter i=source.getInterpreterOfGET();
-            i.eval("System.out.println(invoicelist.getInvoice().toString());");
+            Document doc=source.executeGET();
+            System.out.println(SWBUtils.XML.domToXml(doc));
+            //Interpreter i=source.getInterpreterOfGET();
+            //i.eval("System.out.println(invoicelist.getInvoice().toString());");
         }        
         catch(ServerSideExecutionRestException e)
         {
