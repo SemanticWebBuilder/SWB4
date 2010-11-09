@@ -244,17 +244,17 @@ public class SWBAProcessInstanceList extends GenericResource {
                 out.println("<table width=\"100%\">");
 
                 out.println("<tr>");
-                out.print("<th>Activity</th>");
-                out.print("<th>Type</th>");
-                out.print("<th>Creator</th>");
-                out.print("<th>Created</th>");
-                out.print("<th>Ended by</th>");
-                out.print("<th>Ended</th>");
-                out.print("<th>Assigned To</th>");
-                out.print("<th>Assigned</th>");
-                out.print("<th>Action</th>");
-                out.print("<th>Status</th>");
-                out.print("<th>&nbsp;</th>");
+                out.println("<th>Activity</th>");
+                out.println("<th>Type</th>");
+                out.println("<th>Creator</th>");
+                out.println("<th>Created</th>");
+                out.println("<th>Ended by</th>");
+                out.println("<th>Ended</th>");
+                out.println("<th>Assigned To</th>");
+                out.println("<th>Assigned</th>");
+                out.println("<th>Action</th>");
+                out.println("<th>Status</th>");
+                out.println("<th>&nbsp;</th>");
                 out.println("</tr>");
 
                 Iterator<FlowNodeInstance> actit = SWBComparator.sortByCreated(pi.listFlowNodeInstances());
@@ -304,7 +304,7 @@ public class SWBAProcessInstanceList extends GenericResource {
         String space = "";
         if (espacios > 0) {
             for (int i = 0; i < espacios; i++) {
-                space += "=";
+                space += "..";
             }
 
             space += ">";
