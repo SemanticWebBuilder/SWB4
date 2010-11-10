@@ -23,4 +23,17 @@ public class Question extends org.semanticwb.resources.sem.forumcat.base.Questio
 
         return ret;
     }
+
+    public boolean userHasVoted(User user) {
+        boolean ret = false;
+        Iterator<QuestionVote> votes = QuestionVote.ClassMgr.listQuestionVoteByQuestionVote(this);
+        while (votes.hasNext() && !ret) {
+            QuestionVote vote = votes.next();
+            if (vote.getUserVote().getURI().equals(user.getURI())) {
+                ret = true;
+            }
+        }
+
+        return ret;
+    }
 }
