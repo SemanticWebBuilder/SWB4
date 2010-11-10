@@ -3236,7 +3236,7 @@ public Document getDomProperty(SemanticProperty prop)
      */
     public Iterator<SemanticObject> listHerarquicalParents()
     {
-        ArrayList<SemanticObject> list=new ArrayList();
+        HashSet<SemanticObject> list=new HashSet();
         Iterator<SemanticProperty> it=getSemanticClass().listInverseHerarquicalProperties();
         while(it.hasNext())
         {
@@ -3245,7 +3245,7 @@ public Document getDomProperty(SemanticProperty prop)
             while(it2.hasNext())
             {
                 SemanticObject ch=it2.next();
-                list.add(ch);
+                if(!ch.equals(this))list.add(ch);
             }
         }
         return list.iterator();
