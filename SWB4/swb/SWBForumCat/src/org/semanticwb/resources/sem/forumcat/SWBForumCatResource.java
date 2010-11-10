@@ -53,17 +53,14 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
     {
         User user=response.getUser();
         WebSite website=response.getWebPage().getWebSite();
-
         if(isAcceptGuessComments() || user.isSigned()) {
             String action=response.getAction();
             response.setAction(response.Action_EDIT);
-
             if(action.equals("addQuestion")) {
                 SWBFormMgr mgr = new SWBFormMgr(Question.forumCat_Question, getResourceBase().getSemanticObject(), SWBFormMgr.MODE_CREATE);
                 try {
-                    SemanticObject semObject = mgr.processForm(request);
+                  SemanticObject semObject = mgr.processForm(request);
                     Question question=(Question)semObject.createGenericInstance();
-                    
                     if (user != null && user.isSigned()) {
                         question.setCreator(user);
                     }
@@ -71,8 +68,8 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     SemanticObject semObjectChild = SemanticObject.createSemanticObject((request.getParameter("categoryuri")));
                     WebPage webPage = (WebPage) semObjectChild.createGenericInstance();
                     question.setWebpage(webPage);
-                    if (isIsModerate()) {
-                        question.setQueStatus(STATUS_REGISTERED);
+                   if (isIsModerate()) {
+                    question.setQueStatus(STATUS_REGISTERED);
                     } else{
                         question.setQueStatus(STATUS_ACEPTED);
                     }
@@ -90,29 +87,28 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     }
                 } catch(FormValidateException e) { log.error(e); }
                 if (request.getParameter("org")!=null){
-                    response.setAction(request.getParameter("org"));
+                  response.setAction(request.getParameter("org"));
                 }else{
-                    response.setAction("edit");
+                  response.setAction("edit");
                 }
                 response.setRenderParameter("uri", request.getParameter("uri"));
             } else if(action.equals("removeQuestion")) {
                 try {
                     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
-                    //TODO: revisar regla de negocio
+//TODO: revisar regla de negocio
                     Question question=(Question)semObject.createGenericInstance();
                     question.setQueStatus(STATUS_REMOVED);
-                    //                    semObject.remove();
+//                    semObject.remove();
                     if (request.getParameter("org")!=null){
-                        response.setAction(request.getParameter("org"));
+                      response.setAction(request.getParameter("org"));
                     }else{
-                        response.setAction("edit");
+                      response.setAction("edit");
                     }
                 } catch(Exception e) { log.error(e); }
             } else if(action.equals("answerQuestion")) {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
                 Question question=(Question)semObject.createGenericInstance();
                 SWBFormMgr mgr = new SWBFormMgr(Answer.forumCat_Answer, semObject, SWBFormMgr.MODE_CREATE);
-
                 try {
                     SemanticObject semObjectChild = mgr.processForm(request);
                     Answer answer=(Answer)semObjectChild.createGenericInstance();
@@ -132,9 +128,9 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     mgr.processForm(request);
                 } catch(FormValidateException e) { log.error(e); }
                 if (request.getParameter("org")!=null){
-                    response.setAction(request.getParameter("org"));
+                  response.setAction(request.getParameter("org"));
                 }else{
-                    response.setAction("showDetail");
+                  response.setAction("showDetail");
                 }
                 Answer answer=(Answer)semObject.createGenericInstance();
                 response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
@@ -145,7 +141,6 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     if(!question.isQueIsApropiate()) {
                         int innapropiateCount=question.getQueInappropriate()+1;
                         question.setQueInappropriate(innapropiateCount);
-
                         if(innapropiateCount>=getMaxInnapropiateCount()) {//Enviar correo a administradores del foro
                             Role role=website.getUserRepository().getRole("adminForum");
                             Iterator <GenericObject> itGo=role.listRelatedObjects();
@@ -171,17 +166,18 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                                       swbMail.setFromEmail(SWBPlatform.getEnv("af/adminEmail"));
                                       swbMail.setHostName(SWBPlatform.getEnv("swb/smtpServer"));
                                       SWBUtils.EMAIL.sendBGEmail(swbMail);
+
                                     }
                                 }
                             }
                         }
                     }
-                    if (request.getParameter("org")!=null){
-                        response.setAction(request.getParameter("org"));
-                        response.setRenderParameter("uri", request.getParameter("uri"));
-                    }else{
-                        response.setAction("edit");
-                    }
+                if (request.getParameter("org")!=null){
+                  response.setAction(request.getParameter("org"));
+                   response.setRenderParameter("uri", request.getParameter("uri"));
+                }else{
+                  response.setAction("edit");
+                }
                 } catch(Exception e) { log.error(e); }
             } else if(action.equals("markAnswerAsInnapropiate")) {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
