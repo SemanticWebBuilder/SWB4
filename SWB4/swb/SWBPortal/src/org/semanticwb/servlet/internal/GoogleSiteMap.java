@@ -50,11 +50,10 @@ public class GoogleSiteMap implements InternalServlet {
         //resp.setHeader("Content-Encoding", "gzip");
         resp.setContentType("text/xml");
         //java.util.zip.GZIPOutputStream garr = new java.util.zip.GZIPOutputStream(resp.getOutputStream());
-        //OutputStreamWriter os = new OutputStreamWriter(garr, "UTF-8");
-        OutputStreamWriter os = new OutputStreamWriter(resp.getOutputStream(), "UTF-8");
-        PrintWriter out = new PrintWriter(os, true);
-        out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        out.println("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">");
+        StringBuffer ret=new StringBuffer();
+        ret.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        //ret.append("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">");
+        ret.append("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd\">");
 
         String modelid=dparams.getModelId();
 
@@ -84,33 +83,33 @@ public class GoogleSiteMap implements InternalServlet {
             }
             WebPage topicH = map.getHomePage();
             if (null!= topicH.getWebSite().getLanguage()) lang = topicH.getWebSite().getLanguage().getId(); else lang = "es";
-            out.print("<url><loc>" + hn +topicH.getRealUrl() + "</loc>");
+            ret.append("<url><loc>" + hn +topicH.getRealUrl() + "</loc>");
             if (!"".equals(topicH.getContentsLastUpdate(lang, "yyyy-mm-dd")))
-                    out.print("<lastmod>"+topicH.getContentsLastUpdate(lang, "yyyy-mm-dd")+"</lastmod>");
-            out.println("<priority>0.8</priority></url>");
+                    ret.append("<lastmod>"+topicH.getContentsLastUpdate(lang, "yyyy-mm-dd")+"</lastmod>");
+            ret.append("<priority>0.8</priority></url>");
             Iterator<WebPage> chanels =topicH.listVisibleChilds(lang);
             while (chanels.hasNext())
             {
                 WebPage chanel = chanels.next();
                 if (null!= chanel.getWebSite().getLanguage()) lang = chanel.getWebSite().getLanguage().getId(); else lang = "es";
-                out.print("<url><loc>" + hn + chanel.getRealUrl() + "</loc>");
+                ret.append("<url><loc>" + hn + chanel.getRealUrl() + "</loc>");
             if (!"".equals(chanel.getContentsLastUpdate(lang, "yyyy-mm-dd")))
-                    out.print("<lastmod>"+chanel.getContentsLastUpdate(lang, "yyyy-mm-dd")+"</lastmod>");
-            out.println("<priority>0.5</priority></url>");
+                    ret.append("<lastmod>"+chanel.getContentsLastUpdate(lang, "yyyy-mm-dd")+"</lastmod>");
+            ret.append("<priority>0.5</priority></url>");
                 Iterator sections = chanel.listVisibleChilds(lang);
                 while (sections.hasNext())
                 {
                     WebPage section = (WebPage) sections.next();
                     if (null!= section.getWebSite().getLanguage()) lang = section.getWebSite().getLanguage().getId(); else lang = "es";
-                    out.print("<url><loc>" + hn + section.getRealUrl() + "</loc>");
+                    ret.append("<url><loc>" + hn + section.getRealUrl() + "</loc>");
             if (!"".equals(section.getContentsLastUpdate(lang, "yyyy-mm-dd")))
-                    out.print("<lastmod>"+section.getContentsLastUpdate(lang, "yyyy-mm-dd")+"</lastmod>");
-            out.println("<priority>0.3</priority></url>");
+                    ret.append("<lastmod>"+section.getContentsLastUpdate(lang, "yyyy-mm-dd")+"</lastmod>");
+            ret.append("<priority>0.3</priority></url>");
                 }
             }
         }
-        out.println("</urlset>");
-        out.close();
+        ret.append("</urlset>");
+        resp.getWriter().print(SWBUtils.TEXT.encode(ret.toString(), SWBUtils.TEXT.CHARSET_UTF8));
     }
 
 }

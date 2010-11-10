@@ -626,7 +626,7 @@ public class DistributorParams
 
         //MAPS74
         int ret=-1;
-        String ipuser = request.getRemoteAddr().toString();
+        String ipuser = request.getRemoteAddr();
         Iterator<IPFilter> it = webpage.getWebSite().listIPFilters();
         while (it.hasNext())
         {
@@ -637,14 +637,14 @@ public class DistributorParams
                 String ipn=ip.getIpNumber();
                 if(action!=2)
                 {
-                    if (ipn!=null  && ipuser.startsWith(ipn))
+                    if (ipn!=null && (ipuser==null || ipuser.startsWith(ipn)))
                     {
                         ret=action;
                         break;
                     }
                 }else
                 {
-                    if (ipn!=null  && ipuser.startsWith(ipn))
+                    if (ipn!=null  && (ipuser==null || ipuser.startsWith(ipn)))
                     {
                         ret=-1;
                         break;
