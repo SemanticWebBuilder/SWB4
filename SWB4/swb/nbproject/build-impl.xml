@@ -571,6 +571,9 @@ exists or setup the property manually. For example like this:
         <ant antfile="${project.SWBRepositoryManager}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
+        <ant antfile="${project.SWBRestLibrary}/build.xml" inheritall="false" target="jar">
+            <property name="deploy.on.save" value="false"/>
+        </ant>
         <ant antfile="${project.SWBSIP}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
@@ -628,6 +631,9 @@ exists or setup the property manually. For example like this:
             <property name="deploy.on.save" value="false"/>
         </ant>
         <ant antfile="${project.SWBRepositoryManager}/build.xml" inheritall="false" target="jar">
+            <property name="deploy.on.save" value="false"/>
+        </ant>
+        <ant antfile="${project.SWBRestLibrary}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
         <ant antfile="${project.SWBSIP}/build.xml" inheritall="false" target="jar">
@@ -877,6 +883,8 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.antlrworks-1.4.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${reference.SWBSIP.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.commons-digester-1.7.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.bsh-core-2.0b4.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${reference.SWBRestLibrary.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
@@ -974,6 +982,8 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.antlrworks-1.4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${reference.SWBSIP.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.commons-digester-1.7.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${file.reference.bsh-core-2.0b4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copyfiles files="${reference.SWBRestLibrary.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init" if="dist.ear.dir" name="-clean-webinf-lib">
         <delete dir="${build.web.dir}/WEB-INF/lib"/>
@@ -1295,6 +1305,7 @@ exists or setup the property manually. For example like this:
         <ant antfile="${project.SWBPortlet}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBProcess}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBRepositoryManager}/build.xml" inheritall="false" target="clean"/>
+        <ant antfile="${project.SWBRestLibrary}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBSIP}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBSearch}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBSemanticFileRepository}/build.xml" inheritall="false" target="clean"/>
