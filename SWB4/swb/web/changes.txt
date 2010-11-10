@@ -3,6 +3,10 @@
     - Se elimino necesidad de tener un archivo index.html dentro del directorio raiz (Jei).
     - Mejoras en performance para el manejo de conecciones a DB Oracle (Jei).
     - Soporte a Papelera de Reciclaje para Platillas, Contenidos y Secciones (Jei).
+    - Se corrigio problema de cache de SemanticObjects (Jei).
+    - Se corrigio Indexación de contenidos con padre desactivado.
+    - Se modificaron headers de sitemap.xml para pasar validación w3c
+
 
   4.0.1.8
     - Mejora cuando limpia estilos el recurso de Word (Victor L)
