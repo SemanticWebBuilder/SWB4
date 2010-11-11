@@ -364,6 +364,29 @@ public class GraphicalElement extends CustomNode
         {
             remove(true);
         }
+        if (e.code == e.code.VK_RIGHT and not (this instanceof Lane)) {
+            ModelerUtils.setResizeNode(null);
+            this.x += 10;
+            ModelerUtils.setResizeNode(this);
+        } else if (e.code == e.code.VK_LEFT and not (this instanceof Lane)) {
+            var sp = this.x - this.w / 2;
+            if (sp - 10 > this.sceneX) {
+                ModelerUtils.setResizeNode(null);
+                this.x -= 10;
+                ModelerUtils.setResizeNode(this);
+            }
+        } else if (e.code == e.code.VK_UP and not (this instanceof Lane)) {
+            var sp = this.y - this.h / 2;
+            if (sp - 10 > this.sceneY) {
+                ModelerUtils.setResizeNode(null);
+                this.y -= 10;
+                ModelerUtils.setResizeNode(this);
+            }
+        } else if (e.code == e.code.VK_DOWN and not (this instanceof Lane)) {
+            ModelerUtils.setResizeNode(null);
+            this.y += 10;
+            ModelerUtils.setResizeNode(this);
+        }
     }
 
     override var onKeyReleased = function( e: KeyEvent )
