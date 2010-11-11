@@ -117,14 +117,14 @@ public class GraphicalElement extends CustomNode
             action: function (e: MouseEvent) {
                     remove(true);
                 }
-            },
-            Action{isSeparator: true},
-            Action {
-            label: ModelerUtils.getLocalizedString("actEdit");
-            action: function (e: MouseEvent) {
-                    println("Editando propiedades de {this.title}");
-                }
-            }
+            }//,
+//            Action{isSeparator: true},
+//            Action {
+//            label: ModelerUtils.getLocalizedString("actEdit");
+//            action: function (e: MouseEvent) {
+//                    println("Editando propiedades de {this.title}");
+//                }
+//            }
         ];
 
         insert props into menuOptions;
@@ -161,9 +161,9 @@ public class GraphicalElement extends CustomNode
         {
             if(e.clickCount >= 2)
             {
-                if(containerable)
+                if(text != null)
                 {
-                    modeler.containerElement=this;
+                    text.startEditing();
                 }
             }
         }
