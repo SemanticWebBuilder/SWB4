@@ -217,4 +217,18 @@ public class Task extends Activity
             insert imgComp into icons;
         }
     }
+
+    override var onMouseClicked = function (e: MouseEvent): Void {
+        if (e.button == e.button.PRIMARY) {
+            if (e.clickCount >= 2) {
+                text.startEditing()
+            }
+        } else if (e.button == e.button.SECONDARY) {
+            if (modeler.getFocusedNode() == this) {
+                ModelerUtils.stopToolTip();
+                ModelerUtils.popup.setOptions(menuOptions);
+                ModelerUtils.popup.show(e);
+            }
+        }
+    }
 }
