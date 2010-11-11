@@ -1707,8 +1707,14 @@ public class ToolBar extends CustomNode
                             }
                             onMouseDragged: function (e: MouseEvent): Void
                             {
-                                x=dx+e.sceneX;
-                                y=dy+e.sceneY;
+                                var tx = dx + e.sceneX;
+                                var ty = dy + e.sceneY;
+                                if (tx >= 0 and e.sceneX <= stage.scene.width) {
+                                    x=dx+e.sceneX;
+                                }
+                                if (ty >= 0 and e.sceneY <= stage.scene.height) {
+                                    y=dy+e.sceneY;
+                                }
                             }
                             onMouseReleased: function (e: MouseEvent): Void
                             {
