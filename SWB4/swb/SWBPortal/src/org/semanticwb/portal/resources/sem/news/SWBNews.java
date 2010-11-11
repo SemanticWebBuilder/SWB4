@@ -91,7 +91,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
                 if(contentsMonth==null)
                 {
                     contentsMonth=new ArrayList<SWBNewContent>();
-                    getNewsByMonth.put(key, contents);
+                    getNewsByMonth.put(key, contentsMonth);
                 }
                 contentsMonth.add(content);
             }
