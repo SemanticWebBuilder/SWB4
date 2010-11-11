@@ -44,7 +44,12 @@ public class SubProcess extends Activity
         image: Image {
             url: "{__DIR__}images/n_collapsed.png"
         }
-        effect: adjust
+        effect: adjust,
+        onMouseClicked:function(e: MouseEvent): Void {
+            if (e.clickCount >= 2 and containerable) {
+                modeler.containerElement=this;
+            }
+        }
     }
 
     def imgLoop = ImageView {
@@ -172,16 +177,7 @@ public class SubProcess extends Activity
     override var onMouseClicked = function (e: MouseEvent): Void {
         if (e.button == e.button.PRIMARY) {
             if (e.clickCount >= 2) {
-                if (e.sceneX > text.boundsInParent.minX and e.sceneX < text.boundsInParent.maxX) {
-                    if (e.sceneY > text.boundsInParent.minY and e.sceneY < text.boundsInParent.maxY) {
-                        text.startEditing()
-                    } else {
-                        if(containerable)
-                        {
-                            modeler.containerElement=this;
-                        }
-                    }
-                }
+                text.startEditing()
             }
         } else if (e.button == e.button.SECONDARY) {
             if (modeler.getFocusedNode() == this) {
