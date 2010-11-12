@@ -3,23 +3,24 @@ package org.semanticwb.resources.sem.forumcat.base;
 
 public abstract class SWBForumCatResourceBase extends org.semanticwb.portal.api.GenericSemResource 
 {
-    public static final org.semanticwb.platform.SemanticProperty forumCat_attachFilesSize=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#attachFilesSize");
-    public static final org.semanticwb.platform.SemanticProperty forumCat_selectCategory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#selectCategory");
-    public static final org.semanticwb.platform.SemanticProperty forumCat_markInnapropiateQuestions=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#markInnapropiateQuestions");
-    public static final org.semanticwb.platform.SemanticProperty forumCat_isQuestionVotable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#isQuestionVotable");
-    public static final org.semanticwb.platform.SemanticProperty forumCat_isAnswerVotable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#isAnswerVotable");
-    public static final org.semanticwb.platform.SemanticProperty forumCat_acceptGuessComments=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#acceptGuessComments");
-    public static final org.semanticwb.platform.SemanticProperty forumCat_isModerate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#isModerate");
-    public static final org.semanticwb.platform.SemanticProperty forumCat_attachFilesTypes=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#attachFilesTypes");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_questionClosable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#questionClosable");
     public static final org.semanticwb.platform.SemanticProperty forumCat_markInnapropiateAnswers=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#markInnapropiateAnswers");
     public static final org.semanticwb.platform.SemanticProperty forumCat_isQuestionSubscription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#isQuestionSubscription");
-    public static final org.semanticwb.platform.SemanticProperty forumCat_maxInnapropiateCount=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#maxInnapropiateCount");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_markInnapropiateQuestions=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#markInnapropiateQuestions");
     public static final org.semanticwb.platform.SemanticProperty forumCat_isCategorySubscription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#isCategorySubscription");
-    public static final org.semanticwb.platform.SemanticProperty forumCat_acceptAttachements=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#acceptAttachements");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_isModerate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#isModerate");
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_semanticResourceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#semanticResourceInv");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_acceptAttachements=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#acceptAttachements");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_acceptGuessComments=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#acceptGuessComments");
     public static final org.semanticwb.platform.SemanticClass forumCat_Question=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#Question");
     public static final org.semanticwb.platform.SemanticProperty forumCat_hasQuestionInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#hasQuestionInv");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_maxInnapropiateCount=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#maxInnapropiateCount");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_attachFilesTypes=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#attachFilesTypes");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_isAnswerVotable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#isAnswerVotable");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_selectCategory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#selectCategory");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_attachFilesSize=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#attachFilesSize");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_isQuestionVotable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#isQuestionVotable");
     public static final org.semanticwb.platform.SemanticClass forumCat_SWBForumCatResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#SWBForumCatResource");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#SWBForumCatResource");
 
@@ -37,147 +38,21 @@ public abstract class SWBForumCatResourceBase extends org.semanticwb.portal.api.
     }
 
 /**
-* Gets the AttachFilesSize property
-* @return int with the AttachFilesSize
+* Gets the QuestionClosable property
+* @return boolean with the QuestionClosable
 */
-    public int getAttachFilesSize()
+    public boolean isQuestionClosable()
     {
-        return getSemanticObject().getIntProperty(forumCat_attachFilesSize);
+        return getSemanticObject().getBooleanProperty(forumCat_questionClosable);
     }
 
 /**
-* Sets the AttachFilesSize property
-* @param value long with the AttachFilesSize
+* Sets the QuestionClosable property
+* @param value long with the QuestionClosable
 */
-    public void setAttachFilesSize(int value)
+    public void setQuestionClosable(boolean value)
     {
-        getSemanticObject().setIntProperty(forumCat_attachFilesSize, value);
-    }
-
-/**
-* Gets the SelectCategory property
-* @return boolean with the SelectCategory
-*/
-    public boolean isSelectCategory()
-    {
-        return getSemanticObject().getBooleanProperty(forumCat_selectCategory);
-    }
-
-/**
-* Sets the SelectCategory property
-* @param value long with the SelectCategory
-*/
-    public void setSelectCategory(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(forumCat_selectCategory, value);
-    }
-
-/**
-* Gets the MarkInnapropiateQuestions property
-* @return boolean with the MarkInnapropiateQuestions
-*/
-    public boolean isMarkInnapropiateQuestions()
-    {
-        return getSemanticObject().getBooleanProperty(forumCat_markInnapropiateQuestions);
-    }
-
-/**
-* Sets the MarkInnapropiateQuestions property
-* @param value long with the MarkInnapropiateQuestions
-*/
-    public void setMarkInnapropiateQuestions(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(forumCat_markInnapropiateQuestions, value);
-    }
-
-/**
-* Gets the IsQuestionVotable property
-* @return boolean with the IsQuestionVotable
-*/
-    public boolean isIsQuestionVotable()
-    {
-        return getSemanticObject().getBooleanProperty(forumCat_isQuestionVotable);
-    }
-
-/**
-* Sets the IsQuestionVotable property
-* @param value long with the IsQuestionVotable
-*/
-    public void setIsQuestionVotable(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(forumCat_isQuestionVotable, value);
-    }
-
-/**
-* Gets the IsAnswerVotable property
-* @return boolean with the IsAnswerVotable
-*/
-    public boolean isIsAnswerVotable()
-    {
-        return getSemanticObject().getBooleanProperty(forumCat_isAnswerVotable);
-    }
-
-/**
-* Sets the IsAnswerVotable property
-* @param value long with the IsAnswerVotable
-*/
-    public void setIsAnswerVotable(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(forumCat_isAnswerVotable, value);
-    }
-
-/**
-* Gets the AcceptGuessComments property
-* @return boolean with the AcceptGuessComments
-*/
-    public boolean isAcceptGuessComments()
-    {
-        return getSemanticObject().getBooleanProperty(forumCat_acceptGuessComments);
-    }
-
-/**
-* Sets the AcceptGuessComments property
-* @param value long with the AcceptGuessComments
-*/
-    public void setAcceptGuessComments(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(forumCat_acceptGuessComments, value);
-    }
-
-/**
-* Gets the IsModerate property
-* @return boolean with the IsModerate
-*/
-    public boolean isIsModerate()
-    {
-        return getSemanticObject().getBooleanProperty(forumCat_isModerate);
-    }
-
-/**
-* Sets the IsModerate property
-* @param value long with the IsModerate
-*/
-    public void setIsModerate(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(forumCat_isModerate, value);
-    }
-
-/**
-* Gets the AttachFilesTypes property
-* @return String with the AttachFilesTypes
-*/
-    public String getAttachFilesTypes()
-    {
-        return getSemanticObject().getProperty(forumCat_attachFilesTypes);
-    }
-
-/**
-* Sets the AttachFilesTypes property
-* @param value long with the AttachFilesTypes
-*/
-    public void setAttachFilesTypes(String value)
-    {
-        getSemanticObject().setProperty(forumCat_attachFilesTypes, value);
+        getSemanticObject().setBooleanProperty(forumCat_questionClosable, value);
     }
 
 /**
@@ -217,21 +92,21 @@ public abstract class SWBForumCatResourceBase extends org.semanticwb.portal.api.
     }
 
 /**
-* Gets the MaxInnapropiateCount property
-* @return int with the MaxInnapropiateCount
+* Gets the MarkInnapropiateQuestions property
+* @return boolean with the MarkInnapropiateQuestions
 */
-    public int getMaxInnapropiateCount()
+    public boolean isMarkInnapropiateQuestions()
     {
-        return getSemanticObject().getIntProperty(forumCat_maxInnapropiateCount);
+        return getSemanticObject().getBooleanProperty(forumCat_markInnapropiateQuestions);
     }
 
 /**
-* Sets the MaxInnapropiateCount property
-* @param value long with the MaxInnapropiateCount
+* Sets the MarkInnapropiateQuestions property
+* @param value long with the MarkInnapropiateQuestions
 */
-    public void setMaxInnapropiateCount(int value)
+    public void setMarkInnapropiateQuestions(boolean value)
     {
-        getSemanticObject().setIntProperty(forumCat_maxInnapropiateCount, value);
+        getSemanticObject().setBooleanProperty(forumCat_markInnapropiateQuestions, value);
     }
 
 /**
@@ -253,21 +128,21 @@ public abstract class SWBForumCatResourceBase extends org.semanticwb.portal.api.
     }
 
 /**
-* Gets the AcceptAttachements property
-* @return boolean with the AcceptAttachements
+* Gets the IsModerate property
+* @return boolean with the IsModerate
 */
-    public boolean isAcceptAttachements()
+    public boolean isIsModerate()
     {
-        return getSemanticObject().getBooleanProperty(forumCat_acceptAttachements);
+        return getSemanticObject().getBooleanProperty(forumCat_isModerate);
     }
 
 /**
-* Sets the AcceptAttachements property
-* @param value long with the AcceptAttachements
+* Sets the IsModerate property
+* @param value long with the IsModerate
 */
-    public void setAcceptAttachements(boolean value)
+    public void setIsModerate(boolean value)
     {
-        getSemanticObject().setBooleanProperty(forumCat_acceptAttachements, value);
+        getSemanticObject().setBooleanProperty(forumCat_isModerate, value);
     }
    /**
    * Sets the value for the property Resource
@@ -307,6 +182,42 @@ public abstract class SWBForumCatResourceBase extends org.semanticwb.portal.api.
          }
          return ret;
     }
+
+/**
+* Gets the AcceptAttachements property
+* @return boolean with the AcceptAttachements
+*/
+    public boolean isAcceptAttachements()
+    {
+        return getSemanticObject().getBooleanProperty(forumCat_acceptAttachements);
+    }
+
+/**
+* Sets the AcceptAttachements property
+* @param value long with the AcceptAttachements
+*/
+    public void setAcceptAttachements(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(forumCat_acceptAttachements, value);
+    }
+
+/**
+* Gets the AcceptGuessComments property
+* @return boolean with the AcceptGuessComments
+*/
+    public boolean isAcceptGuessComments()
+    {
+        return getSemanticObject().getBooleanProperty(forumCat_acceptGuessComments);
+    }
+
+/**
+* Sets the AcceptGuessComments property
+* @param value long with the AcceptGuessComments
+*/
+    public void setAcceptGuessComments(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(forumCat_acceptGuessComments, value);
+    }
    /**
    * Gets all the org.semanticwb.resources.sem.forumcat.Question
    * @return A GenericIterator with all the org.semanticwb.resources.sem.forumcat.Question
@@ -345,5 +256,113 @@ public abstract class SWBForumCatResourceBase extends org.semanticwb.portal.api.
              ret=(org.semanticwb.resources.sem.forumcat.Question)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the MaxInnapropiateCount property
+* @return int with the MaxInnapropiateCount
+*/
+    public int getMaxInnapropiateCount()
+    {
+        return getSemanticObject().getIntProperty(forumCat_maxInnapropiateCount);
+    }
+
+/**
+* Sets the MaxInnapropiateCount property
+* @param value long with the MaxInnapropiateCount
+*/
+    public void setMaxInnapropiateCount(int value)
+    {
+        getSemanticObject().setIntProperty(forumCat_maxInnapropiateCount, value);
+    }
+
+/**
+* Gets the AttachFilesTypes property
+* @return String with the AttachFilesTypes
+*/
+    public String getAttachFilesTypes()
+    {
+        return getSemanticObject().getProperty(forumCat_attachFilesTypes);
+    }
+
+/**
+* Sets the AttachFilesTypes property
+* @param value long with the AttachFilesTypes
+*/
+    public void setAttachFilesTypes(String value)
+    {
+        getSemanticObject().setProperty(forumCat_attachFilesTypes, value);
+    }
+
+/**
+* Gets the IsAnswerVotable property
+* @return boolean with the IsAnswerVotable
+*/
+    public boolean isIsAnswerVotable()
+    {
+        return getSemanticObject().getBooleanProperty(forumCat_isAnswerVotable);
+    }
+
+/**
+* Sets the IsAnswerVotable property
+* @param value long with the IsAnswerVotable
+*/
+    public void setIsAnswerVotable(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(forumCat_isAnswerVotable, value);
+    }
+
+/**
+* Gets the SelectCategory property
+* @return boolean with the SelectCategory
+*/
+    public boolean isSelectCategory()
+    {
+        return getSemanticObject().getBooleanProperty(forumCat_selectCategory);
+    }
+
+/**
+* Sets the SelectCategory property
+* @param value long with the SelectCategory
+*/
+    public void setSelectCategory(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(forumCat_selectCategory, value);
+    }
+
+/**
+* Gets the AttachFilesSize property
+* @return int with the AttachFilesSize
+*/
+    public int getAttachFilesSize()
+    {
+        return getSemanticObject().getIntProperty(forumCat_attachFilesSize);
+    }
+
+/**
+* Sets the AttachFilesSize property
+* @param value long with the AttachFilesSize
+*/
+    public void setAttachFilesSize(int value)
+    {
+        getSemanticObject().setIntProperty(forumCat_attachFilesSize, value);
+    }
+
+/**
+* Gets the IsQuestionVotable property
+* @return boolean with the IsQuestionVotable
+*/
+    public boolean isIsQuestionVotable()
+    {
+        return getSemanticObject().getBooleanProperty(forumCat_isQuestionVotable);
+    }
+
+/**
+* Sets the IsQuestionVotable property
+* @param value long with the IsQuestionVotable
+*/
+    public void setIsQuestionVotable(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(forumCat_isQuestionVotable, value);
     }
 }
