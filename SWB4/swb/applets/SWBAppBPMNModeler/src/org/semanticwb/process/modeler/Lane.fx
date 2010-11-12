@@ -122,8 +122,10 @@ public class Lane extends GraphicalElement
 
     override public function remove(validate:Boolean)
     {
-        //TODO: Internacionalizar mensaje
-       if(not validate or sizeof graphChilds == 0 or Alert.confirm("Remove {this}", "Are you sure you want to delete \"{this.title}\" {this}?"))
+        ModelerUtils.popup.hide();
+        var tit = "{ModelerUtils.getLocalizedString("actDelete")} Lane";
+        var msg = "{ModelerUtils.getLocalizedString("msgDelConfirm")} {this.title}?";
+       if(not validate or sizeof graphChilds == 0 or Alert.confirm(tit, msg))
        {
            //println("remove lane {getGraphParent()}");
            if(getGraphParent() instanceof Pool)
