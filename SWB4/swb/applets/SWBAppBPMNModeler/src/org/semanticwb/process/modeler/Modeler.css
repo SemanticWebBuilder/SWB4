@@ -30,14 +30,14 @@
 }
 .modifierGateway {
     -fx-stroke: -gateway-normal-stroke;
-    -fx-stroke-width: 4;
+    -fx-stroke-width: 3;
     -fx-stroke-line-cap: round;
     -fx-fill:linear (0%,0%) to (0%,100%) stops (0%,-gateway-first-color) (100%,-gateway-second-color);
 }
 
 .modifierGateway2 {
     -fx-stroke: -gateway-normal-stroke;
-    -fx-stroke-width: 2;
+    -fx-stroke-width: 1;
     -fx-fill:linear (0%,0%) to (0%,100%) stops (0%,-gateway-first-color) (100%,-gateway-second-color);
 }
 
@@ -163,25 +163,25 @@
 }
 
 .startEvent {
-	-fx-cursor: hand;
+    -fx-cursor: hand;
     -fx-stroke: -startevent-normal-stroke;
-    -fx-stroke-width:2;
+    -fx-stroke-width:1;
     -fx-fill:linear (0%,0%) to (100%,0%) stops (0%,-startevent-first-color) (100%,-startevent-second-color);
 }
 
 .startEvent:hover {
     -fx-stroke:-hover-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .startEvent:focused {
     -fx-stroke:-focus-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .interEvent {
     -fx-stroke:-interevent-normal-stroke;
-    -fx-stroke-width: 2;
+    -fx-stroke-width: 1;
     -fx-fill:linear (0%,0%) to (100%,0%) stops (0%,-interevent-first-color) (100%,-interevent-second-color);
 }
 
@@ -193,65 +193,65 @@
 
 .interEvent:hover {
     -fx-stroke:-hover-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .interEvent:focused {
     -fx-stroke:-focus-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .endEvent {
     -fx-stroke:-endevent-normal-stroke;
-    -fx-stroke-width: 4;
+    -fx-stroke-width: 2;
     -fx-cursor: hand;
     -fx-fill:linear (0%,0%) to (100%,0%) stops (0%,-endevent-first-color) (100%,-endevent-second-color);
 }
 
 .endEvent:hover {
     -fx-stroke:-hover-stroke;
-    -fx-stroke-width: 5;
+    -fx-stroke-width: 3;
 }
 
 .endEvent:focused {
     -fx-stroke:-focus-stroke;
-    -fx-stroke-width: 5;
+    -fx-stroke-width: 3;
 }
 
 .gateway {
     -fx-stroke:-gateway-normal-stroke;
-    -fx-stroke-width: 2;
+    -fx-stroke-width: 1;
     -fx-fill:linear (0%,0%) to (0%,100%) stops (0%,-gateway-first-color) (100%,-gateway-second-color);
     -fx-cursor: hand;
 }
 
 .gateway:hover {
     -fx-stroke:-hover-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .gateway:focused {
     -fx-stroke:-focus-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .task {
     -fx-arc-width: 15;
     -fx-arc-height: 15;
     -fx-stroke: -normal-stroke;
-    -fx-stroke-width: 2;
+    -fx-stroke-width: 1;
     -fx-cursor: hand;
     -fx-fill:linear (0%,0%) to (0%,100%) stops (0%,-task-first-color) (100%,-task-second-color);
 }
 
 .task:hover {
     -fx-stroke: -hover-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .task:focused {
     -fx-stroke: -focus-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .dataObject {
@@ -273,18 +273,18 @@
 
 .artifact {
     -fx-stroke: -normal-stroke;
-    -fx-stroke-width: 2;
+    -fx-stroke-width: 1;
     -fx-cursor: hand
 }
 
 .artifact:hover {
     -fx-stroke: -hover-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .artifact:focused {
     -fx-stroke: -focus-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .artifact#textbox {
@@ -294,7 +294,7 @@
 
 .connObject {
     -fx-stroke:-normal-stroke;
-    -fx-stroke-width: 2;
+    -fx-stroke-width: 1.5;
     -fx-cursor: hand;
 }
 
@@ -308,34 +308,34 @@
 
 .connObject:hover {
     -fx-stroke:-hover-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .connObject:focused {
     -fx-stroke:-focus-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .containerButton {
-	-fx-fill: null;
+    -fx-fill: null;
 }
 
 .containerPath {
-	-fx-fill: -containerbutton-color;
-	-fx-stroke: -containerbutton-stroke;
-	-fx-stroke-width: 1;
-	-fx-arc-width: 6;
+    -fx-fill: -containerbutton-color;
+    -fx-stroke: -containerbutton-stroke;
+    -fx-stroke-width: 1;
+    -fx-arc-width: 6;
     -fx-arc-height: 6;
 }
 
 .containerPath#separator {
-	-fx-fill: null;
-	-fx-stroke: -containerbutton-stroke;
-	-fx-stroke-width: 1;
+    -fx-fill: null;
+    -fx-stroke: -containerbutton-stroke;
+    -fx-stroke-width: 1;
 }
 
 .containerButton#label {
-	-fx-font-family: "Verdana";
+    -fx-font-family: "Verdana";
     -fx-font-size: 10pt;
     -fx-fontstyle: normal;
     -fx-font-weight: normal;
@@ -347,11 +347,11 @@
 }
 
 .arrowMessage:hover {
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .arrowMessage:focused {
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .editableTextBox {
@@ -444,11 +444,11 @@
 }
 
 .scrollView {
-	-fx-background-color: linear (0%,0%) to (0%,100%) stops (0%,#B9D6D6) (100%,#DDECEB);/*#EDEDED;*/
+    -fx-background-color: linear (0%,0%) to (0%,100%) stops (0%,#B9D6D6) (100%,#DDECEB);/*#EDEDED;*/
 }
 
 .splash {
-	-fx-font-family: "Verdana";
+    -fx-font-family: "Verdana";
     -fx-font-size: 11pt;
     -fx-fontstyle: normal;
     -fx-font-weight: normal;
@@ -456,7 +456,7 @@
 }
 
 .group#label {
-	-fx-font-family: "Verdana";
+    -fx-font-family: "Verdana";
     -fx-font-size: 11pt;
     -fx-fontstyle: normal;
     -fx-font-weight: normal;
@@ -464,45 +464,45 @@
 }
 
 .menuItem {
-	-fx-arc-width: 6;
-	-fx-arc-height: 6;
-	-fx-cursor: hand;
-	-fx-fill: #E6E8EA;
-	-fx-opacity: 1;
+    -fx-arc-width: 6;
+    -fx-arc-height: 6;
+    -fx-cursor: hand;
+    -fx-fill: #E6E8EA;
+    -fx-opacity: 1;
 }
 
 .menuItemSeparator {
-	-fx-cursor: hand;
-	-fx-fill: gray;
-	-fx-opacity: 1;
+    -fx-cursor: hand;
+    -fx-fill: gray;
+    -fx-opacity: 1;
 }
 
 .menuItem:hover {
-	-fx-fill: #3370CE;
+    -fx-fill: #3370CE;
 }
 
 .menuItem#caption {
-	-fx-fill: black;
-	-fx-text-origin: top;
-	-fx-font-family: "Verdana";
+    -fx-fill: black;
+    -fx-text-origin: top;
+    -fx-font-family: "Verdana";
     -fx-font-size: 11pt;
     -fx-fontstyle: normal;
     -fx-font-weight: normal;
 }
 
 .menu {
-	-fx-effect: dropshadow(gaussian, #707070, 10, 0, 3, 3);
-	-fx-stroke: black;
+    -fx-effect: dropshadow(gaussian, #707070, 10, 0, 3, 3);
+    -fx-stroke: black;
     -fx-stroke-width: 1;
-	-fx-arc-width: 6;
-	-fx-arc-height: 6;
-	-fx-cursor: hand;
-	-fx-fill: #E6E8EA;
-	-fx-opacity: 1;
+    -fx-arc-width: 6;
+    -fx-arc-height: 6;
+    -fx-cursor: hand;
+    -fx-fill: #E6E8EA;
+    -fx-opacity: 1;
 }
 
 .resizepoint {
-	-fx-fill: #f5f5ff;
-	-fx-stroke: #03689a;
-	-fx-stroke-width: 1;
+    -fx-fill: #f5f5ff;
+    -fx-stroke: #03689a;
+    -fx-stroke-width: 1;
 }
