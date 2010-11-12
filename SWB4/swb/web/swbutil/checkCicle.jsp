@@ -8,25 +8,32 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Check Cicle</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <h1>Check Cicle</h1>
 <%
-    WebSite site=SWBContext.getWebSite("sectur");
-    Iterator<WebPage> it=site.listWebPages();
-    while (it.hasNext()) {
-        WebPage elem = it.next();
-        WebPage parent=elem.getParent();
-        while(parent!=null)
-        {
-            if(elem==parent || parent.isChildof(elem))
+    Iterator<WebSite> wsit=SWBContext.listWebSites();
+    while (wsit.hasNext())
+    {
+        WebSite site=wsit.next();
+        out.print("Site:"+site.getId());
+        out.print("<br/>");
+        Iterator<WebPage> it=site.listWebPages();
+        while (it.hasNext()) {
+            WebPage elem = it.next();
+            WebPage parent=elem.getParent();
+            while(parent!=null)
             {
-                out.print("Cicle:"+elem.getId()+" --> "+parent.getId());
-                out.print("<br/>");
-            }
-            parent=parent.getParent();
-         }
+                if(elem==parent || parent.isChildof(elem))
+                {
+                    out.print("Cicle:"+elem.getId()+" --> "+parent.getId());
+                    out.print("<br/>");
+                    break;
+                }
+                parent=parent.getParent();
+             }
+        }
     }
 %>
     </body>

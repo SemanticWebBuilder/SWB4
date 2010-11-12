@@ -4,6 +4,7 @@
     Author     : jei
 --%>
 
+<%@page import="java.lang.management.ThreadInfo"%>
 <%@page import="org.semanticwb.portal.monitor.SWBThreadDumper"%>
 <%@page import="java.lang.management.ManagementFactory"%>
 <%@page import="java.lang.management.ThreadMXBean"%>
@@ -18,8 +19,30 @@
     </head>
     <body>
         <%
+            String stop=request.getParameter("stop");
+            if(stop!=null)
+            {
+                ThreadGroup group=Thread.currentThread().getThreadGroup();
+                int numThreads = group.activeCount();
+                Thread[] athreads = new Thread[numThreads*2];
+                numThreads = group.enumerate(athreads, false);
+
+                // Enumerate each thread in `group'
+                for (int i=0; i<numThreads; i++) {
+                    // Get thread
+                    Thread thread = athreads[i];
+                    out.println("thread:"+thread.getName()+"<br>");
+                    if(stop!=null && stop.length()>1 && thread.getName().indexOf(stop)>-1)
+                    {
+                        //thread.stop();
+                        out.println("Interrupted...<br>");
+                    }
+                }
+            }
+
             ThreadMXBean threads=ManagementFactory.getThreadMXBean();
             long t[]=threads.getAllThreadIds();
+
             out.println("<h1>Threads:"+t.length+"</h1>");
 /*
             for(int x=0;x<t.length;x++)
