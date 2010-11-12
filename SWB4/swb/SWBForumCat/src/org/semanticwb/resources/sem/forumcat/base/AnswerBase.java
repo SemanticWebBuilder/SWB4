@@ -14,6 +14,10 @@ public abstract class AnswerBase extends org.semanticwb.model.SWBClass implement
     public static final org.semanticwb.platform.SemanticProperty forumCat_attachements=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#attachements");
     public static final org.semanticwb.platform.SemanticClass forumCat_Question=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#Question");
     public static final org.semanticwb.platform.SemanticProperty forumCat_ansQuestion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#ansQuestion");
+   /**
+   * Indica si la respuesta ha sido marcada como la mejor.
+   */
+    public static final org.semanticwb.platform.SemanticProperty forumCat_bestAnswer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#bestAnswer");
     public static final org.semanticwb.platform.SemanticClass forumCat_Answer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#Answer");
    /**
    * The semantic class that represents the currentObject
@@ -425,5 +429,23 @@ public abstract class AnswerBase extends org.semanticwb.model.SWBClass implement
              ret=(org.semanticwb.resources.sem.forumcat.Question)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the BestAnswer property
+* @return boolean with the BestAnswer
+*/
+    public boolean isBestAnswer()
+    {
+        return getSemanticObject().getBooleanProperty(forumCat_bestAnswer);
+    }
+
+/**
+* Sets the BestAnswer property
+* @param value long with the BestAnswer
+*/
+    public void setBestAnswer(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(forumCat_bestAnswer, value);
     }
 }
