@@ -86,7 +86,7 @@ public class Pool extends GraphicalElement
     {
         ModelerUtils.popup.hide();
         var tit = "{ModelerUtils.getLocalizedString("actDelete")} Pool";
-        var msg = "{ModelerUtils.getLocalizedString("msgDelConfirm")} {this.title}?";
+        var msg = "{ModelerUtils.getLocalizedString("msgDelConfirm")} \"{this.title}\"?";
        if(not validate or sizeof graphChilds == 0 or Alert.confirm(tit, msg))
        {
            super.remove(validate);
