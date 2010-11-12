@@ -106,16 +106,16 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
         for (String key : keys) {
             String value = ufq.getFiltros().get(key);
             if (filts.length() > 0) {
-                filts.append("'],");
+                filts.append("\\'],");
             } else if (filts.length() == 0) {
                 filts.append("[");
             }
-            filts.append("['");
+            filts.append("[\\'");
             filts.append(key);
-            filts.append("', '");
+            filts.append("\\', \\'");
             filts.append(value);
         }
-        filts.append("']]");
+        filts.append("\\']]");
 
         if (prop.getCardinality() != 1) {
             buffer.append("        <button onclick=\"fileUpload_addNewUpload('" + pname + "','" + filts.toString() + "','" + url + "');return false;\">" + agregar + "</button>\n");
