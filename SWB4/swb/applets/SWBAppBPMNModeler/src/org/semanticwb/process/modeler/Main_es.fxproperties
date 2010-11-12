@@ -102,6 +102,7 @@
 "actMultiInstance" = "Multi-Instancia"
 "actLoop" = "Ciclo"
 "actCompensa" = "Compensación"
+"msgDelConfirm" = "¿Seguro que desea eliminar"
 "msgError1" = "Una actividad no puede tener flujos de secuencia provenientes de una compuerta basada en eventos"
 "msgError2" = "Una Anotación de Texto debe conectarse usando Asociaciones no Direccionales"
 "msgError3" = "Un Artefacto debe conectarse usando Asociaciones"
