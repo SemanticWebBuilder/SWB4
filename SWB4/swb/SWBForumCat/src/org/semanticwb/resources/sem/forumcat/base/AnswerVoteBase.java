@@ -3,15 +3,15 @@ package org.semanticwb.resources.sem.forumcat.base;
 
 public abstract class AnswerVoteBase extends org.semanticwb.model.SWBClass 
 {
-    public static final org.semanticwb.platform.SemanticProperty forumCat_likeAnswer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#likeAnswer");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_ansCommentVote=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#ansCommentVote");
    /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
    */
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty forumCat_ansUserVote=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#ansUserVote");
-    public static final org.semanticwb.platform.SemanticProperty forumCat_ansCommentVote=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#ansCommentVote");
     public static final org.semanticwb.platform.SemanticClass forumCat_Answer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#Answer");
     public static final org.semanticwb.platform.SemanticProperty forumCat_answerVote=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#answerVote");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_likeAnswer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#likeAnswer");
     public static final org.semanticwb.platform.SemanticClass forumCat_AnswerVote=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#AnswerVote");
    /**
    * The semantic class that represents the currentObject
@@ -145,21 +145,21 @@ public abstract class AnswerVoteBase extends org.semanticwb.model.SWBClass
     }
 
 /**
-* Gets the LikeAnswer property
-* @return boolean with the LikeAnswer
+* Gets the AnsCommentVote property
+* @return String with the AnsCommentVote
 */
-    public boolean isLikeAnswer()
+    public String getAnsCommentVote()
     {
-        return getSemanticObject().getBooleanProperty(forumCat_likeAnswer);
+        return getSemanticObject().getProperty(forumCat_ansCommentVote);
     }
 
 /**
-* Sets the LikeAnswer property
-* @param value long with the LikeAnswer
+* Sets the AnsCommentVote property
+* @param value long with the AnsCommentVote
 */
-    public void setLikeAnswer(boolean value)
+    public void setAnsCommentVote(String value)
     {
-        getSemanticObject().setBooleanProperty(forumCat_likeAnswer, value);
+        getSemanticObject().setProperty(forumCat_ansCommentVote, value);
     }
    /**
    * Sets the value for the property AnsUserVote
@@ -199,24 +199,6 @@ public abstract class AnswerVoteBase extends org.semanticwb.model.SWBClass
          }
          return ret;
     }
-
-/**
-* Gets the AnsCommentVote property
-* @return String with the AnsCommentVote
-*/
-    public String getAnsCommentVote()
-    {
-        return getSemanticObject().getProperty(forumCat_ansCommentVote);
-    }
-
-/**
-* Sets the AnsCommentVote property
-* @param value long with the AnsCommentVote
-*/
-    public void setAnsCommentVote(String value)
-    {
-        getSemanticObject().setProperty(forumCat_ansCommentVote, value);
-    }
    /**
    * Sets the value for the property AnswerVote
    * @param value AnswerVote to set
@@ -254,5 +236,23 @@ public abstract class AnswerVoteBase extends org.semanticwb.model.SWBClass
              ret=(org.semanticwb.resources.sem.forumcat.Answer)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the LikeAnswer property
+* @return boolean with the LikeAnswer
+*/
+    public boolean isLikeAnswer()
+    {
+        return getSemanticObject().getBooleanProperty(forumCat_likeAnswer);
+    }
+
+/**
+* Sets the LikeAnswer property
+* @param value long with the LikeAnswer
+*/
+    public void setLikeAnswer(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(forumCat_likeAnswer, value);
     }
 }
