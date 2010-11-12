@@ -28,18 +28,10 @@ import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.query.larq.IndexBuilderString;
-import com.hp.hpl.jena.query.larq.IndexBuilderSubject;
 import com.hp.hpl.jena.query.larq.IndexLARQ;
 import com.hp.hpl.jena.query.larq.LARQ;
-import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.NodeIterator;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.sparql.util.StringUtils;
-import java.io.FileOutputStream;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
 import org.junit.*;
 
 /*
@@ -47,21 +39,7 @@ import org.junit.*;
  * and open the template in the editor.
  */
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Dns;
-import org.semanticwb.model.Language;
-import org.semanticwb.model.ResourceType;
-import org.semanticwb.model.Resource;
-import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.Template;
-import org.semanticwb.model.TemplateGroup;
-import org.semanticwb.model.TemplateRef;
-import org.semanticwb.model.UserRepository;
-import org.semanticwb.model.User;
-import org.semanticwb.model.VersionInfo;
-import org.semanticwb.model.WebPage;
-import org.semanticwb.model.WebSite;
 
 
 /**
