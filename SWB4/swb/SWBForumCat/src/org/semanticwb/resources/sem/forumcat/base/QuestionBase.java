@@ -15,6 +15,10 @@ public abstract class QuestionBase extends org.semanticwb.model.SWBClass impleme
     public static final org.semanticwb.platform.SemanticProperty forumCat_queStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#queStatus");
     public static final org.semanticwb.platform.SemanticClass forumCat_Answer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#Answer");
     public static final org.semanticwb.platform.SemanticProperty forumCat_hasAnswerInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#hasAnswerInv");
+   /**
+   * Indica si la pregunta ha sido cerrada por su creador.
+   */
+    public static final org.semanticwb.platform.SemanticProperty forumCat_closed=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#closed");
     public static final org.semanticwb.platform.SemanticProperty forumCat_question=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#question");
     public static final org.semanticwb.platform.SemanticProperty forumCat_queIsApropiate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#queIsApropiate");
     public static final org.semanticwb.platform.SemanticProperty forumCat_specifications=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#specifications");
@@ -524,6 +528,24 @@ public abstract class QuestionBase extends org.semanticwb.model.SWBClass impleme
              ret=(org.semanticwb.resources.sem.forumcat.Answer)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Closed property
+* @return boolean with the Closed
+*/
+    public boolean isClosed()
+    {
+        return getSemanticObject().getBooleanProperty(forumCat_closed);
+    }
+
+/**
+* Sets the Closed property
+* @param value long with the Closed
+*/
+    public void setClosed(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(forumCat_closed, value);
     }
 
 /**
