@@ -49,7 +49,7 @@ public class SubProcess extends Activity
             if (e.clickCount >= 2 and containerable) {
                 modeler.containerElement=this;
             }
-        }
+        },
     }
 
     def imgLoop = ImageView {
@@ -177,7 +177,9 @@ public class SubProcess extends Activity
     override var onMouseClicked = function (e: MouseEvent): Void {
         if (e.button == e.button.PRIMARY) {
             if (e.clickCount >= 2) {
-                text.startEditing()
+                if (not (modeler.containerElement == this)) {
+                    text.startEditing()
+                }
             }
         } else if (e.button == e.button.SECONDARY) {
             if (modeler.getFocusedNode() == this) {
