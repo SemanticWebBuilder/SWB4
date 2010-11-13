@@ -665,7 +665,8 @@ public class CodeGenerator
 
         File dir = createPackage(tpc.getCodePackage(), pDirectory);
         File fileClass = new File(dir.getPath() + File.separatorChar + tpc.getUpperClassName() + ".java");
-        if (!fileClass.exists())
+        File fileClass2 = new File(dir.getPath() + File.separatorChar + tpc.getUpperClassName() + ".groovy");
+        if (!fileClass.exists() && !fileClass2.exists())
         {
             StringBuilder javaClassContent = new StringBuilder();
             if (tpc.getCodePackage()!=null && !tpc.getCodePackage().equals(""))
@@ -1368,7 +1369,8 @@ public class CodeGenerator
         String sPackage = tpc.getCodePackage();
         File dir = createPackage(sPackage, pDirectory);
         File fileClass = new File(dir.getPath() + File.separatorChar + tpc.getUpperClassName() + ".java");
-        if (!fileClass.exists())
+        File fileClass2 = new File(dir.getPath() + File.separatorChar + tpc.getUpperClassName() + ".groovy");
+        if (!fileClass.exists() && !fileClass2.exists())
         {
             StringBuilder javaClassContent = new StringBuilder();
             if (!sPackage.equals(""))
