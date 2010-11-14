@@ -1897,6 +1897,23 @@ public class SWBUtils {
             return txt;
         }
 
+        /**
+         * Une los elementos del arreglo <b>arr</b> de Strings con el valor <b>concat</b>
+         * @param concat, valor a concatenar
+         * @param arr, valores a concatenar con el valor del parametro concat
+         * @return
+         */
+        public static String join(String concat, String[] arr)
+        {
+            StringBuffer ret=new StringBuffer();
+            for(int x=0;x<arr.length;x++)
+            {
+                ret.append(arr[x]);
+                if((x+1)<arr.length)ret.append(concat);
+            }
+            return ret.toString();
+        }
+
     }
 
     /**
