@@ -31,7 +31,6 @@ package org.semanticwb;
 import com.hp.hpl.jena.query.*;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.sparql.util.IndentedWriter;
 import java.util.Iterator;
 import org.junit.*;
 import org.semanticwb.platform.SemanticVocabulary;
@@ -99,7 +98,8 @@ public class TestQuery {
         
         Query query = QueryFactory.create(queryString) ;
         // Print with line numbers
-        query.serialize(new IndentedWriter(System.out,true)) ;
+        //query.serialize(new IndentedWriter(System.out,true));
+        query.serialize(System.out) ;
         System.out.println() ;
         
         // Create a single execution of this query, apply to a model
@@ -190,7 +190,8 @@ public class TestQuery {
 
         Query query = QueryFactory.create(queryString) ;
         // Print with line numbers
-        query.serialize(new IndentedWriter(System.out,true)) ;
+        //query.serialize(new IndentedWriter(System.out,true)) ;
+        query.serialize(System.out) ;
         System.out.println() ;
 
         // Create a single execution of this query, apply to a model

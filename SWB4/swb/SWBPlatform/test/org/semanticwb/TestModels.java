@@ -37,7 +37,6 @@ import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.sparql.util.IndentedWriter;
 import java.util.Iterator;
 import org.junit.*;
 import org.semanticwb.platform.SemanticClass;
