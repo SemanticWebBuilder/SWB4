@@ -111,7 +111,7 @@ public class TestIndex {
 
         String searchString = "+sección" ;
 
-        String queryString = StringUtils.join("\n", new String[]{
+        String queryString = SWBUtils.TEXT.join("\n", new String[]{
             "PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>" ,
             "PREFIX :       <http://example/>" ,
             "PREFIX pf:     <http://jena.hpl.hp.com/ARQ/property#>",
