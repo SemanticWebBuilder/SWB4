@@ -53,12 +53,14 @@ public class ProcessObserver extends org.semanticwb.process.model.base.ProcessOb
 
     public void sendSignal(FlowNodeInstance instance)
     {
+        System.out.println("sendSignal:"+((Event)instance.getFlowNodeType()).getActionCode());
         Iterator<FlowNodeInstance> it=listSignalObserverInstances();
         while (it.hasNext())
         {
             FlowNodeInstance flowNodeInstance = it.next();
             String c1=((Event)flowNodeInstance.getFlowNodeType()).getActionCode();
             String c2=((Event)instance.getFlowNodeType()).getActionCode();
+            System.out.println(flowNodeInstance+" "+c1+"=="+c2);
             if((c1!=null && c1.equals(c2)) || c1==null && c2==null)
             {
                 try
@@ -72,11 +74,13 @@ public class ProcessObserver extends org.semanticwb.process.model.base.ProcessOb
         while (nit.hasNext())
         {
             StartEvent startEvent = nit.next();
+            System.out.println(startEvent);
             Containerable cont=startEvent.getContainer();
             if(cont!=null && cont instanceof Process && ((Process)cont).isActive())
             {
                 String c1=startEvent.getActionCode();
                 String c2=((Event)instance.getFlowNodeType()).getActionCode();
+                System.out.println(startEvent+" "+c1+"=="+c2);
                 if((c1!=null && c1.equals(c2)) || c1==null && c2==null)
                 {
                     try
@@ -211,6 +215,7 @@ public class ProcessObserver extends org.semanticwb.process.model.base.ProcessOb
 
     public void notify(SemanticObject obj, Object prop, String lang, String action)
     {
+        System.out.println(obj+" "+prop+" "+action+" "+SemanticObject.ACT_CREATE);
         if(SemanticObject.ACT_CREATE.equals(action))
         {
             if(obj.instanceOf(TimerStartEvent.sclass))
