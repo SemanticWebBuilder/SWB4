@@ -6,6 +6,8 @@ public class ProcessSite extends org.semanticwb.process.model.base.ProcessSiteBa
     public ProcessSite(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+        //Initialize ProcessObserver
+        ProcessObserver po=getProcessObserver();
     }
 
     public synchronized ProcessObserver getProcessObserver()
