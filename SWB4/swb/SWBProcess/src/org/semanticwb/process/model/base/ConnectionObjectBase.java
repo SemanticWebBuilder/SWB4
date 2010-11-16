@@ -7,84 +7,160 @@ public abstract class ConnectionObjectBase extends org.semanticwb.process.model.
     public static final org.semanticwb.platform.SemanticProperty swp_source=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#source");
     public static final org.semanticwb.platform.SemanticProperty swp_target=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#target");
     public static final org.semanticwb.platform.SemanticClass swp_ConnectionObject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ConnectionObject");
+   /**
+   * The semantic class that represents the currentObject
+   */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ConnectionObject");
 
     public static class ClassMgr
     {
+       /**
+       * Returns a list of ConnectionObject for a model
+       * @param model Model to find
+       * @return Iterator of org.semanticwb.process.model.ConnectionObject
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ConnectionObject> listConnectionObjects(org.semanticwb.model.SWBModel model)
         {
             java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
             return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject>(it, true);
         }
+       /**
+       * Returns a list of org.semanticwb.process.model.ConnectionObject for all models
+       * @return Iterator of org.semanticwb.process.model.ConnectionObject
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ConnectionObject> listConnectionObjects()
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject>(it, true);
         }
-
+       /**
+       * Gets a org.semanticwb.process.model.ConnectionObject
+       * @param id Identifier for org.semanticwb.process.model.ConnectionObject
+       * @param model Model of the org.semanticwb.process.model.ConnectionObject
+       * @return A org.semanticwb.process.model.ConnectionObject
+       */
         public static org.semanticwb.process.model.ConnectionObject getConnectionObject(String id, org.semanticwb.model.SWBModel model)
         {
             return (org.semanticwb.process.model.ConnectionObject)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
-
+       /**
+       * Create a org.semanticwb.process.model.ConnectionObject
+       * @param id Identifier for org.semanticwb.process.model.ConnectionObject
+       * @param model Model of the org.semanticwb.process.model.ConnectionObject
+       * @return A org.semanticwb.process.model.ConnectionObject
+       */
         public static org.semanticwb.process.model.ConnectionObject createConnectionObject(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.process.model.ConnectionObject)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.process.model.ConnectionObject)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
-
+       /**
+       * Remove a org.semanticwb.process.model.ConnectionObject
+       * @param id Identifier for org.semanticwb.process.model.ConnectionObject
+       * @param model Model of the org.semanticwb.process.model.ConnectionObject
+       */
         public static void removeConnectionObject(String id, org.semanticwb.model.SWBModel model)
         {
             model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
         }
+       /**
+       * Returns true if exists a org.semanticwb.process.model.ConnectionObject
+       * @param id Identifier for org.semanticwb.process.model.ConnectionObject
+       * @param model Model of the org.semanticwb.process.model.ConnectionObject
+       * @return true if the org.semanticwb.process.model.ConnectionObject exists, false otherwise
+       */
 
         public static boolean hasConnectionObject(String id, org.semanticwb.model.SWBModel model)
         {
             return (getConnectionObject(id, model)!=null);
         }
+       /**
+       * Gets all org.semanticwb.process.model.ConnectionObject with a determined Source
+       * @param value Source of the type org.semanticwb.process.model.GraphicalElement
+       * @param model Model of the org.semanticwb.process.model.ConnectionObject
+       * @return Iterator with all the org.semanticwb.process.model.ConnectionObject
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ConnectionObject> listConnectionObjectBySource(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_source, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ConnectionObject with a determined Source
+       * @param value Source of the type org.semanticwb.process.model.GraphicalElement
+       * @return Iterator with all the org.semanticwb.process.model.ConnectionObject
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ConnectionObject> listConnectionObjectBySource(org.semanticwb.process.model.GraphicalElement value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_source,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ConnectionObject with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.process.model.ConnectionObject
+       * @return Iterator with all the org.semanticwb.process.model.ConnectionObject
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ConnectionObject> listConnectionObjectByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ConnectionObject with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.process.model.ConnectionObject
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ConnectionObject> listConnectionObjectByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ConnectionObject with a determined Target
+       * @param value Target of the type org.semanticwb.process.model.GraphicalElement
+       * @param model Model of the org.semanticwb.process.model.ConnectionObject
+       * @return Iterator with all the org.semanticwb.process.model.ConnectionObject
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ConnectionObject> listConnectionObjectByTarget(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_target, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ConnectionObject with a determined Target
+       * @param value Target of the type org.semanticwb.process.model.GraphicalElement
+       * @return Iterator with all the org.semanticwb.process.model.ConnectionObject
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ConnectionObject> listConnectionObjectByTarget(org.semanticwb.process.model.GraphicalElement value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_target,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ConnectionObject with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.process.model.ConnectionObject
+       * @return Iterator with all the org.semanticwb.process.model.ConnectionObject
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ConnectionObject> listConnectionObjectByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ConnectionObject with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.process.model.ConnectionObject
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ConnectionObject> listConnectionObjectByCreator(org.semanticwb.model.User value)
         {
@@ -93,10 +169,18 @@ public abstract class ConnectionObjectBase extends org.semanticwb.process.model.
         }
     }
 
+   /**
+   * Constructs a ConnectionObjectBase with a SemanticObject
+   * @param base The SemanticObject with the properties for the ConnectionObject
+   */
     public ConnectionObjectBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
+   /**
+   * Sets the value for the property Source
+   * @param value Source to set
+   */
 
     public void setSource(org.semanticwb.process.model.GraphicalElement value)
     {
@@ -108,12 +192,19 @@ public abstract class ConnectionObjectBase extends org.semanticwb.process.model.
             removeSource();
         }
     }
+   /**
+   * Remove the value for Source property
+   */
 
     public void removeSource()
     {
         getSemanticObject().removeProperty(swp_source);
     }
 
+   /**
+   * Gets the Source
+   * @return a org.semanticwb.process.model.GraphicalElement
+   */
     public org.semanticwb.process.model.GraphicalElement getSource()
     {
          org.semanticwb.process.model.GraphicalElement ret=null;
@@ -124,6 +215,10 @@ public abstract class ConnectionObjectBase extends org.semanticwb.process.model.
          }
          return ret;
     }
+   /**
+   * Sets the value for the property Target
+   * @param value Target to set
+   */
 
     public void setTarget(org.semanticwb.process.model.GraphicalElement value)
     {
@@ -135,12 +230,19 @@ public abstract class ConnectionObjectBase extends org.semanticwb.process.model.
             removeTarget();
         }
     }
+   /**
+   * Remove the value for Target property
+   */
 
     public void removeTarget()
     {
         getSemanticObject().removeProperty(swp_target);
     }
 
+   /**
+   * Gets the Target
+   * @return a org.semanticwb.process.model.GraphicalElement
+   */
     public org.semanticwb.process.model.GraphicalElement getTarget()
     {
          org.semanticwb.process.model.GraphicalElement ret=null;
@@ -152,6 +254,10 @@ public abstract class ConnectionObjectBase extends org.semanticwb.process.model.
          return ret;
     }
 
+   /**
+   * Gets the ProcessSite
+   * @return a instance of org.semanticwb.process.model.ProcessSite
+   */
     public org.semanticwb.process.model.ProcessSite getProcessSite()
     {
         return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();

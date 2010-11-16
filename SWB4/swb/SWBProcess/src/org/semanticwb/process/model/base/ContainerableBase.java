@@ -13,11 +13,26 @@ public interface ContainerableBase extends org.semanticwb.model.GenericObject
 
     public org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject> listProcessClasses();
 
+   /**
+   * Adds the ProcessClass
+   * @param value An instance of org.semanticwb.platform.SemanticObject
+   */
     public void addProcessClass(org.semanticwb.platform.SemanticObject value);
 
+   /**
+   * Remove all the values for the property ProcessClass
+   */
     public void removeAllProcessClass();
 
+   /**
+   * Remove a value from the property ProcessClass
+   * @param value An instance of org.semanticwb.platform.SemanticObject
+   */
     public void removeProcessClass(org.semanticwb.platform.SemanticObject value);
 
+/**
+* Gets the ProcessClass
+* @return a instance of org.semanticwb.platform.SemanticObject
+*/
     public org.semanticwb.platform.SemanticObject getProcessClass();
 }

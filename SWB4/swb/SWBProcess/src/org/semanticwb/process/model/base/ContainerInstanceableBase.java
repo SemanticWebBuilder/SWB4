@@ -11,12 +11,27 @@ public interface ContainerInstanceableBase extends org.semanticwb.model.GenericO
     public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessObject> listProcessObjects();
     public boolean hasProcessObject(org.semanticwb.process.model.ProcessObject value);
 
+   /**
+   * Adds the ProcessObject
+   * @param value An instance of org.semanticwb.process.model.ProcessObject
+   */
     public void addProcessObject(org.semanticwb.process.model.ProcessObject value);
 
+   /**
+   * Remove all the values for the property ProcessObject
+   */
     public void removeAllProcessObject();
 
+   /**
+   * Remove a value from the property ProcessObject
+   * @param value An instance of org.semanticwb.process.model.ProcessObject
+   */
     public void removeProcessObject(org.semanticwb.process.model.ProcessObject value);
 
+/**
+* Gets the ProcessObject
+* @return a instance of org.semanticwb.process.model.ProcessObject
+*/
     public org.semanticwb.process.model.ProcessObject getProcessObject();
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowNodeInstance> listFlowNodeInstances();

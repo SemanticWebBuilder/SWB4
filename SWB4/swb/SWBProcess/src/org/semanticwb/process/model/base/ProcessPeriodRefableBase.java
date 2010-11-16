@@ -9,11 +9,26 @@ public interface ProcessPeriodRefableBase extends org.semanticwb.model.Referensa
     public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessPeriodRef> listProcessPeriodRefs();
     public boolean hasProcessPeriodRef(org.semanticwb.process.model.ProcessPeriodRef value);
 
+   /**
+   * Adds the ProcessPeriodRef
+   * @param value An instance of org.semanticwb.process.model.ProcessPeriodRef
+   */
     public void addProcessPeriodRef(org.semanticwb.process.model.ProcessPeriodRef value);
 
+   /**
+   * Remove all the values for the property ProcessPeriodRef
+   */
     public void removeAllProcessPeriodRef();
 
+   /**
+   * Remove a value from the property ProcessPeriodRef
+   * @param value An instance of org.semanticwb.process.model.ProcessPeriodRef
+   */
     public void removeProcessPeriodRef(org.semanticwb.process.model.ProcessPeriodRef value);
 
+/**
+* Gets the ProcessPeriodRef
+* @return a instance of org.semanticwb.process.model.ProcessPeriodRef
+*/
     public org.semanticwb.process.model.ProcessPeriodRef getProcessPeriodRef();
 }
