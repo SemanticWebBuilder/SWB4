@@ -435,7 +435,7 @@
                                                                         <tbody>
                                                                             <tr>
                                                                                 <td valign="middle">
-                                                                                    <div style="font-weight:bold;">Re: <%=question.getQuestion()%></div>
+                                                                                    <div style="font-weight:bold;">Re: <%=question.getQuestion()%><%=answer.isBestAnswer()?" (Mejor respuesta)":""%></div>
                                                                                     <div class="smalltext"><b>Respuesta No. <%=nAnswer%>:</b> <%=iso8601dateFormat.format(question.getCreated())%></div>
                                                                                 </td>
                                                                             </tr>
@@ -482,7 +482,7 @@
                                                                                          %><a href="<%=removeUrl%>">Eliminar</a>&nbsp;<%
                                                                                     }
                                                                                     if (user.isSigned() && question.getCreator().getURI().equals(user.getURI())) {
-                                                                                        if (!hasBestAnswer && !answer.isBestAnswer() && !answer.getCreator().getURI().equals(user.getURI()) ) {
+                                                                                        if (!hasBestAnswer && !answer.getCreator().getURI().equals(user.getURI()) &&  semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markBestAnswer)) {
                                                                                             actionURL.setAction("bestAnswer");
                                                                                             actionURL.setParameter("org", "showDetail");
                                                                                             %><a href="<%=actionURL%>">Mejor respuesta</a>&nbsp;<%
