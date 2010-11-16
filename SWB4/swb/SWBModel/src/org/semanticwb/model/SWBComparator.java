@@ -331,7 +331,7 @@ public static Iterator sortSermanticObjects(Iterator it) {
                         d2 = ((Traceable)o2).getCreated();
                     }
 
-                    int ret = d1.after(d2)? 1 : -1;
+                    int ret = d1.getTime()>d2.getTime()? 1 : -1;
                     return ret;
                 }
             });
@@ -350,7 +350,7 @@ public static Iterator sortSermanticObjects(Iterator it) {
                         d2 = ((Traceable)o2).getCreated();
                     }
 
-                    int ret = d1.after(d2)? -1 : 1;
+                    int ret = d1.getTime()>d2.getTime()? -1 : 1;
                     return ret;
                 }
             });
