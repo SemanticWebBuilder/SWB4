@@ -3,7 +3,7 @@
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
 "IsWebType" = "8:FALSE"
-"ProjectName" = "8:SemanticWebbuilderForOffice2010"
+"ProjectName" = "8:SetupSemanticWebbuilderForOffice2010"
 "LanguageId" = "3:3082"
 "CodePage" = "3:1252"
 "UILanguageId" = "3:3082"
@@ -506,6 +506,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
         "Release"
@@ -1130,7 +1143,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SemanticWebBuilder para Office 2010"
         "ProductCode" = "8:{58B5565A-6E1F-483D-9854-01382996F722}"
-        "PackageCode" = "8:{1082AA23-21D3-4E97-A4EB-E1E7F55E1962}"
+        "PackageCode" = "8:{BE505ACD-2120-4797-96F1-6B3083FCDF34}"
         "UpgradeCode" = "8:{5497AC65-2B5B-4E54-8D49-481DD9C35015}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
