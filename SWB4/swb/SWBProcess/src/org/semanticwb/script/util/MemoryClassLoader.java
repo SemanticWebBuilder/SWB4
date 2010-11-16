@@ -48,7 +48,7 @@ public final class MemoryClassLoader extends ClassLoader {
     {
         // First, check if the class has already been loaded
         //System.out.println("Enter loadClass:"+name);
-        Class c = findLoadedClass(name);
+        Class c = findClass(name);
         if (c == null)
         {
             c=getParentClass(name);
@@ -75,7 +75,7 @@ public final class MemoryClassLoader extends ClassLoader {
     public MemoryClassLoader(ClassLoader parent) {
         super(parent);
     }
-    
+
 
     public void addAll(Map<String, String> map)
     {
@@ -83,7 +83,7 @@ public final class MemoryClassLoader extends ClassLoader {
         for (Map.Entry<String, String> entry : map.entrySet()) {
             list.add(new Source(entry.getKey(), Kind.SOURCE, entry.getValue()));
         }
-        
+
         URLClassLoader urlClassLoader = (URLClassLoader) this.getParent();
         StringBuilder sb = new StringBuilder();
         List<String> options = new ArrayList<String>();
@@ -91,13 +91,23 @@ public final class MemoryClassLoader extends ClassLoader {
 
         for (URL url : urlClassLoader.getURLs())
             sb.append(url.getFile()).append(File.pathSeparator);
-        
+
         options.add(sb.toString());
 
         JavaCompiler.CompilationTask task=this.compiler.getTask(null, this.manager, null, options, null, list);
         task.call();
-    }    
-
+    }
+    public Class<?> findDynamicClass(String name) throws ClassNotFoundException
+    {
+        synchronized (this.manager) {
+            Output mc = this.manager.map.remove(name);
+            if (mc != null) {
+                byte[] array = mc.toByteArray();
+                return defineClass(name, array, 0, array.length);
+            }
+        }
+        throw new ClassNotFoundException();
+    }
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
@@ -124,7 +134,7 @@ public final class MemoryClassLoader extends ClassLoader {
         ArrayList<String> names=new ArrayList<String>();
         for(String name : this.manager.map.keySet())
         {
-            names.add(name);            
+            names.add(name);
         }
         return names.toArray(new String[names.size()]);
     }
