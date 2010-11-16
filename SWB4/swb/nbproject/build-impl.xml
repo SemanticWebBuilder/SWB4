@@ -565,13 +565,7 @@ exists or setup the property manually. For example like this:
         <ant antfile="${project.SWBPortlet}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
-        <ant antfile="${project.SWBProcess}/build.xml" inheritall="false" target="jar">
-            <property name="deploy.on.save" value="false"/>
-        </ant>
         <ant antfile="${project.SWBRepositoryManager}/build.xml" inheritall="false" target="jar">
-            <property name="deploy.on.save" value="false"/>
-        </ant>
-        <ant antfile="${project.SWBRestLibrary}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
         <ant antfile="${project.SWBSIP}/build.xml" inheritall="false" target="jar">
@@ -627,13 +621,7 @@ exists or setup the property manually. For example like this:
         <ant antfile="${project.SWBPortlet}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
-        <ant antfile="${project.SWBProcess}/build.xml" inheritall="false" target="jar">
-            <property name="deploy.on.save" value="false"/>
-        </ant>
         <ant antfile="${project.SWBRepositoryManager}/build.xml" inheritall="false" target="jar">
-            <property name="deploy.on.save" value="false"/>
-        </ant>
-        <ant antfile="${project.SWBRestLibrary}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
         <ant antfile="${project.SWBSIP}/build.xml" inheritall="false" target="jar">
@@ -874,7 +862,6 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.facebook-java-api-3.0.0-SNAPSHOT.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.facebook-java-api-schema-3.0.0-SNAPSHOT.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.twitter4j-2.0.9.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${reference.SWBProcess.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.poi-3.5-FINAL-20090928.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.poi-ooxml-3.5-FINAL-20090928.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.xmlbeans-2.3.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
@@ -884,7 +871,6 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${reference.SWBSIP.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.commons-digester-1.7.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.bsh-core-2.0b4.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${reference.SWBRestLibrary.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
@@ -973,7 +959,6 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${file.reference.facebook-java-api-3.0.0-SNAPSHOT.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.facebook-java-api-schema-3.0.0-SNAPSHOT.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.twitter4j-2.0.9.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${reference.SWBProcess.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.poi-3.5-FINAL-20090928.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.poi-ooxml-3.5-FINAL-20090928.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.xmlbeans-2.3.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
@@ -983,7 +968,6 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${reference.SWBSIP.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.commons-digester-1.7.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.bsh-core-2.0b4.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${reference.SWBRestLibrary.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init" if="dist.ear.dir" name="-clean-webinf-lib">
         <delete dir="${build.web.dir}/WEB-INF/lib"/>
@@ -1303,9 +1287,7 @@ exists or setup the property manually. For example like this:
         <ant antfile="${project.SWBPlatform}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBPortal}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBPortlet}/build.xml" inheritall="false" target="clean"/>
-        <ant antfile="${project.SWBProcess}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBRepositoryManager}/build.xml" inheritall="false" target="clean"/>
-        <ant antfile="${project.SWBRestLibrary}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBSIP}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBSearch}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBSemanticFileRepository}/build.xml" inheritall="false" target="clean"/>
