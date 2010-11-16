@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWB4Word2010", "SWB4Word2010\SWB4Word2010.csproj", "{54A8614C-B940-48ED-8161-E2A919588EFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWB4PPT2010", "SWB4PPT2010\SWB4PPT2010.csproj", "{50D371DD-F475-406B-8065-B7988204077F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWB4Excel2010", "SWB4Excel2010\SWB4Excel2010.csproj", "{20458274-BC46-4BEA-B8D1-7DF6FE850695}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWB4Office2010Library", "SWB4Office2010Library\SWB4Office2010Library.csproj", "{F4ED2DD4-A3CD-409A-AB3A-6F0D4D78F0F7}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SemanticWebbuilderForOffice2010", "SemanticWebbuilderForOffice2010\SemanticWebbuilderForOffice2010.vdproj", "{17D7A450-A8BE-46DD-A6BB-10AB3071309E}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{54A8614C-B940-48ED-8161-E2A919588EFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54A8614C-B940-48ED-8161-E2A919588EFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54A8614C-B940-48ED-8161-E2A919588EFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54A8614C-B940-48ED-8161-E2A919588EFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50D371DD-F475-406B-8065-B7988204077F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50D371DD-F475-406B-8065-B7988204077F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50D371DD-F475-406B-8065-B7988204077F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50D371DD-F475-406B-8065-B7988204077F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20458274-BC46-4BEA-B8D1-7DF6FE850695}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20458274-BC46-4BEA-B8D1-7DF6FE850695}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20458274-BC46-4BEA-B8D1-7DF6FE850695}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20458274-BC46-4BEA-B8D1-7DF6FE850695}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4ED2DD4-A3CD-409A-AB3A-6F0D4D78F0F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4ED2DD4-A3CD-409A-AB3A-6F0D4D78F0F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4ED2DD4-A3CD-409A-AB3A-6F0D4D78F0F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4ED2DD4-A3CD-409A-AB3A-6F0D4D78F0F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17D7A450-A8BE-46DD-A6BB-10AB3071309E}.Debug|Any CPU.ActiveCfg = Debug
+		{17D7A450-A8BE-46DD-A6BB-10AB3071309E}.Release|Any CPU.ActiveCfg = Release
+		{17D7A450-A8BE-46DD-A6BB-10AB3071309E}.Release|Any CPU.Build.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
