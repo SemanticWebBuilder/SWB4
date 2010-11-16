@@ -36,7 +36,7 @@
 
             //mgr.addAltEntry("http://www.w3.org/2002/07/owl", "file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/owl.owl");
             mgr.addAltEntry("http://www.semanticwebbuilder.org/swb4/ontology", "file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/swb.owl");
-            mgr.addAltEntry("http://www.semanticwebbuilder.org/swb4/process", "file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/swp.owl");
+            mgr.addAltEntry("http://www.semanticwebbuilder.org/swb4/process", "file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl_ext/swp.owl");
             mgr.addAltEntry("http://www.semanticwebbuilder.org/swb4/community", "file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/community.owl");
 
             //String swbowl="file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/cat.owl";

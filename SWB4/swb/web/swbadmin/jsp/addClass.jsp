@@ -34,17 +34,10 @@
 %>
 <form id="rdfs:Class/form" dojoType="dijit.form.Form" class="swbform" action="<%=org.semanticwb.SWBPlatform.getContextPath()%>/swbadmin/jsp/SemResourceEditor.jsp"  onsubmit="submitForm('rdfs:Class/form');return false;" method="post">
     <!--<input type="hidden" name="scls" value="< % =scls%>"/>-->
-    <input type="hidden" name="smode" value="createClass"/>
+    <input type="hidden" name="act" value="createClass"/>
     <input type="hidden" name="sref" value="<%=sref%>"/>
 	<fieldset>
 	    <table>
-            <tr>
-                <td align="right">
-                    <label for="label"><%=getLocaleString("label",lang)%></label>
-                </td><td>
-                    <input type="text" name="label" dojoType="dijit.form.ValidationTextBox" promptMessage="<%=getLocaleString("enter",lang)%> <%=getLocaleString("label",lang)%>." invalidMessage="<%=getLocaleString("label",lang)%> <%=getLocaleString("invalid",lang)%>." trim="true"/>
-	            </td>
-            </tr>
             <tr>
                 <td align="right">
                     <label><%=getLocaleString("name",lang)%> <em>*</em></label>

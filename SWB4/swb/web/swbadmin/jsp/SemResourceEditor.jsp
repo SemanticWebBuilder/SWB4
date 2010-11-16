@@ -152,6 +152,7 @@
     String suri=request.getParameter("suri");
     String puri=request.getParameter("puri");
     String act=request.getParameter("act");
+    String sref=request.getParameter("sref");
 
     //System.out.println("suri:"+suri);
     String pathView=SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceTab.jsp";
@@ -212,6 +213,17 @@
 
         renderPropValues(res, prop, out, isbase, act!=null && act.equals("addempty"),editValue);
         return;
+    }else if(sref!=null)
+    {
+        System.out.print("sref"+sref);
+        System.out.print("act"+act);
+        //Property prop=ont.getRDFOntModel().getOntProperty(puri);
+        //String editValue=null;
+        if(act!=null && act.equals("add"))
+        {
+            String id=request.getParameter("id");
+            System.out.print("id:"+act);
+        }
     }
 
     //System.out.println("isbase:"+isbase);
@@ -282,7 +294,6 @@
         renderPropValues(res,prop,out,isbase,false,null);
         out.println("</div>");
         out.println("</td></tr>");
-
     }
 %>
         </table>
