@@ -48,7 +48,7 @@ public abstract class UndoMgr
         {
             index++;
             arr=arr.subList(0, index);
-            System.out.println(index+" "+aux);
+            //System.out.println(index+" "+aux);
             arr.add(aux);
         }
         //System.out.println("index:"+index);
@@ -59,7 +59,7 @@ public abstract class UndoMgr
         if(index>-1)
         {
             index--;
-            System.out.println(index+" "+arr.get(index));
+            //System.out.println(index+" "+arr.get(index));
             return arr.get(index);
         }
         return null;
@@ -70,7 +70,7 @@ public abstract class UndoMgr
         if(index+1<arr.size())
         {
             index++;
-            System.out.println(index+" "+arr.get(index));
+            //System.out.println(index+" "+arr.get(index));
             return arr.get(index);
         }
         return null;
