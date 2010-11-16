@@ -19,15 +19,32 @@ public class IntermediateCatchEvent extends org.semanticwb.process.model.base.In
     @Override
     public void notifyEvent(FlowNodeInstance instance, FlowNodeInstance from)
     {
+        //System.out.println("instance:"+instance);
+        //System.out.println("from:"+from);
         if(isInterruptor())
         {
             GraphicalElement subpro=getParent();
+            //System.out.println("subpro:"+subpro);
             if(subpro!=null && subpro instanceof FlowNode)
             {
                 FlowNodeInstance source=instance.getRelatedFlowNodeInstance((FlowNode)subpro);
-                source.close(from.getCreator(), Instance.STATUS_CLOSED, Instance.ACTION_EVENT, false);
+                //System.out.println("source"+source);
+                if(from!=null)
+                {
+                    source.close(from.getCreator(), Instance.STATUS_CLOSED, Instance.ACTION_EVENT, false);
+                }else
+                {
+                    source.close(instance.getCreator(), Instance.STATUS_CLOSED, Instance.ACTION_EVENT, false);
+                }
             }
         }
-        instance.close(from.getCreator(),from.getSourceInstance().getAction());
+        //System.out.println("source2:"+from.getSourceInstance());
+        if(from!=null)
+        {
+            instance.close(from.getCreator(),from.getSourceInstance().getAction());
+        }else
+        {
+            instance.close(instance.getCreator());
+        }
     }
 }
