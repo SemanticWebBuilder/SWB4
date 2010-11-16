@@ -179,6 +179,16 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                   response.setAction("edit");
                 }
                 } catch(Exception e) { log.error(e); }
+            } else if(action.equals("bestAnswer")) {
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
+                Answer answer=(Answer)semObject.createGenericInstance();
+                try {
+                    if(!answer.isBestAnswer()) {
+                        answer.setBestAnswer(true);
+                    }
+                } catch(Exception e) { log.error(e); }
+                response.setAction("showDetail");
+                response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
             } else if(action.equals("markAnswerAsInnapropiate")) {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
                 Answer answer=(Answer)semObject.createGenericInstance();
@@ -204,6 +214,26 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 } catch(Exception e) { log.error(e); }
                 response.setAction("showDetail");
                 response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
+            } else if(action.equals("closeQuestion")) {
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
+                Question question=(Question)semObject.createGenericInstance();
+                try {
+                    if(!question.isClosed()) {
+                        question.setClosed(true);
+                    }
+                } catch(Exception e) { log.error(e); }
+                response.setAction("showDetail");
+                response.setRenderParameter("uri", question.getURI());
+            } else if(action.equals("openQuestion")) {
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
+                Question question=(Question)semObject.createGenericInstance();
+                try {
+                    if(question.isClosed()) {
+                        question.setClosed(false);
+                    }
+                } catch(Exception e) { log.error(e); }
+                response.setAction("showDetail");
+                response.setRenderParameter("uri", question.getURI());
             } else if(action.equals("voteQuestion")) {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
                 Question question=(Question)semObject.createGenericInstance();
