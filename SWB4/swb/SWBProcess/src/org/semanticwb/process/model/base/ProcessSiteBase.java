@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Trashable,org.semanticwb.model.Localeable,org.semanticwb.model.Indexable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableNode,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable
+public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Trashable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable,org.semanticwb.model.Indexable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode
 {
     public static final org.semanticwb.platform.SemanticClass swp_AdhocSubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#AdhocSubProcess");
     public static final org.semanticwb.platform.SemanticClass swp_ProcessPeriod=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessPeriod");
@@ -15,6 +15,9 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
     public static final org.semanticwb.platform.SemanticClass swp_ScalationIntermediateThrowEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ScalationIntermediateThrowEvent");
     public static final org.semanticwb.platform.SemanticClass swp_SignalEndEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#SignalEndEvent");
     public static final org.semanticwb.platform.SemanticClass swp_StartEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#StartEvent");
+   /**
+   * Objeto utilizado para agrupar propiedades que en su conjunto definen una vista dentro de la administración de SWB
+   */
     public static final org.semanticwb.platform.SemanticClass swbxf_FormView=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView");
     public static final org.semanticwb.platform.SemanticClass swp_AdhocTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#AdhocTask");
     public static final org.semanticwb.platform.SemanticClass swp_Task=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Task");
@@ -93,23 +96,39 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
     public static final org.semanticwb.platform.SemanticClass swp_CompensationSubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#CompensationSubProcess");
     public static final org.semanticwb.platform.SemanticClass swp_MultipleIntermediateCatchEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#MultipleIntermediateCatchEvent");
     public static final org.semanticwb.platform.SemanticClass swp_ProcessSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessSite");
+   /**
+   * The semantic class that represents the currentObject
+   */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessSite");
 
     public static class ClassMgr
     {
+       /**
+       * Returns a list of ProcessSite for a model
+       * @param model Model to find
+       * @return Iterator of org.semanticwb.process.model.ProcessSite
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSites(org.semanticwb.model.SWBModel model)
         {
             java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
             return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite>(it, true);
         }
+       /**
+       * Returns a list of org.semanticwb.process.model.ProcessSite for all models
+       * @return Iterator of org.semanticwb.process.model.ProcessSite
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSites()
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite>(it, true);
         }
-
+       /**
+       * Gets a org.semanticwb.process.model.ProcessSite
+       * @param id Identifier for org.semanticwb.process.model.ProcessSite
+       * @return A org.semanticwb.process.model.ProcessSite
+       */
         public static org.semanticwb.process.model.ProcessSite getProcessSite(String id)
         {
             org.semanticwb.platform.SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();
@@ -125,14 +144,21 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
             }
             return ret;
         }
-
+       /**
+       * Create a org.semanticwb.process.model.ProcessSite
+       * @param id Identifier for org.semanticwb.process.model.ProcessSite
+       * @return A org.semanticwb.process.model.ProcessSite
+       */
         public static org.semanticwb.process.model.ProcessSite createProcessSite(String id, String namespace)
         {
             org.semanticwb.platform.SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();
             org.semanticwb.platform.SemanticModel model=mgr.createModel(id, namespace);
-            return (org.semanticwb.process.model.ProcessSite)model.createGenericObject(model.getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.process.model.ProcessSite)model.createGenericObject(model.getObjectUri(id,sclass),sclass);
         }
-
+       /**
+       * Remove a org.semanticwb.process.model.ProcessSite
+       * @param id Identifier for org.semanticwb.process.model.ProcessSite
+       */
         public static void removeProcessSite(String id)
         {
             org.semanticwb.process.model.ProcessSite obj=getProcessSite(id);
@@ -141,113 +167,240 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
                 obj.remove();
             }
         }
+       /**
+       * Returns true if exists a org.semanticwb.process.model.ProcessSite
+       * @param id Identifier for org.semanticwb.process.model.ProcessSite
+       * @return true if the org.semanticwb.process.model.ProcessSite exists, false otherwise
+       */
 
         public static boolean hasProcessSite(String id)
         {
             return (getProcessSite(id)!=null);
         }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined ModelProperty
+       * @param value ModelProperty of the type org.semanticwb.model.ModelProperty
+       * @param model Model of the org.semanticwb.process.model.ProcessSite
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByModelProperty(org.semanticwb.model.ModelProperty value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasModelProperty, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined ModelProperty
+       * @param value ModelProperty of the type org.semanticwb.model.ModelProperty
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByModelProperty(org.semanticwb.model.ModelProperty value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasModelProperty,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined Language
+       * @param value Language of the type org.semanticwb.model.Language
+       * @param model Model of the org.semanticwb.process.model.ProcessSite
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByLanguage(org.semanticwb.model.Language value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_language, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined Language
+       * @param value Language of the type org.semanticwb.model.Language
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByLanguage(org.semanticwb.model.Language value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_language,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined SubModel
+       * @param value SubModel of the type org.semanticwb.model.SWBModel
+       * @param model Model of the org.semanticwb.process.model.ProcessSite
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteBySubModel(org.semanticwb.model.SWBModel value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasSubModel, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined SubModel
+       * @param value SubModel of the type org.semanticwb.model.SWBModel
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteBySubModel(org.semanticwb.model.SWBModel value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasSubModel,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.process.model.ProcessSite
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined ParentWebSite
+       * @param value ParentWebSite of the type org.semanticwb.model.WebSite
+       * @param model Model of the org.semanticwb.process.model.ProcessSite
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByParentWebSite(org.semanticwb.model.WebSite value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_parentWebSite, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined ParentWebSite
+       * @param value ParentWebSite of the type org.semanticwb.model.WebSite
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByParentWebSite(org.semanticwb.model.WebSite value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_parentWebSite,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined UserRepository
+       * @param value UserRepository of the type org.semanticwb.model.UserRepository
+       * @param model Model of the org.semanticwb.process.model.ProcessSite
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByUserRepository(org.semanticwb.model.UserRepository value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_userRepository, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined UserRepository
+       * @param value UserRepository of the type org.semanticwb.model.UserRepository
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByUserRepository(org.semanticwb.model.UserRepository value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_userRepository,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined Ontology
+       * @param value Ontology of the type org.semanticwb.model.Ontology
+       * @param model Model of the org.semanticwb.process.model.ProcessSite
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByOntology(org.semanticwb.model.Ontology value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasOntology, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined Ontology
+       * @param value Ontology of the type org.semanticwb.model.Ontology
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByOntology(org.semanticwb.model.Ontology value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasOntology,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.process.model.ProcessSite
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined HomePage
+       * @param value HomePage of the type org.semanticwb.model.WebPage
+       * @param model Model of the org.semanticwb.process.model.ProcessSite
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByHomePage(org.semanticwb.model.WebPage value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_homePage, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined HomePage
+       * @param value HomePage of the type org.semanticwb.model.WebPage
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByHomePage(org.semanticwb.model.WebPage value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_homePage,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined DefaultTemplate
+       * @param value DefaultTemplate of the type org.semanticwb.model.Template
+       * @param model Model of the org.semanticwb.process.model.ProcessSite
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByDefaultTemplate(org.semanticwb.model.Template value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_defaultTemplate, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined DefaultTemplate
+       * @param value DefaultTemplate of the type org.semanticwb.model.Template
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
 
         public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByDefaultTemplate(org.semanticwb.model.Template value)
         {
@@ -256,6 +409,10 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
         }
     }
 
+   /**
+   * Constructs a ProcessSiteBase with a SemanticObject
+   * @param base The SemanticObject with the properties for the ProcessSite
+   */
     public ProcessSiteBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

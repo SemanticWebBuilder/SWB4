@@ -16,14 +16,28 @@ public interface ProcessTraceableBase extends org.semanticwb.model.Traceable
 
     public void setAssigned(java.util.Date value);
 
-    public void setAssignedto(org.semanticwb.model.User user);
+   /**
+   * Sets a value from the property Assignedto
+   * @param value An instance of org.semanticwb.model.User
+   */
+    public void setAssignedto(org.semanticwb.model.User value);
 
+   /**
+   * Remove the value from the property Assignedto
+   */
     public void removeAssignedto();
 
     public org.semanticwb.model.User getAssignedto();
 
-    public void setEndedby(org.semanticwb.model.User user);
+   /**
+   * Sets a value from the property Endedby
+   * @param value An instance of org.semanticwb.model.User
+   */
+    public void setEndedby(org.semanticwb.model.User value);
 
+   /**
+   * Remove the value from the property Endedby
+   */
     public void removeEndedby();
 
     public org.semanticwb.model.User getEndedby();
