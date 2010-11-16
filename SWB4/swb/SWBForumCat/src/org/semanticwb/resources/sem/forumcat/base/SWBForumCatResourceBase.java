@@ -12,6 +12,7 @@ public abstract class SWBForumCatResourceBase extends org.semanticwb.portal.api.
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_semanticResourceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#semanticResourceInv");
     public static final org.semanticwb.platform.SemanticProperty forumCat_acceptAttachements=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#acceptAttachements");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_markBestAnswer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#markBestAnswer");
     public static final org.semanticwb.platform.SemanticProperty forumCat_acceptGuessComments=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#acceptGuessComments");
     public static final org.semanticwb.platform.SemanticClass forumCat_Question=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#Question");
     public static final org.semanticwb.platform.SemanticProperty forumCat_hasQuestionInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#hasQuestionInv");
@@ -199,6 +200,24 @@ public abstract class SWBForumCatResourceBase extends org.semanticwb.portal.api.
     public void setAcceptAttachements(boolean value)
     {
         getSemanticObject().setBooleanProperty(forumCat_acceptAttachements, value);
+    }
+
+/**
+* Gets the MarkBestAnswer property
+* @return boolean with the MarkBestAnswer
+*/
+    public boolean isMarkBestAnswer()
+    {
+        return getSemanticObject().getBooleanProperty(forumCat_markBestAnswer);
+    }
+
+/**
+* Sets the MarkBestAnswer property
+* @param value long with the MarkBestAnswer
+*/
+    public void setMarkBestAnswer(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(forumCat_markBestAnswer, value);
     }
 
 /**
