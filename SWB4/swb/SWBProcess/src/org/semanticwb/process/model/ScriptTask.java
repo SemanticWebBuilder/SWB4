@@ -86,15 +86,15 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
             Interpreter i = new Interpreter();  // Construct an interpreter
             MemoryClassLoader mcls=null;
 
-            if(loaders.containsKey(instance.getURI()))
-            {
-                mcls=loaders.get(instance.getURI());
-            }
-            else
-            {
+//            if(loaders.containsKey(instance.getURI()))
+//            {
+//                mcls=loaders.get(instance.getURI());
+//            }
+//            else
+//            {
                 mcls=loadClasses(instance,ProcessObject.class.getClassLoader());
-                loaders.put(instance.getURI(), mcls);
-            }
+//                loaders.put(instance.getURI(), mcls);
+//            }
             
             i.setClassLoader(mcls);
             i.set("instance", instance);            
