@@ -1,3 +1,4 @@
+<%@page import="java.util.HashSet"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="org.semanticwb.model.WebPage"%>
 <%@page import="org.semanticwb.model.WebSite"%>
@@ -22,14 +23,19 @@
         Iterator<WebPage> it=site.listWebPages();
         while (it.hasNext()) {
             WebPage elem = it.next();
+            HashSet set=new HashSet();
+            set.add(elem);
             WebPage parent=elem.getParent();
             while(parent!=null)
             {
-                if(elem==parent || parent.isChildof(elem))
+                if(set.contains(parent))
                 {
                     out.print("Cicle:"+elem.getId()+" --> "+parent.getId());
                     out.print("<br/>");
                     break;
+                }else
+                {
+                    set.add(parent);
                 }
                 parent=parent.getParent();
              }
