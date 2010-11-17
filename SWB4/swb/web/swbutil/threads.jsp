@@ -34,7 +34,7 @@
                     out.println("thread:"+thread.getName()+"<br>");
                     if(stop!=null && stop.length()>1 && thread.getName().indexOf(stop)>-1)
                     {
-                        //thread.stop();
+                        thread.stop();
                         out.println("Interrupted...<br>");
                     }
                 }
