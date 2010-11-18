@@ -21,6 +21,14 @@ public class ExclusiveGateway extends Gateway
         initializeCustomNode();        
         w=50;
         h=50;
+        text=EditableText
+        {
+            text: bind title with inverse
+            x:bind x
+            y: bind y + 40
+            width: bind w + 60
+            height: bind h
+        }
         shape= Polygon
         {
             points: [w/2,0,w,h/2,w/2,h,0,h/2]
@@ -32,25 +40,29 @@ public class ExclusiveGateway extends Gateway
         return Group
         {
             content: [
-                shape,
-                Line{
-                    startX: w/2-w/6
-                    startY: h/2-h/6
-                    endX: w/2+w/6
-                    endY: h/2+h/6
-                    styleClass: "modifierGateway"
-                }, Line{
-                    startX: w/2+w/6
-                    startY: h/2-h/6
-                    endX: w/2-w/6
-                    endY: h/2+h/6
-                    styleClass: "modifierGateway"
-                }
+                Group {
+                    content: [
+                        shape,
+                        Line {
+                            startX: w / 2 - w / 6
+                            startY: h / 2 - h / 6
+                            endX: w / 2 + w / 6
+                            endY: h / 2 + h / 6
+                            styleClass: "modifierGateway"
+                        }, Line {
+                            startX: w / 2 + w / 6
+                            startY: h / 2 - h / 6
+                            endX: w / 2 - w / 6
+                            endY: h / 2 + h / 6
+                            styleClass: "modifierGateway"
+                        }
+                    ]
+                    translateX: bind x - w / 2
+                    translateY: bind y - w / 2
+                    scaleX: bind s;
+                    scaleY: bind s;
+                }, text
             ]
-            translateX: bind x - w/2
-            translateY: bind y - w/2
-            scaleX: bind s;
-            scaleY: bind s;
             visible:bind canView()
         };
     }
