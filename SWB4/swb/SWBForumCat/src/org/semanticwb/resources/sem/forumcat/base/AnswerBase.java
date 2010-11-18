@@ -1,7 +1,7 @@
 package org.semanticwb.resources.sem.forumcat.base;
 
 
-public abstract class AnswerBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable
+public abstract class AnswerBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Searchable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty forumCat_ansStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#ansStatus");
     public static final org.semanticwb.platform.SemanticProperty forumCat_ansInappropriate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#ansInappropriate");
