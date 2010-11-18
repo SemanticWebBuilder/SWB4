@@ -75,6 +75,11 @@ public class Modeler extends CustomNode
                 mousex=e.x+getXScroll();
                 mousey=e.y+getYScroll();
 
+                if (ModelerUtils.clickedNode == null) {
+                    ModelerUtils.setResizeNode(null);
+                    this.requestFocus();
+                }
+
                 if(tempNode!=null)
                 {
                     var close: Boolean=true;
@@ -208,7 +213,6 @@ public class Modeler extends CustomNode
                          ModelerUtils.clickedNode=null;
                      }
                  }
-
              }
 
              onKeyPressed: function (e: KeyEvent): Void
