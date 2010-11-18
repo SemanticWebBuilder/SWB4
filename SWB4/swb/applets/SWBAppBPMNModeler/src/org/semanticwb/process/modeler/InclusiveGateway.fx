@@ -21,6 +21,14 @@ public class InclusiveGateway extends Gateway
         initializeCustomNode();
         w=50;
         h=50;
+        text=EditableText
+        {
+            text: bind title with inverse
+            x:bind x
+            y: bind y + 40
+            width: bind w + 60
+            height: bind h
+        }
         shape= Polygon
         {
             points: [w/2,0,w,h/2,w/2,h,0,h/2]
@@ -32,18 +40,22 @@ public class InclusiveGateway extends Gateway
         return Group
         {
             content: [
-                shape, Circle
-                {
-                    centerX: w/2
-                    centerY: h/2
-                    radius: w/4
-                    styleClass: "modifierGateway"
-                }
+                Group {
+                    content: [
+                        shape, Circle
+                        {
+                            centerX: w/2
+                            centerY: h/2
+                            radius: w/4
+                            styleClass: "modifierGateway"
+                        }
+                    ]
+                    translateX: bind x - w/2
+                    translateY: bind y - w/2
+                    scaleX: bind s;
+                    scaleY: bind s;
+                }, text
             ]
-            translateX: bind x - w/2
-            translateY: bind y - w/2
-            scaleX: bind s;
-            scaleY: bind s;
             visible: bind canView()
         };
     }
