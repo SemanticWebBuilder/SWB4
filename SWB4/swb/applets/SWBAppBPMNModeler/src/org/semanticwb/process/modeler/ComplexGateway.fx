@@ -20,7 +20,7 @@ public class ComplexGateway extends Gateway
     {
         initializeCustomNode();
         w=50;
-        h=50;
+        h=50;        
         text=EditableText
         {
             text: bind title with inverse
