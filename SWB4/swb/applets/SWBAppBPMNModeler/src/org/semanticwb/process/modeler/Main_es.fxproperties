@@ -10,6 +10,7 @@
 "content" = "Contenido de la Aplicación"
 "hideTooltip" = "Ocultar Barra de Herramientas"
 "maximizeTooltip" = "Maximizar"
+"minimizeTooltip" = "Minimizar"
 "subTask" = "SubTarea"
 "adhocSubProcess" = "Sub-Proceso AdHoc"
 "transaction" = "Transacción"
