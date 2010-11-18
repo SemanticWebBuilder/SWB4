@@ -58,6 +58,7 @@ public class ToolBar extends CustomNode
 
     var fileChooser = javax.swing.JFileChooser{};
     var imageFileChooser = javax.swing.JFileChooser{};
+    var hidden:Boolean = false;
 
     def imgDiv: Image = Image {
         url: "{__DIR__}images/barra_division.png"
@@ -434,6 +435,7 @@ public class ToolBar extends CustomNode
             image: "images/file1.png"
             imageOver: "images/file2.png"
             imageClicked: "images/file3.png"
+            visible: bind not hidden
             buttons: [
                 ImgButton {
                     text: ModelerUtils.getLocalizedString("new")
@@ -538,6 +540,7 @@ public class ToolBar extends CustomNode
             image: "images/task_1.png"
             imageOver: "images/task_2.png"
             imageClicked: "images/task_3.png"
+            visible: bind not hidden
             buttons: [
                 ImgButton {
                     text: ModelerUtils.getLocalizedString("abstractTask")
@@ -655,6 +658,7 @@ public class ToolBar extends CustomNode
             image: "images/subtask_1.png"
             imageOver: "images/subtask_2.png"
             imageClicked: "images/subtask_3.png"
+            visible: bind not hidden
             buttons: [
                 ImgButton {
                     text: ModelerUtils.getLocalizedString("subProcess")
@@ -723,6 +727,7 @@ public class ToolBar extends CustomNode
             image: "images/start_1.png"
             imageOver: "images/start_2.png"
             imageClicked: "images/start_3.png"
+            visible: bind not hidden
             buttons: [
                 ImgButton {
                     text: ModelerUtils.getLocalizedString("normalStart")
@@ -882,6 +887,7 @@ public class ToolBar extends CustomNode
             image:"images/inter_1.png"
             imageOver:"images/inter_2.png"
             imageClicked: "images/inter_3.png"
+            visible: bind not hidden
             buttons: [
 //                ImgButton {
 //                    text: ModelerUtils.getLocalizedString("normalInter")
@@ -1150,6 +1156,7 @@ public class ToolBar extends CustomNode
             image: "images/end_1.png"
             imageOver: "images/end_2.png"
             imageClicked: "images/end_3.png"
+            visible: bind not hidden
             buttons: [
                 ImgButton {
                     text: ModelerUtils.getLocalizedString("normalEnd")
@@ -1295,6 +1302,7 @@ public class ToolBar extends CustomNode
             image: "images/if_1.png"
             imageOver: "images/if_2.png"
             imageClicked: "images/if_3.png"
+            visible: bind not hidden
             buttons: [
 //                ImgButton {
 //                    text:"Gateway"
@@ -1427,6 +1435,7 @@ public class ToolBar extends CustomNode
             image:"images/flow_1.png"
             imageOver:"images/flow_2.png"
             imageClicked: "images/flow_3.png"
+            visible: bind not hidden
             buttons: [
                 ImgButton {
                     text: ModelerUtils.getLocalizedString("sequenceFlow")
@@ -1517,6 +1526,7 @@ public class ToolBar extends CustomNode
             image: "images/anota_1.png"
             imageOver: "images/anota_2.png"
             imageClicked: "images/anota_3.png"
+            visible: bind not hidden
             buttons: [
                 ImgButton {
                     text: ModelerUtils.getLocalizedString("textAnnotation")
@@ -1559,6 +1569,7 @@ public class ToolBar extends CustomNode
             image:"images/doc_1.png"
             imageOver:"images/doc_2.png"
             imageClicked: "images/doc_3.png"
+            visible: bind not hidden
             buttons: [
                 ImgButton {
                     text: ModelerUtils.getLocalizedString("dataObj")
@@ -1646,6 +1657,7 @@ public class ToolBar extends CustomNode
             image: "images/pool_1.png"
             imageOver: "images/pool_2.png"
             imageClicked: "images/pool_3.png"
+            visible: bind not hidden
             buttons: [
                 ImgButton
                 {
@@ -1679,6 +1691,8 @@ public class ToolBar extends CustomNode
                 }
             ]
         };
+        var flow: Flow;
+        var imt: ImageView = null;
 
         var ret=Group
         {
@@ -1687,7 +1701,7 @@ public class ToolBar extends CustomNode
              //scaleX:.5
              //scaleY:.5
              content: [
-                Flow {
+                flow = Flow {
                     height: bind h
                     width: bind w
                     content: [
@@ -1721,13 +1735,26 @@ public class ToolBar extends CustomNode
                             }
                         },
                         ImgButton {
-                            text: ModelerUtils.getLocalizedString("hideTooltip")
+                            text: bind if (not hidden) ModelerUtils.getLocalizedString("hideTooltip") else ModelerUtils.getLocalizedString("showTooltip")
                             toolBar:this;
-                            image: "images/sube_1.png"
-                            imageOver: "images/sube_2.png"
+                            image: bind if (not hidden) "images/sube_1.png" else "images/baja_1.png"
+                            imageOver: bind if (not hidden) "images/sube_2.png" else "images/baja_2.png"
                             action: function():Void
                             {
-                                //stage.fullScreen = not stage.fullScreen;
+                                ModelerUtils.stopToolTip();
+                                hidden = not hidden;
+                                if (hidden) {
+                                    imt = ImageView {
+                                        image: imgBottomBar
+                                        smooth: false
+                                    };
+                                    insert imt after flow.content[1];
+                                } else {
+                                    if (imt != null) {
+                                        delete imt from flow.content;
+                                        imt = null;
+                                    }
+                                }
                             }
                         },
                         ImgButton {
@@ -1741,62 +1768,74 @@ public class ToolBar extends CustomNode
                                 modeler.disablePannable=false;
                                 stage.fullScreen = not stage.fullScreen;
                             }
+                            visible: bind not hidden
                         },
                         file,
                         ImageView {
                             image: imgDiv
                             smooth: false
+                            visible: bind not hidden
                             //blocksMouse:true
                         },
                         task,
                         ImageView {
                             image: imgSpace
                             smooth: false
+                            visible: bind not hidden
                         },
                         subtask,
                         ImageView {
                             image: imgSpace
                             smooth: false
+                            visible: bind not hidden
                         },
                         startEvent,
                         ImageView {
                             image: imgSpace
                             smooth: false
+                            visible: bind not hidden
                         },
                         interEvent,
                         ImageView {
                             image: imgSpace
                             smooth: false
+                            visible: bind not hidden
                         },
                         endEvent,
                         ImageView {
                             image: imgSpace
                             smooth: false
+                            visible: bind not hidden
                         },
                         gateWay,
                         ImageView {
                             image: imgDiv
                             smooth: false
+                            visible: bind not hidden
                         },
                         sequence,
                         ImageView {
                             image: imgDiv
                             smooth: false
+                            visible: bind not hidden
                         },
                         artifacts,
                         ImageView {
                             image: imgDiv
                             smooth: false
+                            visible: bind not hidden
                         },
                         dataObj,
                         ImageView {
                             image: imgDiv
                             smooth: false
+                            visible: bind not hidden
                         },
                         pool,
                         ImageView {
                             image: imgBottomBar
                             smooth: false
+                            visible: bind not hidden
                         }
                     ]
                 },
