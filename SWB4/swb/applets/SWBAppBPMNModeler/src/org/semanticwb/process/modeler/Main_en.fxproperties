@@ -10,6 +10,7 @@
 "content" = "Application content"
 "hideTooltip" = "Hide ToolBar"
 "maximizeTooltip" = "Maximize"
+"minimizeTooltip" = "Minimize"
 "subTask" = "Sub-Task"
 "adhocSubProcess" = "AdHoc Sub-Process"
 "transaction" = "Transaction"
