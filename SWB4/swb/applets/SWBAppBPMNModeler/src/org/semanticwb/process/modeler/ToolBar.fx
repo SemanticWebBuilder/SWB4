@@ -29,14 +29,12 @@ import javafx.stage.AppletStageExtension;
 import javafx.stage.Alert;
 import applets.commons.WBXMLParser;
 import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.BufferedOutputStream;
 import org.semanticwb.process.modeler.GraphicalElement;
 import org.semanticwb.process.modeler.ModelerUtils;
 import java.lang.Class;
-import java.lang.UnsupportedOperationException;
 import java.lang.String;
 
 public var counter: Integer;
@@ -1733,10 +1731,10 @@ public class ToolBar extends CustomNode
                             }
                         },
                         ImgButton {
-                            text: ModelerUtils.getLocalizedString("maximizeTooltip")
+                            text: bind if(not stage.fullScreen) ModelerUtils.getLocalizedString("maximizeTooltip") else ModelerUtils.getLocalizedString("minimizeTooltip")
                             toolBar:this;
-                            image: "images/maxim_1.png"
-                            imageOver: "images/maxim_2.png"
+                            image: bind if(not stage.fullScreen) "images/maxim_1.png" else "images/minim_1.png"
+                            imageOver: bind if(not stage.fullScreen) "images/maxim_2.png" else "images/minim_2.png"
                             action: function():Void
                             {
                                 ModelerUtils.clickedNode=null;
