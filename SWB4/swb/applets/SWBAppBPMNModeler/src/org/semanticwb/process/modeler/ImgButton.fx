@@ -30,27 +30,39 @@ public class ImgButton extends CustomNode
     public var subMenu:SubMenu;
     public var toolBar:ToolBar;
     public var action:function():Void;
+    var imgN: Image;
+    var imgO: Image;
+    var ti = bind image on replace {
+        imgN = Image {
+            url: "{__DIR__}{image}"
+        };
+    }
+    var to = bind imageOver on replace {
+        imgO = Image {
+            url: "{__DIR__}{imageOver}"
+        };
+    }
 
     override protected function create():Node
     {
-        def imgN: Image = Image {
-            url: "{__DIR__}{image}"
-        }
+//        imgN = Image {
+//            url: "{__DIR__}{image}"
+//        }
 
-        def imgO: Image = Image {
-            url: "{__DIR__}{imageOver}"
-        }
+//        imgO = Image {
+//            url: "{__DIR__}{imageOver}"
+//        }
         
          content=Group
          {
              content:[
                ImageView {
-	         image: imgN
+	         image: bind imgN
                  smooth: false
                  visible: bind not over
                },
                ImageView {
-	         image: imgO
+	         image: bind imgO
                  smooth: false
                  visible: bind over
                }
