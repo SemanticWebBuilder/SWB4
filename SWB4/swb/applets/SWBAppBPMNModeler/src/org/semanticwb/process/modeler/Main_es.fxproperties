@@ -9,6 +9,7 @@
 "receiveTask" = "Tarea de Recepción de mensaje"
 "content" = "Contenido de la Aplicación"
 "hideTooltip" = "Ocultar Barra de Herramientas"
+"showTooltip" = "Mostrar Barra de Herramientas"
 "maximizeTooltip" = "Maximizar"
 "minimizeTooltip" = "Minimizar"
 "subTask" = "SubTarea"
