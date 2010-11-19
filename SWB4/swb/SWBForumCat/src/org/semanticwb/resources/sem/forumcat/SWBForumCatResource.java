@@ -65,6 +65,10 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         question.setCreator(user);
                     }
                     question.setForumResource(this);
+                    
+                    if (request.getParameter("tags") != null) {
+                        question.setTags(request.getParameter("tags"));
+                    }
                     SemanticObject semObjectChild = SemanticObject.createSemanticObject((request.getParameter("categoryuri")));
                     WebPage webPage = (WebPage) semObjectChild.createGenericInstance();
                     question.setWebpage(webPage);
@@ -84,6 +88,9 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         SemanticObject semObjectChild = SemanticObject.createSemanticObject((request.getParameter("categoryuri")));
                         WebPage webPage = (WebPage) semObjectChild.createGenericInstance();
                         question.setWebpage(webPage);
+                        if (request.getParameter("tags") != null) {
+                            question.setTags(request.getParameter("tags"));
+                        }
                     }
                 } catch(FormValidateException e) { log.error(e); }
                 if (request.getParameter("org")!=null){
