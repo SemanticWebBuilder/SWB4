@@ -266,4 +266,10 @@ public class WebSite extends WebSiteBase {
     public String getSearchDisplayImage() {
         return null;
     }
+
+
+    public boolean isValid()
+    {
+        return isActive() && !isDeleted();
+    }
 }
