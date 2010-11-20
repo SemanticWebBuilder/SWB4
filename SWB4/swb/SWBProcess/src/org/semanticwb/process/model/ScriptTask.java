@@ -37,15 +37,15 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
         log.debug("Para el objeto "+object.getURI()+" de la instancia de proceso "+ instance.getURI() +" se econtró la clase "+className);
         try
         {
-            System.out.println("Cargando clase "+className+" ...");
+            //System.out.println("Cargando clase "+className+" ...");
             Class clazz=mcls.loadClass(className);
-            System.out.println("Obteniendo constructor...");
+            //System.out.println("Obteniendo constructor...");
             Constructor c=clazz.getConstructor(SemanticObject.class);
-            System.out.println("Instanciando objeto...");
+            //System.out.println("Instanciando objeto...");
             Object instanceObject=c.newInstance(object);
-            System.out.println("Agregando variable "+varname+"="+instanceObject+" de tipo "+instanceObject.getClass());
+            //System.out.println("Agregando variable "+varname+"="+instanceObject+" de tipo "+instanceObject.getClass());
             i.set(varname, instanceObject);
-            System.out.println("Variable "+ varname +" agregada");
+            //System.out.println("Variable "+ varname +" agregada");
         }
         catch(ClassNotFoundException cnfe)
         {
@@ -86,15 +86,15 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
             Interpreter i = new Interpreter();  // Construct an interpreter
             MemoryClassLoader mcls=null;
 
-//            if(loaders.containsKey(instance.getURI()))
-//            {
-//                mcls=loaders.get(instance.getURI());
-//            }
-//            else
-//            {
+            if(loaders.containsKey(instance.getURI()))
+            {
+                mcls=loaders.get(instance.getURI());
+            }
+            else
+            {
                 mcls=loadClasses(instance,ProcessObject.class.getClassLoader());
-//                loaders.put(instance.getURI(), mcls);
-//            }
+                loaders.put(instance.getURI(), mcls);
+            }
             
             i.setClassLoader(mcls);
             i.set("instance", instance);            
@@ -114,8 +114,8 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
             }
 
             Object ret=i.eval(code);
-            System.out.println("ret:"+ret);
-            System.out.println("time:"+ (System.currentTimeMillis()-ini ));
+            //System.out.println("ret:"+ret);
+            //System.out.println("time:"+ (System.currentTimeMillis()-ini ));
 
         }catch(Exception e)
         {
