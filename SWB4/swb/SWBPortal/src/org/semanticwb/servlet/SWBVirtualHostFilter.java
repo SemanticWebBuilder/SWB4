@@ -260,13 +260,13 @@ public class SWBVirtualHostFilter implements Filter
                         case 500:
                         case 404:
                             processError(resp.getError(), resp.getErrorMsg(), _response, dparams);
-                            log.error(path + " - " + resp.getError() + ":" + resp.getErrorMsg());
+                            log.warn(path + " - " + resp.getError() + ":" + resp.getErrorMsg());
                             break;
                         case 403:
                             loginInternalServlet.doProcess(_request, _response, dparams);
                             break;
                         default:
-                            log.error(path + " - " + resp.getError() + ":" + resp.getErrorMsg());
+                            log.warn(path + " - " + resp.getError() + ":" + resp.getErrorMsg());
                             _response.sendError(resp.getError(), resp.getErrorMsg());
                     }
                 }
@@ -453,7 +453,7 @@ public class SWBVirtualHostFilter implements Filter
         String msg = null;
         try
         {
-            System.out.println("modelid:"+modelid);
+            //System.out.println("modelid:"+modelid);
             if(modelid!=null)
             {
                 msg = SWBUtils.IO.getFileFromPath(SWBPortal.getWorkPath() + "/models/"+modelid + path + "_"+dparams.getUser().getLanguage()+".html");

@@ -527,7 +527,10 @@ public class DistributorParams
             {
                 wp=dns.getWebSite().getHomePage();
             }
-        }else
+            if(wp!=null && (!wp.isValid() || !wp.getWebSite().isValid()))wp=null;
+        }
+
+        if(wp==null)
         {
             Iterator<WebSite> it=SWBContext.listWebSites();
             while(it.hasNext())
@@ -536,7 +539,11 @@ public class DistributorParams
                 if(!site.equals(SWBContext.getAdminWebSite())
                    && !site.equals(SWBContext.getGlobalWebSite()))
                 {
-                    wp=site.getHomePage();
+                    if(site.isValid() && site.getHomePage().isValid())
+                    {
+                        wp=site.getHomePage();
+                        break;
+                    }
                 }
             }
             if(wp==null)
