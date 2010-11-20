@@ -50,8 +50,7 @@ public class BPMSProcessInstance {
                 }
             } catch(Exception e){
               log.error("Error en BPMSProcessInstance.getAllProcessSites", e);
-                System.out.println("Error en BPMSProcessInstance.getAllProcessSites:"
-                        + e.getMessage());
+                //System.out.println("Error en BPMSProcessInstance.getAllProcessSites:"+ e.getMessage());
             }
             return allSites;
         }
@@ -106,9 +105,7 @@ public class BPMSProcessInstance {
 
             } catch(Exception e){
               log.error("Error en BPMSProcessInstance.getAllProcessDefinitions", e);
-                System.out.println("Error en " +
-                        "BPMSProcessInstance.getAllProcessDefinitions:" +
-                        e.getMessage());
+                //System.out.println("Error en " + "BPMSProcessInstance.getAllProcessDefinitions:" + e.getMessage());
             }
             return vAllProcessDefinitions;
         }
