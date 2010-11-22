@@ -1044,6 +1044,7 @@ public class SemanticMgr implements SWBInstanceObject
      */
     public void processExternalChange(String uri, String puri, String lang, String action)
     {
+        System.out.println("processExternalChange");
         SemanticProperty prop=null;
         if(puri!=null)prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(puri);
 

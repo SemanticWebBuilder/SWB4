@@ -200,27 +200,34 @@ public class SemanticObject
         GenericObject gen=getGenericInstance();
         if(gen==null)
         {
-            SemanticClass clazz=getSemanticClass();
-            if(clazz==null)
+            synchronized(this)
             {
-                log.error("SemanticObject("+this+") without SemanticClass...");
-            }else
-            {
-                if(clazz.isSWBInterface())
+                gen=getGenericInstance();
+                if(gen==null)
                 {
-                    Iterator<SemanticClass> classes=listSemanticClasses();
-                    while(classes.hasNext())
+                    SemanticClass clazz=getSemanticClass();
+                    if(clazz==null)
                     {
-                        SemanticClass tempClazz=classes.next();
-                        if(tempClazz.isSWBClass())
+                        log.error("SemanticObject("+this+") without SemanticClass...");
+                    }else
+                    {
+                        if(clazz.isSWBInterface())
                         {
-                            clazz=tempClazz;
-                            break;
+                            Iterator<SemanticClass> classes=listSemanticClasses();
+                            while(classes.hasNext())
+                            {
+                                SemanticClass tempClazz=classes.next();
+                                if(tempClazz.isSWBClass())
+                                {
+                                    clazz=tempClazz;
+                                    break;
+                                }
+                            }
                         }
+                        gen=clazz.construcGenericInstance(this);
+                        setGenericInstance(gen);
                     }
                 }
-                gen=clazz.construcGenericInstance(this);
-                setGenericInstance(gen);
             }
         }
         return gen;
@@ -263,11 +270,18 @@ public class SemanticObject
         SemanticObject ret=getSemanticObject(uri);
         if(ret==null)
         {
-            Resource res=SWBPlatform.getSemanticMgr().getOntology().getResource(uri);
-            if(res!=null)
+            synchronized(SemanticObject.class)
             {
-                ret=new SemanticObject(res);
-                m_objs.put(uri, ret);
+                ret=getSemanticObject(uri);
+                if(ret==null)
+                {
+                    Resource res=SWBPlatform.getSemanticMgr().getOntology().getResource(uri);
+                    if(res!=null)
+                    {
+                        ret=new SemanticObject(res);
+                        m_objs.put(uri, ret);
+                    }
+                }
             }
         }
         return ret;
@@ -286,17 +300,24 @@ public class SemanticObject
         SemanticObject ret=getSemanticObject(id);
         if(ret==null)
         {
-//            //System.out.println("res1:"+res+" "+id);
-//            //if(hasCache)
-//            {
-//                if(res.getURI()!=null && (res.getModel()==SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel() || res.getModel()==SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel()))
-//                {
-//                    res=SWBPlatform.getSemanticMgr().getOntology().getResource(res.getURI());
-//                }
-//            }
-//            //System.out.println("res2:"+res+" "+id);
-            ret=new SemanticObject(res);
-            m_objs.put(id, ret);
+            synchronized(SemanticObject.class)
+            {
+                ret=getSemanticObject(id);
+                if(ret==null)
+                {
+        //            //System.out.println("res1:"+res+" "+id);
+        //            //if(hasCache)
+        //            {
+        //                if(res.getURI()!=null && (res.getModel()==SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel() || res.getModel()==SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel()))
+        //                {
+        //                    res=SWBPlatform.getSemanticMgr().getOntology().getResource(res.getURI());
+        //                }
+        //            }
+        //            //System.out.println("res2:"+res+" "+id);
+                    ret=new SemanticObject(res);
+                    m_objs.put(id, ret);
+                }
+            }
         }
         return ret;
     }
@@ -322,6 +343,7 @@ public class SemanticObject
      */
     public static void removeCache(String uri)
     {
+        System.out.println("removeCache:"+uri);
         m_objs.remove(uri);
     }
 
@@ -1524,7 +1546,7 @@ public Document getDomProperty(SemanticProperty prop)
         {
             Statement stmt=props.nextStatement();
             Property prop=stmt.getPredicate();
-            properties.add(this.m_model.getSemanticProperty(prop.getURI()));
+            properties.add(getModel().getSemanticProperty(prop.getURI()));
         }
         props.close();
         return properties.iterator();
@@ -3262,9 +3284,9 @@ public Document getDomProperty(SemanticProperty prop)
     {
         //Get URI
         String id=null;
-        if(m_cls.isAutogenId())
+        if(getSemanticClass().isAutogenId())
         {
-            id=""+m_model.getCounter(m_cls);
+            id=""+getModel().getCounter(getSemanticClass());
         }else
         {
             int x=1;
@@ -3274,7 +3296,7 @@ public Document getDomProperty(SemanticProperty prop)
                 id=getId()+x;
             }while(createSemanticObject(id)!=null);
         }
-        String uri=m_model.getObjectUri(id, m_cls);
+        String uri=getModel().getObjectUri(id, getSemanticClass());
         Resource res=getModel().getRDFModel().createResource(uri);
 
         //Get Herarquical properties
@@ -3290,7 +3312,7 @@ public Document getDomProperty(SemanticProperty prop)
             hp.add(ithp.next());
         }
 
-        //res.addProperty(m_model.getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE), m_cls.getOntClass());
+        //res.addProperty(getModel().getRDFModel().getProperty(SemanticVocabulary.RDF_TYPE), m_cls.getOntClass());
         Iterator<Statement> it=m_res.listProperties();
         while(it.hasNext())
         {
@@ -3300,7 +3322,7 @@ public Document getDomProperty(SemanticProperty prop)
             if(sprop==null || !sprop.isRemoveDependency())
             {
                 Statement nst=new StatementImpl(res, prop, st.getObject());
-                m_model.getRDFModel().add(nst);
+                getModel().getRDFModel().add(nst);
             }else
             {
                 System.out.println("Remove dependency prop:"+prop);
