@@ -150,23 +150,21 @@ public class WBMenuMap extends GenericAdmResource
         WebPage basetp = paramRequest.getWebPage().getWebSite().getHomePage();
         WebPage topic = paramRequest.getWebPage();
 
-        String basetopic = base.getAttribute("basetopic","_home");
-        try
+        String basetopic = base.getAttribute("basetopic",null);
+        
+        if(basetopic!=null)
         {
-            if(!"_home".equals(basetopic))
-            {
-                basetp = topic.getWebSite().getWebPage(basetopic);
-            }
-        }catch(Exception e)
+            basetp = topic.getWebSite().getWebPage(basetopic);
+        }
+
+        if(basetp==null)
         {
-            log.debug("Error. Tópico no encontrado: "+basetopic+". WBMenuNivel.getDom()", e);
             basetp = topic.getWebSite().getHomePage();
         }
 
         try
         {
             String lang = paramRequest.getUser().getLanguage();
-
 
             Document  dom = SWBUtils.XML.getNewDocument();
             Element el = dom.createElement("menu");
@@ -202,11 +200,11 @@ public class WBMenuMap extends GenericAdmResource
         while(it.hasNext())
         {
             WebPage tp=it.next();
-            if(tp.isActive() && (tp.isVisible() || tp==topic || tp.isParentof(topic)))
+            if(tp.isActive() && (tp.isVisible() || tp.equals(topic) || tp.isParentof(topic)))
             {
                 if(user.haveAccess(tp))
                 {
-                    if(tp.isParentof(topic) || tp==topic)
+                    if(tp.isParentof(topic) || tp.equals(topic))
                     {
                         return getLimits(tp, topic,level+1,user);
                     }else
@@ -256,7 +254,7 @@ public class WBMenuMap extends GenericAdmResource
                     ele.setAttribute("realLevel", ""+rlevel);
                     ele.setAttribute("level", ""+level);
                     ele.setAttribute("inPath", ""+tp.isParentof(topic));
-                    if(tp==topic) ele.setAttribute("current", "true");
+                    if(tp.equals(topic)) ele.setAttribute("current", "true");
                     else ele.setAttribute("current", "false");
                     if (tpurl.startsWith("http://")||tpurl.startsWith("https://")) {
                         ele.setAttribute("target", "_blank");
@@ -267,7 +265,7 @@ public class WBMenuMap extends GenericAdmResource
                     int auxl=0;
                     if(((nsup<0 || rlevel<=nsup) || (ninf<0 || rlevel>=(max-ninf))))
                     {
-                        if(!(topic==tp && tp.getParent()!=aux))
+                        if(!(topic.equals(tp) && tp.getParent()!=aux))
                         {
                             if(nini<=rlevel)
                             {
@@ -284,7 +282,7 @@ public class WBMenuMap extends GenericAdmResource
                         ele=nodo;
                     }
 
-                    if(tp.isParentof(topic) || tp==topic)
+                    if(tp.isParentof(topic) || tp.equals(topic))
                     {
                         ele.setAttribute("open","true");
                         if(getChilds(dom,ele, tp, topic, lang, level+auxl, rlevel+1, user,max))
@@ -301,11 +299,11 @@ public class WBMenuMap extends GenericAdmResource
                             if(bro4ch)
                             {
                                 //System.out.println("tp:"+tp.getId()+" topic:"+topic.getId()+":"+level+":"+rlevel+" max:"+max+" bro4ch");
-                                if(!bro && (rlevel+1)<max && (!tp.isChildof(topic)||(tp.getParent()!=aux && (tp.getParent()==topic||tp==topic))))nodo.removeChild(ele);
+                                if(!bro && (rlevel+1)<max && (!tp.isChildof(topic)||(tp.getParent()!=aux && (tp.getParent().equals(topic)||tp.equals(topic)))))nodo.removeChild(ele);
                             }else
                             {
                                 //System.out.println("tp:"+tp.getId()+" topic:"+topic.getId()+":"+level+":"+rlevel+" max:"+max+" bro:"+bro);
-                                if(!bro && (!tp.isChildof(topic)||(tp.getParent()!=aux && (tp.getParent()==topic||tp==topic))))nodo.removeChild(ele);
+                                if(!bro && (!tp.isChildof(topic)||(tp.getParent()!=aux && (tp.getParent().equals(topic)||tp.equals(topic)))))nodo.removeChild(ele);
                             }
                         }catch(Exception noe){}
 
