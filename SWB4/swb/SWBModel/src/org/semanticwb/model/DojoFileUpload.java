@@ -123,7 +123,7 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
             buffer.append("	<div id=\"" + pname + "_dynamic\"></div>\n");
         } else {
 
-            buffer.append("<input dojoType=\"dojox.form.FileInputAuto\" "
+            buffer.append("<input dojoType=\"dojox.form.FileInputAuto\" blurDelay=\"0\" "
                     + "id=\"" + pname + "_defaultAuto\" name=\"" + pname + "_inputFileAuto\" url=\"" + url
                     + "\" onComplete=\"fileUpload_Callback\" fileMask=\"" + filts.toString() + "\"/>\n");
             if (!"create".equals(mode) && obj.getProperty(prop) != null) {
