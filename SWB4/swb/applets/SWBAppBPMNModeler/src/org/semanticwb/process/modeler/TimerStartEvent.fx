@@ -33,20 +33,20 @@ public class TimerStartEvent extends StartEvent
 
             if (modeler.containerElement instanceof AdhocSubProcess) {
                 ret = false;
-                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError48"));
+                ModelerUtils.setErrorMessage(##"msgError48");
             } else if (modeler.containerElement instanceof EventSubProcess) {
                 ret = false;
                 if (c != 0) {
-                    ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError44"));
+                    ModelerUtils.setErrorMessage(##"msgError44");
                 } else {
-                    ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError43"));
+                    ModelerUtils.setErrorMessage(##"msgError43");
                 }
             } else if (c != 0) {
                 ret = false;
-                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError44"));
+                ModelerUtils.setErrorMessage(##"msgError44");
             } else {
                 ret = false;
-                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError50"));
+                ModelerUtils.setErrorMessage(##"msgError50");
             }
         }
         return ret;

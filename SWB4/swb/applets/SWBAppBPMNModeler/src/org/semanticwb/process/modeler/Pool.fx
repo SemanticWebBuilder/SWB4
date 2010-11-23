@@ -85,8 +85,8 @@ public class Pool extends GraphicalElement
     override public function remove(validate:Boolean)
     {
         ModelerUtils.popup.hide();
-        var tit = "{ModelerUtils.getLocalizedString("actDelete")} Pool";
-        var msg = "{ModelerUtils.getLocalizedString("msgDelConfirm")} \"{this.title}\"?";
+        var tit = ##"actDelete";
+        var msg = ##[confirmDelete]"\"{this.title}\"";
        if(not validate or sizeof graphChilds == 0 or Alert.confirm(tit, msg))
        {
            super.remove(validate);
@@ -154,7 +154,7 @@ public class Pool extends GraphicalElement
         var ret = true;
         if (link instanceof SequenceFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError37"));
+            ModelerUtils.setErrorMessage(##"msgError37");
         }        
         return ret;
     }
@@ -164,12 +164,12 @@ public class Pool extends GraphicalElement
         var ret = true;
         if (link instanceof SequenceFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError37"));
+            ModelerUtils.setErrorMessage(##"msgError37");
         }
         if (link instanceof MessageFlow) {
             if (link.ini.getPool() == this) {
                 ret = false;
-                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError16"));
+                ModelerUtils.setErrorMessage(##"msgError16");
             }
         }
         return ret;
@@ -179,7 +179,7 @@ public class Pool extends GraphicalElement
         var ret = super.canAddToDiagram();
         if (modeler.containerElement != null and modeler.containerElement instanceof SubProcess) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError45"));
+            ModelerUtils.setErrorMessage(##"msgError45");
         }
         return ret;
     }

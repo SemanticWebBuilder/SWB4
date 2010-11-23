@@ -161,7 +161,7 @@ public class ToolBar extends CustomNode
         AppletStageExtension.eval("parent.reloadTreeNodeByURI('{conn.getUri()}')");
         if(data.indexOf("OK")>0)
         {
-            Alert.inform("SemanticWebBuilder","Los datos fueron enviados correctamente");
+            Alert.inform("SemanticWebBuilder",##"msgSent");
             loadProcess();
         }else
         {
@@ -431,14 +431,14 @@ public class ToolBar extends CustomNode
         {
             modeler: modeler
             toolBar:this
-            text: ModelerUtils.getLocalizedString("file")
+            text: ##"file"//ModelerUtils.getLocalizedString("file")
             image: "images/file1.png"
             imageOver: "images/file2.png"
             imageClicked: "images/file3.png"
             visible: bind not hidden
             buttons: [
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("new")
+                    text: ##"new"//ModelerUtils.getLocalizedString("new")
                     image: "images/file_nuevo1.png"
                     imageOver: "images/file_nuevo2.png"
                     action: function():Void
@@ -451,7 +451,7 @@ public class ToolBar extends CustomNode
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("open")
+                    text: ##"open"//ModelerUtils.getLocalizedString("open")
                     image: "images/file_abrir1.png"
                     imageOver: "images/file_abrir2.png"
                     action: function():Void
@@ -464,7 +464,7 @@ public class ToolBar extends CustomNode
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("save")
+                    text: ##"save"//ModelerUtils.getLocalizedString("save")
                     image: "images/file_guardar1.png"
                     imageOver: "images/file_guardar2.png"
                     action: function():Void
@@ -481,7 +481,7 @@ public class ToolBar extends CustomNode
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("export")
+                    text: ##"export"//ModelerUtils.getLocalizedString("export")
                     image: "images/file_saveasimage1.png"
                     imageOver: "images/file_saveasimage2.png"
                     action: function():Void
@@ -492,7 +492,7 @@ public class ToolBar extends CustomNode
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("print")
+                    text: ##"print"//ModelerUtils.getLocalizedString("print")
                     image: "images/file_print1.png"
                     imageOver: "images/file_print2.png"
                     action: function():Void
@@ -519,7 +519,7 @@ public class ToolBar extends CustomNode
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("about")
+                    text: ##"about"//ModelerUtils.getLocalizedString("about")
                     image: "images/file_about1.png"
                     imageOver: "images/file_about2.png"
                     action: function():Void
@@ -536,14 +536,14 @@ public class ToolBar extends CustomNode
         {
             modeler: modeler
             toolBar:this
-            text: ModelerUtils.getLocalizedString("task")
+            text: ##"task"//ModelerUtils.getLocalizedString("task")
             image: "images/task_1.png"
             imageOver: "images/task_2.png"
             imageClicked: "images/task_3.png"
             visible: bind not hidden
             buttons: [
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("abstractTask")
+                    text: ##"abstractTask"//ModelerUtils.getLocalizedString("abstractTask")
                     image: "images/task_normal1.png"
                     imageOver: "images/task_normal2.png"
                     action: function():Void
@@ -552,13 +552,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=Task
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("abstractTask")
+                            title: ##"abstractTask"//ModelerUtils.getLocalizedString("abstractTask")
                             uri:"new:task:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("userTask")
+                    text: ##"userTask"//ModelerUtils.getLocalizedString("userTask")
                     image: "images/task_usr1.png"
                     imageOver: "images/task_usr2.png"
                     action: function():Void
@@ -567,13 +567,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=UserTask
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("userTask")
+                            title: ##"userTask"//ModelerUtils.getLocalizedString("userTask")
                             uri:"new:usertask:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("serviceTask")
+                    text: ##"serviceTask"//ModelerUtils.getLocalizedString("serviceTask")
                     image: "images/task_servicio1.png"
                     imageOver: "images/task_servicio2.png"
                     action: function():Void
@@ -582,13 +582,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=ServiceTask
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("serviceTask")
+                            title: ##"serviceTask"//ModelerUtils.getLocalizedString("serviceTask")
                             uri:"new:servicetask:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("scriptTask")
+                    text: ##"scriptTask"//ModelerUtils.getLocalizedString("scriptTask")
                     image: "images/task_script1.png"
                     imageOver: "images/task_script2.png"
                     action: function():Void
@@ -597,13 +597,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=ScriptTask
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("scriptTask")
+                            title: ##"scriptTask"//ModelerUtils.getLocalizedString("scriptTask")
                             uri:"new:scripttask:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("manualTask")
+                    text: ##"manualTask"//ModelerUtils.getLocalizedString("manualTask")
                     image: "images/task_manual1.png"
                     imageOver: "images/task_manual2.png"
                     action: function():Void
@@ -612,13 +612,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=ManualTask
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("manualTask")
+                            title: ##"manualTask"//ModelerUtils.getLocalizedString("manualTask")
                             uri:"new:manualtask:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("sendTask")
+                    text: ##"sendTask"//ModelerUtils.getLocalizedString("sendTask")
                     image: "images/task_envio1.png"
                     imageOver: "images/task_envio2.png"
                     action: function():Void
@@ -627,13 +627,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=SendTask
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("sendTask")
+                            title: ##"sendTask"//ModelerUtils.getLocalizedString("sendTask")
                             uri:"new:sendtask:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("receiveTask")
+                    text: ##"receiveTask"//ModelerUtils.getLocalizedString("receiveTask")
                     image: "images/task_recive1.png"
                     imageOver: "images/task_recive2.png"
                     action: function():Void
@@ -642,7 +642,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=ReceiveTask
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("receiveTask")
+                            title: ##"receiveTask"//ModelerUtils.getLocalizedString("receiveTask")
                             uri:"new:receivetask:{counter++}"
                         }
                     }
@@ -654,14 +654,14 @@ public class ToolBar extends CustomNode
         {
             modeler: modeler
             toolBar:this
-            text: ModelerUtils.getLocalizedString("subTask")
+            text: ##"subTask"//ModelerUtils.getLocalizedString("subTask")
             image: "images/subtask_1.png"
             imageOver: "images/subtask_2.png"
             imageClicked: "images/subtask_3.png"
             visible: bind not hidden
             buttons: [
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("subProcess")
+                    text: ##"subProcess"//ModelerUtils.getLocalizedString("subProcess")
                     image: "images/subtask_colapsado1.png"
                     imageOver: "images/subtask_colapsado2.png"
                     action: function():Void {
@@ -669,13 +669,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=SubProcess
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("subProcess")
+                            title: ##"subProcess"//ModelerUtils.getLocalizedString("subProcess")
                             uri:"new:subprocess:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("adhocSubProcess")
+                    text: ##"adhocSubProcess"//ModelerUtils.getLocalizedString("adhocSubProcess")
                     image: "images/subtask_adhoc+1.png"
                     imageOver: "images/subtask_adhoc+2.png"
                     action: function():Void {
@@ -683,13 +683,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=AdhocSubProcess
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("adhocSubProcess")
+                            title: ##"adhocSubProcess"//ModelerUtils.getLocalizedString("adhocSubProcess")
                             uri:"new:adhocsubprocess:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("eventSubProcess")
+                    text: ##"eventSubProcess"//ModelerUtils.getLocalizedString("eventSubProcess")
                     image: "images/subtask_evento1.png"
                     imageOver: "images/subtask_evento2.png"
                     action: function():Void {
@@ -697,13 +697,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=EventSubProcess
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("eventSubProcess")
+                            title: ##"eventSubProcess"//ModelerUtils.getLocalizedString("eventSubProcess")
                             uri:"new:eventsubprocess:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("transaction")
+                    text: ##"transaction"//ModelerUtils.getLocalizedString("transaction")
                     image: "images/subtask_transaccion1.png"
                     imageOver: "images/subtask_transaccion2.png"
                     action: function():Void {
@@ -711,7 +711,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=TransactionSubProcess
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("transaction")
+                            title: ##"transaction"//ModelerUtils.getLocalizedString("transaction")
                             uri:"new:transactionsubprocess:{counter++}"
                         }
                     }
@@ -723,14 +723,14 @@ public class ToolBar extends CustomNode
         {
             modeler: modeler
             toolBar:this
-            text: ModelerUtils.getLocalizedString("startEvents")
+            text: ##"startEvents"//ModelerUtils.getLocalizedString("startEvents")
             image: "images/start_1.png"
             imageOver: "images/start_2.png"
             imageClicked: "images/start_3.png"
             visible: bind not hidden
             buttons: [
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("normalStart")
+                    text: ##"normalStart"//ModelerUtils.getLocalizedString("normalStart")
                     image: "images/start_normal1.png"
                     imageOver: "images/start_normal2.png"
                     action: function():Void {
@@ -738,13 +738,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=StartEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("normalStart")
+                            title: ##"normalStart"//ModelerUtils.getLocalizedString("normalStart")
                             uri:"new:startevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("messageStart")
+                    text: ##"messageStart"//ModelerUtils.getLocalizedString("messageStart")
                     image: "images/start_msj1.png"
                     imageOver: "images/start_msj2.png"
                     action: function():Void {
@@ -752,13 +752,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=MessageStartEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("messageStart")
+                            title: ##"messageStart"//ModelerUtils.getLocalizedString("messageStart")
                             uri:"new:startevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("timerStart")
+                    text: ##"timerStart"//ModelerUtils.getLocalizedString("timerStart")
                     image: "images/start_tmp1.png"
                     imageOver: "images/start_tmp2.png"
                     action: function():Void
@@ -767,13 +767,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=TimerStartEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("timerStart")
+                            title: ##"timerStart"//ModelerUtils.getLocalizedString("timerStart")
                             uri:"new:startevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("ruleStart")
+                    text: ##"ruleStart"//ModelerUtils.getLocalizedString("ruleStart")
                     image: "images/start_cond1.png"
                     imageOver: "images/start_cond2.png"
                     action: function():Void {
@@ -781,13 +781,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=RuleStartEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("ruleStart")
+                            title: ##"ruleStart"//ModelerUtils.getLocalizedString("ruleStart")
                             uri:"new:startevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("signalStart")
+                    text: ##"signalStart"//ModelerUtils.getLocalizedString("signalStart")
                     image: "images/start_senal1.png"
                     imageOver: "images/start_senal2.png"
                     action: function():Void
@@ -796,13 +796,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=SignalStartEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("signalStart")
+                            title: ##"signalStart"//ModelerUtils.getLocalizedString("signalStart")
                             uri:"new:startevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("multipleStart")
+                    text: ##"multipleStart"//ModelerUtils.getLocalizedString("multipleStart")
                     image: "images/start_multi1.png"
                     imageOver: "images/start_multi2.png"
                     action: function():Void
@@ -811,13 +811,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=MultipleStartEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("multipleStart")
+                            title: ##"multipleStart"//ModelerUtils.getLocalizedString("multipleStart")
                             uri:"new:startevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("parallelStart")
+                    text: ##"parallelStart"//ModelerUtils.getLocalizedString("parallelStart")
                     image: "images/start_paralelo1.png"
                     imageOver: "images/start_paralelo2.png"
                     action: function():Void
@@ -826,13 +826,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=ParallelStartEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("parallelStart")
+                            title: ##"parallelStart"//ModelerUtils.getLocalizedString("parallelStart")
                             uri:"new:startevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("scalationStart")
+                    text: ##"scalationStart"//ModelerUtils.getLocalizedString("scalationStart")
                     image: "images/start_escala1.png"
                     imageOver: "images/start_escala2.png"
                     action: function():Void
@@ -841,13 +841,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=ScalationStartEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("scalationStart")
+                            title: ##"scalationStart"//ModelerUtils.getLocalizedString("scalationStart")
                             uri:"new:startevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("errorStart")
+                    text: ##"errorStart"//ModelerUtils.getLocalizedString("errorStart")
                     image: "images/start_error1.png"
                     imageOver: "images/start_error2.png"
                     action: function():Void
@@ -856,13 +856,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=ErrorStartEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("errorStart")
+                            title: ##"errorStart"//ModelerUtils.getLocalizedString("errorStart")
                             uri:"new:startevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("compensationStart")
+                    text: ##"compensationStart"//ModelerUtils.getLocalizedString("compensationStart")
                     image: "images/start_compensa1.png"
                     imageOver: "images/start_compensa2.png"
                     action: function():Void
@@ -871,7 +871,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=CompensationStartEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("compensationStart")
+                            title: ##"compensationStart"//ModelerUtils.getLocalizedString("compensationStart")
                             uri:"new:startevent:{counter++}"
                         }
                     }
@@ -883,7 +883,7 @@ public class ToolBar extends CustomNode
         {
             modeler: modeler
             toolBar:this
-            text: ModelerUtils.getLocalizedString("interEvents")
+            text: ##"interEvents"//ModelerUtils.getLocalizedString("interEvents")
             image:"images/inter_1.png"
             imageOver:"images/inter_2.png"
             imageClicked: "images/inter_3.png"
@@ -905,7 +905,7 @@ public class ToolBar extends CustomNode
 //                    }
 //                },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("messageInterCatch")
+                    text: ##"messageInterCatch"//ModelerUtils.getLocalizedString("messageInterCatch")
                     image: "images/inter_msj_b_1.png"
                     imageOver: "images/inter_msj_b_2.png"
                     action: function():Void {
@@ -913,13 +913,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=MessageIntermediateCatchEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("messageInterCatch")
+                            title: ##"messageInterCatch"//ModelerUtils.getLocalizedString("messageInterCatch")
                             uri:"new:interevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("messageInterThrow")
+                    text: ##"messageInterThrow"//ModelerUtils.getLocalizedString("messageInterThrow")
                     image: "images/inter_msj_n_1.png"
                     imageOver: "images/inter_msj_n_2.png"
                     action: function():Void {
@@ -927,13 +927,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=MessageIntermediateThrowEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("messageInterThrow")
+                            title: ##"messageInterThrow"//ModelerUtils.getLocalizedString("messageInterThrow")
                             uri:"new:interevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("timerInter")
+                    text: ##"timerInter"//ModelerUtils.getLocalizedString("timerInter")
                     image: "images/inter_tmp1.png"
                     imageOver: "images/inter_tmp2.png"
                     action: function():Void
@@ -942,13 +942,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=TimerIntermediateCatchEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("timerInter")
+                            title: ##"timerInter"//ModelerUtils.getLocalizedString("timerInter")
                             uri:"new:interevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("errorInter")
+                    text: ##"errorInter"//ModelerUtils.getLocalizedString("errorInter")
                     image: "images/inter_error1.png"
                     imageOver: "images/inter_error2.png"
                     action: function():Void
@@ -957,13 +957,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=ErrorIntermediateCatchEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("errorInter")
+                            title: ##"errorInter"//ModelerUtils.getLocalizedString("errorInter")
                             uri:"new:interevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("cancelInter")
+                    text: ##"cancelInter"//ModelerUtils.getLocalizedString("cancelInter")
                     image: "images/inter_cancel_1.png"
                     imageOver: "images/inter_cancel_2.png"
                     action: function():Void
@@ -972,13 +972,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=CancelationIntermediateCatchEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("cancelInter")
+                            title: ##"cancelInter"//ModelerUtils.getLocalizedString("cancelInter")
                             uri:"new:interevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("compensationInterCatch")
+                    text: ##"compensationInterCatch"//ModelerUtils.getLocalizedString("compensationInterCatch")
                     image: "images/inter_compensa_b_1.png"
                     imageOver: "images/inter_compensa_b_2.png"
                     action: function():Void {
@@ -986,13 +986,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=CompensationIntermediateCatchEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("compensationInterCatch")
+                            title: ##"compensationInterCatch"//ModelerUtils.getLocalizedString("compensationInterCatch")
                             uri:"new:interevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("compensationInterThrow")
+                    text: ##"compensationInterThrow"//ModelerUtils.getLocalizedString("compensationInterThrow")
                     image: "images/inter_compensa_n_1.png"
                     imageOver: "images/inter_compensa_n_2.png"
                     action: function():Void {
@@ -1000,13 +1000,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=CompensationIntermediateThrowEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("compensationInterThrow")
+                            title: ##"compensationInterThrow"//ModelerUtils.getLocalizedString("compensationInterThrow")
                             uri:"new:interevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("ruleInter")
+                    text: ##"ruleInter"//ModelerUtils.getLocalizedString("ruleInter")
                     image: "images/inter_cond1.png"
                     imageOver: "images/inter_cond2.png"
                     action: function():Void {
@@ -1014,13 +1014,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=RuleIntermediateCatchEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("ruleInter")
+                            title: ##"ruleInter"//ModelerUtils.getLocalizedString("ruleInter")
                             uri:"new:interevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("linkInterCatch")
+                    text: ##"linkInterCatch"//ModelerUtils.getLocalizedString("linkInterCatch")
                     image: "images/inter_enlace_b_1.png"
                     imageOver: "images/inter_enlace_b_2.png"
                     action: function():Void {
@@ -1028,13 +1028,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=LinkIntermediateCatchEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("linkInterCatch")
+                            title: ##"linkInterCatch"//ModelerUtils.getLocalizedString("linkInterCatch")
                             uri:"new:interevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("linkInterThrow")
+                    text: ##"linkInterThrow"//ModelerUtils.getLocalizedString("linkInterThrow")
                     image: "images/inter_enlace_n_1.png"
                     imageOver: "images/inter_enlace_n_2.png"
                     action: function():Void {
@@ -1042,13 +1042,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=LinkIntermediateThrowEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("linkInterThrow")
+                            title: ##"linkInterThrow"//ModelerUtils.getLocalizedString("linkInterThrow")
                             uri:"new:interevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("signalInterCatch")
+                    text: ##"signalInterCatch"//ModelerUtils.getLocalizedString("signalInterCatch")
                     image: "images/inter_senal_b_1.png"
                     imageOver: "images/inter_senal_b_2.png"
                     action: function():Void {
@@ -1056,13 +1056,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=SignalIntermediateCatchEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("signalInterCatch")
+                            title: ##"signalInterCatch"//ModelerUtils.getLocalizedString("signalInterCatch")
                             uri:"new:interevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("signalInterThrow")
+                    text: ##"signalInterThrow"//ModelerUtils.getLocalizedString("signalInterThrow")
                     image: "images/inter_senal_n_1.png"
                     imageOver: "images/inter_senal_n_2.png"
                     action: function():Void {
@@ -1070,13 +1070,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=SignalIntermediateThrowEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("signalInterThrow")
+                            title: ##"signalInterThrow"//ModelerUtils.getLocalizedString("signalInterThrow")
                             uri:"new:interevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("multInterCatch")
+                    text: ##"multInterCatch"//ModelerUtils.getLocalizedString("multInterCatch")
                     image: "images/inter_multi_b_1.png"
                     imageOver: "images/inter_multi_b_2.png"
                     action: function():Void {
@@ -1084,13 +1084,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=MultipleIntermediateCatchEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("multInterCatch")
+                            title: ##"multInterCatch"//ModelerUtils.getLocalizedString("multInterCatch")
                             uri:"new:interevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("multInterThrow")
+                    text: ##"multInterThrow"//ModelerUtils.getLocalizedString("multInterThrow")
                     image: "images/inter_multi_n_1.png"
                     imageOver: "images/inter_multi_n_2.png"
                     action: function():Void {
@@ -1098,13 +1098,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=MultipleIntermediateThrowEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("multInterThrow")
+                            title: ##"multInterThrow"//ModelerUtils.getLocalizedString("multInterThrow")
                             uri:"new:interevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("scalInterCatch")
+                    text: ##"scalInterCatch"//ModelerUtils.getLocalizedString("scalInterCatch")
                     image: "images/inter_escala_b_1.png"
                     imageOver: "images/inter_escala_b_2.png"
                     action: function():Void {
@@ -1112,13 +1112,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=ScalationIntermediateCatchEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("scalInterCatch")
+                            title: ##"scalInterCatch"//ModelerUtils.getLocalizedString("scalInterCatch")
                             uri:"new:interevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("scalInterThrow")
+                    text: ##"scalInterThrow"//ModelerUtils.getLocalizedString("scalInterThrow")
                     image: "images/inter_escala_n_1.png"
                     imageOver: "images/inter_escala_n_2.png"
                     action: function():Void {
@@ -1126,13 +1126,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=ScalationIntermediateThrowEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("scalInterThrow")
+                            title: ##"scalInterThrow"//ModelerUtils.getLocalizedString("scalInterThrow")
                             uri:"new:interevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("parallelInter")
+                    text: ##"parallelInter"//ModelerUtils.getLocalizedString("parallelInter")
                     image: "images/inter_paralelo1.png"
                     imageOver: "images/inter_paralelo2.png"
                     action: function():Void {
@@ -1140,7 +1140,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=ParallelIntermediateCatchEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("parallelInter")
+                            title: ##"parallelInter"//ModelerUtils.getLocalizedString("parallelInter")
                             uri:"new:interevent:{counter++}"
                         }
                     }
@@ -1152,14 +1152,14 @@ public class ToolBar extends CustomNode
         {
             modeler: modeler
             toolBar:this
-            text: ModelerUtils.getLocalizedString("endEvents")
+            text: ##"endEvents"//ModelerUtils.getLocalizedString("endEvents")
             image: "images/end_1.png"
             imageOver: "images/end_2.png"
             imageClicked: "images/end_3.png"
             visible: bind not hidden
             buttons: [
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("normalEnd")
+                    text: ##"normalEnd"//ModelerUtils.getLocalizedString("normalEnd")
                     image: "images/end_normal1.png"
                     imageOver: "images/end_normal2.png"
                     action: function():Void {
@@ -1167,13 +1167,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=EndEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("normalEnd")
+                            title: ##"normalEnd"//ModelerUtils.getLocalizedString("normalEnd")
                             uri:"new:endevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("messageEnd")
+                    text: ##"messageEnd"//ModelerUtils.getLocalizedString("messageEnd")
                     image: "images/end_msj1.png"
                     imageOver: "images/end_msj2.png"
                     action: function():Void {
@@ -1181,13 +1181,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=MessageEndEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("messageEnd")
+                            title: ##"messageEnd"//ModelerUtils.getLocalizedString("messageEnd")
                             uri:"new:endevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("errorEnd")
+                    text: ##"errorEnd"//ModelerUtils.getLocalizedString("errorEnd")
                     image: "images/end_error1.png"
                     imageOver: "images/end_error2.png"
                     action: function():Void
@@ -1196,13 +1196,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=ErrorEndEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("errorEnd")
+                            title: ##"errorEnd"//ModelerUtils.getLocalizedString("errorEnd")
                             uri:"new:endevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("cancelEnd")
+                    text: ##"cancelEnd"//ModelerUtils.getLocalizedString("cancelEnd")
                     image: "images/end_cancel1.png"
                     imageOver: "images/end_cancel2.png"
                     action: function():Void
@@ -1211,13 +1211,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=CancelationEndEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("cancelEnd")
+                            title: ##"cancelEnd"//ModelerUtils.getLocalizedString("cancelEnd")
                             uri:"new:endevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("compensationEnd")
+                    text: ##"compensationEnd"//ModelerUtils.getLocalizedString("compensationEnd")
                     image: "images/end_compensa1.png"
                     imageOver: "images/end_compensa2.png"
                     action: function():Void
@@ -1226,13 +1226,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=CompensationEndEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("compensationEnd")
+                            title: ##"compensationEnd"//ModelerUtils.getLocalizedString("compensationEnd")
                             uri:"new:endevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("signalEnd")
+                    text: ##"signalEnd"//ModelerUtils.getLocalizedString("signalEnd")
                     image: "images/end_senal1.png"
                     imageOver: "images/end_senal2.png"
                     action: function():Void
@@ -1241,13 +1241,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=SignalEndEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("signalEnd")
+                            title: ##"signalEnd"//ModelerUtils.getLocalizedString("signalEnd")
                             uri:"new:endevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text:ModelerUtils.getLocalizedString("multipleEnd")
+                    text: ##"multipleEnd"//ModelerUtils.getLocalizedString("multipleEnd")
                     image: "images/end_multi1.png"
                     imageOver: "images/end_multi2.png"
                     action: function():Void
@@ -1256,13 +1256,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=MultipleEndEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("multipleEnd")
+                            title: ##"multipleEnd"//ModelerUtils.getLocalizedString("multipleEnd")
                             uri:"new:endevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("scalationEnd")
+                    text: ##"scalationEnd"//ModelerUtils.getLocalizedString("scalationEnd")
                     image: "images/end_escala1.png"
                     imageOver: "images/end_escala2.png"
                     action: function():Void
@@ -1271,13 +1271,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=ScalationEndEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("scalationEnd")
+                            title: ##"scalationEnd"//ModelerUtils.getLocalizedString("scalationEnd")
                             uri:"new:endevent:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("terminateEnd")
+                    text: ##"terminateEnd"//ModelerUtils.getLocalizedString("terminateEnd")
                     image: "images/end_termina1.png"
                     imageOver: "images/end_termina2.png"
                     action: function():Void
@@ -1286,7 +1286,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=TerminationEndEvent
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("terminateEnd")
+                            title: ##"terminateEnd"//ModelerUtils.getLocalizedString("terminateEnd")
                             uri:"new:endevent:{counter++}"
                         }
                     }
@@ -1298,7 +1298,7 @@ public class ToolBar extends CustomNode
         {
             modeler: modeler
             toolBar:this
-            text: ModelerUtils.getLocalizedString("gateways")
+            text: ##"gateways"//ModelerUtils.getLocalizedString("gateways")
             image: "images/if_1.png"
             imageOver: "images/if_2.png"
             imageClicked: "images/if_3.png"
@@ -1320,7 +1320,7 @@ public class ToolBar extends CustomNode
 //                    }
 //                },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("xorGateway")
+                    text: ##"xorGateway"//ModelerUtils.getLocalizedString("xorGateway")
                     image: "images/gate_datos1.png"
                     imageOver: "images/gate_datos2.png"
                     action: function():Void
@@ -1329,13 +1329,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=ExclusiveGateway
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("xorGateway")
+                            title: ##"xorGateway"//ModelerUtils.getLocalizedString("xorGateway")
                             uri:"new:exclusivegateway:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("orGateway")
+                    text: ##"orGateway"//ModelerUtils.getLocalizedString("orGateway")
                     image: "images/gate_inclusiva_1.png"
                     imageOver: "images/gate_inclusiva_2.png"
                     action: function():Void
@@ -1344,13 +1344,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=InclusiveGateway
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("orGateway")
+                            title: ##"orGateway"//ModelerUtils.getLocalizedString("orGateway")
                             uri:"new:inclusivegateway:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("xorGatewayStart")
+                    text: ##"xorGatewayStart"//ModelerUtils.getLocalizedString("xorGatewayStart")
                     image: "images/gate_eventos_str_1.png"
                     imageOver: "images/gate_eventos_str_2.png"
                     action: function():Void
@@ -1359,13 +1359,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=ExclusiveStartEventGateway
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("xorGatewayStart")
+                            title: ##"xorGatewayStart"//ModelerUtils.getLocalizedString("xorGatewayStart")
                             uri:"new:exclusivestarteventgateway:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("evtXorGateway");
+                    text: ##"evtXorGateway"//ModelerUtils.getLocalizedString("evtXorGateway");
                     image: "images/gate_eventos_int_1.png"
                     imageOver: "images/gate_eventos_int_2.png"
                     action: function():Void
@@ -1374,13 +1374,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=ExclusiveIntermediateEventGateway
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("evtXorGateway")
+                            title: ##"evtXorGateway"//ModelerUtils.getLocalizedString("evtXorGateway")
                             uri:"new:exclusiveintermediateeventgateway:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("parallelGateway")
+                    text: ##"parallelGateway"//ModelerUtils.getLocalizedString("parallelGateway")
                     image: "images/gate_paralela_n_1.png"
                     imageOver: "images/gate_paralela_n_2.png"
                     action: function():Void
@@ -1389,13 +1389,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=ParallelGateway
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("parallelGateway")
+                            title: ##"parallelGateway"//ModelerUtils.getLocalizedString("parallelGateway")
                             uri:"new:parallelgateway:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("parallelGatewayStart")
+                    text: ##"parallelGatewayStart"//ModelerUtils.getLocalizedString("parallelGatewayStart")
                     image: "images/gate_paralela_b_1.png"
                     imageOver: "images/gate_paralela_b_2.png"
                     action: function():Void
@@ -1404,13 +1404,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=ParallelStartEventGateway
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("parallelGatewayStart")
+                            title: ##"parallelGatewayStart"//ModelerUtils.getLocalizedString("parallelGatewayStart")
                             uri:"new:parallelstarteventgateway:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("complexGateway")
+                    text: ##"complexGateway"//ModelerUtils.getLocalizedString("complexGateway")
                     image: "images/gate_compleja_1.png"
                     imageOver: "images/gate_compleja_2.png"
                     action: function():Void
@@ -1419,7 +1419,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=ComplexGateway
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("complexGateway")
+                            title: ##"complexGateway"//ModelerUtils.getLocalizedString("complexGateway")
                             uri:"new:complexgateway:{counter++}"
                         }
                     }
@@ -1431,14 +1431,14 @@ public class ToolBar extends CustomNode
         {
             modeler: modeler
             toolBar:this
-            text: ModelerUtils.getLocalizedString("connObjects")
+            text: ##"connObjects"//ModelerUtils.getLocalizedString("connObjects")
             image:"images/flow_1.png"
             imageOver:"images/flow_2.png"
             imageClicked: "images/flow_3.png"
             visible: bind not hidden
             buttons: [
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("sequenceFlow")
+                    text: ##"sequenceFlow"//ModelerUtils.getLocalizedString("sequenceFlow")
                     image: "images/flow_normal1.png"
                     imageOver: "images/flow_normal2.png"
                     action: function():Void {
@@ -1451,7 +1451,7 @@ public class ToolBar extends CustomNode
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("condFlow")
+                    text: ##"condFlow"//ModelerUtils.getLocalizedString("condFlow")
                     image: "images/flow_condicion1.png"
                     imageOver: "images/flow_condicion2.png"
                     action: function():Void {
@@ -1464,7 +1464,7 @@ public class ToolBar extends CustomNode
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("defFlow")
+                    text: ##"defFlow"//ModelerUtils.getLocalizedString("defFlow")
                     image: "images/flow_defecto1.png"
                     imageOver: "images/flow_defecto2.png"
                     action: function():Void {
@@ -1477,7 +1477,7 @@ public class ToolBar extends CustomNode
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("msgFlow")
+                    text: ##"msgFlow"//ModelerUtils.getLocalizedString("msgFlow")
                     image: "images/flow_msj1.png"
                     imageOver: "images/flow_msj2.png"
                     action: function():Void {
@@ -1490,7 +1490,7 @@ public class ToolBar extends CustomNode
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("assocFlow")
+                    text: ##"assocFlow"//ModelerUtils.getLocalizedString("assocFlow")
                     image: "images/doc_dir_asocia1.png"
                     imageOver: "images/doc_dir_asocia2.png"
                     action: function():Void {
@@ -1503,7 +1503,7 @@ public class ToolBar extends CustomNode
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("dirAssocFlow")
+                    text: ##"dirAssocFlow"//ModelerUtils.getLocalizedString("dirAssocFlow")
                     image: "images/doc_asocia1.png"
                     imageOver: "images/doc_asocia2.png"
                     action: function():Void {
@@ -1522,14 +1522,14 @@ public class ToolBar extends CustomNode
         {
             modeler: modeler
             toolBar:this
-            text: ModelerUtils.getLocalizedString("artifacts")
+            text: ##"artifacts"//ModelerUtils.getLocalizedString("artifacts")
             image: "images/anota_1.png"
             imageOver: "images/anota_2.png"
             imageClicked: "images/anota_3.png"
             visible: bind not hidden
             buttons: [
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("textAnnotation")
+                    text: ##"textAnnotation"//ModelerUtils.getLocalizedString("textAnnotation")
                     image: "images/doc_anota1.png"
                     imageOver: "images/doc_anota2.png"
                     action: function():Void
@@ -1538,13 +1538,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=AnnotationArtifact
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("textAnnotation")
+                            title: ##"textAnnotation"//ModelerUtils.getLocalizedString("textAnnotation")
                             uri:"new:annotationartifact:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("group")
+                    text: ##"group"//ModelerUtils.getLocalizedString("group")
                     image: "images/doc_grupo1.png"
                     imageOver: "images/doc_grupo2.png"
                     action: function():Void
@@ -1553,7 +1553,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=GroupArtifact
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("group")
+                            title: ##"group"//ModelerUtils.getLocalizedString("group")
                             uri:"new:groupartifact:{counter++}"
                         }
                     }
@@ -1565,14 +1565,14 @@ public class ToolBar extends CustomNode
         {
             modeler: modeler
             toolBar:this
-            text: ModelerUtils.getLocalizedString("dataObjs")
+            text: ##"dataObjs"//ModelerUtils.getLocalizedString("dataObjs")
             image:"images/doc_1.png"
             imageOver:"images/doc_2.png"
             imageClicked: "images/doc_3.png"
             visible: bind not hidden
             buttons: [
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("dataObj")
+                    text: ##"dataObj"//ModelerUtils.getLocalizedString("dataObj")
                     image: "images/doc_normal1.png"
                     imageOver: "images/doc_normal2.png"
                     action: function():Void
@@ -1581,13 +1581,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=Artifact
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("dataObj")
+                            title: ##"dataObj"//ModelerUtils.getLocalizedString("dataObj")
                             uri:"new:artifact:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("collection")
+                    text: ##"collection"//ModelerUtils.getLocalizedString("collection")
                     image: "images/doc_objeto1.png"
                     imageOver: "images/doc_objeto2.png"
                     action: function():Void
@@ -1596,13 +1596,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=CollectionArtifact
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("collection")
+                            title: ##"collection"//ModelerUtils.getLocalizedString("collection")
                             uri:"new:multipleartifact:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("dataInput")
+                    text: ##"dataInput"//ModelerUtils.getLocalizedString("dataInput")
                     image: "images/doc_entrada1.png"
                     imageOver: "images/doc_entrada2.png"
                     action: function():Void
@@ -1611,13 +1611,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=InputArtifact
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("dataInput")
+                            title: ##"dataInput"//ModelerUtils.getLocalizedString("dataInput")
                             uri:"new:inputartifact:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("dataOutput")
+                    text: ##"dataOutput"//ModelerUtils.getLocalizedString("dataOutput")
                     image: "images/doc_salida1.png"
                     imageOver: "images/doc_salida2.png"
                     action: function():Void
@@ -1626,13 +1626,13 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=OutputArtifact
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("dataOutput")
+                            title: ##"dataOutput"//ModelerUtils.getLocalizedString("dataOutput")
                             uri:"new:outputartifact:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text: ModelerUtils.getLocalizedString("dataStore")
+                    text: ##"dataStore"//ModelerUtils.getLocalizedString("dataStore")
                     image: "images/doc_base1.png"
                     imageOver: "images/doc_base2.png"
                     action: function():Void
@@ -1641,7 +1641,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=DataStoreArtifact
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("dataStore")
+                            title: ##"dataStore"//ModelerUtils.getLocalizedString("dataStore")
                             uri:"new:datastoreartifact:{counter++}"
                         }
                     }
@@ -1653,7 +1653,7 @@ public class ToolBar extends CustomNode
         {
             modeler: modeler
             toolBar:this
-            text: ModelerUtils.getLocalizedString("swimLanes")
+            text: ##"swimLanes"//ModelerUtils.getLocalizedString("swimLanes")
             image: "images/pool_1.png"
             imageOver: "images/pool_2.png"
             imageClicked: "images/pool_3.png"
@@ -1661,7 +1661,7 @@ public class ToolBar extends CustomNode
             buttons: [
                 ImgButton
                 {
-                    text: ModelerUtils.getLocalizedString("pool")
+                    text: ##"pool"//ModelerUtils.getLocalizedString("pool")
                     image: "images/pool_pool1.png"
                     imageOver: "images/pool_pool2.png"
                     action: function():Void {
@@ -1669,14 +1669,14 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=Pool
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("pool")
+                            title: ##"pool"//ModelerUtils.getLocalizedString("pool")
                             uri:"new:pool:{counter++}"
                         }
                     }
                 },
                 ImgButton
                 {
-                    text: ModelerUtils.getLocalizedString("lane")
+                    text: ##"lane"//ModelerUtils.getLocalizedString("lane")
                     image: "images/pool_lane1.png"
                     imageOver: "images/pool_lane2.png"
                     action: function():Void {
@@ -1684,7 +1684,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=Lane
                         {
                             modeler:modeler
-                            title: ModelerUtils.getLocalizedString("lane")
+                            title: ##"lane"//ModelerUtils.getLocalizedString("lane")
                             uri:"new:Lane:{counter++}"
                         }
                     }
@@ -1735,7 +1735,7 @@ public class ToolBar extends CustomNode
                             }
                         },
                         ImgButton {
-                            text: bind if (not hidden) ModelerUtils.getLocalizedString("hideTooltip") else ModelerUtils.getLocalizedString("showTooltip")
+                            text: bind if (not hidden) ##"hideTooltip" else ##"showTooltip"
                             toolBar:this;
                             image: bind if (not hidden) "images/sube_1.png" else "images/baja_1.png"
                             imageOver: bind if (not hidden) "images/sube_2.png" else "images/baja_2.png"
@@ -1758,7 +1758,7 @@ public class ToolBar extends CustomNode
                             }
                         },
                         ImgButton {
-                            text: bind if(not stage.fullScreen) ModelerUtils.getLocalizedString("maximizeTooltip") else ModelerUtils.getLocalizedString("minimizeTooltip")
+                            text: bind if(not stage.fullScreen) ##"maximizeTooltip" else ##"minimizeTooltip"
                             toolBar:this;
                             image: bind if(not stage.fullScreen) "images/maxim_1.png" else "images/minim_1.png"
                             imageOver: bind if(not stage.fullScreen) "images/maxim_2.png" else "images/minim_2.png"
@@ -1884,7 +1884,7 @@ public class ToolBar extends CustomNode
 
 class FileFilter extends javax.swing.filechooser.FileFilter {
     override public function getDescription() : String {
-        return ModelerUtils.getLocalizedString("swpFileFilter");
+        return ##"swpFileFilter"//ModelerUtils.getLocalizedString("swpFileFilter");
     }
 
     override public function accept(f: java.io.File) : Boolean {
@@ -1894,7 +1894,7 @@ class FileFilter extends javax.swing.filechooser.FileFilter {
 
 class ImageFileFilter extends javax.swing.filechooser.FileFilter {
     override public function getDescription() : String {
-        return ModelerUtils.getLocalizedString("exportFileFilter");
+        return ##"exportFileFilter"//ModelerUtils.getLocalizedString("exportFileFilter");
     }
 
     override public function accept(f: java.io.File) : Boolean {

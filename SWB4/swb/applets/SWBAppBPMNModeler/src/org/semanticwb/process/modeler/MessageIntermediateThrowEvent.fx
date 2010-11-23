@@ -32,7 +32,7 @@ public class MessageIntermediateThrowEvent extends IntermediateThrowEvent
 
         if (link instanceof MessageFlow and c != 0) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError32"));
+            ModelerUtils.setErrorMessage(##"msgError32");
         }
         return ret;
     }
@@ -42,7 +42,7 @@ public class MessageIntermediateThrowEvent extends IntermediateThrowEvent
 
         if (link instanceof MessageFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError31"));
+            ModelerUtils.setErrorMessage(##"msgError31");
         }
         return ret;
     }

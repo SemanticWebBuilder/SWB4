@@ -37,21 +37,21 @@ public class FlowNode extends GraphicalElement
         if (link instanceof SequenceFlow) {
             if (not(link.ini.getPool() == getPool())) {
                 ret = false;
-                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError14"));
+                ModelerUtils.setErrorMessage(##"msgError14");
             }
         }
 
         if (link instanceof AssociationFlow) {
             if (not(link.ini instanceof Artifact) and not(link.ini instanceof CompensationIntermediateCatchEvent and link.ini.getGraphParent() instanceof Activity)) {
                 ret = false;
-                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError15"));
+                ModelerUtils.setErrorMessage(##"msgError15");
             }
         }
 
         if (link instanceof MessageFlow) {
             if (link.ini.getPool() == getPool()) {
                 ret = false;
-                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError16"));
+                ModelerUtils.setErrorMessage(##"msgError16");
             }
         }
         return ret;

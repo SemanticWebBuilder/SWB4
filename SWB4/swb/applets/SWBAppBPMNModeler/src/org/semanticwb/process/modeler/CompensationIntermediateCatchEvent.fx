@@ -26,10 +26,9 @@ public class CompensationIntermediateCatchEvent extends IntermediateCatchEvent
         if (getGraphParent() instanceof Activity) {
             if (not(link instanceof DirectionalAssociation)) {
                 ret = false;
-                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError7"));
+                ModelerUtils.setErrorMessage(##"msgError7");
             }
         }
         return ret;
     }
-
 }

@@ -53,7 +53,7 @@ public class IntermediateCatchEvent extends CatchEvent
         if (isInterrupting) {
             var actions: Action[] = [
                 Action {
-                    label: bind if (this.cancelActivity) "Interruptor" else "No Interruptor"
+                    label: bind if (this.cancelActivity) ##"interrupting" else ##"nonInterrupting"
                     action: function (e: MouseEvent) {
                         this.cancelActivity = not this.cancelActivity;
                     }
@@ -105,10 +105,10 @@ public class IntermediateCatchEvent extends CatchEvent
         if (link instanceof SequenceFlow) {
             if (this.getGraphParent() instanceof Activity) {
                 ret = false;
-                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError20"));
+                ModelerUtils.setErrorMessage(##"msgError20");
             } else if (c != 0) {
                 ret = false;
-                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError21"));
+                ModelerUtils.setErrorMessage(##"msgError21");
             }
         }
         return ret;
@@ -126,7 +126,7 @@ public class IntermediateCatchEvent extends CatchEvent
         
         if (link instanceof SequenceFlow and c != 0) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError22"));
+            ModelerUtils.setErrorMessage(##"msgError22");
         }
         return ret;
     }

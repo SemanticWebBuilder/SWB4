@@ -8,9 +8,7 @@ package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
 import javafx.scene.Group;
-import javafx.scene.Cursor;
 import javafx.scene.shape.Circle;
-import javafx.scene.paint.Color;
 
 /**
  * @author javier.solis
@@ -77,7 +75,7 @@ public class IntermediateThrowEvent extends ThrowEvent
         if(not(parent instanceof Pool or parent instanceof Lane))
         {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError23"));
+            ModelerUtils.setErrorMessage(##"msgError23");
         }
         return ret;
     }
@@ -94,7 +92,7 @@ public class IntermediateThrowEvent extends ThrowEvent
      
         if (link instanceof SequenceFlow and c != 0) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError21"));
+            ModelerUtils.setErrorMessage(##"msgError21");
         }
         return ret;
     }
@@ -111,7 +109,7 @@ public class IntermediateThrowEvent extends ThrowEvent
 
         if (link instanceof SequenceFlow and c != 0) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError22"));
+            ModelerUtils.setErrorMessage(##"msgError22");
         }
         return ret;
     }

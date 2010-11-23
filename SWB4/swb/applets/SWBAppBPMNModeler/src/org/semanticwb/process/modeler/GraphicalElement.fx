@@ -113,7 +113,7 @@ public class GraphicalElement extends CustomNode
     public function setCommonMenuOptions () {
         var props:Action[] = [
             Action {
-            label: ModelerUtils.getLocalizedString("actDelete");
+            label: ##"actDelete";
             action: function (e: MouseEvent) {
                     remove(true);
                 }

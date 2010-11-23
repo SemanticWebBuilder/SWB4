@@ -26,7 +26,7 @@ public class CancelationIntermediateCatchEvent extends IntermediateCatchEvent
         if(parent instanceof Pool or parent instanceof Lane or parent instanceof TransactionSubProcess) {
             ret = true;
         } else {
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError6"));
+            ModelerUtils.setErrorMessage(##"msgError6");
         }
         return ret;
     }

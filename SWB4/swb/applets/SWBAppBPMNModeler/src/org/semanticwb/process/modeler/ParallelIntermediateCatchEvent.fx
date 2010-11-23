@@ -25,7 +25,7 @@ public class ParallelIntermediateCatchEvent extends IntermediateCatchEvent
 
         if (parent instanceof Activity) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError39"));
+            ModelerUtils.setErrorMessage(##"msgError39");
         }
         return ret;
     }

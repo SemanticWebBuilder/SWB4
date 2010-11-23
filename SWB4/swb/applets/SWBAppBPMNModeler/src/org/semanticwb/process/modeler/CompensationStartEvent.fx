@@ -33,22 +33,22 @@ public class CompensationStartEvent extends StartEvent
             
             if (modeler.containerElement instanceof AdhocSubProcess) {
                 ret = false;
-                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError48"));
+                ModelerUtils.setErrorMessage(##"msgError48");
             } else if (modeler.containerElement instanceof EventSubProcess) {
                 if (c != 0) {
                     ret = false;
-                    ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError44"));
+                    ModelerUtils.setErrorMessage(##"msgError44");
                 }
             } else if (c != 0) {
                 ret = false;
-                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError44"));
+                ModelerUtils.setErrorMessage(##"msgError44");
             } else {
                 ret = false;
-                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError50"));
+                ModelerUtils.setErrorMessage(##"msgError50");
             }
         } else {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError51"));
+            ModelerUtils.setErrorMessage(##"msgError51");
         }
         return ret;
     }

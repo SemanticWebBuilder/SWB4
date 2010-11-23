@@ -33,10 +33,10 @@ public class EndEvent extends ThrowEvent
         var ret = super.canEndLink(link);
         if (not(link instanceof SequenceFlow)) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError8"));
+            ModelerUtils.setErrorMessage(##"msgError8");
         } else if (link instanceof SequenceFlow and link.ini instanceof ExclusiveIntermediateEventGateway) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError9"));
+            ModelerUtils.setErrorMessage(##"msgError9");
         }
         return ret;
     }
@@ -46,7 +46,7 @@ public class EndEvent extends ThrowEvent
         if (modeler.containerElement != null) {
             if (modeler.containerElement instanceof AdhocSubProcess) {
                 ret = false;
-                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError49"));
+                ModelerUtils.setErrorMessage(##"msgError49");
             }
         }
         return ret;

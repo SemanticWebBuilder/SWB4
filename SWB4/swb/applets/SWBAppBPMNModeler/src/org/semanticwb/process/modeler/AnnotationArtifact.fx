@@ -79,7 +79,7 @@ public class AnnotationArtifact extends Artifact
 
         if (link instanceof DirectionalAssociation) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError2"));
+            ModelerUtils.setErrorMessage(##"msgError2");
         }        
         return ret;
     }
@@ -89,10 +89,10 @@ public class AnnotationArtifact extends Artifact
 
         if (link.ini instanceof Artifact) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError5"));
+            ModelerUtils.setErrorMessage(##"msgError5");
         } else if (link instanceof DirectionalAssociation) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError2"));
+            ModelerUtils.setErrorMessage(##"msgError2");
         }
         return ret;
     }

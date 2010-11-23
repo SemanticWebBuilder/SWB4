@@ -39,7 +39,7 @@ public class ContainerButton extends CustomNode
                 t = Text {
                     x:bind r.x+4;
                     y:bind r.y+12;
-                    content:bind if(container!=null)container.title else ModelerUtils.getLocalizedString("root")                    
+                    content:bind if(container!=null)container.title else ##"root"
                     fill: bind if(container!=modeler.containerElement)Color.BLUE else Color.BLACK
                     styleClass: "containerButton"
                     id: "label"
