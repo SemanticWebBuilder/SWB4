@@ -1,0 +1,3 @@
+"msgError17" = "Gateway cannot have outgoing Message Flow"
+"msgError18" = "Converging Gateway must have only one outgoing Sequence Flow"
+"msgError19" = "Diverging Gateway must have only one incoming Sequence Flow"

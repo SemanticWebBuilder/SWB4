@@ -1,0 +1,3 @@
+"msgError21" = "Un Evento Intermedio puede tener un solo Flujo de Secuencia entrante"
+"msgError22" = "Un Evento Intermedio puede tener un solo Flujo de Secuencia saliente"
+"msgError23" = "Un Evento Intermedio Disparador no puede adherirse a una Actividad"
