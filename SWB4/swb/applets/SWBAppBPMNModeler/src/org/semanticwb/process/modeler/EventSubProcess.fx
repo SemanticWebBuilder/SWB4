@@ -21,7 +21,7 @@ public class EventSubProcess extends SubProcess {
 
         if (link instanceof SequenceFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError47"));
+            ModelerUtils.setErrorMessage(##"msgError47");
         }
         return ret;
     }
@@ -31,7 +31,7 @@ public class EventSubProcess extends SubProcess {
 
         if (link instanceof SequenceFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError47"));
+            ModelerUtils.setErrorMessage(##"msgError47");
         }
         return ret;
     }

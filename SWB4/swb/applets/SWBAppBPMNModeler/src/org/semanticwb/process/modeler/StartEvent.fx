@@ -32,11 +32,11 @@ public class StartEvent extends CatchEvent
 
         if (link instanceof SequenceFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError33"));
+            ModelerUtils.setErrorMessage(##"msgError33");
         }
 
         if (link instanceof MessageFlow) {
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError34"));
+            ModelerUtils.setErrorMessage(##"msgError34");
             ret = false;
         }
         return ret;
@@ -48,7 +48,7 @@ public class StartEvent extends CatchEvent
         
         if(link instanceof MessageFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError35"));
+            ModelerUtils.setErrorMessage(##"msgError35");
         }
         return ret;
     }
@@ -67,16 +67,16 @@ public class StartEvent extends CatchEvent
             if (modeler.containerElement instanceof EventSubProcess) {
                 ret = false;
                 if (c != 0) {
-                    ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError44"));
+                    ModelerUtils.setErrorMessage(##"msgError44");
                 } else {
-                    ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError41"));
+                    ModelerUtils.setErrorMessage(##"msgError41");
                 }
             } else if (modeler.containerElement instanceof AdhocSubProcess) {
                 ret = false;
-                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError48"));
+                ModelerUtils.setErrorMessage(##"msgError48");
             } else if (c != 0) {
                 ret = false;
-                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError44"));
+                ModelerUtils.setErrorMessage(##"msgError44");
             }
         }
         return ret;

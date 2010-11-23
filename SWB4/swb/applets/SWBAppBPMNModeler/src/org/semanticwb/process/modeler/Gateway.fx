@@ -79,13 +79,13 @@ public class Gateway extends FlowNode
         
         if (link instanceof MessageFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError17"));
+            ModelerUtils.setErrorMessage(##"msgError17");
         }
 
         if (link instanceof SequenceFlow) {
             if (ci > 1 and co != 0) {
                 ret = false;
-                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError18"));
+                ModelerUtils.setErrorMessage(##"msgError18");
             }
         }
         return ret;
@@ -110,13 +110,13 @@ public class Gateway extends FlowNode
         
         if (link instanceof MessageFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError17"));
+            ModelerUtils.setErrorMessage(##"msgError17");
         }
 
         if (link instanceof SequenceFlow) {
             if (co > 1 and ci != 0) {
                 ret = false;
-                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError19"));
+                ModelerUtils.setErrorMessage(##"msgError19");
             }
         }
         return ret;

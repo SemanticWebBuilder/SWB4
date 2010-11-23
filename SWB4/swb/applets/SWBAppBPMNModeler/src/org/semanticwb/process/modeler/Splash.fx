@@ -67,7 +67,7 @@ public class Splash extends CustomNode
                 Text {
                     x:bind x+110
                     y:bind y+35
-                    content:bind "{ModelerUtils.getLocalizedString("version")}: {ModelerUtils.version}"
+                    content:bind "Version: {ModelerUtils.version}"
                     styleClass: "splash"
                 }
             ]

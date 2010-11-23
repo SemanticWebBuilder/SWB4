@@ -25,7 +25,7 @@ public class ErrorIntermediateCatchEvent extends IntermediateCatchEvent
 
         if (link instanceof SequenceFlow and link.ini instanceof EventBasedGateway) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError10"));
+            ModelerUtils.setErrorMessage(##"msgError10");
         }
         return ret;
     }

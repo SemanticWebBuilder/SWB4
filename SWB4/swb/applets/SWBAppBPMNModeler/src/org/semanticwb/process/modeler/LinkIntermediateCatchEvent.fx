@@ -21,7 +21,7 @@ public class LinkIntermediateCatchEvent extends IntermediateCatchEvent
     }
 
     public override function canEndLink(link:ConnectionObject) {
-        ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError27"));
+        ModelerUtils.setErrorMessage(##"msgError27");
         return false;
     }
 
@@ -29,7 +29,7 @@ public class LinkIntermediateCatchEvent extends IntermediateCatchEvent
         var ret = super.canStartLink(link);
         if (link instanceof MessageFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError24"));
+            ModelerUtils.setErrorMessage(##"msgError24");
         }
         return ret;
     }
@@ -39,9 +39,8 @@ public class LinkIntermediateCatchEvent extends IntermediateCatchEvent
 
         if (parent instanceof Activity) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError25"));
+            ModelerUtils.setErrorMessage(##"msgError25");
         }
         return ret;
     }
-
 }

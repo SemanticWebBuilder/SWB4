@@ -19,7 +19,7 @@ public class MessageFlow extends ConnectionObject
 {
     public override function create(): Node
     {
-        title=ModelerUtils.getLocalizedString("Message");
+        title=##"message";
         arrowType=ARROW_TYPE_MESSAGE;
         strokeDash=[2,5];
         notGroup=true;  //No agrega los elementos path y arrow al grupo

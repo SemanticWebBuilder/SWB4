@@ -136,21 +136,21 @@ public class SubProcess extends Activity
         if (not isTransaction) {
             var actions: Action[] = [
                 Action {
-                    label: ModelerUtils.getLocalizedString("actMultiInstance");
+                    label: ##"actMultiInstance";
                     status: bind if (isMultiInstance) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                     action: function (e: MouseEvent) {
                         this.setModifier(TYPE_MULTIPLE);
                     }
                 },
                 Action {
-                    label: ModelerUtils.getLocalizedString("actLoop");
+                    label: ##"actLoop";
                     status: bind if (isLoop) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                     action: function (e: MouseEvent) {
                         this.setModifier(TYPE_LOOP);
                     }
                 },
                 Action {
-                    label: ModelerUtils.getLocalizedString("actCompensa");
+                    label: ##"actCompensa";
                     status: bind if (isForCompensation) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                     action: function (e: MouseEvent) {
                         this.setModifier(TYPE_COMPENSATION);
@@ -235,7 +235,7 @@ public class SubProcess extends Activity
     override public function remove(validate:Boolean)
     {
         //TODO: Internacionalizar mensaje
-        if(not validate or sizeof containerChilds == 0 or Alert.confirm("Remove {this}", "Are you sure you want to delete \"{this.title}\" {this}?"))
+        if(not validate or sizeof containerChilds == 0 or Alert.confirm(##"actDelete", ##[confirmDelete]"\"{this.title}\""))
         {
             for(child in containerChilds)
             {

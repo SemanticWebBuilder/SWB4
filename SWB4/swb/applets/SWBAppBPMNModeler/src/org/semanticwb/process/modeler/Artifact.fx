@@ -129,7 +129,7 @@ public class Artifact extends GraphicalElement
         var ret = super.canStartLink(link);
         if (not(link instanceof AssociationFlow)) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError3"));
+            ModelerUtils.setErrorMessage(##"msgError3");
         }
         return ret;
     }
@@ -139,10 +139,10 @@ public class Artifact extends GraphicalElement
 
         if (not(link instanceof AssociationFlow)) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError3"));
+            ModelerUtils.setErrorMessage(##"msgError3");
         } else if (link.ini instanceof Artifact) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError5"));
+            ModelerUtils.setErrorMessage(##"msgError5");
         }
         return ret;
     }

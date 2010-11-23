@@ -17,10 +17,10 @@ public class EventBasedGateway extends Gateway
 
         if (link instanceof DefaultFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError12"));
+            ModelerUtils.setErrorMessage(##"msgError12");
         } else if (link instanceof ConditionalFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError13"));
+            ModelerUtils.setErrorMessage(##"msgError13");
         }
         return ret;
     }

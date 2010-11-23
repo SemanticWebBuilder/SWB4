@@ -32,7 +32,7 @@ public class MessageIntermediateCatchEvent extends IntermediateCatchEvent
 
         if (link instanceof MessageFlow and c != 0) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError29"));
+            ModelerUtils.setErrorMessage(##"msgError29");
         }
         return ret;
     }
@@ -42,9 +42,8 @@ public class MessageIntermediateCatchEvent extends IntermediateCatchEvent
 
         if(link instanceof MessageFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError30"));
+            ModelerUtils.setErrorMessage(##"msgError30");
         }
         return ret;
     }
-
 }
