@@ -143,7 +143,17 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
                     throw new AssertionError(ie.getMessage());        
                 }
             }
-            else
+            else if(obj instanceof String)
+            {
+                try
+                {
+                    return (T)SemanticObject.createSemanticObject((String)obj);
+                }
+                catch(Exception ie)
+                {
+                    throw new AssertionError(ie.getMessage());
+                }
+            }else
             {
                 throw new AssertionError("No type found...");      
             }
