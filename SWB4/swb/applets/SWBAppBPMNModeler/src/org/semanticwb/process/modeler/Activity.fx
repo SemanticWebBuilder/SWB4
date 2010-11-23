@@ -30,7 +30,7 @@ public class Activity extends FlowNode
             ret = true;            
         } else if (link.ini instanceof ExclusiveIntermediateEventGateway) {
             ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError1"));
+            ModelerUtils.setErrorMessage(##"msgError1");
         }
         return ret;
     }
