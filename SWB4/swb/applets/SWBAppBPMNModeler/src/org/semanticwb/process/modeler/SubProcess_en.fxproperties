@@ -1,0 +1,5 @@
+"actDelete" = "Delete"
+"actMultiInstance" = "Multi-Instance"
+"actLoop" = "Loop"
+"actCompensa" = "Compensation"
+"confirmDelete" = "Are you sure you want to delete %s?"
