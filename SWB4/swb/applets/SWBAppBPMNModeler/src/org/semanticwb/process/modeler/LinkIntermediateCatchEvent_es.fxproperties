@@ -1,0 +1,3 @@
+"msgError24" = "Un Evento de Enlace no puede conectarse usando Flujos de Mensaje"
+"msgError25" = "Un Evento de Enlace no puede adherirse a una Actividad"
+"msgError27" = "Un Evento de Enlace Receptor no puede tener Flujos de Secuencia entrantes"

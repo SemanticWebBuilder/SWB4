@@ -1,0 +1,5 @@
+"actDelete" = "Delete"
+"confirmDelete" = "Are you sure you want to delete %s?"
+"msgError16" = "Message Flow must cross Pool boundaries"
+"msgError37" = "Pool cannot be linked using Sequence Flow"
+"msgError45" = "Pool cannot be added to a Sub-Process"

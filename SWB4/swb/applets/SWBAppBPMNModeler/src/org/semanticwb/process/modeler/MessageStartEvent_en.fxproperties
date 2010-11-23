@@ -1,0 +1,4 @@
+"msgError36" = "Message Start Event can have only one incoming Message Flow"
+"msgError44" = "Sub-Process cannot have more than one Start Event"
+"msgError48" = "Start Event cannot be used in Ad-Hoc Sub-Process"
+"msgError50" = "Sub-Process and Transaction must start with Normal Start Event"

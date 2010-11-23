@@ -1,0 +1,4 @@
+"msgError43" = "Un Sub-Proceso de Evento no puede iniciar con un Evento de Inicio Paralelo"
+"msgError44" = "Un Sub-Proceso no debe tener más de un Evento de Inicio"
+"msgError48" = "Un Sub-Proceso AdHoc no debe tener Eventos de Inicio"
+"msgError50" = "Un Sub-Proceso o una Transacción debe comenzar con un Evento de Inicio Normal"

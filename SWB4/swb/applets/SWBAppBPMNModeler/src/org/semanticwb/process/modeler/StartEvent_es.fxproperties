@@ -1,0 +1,6 @@
+"msgError33" = "Un Evento Inicial no puede tener Flujos de Secuencia entrantes"
+"msgError34" = "Un Evento Inicial no puede tener Flujos de Mensaje entrantes"
+"msgError35" = "Un Evento Inicial no puede tener Flujos de Mensaje salientes"
+"msgError41" = "Un Sub-Proceso de Evento no puede iniciar con un Evento de Inicio Normal"
+"msgError44" = "Un Sub-Proceso no debe tener más de un Evento de Inicio"
+"msgError48" = "Un Sub-Proceso AdHoc no debe tener Eventos de Inicio"

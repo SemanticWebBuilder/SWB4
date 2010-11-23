@@ -1,0 +1,6 @@
+"msgError33" = "Start Event cannot have incoming Sequence Flow"
+"msgError34" = "Start Event cannot have incoming Message Flow"
+"msgError35" = "Start Event cannot have outgoing Message Flow"
+"msgError41" = "Event Sub-Process cannot start with a Normal Start Event"
+"msgError44" = "Sub-Process cannot have more than one Start Event"
+"msgError48" = "Start Event cannot be used in Ad-Hoc Sub-Process"

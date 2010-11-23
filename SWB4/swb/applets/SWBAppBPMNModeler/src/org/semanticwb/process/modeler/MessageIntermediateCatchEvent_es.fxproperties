@@ -1,0 +1,2 @@
+"msgError29" = "Un Evento Intermedio de Message Receptor puede tener un solo Flujo de Mensaje entrante"
+"msgError30" = "Un Evento Intermedio de Message Receptor no puede tener Flujos de Mensage salientes"
