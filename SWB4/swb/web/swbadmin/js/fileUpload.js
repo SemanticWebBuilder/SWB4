@@ -23,6 +23,7 @@ function fileUpload_addNewUpload(pname,filters,url)
     var widget = new dojox.form.FileInputAuto({
             id: "" + pname + "_dynamic"+(++fileUploadCounter),
             url: "" + url,
+            blurDelay: 0,
             name: "" + pname + "_dynamic"+fileUploadCounter,
             onComplete: fileUpload_Callback,
             fileMask: ""+filters
