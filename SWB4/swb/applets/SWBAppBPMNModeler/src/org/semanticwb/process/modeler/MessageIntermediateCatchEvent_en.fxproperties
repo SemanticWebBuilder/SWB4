@@ -1,0 +1,2 @@
+"msgError29" = "Message Intermediate Catch Event can have only one incoming Message Flow"
+"msgError30" = "Message Intermediate Catch Event cannot have outgoing Message Flow"

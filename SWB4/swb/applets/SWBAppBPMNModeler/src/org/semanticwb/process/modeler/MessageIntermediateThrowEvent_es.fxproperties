@@ -1,0 +1,2 @@
+"msgError31" = "Un Evento Intermedio de Message Disparador no puede tener Flujos de Mensaje entrantes"
+"msgError32" = "Un Evento Intermedio de Message Disparador puede tener solo un Flujo de Mensage saliente"

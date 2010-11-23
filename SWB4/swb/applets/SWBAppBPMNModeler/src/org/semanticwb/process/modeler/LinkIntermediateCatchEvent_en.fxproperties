@@ -1,0 +1,3 @@
+"msgError24" = "Link Event cannot have outgoing Message Flow"
+"msgError25" = "Link Event cannot be attached to Activity"
+"msgError27" = "Link Intermediate Catch Event cannot have incoming Sequence Flow"

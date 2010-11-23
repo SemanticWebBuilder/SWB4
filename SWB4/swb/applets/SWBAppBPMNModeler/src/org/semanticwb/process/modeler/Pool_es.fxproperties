@@ -1,0 +1,5 @@
+"actDelete" = "Eliminar"
+"confirmDelete" = "¿Seguro que desea eliminar %s?"
+"msgError16" = "Un Flujo de Mensage debe cruzar los límites del Pool"
+"msgError37" = "Un Pool no puede conectarse usando Flujos de Secuencia"
+"msgError45" = "Un Pool no puede agregarse en un Sub-Proceso"

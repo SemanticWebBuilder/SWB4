@@ -1,0 +1,2 @@
+"msgError24" = "Link Event cannot have outgoing Message Flow"
+"msgError26" = "Link Intermediate Throw Event cannot have outgoing Sequence Flow"
