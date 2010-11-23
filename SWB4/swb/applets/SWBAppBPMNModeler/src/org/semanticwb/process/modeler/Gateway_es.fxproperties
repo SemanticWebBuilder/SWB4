@@ -1,0 +1,3 @@
+"msgError17" = "Una Compuerta no puede conectarse usando Flujos de Mensaje"
+"msgError18" = "Una Compuerta convergente puede tener un solo Flujo de Secuencia saliente"
+"msgError19" = "Una Compuerta divergente puede tener un solo Flujo de Secuencia entrante"

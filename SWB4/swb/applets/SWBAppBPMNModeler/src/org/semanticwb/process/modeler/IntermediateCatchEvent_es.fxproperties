@@ -1,0 +1,5 @@
+"interrupting" = "Interruptor"
+"nonInterrupting" = "No-Interruptor"
+"msgError20" = "Un Evento Adherido no puede tener Flujos de Secuencia entrantes"
+"msgError21" = "Un Evento Intermedio puede tener un solo Flujo de Secuencia entrante"
+"msgError22" = "Un Evento Intermedio puede tener un solo Flujo de Secuencia saliente"

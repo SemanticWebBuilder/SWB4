@@ -1,0 +1,3 @@
+"msgError14" = "Sequence Flow cannot cross Pool boundaries"
+"msgError15" = "Association Flow cannot link Flow Nodes"
+"msgError16" = "Message Flow must cross Pool boundaries"
