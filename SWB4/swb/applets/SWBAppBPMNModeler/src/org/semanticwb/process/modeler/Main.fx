@@ -123,7 +123,7 @@ var scene : Scene = Scene {
 }
 
 var stage : Stage = Stage {
-    title: ModelerUtils.getLocalizedString("appTitle");
+    title: ##"appTitle"
     resizable: true
     scene: scene
     //style: StageStyle.TRANSPARENT    //StageStyle.UNDECORATED
