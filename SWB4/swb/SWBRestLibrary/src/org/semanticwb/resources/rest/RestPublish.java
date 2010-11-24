@@ -1659,7 +1659,7 @@ public class RestPublish
                 }
                 else
                 {
-                    response.setStatus(404);
+                    showError(request, response, "Invalid uri");
                     return;
                 }
 
@@ -1667,7 +1667,7 @@ public class RestPublish
             }
             else
             {
-                response.setStatus(404);
+                showError(request, response, "The parameter uri was not found");
                 return;
                 
             }
