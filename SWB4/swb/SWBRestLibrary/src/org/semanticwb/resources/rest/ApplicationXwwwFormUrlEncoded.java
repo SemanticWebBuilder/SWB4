@@ -125,6 +125,7 @@ public final class ApplicationXwwwFormUrlEncoded extends RepresentationBase impl
                 url=new URL(url.toString()+"?"+_parameters);
             }
             HttpURLConnection con=(HttpURLConnection)url.openConnection();
+            con.setRequestMethod(this.method.getHTTPMethod().toString());
             if(this.getMethod().getHTTPMethod()==HTTPMethod.PUT || this.getMethod().getHTTPMethod()==HTTPMethod.POST)
             {
                 con.setRequestProperty(CONTENT_TYPE, this.mediaType);
