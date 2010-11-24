@@ -2,20 +2,21 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package org.semanticwb.resources.rest;
+package org.semanticwb.rest;
 
 import java.util.Map;
+import org.w3c.dom.Document;
 
 /**
  *
  * @author victor.lorenzana
  */
-public class PUTMethod extends Method {
+public final class GETMethod extends Method
+{
 
-    PUTMethod(String id,Resource resource)
+    GETMethod(String id,Resource resource)
     {
-        super(id,HTTPMethod.PUT,resource);
+        super(id,HTTPMethod.GET,resource);
     }
 
     @Override
