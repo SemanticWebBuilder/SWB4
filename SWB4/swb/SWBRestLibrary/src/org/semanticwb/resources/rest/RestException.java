@@ -5,8 +5,6 @@
 
 package org.semanticwb.resources.rest;
 
-import org.semanticwb.rest.*;
-
 /**
  *
  * @author victor.lorenzana
