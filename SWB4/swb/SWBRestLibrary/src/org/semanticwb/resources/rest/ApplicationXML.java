@@ -43,7 +43,7 @@ public final class ApplicationXML implements RepresentationResponse {
     {
         return document;
     }
-    private void createClasses(Element element,HashMap<String,String> classes)
+    public static void createClasses(Element element,HashMap<String,String> classes)
     {
         String name=toUpperCase(element.getTagName());
         NodeList nodes=element.getChildNodes();
@@ -61,12 +61,12 @@ public final class ApplicationXML implements RepresentationResponse {
             classes.put(name, code);
         }
     }
-    private static String toUpperCase(String data)
+    public static String toUpperCase(String data)
     {
         String letter = data.substring(0, 1);
         return letter.toUpperCase() + data.substring(1).toLowerCase();
     }
-    private String getCode(Element element)
+    private static String getCode(Element element)
     {
         StringBuilder sb=new StringBuilder();
         String className=toUpperCase(element.getTagName());
@@ -174,7 +174,7 @@ public final class ApplicationXML implements RepresentationResponse {
     public Object getObject() throws bsh.EvalError,RestException
     {
         ClassLoader mcls=getClassLoader();
-        String className=toUpperCase(getRootName());
+        String className=toUpperCase(getRootName(document));
         try
         {
             Class clazz=mcls.loadClass(className);
@@ -187,14 +187,14 @@ public final class ApplicationXML implements RepresentationResponse {
             throw new RestException("Error creating a object response",clnfe);
         }
     }
-    private HashMap<String,String> getClasses(Document response)
+    public static HashMap<String,String> getClasses(Document response)
     {
         HashMap<String,String> classes=new HashMap<String, String>();
         Element root=response.getDocumentElement();
         createClasses(root, classes);
         return classes;
     }
-    private String getRootName()
+    public static String getRootName(Document document)
     {
         return document.getDocumentElement().getTagName();
     }
@@ -213,7 +213,7 @@ public final class ApplicationXML implements RepresentationResponse {
     {
         Interpreter i=new Interpreter();
         ClassLoader mcls=getClassLoader();
-        String className=getRootName();
+        String className=getRootName(document);
         className=toUpperCase(className);
         try
         {
