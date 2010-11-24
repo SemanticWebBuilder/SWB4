@@ -124,6 +124,19 @@ public abstract class RepresentationBase implements RepresentationRequest {
         {
             valid(parameter, values);
         }
+
+        for(Parameter parameter : this.method.getRequiredParameters())
+        {
+            if(!exists(parameter.getName(), values))
+            {
+                throw new RestException("The parameter "+parameter.getName()+" was not found");
+            }
+            valid(parameter, values);
+        }
+        for(Parameter parameter : this.method.getOptionalParameters())
+        {
+            valid(parameter, values);
+        }
     }
     public Parameter[] getRequiredParameters()
     {
