@@ -76,7 +76,7 @@ public final class ApplicationMultipartFormData extends RepresentationBase imple
                     ApplicationXML resp=new ApplicationXML(response);
                     return resp;
                 }
-                if (con.getHeaderField(CONTENT_TYPE) != null && con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(ApplicationAtomXML.ATOM_NS))
+                if (con.getHeaderField(CONTENT_TYPE) != null && con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(AtomXML.ATOM_NS))
                 {
                     InputStream in = con.getInputStream();
                     Document response = SWBUtils.XML.xmlToDom(in);
@@ -84,7 +84,7 @@ public final class ApplicationMultipartFormData extends RepresentationBase imple
                     {
                         throw new RestException("The content of the url is invalid");
                     }
-                    ApplicationAtomXML resp = new ApplicationAtomXML(this.method);
+                    AtomXML resp = new AtomXML(this.method);
                     resp.setDocument(response);
                     return resp;
                 }

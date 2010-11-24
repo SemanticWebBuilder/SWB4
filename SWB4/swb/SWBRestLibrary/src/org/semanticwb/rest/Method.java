@@ -7,7 +7,7 @@ package org.semanticwb.rest;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -16,17 +16,17 @@ import org.w3c.dom.NodeList;
  *
  * @author victor.lorenzana
  */
-public abstract class Method {
+public final class Method {
     private final String id;
     private final Set<Parameter> parameters=new HashSet<Parameter>();
-    private final HTTPMethod method;
+    private final HTTPMethod httpMethod;
     private final Resource resource;
     protected final Set<RepresentationRequest> requests=new HashSet<RepresentationRequest>();
     protected RepresentationRequest defaultRequestRepresentation;
-    protected Method(String id,HTTPMethod method,Resource resource)
+    protected Method(String id,HTTPMethod httpMethod,Resource resource)
     {
         this.id=id;
-        this.method=method;
+        this.httpMethod=httpMethod;
         this.resource=resource;
     }
     public String getId()
@@ -37,23 +37,20 @@ public abstract class Method {
     {
         String id=method.getAttribute("id");
         String name=method.getAttribute("name");
-        Method m=null;
-        if(name.toUpperCase().equals("POST"))
+        HTTPMethod httpMethod=HTTPMethod.GET;
+        if(name.equals(HTTPMethod.DELETE.toString()))
         {
-            m=new POSTMethod(id,resource);
+            httpMethod=HTTPMethod.DELETE;
         }
-        else if(name.toUpperCase().equals("PUT"))
+        if(name.equals(HTTPMethod.POST.toString()))
         {
-            m=new PUTMethod(id,resource);
+            httpMethod=HTTPMethod.POST;
         }
-        else if(name.toUpperCase().equals("DELETE"))
+        if(name.equals(HTTPMethod.PUT.toString()))
         {
-            m=new DELETEMethod(id,resource);
+            httpMethod=HTTPMethod.PUT;
         }
-        else
-        {
-            m=new GETMethod(id,resource);
-        }
+        Method m= new Method(id,httpMethod,resource);
         NodeList nodesRequest=method.getElementsByTagNameNS(ServiceInfo.WADL_NS, "request");
         if(nodesRequest.getLength()>0)
         {
@@ -82,7 +79,7 @@ public abstract class Method {
         }
         if(m.defaultRequestRepresentation==null)
         {
-            ApplicationXwwwFormUrlEncoded _default=new ApplicationXwwwFormUrlEncoded(m);
+            XWWWFormUrlEncoded _default=new XWWWFormUrlEncoded(m);
             m.defaultRequestRepresentation=_default;
         }        
         return m;
@@ -93,7 +90,7 @@ public abstract class Method {
     }
     public HTTPMethod getHTTPMethod()
     {
-        return method;
+        return httpMethod;
     }
     public Parameter[] getAllParameters()
     {
@@ -133,8 +130,11 @@ public abstract class Method {
         return defaultRequestRepresentation;
     }
     
-    public abstract RepresentationResponse execute(Map<String, Object> values) throws ExecutionRestException;
     
-
+    
+    public RepresentationResponse request(List<ParameterValue> values) throws ExecutionRestException,RestException
+    {
+        return getDefaultRequestRepresentation().request(values);
+    }
 
 }

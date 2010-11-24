@@ -23,12 +23,12 @@ import org.w3c.dom.Text;
  *
  * @author victor.lorenzana
  */
-public class ApplicationAtomXML extends RepresentationBase implements RepresentationRequest,RepresentationResponse
+public class AtomXML extends RepresentationBase implements RepresentationRequest,RepresentationResponse
 {
     private Document document;
     public static final String ATOM_NS = "http://www.w3.org/2005/Atom";
 
-    public ApplicationAtomXML(Method method)
+    public AtomXML(Method method)
     {
         super("application/atom+xml", method);
     }
@@ -166,7 +166,7 @@ public class ApplicationAtomXML extends RepresentationBase implements Representa
                     {
                         throw new RestException("The content of the url is invalid");
                     }
-                    ApplicationAtomXML resp = new ApplicationAtomXML(this.method);
+                    AtomXML resp = new AtomXML(this.method);
                     resp.document=response;
                     return resp;
                 }
