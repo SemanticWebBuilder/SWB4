@@ -3,7 +3,8 @@
  * and open the template in the editor.
  */
 
-package org.semanticwb.rest;
+package org.semanticwb.resources.rest;
+
 
 import java.io.PrintStream;
 import java.io.PrintWriter;

@@ -3,7 +3,9 @@
  * and open the template in the editor.
  */
 
-package org.semanticwb.rest;
+package org.semanticwb.resources.rest;
+
+import org.semanticwb.rest.*;
 
 /**
  *
