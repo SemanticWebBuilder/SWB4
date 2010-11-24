@@ -720,6 +720,42 @@ public class RestPublish
 
     }
 
+    private void addDELETEMethod(Document doc, Element resource, SemanticClass clazz)
+    {
+        Element method = doc.createElementNS(WADL_NS, "method");
+        method.setAttribute("name", "DELETE");
+        method.setAttribute("id", "delete" + clazz.getName());
+        resource.appendChild(method);
+
+        Element request = doc.createElementNS(WADL_NS, "request");
+        method.appendChild(request);
+
+        Element param = doc.createElementNS(WADL_NS, "param");
+        param.setAttribute("name", "uri");
+        param.setAttribute("style", "query");
+        param.setAttribute("type", XSD_STRING);
+        param.setAttribute("required", "true");
+        request.appendChild(param);
+
+        /*Element response = doc.createElement("response");
+        response.setAttribute("status", "400");
+        method.appendChild(response);
+
+        Element representation = doc.createElement("representation");
+        response.appendChild(representation);
+        representation.setAttribute("mediaType", "application/xml");
+        //representation.setAttribute("element", "Error");*/
+
+        Element response = doc.createElementNS(WADL_NS, "response");
+        //response.setAttribute("status", "200");
+        method.appendChild(response);
+
+        Element representation = doc.createElementNS(WADL_NS, "representation");
+        response.appendChild(representation);
+        representation.setAttribute("mediaType", "application/xml");
+        //representation.setAttribute("element", clazz.getPrefix() + ":" + clazz.getName());
+    }
+
     private void addGetMethod(Document doc, Element resource, SemanticClass clazz)
     {
         Element method = doc.createElementNS(WADL_NS, "method");
@@ -990,6 +1026,7 @@ public class RestPublish
             addGetMethod(doc, resource, clazz);
             addPUTMethod(doc, resource, clazz);
             addPOSTMethod(doc, resource, clazz);
+            addDELETEMethod(doc, resource, clazz);
             try
             {
                 Class clazzjava = Class.forName(clazz.getClassName());
@@ -1200,7 +1237,7 @@ public class RestPublish
         Document doc = SWBUtils.XML.getNewDocument();
         Element created = doc.createElement("Created");
         doc.appendChild(created);
-        created.setAttribute("uri", "uri");
+        created.setAttribute("uri", uri);
         return doc;
     }
 
@@ -1209,7 +1246,7 @@ public class RestPublish
         Document doc = SWBUtils.XML.getNewDocument();
         Element created = doc.createElement("Updated");
         doc.appendChild(created);
-        created.setAttribute("uri", "uri");
+        created.setAttribute("uri", uri);
         return doc;
     }
 
@@ -1218,7 +1255,7 @@ public class RestPublish
         Document doc = SWBUtils.XML.getNewDocument();
         Element created = doc.createElement("Deleted");
         doc.appendChild(created);
-        created.setAttribute("uri", "uri");
+        created.setAttribute("uri", uri);
         return doc;
     }
 
@@ -1580,10 +1617,62 @@ public class RestPublish
         }
     }
 
+    private void showDeleted(HttpServletRequest request, HttpServletResponse response, String uri) throws IOException
+    {
+        Document doc = getDeleted(uri);
+        PrintWriter out = response.getWriter();
+        String charset = Charset.defaultCharset().name();
+        response.setContentType("application/xml; charset=" + charset);
+        String xml = SWBUtils.XML.domToXml(doc, charset, true);
+        out.print(xml);
+        out.close();
+    }
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
+        if (request.getMethod().toLowerCase().equals("delete"))
+        {
+            if (request.getParameter("uri") != null)
+            {
+                String uri = request.getParameter("uri");
+                if (uri.indexOf(":") != -1)
+                {
+                    if (uri.indexOf("%3A") != -1)
+                    {
+                        uri = uri.replace("%3A", ":");
+                    }
+                    if (uri.indexOf("%23") != -1)
+                    {
+                        uri = uri.replace("%23", "#");
+                    }
+                    if (uri.indexOf("#") == -1)
+                    {
+                        uri = SemanticObject.shortToFullURI(uri);
+                    }
+                }
 
-        if (request.getMethod().toLowerCase().equals("get"))
+                SemanticObject obj = SemanticObject.createSemanticObject(uri);
+                if (obj != null)
+                {
+                    uri=obj.getShortURI();
+                    obj.remove();
+                    showDeleted(request, response, uri);
+                }
+                else
+                {
+                    response.setStatus(404);
+                    return;
+                }
+
+
+            }
+            else
+            {
+                response.setStatus(404);
+                return;
+                
+            }
+        }
+        else if(request.getMethod().toLowerCase().equals("get"))
         {
             if (request.getParameter(XSD_PREFIX) != null)
             {
@@ -1684,7 +1773,7 @@ public class RestPublish
                 showError(request, response, e.getMessage());
                 return;
             }
-        }
+        }        
         else if (request.getMethod().toLowerCase().equals("put"))
         {
             String classuri = request.getParameter(REST_CLASSURI);
