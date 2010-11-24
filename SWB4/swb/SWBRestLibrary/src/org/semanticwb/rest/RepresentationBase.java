@@ -41,7 +41,7 @@ public abstract class RepresentationBase implements RepresentationRequest {
         RepresentationBase representationInfo=null;        
         if(mediaType.equals("application/x-www-form-urlencoded"))
         {
-            representationInfo=new ApplicationXwwwFormUrlEncoded(method);
+            representationInfo=new XWWWFormUrlEncoded(method);
         }
         if(mediaType.equals("multipart/form-data"))
         {
