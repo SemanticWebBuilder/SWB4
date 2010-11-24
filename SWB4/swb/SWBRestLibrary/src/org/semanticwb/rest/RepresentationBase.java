@@ -21,6 +21,8 @@ public abstract class RepresentationBase implements RepresentationRequest {
 
     protected static final String JSON_CONTENT_TYPE = "json";
     protected static final String APPLICATION_XML = "application/xml";
+    protected static final String TEXT_XML = "text/xml";
+
     protected static final String CONTENT_TYPE = "Content-Type";
     protected final Set<Parameter> parameters=new HashSet<Parameter>();
     protected final String mediaType;
