@@ -62,16 +62,18 @@ public class TestRestSource {
             {                
                 for(Method minfo : res.getMethods())
                 {
-                    if(minfo.getId().equals("listEventElements"))
+                    if(minfo.getId().equals("deleteEventElement"))
                     {
                         ArrayList<ParameterValue> values=new ArrayList<ParameterValue>();
+                        values.add(new ParameterValue("uri", "reg_digital_demo:swbcomm_EventElement:42"));
                         RepresentationResponse resp=minfo.getDefaultRequestRepresentation().request(values);
                         System.out.print("obj :"+resp.getObject().getClass().getName());
                         if(resp instanceof ApplicationXMLRepresentation)
                         {
                             Document doc=((ApplicationXMLRepresentation)resp).getDocument();
                             String xml=SWBUtils.XML.domToXml(doc);
-                            System.out.println("xml: "+xml);
+                            System.out.println("Respuesta XML: ");
+                            System.out.println(xml);
                         }
                         break;
                     }
