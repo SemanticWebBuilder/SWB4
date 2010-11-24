@@ -30,7 +30,6 @@ import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticVocabulary;
-import org.semanticwb.portal.community.EventElement;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -1592,7 +1591,7 @@ public class RestPublish
                 SemanticObject obj = SemanticObject.createSemanticObject(uri);
                 if (obj != null)
                 {
-                    SemanticClass clazz = EventElement.sclass;
+                    SemanticClass clazz = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
                     showXSD(response, clazz);
                 }
 

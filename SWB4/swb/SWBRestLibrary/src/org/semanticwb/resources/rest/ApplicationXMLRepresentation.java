@@ -10,7 +10,6 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import org.semanticwb.rest.util.MemoryClassLoader;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
