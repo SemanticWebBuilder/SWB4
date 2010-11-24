@@ -66,7 +66,7 @@ public class TestRestSource {
                     {
                         ArrayList<ParameterValue> values=new ArrayList<ParameterValue>();
                         values.add(new ParameterValue("uri", "reg_digital_demo:swbcomm_EventElement:42"));
-                        RepresentationResponse resp=minfo.getDefaultRequestRepresentation().request(values);
+                        RepresentationResponse resp=minfo.request(values);
                         System.out.print("obj :"+resp.getObject().getClass().getName());
                         if(resp instanceof ApplicationXML)
                         {
