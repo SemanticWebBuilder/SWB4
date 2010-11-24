@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package org.semanticwb.resources.rest;
+package org.semanticwb.rest;
 
 import java.util.ArrayList;
 import java.util.Arrays;

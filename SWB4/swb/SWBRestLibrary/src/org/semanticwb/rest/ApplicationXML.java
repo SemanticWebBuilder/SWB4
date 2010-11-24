@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package org.semanticwb.resources.rest;
+package org.semanticwb.rest;
 
 import bsh.Interpreter;
 import java.lang.reflect.Constructor;

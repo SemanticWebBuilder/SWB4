@@ -3,28 +3,26 @@
  * and open the template in the editor.
  */
 
-package org.semanticwb.resources.rest;
+package org.semanticwb.rest;
 
 import java.util.Map;
-import org.w3c.dom.Document;
 
 /**
  *
  * @author victor.lorenzana
  */
-public final class POSTMethod extends Method {
+public class DELETEMethod extends Method{
 
-    POSTMethod(String id,Resource resource)
+    DELETEMethod(String id,Resource resource)
     {
-        super(id,HTTPMethod.POST,resource);
+        super(id,HTTPMethod.DELETE,resource);
     }
-
-    
-    
 
     @Override
     public RepresentationResponse execute(Map<String, Object> values) throws ExecutionRestException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    
 }
