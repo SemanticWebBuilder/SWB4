@@ -72,13 +72,13 @@ public class Parameter {
         }
         boolean fixed=false;
         String fixedvalue=null;
-        if(sfixed!=null)
+        if(sfixed!=null && !sfixed.trim().equals(""))
         {            
             fixedvalue=sfixed;
             fixed=true;
         }
         boolean repeating=false;
-        if(srepeating!=null)
+        if(srepeating!=null && !srepeating.trim().equals(""))
         {
             if(srepeating.equals("true"))
             {
