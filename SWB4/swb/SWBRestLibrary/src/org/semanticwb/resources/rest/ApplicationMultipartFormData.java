@@ -73,7 +73,7 @@ public final class ApplicationMultipartFormData extends RepresentationBase imple
                     {
                         throw new RestException("The content of the url is invalid");
                     }
-                    ApplicationXMLRepresentation resp=new ApplicationXMLRepresentation(response);
+                    ApplicationXML resp=new ApplicationXML(response);
                     return resp;
                 }
                 else
