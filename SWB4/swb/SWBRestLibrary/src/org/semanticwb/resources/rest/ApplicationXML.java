@@ -21,11 +21,11 @@ import org.w3c.dom.NodeList;
  *
  * @author victor.lorenzana
  */
-public final class ApplicationXMLRepresentation implements RepresentationResponse {
+public final class ApplicationXML implements RepresentationResponse {
 
     private static final String NL="\r\n";
     private Document document;
-    ApplicationXMLRepresentation(Document response)
+    ApplicationXML(Document response)
     {
         this.document=response;
     }
