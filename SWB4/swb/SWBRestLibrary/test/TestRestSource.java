@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.resources.rest.ApplicationXMLRepresentation;
+import org.semanticwb.resources.rest.ApplicationXML;
 import org.semanticwb.resources.rest.Method;
 import org.semanticwb.resources.rest.ParameterValue;
 import org.semanticwb.resources.rest.RepresentationResponse;
@@ -68,9 +68,9 @@ public class TestRestSource {
                         values.add(new ParameterValue("uri", "reg_digital_demo:swbcomm_EventElement:42"));
                         RepresentationResponse resp=minfo.getDefaultRequestRepresentation().request(values);
                         System.out.print("obj :"+resp.getObject().getClass().getName());
-                        if(resp instanceof ApplicationXMLRepresentation)
+                        if(resp instanceof ApplicationXML)
                         {
-                            Document doc=((ApplicationXMLRepresentation)resp).getDocument();
+                            Document doc=((ApplicationXML)resp).getDocument();
                             String xml=SWBUtils.XML.domToXml(doc);
                             System.out.println("Respuesta XML: ");
                             System.out.println(xml);
