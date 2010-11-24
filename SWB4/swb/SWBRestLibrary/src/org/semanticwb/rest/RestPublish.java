@@ -309,9 +309,7 @@ public class RestPublish
         method.appendChild(request);
 
 
-        Element representation = doc.createElementNS(WADL_NS, "representation");
-        representation.setAttribute("mediaType", "multipart/form-data");
-        request.appendChild(representation);
+        
 
         Iterator<SemanticProperty> props = clazz.listProperties();
         while (props.hasNext())
@@ -371,7 +369,7 @@ public class RestPublish
                     {
                         param.setAttribute("repeating", "true");
                     }
-                    representation.appendChild(param);
+                    request.appendChild(param);
                 }
                 else
                 {
@@ -383,7 +381,7 @@ public class RestPublish
                     {
                         param.setAttribute("repeating", "true");
                     }
-                    representation.appendChild(param);
+                    request.appendChild(param);
                 }
             }
 
@@ -393,14 +391,14 @@ public class RestPublish
         param.setAttribute("style", "query");
         param.setAttribute("type", XSD_STRING);
         param.setAttribute("required", "true");
-        representation.appendChild(param);
+        request.appendChild(param);
 
         param = doc.createElementNS(WADL_NS, "param");
         param.setAttribute("name", REST_MODELURI);
         param.setAttribute("style", "query");
         param.setAttribute("type", XSD_STRING);
         param.setAttribute("required", "true");
-        representation.appendChild(param);
+        request.appendChild(param);
 
         if (!clazz.isAutogenId())
         {
@@ -409,7 +407,7 @@ public class RestPublish
             param.setAttribute("style", "query");
             param.setAttribute("type", XSD_STRING);
             param.setAttribute("required", "true");
-            representation.appendChild(param);
+            request.appendChild(param);
         }
 
         /*Element response = doc.createElement("response");
@@ -425,7 +423,7 @@ public class RestPublish
         //response.setAttribute("status", "200");
         method.appendChild(response);
 
-        representation = doc.createElementNS(WADL_NS, "representation");
+        Element representation = doc.createElementNS(WADL_NS, "representation");
         response.appendChild(representation);
         representation.setAttribute("mediaType", "application/xml");
         //representation.setAttribute("element", "result");
@@ -441,16 +439,14 @@ public class RestPublish
         Element request = doc.createElementNS(WADL_NS, "request");
         method.appendChild(request);
 
-        Element representation = doc.createElementNS(WADL_NS, "representation");
-        representation.setAttribute("mediaType", "multipart/form-data");
-        request.appendChild(representation);
+        
 
         Element param = doc.createElementNS(WADL_NS, "param");
         param.setAttribute("name", REST_URI);
         param.setAttribute("style", "query");
         param.setAttribute("type", "xsd:anyURI");
 
-        representation.appendChild(param);
+        request.appendChild(param);
 
         Iterator<SemanticProperty> props = clazz.listProperties();
         while (props.hasNext())
@@ -510,7 +506,7 @@ public class RestPublish
                     {
                         param.setAttribute("repeating", "true");
                     }
-                    representation.appendChild(param);
+                    request.appendChild(param);
                 }
                 else
                 {
@@ -522,7 +518,7 @@ public class RestPublish
                     {
                         param.setAttribute("repeating", "true");
                     }
-                    representation.appendChild(param);
+                    request.appendChild(param);
                 }
             }
 
@@ -542,7 +538,7 @@ public class RestPublish
         //response.setAttribute("status", "200");
         method.appendChild(response);
 
-        representation = doc.createElementNS(WADL_NS, "representation");
+        Element representation = doc.createElementNS(WADL_NS, "representation");
         response.appendChild(representation);
         representation.setAttribute("mediaType", "application/xml");
         //representation.setAttribute("element", "result");

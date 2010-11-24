@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -17,21 +18,27 @@ import org.w3c.dom.NodeList;
  * @author victor.lorenzana
  */
 public final class Method {
-    private final String id;
+    private final String name;
     private final Set<Parameter> parameters=new HashSet<Parameter>();
     private final HTTPMethod httpMethod;
     private final Resource resource;
     protected final Set<RepresentationRequest> requests=new HashSet<RepresentationRequest>();
     protected RepresentationRequest defaultRequestRepresentation;
-    protected Method(String id,HTTPMethod httpMethod,Resource resource)
+    private final String id;
+    protected Method(String name,HTTPMethod httpMethod,Resource resource)
     {
-        this.id=id;
+        this.name=name;
         this.httpMethod=httpMethod;
         this.resource=resource;
+        id=UUID.randomUUID().toString().replace("-", "_");
     }
     public String getId()
     {
         return id;
+    }
+    public String getName()
+    {
+        return name;
     }
     static Method createMethodInfo(Element method,Resource resource) throws RestException
     {
