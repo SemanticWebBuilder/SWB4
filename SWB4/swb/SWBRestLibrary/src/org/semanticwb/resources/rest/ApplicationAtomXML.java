@@ -25,14 +25,24 @@ import org.w3c.dom.Text;
  */
 public class ApplicationAtomXML extends RepresentationBase implements RepresentationRequest,RepresentationResponse
 {
-    Document document;
-    private static final String ATOM_NS = "http://www.w3.org/2005/Atom";
+    private Document document;
+    public static final String ATOM_NS = "http://www.w3.org/2005/Atom";
 
     public ApplicationAtomXML(Method method)
     {
         super("application/atom+xml", method);
     }
-
+    public void setDocument(Document document)
+    {
+        if(this.document==null)
+        {
+            this.document=document;
+        }
+    }
+    public Document getDocument()
+    {
+        return document;
+    }
     private Document constructParameters(List<ParameterValue> values) throws RestException
     {
         Document doc = SWBUtils.XML.getNewDocument();

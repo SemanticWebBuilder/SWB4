@@ -151,6 +151,18 @@ public final class ApplicationXwwwFormUrlEncoded extends RepresentationBase impl
                     ApplicationXML resp=new ApplicationXML(response);
                     return resp;
                 }
+                if (con.getHeaderField(CONTENT_TYPE) != null && con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(ApplicationAtomXML.ATOM_NS))
+                {
+                    InputStream in = con.getInputStream();
+                    Document response = SWBUtils.XML.xmlToDom(in);
+                    if (response == null)
+                    {
+                        throw new RestException("The content of the url is invalid");
+                    }
+                    ApplicationAtomXML resp = new ApplicationAtomXML(this.method);
+                    resp.setDocument(response);
+                    return resp;
+                }
                 else
                 {
                     throw new RestException("The response has a not valid Content-Type header: "+con.getHeaderField(CONTENT_TYPE)+"(only "+JSON_CONTENT_TYPE+","+APPLICATION_XML+" are valid)");
