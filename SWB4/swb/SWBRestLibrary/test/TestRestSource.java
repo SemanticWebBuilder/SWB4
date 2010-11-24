@@ -62,7 +62,7 @@ public class TestRestSource {
             {                
                 for(Method minfo : res.getMethods())
                 {
-                    if(minfo.getId().equals("deleteEventElement"))
+                    if(minfo.getName().equals("deleteEventElement"))
                     {
                         ArrayList<ParameterValue> values=new ArrayList<ParameterValue>();
                         values.add(new ParameterValue("uri", "reg_digital_demo:swbcomm_EventElement:42"));
