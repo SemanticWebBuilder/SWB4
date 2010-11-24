@@ -140,7 +140,7 @@ public final class XWWWFormUrlEncoded extends RepresentationBase implements Repr
             
             if(con.getResponseCode()==200)
             {
-                if(con.getHeaderField(CONTENT_TYPE)!=null && con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(APPLICATION_XML))
+                if(con.getHeaderField(CONTENT_TYPE)!=null && (con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(APPLICATION_XML) || con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(TEXT_XML)))
                 {
                     InputStream in=con.getInputStream();
                     Document response=SWBUtils.XML.xmlToDom(in);
