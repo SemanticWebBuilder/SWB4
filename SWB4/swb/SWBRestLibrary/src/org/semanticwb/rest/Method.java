@@ -18,27 +18,24 @@ import org.w3c.dom.NodeList;
  * @author victor.lorenzana
  */
 public final class Method {
-    private final String name;
+    private final String id;
     private final Set<Parameter> parameters=new HashSet<Parameter>();
     private final HTTPMethod httpMethod;
     private final Resource resource;
     protected final Set<RepresentationRequest> requests=new HashSet<RepresentationRequest>();
     protected RepresentationRequest defaultRequestRepresentation;
-    private final String id;
+    
     protected Method(String name,HTTPMethod httpMethod,Resource resource)
     {
-        this.name=name;
+        this.id=name;
         this.httpMethod=httpMethod;
         this.resource=resource;
-        id=UUID.randomUUID().toString().replace("-", "_");
+        
     }
+    
     public String getId()
     {
         return id;
-    }
-    public String getName()
-    {
-        return name;
     }
     static Method createMethodInfo(Element method,Resource resource) throws RestException
     {
@@ -58,7 +55,7 @@ public final class Method {
             httpMethod=HTTPMethod.PUT;
         }
         Method m= new Method(id,httpMethod,resource);
-        NodeList nodesRequest=method.getElementsByTagNameNS(ServiceInfo.WADL_NS, "request");
+        NodeList nodesRequest=method.getElementsByTagNameNS(method.getNamespaceURI(), "request");
         if(nodesRequest.getLength()>0)
         {
             Element request=(Element)nodesRequest.item(0);

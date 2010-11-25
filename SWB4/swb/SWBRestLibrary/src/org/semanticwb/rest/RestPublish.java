@@ -6,8 +6,11 @@ package org.semanticwb.rest;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.sql.Timestamp;
@@ -51,22 +54,33 @@ public class RestPublish
     private static final String REST_URI = "rest:uri";
     private static final String SCHEMA_INSTANCE_NS = "http://www.w3.org/2001/XMLSchema-instance";
     private static final String SCHEMA_NS = "http://www.w3.org/2001/XMLSchema";
-    private static final String WADL_NS = "http://research.sun.com/wadl/2006/10";
-    private static final String WADL_XSD_LOCATION = "https://wadl.dev.java.net/wadl20061109.xsd";
     private static final String XSD_PREFIX = "xsd";
     private static final String XLINK_NS = "http://www.w3.org/1999/xlink";
     private static final String XSD_STRING = "xsd:string";
     private final Set<SemanticClass> classes;
+
+    public static final String REST_RESOURCES_2010 = "http://www.semanticwb.org/rest/2010";
+
+    public static final String WADL_NS_2006 = "http://research.sun.com/wadl/2006/10";
+    private static final String WADL_XSD_LOCATION_2006 = "https://wadl.dev.java.net/wadl20061109.xsd";
+    public static final String WADL_NS_2009 = "http://wadl.dev.java.net/2009/02";
+    private static final String WADL_XSD_LOCATION_2009 = "http://www.w3.org/Submission/wadl/wadl.xsd";
 
     public RestPublish(Set<SemanticClass> classes)
     {
         this.classes = classes;
     }
 
+
     private Document getErrorXSD()
     {
         Document doc = SWBUtils.XML.getNewDocument();
         Element schema = doc.createElementNS(SCHEMA_NS, "schema");
+
+        Attr attr = doc.createAttribute("xmlns");
+        attr.setValue(REST_RESOURCES_2010);
+        schema.setAttributeNode(attr);
+
         doc.appendChild(schema);
         schema.setPrefix(XSD_PREFIX);
         Element element = doc.createElementNS(SCHEMA_NS, "element");
@@ -92,51 +106,16 @@ public class RestPublish
         return doc;
     }
 
-    private Document getUpdatedXSD()
-    {
-        Document doc = SWBUtils.XML.getNewDocument();
-        Element schema = doc.createElementNS(SCHEMA_NS, "schema");
-        //schema.setAttribute("xmlns:xlink",XLINK_NS);
-        doc.appendChild(schema);
-        schema.setPrefix(XSD_PREFIX);
-        Element element = doc.createElementNS(SCHEMA_NS, "element");
-        schema.appendChild(element);
-        element.setAttribute("name", "Updated");
-        element.setPrefix(XSD_PREFIX);
-        Element attribute = doc.createElementNS(SCHEMA_NS, "attribute");
-        element.appendChild(attribute);
-        attribute.setAttribute("name", "uri");
-        attribute.setAttribute("type", XSD_STRING);
-        attribute.setPrefix(XSD_PREFIX);
-
-        return doc;
-    }
-
-    private Document getDeletedXSD()
-    {
-        Document doc = SWBUtils.XML.getNewDocument();
-        Element schema = doc.createElementNS(SCHEMA_NS, "schema");
-        //schema.setAttribute("xmlns:xlink",XLINK_NS);
-        doc.appendChild(schema);
-        schema.setPrefix(XSD_PREFIX);
-        Element element = doc.createElementNS(SCHEMA_NS, "element");
-        schema.appendChild(element);
-        element.setAttribute("name", "Deleted");
-        element.setPrefix(XSD_PREFIX);
-        Element attribute = doc.createElementNS(SCHEMA_NS, "attribute");
-        element.appendChild(attribute);
-        attribute.setAttribute("name", "uri");
-        attribute.setAttribute("type", XSD_STRING);
-        attribute.setPrefix(XSD_PREFIX);
-
-        return doc;
-    }
-
     private Document getCreatedXSD()
     {
         Document doc = SWBUtils.XML.getNewDocument();
         Element schema = doc.createElementNS(SCHEMA_NS, "schema");
-        //schema.setAttribute("xmlns:xlink",XLINK_NS);
+        
+
+        Attr attr = doc.createAttribute("xmlns");
+        attr.setValue(REST_RESOURCES_2010);
+        schema.setAttributeNode(attr);
+
         doc.appendChild(schema);
         schema.setPrefix(XSD_PREFIX);
         Element element = doc.createElementNS(SCHEMA_NS, "element");
@@ -154,20 +133,267 @@ public class RestPublish
 
         return doc;
     }
-
-    private Document getXSD(final SemanticClass clazz)
+    private Document getUpdatedXSD()
     {
         Document doc = SWBUtils.XML.getNewDocument();
-
         Element schema = doc.createElementNS(SCHEMA_NS, "schema");
-        schema.setAttribute("xmlns", clazz.getURI());
+
+        Attr attr = doc.createAttribute("xmlns");
+        attr.setValue(REST_RESOURCES_2010);
+        schema.setAttributeNode(attr);
+
+        doc.appendChild(schema);
+        schema.setPrefix(XSD_PREFIX);
+        Element element = doc.createElementNS(SCHEMA_NS, "element");
+        schema.appendChild(element);
+        element.setAttribute("name", "Updated");
+        element.setPrefix(XSD_PREFIX);
+        Element attribute = doc.createElementNS(SCHEMA_NS, "attribute");
+        element.appendChild(attribute);
+        attribute.setAttribute("name", "uri");
+        attribute.setAttribute("type", XSD_STRING);
+        attribute.setPrefix(XSD_PREFIX);
+        return doc;
+    }
+
+    private Document getDeletedXSD()
+    {
+        Document doc = SWBUtils.XML.getNewDocument();
+        Element schema = doc.createElementNS(SCHEMA_NS, "schema");
+
+
+        Attr attr = doc.createAttribute("xmlns");
+        attr.setValue(REST_RESOURCES_2010);
+        schema.setAttributeNode(attr);
+
+        doc.appendChild(schema);
+        schema.setPrefix(XSD_PREFIX);
+        Element element = doc.createElementNS(SCHEMA_NS, "element");
+        schema.appendChild(element);
+        element.setAttribute("name", "Deleted");
+        element.setPrefix(XSD_PREFIX);
+        Element attribute = doc.createElementNS(SCHEMA_NS, "attribute");
+        element.appendChild(attribute);
+        attribute.setAttribute("name", "uri");
+        attribute.setAttribute("type", XSD_STRING);
+        attribute.setPrefix(XSD_PREFIX);
+
+        return doc;
+    }
+
+    
+
+    private Document getXSD(final SemanticClass clazz, final String version)
+    {
+        Document doc = SWBUtils.XML.getNewDocument();
+        Element schema = doc.createElementNS(SCHEMA_NS, "schema");
+
+        Attr attr = doc.createAttribute("xmlns");        
+        attr.setValue(clazz.getURI());
+        schema.setAttributeNode(attr);
+
         schema.setAttribute("xmlns:" + clazz.getPrefix(), clazz.getURI());
         schema.setAttribute("xmlns:xlink", XLINK_NS);
+        schema.setAttribute("xmlns:swbrest", REST_RESOURCES_2010);
         doc.appendChild(schema);
         schema.setPrefix(XSD_PREFIX);
         addXSD(schema, clazz);
 
         return doc;
+    }
+
+    private void addClassManagerResultToXSD(final Element schema, final SemanticClass clazz, HashSet<SemanticClass> ranges)
+    {
+        Document doc = schema.getOwnerDocument();
+        try
+        {
+            Class main = Class.forName(clazz.getClassName());
+            Class msgr = getClassManager(main);
+            for (Method m : msgr.getDeclaredMethods())
+            {
+                if (Modifier.isPublic(m.getModifiers()) && Modifier.isStatic(m.getModifiers()) && (m.getName().startsWith("has") || m.getName().startsWith("list")))
+                {
+                    Class returnType = m.getReturnType();
+
+                    Element methodElement = doc.createElementNS(SCHEMA_NS, "Element");
+                    methodElement.setPrefix(XSD_PREFIX);
+                    methodElement.setAttribute("name", "swbrest:"+m.getName());
+                    schema.appendChild(methodElement);
+                    if (returnType instanceof Class && isGenericObject(returnType)) // is GenericObject
+                    {
+                        // gets SemanticClass;
+                        Field sclass = ((Class) returnType).getField("sclass");
+                        Object objClass = sclass.get(null);
+                        if (objClass instanceof SemanticClass)
+                        {
+                            SemanticClass returnSemanticClazz = (SemanticClass) objClass;
+                            addProperties(returnSemanticClazz, methodElement, ranges);
+                        }
+                    }
+                    else if (returnType.equals(Iterator.class)) // GenericIterator
+                    {
+                        if (m.getGenericReturnType() instanceof ParameterizedType)
+                        {
+                            if (((ParameterizedType) m.getGenericReturnType()).getActualTypeArguments() != null && ((ParameterizedType) m.getGenericReturnType()).getActualTypeArguments().length > 0)
+                            {
+                                Type actual = ((ParameterizedType) m.getGenericReturnType()).getActualTypeArguments()[0];
+                                if (actual instanceof Class)
+                                {
+                                    Class _returnType = (Class) actual;
+                                    Field sclass = ((Class) _returnType).getField("sclass");
+                                    Object objClass = sclass.get(null);
+                                    if (objClass instanceof SemanticClass)
+                                    {
+                                        SemanticClass returnSemanticClazz = (SemanticClass) objClass;
+                                        Element complex = doc.createElementNS(SCHEMA_NS, "complexType");
+                                        complex.setPrefix(XSD_PREFIX);
+                                        methodElement.appendChild(complex);
+                                        Element sequence = doc.createElementNS(SCHEMA_NS, "sequence");
+                                        sequence.setPrefix(XSD_PREFIX);
+                                        complex.appendChild(sequence);
+                                        Element child = doc.createElementNS(SCHEMA_NS, "element");
+                                        child.setPrefix(XSD_PREFIX);
+                                        child.setAttribute("name", "swbrest:"+returnSemanticClazz.getName());
+
+                                        Element shortURI = doc.createElementNS(SCHEMA_NS, "attribute");
+                                        shortURI.setPrefix(XSD_PREFIX);
+                                        shortURI.setAttribute("name", "shortURI");
+                                        child.appendChild(shortURI);
+
+                                        Element uri = doc.createElementNS(SCHEMA_NS, "attribute");
+                                        uri.setAttribute("name", "uri");
+                                        child.appendChild(uri);
+
+                                        Element href = doc.createElementNS(SCHEMA_NS, "attribute");
+                                        href.setAttribute("name", "xlink:href");
+                                        child.appendChild(href);
+
+
+                                        sequence.appendChild(child);
+                                    }
+                                }
+                            }
+
+                        }
+
+                    }
+                    else
+                    {
+                        if (returnType instanceof Class)
+                        {
+                            methodElement.setAttribute("type", classToxsd((Class) returnType));
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception cnfe)
+        {
+            cnfe.printStackTrace();
+            log.error(cnfe);
+        }
+
+    }
+
+    private void addProperties(SemanticClass clazz, Element element, HashSet<SemanticClass> ranges)
+    {
+        Document doc = element.getOwnerDocument();
+        Element complexType = doc.createElementNS(SCHEMA_NS, "complexType");
+        complexType.setPrefix(XSD_PREFIX);
+        element.appendChild(complexType);
+
+        Element sequence = doc.createElementNS(SCHEMA_NS, "sequence");
+        sequence.setPrefix(XSD_PREFIX);
+        complexType.appendChild(sequence);
+
+        Iterator<SemanticProperty> props = clazz.listProperties();
+        while (props.hasNext())
+        {
+            SemanticProperty prop = props.next();
+            if (!prop.hasInverse())
+            {
+                if (prop.isDataTypeProperty())
+                {
+                    Element property = doc.createElementNS(SCHEMA_NS, "element");
+                    property.setPrefix(XSD_PREFIX);
+                    property.setAttribute("name", prop.getName());
+                    sequence.appendChild(property);
+                    String type = XSD_STRING;
+                    if (prop.isBoolean())
+                    {
+                        type = SemanticVocabulary.XMLS_BOOLEAN;
+                    }
+                    else if (prop.isBinary())
+                    {
+                        type = SemanticVocabulary.XMLS_BASE64BINARY;
+                    }
+                    else if (prop.isByte())
+                    {
+                        type = SemanticVocabulary.XMLS_BYTE;
+                    }
+                    else if (prop.isDate())
+                    {
+                        type = SemanticVocabulary.XMLS_DATE;
+                    }
+                    else if (prop.isDateTime())
+                    {
+                        type = SemanticVocabulary.XMLS_DATETIME;
+                    }
+                    else if (prop.isDouble())
+                    {
+                        type = SemanticVocabulary.XMLS_DOUBLE;
+                    }
+                    else if (prop.isFloat())
+                    {
+                        type = SemanticVocabulary.XMLS_FLOAT;
+                    }
+                    else if (prop.isInt())
+                    {
+                        type = SemanticVocabulary.XMLS_INT;
+                    }
+                    else if (prop.isLong())
+                    {
+                        type = SemanticVocabulary.XMLS_LONG;
+                    }
+                    else if (prop.isShort())
+                    {
+                        type = SemanticVocabulary.XMLS_SHORT;
+                    }
+                    type = type.replace(SCHEMA_NS + "#", "xsd:");
+                    property.setAttribute("type", type);
+                    if (prop.getName().startsWith("has"))
+                    {
+                        property.setAttribute("minOccurs", "0");
+                        property.setAttribute("maxOccurs", "unbounded");
+                    }
+
+                }
+                else
+                {
+                    SemanticClass range = prop.getRangeClass();
+                    if (range != null)
+                    {
+                        ranges.add(range);
+                        Element property = doc.createElementNS(SCHEMA_NS, "element");
+                        sequence.appendChild(property);
+                        property.setAttribute("name", prop.getName());
+                        if (prop.getName().startsWith("has"))
+                        {
+                            property.setAttribute("minOccurs", "0");
+                            property.setAttribute("maxOccurs", "unbounded");
+                        }
+                        property.setPrefix(XSD_PREFIX);
+                        //property.setAttribute("type", range.getName());
+                        Element attribute = doc.createElementNS(SCHEMA_NS, "attribute");
+                        attribute.setPrefix(XSD_PREFIX);
+                        property.appendChild(attribute);
+                        attribute.setAttribute("name", "xlink:href");
+                        //attribute.setAttribute("type","xsd:string");
+                        //addXSD(schema,range);
+                    }
+                }
+            }
+        }
     }
 
     private void addXSD(final Element schema, final SemanticClass clazz)
@@ -192,114 +418,18 @@ public class RestPublish
 
         if (!exists && clazz.isSWBClass())
         {
+            HashSet<SemanticClass> ranges = new HashSet<SemanticClass>();
+            // addClassMenegerResults
+            addClassManagerResultToXSD(schema, clazz, ranges);
             Element element = doc.createElementNS(SCHEMA_NS, "element");
             schema.appendChild(element);
             element.setAttribute("name", clazz.getName());
             element.setPrefix(XSD_PREFIX);
-
-            HashSet<SemanticClass> ranges = new HashSet<SemanticClass>();
-
-            Element complexType = doc.createElementNS(SCHEMA_NS, "complexType");
-            complexType.setPrefix(XSD_PREFIX);
-            element.appendChild(complexType);
-
-            Element sequence = doc.createElementNS(SCHEMA_NS, "sequence");
-            sequence.setPrefix(XSD_PREFIX);
-            complexType.appendChild(sequence);
-
-            Iterator<SemanticProperty> props = clazz.listProperties();
-            while (props.hasNext())
-            {
-                SemanticProperty prop = props.next();
-                if (!prop.hasInverse())
-                {
-                    if (prop.isDataTypeProperty())
-                    {
-                        Element property = doc.createElementNS(SCHEMA_NS, "element");
-                        property.setPrefix(XSD_PREFIX);
-                        property.setAttribute("name", prop.getName());
-                        sequence.appendChild(property);
-                        String type = XSD_STRING;
-                        if (prop.isBoolean())
-                        {
-                            type = SemanticVocabulary.XMLS_BOOLEAN;
-                        }
-                        else if (prop.isBinary())
-                        {
-                            type = SemanticVocabulary.XMLS_BASE64BINARY;
-                        }
-                        else if (prop.isByte())
-                        {
-                            type = SemanticVocabulary.XMLS_BYTE;
-                        }
-                        else if (prop.isDate())
-                        {
-                            type = SemanticVocabulary.XMLS_DATE;
-                        }
-                        else if (prop.isDateTime())
-                        {
-                            type = SemanticVocabulary.XMLS_DATETIME;
-                        }
-                        else if (prop.isDouble())
-                        {
-                            type = SemanticVocabulary.XMLS_DOUBLE;
-                        }
-                        else if (prop.isFloat())
-                        {
-                            type = SemanticVocabulary.XMLS_FLOAT;
-                        }
-                        else if (prop.isInt())
-                        {
-                            type = SemanticVocabulary.XMLS_INT;
-                        }
-                        else if (prop.isLong())
-                        {
-                            type = SemanticVocabulary.XMLS_LONG;
-                        }
-                        else if (prop.isShort())
-                        {
-                            type = SemanticVocabulary.XMLS_SHORT;
-                        }
-                        type = type.replace(SCHEMA_NS + "#", "xsd:");
-                        property.setAttribute("type", type);
-                        if (prop.getName().startsWith("has"))
-                        {
-                            property.setAttribute("minOccurs", "0");
-                            property.setAttribute("maxOccurs", "unbounded");
-                        }
-
-                    }
-                    else
-                    {
-                        SemanticClass range = prop.getRangeClass();
-                        if (range != null)
-                        {
-                            ranges.add(range);
-                            Element property = doc.createElementNS(SCHEMA_NS, "element");
-                            sequence.appendChild(property);
-                            property.setAttribute("name", prop.getName());
-                            if (prop.getName().startsWith("has"))
-                            {
-                                property.setAttribute("minOccurs", "0");
-                                property.setAttribute("maxOccurs", "unbounded");
-                            }
-                            property.setPrefix(XSD_PREFIX);
-                            //property.setAttribute("type", range.getName());
-                            Element attribute = doc.createElementNS(SCHEMA_NS, "attribute");
-                            attribute.setPrefix(XSD_PREFIX);
-                            property.appendChild(attribute);
-                            attribute.setAttribute("name", "xlink:href");
-                            //attribute.setAttribute("type","xsd:string");
-                            //addXSD(schema,range);
-                        }
-                    }
-                }
-            }
+            addProperties(clazz, element, ranges);
         }
-
     }
 
-    private void addPUTMethod(Document doc, Element resource, SemanticClass clazz)
+    private void addPUTMethod(Document doc, Element resource, SemanticClass clazz, String WADL_NS)
     {
         Element method = doc.createElementNS(WADL_NS, "method");
         method.setAttribute("name", "PUT");
@@ -411,26 +541,31 @@ public class RestPublish
             request.appendChild(param);
         }
 
-        /*Element response = doc.createElement("response");
-        response.setAttribute("status", "400");
-        method.appendChild(response);
 
-        representation = doc.createElement("representation");
-        response.appendChild(representation);
-        representation.setAttribute("mediaType", "application/xml");
-        //representation.setAttribute("element", "Error");*/
+        if (WADL_NS.equals(WADL_NS_2009))
+        {
+            Element error = doc.createElementNS(WADL_NS, "response");
+            method.appendChild(error);
+            Element representation = doc.createElementNS(WADL_NS, "representation");
+            error.appendChild(representation);
+            representation.setAttribute("mediaType", "application/xml");
+            error.setAttribute("status", "400");
+            representation.setAttribute("element", "swbrest:Error");
+        }
 
         Element response = doc.createElementNS(WADL_NS, "response");
-        //response.setAttribute("status", "200");
         method.appendChild(response);
-
         Element representation = doc.createElementNS(WADL_NS, "representation");
         response.appendChild(representation);
         representation.setAttribute("mediaType", "application/xml");
-        //representation.setAttribute("element", "result");
+        if (WADL_NS.equals(WADL_NS_2009))
+        {
+            response.setAttribute("status", "200");
+            representation.setAttribute("element", "swbrest:Created");
+        }
     }
 
-    private void addPOSTMethod(Document doc, Element resource, SemanticClass clazz)
+    private void addPOSTMethod(Document doc, Element resource, SemanticClass clazz, String WADL_NS)
     {
         Element method = doc.createElementNS(WADL_NS, "method");
         method.setAttribute("name", "POST");
@@ -526,30 +661,34 @@ public class RestPublish
         }
 
 
-        /*Element response = doc.createElement("response");
-        response.setAttribute("status", "400");
-        method.appendChild(response);
-
-        representation = doc.createElement("representation");
-        response.appendChild(representation);
-        representation.setAttribute("mediaType", "application/xml");
-        //representation.setAttribute("element", "Error");*/
+        if (WADL_NS.equals(WADL_NS_2009))
+        {
+            Element error = doc.createElementNS(WADL_NS, "response");
+            method.appendChild(error);
+            Element representation = doc.createElementNS(WADL_NS, "representation");
+            error.appendChild(representation);
+            representation.setAttribute("mediaType", "application/xml");
+            error.setAttribute("status", "400");
+            representation.setAttribute("element", "swbrest:Error");
+        }
 
         Element response = doc.createElementNS(WADL_NS, "response");
-        //response.setAttribute("status", "200");
         method.appendChild(response);
-
         Element representation = doc.createElementNS(WADL_NS, "representation");
         response.appendChild(representation);
         representation.setAttribute("mediaType", "application/xml");
-        //representation.setAttribute("element", "result");
+        if (WADL_NS.equals(WADL_NS_2009))
+        {
+            response.setAttribute("status", "200");
+            representation.setAttribute("element", "swbrest:Updated");
+        }
     }
 
-    private void createMethod(Document doc, Element resource, SemanticClass clazz, Method method)
+    private void createMethod(Document doc, Element resource, SemanticClass clazz, Method method, String WADL_NS,String id)
     {
         Element emethod = doc.createElementNS(WADL_NS, "method");
         emethod.setAttribute("name", "GET");
-        emethod.setAttribute("id", method.getName());
+        emethod.setAttribute("id", id);
         resource.appendChild(emethod);
 
         Element request = doc.createElementNS(WADL_NS, "request");
@@ -594,12 +733,27 @@ public class RestPublish
         }
 
 
+        if (WADL_NS.equals(WADL_NS_2009))
+        {
+            Element error = doc.createElementNS(WADL_NS, "response");
+            emethod.appendChild(error);
+            Element representation = doc.createElementNS(WADL_NS, "representation");
+            error.appendChild(representation);
+            representation.setAttribute("mediaType", "application/xml");
+            error.setAttribute("status", "400");
+            representation.setAttribute("element", "swbrest:Error");
+        }
+
         Element response = doc.createElementNS(WADL_NS, "response");
         emethod.appendChild(response);
-
         Element representation = doc.createElementNS(WADL_NS, "representation");
         response.appendChild(representation);
         representation.setAttribute("mediaType", "application/xml");
+        if (WADL_NS.equals(WADL_NS_2009))
+        {
+            response.setAttribute("status", "200");
+            representation.setAttribute("element", clazz.getPrefix() + ":" + clazz.getName());
+        }
     }
 
     private static boolean isGenericObject(Class clazz)
@@ -717,7 +871,7 @@ public class RestPublish
 
     }
 
-    private void addDELETEMethod(Document doc, Element resource, SemanticClass clazz)
+    private void addDELETEMethod(Document doc, Element resource, SemanticClass clazz, String WADL_NS)
     {
         Element method = doc.createElementNS(WADL_NS, "method");
         method.setAttribute("name", "DELETE");
@@ -734,26 +888,31 @@ public class RestPublish
         param.setAttribute("required", "true");
         request.appendChild(param);
 
-        /*Element response = doc.createElement("response");
-        response.setAttribute("status", "400");
-        method.appendChild(response);
 
-        Element representation = doc.createElement("representation");
-        response.appendChild(representation);
-        representation.setAttribute("mediaType", "application/xml");
-        //representation.setAttribute("element", "Error");*/
+        if (WADL_NS.equals(WADL_NS_2009))
+        {
+            Element error = doc.createElementNS(WADL_NS, "response");
+            method.appendChild(error);
+            Element representation = doc.createElementNS(WADL_NS, "representation");
+            error.appendChild(representation);
+            representation.setAttribute("mediaType", "application/xml");
+            error.setAttribute("status", "400");
+            representation.setAttribute("element", "swbrest:Error");
+        }
 
         Element response = doc.createElementNS(WADL_NS, "response");
-        //response.setAttribute("status", "200");
         method.appendChild(response);
-
         Element representation = doc.createElementNS(WADL_NS, "representation");
         response.appendChild(representation);
         representation.setAttribute("mediaType", "application/xml");
-        //representation.setAttribute("element", clazz.getPrefix() + ":" + clazz.getName());
+        if (WADL_NS.equals(WADL_NS_2009))
+        {
+            response.setAttribute("status", "200");
+            representation.setAttribute("element", "swbrest:Deleted");
+        }
     }
 
-    private void addGetMethod(Document doc, Element resource, SemanticClass clazz)
+    private void addGetMethod(Document doc, Element resource, SemanticClass clazz, String WADL_NS)
     {
         Element method = doc.createElementNS(WADL_NS, "method");
         method.setAttribute("name", "GET");
@@ -770,23 +929,29 @@ public class RestPublish
         param.setAttribute("required", "true");
         request.appendChild(param);
 
-        /*Element response = doc.createElement("response");
-        response.setAttribute("status", "400");
-        method.appendChild(response);
 
-        Element representation = doc.createElement("representation");
-        response.appendChild(representation);
-        representation.setAttribute("mediaType", "application/xml");
-        //representation.setAttribute("element", "Error");*/
+
+        if (WADL_NS.equals(WADL_NS_2009))
+        {
+            Element error = doc.createElementNS(WADL_NS, "response");
+            method.appendChild(error);
+            Element representation = doc.createElementNS(WADL_NS, "representation");
+            error.appendChild(representation);
+            representation.setAttribute("mediaType", "application/xml");
+            error.setAttribute("status", "400");
+            representation.setAttribute("element", "swbrest:Error");
+        }
 
         Element response = doc.createElementNS(WADL_NS, "response");
-        //response.setAttribute("status", "200");
         method.appendChild(response);
-
         Element representation = doc.createElementNS(WADL_NS, "representation");
         response.appendChild(representation);
         representation.setAttribute("mediaType", "application/xml");
-        //representation.setAttribute("element", clazz.getPrefix() + ":" + clazz.getName());
+        if (WADL_NS.equals(WADL_NS_2009))
+        {
+            response.setAttribute("status", "200");
+            representation.setAttribute("element", clazz.getPrefix() + ":" + clazz.getName());
+        }
     }
 
     private void executeMethod(HttpServletRequest request, HttpServletResponse response) throws IOException
@@ -810,7 +975,12 @@ public class RestPublish
 
     private void showList(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
-        Document doc = getList(request);
+        String version = "2009";
+        if ("2006".equals(request.getParameter("version")))
+        {
+            version = "2006";
+        }
+        Document doc = getWADL(request, version);
         PrintWriter out = response.getWriter();
         String charset = Charset.defaultCharset().name();
         response.setContentType("application/xml; charset=" + charset);
@@ -852,9 +1022,14 @@ public class RestPublish
         out.close();
     }
 
-    private void showXSD(HttpServletResponse response, SemanticClass clazz) throws IOException
+    private void showXSD(HttpServletRequest request, HttpServletResponse response, SemanticClass clazz) throws IOException
     {
-        Document doc = getXSD(clazz);
+        String version = "2009";
+        if ("2006".equals(request.getParameter("version")))
+        {
+            version = "2006";
+        }
+        Document doc = getXSD(clazz, version);
         PrintWriter out = response.getWriter();
         String charset = Charset.defaultCharset().name();
         response.setContentType("application/xml; charset=" + charset);
@@ -940,28 +1115,32 @@ public class RestPublish
         return doc;
     }
 
-    private Document getList(HttpServletRequest servletRequest)
+    private Document getWADL(HttpServletRequest servletRequest, String version)
     {
+        String WADL_NS = WADL_NS_2009;
+        String WADL_XSD_LOCATION = WADL_XSD_LOCATION_2009;
+        if ("2006".equals(version))
+        {
+            WADL_NS = WADL_NS_2006;
+            WADL_XSD_LOCATION = WADL_XSD_LOCATION_2006;
+        }
         Document doc = SWBUtils.XML.getNewDocument();
         Element application = doc.createElementNS(WADL_NS, "application");
 
 
         application.setAttribute("xmlns:xsi", SCHEMA_INSTANCE_NS);
         application.setAttribute("xmlns:xsd", SCHEMA_NS);
+        application.setAttribute("xmlns:swbrest", REST_RESOURCES_2010);
 
         Attr attr = doc.createAttribute("xmlns");
         attr.setValue(WADL_NS);
         application.setAttributeNode(attr);
+
         Attr schemaLocation = doc.createAttributeNS(SCHEMA_INSTANCE_NS, "schemaLocation");
         schemaLocation.setValue(WADL_NS + " " + WADL_XSD_LOCATION);
         schemaLocation.setPrefix("xsi");
         application.setAttributeNodeNS(schemaLocation);
 
-        String port = "";
-        if (servletRequest.getServerPort() != 80)
-        {
-            port = ":" + servletRequest.getServerPort();
-        }
 
         Set<String> prefixes = new HashSet<String>();
 
@@ -981,24 +1160,32 @@ public class RestPublish
 
         Element include = doc.createElementNS(WADL_NS, "include");
         grammars.appendChild(include);
-        include.setAttribute("href", servletRequest.getScheme() + "://" + servletRequest.getServerName() + port + servletRequest.getRequestURI() + "?error=xsd");
+        include.setAttribute("href", servletRequest.getRequestURI() + "?error=xsd");
 
         include = doc.createElementNS(WADL_NS, "include");
         grammars.appendChild(include);
-        include.setAttribute("href", servletRequest.getScheme() + "://" + servletRequest.getServerName() + port + servletRequest.getRequestURI() + "?created=xsd");
+        include.setAttribute("href", servletRequest.getRequestURI() + "?created=xsd");
+
+        include = doc.createElementNS(WADL_NS, "include");
+        grammars.appendChild(include);
+        include.setAttribute("href", servletRequest.getRequestURI() + "?updated=xsd");
+
+        include = doc.createElementNS(WADL_NS, "include");
+        grammars.appendChild(include);
+        include.setAttribute("href", servletRequest.getRequestURI() + "?deleted=xsd");
 
         for (SemanticClass clazz : classes)
         {
             String xsd = URLEncoder.encode(clazz.getURI());
             include = doc.createElementNS(WADL_NS, "include");
             grammars.appendChild(include);
-            include.setAttribute("href", servletRequest.getScheme() + "://" + servletRequest.getServerName() + port + servletRequest.getRequestURI() + "?xsd=" + xsd);
+            include.setAttribute("href", servletRequest.getRequestURI() + "?xsd=" + xsd);
         }
 
         doc.appendChild(application);
         Element resources = doc.createElementNS(WADL_NS, "resources");
 
-        String base = servletRequest.getScheme() + "://" + servletRequest.getServerName() + port + servletRequest.getRequestURI();
+        String base = servletRequest.getRequestURI();
         int pos = base.lastIndexOf("/");
         if (pos != -1)
         {
@@ -1006,7 +1193,7 @@ public class RestPublish
         }
 
         resources.setAttribute("base", base);
-        base = servletRequest.getScheme() + "://" + servletRequest.getServerName() + port + servletRequest.getRequestURI();
+        base = servletRequest.getRequestURI();
         pos = base.lastIndexOf("/");
         if (pos != -1)
         {
@@ -1020,10 +1207,10 @@ public class RestPublish
             resources.appendChild(resource);
             resource.setAttribute("path", resourcepath);
             resource.setAttribute("id", clazz.getName());
-            addGetMethod(doc, resource, clazz);
-            addPUTMethod(doc, resource, clazz);
-            addPOSTMethod(doc, resource, clazz);
-            addDELETEMethod(doc, resource, clazz);
+            addGetMethod(doc, resource, clazz, WADL_NS);
+            addPUTMethod(doc, resource, clazz, WADL_NS);
+            addPOSTMethod(doc, resource, clazz, WADL_NS);
+            addDELETEMethod(doc, resource, clazz, WADL_NS);
             try
             {
                 Class clazzjava = Class.forName(clazz.getClassName());
@@ -1035,11 +1222,18 @@ public class RestPublish
                         if (c.getName().endsWith("ClassMgr"))
                         {
                             Class mgr = c;
+                            HashSet<String> ids=new HashSet<String>();
                             for (Method m : mgr.getDeclaredMethods())
                             {
                                 if (Modifier.isPublic(m.getModifiers()) && Modifier.isStatic(m.getModifiers()) && (m.getName().startsWith("has") || m.getName().startsWith("list")))
                                 {
-                                    createMethod(doc, resource, clazz, m);
+                                    String id=m.getName();
+                                    if(ids.contains(id))
+                                    {
+                                        id="_"+id;
+                                    }
+                                    createMethod(doc, resource, clazz, m, WADL_NS,id);
+                                    ids.add(id);
                                 }
                             }
                             break;
@@ -1068,6 +1262,11 @@ public class RestPublish
     {
         Document doc = SWBUtils.XML.getNewDocument();
         Element eError = doc.createElement("Error");
+
+        Attr xmlns=doc.createAttribute("xmlns");
+        xmlns.setValue(REST_RESOURCES_2010);
+        eError.setAttributeNode(xmlns);
+
         doc.appendChild(eError);
         for (String error : errors)
         {
@@ -1163,6 +1362,14 @@ public class RestPublish
     public Document getExecuteMethod(HttpServletRequest request) throws Exception
     {
         String methodName = request.getParameter("method");
+        if(methodName==null)
+        {
+            throw new Exception("The parameter method was not found");
+        }
+        if(methodName.startsWith("_"))
+        {
+            methodName=methodName.substring(1);
+        }
         String classUri = request.getParameter("classuri");
         SemanticClass clazz = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(classUri);
         if (clazz == null)
@@ -1177,13 +1384,11 @@ public class RestPublish
             if (m.getName().equals(methodName))
             {
                 if (checkParameters(m, request) && Modifier.isStatic(m.getModifiers()) && Modifier.isPublic(m.getModifiers()))
-                {
-                    System.out.println("A punto de ejecutar...");
+                {                    
                     try
                     {
                         Object[] args = getParameters(m, request);
-                        Object resinvoke = m.invoke(null, args);
-                        System.out.println("obj: " + resinvoke);
+                        Object resinvoke = m.invoke(null, args);                        
                         if (resinvoke != null)
                         {
                             if (resinvoke instanceof SemanticObject)
@@ -1195,6 +1400,15 @@ public class RestPublish
                             {
                                 Document doc = SWBUtils.XML.getNewDocument();
                                 Element res = doc.createElement(m.getName());
+
+                                Attr xmlns=doc.createAttribute("xmlns");
+                                xmlns.setValue(REST_RESOURCES_2010);
+                                res.setAttributeNode(xmlns);
+
+                                Attr swbrest=doc.createAttribute("xmlns:swbrest");
+                                xmlns.setValue(REST_RESOURCES_2010);
+                                res.setAttributeNode(swbrest);
+
                                 doc.appendChild(res);
                                 res.setAttribute("xmlns:xlink", XLINK_NS);
                                 GenericIterator gi = (GenericIterator) resinvoke;
@@ -1202,12 +1416,9 @@ public class RestPublish
                                 {
                                     GenericObject go = gi.next();
                                     SemanticObject obj = go.getSemanticObject();
-                                    res.setAttribute("xmlns:" + obj.getSemanticClass().getPrefix(), obj.getSemanticClass().getURI());
-                                    Element name = doc.createElementNS(obj.getSemanticClass().getURI(), obj.getSemanticClass().getName());
-                                    Attr href=doc.createAttributeNS(XLINK_NS, "href");
-                                    href.setPrefix("xlink");
-                                    href.setValue(request.getRequestURI() + "?uri=" + obj.getShortURI());
-                                    name.setPrefix(obj.getSemanticClass().getPrefix());
+                                    Element name = doc.createElementNS(REST_RESOURCES_2010, obj.getSemanticClass().getName());
+                                    name.setPrefix("swbrest");
+                                    name.setAttributeNS(XLINK_NS, "xlink:href", request.getRequestURI() + "?uri=" + obj.getShortURI());
                                     name.setAttribute("uri", obj.getURI());
                                     name.setAttribute("shortURI", obj.getShortURI());
                                     res.appendChild(name);
@@ -1216,9 +1427,9 @@ public class RestPublish
                                 {
                                     GenericObject go = gi.next();
                                     SemanticObject obj = go.getSemanticObject();
-                                    Element name = doc.createElementNS(obj.getSemanticClass().getURI(), obj.getSemanticClass().getName());
-                                    name.setAttributeNS(XLINK_NS, "xlink:href", request.getRequestURI() + "?uri=" + obj.getShortURI());
-                                    name.setPrefix(obj.getSemanticClass().getPrefix());
+                                    Element name = doc.createElementNS(REST_RESOURCES_2010, obj.getSemanticClass().getName());
+                                    name.setPrefix("swbrest");
+                                    name.setAttributeNS(XLINK_NS, "xlink:href", request.getRequestURI() + "?uri=" + obj.getShortURI());                                    
                                     name.setAttribute("uri", obj.getURI());
                                     name.setAttribute("shortURI", obj.getShortURI());
                                     res.appendChild(name);
@@ -1250,6 +1461,9 @@ public class RestPublish
         Document doc = SWBUtils.XML.getNewDocument();
         Element created = doc.createElement("Created");
         doc.appendChild(created);
+        Attr xmlns=doc.createAttribute("xmlns");
+        xmlns.setValue(REST_RESOURCES_2010);
+        created.appendChild(xmlns);
         created.setAttribute("uri", uri);
         return doc;
     }
@@ -1257,18 +1471,25 @@ public class RestPublish
     public Document getUpdated(String uri)
     {
         Document doc = SWBUtils.XML.getNewDocument();
-        Element created = doc.createElement("Updated");
-        doc.appendChild(created);
-        created.setAttribute("uri", uri);
+        Element updated = doc.createElement("Updated");
+        Attr xmlns=doc.createAttribute("xmlns");
+        xmlns.setValue(REST_RESOURCES_2010);
+        updated.appendChild(xmlns);
+
+        doc.appendChild(updated);
+        updated.setAttribute("uri", uri);
         return doc;
     }
 
     public Document getDeleted(String uri)
     {
         Document doc = SWBUtils.XML.getNewDocument();
-        Element created = doc.createElement("Deleted");
-        doc.appendChild(created);
-        created.setAttribute("uri", uri);
+        Element deleted = doc.createElement("Deleted");
+        Attr xmlns=doc.createAttribute("xmlns");
+        xmlns.setValue(REST_RESOURCES_2010);
+        deleted.appendChild(xmlns);
+        doc.appendChild(deleted);
+        deleted.setAttribute("uri", uri);
         return doc;
     }
 
@@ -1695,7 +1916,7 @@ public class RestPublish
                 if (obj != null)
                 {
                     SemanticClass clazz = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
-                    showXSD(response, clazz);
+                    showXSD(request, response, clazz);
                 }
 
             }

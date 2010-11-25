@@ -5,14 +5,15 @@
 
 package org.semanticwb.rest;
 
+import java.net.URI;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
 /**
  *
  * @author victor.lorenzana
@@ -38,27 +39,36 @@ public class Resource {
     static Resource createResourceInfo(final Element resource,final URL basePath) throws RestException
     {
         String id=resource.getAttribute("id");
-        if(id==null)
+        if(id==null || resource.getAttribute("id").trim().equals(""))
         {
             id=resource.getAttribute("path");
         }
         URL path;
-        if(resource.getAttribute("path")!=null)
+        if(resource.getAttribute("path")!=null && !resource.getAttribute("path").trim().equals(""))
         {
             try
             {
                 String spath=resource.getAttribute("path");
-                String _basepath=basePath.toString();
-                if(_basepath.indexOf(".")==-1)
+                URI uriPath=new URI(spath);
+                if(!uriPath.isAbsolute())
                 {
-                    _basepath=basePath+"/";
-                    URL tmp=new URL(_basepath);
-                    path=new URL(tmp,spath);
+                    URI base=basePath.toURI();
+                    if(!basePath.toString().endsWith("/"))
+                    {
+                        String newpath=basePath.toString()+"/";
+                        base=new URI(newpath);
+                    }
+                    URI temp=base.resolve(uriPath);
+                    path=temp.normalize().toURL();
                 }
                 else
                 {
-                    path=new URL(basePath, spath);
-                }                
+                    path=uriPath.toURL();
+                }
+            }
+            catch(URISyntaxException me)
+            {
+                throw new RestException(me);
             }
             catch(MalformedURLException me)
             {
@@ -70,7 +80,7 @@ public class Resource {
             path=basePath;
         }
         Resource info=new Resource(id,path);
-        NodeList emethods=resource.getElementsByTagNameNS(ServiceInfo.WADL_NS, "method");
+        NodeList emethods=resource.getElementsByTagNameNS(resource.getNamespaceURI(), "method");
         for(int i=0;i<emethods.getLength();i++)
         {
             Node node=emethods.item(i);

@@ -77,10 +77,11 @@ public class TestRestSource {
                         }
                         break;
                     }*/
-                    if(minfo.getName().equals("listEventElements"))
+                    if(minfo.getId().equals("_listEventElements"))
                     {
                         ArrayList<ParameterValue> values=new ArrayList<ParameterValue>();
                         RepresentationResponse resp=minfo.request(values);
+                        
                         if(resp instanceof ApplicationXML)
                         {
                             Document doc=((ApplicationXML)resp).getDocument();
