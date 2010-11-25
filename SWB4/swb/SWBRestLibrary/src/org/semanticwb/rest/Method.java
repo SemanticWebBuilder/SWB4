@@ -32,7 +32,10 @@ public final class Method {
         this.resource=resource;
         
     }
-    
+    public ResponseDefinition[] getResponseDefinitions()
+    {
+        return responses.toArray(new ResponseDefinition[responses.size()]);
+    }
     public String getId()
     {
         return id;

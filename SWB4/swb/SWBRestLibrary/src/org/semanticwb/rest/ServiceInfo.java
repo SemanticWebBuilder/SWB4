@@ -142,8 +142,7 @@ public class ServiceInfo
                     if(nodes.item(j) instanceof Element)
                     {
                         Element include=(Element)nodes.item(j);
-                        String spath=include.getAttribute("href");
-                        System.out.println("href: "+spath);
+                        String spath=include.getAttribute("href");                        
                         URL path=url;
                         try
                         {

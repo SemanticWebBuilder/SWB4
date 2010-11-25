@@ -11,6 +11,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.sql.Timestamp;
@@ -48,6 +49,7 @@ import static javax.xml.XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI;
  */
 public class RestPublish
 {
+    private static final String XSD_ANYURI = "xsd:anyURI";
 
     private static final Logger log = SWBUtils.getLogger(RestPublish.class);
     private static final String REST_MODELURI = "rest:modeluri";
@@ -132,15 +134,12 @@ public class RestPublish
         Element element = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
         schema.appendChild(element);
         element.setAttribute("name", "Created");
+        element.setAttribute("type", XSD_ANYURI);
         element.setPrefix(XSD_PREFIX);
 
 
 
-        Element attribute = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
-        element.appendChild(attribute);
-        attribute.setAttribute("name", "uri");
-        attribute.setAttribute("type", XSD_STRING);
-        attribute.setPrefix(XSD_PREFIX);
+        
 
         return doc;
     }
@@ -159,12 +158,9 @@ public class RestPublish
         Element element = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
         schema.appendChild(element);
         element.setAttribute("name", "Updated");
+        element.setAttribute("type", "xsd:boolean");
         element.setPrefix(XSD_PREFIX);
-        Element attribute = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
-        element.appendChild(attribute);
-        attribute.setAttribute("name", "uri");
-        attribute.setAttribute("type", XSD_STRING);
-        attribute.setPrefix(XSD_PREFIX);
+        
         return doc;
     }
 
@@ -182,13 +178,8 @@ public class RestPublish
         Element element = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
         schema.appendChild(element);
         element.setAttribute("name", "Deleted");
+        element.setAttribute("type", "xsd:boolean");
         element.setPrefix(XSD_PREFIX);
-        Element attribute = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
-        element.appendChild(attribute);
-        attribute.setAttribute("name", "uri");
-        attribute.setAttribute("type", XSD_STRING);
-        attribute.setPrefix(XSD_PREFIX);
-
         return doc;
     }
 
@@ -266,10 +257,12 @@ public class RestPublish
                                         Element shortURI = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
                                         shortURI.setPrefix(XSD_PREFIX);
                                         shortURI.setAttribute("name", "shortURI");
+                                        shortURI.setAttribute("type", XSD_STRING);
                                         child.appendChild(shortURI);
 
                                         Element uri = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
                                         uri.setAttribute("name", "uri");
+                                        shortURI.setAttribute("type", XSD_ANYURI);
                                         child.appendChild(uri);
 
                                         Element href = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
@@ -385,6 +378,7 @@ public class RestPublish
                         Element property = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
                         sequence.appendChild(property);
                         property.setAttribute("name", prop.getName());
+                        property.setAttribute("type", XSD_ANYURI);
                         if (prop.getName().startsWith("has"))
                         {
                             property.setAttribute("minOccurs", "0");
@@ -396,8 +390,7 @@ public class RestPublish
                         attribute.setPrefix(XSD_PREFIX);
                         property.appendChild(attribute);
                         attribute.setAttribute("name", "xlink:href");
-                        //attribute.setAttribute("type","xsd:string");
-                        //addXSD(schema,range);
+                        attribute.setAttribute("type", XSD_STRING);
                     }
                 }
             }
@@ -513,7 +506,7 @@ public class RestPublish
                     Element param = doc.createElementNS(WADL_NS, "param");
                     param.setAttribute("name", prop.getName());
                     param.setAttribute("style", "query");
-                    param.setAttribute("type", "xsd:anyURI");
+                    param.setAttribute("type", XSD_ANYURI);
                     if (prop.getName().startsWith("has"))
                     {
                         param.setAttribute("repeating", "true");
@@ -586,7 +579,7 @@ public class RestPublish
         Element param = doc.createElementNS(WADL_NS, "param");
         param.setAttribute("name", REST_URI);
         param.setAttribute("style", "query");
-        param.setAttribute("type", "xsd:anyURI");
+        param.setAttribute("type", XSD_ANYURI);
 
         request.appendChild(param);
 
@@ -655,7 +648,7 @@ public class RestPublish
                     param = doc.createElementNS(WADL_NS, "param");
                     param.setAttribute("name", prop.getName());
                     param.setAttribute("style", "query");
-                    param.setAttribute("type", "xsd:anyURI");
+                    param.setAttribute("type", XSD_ANYURI);
                     if (prop.getName().startsWith("has"))
                     {
                         param.setAttribute("repeating", "true");
@@ -723,7 +716,7 @@ public class RestPublish
                 param = doc.createElementNS(WADL_NS, "param");
                 param.setAttribute("name", classparam.getName().toLowerCase());
                 param.setAttribute("style", "query");
-                param.setAttribute("type", "xsd:anyURI");
+                param.setAttribute("type", XSD_ANYURI);
                 param.setAttribute("required", "true");
                 request.appendChild(param);
             }
@@ -871,6 +864,10 @@ public class RestPublish
         {
             return Short.class;
         }
+        if (xsdType.equals(SemanticVocabulary.XMLS_URI+"anyURI"))
+        {
+            return URI.class;
+        }
 
         return String.class;
 
@@ -1017,9 +1014,9 @@ public class RestPublish
         out.close();
     }
 
-    private void showUpdated(HttpServletRequest request, HttpServletResponse response, String uri) throws IOException
+    private void showUpdated(HttpServletRequest request, HttpServletResponse response, boolean isUpdated) throws IOException
     {
-        Document doc = getUpdated(uri);
+        Document doc = getUpdated(isUpdated);
         PrintWriter out = response.getWriter();
         String charset = Charset.defaultCharset().name();
         response.setContentType("application/xml; charset=" + charset);
@@ -1102,6 +1099,8 @@ public class RestPublish
                                     Element eprop = doc.createElementNS(obj.getSemanticClass().getURI(), prop.getName());
                                     name.appendChild(eprop);
                                     eprop.setAttributeNS(XLINK_NS, "xlink:href", request.getRequestURI() + "?uri=" + value.getShortURI());
+                                    Text data=doc.createTextNode(value.getURI());
+                                    eprop.appendChild(data);
                                 }
                             }
                         }
@@ -1113,6 +1112,8 @@ public class RestPublish
                             if (value != null)
                             {
                                 eprop.setAttributeNS(XLINK_NS, "xlink:href", request.getRequestURI() + "?uri=" + value.getShortURI());
+                                Text data=doc.createTextNode(value.getURI());
+                                eprop.appendChild(data);
                             }
                         }
                     }
@@ -1496,24 +1497,25 @@ public class RestPublish
         Attr xmlns = doc.createAttribute("xmlns");
         xmlns.setValue(REST_RESOURCES_2010);
         created.appendChild(xmlns);
-        created.setAttribute("uri", uri);
+        Text data=doc.createTextNode(uri);
+        created.appendChild(created);
         return doc;
     }
 
-    public Document getUpdated(String uri)
+    public Document getUpdated(boolean isUpdated)
     {
         Document doc = SWBUtils.XML.getNewDocument();
         Element updated = doc.createElement("Updated");
         Attr xmlns = doc.createAttribute("xmlns");
         xmlns.setValue(REST_RESOURCES_2010);
         updated.appendChild(xmlns);
-
         doc.appendChild(updated);
-        updated.setAttribute("uri", uri);
+        Text data=doc.createTextNode(Boolean.toString(isUpdated));
+        updated.appendChild(data);
         return doc;
     }
 
-    public Document getDeleted(String uri)
+    public Document getDeleted(boolean isdeleted)
     {
         Document doc = SWBUtils.XML.getNewDocument();
         Element deleted = doc.createElement("Deleted");
@@ -1521,7 +1523,8 @@ public class RestPublish
         xmlns.setValue(REST_RESOURCES_2010);
         deleted.appendChild(xmlns);
         doc.appendChild(deleted);
-        deleted.setAttribute("uri", uri);
+        Text data=doc.createTextNode(Boolean.toString(isdeleted));
+        deleted.appendChild(deleted);
         return doc;
     }
 
@@ -1883,9 +1886,9 @@ public class RestPublish
         }
     }
 
-    private void showDeleted(HttpServletRequest request, HttpServletResponse response, String uri) throws IOException
+    private void showDeleted(HttpServletRequest request, HttpServletResponse response, boolean isdeleted) throws IOException
     {
-        Document doc = getDeleted(uri);
+        Document doc = getDeleted(isdeleted);
         PrintWriter out = response.getWriter();
         String charset = Charset.defaultCharset().name();
         response.setContentType("application/xml; charset=" + charset);
@@ -1922,11 +1925,11 @@ public class RestPublish
                 {
                     uri = obj.getShortURI();
                     obj.remove();
-                    showDeleted(request, response, uri);
+                    showDeleted(request, response, true);
                 }
                 else
                 {
-                    showError(request, response, "Invalid uri");
+                    showDeleted(request, response, false);
                     return;
                 }
 
@@ -2060,17 +2063,23 @@ public class RestPublish
                 }
             }
             SemanticObject obj = SemanticObject.createSemanticObject(uri);
-            try
+            if(obj!=null)
             {
-                updateProperties(request, obj);
-                showUpdated(request, response, obj.getURI());
+                try
+                {
+                    updateProperties(request, obj);
+                    showUpdated(request, response, true);
+                }
+                catch (Exception e)
+                {                    
+                    response.setStatus(400);
+                    showError(request, response, e.getMessage());
+                    return;
+                }
             }
-            catch (Exception e)
+            else
             {
-                obj.remove();
-                response.setStatus(400);
-                showError(request, response, e.getMessage());
-                return;
+                showUpdated(request, response, false);
             }
         }
         else if (request.getMethod().toLowerCase().equals("put"))
