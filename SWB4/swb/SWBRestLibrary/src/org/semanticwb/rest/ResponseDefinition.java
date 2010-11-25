@@ -20,39 +20,46 @@ public final class ResponseDefinition
 
     private final int status;
     private final String mediaType;
-    private Element responseDefinition;
-    private ResponseDefinition(int status,String mediaType,Element responseDefinition)
+    private final ParameterDefinition[] parameters;
+
+    private ResponseDefinition(int status, String mediaType, ParameterDefinition[] parameters)
     {
         this.status = status;
-        this.mediaType=mediaType;
-        this.responseDefinition=responseDefinition;
+        this.mediaType = mediaType;
+        this.parameters = parameters;
     }
 
     public int getStatus()
     {
         return status;
     }
-    private static Element getElementDefinition(Document doc,String localname,String namespace)
+
+    public String getMediaType()
     {
-        NodeList schemas=doc.getElementsByTagNameNS(XMLConstants.W3C_XML_SCHEMA_NS_URI, "schema");
-        for(int i=0;i<schemas.getLength();i++)
+        return mediaType;
+    }
+
+    private static Element getElementDefinition(Document doc, String localname, String namespace)
+    {
+        NodeList schemas = doc.getElementsByTagNameNS(XMLConstants.W3C_XML_SCHEMA_NS_URI, "schema");
+        for (int i = 0; i < schemas.getLength(); i++)
         {
-            Element schema=(Element)schemas.item(i);
-            String targetNamespace=schema.getAttribute("targetNamespace");
-            if(namespace.equals(targetNamespace))
+            Element schema = (Element) schemas.item(i);
+            String targetNamespace = schema.getAttribute("targetNamespace");
+            if (namespace.equals(targetNamespace))
             {
                 // this is the schema
-                NodeList childs=schema.getChildNodes();
-                for(int j=0;j<childs.getLength();j++)
+                NodeList childs = schema.getChildNodes();
+                for (int j = 0; j < childs.getLength(); j++)
                 {
-                    Node child=childs.item(j);
-                    if(child instanceof Element && XMLConstants.W3C_XML_SCHEMA_NS_URI.equals(child.getNamespaceURI()))
+                    Node child = childs.item(j);
+                    if (child instanceof Element && XMLConstants.W3C_XML_SCHEMA_NS_URI.equals(child.getNamespaceURI()))
                     {
-                        Element eDefinition=(Element)child;
-                        if(eDefinition.getLocalName().equals("element"))
-                        {                            
-                            String name=eDefinition.getAttribute("name");
-                            if(localname.equals(name))
+                        Element eDefinition = (Element) child;
+                        if (eDefinition.getLocalName().equals("element"))
+                        {
+                            String name = eDefinition.getAttribute("name");
+                            if (localname.equals(name))
                             {
                                 return eDefinition;
                             }
@@ -63,9 +70,49 @@ public final class ResponseDefinition
         }
         return null;
     }
+
+    public static void extractDefinitions(Element parent, ArrayList<ParameterDefinition> parameterDefinitions)
+    {
+        NodeList childs = parent.getChildNodes();
+        for (int j = 0; j < childs.getLength(); j++)
+        {
+            if (childs.item(j) instanceof Element)
+            {
+                Element child=(Element)childs.item(j);
+                if(child.getLocalName().equals("complexType"))
+                {
+                    NodeList complexNodeChilds=child.getChildNodes();
+                    for(int i=0;i<complexNodeChilds.getLength();i++)
+                    {
+                        if(complexNodeChilds.item(i) instanceof Element && ((Element)complexNodeChilds.item(i)).getLocalName().equals("sequence"))
+                        {
+                            Element sequence=(Element)complexNodeChilds.item(i);
+                            extractDefinitions(sequence, parameterDefinitions);
+                        }
+                    }
+                }
+                else
+                {
+                    if(child.getLocalName().equals("element") || child.getLocalName().equals("attribute"))
+                    {
+                        try
+                        {
+                            ParameterDefinition parameter = ParameterDefinition.createParameterDefinition(child);
+                            parameterDefinitions.add(parameter);
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public static ResponseDefinition[] createResponseDefinition(Element response, Method method) throws RestException
     {
-        ArrayList<ResponseDefinition> definitions=new ArrayList<ResponseDefinition>();
+        ArrayList<ResponseDefinition> definitions = new ArrayList<ResponseDefinition>();
         int istatus = 200;
         String status = response.getAttribute("status");
         if (status != null && !status.trim().equals(""))
@@ -80,39 +127,46 @@ public final class ResponseDefinition
                 if (((Element) childs.item(i)).getTagName().equals("representation"))
                 {
                     Element representation = (Element) childs.item(i);
-                    if(representation.getAttribute("mediaType")==null || representation.getAttribute("mediaType").trim().equals(""))
+                    if (representation.getAttribute("mediaType") == null || representation.getAttribute("mediaType").trim().equals(""))
                     {
                         throw new RestException("The attribute mediaType was not found");
                     }
-                    String mediaType=representation.getAttribute("mediaType");
-                    Element responseDefinition=null;
-                    if(representation.getAttribute("element")!=null && !representation.getAttribute("element").trim().equals(""))
+                    String mediaType = representation.getAttribute("mediaType");
+                    Element responseDefinition = null;
+                    if (representation.getAttribute("element") != null && !representation.getAttribute("element").trim().equals(""))
                     {
-                        String element=representation.getAttribute("element");
-                        String namespace=method.getResource().getServiceInfo().getNamespaceURI();
-                        int pos=element.indexOf(":");
-                        if(pos!=-1)
+                        String element = representation.getAttribute("element");
+                        String namespace = method.getResource().getServiceInfo().getNamespaceURI();
+                        int pos = element.indexOf(":");
+                        if (pos != -1)
                         {
-                            String prefix=element.substring(0,pos);
-                            element=element.substring(pos+1);
-                            namespace=response.getOwnerDocument().getDocumentElement().getAttribute("xmlns:"+prefix);
-                            if(namespace==null || namespace.trim().equals(""))
+                            String prefix = element.substring(0, pos);
+                            element = element.substring(pos + 1);
+                            namespace = response.getOwnerDocument().getDocumentElement().getAttribute("xmlns:" + prefix);
+                            if (namespace == null || namespace.trim().equals(""))
                             {
-                                throw new RestException("The namespace for the prefix "+prefix+" was not found");
+                                throw new RestException("The namespace for the prefix " + prefix + " was not found");
                             }
                         }
                         // busca el elemento  en los schemas
-                        responseDefinition=getElementDefinition(response.getOwnerDocument(),element,namespace);
-                        if(responseDefinition==null)
+                        responseDefinition = getElementDefinition(response.getOwnerDocument(), element, namespace);
+                        if (responseDefinition == null)
                         {
-                            throw new RestException("The element "+element+" was not found");
+                            throw new RestException("The element " + element + " was not found");
                         }
                     }
-                    ResponseDefinition definition=new ResponseDefinition(istatus,mediaType,responseDefinition);
+                    ArrayList<ParameterDefinition> parameterDefinitions = new ArrayList<ParameterDefinition>();
+                    extractDefinitions(responseDefinition, parameterDefinitions);
+                    ResponseDefinition definition = new ResponseDefinition(istatus, mediaType, parameterDefinitions.toArray(new ParameterDefinition[parameterDefinitions.size()]));
                     definitions.add(definition);
                 }
             }
         }
         return definitions.toArray(new ResponseDefinition[definitions.size()]);
+    }
+
+    public ParameterDefinition[] getParameters()
+    {
+        return parameters;
     }
 }
