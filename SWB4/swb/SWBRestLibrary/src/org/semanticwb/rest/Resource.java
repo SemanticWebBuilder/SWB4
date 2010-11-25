@@ -20,13 +20,15 @@ import org.w3c.dom.NodeList;
  */
 public class Resource {
 
+    private final ServiceInfo serviceInfo;
     private final Set<Method> methods=new HashSet<Method>();
     private String id;
     private URL path;
-    private Resource(String id,URL path)
+    private Resource(String id,URL path,ServiceInfo serviceInfo)
     {
         this.id=id;
         this.path=path;
+        this.serviceInfo=serviceInfo;
     }
     public String getId()
     {
@@ -36,7 +38,11 @@ public class Resource {
     {
         return path;
     }
-    static Resource createResourceInfo(final Element resource,final URL basePath) throws RestException
+    public ServiceInfo getServiceInfo()
+    {
+        return serviceInfo;
+    }
+    static Resource createResourceInfo(final Element resource,final URL basePath,ServiceInfo serviceInfo) throws RestException
     {
         String id=resource.getAttribute("id");
         if(id==null || resource.getAttribute("id").trim().equals(""))
@@ -79,7 +85,7 @@ public class Resource {
         {
             path=basePath;
         }
-        Resource info=new Resource(id,path);
+        Resource info=new Resource(id,path,serviceInfo);
         NodeList emethods=resource.getElementsByTagNameNS(resource.getNamespaceURI(), "method");
         for(int i=0;i<emethods.getLength();i++)
         {

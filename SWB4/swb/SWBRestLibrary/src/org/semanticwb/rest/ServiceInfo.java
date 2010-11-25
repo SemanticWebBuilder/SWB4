@@ -26,6 +26,7 @@ import javax.xml.validation.Validator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.w3c.dom.Document;
+import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -46,13 +47,15 @@ public class ServiceInfo
     private URL resourcesBasePath;
     private static final String JSON_CONTENT_TYPE = "json";
     private final Set<Resource> resources = new HashSet<Resource>();
-    private String WADL_NS = RestPublish.WADL_NS_2009;
-    private final ArrayList<Document> includes=new ArrayList<Document>();
+    private String WADL_NS = RestPublish.WADL_NS_2009;    
     public ServiceInfo(final URL url)
     {
         this.url = url;
     }
-
+    public String getNamespaceURI()
+    {
+        return WADL_NS;
+    }
     public URL getResourcesBasePath() throws RestException
     {
         if (resourcesBasePath == null)
@@ -108,26 +111,33 @@ public class ServiceInfo
         {
             if (nodes.item(i) instanceof Element)
             {
-                Resource resource = Resource.createResourceInfo((Element) nodes.item(i), resourcesBasePath);
+                Resource resource = Resource.createResourceInfo((Element) nodes.item(i), resourcesBasePath,this);
                 resources.add(resource);
             }
         }
-    }
-
+    }   
     public Resource[] getResources()
     {
         return resources.toArray(new Resource[resources.size()]);
     }
-    private void extractIncludes(Document doc) throws RestException
+    private void replace(Document docinclude,Element include)
     {
-        includes.clear();
+        Element root=docinclude.getDocumentElement();
+        Node importedNode=include.getOwnerDocument().importNode(root, true);
+        include.getParentNode().appendChild(importedNode);
+        Document target=include.getOwnerDocument();
+        include.getParentNode().removeChild(include);
+        System.out.println(SWBUtils.XML.domToXml(include.getOwnerDocument()));
+    }
+    private void extractIncludes(Document doc) throws RestException
+    {        
         NodeList gramars=doc.getElementsByTagNameNS(WADL_NS, "grammars");
         for(int i=0;i<gramars.getLength();i++)
         {
             if(gramars.item(i) instanceof Element)
             {
-                Element einclude=(Element)gramars.item(i);
-                NodeList nodes=einclude.getElementsByTagNameNS(WADL_NS, "include");
+                Element grammar=(Element)gramars.item(i);
+                NodeList nodes=grammar.getElementsByTagNameNS(WADL_NS, "include");
                 for(int j=0;j<nodes.getLength();j++)
                 {
                     if(nodes.item(j) instanceof Element)
@@ -162,7 +172,7 @@ public class ServiceInfo
                         try
                         {
                             Document docinclude=getDocument(path);                            
-                            includes.add(docinclude);
+                            replace(docinclude,include);
                         }
                         catch(Exception e)
                         {
@@ -171,7 +181,6 @@ public class ServiceInfo
 
                     }
                 }
-
             }
         }
     }
