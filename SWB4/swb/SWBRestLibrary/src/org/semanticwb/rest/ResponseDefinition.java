@@ -56,9 +56,7 @@ public final class ResponseDefinition
                             {
                                 return eDefinition;
                             }
-
                         }
-
                     }
                 }
             }
@@ -98,12 +96,20 @@ public final class ResponseDefinition
                             String prefix=element.substring(0,pos);
                             element=element.substring(pos+1);
                             namespace=response.getOwnerDocument().getDocumentElement().getAttribute("xmlns:"+prefix);
+                            if(namespace==null || namespace.trim().equals(""))
+                            {
+                                throw new RestException("The namespace for the prefix "+prefix+" was not found");
+                            }
                         }
                         // busca el elemento  en los schemas
                         responseDefinition=getElementDefinition(response.getOwnerDocument(),element,namespace);
+                        if(responseDefinition==null)
+                        {
+                            throw new RestException("The element "+element+" was not found");
+                        }
                     }
                     ResponseDefinition definition=new ResponseDefinition(istatus,mediaType,responseDefinition);
-                    
+                    definitions.add(definition);
                 }
             }
         }

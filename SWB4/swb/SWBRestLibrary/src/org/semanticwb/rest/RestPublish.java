@@ -41,6 +41,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import static javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI;
 import static javax.xml.XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI;
+
 /**
  *
  * @author victor.lorenzana
@@ -53,15 +54,12 @@ public class RestPublish
     private static final String REST_CLASSURI = "rest:classuri";
     private static final String REST_ID = "rest:id";
     private static final String REST_URI = "rest:uri";
-    
-    
     private static final String XSD_PREFIX = "xsd";
+    private static final String REST_RESOURCE_PREFIX = "swbrest";
     private static final String XLINK_NS = "http://www.w3.org/1999/xlink";
     private static final String XSD_STRING = "xsd:string";
     private final Set<SemanticClass> classes;
-
     public static final String REST_RESOURCES_2010 = "http://www.semanticwb.org/rest/2010";
-
     public static final String WADL_NS_2006 = "http://research.sun.com/wadl/2006/10";
     private static final String WADL_XSD_LOCATION_2006 = "https://wadl.dev.java.net/wadl20061109.xsd";
     public static final String WADL_NS_2009 = "http://wadl.dev.java.net/2009/02";
@@ -71,7 +69,6 @@ public class RestPublish
     {
         this.classes = classes;
     }
-
 
     private Document getErrorXSD()
     {
@@ -134,6 +131,7 @@ public class RestPublish
 
         return doc;
     }
+
     private Document getUpdatedXSD()
     {
         Document doc = SWBUtils.XML.getNewDocument();
@@ -181,14 +179,12 @@ public class RestPublish
         return doc;
     }
 
-    
-
     private Document getXSD(final SemanticClass clazz, final String version)
     {
         Document doc = SWBUtils.XML.getNewDocument();
         Element schema = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "schema");
         schema.setAttribute("targetNamespace", clazz.getURI());
-        Attr attr = doc.createAttribute("xmlns");        
+        Attr attr = doc.createAttribute("xmlns");
         attr.setValue(clazz.getURI());
         schema.setAttributeNode(attr);
 
@@ -214,10 +210,9 @@ public class RestPublish
                 if (Modifier.isPublic(m.getModifiers()) && Modifier.isStatic(m.getModifiers()) && (m.getName().startsWith("has") || m.getName().startsWith("list")))
                 {
                     Class returnType = m.getReturnType();
-
                     Element methodElement = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
                     methodElement.setPrefix(XSD_PREFIX);
-                    methodElement.setAttribute("name", "swbrest:"+m.getName());
+                    methodElement.setAttribute("name", REST_RESOURCE_PREFIX +":" + m.getName());
                     schema.appendChild(methodElement);
                     if (returnType instanceof Class && isGenericObject(returnType)) // is GenericObject
                     {
@@ -253,7 +248,7 @@ public class RestPublish
                                         complex.appendChild(sequence);
                                         Element child = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
                                         child.setPrefix(XSD_PREFIX);
-                                        child.setAttribute("name", "swbrest:"+returnSemanticClazz.getName());
+                                        child.setAttribute("name", REST_RESOURCE_PREFIX +":" + returnSemanticClazz.getName());
 
                                         Element shortURI = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
                                         shortURI.setPrefix(XSD_PREFIX);
@@ -419,8 +414,6 @@ public class RestPublish
         if (!exists && clazz.isSWBClass())
         {
             HashSet<SemanticClass> ranges = new HashSet<SemanticClass>();
-            // addClassMenegerResults
-            addClassManagerResultToXSD(schema, clazz, ranges);
             Element element = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
             schema.appendChild(element);
             element.setAttribute("name", clazz.getName());
@@ -550,7 +543,7 @@ public class RestPublish
             error.appendChild(representation);
             representation.setAttribute("mediaType", "application/xml");
             error.setAttribute("status", "400");
-            representation.setAttribute("element", "swbrest:Error");
+            representation.setAttribute("element", REST_RESOURCE_PREFIX +":Error");
         }
 
         Element response = doc.createElementNS(WADL_NS, "response");
@@ -561,7 +554,7 @@ public class RestPublish
         if (WADL_NS.equals(WADL_NS_2009))
         {
             response.setAttribute("status", "200");
-            representation.setAttribute("element", "swbrest:Created");
+            representation.setAttribute("element", REST_RESOURCE_PREFIX +":Created");
         }
     }
 
@@ -669,7 +662,7 @@ public class RestPublish
             error.appendChild(representation);
             representation.setAttribute("mediaType", "application/xml");
             error.setAttribute("status", "400");
-            representation.setAttribute("element", "swbrest:Error");
+            representation.setAttribute("element", REST_RESOURCE_PREFIX +":Error");
         }
 
         Element response = doc.createElementNS(WADL_NS, "response");
@@ -680,11 +673,11 @@ public class RestPublish
         if (WADL_NS.equals(WADL_NS_2009))
         {
             response.setAttribute("status", "200");
-            representation.setAttribute("element", "swbrest:Updated");
+            representation.setAttribute("element", REST_RESOURCE_PREFIX +":Updated");
         }
     }
 
-    private void createMethod(Document doc, Element resource, SemanticClass clazz, Method method, String WADL_NS,String id)
+    private void createMethod(Document doc, Element resource, SemanticClass clazz, Method method, String WADL_NS, String id)
     {
         Element emethod = doc.createElementNS(WADL_NS, "method");
         emethod.setAttribute("name", "GET");
@@ -741,7 +734,7 @@ public class RestPublish
             error.appendChild(representation);
             representation.setAttribute("mediaType", "application/xml");
             error.setAttribute("status", "400");
-            representation.setAttribute("element", "swbrest:Error");
+            representation.setAttribute("element", REST_RESOURCE_PREFIX +":Error");
         }
 
         Element response = doc.createElementNS(WADL_NS, "response");
@@ -752,7 +745,7 @@ public class RestPublish
         if (WADL_NS.equals(WADL_NS_2009))
         {
             response.setAttribute("status", "200");
-            representation.setAttribute("element", clazz.getPrefix() + ":" + clazz.getName());
+            representation.setAttribute("element", REST_RESOURCE_PREFIX +":"+method.getName());
         }
     }
 
@@ -897,7 +890,7 @@ public class RestPublish
             error.appendChild(representation);
             representation.setAttribute("mediaType", "application/xml");
             error.setAttribute("status", "400");
-            representation.setAttribute("element", "swbrest:Error");
+            representation.setAttribute("element", REST_RESOURCE_PREFIX +":Error");
         }
 
         Element response = doc.createElementNS(WADL_NS, "response");
@@ -908,7 +901,7 @@ public class RestPublish
         if (WADL_NS.equals(WADL_NS_2009))
         {
             response.setAttribute("status", "200");
-            representation.setAttribute("element", "swbrest:Deleted");
+            representation.setAttribute("element", REST_RESOURCE_PREFIX +":Deleted");
         }
     }
 
@@ -939,7 +932,7 @@ public class RestPublish
             error.appendChild(representation);
             representation.setAttribute("mediaType", "application/xml");
             error.setAttribute("status", "400");
-            representation.setAttribute("element", "swbrest:Error");
+            representation.setAttribute("element", REST_RESOURCE_PREFIX +":Error");
         }
 
         Element response = doc.createElementNS(WADL_NS, "response");
@@ -1222,17 +1215,17 @@ public class RestPublish
                         if (c.getName().endsWith("ClassMgr"))
                         {
                             Class mgr = c;
-                            HashSet<String> ids=new HashSet<String>();
+                            HashSet<String> ids = new HashSet<String>();
                             for (Method m : mgr.getDeclaredMethods())
                             {
                                 if (Modifier.isPublic(m.getModifiers()) && Modifier.isStatic(m.getModifiers()) && (m.getName().startsWith("has") || m.getName().startsWith("list")))
                                 {
-                                    String id=m.getName();
-                                    if(ids.contains(id))
+                                    String id = m.getName();
+                                    if (ids.contains(id))
                                     {
-                                        id="_"+id;
+                                        id = "_" + id;
                                     }
-                                    createMethod(doc, resource, clazz, m, WADL_NS,id);
+                                    createMethod(doc, resource, clazz, m, WADL_NS, id);
                                     ids.add(id);
                                 }
                             }
@@ -1263,7 +1256,7 @@ public class RestPublish
         Document doc = SWBUtils.XML.getNewDocument();
         Element eError = doc.createElement("Error");
 
-        Attr xmlns=doc.createAttribute("xmlns");
+        Attr xmlns = doc.createAttribute("xmlns");
         xmlns.setValue(REST_RESOURCES_2010);
         eError.setAttributeNode(xmlns);
 
@@ -1362,13 +1355,13 @@ public class RestPublish
     public Document getExecuteMethod(HttpServletRequest request) throws Exception
     {
         String methodName = request.getParameter("method");
-        if(methodName==null)
+        if (methodName == null)
         {
             throw new Exception("The parameter method was not found");
         }
-        if(methodName.startsWith("_"))
+        if (methodName.startsWith("_"))
         {
-            methodName=methodName.substring(1);
+            methodName = methodName.substring(1);
         }
         String classUri = request.getParameter("classuri");
         SemanticClass clazz = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(classUri);
@@ -1384,11 +1377,11 @@ public class RestPublish
             if (m.getName().equals(methodName))
             {
                 if (checkParameters(m, request) && Modifier.isStatic(m.getModifiers()) && Modifier.isPublic(m.getModifiers()))
-                {                    
+                {
                     try
                     {
                         Object[] args = getParameters(m, request);
-                        Object resinvoke = m.invoke(null, args);                        
+                        Object resinvoke = m.invoke(null, args);
                         if (resinvoke != null)
                         {
                             if (resinvoke instanceof SemanticObject)
@@ -1401,11 +1394,11 @@ public class RestPublish
                                 Document doc = SWBUtils.XML.getNewDocument();
                                 Element res = doc.createElement(m.getName());
 
-                                Attr xmlns=doc.createAttribute("xmlns");
+                                Attr xmlns = doc.createAttribute("xmlns");
                                 xmlns.setValue(REST_RESOURCES_2010);
                                 res.setAttributeNode(xmlns);
 
-                                Attr swbrest=doc.createAttribute("xmlns:swbrest");
+                                Attr swbrest = doc.createAttribute("xmlns:swbrest");
                                 xmlns.setValue(REST_RESOURCES_2010);
                                 res.setAttributeNode(swbrest);
 
@@ -1417,7 +1410,7 @@ public class RestPublish
                                     GenericObject go = gi.next();
                                     SemanticObject obj = go.getSemanticObject();
                                     Element name = doc.createElementNS(REST_RESOURCES_2010, obj.getSemanticClass().getName());
-                                    name.setPrefix("swbrest");
+                                    name.setPrefix(REST_RESOURCE_PREFIX);
                                     name.setAttributeNS(XLINK_NS, "xlink:href", request.getRequestURI() + "?uri=" + obj.getShortURI());
                                     name.setAttribute("uri", obj.getURI());
                                     name.setAttribute("shortURI", obj.getShortURI());
@@ -1428,8 +1421,8 @@ public class RestPublish
                                     GenericObject go = gi.next();
                                     SemanticObject obj = go.getSemanticObject();
                                     Element name = doc.createElementNS(REST_RESOURCES_2010, obj.getSemanticClass().getName());
-                                    name.setPrefix("swbrest");
-                                    name.setAttributeNS(XLINK_NS, "xlink:href", request.getRequestURI() + "?uri=" + obj.getShortURI());                                    
+                                    name.setPrefix(REST_RESOURCE_PREFIX);
+                                    name.setAttributeNS(XLINK_NS, "xlink:href", request.getRequestURI() + "?uri=" + obj.getShortURI());
                                     name.setAttribute("uri", obj.getURI());
                                     name.setAttribute("shortURI", obj.getShortURI());
                                     res.appendChild(name);
@@ -1461,7 +1454,7 @@ public class RestPublish
         Document doc = SWBUtils.XML.getNewDocument();
         Element created = doc.createElement("Created");
         doc.appendChild(created);
-        Attr xmlns=doc.createAttribute("xmlns");
+        Attr xmlns = doc.createAttribute("xmlns");
         xmlns.setValue(REST_RESOURCES_2010);
         created.appendChild(xmlns);
         created.setAttribute("uri", uri);
@@ -1472,7 +1465,7 @@ public class RestPublish
     {
         Document doc = SWBUtils.XML.getNewDocument();
         Element updated = doc.createElement("Updated");
-        Attr xmlns=doc.createAttribute("xmlns");
+        Attr xmlns = doc.createAttribute("xmlns");
         xmlns.setValue(REST_RESOURCES_2010);
         updated.appendChild(xmlns);
 
@@ -1485,7 +1478,7 @@ public class RestPublish
     {
         Document doc = SWBUtils.XML.getNewDocument();
         Element deleted = doc.createElement("Deleted");
-        Attr xmlns=doc.createAttribute("xmlns");
+        Attr xmlns = doc.createAttribute("xmlns");
         xmlns.setValue(REST_RESOURCES_2010);
         deleted.appendChild(xmlns);
         doc.appendChild(deleted);
