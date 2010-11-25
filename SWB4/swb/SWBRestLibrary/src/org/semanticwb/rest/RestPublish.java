@@ -70,6 +70,19 @@ public class RestPublish
         this.classes = classes;
     }
 
+    private Document getClsMgrXSD(SemanticClass clazz)
+    {        
+        Document doc = SWBUtils.XML.getNewDocument();
+        Element schema = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "schema");
+        schema.setAttribute("targetNamespace", REST_RESOURCES_2010);
+        Attr attr = doc.createAttribute("xmlns");
+        attr.setValue(REST_RESOURCES_2010);
+        schema.setAttributeNode(attr);
+        doc.appendChild(schema);
+        HashSet<SemanticClass> ranges = new HashSet<SemanticClass>();
+        addClassManagerResultToXSD(schema, clazz, ranges);        
+        return doc;
+    }
     private Document getErrorXSD()
     {
         Document doc = SWBUtils.XML.getNewDocument();
@@ -212,7 +225,7 @@ public class RestPublish
                     Class returnType = m.getReturnType();
                     Element methodElement = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
                     methodElement.setPrefix(XSD_PREFIX);
-                    methodElement.setAttribute("name", REST_RESOURCE_PREFIX +":" + m.getName());
+                    methodElement.setAttribute("name", m.getName());
                     schema.appendChild(methodElement);
                     if (returnType instanceof Class && isGenericObject(returnType)) // is GenericObject
                     {
@@ -982,6 +995,17 @@ public class RestPublish
         out.close();
     }
 
+    private void showCLSMGRXSD(HttpServletRequest request, HttpServletResponse response,SemanticClass clazz) throws IOException
+    {
+        Document doc = getClsMgrXSD(clazz);
+        PrintWriter out = response.getWriter();
+        String charset = Charset.defaultCharset().name();
+        response.setContentType("application/xml; charset=" + charset);
+        String xml = SWBUtils.XML.domToXml(doc, charset, true);
+        out.print(xml);
+        out.close();
+    }
+
     private void showCreted(HttpServletRequest request, HttpServletResponse response, String uri) throws IOException
     {
         Document doc = getCreated(uri);
@@ -1167,8 +1191,23 @@ public class RestPublish
         grammars.appendChild(include);
         include.setAttribute("href", servletRequest.getRequestURI() + "?deleted=xsd");
 
+
+        
+
         for (SemanticClass clazz : classes)
         {
+            try
+            {
+                include = doc.createElementNS(WADL_NS, "include");
+                grammars.appendChild(include);
+                include.setAttribute("href", servletRequest.getRequestURI() + "?clsmgr=xsd&classuri="+URLEncoder.encode(clazz.getURI(),"utf-8"));
+            }
+            catch(Exception e)
+            {
+                log.error(e);
+            }
+
+
             String xsd = URLEncoder.encode(clazz.getURI());
             include = doc.createElementNS(WADL_NS, "include");
             grammars.appendChild(include);
@@ -1928,6 +1967,38 @@ public class RestPublish
             else if (request.getParameter("deleted") != null)
             {
                 showDeletedXSDResponse(request, response);
+            }
+            else if (request.getParameter("clsmgr") != null)
+            {
+                if(request.getParameter("classuri")!=null)
+                {
+                    String uri = request.getParameter("classuri");
+                    
+                    if (uri.indexOf(":") != -1)
+                    {
+                        if (uri.indexOf("%3A") != -1)
+                        {
+                            uri = uri.replace("%3A", ":");
+                        }
+                        if (uri.indexOf("%23") != -1)
+                        {
+                            uri = uri.replace("%23", "#");
+                        }
+                        if (uri.indexOf("#") == -1)
+                        {
+                            uri = SemanticObject.shortToFullURI(uri);
+                        }
+                    }                    
+                    SemanticClass clazz=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);                    
+                    if(clazz!=null)
+                    {                    
+                        showCLSMGRXSD(request, response,clazz);
+                    }
+                    else
+                    {                        
+                        showError(request, response, "The class with uri "+request.getParameter("classuri")+" was not found");
+                    }
+                }
             }
             else if (request.getParameter("method") != null && request.getParameter("classuri") != null)
             {
