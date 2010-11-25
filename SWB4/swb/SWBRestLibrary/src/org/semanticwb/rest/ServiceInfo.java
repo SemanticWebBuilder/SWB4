@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,12 +27,12 @@ import org.w3c.dom.NodeList;
 public class ServiceInfo {
 
     private static final String APPLICATION_XML = "application/xml";
-    private static final String CONTENT_TYPE = "Content-Type";
-    public static final String WADL_NS = "http://research.sun.com/wadl/2006/10";
+    private static final String CONTENT_TYPE = "Content-Type";    
     private final URL url;
     private URL resourcesBasePath;
     private static final String JSON_CONTENT_TYPE = "json";
     private final Set<Resource> resources=new HashSet<Resource>();
+    private String WADL_NS=RestPublish.WADL_NS_2009;
     public ServiceInfo(final URL url)
     {
         this.url=url;        
@@ -45,6 +47,7 @@ public class ServiceInfo {
     }
     private void fill(Document doc) throws RestException
     {
+
         resources.clear();
         NodeList lresources=doc.getElementsByTagNameNS(WADL_NS, "resources");
         if(lresources.getLength()==1)
@@ -56,11 +59,30 @@ public class ServiceInfo {
                 String base=eresources.getAttribute("base");
                 try
                 {
-                    resourcesBasePath=new URL(url, base);
+                    URI baseuri=new URI(base);
+                    if(baseuri.isAbsolute())
+                    {
+                        resourcesBasePath=baseuri.toURL();
+                    }
+                    else
+                    {
+                        URI tempbase=this.url.toURI();
+                        if(!tempbase.toString().endsWith("/"))
+                        {
+                            String newpath=tempbase.toString()+"/";
+                            tempbase=new URI(newpath);
+                        }
+                        resourcesBasePath=tempbase.resolve(baseuri).normalize().toURL();
+                    }
+                    
                 }
                 catch(MalformedURLException mfue)
                 {
                     throw new RestException(mfue);
+                }
+                catch(URISyntaxException e)
+                {
+                    throw new RestException(e);
                 }
             }
         }
@@ -125,6 +147,15 @@ public class ServiceInfo {
             if(nodes.getLength()>0)
             {
                 return true;
+            }
+            else
+            {
+                nodes=doc.getElementsByTagNameNS(RestPublish.WADL_NS_2006, "application");
+                if(nodes.getLength()>0)
+                {
+                    WADL_NS=RestPublish.WADL_NS_2006;
+                    return true;
+                }
             }
         }
         catch(Exception e)
