@@ -39,7 +39,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
-
+import static javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI;
+import static javax.xml.XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI;
 /**
  *
  * @author victor.lorenzana
@@ -52,8 +53,8 @@ public class RestPublish
     private static final String REST_CLASSURI = "rest:classuri";
     private static final String REST_ID = "rest:id";
     private static final String REST_URI = "rest:uri";
-    private static final String SCHEMA_INSTANCE_NS = "http://www.w3.org/2001/XMLSchema-instance";
-    private static final String SCHEMA_NS = "http://www.w3.org/2001/XMLSchema";
+    
+    
     private static final String XSD_PREFIX = "xsd";
     private static final String XLINK_NS = "http://www.w3.org/1999/xlink";
     private static final String XSD_STRING = "xsd:string";
@@ -75,28 +76,28 @@ public class RestPublish
     private Document getErrorXSD()
     {
         Document doc = SWBUtils.XML.getNewDocument();
-        Element schema = doc.createElementNS(SCHEMA_NS, "schema");
-
+        Element schema = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "schema");
+        schema.setAttribute("targetNamespace", REST_RESOURCES_2010);
         Attr attr = doc.createAttribute("xmlns");
         attr.setValue(REST_RESOURCES_2010);
         schema.setAttributeNode(attr);
 
         doc.appendChild(schema);
         schema.setPrefix(XSD_PREFIX);
-        Element element = doc.createElementNS(SCHEMA_NS, "element");
+        Element element = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
         schema.appendChild(element);
         element.setAttribute("name", "Error");
         element.setPrefix(XSD_PREFIX);
-        Element complexType = doc.createElementNS(SCHEMA_NS, "complexType");
+        Element complexType = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "complexType");
         complexType.setPrefix(XSD_PREFIX);
         element.appendChild(complexType);
 
-        Element sequence = doc.createElementNS(SCHEMA_NS, "sequence");
+        Element sequence = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "sequence");
         sequence.setPrefix(XSD_PREFIX);
         complexType.appendChild(sequence);
 
 
-        Element message = doc.createElementNS(SCHEMA_NS, "element");
+        Element message = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
         message.setPrefix(XSD_PREFIX);
         message.setAttribute("name", "Message");
         message.setAttribute("type", XSD_STRING);
@@ -109,8 +110,8 @@ public class RestPublish
     private Document getCreatedXSD()
     {
         Document doc = SWBUtils.XML.getNewDocument();
-        Element schema = doc.createElementNS(SCHEMA_NS, "schema");
-        
+        Element schema = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "schema");
+        schema.setAttribute("targetNamespace", REST_RESOURCES_2010);
 
         Attr attr = doc.createAttribute("xmlns");
         attr.setValue(REST_RESOURCES_2010);
@@ -118,14 +119,14 @@ public class RestPublish
 
         doc.appendChild(schema);
         schema.setPrefix(XSD_PREFIX);
-        Element element = doc.createElementNS(SCHEMA_NS, "element");
+        Element element = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
         schema.appendChild(element);
         element.setAttribute("name", "Created");
         element.setPrefix(XSD_PREFIX);
 
 
 
-        Element attribute = doc.createElementNS(SCHEMA_NS, "attribute");
+        Element attribute = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
         element.appendChild(attribute);
         attribute.setAttribute("name", "uri");
         attribute.setAttribute("type", XSD_STRING);
@@ -136,19 +137,19 @@ public class RestPublish
     private Document getUpdatedXSD()
     {
         Document doc = SWBUtils.XML.getNewDocument();
-        Element schema = doc.createElementNS(SCHEMA_NS, "schema");
-
+        Element schema = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "schema");
+        schema.setAttribute("targetNamespace", REST_RESOURCES_2010);
         Attr attr = doc.createAttribute("xmlns");
         attr.setValue(REST_RESOURCES_2010);
         schema.setAttributeNode(attr);
 
         doc.appendChild(schema);
         schema.setPrefix(XSD_PREFIX);
-        Element element = doc.createElementNS(SCHEMA_NS, "element");
+        Element element = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
         schema.appendChild(element);
         element.setAttribute("name", "Updated");
         element.setPrefix(XSD_PREFIX);
-        Element attribute = doc.createElementNS(SCHEMA_NS, "attribute");
+        Element attribute = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
         element.appendChild(attribute);
         attribute.setAttribute("name", "uri");
         attribute.setAttribute("type", XSD_STRING);
@@ -159,20 +160,19 @@ public class RestPublish
     private Document getDeletedXSD()
     {
         Document doc = SWBUtils.XML.getNewDocument();
-        Element schema = doc.createElementNS(SCHEMA_NS, "schema");
-
-
+        Element schema = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "schema");
+        schema.setAttribute("targetNamespace", REST_RESOURCES_2010);
         Attr attr = doc.createAttribute("xmlns");
         attr.setValue(REST_RESOURCES_2010);
         schema.setAttributeNode(attr);
 
         doc.appendChild(schema);
         schema.setPrefix(XSD_PREFIX);
-        Element element = doc.createElementNS(SCHEMA_NS, "element");
+        Element element = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
         schema.appendChild(element);
         element.setAttribute("name", "Deleted");
         element.setPrefix(XSD_PREFIX);
-        Element attribute = doc.createElementNS(SCHEMA_NS, "attribute");
+        Element attribute = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
         element.appendChild(attribute);
         attribute.setAttribute("name", "uri");
         attribute.setAttribute("type", XSD_STRING);
@@ -186,8 +186,8 @@ public class RestPublish
     private Document getXSD(final SemanticClass clazz, final String version)
     {
         Document doc = SWBUtils.XML.getNewDocument();
-        Element schema = doc.createElementNS(SCHEMA_NS, "schema");
-
+        Element schema = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "schema");
+        schema.setAttribute("targetNamespace", clazz.getURI());
         Attr attr = doc.createAttribute("xmlns");        
         attr.setValue(clazz.getURI());
         schema.setAttributeNode(attr);
@@ -215,7 +215,7 @@ public class RestPublish
                 {
                     Class returnType = m.getReturnType();
 
-                    Element methodElement = doc.createElementNS(SCHEMA_NS, "Element");
+                    Element methodElement = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "Element");
                     methodElement.setPrefix(XSD_PREFIX);
                     methodElement.setAttribute("name", "swbrest:"+m.getName());
                     schema.appendChild(methodElement);
@@ -245,26 +245,26 @@ public class RestPublish
                                     if (objClass instanceof SemanticClass)
                                     {
                                         SemanticClass returnSemanticClazz = (SemanticClass) objClass;
-                                        Element complex = doc.createElementNS(SCHEMA_NS, "complexType");
+                                        Element complex = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "complexType");
                                         complex.setPrefix(XSD_PREFIX);
                                         methodElement.appendChild(complex);
-                                        Element sequence = doc.createElementNS(SCHEMA_NS, "sequence");
+                                        Element sequence = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "sequence");
                                         sequence.setPrefix(XSD_PREFIX);
                                         complex.appendChild(sequence);
-                                        Element child = doc.createElementNS(SCHEMA_NS, "element");
+                                        Element child = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
                                         child.setPrefix(XSD_PREFIX);
                                         child.setAttribute("name", "swbrest:"+returnSemanticClazz.getName());
 
-                                        Element shortURI = doc.createElementNS(SCHEMA_NS, "attribute");
+                                        Element shortURI = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
                                         shortURI.setPrefix(XSD_PREFIX);
                                         shortURI.setAttribute("name", "shortURI");
                                         child.appendChild(shortURI);
 
-                                        Element uri = doc.createElementNS(SCHEMA_NS, "attribute");
+                                        Element uri = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
                                         uri.setAttribute("name", "uri");
                                         child.appendChild(uri);
 
-                                        Element href = doc.createElementNS(SCHEMA_NS, "attribute");
+                                        Element href = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
                                         href.setAttribute("name", "xlink:href");
                                         child.appendChild(href);
 
@@ -298,11 +298,11 @@ public class RestPublish
     private void addProperties(SemanticClass clazz, Element element, HashSet<SemanticClass> ranges)
     {
         Document doc = element.getOwnerDocument();
-        Element complexType = doc.createElementNS(SCHEMA_NS, "complexType");
+        Element complexType = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "complexType");
         complexType.setPrefix(XSD_PREFIX);
         element.appendChild(complexType);
 
-        Element sequence = doc.createElementNS(SCHEMA_NS, "sequence");
+        Element sequence = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "sequence");
         sequence.setPrefix(XSD_PREFIX);
         complexType.appendChild(sequence);
 
@@ -314,7 +314,7 @@ public class RestPublish
             {
                 if (prop.isDataTypeProperty())
                 {
-                    Element property = doc.createElementNS(SCHEMA_NS, "element");
+                    Element property = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
                     property.setPrefix(XSD_PREFIX);
                     property.setAttribute("name", prop.getName());
                     sequence.appendChild(property);
@@ -359,7 +359,7 @@ public class RestPublish
                     {
                         type = SemanticVocabulary.XMLS_SHORT;
                     }
-                    type = type.replace(SCHEMA_NS + "#", "xsd:");
+                    type = type.replace(W3C_XML_SCHEMA_NS_URI + "#", "xsd:");
                     property.setAttribute("type", type);
                     if (prop.getName().startsWith("has"))
                     {
@@ -374,7 +374,7 @@ public class RestPublish
                     if (range != null)
                     {
                         ranges.add(range);
-                        Element property = doc.createElementNS(SCHEMA_NS, "element");
+                        Element property = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
                         sequence.appendChild(property);
                         property.setAttribute("name", prop.getName());
                         if (prop.getName().startsWith("has"))
@@ -384,7 +384,7 @@ public class RestPublish
                         }
                         property.setPrefix(XSD_PREFIX);
                         //property.setAttribute("type", range.getName());
-                        Element attribute = doc.createElementNS(SCHEMA_NS, "attribute");
+                        Element attribute = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
                         attribute.setPrefix(XSD_PREFIX);
                         property.appendChild(attribute);
                         attribute.setAttribute("name", "xlink:href");
@@ -421,7 +421,7 @@ public class RestPublish
             HashSet<SemanticClass> ranges = new HashSet<SemanticClass>();
             // addClassMenegerResults
             addClassManagerResultToXSD(schema, clazz, ranges);
-            Element element = doc.createElementNS(SCHEMA_NS, "element");
+            Element element = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
             schema.appendChild(element);
             element.setAttribute("name", clazz.getName());
             element.setPrefix(XSD_PREFIX);
@@ -491,7 +491,7 @@ public class RestPublish
                     {
                         type = SemanticVocabulary.XMLS_SHORT;
                     }
-                    type = type.replace(SCHEMA_NS + "#", "xsd:");
+                    type = type.replace(W3C_XML_SCHEMA_NS_URI + "#", "xsd:");
                     Element param = doc.createElementNS(WADL_NS, "param");
                     param.setAttribute("name", prop.getName());
                     param.setAttribute("style", "query");
@@ -633,7 +633,7 @@ public class RestPublish
                     {
                         type = SemanticVocabulary.XMLS_SHORT;
                     }
-                    type = type.replace(SCHEMA_NS + "#", "xsd:");
+                    type = type.replace(W3C_XML_SCHEMA_NS_URI + "#", "xsd:");
                     param = doc.createElementNS(WADL_NS, "param");
                     param.setAttribute("name", prop.getName());
                     param.setAttribute("style", "query");
@@ -1128,15 +1128,15 @@ public class RestPublish
         Element application = doc.createElementNS(WADL_NS, "application");
 
 
-        application.setAttribute("xmlns:xsi", SCHEMA_INSTANCE_NS);
-        application.setAttribute("xmlns:xsd", SCHEMA_NS);
+        application.setAttribute("xmlns:xsi", W3C_XML_SCHEMA_INSTANCE_NS_URI);
+        application.setAttribute("xmlns:xsd", W3C_XML_SCHEMA_NS_URI);
         application.setAttribute("xmlns:swbrest", REST_RESOURCES_2010);
 
         Attr attr = doc.createAttribute("xmlns");
         attr.setValue(WADL_NS);
         application.setAttributeNode(attr);
 
-        Attr schemaLocation = doc.createAttributeNS(SCHEMA_INSTANCE_NS, "schemaLocation");
+        Attr schemaLocation = doc.createAttributeNS(W3C_XML_SCHEMA_INSTANCE_NS_URI, "schemaLocation");
         schemaLocation.setValue(WADL_NS + " " + WADL_XSD_LOCATION);
         schemaLocation.setPrefix("xsi");
         application.setAttributeNodeNS(schemaLocation);
@@ -1718,7 +1718,7 @@ public class RestPublish
                     {
                         type = SemanticVocabulary.XMLS_SHORT;
                     }
-                    type = type.replace(SCHEMA_NS + "#", "xsd:");
+                    type = type.replace(W3C_XML_SCHEMA_NS_URI + "#", "xsd:");
                     if (prop.getName().startsWith("has"))
                     {
                         if (values != null)
