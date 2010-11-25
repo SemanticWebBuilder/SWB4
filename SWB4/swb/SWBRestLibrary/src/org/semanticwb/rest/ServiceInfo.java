@@ -120,30 +120,30 @@ public class ServiceInfo
     {
         return resources.toArray(new Resource[resources.size()]);
     }
-    private void replace(Document docinclude,Element include)
+    private void importInLine(Document docinclude,Element grammars)
     {
-        Element root=docinclude.getDocumentElement();
-        Node importedNode=include.getOwnerDocument().importNode(root, true);
-        include.getParentNode().appendChild(importedNode);
-        Document target=include.getOwnerDocument();
-        include.getParentNode().removeChild(include);
-        System.out.println(SWBUtils.XML.domToXml(include.getOwnerDocument()));
+        Element rootElement=docinclude.getDocumentElement();
+        Node importedNode=grammars.getOwnerDocument().importNode(rootElement, true);
+        grammars.appendChild(importedNode);
     }
     private void extractIncludes(Document doc) throws RestException
     {        
-        NodeList gramars=doc.getElementsByTagNameNS(WADL_NS, "grammars");
-        for(int i=0;i<gramars.getLength();i++)
+        NodeList nodesgrammars=doc.getElementsByTagNameNS(WADL_NS, "grammars");
+        for(int i=0;i<nodesgrammars.getLength();i++)
         {
-            if(gramars.item(i) instanceof Element)
+            if(nodesgrammars.item(i) instanceof Element)
             {
-                Element grammar=(Element)gramars.item(i);
-                NodeList nodes=grammar.getElementsByTagNameNS(WADL_NS, "include");
+                Element grammars=(Element)nodesgrammars.item(i);
+                ArrayList<Document> includes=new ArrayList<Document>();
+                ArrayList<Element> toDelete=new ArrayList<Element>();
+                NodeList nodes=grammars.getElementsByTagNameNS(WADL_NS, "include");
                 for(int j=0;j<nodes.getLength();j++)
                 {
                     if(nodes.item(j) instanceof Element)
                     {
                         Element include=(Element)nodes.item(j);
                         String spath=include.getAttribute("href");
+                        System.out.println("href: "+spath);
                         URL path=url;
                         try
                         {
@@ -172,7 +172,7 @@ public class ServiceInfo
                         try
                         {
                             Document docinclude=getDocument(path);                            
-                            replace(docinclude,include);
+                            includes.add(docinclude);
                         }
                         catch(Exception e)
                         {
@@ -181,6 +181,16 @@ public class ServiceInfo
 
                     }
                 }
+                
+                for(Element e : toDelete)
+                {
+                    grammars.removeChild(e);
+                }
+                for(Document includedoc : includes)
+                {
+                    importInLine(includedoc, grammars);
+                }
+
             }
         }
     }
