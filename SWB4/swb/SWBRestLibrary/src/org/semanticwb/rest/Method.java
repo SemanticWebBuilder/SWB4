@@ -6,10 +6,10 @@
 package org.semanticwb.rest;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -24,7 +24,7 @@ public final class Method {
     private final Resource resource;
     protected final Set<RepresentationRequest> requests=new HashSet<RepresentationRequest>();
     protected RepresentationRequest defaultRequestRepresentation;
-    
+    protected final Set<ResponseDefinition> responses=new HashSet<ResponseDefinition>();
     protected Method(String name,HTTPMethod httpMethod,Resource resource)
     {
         this.id=name;
@@ -59,10 +59,10 @@ public final class Method {
         if(nodesRequest.getLength()>0)
         {
             Element request=(Element)nodesRequest.item(0);
-            NodeList childs=(request).getChildNodes();
+            NodeList childs=request.getChildNodes();
             for(int i=0;i<childs.getLength();i++)
             {
-                if(childs.item(i) instanceof Element)
+                if(childs.item(i) instanceof Element && ((Element)childs.item(i)).getNamespaceURI()!=null && ((Element)childs.item(i)).getNamespaceURI().equals(request.getNamespaceURI()))
                 {
                     if(((Element)childs.item(i)).getTagName().equals("param"))
                     {
@@ -85,7 +85,17 @@ public final class Method {
         {
             XWWWFormUrlEncoded _default=new XWWWFormUrlEncoded(m);
             m.defaultRequestRepresentation=_default;
-        }        
+        }
+        NodeList listResponse=method.getElementsByTagNameNS(method.getNamespaceURI(), "response");
+        for(int i=0;i<listResponse.getLength();i++)
+        {
+            if(listResponse.item(i) instanceof Element)
+            {
+                Element response=(Element)listResponse.item(i);
+                ResponseDefinition[] definitions=ResponseDefinition.createResponseDefinition(response, m);
+                m.responses.addAll(Arrays.asList(definitions));
+            }
+        }
         return m;
     }
     public Resource getResource()

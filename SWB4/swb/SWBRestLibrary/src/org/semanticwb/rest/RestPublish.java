@@ -215,7 +215,7 @@ public class RestPublish
                 {
                     Class returnType = m.getReturnType();
 
-                    Element methodElement = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "Element");
+                    Element methodElement = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
                     methodElement.setPrefix(XSD_PREFIX);
                     methodElement.setAttribute("name", "swbrest:"+m.getName());
                     schema.appendChild(methodElement);
