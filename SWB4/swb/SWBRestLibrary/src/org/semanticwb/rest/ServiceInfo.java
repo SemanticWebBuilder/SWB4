@@ -161,8 +161,7 @@ public class ServiceInfo
                         }
                         try
                         {
-                            Document docinclude=getDocument(path);
-                            System.out.println(SWBUtils.XML.domToXml(docinclude));
+                            Document docinclude=getDocument(path);                            
                             includes.add(docinclude);
                         }
                         catch(Exception e)
