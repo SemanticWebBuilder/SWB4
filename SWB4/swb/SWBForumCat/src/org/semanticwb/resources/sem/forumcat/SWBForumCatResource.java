@@ -69,9 +69,11 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     if (request.getParameter("tags") != null) {
                         question.setTags(request.getParameter("tags"));
                     }
-                    SemanticObject semObjectChild = SemanticObject.createSemanticObject((request.getParameter("categoryuri")));
-                    WebPage webPage = (WebPage) semObjectChild.createGenericInstance();
-                    question.setWebpage(webPage);
+                    if (request.getParameter("categoryuri") != null && !request.getParameter("categoryuri").trim().equals("")) {
+                        SemanticObject semObjectChild = SemanticObject.createSemanticObject((request.getParameter("categoryuri")));
+                        WebPage webPage = (WebPage) semObjectChild.createGenericInstance();
+                        question.setWebpage(webPage);
+                    }
                    if (isIsModerate()) {
                     question.setQueStatus(STATUS_REGISTERED);
                     } else{
