@@ -256,12 +256,7 @@ public final class ApplicationXML implements RepresentationResponse {
         ArrayList<Object> values=new ArrayList<Object>();
         try
         {
-            DOMBuilder builder=new DOMBuilder();
-            System.out.println("definition.getPath(): "+definition.getPath());            
-            String path="/swbrest:listEventElements/swbrest:EventElement";
-            System.out.println("path: "+path);
-            System.out.println("path2: "+path.equals(definition.getPath()));
-            System.out.println("xml: "+SWBUtils.XML.domToXml(document));
+            DOMBuilder builder=new DOMBuilder();                        
             XPath xpath=XPath.newInstance(definition.getPath());
             Element root=definition.getMethod().getResource().getServiceInfo().getDocument().getDocumentElement();definition.getPath();
             for(int i=0;i<root.getAttributes().getLength();i++)
