@@ -15,11 +15,15 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.jdom.Namespace;
+import org.jdom.input.DOMBuilder;
 import org.jdom.xpath.XPath;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
@@ -33,10 +37,12 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
     private Document document;
     public static final String ATOM_NS = "http://www.w3.org/2005/Atom";
     private final int status;
-    public AtomXML(Method method,int status)
+    private final URL url;
+    public AtomXML(Method method,int status,URL url)
     {
         super("application/atom+xml", method);
         this.status=status;
+        this.url=url;
 
     }
     public int getStatus()
@@ -166,7 +172,7 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
                     {
                         throw new RestException("The content of the url is invalid");
                     }
-                    ApplicationXML resp = new ApplicationXML(response,this.getMethod(),con.getResponseCode());
+                    ApplicationXML resp = new ApplicationXML(response,this.getMethod(),con.getResponseCode(),url);
                     return resp;
                 }
                 if (con.getHeaderField(CONTENT_TYPE) != null && con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(ATOM_NS))
@@ -177,7 +183,7 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
                     {
                         throw new RestException("The content of the url is invalid");
                     }
-                    AtomXML resp = new AtomXML(this.method,con.getResponseCode());
+                    AtomXML resp = new AtomXML(this.method,con.getResponseCode(),url);
                     resp.document=response;
                     return resp;
                 }
@@ -256,7 +262,7 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
         }
     }
 
-    public Object getValue(ParameterDefinition definition) throws EvalError, RestException
+    public Object getValue(ParameterDefinition definition) throws RestException
     {
          Object[] values=getValues(definition);
          if(values.length>0)
@@ -266,7 +272,7 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
          return null;
     }
 
-    public Object[] getValues(ParameterDefinition definition) throws EvalError, RestException
+    public Object[] getValues(ParameterDefinition definition) throws RestException
     {
         ArrayList<Object> values=new ArrayList<Object>();
         try
@@ -307,5 +313,67 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
             }
         }
         return null;
+    }
+    public URL getLink(ParameterDefinition definition) throws RestException
+    {
+        URL[] temp=getLinks(definition);
+        if(temp!=null && temp.length>0)
+        {
+            return temp[0];
+        }
+        return null;
+    }
+
+    public URL[] getLinks(ParameterDefinition definition) throws RestException
+    {
+        ArrayList<URL> values = new ArrayList<URL>();
+        try
+        {
+            DOMBuilder builder = new DOMBuilder();
+            XPath xpath = XPath.newInstance(definition.getPath());
+            Element root = definition.getMethod().getResource().getServiceInfo().getDocument().getDocumentElement();
+            for (int i = 0; i < root.getAttributes().getLength(); i++)
+            {
+                Node attnode = root.getAttributes().item(i);
+                if (attnode instanceof Attr)
+                {
+                    Attr att = (Attr) attnode;
+                    if ("xmlns".equals(att.getPrefix()))
+                    {
+                        String prefix = att.getLocalName();
+                        String ns = att.getValue();
+                        xpath.addNamespace(prefix, ns);
+                    }
+                }
+            }
+
+            List nodes = xpath.selectNodes(builder.build(document));
+            for (int i = 0; i < nodes.size(); i++)
+            {
+                Object node = nodes.get(i);
+                if (node instanceof org.jdom.Element)
+                {
+                    String prefixXlink="xlink";
+
+                    org.jdom.Element e = (org.jdom.Element) node;
+                    Namespace nslink=Namespace.getNamespace(prefixXlink, RestPublish.XLINK_NS);
+                    org.jdom.Attribute attjdom = e.getAttribute("href", nslink);
+                    if (attjdom != null)
+                    {
+                        String value=attjdom.getValue();
+                        if (value != null && !value.trim().equals(""))
+                        {
+                            URL href=RestPublish.resolve(value, this.url.toURI()).toURL();
+                            values.add(href);
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            throw new RestException(e);
+        }
+        return values.toArray(new URL[values.size()]);
     }
 }
