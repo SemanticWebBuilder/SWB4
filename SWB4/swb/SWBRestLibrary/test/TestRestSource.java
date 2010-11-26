@@ -68,8 +68,8 @@ public class TestRestSource
             ParameterDefinition[] parameters = resp.getParameterDefinitions();
             for (ParameterDefinition parameter : parameters)
             {
-                Object[] objs = resp.getLinks(parameter);
-                for (Object obj : objs)
+                URL[] objs = resp.getLinks(parameter);
+                for (URL obj : objs)
                 {
                     System.out.println("obj: " + obj);
                 }
