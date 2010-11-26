@@ -292,6 +292,9 @@
     <EmbeddedResource Include="Forms\FormEditPorlet.resx">
       <DependentUpon>FormEditPorlet.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEditRepository.resx">
+      <DependentUpon>FormEditRepository.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormInsertLinkToDocuentRepository.resx">
       <DependentUpon>FormInsertLinkToDocuentRepository.cs</DependentUpon>
     </EmbeddedResource>
@@ -478,6 +481,12 @@
     </Compile>
     <Compile Include="Forms\FormEditPorlet.Designer.cs">
       <DependentUpon>FormEditPorlet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormEditRepository.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEditRepository.Designer.cs">
+      <DependentUpon>FormEditRepository.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormInsertLinkToDocuentRepository.cs">
       <SubType>Form</SubType>

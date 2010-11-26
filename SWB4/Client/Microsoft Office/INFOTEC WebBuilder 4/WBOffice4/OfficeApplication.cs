@@ -188,6 +188,14 @@ namespace WBOffice4
                 frm.open();
             }
         }
+        public static void showRepository(DocumentType documentType)
+        {
+            if (OfficeApplication.TryLogOn())
+            {
+                FormEditRepository frm = new FormEditRepository(documentType);
+                frm.ShowDialog();                
+            }
+        }
         public static void ChangePassword()
         {
             if (TryLogOn())
