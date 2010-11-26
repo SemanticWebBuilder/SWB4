@@ -13,8 +13,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
@@ -23,7 +23,6 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-import org.jdom.input.DOMBuilder;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.w3c.dom.Document;
@@ -46,7 +45,7 @@ public class ServiceInfo
     private final URL url;
     private URL resourcesBasePath;
     private static final String JSON_CONTENT_TYPE = "json";
-    private final Set<Resource> resources = new HashSet<Resource>();
+    private final Map<String,Resource> resources = new HashMap<String,Resource>();
     private String WADL_NS = RestPublish.WADL_NS_2009;
     private Document doc;
    
@@ -119,13 +118,17 @@ public class ServiceInfo
             if (nodes.item(i) instanceof Element)
             {
                 Resource resource = Resource.createResourceInfo((Element) nodes.item(i), resourcesBasePath,this);
-                resources.add(resource);
+                resources.put(resource.getId(), resource);
             }
         }
     }   
     public Resource[] getResources()
     {
-        return resources.toArray(new Resource[resources.size()]);
+        return resources.values().toArray(new Resource[resources.size()]);
+    }
+    public Resource getResource(String id)
+    {
+        return resources.get(id);
     }
     private void importInLine(Document docinclude,Element grammars)
     {

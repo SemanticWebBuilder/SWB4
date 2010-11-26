@@ -9,8 +9,8 @@ import java.net.URI;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -21,7 +21,7 @@ import org.w3c.dom.NodeList;
 public class Resource {
 
     private final ServiceInfo serviceInfo;
-    private final Set<Method> methods=new HashSet<Method>();
+    private final Map<String,Method> methods=new HashMap<String, Method>();
     private String id;
     private URL path;
     private Resource(String id,URL path,ServiceInfo serviceInfo)
@@ -93,7 +93,7 @@ public class Resource {
             if(node instanceof Element)
             {
                 Method m=Method.createMethodInfo((Element)node,info);
-                info.methods.add(m);
+                info.methods.put(m.getId(),m);
             }
         }
 
@@ -101,6 +101,10 @@ public class Resource {
     }
     public Method[] getMethods()
     {
-        return methods.toArray(new Method[methods.size()]);
+        return methods.values().toArray(new Method[methods.size()]);
+    }
+    public Method getMethod(String id)
+    {
+        return methods.get(id);
     }
 }
