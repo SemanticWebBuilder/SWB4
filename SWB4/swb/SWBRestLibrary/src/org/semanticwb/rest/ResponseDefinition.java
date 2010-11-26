@@ -186,7 +186,7 @@ public final class ResponseDefinition
                         {
                             throw new RestException("The element " + element + " was not found");
                         }
-                        Element schema=getSchema(response.getOwnerDocument(), namespace, namespace);
+                        Element schema=getSchema(response.getOwnerDocument(), element, namespace);
                         ArrayList<ParameterDefinition> parameterDefinitions = new ArrayList<ParameterDefinition>();
                         extractDefinitions(responseDefinition, parameterDefinitions,method,schema);
                         definition.parameters=parameterDefinitions.toArray(new ParameterDefinition[parameterDefinitions.size()]);
