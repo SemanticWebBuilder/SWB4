@@ -22,7 +22,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 
 /**
  *
@@ -32,11 +31,18 @@ public final class ApplicationXML implements RepresentationResponse {
 
     private static final String NL="\r\n";
     private Document document;
-    ApplicationXML(Document response)
+    private final Method method;
+    private final int status;
+    ApplicationXML(Document response,Method method,int status)
     {
         this.document=response;
+        this.method=method;
+        this.status=status;
     }
-
+    public Method getMethod()
+    {
+        return method;
+    }
     public Object getResponse()
     {
         return document;
@@ -251,7 +257,10 @@ public final class ApplicationXML implements RepresentationResponse {
         try
         {
             DOMBuilder builder=new DOMBuilder();
-            System.out.println("definition.getPath(): "+definition.getPath());
+            System.out.println("definition.getPath(): "+definition.getPath());            
+            String path="/swbrest:listEventElements/swbrest:EventElement";
+            System.out.println("path: "+path);
+            System.out.println("path2: "+path.equals(definition.getPath()));
             System.out.println("xml: "+SWBUtils.XML.domToXml(document));
             XPath xpath=XPath.newInstance(definition.getPath());
             Element root=definition.getMethod().getResource().getServiceInfo().getDocument().getDocumentElement();definition.getPath();
@@ -276,16 +285,9 @@ public final class ApplicationXML implements RepresentationResponse {
                 Object node=nodes.get(i);
                 if(node instanceof org.jdom.Element)
                 {
-                    org.jdom.Element e=(org.jdom.Element)node;
-                    List childs=e.getChildren();
-                    for(int j=0;j<childs.size();j++)
-                    {
-                        if(childs.get(i) instanceof org.jdom.Text)
-                        {
-                            org.jdom.Text data=(org.jdom.Text)childs.get(j);
-                            RestPublish.get(data.getText(),RestPublish.classToxsd(definition.getType()));
-                        }
-                    }
+                    org.jdom.Element e=(org.jdom.Element)node;                    
+                    Object value=RestPublish.get(e.getValue(),RestPublish.classToxsd(definition.getType()));
+                    values.add(value);
                 }
             }
         }
@@ -294,5 +296,20 @@ public final class ApplicationXML implements RepresentationResponse {
             throw new RestException(e);
         }
         return values.toArray(new Object[values.size()]);
+    }
+    public ParameterDefinition[] getParameterDefinitions()
+    {
+        for(ResponseDefinition def : this.getMethod().responses)
+        {
+            if(def.getStatus()==status)
+            {
+                return def.getParameters();
+            }
+        }
+        return null;
+    }
+    public int getStatus()
+    {
+        return status;
     }
 }

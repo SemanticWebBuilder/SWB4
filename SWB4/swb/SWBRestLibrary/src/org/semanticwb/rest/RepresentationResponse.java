@@ -18,4 +18,6 @@ public interface RepresentationResponse extends Representation {
     public Object getObject() throws bsh.EvalError,RestException;
     public Object[] getValues(ParameterDefinition definition) throws bsh.EvalError,RestException;
     public Object getValue(ParameterDefinition definition) throws bsh.EvalError,RestException;
+    public int getStatus();
+    public ParameterDefinition[] getParameterDefinitions();
 }

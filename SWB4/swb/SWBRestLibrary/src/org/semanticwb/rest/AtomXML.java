@@ -32,10 +32,16 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
     private static final Logger log = SWBUtils.getLogger(AtomXML.class);
     private Document document;
     public static final String ATOM_NS = "http://www.w3.org/2005/Atom";
-
-    public AtomXML(Method method)
+    private final int status;
+    public AtomXML(Method method,int status)
     {
         super("application/atom+xml", method);
+        this.status=status;
+
+    }
+    public int getStatus()
+    {
+        return status;
     }
     public void setDocument(Document document)
     {
@@ -160,7 +166,7 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
                     {
                         throw new RestException("The content of the url is invalid");
                     }
-                    ApplicationXML resp = new ApplicationXML(response);
+                    ApplicationXML resp = new ApplicationXML(response,this.getMethod(),con.getResponseCode());
                     return resp;
                 }
                 if (con.getHeaderField(CONTENT_TYPE) != null && con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(ATOM_NS))
@@ -171,7 +177,7 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
                     {
                         throw new RestException("The content of the url is invalid");
                     }
-                    AtomXML resp = new AtomXML(this.method);
+                    AtomXML resp = new AtomXML(this.method,con.getResponseCode());
                     resp.document=response;
                     return resp;
                 }
@@ -290,5 +296,16 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
             throw new RestException(e);
         }
         return values.toArray(new Object[values.size()]);
+    }
+    public ParameterDefinition[] getParameterDefinitions()
+    {
+        for(ResponseDefinition def : this.getMethod().responses)
+        {
+            if(def.getStatus()==status)
+            {
+                return def.getParameters();
+            }
+        }
+        return null;
     }
 }
