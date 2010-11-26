@@ -25,9 +25,11 @@ import org.w3c.dom.Document;
  *
  * @author victor.lorenzana
  */
-public class TestRestSource {
+public class TestRestSource
+{
 
-    public TestRestSource() {
+    public TestRestSource()
+    {
     }
 
     @BeforeClass
@@ -42,76 +44,48 @@ public class TestRestSource {
     }
 
     @Before
-    public void setUp() {
+    public void setUp()
+    {
     }
 
     @After
-    public void tearDown() {
+    public void tearDown()
+    {
     }
 
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
     @Test
-    public void hello() {
-        
+    public void hello()
+    {
+
         try
         {
             RestSource source = new RestSource(new URL("http://localhost:8080/swb/restTest.jsp"));
-            ServiceInfo info=source.getServiceInfo();
-            for(Resource res : info.getResources())
-            {                
-                for(Method minfo : res.getMethods())
+            ServiceInfo info = source.getServiceInfo();
+            Resource res = info.getResource("EventElement");
+            Method minfo = res.getMethod("_listEventElements");
+            ArrayList<ParameterValue> values = new ArrayList<ParameterValue>();
+            RepresentationResponse resp = minfo.request(values);
+            ParameterDefinition[] parameters = resp.getParameterDefinitions();
+            for (ParameterDefinition parameter : parameters)
+            {
+                Object[] objs = resp.getLinks(parameter);
+                for (Object obj : objs)
                 {
-                    /*if(minfo.getName().equals("deleteEventElement"))
-                    {
-                        ArrayList<ParameterValue> values=new ArrayList<ParameterValue>();
-                        values.add(new ParameterValue("uri", "reg_digital_demo:swbcomm_EventElement:42"));
-                        RepresentationResponse resp=minfo.request(values);
-                        System.out.print("obj :"+resp.getObject().getClass().getName());
-                        if(resp instanceof ApplicationXML)
-                        {
-                            Document doc=((ApplicationXML)resp).getDocument();
-                            String xml=SWBUtils.XML.domToXml(doc);
-                            System.out.println("Respuesta XML: ");
-                            System.out.println(xml);
-                        }
-                        break;
-                    }*/
-                    if(minfo.getId().equals("_listEventElements"))
-                    {
-                        
-                        ArrayList<ParameterValue> values=new ArrayList<ParameterValue>();
-                        RepresentationResponse resp=minfo.request(values);
-
-                        ParameterDefinition[] parameters=minfo.getResponseDefinitions()[0].getParameters();
-                        for(ParameterDefinition parameter : parameters)
-                        {
-                            System.out.println("name: "+parameter.getName());
-                            System.out.println("type: "+parameter.getType().getName());
-                            Object obj=resp.getValue(parameter);
-                            System.out.println("obj: "+obj);
-                        }
-                        if(resp instanceof ApplicationXML)
-                        {
-                            Document doc=((ApplicationXML)resp).getDocument();
-                            String xml=SWBUtils.XML.domToXml(doc);
-                            //System.out.println("Respuesta XML: ");
-                            //System.out.println(xml);
-                        }
-                        break;
-                    }
+                    System.out.println("obj: " + obj);
                 }
             }
+
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            if(e.getCause()!=null)
+            if (e.getCause() != null)
             {
                 e.getCause().printStackTrace();
             }
         }
     }
-
 }
