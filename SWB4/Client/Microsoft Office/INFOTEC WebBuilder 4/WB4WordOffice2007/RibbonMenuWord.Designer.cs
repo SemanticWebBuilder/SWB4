@@ -66,6 +66,7 @@
             this.buttonShowDocumentDetail = new Microsoft.Office.Tools.Ribbon.RibbonButton();
             this.separator3 = new Microsoft.Office.Tools.Ribbon.RibbonSeparator();
             this.buttonAddLinkDo = new Microsoft.Office.Tools.Ribbon.RibbonButton();
+            this.buttonViewRep = new Microsoft.Office.Tools.Ribbon.RibbonButton();
             this.separator2 = new Microsoft.Office.Tools.Ribbon.RibbonSeparator();
             this.buttonDelete = new Microsoft.Office.Tools.Ribbon.RibbonButton();
             this.group3 = new Microsoft.Office.Tools.Ribbon.RibbonGroup();
@@ -130,6 +131,7 @@
             this.group2.Items.Add(this.buttonShowDocumentDetail);
             this.group2.Items.Add(this.separator3);
             this.group2.Items.Add(this.buttonAddLinkDo);
+            this.group2.Items.Add(this.buttonViewRep);
             this.group2.Items.Add(this.separator2);
             this.group2.Items.Add(this.buttonDelete);
             this.group2.Label = "Contenido";
@@ -200,6 +202,14 @@
             this.buttonAddLinkDo.Name = "buttonAddLinkDo";
             this.buttonAddLinkDo.ShowImage = true;
             this.buttonAddLinkDo.Click += new System.EventHandler<Microsoft.Office.Tools.Ribbon.RibbonControlEventArgs>(this.buttonAddLinkDo_Click);
+            // 
+            // buttonViewRep
+            // 
+            this.buttonViewRep.Image = global::WB4WordOffice2007.Properties.Resources.see;
+            this.buttonViewRep.Label = "Ver repositorio de contenidos";
+            this.buttonViewRep.Name = "buttonViewRep";
+            this.buttonViewRep.ShowImage = true;
+            this.buttonViewRep.Click += new System.EventHandler<Microsoft.Office.Tools.Ribbon.RibbonControlEventArgs>(this.buttonViewRep_Click);
             // 
             // separator2
             // 
@@ -324,6 +334,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonShowDocumentDetail;
         internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator3;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonAddLinkDo;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonViewRep;
     }
 
     partial class ThisRibbonCollection : Microsoft.Office.Tools.Ribbon.RibbonReadOnlyCollection

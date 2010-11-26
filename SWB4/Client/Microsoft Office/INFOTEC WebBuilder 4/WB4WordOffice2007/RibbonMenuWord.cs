@@ -214,5 +214,10 @@ namespace WB4WordOffice2007
                 document.InsertLinkToDoc();
             }
         }
+
+        private void buttonViewRep_Click(object sender, RibbonControlEventArgs e)
+        {
+            OfficeApplication.showRepository(DocumentType.Word);
+        }
     }
 }
