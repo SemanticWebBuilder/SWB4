@@ -1153,7 +1153,7 @@ public class RestPublish
         application.setAttributeNode(attr);
 
         Attr schemaLocation = doc.createAttributeNS(W3C_XML_SCHEMA_INSTANCE_NS_URI, "schemaLocation");
-        schemaLocation.setValue(WADL_NS + " " + WADL_XSD_LOCATION);
+        schemaLocation.setValue(WADL_XSD_LOCATION);
         schemaLocation.setPrefix("xsi");
         application.setAttributeNodeNS(schemaLocation);
 
