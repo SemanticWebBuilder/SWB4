@@ -195,6 +195,11 @@ namespace WB4ExcelOffice2007
             }
         }
 
+        private void buttonViewRep_Click(object sender, RibbonControlEventArgs e)
+        {
+            OfficeApplication.showRepository(DocumentType.Excel);
+        }
+
         
     }
 }
