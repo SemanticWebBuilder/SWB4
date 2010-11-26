@@ -73,7 +73,7 @@ public final class ApplicationMultipartFormData extends RepresentationBase imple
                     {
                         throw new RestException("The content of the url is invalid");
                     }
-                    ApplicationXML resp=new ApplicationXML(response);
+                    ApplicationXML resp=new ApplicationXML(response,this.getMethod(),con.getResponseCode());
                     return resp;
                 }
                 if (con.getHeaderField(CONTENT_TYPE) != null && con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(AtomXML.ATOM_NS))
@@ -84,7 +84,7 @@ public final class ApplicationMultipartFormData extends RepresentationBase imple
                     {
                         throw new RestException("The content of the url is invalid");
                     }
-                    AtomXML resp = new AtomXML(this.method);
+                    AtomXML resp = new AtomXML(this.method,con.getResponseCode());
                     resp.setDocument(response);
                     return resp;
                 }
