@@ -266,11 +266,7 @@ public final class ApplicationXML implements RepresentationResponse {
                         String prefix=att.getLocalName();
                         String ns=att.getValue();
                         xpath.addNamespace(prefix, ns);
-                    }
-                    if(att.getName().equals("xmlns"))
-                    {
-                        xpath.addNamespace("", att.getValue());
-                    }
+                    }                    
                 }
             }
             

@@ -6,7 +6,11 @@
 package org.semanticwb.rest;
 
 import java.util.ArrayList;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 /**
  *
@@ -53,6 +57,31 @@ public class ParameterDefinition {
     {
         return type;
     }
+    private static String getPrefix(Document doc,Element schema)
+    {
+        String getPrefix="";
+        String targetNamespace=schema.getAttribute("targetNamespace");
+        Element element=doc.getDocumentElement();
+        NamedNodeMap atts=element.getAttributes();
+        for(int i=0;i<atts.getLength();i++)
+        {
+            if(atts.item(i) instanceof Attr)
+            {
+                Attr attr=(Attr)atts.item(i);
+                if(attr.getPrefix()!=null && attr.getPrefix().equals("xmlns"))
+                {
+                    String prefix=attr.getLocalName();
+                    String ns=attr.getValue();
+                    if(targetNamespace.equals(ns))
+                    {
+                        return prefix;
+                    }
+                }
+            }
+
+        }
+        return getPrefix;
+    }
     private static String getPath(Element element,Element schema) throws RestException
     {
         String getPath="";
@@ -64,7 +93,7 @@ public class ParameterDefinition {
         String name=element.getAttribute("name");
         if(!name.trim().equals(""))
         {
-            getPath=getPath+"/"+name;
+            getPath=getPath+"/"+getPrefix(element.getOwnerDocument(),schema)+":"+name;
         }
         return getPath;
         
