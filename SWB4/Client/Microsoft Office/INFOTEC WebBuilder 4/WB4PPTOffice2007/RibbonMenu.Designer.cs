@@ -62,6 +62,8 @@
             this.separator3 = new Microsoft.Office.Tools.Ribbon.RibbonSeparator();
             this.buttonInformation = new Microsoft.Office.Tools.Ribbon.RibbonButton();
             this.buttonCleanPropeties = new Microsoft.Office.Tools.Ribbon.RibbonButton();
+            this.buttonShowDocumentDetail = new Microsoft.Office.Tools.Ribbon.RibbonButton();
+            this.buttonViewRep = new Microsoft.Office.Tools.Ribbon.RibbonButton();
             this.separator2 = new Microsoft.Office.Tools.Ribbon.RibbonSeparator();
             this.buttonDelete = new Microsoft.Office.Tools.Ribbon.RibbonButton();
             this.groupTools = new Microsoft.Office.Tools.Ribbon.RibbonGroup();
@@ -72,7 +74,6 @@
             this.groupHelp = new Microsoft.Office.Tools.Ribbon.RibbonGroup();
             this.buttonHelp = new Microsoft.Office.Tools.Ribbon.RibbonButton();
             this.buttonAbout = new Microsoft.Office.Tools.Ribbon.RibbonButton();
-            this.buttonShowDocumentDetail = new Microsoft.Office.Tools.Ribbon.RibbonButton();
             this.infowb.SuspendLayout();
             this.groupSession.SuspendLayout();
             this.group1.SuspendLayout();
@@ -125,6 +126,7 @@
             this.group1.Items.Add(this.buttonInformation);
             this.group1.Items.Add(this.buttonCleanPropeties);
             this.group1.Items.Add(this.buttonShowDocumentDetail);
+            this.group1.Items.Add(this.buttonViewRep);
             this.group1.Items.Add(this.separator2);
             this.group1.Items.Add(this.buttonDelete);
             this.group1.Label = "Contenido";
@@ -176,6 +178,19 @@
             this.buttonCleanPropeties.Name = "buttonCleanPropeties";
             this.buttonCleanPropeties.ShowImage = true;
             this.buttonCleanPropeties.Click += new System.EventHandler<Microsoft.Office.Tools.Ribbon.RibbonControlEventArgs>(this.buttonCleanPropeties_Click);
+            // 
+            // buttonShowDocumentDetail
+            // 
+            this.buttonShowDocumentDetail.Label = "Detalle de documento";
+            this.buttonShowDocumentDetail.Name = "buttonShowDocumentDetail";
+            this.buttonShowDocumentDetail.Click += new System.EventHandler<Microsoft.Office.Tools.Ribbon.RibbonControlEventArgs>(this.buttonShowDocumentDetail_Click);
+            // 
+            // buttonViewRep
+            // 
+            this.buttonViewRep.Label = "Ver repositorio de contenidos";
+            this.buttonViewRep.Name = "buttonViewRep";
+            this.buttonViewRep.ShowImage = true;
+            this.buttonViewRep.Click += new System.EventHandler<Microsoft.Office.Tools.Ribbon.RibbonControlEventArgs>(this.buttonViewRep_Click);
             // 
             // separator2
             // 
@@ -255,12 +270,6 @@
             this.buttonAbout.Name = "buttonAbout";
             this.buttonAbout.Click += new System.EventHandler<Microsoft.Office.Tools.Ribbon.RibbonControlEventArgs>(this.buttonAbout_Click);
             // 
-            // buttonShowDocumentDetail
-            // 
-            this.buttonShowDocumentDetail.Label = "Detalle de documento";
-            this.buttonShowDocumentDetail.Name = "buttonShowDocumentDetail";
-            this.buttonShowDocumentDetail.Click += new System.EventHandler<Microsoft.Office.Tools.Ribbon.RibbonControlEventArgs>(this.buttonShowDocumentDetail_Click);
-            // 
             // RibbonMenu
             // 
             this.Name = "RibbonMenu";
@@ -305,6 +314,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonSave;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonDocsToAuthorize;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonShowDocumentDetail;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonViewRep;
     }
 
     partial class ThisRibbonCollection : Microsoft.Office.Tools.Ribbon.RibbonReadOnlyCollection

@@ -203,5 +203,10 @@ namespace WB4PPTOffice2007
                 document.showDocumentDetail();
             }
         }
+
+        private void buttonViewRep_Click(object sender, RibbonControlEventArgs e)
+        {
+            OfficeApplication.showRepository(DocumentType.PPT);
+        }
     }
 }
