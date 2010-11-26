@@ -10,8 +10,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.semanticwb.SWBUtils;
-import org.semanticwb.rest.ApplicationXML;
 import org.semanticwb.rest.Method;
 import org.semanticwb.rest.ParameterDefinition;
 import org.semanticwb.rest.ParameterValue;
@@ -19,7 +17,6 @@ import org.semanticwb.rest.RepresentationResponse;
 import org.semanticwb.rest.Resource;
 import org.semanticwb.rest.RestSource;
 import org.semanticwb.rest.ServiceInfo;
-import org.w3c.dom.Document;
 
 /**
  *
