@@ -20,13 +20,12 @@ public final class ResponseDefinition
 
     private final int status;
     private final String mediaType;
-    private final ParameterDefinition[] parameters;
+    private ParameterDefinition[] parameters;
 
-    private ResponseDefinition(int status, String mediaType, ParameterDefinition[] parameters)
+    private ResponseDefinition(int status, String mediaType)
     {
         this.status = status;
-        this.mediaType = mediaType;
-        this.parameters = parameters;
+        this.mediaType = mediaType;        
     }
 
     public int getStatus()
@@ -39,6 +38,37 @@ public final class ResponseDefinition
         return mediaType;
     }
 
+    private static Element getSchema(Document doc, String localname, String namespace)
+    {
+        NodeList schemas = doc.getElementsByTagNameNS(XMLConstants.W3C_XML_SCHEMA_NS_URI, "schema");
+        for (int i = 0; i < schemas.getLength(); i++)
+        {
+            Element schema = (Element) schemas.item(i);
+            String targetNamespace = schema.getAttribute("targetNamespace");
+            if (namespace.equals(targetNamespace))
+            {
+                // this is the schema
+                NodeList childs = schema.getChildNodes();
+                for (int j = 0; j < childs.getLength(); j++)
+                {
+                    Node child = childs.item(j);
+                    if (child instanceof Element && XMLConstants.W3C_XML_SCHEMA_NS_URI.equals(child.getNamespaceURI()))
+                    {
+                        Element eDefinition = (Element) child;
+                        if (eDefinition.getLocalName().equals("element"))
+                        {
+                            String name = eDefinition.getAttribute("name");
+                            if (localname.equals(name))
+                            {
+                                return schema;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
     private static Element getElementDefinition(Document doc, String localname, String namespace)
     {
         NodeList schemas = doc.getElementsByTagNameNS(XMLConstants.W3C_XML_SCHEMA_NS_URI, "schema");
@@ -71,7 +101,7 @@ public final class ResponseDefinition
         return null;
     }
 
-    public static void extractDefinitions(Element parent, ArrayList<ParameterDefinition> parameterDefinitions)
+    public static void extractDefinitions(Element parent, ArrayList<ParameterDefinition> parameterDefinitions,Method method,Element schema)
     {
         NodeList childs = parent.getChildNodes();
         for (int j = 0; j < childs.getLength(); j++)
@@ -87,7 +117,7 @@ public final class ResponseDefinition
                         if(complexNodeChilds.item(i) instanceof Element && ((Element)complexNodeChilds.item(i)).getLocalName().equals("sequence"))
                         {
                             Element sequence=(Element)complexNodeChilds.item(i);
-                            extractDefinitions(sequence, parameterDefinitions);
+                            extractDefinitions(sequence, parameterDefinitions,method,schema);
                         }
                     }
                 }
@@ -97,7 +127,7 @@ public final class ResponseDefinition
                     {
                         try
                         {
-                            ParameterDefinition parameter = ParameterDefinition.createParameterDefinition(child);
+                            ParameterDefinition parameter = ParameterDefinition.createParameterDefinition(child,method,schema);
                             parameterDefinitions.add(parameter);
                         }
                         catch (Exception e)
@@ -133,6 +163,8 @@ public final class ResponseDefinition
                     }
                     String mediaType = representation.getAttribute("mediaType");
                     Element responseDefinition = null;
+                    ResponseDefinition definition = new ResponseDefinition(istatus, mediaType);
+                    definitions.add(definition);
                     if (representation.getAttribute("element") != null && !representation.getAttribute("element").trim().equals(""))
                     {
                         String element = representation.getAttribute("element");
@@ -149,16 +181,17 @@ public final class ResponseDefinition
                             }
                         }
                         // busca el elemento  en los schemas
-                        responseDefinition = getElementDefinition(response.getOwnerDocument(), element, namespace);
+                        responseDefinition = getElementDefinition(response.getOwnerDocument(), element, namespace);                        
                         if (responseDefinition == null)
                         {
                             throw new RestException("The element " + element + " was not found");
                         }
-                    }
-                    ArrayList<ParameterDefinition> parameterDefinitions = new ArrayList<ParameterDefinition>();
-                    extractDefinitions(responseDefinition, parameterDefinitions);
-                    ResponseDefinition definition = new ResponseDefinition(istatus, mediaType, parameterDefinitions.toArray(new ParameterDefinition[parameterDefinitions.size()]));
-                    definitions.add(definition);
+                        Element schema=getSchema(response.getOwnerDocument(), namespace, namespace);
+                        ArrayList<ParameterDefinition> parameterDefinitions = new ArrayList<ParameterDefinition>();
+                        extractDefinitions(responseDefinition, parameterDefinitions,method,schema);
+                        definition.parameters=parameterDefinitions.toArray(new ParameterDefinition[parameterDefinitions.size()]);
+                    }                    
+                    
                 }
             }
         }

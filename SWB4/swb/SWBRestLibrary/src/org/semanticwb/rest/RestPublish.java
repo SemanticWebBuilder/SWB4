@@ -77,6 +77,7 @@ public class RestPublish
         Document doc = SWBUtils.XML.getNewDocument();
         Element schema = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "schema");
         schema.setAttribute("targetNamespace", REST_RESOURCES_2010);
+        schema.setAttribute("xmlns:xlink", XLINK_NS);
         Attr attr = doc.createAttribute("xmlns");
         attr.setValue(REST_RESOURCES_2010);
         schema.setAttributeNode(attr);
@@ -252,21 +253,18 @@ public class RestPublish
                                         complex.appendChild(sequence);
                                         Element child = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
                                         child.setPrefix(XSD_PREFIX);
-                                        child.setAttribute("name", REST_RESOURCE_PREFIX +":" + returnSemanticClazz.getName());
-
+                                        child.setAttribute("name", returnSemanticClazz.getName());
+                                        child.setAttribute("type", XSD_ANYURI);
                                         Element shortURI = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
                                         shortURI.setPrefix(XSD_PREFIX);
                                         shortURI.setAttribute("name", "shortURI");
                                         shortURI.setAttribute("type", XSD_STRING);
                                         child.appendChild(shortURI);
 
-                                        Element uri = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
-                                        uri.setAttribute("name", "uri");
-                                        shortURI.setAttribute("type", XSD_ANYURI);
-                                        child.appendChild(uri);
-
                                         Element href = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
+                                        href.setPrefix(XSD_PREFIX);
                                         href.setAttribute("name", "xlink:href");
+                                        href.setAttribute("type", XSD_STRING);
                                         child.appendChild(href);
 
 
@@ -1432,39 +1430,39 @@ public class RestPublish
                             if (resinvoke instanceof GenericIterator)
                             {
                                 Document doc = SWBUtils.XML.getNewDocument();
-                                Element res = doc.createElement(m.getName());
+                                Element res = doc.createElementNS(REST_RESOURCES_2010,m.getName());
+                                doc.appendChild(res);
 
                                 Attr xmlns = doc.createAttribute("xmlns");
                                 xmlns.setValue(REST_RESOURCES_2010);
                                 res.setAttributeNode(xmlns);
+                                
 
-                                Attr swbrest = doc.createAttribute("xmlns:swbrest");
-                                xmlns.setValue(REST_RESOURCES_2010);
-                                res.setAttributeNode(swbrest);
-
-                                doc.appendChild(res);
+                                
                                 res.setAttribute("xmlns:xlink", XLINK_NS);
                                 GenericIterator gi = (GenericIterator) resinvoke;
                                 if (gi.hasNext())
                                 {
                                     GenericObject go = gi.next();
                                     SemanticObject obj = go.getSemanticObject();
-                                    Element name = doc.createElementNS(REST_RESOURCES_2010, obj.getSemanticClass().getName());
-                                    name.setPrefix(REST_RESOURCE_PREFIX);
+                                    Element name = doc.createElementNS(REST_RESOURCES_2010,obj.getSemanticClass().getName());
                                     name.setAttributeNS(XLINK_NS, "xlink:href", request.getRequestURI() + "?uri=" + obj.getShortURI());
-                                    name.setAttribute("uri", obj.getURI());
                                     name.setAttribute("shortURI", obj.getShortURI());
+                                    
+                                    Text data=doc.createTextNode(obj.getURI());
+                                    name.appendChild(data);
                                     res.appendChild(name);
                                 }
                                 while (gi.hasNext())
                                 {
                                     GenericObject go = gi.next();
                                     SemanticObject obj = go.getSemanticObject();
-                                    Element name = doc.createElementNS(REST_RESOURCES_2010, obj.getSemanticClass().getName());
-                                    name.setPrefix(REST_RESOURCE_PREFIX);
-                                    name.setAttributeNS(XLINK_NS, "xlink:href", request.getRequestURI() + "?uri=" + obj.getShortURI());
-                                    name.setAttribute("uri", obj.getURI());
+                                    Element name = doc.createElementNS(REST_RESOURCES_2010,obj.getSemanticClass().getName());
+                                    name.setAttributeNS(XLINK_NS, "xlink:href", request.getRequestURI() + "?uri=" + obj.getShortURI());                                    
                                     name.setAttribute("shortURI", obj.getShortURI());
+
+                                    Text data=doc.createTextNode(obj.getURI());
+                                    name.appendChild(data);
                                     res.appendChild(name);
                                 }
                                 return doc;
@@ -1590,7 +1588,7 @@ public class RestPublish
         out.close();
     }
 
-    private Object get(String value, String dataType) throws Exception
+    public static Object get(String value, String dataType) throws Exception
     {
         dataType = dataType.replace("xsd:", SemanticVocabulary.XMLS_URI);
         if (dataType.equals(SemanticVocabulary.XMLS_BOOLEAN))

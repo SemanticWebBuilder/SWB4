@@ -12,11 +12,15 @@ import java.lang.reflect.Constructor;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.jdom.xpath.XPath;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 /**
@@ -25,6 +29,7 @@ import org.w3c.dom.Text;
  */
 public class AtomXML extends RepresentationBase implements RepresentationRequest,RepresentationResponse
 {
+    private static final Logger log = SWBUtils.getLogger(AtomXML.class);
     private Document document;
     public static final String ATOM_NS = "http://www.w3.org/2005/Atom";
 
@@ -122,7 +127,7 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            log.debug(e);
             throw new RestException(e);
         }
         return doc;
@@ -243,5 +248,47 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
         {
             throw new RestException("Error creating a object response",clnfe);
         }
+    }
+
+    public Object getValue(ParameterDefinition definition) throws EvalError, RestException
+    {
+         Object[] values=getValues(definition);
+         if(values.length>0)
+         {
+             return values[0];
+         }
+         return null;
+    }
+
+    public Object[] getValues(ParameterDefinition definition) throws EvalError, RestException
+    {
+        ArrayList<Object> values=new ArrayList<Object>();
+        try
+        {
+            XPath xpath=XPath.newInstance(definition.getPath());
+            List nodes=xpath.selectNodes(document);
+            for(int i=0;i<nodes.size();i++)
+            {
+                Object node=nodes.get(i);
+                if(node instanceof Element)
+                {
+                    Element e=(Element)node;
+                    NodeList childs=e.getChildNodes();
+                    for(int j=0;j<childs.getLength();j++)
+                    {
+                        if(childs.item(j) instanceof Text)
+                        {
+                            Text data=(Text)childs.item(j);
+                            RestPublish.get(data.getNodeValue(),RestPublish.classToxsd(definition.getType()));
+                        }
+                    }
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            throw new RestException(e);
+        }
+        return values.toArray(new Object[values.size()]);
     }
 }
