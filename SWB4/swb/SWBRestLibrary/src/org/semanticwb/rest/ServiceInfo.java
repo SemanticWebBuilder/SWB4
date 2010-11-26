@@ -23,10 +23,10 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+import org.jdom.input.DOMBuilder;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.w3c.dom.Document;
-import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -47,7 +47,14 @@ public class ServiceInfo
     private URL resourcesBasePath;
     private static final String JSON_CONTENT_TYPE = "json";
     private final Set<Resource> resources = new HashSet<Resource>();
-    private String WADL_NS = RestPublish.WADL_NS_2009;    
+    private String WADL_NS = RestPublish.WADL_NS_2009;
+    private Document doc;
+   
+    public Document getDocument()
+    {
+        String xml=SWBUtils.XML.domToXml(doc);
+        return SWBUtils.XML.xmlToDom(xml);
+    }
     public ServiceInfo(final URL url)
     {
         this.url = url;
@@ -65,7 +72,7 @@ public class ServiceInfo
         return resourcesBasePath;
     }
 
-    private void fill(Document doc) throws RestException
+    private void fill() throws RestException
     {
 
         resources.clear();
@@ -126,7 +133,7 @@ public class ServiceInfo
         Node importedNode=grammars.getOwnerDocument().importNode(rootElement, true);
         grammars.appendChild(importedNode);
     }
-    private void extractIncludes(Document doc) throws RestException
+    private void extractIncludes() throws RestException
     {        
         NodeList nodesgrammars=doc.getElementsByTagNameNS(WADL_NS, "grammars");
         for(int i=0;i<nodesgrammars.getLength();i++)
@@ -203,15 +210,15 @@ public class ServiceInfo
                 if (con.getHeaderField(CONTENT_TYPE) != null && con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(APPLICATION_XML))
                 {
                     InputStream in = con.getInputStream();
-                    Document response = SWBUtils.XML.xmlToDom(in);
-                    if (response == null)
+                    doc = SWBUtils.XML.xmlToDom(in);
+                    if (doc == null)
                     {
                         throw new RestException("The content of the url is invalid");
                     }
-                    if (isWADL(response))
+                    if (isWADL())
                     {
-                        extractIncludes(response);
-                        fill(response);
+                        extractIncludes();
+                        fill();
                     }
                     else
                     {
@@ -323,7 +330,7 @@ public class ServiceInfo
 
     }
 
-    private boolean isWADL(Document doc)
+    private boolean isWADL()
     {
 
         if(!validate(doc))

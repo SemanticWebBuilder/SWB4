@@ -16,4 +16,6 @@ public interface RepresentationResponse extends Representation {
     public Interpreter getInterpreter() throws bsh.EvalError,RestException;
     public ClassLoader getClassLoader() throws bsh.EvalError;
     public Object getObject() throws bsh.EvalError,RestException;
+    public Object[] getValues(ParameterDefinition definition) throws bsh.EvalError,RestException;
+    public Object getValue(ParameterDefinition definition) throws bsh.EvalError,RestException;
 }

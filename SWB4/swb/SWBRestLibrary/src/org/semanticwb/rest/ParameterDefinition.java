@@ -14,15 +14,28 @@ import org.w3c.dom.Element;
  */
 public class ParameterDefinition {
 
+    private final String path;
     private final String name;
+    
     private final Class type;
     private final boolean isMultiple;
     private final ArrayList<ParameterDefinition> definitions=new ArrayList<ParameterDefinition>();
-    private ParameterDefinition(String name,Class type,boolean isMultiple)
+    private final Method method;
+    private ParameterDefinition(String name,Class type,boolean isMultiple,String path,Method method)
     {
         this.name=name;
         this.type=type;
         this.isMultiple=isMultiple;
+        this.path=path;
+        this.method=method;
+    }
+    public Method getMethod()
+    {
+        return method;
+    }
+    public String getPath()
+    {
+        return path;
     }
     public boolean isMultiple()
     {
@@ -40,7 +53,23 @@ public class ParameterDefinition {
     {
         return type;
     }
-    public static ParameterDefinition createParameterDefinition(Element element) throws RestException
+    private static String getPath(Element element,Element schema) throws RestException
+    {
+        String getPath="";
+        if(element.getParentNode()!=null && element.getParentNode() instanceof Element)
+        {
+            Element parent=(Element)element.getParentNode();
+            getPath=getPath+getPath(parent,schema);
+        }
+        String name=element.getAttribute("name");
+        if(!name.trim().equals(""))
+        {
+            getPath=getPath+"/"+name;
+        }
+        return getPath;
+        
+    }
+    public static ParameterDefinition createParameterDefinition(Element element,Method method,Element schema) throws RestException
     {
         String name=element.getAttribute("name");
         String type=element.getAttribute("type");
@@ -50,10 +79,11 @@ public class ParameterDefinition {
         {
             multiple=true;
         }
-        ParameterDefinition res=new ParameterDefinition(name, RestPublish.xsdToClass(type),multiple);
+        String path=getPath(element,schema);
+        ParameterDefinition res=new ParameterDefinition(name, RestPublish.xsdToClass(type),multiple,path,method);
         if(element.getChildNodes().getLength()>0)
         {
-            ResponseDefinition.extractDefinitions(element, res.definitions);
+            ResponseDefinition.extractDefinitions(element, res.definitions,method,schema);
         }
         return res;
     }

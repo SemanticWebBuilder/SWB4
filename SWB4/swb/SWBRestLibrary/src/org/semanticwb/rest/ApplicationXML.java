@@ -5,17 +5,24 @@
 
 package org.semanticwb.rest;
 
+import bsh.EvalError;
 import bsh.Interpreter;
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import org.jdom.input.DOMBuilder;
+import org.jdom.xpath.XPath;
+import org.semanticwb.SWBUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
 /**
  *
@@ -226,5 +233,70 @@ public final class ApplicationXML implements RepresentationResponse {
         {
             throw new RestException(e);
         }
+    }
+
+    public Object getValue(ParameterDefinition definition) throws EvalError, RestException
+    {
+         Object[] values=getValues(definition);
+         if(values.length>0)
+         {
+             return values[0];
+         }
+         return null;
+    }
+
+    public Object[] getValues(ParameterDefinition definition) throws EvalError, RestException
+    {
+        ArrayList<Object> values=new ArrayList<Object>();
+        try
+        {
+            DOMBuilder builder=new DOMBuilder();
+            System.out.println("definition.getPath(): "+definition.getPath());
+            System.out.println("xml: "+SWBUtils.XML.domToXml(document));
+            XPath xpath=XPath.newInstance(definition.getPath());
+            Element root=definition.getMethod().getResource().getServiceInfo().getDocument().getDocumentElement();definition.getPath();
+            for(int i=0;i<root.getAttributes().getLength();i++)
+            {
+                Node attnode=root.getAttributes().item(i);
+                if(attnode instanceof Attr)
+                {
+                    Attr att=(Attr)attnode;
+                    if("xmlns".equals(att.getPrefix()))
+                    {
+                        String prefix=att.getLocalName();
+                        String ns=att.getValue();
+                        xpath.addNamespace(prefix, ns);
+                    }
+                    if(att.getName().equals("xmlns"))
+                    {
+                        xpath.addNamespace("", att.getValue());
+                    }
+                }
+            }
+            
+            List nodes=xpath.selectNodes(builder.build(document));
+            for(int i=0;i<nodes.size();i++)
+            {
+                Object node=nodes.get(i);
+                if(node instanceof org.jdom.Element)
+                {
+                    org.jdom.Element e=(org.jdom.Element)node;
+                    List childs=e.getChildren();
+                    for(int j=0;j<childs.size();j++)
+                    {
+                        if(childs.get(i) instanceof org.jdom.Text)
+                        {
+                            org.jdom.Text data=(org.jdom.Text)childs.get(j);
+                            RestPublish.get(data.getText(),RestPublish.classToxsd(definition.getType()));
+                        }
+                    }
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            throw new RestException(e);
+        }
+        return values.toArray(new Object[values.size()]);
     }
 }
