@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.rest.ApplicationXML;
 import org.semanticwb.rest.Method;
+import org.semanticwb.rest.ParameterDefinition;
 import org.semanticwb.rest.ParameterValue;
 import org.semanticwb.rest.RepresentationResponse;
 import org.semanticwb.rest.Resource;
@@ -79,15 +80,24 @@ public class TestRestSource {
                     }*/
                     if(minfo.getId().equals("_listEventElements"))
                     {
+                        
                         ArrayList<ParameterValue> values=new ArrayList<ParameterValue>();
                         RepresentationResponse resp=minfo.request(values);
-                        
+
+                        ParameterDefinition[] parameters=minfo.getResponseDefinitions()[0].getParameters();
+                        for(ParameterDefinition parameter : parameters)
+                        {
+                            System.out.println("name: "+parameter.getName());
+                            System.out.println("type: "+parameter.getType().getName());
+                            Object obj=resp.getValue(parameter);
+                            System.out.println("obj: "+obj);
+                        }
                         if(resp instanceof ApplicationXML)
                         {
                             Document doc=((ApplicationXML)resp).getDocument();
                             String xml=SWBUtils.XML.domToXml(doc);
-                            System.out.println("Respuesta XML: ");
-                            System.out.println(xml);
+                            //System.out.println("Respuesta XML: ");
+                            //System.out.println(xml);
                         }
                         break;
                     }
