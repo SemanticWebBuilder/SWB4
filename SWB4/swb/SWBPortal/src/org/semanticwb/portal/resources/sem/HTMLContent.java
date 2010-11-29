@@ -543,6 +543,14 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         String workingDirectory = SWBPortal.getWebWorkPath()
                                   + resource.getWorkPath();
         String message = null;
+        VersionInfo vio = null;
+
+        vio = findVersion(versionNumber);
+        if (vio != null) {
+            filename = vio.getVersionFile();
+        } else {
+            filename = "index.html";
+        }
 
         if (textToSave != null) {
             try {
@@ -560,10 +568,10 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                 }
                 File file = new File(SWBPortal.getWorkPath().substring(0,
                         SWBPortal.getWorkPath().lastIndexOf("/") + 1)
-                        + contentPath + "/index.html");
+                        + contentPath + "/" + filename);
                 filename = file.getName();
                 FileWriter writer = new FileWriter(file);
-                //System.out.println("workingDirectory:"+workingDirectory);
+//                System.out.println("Archivo a guardar: " + filename);
 
                 if (deleteTmp) {
                     //modifica las rutas de los archivos asociados si se acaba de cargar un archivo HTML antes de guardar
