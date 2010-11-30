@@ -23,8 +23,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB4OfficeTest", "WB4OfficeT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlRpcLibrary", "XmlRpcLibrary\XmlRpcLibrary.csproj", "{69135094-2A1F-4205-8A76-58D808E0D115}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlRpcTest", "XmlRpcTest\XmlRpcTest.csproj", "{11E645A3-60E8-420D-8F5A-33F257747D95}"
-EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SemanticWebBuilderOffice20074Setup", "SemanticINFOTECWebBuilder4Setup\SemanticINFOTECWebBuilder4Setup.vdproj", "{AC2289C4-3C56-4C9D-B7C1-3BEA11E8F58A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsPropertyEditorTest", "WindowsFormsPropertyEditorTest\WindowsFormsPropertyEditorTest.csproj", "{3E9193A8-B060-468B-99EB-AE628A1BAFDC}"
@@ -73,10 +71,6 @@ Global
 		{69135094-2A1F-4205-8A76-58D808E0D115}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69135094-2A1F-4205-8A76-58D808E0D115}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69135094-2A1F-4205-8A76-58D808E0D115}.Release|Any CPU.Build.0 = Release|Any CPU
-		{11E645A3-60E8-420D-8F5A-33F257747D95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{11E645A3-60E8-420D-8F5A-33F257747D95}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{11E645A3-60E8-420D-8F5A-33F257747D95}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{11E645A3-60E8-420D-8F5A-33F257747D95}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AC2289C4-3C56-4C9D-B7C1-3BEA11E8F58A}.Debug|Any CPU.ActiveCfg = Debug
 		{AC2289C4-3C56-4C9D-B7C1-3BEA11E8F58A}.Release|Any CPU.ActiveCfg = Release
 		{3E9193A8-B060-468B-99EB-AE628A1BAFDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
