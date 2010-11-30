@@ -302,17 +302,14 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest)
-            throws SWBResourceException, IOException
-    {
+            throws SWBResourceException, IOException {
+
         WebPage page = paramRequest.getWebPage();
         Resource resource = getResourceBase();
-
         VersionInfo vi = getActualVersion();
 
-        //System.out.println("Revisando version..."+vi);
-
         // Genera la version inicial si no existe
-        if(null==vi){
+        if (null == vi) {
             GenericObject go = SWBPlatform.getSemanticMgr().getOntology().getGenericObject(resource.getResourceData().getURI());
             int vnum=1;
             SWBResource swres = (SWBResource) go;
@@ -347,8 +344,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         }
 
         String numversion=request.getParameter("numversion");
-        if (numversion != null && numversion.length()>0)
-        {
+        if (numversion != null && numversion.length() > 0) {
             vi = findVersion(Integer.parseInt(numversion));
         }
         int versionNumber = vi.getVersionNumber();
@@ -356,7 +352,6 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
 
         String resourceWorkPath = SWBPortal.getWorkPath()
                 + resource.getWorkPath() + "/" + versionNumber + "/" + fileName;
-
 
         String fileContent = SWBUtils.IO.getFileFromPath(resourceWorkPath);
         if (fileContent != null) {
@@ -373,7 +368,6 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                 } catch (Exception e) {
                     log.error("HTMLContent - Getting \"deleteStyles\" property.", e);
                 }
-                //System.out.println("HtmlContent: Es de Word");
                 ContentUtils contentUtils = new ContentUtils();
                 fileContent = contentUtils.predefinedStyles(fileContent, resource, true); //Estilos predefinidos
                 //fileContent = contentUtils.predefinedStyles(fileContent, base, isTpred()); //Estilos predefinidos
@@ -382,7 +376,6 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                 }//Paginación
                 fileContent = cleanHTML(fileContent, deleteStyles);
             } else {
-                //System.out.println("HtmlContent: No es de Word");
                 fileContent = SWBUtils.TEXT.replaceAll(fileContent, "<workpath/>",
                     SWBPortal.getWebWorkPath() + resource.getWorkPath() + "/" + versionNumber + "/");
                 //Paginación (Jorge Jiménez-10/Julio/2009)
@@ -571,7 +564,6 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                         + contentPath + "/" + filename);
                 filename = file.getName();
                 FileWriter writer = new FileWriter(file);
-//                System.out.println("Archivo a guardar: " + filename);
 
                 if (deleteTmp) {
                     //modifica las rutas de los archivos asociados si se acaba de cargar un archivo HTML antes de guardar
@@ -584,23 +576,19 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                 //Replace WorkPath
                 textToSave = SWBUtils.TEXT.replaceAll(textToSave, workingDirectory+"/"+versionNumber+"/", "<workpath/>");
 
-                int i=textToSave.indexOf("<workpath/>");
-                while(i>-1)
-                {
-                    String fileName=textToSave.substring(i+11,textToSave.indexOf("\"",i+11));
-                    String s=SWBPortal.getWorkPath()+resource.getWorkPath()+"/"+versionNumber+"/"+fileName;
-                    int ls=fileName.indexOf("/");
-                    if(ls>-1)
-                    {
-                        fileName=fileName.substring(ls+1);
+                int i = textToSave.indexOf("<workpath/>");
+                while (i >- 1) {
+                    String fileName = textToSave.substring(i + 11, textToSave.indexOf("\"", i + 11));
+                    String s = SWBPortal.getWorkPath() + resource.getWorkPath() + "/" + versionNumber + "/" + fileName;
+                    int ls = fileName.indexOf("/");
+                    if (ls >- 1) {
+                        fileName = fileName.substring(ls + 1);
                     }
-                    //System.out.println("fileName:"+fileName);
                     //Solo copia archivos de versiones anteriores
-                    if (s.indexOf(resource.getWorkPath() + "/" + versionNumber) == -1)
-                    {
+                    if (s.indexOf(resource.getWorkPath() + "/" + versionNumber) == -1) {
                         SWBUtils.IO.copy(s, directoryToCreate + "/" + fileName, false, "", "");
                     }
-                    i=textToSave.indexOf("<workpath/>",i+11);
+                    i = textToSave.indexOf("<workpath/>", i + 11);
                 }
 
                 writer.write(textToSave);
@@ -696,7 +684,6 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         }
 
         filename = fUpload.getFileName("NewFile");
-        System.out.println("\n\nNombre del archivo cargado: " + filename + "\n\nhiddenPath: " + hiddenPath);
         filename = filename.replace('\\', '/');
         int i = filename.lastIndexOf("/");
         String strAttaches = fUpload.FindAttaches("NewFile");
@@ -829,7 +816,38 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                 contentRead = new StringBuilder(1024);
                 String lineRead = in.readLine();
                 while (lineRead != null) {
-                    contentRead.append(lineRead);
+                    StringBuilder sbMod = null;
+                    //Se busca cada archivo asociado en el contenido del HTML
+                    sbMod = new StringBuilder(512);
+                    for (int i = 0; i < filesAttached.length; i++) {
+                        String attachment = filesAttached[i];
+                        int index = 0;
+
+                        //Solo se modifican las rutas de los archivos que se encontraban
+                        //en la misma carpeta que el archivo HTML
+                        if (attachment.indexOf('/') == -1) {
+                            while (lineRead.indexOf(attachment, index) > -1) {
+                                int indexFound = lineRead.indexOf(attachment, index);
+                                char charBefore = lineRead.charAt(indexFound - 1);
+
+                                //Se agrega la ruta de la carpeta tmp si el archivo asociado estaba almacenado en la misma carpeta que el HTML
+                                if (charBefore == '\"' || charBefore == '=' || charBefore == '\'') {
+                                    sbMod.append(lineRead.substring(index, indexFound));
+                                    sbMod.append(pathToAdd);
+                                    sbMod.append("/");
+                                    sbMod.append(attachment);
+                                    sbMod.append(lineRead.substring(indexFound + attachment.length(), lineRead.length()));
+                                }
+                                index = indexFound + attachment.length();
+                            }
+                        }
+                    }
+                    if (sbMod != null && sbMod.length() > 0) {
+                        contentRead.append(sbMod);
+                    } else {
+                        contentRead.append(lineRead);
+                    }
+                    
                     contentRead.append("\n");
                     lineRead = in.readLine();
                 }
@@ -844,43 +862,6 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
             }
             if (failure) {
                 return;
-            }
-
-            String fileContent = contentRead.toString();
-            StringBuilder sbMod = null;
-
-            //Se busca cada archivo asociado en el contenido del HTML
-            for (int i = 0; i < filesAttached.length; i++) {
-                sbMod = new StringBuilder(1024);
-                String attachment = filesAttached[i];
-                int index = 0;
-
-                //Solo se modifican las rutas de los archivos que se encontraban
-                //en la misma carpeta que el archivo HTML
-                if (attachment.indexOf('/') == -1) {
-                    while (fileContent.indexOf(attachment, index) > -1) {
-                        int indexFound = fileContent.indexOf(attachment, index);
-                        char charBefore = fileContent.charAt(indexFound - 1);
-
-                        //Se agrega la ruta de la carpeta tmp si el archivo asociado estaba almacenado en la misma carpeta que el HTML
-                        if (charBefore == '\"' || charBefore == '=' || charBefore == '\'') {
-                            sbMod.append(fileContent.substring(index, indexFound));
-                            sbMod.append(pathToAdd);
-                            sbMod.append("/");
-                            sbMod.append(attachment);
-                            sbMod.append(fileContent.substring(indexFound + attachment.length(), fileContent.length()));
-                        }
-                        index = indexFound + attachment.length();
-                    }
-                    if (sbMod.length() > 0) {
-                        fileContent = sbMod.toString();
-                    }
-                }
-            }
-
-            //Si se modifico el contenido del archivo, los cambios están en sbMod:
-            if (sbMod.length() > 1) {
-                contentRead = sbMod;
             }
 
             //Se escribe el nuevo contenido del archivo index.html en la carpeta tmp
@@ -909,7 +890,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
             HttpServletResponse response, SWBParamRequest paramRequest)
             throws IOException {
 
-        StringBuffer output = new StringBuffer(800);
+        StringBuilder output = new StringBuilder(512);
         SWBResourceURL url = paramRequest.getRenderUrl();
         url.setCallMethod(url.Call_DIRECT);
         url.setMode("uploadNewVersion");
@@ -1028,14 +1009,14 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         output.append("\n	GetE( 'divUpload' ).style.display  = 'none' ;");
         output.append("\n	return true ;");
         output.append("\n}");
-        output.append("\n        function fillHiddenPath(sibiling) { ");
+        output.append("\n        function fillHiddenPath(sibling) { ");
         output.append("\n          var localName = document.frmUpload.NewFile.value; ");
         output.append("\n          if (localName.indexOf('fakepath') > 1) { ");
-        output.append("\n              localName = sibiling.previousSibling.value; ");
+        output.append("\n              localName = sibling.previousSibling.value; ");
         output.append("\n          } ");
-        output.append("\n          alert('Archivo seleccionado: ' + localName + ' por Id: ' + document.getElementById('txtUploadFile').value);  ");
+//        output.append("\n          alert('Archivo seleccionado: ' + localName + ' por Id: ' + document.getElementById('txtUploadFile').value);  ");
         output.append("\n          document.frmUpload.hiddenPath.value = localName.substring(0, localName.lastIndexOf(\"\\\\\") + 1);");
-        output.append("\n          alert('Ruta local: ' + document.frmUpload.hiddenPath.value);  ");
+//        output.append("\n          alert('Ruta local: ' + document.frmUpload.hiddenPath.value);  ");
         output.append("\n        } ");
         output.append("\n    function isOk() {");
         output.append("\n	     if  (Ok()) {");
@@ -1054,7 +1035,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         output.append("\n        <form id=\"frmUpload\" name=\"frmUpload\" method=\"post\" enctype=\"multipart/form-data\" onsubmit=\"Ok();\" ");
         output.append("\n            action=\"" + url.toString() + "\">");
         output.append("\n            <span fcklang=\"DlgLnkUpload\">Upload</span><br />");
-        output.append("\n            <input id=\"txtUploadFile\" style=\"width: 100%\" type=\"file\" size=\"40\" name=\"NewFile\" onchange=\"fillHiddenPath(document.getElementById('hiddenPath'));\" /><br />");
+        output.append("\n            <input id=\"txtUploadFile\" style=\"width: 100%\" type=\"file\" size=\"40\" name=\"NewFile\" onchange=\"fillHiddenPath(this.nextSibling);\" /><br />");
         output.append("\n            <input id=\"hiddenPath\" type=\"hidden\" name=\"hiddenPath\" />");
         output.append("\n            <input id=\"hiddennumversion\" type=\"hidden\" name=\"numversion\" value=\"" + numversion + "\" />");
         output.append("\n            <br />");
@@ -1079,8 +1060,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
      * @return el objeto VersionInfo que contiene la informaci&oacute;n de la
      * versi&oacute;n del objeto recibido.
      */
-    private VersionInfo findVersion(int versionNumber)
-    {
+    private VersionInfo findVersion(int versionNumber) {
         VersionInfo ver = getLastVersion();
         if (null != ver) {
             while (ver.getVersionNumber() != versionNumber) { //
@@ -1131,9 +1111,5 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         }
         return super.windowSupport(request, paramRequest);
     }
-
-
-
-
 
 }
