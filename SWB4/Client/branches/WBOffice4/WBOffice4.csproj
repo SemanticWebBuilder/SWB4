@@ -1,0 +1,643 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{32949DA9-CCC0-4A0B-BE39-065FB814D77F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WBOffice4</RootNamespace>
+    <AssemblyName>WBOffice4</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.5.452, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ZipLibrary\net-20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.TeamSystem.Data.UnitTesting, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\EditableListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ICellEditor.cs" />
+    <Compile Include="Forms\FormAddCategory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormAddCategory.Designer.cs">
+      <DependentUpon>FormAddCategory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormContentInformation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormContentInformation.Designer.cs">
+      <DependentUpon>FormContentInformation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormCreatePage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormCreatePage.Designer.cs">
+      <DependentUpon>FormCreatePage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormPreview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormPreview.Designer.cs">
+      <DependentUpon>FormPreview.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormPublishcontentToPage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormPublishcontentToPage.Designer.cs">
+      <DependentUpon>FormPublishcontentToPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormUpdateContent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormUpdateContent.Designer.cs">
+      <DependentUpon>FormUpdateContent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Interfaces\CategoryInfo.cs" />
+    <Compile Include="Interfaces\ContentInfo.cs" />
+    <Compile Include="Interfaces\ContentType.cs" />
+    <Compile Include="Interfaces\IOfficeApplication.cs" />
+    <Compile Include="Interfaces\IOfficeDocument.cs" />
+    <Compile Include="Interfaces\ResourceInfo.cs" />
+    <Compile Include="Interfaces\PropertyInfo.cs" />
+    <Compile Include="Interfaces\VersionInfo.cs" />
+    <Compile Include="Interfaces\WebPageInfo.cs" />
+    <Compile Include="Interfaces\WebSiteInfo.cs" />
+    <Compile Include="MenuListener.cs" />
+    <Compile Include="RtlAwareMessageBox.cs" />
+    <Compile Include="Steps\SelectTitle.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\SelectTitle.Designer.cs">
+      <DependentUpon>SelectTitle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Steps\SelectVersionToPublish.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\SelectVersionToPublish.Designer.cs">
+      <DependentUpon>SelectVersionToPublish.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SWBConfiguration.cs" />
+    <Compile Include="SWBURIConfiguration.cs" />
+    <Compile Include="Forms\AboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AboutBox.Designer.cs">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormChangePassword.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormChangePassword.Designer.cs">
+      <DependentUpon>FormChangePassword.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormConfigurationProxy.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormConfigurationProxy.Designer.cs">
+      <DependentUpon>FormConfigurationProxy.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormLogin.Designer.cs">
+      <DependentUpon>FormLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormOpenContent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormOpenContent.Designer.cs">
+      <DependentUpon>FormOpenContent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Steps\TitleAndDescription.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\TitleAndDescription.Designer.cs">
+      <DependentUpon>TitleAndDescription.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OfficeApplication.cs" />
+    <Compile Include="Steps\SelectSite.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\SelectSite.Designer.cs">
+      <DependentUpon>SelectSite.cs</DependentUpon>
+    </Compile>
+    <Compile Include="URIConfigurationList.cs" />
+    <Compile Include="Utils\FileUtil.cs" />
+    <Compile Include="WBConfiguration.cs" />
+    <Compile Include="DocumentType.cs" />
+    <Compile Include="OfficeDocument.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UserInfo.cs" />
+    <Compile Include="WBAlertException.cs" />
+    <Compile Include="WBException.cs" />
+    <Compile Include="WBOfficeError.cs" />
+    <Compile Include="Forms\FormSaveContent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSaveContent.Designer.cs">
+      <DependentUpon>FormSaveContent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Steps\SelectCategory.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\SelectCategory.Designer.cs">
+      <DependentUpon>SelectCategory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Steps\SummaryNew.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\SummaryNew.Designer.cs">
+      <DependentUpon>SummaryNew.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Steps\Search.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\Search.Designer.cs">
+      <DependentUpon>Search.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Steps\SelectVersionToOpen.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\SelectVersionToOpen.Designer.cs">
+      <DependentUpon>SelectVersionToOpen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Steps\SelectDirectory.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\SelectDirectory.Designer.cs">
+      <DependentUpon>SelectDirectory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ZipFile.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TSWizard\TSWizards.csproj">
+      <Project>{DCF08909-AC8C-4E8D-A868-F54D5B888E43}</Project>
+      <Name>TSWizards</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XmlRpcLibrary\XmlRpcLibrary.csproj">
+      <Project>{69135094-2A1F-4205-8A76-58D808E0D115}</Project>
+      <Name>XmlRpcLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\EditableListView.resx">
+      <DependentUpon>EditableListView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PropertyEditor.resx">
+      <DependentUpon>PropertyEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SelectWebPage.resx">
+      <DependentUpon>SelectWebPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TitleEditor.resx">
+      <DependentUpon>TitleEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AboutBox.resx">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormAddCategory.resx">
+      <DependentUpon>FormAddCategory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormAddElement.resx">
+      <DependentUpon>FormAddElement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormAddLink.resx">
+      <DependentUpon>FormAddLink.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormAuthorize.resx">
+      <DependentUpon>FormAuthorize.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormCalendarList.resx">
+      <DependentUpon>FormCalendarList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormChangePassword.resx">
+      <DependentUpon>FormChangePassword.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormConfigurationProxy.resx">
+      <DependentUpon>FormConfigurationProxy.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormContentInformation.resx">
+      <DependentUpon>FormContentInformation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormCreatePage.resx">
+      <DependentUpon>FormCreatePage.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormDocumentsToAuthorize.resx">
+      <DependentUpon>FormDocumentsToAuthorize.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEditPorlet.resx">
+      <DependentUpon>FormEditPorlet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEditRepository.resx">
+      <DependentUpon>FormEditRepository.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormInsertLinkToDocuentRepository.resx">
+      <DependentUpon>FormInsertLinkToDocuentRepository.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormLogin.resx">
+      <DependentUpon>FormLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormMoveContent.resx">
+      <DependentUpon>FormMoveContent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormOpenContent.resx">
+      <DependentUpon>FormOpenContent.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormPreview.resx">
+      <DependentUpon>FormPreview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormPublishcontentToPage.resx">
+      <DependentUpon>FormPublishcontentToPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormSelectPageToOpen.resx">
+      <DependentUpon>FormSelectPageToOpen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormSendToAutorize.resx">
+      <DependentUpon>FormSendToAutorize.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormUpdateContent.en.resx">
+      <DependentUpon>FormUpdateContent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormUpdateContent.resx">
+      <DependentUpon>FormUpdateContent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormPeriodicidad.en.resx">
+      <DependentUpon>FormPeriodicidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormPeriodicidad.resx">
+      <DependentUpon>FormPeriodicidad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmDetalleDoc.en.resx">
+      <DependentUpon>FrmDetalleDoc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmDetalleDoc.resx">
+      <DependentUpon>FrmDetalleDoc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MessageBoxWB4.en.resx">
+      <DependentUpon>MessageBoxWB4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MessageBoxWB4.resx">
+      <DependentUpon>MessageBoxWB4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Steps\ContentProperties.resx">
+      <DependentUpon>ContentProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Steps\SelectTitle.resx">
+      <DependentUpon>SelectTitle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Steps\SelectVersionToPublish.resx">
+      <DependentUpon>SelectVersionToPublish.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Steps\SelectWebPageID.resx">
+      <DependentUpon>SelectWebPageID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Steps\TitleAndDecriptionCratePage.resx">
+      <DependentUpon>TitleAndDecriptionCratePage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Steps\TitleAndDescription.resx">
+      <DependentUpon>TitleAndDescription.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormSaveContent.resx">
+      <DependentUpon>FormSaveContent.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Steps\SelectCategory.resx">
+      <DependentUpon>SelectCategory.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Steps\SummaryNew.resx">
+      <DependentUpon>SummaryNew.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Steps\SelectSite.resx">
+      <DependentUpon>SelectSite.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Steps\Search.resx">
+      <DependentUpon>Search.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Steps\SelectVersionToOpen.resx">
+      <DependentUpon>SelectVersionToOpen.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Steps\SelectDirectory.resx">
+      <DependentUpon>SelectDirectory.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Steps\ViewProperties.resx">
+      <DependentUpon>ViewProperties.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Shell32">
+      <Guid>{50A7E9B0-70EF-11D1-B75A-00A0C90564FE}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delete.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\splash.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\page.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\see.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\SelectWebPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SelectWebPage.Designer.cs">
+      <DependentUpon>SelectWebPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TitleEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\EditableListView.Designer.cs" />
+    <Compile Include="Controls\PropertyEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\PropertyEditor.Designer.cs">
+      <DependentUpon>PropertyEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CalendarItem.cs" />
+    <Compile Include="Forms\ElementListView.cs">
+    </Compile>
+    <Compile Include="Forms\FlowItem.cs" />
+    <Compile Include="Forms\FormAddElement.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormAddElement.Designer.cs">
+      <DependentUpon>FormAddElement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormAddLink.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormAddLink.Designer.cs">
+      <DependentUpon>FormAddLink.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormAuthorize.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormAuthorize.Designer.cs">
+      <DependentUpon>FormAuthorize.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormCalendarList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormCalendarList.Designer.cs">
+      <DependentUpon>FormCalendarList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormDocumentsToAuthorize.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormDocumentsToAuthorize.Designer.cs">
+      <DependentUpon>FormDocumentsToAuthorize.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormEditPorlet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEditPorlet.Designer.cs">
+      <DependentUpon>FormEditPorlet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormEditRepository.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEditRepository.Designer.cs">
+      <DependentUpon>FormEditRepository.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormInsertLinkToDocuentRepository.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormInsertLinkToDocuentRepository.Designer.cs">
+      <DependentUpon>FormInsertLinkToDocuentRepository.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormMoveContent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormMoveContent.Designer.cs">
+      <DependentUpon>FormMoveContent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormPeriodicidad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSelectPageToOpen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSelectPageToOpen.Designer.cs">
+      <DependentUpon>FormSelectPageToOpen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormSendToAutorize.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSendToAutorize.Designer.cs">
+      <DependentUpon>FormSendToAutorize.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FrmDetalleDoc.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MessageBoxWB4.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SemanticFileItem.cs" />
+    <Compile Include="Forms\SemanticFolderNode.cs" />
+    <Compile Include="Forms\SemanticRepositoryNode.cs" />
+    <Compile Include="Interfaces\CalendarInfo.cs" />
+    <Compile Include="Interfaces\ElementInfo.cs" />
+    <Compile Include="Interfaces\FlowContentInformation.cs" />
+    <Compile Include="Interfaces\LanguageInfo.cs" />
+    <Compile Include="Interfaces\ObjecInfo.cs" />
+    <Compile Include="Interfaces\PageInfo.cs" />
+    <Compile Include="Interfaces\PFlow.cs" />
+    <Compile Include="Interfaces\PropertyObjectInfo.cs" />
+    <Compile Include="Interfaces\RepositoryInfo.cs" />
+    <Compile Include="Interfaces\SemanticFileRepository.cs" />
+    <Compile Include="Interfaces\SemanticFolderRepository.cs" />
+    <Compile Include="Interfaces\SemanticRepository.cs" />
+    <Compile Include="Interfaces\SiteInfo.cs" />
+    <Compile Include="Interfaces\ISmartTag.cs" />
+    <Compile Include="Interfaces\Value.cs" />
+    <Compile Include="Controls\PropertyItem.cs" />
+    <Compile Include="Proxy\SmartTagProxy.cs" />
+    <Compile Include="Steps\CategoryNode.cs" />
+    <Compile Include="Steps\ContentProperties.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\ContentProperties.Designer.cs">
+      <DependentUpon>ContentProperties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Steps\DatabaseSetup.cs" />
+    <Compile Include="Resources\DummyNode.cs" />
+    <Compile Include="Steps\HomeWebPageTreeNode.cs" />
+    <Compile Include="Steps\LanguageListItem.cs" />
+    <Compile Include="Steps\RepositoryNode.cs" />
+    <Compile Include="Steps\SelectSiteCreatePage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\SelectSiteInsertLink.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\SelectSiteMoveContent.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\SelectSitePublish.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\SelectSiteToOpen.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\SelectWebPageID.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\SelectWebPageID.Designer.cs">
+      <DependentUpon>SelectWebPageID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Steps\TitleAndDecriptionCratePage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\TitleAndDecriptionCratePage.Designer.cs">
+      <DependentUpon>TitleAndDecriptionCratePage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Steps\ViewProperties.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\ViewProperties.Designer.cs">
+      <DependentUpon>ViewProperties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Steps\WebPageTreeNode.cs" />
+    <Compile Include="Steps\WebSiteTreeNode.cs" />
+    <Compile Include="Utils\DatabaseSetup.cs" />
+    <Compile Include="Utils\SBWInstallerEventLog.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Utils\SBWInstallerEventLog.Designer.cs">
+      <DependentUpon>SBWInstallerEventLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\MultivalueEditor.cs" />
+    <Compile Include="Utils\TraceEventLogListener.cs" />
+    <Compile Include="Utils\TypeFactory.cs" />
+    <None Include="Resources\edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\envpaga.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delete1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\splash1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_agregarpag32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icono_autorizar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icono_autorizar1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_rechazar.png" />
+    <None Include="Steps\app.config" />
+    <None Include="Utils\app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

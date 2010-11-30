@@ -1,0 +1,283 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1">
+  <asmv1:assemblyIdentity name="WB4ExcelOffice2007.dll" version="1.0.0.0" publicKeyToken="25211cd47655780d" language="neutral" processorArchitecture="msil" type="win32" />
+  <description xmlns="urn:schemas-microsoft-com:asm.v1">WB4ExcelOffice2007 - Excel add-in created with Visual Studio Tools for Office</description>
+  <application />
+  <entryPoint>
+    <co.v1:customHostSpecified />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!--
+          UAC Manifest Options
+          If you want to change the Windows User Account Control level replace the 
+          requestedExecutionLevel node with one of the following.
+
+        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+         If you want to utilize File and Registry Virtualization for backward 
+         compatibility then delete the requestedExecutionLevel node.
+    -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="2.0.50727.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Office.Interop.Excel" version="12.0.0.0" publicKeyToken="71E9BCE111E9429C" language="neutral" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Office.Interop.PowerPoint" version="12.0.0.0" publicKeyToken="71E9BCE111E9429C" language="neutral" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Office.Interop.SmartTag" version="12.0.0.0" publicKeyToken="71E9BCE111E9429C" language="neutral" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Office.Interop.Word" version="12.0.0.0" publicKeyToken="71E9BCE111E9429C" language="neutral" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Office.Tools.Common.v9.0" version="9.0.0.0" publicKeyToken="B03F5F7F11D50A3A" language="neutral" processorArchitecture="msil" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Office.Tools.v9.0" version="9.0.0.0" publicKeyToken="B03F5F7F11D50A3A" language="neutral" processorArchitecture="msil" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.SqlServer.BatchParser" version="10.0.0.0" publicKeyToken="89845DCD8080CC91" language="neutral" processorArchitecture="x86" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.SqlServer.ConnectionInfo" version="10.0.0.0" publicKeyToken="89845DCD8080CC91" language="neutral" processorArchitecture="msil" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.SqlServer.Dmf" version="10.0.0.0" publicKeyToken="89845DCD8080CC91" language="neutral" processorArchitecture="msil" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.SqlServer.Management.Sdk.Sfc" version="10.0.0.0" publicKeyToken="89845DCD8080CC91" language="neutral" processorArchitecture="msil" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.SqlServer.ServiceBrokerEnum" version="10.0.0.0" publicKeyToken="89845DCD8080CC91" language="neutral" processorArchitecture="msil" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.SqlServer.Smo" version="10.0.0.0" publicKeyToken="89845DCD8080CC91" language="neutral" processorArchitecture="msil" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.SqlServer.SqlClrProvider" version="10.0.0.0" publicKeyToken="89845DCD8080CC91" language="neutral" processorArchitecture="msil" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.SqlServer.SqlEnum" version="10.0.0.0" publicKeyToken="89845DCD8080CC91" language="neutral" processorArchitecture="msil" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Vbe.Interop" version="12.0.0.0" publicKeyToken="71E9BCE111E9429C" language="neutral" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.VisualStudio.QualityTools.UnitTestFramework" version="9.0.0.0" publicKeyToken="B03F5F7F11D50A3A" language="neutral" processorArchitecture="msil" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.VisualStudio.TeamSystem.Data" version="9.0.0.0" publicKeyToken="B03F5F7F11D50A3A" language="neutral" processorArchitecture="msil" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.VisualStudio.TeamSystem.Data.UnitTesting" version="9.0.0.0" publicKeyToken="B03F5F7F11D50A3A" language="neutral" processorArchitecture="msil" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.VisualStudio.Tools.Applications.Hosting.v9.0" version="9.0.0.0" publicKeyToken="B03F5F7F11D50A3A" language="neutral" processorArchitecture="msil" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.VisualStudio.Tools.Applications.Runtime.v9.0" version="9.0.0.0" publicKeyToken="B03F5F7F11D50A3A" language="neutral" processorArchitecture="msil" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.VisualStudio.Tools.Applications.ServerDocument.v9.0" version="9.0.0.0" publicKeyToken="B03F5F7F11D50A3A" language="neutral" processorArchitecture="msil" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="office" version="12.0.0.0" publicKeyToken="71E9BCE111E9429C" language="neutral" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="stdole" version="7.0.3300.0" publicKeyToken="B03F5F7F11D50A3A" language="neutral" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="System.Core" version="3.5.0.0" publicKeyToken="b77a5c561934e089" language="neutral" processorArchitecture="msil" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="WindowsBase" version="3.0.0.0" publicKeyToken="31bf3856ad364e35" language="neutral" processorArchitecture="msil" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ICSharpCode.SharpZipLib.dll" size="192512">
+      <assemblyIdentity name="ICSharpCode.SharpZipLib" version="0.85.5.452" publicKeyToken="1B03E6ACF1164F73" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+        <dsig:DigestValue>1pnltGoU6k18BS5Bk/hfCk8rKes=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="TSWizards.dll" size="102400">
+      <assemblyIdentity name="TSWizards" version="1.1.0.0" publicKeyToken="8E33D70370D413DB" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+        <dsig:DigestValue>doJ8bmc1TmdHcyCc4P2Bvs4mFrw=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="es\TSWizards.resources.dll" size="4096">
+      <assemblyIdentity name="TSWizards.resources" version="1.1.0.0" publicKeyToken="8E33D70370D413DB" language="es" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+        <dsig:DigestValue>P9tBQG9IabzN3pNtOb5GpGpHKUQ=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WB4ExcelOffice2007.dll" size="39936">
+      <assemblyIdentity name="WB4ExcelOffice2007" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+        <dsig:DigestValue>w1BnAtb15bAD782RSzpZVzdShW8=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WB4Office2007Library.dll" size="27136">
+      <assemblyIdentity name="WB4Office2007Library" version="4.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+        <dsig:DigestValue>n2hN+WvEGjLkaYG2jnEyWeuWeAg=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WBOffice4.dll" size="676864">
+      <assemblyIdentity name="WBOffice4" version="4.0.1.4" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+        <dsig:DigestValue>wnGa8hYGRqmhSMfmP9A0CL0+UE4=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="en\WBOffice4.resources.dll" size="32768">
+      <assemblyIdentity name="WBOffice4.resources" version="4.0.1.4" language="en" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+        <dsig:DigestValue>bMwXL3+yJv3s+zXR+6avUHQDEo8=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="XmlRpcLibrary.dll" size="37888">
+      <assemblyIdentity name="XmlRpcLibrary" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+        <dsig:DigestValue>Ykf16M7xNhNJ5dBZI1WbNlTpvFg=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <vstav2:addIn xmlns:vstav2="urn:schemas-microsoft-com:vsta.v2">
+    <vstav2:entryPoints>
+      <vstav2:entryPoint class="WB4ExcelOffice2007.ThisAddIn">
+        <assemblyIdentity name="WB4ExcelOffice2007" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      </vstav2:entryPoint>
+    </vstav2:entryPoints>
+    <vstav2:update enabled="true">
+      <vstav2:expiration maximumAge="7" unit="days" />
+    </vstav2:update>
+    <vstav2:application>
+      <vstov3:customization xmlns:vstov3="urn:schemas-microsoft-com:vsto.v3">
+        <vstov3:appAddIn application="Excel" loadBehavior="3" keyName="WB4ExcelOffice2007">
+          <vstov3:friendlyName>WB4ExcelOffice2007</vstov3:friendlyName>
+          <vstov3:description>WB4ExcelOffice2007 - Excel add-in created with Visual Studio Tools for Office</vstov3:description>
+        </vstov3:appAddIn>
+      </vstov3:customization>
+    </vstav2:application>
+  </vstav2:addIn>
+<publisherIdentity name="CN=FONDO DE INFORMACIÓN Y DOCUMENTACIÓN PARA LA INDUSTRIA INFOTEC, OU=DESARROLLO DE NUEVOS PRODUCTOS Y SERVICIOS, O=FONDO DE INFORMACIÓN Y DOCUMENTACIÓN PARA LA INDUSTRIA INFOTEC, L=Mexico City, S=D.F., C=MX" issuerKeyHash="c5ed935f2b38477e58d357c7ff45c54441e15fbf" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue>bdx/EbMX2einAVMY9W5fr8cq2N0=</DigestValue></Reference></SignedInfo><SignatureValue>bJxtV1KVNe8jslxLZl8oylz1DO9ZSMWvk/E6jwEZdBA4eteJrqnKkS0hj0SQd2bEiLqTW8OqbQmaE8Z9xPQLF7040bybPP2F12hhA5mRFDTCQSaWlhtsvulWy0WEout1OKgwXsHZmHX8dFY2kOyIt5S5/sjzXrdEUrHz+xDuaI0FkpYBxHkanps4o23gEbuu6ZZ5qvAr5TODdTpPNSNHd6cJIPaNAaZgHMMDp9DkD+HVwpLtvq+OOrYulnEWaxu3FJE7Xhtu7SCMgJeV5b5/KbW5xiF2KhDDpV3/AQNzN4PTa92nK1w8iY4vkjRsG5xBtAfp1S/Zb2UyxxABrhEmqw==</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>1BlTHFYp1WzFPC64x68aBRBeCxjjeJT0+aa4E3wuDpe0YWFAZ5HCF2LXmjcA9w07+Mq5QYM5bssBQW/LoMfuAPd6CeZWlpFcOSWA4VgkFgTAT/p6HI1QOZGoUvOlfhH325w8R5eENQhFHV9kncAyKvqGbXEDhW5sN1ryuLRCxPDeASHJby0BloG+/BTNoRceCjCR7LlqIgeEkpwQuFT6prspokcNRdIpMVmeukwyDOASQKWpeB3m1t96d5e+DaroYFvR8f4yqkMEb8U78flfphHxt5jn8Yy1z4QHNVZCEV7yYb+En9NptsL6IjADcDPjjNoyRoO5NKAIQEgg1HFFzQ==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="ddd82ac7af5f6ef5185301a7e8d917b3117fdc6d" Description="" Url=""><as:assemblyIdentity name="WB4ExcelOffice2007.dll" version="1.0.0.0" publicKeyToken="25211cd47655780d" language="neutral" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=FONDO DE INFORMACIÓN Y DOCUMENTACIÓN PARA LA INDUSTRIA INFOTEC, OU=DESARROLLO DE NUEVOS PRODUCTOS Y SERVICIOS, O=FONDO DE INFORMACIÓN Y DOCUMENTACIÓN PARA LA INDUSTRIA INFOTEC, L=Mexico City, S=D.F., C=MX</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue>nCRy02RonLiZgx7PrXTBejxgmZU=</DigestValue></Reference></SignedInfo><SignatureValue>mzKnkSLPsspBeGP+YmkuQyWinuHb1sxv7e+T0JL4IepnP234w9muquUFcP8MzGpD2xh22J52jKYYa9EJ92opKrqKUmNGvjOL7MVeeTAWP8ekb2Eq2FU5upkhNc/YsQ0jm7AjMf88lA9rm8BeBKe1cjaKHpUmT44eqQqRRSrPW4sO0k0PoFns1VcuhrS9ZU2ofz6gT/yp/2or/HTLJdF7DzLIBH+tdy9T5uuWTm26J5n4cErNZ3XHa5KPZazYU3NjKmb/JOmqjsyRNZNZRiom81hvugxkWRZM1nhKUlK4WnlgHt6a9MMcybCVSSW0Wz2klJztApwbUCwzuWj66NtevA==</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>1BlTHFYp1WzFPC64x68aBRBeCxjjeJT0+aa4E3wuDpe0YWFAZ5HCF2LXmjcA9w07+Mq5QYM5bssBQW/LoMfuAPd6CeZWlpFcOSWA4VgkFgTAT/p6HI1QOZGoUvOlfhH325w8R5eENQhFHV9kncAyKvqGbXEDhW5sN1ryuLRCxPDeASHJby0BloG+/BTNoRceCjCR7LlqIgeEkpwQuFT6prspokcNRdIpMVmeukwyDOASQKWpeB3m1t96d5e+DaroYFvR8f4yqkMEb8U78flfphHxt5jn8Yy1z4QHNVZCEV7yYb+En9NptsL6IjADcDPjjNoyRoO5NKAIQEgg1HFFzQ==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIENTCCA56gAwIBAgIQFzs/pxKY25SQm7WPVrOM8DANBgkqhkiG9w0BAQUFADBVMQswCQYDVQQGEwJaQTElMCMGA1UEChMcVGhhd3RlIENvbnN1bHRpbmcgKFB0eSkgTHRkLjEfMB0GA1UEAxMWVGhhd3RlIENvZGUgU2lnbmluZyBDQTAeFw0wODA4MTkwMDAwMDBaFw0wOTA4MTkyMzU5NTlaMIH9MQswCQYDVQQGEwJNWDENMAsGA1UECAwERC5GLjEUMBIGA1UEBwwLTWV4aWNvIENpdHkxSTBHBgNVBAoMQEZPTkRPIERFIElORk9STUFDScOTTiBZIERPQ1VNRU5UQUNJw5NOIFBBUkEgTEEgSU5EVVNUUklBIElORk9URUMxMzAxBgNVBAsMKkRFU0FSUk9MTE8gREUgTlVFVk9TIFBST0RVQ1RPUyBZIFNFUlZJQ0lPUzFJMEcGA1UEAwxARk9ORE8gREUgSU5GT1JNQUNJw5NOIFkgRE9DVU1FTlRBQ0nDk04gUEFSQSBMQSBJTkRVU1RSSUEgSU5GT1RFQzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANQZUxxWKdVsxTwuuMevGgUQXgsY43iU9PmmuBN8Lg6XtGFhQGeRwhdi15o3APcNO/jKuUGDOW7LAUFvy6DH7gD3egnmVpaRXDklgOFYJBYEwE/6ehyNUDmRqFLzpX4R99ucPEeXhDUIRR1fZJ3AMir6hm1xA4VubDda8ri0QsTw3gEhyW8tAZaBvvwUzaEXHgowkey5aiIHhJKcELhU+qa7KaJHDUXSKTFZnrpMMgzgEkClqXgd5tbfeneXvg2q6GBb0fH+MqpDBG/FO/H5X6YR8beY5/GMtc+EBzVWQhFe8mG/hJ/TabbC+iIwA3Az44zaMkaDuTSgCEBIINRxRc0CAwEAAaOB2DCB1TAMBgNVHRMBAf8EAjAAMD4GA1UdHwQ3MDUwM6AxoC+GLWh0dHA6Ly9jcmwudGhhd3RlLmNvbS9UaGF3dGVDb2RlU2lnbmluZ0NBLmNybDAfBgNVHSUEGDAWBggrBgEFBQcDAwYKKwYBBAGCNwIBFjAdBgNVHQQEFjAUMA4wDAYKKwYBBAGCNwIBFgMCB4AwMgYIKwYBBQUHAQEEJjAkMCIGCCsGAQUFBzABhhZodHRwOi8vb2NzcC50aGF3dGUuY29tMBEGCWCGSAGG+EIBAQQEAwIEEDANBgkqhkiG9w0BAQUFAAOBgQAb0npN13edo8eS/YL9fpt7vTbXtqf5fQ07ZQ8Zk+RwfhxBa35bxpiHHcJu4WLnsuSHIPfBXoqwTb5GDI0A+8JtU+V/X8yWSJBjm/l0PYsAbqklJcLLA9Ztd4qeaKtL8v5a42I1QonmMR5Hg9F+1jCDBpv5kNKcTAv905qUh6JF8Q==</X509Certificate><X509Certificate>MIIDTjCCAregAwIBAgIBCjANBgkqhkiG9w0BAQUFADCBzjELMAkGA1UEBhMCWkExFTATBgNVBAgTDFdlc3Rlcm4gQ2FwZTESMBAGA1UEBxMJQ2FwZSBUb3duMR0wGwYDVQQKExRUaGF3dGUgQ29uc3VsdGluZyBjYzEoMCYGA1UECxMfQ2VydGlmaWNhdGlvbiBTZXJ2aWNlcyBEaXZpc2lvbjEhMB8GA1UEAxMYVGhhd3RlIFByZW1pdW0gU2VydmVyIENBMSgwJgYJKoZIhvcNAQkBFhlwcmVtaXVtLXNlcnZlckB0aGF3dGUuY29tMB4XDTAzMDgwNjAwMDAwMFoXDTEzMDgwNTIzNTk1OVowVTELMAkGA1UEBhMCWkExJTAjBgNVBAoTHFRoYXd0ZSBDb25zdWx0aW5nIChQdHkpIEx0ZC4xHzAdBgNVBAMTFlRoYXd0ZSBDb2RlIFNpZ25pbmcgQ0EwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAMa4uSdgrwvjkWll236N7ZHmqvG+1e3+bdQsf9Fwd/smmVe03T8wuNwh6miNgZL8LkuRNYQg8tpKurT85tqI8iDFIZIJR5WgCRymeb6xTB388YpuVNJpofFMkzpB/n3UZHtjRfdgYB0xHaTp0w+L+24mJLOo/+XlkNS0wtxQYK5ZAgMBAAGjgbMwgbAwEgYDVR0TAQH/BAgwBgEB/wIBADBABgNVHR8EOTA3MDWgM6Axhi9odHRwOi8vY3JsLnRoYXd0ZS5jb20vVGhhd3RlUHJlbWl1bVNlcnZlckNBLmNybDAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwMwDgYDVR0PAQH/BAQDAgEGMCkGA1UdEQQiMCCkHjAcMRowGAYDVQQDExFQcml2YXRlTGFiZWwyLTE0NDANBgkqhkiG9w0BAQUFAAOBgQB2spzuE58b9i00kpRFczTcjmsuXPxMfYnrw2jx15kPLh0XyLUWi77NigUG8hlJOgNbBckgjm1S4XaBoMNliiJn5BxTUzdGv7zXL+t7ntAURWxAIQjiXXV2ZjAe9N+Cii+986IMvx3bnxSimnI3TbB3SOhKPwnOVRks7+YHJOGv7A==</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>

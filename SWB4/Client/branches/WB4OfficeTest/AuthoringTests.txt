@@ -1,0 +1,160 @@
+﻿==========================================================================
+    Visual Studio Team System: Información general sobre la creación y 
+    ejecución de pruebas    
+==========================================================================
+
+Esta información general describe las características para la creación y 
+ejecución de pruebas en Visual Studio Team System y Visual Studio Team Edition 
+for Software Testers.
+
+Abrir las pruebas
+-----------------
+Para abrir una prueba, abra un proyecto de prueba o un archivo de metadatos de 
+prueba (un archivo con extensión .vsmdi) que contenga la definición de la 
+prueba. Puede encontrar proyectos de prueba y archivos de metadatos en el 
+Explorador de soluciones.
+
+Ver pruebas
+-----------
+Para ver qué pruebas están disponibles, abra la ventana Vista de pruebas. O 
+bien, si ha instalado Team Edition for Software Testers, también puede abrir
+la ventana Editor de la lista de pruebas para ver las pruebas.
+
+Para abrir la ventana Vista de pruebas, haga clic en el menú Prueba, elija 
+Windows y, a continuación, haga clic en Vista de pruebas. Para abrir la ventana 
+Editor de la lista de pruebas (si ha instalado Team Edition for Software 
+Testers), haga clic en Prueba, elija Windows y, a continuación, haga clic en 
+Editor de la lista de pruebas.
+
+Ejecutar pruebas
+----------------
+Puede ejecutar pruebas desde la ventana Vista de pruebas y desde la ventana 
+Editor de la lista de pruebas.
+Consulte Ver pruebas para obtener información sobre cómo abrir estas ventanas. 
+Para ejecutar una o varias pruebas mostradas en la ventana Vista de pruebas, 
+seleccione primero las pruebas de dicha ventana; para seleccionar varias 
+pruebas, presione las teclas MAYÚS o CTRL mientras hace clic en las mismas. A 
+continuación haga clic en el botón Ejecutar pruebas en la barra de herramientas 
+de la ventana Vista de pruebas.
+
+Si ha instalado Visual Studio Team Edition for Software Testers, también puede
+utilizar la ventana Editor de la lista de pruebas para ejecutar las pruebas. 
+Para ejecutar pruebas en el Editor de la lista de pruebas, active la casilla 
+situada junto a cada prueba que desee ejecutar. Después haga clic en el botón 
+Ejecutar pruebas en la barra de herramientas de la ventana Editor de la lista 
+de pruebas.
+
+Ver los resultados de la prueba
+-------------------------------
+Cuando ejecuta una prueba o una serie de pruebas, los resultados de la 
+ejecución de la prueba se muestran en la ventana Resultados de pruebas. Cada 
+una de las pruebas de la ejecución se muestra en una línea distinta para que 
+pueda ver su estado. La ventana contiene una barra de estado incrustada en la 
+mitad superior de la ventana, que le proporciona información resumida sobre la 
+ejecución de prueba completa.
+
+Para ver más detalles acerca de los resultados de una prueba particular, haga 
+doble clic en la ventana Resultados de pruebas. Se abrirá una ventana en la que 
+se proporciona más información acerca del resultado de la prueba particular, 
+como los mensajes de error específicos devueltos por la prueba.
+
+Cambiar el modo de ejecución de las pruebas
+-------------------------------------------
+Siempre que ejecuta una o varias pruebas, se utiliza una colección de opciones 
+para determinar cómo se ejecutan las mismas. Estas opciones se encuentran en un 
+archivo de “configuración de la ejecución de pruebas”.
+
+A continuación, se incluye un listado parcial de los cambios que puede realizar 
+con un archivo de configuración de la ejecución de pruebas:
+
+ - Cambiar el esquema de nombres para cada ejecución de pruebas.
+ - Cambiar el controlador de pruebas que ejecutan las pruebas para que pueda 
+   ejecutar pruebas en remoto.
+ - Recopilar datos de cobertura del código que se está probando para que pueda 
+   ver qué líneas de código cubren sus pruebas.
+ - Habilitar y deshabilitar la implementación de pruebas. 
+ - Especificar archivos adicionales para implementarlos antes de ejecutar las 
+   pruebas.
+ - Seleccionar un host distinto, ASP.NET, para ejecutar pruebas unitarias de 
+   ASP.NET.
+ - Seleccionar un host diferente, el host de pruebas de Smart Device, para 
+   ejecutar pruebas unitarias de Smart Device.
+ - Establecer varias propiedades para los agentes de pruebas que ejecutan sus 
+   pruebas.
+ - Ejecutar scripts personalizados al inicio y al final de cada ejecución de 
+   pruebas para que pueda configurar el entorno de la prueba según sea 
+   necesario siempre que se ejecuten las pruebas.
+ - Establecer los límites de tiempo para las pruebas y las ejecuciones de 
+   pruebas.
+ - Establecer la combinación de exploradores y el número de veces que se tienen 
+   que repetir las pruebas web en la ejecución de pruebas.
+
+De forma predeterminada, un archivo de configuración de ejecución de pruebas se
+crea cuando crea un proyecto de prueba nuevo. Para realizar cambios en este 
+archivo, haga doble clic en él en el Explorador de soluciones y cambie su 
+configuración. (Los archivos de configuración de la ejecución de pruebas
+tienen la extensión .testrunconfig).
+
+Una solución puede contener varios archivos de configuración de ejecución de
+pruebas. Solamente uno de los archivos, conocido como el archivo de
+configuración de ejecución de pruebas “Activo”, se utiliza para determinar la 
+configuración que utilizan actualmente las ejecuciones de pruebas. Para 
+seleccionar la configuración de ejecución de pruebas activa, haga clic en 
+Seleccionar configuración de ejecución de pruebas activa en el menú Prueba.
+
+-------------------------------------------------------------------------------
+
+Tipos de prueba
+---------------
+En Visual Studio Team Edition for Software Testers, puede crear varios tipos de 
+pruebas diferentes:
+
+Pruebas unitarias: utilice una prueba unitaria para crear una prueba mediante 
+programación en C++, Visual C# o Visual Basic que utilice código fuente. Una 
+prueba unitaria llama a los métodos de una clase, pasando los parámetros 
+adecuados, y comprueba que el valor devuelto es el esperado.
+Hay tres variantes especializadas de pruebas unitarias:
+ - Se crean pruebas unitarias orientadas a datos cuando la configuración 
+   establece que se llame a una prueba unitaria repetidamente para cada fila de 
+   origen de datos. La prueba unitaria utiliza los datos de cada fila como 
+   datos de entrada.
+ - Las pruebas unitarias de ASP.NET son pruebas unitarias que utilizan código 
+   en la aplicación web ASP.NET.
+ - Las pruebas unitarias de Smart Device son pruebas unitarias que se 
+   implementan en un Smart Device o emulador y que, después, ejecuta el host de 
+   pruebas de Smart Device.  
+
+Pruebas web: las pruebas web consisten en una serie ordenada de solicitudes 
+HTTP que se registran en una sesión del explorador mediante Microsoft Internet 
+Explorer. Puede obtener los detalles específicos del informe de pruebas sobre 
+las páginas o sitios solicitados, por ejemplo, si una página particular 
+contiene una cadena específica.
+
+Pruebas de carga: las pruebas de carga se utilizan para encapsular pruebas no 
+manuales, como pruebas unitarias, web y genéricas y, a continuación, generarlas 
+simultáneamente utilizando usuarios virtuales. Al ejecutar estas pruebas bajo 
+carga se generan los resultados de la prueba, incluido el rendimiento y otros 
+contadores, en tablas y gráficos.
+
+Pruebas genéricas: una prueba genérica es un programa existente ajustado para 
+que funcione como una prueba en Visual Studio. Ejemplos de pruebas o programas 
+que puede convertir en pruebas genéricas:
+ - Una prueba existente que utiliza códigos de salida de procesos para 
+   comunicar si se ha pasado o no la prueba. 0 indica que se ha pasado la 
+   prueba y todos los demás valores indican lo contrario.
+ - Un programa general para obtener una funcionalidad específica durante un 
+   escenario de prueba.
+ - Una prueba o programa que utiliza un archivo XML especial (denominado 
+   “archivo de resultados de resumen”), para comunicar los resultados 
+   detallados.
+
+Pruebas manuales: el tipo de prueba manual se utiliza cuando las tareas de las 
+pruebas tiene que llevarlas a cabo un ingeniero de pruebas y no un script 
+automatizado.
+
+Pruebas ordenadas: utilice una prueba ordenada para ejecutar un conjunto de
+pruebas en el orden especificado.
+
+-------------------------------------------------------------------------------
+
+
