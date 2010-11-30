@@ -187,6 +187,7 @@
             // 
             // buttonViewRep
             // 
+            this.buttonViewRep.Image = global::WB4PPTOffice2007.Properties.Resources.see;
             this.buttonViewRep.Label = "Ver repositorio de contenidos";
             this.buttonViewRep.Name = "buttonViewRep";
             this.buttonViewRep.ShowImage = true;
