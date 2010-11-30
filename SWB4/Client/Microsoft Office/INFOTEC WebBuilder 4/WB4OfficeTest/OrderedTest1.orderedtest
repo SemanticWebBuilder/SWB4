@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<OrderedTest name="OrderedTest1" storage="c:\documents and settings\victor.lorenzana\mis documentos\visual studio 2008\projects\infotec webbuilder 4\wb4officetest\orderedtest1.orderedtest" id="87bcdb33-3440-4f54-ba45-fd6d258ff45a" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2006">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<OrderedTest name="OrderedTest1" storage="c:\documents and settings\victor.lorenzana\mis documentos\visual studio 2008\projects\infotec webbuilder 4\wb4officetest\orderedtest1.orderedtest" id="87bcdb33-3440-4f54-ba45-fd6d258ff45a" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
   <Css projectStructure="" iteration="" />
   <Execution timeOut="2147483647" />
   <Owners>
