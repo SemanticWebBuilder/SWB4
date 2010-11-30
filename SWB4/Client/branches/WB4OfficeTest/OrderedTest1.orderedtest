@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<OrderedTest name="OrderedTest1" storage="c:\documents and settings\victor.lorenzana\mis documentos\visual studio 2008\projects\infotec webbuilder 4\wb4officetest\orderedtest1.orderedtest" id="87bcdb33-3440-4f54-ba45-fd6d258ff45a" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2006">
+  <Css projectStructure="" iteration="" />
+  <Execution timeOut="2147483647" />
+  <Owners>
+    <Owner name="" />
+  </Owners>
+  <TestLinks>
+    <TestLink id="d984eac5-b60a-b374-a1ac-89b25d00f5eb" name="AddTest" storage="bin\debug\wb4officetest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+    <TestLink id="5e42c9f2-1846-53a5-946e-e569adbba3a1" name="GetLoginTest" storage="bin\debug\wb4officetest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+  </TestLinks>
+</OrderedTest>

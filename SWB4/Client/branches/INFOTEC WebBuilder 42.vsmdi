@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestLists xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2006">
+  <TestList name="Word2007Test" id="75188edd-2d3a-40d7-9c51-1fa826dccd02" parentListId="8c43106b-9dc1-4907-a29f-aa66a61bf5b6" />
+  <TestList name="Lists of Tests" id="8c43106b-9dc1-4907-a29f-aa66a61bf5b6">
+    <RunConfiguration id="dfbe8e24-de2a-4386-a484-9243b15a0de4" name="Local Test Run" storage="localtestrun.testrunconfig" type="Microsoft.VisualStudio.TestTools.Common.TestRunConfiguration, Microsoft.VisualStudio.QualityTools.Common,   PublicKeyToken=b03f5f7f11d50a3a" />
+  </TestList>
+  <TestList name="Pruebas no incluidas en ninguna lista" id="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+    <TestLinks>
+      <TestLink id="5498f9e2-c65f-77e3-b372-60ae290031f0" name="SaveAsTestOffice2003" storage="testprojectoffice2007\bin\debug\testprojectoffice2007.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="51d8347e-e422-ce2a-7f9e-c60c144bd31e" name="SaveAsTestHtmlAll" storage="testprojectoffice2007\bin\debug\testprojectoffice2007.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="665a825f-4274-b80a-9229-6730197175a3" name="SaveTestWithOutFile" storage="testprojectoffice2007\bin\debug\testprojectoffice2007.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="646cfd07-7c4b-d261-adba-30dfe30ac202" name="SaveTestWithFile" storage="testprojectoffice2007\bin\debug\testprojectoffice2007.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="0bf1b247-b2e7-a21a-2ddb-d2b8cc3ccd8a" name="SaveCustomPropertiesTest" storage="testprojectoffice2007\bin\debug\testprojectoffice2007.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="78394a13-e5cf-bbab-f254-6330db53f496" name="CustomPropertiesTest" storage="testprojectoffice2007\bin\debug\testprojectoffice2007.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="ea8bfc54-2cd1-f2d3-ab88-0655a73d4815" name="SaveCustomPropertiesTest" storage="testprojectoffice2007\bin\debug\testprojectoffice2007.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="8383bbad-0761-9555-f371-68f827bad8f2" name="SaveAsTestOOXml2007" storage="testprojectoffice2007\bin\debug\testprojectoffice2007.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="25ca169b-579b-b57a-37ea-3f644afba06a" name="SaveAsTestHtmlIE" storage="testprojectoffice2007\bin\debug\testprojectoffice2007.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="8215ee38-f317-3e9d-f0a7-560e74c531a9" name="CustomPropertiesTest" storage="testprojectoffice2007\bin\debug\testprojectoffice2007.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="2fc39685-04c0-969e-4a72-1b2d28fe9238" name="GetCustomPropertiesTest" storage="testprojectoffice2007\bin\debug\testprojectoffice2007.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+      <TestLink id="3da8aac8-c03c-192a-a260-9aeca9af301b" name="SaveAsHtmlTest" storage="testprojectoffice2007\bin\debug\testprojectoffice2007.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel,   PublicKeyToken=b03f5f7f11d50a3a" />
+    </TestLinks>
+  </TestList>
+</TestLists>
