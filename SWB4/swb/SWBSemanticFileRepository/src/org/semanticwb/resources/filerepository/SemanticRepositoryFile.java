@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.resources.filerepository;
 
 import java.io.ByteArrayInputStream;
@@ -89,7 +88,6 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
     private static final String DEFAULT_MIME_TYPE = "application/octet-stream";
     private String IDREP = null;
     private String resUUID = null;
-
 
     static {
         try {
@@ -1035,6 +1033,9 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         String strCheck = "checked";
         String strEnable = "";
 
+        String id = getResourceBase().getId();
+        //System.out.println("id:"+id);
+
         PrintWriter out = response.getWriter();
         String accion = paramRequest.getAction();
         if (accion == null) {
@@ -1050,20 +1051,20 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         boolean flag = false;
 
         try {
-            if (getSee() != null) {
-                strView = getSee();
+            if (this.getSee() != null) {
+                strView = this.getSee();
                 flag = true;
             }
-            if (getModify() != null) {
-                strModify = getModify();
+            if (this.getModify() != null) {
+                strModify = this.getModify();
                 flag = true;
             }
-            if (getAdmin() != null) {
-                strAdmin = getAdmin();
+            if (this.getAdmin() != null) {
+                strAdmin = this.getAdmin();
                 flag = true;
             }
         } catch (Exception e) {
-            log.error("Error al revisar la configuración inicial del repositorio de documentos.",e);
+            log.error("Error al revisar la configuración inicial del repositorio de documentos.", e);
         }
 
         if (isUseFolders()) {
@@ -1081,7 +1082,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             SWBResourceURL urlA = paramRequest.getActionUrl();
             urlA.setAction("admin_update");
 
-            out.println("<form id=\"myform_repfile\"  name=\"myform_repfile\" action=\"" + urlA + "\" method=\"post\">");
+            out.println("<form id=\"" + id + "_myform_repfile\"  name=\"" + id + "_myform_repfile\" action=\"" + urlA.toString() + "\" method=\"post\" onsubmit=\"submitForm('" + id + "_myform_repfile');return false;\">");
 
             out.println("<fieldset>");
             out.println("<legend>");
@@ -1093,54 +1094,56 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            String strTemp = "<option value=\"-1\">" + paramRequest.getLocaleString("msgNoRolesAvailable") + "</option>";
-            Iterator<Role> iRoles = wsite.getUserRepository().listRoles(); //DBRole.getInstance().getRoles(topicmap.getDbdata().getRepository());
-            StringBuffer strRules = new StringBuffer("");
-            strRules.append("\n<option value=\"0\">" + paramRequest.getLocaleString("msgSelNone") + "</option>");
-            strRules.append("\n<optgroup label=\"Roles\">");
-            while (iRoles.hasNext()) {
-                Role oRole = iRoles.next();
-                strRules.append("\n<option value=\"" + oRole.getURI() + "\">" + oRole.getDisplayTitle(user.getLanguage()) + "</option>");
-            }
-            strRules.append("\n</optgroup>");
-
-            strRules.append("\n<optgroup label=\"User Groups\">");
-            Iterator<UserGroup> iugroups = wsite.getUserRepository().listUserGroups();
-            while (iugroups.hasNext()) {
-                UserGroup oUG = iugroups.next();
-                strRules.append("\n<option value=\"" + oUG.getURI() + "\">" + oUG.getDisplayTitle(user.getLanguage()) + "</option>");
-            }
-            strRules.append("\n</optgroup>");
-            if (strRules.toString().length() > 0) {
-                strTemp = strRules.toString();
-            }
+//            String strTemp = "<option value=\"-1\">" + paramRequest.getLocaleString("msgNoRolesAvailable") + "</option>";
+//            Iterator<Role> iRoles = wsite.getUserRepository().listRoles(); //DBRole.getInstance().getRoles(topicmap.getDbdata().getRepository());
+//            StringBuffer strRules = new StringBuffer("");
+//            strRules.append("\n<option value=\"0\">" + paramRequest.getLocaleString("msgSelNone") + "</option>");
+//            strRules.append("\n<optgroup label=\"Roles\">");
+//            while (iRoles.hasNext()) {
+//                Role oRole = iRoles.next();
+//                strRules.append("\n<option value=\"" + oRole.getURI() + "\">" + oRole.getDisplayTitle(user.getLanguage()) + "</option>");
+//            }
+//            strRules.append("\n</optgroup>");
+//
+//            strRules.append("\n<optgroup label=\"User Groups\">");
+//            Iterator<UserGroup> iugroups = wsite.getUserRepository().listUserGroups();
+//            while (iugroups.hasNext()) {
+//                UserGroup oUG = iugroups.next();
+//                strRules.append("\n<option value=\"" + oUG.getURI() + "\">" + oUG.getDisplayTitle(user.getLanguage()) + "</option>");
+//            }
+//            strRules.append("\n</optgroup>");
+//            if (strRules.toString().length() > 0) {
+//                strTemp = strRules.toString();
+//            }
 
             out.println("<tr><td colspan=\"2\"><B>" + paramRequest.getLocaleString("msgRolesDefinitionLevel") + "</b></td></tr>");
             out.println("<tr><td align=\"right\" width=150>" + paramRequest.getLocaleString("msgView") + ":</td>");
-            out.println("<td><select name=\"ver\">" + strTemp + "</select></td></tr>");
+            out.println("<td><select name=\"ver\">" + getSelectOptions("ver",wsite,paramRequest) + "</select></td></tr>");
             out.println("<tr><td align=\"right\" width=150>" + paramRequest.getLocaleString("msgModify") + ":</td>");
-            out.println("<td><select name=\"modificar\">" + strTemp + "</select></td></tr>");
+            out.println("<td><select name=\"modificar\">" + getSelectOptions("modificar",wsite,paramRequest) + "</select></td></tr>");
             out.println("<tr><td align=\"right\"  width=150>" + paramRequest.getLocaleString("msgAdministrate") + ":</td>");
-            out.println("<td><select name=\"administrar\">" + strTemp + "</select></td></tr>");
+            out.println("<td><select name=\"administrar\">" + getSelectOptions("administrar",wsite,paramRequest) + "</select></td></tr>");
             out.println("<tr><td align=\"right\"  width=150>" + paramRequest.getLocaleString("msgShowSubDirs") + ":</td>");
             out.println("<td><input type=\"checkbox\" name=\"showdirectory\" value=\"1\" " + strCheck + " " + strEnable + ">");
             out.println("</td></tr>");
+
+            /*
 
             out.println("<tr><td align=\"right\" width=150>" + paramRequest.getLocaleString("msgCreateNotificationMessage") + ":</td>");
 
             strNotify = "";
             if (getMsgcrated() != null) {
-                strNotify = getMsgcrated();
-                flag = true;
+            strNotify = getMsgcrated();
+            flag = true;
             } else {
-                strNotify = null;
-                StringBuffer strMsg = new StringBuffer(paramRequest.getLocaleString("msgCreateNotificationMessage") + ":");
-                strMsg.append("\n" + paramRequest.getLocaleString("msgTheDoc") + " {getDocTitle} " + paramRequest.getLocaleString("msgWasCreated") + ".\n");
-                strMsg.append("\n   " + paramRequest.getLocaleString("msgFileName") + ":       {getFileName}");
-                strMsg.append("\n   " + paramRequest.getLocaleString("msgCreationDate") + ":   {getLastUpdate}");
-                strMsg.append("\n   " + paramRequest.getLocaleString("msgReviewFile") + ":   {getDocLink}");
-                strMsg.append("\n   " + paramRequest.getLocaleString("msgCreationUser") + ":   {getUserName} <{getUserEmail}>");
-                strNotify = strMsg.toString();
+            strNotify = null;
+            StringBuffer strMsg = new StringBuffer(paramRequest.getLocaleString("msgCreateNotificationMessage") + ":");
+            strMsg.append("\n" + paramRequest.getLocaleString("msgTheDoc") + " {getDocTitle} " + paramRequest.getLocaleString("msgWasCreated") + ".\n");
+            strMsg.append("\n   " + paramRequest.getLocaleString("msgFileName") + ":       {getFileName}");
+            strMsg.append("\n   " + paramRequest.getLocaleString("msgCreationDate") + ":   {getLastUpdate}");
+            strMsg.append("\n   " + paramRequest.getLocaleString("msgReviewFile") + ":   {getDocLink}");
+            strMsg.append("\n   " + paramRequest.getLocaleString("msgCreationUser") + ":   {getUserName} <{getUserEmail}>");
+            strNotify = strMsg.toString();
             }
 
             out.println("<td><textarea name=\"notificationcreate\" cols=60 rows=10>" + strNotify + "</textarea></td></tr>");
@@ -1148,19 +1151,19 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 
             strNotify = "";
             if (getMsgupdated() != null) {
-                strNotify = getMsgupdated();
-                flag = true;
+            strNotify = getMsgupdated();
+            flag = true;
             } else {
-                strNotify = null;
-                StringBuffer strMsg = new StringBuffer(paramRequest.getLocaleString("msgUpdNotificationMessage") + ":");
-                strMsg.append("\n" + paramRequest.getLocaleString("msgTheDoc") + " {getDocTitle} " + paramRequest.getLocaleString("msgWasUpd") + ".\n");
-                strMsg.append("\n   " + paramRequest.getLocaleString("msgFileName") + ":       {getFileName}");
-                strMsg.append("\n   " + paramRequest.getLocaleString("msgReviewFile") + ":   {getDocLink}");
-                strMsg.append("\n   " + paramRequest.getLocaleString("msgLastUpd") + ":     {getLastUpdate}");
-                strMsg.append("\n   " + paramRequest.getLocaleString("msgVersionUser") + ":    {getUserName} <{getUserEmail}>");
-                strMsg.append("\n   " + paramRequest.getLocaleString("msgVersionComments") + ":");
-                strMsg.append("\n        {getComments}");
-                strNotify = strMsg.toString();
+            strNotify = null;
+            StringBuffer strMsg = new StringBuffer(paramRequest.getLocaleString("msgUpdNotificationMessage") + ":");
+            strMsg.append("\n" + paramRequest.getLocaleString("msgTheDoc") + " {getDocTitle} " + paramRequest.getLocaleString("msgWasUpd") + ".\n");
+            strMsg.append("\n   " + paramRequest.getLocaleString("msgFileName") + ":       {getFileName}");
+            strMsg.append("\n   " + paramRequest.getLocaleString("msgReviewFile") + ":   {getDocLink}");
+            strMsg.append("\n   " + paramRequest.getLocaleString("msgLastUpd") + ":     {getLastUpdate}");
+            strMsg.append("\n   " + paramRequest.getLocaleString("msgVersionUser") + ":    {getUserName} <{getUserEmail}>");
+            strMsg.append("\n   " + paramRequest.getLocaleString("msgVersionComments") + ":");
+            strMsg.append("\n        {getComments}");
+            strNotify = strMsg.toString();
             }
 
             out.println("<td><textarea name=\"notificationupdate\" cols=60 rows=10>" + strNotify + "</textarea></td></tr>");
@@ -1168,40 +1171,49 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 
             strNotify = "";
             if (getMsgdeleted() != null) {
-                strNotify = getMsgdeleted();
-                flag = true;
+            strNotify = getMsgdeleted();
+            flag = true;
             } else {
-                strNotify = null;
-                StringBuffer strMsg = new StringBuffer(paramRequest.getLocaleString("msgRemoveNotificationMessage") + ":");
-                strMsg.append("\n" + paramRequest.getLocaleString("msgTheDoc") + " {getDocTitle} " + paramRequest.getLocaleString("msgWasRemoved") + ".\n");
-                strMsg.append("\n   " + paramRequest.getLocaleString("msgDirName") + ":  {getDirectoryName}");
-                strMsg.append("\n   " + paramRequest.getLocaleString("msgUserName") + ":       {getUserName} <{getUserEmail}>");
-                strNotify = strMsg.toString();
+            strNotify = null;
+            StringBuffer strMsg = new StringBuffer(paramRequest.getLocaleString("msgRemoveNotificationMessage") + ":");
+            strMsg.append("\n" + paramRequest.getLocaleString("msgTheDoc") + " {getDocTitle} " + paramRequest.getLocaleString("msgWasRemoved") + ".\n");
+            strMsg.append("\n   " + paramRequest.getLocaleString("msgDirName") + ":  {getDirectoryName}");
+            strMsg.append("\n   " + paramRequest.getLocaleString("msgUserName") + ":       {getUserName} <{getUserEmail}>");
+            strNotify = strMsg.toString();
             }
 
             out.println("<td><textarea name=\"notificationremove\" cols=\"60\" rows=\"10\">" + strNotify + "</textarea></td></tr>");
+             *
+             */
             out.println("</table>");
             out.println("</fieldset>");
             out.println("<fieldset>");
-            out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"btn\" >" + paramRequest.getLocaleString("msgBTNAccept") + "</button>");
+            out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" id=\"" + id + "btn\" name=\"btn\" >" + paramRequest.getLocaleString("msgBTNAccept"));
+            out.println("</button>");
+//            out.println("<script type=\"dojo/method\" event=\"onClick\" >");
+//            out.println(" submitForm('"+id+"_myform_repfile'); ");
+//            out.println(" return false; ");
+//            out.println("</script>");
+
+
 
             SWBResourceURL urlold = paramRequest.getRenderUrl();
             urlold.setAction("showold");
 
-            out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" name=\"btnold\" onclick=\"window.location='" + urlold + "'; return false;\" >" + paramRequest.getLocaleString("msgBTNViewOldFiles") + "</button>");
+            out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" name=\"btnold\" onclick=\"submitUrl('" + urlold + "',this.domNode); return false;\" >" + paramRequest.getLocaleString("msgBTNViewOldFiles") + "</button>");
             out.println("</fieldset>");
             out.println("<fieldset>");
-            out.println("<br>* " + paramRequest.getLocaleString("msgNotificationKeys") + ":");
-            out.println("<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getUserName}   " + paramRequest.getLocaleString("msgCompleteUserName"));
-            out.println("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getUserEmail}  " + paramRequest.getLocaleString("msgUserEmail"));
-            out.println("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getDirectoryName} " + paramRequest.getLocaleString("msgDirName"));
-            out.println("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getFileName}   " + paramRequest.getLocaleString("msgFileName"));
-            out.println("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getDocTitle}   " + paramRequest.getLocaleString("msgDocTitle"));
-            out.println("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getDocDesc}    " + paramRequest.getLocaleString("msgDocDescription"));
-            out.println("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getDocVersion} " + paramRequest.getLocaleString("msgDocVersion"));
-            out.println("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getDocLink} " + paramRequest.getLocaleString("msgDocLink"));
-            out.println("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getLastUpdate} " + paramRequest.getLocaleString("msgLastDateModification"));
-            out.println("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getComments}   " + paramRequest.getLocaleString("msgModificationComment"));
+//            out.println("<br>* " + paramRequest.getLocaleString("msgNotificationKeys") + ":");
+//            out.println("<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getUserName}   " + paramRequest.getLocaleString("msgCompleteUserName"));
+//            out.println("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getUserEmail}  " + paramRequest.getLocaleString("msgUserEmail"));
+//            out.println("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getDirectoryName} " + paramRequest.getLocaleString("msgDirName"));
+//            out.println("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getFileName}   " + paramRequest.getLocaleString("msgFileName"));
+//            out.println("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getDocTitle}   " + paramRequest.getLocaleString("msgDocTitle"));
+//            out.println("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getDocDesc}    " + paramRequest.getLocaleString("msgDocDescription"));
+//            out.println("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getDocVersion} " + paramRequest.getLocaleString("msgDocVersion"));
+//            out.println("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getDocLink} " + paramRequest.getLocaleString("msgDocLink"));
+//            out.println("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getLastUpdate} " + paramRequest.getLocaleString("msgLastDateModification"));
+//            out.println("<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{getComments}   " + paramRequest.getLocaleString("msgModificationComment"));
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             out.println("<br> * " + paramRequest.getLocaleString("msgNote") + ": " + paramRequest.getLocaleString("msgRolesDependent"));
 
@@ -1218,11 +1230,11 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                     strAdmin = "0";
                 }
             }
-            out.println("<script type=\"text/javascript\">");
-            out.println("      document.myform_repfile.ver.value='" + strView + "';");
-            out.println("      document.myform_repfile.modificar.value='" + strModify + "';");
-            out.println("      document.myform_repfile.administrar.value='" + strAdmin + "';");
-            out.println("</script>");
+//            out.println("<script type=\"text/javascript\">");
+//            out.println("      document." + id + "_myform_repfile.ver.value='" + strView + "';");
+//            out.println("      document." + id + "_myform_repfile.modificar.value='" + strModify + "';");
+//            out.println("      document." + id + "_myform_repfile.administrar.value='" + strAdmin + "';");
+//            out.println("</script>");
 
         } else if (accion.equals("showold")) {
 
@@ -1281,8 +1293,8 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                                 urldel.setParameter("uuid", nfi.getUUID());
                                 urldel.setParameter("repNS", ns);
                                 urldel.setAction("admin_delete");
-                                out.println("<a href=\"#\" onclick=\"window.location='" + urlrecover + "';\">" + "<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/recover.gif\" border=\"0\" title=\"" + paramRequest.getLocaleString("msgAltRestore") + "\" >" + "</a>");
-                                out.println("&nbsp;<a href=\"#\" onclick=\"window.location='" + urldel + "';\">" + "<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/trash_vacio.gif\" border=\"0\" title=\"" + paramRequest.getLocaleString("msgAltEliminate") + "\" ></a>");
+                                out.println("<a href=\"#\" onclick=\"submitUrl('" + urlrecover + "',this); return false;\">" + "<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/recover.gif\" border=\"0\" title=\"" + paramRequest.getLocaleString("msgAltRestore") + "\" >" + "</a>");
+                                out.println("&nbsp;<a href=\"#\" onclick=\"submitUrl('" + urldel + "',this); return false;\">" + "<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/trash_vacio.gif\" border=\"0\" title=\"" + paramRequest.getLocaleString("msgAltEliminate") + "\" ></a>");
                                 out.println("</td>");
                                 out.println("</tr>");
                             }
@@ -1320,8 +1332,8 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                                         urldel.setParameter("uuid", nfi.getUUID());
                                         urldel.setParameter("repNS", ns);
                                         urldel.setAction("admin_delete");
-                                        out.println("<a href=\"#\" onclick=\"window.location='" + urlrecover + "';\">" + "<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/recover.gif\" border=\"0\" title=\"" + paramRequest.getLocaleString("msgAltRestore") + "\" >" + "</a>");
-                                        out.println("&nbsp;<a href=\"#\" onclick=\"window.location='" + urldel + "';\">" + "<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/trash_vacio.gif\" border=\"0\" title=\"" + paramRequest.getLocaleString("msgAltEliminate") + "\" >" + "</a>");
+                                        out.println("<a href=\"#\" onclick=\"submitUrl('" + urlrecover + "',this); return false;\">" + "<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/recover.gif\" border=\"0\" title=\"" + paramRequest.getLocaleString("msgAltRestore") + "\" >" + "</a>");
+                                        out.println("&nbsp;<a href=\"#\" onclick=\"submitUrl('" + urldel + "',this); return false;\">" + "<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/trash_vacio.gif\" border=\"0\" title=\"" + paramRequest.getLocaleString("msgAltEliminate") + "\" >" + "</a>");
                                         out.println("</td>");
                                         out.println("</tr>");
                                     }
@@ -1336,13 +1348,61 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                 out.println("<fieldset>");
                 SWBResourceURL ub = paramRequest.getRenderUrl();
                 ub.setAction("edit");
-                out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" name=\"btn_back\" onclick=\"window.location='" + ub + "';\">"+paramRequest.getLocaleString("btnBack")+"</button>");
+                out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" name=\"btn_back\" onclick=\"submitUrl('" + ub + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btnBack") + "</button>");
                 out.println("</fieldset>");
             } catch (Exception e) {
                 log.error("Error al traer los folders/archivos eliminados. doAdmin.showold", e);
             }
         }
         out.println("</div>");
+    }
+
+    public String getSelectOptions(String type, WebSite wsite, SWBParamRequest paramRequest) {
+        String strTemp = "";
+        try {
+
+            User user = paramRequest.getUser();
+
+            String selectedItem = "";
+            if (type.equals("ver")) {
+                selectedItem = this.getSee();
+            } else if (type.equals("modificar")) {
+                selectedItem = this.getModify();
+
+            } else if (type.equals("administrar")) {
+                selectedItem = this.getAdmin();
+            }
+
+            strTemp = "<option value=\"-1\">" + paramRequest.getLocaleString("msgNoRolesAvailable") + "</option>";
+
+
+            Iterator<Role> iRoles = wsite.getUserRepository().listRoles(); //DBRole.getInstance().getRoles(topicmap.getDbdata().getRepository());
+            StringBuffer strRules = new StringBuffer("");
+            strRules.append("\n<option value=\"0\">" + paramRequest.getLocaleString("msgSelNone") + "</option>");
+            strRules.append("\n<optgroup label=\"Roles\">");
+            while (iRoles.hasNext()) {
+                Role oRole = iRoles.next();
+                strRules.append("\n<option value=\"" + oRole.getURI() + "\" " + (selectedItem.equals(oRole.getURI()) ? "selected" : "") + ">" + oRole.getDisplayTitle(user.getLanguage()) + "</option>");
+            }
+            strRules.append("\n</optgroup>");
+
+            strRules.append("\n<optgroup label=\"User Groups\">");
+            Iterator<UserGroup> iugroups = wsite.getUserRepository().listUserGroups();
+            while (iugroups.hasNext()) {
+                UserGroup oUG = iugroups.next();
+                strRules.append("\n<option value=\"" + oUG.getURI() + "\">" + oUG.getDisplayTitle(user.getLanguage()) + "</option>");
+            }
+            strRules.append("\n</optgroup>");
+            if (strRules.toString().length() > 0) {
+                strTemp = strRules.toString();
+            }
+
+        } catch (Exception e) {
+        }
+
+
+
+        return strTemp;
     }
 
     @Override
@@ -1352,11 +1412,17 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         String repNS = request.getParameter("repNS");
         if (null == action) {
             action = "";
-        }        
+        }
+
+        //System.out.println("Action:" + action);
+
         User user = response.getUser();
         Session session = null;
         Credentials credentials = new SWBCredentials(user);
         if ("admin_update".equals(action)) {
+
+            //System.out.println("Actualizando....");
+
             String viewrole = request.getParameter("ver");
             String modifyrole = request.getParameter("modificar");
             String adminrole = request.getParameter("administrar");
@@ -1365,13 +1431,18 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             String notifyremove = request.getParameter("notificationremove");
             boolean usefolders = request.getParameter("showdirectory") != null && request.getParameter("showdirectory").equals("1") ? true : false;
 
-            setSee(viewrole);
-            setModify(modifyrole);
-            setAdmin(adminrole);
-            setMsgcrated(notifynew);
-            setMsgupdated(nofiryupdate);
-            setMsgdeleted(notifyremove);
-            setUseFolders(usefolders);
+            this.setSee(viewrole);
+            this.setModify(modifyrole);
+            this.setAdmin(adminrole);
+            this.setMsgcrated(notifynew);
+            this.setMsgupdated(nofiryupdate);
+            this.setMsgdeleted(notifyremove);
+            this.setUseFolders(usefolders);
+
+            try {
+                getResourceBase().updateAttributesToDB();
+            } catch (Exception e) {
+            }
 
             response.setMode(SWBActionResponse.Mode_ADMIN);
             response.setAction("edit");
@@ -1817,7 +1888,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                 } catch (Exception e) {
                     mime = DEFAULT_MIME_TYPE;
                 }
-            //response.setHeader("Content-type", mime + ";");
+                //response.setHeader("Content-type", mime + ";");
             }
             if (action != null && "inline".equals(action)) {
                 response.setContentType(mime);
@@ -2097,5 +2168,3 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         }
     }
 }
-
-
