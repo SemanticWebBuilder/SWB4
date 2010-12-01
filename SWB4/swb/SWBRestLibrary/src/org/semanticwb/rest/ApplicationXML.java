@@ -31,7 +31,7 @@ import org.w3c.dom.NodeList;
  *
  * @author victor.lorenzana
  */
-public final class ApplicationXML implements RepresentationResponse
+public final class ApplicationXML implements XmlResponse
 {
 
     private static final Logger log = SWBUtils.getLogger(ApplicationXML.class);

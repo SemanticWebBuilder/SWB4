@@ -17,6 +17,7 @@ import org.semanticwb.rest.RepresentationResponse;
 import org.semanticwb.rest.Resource;
 import org.semanticwb.rest.RestSource;
 import org.semanticwb.rest.ServiceInfo;
+import org.semanticwb.rest.XmlResponse;
 
 /**
  *
@@ -68,10 +69,15 @@ public class TestRestSource
             ParameterDefinition[] parameters = resp.getParameterDefinitions();
             for (ParameterDefinition parameter : parameters)
             {
-                URL[] objs = resp.getLinks(parameter);
-                for (URL obj : objs)
+                if(resp instanceof XmlResponse)
                 {
-                    System.out.println("obj: " + obj);
+                    XmlResponse xmlResponse=(XmlResponse)resp;
+
+                    URL[] objs = xmlResponse.getLinks(parameter);
+                    for (URL obj : objs)
+                    {
+                        System.out.println("obj: " + obj);
+                    }
                 }
             }
 
