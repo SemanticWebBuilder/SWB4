@@ -7,7 +7,6 @@ package org.semanticwb.rest;
 
 import bsh.Interpreter;
 import java.net.HttpURLConnection;
-import java.net.URL;
 
 /**
  *
@@ -19,9 +18,7 @@ public interface RepresentationResponse extends Representation {
     public ClassLoader getClassLoader() throws bsh.EvalError;
     //public Object getObject() throws bsh.EvalError,RestException;
     public Object getResponse() throws RestException;
-    public Object[] getValues(ParameterDefinition definition) throws RestException;
-    public URL getLink(ParameterDefinition definition) throws RestException;
-    public URL[] getLinks(ParameterDefinition definition) throws RestException;
+    public Object[] getValues(ParameterDefinition definition) throws RestException;    
     public Object getValue(ParameterDefinition definition) throws RestException;
     public int getStatus();
     public ParameterDefinition[] getParameterDefinitions();
