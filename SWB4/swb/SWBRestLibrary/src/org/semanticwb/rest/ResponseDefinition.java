@@ -4,12 +4,23 @@
  */
 package org.semanticwb.rest;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import javax.xml.XMLConstants;
+import javax.xml.transform.Source;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -17,17 +28,45 @@ import org.w3c.dom.NodeList;
  */
 public final class ResponseDefinition
 {
-
+    private static final Logger log = SWBUtils.getLogger(RestPublish.class);
     private final int status;
     private final String mediaType;
     private ParameterDefinition[] parameters;
-
+    private Document docschema;
+    private Element elementDefinition;
     private ResponseDefinition(int status, String mediaType)
     {
         this.status = status;
         this.mediaType = mediaType;        
+    }   
+    public Element getElementDefinition()
+    {
+        return elementDefinition;
     }
+    public void validateResponse(Document document) throws RestException
+    {
+        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        StringReader reader = new StringReader(SWBUtils.XML.domToXml(docschema));
+        Source schemaFile = new StreamSource(reader);
+        try
+        {
+            Schema schema = factory.newSchema(schemaFile);
+            Validator validator = schema.newValidator();
+            DOMSource source = new DOMSource(document);
+            validator.validate(source);
+        }
+        catch (IOException ioe)
+        {
+            log.debug(ioe);
+            throw new RestException(ioe);
+        }
+        catch (SAXException saxe)
+        {
+            log.debug(saxe);
+            throw new RestException(saxe);
 
+        }
+    }
     public int getStatus()
     {
         return status;
@@ -38,7 +77,7 @@ public final class ResponseDefinition
         return mediaType;
     }
 
-    private static Element getSchema(Document doc, String localname, String namespace)
+    public static Element getSchema(Document doc, String localname, String namespace)
     {
         NodeList schemas = doc.getElementsByTagNameNS(XMLConstants.W3C_XML_SCHEMA_NS_URI, "schema");
         for (int i = 0; i < schemas.getLength(); i++)
@@ -186,7 +225,12 @@ public final class ResponseDefinition
                         {
                             throw new RestException("The element " + element + " was not found");
                         }
+                        definition.elementDefinition=representation;
                         Element schema=getSchema(response.getOwnerDocument(), element, namespace);
+                        Document docschema=SWBUtils.XML.getNewDocument();
+                        Node importedNodeschema=docschema.importNode(schema, true);
+                        docschema.appendChild(importedNodeschema);
+                        definition.docschema=docschema;
                         ArrayList<ParameterDefinition> parameterDefinitions = new ArrayList<ParameterDefinition>();
                         extractDefinitions(responseDefinition, parameterDefinitions,method,schema);
                         definition.parameters=parameterDefinitions.toArray(new ParameterDefinition[parameterDefinitions.size()]);

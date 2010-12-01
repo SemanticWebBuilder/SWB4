@@ -24,7 +24,7 @@ public final class Method {
     private final Resource resource;
     protected final Set<RepresentationRequest> requests=new HashSet<RepresentationRequest>();
     protected RepresentationRequest defaultRequestRepresentation;
-    protected final Set<ResponseDefinition> responses=new HashSet<ResponseDefinition>();
+    protected final Set<ResponseDefinition> definitionResponses=new HashSet<ResponseDefinition>();
     protected Method(String name,HTTPMethod httpMethod,Resource resource)
     {
         this.id=name;
@@ -34,7 +34,7 @@ public final class Method {
     }
     public ResponseDefinition[] getResponseDefinitions()
     {
-        return responses.toArray(new ResponseDefinition[responses.size()]);
+        return definitionResponses.toArray(new ResponseDefinition[definitionResponses.size()]);
     }
     public String getId()
     {
@@ -96,7 +96,7 @@ public final class Method {
             {
                 Element response=(Element)listResponse.item(i);
                 ResponseDefinition[] definitions=ResponseDefinition.createResponseDefinition(response, m);
-                m.responses.addAll(Arrays.asList(definitions));
+                m.definitionResponses.addAll(Arrays.asList(definitions));
             }
         }
         return m;

@@ -305,7 +305,7 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
     }
     public ParameterDefinition[] getParameterDefinitions()
     {
-        for(ResponseDefinition def : this.getMethod().responses)
+        for(ResponseDefinition def : this.getMethod().definitionResponses)
         {
             if(def.getStatus()==status)
             {

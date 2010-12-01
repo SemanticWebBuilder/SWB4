@@ -27,10 +27,11 @@ public abstract class RepresentationBase implements RepresentationRequest {
     protected final Set<Parameter> parameters=new HashSet<Parameter>();
     protected final String mediaType;
     protected final Method method;
+    protected ResponseDefinition responseDefinition;
     protected RepresentationBase(String mediaType,Method method)
     {
         this.mediaType=mediaType;
-        this.method=method;
+        this.method=method;        
     }
     static RepresentationBase createRepresenatationRequest(Element representation,Method method) throws RestException
     {
@@ -45,7 +46,7 @@ public abstract class RepresentationBase implements RepresentationRequest {
         {
             representationInfo=new XWWWFormUrlEncoded(method);
         }
-        if(mediaType.equals("multipart/form-data"))
+        else if(mediaType.equals("multipart/form-data"))
         {
             representationInfo=new ApplicationMultipartFormData(method);
         }

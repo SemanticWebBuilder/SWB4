@@ -5,23 +5,35 @@
 package org.semanticwb.rest;
 
 import bsh.Interpreter;
+import java.io.IOException;
+import java.io.StringReader;
 import java.lang.reflect.Constructor;
-import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.xml.XMLConstants;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import org.jdom.Namespace;
 import org.jdom.input.DOMBuilder;
 import org.jdom.xpath.XPath;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -30,18 +42,22 @@ import org.w3c.dom.NodeList;
 public final class ApplicationXML implements RepresentationResponse
 {
 
+    private static final Logger log = SWBUtils.getLogger(ApplicationXML.class);
     private static final String NL = "\r\n";
     private Document document;
     private final Method method;
     private final int status;
     private final URL url;
-    ApplicationXML(Document response, Method method, int status,URL url)
+
+    ApplicationXML(Document response, Method method, int status, URL url)
     {
         this.document = response;
         this.method = method;
         this.status = status;
-        this.url=url;
+        this.url = url;
     }
+
+    
 
     public Method getMethod()
     {
@@ -309,7 +325,7 @@ public final class ApplicationXML implements RepresentationResponse
 
     public ParameterDefinition[] getParameterDefinitions()
     {
-        for (ResponseDefinition def : this.getMethod().responses)
+        for (ResponseDefinition def : this.getMethod().definitionResponses)
         {
             if (def.getStatus() == status)
             {
@@ -341,7 +357,7 @@ public final class ApplicationXML implements RepresentationResponse
         {
             DOMBuilder builder = new DOMBuilder();
             XPath xpath = XPath.newInstance(definition.getPath());
-            Element root = definition.getMethod().getResource().getServiceInfo().getDocument().getDocumentElement();            
+            Element root = definition.getMethod().getResource().getServiceInfo().getDocument().getDocumentElement();
             for (int i = 0; i < root.getAttributes().getLength(); i++)
             {
                 Node attnode = root.getAttributes().item(i);
@@ -351,7 +367,7 @@ public final class ApplicationXML implements RepresentationResponse
                     if ("xmlns".equals(att.getPrefix()))
                     {
                         String prefix = att.getLocalName();
-                        String ns = att.getValue();                        
+                        String ns = att.getValue();
                         xpath.addNamespace(prefix, ns);
                     }
                 }
@@ -363,17 +379,17 @@ public final class ApplicationXML implements RepresentationResponse
                 Object node = nodes.get(i);
                 if (node instanceof org.jdom.Element)
                 {
-                    String prefixXlink="xlink";
+                    String prefixXlink = "xlink";
 
                     org.jdom.Element e = (org.jdom.Element) node;
-                    Namespace nslink=Namespace.getNamespace(prefixXlink, RestPublish.XLINK_NS);
+                    Namespace nslink = Namespace.getNamespace(prefixXlink, RestPublish.XLINK_NS);
                     org.jdom.Attribute attjdom = e.getAttribute("href", nslink);
                     if (attjdom != null)
                     {
-                        String value=attjdom.getValue();
+                        String value = attjdom.getValue();
                         if (value != null && !value.trim().equals(""))
-                        {                            
-                            URL href=RestPublish.resolve(value, this.url.toURI()).toURL();
+                        {
+                            URL href = RestPublish.resolve(value, this.url.toURI()).toURL();
                             values.add(href);
                         }
                     }
