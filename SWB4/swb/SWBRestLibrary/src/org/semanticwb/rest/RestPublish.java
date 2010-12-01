@@ -76,7 +76,7 @@ public class RestPublish
         
         System.setProperty(RepresentationBase.ORG_SEMANTICWB_REST_REPRESENTATIONBASE+XWWWFormUrlEncoded.APPLICATION_XWWW_FORM_URL_ENCODED, XWWWFormUrlEncoded.class.getCanonicalName());
         System.setProperty(RepresentationBase.ORG_SEMANTICWB_REST_REPRESENTATIONBASE+AtomXML.APPLICATION_ATOM_XML, AtomXML.class.getCanonicalName());
-        System.setProperty(RepresentationBase.ORG_SEMANTICWB_REST_REPRESENTATIONBASE+ApplicationMultipartFormData.MULTIPART_FORM_DATA, ApplicationMultipartFormData.class.getCanonicalName());
+        System.setProperty(RepresentationBase.ORG_SEMANTICWB_REST_REPRESENTATIONBASE+MultipartFormData.MULTIPART_FORM_DATA, MultipartFormData.class.getCanonicalName());
     }
     public RestPublish(Set<SemanticClass> classes)
     {

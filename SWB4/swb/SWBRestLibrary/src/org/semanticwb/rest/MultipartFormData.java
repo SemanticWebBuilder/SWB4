@@ -15,11 +15,11 @@ import java.util.List;
  *
  * @author victor.lorenzana
  */
-public final class ApplicationMultipartFormData extends RepresentationBase implements RepresentationRequest {
+public final class MultipartFormData extends RepresentationBase implements RepresentationRequest {
     public static final String MULTIPART_FORM_DATA = "multipart/form-data";
 
     private static String boundary = "gc0p4Jq0M2Yt08jU534c0p";
-    public ApplicationMultipartFormData()
+    public MultipartFormData()
     {
         
     }
