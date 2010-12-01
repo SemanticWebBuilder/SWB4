@@ -5,6 +5,8 @@
 
 package org.semanticwb.rest;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -18,60 +20,74 @@ import org.w3c.dom.NodeList;
  * @author victor.lorenzana
  */
 public abstract class RepresentationBase implements RepresentationRequest {
+    public static final String ORG_SEMANTICWB_REST_REPRESENTATIONBASE = "org.semanticwb.rest.RepresentationBase/";
 
-    protected static final String JSON_CONTENT_TYPE = "json";
-    protected static final String APPLICATION_XML = "application/xml";
+    protected static final String JSON_CONTENT_TYPE = "json";    
     protected static final String TEXT_XML = "text/xml";
 
     protected static final String CONTENT_TYPE = "Content-Type";
     protected final Set<Parameter> parameters=new HashSet<Parameter>();
-    protected final String mediaType;
-    protected final Method method;
+    //protected String mediaType;
+    protected Method method;
     protected ResponseDefinition responseDefinition;
-    protected RepresentationBase(String mediaType,Method method)
+    /*protected RepresentationBase(String mediaType,Method method)
     {
         this.mediaType=mediaType;
         this.method=method;        
+    }*/
+    protected RepresentationBase()
+    {
+        
     }
-    static RepresentationBase createRepresenatationRequest(Element representation,Method method) throws RestException
+    static RepresentationRequest createRepresenatationRequest(Element representation,Method method) throws RestException
     {
         String mediaType=representation.getAttribute("mediaType");
         if(mediaType==null)
         {
             throw new RestException("The mediaType atributo was not found");
         }
-       
-        RepresentationBase representationInfo=null;        
-        if(mediaType.equals("application/x-www-form-urlencoded"))
+        
+        try
         {
-            representationInfo=new XWWWFormUrlEncoded(method);
-        }
-        else if(mediaType.equals("multipart/form-data"))
-        {
-            representationInfo=new ApplicationMultipartFormData(method);
-        }
-        if(representation==null)
-        {
-            throw new RestException("The representation "+ mediaType +" is not supported");
-        }
-        else
-        {
-            NodeList params=representation.getChildNodes();
-            for(int i=0;i<params.getLength();i++)
+
+            Class<RepresentationRequest> repclass=RestSource.getRepresentationRequest(mediaType);
+            if(repclass!=null)
             {
-                if(params.item(i) instanceof Element && ((Element)params.item(i)).getTagName().equals("param"))
+                Object objrep=repclass.newInstance();
+                if(objrep instanceof RepresentationRequest)
                 {
-                    Parameter param=Parameter.createParamterInfo((Element)params.item(i));
-                    representationInfo.parameters.add(param);
+                    RepresentationRequest representationInfo=(RepresentationRequest)objrep;
+                    representationInfo.setMethod(method);
+                    NodeList params=representation.getChildNodes();
+                    for(int i=0;i<params.getLength();i++)
+                    {
+                        if(params.item(i) instanceof Element && ((Element)params.item(i)).getTagName().equals("param"))
+                        {
+                            Parameter param=Parameter.createParamterInfo((Element)params.item(i));
+                            representationInfo.addParameter(param);
+                        }
+                    }
+                    return representationInfo;
+                }
+                else
+                {
+                    throw new RestException("The representatin "+ mediaType +" is not supported");
                 }
             }
+            else
+            {
+                throw new RestException("The representatin "+ mediaType +" is not supported");
+            }
         }
-        return representationInfo;
-    }
-    public String getMediaType()
-    {
-        return mediaType;
-    }
+        catch(IllegalAccessException cnfe)
+        {
+            throw new RestException("The representatin "+ mediaType +" is not supported", cnfe);
+        }
+        catch(InstantiationException cnfe)
+        {
+            throw new RestException("The representatin "+ mediaType +" is not supported", cnfe);
+        }         
+    }    
     public Method getMethod()
     {
         return method;
@@ -175,7 +191,40 @@ public abstract class RepresentationBase implements RepresentationRequest {
         getAllParameters.addAll(Arrays.asList(method.getOptionalParameters()));
         return getAllParameters.toArray(new Parameter[getAllParameters.size()]);
     }
-
+    protected RepresentationResponse processResponse(HttpURLConnection con) throws IOException,InstantiationException,IllegalAccessException,RestException,ExecutionRestException
+    {
+        int responseCode = con.getResponseCode();
+            if (con.getHeaderField(CONTENT_TYPE) != null)
+            {
+                String mediaType = con.getHeaderField(CONTENT_TYPE);
+                for (ResponseDefinition definition : method.getResponseDefinitions())
+                {
+                    if (definition.getMediaType().equals(mediaType) && definition.getStatus() == responseCode)
+                    {
+                        Class clazz = RestSource.getRepresentationResponse(mediaType);
+                        Object obj = clazz.newInstance();
+                        if (obj instanceof RepresentationResponse)
+                        {
+                            RepresentationResponse repResponse = (RepresentationResponse) obj;
+                            repResponse.process(con);
+                            for (ResponseDefinition def : this.method.definitionResponses)
+                            {
+                                if (def.getMediaType().equals(con.getHeaderField(CONTENT_TYPE)))
+                                {
+                                    def.validateResponse(repResponse.getResponse());
+                                }
+                            }
+                            return repResponse;
+                        }
+                    }
+                }
+                throw new ExecutionRestException(this.getMethod().getHTTPMethod(), con.getURL(), "The response "+mediaType+" is not supported");
+            }
+            else
+            {
+                throw new ExecutionRestException(this.getMethod().getHTTPMethod(), con.getURL(), "The content-type was not found");
+            }
+    }
     
 
 }

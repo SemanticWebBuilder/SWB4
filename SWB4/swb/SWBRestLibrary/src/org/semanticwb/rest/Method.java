@@ -86,7 +86,8 @@ public final class Method {
         }
         if(m.defaultRequestRepresentation==null)
         {
-            XWWWFormUrlEncoded _default=new XWWWFormUrlEncoded(m);
+            XWWWFormUrlEncoded _default=new XWWWFormUrlEncoded();
+            _default.setMethod(m);
             m.defaultRequestRepresentation=_default;
         }
         NodeList listResponse=method.getElementsByTagNameNS(method.getNamespaceURI(), "response");

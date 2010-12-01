@@ -18,6 +18,7 @@ import java.nio.charset.Charset;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -68,6 +69,15 @@ public class RestPublish
     public static final String WADL_NS_2009 = "http://wadl.dev.java.net/2009/02";
     private static final String WADL_XSD_LOCATION_2009 = "http://www.w3.org/Submission/wadl/wadl.xsd";
 
+    
+
+    static
+    {
+        
+        System.setProperty(RepresentationBase.ORG_SEMANTICWB_REST_REPRESENTATIONBASE+XWWWFormUrlEncoded.APPLICATION_XWWW_FORM_URL_ENCODED, XWWWFormUrlEncoded.class.getCanonicalName());
+        System.setProperty(RepresentationBase.ORG_SEMANTICWB_REST_REPRESENTATIONBASE+AtomXML.APPLICATION_ATOM_XML, AtomXML.class.getCanonicalName());
+        System.setProperty(RepresentationBase.ORG_SEMANTICWB_REST_REPRESENTATIONBASE+ApplicationMultipartFormData.MULTIPART_FORM_DATA, ApplicationMultipartFormData.class.getCanonicalName());
+    }
     public RestPublish(Set<SemanticClass> classes)
     {
         this.classes = classes;
