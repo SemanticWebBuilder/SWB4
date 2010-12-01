@@ -4,7 +4,7 @@
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
     <admdbconnmgr defconn="true"/>
     <fieldset legend="Content Setting">
-        <input type="file" name="archive" label="PDF Document:" showfile="true" filetype="pdf" isshowfiletype="true" isremovefile="true" removemsg="Remove PDF document" size="40" jsrequired="true" />
+        <input type="file" name="archive" label="PDF Document:" showfile="true" filetype="pdf" isshowfiletype="true" isremovefile="true" removemsg="Remove PDF document" size="40" />
     </fieldset>
 
     <fieldset legend="Look and Feel">
@@ -19,8 +19,20 @@
     </fieldset>
 
     <fieldset>
-        <input type="submit" name="btnSave" id="btnSave" value="Save" />
+        <input type="submit" name="btnSave" id="btnSave" value="Save" onclick="return jsValida(this.form)" />
         <input type="reset"  name="btnReset" id="btnReset" value="Reset" />
     </fieldset>
     </form>
+    <script type="text/javascript">
+    <![CDATA[
+        function jsValida(frm) {
+             if(!dojo.byId('archive').value && !dojo.byId('wbNoFile_archive')) {
+                alert('Specify a PDF document for the resource');
+                dojo.byId('archive').focus();
+                return false;
+            }
+            return true;
+        }
+    ]]>
+    </script>
 </admresource>
