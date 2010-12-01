@@ -113,6 +113,7 @@ public final class XWWWFormUrlEncoded extends RepresentationBase implements Repr
         }
         return sb.toString();
     }
+
     public RepresentationResponse request(List<ParameterValue> values) throws RestException
     {
         checkParameters(values);
@@ -148,7 +149,18 @@ public final class XWWWFormUrlEncoded extends RepresentationBase implements Repr
                     {
                         throw new RestException("The content of the url is invalid");
                     }
+                    for(ResponseDefinition def :  this.method.definitionResponses)
+                    {
+                        if(def.getMediaType().equals(con.getHeaderField(CONTENT_TYPE)))
+                        {
+                            def.validateResponse(response);
+                        }
+                    }
                     ApplicationXML resp=new ApplicationXML(response,this.getMethod(),con.getResponseCode(),url);
+                    if(this.responseDefinition!=null)
+                    {
+                        this.responseDefinition.validateResponse(response);
+                    }
                     return resp;
                 }
                 if (con.getHeaderField(CONTENT_TYPE) != null && con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(AtomXML.ATOM_NS))
@@ -159,7 +171,18 @@ public final class XWWWFormUrlEncoded extends RepresentationBase implements Repr
                     {
                         throw new RestException("The content of the url is invalid");
                     }
+                    for(ResponseDefinition def :  this.method.definitionResponses)
+                    {
+                        if(def.getMediaType().equals(con.getHeaderField(CONTENT_TYPE)))
+                        {
+                            def.validateResponse(response);
+                        }
+                    }
                     AtomXML resp = new AtomXML(this.method,con.getResponseCode(),url);
+                    if(this.responseDefinition!=null)
+                    {
+                        this.responseDefinition.validateResponse(response);
+                    }
                     resp.setDocument(response);
                     return resp;
                 }

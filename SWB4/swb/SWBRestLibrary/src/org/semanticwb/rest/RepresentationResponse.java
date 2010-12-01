@@ -23,4 +23,5 @@ public interface RepresentationResponse extends Representation {
     public Object getValue(ParameterDefinition definition) throws RestException;
     public int getStatus();
     public ParameterDefinition[] getParameterDefinitions();
+    
 }
