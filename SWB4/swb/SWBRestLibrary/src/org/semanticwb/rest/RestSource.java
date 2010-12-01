@@ -5,7 +5,9 @@
 package org.semanticwb.rest;
 
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -16,8 +18,9 @@ import org.semanticwb.SWBUtils;
  */
 public class RestSource
 {
-    public static final HashMap<String,Class<RepresentationRequest>> representationsRequest=new HashMap<String,Class<RepresentationRequest>>();
-    public static final HashMap<String,Class<RepresentationResponse>> representationsResponse=new HashMap<String, Class<RepresentationResponse>>();
+
+    public static final Map<String,Class<RepresentationRequest>> representationsRequest=Collections.synchronizedMap(new HashMap<String,Class<RepresentationRequest>>());
+    public static final Map<String,Class<RepresentationResponse>> representationsResponse=Collections.synchronizedMap(new HashMap<String, Class<RepresentationResponse>>());
     private static final Logger log=SWBUtils.getLogger(RestSource.class);
     private final URL wadlurl;
     private ServiceInfo serviceInfo;
