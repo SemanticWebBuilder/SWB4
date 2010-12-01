@@ -33,6 +33,7 @@ import org.w3c.dom.Text;
  */
 public class AtomXML extends RepresentationBase implements RepresentationRequest,RepresentationResponse
 {
+    public static final String APPLICATION_ATOM_XML = "application/atom+xml";
     private static final Logger log = SWBUtils.getLogger(AtomXML.class);
     private Document document;
     public static final String ATOM_NS = "http://www.w3.org/2005/Atom";
@@ -40,7 +41,7 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
     private final URL url;
     public AtomXML(Method method,int status,URL url)
     {
-        super("application/atom+xml", method);
+        //super("application/atom+xml", method);
         this.status=status;
         this.url=url;
 
@@ -154,7 +155,7 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod(this.getMethod().getHTTPMethod().toString());
             String charset = Charset.defaultCharset().name();
-            con.setRequestProperty(CONTENT_TYPE + "; charset=" + charset, this.mediaType);
+            con.setRequestProperty(CONTENT_TYPE + "; charset=" + charset, APPLICATION_ATOM_XML);
             con.setDoOutput(true);
             con.setDoInput(true);
             OutputStream out = con.getOutputStream();
@@ -162,40 +163,7 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
             String xml = SWBUtils.XML.domToXml(requestAtomDocument, charset, true);
             out.write(xml.getBytes());
             out.close();
-            if (con.getResponseCode() == 200)
-            {
-                if(con.getHeaderField(CONTENT_TYPE)!=null && (con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(APPLICATION_XML) || con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(TEXT_XML)))
-                {
-                    InputStream in = con.getInputStream();
-                    Document response = SWBUtils.XML.xmlToDom(in);
-                    if (response == null)
-                    {
-                        throw new RestException("The content of the url is invalid");
-                    }
-                    ApplicationXML resp = new ApplicationXML(response,this.getMethod(),con.getResponseCode(),url);
-                    return resp;
-                }
-                if (con.getHeaderField(CONTENT_TYPE) != null && con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(ATOM_NS))
-                {
-                    InputStream in = con.getInputStream();
-                    Document response = SWBUtils.XML.xmlToDom(in);
-                    if (response == null)
-                    {
-                        throw new RestException("The content of the url is invalid");
-                    }
-                    AtomXML resp = new AtomXML(this.method,con.getResponseCode(),url);
-                    resp.document=response;
-                    return resp;
-                }
-                else
-                {
-                    throw new RestException("The response has a not valid Content-Type header: " + con.getHeaderField(CONTENT_TYPE) + "(only " + JSON_CONTENT_TYPE + "," + APPLICATION_XML + " are valid)");
-                }
-            }
-            else
-            {
-                throw new RestException("The document was not found error code " + con.getResponseCode());
-            }
+            return super.processResponse(con);
         }
         catch (Exception ioe)
         {
@@ -241,7 +209,7 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
         return mcls;
     }
 
-    public Object getObject() throws EvalError, RestException
+    private Object getObject() throws EvalError, RestException
     {
         if(document==null)
         {
@@ -375,5 +343,41 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
             throw new RestException(e);
         }
         return values.toArray(new URL[values.size()]);
+    }
+
+    public void setMethod(Method method)
+    {
+        this.method=method;
+    }
+
+    public String getMediaType()
+    {
+        return APPLICATION_ATOM_XML;
+    }
+    public void addParameter(Parameter parameter)
+    {
+        this.parameters.add(parameter);
+    }
+
+    public Object getResponse() throws RestException
+    {
+        return document;
+    }
+    public void process(HttpURLConnection con) throws ExecutionRestException
+    {
+        try
+        {
+            InputStream in=con.getInputStream();
+            document=SWBUtils.XML.xmlToDom(in);
+            if(document==null)
+            {
+                throw new ExecutionRestException(HTTPMethod.POST, con.getURL(), "The document is invalid");
+            }
+            in.close();
+        }
+        catch(Exception e)
+        {
+            throw new ExecutionRestException(this.method.getHTTPMethod(), url, e);
+        }
     }
 }

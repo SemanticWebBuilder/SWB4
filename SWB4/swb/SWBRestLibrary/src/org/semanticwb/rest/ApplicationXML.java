@@ -5,23 +5,16 @@
 package org.semanticwb.rest;
 
 import bsh.Interpreter;
-import java.io.IOException;
-import java.io.StringReader;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.xml.XMLConstants;
 
-import javax.xml.transform.Source;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 import org.jdom.Namespace;
 import org.jdom.input.DOMBuilder;
 import org.jdom.xpath.XPath;
@@ -33,7 +26,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 /**
  *
@@ -210,7 +202,7 @@ public final class ApplicationXML implements RepresentationResponse
         return sb.toString();
     }
 
-    public Object getObject() throws bsh.EvalError, RestException
+    private Object getObject() throws bsh.EvalError, RestException
     {
         ClassLoader mcls = getClassLoader();
         String className = toUpperCase(getRootName(document));
@@ -401,5 +393,26 @@ public final class ApplicationXML implements RepresentationResponse
             throw new RestException(e);
         }
         return values.toArray(new URL[values.size()]);
+    }
+    public Object getNativeResponse() throws RestException
+    {
+        return this.document;
+    }
+    public void process(HttpURLConnection con) throws ExecutionRestException
+    {
+        try
+        {
+            InputStream in=con.getInputStream();
+            document=SWBUtils.XML.xmlToDom(in);
+            if(document==null)
+            {
+                throw new ExecutionRestException(HTTPMethod.POST, con.getURL(), "The document is invalid");
+            }
+            in.close();
+        }
+        catch(Exception e)
+        {
+            throw new ExecutionRestException(this.method.getHTTPMethod(), url, e);
+        }        
     }
 }

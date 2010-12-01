@@ -6,24 +6,22 @@
 package org.semanticwb.rest;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
-import org.semanticwb.SWBUtils;
-import org.w3c.dom.Document;
 
 /**
  *
  * @author victor.lorenzana
  */
 public final class ApplicationMultipartFormData extends RepresentationBase implements RepresentationRequest {
+    public static final String MULTIPART_FORM_DATA = "multipart/form-data";
 
     private static String boundary = "gc0p4Jq0M2Yt08jU534c0p";
-    public ApplicationMultipartFormData(Method method)
+    public ApplicationMultipartFormData()
     {
-        super("multipart/form-data",method);
+        
     }
     private static OutputStream sendHeaders(HttpURLConnection connection) throws IOException
     {
@@ -53,7 +51,7 @@ public final class ApplicationMultipartFormData extends RepresentationBase imple
         {            
             HttpURLConnection con=(HttpURLConnection)url.openConnection();
             con.setRequestMethod(this.getMethod().getHTTPMethod().toString());
-            con.setRequestProperty(CONTENT_TYPE, this.mediaType);
+            con.setRequestProperty(CONTENT_TYPE, MULTIPART_FORM_DATA);
             con.setDoOutput(true);
             con.setDoInput(true);
             OutputStream out = sendHeaders(con);
@@ -62,67 +60,27 @@ public final class ApplicationMultipartFormData extends RepresentationBase imple
                 sendPart(value, out);
             }
             writeEnd(out);
-            out.close();
-            if(con.getResponseCode()==200)
-            {
-                if(con.getHeaderField(CONTENT_TYPE)!=null && (con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(APPLICATION_XML) || con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(TEXT_XML)))
-                {
-                    InputStream in=con.getInputStream();
-                    Document response=SWBUtils.XML.xmlToDom(in);
-                    if(response==null)
-                    {
-                        throw new RestException("The content of the url is invalid");
-                    }
-                    for(ResponseDefinition def :  this.method.definitionResponses)
-                    {
-                        if(def.getMediaType().equals(con.getHeaderField(CONTENT_TYPE)))
-                        {
-                            def.validateResponse(response);
-                        }
-                    }
-                    ApplicationXML resp=new ApplicationXML(response,this.getMethod(),con.getResponseCode(),url);
-                    if(this.responseDefinition!=null)
-                    {
-                        this.responseDefinition.validateResponse(response);
-                    }
-                    return resp;
-                }
-                if (con.getHeaderField(CONTENT_TYPE) != null && con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(AtomXML.ATOM_NS))
-                {
-                    InputStream in = con.getInputStream();
-                    Document response = SWBUtils.XML.xmlToDom(in);
-                    if (response == null)
-                    {
-                        throw new RestException("The content of the url is invalid");
-                    }
-                    for(ResponseDefinition def :  this.method.definitionResponses)
-                    {
-                        if(def.getMediaType().equals(con.getHeaderField(CONTENT_TYPE)))
-                        {
-                            def.validateResponse(response);
-                        }
-                    }
-                    AtomXML resp = new AtomXML(this.method,con.getResponseCode(),url);
-                    if(this.responseDefinition!=null)
-                    {
-                        this.responseDefinition.validateResponse(response);
-                    }
-                    resp.setDocument(response);
-                    return resp;
-                }
-                else
-                {
-                    throw new RestException("The response has a not valid Content-Type header: "+con.getHeaderField(CONTENT_TYPE)+"(only "+JSON_CONTENT_TYPE+","+APPLICATION_XML+" are valid)");
-                }
-            }
-            else
-            {
-                throw new RestException("The document was not found error code "+con.getResponseCode());
-            }
+            out.close();            
+            return processResponse(con);            
         }
         catch(Exception ioe)
         {
             throw new ExecutionRestException(this.getMethod().getHTTPMethod(), url, ioe);
         }
+    }
+
+    public void setMethod(Method method)
+    {
+        this.method=method;
+    }
+
+    public String getMediaType()
+    {
+        return MULTIPART_FORM_DATA;
+    }
+
+    public void addParameter(Parameter parameter)
+    {
+        this.parameters.add(parameter);
     }
 }

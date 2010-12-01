@@ -19,4 +19,6 @@ public interface RepresentationRequest extends Representation {
     public Parameter[] getOptionalParameters();
     public Parameter[] getAllParameters();
     public Method getMethod();
+    public void setMethod(Method method);
+    public void addParameter(Parameter parameter);
 }
