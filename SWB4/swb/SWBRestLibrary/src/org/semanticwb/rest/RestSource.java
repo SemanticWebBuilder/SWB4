@@ -27,7 +27,7 @@ public class RestSource
     static
     {
         addRepresentationRequest(AtomXML.APPLICATION_ATOM_XML, (Class<RepresentationRequest>)AtomXML.class.asSubclass(RepresentationRequest.class));
-        addRepresentationRequest(ApplicationMultipartFormData.MULTIPART_FORM_DATA, (Class<RepresentationRequest>)ApplicationMultipartFormData.class.asSubclass(RepresentationRequest.class));
+        addRepresentationRequest(MultipartFormData.MULTIPART_FORM_DATA, (Class<RepresentationRequest>)MultipartFormData.class.asSubclass(RepresentationRequest.class));
         addRepresentationRequest(XWWWFormUrlEncoded.APPLICATION_XWWW_FORM_URL_ENCODED, (Class<RepresentationRequest>)XWWWFormUrlEncoded.class.asSubclass(RepresentationRequest.class));
 
 
