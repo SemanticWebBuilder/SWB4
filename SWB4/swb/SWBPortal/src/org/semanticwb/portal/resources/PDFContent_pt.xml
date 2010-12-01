@@ -4,7 +4,7 @@
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
     <admdbconnmgr defconn="true"/>
     <fieldset legend="Configuración de contenido">
-        <input type="file" name="archive" label="Documento PDF:" showfile="true" filetype="pdf" isshowfiletype="true" isremovefile="true" removemsg="Quitar documento PDF" size="40" jsrequired="true" />
+        <input type="file" name="archive" label="Documento PDF:" showfile="true" filetype="pdf" isshowfiletype="true" isremovefile="true" removemsg="Quitar documento PDF" size="40" />
     </fieldset>
 
     <fieldset legend="Forma y estilo">
