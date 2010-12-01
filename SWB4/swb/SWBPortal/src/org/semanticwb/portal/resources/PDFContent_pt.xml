@@ -19,8 +19,20 @@
     </fieldset>
 
     <fieldset>
-        <input type="submit" name="btnSave" id="btnSave" value="Salvar" />
+        <input type="submit" name="btnSave" id="btnSave" value="Salvar" onclick="return jsValida(this.form)" />
         <input type="reset"  name="btnReset" id="btnReset" value="Restabelecer" />
     </fieldset>
     </form>
+    <script type="text/javascript">
+    <![CDATA[
+        function jsValida(frm) {
+             if(!dojo.byId('archive').value && !dojo.byId('wbNoFile_archive')) {
+                alert('Especifique um documento PDF para o recurso');
+                dojo.byId('archive').focus();
+                return false;
+            }
+            return true;
+        }
+    ]]>
+    </script>
 </admresource>
