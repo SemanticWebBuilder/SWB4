@@ -45,26 +45,29 @@ public final class ResponseDefinition
     }
     public void validateResponse(Document document) throws RestException
     {
-        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        StringReader reader = new StringReader(SWBUtils.XML.domToXml(docschema));
-        Source schemaFile = new StreamSource(reader);
-        try
+        if(elementDefinition!=null && docschema!=null)
         {
-            Schema schema = factory.newSchema(schemaFile);
-            Validator validator = schema.newValidator();
-            DOMSource source = new DOMSource(document);
-            validator.validate(source);
-        }
-        catch (IOException ioe)
-        {
-            log.debug(ioe);
-            throw new RestException(ioe);
-        }
-        catch (SAXException saxe)
-        {
-            log.debug(saxe);
-            throw new RestException(saxe);
+            SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            StringReader reader = new StringReader(SWBUtils.XML.domToXml(docschema));
+            Source schemaFile = new StreamSource(reader);
+            try
+            {
+                Schema schema = factory.newSchema(schemaFile);
+                Validator validator = schema.newValidator();
+                DOMSource source = new DOMSource(document);
+                validator.validate(source);
+            }
+            catch (IOException ioe)
+            {
+                log.debug(ioe);
+                throw new RestException(ioe);
+            }
+            catch (SAXException saxe)
+            {
+                log.debug(saxe);
+                throw new RestException(saxe);
 
+            }
         }
     }
     public int getStatus()
