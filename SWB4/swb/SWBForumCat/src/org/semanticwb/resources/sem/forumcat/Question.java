@@ -1,11 +1,16 @@
 package org.semanticwb.resources.sem.forumcat;
 
 import java.util.Iterator;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.model.User;
 
 
 public class Question extends org.semanticwb.resources.sem.forumcat.base.QuestionBase 
 {
+    static {
+        SWBPortal.getIndexMgr().getDefaultIndexer().registerParser(Question.class, new QuestionParser());
+    }
+
     public Question(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
