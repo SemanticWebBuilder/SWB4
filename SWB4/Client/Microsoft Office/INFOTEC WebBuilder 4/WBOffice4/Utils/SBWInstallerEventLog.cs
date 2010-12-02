@@ -25,7 +25,11 @@ namespace WBOffice4.Utils
             myEventLogInstaller.Log = TraceEventLogListener.eventLogName;
 
             // Add myEventLogInstaller to the Installer collection.
-            Installers.Add(myEventLogInstaller);   
+            try
+            {
+                Installers.Add(myEventLogInstaller);
+            }
+            catch { }
         }
     }
 }
