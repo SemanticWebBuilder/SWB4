@@ -1,11 +1,16 @@
 package org.semanticwb.resources.sem.forumcat;
 
 import java.util.Iterator;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.model.User;
 
 
 public class Answer extends org.semanticwb.resources.sem.forumcat.base.AnswerBase 
 {
+    static {
+        SWBPortal.getIndexMgr().getDefaultIndexer().registerParser(Answer.class, new AnswerParser());
+    }
+
     public Answer(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
@@ -20,7 +25,6 @@ public class Answer extends org.semanticwb.resources.sem.forumcat.base.AnswerBas
                 ret = true;
             }
         }
-
         return ret;
     }
 }
