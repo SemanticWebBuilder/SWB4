@@ -1,2 +1,3 @@
 "msgError29" = "Message Intermediate Catch Event can have only one incoming Message Flow"
 "msgError30" = "Message Intermediate Catch Event cannot have outgoing Message Flow"
+"msgError52" = "Gateway cannot have ReceiveTask and Message Intermedaite Event in output flows"
