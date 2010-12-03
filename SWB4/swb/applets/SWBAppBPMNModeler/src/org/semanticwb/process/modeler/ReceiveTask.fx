@@ -35,4 +35,13 @@ public class ReceiveTask extends Task
         }
         return ret;
     }
+
+    public override function canStartLink(link: ConnectionObject) : Boolean {
+        var ret = super.canStartLink(link);
+        if (link instanceof MessageFlow) {
+            ret = false;
+            ModelerUtils.setErrorMessage(##"msgError56");
+        }
+        return ret;
+    }
 }
