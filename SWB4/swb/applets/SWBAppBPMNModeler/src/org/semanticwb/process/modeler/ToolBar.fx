@@ -972,7 +972,6 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=CancelationIntermediateCatchEvent
                         {
                             modeler:modeler
-                            title: ##"cancelInter"//ModelerUtils.getLocalizedString("cancelInter")
                             uri:"new:interevent:{counter++}"
                         }
                     }
