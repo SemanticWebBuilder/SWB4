@@ -11,6 +11,8 @@ import javafx.scene.Group;
 import javafx.scene.shape.Circle;
 import javafx.scene.image.ImageView;
 import javafx.scene.effect.ColorAdjust;
+import org.semanticwb.process.modeler.ConditionalFlow;
+import org.semanticwb.process.modeler.ModelerUtils;
 
 /**
  * @author javier.solis
@@ -237,4 +239,14 @@ public class Event extends FlowNode
              message.visible=false;
         }
     }
+
+    public override function canStartLink(link: ConnectionObject) : Boolean {
+        var ret = super.canStartLink(link);
+        if (link instanceof ConditionalFlow) {
+            ret = false;
+            ModelerUtils.setErrorMessage(##"msgError53");
+        }
+        return ret;
+    }
+
 }
