@@ -34,6 +34,15 @@ public class MessageIntermediateCatchEvent extends IntermediateCatchEvent
             ret = false;
             ModelerUtils.setErrorMessage(##"msgError29");
         }
+
+        if (link instanceof SequenceFlow and link.ini instanceof ExclusiveIntermediateEventGateway) {
+            for(ele in link.ini.getOutputConnectionObjects()) {
+                if(ele instanceof SequenceFlow and ele.end instanceof ReceiveTask) {
+                    ret = false;
+                    ModelerUtils.setErrorMessage(##"msgError52");
+                }
+            }
+        }
         return ret;
     }
 
