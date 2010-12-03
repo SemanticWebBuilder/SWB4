@@ -1,1 +1,2 @@
 "msgError52" = "Un Gateway no puede tener una Tarea de Recepción y un Evento Intermedio de Mensaje en sus salidas"
+"msgError56" = "Una Tarea de Recepción de Mensaje no puede tener Flujos de Mensaje salientes"
