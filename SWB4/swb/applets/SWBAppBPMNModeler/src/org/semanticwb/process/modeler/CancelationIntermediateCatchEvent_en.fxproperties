@@ -1,1 +1,2 @@
 "msgError6" = "Cancelation Boundary event can only be attached to Transaction"
+"msgError55" = "Cancelation Boundary event must be attached to a Transaction"
