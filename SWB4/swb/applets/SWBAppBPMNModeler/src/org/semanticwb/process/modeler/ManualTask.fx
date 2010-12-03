@@ -19,4 +19,22 @@ public class ManualTask extends Task
         type=TYPE_MANUAL;
         return super.create();
     }
+
+    override public function canStartLink(link:ConnectionObject) : Boolean {
+        var ret = super.canStartLink(link);
+        if (link instanceof MessageFlow) {
+            ret = false;
+            ModelerUtils.setErrorMessage(##"msgError57");
+        }
+        return ret;
+    }
+
+    override public function canEndLink(link:ConnectionObject) : Boolean {
+        var ret = super.canEndLink(link);
+        if (link instanceof MessageFlow) {
+            ret = false;
+            ModelerUtils.setErrorMessage(##"msgError57");
+        }
+        return ret;
+    }
 }
