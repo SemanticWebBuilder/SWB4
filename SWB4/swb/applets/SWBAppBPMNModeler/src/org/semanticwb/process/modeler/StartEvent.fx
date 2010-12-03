@@ -8,6 +8,7 @@ package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
 import org.semanticwb.process.modeler.AdhocSubProcess;
+import org.semanticwb.process.modeler.MultipleStartEvent;
 
 /**
  * @author javier.solis
@@ -35,7 +36,7 @@ public class StartEvent extends CatchEvent
             ModelerUtils.setErrorMessage(##"msgError33");
         }
 
-        if (link instanceof MessageFlow) {
+        if (link instanceof MessageFlow and not (this instanceof MultipleStartEvent)) {
             ModelerUtils.setErrorMessage(##"msgError34");
             ret = false;
         }
