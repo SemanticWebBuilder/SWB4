@@ -1,1 +1,2 @@
 "msgError6" = "Un Evento Intermedio de Cancelación sólo puede adherirse a Transacciones"
+"msgError55" = "Un Evento Intermedio de Cancelación debe ir adherido a una Transacción"
