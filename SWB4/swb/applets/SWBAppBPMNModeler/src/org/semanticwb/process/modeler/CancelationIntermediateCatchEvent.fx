@@ -30,4 +30,9 @@ public class CancelationIntermediateCatchEvent extends IntermediateCatchEvent
         }
         return ret;
     }
+
+    public override function canEndLink(link:ConnectionObject) : Boolean {
+        ModelerUtils.setErrorMessage(##"msgError55");
+        return false;
+    }
 }
