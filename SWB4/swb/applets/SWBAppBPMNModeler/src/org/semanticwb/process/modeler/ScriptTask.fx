@@ -19,4 +19,22 @@ public class ScriptTask extends Task
         type=TYPE_SCRIPT;
         return super.create();
     }
+
+    override public function canStartLink(link:ConnectionObject) : Boolean {
+        var ret = super.canStartLink(link);
+        if (link instanceof MessageFlow) {
+            ret = false;
+            ModelerUtils.setErrorMessage(##"msgError58");
+        }
+        return ret;
+    }
+
+    override public function canEndLink(link:ConnectionObject) : Boolean {
+        var ret = super.canEndLink(link);
+        if (link instanceof MessageFlow) {
+            ret = false;
+            ModelerUtils.setErrorMessage(##"msgError58");
+        }
+        return ret;
+    }
 }
