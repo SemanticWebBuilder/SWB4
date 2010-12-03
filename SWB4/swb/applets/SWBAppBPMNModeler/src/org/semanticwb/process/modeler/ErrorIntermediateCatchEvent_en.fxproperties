@@ -1,1 +1,2 @@
 "msgError10" = "Error Intermediate Event cannot be linked to Event-based Gateway"
+"msgError54" = "Error Intermediate Event must be attached to an activity"
