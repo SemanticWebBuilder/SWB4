@@ -8,6 +8,7 @@ package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
 import org.semanticwb.process.modeler.ExclusiveIntermediateEventGateway;
+import org.semanticwb.process.modeler.MessageIntermediateCatchEvent;
 
 /**
  * @author javier.solis
@@ -23,9 +24,14 @@ public class ReceiveTask extends Task
 
     public override function canEndLink(link:ConnectionObject) : Boolean {
         var ret = super.canEndLink(link);
-
         if (link instanceof SequenceFlow and link.ini instanceof ExclusiveIntermediateEventGateway) {
             ret = true;
+            for(ele in link.ini.getOutputConnectionObjects()) {
+                if(ele instanceof SequenceFlow and ele.end instanceof MessageIntermediateCatchEvent) {
+                    ret = false;
+                    ModelerUtils.setErrorMessage(##"msgError52");
+                }
+            }
         }
         return ret;
     }
