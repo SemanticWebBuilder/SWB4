@@ -1,2 +1,3 @@
 "msgError29" = "Un Evento Intermedio de Message Receptor puede tener un solo Flujo de Mensaje entrante"
 "msgError30" = "Un Evento Intermedio de Message Receptor no puede tener Flujos de Mensage salientes"
+"msgError52" = "Un Gateway no puede tener una Tarea de Recepción y un Evento Intermedio de Mensaje en sus salidas"
