@@ -1,1 +1,2 @@
 "msgError52" = "Gateway cannot have ReceiveTask and Message Intermedaite Event in output flows"
+"msgError56" = "Receive Task cannot have outgoing Message Flow"
