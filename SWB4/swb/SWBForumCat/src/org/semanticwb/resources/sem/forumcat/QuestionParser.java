@@ -44,6 +44,18 @@ public class QuestionParser extends GenericParser {
     }
 
     @Override
+    public String getIndexTitle(Searchable gen) {
+        Question q = (Question) gen;
+        return q.getQuestion();
+    }
+
+    @Override
+    public String getTitle(Searchable gen, String lang) {
+        Question q = (Question) gen;
+        return q.getQuestion();
+    }
+
+    @Override
     public String getType(Searchable gen) {
         return "Question";
     }
@@ -77,7 +89,7 @@ public class QuestionParser extends GenericParser {
         if (page != null) {
             ret = super.getUrl(page);
         }
-        return ret;
+        return ret + "?searchAct=showDetail&uri=" + q.getEncodedURI();
     }
 
     private WebPage getWebPage(Resource res) {
