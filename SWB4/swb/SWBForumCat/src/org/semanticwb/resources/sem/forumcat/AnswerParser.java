@@ -34,6 +34,18 @@ public class AnswerParser extends GenericParser {
         return map;
     }
 
+    @Override
+    public String getIndexTitle(Searchable gen) {
+        Answer a = (Answer) gen;
+        return a.getAnswer();
+    }
+
+    @Override
+    public String getTitle(Searchable gen, String lang) {
+        Answer a = (Answer) gen;
+        return a.getAnswer();
+    }
+
     public String getIndexCreator(Searchable gen) {
         String ret = "";
         Answer a = (Answer) gen;
@@ -76,7 +88,7 @@ public class AnswerParser extends GenericParser {
         if (page != null) {
             ret = super.getUrl(page);
         }
-        return ret;
+        return ret + "?searchAct=showDetail&uri=" + a.getAnsQuestion().getEncodedURI();
     }
 
     private WebPage getWebPage(Resource res) {
