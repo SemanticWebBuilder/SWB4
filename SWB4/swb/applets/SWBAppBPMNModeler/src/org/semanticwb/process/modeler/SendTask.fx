@@ -19,4 +19,13 @@ public class SendTask extends Task
         type=TYPE_SEND;
         return super.create();
     }
+
+    public override function canEndLink(link: ConnectionObject) : Boolean {
+        var ret = super.canEndLink(link);
+        if (link instanceof MessageFlow) {
+            ret = false;
+            ModelerUtils.setErrorMessage(##"msgError57");
+        }
+        return ret;
+    }
 }
