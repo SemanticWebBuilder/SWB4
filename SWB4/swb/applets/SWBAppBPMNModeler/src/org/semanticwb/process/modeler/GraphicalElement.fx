@@ -322,7 +322,7 @@ public class GraphicalElement extends CustomNode
         over=true;
         if (not resizing) {
             if (title == null or title.trim() == "") {
-                ModelerUtils.startToolTip("{toolTipText}", x - w / 2 - modeler.getXScroll(), y + h / 2 - modeler.getYScroll() + 3);
+                //ModelerUtils.startToolTip("{toolTipText}", x - w / 2 - modeler.getXScroll(), y + h / 2 - modeler.getYScroll() + 3);
             } else {
                 ModelerUtils.startToolTip("{title}", x - w / 2 - modeler.getXScroll(), y + h / 2 - modeler.getYScroll() + 3);
             }
