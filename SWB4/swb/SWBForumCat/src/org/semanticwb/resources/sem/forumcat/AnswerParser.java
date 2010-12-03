@@ -50,7 +50,7 @@ public class AnswerParser extends GenericParser {
     @Override
     public String getUpdated(Searchable gen) {
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return f.format(((WebPage)gen).getUpdated());
+        return f.format(((Answer)gen).getUpdated());
     }
 
     @Override
@@ -70,19 +70,17 @@ public class AnswerParser extends GenericParser {
     @Override
     public String getUrl(Searchable gen) {
         //TODO:Revisar si es la URL correcta
+        Answer a = (Answer)gen;
         String ret = null;
-        WebPage page = getWebPage((Resource) gen);
+        WebPage page = getWebPage((Resource) a.getAnsQuestion().getForumResource().getResourceBase());
         if (page != null) {
             ret = super.getUrl(page);
         }
         return ret;
     }
 
-    private WebPage getWebPage(Searchable gen) {
+    private WebPage getWebPage(Resource res) {
         WebPage ret = null;
-        Question question = (Question) gen;
-        Resource res = question.getForumResource().getResourceBase();
-
         if (res.getResourceType() != null && res.getResourceType().getResourceMode() == ResourceType.MODE_CONTENT) {
             Iterator<Resourceable> it = res.listResourceables();
             while (it.hasNext()) {
