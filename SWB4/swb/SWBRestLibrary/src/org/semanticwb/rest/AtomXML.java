@@ -37,15 +37,9 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
     private static final Logger log = SWBUtils.getLogger(AtomXML.class);
     private Document document;
     public static final String ATOM_NS = "http://www.w3.org/2005/Atom";
-    private final int status;
-    private final URL url;
-    public AtomXML(Method method,int status,URL url)
-    {
-        //super("application/atom+xml", method);
-        this.status=status;
-        this.url=url;
-
-    }
+    private int status;
+    private URL url;
+    
     public int getStatus()
     {
         return status;
@@ -345,10 +339,7 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
         return values.toArray(new URL[values.size()]);
     }
 
-    public void setMethod(Method method)
-    {
-        this.method=method;
-    }
+    
 
     public String getMediaType()
     {
@@ -378,6 +369,29 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
         catch(Exception e)
         {
             throw new ExecutionRestException(this.method.getHTTPMethod(), url, e);
+        }
+    }
+
+    public void setMethod(Method method)
+    {
+        if(this.method==null)
+        {
+            this.method=method;
+        }
+    }
+
+    public void setURL(URL url)
+    {
+        if(this.url==null)
+        {
+            this.url=url;
+        }
+    }
+    public void setStatus(int status)
+    {
+        if(this.status==0)
+        {
+            this.status=status;
         }
     }
 }
