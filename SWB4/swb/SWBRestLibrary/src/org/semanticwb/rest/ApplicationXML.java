@@ -34,12 +34,12 @@ import org.w3c.dom.Text;
  *
  * @author victor.lorenzana
  */
-public final class ApplicationXML extends RepresentationBase implements RepresentationRequest,XmlResponse
+public class ApplicationXML extends RepresentationBase implements RepresentationRequest,XmlResponse
 {
     public static final String APPLICATION_XML="application/xml";
     private static final Logger log = SWBUtils.getLogger(ApplicationXML.class);
     private static final String NL = "\r\n";
-    private Document document;    
+    private Document document;
     private int status;
     private URL url;
     private String APPLICATION_NS="http://www.demo.org.mx";
@@ -103,7 +103,7 @@ public final class ApplicationXML extends RepresentationBase implements Represen
             classes.put(name, code);
         }
     }
-
+    
     public static String toUpperCase(String data)
     {
         String letter = data.substring(0, 1);
@@ -429,7 +429,7 @@ public final class ApplicationXML extends RepresentationBase implements Represen
             throw new ExecutionRestException(this.method.getHTTPMethod(), url, e);
         }        
     }
-    private Document constructParameters(List<ParameterValue> values) throws RestException
+    protected Document constructParameters(List<ParameterValue> values) throws RestException
     {
         Document doc = SWBUtils.XML.getNewDocument();
         Element feed = doc.createElementNS(APPLICATION_NS, "feed");
