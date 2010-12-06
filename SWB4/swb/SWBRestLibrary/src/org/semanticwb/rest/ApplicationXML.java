@@ -522,7 +522,7 @@ public final class ApplicationXML extends RepresentationBase implements Represen
             HttpURLConnection con = (HttpURLConnection) _url.openConnection();
             con.setRequestMethod(this.getMethod().getHTTPMethod().toString());
             String charset = Charset.defaultCharset().name();
-            con.setRequestProperty(CONTENT_TYPE + "; charset=" + charset, APPLICATION_XML);
+            con.setRequestProperty(CONTENT_TYPE, APPLICATION_XML+"; charset=" + charset);
             con.setDoOutput(true);
             con.setDoInput(true);
             OutputStream out = con.getOutputStream();

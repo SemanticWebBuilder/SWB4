@@ -149,7 +149,7 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
             HttpURLConnection con = (HttpURLConnection) _url.openConnection();
             con.setRequestMethod(this.getMethod().getHTTPMethod().toString());
             String charset = Charset.defaultCharset().name();
-            con.setRequestProperty(CONTENT_TYPE + "; charset=" + charset, APPLICATION_ATOM_XML);
+            con.setRequestProperty(CONTENT_TYPE,APPLICATION_ATOM_XML+ "; charset=" + charset);
             con.setDoOutput(true);
             con.setDoInput(true);
             OutputStream out = con.getOutputStream();

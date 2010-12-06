@@ -25,7 +25,7 @@ public final class MultipartFormData extends RepresentationBase implements Repre
     }
     private static OutputStream sendHeaders(HttpURLConnection connection) throws IOException
     {
-        connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+        connection.setRequestProperty(CONTENT_TYPE, "multipart/form-data; boundary=" + boundary);
         OutputStream out = connection.getOutputStream();
         return out;
     }
