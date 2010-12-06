@@ -6,9 +6,11 @@ package org.semanticwb.rest;
 
 import bsh.Interpreter;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,19 +28,21 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
 /**
  *
  * @author victor.lorenzana
  */
-public final class ApplicationXML implements XmlResponse
+public final class ApplicationXML extends RepresentationBase implements RepresentationRequest,XmlResponse
 {
+    public static final String APPLICATION_XML="application/xml";
     private static final Logger log = SWBUtils.getLogger(ApplicationXML.class);
     private static final String NL = "\r\n";
-    private Document document;
-    private Method method;
+    private Document document;    
     private int status;
     private URL url;
+    private String APPLICATION_NS="http://www.demo.org.mx";
     public ApplicationXML()
     {
         
@@ -66,13 +70,6 @@ public final class ApplicationXML implements XmlResponse
             this.status=status;
         }
     }
-    
-
-    public Method getMethod()
-    {
-        return method;
-    }
-
     public Object getResponse()
     {
         return document;
@@ -431,5 +428,118 @@ public final class ApplicationXML implements XmlResponse
         {
             throw new ExecutionRestException(this.method.getHTTPMethod(), url, e);
         }        
+    }
+    private Document constructParameters(List<ParameterValue> values) throws RestException
+    {
+        Document doc = SWBUtils.XML.getNewDocument();
+        Element feed = doc.createElementNS(APPLICATION_NS, "feed");
+        doc.appendChild(feed);
+        try
+        {
+            for (Parameter parameter : this.getRequiredParameters())
+            {
+                for (ParameterValue pvalue : values)
+                {
+                    if (pvalue.getName().equals(parameter.getName()))
+                    {
+                        Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
+                        Text data = doc.createTextNode(pvalue.getValue().toString());
+                        eparam.appendChild(data);
+                    }
+                }
+            }
+            for (Parameter parameter : this.getOptionalParameters())
+            {
+                for (ParameterValue pvalue : values)
+                {
+                    if (pvalue.getName().equals(parameter.getName()))
+                    {
+                        Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
+                        Text data = doc.createTextNode(pvalue.getValue().toString());
+                        eparam.appendChild(data);
+                    }
+                }
+            }
+            for (Parameter parameter : this.parameters)
+            {
+                if (parameter.isFixed())
+                {
+                    Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
+                    Text data = doc.createTextNode(parameter.getFixedValue());
+                    eparam.appendChild(data);
+                }
+            }
+
+
+            for (Parameter parameter : this.method.getRequiredParameters())
+            {
+                for (ParameterValue pvalue : values)
+                {
+                    if (pvalue.getName().equals(parameter.getName()))
+                    {
+                        Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
+                        Text data = doc.createTextNode(pvalue.getValue().toString());
+                        eparam.appendChild(data);
+                    }
+                }
+            }
+            for (Parameter parameter : this.method.getOptionalParameters())
+            {
+                for (ParameterValue pvalue : values)
+                {
+                    if (pvalue.getName().equals(parameter.getName()))
+                    {
+                        Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
+                        Text data = doc.createTextNode(pvalue.getValue().toString());
+                        eparam.appendChild(data);
+                    }
+                }
+            }
+            for (Parameter parameter : this.method.getAllParameters())
+            {
+                if (parameter.isFixed())
+                {
+                    Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
+                    Text data = doc.createTextNode(parameter.getFixedValue());
+                    eparam.appendChild(data);
+                }
+            }
+
+        }
+        catch (Exception e)
+        {
+            log.debug(e);
+            throw new RestException(e);
+        }
+        return doc;
+    }
+    public RepresentationResponse request(List<ParameterValue> values) throws RestException
+    {
+        checkParameters(values);
+        URL _url = this.getMethod().getResource().getPath();
+        try
+        {
+            HttpURLConnection con = (HttpURLConnection) _url.openConnection();
+            con.setRequestMethod(this.getMethod().getHTTPMethod().toString());
+            String charset = Charset.defaultCharset().name();
+            con.setRequestProperty(CONTENT_TYPE + "; charset=" + charset, APPLICATION_XML);
+            con.setDoOutput(true);
+            con.setDoInput(true);
+            OutputStream out = con.getOutputStream();
+            Document requestAtomDocument = constructParameters(values);
+            String xml = SWBUtils.XML.domToXml(requestAtomDocument, charset, true);
+            out.write(xml.getBytes());
+            out.close();
+            return super.processResponse(con);
+        }
+        catch (Exception ioe)
+        {
+            throw new ExecutionRestException(this.getMethod().getHTTPMethod(), _url, ioe);
+        }
+    }
+
+    public void addParameter(Parameter parameter)
+    {
+        this.parameters.add(parameter);
     }
 }

@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.List;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -17,11 +18,10 @@ import org.semanticwb.SWBUtils;
  *
  * @author victor.lorenzana
  */
-public class JSON implements RepresentationResponse {
+public class JSON extends RepresentationBase implements RepresentationRequest,RepresentationResponse {
 
     public static final String APPLICATION_JSON="application/json";
-    private static final Logger log = SWBUtils.getLogger(JSON.class);
-    private Method method;
+    private static final Logger log = SWBUtils.getLogger(JSON.class);    
     private int status;
     private URL url;
     private JSONObject response;
@@ -133,5 +133,14 @@ public class JSON implements RepresentationResponse {
     public Method getMethod()
     {
         return getMethod();
+    }
+
+    public RepresentationResponse request(List<ParameterValue> values) throws ExecutionRestException, RestException
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    public void addParameter(Parameter parameter)
+    {
+        this.parameters.add(parameter);
     }
 }

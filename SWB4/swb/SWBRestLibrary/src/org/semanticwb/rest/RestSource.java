@@ -30,7 +30,7 @@ public class RestSource
         addRepresentationRequest(MultipartFormData.MULTIPART_FORM_DATA, (Class<RepresentationRequest>)MultipartFormData.class.asSubclass(RepresentationRequest.class));
         addRepresentationRequest(XWWWFormUrlEncoded.APPLICATION_XWWW_FORM_URL_ENCODED, (Class<RepresentationRequest>)XWWWFormUrlEncoded.class.asSubclass(RepresentationRequest.class));
 
-
+        addRepresentationResponse(ApplicationXML.APPLICATION_XML, (Class<RepresentationResponse>)ApplicationXML.class.asSubclass(RepresentationResponse.class));
         addRepresentationResponse(AtomXML.APPLICATION_ATOM_XML, (Class<RepresentationResponse>)AtomXML.class.asSubclass(RepresentationResponse.class));
 
     }
