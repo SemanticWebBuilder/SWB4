@@ -15,4 +15,6 @@ public interface XmlResponse extends RepresentationResponse {
 
     public URL getLink(ParameterDefinition definition) throws RestException;
     public URL[] getLinks(ParameterDefinition definition) throws RestException;
+    public Object[] getValues(ParameterDefinition definition) throws RestException;
+    public Object getValue(ParameterDefinition definition) throws RestException;
 }
