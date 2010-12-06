@@ -33,22 +33,39 @@ import org.w3c.dom.NodeList;
  */
 public final class ApplicationXML implements XmlResponse
 {
-
     private static final Logger log = SWBUtils.getLogger(ApplicationXML.class);
     private static final String NL = "\r\n";
     private Document document;
-    private final Method method;
-    private final int status;
-    private final URL url;
-
-    ApplicationXML(Document response, Method method, int status, URL url)
+    private Method method;
+    private int status;
+    private URL url;
+    public ApplicationXML()
     {
-        this.document = response;
-        this.method = method;
-        this.status = status;
-        this.url = url;
+        
+    }
+    
+    public void setMethod(Method method)
+    {
+        if(this.method==null)
+        {
+            this.method=method;
+        }
     }
 
+    public void setURL(URL url)
+    {
+        if(this.url==null)
+        {
+            this.url=url;
+        }
+    }
+    public void setStatus(int status)
+    {
+        if(this.status==0)
+        {
+            this.status=status;
+        }
+    }
     
 
     public Method getMethod()

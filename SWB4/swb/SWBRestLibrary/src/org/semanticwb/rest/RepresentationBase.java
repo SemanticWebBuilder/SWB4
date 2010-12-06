@@ -206,6 +206,9 @@ public abstract class RepresentationBase implements RepresentationRequest {
                         if (obj instanceof RepresentationResponse)
                         {
                             RepresentationResponse repResponse = (RepresentationResponse) obj;
+                            repResponse.setMethod(method);
+                            repResponse.setStatus(responseCode);
+                            repResponse.setURL(con.getURL());
                             repResponse.process(con);
                             for (ResponseDefinition def : this.method.definitionResponses)
                             {
