@@ -40,7 +40,7 @@ public class JSON extends RepresentationBase implements RepresentationRequest, R
     public Object getValue(ParameterDefinition definition) throws RestException
     {
         Object[] values = getValues(definition);
-        if (values.length > 0)
+        if (values!=null && values.length > 0)
         {
             return values[0];
         }
