@@ -18,7 +18,7 @@ import org.semanticwb.SWBUtils;
  *
  * @author victor.lorenzana
  */
-public class JSON extends RepresentationBase implements RepresentationRequest, RepresentationResponse
+public class JSON extends RepresentationBase implements RepresentationRequest, JSONResponse
 {
 
     public static final String APPLICATION_JSON = "application/json";
@@ -264,5 +264,10 @@ public class JSON extends RepresentationBase implements RepresentationRequest, R
     public void addParameter(Parameter parameter)
     {
         this.parameters.add(parameter);
+    }
+
+    public JSONObject getJSONResponse()
+    {
+        return response;
     }
 }
