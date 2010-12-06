@@ -9,9 +9,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
-import org.json.HTTPTokener;
 import org.json.JSONObject;
-import org.json.XML;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
