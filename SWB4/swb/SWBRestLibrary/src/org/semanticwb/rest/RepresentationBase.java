@@ -21,20 +21,12 @@ import org.w3c.dom.NodeList;
  */
 public abstract class RepresentationBase implements RepresentationRequest {
     public static final String ORG_SEMANTICWB_REST_REPRESENTATIONBASE = "org.semanticwb.rest.RepresentationBase/";
-
-    protected static final String JSON_CONTENT_TYPE = "json";    
-    protected static final String TEXT_XML = "text/xml";
-
     protected static final String CONTENT_TYPE = "Content-Type";
     protected final Set<Parameter> parameters=new HashSet<Parameter>();
     //protected String mediaType;
     protected Method method;
     protected ResponseDefinition responseDefinition;
-    /*protected RepresentationBase(String mediaType,Method method)
-    {
-        this.mediaType=mediaType;
-        this.method=method;        
-    }*/
+   
     protected RepresentationBase()
     {
         
