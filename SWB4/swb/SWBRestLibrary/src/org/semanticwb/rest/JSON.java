@@ -31,22 +31,6 @@ public class JSON extends RepresentationBase implements RepresentationRequest, R
     {
         return response;
     }
-
-    public Object[] getValues(ParameterDefinition definition) throws RestException
-    {
-        return null;
-    }
-
-    public Object getValue(ParameterDefinition definition) throws RestException
-    {
-        Object[] values = getValues(definition);
-        if (values!=null && values.length > 0)
-        {
-            return values[0];
-        }
-        return null;
-    }
-
     public int getStatus()
     {
         return status;

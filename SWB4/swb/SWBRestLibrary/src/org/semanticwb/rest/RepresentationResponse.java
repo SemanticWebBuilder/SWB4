@@ -14,9 +14,7 @@ import java.net.URL;
  */
 public interface RepresentationResponse extends Representation {
         
-    public Object getResponse() throws RestException;
-    public Object[] getValues(ParameterDefinition definition) throws RestException;    
-    public Object getValue(ParameterDefinition definition) throws RestException;
+    public Object getResponse() throws RestException;    
     public int getStatus();
     public ParameterDefinition[] getParameterDefinitions();
     public void process(HttpURLConnection con) throws ExecutionRestException;
