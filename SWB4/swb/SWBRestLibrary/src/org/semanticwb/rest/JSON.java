@@ -137,11 +137,7 @@ public class JSON extends RepresentationBase implements RepresentationRequest, R
     {
         return APPLICATION_JSON;
     }
-
-    public Method getMethod()
-    {
-        return getMethod();
-    }
+   
 
     private String constructParameters(List<ParameterValue> values) throws RestException
     {
