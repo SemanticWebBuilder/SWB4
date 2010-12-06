@@ -146,7 +146,6 @@ public class JSON extends RepresentationBase implements RepresentationRequest, R
     private String constructParameters(List<ParameterValue> values) throws RestException
     {
         StringBuilder sb = new StringBuilder("{");
-
         try
         {
             for (Parameter parameter : this.getRequiredParameters())
