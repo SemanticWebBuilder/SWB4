@@ -4,14 +4,11 @@
  */
 package org.semanticwb.rest;
 
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
-import org.semanticwb.SWBUtils;
-import org.w3c.dom.Document;
 
 /**
  *

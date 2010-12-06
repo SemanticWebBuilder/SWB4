@@ -31,7 +31,7 @@ import org.w3c.dom.Text;
  *
  * @author victor.lorenzana
  */
-public class AtomXML extends RepresentationBase implements RepresentationRequest,RepresentationResponse
+public class AtomXML extends RepresentationBase implements RepresentationRequest,XmlResponse
 {
     public static final String APPLICATION_ATOM_XML = "application/atom+xml";
     private static final Logger log = SWBUtils.getLogger(AtomXML.class);
@@ -143,10 +143,10 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
     public RepresentationResponse request(List<ParameterValue> values) throws RestException
     {
         checkParameters(values);
-        URL url = this.getMethod().getResource().getPath();
+        URL _url = this.getMethod().getResource().getPath();
         try
         {
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            HttpURLConnection con = (HttpURLConnection) _url.openConnection();
             con.setRequestMethod(this.getMethod().getHTTPMethod().toString());
             String charset = Charset.defaultCharset().name();
             con.setRequestProperty(CONTENT_TYPE + "; charset=" + charset, APPLICATION_ATOM_XML);
@@ -161,7 +161,7 @@ public class AtomXML extends RepresentationBase implements RepresentationRequest
         }
         catch (Exception ioe)
         {
-            throw new ExecutionRestException(this.getMethod().getHTTPMethod(), url, ioe);
+            throw new ExecutionRestException(this.getMethod().getHTTPMethod(), _url, ioe);
         }
     }
 
