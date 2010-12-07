@@ -46,7 +46,6 @@ public class QuestionParser extends GenericParser {
     @Override
     public String getIndexTitle(Searchable gen) {
         Question q = (Question) gen;
-        System.out.println("Indexing " + q.getQuestion());
         return q.getQuestion();
     }
 
