@@ -519,7 +519,7 @@ public class SWBAResourceVersion extends GenericResource {
                     gov.getSemanticObject().setObjectProperty(Versionable.swb_actualVersion, nvinf);
                 }
                 nvinf.setIntProperty(VersionInfo.swb_versionNumber, vnum);
-                nvinf.setProperty(VersionInfo.swb_versionFile, "index.html");
+                nvinf.setProperty(VersionInfo.swb_versionFile, vil.getVersionFile()); //"index.html"
                 String VersionComment = request.getParameter("versionComment");
                 log.debug(VersionComment);
                 if (VersionComment != null) {
