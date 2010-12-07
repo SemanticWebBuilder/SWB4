@@ -9,6 +9,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
@@ -125,7 +127,9 @@ public class JSON extends RepresentationBase implements RepresentationRequest, J
 
     private String constructParameters(List<ParameterValue> values) throws RestException
     {
-        StringBuilder sb = new StringBuilder("{");
+        JSONObject jSONObject=new JSONObject();
+
+        
         try
         {
             for (Parameter parameter : this.getRequiredParameters())
@@ -136,11 +140,7 @@ public class JSON extends RepresentationBase implements RepresentationRequest, J
                     {
                         String name = parameter.getName();
                         String value = pvalue.getValue().toString();
-                        sb.append("\"");
-                        sb.append(name);
-                        sb.append("\":");
-                        sb.append(value);
-                        sb.append(",");
+                        jSONObject.accumulate(name, value);
                     }
                 }
             }
@@ -152,11 +152,7 @@ public class JSON extends RepresentationBase implements RepresentationRequest, J
                     {
                         String name = parameter.getName();
                         String value = pvalue.getValue().toString();
-                        sb.append("\"");
-                        sb.append(name);
-                        sb.append("\":");
-                        sb.append(value);
-                        sb.append(",");
+                        jSONObject.accumulate(name, value);
                     }
                 }
             }
@@ -166,11 +162,7 @@ public class JSON extends RepresentationBase implements RepresentationRequest, J
                 {
                     String name = parameter.getName();
                     String value = parameter.getFixedValue();
-                    sb.append("\"");
-                    sb.append(name);
-                    sb.append("\":");
-                    sb.append(value);
-                    sb.append(",");
+                    jSONObject.accumulate(name, value);
 
                 }
             }
@@ -184,11 +176,7 @@ public class JSON extends RepresentationBase implements RepresentationRequest, J
                     {
                         String name = parameter.getName();
                         String value = pvalue.getValue().toString();
-                        sb.append("\"");
-                        sb.append(name);
-                        sb.append("\":");
-                        sb.append(value);
-                        sb.append(",");
+                        jSONObject.accumulate(name, value);
                     }
                 }
             }
@@ -200,11 +188,7 @@ public class JSON extends RepresentationBase implements RepresentationRequest, J
                     {
                         String name = parameter.getName();
                         String value = pvalue.getValue().toString();
-                        sb.append("\"");
-                        sb.append(name);
-                        sb.append("\":");
-                        sb.append(value);
-                        sb.append(",");
+                        jSONObject.accumulate(name, value);
                     }
                 }
             }
@@ -214,11 +198,7 @@ public class JSON extends RepresentationBase implements RepresentationRequest, J
                 {
                     String name = parameter.getName();
                     String value = parameter.getFixedValue();
-                    sb.append("\"");
-                    sb.append(name);
-                    sb.append("\":");
-                    sb.append(",");
-                    sb.append(value);
+                    jSONObject.accumulate(name, value);
                 }
             }
 
@@ -227,14 +207,8 @@ public class JSON extends RepresentationBase implements RepresentationRequest, J
         {
             log.debug(e);
             throw new RestException(e);
-        }
-        String valueToReturn=sb.toString().trim();
-        if(valueToReturn.endsWith(","))
-        {
-            valueToReturn=valueToReturn.substring(0,valueToReturn.length()-2);
-        }
-        valueToReturn+="}";
-        return valueToReturn;
+        }        
+        return jSONObject.toString();
     }
 
     public RepresentationResponse request(List<ParameterValue> values) throws ExecutionRestException, RestException
