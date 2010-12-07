@@ -136,7 +136,11 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 } catch (FormValidateException e) {
                     log.error(e);
                 }
-                response.setAction("showDetail");
+                if (request.getParameter("org") != null) {
+                    response.setAction(request.getParameter("org"));
+                } else {
+                    response.setAction("showDetail");
+                }
                 response.setRenderParameter("uri", request.getParameter("uri"));
             } else if (action.equals("editAnswer")) {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
@@ -210,7 +214,11 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 } catch (Exception e) {
                     log.error(e);
                 }
-                response.setAction("showDetail");
+                if (request.getParameter("org") != null) {
+                    response.setAction(request.getParameter("org"));
+                } else {
+                    response.setAction("showDetail");
+                }
                 response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
             } else if (action.equals("markAnswerAsInnapropiate")) {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
@@ -237,7 +245,11 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 } catch (Exception e) {
                     log.error(e);
                 }
-                response.setAction("showDetail");
+                if (request.getParameter("org") != null) {
+                    response.setAction(request.getParameter("org"));
+                } else {
+                    response.setAction("showDetail");
+                }
                 response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
             } else if (action.equals("closeQuestion")) {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
@@ -249,7 +261,11 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 } catch (Exception e) {
                     log.error(e);
                 }
-                response.setAction("showDetail");
+                if (request.getParameter("org") != null) {
+                    response.setAction(request.getParameter("org"));
+                } else {
+                    response.setAction("showDetail");
+                }
                 response.setRenderParameter("uri", question.getURI());
             } else if (action.equals("openQuestion")) {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
@@ -261,7 +277,11 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 } catch (Exception e) {
                     log.error(e);
                 }
-                response.setAction("showDetail");
+                if (request.getParameter("org") != null) {
+                    response.setAction(request.getParameter("org"));
+                } else {
+                    response.setAction("showDetail");
+                }
                 response.setRenderParameter("uri", question.getURI());
             } else if (action.equals("voteQuestion")) {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
@@ -326,13 +346,21 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         boolean likeVote = Boolean.parseBoolean(request.getParameter("likeVote"));
                         answerVote.setLikeAnswer(likeVote);
                     }
-                    response.setAction("showDetail");
+                    if (request.getParameter("org") != null) {
+                        response.setAction(request.getParameter("org"));
+                    } else {
+                        response.setAction("showDetail");
+                    }
                     response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
                 }
             } else if (action.equals("removeAnswer")) {
                 try {
                     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
-                    response.setAction("showDetail");
+                    if (request.getParameter("org") != null) {
+                        response.setAction(request.getParameter("org"));
+                    } else {
+                        response.setAction("showDetail");
+                    }
                     Answer answer = (Answer) semObject.createGenericInstance();
                     response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
 //TODO: revisar regla de negocio
