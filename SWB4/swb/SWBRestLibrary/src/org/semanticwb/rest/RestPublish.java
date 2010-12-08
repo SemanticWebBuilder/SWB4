@@ -59,7 +59,27 @@ import static javax.xml.XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI;
 public class RestPublish
 {
 
+    private static final String APPLICATION_JSON = "application/json";
+    private static final String APPLICATION_XML = "application/xml";
+    private static final String ELEMENT = "element";
+    private static final String MEDIA_TYPE = "mediaType";
+    private static final String NAME = "name";
+    private static final String QUERY = "query";
+    private static final String REQUIRED = "required";
+    private static final String STATUS = "status";
+    private static final String STYLE = "style";
+    private static final String TYPE = "type";
+    private static final String VALUE = "value";
     private static final String XSD_ANYURI = "xsd:anyURI";
+    private static final String XSD_BOOLEAN = "xsd:boolean";
+    private static final String XSD_BYTE = "xsd:byte";
+    private static final String XSD_DATE = "xsd:date";
+    private static final String XSD_DATETIME = "xsd:datetime";
+    private static final String XSD_DOUBLE = "xsd:double";
+    private static final String XSD_FLOAT = "xsd:float";
+    private static final String XSD_INT = "xsd:int";
+    private static final String XSD_LONG = "xsd:long";
+    private static final String XSD_SHORT = "xsd:short";
     private static final Logger log = SWBUtils.getLogger(RestPublish.class);
     private static final String REST_MODELURI = "rest:modeluri";
     private static final String REST_CLASSURI = "rest:classuri";
@@ -169,9 +189,9 @@ public class RestPublish
 
         doc.appendChild(schema);
         schema.setPrefix(XSD_PREFIX);
-        Element element = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
+        Element element = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, ELEMENT);
         schema.appendChild(element);
-        element.setAttribute("name", "Error");
+        element.setAttribute(NAME, "Error");
         element.setPrefix(XSD_PREFIX);
         Element complexType = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "complexType");
         complexType.setPrefix(XSD_PREFIX);
@@ -182,10 +202,10 @@ public class RestPublish
         complexType.appendChild(sequence);
 
 
-        Element message = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
+        Element message = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, ELEMENT);
         message.setPrefix(XSD_PREFIX);
-        message.setAttribute("name", "Message");
-        message.setAttribute("type", XSD_STRING);
+        message.setAttribute(NAME, "Message");
+        message.setAttribute(TYPE, XSD_STRING);
         sequence.appendChild(message);
         message.setAttribute("minOccurs", "1");
         message.setAttribute("maxOccurs", "unbounded");
@@ -204,10 +224,10 @@ public class RestPublish
 
         doc.appendChild(schema);
         schema.setPrefix(XSD_PREFIX);
-        Element element = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
+        Element element = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, ELEMENT);
         schema.appendChild(element);
-        element.setAttribute("name", "Created");
-        element.setAttribute("type", XSD_ANYURI);
+        element.setAttribute(NAME, "Created");
+        element.setAttribute(TYPE, XSD_ANYURI);
         element.setPrefix(XSD_PREFIX);
 
 
@@ -228,10 +248,10 @@ public class RestPublish
 
         doc.appendChild(schema);
         schema.setPrefix(XSD_PREFIX);
-        Element element = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
+        Element element = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, ELEMENT);
         schema.appendChild(element);
-        element.setAttribute("name", "Updated");
-        element.setAttribute("type", "xsd:boolean");
+        element.setAttribute(NAME, "Updated");
+        element.setAttribute(TYPE, XSD_BOOLEAN);
         element.setPrefix(XSD_PREFIX);
 
         return doc;
@@ -248,10 +268,10 @@ public class RestPublish
 
         doc.appendChild(schema);
         schema.setPrefix(XSD_PREFIX);
-        Element element = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
+        Element element = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, ELEMENT);
         schema.appendChild(element);
-        element.setAttribute("name", "Deleted");
-        element.setAttribute("type", "xsd:boolean");
+        element.setAttribute(NAME, "Deleted");
+        element.setAttribute(TYPE, XSD_BOOLEAN);
         element.setPrefix(XSD_PREFIX);
         return doc;
     }
@@ -287,9 +307,9 @@ public class RestPublish
                 if (Modifier.isPublic(m.getModifiers()) && Modifier.isStatic(m.getModifiers()) && (m.getName().startsWith("has") || m.getName().startsWith("list")))
                 {
                     Class returnType = m.getReturnType();
-                    Element methodElement = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
+                    Element methodElement = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, ELEMENT);
                     methodElement.setPrefix(XSD_PREFIX);
-                    methodElement.setAttribute("name", m.getName());
+                    methodElement.setAttribute(NAME, m.getName());
                     schema.appendChild(methodElement);
                     if (returnType instanceof Class && isGenericObject(returnType)) // is GenericObject
                     {
@@ -323,20 +343,20 @@ public class RestPublish
                                         Element sequence = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "sequence");
                                         sequence.setPrefix(XSD_PREFIX);
                                         complex.appendChild(sequence);
-                                        Element child = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
+                                        Element child = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, ELEMENT);
                                         child.setPrefix(XSD_PREFIX);
-                                        child.setAttribute("name", returnSemanticClazz.getName());
-                                        child.setAttribute("type", XSD_ANYURI);
+                                        child.setAttribute(NAME, returnSemanticClazz.getName());
+                                        child.setAttribute(TYPE, XSD_ANYURI);
                                         Element shortURI = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
                                         shortURI.setPrefix(XSD_PREFIX);
-                                        shortURI.setAttribute("name", "shortURI");
-                                        shortURI.setAttribute("type", XSD_STRING);
+                                        shortURI.setAttribute(NAME, "shortURI");
+                                        shortURI.setAttribute(TYPE, XSD_STRING);
                                         child.appendChild(shortURI);
 
                                         Element href = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
                                         href.setPrefix(XSD_PREFIX);
-                                        href.setAttribute("name", "xlink:href");
-                                        href.setAttribute("type", XSD_STRING);
+                                        href.setAttribute(NAME, "xlink:href");
+                                        href.setAttribute(TYPE, XSD_STRING);
                                         child.appendChild(href);
                                         sequence.appendChild(child);
                                     }
@@ -350,7 +370,7 @@ public class RestPublish
                     {
                         if (returnType instanceof Class)
                         {
-                            methodElement.setAttribute("type", classToxsd((Class) returnType));
+                            methodElement.setAttribute(TYPE, classToxsd((Class) returnType));
                         }
                     }
                 }
@@ -383,9 +403,9 @@ public class RestPublish
             {
                 if (prop.isDataTypeProperty())
                 {
-                    Element property = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
+                    Element property = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, ELEMENT);
                     property.setPrefix(XSD_PREFIX);
-                    property.setAttribute("name", prop.getName());
+                    property.setAttribute(NAME, prop.getName());
                     sequence.appendChild(property);
                     String type = XSD_STRING;
                     if (prop.isBoolean())
@@ -429,7 +449,7 @@ public class RestPublish
                         type = SemanticVocabulary.XMLS_SHORT;
                     }
                     type = type.replace(W3C_XML_SCHEMA_NS_URI + "#", "xsd:");
-                    property.setAttribute("type", type);
+                    property.setAttribute(TYPE, type);
                     if (prop.getName().startsWith("has"))
                     {
                         property.setAttribute("minOccurs", "0");
@@ -443,10 +463,10 @@ public class RestPublish
                     if (range != null)
                     {
                         ranges.add(range);
-                        Element property = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
+                        Element property = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, ELEMENT);
                         sequence.appendChild(property);
-                        property.setAttribute("name", prop.getName());
-                        property.setAttribute("type", XSD_ANYURI);
+                        property.setAttribute(NAME, prop.getName());
+                        property.setAttribute(TYPE, XSD_ANYURI);
                         if (prop.getName().startsWith("has"))
                         {
                             property.setAttribute("minOccurs", "0");
@@ -457,8 +477,8 @@ public class RestPublish
                         Element attribute = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
                         attribute.setPrefix(XSD_PREFIX);
                         property.appendChild(attribute);
-                        attribute.setAttribute("name", "xlink:href");
-                        attribute.setAttribute("type", XSD_STRING);
+                        attribute.setAttribute(NAME, "xlink:href");
+                        attribute.setAttribute(TYPE, XSD_STRING);
                     }
                 }
             }
@@ -476,7 +496,7 @@ public class RestPublish
             if (node instanceof Element)
             {
                 Element element = (Element) node;
-                String name = element.getAttribute("name");
+                String name = element.getAttribute(NAME);
                 if (name.equals(clazz.getName()))
                 {
                     exists = true;
@@ -488,9 +508,9 @@ public class RestPublish
         if (!exists && clazz.isSWBClass())
         {
             HashSet<SemanticClass> ranges = new HashSet<SemanticClass>();
-            Element element = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "element");
+            Element element = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, ELEMENT);
             schema.appendChild(element);
-            element.setAttribute("name", clazz.getName());
+            element.setAttribute(NAME, clazz.getName());
             element.setPrefix(XSD_PREFIX);
             addProperties(clazz, element, ranges);
         }
@@ -499,7 +519,7 @@ public class RestPublish
     private void addPOSTMethod(Document doc, Element resource, SemanticClass clazz, String WADL_NS)
     {
         Element method = doc.createElementNS(WADL_NS, "method");
-        method.setAttribute("name", "POST");
+        method.setAttribute(NAME, "POST");
         method.setAttribute("id", "add" + clazz.getName());
         resource.appendChild(method);
 
@@ -560,9 +580,9 @@ public class RestPublish
                     }
                     type = type.replace(W3C_XML_SCHEMA_NS_URI + "#", "xsd:");
                     Element param = doc.createElementNS(WADL_NS, "param");
-                    param.setAttribute("name", prop.getName());
-                    param.setAttribute("style", "query");
-                    param.setAttribute("type", type);
+                    param.setAttribute(NAME, prop.getName());
+                    param.setAttribute(STYLE, QUERY);
+                    param.setAttribute(TYPE, type);
                     if (prop.getName().startsWith("has"))
                     {
                         param.setAttribute("repeating", "true");
@@ -572,9 +592,9 @@ public class RestPublish
                 else
                 {
                     Element param = doc.createElementNS(WADL_NS, "param");
-                    param.setAttribute("name", prop.getName());
-                    param.setAttribute("style", "query");
-                    param.setAttribute("type", XSD_ANYURI);
+                    param.setAttribute(NAME, prop.getName());
+                    param.setAttribute(STYLE, QUERY);
+                    param.setAttribute(TYPE, XSD_ANYURI);
                     if (prop.getName().startsWith("has"))
                     {
                         param.setAttribute("repeating", "true");
@@ -585,28 +605,28 @@ public class RestPublish
 
         }
         Element param = doc.createElementNS(WADL_NS, "param");
-        param.setAttribute("name", REST_CLASSURI);
-        param.setAttribute("style", "query");
+        param.setAttribute(NAME, REST_CLASSURI);
+        param.setAttribute(STYLE, QUERY);
         param.setAttribute("fixed", clazz.getURI());
-        param.setAttribute("type", XSD_STRING);
-        param.setAttribute("required", "true");
+        param.setAttribute(TYPE, XSD_STRING);
+        param.setAttribute(REQUIRED, "true");
         request.appendChild(param);
 
         param = doc.createElementNS(WADL_NS, "param");
-        param.setAttribute("name", REST_MODELURI);
-        param.setAttribute("style", "query");
-        param.setAttribute("type", XSD_STRING);
-        param.setAttribute("required", "true");
+        param.setAttribute(NAME, REST_MODELURI);
+        param.setAttribute(STYLE, QUERY);
+        param.setAttribute(TYPE, XSD_STRING);
+        param.setAttribute(REQUIRED, "true");
         request.appendChild(param);
 
-        Iterator<WebSite> sites=WebSite.ClassMgr.listWebSites();
-        while(sites.hasNext())
+        Iterator<WebSite> sites = WebSite.ClassMgr.listWebSites();
+        while (sites.hasNext())
         {
-            WebSite site=sites.next();
-            if(!(site.getURI().equals(SWBContext.getAdminWebSite().getURI()) || site.getURI().equals(SWBContext.getGlobalWebSite().getURI())))
+            WebSite site = sites.next();
+            if (!(site.getURI().equals(SWBContext.getAdminWebSite().getURI()) || site.getURI().equals(SWBContext.getGlobalWebSite().getURI())))
             {
-                Element option=doc.createElementNS(WADL_NS, "option");
-                option.setAttribute("value",site.getShortURI());
+                Element option = doc.createElementNS(WADL_NS, "option");
+                option.setAttribute(VALUE, site.getShortURI());
                 param.appendChild(option);
             }
         }
@@ -614,10 +634,10 @@ public class RestPublish
         if (!clazz.isAutogenId())
         {
             param = doc.createElementNS(WADL_NS, "param");
-            param.setAttribute("name", REST_ID);
-            param.setAttribute("style", "query");
-            param.setAttribute("type", XSD_STRING);
-            param.setAttribute("required", "true");
+            param.setAttribute(NAME, REST_ID);
+            param.setAttribute(STYLE, QUERY);
+            param.setAttribute(TYPE, XSD_STRING);
+            param.setAttribute(REQUIRED, "true");
             request.appendChild(param);
         }
 
@@ -627,7 +647,7 @@ public class RestPublish
     private void addPUTMethod(Document doc, Element resource, SemanticClass clazz, String WADL_NS)
     {
         Element method = doc.createElementNS(WADL_NS, "method");
-        method.setAttribute("name", "PUT");
+        method.setAttribute(NAME, "PUT");
         method.setAttribute("id", "update" + clazz.getName());
         resource.appendChild(method);
 
@@ -637,9 +657,9 @@ public class RestPublish
 
 
         Element param = doc.createElementNS(WADL_NS, "param");
-        param.setAttribute("name", REST_URI);
-        param.setAttribute("style", "query");
-        param.setAttribute("type", XSD_ANYURI);
+        param.setAttribute(NAME, REST_URI);
+        param.setAttribute(STYLE, QUERY);
+        param.setAttribute(TYPE, XSD_ANYURI);
 
         request.appendChild(param);
 
@@ -694,9 +714,9 @@ public class RestPublish
                     }
                     type = type.replace(W3C_XML_SCHEMA_NS_URI + "#", "xsd:");
                     param = doc.createElementNS(WADL_NS, "param");
-                    param.setAttribute("name", prop.getName());
-                    param.setAttribute("style", "query");
-                    param.setAttribute("type", type);
+                    param.setAttribute(NAME, prop.getName());
+                    param.setAttribute(STYLE, QUERY);
+                    param.setAttribute(TYPE, type);
                     if (prop.getName().startsWith("has"))
                     {
                         param.setAttribute("repeating", "true");
@@ -706,9 +726,9 @@ public class RestPublish
                 else
                 {
                     param = doc.createElementNS(WADL_NS, "param");
-                    param.setAttribute("name", prop.getName());
-                    param.setAttribute("style", "query");
-                    param.setAttribute("type", XSD_ANYURI);
+                    param.setAttribute(NAME, prop.getName());
+                    param.setAttribute(STYLE, QUERY);
+                    param.setAttribute(TYPE, XSD_ANYURI);
                     if (prop.getName().startsWith("has"))
                     {
                         param.setAttribute("repeating", "true");
@@ -724,7 +744,7 @@ public class RestPublish
     private void createMethod(Document doc, Element resource, SemanticClass clazz, Method m, String WADL_NS, String id)
     {
         Element method = doc.createElementNS(WADL_NS, "method");
-        method.setAttribute("name", "GET");
+        method.setAttribute(NAME, "GET");
         method.setAttribute("id", id);
         resource.appendChild(method);
 
@@ -732,19 +752,19 @@ public class RestPublish
         method.appendChild(request);
 
         Element param = doc.createElementNS(WADL_NS, "param");
-        param.setAttribute("name", "method");
-        param.setAttribute("style", "query");
+        param.setAttribute(NAME, "method");
+        param.setAttribute(STYLE, QUERY);
         param.setAttribute("fixed", m.getName());
-        param.setAttribute("type", XSD_STRING);
-        param.setAttribute("required", "true");
+        param.setAttribute(TYPE, XSD_STRING);
+        param.setAttribute(REQUIRED, "true");
         request.appendChild(param);
 
         param = doc.createElementNS(WADL_NS, "param");
-        param.setAttribute("name", "classuri");
-        param.setAttribute("style", "query");
+        param.setAttribute(NAME, "classuri");
+        param.setAttribute(STYLE, QUERY);
         param.setAttribute("fixed", clazz.getURI());
-        param.setAttribute("type", XSD_STRING);
-        param.setAttribute("required", "true");
+        param.setAttribute(TYPE, XSD_STRING);
+        param.setAttribute(REQUIRED, "true");
         request.appendChild(param);
 
         for (Class classparam : m.getParameterTypes())
@@ -752,19 +772,19 @@ public class RestPublish
             if (isGenericObject(classparam))
             {
                 param = doc.createElementNS(WADL_NS, "param");
-                param.setAttribute("name", classparam.getName().toLowerCase());
-                param.setAttribute("style", "query");
-                param.setAttribute("type", XSD_ANYURI);
-                param.setAttribute("required", "true");
+                param.setAttribute(NAME, classparam.getName().toLowerCase());
+                param.setAttribute(STYLE, QUERY);
+                param.setAttribute(TYPE, XSD_ANYURI);
+                param.setAttribute(REQUIRED, "true");
                 request.appendChild(param);
             }
             else
             {
                 param = doc.createElementNS(WADL_NS, "param");
-                param.setAttribute("name", classparam.getName().toLowerCase());
-                param.setAttribute("style", "query");
-                param.setAttribute("type", classToxsd(classparam));
-                param.setAttribute("required", "true");
+                param.setAttribute(NAME, classparam.getName().toLowerCase());
+                param.setAttribute(STYLE, QUERY);
+                param.setAttribute(TYPE, classToxsd(classparam));
+                param.setAttribute(REQUIRED, "true");
                 request.appendChild(param);
             }
         }
@@ -795,47 +815,39 @@ public class RestPublish
         String getXSDType = XSD_STRING;
         if (clazz.equals(Boolean.class))
         {
-            getXSDType = "xsd:boolean";
+            getXSDType = XSD_BOOLEAN;
         }
         else if (clazz.equals(Byte.class))
         {
-            getXSDType = "xsd:byte";
+            getXSDType = XSD_BYTE;
         }
         else if (clazz.equals(Date.class))
         {
-            getXSDType = "xsd:date";
+            getXSDType = XSD_DATE;
         }
         else if (clazz.equals(Timestamp.class))
         {
-            getXSDType = "xsd:datetime";
+            getXSDType = XSD_DATETIME;
         }
         else if (clazz.equals(Double.class))
         {
-            getXSDType = "xsd:double";
+            getXSDType = XSD_DOUBLE;
         }
         else if (clazz.equals(Float.class))
         {
-            getXSDType = "xsd:float";
-        }
-        else if (clazz.equals(Float.class))
-        {
-            getXSDType = "xsd:float";
-        }
-        else if (clazz.equals(Float.class))
-        {
-            getXSDType = "xsd:float";
+            getXSDType = XSD_FLOAT;
         }
         else if (clazz.equals(Integer.class))
         {
-            getXSDType = "xsd:int";
+            getXSDType = XSD_INT;
         }
         else if (clazz.equals(Long.class))
         {
-            getXSDType = "xsd:long";
+            getXSDType = XSD_LONG;
         }
         else if (clazz.equals(Short.class))
         {
-            getXSDType = "xsd:short";
+            getXSDType = XSD_SHORT;
         }
         return getXSDType;
 
@@ -893,7 +905,7 @@ public class RestPublish
     private void addDELETEMethod(Document doc, Element resource, SemanticClass clazz, String WADL_NS)
     {
         Element method = doc.createElementNS(WADL_NS, "method");
-        method.setAttribute("name", "DELETE");
+        method.setAttribute(NAME, "DELETE");
         method.setAttribute("id", "delete" + clazz.getName());
         resource.appendChild(method);
 
@@ -901,10 +913,10 @@ public class RestPublish
         method.appendChild(request);
 
         Element param = doc.createElementNS(WADL_NS, "param");
-        param.setAttribute("name", "uri");
-        param.setAttribute("style", "query");
-        param.setAttribute("type", XSD_STRING);
-        param.setAttribute("required", "true");
+        param.setAttribute(NAME, "uri");
+        param.setAttribute(STYLE, QUERY);
+        param.setAttribute(TYPE, XSD_STRING);
+        param.setAttribute(REQUIRED, "true");
         request.appendChild(param);
         configureCommonsElements(method, request, WADL_NS, REST_RESOURCE_PREFIX + ":Deleted");
     }
@@ -913,18 +925,18 @@ public class RestPublish
     {
         Document doc = method.getOwnerDocument();
         Element param = doc.createElementNS(WADL_NS, "param");
-        param.setAttribute("name", "format");
-        param.setAttribute("style", "query");
+        param.setAttribute(NAME, "format");
+        param.setAttribute(STYLE, QUERY);
         request.appendChild(param);
 
         Element option = doc.createElementNS(WADL_NS, "option");
-        option.setAttribute("value", "xml");
-        option.setAttribute("mediaType", "application/xml");
+        option.setAttribute(VALUE, "xml");
+        option.setAttribute(MEDIA_TYPE, APPLICATION_XML);
         param.appendChild(option);
 
         option = doc.createElementNS(WADL_NS, "option");
-        option.setAttribute("value", "json");
-        option.setAttribute("mediaType", "application/json");
+        option.setAttribute(VALUE, "json");
+        option.setAttribute(MEDIA_TYPE, APPLICATION_JSON);
         param.appendChild(option);
 
         if (WADL_NS.equals(WADL_NS_2009))
@@ -933,31 +945,31 @@ public class RestPublish
             method.appendChild(error);
             Element representation = doc.createElementNS(WADL_NS, "representation");
             error.appendChild(representation);
-            representation.setAttribute("mediaType", "application/xml");
-            error.setAttribute("status", "400");
-            representation.setAttribute("element", REST_RESOURCE_PREFIX + ":Error");
+            representation.setAttribute(MEDIA_TYPE, APPLICATION_XML);
+            error.setAttribute(STATUS, "400");
+            representation.setAttribute(ELEMENT, REST_RESOURCE_PREFIX + ":Error");
         }
 
         Element response = doc.createElementNS(WADL_NS, "response");
         method.appendChild(response);
         Element representation = doc.createElementNS(WADL_NS, "representation");
         response.appendChild(representation);
-        representation.setAttribute("mediaType", "application/xml");
+        representation.setAttribute(MEDIA_TYPE, APPLICATION_XML);
         if (WADL_NS.equals(WADL_NS_2009))
         {
-            response.setAttribute("status", "200");
-            representation.setAttribute("element", elementType);
+            response.setAttribute(STATUS, "200");
+            representation.setAttribute(ELEMENT, elementType);
         }
 
         representation = doc.createElementNS(WADL_NS, "representation");
         response.appendChild(representation);
-        representation.setAttribute("mediaType", "application/json");
+        representation.setAttribute(MEDIA_TYPE, APPLICATION_JSON);
     }
 
     private void addGetMethod(Document doc, Element resource, SemanticClass clazz, String WADL_NS)
     {
         Element method = doc.createElementNS(WADL_NS, "method");
-        method.setAttribute("name", "GET");
+        method.setAttribute(NAME, "GET");
         method.setAttribute("id", "get" + clazz.getName());
         resource.appendChild(method);
 
@@ -965,10 +977,10 @@ public class RestPublish
         method.appendChild(request);
 
         Element param = doc.createElementNS(WADL_NS, "param");
-        param.setAttribute("name", "uri");
-        param.setAttribute("style", "query");
-        param.setAttribute("type", XSD_STRING);
-        param.setAttribute("required", "true");
+        param.setAttribute(NAME, "uri");
+        param.setAttribute(STYLE, QUERY);
+        param.setAttribute(TYPE, XSD_STRING);
+        param.setAttribute(REQUIRED, "true");
         request.appendChild(param);
 
         configureCommonsElements(method, request, WADL_NS, clazz.getPrefix() + ":" + clazz.getName());
@@ -985,20 +997,24 @@ public class RestPublish
         {
             doc = getError(e.getMessage());
         }
+        showDocument(response, doc);
+    }
+
+    private void showDocument(HttpServletResponse response, Document doc) throws IOException
+    {
         PrintWriter out = response.getWriter();
         String charset = Charset.defaultCharset().name();
-        response.setContentType("application/xml; charset=" + charset);
+        response.setContentType(APPLICATION_XML +"; charset=" + charset);
         String xml = SWBUtils.XML.domToXml(doc, charset, true);
         out.print(xml);
         out.close();
     }
-
-    private void showDocument(HttpServletRequest request, HttpServletResponse response, Document doc) throws IOException
+    private void showJSON(HttpServletResponse response, JSONObject jSONObject) throws IOException
     {
         PrintWriter out = response.getWriter();
         String charset = Charset.defaultCharset().name();
-        response.setContentType("application/xml; charset=" + charset);
-        String xml = SWBUtils.XML.domToXml(doc, charset, true);
+        response.setContentType(APPLICATION_XML +"; charset=" + charset);
+        String xml = jSONObject.toString();
         out.print(xml);
         out.close();
     }
@@ -1011,36 +1027,22 @@ public class RestPublish
             version = "2006";
         }
         Document doc = getWADL(request, version);
-        PrintWriter out = response.getWriter();
-        String charset = Charset.defaultCharset().name();
-        response.setContentType("application/xml; charset=" + charset);
-        String xml = SWBUtils.XML.domToXml(doc, charset, true);
-        out.print(xml);
-        out.close();
+        showDocument(response, doc);
     }
 
-    private void showCLSMGRXSD(HttpServletRequest request, HttpServletResponse response, SemanticClass clazz) throws IOException
+    private void showCLSMGRXSD(HttpServletResponse response, SemanticClass clazz) throws IOException
     {
         Document doc = getClsMgrXSD(clazz);
-        PrintWriter out = response.getWriter();
-        String charset = Charset.defaultCharset().name();
-        response.setContentType("application/xml; charset=" + charset);
-        String xml = SWBUtils.XML.domToXml(doc, charset, true);
-        out.print(xml);
-        out.close();
+        showDocument(response, doc);
     }
 
     private void showCreted(HttpServletRequest request, HttpServletResponse response, String uri) throws IOException
     {
-        PrintWriter out = response.getWriter();
-        String data = null;
-        String charset = Charset.defaultCharset().name();
         if ("json".equals(request.getParameter("format")))
-        {
-            response.setContentType("application/json; charset=" + charset);
+        {            
             try
             {
-                data = getCreatedAsJSON(uri).toString();
+                showJSON(response,getCreatedAsJSON(uri));
             }
             catch (Exception e)
             {
@@ -1050,25 +1052,18 @@ public class RestPublish
         else
         {
             Document doc = getCreatedAsXML(uri);
-            response.setContentType("application/xml; charset=" + charset);
-            data = SWBUtils.XML.domToXml(doc, charset, true);
+            showDocument(response, doc);
         }
-        out.print(data);
-        out.close();
+        
     }
 
     private void showUpdated(HttpServletRequest request, HttpServletResponse response, boolean isUpdated) throws IOException
     {
-
-        PrintWriter out = response.getWriter();
-        String data = null;
-        String charset = Charset.defaultCharset().name();
         if ("json".equals(request.getParameter("format")))
-        {
-            response.setContentType("application/json; charset=" + charset);
+        {            
             try
             {
-                data = getUpdatedAsJSON(isUpdated).toString();
+                showJSON(response,getUpdatedAsJSON(isUpdated));
             }
             catch (Exception e)
             {
@@ -1078,25 +1073,21 @@ public class RestPublish
         else
         {
             Document doc = getUpdatedAsXml(isUpdated);
-            response.setContentType("application/xml; charset=" + charset);
-            data = SWBUtils.XML.domToXml(doc, charset, true);
+            showDocument(response, doc);
         }
-        out.print(data);
-        out.close();
+       
     }
 
     private void showObject(HttpServletRequest request, HttpServletResponse response, SemanticObject obj) throws IOException
     {
 
-        PrintWriter out = response.getWriter();
-        String data = null;
-        String charset = Charset.defaultCharset().name();
+        
         if ("json".equals(request.getParameter("format")))
         {
-            response.setContentType("application/json; charset=" + charset);
+            
             try
             {
-                data = serializeAsJSON(obj, request).toString();
+                showJSON(response,serializeAsJSON(obj, request));
             }
             catch (Exception e)
             {
@@ -1106,11 +1097,9 @@ public class RestPublish
         else
         {
             Document doc = serializeAsXML(obj, request);
-            response.setContentType("application/xml; charset=" + charset);
-            data = SWBUtils.XML.domToXml(doc, charset, true);
+            showDocument(response, doc);
         }
-        out.print(data);
-        out.close();
+        
     }
 
     private void showXSD(HttpServletRequest request, HttpServletResponse response, SemanticClass clazz) throws IOException
@@ -1121,12 +1110,7 @@ public class RestPublish
             version = "2006";
         }
         Document doc = getXSD(clazz, version);
-        PrintWriter out = response.getWriter();
-        String charset = Charset.defaultCharset().name();
-        response.setContentType("application/xml; charset=" + charset);
-        String xml = SWBUtils.XML.domToXml(doc, charset, true);
-        out.print(xml);
-        out.close();
+        showDocument(response, doc);
     }
 
     private void serializeAsJSON(SemanticObject obj, JSONObject jSONObject, HttpServletRequest request) throws JSONException
@@ -1508,7 +1492,7 @@ public class RestPublish
                     }
                 }
                 catch (Exception e)
-                {                    
+                {
                     log.error(e);
                     return false;
                 }
@@ -1625,7 +1609,7 @@ public class RestPublish
                         }
                     }
                     catch (Exception e)
-                    {                        
+                    {
                         log.error(e);
                         throw e;
                     }
@@ -1762,62 +1746,37 @@ public class RestPublish
     {
         String[] error = new String[1];
         error[0] = msg;
-        showError(request, response, error);
+        showError(response, error);
     }
 
-    private void showError(HttpServletRequest request, HttpServletResponse response, String[] msg) throws IOException
+    private void showError(HttpServletResponse response, String[] msg) throws IOException
     {
         Document doc = getError(msg);
-        PrintWriter out = response.getWriter();
-        String charset = Charset.defaultCharset().name();
-        response.setContentType("application/xml; charset=" + charset);
-        String xml = SWBUtils.XML.domToXml(doc, charset, true);
-        out.print(xml);
-        out.close();
+        showDocument(response, doc);
     }
 
-    private void showCreatedXSDResponse(HttpServletRequest request, HttpServletResponse response) throws IOException
+    private void showCreatedXSDResponse(HttpServletResponse response) throws IOException
     {
         Document doc = getCreatedXSD();
-        PrintWriter out = response.getWriter();
-        String charset = Charset.defaultCharset().name();
-        response.setContentType("application/xml; charset=" + charset);
-        String xml = SWBUtils.XML.domToXml(doc, charset, true);
-        out.print(xml);
-        out.close();
+        showDocument(response, doc);
     }
 
-    private void showDeletedXSDResponse(HttpServletRequest request, HttpServletResponse response) throws IOException
+    private void showDeletedXSDResponse(HttpServletResponse response) throws IOException
     {
         Document doc = getDeletedXSD();
-        PrintWriter out = response.getWriter();
-        String charset = Charset.defaultCharset().name();
-        response.setContentType("application/xml; charset=" + charset);
-        String xml = SWBUtils.XML.domToXml(doc, charset, true);
-        out.print(xml);
-        out.close();
+        showDocument(response, doc);
     }
 
-    private void showUpdatedXSDResponse(HttpServletRequest request, HttpServletResponse response) throws IOException
+    private void showUpdatedXSDResponse(HttpServletResponse response) throws IOException
     {
         Document doc = getUpdatedXSD();
-        PrintWriter out = response.getWriter();
-        String charset = Charset.defaultCharset().name();
-        response.setContentType("application/xml; charset=" + charset);
-        String xml = SWBUtils.XML.domToXml(doc, charset, true);
-        out.print(xml);
-        out.close();
+        showDocument(response, doc);
     }
 
     private void showErrorXSD(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
         Document doc = getErrorXSD();
-        PrintWriter out = response.getWriter();
-        String charset = Charset.defaultCharset().name();
-        response.setContentType("application/xml; charset=" + charset);
-        String xml = SWBUtils.XML.domToXml(doc, charset, true);
-        out.print(xml);
-        out.close();
+        showDocument(response, doc);
     }
 
     public static Object get(String value, String dataType) throws Exception
@@ -2117,16 +2076,12 @@ public class RestPublish
     }
 
     private void showDeleted(HttpServletRequest request, HttpServletResponse response, boolean isdeleted) throws IOException
-    {
-        PrintWriter out = response.getWriter();
-        String data = null;
-        String charset = Charset.defaultCharset().name();
+    {        
         if ("json".equals(request.getParameter("format")))
-        {
-            response.setContentType("application/json; charset=" + charset);
+        {            
             try
             {
-                data = getDeletedAsJSON(isdeleted).toString();
+                showJSON(response, getDeletedAsJSON(isdeleted));
             }
             catch (Exception e)
             {
@@ -2136,16 +2091,14 @@ public class RestPublish
         else
         {
             Document doc = getDeletedAsXML(isdeleted);
-            response.setContentType("application/xml; charset=" + charset);
-            data = SWBUtils.XML.domToXml(doc, charset, true);
+            showDocument(response, doc);
         }
-        out.print(data);
-        out.close();
+       
     }
 
     private void showObject(HttpServletRequest request, HttpServletResponse response, List<String> path, SemanticClass clazz) throws RestException, IOException
     {
-        String uri = path.get(0);        
+        String uri = path.get(0);
         if (uri.indexOf(":") != -1)
         {
             if (uri.indexOf("%3A") != -1)
@@ -2227,7 +2180,7 @@ public class RestPublish
                         if (path.isEmpty())
                         {
                             Document doc = getExecuteMethod(request, "list" + clazz.getNameInPlural(), clazz);
-                            showDocument(request, response, doc);
+                            showDocument(response, doc);
                             return;
                         }
                         else
@@ -2272,17 +2225,17 @@ public class RestPublish
                 SemanticObject obj = SemanticObject.createSemanticObject(uri);
                 if (obj != null)
                 {
-                    SemanticClass clazz=obj.getSemanticClass();
-                    boolean isUpdatable=false;
-                    for(SemanticClass clazzCatalog : classes)
+                    SemanticClass clazz = obj.getSemanticClass();
+                    boolean isUpdatable = false;
+                    for (SemanticClass clazzCatalog : classes)
                     {
-                        if(clazzCatalog.equals(clazz))
+                        if (clazzCatalog.equals(clazz))
                         {
-                            isUpdatable=true;
+                            isUpdatable = true;
                             break;
                         }
                     }
-                    if(!isUpdatable)
+                    if (!isUpdatable)
                     {
                         response.setStatus(400);
                         showError(request, response, "The object was not found");
@@ -2326,15 +2279,15 @@ public class RestPublish
             }
             else if (request.getParameter("created") != null)
             {
-                showCreatedXSDResponse(request, response);
+                showCreatedXSDResponse(response);
             }
             else if (request.getParameter("updated") != null)
             {
-                showUpdatedXSDResponse(request, response);
+                showUpdatedXSDResponse(response);
             }
             else if (request.getParameter("deleted") != null)
             {
-                showDeletedXSDResponse(request, response);
+                showDeletedXSDResponse(response);
             }
             else if (request.getParameter("clsmgr") != null)
             {
@@ -2360,7 +2313,7 @@ public class RestPublish
                     SemanticClass clazz = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
                     if (clazz != null)
                     {
-                        showCLSMGRXSD(request, response, clazz);
+                        showCLSMGRXSD(response, clazz);
                     }
                     else
                     {
@@ -2465,17 +2418,17 @@ public class RestPublish
                 SemanticObject obj = SemanticObject.createSemanticObject(uri);
                 if (obj != null)
                 {
-                    SemanticClass clazz=obj.getSemanticClass();
-                    boolean isUpdatable=false;
-                    for(SemanticClass clazzCatalog : classes)
+                    SemanticClass clazz = obj.getSemanticClass();
+                    boolean isUpdatable = false;
+                    for (SemanticClass clazzCatalog : classes)
                     {
-                        if(clazzCatalog.equals(clazz))
+                        if (clazzCatalog.equals(clazz))
                         {
-                            isUpdatable=true;
+                            isUpdatable = true;
                             break;
                         }
                     }
-                    if(!isUpdatable)
+                    if (!isUpdatable)
                     {
                         response.setStatus(400);
                         showError(request, response, "The object was not found");
@@ -2538,19 +2491,19 @@ public class RestPublish
                 showError(request, response, "The class " + request.getParameter("classuri") + " was not found");
                 return;
             }
-            boolean isPublished=false;
-            for(SemanticClass clazzCatalog : classes)
+            boolean isPublished = false;
+            for (SemanticClass clazzCatalog : classes)
             {
-                if(clazzCatalog.equals(clazz))
+                if (clazzCatalog.equals(clazz))
                 {
-                    isPublished=true;
+                    isPublished = true;
                     break;
                 }
             }
-            if(!isPublished)
+            if (!isPublished)
             {
                 response.setStatus(400);
-                showError(request, response, "Can not create a object with class "+request.getParameter("classuri"));
+                showError(request, response, "Can not create a object with class " + request.getParameter("classuri"));
                 return;
             }
             if (!clazz.isAutogenId())
@@ -2595,14 +2548,14 @@ public class RestPublish
             }
 
             GenericObject model = (GenericObjectBase) objmodel.createGenericInstance();
-            if(!(model instanceof WebSite))
+            if (!(model instanceof WebSite))
             {
                 response.setStatus(400);
                 showError(request, response, "The model " + request.getParameter(REST_MODELURI) + " was not found");
                 return;
             }
-            WebSite site=(WebSite)model;
-            if(site.getURI().equals(SWBContext.getAdminWebSite().getURI()) || site.getURI().equals(SWBContext.getGlobalWebSite().getURI()))
+            WebSite site = (WebSite) model;
+            if (site.getURI().equals(SWBContext.getAdminWebSite().getURI()) || site.getURI().equals(SWBContext.getGlobalWebSite().getURI()))
             {
                 response.setStatus(400);
                 showError(request, response, "The model " + request.getParameter(REST_MODELURI) + " was not found");
