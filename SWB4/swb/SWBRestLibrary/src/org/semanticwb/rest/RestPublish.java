@@ -4,6 +4,7 @@
  */
 package org.semanticwb.rest;
 
+import org.semanticwb.model.WebSite;
 import java.util.List;
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,6 +36,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.base.GenericObjectBase;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticLiteral;
@@ -596,6 +598,18 @@ public class RestPublish
         param.setAttribute("type", XSD_STRING);
         param.setAttribute("required", "true");
         request.appendChild(param);
+
+        Iterator<WebSite> sites=WebSite.ClassMgr.listWebSites();
+        while(sites.hasNext())
+        {
+            WebSite site=sites.next();
+            if(!(site.getURI().equals(SWBContext.getAdminWebSite().getURI()) || site.getURI().equals(SWBContext.getGlobalWebSite().getURI())))
+            {
+                Element option=doc.createElementNS(WADL_NS, "option");
+                option.setAttribute("value",site.getShortURI());
+                param.appendChild(option);
+            }
+        }
 
         if (!clazz.isAutogenId())
         {
@@ -2581,11 +2595,25 @@ public class RestPublish
                 showError(request, response, "The object " + request.getParameter(REST_MODELURI) + " is not a model");
                 return;
             }
+
             GenericObject model = (GenericObjectBase) objmodel.createGenericInstance();
+            if(!(model instanceof WebSite))
+            {
+                response.setStatus(400);
+                showError(request, response, "The model " + request.getParameter(REST_MODELURI) + " was not found");
+                return;
+            }
+            WebSite site=(WebSite)model;
+            if(site.getURI().equals(SWBContext.getAdminWebSite().getURI()) || site.getURI().equals(SWBContext.getGlobalWebSite().getURI()))
+            {
+                response.setStatus(400);
+                showError(request, response, "The model " + request.getParameter(REST_MODELURI) + " was not found");
+                return;
+            }
             String id = null;
             if (clazz.isAutogenId())
             {
-                id = String.valueOf(model.getSemanticObject().getModel().getCounter(clazz));
+                id = String.valueOf(site.getSemanticObject().getModel().getCounter(clazz));
             }
             else
             {
@@ -2596,7 +2624,7 @@ public class RestPublish
                     showError(request, response, "The object parameter rest:id was not found");
                     return;
                 }
-                SemanticObject objtest = model.getSemanticObject().getModel().createSemanticObjectById(id, clazz);
+                SemanticObject objtest = site.getSemanticObject().getModel().createSemanticObjectById(id, clazz);
                 if (objtest != null)
                 {
                     response.setStatus(400);
@@ -2604,7 +2632,7 @@ public class RestPublish
                     return;
                 }
             }
-            GenericObject newobj = model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, clazz), clazz);
+            GenericObject newobj = site.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, clazz), clazz);
             // update properties
             try
             {
