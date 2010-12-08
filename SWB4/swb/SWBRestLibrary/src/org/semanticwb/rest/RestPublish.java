@@ -23,6 +23,8 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
@@ -67,15 +69,14 @@ public class RestPublish
     public static final String WADL_NS_2009 = "http://wadl.dev.java.net/2009/02";
     private static final String WADL_XSD_LOCATION_2009 = "http://www.w3.org/Submission/wadl/wadl.xsd";
 
-    
-
     static
     {
-        
-        System.setProperty(RepresentationBase.ORG_SEMANTICWB_REST_REPRESENTATIONBASE+XWWWFormUrlEncoded.APPLICATION_XWWW_FORM_URL_ENCODED, XWWWFormUrlEncoded.class.getCanonicalName());
-        System.setProperty(RepresentationBase.ORG_SEMANTICWB_REST_REPRESENTATIONBASE+AtomXML.APPLICATION_ATOM_XML, AtomXML.class.getCanonicalName());
-        System.setProperty(RepresentationBase.ORG_SEMANTICWB_REST_REPRESENTATIONBASE+MultipartFormData.MULTIPART_FORM_DATA, MultipartFormData.class.getCanonicalName());
+
+        System.setProperty(RepresentationBase.ORG_SEMANTICWB_REST_REPRESENTATIONBASE + XWWWFormUrlEncoded.APPLICATION_XWWW_FORM_URL_ENCODED, XWWWFormUrlEncoded.class.getCanonicalName());
+        System.setProperty(RepresentationBase.ORG_SEMANTICWB_REST_REPRESENTATIONBASE + AtomXML.APPLICATION_ATOM_XML, AtomXML.class.getCanonicalName());
+        System.setProperty(RepresentationBase.ORG_SEMANTICWB_REST_REPRESENTATIONBASE + MultipartFormData.MULTIPART_FORM_DATA, MultipartFormData.class.getCanonicalName());
     }
+
     public RestPublish(Set<SemanticClass> classes)
     {
         this.classes = classes;
@@ -577,28 +578,7 @@ public class RestPublish
             request.appendChild(param);
         }
 
-
-        if (WADL_NS.equals(WADL_NS_2009))
-        {
-            Element error = doc.createElementNS(WADL_NS, "response");
-            method.appendChild(error);
-            Element representation = doc.createElementNS(WADL_NS, "representation");
-            error.appendChild(representation);
-            representation.setAttribute("mediaType", "application/xml");
-            error.setAttribute("status", "400");
-            representation.setAttribute("element", REST_RESOURCE_PREFIX + ":Error");
-        }
-
-        Element response = doc.createElementNS(WADL_NS, "response");
-        method.appendChild(response);
-        Element representation = doc.createElementNS(WADL_NS, "representation");
-        response.appendChild(representation);
-        representation.setAttribute("mediaType", "application/xml");
-        if (WADL_NS.equals(WADL_NS_2009))
-        {
-            response.setAttribute("status", "200");
-            representation.setAttribute("element", REST_RESOURCE_PREFIX + ":Created");
-        }
+        configureCommonsElements(method, request, WADL_NS, REST_RESOURCE_PREFIX + ":Created");
     }
 
     private void addPOSTMethod(Document doc, Element resource, SemanticClass clazz, String WADL_NS)
@@ -695,45 +675,23 @@ public class RestPublish
             }
 
         }
-
-
-        if (WADL_NS.equals(WADL_NS_2009))
-        {
-            Element error = doc.createElementNS(WADL_NS, "response");
-            method.appendChild(error);
-            Element representation = doc.createElementNS(WADL_NS, "representation");
-            error.appendChild(representation);
-            representation.setAttribute("mediaType", "application/xml");
-            error.setAttribute("status", "400");
-            representation.setAttribute("element", REST_RESOURCE_PREFIX + ":Error");
-        }
-
-        Element response = doc.createElementNS(WADL_NS, "response");
-        method.appendChild(response);
-        Element representation = doc.createElementNS(WADL_NS, "representation");
-        response.appendChild(representation);
-        representation.setAttribute("mediaType", "application/xml");
-        if (WADL_NS.equals(WADL_NS_2009))
-        {
-            response.setAttribute("status", "200");
-            representation.setAttribute("element", REST_RESOURCE_PREFIX + ":Updated");
-        }
+        configureCommonsElements(method, request, WADL_NS, REST_RESOURCE_PREFIX + ":Updated");
     }
 
-    private void createMethod(Document doc, Element resource, SemanticClass clazz, Method method, String WADL_NS, String id)
+    private void createMethod(Document doc, Element resource, SemanticClass clazz, Method m, String WADL_NS, String id)
     {
-        Element emethod = doc.createElementNS(WADL_NS, "method");
-        emethod.setAttribute("name", "GET");
-        emethod.setAttribute("id", id);
-        resource.appendChild(emethod);
+        Element method = doc.createElementNS(WADL_NS, "method");
+        method.setAttribute("name", "GET");
+        method.setAttribute("id", id);
+        resource.appendChild(method);
 
         Element request = doc.createElementNS(WADL_NS, "request");
-        emethod.appendChild(request);
+        method.appendChild(request);
 
         Element param = doc.createElementNS(WADL_NS, "param");
         param.setAttribute("name", "method");
         param.setAttribute("style", "query");
-        param.setAttribute("fixed", method.getName());
+        param.setAttribute("fixed", m.getName());
         param.setAttribute("type", XSD_STRING);
         param.setAttribute("required", "true");
         request.appendChild(param);
@@ -746,7 +704,7 @@ public class RestPublish
         param.setAttribute("required", "true");
         request.appendChild(param);
 
-        for (Class classparam : method.getParameterTypes())
+        for (Class classparam : m.getParameterTypes())
         {
             if (isGenericObject(classparam))
             {
@@ -767,29 +725,7 @@ public class RestPublish
                 request.appendChild(param);
             }
         }
-
-
-        if (WADL_NS.equals(WADL_NS_2009))
-        {
-            Element error = doc.createElementNS(WADL_NS, "response");
-            emethod.appendChild(error);
-            Element representation = doc.createElementNS(WADL_NS, "representation");
-            error.appendChild(representation);
-            representation.setAttribute("mediaType", "application/xml");
-            error.setAttribute("status", "400");
-            representation.setAttribute("element", REST_RESOURCE_PREFIX + ":Error");
-        }
-
-        Element response = doc.createElementNS(WADL_NS, "response");
-        emethod.appendChild(response);
-        Element representation = doc.createElementNS(WADL_NS, "representation");
-        response.appendChild(representation);
-        representation.setAttribute("mediaType", "application/xml");
-        if (WADL_NS.equals(WADL_NS_2009))
-        {
-            response.setAttribute("status", "200");
-            representation.setAttribute("element", REST_RESOURCE_PREFIX + ":" + method.getName());
-        }
+        configureCommonsElements(method, request, WADL_NS, REST_RESOURCE_PREFIX + ":" + m.getName());
     }
 
     private static boolean isGenericObject(Class clazz)
@@ -927,7 +863,26 @@ public class RestPublish
         param.setAttribute("type", XSD_STRING);
         param.setAttribute("required", "true");
         request.appendChild(param);
+        configureCommonsElements(method, request, WADL_NS, REST_RESOURCE_PREFIX + ":Deleted");
+    }
 
+    private void configureCommonsElements(Element method, Element request, String WADL_NS, String elementType)
+    {
+        Document doc = method.getOwnerDocument();
+        Element param = doc.createElementNS(WADL_NS, "param");
+        param.setAttribute("name", "format");
+        param.setAttribute("style", "query");
+        request.appendChild(param);
+
+        Element option = doc.createElementNS(WADL_NS, "option");
+        option.setAttribute("value", "xml");
+        option.setAttribute("mediaType", "application/xml");
+        param.appendChild(option);
+
+        option = doc.createElementNS(WADL_NS, "option");
+        option.setAttribute("value", "json");
+        option.setAttribute("mediaType", "application/json");
+        param.appendChild(option);
 
         if (WADL_NS.equals(WADL_NS_2009))
         {
@@ -948,8 +903,12 @@ public class RestPublish
         if (WADL_NS.equals(WADL_NS_2009))
         {
             response.setAttribute("status", "200");
-            representation.setAttribute("element", REST_RESOURCE_PREFIX + ":Deleted");
+            representation.setAttribute("element", elementType);
         }
+
+        representation = doc.createElementNS(WADL_NS, "representation");
+        response.appendChild(representation);
+        representation.setAttribute("mediaType", "application/json");
     }
 
     private void addGetMethod(Document doc, Element resource, SemanticClass clazz, String WADL_NS)
@@ -969,29 +928,7 @@ public class RestPublish
         param.setAttribute("required", "true");
         request.appendChild(param);
 
-
-
-        if (WADL_NS.equals(WADL_NS_2009))
-        {
-            Element error = doc.createElementNS(WADL_NS, "response");
-            method.appendChild(error);
-            Element representation = doc.createElementNS(WADL_NS, "representation");
-            error.appendChild(representation);
-            representation.setAttribute("mediaType", "application/xml");
-            error.setAttribute("status", "400");
-            representation.setAttribute("element", REST_RESOURCE_PREFIX + ":Error");
-        }
-
-        Element response = doc.createElementNS(WADL_NS, "response");
-        method.appendChild(response);
-        Element representation = doc.createElementNS(WADL_NS, "representation");
-        response.appendChild(representation);
-        representation.setAttribute("mediaType", "application/xml");
-        if (WADL_NS.equals(WADL_NS_2009))
-        {
-            response.setAttribute("status", "200");
-            representation.setAttribute("element", clazz.getPrefix() + ":" + clazz.getName());
-        }
+        configureCommonsElements(method, request, WADL_NS, clazz.getPrefix() + ":" + clazz.getName());
     }
 
     private void executeMethod(HttpServletRequest request, HttpServletResponse response) throws IOException
@@ -1042,34 +979,84 @@ public class RestPublish
 
     private void showCreted(HttpServletRequest request, HttpServletResponse response, String uri) throws IOException
     {
-        Document doc = getCreated(uri);
         PrintWriter out = response.getWriter();
+        String data = null;
         String charset = Charset.defaultCharset().name();
-        response.setContentType("application/xml; charset=" + charset);
-        String xml = SWBUtils.XML.domToXml(doc, charset, true);
-        out.print(xml);
+        if ("json".equals(request.getParameter("format")))
+        {
+            response.setContentType("application/json; charset=" + charset);
+            try
+            {
+                data = getCreatedAsJSON(uri).toString();
+            }
+            catch (Exception e)
+            {
+                showError(request, response, e.getMessage());
+            }
+        }
+        else
+        {
+            Document doc = getCreatedAsXML(uri);
+            response.setContentType("application/xml; charset=" + charset);
+            data = SWBUtils.XML.domToXml(doc, charset, true);
+        }
+        out.print(data);
         out.close();
     }
 
     private void showUpdated(HttpServletRequest request, HttpServletResponse response, boolean isUpdated) throws IOException
     {
-        Document doc = getUpdated(isUpdated);
+
         PrintWriter out = response.getWriter();
+        String data = null;
         String charset = Charset.defaultCharset().name();
-        response.setContentType("application/xml; charset=" + charset);
-        String xml = SWBUtils.XML.domToXml(doc, charset, true);
-        out.print(xml);
+        if ("json".equals(request.getParameter("format")))
+        {
+            response.setContentType("application/json; charset=" + charset);
+            try
+            {
+                data = getUpdatedAsJSON(isUpdated).toString();
+            }
+            catch (Exception e)
+            {
+                showError(request, response, e.getMessage());
+            }
+        }
+        else
+        {
+            Document doc = getUpdatedAsXml(isUpdated);
+            response.setContentType("application/xml; charset=" + charset);
+            data = SWBUtils.XML.domToXml(doc, charset, true);
+        }
+        out.print(data);
         out.close();
     }
 
     private void showObject(HttpServletRequest request, HttpServletResponse response, SemanticObject obj) throws IOException
     {
-        Document doc = serialize(obj, request);
+
         PrintWriter out = response.getWriter();
+        String data = null;
         String charset = Charset.defaultCharset().name();
-        response.setContentType("application/xml; charset=" + charset);
-        String xml = SWBUtils.XML.domToXml(doc, charset, true);
-        out.print(xml);
+        if ("json".equals(request.getParameter("format")))
+        {
+            response.setContentType("application/json; charset=" + charset);
+            try
+            {
+                data = serializeAsJSON(obj, request).toString();
+            }
+            catch (Exception e)
+            {
+                showError(request, response, e.getMessage());
+            }
+        }
+        else
+        {
+            Document doc = serializeAsXML(obj, request);
+            response.setContentType("application/xml; charset=" + charset);
+            data = SWBUtils.XML.domToXml(doc, charset, true);
+        }
+        out.print(data);
         out.close();
     }
 
@@ -1087,6 +1074,73 @@ public class RestPublish
         String xml = SWBUtils.XML.domToXml(doc, charset, true);
         out.print(xml);
         out.close();
+    }
+
+    private void serializeAsJSON(SemanticObject obj, JSONObject jSONObject, HttpServletRequest request) throws JSONException
+    {
+        Iterator<SemanticProperty> props = obj.listProperties();
+        while (props.hasNext())
+        {
+            SemanticProperty prop = props.next();
+            if (!prop.hasInverse())
+            {
+                if (prop.isDataTypeProperty())
+                {
+                    if (prop.getName().startsWith("has"))
+                    {
+                        Iterator<SemanticLiteral> values = obj.listLiteralProperties(prop);
+                        while (values.hasNext())
+                        {
+                            SemanticLiteral value = values.next();
+                            String name = prop.getName();
+                            String data = value.getString();
+                            jSONObject.accumulate(name, data);
+                        }
+                    }
+                    else
+                    {
+                        String name = prop.getName();
+                        String data = obj.getProperty(prop);
+                        jSONObject.accumulate(name, data);
+                    }
+                }
+                else
+                {
+                    SemanticClass range = prop.getRangeClass();
+                    if (range != null)
+                    {
+                        if (prop.getName().startsWith("has"))
+                        {
+                            Iterator<SemanticObject> values = obj.listObjectProperties(prop);
+                            while (values.hasNext())
+                            {
+                                SemanticObject value = values.next();
+                                if (value != null)
+                                {
+                                    String name = prop.getName();
+                                    JSONObject data = new JSONObject();
+                                    data.put("uri", value.getURI());
+                                    data.put("href", request.getRequestURI() + "?uri=" + value.getShortURI());
+                                    jSONObject.accumulate(name, data);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            SemanticObject value = obj.getObjectProperty(prop);
+                            if (value != null)
+                            {
+                                String name = prop.getName();
+                                JSONObject data = new JSONObject();
+                                data.put("uri", value.getURI());
+                                data.put("href", request.getRequestURI() + "?uri=" + value.getShortURI());
+                                jSONObject.accumulate(name, data);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void serialize(SemanticObject obj, Element name, HttpServletRequest request)
@@ -1159,7 +1213,14 @@ public class RestPublish
         }
     }
 
-    private Document serialize(SemanticObject obj, HttpServletRequest request)
+    private JSONObject serializeAsJSON(SemanticObject obj, HttpServletRequest request) throws Exception
+    {
+        JSONObject jSONObject = new JSONObject();
+        serializeAsJSON(obj, jSONObject, request);
+        return jSONObject;
+    }
+
+    private Document serializeAsXML(SemanticObject obj, HttpServletRequest request)
     {
         Document doc = SWBUtils.XML.getNewDocument();
         Element name = doc.createElementNS(obj.getSemanticClass().getURI(), obj.getSemanticClass().getName());
@@ -1464,7 +1525,7 @@ public class RestPublish
                             if (resinvoke instanceof SemanticObject)
                             {
                                 SemanticObject so = (SemanticObject) resinvoke;
-                                return serialize(so, request);
+                                return serializeAsXML(so, request);
                             }
                             if (resinvoke instanceof GenericIterator)
                             {
@@ -1526,7 +1587,21 @@ public class RestPublish
 
     }
 
-    public Document getCreated(String uri)
+    public JSONObject getCreatedAsJSON(String uri) throws RestException
+    {
+        JSONObject jSONObject = new JSONObject();
+        try
+        {
+            jSONObject.put("Created", uri);
+        }
+        catch (Exception e)
+        {
+            throw new RestException(e);
+        }
+        return jSONObject;
+    }
+
+    public Document getCreatedAsXML(String uri)
     {
         Document doc = SWBUtils.XML.getNewDocument();
         Element created = doc.createElement("Created");
@@ -1539,7 +1614,21 @@ public class RestPublish
         return doc;
     }
 
-    public Document getUpdated(boolean isUpdated)
+    public JSONObject getUpdatedAsJSON(boolean isUpdated) throws RestException
+    {
+        JSONObject jSONObject = new JSONObject();
+        try
+        {
+            jSONObject.put("Updated", isUpdated);
+        }
+        catch (Exception e)
+        {
+            throw new RestException(e);
+        }
+        return jSONObject;
+    }
+
+    public Document getUpdatedAsXml(boolean isUpdated)
     {
         Document doc = SWBUtils.XML.getNewDocument();
         Element updated = doc.createElement("Updated");
@@ -1552,7 +1641,21 @@ public class RestPublish
         return doc;
     }
 
-    public Document getDeleted(boolean isdeleted)
+    public JSONObject getDeletedAsJSON(boolean isdeleted) throws RestException
+    {
+        JSONObject jSONObject = new JSONObject();
+        try
+        {
+            jSONObject.put("Deleted", isdeleted);
+        }
+        catch (Exception e)
+        {
+            throw new RestException(e);
+        }
+        return jSONObject;
+    }
+
+    public Document getDeletedAsXML(boolean isdeleted)
     {
         Document doc = SWBUtils.XML.getNewDocument();
         Element deleted = doc.createElement("Deleted");
@@ -1561,7 +1664,7 @@ public class RestPublish
         deleted.appendChild(xmlns);
         doc.appendChild(deleted);
         Text data = doc.createTextNode(Boolean.toString(isdeleted));
-        deleted.appendChild(deleted);
+        deleted.appendChild(data);
         return doc;
     }
 
@@ -1925,12 +2028,28 @@ public class RestPublish
 
     private void showDeleted(HttpServletRequest request, HttpServletResponse response, boolean isdeleted) throws IOException
     {
-        Document doc = getDeleted(isdeleted);
         PrintWriter out = response.getWriter();
+        String data = null;
         String charset = Charset.defaultCharset().name();
-        response.setContentType("application/xml; charset=" + charset);
-        String xml = SWBUtils.XML.domToXml(doc, charset, true);
-        out.print(xml);
+        if ("json".equals(request.getParameter("format")))
+        {
+            response.setContentType("application/json; charset=" + charset);
+            try
+            {
+                data = getDeletedAsJSON(isdeleted).toString();
+            }
+            catch (Exception e)
+            {
+                showError(request, response, e.getMessage());
+            }
+        }
+        else
+        {
+            Document doc = getDeletedAsXML(isdeleted);
+            response.setContentType("application/xml; charset=" + charset);
+            data = SWBUtils.XML.domToXml(doc, charset, true);
+        }
+        out.print(data);
         out.close();
     }
 
