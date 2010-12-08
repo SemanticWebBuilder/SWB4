@@ -1440,7 +1440,7 @@ public class RestPublish
             }
             catch (ClassNotFoundException clnfe)
             {
-                clnfe.printStackTrace();
+                log.error(clnfe);
             }
 
 
@@ -1508,8 +1508,7 @@ public class RestPublish
                     }
                 }
                 catch (Exception e)
-                {
-                    e.printStackTrace();
+                {                    
                     log.error(e);
                     return false;
                 }
@@ -1626,8 +1625,7 @@ public class RestPublish
                         }
                     }
                     catch (Exception e)
-                    {
-                        e.printStackTrace();
+                    {                        
                         log.error(e);
                         throw e;
                     }
