@@ -2133,8 +2133,7 @@ public class RestPublish
 
     private void showObject(HttpServletRequest request, HttpServletResponse response, List<String> path, SemanticClass clazz) throws RestException, IOException
     {
-        String uri = path.get(0);
-        System.out.println("uri to show: " + uri);
+        String uri = path.get(0);        
         if (uri.indexOf(":") != -1)
         {
             if (uri.indexOf("%3A") != -1)
@@ -2261,6 +2260,22 @@ public class RestPublish
                 SemanticObject obj = SemanticObject.createSemanticObject(uri);
                 if (obj != null)
                 {
+                    SemanticClass clazz=obj.getSemanticClass();
+                    boolean isUpdatable=false;
+                    for(SemanticClass clazzCatalog : classes)
+                    {
+                        if(clazzCatalog.equals(clazz))
+                        {
+                            isUpdatable=true;
+                            break;
+                        }
+                    }
+                    if(!isUpdatable)
+                    {
+                        response.setStatus(400);
+                        showError(request, response, "The object was not found");
+                        return;
+                    }
                     uri = obj.getShortURI();
                     obj.remove();
                     showDeleted(request, response, true);
@@ -2438,6 +2453,22 @@ public class RestPublish
                 SemanticObject obj = SemanticObject.createSemanticObject(uri);
                 if (obj != null)
                 {
+                    SemanticClass clazz=obj.getSemanticClass();
+                    boolean isUpdatable=false;
+                    for(SemanticClass clazzCatalog : classes)
+                    {
+                        if(clazzCatalog.equals(clazz))
+                        {
+                            isUpdatable=true;
+                            break;
+                        }
+                    }
+                    if(!isUpdatable)
+                    {
+                        response.setStatus(400);
+                        showError(request, response, "The object was not found");
+                        return;
+                    }
                     try
                     {
                         updateProperties(request, obj);
