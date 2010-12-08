@@ -3,6 +3,7 @@
 "open" = "Open"
 "save" = "Save"
 "export" = "Export"
+"exportxpdl" = "Export XPDL"
 "print" = "Print"
 "about" = "About"
 "task" = "Tareas"
