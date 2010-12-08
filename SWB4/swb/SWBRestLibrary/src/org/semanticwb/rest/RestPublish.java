@@ -377,8 +377,7 @@ public class RestPublish
             }
         }
         catch (Exception cnfe)
-        {
-            cnfe.printStackTrace();
+        {            
             log.error(cnfe);
         }
 
