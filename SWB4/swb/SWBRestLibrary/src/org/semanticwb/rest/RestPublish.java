@@ -377,7 +377,7 @@ public class RestPublish
             }
         }
         catch (Exception cnfe)
-        {            
+        {
             log.error(cnfe);
         }
 
@@ -1003,16 +1003,17 @@ public class RestPublish
     {
         PrintWriter out = response.getWriter();
         String charset = Charset.defaultCharset().name();
-        response.setContentType(APPLICATION_XML +"; charset=" + charset);
+        response.setContentType(APPLICATION_XML + "; charset=" + charset);
         String xml = SWBUtils.XML.domToXml(doc, charset, true);
         out.print(xml);
         out.close();
     }
+
     private void showJSON(HttpServletResponse response, JSONObject jSONObject) throws IOException
     {
         PrintWriter out = response.getWriter();
         String charset = Charset.defaultCharset().name();
-        response.setContentType(APPLICATION_XML +"; charset=" + charset);
+        response.setContentType(APPLICATION_XML + "; charset=" + charset);
         String xml = jSONObject.toString();
         out.print(xml);
         out.close();
@@ -1038,10 +1039,10 @@ public class RestPublish
     private void showCreted(HttpServletRequest request, HttpServletResponse response, String uri) throws IOException
     {
         if ("json".equals(request.getParameter("format")))
-        {            
+        {
             try
             {
-                showJSON(response,getCreatedAsJSON(uri));
+                showJSON(response, getCreatedAsJSON(uri));
             }
             catch (Exception e)
             {
@@ -1053,16 +1054,16 @@ public class RestPublish
             Document doc = getCreatedAsXML(uri);
             showDocument(response, doc);
         }
-        
+
     }
 
     private void showUpdated(HttpServletRequest request, HttpServletResponse response, boolean isUpdated) throws IOException
     {
         if ("json".equals(request.getParameter("format")))
-        {            
+        {
             try
             {
-                showJSON(response,getUpdatedAsJSON(isUpdated));
+                showJSON(response, getUpdatedAsJSON(isUpdated));
             }
             catch (Exception e)
             {
@@ -1074,19 +1075,19 @@ public class RestPublish
             Document doc = getUpdatedAsXml(isUpdated);
             showDocument(response, doc);
         }
-       
+
     }
 
     private void showObject(HttpServletRequest request, HttpServletResponse response, SemanticObject obj) throws IOException
     {
 
-        
+
         if ("json".equals(request.getParameter("format")))
         {
-            
+
             try
             {
-                showJSON(response,serializeAsJSON(obj, request));
+                showJSON(response, serializeAsJSON(obj, request));
             }
             catch (Exception e)
             {
@@ -1098,7 +1099,7 @@ public class RestPublish
             Document doc = serializeAsXML(obj, request);
             showDocument(response, doc);
         }
-        
+
     }
 
     private void showXSD(HttpServletRequest request, HttpServletResponse response, SemanticClass clazz) throws IOException
@@ -1820,21 +1821,7 @@ public class RestPublish
         if (dataType.equals(SemanticVocabulary.XMLS_URI))
         {
             String uri = value;
-            if (uri.indexOf(":") != -1)
-            {
-                if (uri.indexOf("%3A") != -1)
-                {
-                    uri = uri.replace("%3A", ":");
-                }
-                if (uri.indexOf("%23") != -1)
-                {
-                    uri = uri.replace("%23", "#");
-                }
-                if (uri.indexOf("#") == -1)
-                {
-                    uri = SemanticObject.shortToFullURI(uri);
-                }
-            }
+            uri=fixURI(uri);
             SemanticObject ovalue = SemanticObject.createSemanticObject(uri);
             if (ovalue == null)
             {
@@ -1887,6 +1874,26 @@ public class RestPublish
         {
             Short.parseShort(value);
         }
+    }
+
+    private static String fixURI(String uri)
+    {
+        if (uri!=null && uri.indexOf(":") != -1)
+        {
+            if (uri.indexOf("%3A") != -1)
+            {
+                uri = uri.replace("%3A", ":");
+            }
+            if (uri.indexOf("%23") != -1)
+            {
+                uri = uri.replace("%23", "#");
+            }
+            if (uri.indexOf("#") == -1)
+            {
+                uri = SemanticObject.shortToFullURI(uri);
+            }
+        }
+        return uri;
     }
 
     private void updateProperties(HttpServletRequest request, SemanticObject obj) throws Exception
@@ -2005,21 +2012,7 @@ public class RestPublish
                             for (String value : values)
                             {
                                 String uri = value;
-                                if (uri.indexOf(":") != -1)
-                                {
-                                    if (uri.indexOf("%3A") != -1)
-                                    {
-                                        uri = uri.replace("%3A", ":");
-                                    }
-                                    if (uri.indexOf("%23") != -1)
-                                    {
-                                        uri = uri.replace("%23", "#");
-                                    }
-                                    if (uri.indexOf("#") == -1)
-                                    {
-                                        uri = SemanticObject.shortToFullURI(uri);
-                                    }
-                                }
+                                uri=fixURI(uri);
                                 SemanticObject testobj = SemanticObject.createSemanticObject(uri);
                                 if (testobj == null)
                                 {
@@ -2043,21 +2036,7 @@ public class RestPublish
                             if (values[0] != null)
                             {
                                 String uri = values[0];
-                                if (uri.indexOf(":") != -1)
-                                {
-                                    if (uri.indexOf("%3A") != -1)
-                                    {
-                                        uri = uri.replace("%3A", ":");
-                                    }
-                                    if (uri.indexOf("%23") != -1)
-                                    {
-                                        uri = uri.replace("%23", "#");
-                                    }
-                                    if (uri.indexOf("#") == -1)
-                                    {
-                                        uri = SemanticObject.shortToFullURI(uri);
-                                    }
-                                }
+                                uri=fixURI(uri);
                                 SemanticObject testobj = SemanticObject.createSemanticObject(uri);
                                 if (testobj == null)
                                 {
@@ -2075,9 +2054,9 @@ public class RestPublish
     }
 
     private void showDeleted(HttpServletRequest request, HttpServletResponse response, boolean isdeleted) throws IOException
-    {        
+    {
         if ("json".equals(request.getParameter("format")))
-        {            
+        {
             try
             {
                 showJSON(response, getDeletedAsJSON(isdeleted));
@@ -2092,27 +2071,13 @@ public class RestPublish
             Document doc = getDeletedAsXML(isdeleted);
             showDocument(response, doc);
         }
-       
+
     }
 
     private void showObject(HttpServletRequest request, HttpServletResponse response, List<String> path, SemanticClass clazz) throws RestException, IOException
     {
         String uri = path.get(0);
-        if (uri.indexOf(":") != -1)
-        {
-            if (uri.indexOf("%3A") != -1)
-            {
-                uri = uri.replace("%3A", ":");
-            }
-            if (uri.indexOf("%23") != -1)
-            {
-                uri = uri.replace("%23", "#");
-            }
-            if (uri.indexOf("#") == -1)
-            {
-                uri = SemanticObject.shortToFullURI(uri);
-            }
-        }
+        uri=fixURI(uri);
         SemanticObject obj = SemanticObject.createSemanticObject(uri);
         if (obj == null || !obj.getSemanticClass().equals(clazz))
         {
@@ -2205,22 +2170,7 @@ public class RestPublish
             if (request.getParameter("uri") != null)
             {
                 String uri = request.getParameter("uri");
-                if (uri.indexOf(":") != -1)
-                {
-                    if (uri.indexOf("%3A") != -1)
-                    {
-                        uri = uri.replace("%3A", ":");
-                    }
-                    if (uri.indexOf("%23") != -1)
-                    {
-                        uri = uri.replace("%23", "#");
-                    }
-                    if (uri.indexOf("#") == -1)
-                    {
-                        uri = SemanticObject.shortToFullURI(uri);
-                    }
-                }
-
+                uri=fixURI(uri);
                 SemanticObject obj = SemanticObject.createSemanticObject(uri);
                 if (obj != null)
                 {
@@ -2293,22 +2243,7 @@ public class RestPublish
                 if (request.getParameter("classuri") != null)
                 {
                     String uri = request.getParameter("classuri");
-
-                    if (uri.indexOf(":") != -1)
-                    {
-                        if (uri.indexOf("%3A") != -1)
-                        {
-                            uri = uri.replace("%3A", ":");
-                        }
-                        if (uri.indexOf("%23") != -1)
-                        {
-                            uri = uri.replace("%23", "#");
-                        }
-                        if (uri.indexOf("#") == -1)
-                        {
-                            uri = SemanticObject.shortToFullURI(uri);
-                        }
-                    }
+                    uri=fixURI(uri);
                     SemanticClass clazz = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
                     if (clazz != null)
                     {
@@ -2327,21 +2262,7 @@ public class RestPublish
             else if (request.getParameter("uri") != null)
             {
                 String uri = request.getParameter("uri");
-                if (uri.indexOf(":") != -1)
-                {
-                    if (uri.indexOf("%3A") != -1)
-                    {
-                        uri = uri.replace("%3A", ":");
-                    }
-                    if (uri.indexOf("%23") != -1)
-                    {
-                        uri = uri.replace("%23", "#");
-                    }
-                    if (uri.indexOf("#") == -1)
-                    {
-                        uri = SemanticObject.shortToFullURI(uri);
-                    }
-                }
+                uri=fixURI(uri);
 
                 SemanticObject obj = SemanticObject.createSemanticObject(uri);
                 if (obj != null)
@@ -2399,21 +2320,7 @@ public class RestPublish
             }
             else
             {
-                if (uri.indexOf(":") != -1)
-                {
-                    if (uri.indexOf("%3A") != -1)
-                    {
-                        uri = uri.replace("%3A", ":");
-                    }
-                    if (uri.indexOf("%23") != -1)
-                    {
-                        uri = uri.replace("%23", "#");
-                    }
-                    if (uri.indexOf("#") == -1)
-                    {
-                        uri = SemanticObject.shortToFullURI(uri);
-                    }
-                }
+                uri=fixURI(uri);
                 SemanticObject obj = SemanticObject.createSemanticObject(uri);
                 if (obj != null)
                 {
@@ -2467,22 +2374,7 @@ public class RestPublish
                 showError(request, response, "The parameter modeluri is required");
                 return;
             }
-
-            if (classuri.indexOf(":") != -1)
-            {
-                if (classuri.indexOf("%3A") != -1)
-                {
-                    classuri = classuri.replace("%3A", ":");
-                }
-                if (classuri.indexOf("%23") != -1)
-                {
-                    classuri = classuri.replace("%23", "#");
-                }
-                if (classuri.indexOf("#") == -1)
-                {
-                    classuri = SemanticObject.shortToFullURI(classuri);
-                }
-            }
+            classuri=fixURI(classuri);
             SemanticClass clazz = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(classuri);
             if (clazz == null)
             {
@@ -2514,24 +2406,7 @@ public class RestPublish
                     return;
                 }
             }
-
-
-
-            if (modeluri.indexOf(":") != -1)
-            {
-                if (modeluri.indexOf("%3A") != -1)
-                {
-                    modeluri = classuri.replace("%3A", ":");
-                }
-                if (modeluri.indexOf("%23") != -1)
-                {
-                    modeluri = classuri.replace("%23", "#");
-                }
-                if (modeluri.indexOf("#") == -1)
-                {
-                    modeluri = SemanticObject.shortToFullURI(modeluri);
-                }
-            }
+            modeluri=fixURI(modeluri);            
             SemanticObject objmodel = SemanticObject.createSemanticObject(modeluri);
             if (objmodel == null)
             {
