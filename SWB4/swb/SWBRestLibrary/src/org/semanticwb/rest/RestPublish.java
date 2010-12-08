@@ -585,6 +585,7 @@ public class RestPublish
         Element param = doc.createElementNS(WADL_NS, "param");
         param.setAttribute("name", REST_CLASSURI);
         param.setAttribute("style", "query");
+        param.setAttribute("fixed", clazz.getURI());
         param.setAttribute("type", XSD_STRING);
         param.setAttribute("required", "true");
         request.appendChild(param);
@@ -2492,6 +2493,21 @@ public class RestPublish
             {
                 response.setStatus(400);
                 showError(request, response, "The class " + request.getParameter("classuri") + " was not found");
+                return;
+            }
+            boolean isPublished=false;
+            for(SemanticClass clazzCatalog : classes)
+            {
+                if(clazzCatalog.equals(clazz))
+                {
+                    isPublished=true;
+                    break;
+                }
+            }
+            if(!isPublished)
+            {
+                response.setStatus(400);
+                showError(request, response, "Can not create a object with class "+request.getParameter("classuri"));
                 return;
             }
             if (!clazz.isAutogenId())
