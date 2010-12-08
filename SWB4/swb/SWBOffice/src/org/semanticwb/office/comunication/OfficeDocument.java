@@ -2461,7 +2461,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     resourceType = site.createResourceType(EXCEL_RESOURCE_TYPE);
                     resourceType.setCreated(new Date(System.currentTimeMillis()));
                     resourceType.setDescription(EXCEL_RESOURCE_DESCRIPTION);
-                    resourceType.setResourceBundle(ExcelResource.class.getSimpleName());
+                    resourceType.setResourceBundle(ExcelResource.class.getCanonicalName());
                     resourceType.setTitle(EXCEL_RESOURCE_TITLE);
                     resourceType.setResourceMode(1);
                     resourceType.setResourceClassName(ExcelResource.class.getCanonicalName());
@@ -2477,7 +2477,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     resourceType = site.createResourceType(PPT_RESOURCE_TYPE);
                     resourceType.setCreated(new Date(System.currentTimeMillis()));
                     resourceType.setDescription(PPT_RESOURCE_DESCRIPTION);
-                    resourceType.setResourceBundle(PPTResource.class.getSimpleName());
+                    resourceType.setResourceBundle(PPTResource.class.getCanonicalName());
                     resourceType.setTitle(PPT_RESOURCE_TITLE);
                     resourceType.setResourceMode(1);
                     resourceType.setResourceClassName(PPTResource.class.getCanonicalName());
@@ -2495,7 +2495,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     resourceType.setCreated(new Date(System.currentTimeMillis()));
                     resourceType.setDescription(WORD_RESOURCE_DESCRIPTION);
                     resourceType.setTitle(WORD_RESOURCE_TITLE);
-                    resourceType.setResourceBundle(WordResource.class.getSimpleName());
+                    resourceType.setResourceBundle(WordResource.class.getCanonicalName());
                     resourceType.setResourceMode(1);
                     resourceType.setResourceClassName(WordResource.class.getCanonicalName());
                     resourceType.setUpdated(new Date(System.currentTimeMillis()));
