@@ -209,8 +209,15 @@ private SWBResourceCachedMgr cache;
         SWBResource res=resources.get(uri);
         if(res==null)
         {
-            Resource resource=(Resource)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(uri);
-            res=getResource(resource);
+            synchronized(this)
+            {
+                res=resources.get(uri);
+                if(res==null)
+                {
+                    Resource resource=(Resource)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(uri);
+                    res=getResource(resource);
+                }
+            }
         }
         return res;
     }
@@ -230,10 +237,17 @@ private SWBResourceCachedMgr cache;
             res=resources.get(uri);
             if(res==null)
             {
-                res=createSWBResource(resource);
-                if(res!=null)
+                synchronized(this)
                 {
-                    resources.put(uri, res);
+                    res=resources.get(uri);
+                    if(res==null)
+                    {
+                        res=createSWBResource(resource);
+                        if(res!=null)
+                        {
+                            resources.put(uri, res);
+                        }
+                    }
                 }
             }
         }

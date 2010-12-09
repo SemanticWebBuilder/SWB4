@@ -307,6 +307,7 @@ public class SWBAccessLog implements SWBAppObject
      */
     public synchronized void log(HashMap hm, String tm, String strFile, String str)
     {
+        //System.out.println("hm:"+hm+" tm:"+tm+" strFile:"+strFile+" str:"+str);
         PrintWriter log=null;
         if (str.startsWith(datePatern))
         {
