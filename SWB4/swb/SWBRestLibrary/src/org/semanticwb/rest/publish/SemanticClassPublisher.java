@@ -5,14 +5,17 @@
 package org.semanticwb.rest.publish;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import java.util.List;
 import java.util.ArrayList;
 import org.semanticwb.model.GenericIterator;
-import java.lang.reflect.Modifier;
+
 import java.sql.Timestamp;
 import java.util.Date;
 import org.semanticwb.model.GenericObject;
@@ -151,7 +154,7 @@ public final class SemanticClassPublisher extends RestModule
 
         public String getId()
         {
-            return "delete";
+            return "delete_"+clazz.getPrefix()+"_"+clazz.getName();
         }
 
         public void addParameters(Element method)
@@ -222,7 +225,7 @@ public final class SemanticClassPublisher extends RestModule
 
         public String getId()
         {
-            return "update";
+            return "update_"+clazz.getPrefix()+"_"+clazz.getName();
         }
 
         public void addParameters(Element method)
@@ -497,7 +500,7 @@ public final class SemanticClassPublisher extends RestModule
 
         public String getId()
         {
-            return "add";
+            return "add_"+clazz.getPrefix()+"_"+clazz.getName();
         }
 
         public void execute(HttpServletRequest request, HttpServletResponse response, String basepath) throws IOException
@@ -619,7 +622,7 @@ public final class SemanticClassPublisher extends RestModule
 
         public String getId()
         {
-            return "get";
+            return "get_"+clazz.getPrefix()+"_"+clazz.getName();
         }
 
         public void execute(HttpServletRequest request, HttpServletResponse response, String basepath) throws IOException
@@ -667,14 +670,25 @@ public final class SemanticClassPublisher extends RestModule
             return clazz.getPrefix() + "_" + clazz.getName();
         }
     }
-
+    class ModelMethodModule extends MethodModule
+    {
+        public ModelMethodModule(Method m, SemanticClass clazz)
+        {
+            super(m, clazz);
+        }
+        @Override
+        public String getId()
+        {
+            return "_"+m.getName()+clazz.getPrefix()+"_"+clazz.getName();
+        }
+    }
     class MethodModule extends MethodModuleBase
     {
 
-        private final java.lang.reflect.Method m;
-        private final SemanticClass clazz;
+        protected final Method m;
+        protected final SemanticClass clazz;
 
-        public MethodModule(java.lang.reflect.Method m, SemanticClass clazz)
+        public MethodModule(Method m, SemanticClass clazz)
         {
             this.m = m;
             this.clazz = clazz;
@@ -682,7 +696,7 @@ public final class SemanticClassPublisher extends RestModule
 
         public String getId()
         {
-            return m.getName();
+            return m.getName()+clazz.getPrefix()+"_"+clazz.getName();
         }
 
         public HTTPMethod getHTTPMethod()
@@ -744,7 +758,7 @@ public final class SemanticClassPublisher extends RestModule
             }
         }
 
-        private Object[] getParameters(java.lang.reflect.Method m, HttpServletRequest request) throws Exception
+        private Object[] getParameters(Method m, HttpServletRequest request) throws Exception
         {
             ArrayList<Object> getParameters = new ArrayList<Object>();
             for (Class parameter : m.getParameterTypes())
@@ -764,7 +778,7 @@ public final class SemanticClassPublisher extends RestModule
             return getParameters.toArray(new Object[getParameters.size()]);
         }
 
-        private boolean checkParameters(java.lang.reflect.Method m, HttpServletRequest request)
+        private boolean checkParameters(Method m, HttpServletRequest request)
         {
             for (Class parameter : m.getParameterTypes())
             {
@@ -897,7 +911,7 @@ public final class SemanticClassPublisher extends RestModule
                         {
                             Class mgr = c;
 
-                            for (java.lang.reflect.Method m : mgr.getDeclaredMethods())
+                            for (Method m : mgr.getDeclaredMethods())
                             {
                                 if (Modifier.isPublic(m.getModifiers()) && Modifier.isStatic(m.getModifiers()) && (m.getName().startsWith("has") || m.getName().startsWith("list")))
                                 {
@@ -932,7 +946,7 @@ public final class SemanticClassPublisher extends RestModule
                         if (c.getName().endsWith("ClassMgr"))
                         {
                             Class mgr = c;
-                            for (java.lang.reflect.Method m : mgr.getDeclaredMethods())
+                            for (Method m : mgr.getDeclaredMethods())
                             {
                                 if (methodName.equals(methodName) && Modifier.isPublic(m.getModifiers()) && Modifier.isStatic(m.getModifiers()) && (m.getName().startsWith("has") || m.getName().startsWith("list")))
                                 {
@@ -974,7 +988,7 @@ public final class SemanticClassPublisher extends RestModule
         @Override
         public String getId()
         {
-            return "functions";
+            return "functionsOf_"+clazz.getPrefix()+"_"+clazz.getName();
         }
     }
 
@@ -1016,7 +1030,7 @@ public final class SemanticClassPublisher extends RestModule
                         if (c.getName().endsWith("ClassMgr"))
                         {
                             Class mgr = c;
-                            for (java.lang.reflect.Method m : mgr.getDeclaredMethods())
+                            for (Method m : mgr.getDeclaredMethods())
                             {
                                 if (methodName.equals(methodName) && Modifier.isPublic(m.getModifiers()) && Modifier.isStatic(m.getModifiers()) && (m.getName().startsWith("has") || m.getName().startsWith("list")))
                                 {
@@ -1051,13 +1065,13 @@ public final class SemanticClassPublisher extends RestModule
                         {
                             Class mgr = c;
 
-                            for (java.lang.reflect.Method m : mgr.getDeclaredMethods())
+                            for (Method m : mgr.getDeclaredMethods())
                             {
                                 if (Modifier.isPublic(m.getModifiers()) && Modifier.isStatic(m.getModifiers()) && (m.getName().startsWith("has") || m.getName().startsWith("list")))
                                 {
                                     if (hasModel(m))
                                     {
-                                        MethodModule method = new MethodModule(m, clazz);
+                                        ModelMethodModule method = new ModelMethodModule(m, clazz);
                                         this.methods.put(method.getId(), method);
                                     }
                                 }
@@ -1076,7 +1090,7 @@ public final class SemanticClassPublisher extends RestModule
         @Override
         public String getId()
         {
-            return "model";
+            return "ModelFunctionsOf_"+clazz.getPrefix()+"_"+clazz.getName();
         }
     }
 
@@ -1912,7 +1926,7 @@ public final class SemanticClassPublisher extends RestModule
 
     }
 
-    private boolean hasModel(java.lang.reflect.Method method)
+    private boolean hasModel(Method method)
     {
         for (Class parameterClass : method.getParameterTypes())
         {
@@ -2231,7 +2245,7 @@ public final class SemanticClassPublisher extends RestModule
         {
             Class main = Class.forName(clazz.getClassName());
             Class msgr = getClassManager(main);
-            for (java.lang.reflect.Method m : msgr.getDeclaredMethods())
+            for (Method m : msgr.getDeclaredMethods())
             {
                 if (Modifier.isPublic(m.getModifiers()) && Modifier.isStatic(m.getModifiers()) && (m.getName().startsWith("has") || m.getName().startsWith("list")))
                 {
