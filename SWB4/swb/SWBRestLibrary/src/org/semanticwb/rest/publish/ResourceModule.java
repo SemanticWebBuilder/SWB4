@@ -52,8 +52,7 @@ public abstract class ResourceModule
     }
 
     public void service(HttpServletRequest request, HttpServletResponse response, String servet, List<String> path, String basepath) throws IOException
-    {
-        System.out.println("path: " + path.size());
+    {        
         if (path.isEmpty())
         {
             for (MethodModule methodModule : methods.values())
