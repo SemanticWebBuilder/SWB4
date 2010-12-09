@@ -38,8 +38,7 @@ public abstract class ResourceModule
             method.setAttribute("id", id);
             method.setAttribute("name", methodModule.getHTTPMethod().toString());
             methodModule.addParameters(method);
-        }
-        System.out.println("subResources: "+subResources.size());
+        }        
         for (String id : subResources.keySet())
         {
             ResourceModule subresource=subResources.get(id);
@@ -66,6 +65,17 @@ public abstract class ResourceModule
         }
         else // issubresource
         {
+            String subresource=path.get(0);
+            if(subResources.containsKey(subresource))
+            {
+                ResourceModule resourceModule=subResources.get(subresource);
+                basepath+="/"+path.remove(0);
+                resourceModule.service(request, response, servet, path, basepath);
+            }
+            else
+            {
+                response.setStatus(404);
+            }
         }
     }
 }
