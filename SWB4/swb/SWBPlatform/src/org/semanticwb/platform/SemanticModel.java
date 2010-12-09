@@ -37,6 +37,7 @@ import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
@@ -750,13 +751,22 @@ public SemanticObject getSemanticObject(String uri)
     {
         log.debug("sparQLQuery:"+queryString);
         QueryExecution ret=null;
-        Query query = QueryFactory.create(queryString);
+        Query query = QueryFactory.create(queryString, Syntax.syntaxARQ);
         if(m_model.getGraph() instanceof RemoteGraph)
         {
             ret=QueryExecutionFactory.sparqlService(((RemoteGraph)m_model.getGraph()).getUri(), query);
         }else
         {
-            ret=QueryExecutionFactory.create(query, m_model);
+            if(dataset!=null)
+            {
+                //System.out.println("Query by Dataset:"+queryString);
+                ret=QueryExecutionFactory.create(query, dataset);
+            }
+            else
+            {
+                //System.out.println("Query by model:"+queryString);
+                ret = QueryExecutionFactory.create(query, m_model);
+            }
         }
         return ret;
     }
@@ -812,6 +822,14 @@ public SemanticObject getSemanticObject(String uri)
             listModelClasses();
         }
         return m_classes.contains(cls);
+    }
+
+    public Dataset getDataset() {
+        return dataset;
+    }
+
+    public void setDataset(Dataset dataset) {
+        this.dataset = dataset;
     }
 
 }

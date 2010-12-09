@@ -343,7 +343,7 @@ public class SemanticObject
      */
     public static void removeCache(String uri)
     {
-        System.out.println("removeCache:"+uri);
+        //System.out.println("removeCache:"+uri);
         m_objs.remove(uri);
     }
 
@@ -440,7 +440,7 @@ public class SemanticObject
                 //System.out.println("removePropertyValueCache3:"+aux+" "+inv+" "+inv.getCardinality());
                 if(aux instanceof ArrayList)
                 {
-                    Iterator it=((ArrayList)aux).iterator();
+                    Iterator it=new SemanticIterator(((ArrayList)aux).iterator());
                     while(it.hasNext())
                     {
                         SemanticObject obj=(SemanticObject)it.next();
@@ -480,7 +480,7 @@ public class SemanticObject
         //System.out.println("getList:"+this+" "+prop);
         Iterator it=null;
         ArrayList arr=(ArrayList)m_cacheprops.get(prop.getURI()+"|list");
-        if(arr!=null)it=arr.iterator();
+        if(arr!=null)it=new SemanticIterator(arr.iterator());
         return it;
     }
 
@@ -504,7 +504,7 @@ public class SemanticObject
 //            {
 //                System.out.println("Ite:"+it.next());
 //            }
-            ret=arr.contains(obj);
+            ret=arr.contains(obj.getURI());
         }
 //        System.out.println("hasObjectPropertyCache:"+this+" prop:"+prop+" obj:"+obj+" "+ret);
         return ret;
@@ -550,11 +550,11 @@ public class SemanticObject
         while(list.hasNext())
         {
             SemanticObject obj=list.next();
-            arr.add(obj);
+            arr.add(obj.getURI());
             //System.out.println("-->add:"+obj);
         }
         m_cacheprops.put(prop.getURI()+"|list", arr);
-        return arr.iterator();
+        return new SemanticIterator(arr.iterator());
     }
 
     /**
