@@ -13,7 +13,7 @@ import org.w3c.dom.Element;
  *
  * @author victor.lorenzana
  */
-public abstract class  MehodModuleBase implements MethodModule{
+public abstract class  MethodModuleBase implements MethodModule{
 
     protected static final String NAME = "name";
     protected static final String QUERY = "query";
@@ -27,7 +27,7 @@ public abstract class  MehodModuleBase implements MethodModule{
     protected static final String APPLICATION_XML = "application/xml";
     public static final String WADL_NS_2009 = "http://wadl.dev.java.net/2009/02";
     protected static final String ELEMENT = "element";
-    protected  void configureCommonsElements(Element method, Element request, String WADL_NS, String elementType)
+    public static void configureCommonsElements(Element method, Element request, String WADL_NS, String elementType)
     {
         Document doc = method.getOwnerDocument();
         Element param = doc.createElementNS(WADL_NS, "param");
