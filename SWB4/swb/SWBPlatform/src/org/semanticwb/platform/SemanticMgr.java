@@ -57,6 +57,7 @@ import com.hp.hpl.jena.sdb.store.DatabaseType;
 import com.hp.hpl.jena.sdb.store.LayoutType;
 import com.hp.hpl.jena.sdb.store.StoreFactory;
 import com.hp.hpl.jena.sdb.store.StoreMaker;
+import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.TDBFactory;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.RDFS;
@@ -159,6 +160,8 @@ public class SemanticMgr implements SWBInstanceObject
     private IDBConnection conn;
     /** The maker. */
     private ModelMaker maker;
+    /** The Dataset */
+    private Dataset set;
     /** The store. */
     private Store store;
     /** The vocabulary. */
@@ -307,7 +310,7 @@ public class SemanticMgr implements SWBInstanceObject
                 public void run() {
                     commit();
                 }
-            }, 60000, 10000);
+            }, 60000, 30000);
         } else {
             // create a database connection
             //conn = new DBConnection(M_DB_URL, M_DB_USER, M_DB_PASSWD, M_DB);
@@ -545,9 +548,11 @@ public class SemanticMgr implements SWBInstanceObject
         Model ret = null;
         // create or open the default model
         if (SWBPlatform.isSDB()) {
-            ret = SDBFactory.connectNamedModel(store, name);
+            ret=set.getNamedModel(name);
+            //ret = SDBFactory.connectNamedModel(store, name);
         } else if (SWBPlatform.isTDB()) {
-            ret = TDBFactory.createNamedModel(name, SWBPlatform.createInstance().getPlatformWorkPath() + "/data");
+            ret=set.getNamedModel(name);
+            //ret = TDBFactory.createNamedModel(name, SWBPlatform.createInstance().getPlatformWorkPath() + "/data");
             //System.out.println("loadRDFDBModel:"+name);
         } else {
             ret = maker.openModel(name);
@@ -668,27 +673,31 @@ public class SemanticMgr implements SWBInstanceObject
     /**
      * Load db models.
      */
-    public void loadDBModels() {
-
+    public void loadDBModels()
+    {
         log.debug("loadDBModels");
         //LoadModels
         if (SWBPlatform.isSDB()) {
-            Dataset set = SDBFactory.connectDataset(store);
+            set = SDBFactory.connectDataset(store);
             Iterator<String> it = set.listNames();
             while (it.hasNext()) {
                 String name = it.next();
                 log.trace("LoadingModel:" + name);
                 SemanticModel model = loadDBModel(name);
+                model.setDataset(set);
             }
             //set.close();
         } else if (SWBPlatform.isTDB()) {
-            Dataset set = TDBFactory.createDataset(SWBPlatform.createInstance().getPlatformWorkPath() + "/data");
+            log.debug("TDB Path:"+SWBPlatform.createInstance().getPlatformWorkPath() + "/data");
+            TDB.getContext().set(TDB.symUnionDefaultGraph,true);
+            set = TDBFactory.createDataset(SWBPlatform.createInstance().getPlatformWorkPath() + "/data");
             Iterator<String> it = set.listNames();
             while (it.hasNext()) {
                 String name = it.next();
                 log.trace("LoadingModel:" + name);
                 //System.out.println("LoadingModel:"+name);
                 SemanticModel model = loadDBModel(name);
+                model.setDataset(set);
             }
             //set.close();
         } else {
@@ -1151,8 +1160,11 @@ public class SemanticMgr implements SWBInstanceObject
         Iterator<SemanticModel> it = m_models.values().iterator();
         while (it.hasNext()) {
             SemanticModel model = it.next();
+            model.getRDFModel().commit();
             model.getRDFModel().close();
         }
+        timer.cancel();
+        timer=null;
     }
 
     /**
