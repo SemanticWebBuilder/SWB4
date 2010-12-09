@@ -750,7 +750,7 @@ public final class SemanticClassPublisher extends RestModule
                     SemanticObject so = (SemanticObject) resinvoke;
                     return serializeAsXML(so, basePath);
                 }
-                else if(resinvoke instanceof GenericIterator)
+                else if (resinvoke instanceof GenericIterator)
                 {
                     Document doc = SWBUtils.XML.getNewDocument();
                     Element res = doc.createElementNS(REST_RESOURCES_2010, m.getName());
@@ -824,19 +824,11 @@ public final class SemanticClassPublisher extends RestModule
     class SemanticFunctionsResourceModule extends ResourceModule
     {
 
-        @Override
-        public void service(HttpServletRequest request, HttpServletResponse response, String servet, List<String> path, String basepath) throws IOException
-        {
-            String method=request.getParameter("method");
-            if(method==null || method.trim().equals(""))
-            {
-                
-            }
-            
-        }
+        private final SemanticClass clazz;
 
         public SemanticFunctionsResourceModule(SemanticClass clazz)
-        {            
+        {
+            this.clazz = clazz;
             try
             {
                 Class clazzjava = Class.forName(clazz.getClassName());
@@ -871,6 +863,62 @@ public final class SemanticClassPublisher extends RestModule
             // adds methods
         }
 
+        private boolean existsMethodName(String methodName)
+        {
+            try
+            {
+                Class clazzjava = Class.forName(clazz.getClassName());
+                Class superclazz = clazzjava.getSuperclass();
+                if (superclazz.getName().endsWith("Base"))
+                {
+                    for (Class c : superclazz.getDeclaredClasses())
+                    {
+                        if (c.getName().endsWith("ClassMgr"))
+                        {
+                            Class mgr = c;
+                            for (java.lang.reflect.Method m : mgr.getDeclaredMethods())
+                            {
+                                if (methodName.equals(methodName) && Modifier.isPublic(m.getModifiers()) && Modifier.isStatic(m.getModifiers()) && (m.getName().startsWith("has") || m.getName().startsWith("list")))
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+            catch (ClassNotFoundException cnfe)
+            {
+                log.error(cnfe);
+            }
+            return false;
+        }
+
+        @Override
+        public void service(HttpServletRequest request, HttpServletResponse response, String servet, List<String> path, String basepath) throws IOException
+        {
+            String method = request.getParameter("method");
+            if (method == null || method.trim().equals(""))
+            {
+                response.setStatus(400);
+                showError(request, response, "The parameter method was not found");
+                return;
+            }
+            if (!existsMethodName(method))
+            {
+                response.setStatus(400);
+                showError(request, response, "The method was not found");
+                return;
+            }
+
+            super.service(request, response, servet, path, basepath);
+        }
+
+        public void add()
+        {
+        }
+
         @Override
         public String getId()
         {
@@ -881,23 +929,21 @@ public final class SemanticClassPublisher extends RestModule
     class SemanticModelResourceModule extends ResourceModule
     {
 
-        
-
         @Override
         public void service(HttpServletRequest request, HttpServletResponse response, String servet, List<String> path, String basepath) throws IOException
         {
-            String method=request.getParameter("method");
-            if(method==null || method.trim().equals(""))
+            String method = request.getParameter("method");
+            if (method == null || method.trim().equals(""))
             {
-                
             }
 
 
         }
+
         public SemanticModelResourceModule(SemanticClass clazz)
         {
             // adds methods
-            
+
             try
             {
                 Class clazzjava = Class.forName(clazz.getClassName());
@@ -1783,5 +1829,4 @@ public final class SemanticClassPublisher extends RestModule
         }
         return false;
     }
-    
 }
