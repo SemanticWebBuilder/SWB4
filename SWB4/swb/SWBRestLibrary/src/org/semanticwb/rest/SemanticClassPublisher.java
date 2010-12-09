@@ -4,6 +4,8 @@
  */
 package org.semanticwb.rest;
 
+import java.util.ArrayList;
+import org.semanticwb.model.GenericIterator;
 import java.lang.reflect.Modifier;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -614,10 +616,11 @@ public final class SemanticClassPublisher extends RestModule
 
         private final java.lang.reflect.Method m;
         private final SemanticClass clazz;
-        public MethodModule(java.lang.reflect.Method m,SemanticClass clazz)
+
+        public MethodModule(java.lang.reflect.Method m, SemanticClass clazz)
         {
             this.m = m;
-            this.clazz=clazz;
+            this.clazz = clazz;
         }
 
         public String getId()
@@ -632,8 +635,8 @@ public final class SemanticClassPublisher extends RestModule
 
         public void addParameters(Element method)
         {
-            Document doc=method.getOwnerDocument();
-            String WADL_NS=method.getNamespaceURI();
+            Document doc = method.getOwnerDocument();
+            String WADL_NS = method.getNamespaceURI();
             Element request = doc.createElementNS(WADL_NS, "request");
             method.appendChild(request);
 
@@ -645,7 +648,7 @@ public final class SemanticClassPublisher extends RestModule
             param.setAttribute(REQUIRED, "true");
             request.appendChild(param);
 
-            
+
             for (Class classparam : m.getParameterTypes())
             {
                 if (isGenericObject(classparam))
@@ -670,9 +673,150 @@ public final class SemanticClassPublisher extends RestModule
             configureCommonsElements(method, request, WADL_NS, REST_RESOURCE_PREFIX + ":" + m.getName());
         }
 
+        private Object convert(String value, Class clazz) throws Exception
+        {
+            if (isGenericObject(clazz))
+            {
+                GenericObject go = SemanticObject.createSemanticObject(value).createGenericInstance();
+                return go;
+            }
+            else
+            {
+                String type = classToxsd(clazz);
+                return get(value, type);
+            }
+        }
+
+        private Object[] getParameters(java.lang.reflect.Method m, HttpServletRequest request) throws Exception
+        {
+            ArrayList<Object> getParameters = new ArrayList<Object>();
+            for (Class parameter : m.getParameterTypes())
+            {
+                String parameterName = parameter.getName();
+                String value = request.getParameter(parameterName);
+                if (value != null)
+                {
+                    Object parameterValue = convert(value, parameter);
+                    getParameters.add(parameterValue);
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            return getParameters.toArray(new Object[getParameters.size()]);
+        }
+
+        private boolean checkParameters(java.lang.reflect.Method m, HttpServletRequest request)
+        {
+            for (Class parameter : m.getParameterTypes())
+            {
+                String parameterName = parameter.getName();
+                String value = request.getParameter(parameterName);
+                if (value != null)
+                {
+                    try
+                    {
+                        Object parameterValue = convert(value, parameter);
+                        if (parameterValue == null)
+                        {
+                            return false;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        log.error(e);
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private Document executeMethod(HttpServletRequest request, String basePath) throws Exception
+        {
+            checkParameters(m, request);
+            Object[] args = getParameters(m, request);
+            Object resinvoke = m.invoke(null, args);
+            if (resinvoke != null)
+            {
+                if (resinvoke instanceof SemanticObject)
+                {
+                    SemanticObject so = (SemanticObject) resinvoke;
+                    return serializeAsXML(so, basePath);
+                }
+                else if(resinvoke instanceof GenericIterator)
+                {
+                    Document doc = SWBUtils.XML.getNewDocument();
+                    Element res = doc.createElementNS(REST_RESOURCES_2010, m.getName());
+                    doc.appendChild(res);
+
+                    Attr xmlns = doc.createAttribute("xmlns");
+                    xmlns.setValue(REST_RESOURCES_2010);
+                    res.setAttributeNode(xmlns);
+
+
+
+                    res.setAttribute("xmlns:xlink", XLINK_NS);
+                    GenericIterator gi = (GenericIterator) resinvoke;
+                    if (gi.hasNext())
+                    {
+                        GenericObject go = gi.next();
+                        SemanticObject obj = go.getSemanticObject();
+                        Element name = doc.createElementNS(REST_RESOURCES_2010, obj.getSemanticClass().getName());
+                        name.setAttributeNS(XLINK_NS, "xlink:href", getPathForObject(obj, basePath));
+                        name.setAttribute("shortURI", obj.getShortURI());
+
+                        Text data = doc.createTextNode(obj.getURI());
+                        name.appendChild(data);
+                        res.appendChild(name);
+                    }
+                    while (gi.hasNext())
+                    {
+                        GenericObject go = gi.next();
+                        SemanticObject obj = go.getSemanticObject();
+                        Element name = doc.createElementNS(REST_RESOURCES_2010, obj.getSemanticClass().getName());
+                        name.setAttributeNS(XLINK_NS, "xlink:href", getPathForObject(obj, basePath));
+                        name.setAttribute("shortURI", obj.getShortURI());
+
+                        Text data = doc.createTextNode(obj.getURI());
+                        name.appendChild(data);
+                        res.appendChild(name);
+                    }
+                    return doc;
+                }
+                else
+                {
+                    throw new Exception("The type of the result is not supported");
+                }
+            }
+            else
+            {
+                throw new Exception("Error can not execute the method");
+            }
+
+
+        }
+
         public void execute(HttpServletRequest request, HttpServletResponse response, String basePath) throws IOException
         {
-            
+            String methodName = request.getParameter("method");
+            if (m.getName().equals(methodName))
+            {
+                try
+                {
+                    executeMethod(request, basePath);
+                }
+                catch (Exception e)
+                {
+                    showError(request, response, e.getMessage());
+                    return;
+                }
+            }
         }
     }
 
@@ -702,7 +846,7 @@ public final class SemanticClassPublisher extends RestModule
                                 {
                                     if (!hasModel(m))
                                     {
-                                        MethodModule method = new MethodModule(m,clazz);
+                                        MethodModule method = new MethodModule(m, clazz);
                                         this.methods.put(method.getId(), method);
                                     }
                                 }
@@ -722,6 +866,56 @@ public final class SemanticClassPublisher extends RestModule
         public String getId()
         {
             return "funtions";
+        }
+    }
+
+    class SemanticModelResourceModule extends ResourceModule
+    {
+
+        private final SemanticClass clazz;
+
+        public SemanticModelResourceModule(SemanticClass clazz)
+        {
+            // adds methods
+            this.clazz = clazz;
+            try
+            {
+                Class clazzjava = Class.forName(clazz.getClassName());
+                Class superclazz = clazzjava.getSuperclass();
+                if (superclazz.getName().endsWith("Base"))
+                {
+                    for (Class c : superclazz.getDeclaredClasses())
+                    {
+                        if (c.getName().endsWith("ClassMgr"))
+                        {
+                            Class mgr = c;
+
+                            for (java.lang.reflect.Method m : mgr.getDeclaredMethods())
+                            {
+                                if (Modifier.isPublic(m.getModifiers()) && Modifier.isStatic(m.getModifiers()) && (m.getName().startsWith("has") || m.getName().startsWith("list")))
+                                {
+                                    if (hasModel(m))
+                                    {
+                                        MethodModule method = new MethodModule(m, clazz);
+                                        this.methods.put(method.getId(), method);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (ClassNotFoundException clnfe)
+            {
+                log.error(clnfe);
+            }
+
+        }
+
+        @Override
+        public String getId()
+        {
+            return "model";
         }
     }
 
@@ -755,6 +949,9 @@ public final class SemanticClassPublisher extends RestModule
         SemanticFunctionsResourceModule functions = new SemanticFunctionsResourceModule(clazz);
 
         resourceModule.subResources.put(functions.getId(), functions);
+
+        SemanticModelResourceModule model = new SemanticModelResourceModule(clazz);
+        resourceModule.subResources.put(model.getId(), model);
 
         resourceModules.put(resourceModule.getId(), resourceModule);
     }
