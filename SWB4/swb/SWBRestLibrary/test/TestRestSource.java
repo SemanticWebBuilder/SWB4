@@ -10,14 +10,14 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.semanticwb.rest.Method;
-import org.semanticwb.rest.ParameterDefinition;
-import org.semanticwb.rest.ParameterValue;
-import org.semanticwb.rest.RepresentationResponse;
-import org.semanticwb.rest.Resource;
-import org.semanticwb.rest.RestSource;
-import org.semanticwb.rest.ServiceInfo;
-import org.semanticwb.rest.XmlResponse;
+import org.semanticwb.rest.consume.Method;
+import org.semanticwb.rest.consume.ParameterDefinition;
+import org.semanticwb.rest.consume.ParameterValue;
+import org.semanticwb.rest.consume.RepresentationResponse;
+import org.semanticwb.rest.consume.Resource;
+import org.semanticwb.rest.consume.RestSource;
+import org.semanticwb.rest.consume.ServiceInfo;
+import org.semanticwb.rest.consume.XmlResponse;
 
 /**
  *
