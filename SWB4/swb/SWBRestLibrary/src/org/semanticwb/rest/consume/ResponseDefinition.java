@@ -213,13 +213,13 @@ public final class ResponseDefinition
                     definitions.add(definition);
                     if (representation.getAttribute("element") != null && !representation.getAttribute("element").trim().equals(""))
                     {
-                        String element = representation.getAttribute("element");
+                        String elementName = representation.getAttribute("element");
                         String namespace = method.getResource().getServiceInfo().getNamespaceURI();
-                        int pos = element.indexOf(":");
+                        int pos = elementName.indexOf(":");
                         if (pos != -1)
                         {
-                            String prefix = element.substring(0, pos);
-                            element = element.substring(pos + 1);
+                            String prefix = elementName.substring(0, pos);
+                            elementName = elementName.substring(pos + 1);
                             namespace = response.getOwnerDocument().getDocumentElement().getAttribute("xmlns:" + prefix);
                             if (namespace == null || namespace.trim().equals(""))
                             {
@@ -227,13 +227,13 @@ public final class ResponseDefinition
                             }
                         }
                         // busca el elemento  en los schemas
-                        responseDefinition = getElementDefinition(response.getOwnerDocument(), element, namespace);                        
+                        responseDefinition = getElementDefinition(response.getOwnerDocument(), elementName, namespace);
                         if (responseDefinition == null)
                         {
-                            throw new RestException("The element " + element + " was not found");
+                            throw new RestException("The element " + elementName + " was not found");
                         }
                         definition.elementDefinition=representation;
-                        Element schema=getSchema(response.getOwnerDocument(), element, namespace);
+                        Element schema=getSchema(response.getOwnerDocument(), elementName, namespace);
                         Document docschema=SWBUtils.XML.getNewDocument();
                         Node importedNodeschema=docschema.importNode(schema, true);
                         docschema.appendChild(importedNodeschema);
