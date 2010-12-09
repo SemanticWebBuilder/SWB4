@@ -260,11 +260,11 @@ public class SWBUtils {
     private static void initLogger()
     {
 
-        String log_conf = "log4j.rootLogger=info, stdout" + "\n"
+        String log_conf = "log4j.rootLogger=error, stdout" + "\n"
                 + "log4j.appender.stdout=org.apache.log4j.ConsoleAppender" + "\n"
                 + "log4j.appender.stdout.layout=org.apache.log4j.PatternLayout" + "\n"
                 + "log4j.appender.stdout.layout.ConversionPattern=%d %p - %m%n" + "\n"
-                + "log4j.logger.org.semanticwb=trace";
+                + "log4j.logger.org.semanticwb=error";
 
         try
         {
