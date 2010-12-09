@@ -39,6 +39,16 @@ public abstract class ResourceModule
             method.setAttribute("name", methodModule.getHTTPMethod().toString());
             methodModule.addParameters(method);
         }
+        System.out.println("subResources: "+subResources.size());
+        for (String id : subResources.keySet())
+        {
+            ResourceModule subresource=subResources.get(id);
+            Element esubresource = doc.createElementNS(WADL_NS, "resource");
+            esubresource.setAttribute("id", subresource.getId());
+            esubresource.setAttribute("path", id);
+            subresource.addMethods(esubresource);
+            resource.appendChild(esubresource);
+        }
     }
 
     public void service(HttpServletRequest request, HttpServletResponse response, String servet, List<String> path, String basepath) throws IOException

@@ -4,6 +4,7 @@
  */
 package org.semanticwb.rest;
 
+import java.lang.reflect.Modifier;
 import java.sql.Timestamp;
 import java.util.Date;
 import org.semanticwb.model.GenericObject;
@@ -44,13 +45,29 @@ import static javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI;
 public final class SemanticClassPublisher extends RestModule
 {
 
+    private static final String XSD_ANYURI = "xsd:anyURI";
+    private static final String XSD_BOOLEAN = "xsd:boolean";
+    private static final String XSD_BYTE = "xsd:byte";
+    private static final String XSD_DATE = "xsd:date";
+    private static final String XSD_DATETIME = "xsd:datetime";
+    private static final String XSD_DOUBLE = "xsd:double";
+    private static final String XSD_FLOAT = "xsd:float";
+    private static final String XSD_INT = "xsd:int";
+    private static final String XSD_LONG = "xsd:long";
+    private static final String XSD_SHORT = "xsd:short";
+    private static final String NAME = "name";
+    private static final String QUERY = "query";
+    private static final String REQUIRED = "required";
+    private static final String STATUS = "status";
+    private static final String STYLE = "style";
+    private static final String TYPE = "type";
+    private static final String VALUE = "value";
     public static final String XLINK_NS = "http://www.w3.org/1999/xlink";
     private static final String APPLICATION_JSON = "application/json";
     private static final String APPLICATION_XML = "application/xml";
     public static final String REST_RESOURCES_2010 = "http://www.semanticwb.org/rest/2010";
     private static final String REST_MODELURI = "rest:modeluri";
     private static final String REST_CLASSURI = "rest:classuri";
-    private static final String XSD_ANYURI = "xsd:anyURI";
     private static final String REST_URI = "rest:uri";
     public static final String REST_RESOURCE_PREFIX = "swbrest";
     public static final String XSD_STRING = "xsd:string";
@@ -58,7 +75,7 @@ public final class SemanticClassPublisher extends RestModule
     private static final Logger log = SWBUtils.getLogger(SemanticClassPublisher.class);
     private final Set<SemanticClass> classes = Collections.synchronizedSet(new HashSet<SemanticClass>());
 
-    class DeleteModule extends MehodModuleBase
+    class DeleteModule extends MethodModuleBase
     {
 
         private final SemanticClass clazz;
@@ -91,7 +108,7 @@ public final class SemanticClassPublisher extends RestModule
             param.setAttribute(TYPE, XSD_STRING);
             param.setAttribute(REQUIRED, "true");
             request.appendChild(param);
-            configureCommonsElements(method, request, WADL_NS, REST_RESOURCE_PREFIX + ":Deleted");
+            MethodModuleBase.configureCommonsElements(method, request, WADL_NS, REST_RESOURCE_PREFIX + ":Deleted");
         }
 
         public void execute(HttpServletRequest request, HttpServletResponse response, String basepath) throws IOException
@@ -129,7 +146,7 @@ public final class SemanticClassPublisher extends RestModule
         }
     }
 
-    class PutModule extends MehodModuleBase
+    class PutModule extends MethodModuleBase
     {
 
         private final SemanticClass clazz;
@@ -279,7 +296,7 @@ public final class SemanticClassPublisher extends RestModule
         }
     }
 
-    class PostModule extends MehodModuleBase
+    class PostModule extends MethodModuleBase
     {
 
         private final SemanticClass clazz;
@@ -510,7 +527,7 @@ public final class SemanticClassPublisher extends RestModule
         }
     }
 
-    class GetMethodModule extends MehodModuleBase
+    class GetMethodModule extends MethodModuleBase
     {
 
         private final SemanticClass clazz;
@@ -592,6 +609,122 @@ public final class SemanticClassPublisher extends RestModule
         }
     }
 
+    class MethodModule extends MethodModuleBase
+    {
+
+        private final java.lang.reflect.Method m;
+        private final SemanticClass clazz;
+        public MethodModule(java.lang.reflect.Method m,SemanticClass clazz)
+        {
+            this.m = m;
+            this.clazz=clazz;
+        }
+
+        public String getId()
+        {
+            return m.getName();
+        }
+
+        public HTTPMethod getHTTPMethod()
+        {
+            return HTTPMethod.GET;
+        }
+
+        public void addParameters(Element method)
+        {
+            Document doc=method.getOwnerDocument();
+            String WADL_NS=method.getNamespaceURI();
+            Element request = doc.createElementNS(WADL_NS, "request");
+            method.appendChild(request);
+
+            Element param = doc.createElementNS(WADL_NS, "param");
+            param.setAttribute(NAME, "method");
+            param.setAttribute(STYLE, QUERY);
+            param.setAttribute("fixed", m.getName());
+            param.setAttribute(TYPE, XSD_STRING);
+            param.setAttribute(REQUIRED, "true");
+            request.appendChild(param);
+
+            
+            for (Class classparam : m.getParameterTypes())
+            {
+                if (isGenericObject(classparam))
+                {
+                    param = doc.createElementNS(WADL_NS, "param");
+                    param.setAttribute(NAME, classparam.getName().toLowerCase());
+                    param.setAttribute(STYLE, QUERY);
+                    param.setAttribute(TYPE, XSD_ANYURI);
+                    param.setAttribute(REQUIRED, "true");
+                    request.appendChild(param);
+                }
+                else
+                {
+                    param = doc.createElementNS(WADL_NS, "param");
+                    param.setAttribute(NAME, classparam.getName().toLowerCase());
+                    param.setAttribute(STYLE, QUERY);
+                    param.setAttribute(TYPE, classToxsd(classparam));
+                    param.setAttribute(REQUIRED, "true");
+                    request.appendChild(param);
+                }
+            }
+            configureCommonsElements(method, request, WADL_NS, REST_RESOURCE_PREFIX + ":" + m.getName());
+        }
+
+        public void execute(HttpServletRequest request, HttpServletResponse response, String basePath) throws IOException
+        {
+            
+        }
+    }
+
+    class SemanticFunctionsResourceModule extends ResourceModule
+    {
+
+        private final SemanticClass clazz;
+
+        public SemanticFunctionsResourceModule(SemanticClass clazz)
+        {
+            this.clazz = clazz;
+            try
+            {
+                Class clazzjava = Class.forName(clazz.getClassName());
+                Class superclazz = clazzjava.getSuperclass();
+                if (superclazz.getName().endsWith("Base"))
+                {
+                    for (Class c : superclazz.getDeclaredClasses())
+                    {
+                        if (c.getName().endsWith("ClassMgr"))
+                        {
+                            Class mgr = c;
+
+                            for (java.lang.reflect.Method m : mgr.getDeclaredMethods())
+                            {
+                                if (Modifier.isPublic(m.getModifiers()) && Modifier.isStatic(m.getModifiers()) && (m.getName().startsWith("has") || m.getName().startsWith("list")))
+                                {
+                                    if (!hasModel(m))
+                                    {
+                                        MethodModule method = new MethodModule(m,clazz);
+                                        this.methods.put(method.getId(), method);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (ClassNotFoundException clnfe)
+            {
+                log.error(clnfe);
+            }
+            // adds methods
+        }
+
+        @Override
+        public String getId()
+        {
+            return "funtions";
+        }
+    }
+
     public SemanticClassPublisher()
     {
         for (SemanticClass clazz : classes)
@@ -616,6 +749,12 @@ public final class SemanticClassPublisher extends RestModule
 
         DeleteModule delete = new DeleteModule(clazz);
         resourceModule.methods.put(delete.getId(), delete);
+
+        // add subResourcemodules
+
+        SemanticFunctionsResourceModule functions = new SemanticFunctionsResourceModule(clazz);
+
+        resourceModule.subResources.put(functions.getId(), functions);
 
         resourceModules.put(resourceModule.getId(), resourceModule);
     }
@@ -1352,5 +1491,79 @@ public final class SemanticClassPublisher extends RestModule
             throw new RestException(e);
         }
         return jSONObject;
+    }
+
+    private static boolean isGenericObject(Class clazz)
+    {
+        try
+        {
+            clazz.asSubclass(GenericObject.class);
+            return true;
+        }
+        catch (ClassCastException e)
+        {
+            //e.printStackTrace();
+            return false;
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+        }
+        return false;
+    }
+
+    public static String classToxsd(Class clazz)
+    {
+        String getXSDType = XSD_STRING;
+        if (clazz.equals(Boolean.class))
+        {
+            getXSDType = XSD_BOOLEAN;
+        }
+        else if (clazz.equals(Byte.class))
+        {
+            getXSDType = XSD_BYTE;
+        }
+        else if (clazz.equals(Date.class))
+        {
+            getXSDType = XSD_DATE;
+        }
+        else if (clazz.equals(Timestamp.class))
+        {
+            getXSDType = XSD_DATETIME;
+        }
+        else if (clazz.equals(Double.class))
+        {
+            getXSDType = XSD_DOUBLE;
+        }
+        else if (clazz.equals(Float.class))
+        {
+            getXSDType = XSD_FLOAT;
+        }
+        else if (clazz.equals(Integer.class))
+        {
+            getXSDType = XSD_INT;
+        }
+        else if (clazz.equals(Long.class))
+        {
+            getXSDType = XSD_LONG;
+        }
+        else if (clazz.equals(Short.class))
+        {
+            getXSDType = XSD_SHORT;
+        }
+        return getXSDType;
+
+    }
+
+    private boolean hasModel(java.lang.reflect.Method method)
+    {
+        for (Class parameterClass : method.getParameterTypes())
+        {
+            if (parameterClass.equals(org.semanticwb.model.SWBModel.class))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
