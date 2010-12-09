@@ -52,6 +52,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import static javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI;
 import static org.semanticwb.rest.util.XMLConstants.XLINK_NS;
+
 /**
  *
  * @author victor.lorenzana
@@ -71,13 +72,11 @@ public final class SemanticClassPublisher extends RestModule
     private static final String XSD_INT = "xsd:int";
     private static final String XSD_LONG = "xsd:long";
     private static final String XSD_SHORT = "xsd:short";
-    private static final String NAME = "name";    
+    private static final String NAME = "name";
     private static final String TYPE = "type";
-    
     private static final String APPLICATION_XML = "application/xml";
     public static final String REST_RESOURCES_2010 = "http://www.semanticwb.org/rest/2010";
     private static final String REST_MODELURI = "rest:modeluri";
-    
     private static final String REST_URI = "rest:uri";
     public static final String REST_RESOURCE_PREFIX = "swbrest";
     public static final String XSD_STRING = "xsd:string";
@@ -154,7 +153,7 @@ public final class SemanticClassPublisher extends RestModule
 
         public String getId()
         {
-            return "delete_"+clazz.getPrefix()+"_"+clazz.getName();
+            return "delete_" + clazz.getPrefix() + "_" + clazz.getName();
         }
 
         public void addParameters(Element method)
@@ -225,7 +224,7 @@ public final class SemanticClassPublisher extends RestModule
 
         public String getId()
         {
-            return "update_"+clazz.getPrefix()+"_"+clazz.getName();
+            return "update_" + clazz.getPrefix() + "_" + clazz.getName();
         }
 
         public void addParameters(Element method)
@@ -500,7 +499,7 @@ public final class SemanticClassPublisher extends RestModule
 
         public String getId()
         {
-            return "add_"+clazz.getPrefix()+"_"+clazz.getName();
+            return "add_" + clazz.getPrefix() + "_" + clazz.getName();
         }
 
         public void execute(HttpServletRequest request, HttpServletResponse response, String basepath) throws IOException
@@ -622,7 +621,7 @@ public final class SemanticClassPublisher extends RestModule
 
         public String getId()
         {
-            return "get_"+clazz.getPrefix()+"_"+clazz.getName();
+            return "get_" + clazz.getPrefix() + "_" + clazz.getName();
         }
 
         public void execute(HttpServletRequest request, HttpServletResponse response, String basepath) throws IOException
@@ -670,18 +669,22 @@ public final class SemanticClassPublisher extends RestModule
             return clazz.getPrefix() + "_" + clazz.getName();
         }
     }
+
     class ModelMethodModule extends MethodModule
     {
+
         public ModelMethodModule(Method m, SemanticClass clazz)
         {
             super(m, clazz);
         }
+
         @Override
         public String getId()
         {
-            return "_"+m.getName()+clazz.getPrefix()+"_"+clazz.getName();
+            return "_" + m.getName() + clazz.getPrefix() + "_" + clazz.getName();
         }
     }
+
     class MethodModule extends MethodModuleBase
     {
 
@@ -696,7 +699,7 @@ public final class SemanticClassPublisher extends RestModule
 
         public String getId()
         {
-            return m.getName()+clazz.getPrefix()+"_"+clazz.getName();
+            return m.getName() + clazz.getPrefix() + "_" + clazz.getName();
         }
 
         public HTTPMethod getHTTPMethod()
@@ -988,7 +991,7 @@ public final class SemanticClassPublisher extends RestModule
         @Override
         public String getId()
         {
-            return "functionsOf_"+clazz.getPrefix()+"_"+clazz.getName();
+            return "functionsOf_" + clazz.getPrefix() + "_" + clazz.getName();
         }
     }
 
@@ -1090,7 +1093,7 @@ public final class SemanticClassPublisher extends RestModule
         @Override
         public String getId()
         {
-            return "ModelFunctionsOf_"+clazz.getPrefix()+"_"+clazz.getName();
+            return "ModelFunctionsOf_" + clazz.getPrefix() + "_" + clazz.getName();
         }
     }
 
@@ -1157,7 +1160,13 @@ public final class SemanticClassPublisher extends RestModule
         {
             if (!prefixes.contains(clazz.getPrefix()))
             {
-                application.setAttribute("xmlns:" + clazz.getPrefix(), clazz.getURI());
+                String uri = clazz.getURI();
+                int pos = uri.indexOf("#");
+                if (pos != -1)
+                {
+                    uri = uri.substring(0, pos);
+                }
+                application.setAttribute("xmlns:" + clazz.getPrefix(), uri);
                 prefixes.add(clazz.getPrefix());
             }
         }
@@ -1983,7 +1992,13 @@ public final class SemanticClassPublisher extends RestModule
     {
         Document doc = SWBUtils.XML.getNewDocument();
         Element schema = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "schema");
-        schema.setAttribute("targetNamespace", clazz.getURI());
+        String uri = clazz.getURI();
+        int pos = uri.indexOf("#");
+        if (pos != -1)
+        {
+            uri = uri.substring(0, pos);
+        }
+        schema.setAttribute("targetNamespace", uri);
         Attr attr = doc.createAttribute("xmlns");
         attr.setValue(clazz.getURI());
         schema.setAttributeNode(attr);
@@ -2325,6 +2340,7 @@ public final class SemanticClassPublisher extends RestModule
         }
 
     }
+
     private Class getClassManager(Class clazz) throws Exception
     {
         Class superclazz = clazz.getSuperclass();
