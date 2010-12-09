@@ -20,25 +20,27 @@ import org.semanticwb.servlet.internal.InternalServlet;
  */
 public class Rest implements InternalServlet{
 
-    RestPublish publish=new RestPublish("rest");
+    RestManager manager=new RestManager("rest");
     public void init(ServletContext config) throws ServletException
-    {        
+    {
+        SemanticClassPublisher module=new SemanticClassPublisher();
+        
         try
         {
-            RestPublish.addSemanticClass(new URI("http://www.semanticwebbuilder.org/swb4/community#Clasified"));
-            RestPublish.addSemanticClass(new URI("http://www.semanticwebbuilder.org/swb4/community#EventElement"));
+            module.addSemanticClass(new URI("http://www.semanticwebbuilder.org/swb4/community#Clasified"));
+            module.addSemanticClass(new URI("http://www.semanticwebbuilder.org/swb4/community#EventElement"));
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
-        
+        RestManager.addModule("so",module);
     }
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
     {
         System.out.println("request.getRequestURI(): "+request.getRequestURI());        
-        publish.service(request, response);
+        manager.service(request, response);
         
     }
 
