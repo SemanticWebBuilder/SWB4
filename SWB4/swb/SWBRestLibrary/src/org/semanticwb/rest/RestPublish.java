@@ -1290,7 +1290,7 @@ public class RestPublish
         application.setAttributeNode(attr);
 
         Attr schemaLocation = doc.createAttributeNS(W3C_XML_SCHEMA_INSTANCE_NS_URI, "schemaLocation");
-        schemaLocation.setValue(WADL_XSD_LOCATION);
+        schemaLocation.setValue(WADL_NS + " " + WADL_XSD_LOCATION);
         schemaLocation.setPrefix("xsi");
         application.setAttributeNodeNS(schemaLocation);
 
@@ -1380,9 +1380,9 @@ public class RestPublish
         {
             Element resource = doc.createElementNS(WADL_NS, "resource");
             resources.appendChild(resource);
-            pos = servletRequest.getRequestURI().indexOf(".");
+
             String idresource = clazz.getPrefix() + "_" + clazz.getName();
-            if (pos == -1)
+            if (servlet != null)
             {
                 resourcepath = idresource;
             }
@@ -1392,6 +1392,19 @@ public class RestPublish
             addPUTMethod(doc, resource, clazz, WADL_NS);
             addPOSTMethod(doc, resource, clazz, WADL_NS);
             addDELETEMethod(doc, resource, clazz, WADL_NS);
+
+            Element functions = doc.createElementNS(WADL_NS, "resource");
+            functions.setAttribute("path", "functions");
+            functions.setAttribute("id", "functions");
+            resource.appendChild(functions);
+
+            Element resourceMethodsModel = doc.createElementNS(WADL_NS, "resource");
+            resourceMethodsModel.setAttribute("path", "model");
+            resourceMethodsModel.setAttribute("id", "model");
+            functions.appendChild(resourceMethodsModel);
+
+
+
             try
             {
                 Class clazzjava = Class.forName(clazz.getClassName());
@@ -1403,18 +1416,21 @@ public class RestPublish
                         if (c.getName().endsWith("ClassMgr"))
                         {
                             Class mgr = c;
-                            HashSet<String> ids = new HashSet<String>();
+
                             for (Method m : mgr.getDeclaredMethods())
                             {
                                 if (Modifier.isPublic(m.getModifiers()) && Modifier.isStatic(m.getModifiers()) && (m.getName().startsWith("has") || m.getName().startsWith("list")))
                                 {
                                     String id = m.getName();
-                                    if (ids.contains(id))
+                                    if (hasModel(m))
                                     {
-                                        id = "_" + id;
+                                        createMethod(doc, resourceMethodsModel, clazz, m, WADL_NS, id);
                                     }
-                                    createMethod(doc, resource, clazz, m, WADL_NS, id);
-                                    ids.add(id);
+                                    else
+                                    {
+                                        createMethod(doc, functions, clazz, m, WADL_NS, id);
+                                    }
+
                                 }
                             }
                             break;
@@ -1430,6 +1446,18 @@ public class RestPublish
 
         }
         return doc;
+    }
+
+    private boolean hasModel(Method method)
+    {
+        for (Class parameterClass : method.getParameterTypes())
+        {
+            if (parameterClass.equals(org.semanticwb.model.SWBModel.class))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Document getError(String error)
@@ -1622,8 +1650,7 @@ public class RestPublish
     private String getPathForObject(SemanticObject obj, HttpServletRequest request)
     {
         String path = request.getRequestURI() + "?uri=" + obj.getShortURI();
-        int pos = request.getRequestURI().indexOf(".");
-        if (pos == -1 && servlet != null)
+        if (servlet != null)
         {
             path = SWBPlatform.getContextPath() + "/" + servlet + "/" + obj.getSemanticClass().getPrefix() + "_" + obj.getSemanticClass().getName() + "/" + obj.getShortURI();
         }
@@ -1632,6 +1659,7 @@ public class RestPublish
 
     public Document getExecuteMethod(HttpServletRequest request, String methodName) throws Exception
     {
+
         if (methodName.startsWith("_"))
         {
             methodName = methodName.substring(1);
@@ -1643,6 +1671,7 @@ public class RestPublish
             throw new Exception("The class " + classUri + " was not found");
         }
         return getExecuteMethod(request, methodName, clazz);
+
 
     }
 
@@ -1821,7 +1850,7 @@ public class RestPublish
         if (dataType.equals(SemanticVocabulary.XMLS_URI))
         {
             String uri = value;
-            uri=fixURI(uri);
+            uri = fixURI(uri);
             SemanticObject ovalue = SemanticObject.createSemanticObject(uri);
             if (ovalue == null)
             {
@@ -1878,7 +1907,7 @@ public class RestPublish
 
     private static String fixURI(String uri)
     {
-        if (uri!=null && uri.indexOf(":") != -1)
+        if (uri != null && uri.indexOf(":") != -1)
         {
             if (uri.indexOf("%3A") != -1)
             {
@@ -2012,7 +2041,7 @@ public class RestPublish
                             for (String value : values)
                             {
                                 String uri = value;
-                                uri=fixURI(uri);
+                                uri = fixURI(uri);
                                 SemanticObject testobj = SemanticObject.createSemanticObject(uri);
                                 if (testobj == null)
                                 {
@@ -2036,7 +2065,7 @@ public class RestPublish
                             if (values[0] != null)
                             {
                                 String uri = values[0];
-                                uri=fixURI(uri);
+                                uri = fixURI(uri);
                                 SemanticObject testobj = SemanticObject.createSemanticObject(uri);
                                 if (testobj == null)
                                 {
@@ -2077,7 +2106,7 @@ public class RestPublish
     private void showObject(HttpServletRequest request, HttpServletResponse response, List<String> path, SemanticClass clazz) throws RestException, IOException
     {
         String uri = path.get(0);
-        uri=fixURI(uri);
+        uri = fixURI(uri);
         SemanticObject obj = SemanticObject.createSemanticObject(uri);
         if (obj == null || !obj.getSemanticClass().equals(clazz))
         {
@@ -2088,42 +2117,6 @@ public class RestPublish
             showObject(request, response, obj);
         }
 
-    }
-
-    private void putContext(HttpServletRequest request, HttpServletResponse response, List<String> path) throws IOException
-    {
-        String classURI = path.get(0);
-        int pos = classURI.indexOf("_");
-        if (pos != -1)
-        {
-            path.remove(0);
-            String prefix = classURI.substring(0, pos);
-            String name = classURI.substring(pos + 1);
-            for (SemanticClass clazz : classes)
-            {
-                if (prefix.equals(clazz.getPrefix()) && name.equals(clazz.getName()))
-                {
-                    try
-                    {
-                        if (path.isEmpty())
-                        {
-                            showError(request, response, "The context is invalid");
-                            return;
-                        }
-                        else
-                        {
-                            showObject(request, response, path, clazz);
-                            return;
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        showError(request, response, e.getMessage());
-                    }
-                }
-            }
-        }
-        response.setStatus(404);
     }
 
     private void showContext(HttpServletRequest request, HttpServletResponse response, List<String> path) throws IOException
@@ -2170,7 +2163,7 @@ public class RestPublish
             if (request.getParameter("uri") != null)
             {
                 String uri = request.getParameter("uri");
-                uri=fixURI(uri);
+                uri = fixURI(uri);
                 SemanticObject obj = SemanticObject.createSemanticObject(uri);
                 if (obj != null)
                 {
@@ -2211,103 +2204,157 @@ public class RestPublish
         }
         else if (request.getMethod().toLowerCase().equals("get"))
         {
-            if (request.getParameter(XSD_PREFIX) != null)
+            if (servlet == null)
             {
-                String uri = request.getParameter(XSD_PREFIX);
-                SemanticObject obj = SemanticObject.createSemanticObject(uri);
-                if (obj != null)
+                if (request.getParameter(XSD_PREFIX) != null)
                 {
-                    SemanticClass clazz = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
-                    showXSD(request, response, clazz);
-                }
-
-            }
-            else if (request.getParameter("error") != null)
-            {
-                showErrorXSD(request, response);
-            }
-            else if (request.getParameter("created") != null)
-            {
-                showCreatedXSDResponse(response);
-            }
-            else if (request.getParameter("updated") != null)
-            {
-                showUpdatedXSDResponse(response);
-            }
-            else if (request.getParameter("deleted") != null)
-            {
-                showDeletedXSDResponse(response);
-            }
-            else if (request.getParameter("clsmgr") != null)
-            {
-                if (request.getParameter("classuri") != null)
-                {
-                    String uri = request.getParameter("classuri");
-                    uri=fixURI(uri);
-                    SemanticClass clazz = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
-                    if (clazz != null)
+                    String uri = request.getParameter(XSD_PREFIX);
+                    SemanticObject obj = SemanticObject.createSemanticObject(uri);
+                    if (obj != null)
                     {
-                        showCLSMGRXSD(response, clazz);
+                        SemanticClass clazz = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
+                        showXSD(request, response, clazz);
+                    }
+
+                }
+                else if (request.getParameter("error") != null)
+                {
+                    showErrorXSD(request, response);
+                }
+                else if (request.getParameter("created") != null)
+                {
+                    showCreatedXSDResponse(response);
+                }
+                else if (request.getParameter("updated") != null)
+                {
+                    showUpdatedXSDResponse(response);
+                }
+                else if (request.getParameter("deleted") != null)
+                {
+                    showDeletedXSDResponse(response);
+                }
+                else if (request.getParameter("clsmgr") != null)
+                {
+                    if (request.getParameter("classuri") != null)
+                    {
+                        String uri = request.getParameter("classuri");
+                        uri = fixURI(uri);
+                        SemanticClass clazz = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
+                        if (clazz != null)
+                        {
+                            showCLSMGRXSD(response, clazz);
+                        }
+                        else
+                        {
+                            showError(request, response, "The class with uri " + request.getParameter("classuri") + " was not found");
+                        }
+                    }
+                }
+                else if (request.getParameter("method") != null && request.getParameter("classuri") != null)
+                {
+                    executeMethod(request, response);
+                }
+                else if (request.getParameter("uri") != null)
+                {
+                    String uri = request.getParameter("uri");
+                    uri = fixURI(uri);
+
+                    SemanticObject obj = SemanticObject.createSemanticObject(uri);
+                    if (obj != null)
+                    {
+                        showObject(request, response, obj);
                     }
                     else
                     {
-                        showError(request, response, "The class with uri " + request.getParameter("classuri") + " was not found");
+                        response.setStatus(400);
+                        showError(request, response, "The objct with uri " + request.getParameter("uri") + " was not found");
                     }
-                }
-            }
-            else if (request.getParameter("method") != null && request.getParameter("classuri") != null)
-            {
-                executeMethod(request, response);
-            }
-            else if (request.getParameter("uri") != null)
-            {
-                String uri = request.getParameter("uri");
-                uri=fixURI(uri);
 
-                SemanticObject obj = SemanticObject.createSemanticObject(uri);
-                if (obj != null)
-                {
-                    showObject(request, response, obj);
+
                 }
                 else
                 {
-                    response.setStatus(400);
-                    showError(request, response, "The objct with uri " + request.getParameter("uri") + " was not found");
-                }
-
-
-            }
-            else
-            {
-                String context = SWBPortal.getContextPath();
-                String uri = request.getRequestURI();
-                if (uri.startsWith(context))
-                {
-                    uri = uri.substring(context.length()).trim();
-                }
-                int pos = uri.indexOf(".");
-                if (pos == -1)
-                {
-                    if (uri.startsWith("/"))
+                    String context = SWBPortal.getContextPath();
+                    String uri = request.getRequestURI();
+                    if (uri.startsWith(context))
                     {
-                        uri = uri.substring(1);
+                        uri = uri.substring(context.length()).trim();
                     }
-                    String[] path = uri.split("/");
-                    if (path.length <= 1)
+                    int pos = uri.indexOf(".");
+                    if (pos == -1)
+                    {
+                        if (uri.startsWith("/"))
+                        {
+                            uri = uri.substring(1);
+                        }
+                        String[] path = uri.split("/");
+                        if (path.length <= 1)
+                        {
+                            showList(request, response);
+                        }
+                        else
+                        {
+                            ArrayList<String> listPath = new ArrayList<String>();
+                            listPath.addAll(Arrays.asList(path));
+                            listPath.remove(0);
+                            showContext(request, response, listPath);
+                        }
+                    }
+                    else
                     {
                         showList(request, response);
                     }
+                }
+            }
+            else
+            {
+                String requestURI = request.getRequestURI();
+                String context = SWBPortal.getContextPath();
+                if (requestURI.startsWith(context))
+                {
+                    requestURI = requestURI.substring(context.length()).trim();
+                }
+                String[] path = requestURI.split("/");
+                if (path.length <= 1)
+                {
+                    if (request.getParameter(XSD_PREFIX) != null)
+                    {
+                        String uri = request.getParameter(XSD_PREFIX);
+                        SemanticObject obj = SemanticObject.createSemanticObject(uri);
+                        if (obj != null)
+                        {
+                            SemanticClass clazz = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
+                            showXSD(request, response, clazz);
+                        }
+
+                    }
+                    else if (request.getParameter("error") != null)
+                    {
+                        showErrorXSD(request, response);
+                    }
+                    else if (request.getParameter("created") != null)
+                    {
+                        showCreatedXSDResponse(response);
+                    }
+                    else if (request.getParameter("updated") != null)
+                    {
+                        showUpdatedXSDResponse(response);
+                    }
+                    else if (request.getParameter("deleted") != null)
+                    {
+                        showDeletedXSDResponse(response);
+                    }
                     else
                     {
-                        ArrayList<String> listPath = new ArrayList<String>();
-                        listPath.addAll(Arrays.asList(path));
-                        listPath.remove(0);
-                        showContext(request, response, listPath);
+                        showList(request, response);
                     }
                 }
                 else
                 {
-                    showList(request, response);
+                    ArrayList<String> listPath = new ArrayList<String>();
+                    listPath.addAll(Arrays.asList(path));
+                    listPath.remove(0);
+                    showContext(request, response, listPath);
                 }
             }
         }
@@ -2320,7 +2367,7 @@ public class RestPublish
             }
             else
             {
-                uri=fixURI(uri);
+                uri = fixURI(uri);
                 SemanticObject obj = SemanticObject.createSemanticObject(uri);
                 if (obj != null)
                 {
@@ -2374,7 +2421,7 @@ public class RestPublish
                 showError(request, response, "The parameter modeluri is required");
                 return;
             }
-            classuri=fixURI(classuri);
+            classuri = fixURI(classuri);
             SemanticClass clazz = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(classuri);
             if (clazz == null)
             {
@@ -2406,7 +2453,7 @@ public class RestPublish
                     return;
                 }
             }
-            modeluri=fixURI(modeluri);            
+            modeluri = fixURI(modeluri);
             SemanticObject objmodel = SemanticObject.createSemanticObject(modeluri);
             if (objmodel == null)
             {
