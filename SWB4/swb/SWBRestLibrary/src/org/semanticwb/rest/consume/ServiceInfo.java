@@ -37,31 +37,34 @@ import org.xml.sax.SAXException;
  */
 public class ServiceInfo
 {
+
     private static final Logger log = SWBUtils.getLogger(ServiceInfo.class);
-    
     protected static final String TEXT_XML = "text/xml";
     private static final String APPLICATION_XML = "application/xml";
     private static final String CONTENT_TYPE = "Content-Type";
     private final URL url;
     private URL resourcesBasePath;
     private static final String JSON_CONTENT_TYPE = "json";
-    private final Map<String,Resource> resources = new HashMap<String,Resource>();
+    private final Map<String, Resource> resources = new HashMap<String, Resource>();
     private String WADL_NS = RestPublish.WADL_NS_2009;
     private Document doc;
-   
+
     public Document getDocument()
     {
-        String xml=SWBUtils.XML.domToXml(doc);
+        String xml = SWBUtils.XML.domToXml(doc);
         return SWBUtils.XML.xmlToDom(xml);
     }
+
     public ServiceInfo(final URL url)
     {
         this.url = url;
     }
+
     public String getNamespaceURI()
     {
         return WADL_NS;
     }
+
     public URL getResourcesBasePath() throws RestException
     {
         if (resourcesBasePath == null)
@@ -117,85 +120,89 @@ public class ServiceInfo
         {
             if (nodes.item(i) instanceof Element)
             {
-                Resource resource = Resource.createResourceInfo((Element) nodes.item(i), resourcesBasePath,this);
+                Resource resource = Resource.createResourceInfo((Element) nodes.item(i), resourcesBasePath, this);
                 resources.put(resource.getId(), resource);
             }
         }
-    }   
+    }
+
     public Resource[] getResources()
     {
         return resources.values().toArray(new Resource[resources.size()]);
     }
+
     public Resource getResource(String id)
     {
         return resources.get(id);
     }
-    private void importInLine(Document docinclude,Element grammars)
+
+    private void importInLine(Document docinclude, Element grammars)
     {
-        Element rootElement=docinclude.getDocumentElement();
-        Node importedNode=grammars.getOwnerDocument().importNode(rootElement, true);
+        Element rootElement = docinclude.getDocumentElement();
+        Node importedNode = grammars.getOwnerDocument().importNode(rootElement, true);
         grammars.appendChild(importedNode);
     }
+
     private void extractIncludes() throws RestException
-    {        
-        NodeList nodesgrammars=doc.getElementsByTagNameNS(WADL_NS, "grammars");
-        for(int i=0;i<nodesgrammars.getLength();i++)
+    {
+        NodeList nodesgrammars = doc.getElementsByTagNameNS(WADL_NS, "grammars");
+        for (int i = 0; i < nodesgrammars.getLength(); i++)
         {
-            if(nodesgrammars.item(i) instanceof Element)
+            if (nodesgrammars.item(i) instanceof Element)
             {
-                Element grammars=(Element)nodesgrammars.item(i);
-                ArrayList<Document> includes=new ArrayList<Document>();
-                ArrayList<Element> toDelete=new ArrayList<Element>();
-                NodeList nodes=grammars.getElementsByTagNameNS(WADL_NS, "include");
-                for(int j=0;j<nodes.getLength();j++)
+                Element grammars = (Element) nodesgrammars.item(i);
+                ArrayList<Document> includes = new ArrayList<Document>();
+                ArrayList<Element> toDelete = new ArrayList<Element>();
+                NodeList nodes = grammars.getElementsByTagNameNS(WADL_NS, "include");
+                for (int j = 0; j < nodes.getLength(); j++)
                 {
-                    if(nodes.item(j) instanceof Element)
+                    if (nodes.item(j) instanceof Element)
                     {
-                        Element include=(Element)nodes.item(j);
-                        String spath=include.getAttribute("href");                        
-                        URL path=url;
+                        Element include = (Element) nodes.item(j);
+                        String spath = include.getAttribute("href");
+                        URL path = url;
                         try
                         {
-                            URI uriPath=new URI(spath);
-                            if(!uriPath.isAbsolute())
+                            URI uriPath = new URI(spath);
+                            if (!uriPath.isAbsolute())
                             {
-                                URI base=url.toURI();
-                                if(!url.toString().endsWith("/"))
+                                URI base = url.toURI();
+                                if (!url.toString().endsWith("/"))
                                 {
-                                    String newpath=url.toString()+"/";
-                                    base=new URI(newpath);
+                                    String newpath = url.toString() + "/";
+                                    base = new URI(newpath);
                                 }
-                                URI temp=base.resolve(uriPath);
-                                path=temp.normalize().toURL();
+                                URI temp = base.resolve(uriPath);
+                                path = temp.normalize().toURL();
                             }
                             else
                             {
-                                path=uriPath.toURL();
+                                path = uriPath.toURL();
                             }
                         }
-                        catch(Exception e)
+                        catch (Exception e)
                         {
                             e.printStackTrace();
                             log.debug(e);
                         }
                         try
                         {
-                            Document docinclude=getDocument(path);                            
+                            Document docinclude = getDocument(path);
                             includes.add(docinclude);
                         }
-                        catch(Exception e)
+                        catch (Exception e)
                         {
                             throw new RestException(e);
                         }
 
                     }
                 }
-                
-                for(Element e : toDelete)
+
+                for (Element e : toDelete)
                 {
                     grammars.removeChild(e);
                 }
-                for(Document includedoc : includes)
+                for (Document includedoc : includes)
                 {
                     importInLine(includedoc, grammars);
                 }
@@ -203,6 +210,7 @@ public class ServiceInfo
             }
         }
     }
+
     public void loadService() throws RestException
     {
         try
@@ -280,51 +288,131 @@ public class ServiceInfo
 
     private boolean validate(Document doc)
     {
-        boolean validate=false;
-        String schemaLocation = doc.getDocumentElement().getAttributeNS(XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI, "schemaLocation");
-        if (schemaLocation == null || schemaLocation.trim().equals(""))
-        {
-            schemaLocation = "http://www.w3.org/Submission/wadl/wadl.xsd";
-        }
 
-        StringTokenizer st = new StringTokenizer(schemaLocation, " \r");
-        while (st.hasMoreTokens())
+        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        boolean validate = false;
+
+        Document docschema = null;
+        if (doc.getDocumentElement().getNamespaceURI().equals(org.semanticwb.rest.util.XMLConstants.WADL_NS_2006))
         {
-            String location = st.nextToken();
-            if (location != null && !location.trim().equals(""))
+            InputStream in = XMLConstants.class.getResourceAsStream("/org/semanticwb/rest/util/wadl_2006.xml");
+            docschema = SWBUtils.XML.xmlToDom(in);
+            try
             {
-                Document docschema = null;
+                in.close();
+            }
+            catch (Exception e)
+            {
+                log.debug(e);
+            }
+            if (docschema != null)
+            {
+
+                StringReader reader = new StringReader(SWBUtils.XML.domToXml(docschema));
+                Source schemaFile = new StreamSource(reader);
                 try
                 {
-                    URL urlschema = new URL(location);
-                    docschema = getDocument(urlschema);
+                    Schema schema = factory.newSchema(schemaFile);
+                    Validator validator = schema.newValidator();
+                    DOMSource source = new DOMSource(doc);
+                    validator.validate(source);
+                    validate = true;
                 }
-                catch (Exception e)
+                catch (IOException ioe)
                 {
-                    log.debug(e);
-                }                
-                if (docschema != null)
+                    log.debug(ioe);
+                    validate = false;
+                }
+                catch (SAXException saxe)
                 {
-                    SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-                    StringReader reader = new StringReader(SWBUtils.XML.domToXml(docschema));
-                    Source schemaFile = new StreamSource(reader);
+                    log.debug(saxe);
+                    validate = false;
+                }
+            }
+        }
+        if (doc.getDocumentElement().getNamespaceURI().equals(org.semanticwb.rest.util.XMLConstants.WADL_NS_2009))
+        {
+            InputStream in = XMLConstants.class.getResourceAsStream("/org/semanticwb/rest/util/wadl_2009.xml");
+            docschema = SWBUtils.XML.xmlToDom(in);
+            try
+            {
+                in.close();
+            }
+            catch (Exception e)
+            {
+                log.debug(e);
+            }
+            if (docschema != null)
+            {
+
+                StringReader reader = new StringReader(SWBUtils.XML.domToXml(docschema));
+                Source schemaFile = new StreamSource(reader);
+                try
+                {
+                    Schema schema = factory.newSchema(schemaFile);
+                    Validator validator = schema.newValidator();
+                    DOMSource source = new DOMSource(doc);
+                    validator.validate(source);
+                    validate = true;
+                }
+                catch (IOException ioe)
+                {
+                    log.debug(ioe);
+                    validate = false;
+                }
+                catch (SAXException saxe)
+                {
+                    log.debug(saxe);
+                    validate = false;
+                }
+            }
+        }
+        else
+        {
+            String schemaLocation = doc.getDocumentElement().getAttributeNS(XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI, "schemaLocation");
+            if (schemaLocation == null || schemaLocation.trim().equals(""))
+            {
+                schemaLocation = "http://www.w3.org/Submission/wadl/wadl.xsd";
+            }
+            StringTokenizer st = new StringTokenizer(schemaLocation, " \r");
+            while (st.hasMoreTokens())
+            {
+                String location = st.nextToken();
+                if (location != null && !location.trim().equals(""))
+                {
+
                     try
                     {
-                        Schema schema = factory.newSchema(schemaFile);
-                        Validator validator = schema.newValidator();
-                        DOMSource source = new DOMSource(doc);
-                        validator.validate(source);
-                        validate=true;
+                        URL urlschema = new URL(location);
+                        docschema = getDocument(urlschema);
                     }
-                    catch (IOException ioe)
+                    catch (Exception e)
                     {
-                        log.debug(ioe);
-                        validate=false;
+                        log.debug(e);
                     }
-                    catch (SAXException saxe)
+                    if (docschema != null)
                     {
-                        log.debug(saxe);
-                        validate=false;
+
+                        StringReader reader = new StringReader(SWBUtils.XML.domToXml(docschema));
+                        Source schemaFile = new StreamSource(reader);
+                        try
+                        {
+                            Schema schema = factory.newSchema(schemaFile);
+                            Validator validator = schema.newValidator();
+                            DOMSource source = new DOMSource(doc);
+                            validator.validate(source);
+                            validate = true;
+                        }
+                        catch (IOException ioe)
+                        {
+                            log.debug(ioe);
+                            validate = false;
+                        }
+                        catch (SAXException saxe)
+                        {
+                            log.debug(saxe);
+                            validate = false;
+                        }
                     }
                 }
             }
@@ -336,24 +424,24 @@ public class ServiceInfo
     private boolean isWADL()
     {
 
-        if(!validate(doc))
+        if (!validate(doc))
         {
             return false;
         }
         String xmlns = doc.getDocumentElement().getAttribute("xmlns");
-        if(!(xmlns.equals(RestPublish.WADL_NS_2006) || xmlns.equals(RestPublish.WADL_NS_2009)))
+        if (!(xmlns.equals(RestPublish.WADL_NS_2006) || xmlns.equals(RestPublish.WADL_NS_2009)))
         {
             return false;
 
         }
-        WADL_NS=xmlns;
+        WADL_NS = xmlns;
         try
         {
             NodeList nodes = doc.getElementsByTagNameNS(WADL_NS, "application");
             if (nodes.getLength() > 0)
             {
                 return true;
-            }            
+            }
         }
         catch (Exception e)
         {
