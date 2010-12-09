@@ -19,36 +19,42 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import static javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI;
 import static javax.xml.XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI;
+
 /**
  *
  * @author victor.lorenzana
  */
 public abstract class RestModule
 {
+
     public static final String WADL_NS_2006 = "http://research.sun.com/wadl/2006/10";
     public static final String WADL_NS_2009 = "http://wadl.dev.java.net/2009/02";
     private static final String WADL_XSD_LOCATION_2006 = "https://wadl.dev.java.net/wadl20061109.xsd";
     private static final String WADL_XSD_LOCATION_2009 = "http://www.w3.org/Submission/wadl/wadl.xsd";
     private static final String APPLICATION_XML = "application/xml";
     protected final Map<String, ResourceModule> resourceModules = Collections.synchronizedMap(new HashMap<String, ResourceModule>());
-    
-    public void addResourceModule(String path,ResourceModule resourceModule)
+
+    public void addResourceModule(String path, ResourceModule resourceModule)
     {
         resourceModules.put(path, resourceModule);
     }
-    public void service(HttpServletRequest request, HttpServletResponse response,String servet,List<String> path,String basepath) throws IOException
+
+    public void service(HttpServletRequest request, HttpServletResponse response, String servet, List<String> path, String basepath) throws IOException
     {
-        if(path.isEmpty())
+        if (path.isEmpty())
         {
-            showWADL(request, response,basepath);
+            
+            
+                showWADL(request, response, basepath);
+            
         }
         else
         {
-            String moduleId=path.get(0);
-            if(resourceModules.containsKey(moduleId))
+            String moduleId = path.get(0);
+            if (resourceModules.containsKey(moduleId))
             {
-                ResourceModule module=resourceModules.get(moduleId);                
-                basepath+="/"+path.remove(0);
+                ResourceModule module = resourceModules.get(moduleId);
+                basepath += "/" + path.remove(0);
                 module.service(request, response, servet, path, basepath);
             }
             else
@@ -57,17 +63,19 @@ public abstract class RestModule
             }
         }
     }
-    private void showWADL(HttpServletRequest request, HttpServletResponse response,String basepath) throws IOException
+
+    private void showWADL(HttpServletRequest request, HttpServletResponse response, String basepath) throws IOException
     {
         String version = "2009";
         if ("2006".equals(request.getParameter("version")))
         {
             version = "2006";
         }
-        Document doc = getWADL(request, version,basepath);
+        Document doc = getWADL(request, version, basepath);
         showDocument(response, doc);
     }
-    protected Document getWADL(HttpServletRequest servletRequest, String version,String basePath)
+
+    protected Document getWADL(HttpServletRequest servletRequest, String version, String basePath)
     {
         String WADL_NS = WADL_NS_2009;
         String WADL_XSD_LOCATION = WADL_XSD_LOCATION_2009;
@@ -83,7 +91,7 @@ public abstract class RestModule
         application.setAttribute("xmlns:xsi", W3C_XML_SCHEMA_INSTANCE_NS_URI);
         application.setAttribute("xmlns:xsd", W3C_XML_SCHEMA_NS_URI);
         addAditionalNamespaces(application);
-        
+
 
         Attr attr = doc.createAttribute("xmlns");
         attr.setValue(WADL_NS);
@@ -96,15 +104,15 @@ public abstract class RestModule
 
         Element grammars = doc.createElementNS(WADL_NS, "grammars");
         application.appendChild(grammars);
-        addIncludes(grammars,servletRequest);
+        addIncludes(grammars, servletRequest);
 
         Element resources = doc.createElementNS(WADL_NS, "resources");
         resources.setAttribute("base", basePath);
-        application.appendChild(resources);        
+        application.appendChild(resources);
 
-        for(String path : resourceModules.keySet())
+        for (String path : resourceModules.keySet())
         {
-            ResourceModule resourceModule=resourceModules.get(path);
+            ResourceModule resourceModule = resourceModules.get(path);
             Element resource = doc.createElementNS(WADL_NS, "resource");
             resources.appendChild(resource);
             resource.setAttribute("path", path);
@@ -114,6 +122,7 @@ public abstract class RestModule
 
         return doc;
     }
+
     private void showDocument(HttpServletResponse response, Document doc) throws IOException
     {
         PrintWriter out = response.getWriter();
@@ -125,6 +134,6 @@ public abstract class RestModule
     }
 
     protected abstract void addAditionalNamespaces(Element application);
-    protected abstract void addIncludes(Element grammars,HttpServletRequest request);
-    
+
+    protected abstract void addIncludes(Element grammars, HttpServletRequest request);
 }
