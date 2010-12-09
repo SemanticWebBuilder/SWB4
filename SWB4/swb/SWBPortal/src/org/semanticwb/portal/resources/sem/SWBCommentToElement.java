@@ -118,8 +118,8 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         String comment = request.getParameter("cmnt_comment")==null ? "" : request.getParameter("cmnt_comment");
         String uri = request.getParameter("uri");
 
-        System.out.println("\n\ndoView.......");
-        System.out.println("uri="+uri);
+        //System.out.println("\n\ndoView.......");
+        //System.out.println("uri="+uri);
 
         SWBResourceURL rUrl = paramRequest.getActionUrl();
         rUrl.setAction(paramRequest.Action_ADD);
@@ -213,7 +213,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         itComments = SWBComparator.sortByCreated(itComments, false);
 
         html.append("<div class=\"swb-comentario-sem-lista\">");
-        html.append("<h2>comentarios</h2>");
+        html.append("<h2>Comentarios</h2>");
         if(itComments.hasNext()) {
             html.append("<ol>");
         }

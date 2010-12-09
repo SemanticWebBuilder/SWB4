@@ -102,7 +102,7 @@ public class SWBServiceMgr implements SemanticObserver, SWBObserver {
             if(obj.getModel().isTraceable())SWBPortal.getDBAdmLog().saveAdmLog(usr, obj, prop, action);
 
             SemanticClass cls = obj.getSemanticClass();
-            if(cls.isSWB())
+            if(cls!=null && cls.isSWB())
             {
                 if (prop == null) //se modifico un objeto CREATE o REMOVE
                 {
