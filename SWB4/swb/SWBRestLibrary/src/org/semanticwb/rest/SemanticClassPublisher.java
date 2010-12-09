@@ -4,6 +4,7 @@
  */
 package org.semanticwb.rest;
 
+import java.util.List;
 import java.util.ArrayList;
 import org.semanticwb.model.GenericIterator;
 import java.lang.reflect.Modifier;
@@ -823,11 +824,19 @@ public final class SemanticClassPublisher extends RestModule
     class SemanticFunctionsResourceModule extends ResourceModule
     {
 
-        private final SemanticClass clazz;
+        @Override
+        public void service(HttpServletRequest request, HttpServletResponse response, String servet, List<String> path, String basepath) throws IOException
+        {
+            String method=request.getParameter("method");
+            if(method==null || method.trim().equals(""))
+            {
+                
+            }
+            
+        }
 
         public SemanticFunctionsResourceModule(SemanticClass clazz)
-        {
-            this.clazz = clazz;
+        {            
             try
             {
                 Class clazzjava = Class.forName(clazz.getClassName());
@@ -872,12 +881,23 @@ public final class SemanticClassPublisher extends RestModule
     class SemanticModelResourceModule extends ResourceModule
     {
 
-        private final SemanticClass clazz;
+        
 
+        @Override
+        public void service(HttpServletRequest request, HttpServletResponse response, String servet, List<String> path, String basepath) throws IOException
+        {
+            String method=request.getParameter("method");
+            if(method==null || method.trim().equals(""))
+            {
+                
+            }
+
+
+        }
         public SemanticModelResourceModule(SemanticClass clazz)
         {
             // adds methods
-            this.clazz = clazz;
+            
             try
             {
                 Class clazzjava = Class.forName(clazz.getClassName());
@@ -1763,4 +1783,5 @@ public final class SemanticClassPublisher extends RestModule
         }
         return false;
     }
+    
 }
