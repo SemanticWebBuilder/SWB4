@@ -76,8 +76,8 @@ public class Task extends Activity
 
     protected var message=ImageView
     {
-        x: bind shape.boundsInLocal.minX+10;
-        y: bind shape.boundsInLocal.minY+10;
+        x: bind shape.boundsInLocal.minX+3;
+        y: bind shape.boundsInLocal.minY+3;
         scaleX: bind is;
         scaleY: bind is;
         effect: adjust
@@ -165,17 +165,17 @@ public class Task extends Activity
             message.styleClass = "modifierManual";
             ix = -w / 2 + 5;
             iy = -h / 2 + 3;
-            is = 1;
+            is = 0.8;
         } else if(type.equals(TYPE_SEND)) {
             message.styleClass = "modifierMessageThrow";
             ix = -w / 2 + 5;
             iy = -h / 2 + 3;
-            is = 1;
+            is = 0.8;
         } else if(type.equals(TYPE_RECEIVE)) {
             message.styleClass = "modifierMessageCatch";
             ix = -w / 2 + 5;
             iy = -h / 2 + 3;
-            is = 1;
+            is = 0.8;
         } else {
             message.visible = false;
         }
