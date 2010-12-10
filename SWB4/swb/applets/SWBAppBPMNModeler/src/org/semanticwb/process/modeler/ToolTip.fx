@@ -17,6 +17,8 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.paint.Color;
+import javafx.animation.Interpolator;
+import javafx.animation.Timeline;
 
 /**
  * @author victor.lorenzana
@@ -37,17 +39,17 @@ public class ToolTip extends CustomNode {
     var r:Rectangle;
     var p: Polygon;
     
-    //override var opacity = 0.0;
-//    def timeLine: Timeline = Timeline {
-//        keyFrames: [
-//            at (0s) {
-//                opacity => 0.0;
-//            },
-//            at (800ms) {
-//                opacity => 1.0 tween Interpolator.EASEBOTH;
-//            }
-//        ]
-//    }
+    override var opacity = 0.0;
+    def timeLine: Timeline = Timeline {
+        keyFrames: [
+            at (0s) {
+                opacity => 0.0;
+            },
+            at (800ms) {
+                opacity => 1.0 tween Interpolator.EASEBOTH;
+            }
+        ]
+    }
 
     def lightGrad = LinearGradient {
         startX: 0.0
@@ -133,13 +135,13 @@ public class ToolTip extends CustomNode {
 
     public function show(): Void {
         this.visible = true;
-//        timeLine.playFromStart();
+        timeLine.playFromStart();
     }
 
     public function hide(): Void {
-//        if (timeLine.running) {
-//            timeLine.stop();
-//        }
+        if (timeLine.running) {
+            timeLine.stop();
+        }
         this.visible = false;
     }
 
