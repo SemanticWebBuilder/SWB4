@@ -225,6 +225,17 @@ public class ConnectionObject  extends CustomNode
         modeler.keyPressed(e);
     }
 
+    override var onMouseClicked = function (e)
+    {
+        if(e.clickCount >= 2)
+        {
+            if(text != null)
+            {
+                text.startEditing();
+            }
+        }
+    }
+
     public function keyPressed( e: KeyEvent )
     {
         if(e.code==e.code.VK_DELETE)
