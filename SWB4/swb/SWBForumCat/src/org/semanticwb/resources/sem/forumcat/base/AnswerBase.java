@@ -3,8 +3,8 @@ package org.semanticwb.resources.sem.forumcat.base;
 
 public abstract class AnswerBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Searchable,org.semanticwb.model.Traceable
 {
-    public static final org.semanticwb.platform.SemanticProperty forumCat_ansStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#ansStatus");
     public static final org.semanticwb.platform.SemanticProperty forumCat_ansInappropriate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#ansInappropriate");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_ansStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#ansStatus");
    /**
    * Sirve para poner ligas de referencias a la respuesta que se esta dando
    */
@@ -18,6 +18,7 @@ public abstract class AnswerBase extends org.semanticwb.model.SWBClass implement
    * Indica si la respuesta ha sido marcada como la mejor.
    */
     public static final org.semanticwb.platform.SemanticProperty forumCat_bestAnswer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#bestAnswer");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_ansIrrelevant=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#ansIrrelevant");
     public static final org.semanticwb.platform.SemanticClass forumCat_Answer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#Answer");
    /**
    * The semantic class that represents the currentObject
@@ -212,24 +213,6 @@ public abstract class AnswerBase extends org.semanticwb.model.SWBClass implement
     }
 
 /**
-* Gets the AnsStatus property
-* @return int with the AnsStatus
-*/
-    public int getAnsStatus()
-    {
-        return getSemanticObject().getIntProperty(forumCat_ansStatus);
-    }
-
-/**
-* Sets the AnsStatus property
-* @param value long with the AnsStatus
-*/
-    public void setAnsStatus(int value)
-    {
-        getSemanticObject().setIntProperty(forumCat_ansStatus, value);
-    }
-
-/**
 * Gets the AnsInappropriate property
 * @return int with the AnsInappropriate
 */
@@ -245,6 +228,24 @@ public abstract class AnswerBase extends org.semanticwb.model.SWBClass implement
     public void setAnsInappropriate(int value)
     {
         getSemanticObject().setIntProperty(forumCat_ansInappropriate, value);
+    }
+
+/**
+* Gets the AnsStatus property
+* @return int with the AnsStatus
+*/
+    public int getAnsStatus()
+    {
+        return getSemanticObject().getIntProperty(forumCat_ansStatus);
+    }
+
+/**
+* Sets the AnsStatus property
+* @param value long with the AnsStatus
+*/
+    public void setAnsStatus(int value)
+    {
+        getSemanticObject().setIntProperty(forumCat_ansStatus, value);
     }
 
 /**
@@ -447,5 +448,23 @@ public abstract class AnswerBase extends org.semanticwb.model.SWBClass implement
     public void setBestAnswer(boolean value)
     {
         getSemanticObject().setBooleanProperty(forumCat_bestAnswer, value);
+    }
+
+/**
+* Gets the AnsIrrelevant property
+* @return int with the AnsIrrelevant
+*/
+    public int getAnsIrrelevant()
+    {
+        return getSemanticObject().getIntProperty(forumCat_ansIrrelevant);
+    }
+
+/**
+* Sets the AnsIrrelevant property
+* @param value long with the AnsIrrelevant
+*/
+    public void setAnsIrrelevant(int value)
+    {
+        getSemanticObject().setIntProperty(forumCat_ansIrrelevant, value);
     }
 }
