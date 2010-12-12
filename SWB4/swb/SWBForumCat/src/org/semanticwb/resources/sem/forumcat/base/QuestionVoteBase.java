@@ -3,15 +3,15 @@ package org.semanticwb.resources.sem.forumcat.base;
 
 public abstract class QuestionVoteBase extends org.semanticwb.model.SWBClass 
 {
-    public static final org.semanticwb.platform.SemanticProperty forumCat_likeVote=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#likeVote");
     public static final org.semanticwb.platform.SemanticProperty forumCat_commentVote=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#commentVote");
-    public static final org.semanticwb.platform.SemanticClass forumCat_Question=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#Question");
-    public static final org.semanticwb.platform.SemanticProperty forumCat_questionVote=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#questionVote");
    /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
    */
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty forumCat_userVote=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#userVote");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_likeVote=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#likeVote");
+    public static final org.semanticwb.platform.SemanticClass forumCat_Question=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#Question");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_questionVote=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#questionVote");
     public static final org.semanticwb.platform.SemanticClass forumCat_QuestionVote=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#QuestionVote");
    /**
    * The semantic class that represents the currentObject
@@ -88,29 +88,6 @@ public abstract class QuestionVoteBase extends org.semanticwb.model.SWBClass
             return (getQuestionVote(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.resources.sem.forumcat.QuestionVote with a determined QuestionVote
-       * @param value QuestionVote of the type org.semanticwb.resources.sem.forumcat.Question
-       * @param model Model of the org.semanticwb.resources.sem.forumcat.QuestionVote
-       * @return Iterator with all the org.semanticwb.resources.sem.forumcat.QuestionVote
-       */
-
-        public static java.util.Iterator<org.semanticwb.resources.sem.forumcat.QuestionVote> listQuestionVoteByQuestionVote(org.semanticwb.resources.sem.forumcat.Question value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.resources.sem.forumcat.QuestionVote> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(forumCat_questionVote, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.resources.sem.forumcat.QuestionVote with a determined QuestionVote
-       * @param value QuestionVote of the type org.semanticwb.resources.sem.forumcat.Question
-       * @return Iterator with all the org.semanticwb.resources.sem.forumcat.QuestionVote
-       */
-
-        public static java.util.Iterator<org.semanticwb.resources.sem.forumcat.QuestionVote> listQuestionVoteByQuestionVote(org.semanticwb.resources.sem.forumcat.Question value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.resources.sem.forumcat.QuestionVote> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(forumCat_questionVote,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.resources.sem.forumcat.QuestionVote with a determined UserVote
        * @param value UserVote of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.resources.sem.forumcat.QuestionVote
@@ -133,6 +110,29 @@ public abstract class QuestionVoteBase extends org.semanticwb.model.SWBClass
             org.semanticwb.model.GenericIterator<org.semanticwb.resources.sem.forumcat.QuestionVote> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(forumCat_userVote,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.resources.sem.forumcat.QuestionVote with a determined QuestionVote
+       * @param value QuestionVote of the type org.semanticwb.resources.sem.forumcat.Question
+       * @param model Model of the org.semanticwb.resources.sem.forumcat.QuestionVote
+       * @return Iterator with all the org.semanticwb.resources.sem.forumcat.QuestionVote
+       */
+
+        public static java.util.Iterator<org.semanticwb.resources.sem.forumcat.QuestionVote> listQuestionVoteByQuestionVote(org.semanticwb.resources.sem.forumcat.Question value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.resources.sem.forumcat.QuestionVote> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(forumCat_questionVote, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.resources.sem.forumcat.QuestionVote with a determined QuestionVote
+       * @param value QuestionVote of the type org.semanticwb.resources.sem.forumcat.Question
+       * @return Iterator with all the org.semanticwb.resources.sem.forumcat.QuestionVote
+       */
+
+        public static java.util.Iterator<org.semanticwb.resources.sem.forumcat.QuestionVote> listQuestionVoteByQuestionVote(org.semanticwb.resources.sem.forumcat.Question value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.resources.sem.forumcat.QuestionVote> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(forumCat_questionVote,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**
@@ -142,24 +142,6 @@ public abstract class QuestionVoteBase extends org.semanticwb.model.SWBClass
     public QuestionVoteBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-/**
-* Gets the LikeVote property
-* @return boolean with the LikeVote
-*/
-    public boolean isLikeVote()
-    {
-        return getSemanticObject().getBooleanProperty(forumCat_likeVote);
-    }
-
-/**
-* Sets the LikeVote property
-* @param value long with the LikeVote
-*/
-    public void setLikeVote(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(forumCat_likeVote, value);
     }
 
 /**
@@ -178,44 +160,6 @@ public abstract class QuestionVoteBase extends org.semanticwb.model.SWBClass
     public void setCommentVote(String value)
     {
         getSemanticObject().setProperty(forumCat_commentVote, value);
-    }
-   /**
-   * Sets the value for the property QuestionVote
-   * @param value QuestionVote to set
-   */
-
-    public void setQuestionVote(org.semanticwb.resources.sem.forumcat.Question value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(forumCat_questionVote, value.getSemanticObject());
-        }else
-        {
-            removeQuestionVote();
-        }
-    }
-   /**
-   * Remove the value for QuestionVote property
-   */
-
-    public void removeQuestionVote()
-    {
-        getSemanticObject().removeProperty(forumCat_questionVote);
-    }
-
-   /**
-   * Gets the QuestionVote
-   * @return a org.semanticwb.resources.sem.forumcat.Question
-   */
-    public org.semanticwb.resources.sem.forumcat.Question getQuestionVote()
-    {
-         org.semanticwb.resources.sem.forumcat.Question ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(forumCat_questionVote);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.resources.sem.forumcat.Question)obj.createGenericInstance();
-         }
-         return ret;
     }
    /**
    * Sets the value for the property UserVote
@@ -252,6 +196,62 @@ public abstract class QuestionVoteBase extends org.semanticwb.model.SWBClass
          if(obj!=null)
          {
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
+* Gets the LikeVote property
+* @return boolean with the LikeVote
+*/
+    public boolean isLikeVote()
+    {
+        return getSemanticObject().getBooleanProperty(forumCat_likeVote);
+    }
+
+/**
+* Sets the LikeVote property
+* @param value long with the LikeVote
+*/
+    public void setLikeVote(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(forumCat_likeVote, value);
+    }
+   /**
+   * Sets the value for the property QuestionVote
+   * @param value QuestionVote to set
+   */
+
+    public void setQuestionVote(org.semanticwb.resources.sem.forumcat.Question value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(forumCat_questionVote, value.getSemanticObject());
+        }else
+        {
+            removeQuestionVote();
+        }
+    }
+   /**
+   * Remove the value for QuestionVote property
+   */
+
+    public void removeQuestionVote()
+    {
+        getSemanticObject().removeProperty(forumCat_questionVote);
+    }
+
+   /**
+   * Gets the QuestionVote
+   * @return a org.semanticwb.resources.sem.forumcat.Question
+   */
+    public org.semanticwb.resources.sem.forumcat.Question getQuestionVote()
+    {
+         org.semanticwb.resources.sem.forumcat.Question ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(forumCat_questionVote);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.resources.sem.forumcat.Question)obj.createGenericInstance();
          }
          return ret;
     }

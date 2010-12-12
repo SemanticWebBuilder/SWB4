@@ -4,6 +4,7 @@ package org.semanticwb.resources.sem.forumcat.base;
 public abstract class SWBForumCatResourceBase extends org.semanticwb.portal.api.GenericSemResource 
 {
     public static final org.semanticwb.platform.SemanticProperty forumCat_questionClosable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#questionClosable");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_markIrrelevantAnswers=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#markIrrelevantAnswers");
     public static final org.semanticwb.platform.SemanticProperty forumCat_markInnapropiateAnswers=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#markInnapropiateAnswers");
     public static final org.semanticwb.platform.SemanticProperty forumCat_isQuestionSubscription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#isQuestionSubscription");
     public static final org.semanticwb.platform.SemanticProperty forumCat_markInnapropiateQuestions=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#markInnapropiateQuestions");
@@ -54,6 +55,24 @@ public abstract class SWBForumCatResourceBase extends org.semanticwb.portal.api.
     public void setQuestionClosable(boolean value)
     {
         getSemanticObject().setBooleanProperty(forumCat_questionClosable, value);
+    }
+
+/**
+* Gets the MarkIrrelevantAnswers property
+* @return String with the MarkIrrelevantAnswers
+*/
+    public String getMarkIrrelevantAnswers()
+    {
+        return getSemanticObject().getProperty(forumCat_markIrrelevantAnswers);
+    }
+
+/**
+* Sets the MarkIrrelevantAnswers property
+* @param value long with the MarkIrrelevantAnswers
+*/
+    public void setMarkIrrelevantAnswers(String value)
+    {
+        getSemanticObject().setProperty(forumCat_markIrrelevantAnswers, value);
     }
 
 /**
