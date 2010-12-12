@@ -75,6 +75,10 @@
     <swb:notCodeGeneration rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:notCodeGeneration>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="categoryUserInv">
+    <swb:notCodeGeneration rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:notCodeGeneration>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="questionObj">
     <owl:inverseOf rdf:resource="#questionObjInv"/>
     <rdfs:range rdf:resource="#Question"/>
@@ -86,10 +90,6 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:domain>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="categoryUserInv">
-    <swb:notCodeGeneration rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:notCodeGeneration>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="forumResource">
     <rdfs:domain rdf:resource="#Question"/>
@@ -167,6 +167,13 @@
     <rdfs:label xml:lang="es">Referencias</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Answer"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="askPoints">
+    <rdfs:label xml:lang="es">Puntos por preguntar</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:label xml:lang="en">Points for asking</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cantidad de puntos sumados al usuario por responder una pregunta</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="queInappropriate">
     <rdfs:domain rdf:resource="#Question"/>
@@ -320,6 +327,18 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="markBestAnswer">
+    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_bestAnswer">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >220</swb:index>
+        <rdfs:label xml:lang="es">Permitir marcar mejor respuesta</rdfs:label>
+        <rdfs:label xml:lang="en">Allow to mark best answer</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="attachements">
     <rdfs:domain rdf:resource="#Answer"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -343,18 +362,6 @@
             >120</swbxf:imgThumbnailWidth>
           </swb:DojoImageUpload>
         </swbxf:formElement>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="markBestAnswer">
-    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_bestAnswer">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >220</swb:index>
-        <rdfs:label xml:lang="es">Permitir marcar mejor respuesta</rdfs:label>
-        <rdfs:label xml:lang="en">Allow to mark best answer</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
@@ -408,6 +415,25 @@
     <rdfs:label xml:lang="en">Closed</rdfs:label>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Indica si la pregunta ha sido cerrada por su creador.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="isValuable">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:label xml:lang="es">Usar sistema de puntaje</rdfs:label>
+    <rdfs:label xml:lang="en">Use points system</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Permite activar el sistema de puntaje para el foro</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="markIrrelevantAnswers">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_markIrrelevantAnswers">
+        <rdfs:label xml:lang="en">Allow to mark irrelevant answers</rdfs:label>
+        <rdfs:label xml:lang="es">Permitir marcar respuestas como irrelevantes</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >90</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="specifications">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -467,6 +493,13 @@
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#SWBForumCatResource"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="answerPoints">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:label xml:lang="es">Puntos por responder</rdfs:label>
+    <rdfs:label xml:lang="en">Points for answering</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cantidad de puntos sumados al usuario por responder una pregunta</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="ansStatus">
     <rdfs:domain rdf:resource="#Answer"/>
