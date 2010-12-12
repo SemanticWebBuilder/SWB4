@@ -438,6 +438,12 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="irrelevantVote">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Indica si la respuesta ha sido marcada como irrelevante</rdfs:label>
+    <rdfs:domain rdf:resource="#AnswerVote"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="specifications">
     <rdfs:label xml:lang="en">Add specifications</rdfs:label>
     <rdfs:label xml:lang="es">Añadir especificaciones</rdfs:label>
@@ -509,10 +515,10 @@
     <rdfs:domain rdf:resource="#Answer"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="ansIrrelevant">
+    <rdfs:domain rdf:resource="#Answer"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Número de veces que la respuesta ha sido marcada como irrelevante</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:domain rdf:resource="#Answer"/>
   </owl:DatatypeProperty>
   <swb:CodePackage rdf:ID="pkg_forumCat">
     <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
