@@ -10,6 +10,7 @@ public abstract class AnswerVoteBase extends org.semanticwb.model.SWBClass
     public static final org.semanticwb.platform.SemanticProperty forumCat_ansUserVote=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#ansUserVote");
     public static final org.semanticwb.platform.SemanticProperty forumCat_likeAnswer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#likeAnswer");
     public static final org.semanticwb.platform.SemanticProperty forumCat_ansCommentVote=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#ansCommentVote");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_irrelevantVote=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#irrelevantVote");
     public static final org.semanticwb.platform.SemanticClass forumCat_Answer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#Answer");
     public static final org.semanticwb.platform.SemanticProperty forumCat_answerVote=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#answerVote");
     public static final org.semanticwb.platform.SemanticClass forumCat_AnswerVote=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#AnswerVote");
@@ -216,6 +217,24 @@ public abstract class AnswerVoteBase extends org.semanticwb.model.SWBClass
     public void setAnsCommentVote(String value)
     {
         getSemanticObject().setProperty(forumCat_ansCommentVote, value);
+    }
+
+/**
+* Gets the IrrelevantVote property
+* @return boolean with the IrrelevantVote
+*/
+    public boolean isIrrelevantVote()
+    {
+        return getSemanticObject().getBooleanProperty(forumCat_irrelevantVote);
+    }
+
+/**
+* Sets the IrrelevantVote property
+* @param value long with the IrrelevantVote
+*/
+    public void setIrrelevantVote(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(forumCat_irrelevantVote, value);
     }
    /**
    * Sets the value for the property AnswerVote
