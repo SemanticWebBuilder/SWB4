@@ -59,20 +59,20 @@ public abstract class SWBForumCatResourceBase extends org.semanticwb.portal.api.
 
 /**
 * Gets the MarkIrrelevantAnswers property
-* @return String with the MarkIrrelevantAnswers
+* @return boolean with the MarkIrrelevantAnswers
 */
-    public String getMarkIrrelevantAnswers()
+    public boolean isMarkIrrelevantAnswers()
     {
-        return getSemanticObject().getProperty(forumCat_markIrrelevantAnswers);
+        return getSemanticObject().getBooleanProperty(forumCat_markIrrelevantAnswers);
     }
 
 /**
 * Sets the MarkIrrelevantAnswers property
 * @param value long with the MarkIrrelevantAnswers
 */
-    public void setMarkIrrelevantAnswers(String value)
+    public void setMarkIrrelevantAnswers(boolean value)
     {
-        getSemanticObject().setProperty(forumCat_markIrrelevantAnswers, value);
+        getSemanticObject().setBooleanProperty(forumCat_markIrrelevantAnswers, value);
     }
 
 /**
