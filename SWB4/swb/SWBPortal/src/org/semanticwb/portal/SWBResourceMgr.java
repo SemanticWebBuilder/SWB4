@@ -199,6 +199,15 @@ private SWBResourceCachedMgr cache;
     }
 
     /**
+     * Elimina el recurso del cache de recursos.
+     * @param uri
+     */
+    public void removeResource(String uri)
+    {
+        resources.remove(uri);
+    }
+
+    /**
      * Gets the resource.
      * 
      * @param uri the uri
