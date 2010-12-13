@@ -716,7 +716,19 @@ public class ProcessForm extends GenericResource {
         out.println("	}");
         out.println("	return true;");
         out.println("}");
-        out.println("</script> ");
+//        out.println("</script> ");
+//
+//        out.println("<script type=\"text/javascript\">");
+        out.println("   function updItem(uri,param,sel) {");
+        out.println("   if(sel.options.selectedIndex >= 0){");
+        out.println("       var valor = sel.options[sel.options.selectedIndex].value;");
+        out.println("       var url = uri+'&'+param+'='+valor;");
+        out.println("       alert(url);");
+        out.println("       submitUrl(url,sel);");
+        out.println("   }");
+        out.println("   return false;");
+        out.println("}");
+        out.println("</script>");
 
         int max = 1;
         while (!base.getAttribute("prop" + max, "").equals("")) {
@@ -743,8 +755,11 @@ public class ProcessForm extends GenericResource {
         SWBResourceURL urladd = paramRequest.getActionUrl();
         urladd.setAction("addprops");
 
+        out.println("<div class=\"swbform\">");
         out.println("<form action=\"" + urladd + "\" id=\""+suri+"/forma\" method=\"post\">");
         out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\">");
+        out.println("<fieldset>");
+        out.println("<legend>" + "Configuración" + "</legend>");
         out.println("<table border=\"0\" >");
         out.println("<tr>");
         out.println("<th>Propiedades");
@@ -757,7 +772,7 @@ public class ProcessForm extends GenericResource {
         out.println("<tr>");
         out.println("<td>");
         // select con la lista de propiedades existentes
-        out.println("<select size=\"10\" name=\"propiedades\" id=\"propiedades\" multiple style=\"width:250px;\">");
+        out.println("<select size=\"10\" name=\"propiedades\" id=\""+suri+"/propiedades\" multiple style=\"width:250px;\">");
         Iterator<String> its = hmprops.keySet().iterator();
         while (its.hasNext()) {
             String str = its.next();
@@ -772,12 +787,12 @@ public class ProcessForm extends GenericResource {
         out.println("</td>");
         out.println("<td valign=\"middle\">");
         // botones
-        out.println("<input type = \"button\" style=\"width: 25px;\" id = \"btnMoveLeft\" onclick = \"MoveItems('existentes','propiedades');\" value=\"<-\"><br>");
-        out.println("<input type = \"button\" style=\"width: 25px;\" id = \"btnMoveRight\" onclick = \"MoveItems('propiedades','existentes');\" value=\"->\">");
+        out.println("<button dojoType=\"dijit.form.Button\" type = \"button\" style=\"width: 25px;\" id = \""+suri+"btnMoveLeft\" onclick = \"MoveItems('"+suri+"/existentes','"+suri+"/propiedades');\"><-</button><br>");
+        out.println("<button dojoType=\"dijit.form.Button\" type = \"button\" style=\"width: 25px;\" id = \""+suri+"btnMoveRight\" onclick = \"MoveItems('"+suri+"/propiedades','"+suri+"/existentes');\">-></button>");
         out.println("</td>");
         out.println("<td>");
         // select con la lista de propiedades seleccionadas
-        out.println("<select size=\"10\" name=\"existentes\" id=\"existentes\" multiple style=\"width:250px;\">");
+        out.println("<select size=\"10\" name=\"existentes\" id=\""+suri+"/existentes\" multiple style=\"width:250px;\">");
         its = hmselected.keySet().iterator();
         while (its.hasNext()) {
             String str = its.next();
@@ -792,16 +807,31 @@ public class ProcessForm extends GenericResource {
         out.println("<tr>");
         out.println("<td colspan=\"3\" align=\"center\">");
         // botones para guadar cambios
-        out.println("<input type=\"button\"  onclick=\"if(enviatodos('existentes')){ submitForm('"+suri+"/forma'); }; return false\" value=\"Guardar\">");
-        SWBResourceURL urlbck = paramRequest.getRenderUrl();
-        urlbck.setMode(SWBResourceURL.Mode_VIEW);
-        urlbck.setParameter("suri", suri);
-
-        out.println("<input type=\"button\" value=\"Cancelar\" onclick=\"submitUrl('"+urlbck+"',this); return false;\">");
+        out.println("<button  dojoType=\"dijit.form.Button\" type=\"button\">Guardar");
+        out.println("<script type=\"dojo/method\" event=\"onClick\" >");
+        out.println(" if(enviatodos('existentes')) {");
+        out.println("   submitForm('"+suri+"/forma'); ");
+        out.println(" } ");
+        out.println(" return false; ");
+        out.println("</script>");
+        out.println("</button>");
+//        SWBResourceURL urlbck = paramRequest.getRenderUrl();
+//        urlbck.setMode(SWBResourceURL.Mode_VIEW);
+//        urlbck.setParameter("suri", suri);
+//
+//        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\">Cancelar");
+//        out.println("<script type=\"dojo/method\" event=\"onClick\" >");
+//        //out.println(" var miform = dojo.byId('"+ id + "/collectionconfig'); ");
+//        out.println(" submitUrl('" + urlbck + "',this.domNode); ");
+//        out.println(" return false; ");
+//        out.println("</script>");
+//        out.println("</button>");
         out.println("</td>");
         out.println("</tr>");
         out.println("</table>");
-        out.println("</form>");
+        //out.println("</form>");
+        out.println("</fieldset>");
+        out.println("<fieldset>");
 
         out.println("<table border=\"0\" width=\"100%\">");
         out.println("<tr>");
@@ -874,12 +904,53 @@ public class ProcessForm extends GenericResource {
             urlupd.setParameter("prop", "" + i);
             urlupd.setParameter("suri", suri);
 
-            out.println("<select name=\"formElement\" onchange=\"updItem('" + urlupd + "','feuri',this);\">");
+            out.println("<select id=\""+suri+"/"+i+"/sfe\" name=\"formElement\" style=\"width:200px;\" onchange=\"updItem('" + urlupd + "','feuri',this);\" >"); //
+
+//            out.println("<script type=\"dojo/connect\" event=\"onChange\">");
+//            out.println(" var sel=this;   ");
+//            out.println("   if(sel.options.selectedIndex >= 0){");
+//            out.println("       var valor = sel.options[sel.options.selectedIndex].value;");  //
+//            out.println("       var url = '" + urlupd + "&feuri='+valor;");
+//            out.println("       alert(url);");
+//            //out.println(" submitUrl('" + urluinh + "&'+self1.attr(\"name\")+'='+self1.attr(\"value\"),self1.domNode);");
+//            out.println("       submitUrl(url,sel);");
+//            out.println("   }");
+//            out.println("   return false;");
+//
+//
+//            //out.println("updItem('" + urlupd + "','feuri',self1);");
+//            //out.println(" showStatusURL('" + urluinh + "&'+self1.attr(\"name\")+'='+self1.attr(\"value\"),true);");
+//
+//            out.println("</script>");
+
+
+
             out.println(getFESelect(fe, paramRequest));
             out.println("</select>");
             out.println("</td>");
             out.println("<td>");
-            out.println("<select name=\"mode\" onchange=\"updItem('" + urlupd + "','mode',this);\">");
+            out.println("<select id=\""+suri+"/"+i+"/smode\" name=\"mode\" style=\"width:80px;\" onchange=\"updItem('" + urlupd + "','mode',this);\">"); //
+
+//            out.println("<script type=\"dojo/connect\" event=\"onChange\">");
+//            out.println(" var sel=this;   ");
+//
+////            out.println("   if(sel.options.selectedIndex >= 0){");
+//            out.println("       var valor = sel.attr(\"value\"); ");  //sel.options[sel.options.selectedIndex].value;
+//            out.println("       var url = '" + urlupd + "&mode='+valor;");
+//            out.println("       alert(url);");
+//            //out.println(" submitUrl('" + urluinh + "&'+self1.attr(\"name\")+'='+self1.attr(\"value\"),self1.domNode);");
+//            out.println("       submitUrl(url,sel.domNode);");
+////            out.println("   }");
+//            out.println("   return false;");
+//
+//
+//            //out.println("updItem('" + urlupd + "','feuri',self1);");
+//            //out.println(" showStatusURL('" + urluinh + "&'+self1.attr(\"name\")+'='+self1.attr(\"value\"),true);");
+//
+//            out.println("</script>");
+
+
+
             out.println("<option value=\"edit\" " + (modo.equals("edit") ? "selected" : "") + " >Edit</option>");
             out.println("<option value=\"view\" " + (modo.equals("view") ? "selected" : "") + " >View</option>");
             out.println("</select>");
@@ -889,18 +960,9 @@ public class ProcessForm extends GenericResource {
         }
 
         out.println("</table>");
-
-        out.println("<script type=\"text/javascript\">");
-        out.println("   function updItem(uri,param,sel) {");
-        out.println("   if(sel.options.selectedIndex >= 0){");
-        out.println("       var valor = sel.options[sel.options.selectedIndex].value;");
-        //out.println("       alert(uri+'&'+param+'='+escape(valor));");
-        out.println("       submitUrl(uri+'&'+param+'='+escape(valor),sel);");
-        out.println("   }");
-        out.println("   return false;");
-        out.println("}");
-        out.println("</script>");
-
+        out.println("</fieldset>");
+        out.println("</form>");
+        out.println("</div>");
 
     }
 
