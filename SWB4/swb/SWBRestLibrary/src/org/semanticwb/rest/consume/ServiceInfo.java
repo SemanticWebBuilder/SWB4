@@ -13,6 +13,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -60,6 +61,16 @@ public class ServiceInfo
         this.url = url;
     }
 
+    public Method[] getAllMethods()
+    {
+        ArrayList<Method> allMethods = new ArrayList<Method>();
+        for (Resource resource : resources.values())
+        {
+            allMethods.addAll(Arrays.asList(resource.getAllMethods()));
+        }
+        return allMethods.toArray(new Method[allMethods.size()]);
+    }
+
     public String getNamespaceURI()
     {
         return WADL_NS;
@@ -74,54 +85,61 @@ public class ServiceInfo
         return resourcesBasePath;
     }
 
+    private void addResources(Element eResources)
+    {
+    }
+
     private void fill() throws RestException
     {
 
         resources.clear();
         NodeList lresources = doc.getElementsByTagNameNS(WADL_NS, "resources");
-        if (lresources.getLength() == 1)
+        for (int i = 0; i < lresources.getLength(); i++)
         {
-            Node node = lresources.item(0);
-            if (node instanceof Element)
+            if (lresources.item(i) instanceof Element)
             {
-                Element eresources = (Element) node;
-                String base = eresources.getAttribute("base");
-                try
+                Element eresources = (Element) lresources.item(i);
+                NodeList childs = eresources.getChildNodes();
+                for (int j = 0; j < childs.getLength(); j++)
                 {
-                    URI baseuri = new URI(base);
-                    if (baseuri.isAbsolute())
+                    if (childs.item(j) instanceof Element && ((Element) childs.item(j)).getNamespaceURI().equals(WADL_NS) && ((Element) childs.item(j)).getLocalName().equals("resource"))
                     {
-                        resourcesBasePath = baseuri.toURL();
-                    }
-                    else
-                    {
-                        URI tempbase = this.url.toURI();
-                        if (!tempbase.toString().endsWith("/"))
+                        Element eresource = ((Element) childs.item(j));
+                        String base = eresource.getAttribute("base");
+                        try
                         {
-                            String newpath = tempbase.toString() + "/";
-                            tempbase = new URI(newpath);
-                        }
-                        resourcesBasePath = tempbase.resolve(baseuri).normalize().toURL();
-                    }
+                            URI baseuri = new URI(base);
+                            if (baseuri.isAbsolute())
+                            {
+                                resourcesBasePath = baseuri.toURL();
+                            }
+                            else
+                            {
+                                URI tempbase = this.url.toURI();
+                                if (!tempbase.toString().endsWith("/"))
+                                {
+                                    String newpath = tempbase.toString() + "/";
+                                    tempbase = new URI(newpath);
+                                }
+                                resourcesBasePath = tempbase.resolve(baseuri).normalize().toURL();
+                            }
 
+
+
+                            Resource resource = Resource.createResourceInfo(eresource, resourcesBasePath, this);
+                            this.resources.put(resource.getId(), resource);
+
+                        }
+                        catch (MalformedURLException mfue)
+                        {
+                            throw new RestException(mfue);
+                        }
+                        catch (URISyntaxException e)
+                        {
+                            throw new RestException(e);
+                        }
+                    }
                 }
-                catch (MalformedURLException mfue)
-                {
-                    throw new RestException(mfue);
-                }
-                catch (URISyntaxException e)
-                {
-                    throw new RestException(e);
-                }
-            }
-        }
-        NodeList nodes = doc.getElementsByTagNameNS(WADL_NS, "resource");
-        for (int i = 0; i < nodes.getLength(); i++)
-        {
-            if (nodes.item(i) instanceof Element)
-            {
-                Resource resource = Resource.createResourceInfo((Element) nodes.item(i), resourcesBasePath, this);
-                resources.put(resource.getId(), resource);
             }
         }
     }
@@ -133,7 +151,22 @@ public class ServiceInfo
 
     public Resource getResource(String id)
     {
-        return resources.get(id);
+        if(resources.containsKey(id))
+        {
+            return resources.get(id);
+        }
+        else
+        {
+            for(Resource resource : resources.values())
+            {
+                Resource tmp=resource.getResource(id);
+                if(tmp!=null)
+                {
+                    return tmp;
+                }
+            }
+        }
+        return null;
     }
 
     private void importInLine(Document docinclude, Element grammars)

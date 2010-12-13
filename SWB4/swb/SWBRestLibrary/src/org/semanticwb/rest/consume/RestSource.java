@@ -32,6 +32,7 @@ public class RestSource
         addRepresentationResponse(AtomXML.APPLICATION_ATOM_XML, (Class<RepresentationResponse>)AtomXML.class.asSubclass(RepresentationResponse.class));
 
     }
+    
     public static void addRepresentationRequest(String mediaType,Class<RepresentationRequest> clazz)
     {
        if(!representationsRequest.containsKey(mediaType))
