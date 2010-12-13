@@ -313,6 +313,13 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     out.println("<button dojoType=\"dijit.form.Button\" _type=\"button\"  id=\""+id+"_btnDisp\">" + paramsRequest.getLocaleString("btnAdd2display"));
                     out.println("<script type=\"dojo/method\" event=\"onClick\" >");
                     //out.println(" var miform = dojo.byId('"+ id + "/collectionconfig'); ");
+                    out.println(" var semprop = dojo.byId('"+id+"_semprop'); ");
+                    out.println(" if(semprop.value=='')");
+                    out.println(" {");
+                    out.println("   alert('Falta selecionar propiedad de la lista.');");
+                    out.println("   semprop.focus();");
+                    out.println("   return false;");
+                    out.println(" }");
                     out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
                     out.println(" actbut.value='display'; ");
                     out.println(" submitForm('" + id + "/collectionconfig'); ");
@@ -408,7 +415,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
                         catch(Exception e)
                         {
                             log.error("Error in display class property.", e);
-                            continue;
+                            //continue;
                         }
                         out.println("<tr>");
                         out.println("<td  width=\"70\" align=\"left\">");
@@ -521,6 +528,20 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     
                     out.println("<button dojoType=\"dijit.form.Button\" _type=\"submit\"  id=\""+id+"_btnSear\">" + paramsRequest.getLocaleString("btnAdd2search") );
                     out.println("<script type=\"dojo/method\" event=\"onClick\" >");
+                    out.println(" var semprop2 = dojo.byId('"+id+"_semprop2'); ");
+                    out.println(" if(semprop2.value=='')");
+                    out.println(" {");
+                    out.println("   alert('Falta selecionar propiedad de la lista.');");
+                    out.println("   semprop2.focus();");
+                    out.println("   return false;");
+                    out.println(" }");
+                    out.println(" var sempropFE2 = dojo.byId('"+id+"_sempropFE2'); ");
+                    out.println(" if(sempropFE2.value=='')");
+                    out.println(" {");
+                    out.println("   alert('Falta seleccionar el control a utilizar de la lista.');");
+                    out.println("   sempropFE2.focus();");
+                    out.println("   return false;");
+                    out.println(" }");
                     out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
                     out.println(" actbut.value='search';");
                     out.println(" submitForm('" + id + "/collectionconfig'); ");
@@ -1260,7 +1281,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
                             urlr.setParameter("sval", semO.getURI());
                             urlr.setParameter("ract", action);
                             //urlr.setParameter("page", ""+p);
-                            urlr.setAction("remove");
+                            urlr.setAction("removeso");
                             out.println("<a href=\"#\" title=\"" + paramsRequest.getLocaleString("remove") + "\" onclick=\"if(confirm('" + paramsRequest.getLocaleString("confirm_remove") + " " + SWBUtils.TEXT.scape4Script(semO.getDisplayName(user.getLanguage())) + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"" + paramsRequest.getLocaleString("remove") + "\"></a>");
                             out.println("<a href=\"#\"  title=\"" + paramsRequest.getLocaleString("documentAdmin") + "\" onclick=\"selectTab('" + semO.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.scape4Script(semO.getDisplayName()) + "','bh_AdminPorltet');return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + paramsRequest.getLocaleString("documentAdmin") + "\"></a>");
                             out.println("</td>");
@@ -1668,6 +1689,17 @@ public class SWBACollectionConfig extends GenericAdmResource {
             //response.setRenderParameter("closetab", sval);
             response.setRenderParameter("statmsg", response.getLocaleString("statmsg2"));
             response.setMode(SWBActionResponse.Mode_EDIT);
+        } else if ("removeso".equals(action))
+        {
+            log.debug("processAction(removeso)");
+
+            SemanticObject so = ont.getSemanticObject(sval);
+            if(null!=so) so.remove();
+            
+            log.debug("remove-closetab:" + sval);
+            //response.setRenderParameter("closetab", sval);
+            response.setRenderParameter("statmsg", response.getLocaleString("statmsg2"));
+            response.setMode(SWBActionResponse.Mode_VIEW);
         }
         else if(action.equals("updcfg")){
 
