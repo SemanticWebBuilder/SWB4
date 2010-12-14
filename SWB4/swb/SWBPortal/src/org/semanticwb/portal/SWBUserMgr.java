@@ -330,7 +330,7 @@ public class SWBUserMgr
      */
     public Set<User> getSessionUsers(String website)
     {
-        HashSet set=new HashSet();
+        HashSet<User> set=new HashSet();
         Iterator<SWBSessionObject> it=listSessionObjects();
         while (it.hasNext())
         {
@@ -339,7 +339,7 @@ public class SWBUserMgr
             Iterator<Principal> it2=su.getPrincipals().iterator();
             if(it2.hasNext())
             {
-                set.add(it2.next());
+                set.add((User)it2.next());
             }
         }
         return set;
