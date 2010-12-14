@@ -8,11 +8,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.List;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.rest.util.HTTPMethod;
 
 /**
  *
@@ -213,18 +215,30 @@ public class JSON extends RepresentationBase implements RepresentationRequest, J
     {
         checkParameters(values);
         URL _url = this.getMethod().getResource().getPath();
+        HttpURLConnection con=null;
+        String requestAtomDocument = constructParameters(values);            
         try
         {
-            HttpURLConnection con = (HttpURLConnection) _url.openConnection();
-            con.setRequestMethod(this.getMethod().getHTTPMethod().toString());
-            String charset = Charset.defaultCharset().name();
-            con.setRequestProperty(CONTENT_TYPE, APPLICATION_JSON+ "; charset=" + charset);
-            con.setDoOutput(true);
-            con.setDoInput(true);
-            OutputStream out = con.getOutputStream();
-            String requestAtomDocument = constructParameters(values);            
-            out.write(requestAtomDocument.getBytes());
-            out.close();
+            if(this.getMethod().getHTTPMethod()==HTTPMethod.POST || this.getMethod().getHTTPMethod()==HTTPMethod.PUT)
+            {
+                con = (HttpURLConnection) _url.openConnection();
+                con.setRequestMethod(this.getMethod().getHTTPMethod().toString());
+                String charset = Charset.defaultCharset().name();
+                con.setRequestProperty(CONTENT_TYPE, APPLICATION_JSON+ "; charset=" + charset);
+                con.setDoOutput(true);
+                con.setDoInput(true);
+                OutputStream out = con.getOutputStream();
+                out.write(requestAtomDocument.getBytes());
+                out.close();
+            }
+            else
+            {
+                URL newurl=new URL(_url.toString()+"?st="+URLEncoder.encode(requestAtomDocument));
+                con = (HttpURLConnection)newurl.openConnection();
+                con.setRequestMethod(this.getMethod().getHTTPMethod().toString());
+                String charset = Charset.defaultCharset().name();
+                con.setRequestProperty(CONTENT_TYPE, APPLICATION_JSON+ "; charset=" + charset);
+            }
             return super.processResponse(con);
         }
         catch (Exception ioe)
