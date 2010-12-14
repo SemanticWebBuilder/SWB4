@@ -96,14 +96,13 @@ public class Poll extends GenericResource {
     /**
      * The Enum Display.
      */
-    public enum Display {
-        
+    public enum Display { 
         /** The SLIDE. */
         SLIDE, 
- /** The POPUP. */
- POPUP, 
- /** The SIMPLE. */
- SIMPLE;
+        /** The POPUP. */
+        POPUP,
+        /** The SIMPLE. */
+        SIMPLE;
         
         /* (non-Javadoc)
          * @see java.lang.Enum#toString()
@@ -118,11 +117,10 @@ public class Poll extends GenericResource {
      * The Enum VMode.
      */
     public enum VMode {
-        
         /** The IP. */
         IP, 
- /** The COOKIE. */
- COOKIE;
+        /** The COOKIE. */
+        COOKIE;
         
         /* (non-Javadoc)
          * @see java.lang.Enum#toString()
@@ -140,10 +138,10 @@ public class Poll extends GenericResource {
         
         /** The INPOLL. */
         INPOLL, 
- /** The INRESULTS. */
- INRESULTS, 
- /** The INBOTH. */
- INBOTH;
+        /** The INRESULTS. */
+        INRESULTS,
+        /** The INBOTH. */
+        INBOTH;
         
         /* (non-Javadoc)
          * @see java.lang.Enum#toString()
@@ -292,12 +290,12 @@ public class Poll extends GenericResource {
         if( Display.POPUP.toString().equals(display) )
             e.setAttribute("action", "abreResultados('"+url.toString(true)+"')");
         else if( Display.SLIDE.toString().equals(display) )
-            e.setAttribute("action", "getHtml('"+url+"','"+PREF+base.getId()+"'); expande();");
+            e.setAttribute("action", "postHtml('"+url+"','"+PREF+base.getId()+"'); expande();");
         else {
             e.setAttribute("label", base.getAttribute("msg_viewresults", paramRequest.getLocaleString("lblDoAdmin_msgResults").replaceAll("\"", "")));
             url = new SWBResourceURLImp(request, base, paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
             url.setMode("accesible");
-            e.setAttribute("action", url.toString(true));
+            e.setAttribute("action", "window.location.href='"+url.toString(true)+"'");
         }
         e.setAttribute("path", path);
         e.setAttribute("title", paramRequest.getLocaleString("msgResults_title"));
@@ -353,8 +351,8 @@ public class Poll extends GenericResource {
         response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
 
          try {
-            //String jspFile = paramRequest.getResourceBase().getAttribute("jspfile","/swbadmin/jsp/poll/poll.jsp");
-             String jspFile = paramRequest.getResourceBase().getAttribute("jspfile","/swbadmin/jsp/poll/pollAccessible.jsp");
+            String jspFile = paramRequest.getResourceBase().getAttribute("jspfile","/swbadmin/jsp/poll/poll.jsp");
+            //String jspFile = paramRequest.getResourceBase().getAttribute("jspfile","/swbadmin/jsp/poll/pollAccessible.jsp");
 
             request.setAttribute("paramRequest", paramRequest);
             Document dom = getDom(request, response, paramRequest);
@@ -476,8 +474,8 @@ public class Poll extends GenericResource {
                         out.println("</p>");
                     }else {
                         out.println("<p>");
-                        out.println("<a href=\"javascript:;\" onclick=\"getHtml('"+url+"','"+poll+base.getId()+"'); expande();\">" + base.getAttribute("msg_viewresults",paramRequest.getLocaleString("msg_viewresults")) + "</a>");
-                        out.println("<div id=\""+poll+base.getId()+"\"> ");
+                        out.println("<a href=\"javascript:;\" onclick=\"postHtml('"+url+"','"+PREF+base.getId()+"'); expande();\">" + base.getAttribute("msg_viewresults",paramRequest.getLocaleString("msg_viewresults")) + "</a>");
+                        out.println("<div id=\""+PREF+base.getId()+"\"> ");
                         out.println("</div>");
                         out.println("</p>");
                     }
@@ -503,6 +501,8 @@ public class Poll extends GenericResource {
 
                     out.println("<script type=\"text/javascript\">");
                     out.println("dojo.require(\"dojo.fx\");");
+                    out.println("dojo.require(\"dijit.dijit\");");
+                    out.println("dojo.require(\"dijit.layout.ContentPane\");");
 
                     out.println("\nfunction buscaCookie(forma) {");
                     out.println("    var numcom = getCookie(forma.NombreCookie.value); ");
@@ -556,7 +556,7 @@ public class Poll extends GenericResource {
                     if(display) {
                         out.println("  window.open(\'"+ url.toString() +"&radiobutton=\'+optValue,\'_newenc\',\'"+win+"\'); ");
                     }else {
-                        out.println("  getHtml('"+url.toString()+"&radiobutton='+optValue,'"+poll+base.getId()+"'); expande();");
+                        out.println("  postHtml('"+url.toString()+"&radiobutton='+optValue,'"+PREF+base.getId()+"'); expande();");
                     }
                     out.println("    }else { ");
                     out.println("       alert('"+ paramRequest.getLocaleString("msgDoView_msgAnswer") +"'); ");
@@ -568,14 +568,14 @@ public class Poll extends GenericResource {
                     out.println("} ");
 
                     out.println("function expande() {");
-                    out.println("  var anim1 = dojo.fx.wipeIn( {node:\""+poll+base.getId()+"\", duration:500 });");
-                    out.println("  var anim2 = dojo.fadeIn({node:\""+poll+base.getId()+"\", duration:650});");
+                    out.println("  var anim1 = dojo.fx.wipeIn( {node:\""+PREF+base.getId()+"\", duration:500 });");
+                    out.println("  var anim2 = dojo.fadeIn({node:\""+PREF+base.getId()+"\", duration:650});");
                     out.println("  dojo.fx.combine([anim1,anim2]).play();");
                     out.println("}");
 
                     out.println("function collapse() {");
-                    out.println("  var anim1 = dojo.fx.wipeOut( {node:\""+poll+base.getId()+"\", duration:500 });");
-                    out.println("  var anim2 = dojo.fadeOut({node:\""+poll+base.getId()+"\", duration:650});");
+                    out.println("  var anim1 = dojo.fx.wipeOut( {node:\""+PREF+base.getId()+"\", duration:500 });");
+                    out.println("  var anim2 = dojo.fadeOut({node:\""+PREF+base.getId()+"\", duration:650});");
                     out.println("  dojo.fx.combine([anim1, anim2]).play();");
                     out.println("}");
 
@@ -586,8 +586,7 @@ public class Poll extends GenericResource {
             log.error(paramRequest.getLocaleString("msgDoView_resource") +" "+ restype +" "+ paramRequest.getLocaleString("msgDoView_method"), e);
         }
         out.flush();
-    }
-    **/
+    }*/
 
     /**
      * Muestra los resultados de la encuesta en especifico
@@ -871,12 +870,12 @@ public class Poll extends GenericResource {
                 ret.append(getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("usrmsg_Encuesta_doView_relatedLink"))+" \n");
 
             if( display )
-                ret.append("<p class=\"swb-poll-close\"><a href=\"javascript:window.close();\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></p> \n");
+                ret.append("<p class=\"swb-poll-close\"><a href=\"#\" onclick=\"window.close();\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></p> \n");
             else {
                 if( Display.SIMPLE.toString().equals(base.getAttribute("display")) )
-                    ret.append("<p class=\"swb-poll-close\"><a href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW)+"\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></p> \n");
+                    ret.append("<p class=\"swb-poll-close\"><a href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW).setCallMethod(paramRequest.Call_CONTENT)+"\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></p> \n");
                 else
-                    ret.append("<p class=\"swb-poll-close\"><a href=\"javascript:;\" onmousedown=\"collapse();\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></p> \n");
+                    ret.append("<p class=\"swb-poll-close\"><a href=\"#\" onmousedown=\"collapse();\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></p> \n");
             }
             ret.append("</div> \n");
         }
@@ -895,7 +894,7 @@ public class Poll extends GenericResource {
      * @return the links
      */
     private String getLinks(NodeList links, final String genDesc) {
-        StringBuffer ret = new StringBuffer("");
+        StringBuilder ret = new StringBuilder("");
         if( links==null )
             return ret.toString();
 
@@ -1241,17 +1240,17 @@ public class Poll extends GenericResource {
             ret.append("<tr>");
             ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_question")+"<span class=\"requerido\">*</span>:&nbsp;</td>");
             ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"text\" name=\"question\" value=\""+base.getAttribute("question","").replaceAll("\"", "&#34;")+"\" maxlength=\"50\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" required=\"true\" />");
+            ret.append("<input type=\"text\" name=\"question\" value=\""+base.getAttribute("question","").replaceAll("\"", "&#34;")+"\" maxlength=\"80\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" required=\"true\" />");
             ret.append("</td> ");
             ret.append("</tr>");
 
             ret.append("<tr>");
             ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_option")+"<span class=\"requerido\">*</span>:&nbsp;</td>");
             ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"text\" name=\"txtOption\" maxlength=\"50\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" />");
+            ret.append("<input type=\"text\" name=\"txtOption\" maxlength=\"80\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" />");
             ret.append("<input type=\"hidden\" name=\"option\" value=\""+base.getAttribute("option","").trim().replaceAll("\"", "&#34;")+"\" />");
-            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblDoAdmin_btnAdd")+"\" onClick=\"addOption(this.form.selOption, this.form.txtOption)\" />");
-            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblDoAdmin_btnEdit")+"\" onClick=\"updateOption(this.form.selOption, this.form.txtOption)\" />");
+            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblDoAdmin_btnAdd")+"\" onclick=\"addOption(this.form.selOption, this.form.txtOption)\" />");
+            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblDoAdmin_btnEdit")+"\" onclick=\"updateOption(this.form.selOption, this.form.txtOption)\" />");
             ret.append("</td> ");
             ret.append("</tr> ");
 
@@ -1272,17 +1271,17 @@ public class Poll extends GenericResource {
                 }
             }
             ret.append("</select>");
-            ret.append("<input type=\"button\" name=\"btnDel\" value=\""+paramRequest.getLocaleString("lblDoAdmin_btnDelete")+"\" onClick=\"deleteOption(this.form.selOption, this.form.txtOption)\" />");
+            ret.append("<input type=\"button\" name=\"btnDel\" value=\""+paramRequest.getLocaleString("lblDoAdmin_btnDelete")+"\" onclick=\"deleteOption(this.form.selOption, this.form.txtOption)\" />");
             ret.append("</td>");
             ret.append("</tr>");
 
             ret.append("<tr>");
             ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_link")+":&nbsp;</td>");
             ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"text\" name=\"txtLink\" maxlength=\"60\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" />");
+            ret.append("<input type=\"text\" name=\"txtLink\" maxlength=\"120\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" />");
             ret.append("<input type=\"hidden\" name=\"link\" value=\""+base.getAttribute("link","").trim().replaceAll("\"", "&#34;")+"\" />");
-            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblDoAdmin_btnAdd")+"\" onClick=\"addOption(this.form.selLink, this.form.txtLink)\" />");
-            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblDoAdmin_btnEdit")+"\" onClick=\"updateOption(this.form.selLink, this.form.txtLink)\" />");
+            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblDoAdmin_btnAdd")+"\" onclick=\"addOption(this.form.selLink, this.form.txtLink)\" />");
+            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblDoAdmin_btnEdit")+"\" onclick=\"updateOption(this.form.selLink, this.form.txtLink)\" />");
             ret.append("</td> ");
             ret.append("</tr> ");
 
@@ -1300,7 +1299,7 @@ public class Poll extends GenericResource {
                 }
             }
             ret.append("</select>");
-            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblDoAdmin_btnDelete")+"\" onClick=\"deleteOption(this.form.selLink, this.form.txtLink)\" />");
+            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblDoAdmin_btnDelete")+"\" onclick=\"deleteOption(this.form.selLink, this.form.txtLink)\" />");
             ret.append("</td>");
             ret.append("</tr>");
 
@@ -1388,7 +1387,7 @@ public class Poll extends GenericResource {
             ret.append("<tr>");
             ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_header")+":&nbsp;</td>");
             ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"text\" name=\"header\" value=\""+base.getAttribute("header","")+"\" maxlength=\"50\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" invalidMessage=\"to do\" regExp=\".+\" />");
+            ret.append("<input type=\"text\" name=\"header\" value=\""+base.getAttribute("header","")+"\" maxlength=\"80\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" invalidMessage=\"to do\" regExp=\".+\" />");
             ret.append("</td>");
             ret.append("</tr>");
 
@@ -1410,14 +1409,14 @@ public class Poll extends GenericResource {
             ret.append("<tr>");
             ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_label")+" "+paramRequest.getLocaleString("lblDoAdmin_vote")+":&nbsp;</td>");
             ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"text\" name=\"msg_tovote\" value=\""+base.getAttribute("msg_tovote","")+"\" maxlength=\"25\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" />");
+            ret.append("<input type=\"text\" name=\"msg_tovote\" value=\""+base.getAttribute("msg_tovote","")+"\" maxlength=\"80\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" />");
             ret.append("</td>");
             ret.append("</tr>");
 
             ret.append("<tr>");
             ret.append("<td class=\"datos\">"+ paramRequest.getLocaleString("lblDoAdmin_imgVote") + "<span class=\"enfasis\">(jpg, jpeg, gif, png):</span>:&nbsp;</td>");
             ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"file\" size=\"40\" name=\"button\" onChange=\"isFileType(this, 'jpg|jpeg|gif|png');\" maxlength=\"80\"/>");
+            ret.append("<input type=\"file\" size=\"40\" name=\"button\" onChange=\"isFileType(this, 'jpg|jpeg|gif|png');\" maxlength=\"180\"/>");
             ret.append("</td>");
             ret.append("</tr>");
             if( base.getAttribute("button")!=null ) {
@@ -1564,7 +1563,7 @@ public class Poll extends GenericResource {
 
             ret.append("<tr>");
             ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_jsp")+":&nbsp;</td>");
-            ret.append("<td class=\"valores\"><input type=\"text\" name=\"jspfile\" value=\""+base.getAttribute("jspfile", "")+"\" maxlength=\"20\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" invalidMessage=\"to do\" regExp=\".+\" /></td> ");
+            ret.append("<td class=\"valores\"><input type=\"text\" name=\"jspfile\" value=\""+base.getAttribute("jspfile", "")+"\" maxlength=\"80\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" invalidMessage=\"to do\" regExp=\".+\" /></td> ");
             ret.append("</tr>");
 
             ret.append("<tr>");
@@ -1604,7 +1603,6 @@ public class Poll extends GenericResource {
         }
         return ret.toString();
     }
-
     /**
      * Metodo de validaci?n en javascript para la encuesta.
      * 
@@ -1705,6 +1703,7 @@ public class Poll extends GenericResource {
         script.append("\n<script type=\"text/javascript\">\n");
         script.append("<!--\n");
         script.append("dojo.require(\"dojo.fx\");");
+        script.append("dojo.require(\"dijit.dijit\");");
 
         script.append("function buscaCookie(cocacola, rgName, isCLIValidable, url) {");
         script.append("  var numcom = getCookie(cocacola);");
@@ -1731,7 +1730,7 @@ public class Poll extends GenericResource {
         if( isPopup )
             script.append("   window.open(url+'&radiobutton='+optValue, '_newenc', '"+win+"');");
         else
-            script.append("   getHtml(url+'&radiobutton='+optValue,'"+PREF+base.getId()+"'); expande();");
+            script.append("   postHtml(url+'&radiobutton='+optValue,'"+PREF+base.getId()+"'); expande();");
         script.append("   }else {");
         script.append("      alert('"+paramRequest.getLocaleString("msgDoView_msgAnswer")+"');");
         script.append("   }");
