@@ -46,6 +46,11 @@ public class GraphicalElement extends CustomNode
     public var resizeable:Boolean=false;
     public var resizeType:Number=ResizeNode.RESIZE_A;
     public var modeler:Modeler;
+    public var isMultiInstance: Boolean = false;
+    public var isLoop: Boolean = false;
+    public var isForCompensation: Boolean = false;
+    public var isAdHoc: Boolean = false;
+    public var isTransaction: Boolean = false;
     public var x : Number;
     public var y : Number;
     public var w : Number;
