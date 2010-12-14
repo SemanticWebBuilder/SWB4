@@ -22,11 +22,11 @@ public interface SWBFormLayer {
     /**
      * Set attributes to class according with the xml tag element.
      */
-    void setAttributes();
+    //void setAttributes();
 
 
     //gets
-    
+
     /**
      * obtine atributos insertados adicionalmente a un elemento de forma *.
      *

@@ -16,7 +16,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.transform.Templates;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
@@ -24,9 +23,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
-import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -45,10 +42,8 @@ public class GenericSWBFormsResource extends GenericResource{
 
     private static Logger log = SWBUtils.getLogger(GenericSWBFormsResource.class);
 
-    static Templates plt;
     XmlBundle bundle=null;
     static Hashtable bundles=new Hashtable();
-    WBAdmResourceUtils adResUtils=new WBAdmResourceUtils();
     String xml=null;
     private final String saveOK="Save_OK";
     private final String removeOK="Remove_OK";
@@ -73,11 +68,10 @@ public class GenericSWBFormsResource extends GenericResource{
             bundles.put(name, bundle);
         }
     }
-    
+
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out=response.getWriter();
-        Resource base=getResourceBase();
         User user=paramRequest.getUser();
         StringBuilder ret = new StringBuilder("");
         String action =  request.getParameter("act");
@@ -95,8 +89,9 @@ public class GenericSWBFormsResource extends GenericResource{
         }
 
         String suri=request.getParameter("suri");
+        //System.out.println("suri en GenericSWBFormsResource:"+suri);
 
-        out.println("<a href=\""+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_EDIT).setParameter("suri", suri)+"\">[editar]</a>");
+        //out.println("<a href=\""+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_EDIT).setParameter("suri", suri)+"\">[editar]</a>");
 
         SWBResourceURL urlAction = paramRequest.getActionUrl();
         if(action.equals("add") || action.equals("edit"))
@@ -104,6 +99,7 @@ public class GenericSWBFormsResource extends GenericResource{
             urlAction.setAction("update");
             urlAction.setParameter("suri", suri);
             xml=bundle.getBundle(getClass().getName(), new java.util.Locale(user.getLanguage()));
+            //System.out.println("xml en GenericSWBFormsResource:"+xml);
             if(xml!=null && xml.trim().length()>0) {
                 SWBFormMgrLayer swbFormMgrLayer=new SWBFormMgrLayer(xml, paramRequest, request);
                 String html=swbFormMgrLayer.getHtml();
@@ -119,6 +115,7 @@ public class GenericSWBFormsResource extends GenericResource{
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action=response.getAction();
         Resource base=getResourceBase();
+        User user=response.getUser();
 
          String suri=request.getParameter("suri");
         if (suri == null && !action.equalsIgnoreCase("saveXMLFile"))
@@ -156,11 +153,14 @@ public class GenericSWBFormsResource extends GenericResource{
             {   //Add or update resource.
                 try
                 {
-                    SemanticObject newSemObj=SWBFormMgrLayer.update2DB(request, response, foi);
+                     xml=bundle.getBundle(getClass().getName(), new java.util.Locale(user.getLanguage()));
+                     if(xml!=null && xml.trim().length()>0) {
+                       SWBFormMgrLayer.update2DB(request, response, foi, xml);
+                     }
                     //if(newSemObj!=null){
                     //    base.setAttribute("objInst", newSemObj.getURI());
                     //    base.updateAttributesToDB();
-                        response.setRenderParameter("msg", saveOK);
+                        //response.setRenderParameter("msg", saveOK);
                     //}else{
                     //    response.setRenderParameter("msg", saveError);
                     //}
@@ -200,6 +200,7 @@ public class GenericSWBFormsResource extends GenericResource{
         response.setRenderParameter("suri", suri);
     }
 
+   
     public boolean isViewProperty(SWBParameters paramRequest, SemanticClass cls, SemanticProperty prop)
     {
         boolean ret=false;
@@ -216,6 +217,7 @@ public class GenericSWBFormsResource extends GenericResource{
         return ret;
     }
 
+    /*
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -225,7 +227,7 @@ public class GenericSWBFormsResource extends GenericResource{
         String suri=request.getParameter("suri");
         if(suri==null)
         {
-            out.println("Parámetro no difinido...");
+            out.println("ParÃ¡metro no difinido...");
             return;
         }
         FlowNodeInstance foi = (FlowNodeInstance)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
@@ -270,6 +272,8 @@ public class GenericSWBFormsResource extends GenericResource{
         if(data!=null && data.indexOf(cls.getClassId()+"|"+prop.getPropId())>-1)return ret=true;
         return ret;
     }
+     *
+     */
 
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response,
@@ -283,7 +287,7 @@ public class GenericSWBFormsResource extends GenericResource{
         PrintWriter out = response.getWriter();
         SWBResourceURL url = paramRequest.getActionUrl().setAction("saveXMLFile");
 
-        //Extracción del contenido del archivo para mostrarlo en el editor
+        //ExtracciÃ³n del contenido del archivo para mostrarlo en el editor
         if (xmlFile.exists()) {
             xmlFile = new File(basepath + "code.xml");
             if (xmlFile.exists()) {
