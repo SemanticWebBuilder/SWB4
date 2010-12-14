@@ -22,12 +22,13 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.SWBFormButton;
 import org.semanticwb.portal.SWBFormMgr;
+import org.semanticwb.portal.SWBForms;
 
 /**
  *
  * @author javier.solis
  */
-public class SWBProcessFormMgr
+public class SWBProcessFormMgr implements SWBForms
 {
     private FlowNodeInstance m_pinst=null;
     private HashMap<String, SWBFormMgr> mgrs;
@@ -35,12 +36,12 @@ public class SWBProcessFormMgr
 
 
     private Map<SemanticProperty, String> m_propmap=null;
-    private String m_mode=SWBFormMgr.MODE_EDIT;
+    private String m_mode=MODE_EDIT;
     private String m_action="";
     private String m_method="POST";
     private String m_onsubmit=null;
     private String m_lang="es";
-    private String m_type=SWBFormMgr.TYPE_DOJO;
+    private String m_type=TYPE_DOJO;
     //private PropertyGroup m_general=null;
 
     private HashMap<String, String> hidden=null;
@@ -62,7 +63,7 @@ public class SWBProcessFormMgr
         while (objs.hasNext())
         {
             ProcessObject processObject = objs.next();
-            SWBFormMgr mgr=new SWBFormMgr(processObject.getSemanticObject(),null,SWBFormMgr.MODE_EDIT);
+            SWBFormMgr mgr=new SWBFormMgr(processObject.getSemanticObject(),null,MODE_EDIT);
             mgr.setType(m_type);
             mgrs.put(processObject.getSemanticObject().getSemanticClass().getURI(),mgr);
         }
@@ -81,7 +82,7 @@ public class SWBProcessFormMgr
 
     public void addProperty(SemanticProperty prop, SemanticClass cls)
     {
-        addProperty(prop, cls, SWBFormMgr.MODE_EDIT);
+        addProperty(prop, cls, MODE_EDIT);
     }
 
     public void addProperty(SemanticProperty prop, SemanticClass cls, String view)
@@ -108,9 +109,9 @@ public class SWBProcessFormMgr
         boolean DOJO=false;
         boolean IPHONE=false;
         boolean XHTML=false;
-        if(m_type.equals(SWBFormMgr.TYPE_XHTML))XHTML=true;
-        if(m_type.equals(SWBFormMgr.TYPE_DOJO))DOJO=true;
-        if(m_type.equals(SWBFormMgr.TYPE_IPHONE))IPHONE=true;
+        if(m_type.equals(TYPE_XHTML))XHTML=true;
+        if(m_type.equals(TYPE_DOJO))DOJO=true;
+        if(m_type.equals(TYPE_IPHONE))IPHONE=true;
 
         StringBuffer ret=new StringBuffer();
         String frmname=getFormName();
@@ -120,7 +121,7 @@ public class SWBProcessFormMgr
         //si es dojo por default se manda por ajax
         if(m_onsubmit==null && submitByAjax)onsubmit="  onsubmit=\"submitForm('"+frmname+"');return false;\"";
 
-        if(DOJO)ret.append(SWBFormMgr.DOJO_REQUIRED);
+        if(DOJO)ret.append(DOJO_REQUIRED);
 
         if(DOJO)ret.append("<form id=\""+frmname+"\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\""+m_action+"\""+onsubmit+" method=\""+m_method.toLowerCase()+"\">\n");
         else ret.append("<form id=\""+frmname+"\" class=\"swbform\" action=\""+m_action+"\""+onsubmit+" method=\""+m_method.toLowerCase()+"\">\n");
@@ -226,7 +227,7 @@ public class SWBProcessFormMgr
     {
         //TODO
         //validateForm(request);
-        String smode=request.getParameter(SWBFormMgr.PRM_MODE);
+        String smode=request.getParameter(PRM_MODE);
         if(smode!=null)
         {
             Iterator<SemanticClass> itcls=views.keySet().iterator();
@@ -238,7 +239,7 @@ public class SWBProcessFormMgr
                 {
                     SemanticProperty prop=it.next();
                     SWBFormMgr mgr=mgrs.get(cls.getURI());
-                    if(SWBFormMgr.MODE_EDIT.equals(views.get(cls).get(prop)))
+                    if(MODE_EDIT.equals(views.get(cls).get(prop)))
                     {
                         //System.out.println("ProcessElement:"+prop);
                         mgr.processElement(request, prop);
@@ -276,9 +277,9 @@ public class SWBProcessFormMgr
     public String getFormHiddens()
     {
         StringBuffer ret=new StringBuffer();
-        if(m_pinst!=null)ret.append("    <input type=\"hidden\" name=\""+SWBFormMgr.PRM_URI+"\" value=\""+m_pinst.getURI()+"\"/>\n");
+        if(m_pinst!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_URI+"\" value=\""+m_pinst.getURI()+"\"/>\n");
         //if(m_cls!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_CLS+"\" value=\""+m_cls.getURI()+"\"/>\n");
-        if(m_mode!=null)ret.append("    <input type=\"hidden\" name=\""+SWBFormMgr.PRM_MODE+"\" value=\""+m_mode+"\"/>\n");
+        if(m_mode!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_MODE+"\" value=\""+m_mode+"\"/>\n");
         //if(m_ref!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_REF+"\" value=\""+m_ref.getURI()+"\"/>\n");
         Iterator<Map.Entry<String,String>> hit=hidden.entrySet().iterator();
         while(hit.hasNext())
