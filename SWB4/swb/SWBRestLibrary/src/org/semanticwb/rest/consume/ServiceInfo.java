@@ -61,6 +61,19 @@ public class ServiceInfo
         this.url = url;
     }
 
+    public Method getMethod(String id)
+    {
+        for (Resource subresource : resources.values())
+        {
+            Method tmp = subresource.getMethod(id);
+            if (tmp != null)
+            {
+                return tmp;
+            }
+        }
+        return null;
+    }
+
     public Method[] getAllMethods()
     {
         ArrayList<Method> allMethods = new ArrayList<Method>();
@@ -151,16 +164,16 @@ public class ServiceInfo
 
     public Resource getResource(String id)
     {
-        if(resources.containsKey(id))
+        if (resources.containsKey(id))
         {
             return resources.get(id);
         }
         else
         {
-            for(Resource resource : resources.values())
+            for (Resource resource : resources.values())
             {
-                Resource tmp=resource.getResource(id);
-                if(tmp!=null)
+                Resource tmp = resource.getResource(id);
+                if (tmp != null)
                 {
                     return tmp;
                 }
