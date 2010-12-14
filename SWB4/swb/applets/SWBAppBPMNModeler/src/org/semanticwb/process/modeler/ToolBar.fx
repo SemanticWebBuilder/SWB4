@@ -36,19 +36,13 @@ import org.semanticwb.process.modeler.GraphicalElement;
 import org.semanticwb.process.modeler.ModelerUtils;
 import java.lang.Class;
 import java.lang.String;
-import org.semanticwb.process.modeler.IntermediateCatchEvent;
-import org.semanticwb.process.modeler.IntermediateThrowEvent;
 import org.semanticwb.process.modeler.MessageStartEvent;
 import org.semanticwb.process.modeler.TimerStartEvent;
 import org.semanticwb.process.modeler.RuleStartEvent;
 import org.semanticwb.process.modeler.SignalStartEvent;
 import org.semanticwb.process.modeler.MultipleStartEvent;
 import org.semanticwb.process.modeler.MessageIntermediateCatchEvent;
-import org.semanticwb.process.modeler.Activity;
 import org.semanticwb.process.modeler.TimerIntermediateCatchEvent;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.w3c.dom.Document;
 import org.semanticwb.process.modeler.ErrorIntermediateCatchEvent;
 import org.semanticwb.process.modeler.MessageIntermediateThrowEvent;
 import org.semanticwb.process.modeler.CancelationIntermediateCatchEvent;
@@ -354,7 +348,6 @@ public class ToolBar extends CustomNode
                 ge.isForCompensation = isForCompensation;
                 //println("uri:{ge.uri}");
                 ge.title=title;
-                //ge.setType(type);
                 ge.x=x;
                 ge.y=y;
                 if(w>0)ge.w=w;
@@ -532,17 +525,17 @@ public class ToolBar extends CustomNode
                         saveAsImage();
                     }
                 },
-                ImgButton {
-                    text: ##"exportxpdl"//ModelerUtils.getLocalizedString("export")
-                    image: "images/file_saveasxpdl1.png"
-                    imageOver: "images/file_saveasxpdl2.png"
-                    action: function():Void
-                    {
-                        ModelerUtils.clickedNode=null;
-                        modeler.disablePannable=false;
-                        getXPDL();
-                    }
-                },
+//                ImgButton {
+//                    text: ##"exportxpdl"//ModelerUtils.getLocalizedString("export")
+//                    image: "images/file_saveasxpdl1.png"
+//                    imageOver: "images/file_saveasxpdl2.png"
+//                    action: function():Void
+//                    {
+//                        ModelerUtils.clickedNode=null;
+//                        modeler.disablePannable=false;
+//                        getXPDL();
+//                    }
+//                },
                 ImgButton {
                     text: ##"print"//ModelerUtils.getLocalizedString("print")
                     image: "images/file_print1.png"
@@ -1935,159 +1928,159 @@ public class ToolBar extends CustomNode
         
     }
 
-    function getXPDL () : Void {
-        var ids: String[];
-        var ret = "";
-        var headers = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        headers += "<Package xmlns=\"http://www.wfmc.org/2008/XPDL2.1\"\n";
-        headers += "  xmlns:xpdl=\"http://www.wfmc.org/2008/XPDL2.1\"\n";
-        headers += "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
-        headers += "  xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"\n";
-        headers += "  Id=\"1\" Name=\"p1\">\n";
-        headers += "  <PackageHeader>\n";
-        headers += "    <XPDLVersion>2.1</XPDLVersion>\n";
-        headers += "    <Vendor>SemanticWebBuilder Process Modeler</Vendor>\n";
-        headers += "    <Created></Created>\n";
-        headers += "    <Documentation />\n";
-        headers += "  </PackageHeader>\n";
+//    function getXPDL () : Void {
+//        var ids: String[];
+//        var ret = "";
+//        var headers = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+//        headers += "<Package xmlns=\"http://www.wfmc.org/2008/XPDL2.1\"\n";
+//        headers += "  xmlns:xpdl=\"http://www.wfmc.org/2008/XPDL2.1\"\n";
+//        headers += "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
+//        headers += "  xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"\n";
+//        headers += "  Id=\"1\" Name=\"p1\">\n";
+//        headers += "  <PackageHeader>\n";
+//        headers += "    <XPDLVersion>2.1</XPDLVersion>\n";
+//        headers += "    <Vendor>SemanticWebBuilder Process Modeler</Vendor>\n";
+//        headers += "    <Created></Created>\n";
+//        headers += "    <Documentation />\n";
+//        headers += "  </PackageHeader>\n";
+//
+//        var processBlock = "<WorkFlowProcesses>";
+//        var poolsBlock = "  <Pools>\n";
+//        for (ele in modeler.contents) {
+//            if (ele instanceof GraphicalElement) {
+//                var ge = ele as GraphicalElement;
+//                println("Analizando elemento {ge.title}");
+//            }
+//            if (ele instanceof Pool) {
+//                var p = ele as Pool;
+//                poolsBlock += "    <Pool Process=\"\" Id=\"{p.uri}\" BoundaryVisible=\"true\" Name=\"{p.title}\">\n";
+//                if (p.lanes.size() >= 1) {
+//                    poolsBlock += "      <Lanes>\n";
+//                    for (lane in p.lanes) {
+//                        var l = lane as Lane;
+//                        poolsBlock += "        <Lane Id=\"{l.uri}\" Name=\"{l.title}\" ParentLane=\"{p.uri}\">\n";
+//                        poolsBlock += "          <NodeGraphicsInfos>\n";
+//                        poolsBlock += "            <NodeGraphicsInfo Width=\"{l.w}\" Height=\"{l.h}\">\n";
+//                        poolsBlock += "              <Coordinates XCoordinate=\"{l.x}\" YCoordinate=\"{l.y}\" />\n";
+//                        poolsBlock += "            </NodeGraphicsInfo>\n";
+//                        poolsBlock += "          </NodeGraphicsInfos>\n";
+//                        poolsBlock += "        </Lane>\n";
+//
+//                        for (child in lane.graphChilds) {
+//                            if (child instanceof GraphicalElement) {
+//                                var c = child as GraphicalElement;
+//                                if (c instanceof SubProcess) {
+//                                    var sp = c as SubProcess;
+//                                    for(activity in sp.containerChilds) {
+//                                        if (activity instanceof GraphicalElement) {
+//                                            var ac = activity as GraphicalElement;
+//                                            println("    analizando {ac.title} en subproceso {sp.title}");
+//                                        }
+//                                    }
+//                                }
+//                                println("  Analizando {c.title}");
+//                            }
+//                        }
+//                    }
+//                    poolsBlock += "      </Lanes>\n";
+//                } else
+//                poolsBlock += "      <NodeGraphicsInfos>\n";
+//                poolsBlock += "        <NodeGraphicsInfo Width=\"{p.w}\" Height=\"{p.h}\">\n";
+//                poolsBlock += "          <Coordinates XCoordinate=\"{p.x}\" YCoordinate=\"{p.y}\" />\n";
+//                poolsBlock += "        </NodeGraphicsInfo>\n";
+//                poolsBlock += "      </NodeGraphicsInfos>\n";
+//                poolsBlock += "    </Pool>\n";
+//            } else if (ele instanceof Event) {
+//                var e = ele as Event;
+//                println(getEventBlock(e));
+//                println("--");
+//            }
+//
+//        }
+//        processBlock += "</WorkFlowProcesses>";
+//        poolsBlock += "  </Pools>\n";
+//        ret+= "{headers}{poolsBlock}</Package>";
+////        println(ret);
+//    }
 
-        var processBlock = "<WorkFlowProcesses>";
-        var poolsBlock = "  <Pools>\n";
-        for (ele in modeler.contents) {
-            if (ele instanceof GraphicalElement) {
-                var ge = ele as GraphicalElement;
-                println("Analizando elemento {ge.title}");
-            }
-            if (ele instanceof Pool) {
-                var p = ele as Pool;
-                poolsBlock += "    <Pool Process=\"\" Id=\"{p.uri}\" BoundaryVisible=\"true\" Name=\"{p.title}\">\n";
-                if (p.lanes.size() >= 1) {
-                    poolsBlock += "      <Lanes>\n";
-                    for (lane in p.lanes) {
-                        var l = lane as Lane;
-                        poolsBlock += "        <Lane Id=\"{l.uri}\" Name=\"{l.title}\" ParentLane=\"{p.uri}\">\n";
-                        poolsBlock += "          <NodeGraphicsInfos>\n";
-                        poolsBlock += "            <NodeGraphicsInfo Width=\"{l.w}\" Height=\"{l.h}\">\n";
-                        poolsBlock += "              <Coordinates XCoordinate=\"{l.x}\" YCoordinate=\"{l.y}\" />\n";
-                        poolsBlock += "            </NodeGraphicsInfo>\n";
-                        poolsBlock += "          </NodeGraphicsInfos>\n";
-                        poolsBlock += "        </Lane>\n";
-
-                        for (child in lane.graphChilds) {
-                            if (child instanceof GraphicalElement) {
-                                var c = child as GraphicalElement;
-                                if (c instanceof SubProcess) {
-                                    var sp = c as SubProcess;
-                                    for(activity in sp.containerChilds) {
-                                        if (activity instanceof GraphicalElement) {
-                                            var ac = activity as GraphicalElement;
-                                            println("    analizando {ac.title} en subproceso {sp.title}");
-                                        }
-                                    }
-                                }
-                                println("  Analizando {c.title}");
-                            }
-                        }
-                    }
-                    poolsBlock += "      </Lanes>\n";
-                } else
-                poolsBlock += "      <NodeGraphicsInfos>\n";
-                poolsBlock += "        <NodeGraphicsInfo Width=\"{p.w}\" Height=\"{p.h}\">\n";
-                poolsBlock += "          <Coordinates XCoordinate=\"{p.x}\" YCoordinate=\"{p.y}\" />\n";
-                poolsBlock += "        </NodeGraphicsInfo>\n";
-                poolsBlock += "      </NodeGraphicsInfos>\n";
-                poolsBlock += "    </Pool>\n";
-            } else if (ele instanceof Event) {
-                var e = ele as Event;
-                println(getEventBlock(e));
-                println("--");
-            }
-
-        }
-        processBlock += "</WorkFlowProcesses>";
-        poolsBlock += "  </Pools>\n";
-        ret+= "{headers}{poolsBlock}</Package>";
-//        println(ret);
-    }
-
-    function getEventBlock(e: Event) : String {
-        var trigger = "None";
-        var attachedTo = "";
-        var catchThrow = "";
-        var ret = "<Activity Id=\"{e.uri}\" Name=\"{e.title}\">\n";
-        ret += "  <Event>\n";
-        if (e instanceof StartEvent) {
-            if (e instanceof MessageStartEvent) {
-                trigger = "Message";
-            } else if (e instanceof TimerStartEvent) {
-                trigger = "Timer";
-            } else if (e instanceof RuleStartEvent) {
-                trigger = "Conditional";
-            } else if (e instanceof SignalStartEvent) {
-                trigger = "Signal";
-            } else if (e instanceof MultipleStartEvent) {
-                trigger = "Multiple";
-            }
-            ret += "    <StartEvent Trigger=\"{trigger}\" Implementation=\"Unspecified\">";
-            ret += "    </StartEvent>";
-        } else if (e instanceof IntermediateCatchEvent or e instanceof IntermediateThrowEvent) {
-            if (e.parent instanceof Activity) {
-                var ge = e.parent as GraphicalElement;
-                attachedTo = "Target=\"{ge.uri}\"";
-            }
-
-            if (e instanceof IntermediateCatchEvent) {
-                catchThrow = "CatchThrow=\"CATCH\"";
-            } else if (e instanceof IntermediateThrowEvent) {
-                catchThrow = "CatchThrow=\"THROW\"";
-            }
-
-            if (e instanceof MessageIntermediateCatchEvent or e instanceof MessageIntermediateThrowEvent) {
-                trigger = "Message";
-            } else if (e instanceof TimerIntermediateCatchEvent) {
-                trigger = "Timer";
-            } else if (e instanceof ErrorIntermediateCatchEvent) {
-                trigger = "Error";
-            } else if (e instanceof CancelationIntermediateCatchEvent) {
-                trigger = "Cancel";
-            } else if (e instanceof RuleIntermediateCatchEvent) {
-                trigger = "Conditional";
-            } else if (e instanceof LinkIntermediateCatchEvent or e instanceof LinkIntermediateThrowEvent) {
-                trigger = "Link";
-            } else if (e instanceof SignalIntermediateCatchEvent or e instanceof SignalIntermediateThrowEvent) {
-                trigger = "Signal";
-            } else if (e instanceof CompensationIntermediateCatchEvent or e instanceof CompensationIntermediateThrowEvent) {
-                trigger = "Compensation";
-            } else if (e instanceof MultipleIntermediateCatchEvent or e instanceof MultipleIntermediateThrowEvent) {
-                trigger = "Multiple";
-            }
-
-            ret += "    <IntermediateEvent Trigger=\"{trigger}\" Implementation=\"Unspecified\" {attachedTo}>";
-            ret += "    </IntermediateEvent>";
-        } else if (e instanceof EndEvent) {
-            if (e instanceof MessageEndEvent) {
-                trigger = "Message";
-            } else if (e instanceof ErrorEndEvent) {
-                trigger = "Error";
-            } else if (e instanceof CancelationEndEvent) {
-                trigger = "Cancel";
-            } else if (e instanceof SignalEndEvent) {
-                trigger = "Signal";
-            } else if (e instanceof CompensationEndEvent) {
-                trigger = "Compensation";
-            } else if (e instanceof MultipleEndEvent) {
-                trigger = "Multiple";
-            } else if (e instanceof TerminationEndEvent) {
-                trigger = "Terminate";
-            }
-
-            ret += "    <EndEvent Result=\"{trigger}\" Implementation=\"Unspecified\" {attachedTo}>";
-            ret += "    </EndEvent>";
-        }
-        ret += "  </Event>\n";
-        ret += "</Activity>\n";
-        return ret;
-    }
+//    function getEventBlock(e: Event) : String {
+//        var trigger = "None";
+//        var attachedTo = "";
+//        var catchThrow = "";
+//        var ret = "<Activity Id=\"{e.uri}\" Name=\"{e.title}\">\n";
+//        ret += "  <Event>\n";
+//        if (e instanceof StartEvent) {
+//            if (e instanceof MessageStartEvent) {
+//                trigger = "Message";
+//            } else if (e instanceof TimerStartEvent) {
+//                trigger = "Timer";
+//            } else if (e instanceof RuleStartEvent) {
+//                trigger = "Conditional";
+//            } else if (e instanceof SignalStartEvent) {
+//                trigger = "Signal";
+//            } else if (e instanceof MultipleStartEvent) {
+//                trigger = "Multiple";
+//            }
+//            ret += "    <StartEvent Trigger=\"{trigger}\" Implementation=\"Unspecified\">";
+//            ret += "    </StartEvent>";
+//        } else if (e instanceof IntermediateCatchEvent or e instanceof IntermediateThrowEvent) {
+//            if (e.parent instanceof Activity) {
+//                var ge = e.parent as GraphicalElement;
+//                attachedTo = "Target=\"{ge.uri}\"";
+//            }
+//
+//            if (e instanceof IntermediateCatchEvent) {
+//                catchThrow = "CatchThrow=\"CATCH\"";
+//            } else if (e instanceof IntermediateThrowEvent) {
+//                catchThrow = "CatchThrow=\"THROW\"";
+//            }
+//
+//            if (e instanceof MessageIntermediateCatchEvent or e instanceof MessageIntermediateThrowEvent) {
+//                trigger = "Message";
+//            } else if (e instanceof TimerIntermediateCatchEvent) {
+//                trigger = "Timer";
+//            } else if (e instanceof ErrorIntermediateCatchEvent) {
+//                trigger = "Error";
+//            } else if (e instanceof CancelationIntermediateCatchEvent) {
+//                trigger = "Cancel";
+//            } else if (e instanceof RuleIntermediateCatchEvent) {
+//                trigger = "Conditional";
+//            } else if (e instanceof LinkIntermediateCatchEvent or e instanceof LinkIntermediateThrowEvent) {
+//                trigger = "Link";
+//            } else if (e instanceof SignalIntermediateCatchEvent or e instanceof SignalIntermediateThrowEvent) {
+//                trigger = "Signal";
+//            } else if (e instanceof CompensationIntermediateCatchEvent or e instanceof CompensationIntermediateThrowEvent) {
+//                trigger = "Compensation";
+//            } else if (e instanceof MultipleIntermediateCatchEvent or e instanceof MultipleIntermediateThrowEvent) {
+//                trigger = "Multiple";
+//            }
+//
+//            ret += "    <IntermediateEvent Trigger=\"{trigger}\" Implementation=\"Unspecified\" {attachedTo}>";
+//            ret += "    </IntermediateEvent>";
+//        } else if (e instanceof EndEvent) {
+//            if (e instanceof MessageEndEvent) {
+//                trigger = "Message";
+//            } else if (e instanceof ErrorEndEvent) {
+//                trigger = "Error";
+//            } else if (e instanceof CancelationEndEvent) {
+//                trigger = "Cancel";
+//            } else if (e instanceof SignalEndEvent) {
+//                trigger = "Signal";
+//            } else if (e instanceof CompensationEndEvent) {
+//                trigger = "Compensation";
+//            } else if (e instanceof MultipleEndEvent) {
+//                trigger = "Multiple";
+//            } else if (e instanceof TerminationEndEvent) {
+//                trigger = "Terminate";
+//            }
+//
+//            ret += "    <EndEvent Result=\"{trigger}\" Implementation=\"Unspecified\" {attachedTo}>";
+//            ret += "    </EndEvent>";
+//        }
+//        ret += "  </Event>\n";
+//        ret += "</Activity>\n";
+//        return ret;
+//    }
 }
 
 class FileFilter extends javax.swing.filechooser.FileFilter {
