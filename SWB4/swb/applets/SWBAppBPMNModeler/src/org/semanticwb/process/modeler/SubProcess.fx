@@ -26,11 +26,6 @@ public def TYPE_EVENT="event";
 public def TYPE_ADHOC="adhoc";
 public class SubProcess extends Activity
 {    
-    protected var isMultiInstance: Boolean = false;
-    protected var isLoop: Boolean = false;
-    protected var isForCompensation: Boolean = false;
-    protected var isAdHoc: Boolean = false;
-    protected var isTransaction: Boolean = false;
     protected var strokeDash : Float[];
     var icons: ImageView[];
     var adjust: ColorAdjust = ColorAdjust {
@@ -88,6 +83,21 @@ public class SubProcess extends Activity
         content: bind icons
     }
 
+    var loop=bind isLoop on replace
+    {
+        setModifier(TYPE_LOOP, isLoop);
+    }
+
+    var compensation=bind isForCompensation on replace
+    {
+        setModifier(TYPE_COMPENSATION, isForCompensation);
+    }
+
+    var multiple=bind isMultiInstance on replace
+    {
+        setModifier(TYPE_MULTIPLE, isMultiInstance);
+    }
+
     public override function create(): Node
     {
         resizeable=true;
@@ -139,21 +149,21 @@ public class SubProcess extends Activity
                     label: ##"actMultiInstance";
                     status: bind if (isMultiInstance) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                     action: function (e: MouseEvent) {
-                        this.setModifier(TYPE_MULTIPLE);
+                        this.setModifier(TYPE_MULTIPLE, not isMultiInstance);
                     }
                 },
                 Action {
                     label: ##"actLoop";
                     status: bind if (isLoop) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                     action: function (e: MouseEvent) {
-                        this.setModifier(TYPE_LOOP);
+                        this.setModifier(TYPE_LOOP, not isLoop);
                     }
                 },
                 Action {
                     label: ##"actCompensa";
                     status: bind if (isForCompensation) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                     action: function (e: MouseEvent) {
-                        this.setModifier(TYPE_COMPENSATION);
+                        this.setModifier(TYPE_COMPENSATION, not isForCompensation);
                     }
                 },
                 Action {isSeparator: true}
@@ -190,11 +200,11 @@ public class SubProcess extends Activity
         }
     }
 
-    public function setModifier(modif: String): Void {
+    public function setModifier(modif: String, val:Boolean): Void {
         if(modif.equals(TYPE_COMPENSATION)) {
-            isForCompensation = not isForCompensation;
+            isForCompensation = val;
         } else if(modif.equals(TYPE_LOOP)) {
-            isLoop = not isLoop;
+            isLoop = val;
 
             if (isLoop) {
                 if (isMultiInstance) {
@@ -202,7 +212,7 @@ public class SubProcess extends Activity
                 }
             }
         } else if(modif.equals(TYPE_MULTIPLE)) {
-            isMultiInstance = not isMultiInstance;
+            isMultiInstance = val;
 
             if (isMultiInstance) {
                 if (isLoop) {
