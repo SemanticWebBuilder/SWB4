@@ -53,13 +53,21 @@ public class SWBSessionObject implements HttpSessionBindingListener, Serializabl
     /** The mapa. */
     private transient HashMap<String, Subject> mapa;
 
+    private long time;
+
     /**
      * Instantiates a new sWB session object.
      */
     public SWBSessionObject()
     {
         mapa = new HashMap<String, Subject>();
+        time=System.currentTimeMillis();
     }
+
+    public long getTime() {
+        return time;
+    }
+
 
     /**
      * Gets the subject.
