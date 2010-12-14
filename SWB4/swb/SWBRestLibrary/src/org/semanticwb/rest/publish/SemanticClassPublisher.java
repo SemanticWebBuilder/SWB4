@@ -699,7 +699,7 @@ public final class SemanticClassPublisher extends RestModule
 
         public String getId()
         {
-            return m.getName() + clazz.getPrefix() + "_" + clazz.getName();
+            return clazz.getPrefix() + "_" + clazz.getName()+m.getName();
         }
 
         public HTTPMethod getHTTPMethod()
@@ -918,6 +918,8 @@ public final class SemanticClassPublisher extends RestModule
                             {
                                 if (Modifier.isPublic(m.getModifiers()) && Modifier.isStatic(m.getModifiers()) && (m.getName().startsWith("has") || m.getName().startsWith("list")))
                                 {
+                                    System.out.println("method: "+m.getName());
+                                    System.out.println("hasModel(m: "+hasModel(m));
                                     if (!hasModel(m))
                                     {
                                         MethodModule method = new MethodModule(m, clazz);
