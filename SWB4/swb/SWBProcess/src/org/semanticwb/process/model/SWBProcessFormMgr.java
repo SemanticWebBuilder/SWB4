@@ -68,6 +68,11 @@ public class SWBProcessFormMgr implements SWBForms
             mgrs.put(processObject.getSemanticObject().getSemanticClass().getURI(),mgr);
         }
     }
+
+    public void setType(String type)
+    {
+        this.m_type = type;
+    }
     
     public void clearProperties()
     {
@@ -383,10 +388,16 @@ public class SWBProcessFormMgr implements SWBForms
      * @param mode the mode
      * @return the string
      */
-    public String renderElement(HttpServletRequest request, SemanticProperty prop, SemanticClass cls, String mode)
+    public String renderElement(HttpServletRequest request, SemanticClass cls, SemanticProperty prop, String mode)
     {
         SWBFormMgr mgr=mgrs.get(cls.getURI());
         return mgr.renderElement(request, prop, mode);
+    }
+
+    public String renderElement(HttpServletRequest request, SemanticClass cls, SemanticProperty prop, FormElement element, String mode)
+    {
+        SWBFormMgr mgr=mgrs.get(cls.getURI());
+        return element.renderElement(request, mgr.getSemanticObject(), prop, m_type, mode, m_lang);
     }
 
 

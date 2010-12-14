@@ -18,20 +18,16 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.FormElement;
-import org.semanticwb.model.FormElementURL;
-import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericFormElement;
-import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticVocabulary;
-import org.semanticwb.portal.SWBFormButton;
 import org.semanticwb.portal.SWBFormMgr;
+import org.semanticwb.portal.SWBForms;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -102,33 +98,7 @@ public class ProcessForm extends GenericResource {
             }
         }
 
-
-
-        
-
-        out.println("    <script type=\"text/javascript\">");
-        // scan page for widgets and instantiate them
-        out.println("dojo.require(\"dojo.parser\");");
-        out.println("dojo.require(\"dijit._Calendar\");");
-        out.println("dojo.require(\"dijit.ProgressBar\");");
-
-        // editor:
-        out.println("dojo.require(\"dijit.Editor\");");
-
-        // various Form elemetns
-        out.println("dojo.require(\"dijit.form.Form\");");
-        out.println("dojo.require(\"dijit.form.CheckBox\");");
-        out.println("dojo.require(\"dijit.form.Textarea\");");
-        out.println("dojo.require(\"dijit.form.FilteringSelect\");");
-        out.println("dojo.require(\"dijit.form.TextBox\");");
-        out.println("dojo.require(\"dijit.form.DateTextBox\");");
-        out.println("dojo.require(\"dijit.form.TimeTextBox\");");
-        out.println("dojo.require(\"dijit.form.Button\");");
-        out.println("dojo.require(\"dijit.form.NumberSpinner\");");
-        out.println("dojo.require(\"dijit.form.Slider\");");
-        out.println("dojo.require(\"dojox.form.BusyButton\");");
-        out.println("dojo.require(\"dojox.form.TimeSpinner\");");
-        out.println("</script>");
+        out.println(SWBForms.DOJO_REQUIRED);
 
         SWBResourceURL urlact = paramRequest.getActionUrl();
         urlact.setAction("process");
@@ -175,17 +145,16 @@ public class ProcessForm extends GenericResource {
                 }
 
                 SemanticObject sofe = ont.getSemanticObject(fe);
-                SWBFormMgr fmgr = new SWBFormMgr(foi.getSemanticObject(), SWBFormMgr.MODE_EDIT, SWBFormMgr.MODE_EDIT);
-                FormElement frme = null;
+
+                SWBProcessFormMgr fmgr = new SWBProcessFormMgr(foi);
 
                 out.println("<tr><td width=\"200px\" align=\"right\"><label for=\"title\">"+fmgr.renderLabel(request, semprop, modo)+"</label></td>");
                 out.println("<td>");
                 if (null != sofe) {
                     System.out.println("Antes del FERender");
-                    if (sofe.transformToSemanticClass() != null && sofe.transformToSemanticClass().isSWBFormElement()) {
-                        frme = fmgr.getFormElement(semprop);
-                        out.println(frme.renderElement(request, foi.getSemanticObject(), semprop, SWBFormMgr.TYPE_DOJO, strMode, user.getLanguage()));
-                    }
+                    FormElement frme = (FormElement)sofe.createGenericInstance();
+                    //System.out.println(frme+" "+);
+                    out.println(fmgr.renderElement(request, semclass, semprop, frme, modo));
                 }
                 out.println("</td></tr>");
             }
