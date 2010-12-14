@@ -30,9 +30,13 @@ package org.semanticwb.portal;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.security.Principal;
+import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
@@ -317,6 +321,28 @@ public class SWBUserMgr
                 Login.sendLoginLog(request, user);
             }
         }
+    }
+
+    /**
+     * Regresa usuarios en session ordenados por ultimo acceso
+     * @param website
+     * @return
+     */
+    public Set<User> getSessionUsers(String website)
+    {
+        HashSet set=new HashSet();
+        Iterator<SWBSessionObject> it=listSessionObjects();
+        while (it.hasNext())
+        {
+            SWBSessionObject so = it.next();
+            Subject su=so.getSubject(website);
+            Iterator<Principal> it2=su.getPrincipals().iterator();
+            if(it2.hasNext())
+            {
+                set.add(it2.next());
+            }
+        }
+        return set;
     }
 
 }
