@@ -37,7 +37,10 @@
     <span align="center">
             <Button type="savebtn"/>
             <Button type="submit" name="accept" title="Concluir Tarea Jorge" isBusyButton="true" />
-            <Button isBusyButton="true" name="reject" title="Rechazar Tarea Jorge" type="submit" />     
+            <Button type="submit" name="reject" title="Rechazar Tarea Jorge" isBusyButton="true" />
+            <Button type="acceptbtn"/>
+            <Button type="rejectbtn"/>
+            <Button type="backbtn"/>
     </span>
     </fieldset>
 </form>
