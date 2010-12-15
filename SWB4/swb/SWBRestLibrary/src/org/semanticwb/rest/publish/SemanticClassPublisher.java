@@ -917,9 +917,7 @@ public final class SemanticClassPublisher extends RestModule
                             for (Method m : mgr.getDeclaredMethods())
                             {
                                 if (Modifier.isPublic(m.getModifiers()) && Modifier.isStatic(m.getModifiers()) && (m.getName().startsWith("has") || m.getName().startsWith("list")))
-                                {
-                                    System.out.println("method: "+m.getName());
-                                    System.out.println("hasModel(m: "+hasModel(m));
+                                {                                    
                                     if (!hasModel(m))
                                     {
                                         MethodModule method = new MethodModule(m, clazz);
