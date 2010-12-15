@@ -6,6 +6,8 @@
 package org.semanticwb.rest.publish;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -38,10 +40,9 @@ public class RestInternalServlet implements InternalServlet{
     }
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
-    {
-        System.out.println("request.getRequestURI(): "+request.getRequestURI());        
+    {       
+
         manager.service(request, response);
-        
     }
 
 }
