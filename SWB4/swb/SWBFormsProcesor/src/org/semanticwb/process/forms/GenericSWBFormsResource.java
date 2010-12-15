@@ -200,23 +200,6 @@ public class GenericSWBFormsResource extends GenericResource{
         response.setRenderParameter("suri", suri);
     }
 
-   
-    public boolean isViewProperty(SWBParameters paramRequest, SemanticClass cls, SemanticProperty prop)
-    {
-        boolean ret=false;
-        String data=paramRequest.getResourceBase().getData(paramRequest.getWebPage());
-        if(data!=null && data.indexOf(cls.getClassId()+"|"+prop.getPropId()+"|view")>-1)return ret=true;
-        return ret;
-    }
-
-    public boolean isEditProperty(SWBParameters paramRequest, SemanticClass cls, SemanticProperty prop)
-    {
-        boolean ret=false;
-        String data=paramRequest.getResourceBase().getData(paramRequest.getWebPage());
-        if(data!=null && data.indexOf(cls.getClassId()+"|"+prop.getPropId()+"|edit")>-1)return ret=true;
-        return ret;
-    }
-
     /*
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
