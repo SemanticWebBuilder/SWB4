@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Group;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
+import org.semanticwb.process.modeler.ModelerUtils;
 /**
  * @author javier.solis
  */
@@ -66,4 +67,14 @@ public class ExclusiveGateway extends Gateway
             visible:bind canView()
         };
     }
+
+    override public function canStartLink(link: ConnectionObject) : Boolean {
+        var ret = super.canStartLink(link);
+        if (not (link instanceof ConditionalFlow or link instanceof DefaultFlow)) {
+            ModelerUtils.setErrorMessage(##"msgError1");
+            ret = false;
+        }
+        return ret;
+    }
+
 }
