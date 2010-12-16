@@ -8,6 +8,7 @@ package org.semanticwb.process.modeler;
 import javafx.scene.Node;
 import javafx.scene.Group;
 import javafx.scene.shape.Line;
+import javafx.scene.input.MouseEvent;
 
 /**
  * @author javier.solis
@@ -17,6 +18,7 @@ public class DefaultFlow extends SequenceFlow
 {
     public override function create(): Node
     {
+        title= ##"default";
         arrowType=ARROW_TYPE_SEQUENCE;
         notGroup=true;  //No agrega los elementos path y arrow al grupo
 
@@ -48,6 +50,19 @@ public class DefaultFlow extends SequenceFlow
                 text
             ]
             visible: bind canView()
-        };
+        }
+    }
+
+    override var onMousePressed = function( e: MouseEvent ):Void
+    {
+        if(ModelerUtils.clickedNode==null)
+        {
+            ModelerUtils.clickedNode=this;
+            modeler.setFocusedNode(this);
+            if(e.clickCount >= 2)
+            {
+                text.startEditing();
+            }
+        }
     }
 }
