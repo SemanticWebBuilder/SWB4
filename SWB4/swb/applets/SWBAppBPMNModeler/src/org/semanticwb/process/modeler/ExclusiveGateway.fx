@@ -11,6 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import org.semanticwb.process.modeler.ModelerUtils;
+import org.semanticwb.process.modeler.DefaultFlow;
 /**
  * @author javier.solis
  */
@@ -70,8 +71,21 @@ public class ExclusiveGateway extends Gateway
 
     override public function canStartLink(link: ConnectionObject) : Boolean {
         var ret = super.canStartLink(link);
+        var count = 0;
+
+        for (ele in getOutputConnectionObjects()) {
+            if (ele instanceof DefaultFlow) {
+                count++;
+            }
+        }
+
         if (not (link instanceof ConditionalFlow or link instanceof DefaultFlow)) {
             ModelerUtils.setErrorMessage(##"msgError1");
+            ret = false;
+        }
+
+        if (link instanceof DefaultFlow and count > 0) {
+            ModelerUtils.setErrorMessage(##"msgError2");
             ret = false;
         }
         return ret;
