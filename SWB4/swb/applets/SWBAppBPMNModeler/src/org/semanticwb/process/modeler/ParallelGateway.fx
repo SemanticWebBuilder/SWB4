@@ -54,4 +54,14 @@ public class ParallelGateway extends Gateway
             visible: bind canView()
         };
     }
+
+    override public function canStartLink(link: ConnectionObject) : Boolean {
+        var ret = super.canStartLink(link);
+
+        if (link instanceof ConditionalFlow or link instanceof DefaultFlow) {
+            ModelerUtils.setErrorMessage(##"msgError1");
+            ret = false;
+        }
+        return ret;
+    }
 }
