@@ -332,7 +332,6 @@ public class ToolBar extends CustomNode
             if(ge!=null and not (ge instanceof Lane))
             {
                 var title=js.getString("title");
-                java.lang.System.out.println("Obteniendo ");
                 var isLoop=js.optBoolean("isLoop", false);
                 var isMultiInstance=js.optBoolean("isMultiInstance", false);
                 var isForCompensation=js.optBoolean("isForCompensation", false);
