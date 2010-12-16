@@ -1,1 +1,2 @@
 "msgError1" = "Data-based Exclusive Gateway cannot have outgoing Sequence Flow"
+"msgError2" = "Data-based Exclusive Gateway can have only one outgoing Default Flow"
