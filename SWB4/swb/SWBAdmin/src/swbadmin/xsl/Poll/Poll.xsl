@@ -37,9 +37,10 @@
         </ul>
     </xsl:template>
     <xsl:template name="option">
-        <label for="{@id}"><xsl:value-of select="option"/></label>
-        <input type="radio" name="{@name}" id="{@id}" value="{@value}" />
-        <xsl:apply-templates/>
+        <label for="{@id}"><xsl:value-of select="option"/>
+            <input type="radio" name="{@name}" id="{@id}" value="{@value}" />
+            <xsl:apply-templates/>
+        </label>
     </xsl:template>
 
     <xsl:template match="vote">
