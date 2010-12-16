@@ -202,97 +202,89 @@ public class AdmResourceMgr extends WBContainerFE
       * @return the form fe
       */ 
     private FormFE createObj(Node tag, FormFE forma) {
-        if(tag.getNodeName().equalsIgnoreCase("FORM"))
-        {
+        if(tag.getNodeName().equalsIgnoreCase("FORM")) {
             forma = new FormFE(tag, base,redirect,request);
             if(user!=null) forma.setLocale(new java.util.Locale(user.getLanguage()));
             else forma.setLocale(SWBUtils.TEXT.getLocale());
-        }
-        else
-            if(tag.getNodeName().equalsIgnoreCase("INPUT") && forma != null) {
-                String type = findType(tag);
-                if(type != null)
-                    if(type.equalsIgnoreCase("TEXT")) {
-                        TextFE textfe = new TextFE(tag);
-                        forma.add(textfe);
-                    } else
-                        if(type.equalsIgnoreCase("PASSWORD")) {
-                            PasswordFE passwordfe = new PasswordFE(tag);
-                            forma.add(passwordfe);
-                        } else
-                            if(type.equalsIgnoreCase("FILE")) {
-                                FileFE filefe = new FileFE(tag);
-                                forma.add(filefe);
-                            } else
-                                if(type.equalsIgnoreCase("CHECKBOX")) {
-                                    CheckBoxFE checkboxfe = new CheckBoxFE(tag);
-                                    forma.add(checkboxfe);
-                                } else
-                                    if(type.equalsIgnoreCase("RADIO")) {
-                                        RadioFE radiofe = new RadioFE(tag);
-                                        forma.add(radiofe);
-                                    } else
-                                        if(type.equalsIgnoreCase("SUBMIT")) {
-                                            SubmitFE submitfe = new SubmitFE(tag,forma);
-                                            forma.add(submitfe);
-                                        } else
-                                            if(type.equalsIgnoreCase("RESET")) {
-                                                ResetFE resetfe = new ResetFE(tag);
-                                                forma.add(resetfe);
-                                            } else
-                                                if(type.equalsIgnoreCase("HIDDEN")) {
-                                                    HiddenFE hiddenfe = new HiddenFE(tag);
-                                                    forma.add(hiddenfe);
-                                                } else
-                                                    if(type.equalsIgnoreCase("BUTTON")) {
-                                                        ButtonFE buttonfe = new ButtonFE(tag);
-                                                        forma.add(buttonfe);
-                                                    }
-            } else {
-                if(tag.getNodeName().equalsIgnoreCase("SELECT") && forma != null) {
-                    SelectFE selectfe = new SelectFE(tag);
-                    selectfe = (SelectFE)addChildsFE(tag, selectfe);
-                    forma.add(selectfe);
-                } else
-                    if(tag.getNodeName().equalsIgnoreCase("TEXTAREA") && forma != null) {
-                        TextAreaFE textareafe = new TextAreaFE(tag);
-                        forma.add(textareafe);
-                    } else
-                        if(tag.getNodeName().equalsIgnoreCase("IMG") && forma != null) {
-                            ImgFE imgfe = new ImgFE(tag);
-                            forma.add(imgfe);
-                        } else
-                            if(tag.getNodeName().equalsIgnoreCase("MAP") && forma != null) {
-                                MapFE mapfe = new MapFE(tag);
-                                mapfe.setAdmDBConnMgr(forma.getAdmDBConnMgr());
-                                mapfe = (MapFE)addChildsMapFE(tag, mapfe);
-                                forma.add(mapfe);
-                            } else                        
-                                if(tag.getNodeName().equalsIgnoreCase("APPLET") && forma != null) {
-                                    AppletFE appletfe = new AppletFE(tag);
-                                    appletfe.setAdmDBConnMgr(forma.getAdmDBConnMgr());
-                                    appletfe = (AppletFE)addChildsAppletFE(tag, appletfe);
-                                    forma.add(appletfe);
-                                } else
-                                    if(tag.getNodeName().equalsIgnoreCase("CALENDAR") && forma != null) {
-                                        CalendarFE calendarfe = new CalendarFE(tag);
-                                        forma.add(calendarfe);
-                                    } else
-                                        if(tag.getNodeName().equalsIgnoreCase("admdbconnmgr") && forma != null) {
-                                            AdmDBConnMgr admdbconnmgr = new AdmDBConnMgr(forma, tag, base);
-                                            forma.setAdmDBConnMgr(admdbconnmgr);
-                                        }else
-                                            if((tag.getNodeName().equalsIgnoreCase("statictext") || tag.getNodeName().equalsIgnoreCase("script")) && forma != null) {
-                                                HtmlFE htmlfe = new HtmlFE(tag, base);
-                                                forma.add(htmlfe);
-                                            }else if(tag.getNodeName().equalsIgnoreCase("fieldset") && forma != null) {
-                                                FieldSet fieldset = new FieldSet(tag, base, forma);
-                                                if(user!=null) fieldset.setLocale(new java.util.Locale(user.getLanguage()));
-                                                else fieldset.setLocale(SWBUtils.TEXT.getLocale());
-                                                fieldset.setName(forma.getName());
-                                                forma.add(fieldset);
-                                            }
+        }else if(tag.getNodeName().equalsIgnoreCase("INPUT") && forma != null) {
+            String type = findType(tag);
+            if(type != null)
+            if(type.equalsIgnoreCase("TEXT")) {
+                TextFE textfe = new TextFE(tag);
+                forma.add(textfe);
+            }else if(type.equalsIgnoreCase("PASSWORD")) {
+                PasswordFE passwordfe = new PasswordFE(tag);
+                forma.add(passwordfe);
+            }else if(type.equalsIgnoreCase("FILE")) {
+                FileFE filefe = new FileFE(tag);
+                forma.add(filefe);
+            }else if(type.equalsIgnoreCase("CHECKBOX")) {
+                CheckBoxFE checkboxfe = new CheckBoxFE(tag);
+                forma.add(checkboxfe);
+            }else if(type.equalsIgnoreCase("RADIO")) {
+                RadioFE radiofe = new RadioFE(tag);
+                forma.add(radiofe);
+            }else if(type.equalsIgnoreCase("SUBMIT")) {
+                SubmitFE submitfe = new SubmitFE(tag,forma);
+                forma.add(submitfe);
+            }else if(type.equalsIgnoreCase("RESET")) {
+                ResetFE resetfe = new ResetFE(tag);
+                forma.add(resetfe);
+            }else if(type.equalsIgnoreCase("HIDDEN")) {
+                HiddenFE hiddenfe = new HiddenFE(tag);
+                forma.add(hiddenfe);
+            }else if(type.equalsIgnoreCase("BUTTON")) {
+                ButtonFE buttonfe = new ButtonFE(tag);
+                forma.add(buttonfe);
             }
+        }else {
+            if(tag.getNodeName().equalsIgnoreCase("SELECT") && forma != null) {
+                SelectFE selectfe = new SelectFE(tag);
+                selectfe = (SelectFE)addChildsFE(tag, selectfe);
+                forma.add(selectfe);
+            }else if(tag.getNodeName().equalsIgnoreCase("TEXTAREA") && forma != null) {
+                TextAreaFE textareafe = new TextAreaFE(tag);
+                forma.add(textareafe);
+            }else if(tag.getNodeName().equalsIgnoreCase("IMG") && forma != null) {
+                ImgFE imgfe = new ImgFE(tag);
+                forma.add(imgfe);
+            }else if(tag.getNodeName().equalsIgnoreCase("MAP") && forma != null) {
+                MapFE mapfe = new MapFE(tag);
+                mapfe.setAdmDBConnMgr(forma.getAdmDBConnMgr());
+                mapfe = (MapFE)addChildsMapFE(tag, mapfe);
+                forma.add(mapfe);
+            }else if(tag.getNodeName().equalsIgnoreCase("APPLET") && forma != null) {
+                AppletFE appletfe = new AppletFE(tag);
+                appletfe.setAdmDBConnMgr(forma.getAdmDBConnMgr());
+                appletfe = (AppletFE)addChildsAppletFE(tag, appletfe);
+                forma.add(appletfe);
+            }else if(tag.getNodeName().equalsIgnoreCase("CALENDAR") && forma != null) {
+                CalendarFE calendarfe = new CalendarFE(tag);
+                forma.add(calendarfe);
+            }else if(tag.getNodeName().equalsIgnoreCase("admdbconnmgr") && forma != null) {
+                AdmDBConnMgr admdbconnmgr = new AdmDBConnMgr(forma, tag, base);
+                forma.setAdmDBConnMgr(admdbconnmgr);
+            }else if((tag.getNodeName().equalsIgnoreCase("statictext") || tag.getNodeName().equalsIgnoreCase("script")) && forma != null) {
+                HtmlFE htmlfe = new HtmlFE(tag, base);
+                forma.add(htmlfe);
+            }else if(tag.getNodeName().equalsIgnoreCase("fieldset") && forma != null) {
+                FieldSet fieldset = new FieldSet(tag, base, forma);
+                if(user!=null)
+                    fieldset.setLocale(new java.util.Locale(user.getLanguage()));
+                else
+                    fieldset.setLocale(SWBUtils.TEXT.getLocale());
+                fieldset.setName(forma.getName());
+                forma.add(fieldset);
+            }else if(tag.getNodeName().equalsIgnoreCase("div")) {
+                Div div = new Div(tag, base, forma);
+                if(user!=null)
+                    div.setLocale(new java.util.Locale(user.getLanguage()));
+                else
+                    div.setLocale(SWBUtils.TEXT.getLocale());
+                div.setName(forma.getName());
+                forma.add(div);
+            }
+        }
         return forma;
     }
     
