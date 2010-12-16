@@ -116,7 +116,7 @@ public class FieldSet extends WBContainerFE {
      */
     @Override
     public String getHtml(){
-        StringBuffer ret=new StringBuffer("");
+        StringBuilder ret=new StringBuilder("");
         String xml="";
         try
         {
@@ -146,7 +146,9 @@ public class FieldSet extends WBContainerFE {
 
                 xml=SWBUtils.XML.domToXml(dom, "ISO-8859-1", true);
                 if(xml!=null && !"".equals(xml.trim())) {
+//                    System.out.println("\n\n.....................fieldset");
                     xml=xml.substring(xml.indexOf("<fieldset"), xml.indexOf("/>", xml.indexOf("<fieldset"))) + ">";
+//                    System.out.println(xml);
                 }
                 else {
                     xml="";
@@ -163,6 +165,7 @@ public class FieldSet extends WBContainerFE {
     /* (non-Javadoc)
      * @see org.semanticwb.portal.admin.admresources.lib.WBContainerFE#getJscripsFE()
      */
+    @Override
     public Iterator getJscripsFE(){
         return ajsfe.iterator();
     }
@@ -202,7 +205,7 @@ public class FieldSet extends WBContainerFE {
       * @return the js fe
       */
      public String getJsFE(){
-        StringBuffer strb=new StringBuffer();
+        StringBuilder strb=new StringBuilder();
         Iterator ijsfeObj=ajsfe.iterator();
         while(ijsfeObj.hasNext()){
             WBJsValidationsFE js_valfe=(WBJsValidationsFE)ijsfeObj.next();
@@ -214,6 +217,7 @@ public class FieldSet extends WBContainerFE {
      /* (non-Javadoc)
       * @see org.semanticwb.portal.admin.admresources.lib.WBContainerFE#add(java.lang.Object)
       */
+    @Override
      public void add(Object obj){
        super.add(obj);
        addJSFormFE(obj);
@@ -242,7 +246,7 @@ public class FieldSet extends WBContainerFE {
      * @see org.semanticwb.portal.admin.admresources.lib.WBContainerFE#setAttributes()
      */
     @Override
-    public void setAttributes() {
+    public final void setAttributes() {
         if (tag != null) {
             NamedNodeMap nnodemap = tag.getAttributes();
             if (nnodemap.getLength() > 0) {
@@ -278,89 +282,89 @@ public class FieldSet extends WBContainerFE {
             NodeList ndlchilds = tag.getChildNodes();
             for (int i = 0; i < ndlchilds.getLength(); i++)
             {
-                Node tag=ndlchilds.item(i);
-                if (tag.getNodeName().equalsIgnoreCase("INPUT")) {
-                    String type = findType(tag);
+                Node node=ndlchilds.item(i);
+                if (node.getNodeName().equalsIgnoreCase("INPUT")) {
+                    String type = findType(node);
                     if (type != null) {
                         if (type.equalsIgnoreCase("TEXT")) {
-                            TextFE textfe = new TextFE(tag);
+                            TextFE textfe = new TextFE(node);
                             textfe.setFormFE(form);
                             this.add(textfe);
                         } else if (type.equalsIgnoreCase("PASSWORD")) {
-                            PasswordFE passwordfe = new PasswordFE(tag);
+                            PasswordFE passwordfe = new PasswordFE(node);
                             passwordfe.setFormFE(form);
                             this.add(passwordfe);
                         } else if (type.equalsIgnoreCase("FILE")) {
-                            FileFE filefe = new FileFE(tag);
+                            FileFE filefe = new FileFE(node);
                             filefe.setFormFE(form);
                             this.add(filefe);
                         } else if (type.equalsIgnoreCase("CHECKBOX")) {
-                            CheckBoxFE checkboxfe = new CheckBoxFE(tag);
+                            CheckBoxFE checkboxfe = new CheckBoxFE(node);
                             checkboxfe.setFormFE(form);
                             this.add(checkboxfe);
                         } else if (type.equalsIgnoreCase("RADIO")) {
-                            RadioFE radiofe = new RadioFE(tag);
+                            RadioFE radiofe = new RadioFE(node);
                             radiofe.setFormFE(form);
                             this.add(radiofe);
                         } else if (type.equalsIgnoreCase("SUBMIT")) {
-                            SubmitFE submitfe = new SubmitFE(tag, form);
+                            SubmitFE submitfe = new SubmitFE(node, form);
                             submitfe.setFormFE(form);
                             this.add(submitfe);
                         } else if (type.equalsIgnoreCase("RESET")) {
-                            ResetFE resetfe = new ResetFE(tag);
+                            ResetFE resetfe = new ResetFE(node);
                             resetfe.setFormFE(form);
                             this.add(resetfe);
                         } else if (type.equalsIgnoreCase("HIDDEN")) {
-                            HiddenFE hiddenfe = new HiddenFE(tag);
+                            HiddenFE hiddenfe = new HiddenFE(node);
                             hiddenfe.setFormFE(form);
                             this.add(hiddenfe);
                         } else if (type.equalsIgnoreCase("BUTTON")) {
-                            ButtonFE buttonfe = new ButtonFE(tag);
+                            ButtonFE buttonfe = new ButtonFE(node);
                             buttonfe.setFormFE(form);
                             this.add(buttonfe);
                         }
                     }
                 } else {
-                    if (tag.getNodeName().equalsIgnoreCase("SELECT")) {
-                        SelectFE selectfe = new SelectFE(tag);
-                        selectfe = (SelectFE) addChildsFE(tag, selectfe);
+                    if (node.getNodeName().equalsIgnoreCase("SELECT")) {
+                        SelectFE selectfe = new SelectFE(node);
+                        selectfe = (SelectFE) addChildsFE(node, selectfe);
                         selectfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
                         selectfe.setFormFE(form);
                         this.add(selectfe);
-                    } else if (tag.getNodeName().equalsIgnoreCase("TEXTAREA")) {
-                        TextAreaFE textareafe = new TextAreaFE(tag);
+                    } else if (node.getNodeName().equalsIgnoreCase("TEXTAREA")) {
+                        TextAreaFE textareafe = new TextAreaFE(node);
                         textareafe.setFormFE(form);
                         this.add(textareafe);
-                    } else if (tag.getNodeName().equalsIgnoreCase("IMG")) {
-                        ImgFE imgfe = new ImgFE(tag);
+                    } else if (node.getNodeName().equalsIgnoreCase("IMG")) {
+                        ImgFE imgfe = new ImgFE(node);
                         imgfe.setFormFE(form);
                         this.add(imgfe);
-                    } else if (tag.getNodeName().equalsIgnoreCase("MAP")) {
-                        MapFE mapfe = new MapFE(tag);
+                    } else if (node.getNodeName().equalsIgnoreCase("MAP")) {
+                        MapFE mapfe = new MapFE(node);
                         mapfe.setAdmDBConnMgr(this.getAdmDBConnMgr());
-                        mapfe = (MapFE) addChildsMapFE(tag, mapfe);
+                        mapfe = (MapFE) addChildsMapFE(node, mapfe);
                         mapfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
                         this.add(mapfe);
-                    } else if (tag.getNodeName().equalsIgnoreCase("APPLET")) {
-                        AppletFE appletfe = new AppletFE(tag);
+                    } else if (node.getNodeName().equalsIgnoreCase("APPLET")) {
+                        AppletFE appletfe = new AppletFE(node);
                         appletfe.setAdmDBConnMgr(this.getAdmDBConnMgr());
-                        appletfe = (AppletFE) addChildsAppletFE(tag, appletfe);
+                        appletfe = (AppletFE) addChildsAppletFE(node, appletfe);
                         appletfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
                         this.add(appletfe);
-                    } else if (tag.getNodeName().equalsIgnoreCase("CALENDAR")) {
-                        CalendarFE calendarfe = new CalendarFE(tag);
+                    } else if (node.getNodeName().equalsIgnoreCase("CALENDAR")) {
+                        CalendarFE calendarfe = new CalendarFE(node);
                         calendarfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
                         this.add(calendarfe);
-                    } else if ((tag.getNodeName().equalsIgnoreCase("statictext") || tag.getNodeName().equalsIgnoreCase("script"))) {
+                    } else if ((node.getNodeName().equalsIgnoreCase("statictext") || node.getNodeName().equalsIgnoreCase("script"))) {
                         //HtmlFE htmlfe = new HtmlFE(tag);
                         //TODO:check if the base needs to be passed to other tags, if yes it need to be declared in the WBAdmResource interface
-                        HtmlFE htmlfe = new HtmlFE(tag, base);
+                        HtmlFE htmlfe = new HtmlFE(node, base);
                         htmlfe.setFormFE(form);
                         this.add(htmlfe);
-                    } else if (tag.getNodeName().equalsIgnoreCase("fieldset")) {
+                    } else if (node.getNodeName().equalsIgnoreCase("fieldset")) {
                         //HtmlFE htmlfe = new HtmlFE(tag);
                         //TODO:check if the base needs to be passed to other tags, if yes it need to be declared in the WBAdmResource interface
-                        FieldSet fieldset = new FieldSet(tag, base, form);
+                        FieldSet fieldset = new FieldSet(node, base, form);
                         fieldset.setAdmDBConnMgr(form.getAdmDBConnMgr());
                         this.add(fieldset);
                     }
