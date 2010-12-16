@@ -91,36 +91,23 @@ public class Div extends WBContainerFE {
             if(dom!=null)
             {
                 Element child=dom.createElement("div");
-//                if(name!=null) {
-//                    child.setAttribute("name",name);
-//                }
                 if(id!=null) {
                     child.setAttribute("id",id);
                 }
-//                if(style!=null) {
-//                    child.setAttribute("style",style);
-//                }
                 if(styleclass!=null) {
                     child.setAttribute("class",styleclass);
-                    System.out.println("\n\n\n**************************\nponiendo class");
                 }
-//                if(moreattr!=null) {
-//                    child.setAttribute("moreattr",moreattr);
-//                }
                 if(title!=null) {
                     child.setAttribute("title",title);
-                    System.out.println("\n\n\n**************************\nponiendo title");
                 }
                 if(open!=null) {
                     child.setAttribute("open",open);
-                    System.out.println("\n\n\n**************************\nponiendo open");
                 }
                 dom.appendChild(child);
 
                 xml=SWBUtils.XML.domToXml(dom, "ISO-8859-1", true);
                 if(xml!=null && !"".equals(xml.trim())) {
                     xml=xml.substring(xml.indexOf("<div"), xml.indexOf("/>", xml.indexOf("<div"))) + ">";
-                    System.out.println(xml);
                 }
                 else {
                     xml="";
