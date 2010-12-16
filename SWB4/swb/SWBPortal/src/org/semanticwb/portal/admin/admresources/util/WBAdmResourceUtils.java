@@ -423,17 +423,19 @@ public class WBAdmResourceUtils {
         AdmResourceMgr mgr = new AdmResourceMgr(user);
         mgr.setRequest(request);
         mgr.setXml(xml, base, redirect);
+//        System.out.println("\n\nxml=    "+xml);
         if (form != null && !form.trim().equals("")) {
             xml = mgr.show(form);
         } else {
             xml = mgr.show();
         }
         xml = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><admresource>" + xml + "</admresource>";
-        /*
-        System.out.println("----------");
-        System.out.println(xml);
-        System.out.println("----------");
-         **/
+        
+//        System.out.println("WBAdmResourceUtils.transformAdmResourceByXml...");
+//        System.out.println("----------");
+//        System.out.println(xml);
+//        System.out.println("----------");
+         
         return SWBUtils.XML.xmlToDom(xml);
     }
 
@@ -810,7 +812,7 @@ public class WBAdmResourceUtils {
                 }
             }
         } catch (Exception e) {
-            sbfRet.append("\n<br>\n<!--Exception " + e + "-->");
+            sbfRet.append("\n<br/>\n<!--Exception " + e + "-->");
             log.error("Error while displaying image in resource " + base.getId() + ".", e);
         }
         return sbfRet.toString();
