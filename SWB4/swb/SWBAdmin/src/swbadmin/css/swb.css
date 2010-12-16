@@ -6,22 +6,21 @@
         Purpose of the stylesheet follows.
 */
 
-html, body, #main{	
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-	padding: 0px 0px 0px 0px;
-	margin: 0px 0px 0px 0px;
-	font: 10pt Arial,Myriad,Tahoma,Verdana,sans-serif;
+html, body, #main {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+    font: 10pt Arial,Myriad,Tahoma,Verdana,sans-serif;
 }
 
-.soria .dijitTreeIcon
-{
-	width:20px;
-	height: 18px;
+.soria .dijitTreeIcon {
+    width:20px;
+    height: 18px;
 }
 
-.swbLogo{
+.swbLogo {
     width: 252px;
     height: 26px;
     padding: 0px 0px 0px 0px;
@@ -129,22 +128,21 @@ html, body, #main{
 .swbIconGateway,
 .swbIconPool,
 .swbIconLane,
-.swbIconArtifact
-{
-	background-repeat: no-repeat; 
-	width:20px;
-	height: 18px;
-	text-align: center;
-	padding-right:0px;
+.swbIconArtifact {
+    background-repeat: no-repeat;
+    width:20px;
+    height: 18px;
+    text-align: center;
+    padding-right:0px;
     background-image: url('../icons/icons20x18.png'); background-position: -620px -200px;
 }
 
-.swbIconSystem    { background-position: -200px -0px; }
+.swbIconSystem      { background-position: -200px -0px; }
 .swbIconStrategy    { background-position: -240px -0px; }
-.swbIconContent    { background-position: -260px -0px; }
-.swbIconResources    { background-position: -340px -0px; }
-.swbIconResource     { background-position: -340px -18px; }
-.swbIconResourceU    { background-position: -340px -36px; }
+.swbIconContent     { background-position: -260px -0px; }
+.swbIconResources   { background-position: -340px -0px; }
+.swbIconResource    { background-position: -340px -18px; }
+.swbIconResourceU   { background-position: -340px -36px; }
 .swbIconResourceF   { background-position: -120px -72px; }
 .swbIconResourceW   { background-position: -140px -72px; }
 .swbIconResourceE   { background-position: -160px -72px; }
@@ -159,7 +157,7 @@ html, body, #main{
 .swbIconWebSite     { background-position: -280px -18px; }
 .swbIconWebSiteU    { background-position: -280px -36px; }
 .swbIconHomePage    { background-position: -400px -18px; }
-.swbIconHomePageU    { background-position: -400px -36px; }
+.swbIconHomePageU   { background-position: -400px -36px; }
 .swbIconWebPage     { background-position: -420px -18px; }
 .swbIconWebPageU    { background-position: -420px -36px; }
 .swbIconWebPageF    { background-position: -0px -72px; }
@@ -170,8 +168,8 @@ html, body, #main{
 .swbIconDns         { background-position: -80px -18px; }
 .swbIconLanguages   { background-position: -20px -0px; }
 .swbIconLanguage    { background-position: -20px -18px; }
-.swbIconCountrys   { background-position: -440px -0px; }
-.swbIconCountry    { background-position: -440px -18px; }
+.swbIconCountrys    { background-position: -440px -0px; }
+.swbIconCountry     { background-position: -440px -18px; }
 .swbIconRoles       { background-position: -40px -0px; }
 .swbIconRole        { background-position: -40px -18px; }
 .swbIconUser        { background-position: -0px -18px; }
@@ -200,19 +198,19 @@ html, body, #main{
 .swbIconCalendar    { background-position: -220px -18px; }
 .swbIconCalendarU   { background-position: -220px -36px; }
 
-.swbIconOntology       { background-position: -380px -18px; }
-.swbIconOntologyU      { background-position: -380px -36px; }
+.swbIconOntology    { background-position: -380px -18px; }
+.swbIconOntologyU   { background-position: -380px -36px; }
 .swbIconClass       { background-position: -60px -90px; }
-.swbIconProperty       { background-position: -240px -90px; }
+.swbIconProperty    { background-position: -240px -90px; }
 
-.swbIconProcess   { background-position: -540px -145px; }
-.swbIconProcessU   { background-position: -540px -145px; }
+.swbIconProcess     { background-position: -540px -145px; }
+.swbIconProcessU    { background-position: -540px -145px; }
 .swbIconSubProcess   { background-position: -540px -145px; }
 .swbIconTask   { background-position: -560px -145px; }
 .swbIconInclusiveGateway   { background-position: -400px -145px; }
-.swbIconParallelGateway   { background-position: -420px -145px; }
+.swbIconParallelGateway    { background-position: -420px -145px; }
 .swbIconStartEvent   { background-position: -480px -145px; }
-.swbIconIntermediateEvent   { background-position: -500px -145px; }
+.swbIconIntermediateEvent       { background-position: -500px -145px; }
 .swbIconIntermediateCatchEvent  { background-position: -500px -145px; }
 .swbIconIntermediateThrowEvent  { background-position: -500px -145px; }
 .swbIconEndEvent   { background-position: -520px -145px; }
@@ -241,113 +239,80 @@ th {
 }
 
 .swbform legend {
-	padding: 0 2px;
-	font-weight: bold;
+    padding: 0 2px;
+    font-weight: bold;
     padding-left: 0;
-    _margin: 0 -7px; /*IE Win*/
-	}
+}
 
-_.swbform div {
-    display: inline-block;
-    }
-
-_.swbform div label {
-    display: block;
-    width: 6em;
-    float: left;
-    }
-
-.swbform label_ {
-	display: inline-block;
-	line-height: 1.8;
-	_vertical-align: top;
-    text-align: right;
-    width: 25%;
-    }
-	
 .swbform fieldset ol{
-	margin: 0;
-	padding: 0;
-	}
-
-_form.swbform fieldset li p{
-	margin: 3px 5px;
-	padding: 0;
-    width: 70%;
-    position: absolute ;
-	}
-
-_form.swbform fieldset li span{
-	margin: 3px 5px;
-	padding: 0;
-    _width: 70%;
-    _position: absolute ;
-	}
-
-_form.swbform fieldset li {
-	list-style: none;
-	padding: 2px;
-	margin: 0;
-	_padding: 5px 10px 7px;
-	background: url(../images/swbform-divider.gif) left bottom repeat-x;
-	}
+    margin: 0;
+    padding: 0;
+}
 	
 .swbform fieldset fieldset {
-	border: none;
+    border: none;
     padding: 0px 25px 0px 0px;
     background: none;
-	}
+}
 	
-.swbform fieldset fieldset legend {
+/*.swbform fieldset fieldset legend {
     width: 25%;
     text-align: right;
 	font-weight: normal;
-	}
+}*/
 	
-.swbform fieldset fieldset label {
+/*.swbform fieldset fieldset label {
 	display: block;
 	width: auto;
     margin-left: 26%;
     text-align: left;
     padding: 0px;
-	}
+	}*/
 
-.swbform fieldset span label {
+/*.swbform fieldset span label {
     width: auto;
-    padding: 0px 10px 0px 0px;  /*horizontal*/
-	_display: block;            /* vertical */
-    _margin-left: 25.5%;        /* vertical */
-    _text-align: left;          /* vertical */
-	}
+    padding: 0px 10px 0px 0px;  
+	_display: block;            
+    _margin-left: 25.5%;        
+    _text-align: left;         
+	}*/
 
 .swbform em {
-	font-weight: bold;
-	font-style: normal;
-	color: #f00;
-	}
+    font-weight: bold;
+    font-style: normal;
+    color: #f00;
+}
 
 .swbform {
-	_width: 100%;
-	font-size: 1.1em;
-	color: #333;
+	/*_width: 100%;*/
+    font-size: 1.1em;
+    color: #333;
     font: normal 100% "Lucida Grande", Helvetica, Verdana, Arial;
     background: url(../images/swbform-fieldset.png) left bottom repeat-x;
-	}
+}
 
 .swbform legend,
 .swbform label { color: #333; }
 
 .swbform fieldset {
-    _width: 400px;
+    /*_width: 400px;*/
     padding: 5px;
-	border-top: 1px solid #a0a0ff;
-	border-left: 1px solid #a0a0ff;
-	border-bottom: 1px solid #a0a0ff;
-	border-right: 1px solid #a0a0ff;
-	_background: url(../images/swbform-fieldset.png) left bottom repeat-x;
-    _background: url('../js/dojo/dijit/themes/soria/images/titleBar.png') left bottom repeat-x;
-	}
+    border-top: 1px solid #a0a0ff;
+    border-left: 1px solid #a0a0ff;
+    border-bottom: 1px solid #a0a0ff;
+    border-right: 1px solid #a0a0ff;
+	/*_background: url(../images/swbform-fieldset.png) left bottom repeat-x;
+    _background: url('../js/dojo/dijit/themes/soria/images/titleBar.png') left bottom repeat-x;*/
+}
 
+.swbform-label {
+    width: 250px;
+    display: inline-block;
+    text-align:right;
+    padding-right: 10px;
+}
+.swbform-ul { list-style-type:none;}
+.swbform-li { padding-bottom:3px;}
 
 #swblogout {
     padding:5px;
@@ -384,8 +349,6 @@ _form.swbform fieldset li {
 	font-size: 12px;
 	font-weight: bold;
 }
-
-
 
 /************* Version 3 ****************/
 
@@ -468,5 +431,3 @@ div.sitesectiontree ul.treeres {
 	font-size: 12px;
 }
 /*------------------- select tree  ----*/
-
-
