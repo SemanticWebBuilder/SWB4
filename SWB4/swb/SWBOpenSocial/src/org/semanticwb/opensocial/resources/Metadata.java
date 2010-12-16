@@ -36,7 +36,7 @@ public class Metadata
 
     
 
-    private void adduserPrefs(JSONObject metadata, User user, Gadget gadget) throws JSONException
+    private void adduserPrefs(JSONObject metadata, User user, Gadget gadget,String moduleId) throws JSONException
     {
         // debe obtener las preferencias del usuario al momento de configurar el gadget
         JSONObject adduserPrefs = new JSONObject();
@@ -44,7 +44,7 @@ public class Metadata
         while(preferences.hasNext())
         {
             PersonalizedGadged personalizedGadged=preferences.next();
-            if(personalizedGadged.getGadget().getURI().equals(gadget.getURI()))
+            if(personalizedGadged.getGadget().getURI().equals(gadget.getURI()) && personalizedGadged.getId().equals(moduleId))
             {
                 GenericIterator<UserPref> list=personalizedGadged.listUserPrefses();
                 while(list.hasNext())
@@ -52,6 +52,7 @@ public class Metadata
                     UserPref pref=list.next();
                     adduserPrefs.put(pref.getName(), pref.getValue());
                 }
+                break;
             }
         }
         metadata.put("userPrefs", adduserPrefs);
@@ -67,7 +68,7 @@ public class Metadata
             
             if (gadget != null)
             {
-                adduserPrefs(metadata, paramRequest.getUser(), gadget);
+                adduserPrefs(metadata, paramRequest.getUser(), gadget,moduleId);
                 //URL _url = new URL(gadget.getUrl() + queryString);
                 //adduserPrefs(metadata, paramRequest.getUser(), gadget);
                 /*NodeList requires = gadget.getDocument().getElementsByTagName("Require");
