@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.Templates;
@@ -160,7 +161,8 @@ public class Poll extends GenericResource {
         try {
             super.setResourceBase(base);
             workPath    = SWBPortal.getWorkPath()+base.getWorkPath()+"/";
-            webWorkPath = SWBPortal.getWebWorkPath()+base.getWorkPath()+"/";
+            //webWorkPath = SWBPortal.getWebWorkPath()+base.getWorkPath()+"/";
+            webWorkPath = SWBPortal.getWebWorkPath();
             restype= base.getResourceType().getResourceClassName();
         }catch(Exception e) {
             log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
@@ -245,9 +247,10 @@ public class Poll extends GenericResource {
 
         e = dom.createElement("imgTitle");
         e.setAttribute("path", path);
-        if( imgTitle!=null )
-            e.setAttribute("src", webWorkPath+imgTitle);
-        e.setAttribute("alt", base.getAttribute("header",question));
+        if( imgTitle!=null ) {
+            e.setAttribute("src", webWorkPath+base.getWorkPath()+"/"+imgTitle);
+            e.setAttribute("alt", base.getAttribute("header",question));
+        }
         root.appendChild(e);
 
         e = dom.createElement("question");
@@ -275,7 +278,7 @@ public class Poll extends GenericResource {
         e.appendChild(dom.createTextNode(base.getAttribute("msg_tovote", paramRequest.getLocaleString("msg_tovote"))));
         e.setAttribute("path", path);
         if( imgVote!=null ) {
-            e.setAttribute("src", webWorkPath+imgVote);
+            e.setAttribute("src", webWorkPath+base.getWorkPath()+"/"+imgVote);
             e.setAttribute("alt", base.getAttribute("msg_tovote", paramRequest.getLocaleString("msg_tovote")));
         }
         e.setAttribute("label", base.getAttribute("msg_tovote",paramRequest.getLocaleString("msg_tovote")));
@@ -292,7 +295,7 @@ public class Poll extends GenericResource {
         else if( Display.SLIDE.toString().equals(display) )
             e.setAttribute("action", "postHtml('"+url+"','"+PREF+base.getId()+"'); expande();");
         else {
-            e.setAttribute("label", base.getAttribute("msg_viewresults", paramRequest.getLocaleString("lblDoAdmin_msgResults").replaceAll("\"", "")));
+            e.setAttribute("label", base.getAttribute("msg_viewresults", paramRequest.getLocaleString("lblAdmin_msgResults").replaceAll("\"", "")));
             url = new SWBResourceURLImp(request, base, paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
             url.setMode("accesible");
             e.setAttribute("action", "window.location.href='"+url.toString(true)+"'");
@@ -309,7 +312,7 @@ public class Poll extends GenericResource {
             if( nodes!=null ) {
                 for(int i=0; i<nodes.getLength(); i++) {
                     String value = nodes.item(i).getChildNodes().item(0).getNodeValue().trim();
-                    String content = paramRequest.getLocaleString("lblDoView_relatedLink");
+                    String content = paramRequest.getLocaleString("lblView_relatedLink");
                     if( !"".equals(value) ) {
                         int idx = value.indexOf(",");
                         if( idx>-1 ) {
@@ -344,28 +347,31 @@ public class Poll extends GenericResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Resource base = paramRequest.getResourceBase();
-
-        response.setContentType("text/html; charset=iso-8859-1");
-        response.setHeader("Cache-Control","no-cache"); //HTTP 1.1
-        response.setHeader("Pragma","no-cache"); //HTTP 1.0
-        response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
-
-         try {
-            String jspFile = paramRequest.getResourceBase().getAttribute("jspfile","/swbadmin/jsp/poll/poll.jsp");
-            //String jspFile = paramRequest.getResourceBase().getAttribute("jspfile","/swbadmin/jsp/poll/pollAccessible.jsp");
-
+        if(base.getAttribute("jspfile")!=null) {
+            String jspFile = base.getAttribute("jspfile");
             request.setAttribute("paramRequest", paramRequest);
-            Document dom = getDom(request, response, paramRequest);
-            String html = SWBUtils.XML.transformDom(tpl, dom);
-            boolean isPopup = Boolean.valueOf(base.getAttribute("display", "true")).booleanValue();
-            if( !isPopup )
-                html += "<div id=\""+PREF+base.getId()+"\" class=\"swb-encuesta-res\"></div>";
-            html+=getRenderScript(paramRequest);
-            request.setAttribute("html", html);
             RequestDispatcher rd = request.getRequestDispatcher(jspFile);
-            rd.include(request, response);
-        } catch (Exception e) {
-            log.error(e);
+            try {
+                rd.include(request, response);
+            }catch(ServletException se) {
+                log.error(se);
+            }
+        }else {
+            response.setContentType("text/html; charset=iso-8859-1");
+            response.setHeader("Cache-Control","no-cache"); //HTTP 1.1
+            response.setHeader("Pragma","no-cache"); //HTTP 1.0
+            response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
+            Document dom = getDom(request, response, paramRequest);
+            try {
+                String html = SWBUtils.XML.transformDom(tpl, dom);
+                boolean isPopup = Boolean.valueOf(base.getAttribute("display", "true")).booleanValue();
+                if( !isPopup )
+                    html += "<div id=\""+PREF+base.getId()+"\" class=\"swb-encuesta-res\"></div>";
+                html+=getRenderScript(paramRequest);
+                response.getWriter().println(html);
+            }catch(TransformerException te) {
+                log.error(te);
+            }
         }
     }
 
@@ -480,7 +486,7 @@ public class Poll extends GenericResource {
                         out.println("</p>");
                     }
                     if("1".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim())) {
-                        out.println(getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("lblDoView_relatedLink")));
+                        out.println(getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("lblView_relatedLink")));
                     }
                     out.println("<input type=\"hidden\" name=\"NombreCookie\" value=\"VotosEncuesta"+ base.getId() +"\"/>");
                     out.println("</form>");
@@ -508,7 +514,7 @@ public class Poll extends GenericResource {
                     out.println("    var numcom = getCookie(forma.NombreCookie.value); ");
                     out.println("    if(numcom == \"SI\") { ");
                     if("true".equals(base.getAttribute("oncevote", "true").trim()) && !"0".equals(base.getAttribute("vmode", "0").trim())) {
-                        out.println("    alert('"+ paramRequest.getLocaleString("msgDoView_msgVote") +"'); ");
+                        out.println("    alert('"+ paramRequest.getLocaleString("msgView_msgVote") +"'); ");
                     }
                     out.println("     } ");
                     out.println("    grabaEncuesta(forma); ");
@@ -559,7 +565,7 @@ public class Poll extends GenericResource {
                         out.println("  postHtml('"+url.toString()+"&radiobutton='+optValue,'"+PREF+base.getId()+"'); expande();");
                     }
                     out.println("    }else { ");
-                    out.println("       alert('"+ paramRequest.getLocaleString("msgDoView_msgAnswer") +"'); ");
+                    out.println("       alert('"+ paramRequest.getLocaleString("msgView_msgAnswer") +"'); ");
                     out.println("    } ");
                     out.println("} ");
 
@@ -583,7 +589,7 @@ public class Poll extends GenericResource {
                 }
             }
         }catch (Exception e) {
-            log.error(paramRequest.getLocaleString("msgDoView_resource") +" "+ restype +" "+ paramRequest.getLocaleString("msgDoView_method"), e);
+            log.error(paramRequest.getLocaleString("msgView_resource") +" "+ restype +" "+ paramRequest.getLocaleString("msgView_method"), e);
         }
         out.flush();
     }*/
@@ -717,7 +723,7 @@ public class Poll extends GenericResource {
                         root.appendChild(option);
                         base.setData(SWBUtils.XML.domToXml(dom));
                     }catch (Exception e) {
-                        log.error(paramRequest.getLocaleString("msgDoView_setData") +" "+ restype +" " + paramRequest.getLocaleString("msgDoView_id") +" "+ base.getId() +" - "+ base.getTitle(), e);
+                        log.error(paramRequest.getLocaleString("msgView_setData") +" "+ restype +" " + paramRequest.getLocaleString("msgView_id") +" "+ base.getId() +" - "+ base.getTitle(), e);
                     }
                 }else {
                     try {
@@ -743,7 +749,7 @@ public class Poll extends GenericResource {
                         base.addHit(request, paramRequest.getUser(), paramRequest.getWebPage());
                     }
                     catch (Exception e) {
-                        log.error(paramRequest.getLocaleString("msgDoView_setData") +" "+ restype +" " + paramRequest.getLocaleString("msgDoView_id") +" "+ base.getId() +" - "+ base.getTitle(), e);
+                        log.error(paramRequest.getLocaleString("msgView_setData") +" "+ restype +" " + paramRequest.getLocaleString("msgView_id") +" "+ base.getId() +" - "+ base.getTitle(), e);
                     }
                 }
             }
@@ -928,7 +934,7 @@ public class Poll extends GenericResource {
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         Resource base=getResourceBase();
-        String msg=paramRequest.getLocaleString("lblDoAdmin_undefinedOperation");
+        String msg=paramRequest.getLocaleString("lblAdmin_undefinedOperation");
         String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
 
         if(action.equals("add") || action.equals("edit")) {
@@ -1233,32 +1239,24 @@ public class Poll extends GenericResource {
             ret.append("<form id=\"frmAdmRes\" name=\"frmAdmRes\" method=\"post\" dojoType=\"dijit.form.Form\" enctype=\"multipart/form-data\" action=\""+ url.toString()+"\"> ");
 
             ret.append("<fieldset> ");
-            ret.append("<legend>"+paramRequest.getLocaleString("lblDoAdmin_PollData")+"</legend>");
-            ret.append("<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"5\"> ");
-            ret.append("<tr><td width=\"250\"></td><td></td></tr>");
-
-            ret.append("<tr>");
-            ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_question")+"<span class=\"requerido\">*</span>:&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"text\" name=\"question\" value=\""+base.getAttribute("question","").replaceAll("\"", "&#34;")+"\" maxlength=\"80\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" required=\"true\" />");
-            ret.append("</td> ");
-            ret.append("</tr>");
-
-            ret.append("<tr>");
-            ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_option")+"<span class=\"requerido\">*</span>:&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"text\" name=\"txtOption\" maxlength=\"80\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" />");
+            ret.append("<legend>"+paramRequest.getLocaleString("lblAdmin_Basic")+"</legend>");
+            ret.append("<ul class=\"swbform-ul\"> ");
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label for=\"question\" class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_question")+"<span class=\"requerido\">*</span></label>");
+            ret.append("<input type=\"text\" name=\"question\" id=\"question\" value=\""+base.getAttribute("question","").replaceAll("\"", "&#34;")+"\" maxlength=\"80\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\""+paramRequest.getLocaleString("lblAdmin_msgQuestion")+"\" required=\"true\" />");
+            ret.append("</li>");
+            
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label for=\"txtOption\" class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_option")+"<span class=\"requerido\">*</span></label>");
+            ret.append("<input type=\"text\" name=\"txtOption\" id=\"txtOption\" maxlength=\"80\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\""+paramRequest.getLocaleString("lblAdmin_msgOption")+"\" />");
             ret.append("<input type=\"hidden\" name=\"option\" value=\""+base.getAttribute("option","").trim().replaceAll("\"", "&#34;")+"\" />");
-            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblDoAdmin_btnAdd")+"\" onclick=\"addOption(this.form.selOption, this.form.txtOption)\" />");
-            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblDoAdmin_btnEdit")+"\" onclick=\"updateOption(this.form.selOption, this.form.txtOption)\" />");
-            ret.append("</td> ");
-            ret.append("</tr> ");
-
-            ret.append("<tr> ");
-            ret.append("<td class=\"datos\">&nbsp;</td> ");
-            ret.append("<td class=\"valores\">");
-            ret.append("<select name=\"selOption\" size=\"5\" multiple=\"multiple\" onChange=\"editOption(this.form.selOption, this.form.txtOption)\">");
-
+            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblAdmin_btnAdd")+"\" onclick=\"addOption(this.form.selOption, this.form.txtOption)\" />");
+            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblAdmin_btnEdit")+"\" onclick=\"updateOption(this.form.selOption, this.form.txtOption)\" />");
+            ret.append("<label class=\"swbform-label\">&nbsp;</label>");
+            ret.append("</li>");
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">&nbsp;</label>");
+            ret.append("<select name=\"selOption\" id=\"selOption\" size=\"5\" multiple=\"multiple\" onChange=\"editOption(this.form.selOption, this.form.txtOption)\">");
             String value="";
             Document dom = SWBUtils.XML.xmlToDom(base.getXml());
             if( dom!=null ) {
@@ -1271,23 +1269,18 @@ public class Poll extends GenericResource {
                 }
             }
             ret.append("</select>");
-            ret.append("<input type=\"button\" name=\"btnDel\" value=\""+paramRequest.getLocaleString("lblDoAdmin_btnDelete")+"\" onclick=\"deleteOption(this.form.selOption, this.form.txtOption)\" />");
-            ret.append("</td>");
-            ret.append("</tr>");
-
-            ret.append("<tr>");
-            ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_link")+":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"text\" name=\"txtLink\" maxlength=\"120\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" />");
+            ret.append("<input type=\"button\" name=\"btnDel\" value=\""+paramRequest.getLocaleString("lblAdmin_btnDelete")+"\" onclick=\"deleteOption(this.form.selOption, this.form.txtOption)\" />");
+            ret.append("</li>");
+            
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label for=\"txtLink\" class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_link")+"</label>");
+            ret.append("<input type=\"text\" name=\"txtLink\" id=\"txtLink\" maxlength=\"120\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\""+paramRequest.getLocaleString("lblAdmin_link")+"\" />");
             ret.append("<input type=\"hidden\" name=\"link\" value=\""+base.getAttribute("link","").trim().replaceAll("\"", "&#34;")+"\" />");
-            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblDoAdmin_btnAdd")+"\" onclick=\"addOption(this.form.selLink, this.form.txtLink)\" />");
-            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblDoAdmin_btnEdit")+"\" onclick=\"updateOption(this.form.selLink, this.form.txtLink)\" />");
-            ret.append("</td> ");
-            ret.append("</tr> ");
-
-            ret.append("<tr> ");
-            ret.append("<td class=\"datos\">&nbsp;</td> ");
-            ret.append("<td class=\"valores\">");
+            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblAdmin_btnAdd")+"\" onclick=\"addOption(this.form.selLink, this.form.txtLink)\" />");
+            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblAdmin_btnEdit")+"\" onclick=\"updateOption(this.form.selLink, this.form.txtLink)\" />");
+            ret.append("</li>");
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">&nbsp;</label>");
             ret.append("<select name=\"selLink\" size=\"5\" multiple=\"multiple\" onChange=\"editOption(this.form.selLink, this.form.txtLink)\">");
             if(dom!=null) {
                 NodeList node = dom.getElementsByTagName("link");
@@ -1299,302 +1292,320 @@ public class Poll extends GenericResource {
                 }
             }
             ret.append("</select>");
-            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblDoAdmin_btnDelete")+"\" onclick=\"deleteOption(this.form.selLink, this.form.txtLink)\" />");
-            ret.append("</td>");
-            ret.append("</tr>");
-
-            ret.append("<tr>");
-            ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_displayLinks")+":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
+            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblAdmin_btnDelete")+"\" onclick=\"deleteOption(this.form.selLink, this.form.txtLink)\" />");
+            ret.append("</li>");
+            
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_displayLinks")+"</label>");
             value = base.getAttribute("wherelinks", LocLnks.INPOLL.toString());
             ret.append("<label for=\"wherelinks1\">");
             ret.append("<input type=\"radio\" name=\"wherelinks\" id=\"wherelinks1\" value=\""+LocLnks.INPOLL.toString()+"\" ");
             if(LocLnks.INPOLL.toString().equalsIgnoreCase(value))
                 ret.append(" checked=\"checked\"");
-            ret.append("/> "+paramRequest.getLocaleString("lblDoAdmin_onPoll")+"</label>&nbsp;&nbsp;&nbsp;");
-
+            ret.append("/> "+paramRequest.getLocaleString("lblAdmin_onPoll")+"</label>&nbsp;&nbsp;&nbsp;");
             ret.append("<label for=\"wherelinks2\">");
             ret.append("<input type=\"radio\" name=\"wherelinks\" id=\"wherelinks2\" value=\""+LocLnks.INRESULTS.toString()+"\" ");
             if(LocLnks.INRESULTS.toString().equalsIgnoreCase(value))
                 ret.append(" checked=\"checked\"");
-            ret.append("/> "+paramRequest.getLocaleString("lblDoAdmin_onPollResults")+"</label>&nbsp;&nbsp;&nbsp;");
-
+            ret.append("/> "+paramRequest.getLocaleString("lblAdmin_onPollResults")+"</label>&nbsp;&nbsp;&nbsp;");
             ret.append("<label for=\"wherelinks3\">");
             ret.append("<input type=radio name=\"wherelinks\" id=\"wherelinks3\" value=\""+LocLnks.INBOTH.toString()+"\" ");
             if(LocLnks.INBOTH.toString().equalsIgnoreCase(value))
                 ret.append(" checked=\"checked\"");
-            ret.append("/> "+paramRequest.getLocaleString("lblDoAdmin_onBoth")+"</label>");
-            ret.append("</td>");
-            ret.append("</tr>");
+            ret.append("/> "+paramRequest.getLocaleString("lblAdmin_onBoth")+"</label>");
+            ret.append("</li>");
 
-            ret.append("<tr>");
-            ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_voteOnce")+":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
             value = base.getAttribute("oncevote", Boolean.TRUE.toString());
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_voteOnce")+"</label>");
             ret.append("<label for=\"oncevoteyes\">");
             ret.append("<input type=\"radio\" name=\"oncevote\" id=\"oncevoteyes\" value=\""+Boolean.TRUE.toString()+"\" ");
             if(Boolean.TRUE.toString().equals(value))
                 ret.append(" checked=\"checked\"");
-            ret.append("/> "+paramRequest.getLocaleString("lblDoAdmin_yes")+"</label>&nbsp;&nbsp;&nbsp;");
+            ret.append("/> "+paramRequest.getLocaleString("lblAdmin_yes")+"</label>&nbsp;&nbsp;&nbsp;");
             ret.append("<label for=\"oncevoteno\">");
             ret.append("<input type=\"radio\" name=\"oncevote\" id=\"oncevoteno\" value=\""+Boolean.FALSE.toString()+"\" ");
             if(Boolean.FALSE.toString().equals(value))
                 ret.append(" checked=\"checked\"");
-            ret.append("/> "+paramRequest.getLocaleString("lblDoAdmin_no")+"</label>");
-            ret.append("</td>");
-            ret.append("</tr>");
-
-            ret.append("<tr>");
-            ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_vmode")+":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
+            ret.append("/> "+paramRequest.getLocaleString("lblAdmin_no")+"</label>");
+            ret.append("</li>");
+            
             value = base.getAttribute("vmode", VMode.IP.toString());
-            ret.append("<label for=\"\">");
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_vmode")+"</label>");
+            ret.append("<label for=\"vmodeip\">");
             ret.append("<input type=\"radio\" name=\"vmode\" id=\"vmodeip\" value=\""+VMode.IP.toString()+"\" ");
             if( VMode.IP.toString().equalsIgnoreCase(value) )
                 ret.append(" checked=\"checked\"");
-            ret.append("/> "+paramRequest.getLocaleString("lblDoAdmin_ipMode")+"</label>&nbsp;&nbsp;&nbsp;");
+            ret.append("/> "+paramRequest.getLocaleString("lblAdmin_ipMode")+"</label>&nbsp;&nbsp;&nbsp;");
             ret.append("<label for=\"vmodecki\">");
             ret.append("<input type=\"radio\" name=\"vmode\" id=\"vmodecki\" value=\""+VMode.COOKIE.toString()+"\" ");
             if( VMode.COOKIE.toString().equalsIgnoreCase(value))
                 ret.append(" checked=\"checked\"");
-            ret.append("/> "+paramRequest.getLocaleString("lblDoAdmin_cookieMode")+"</label>");
-            ret.append("</td>");
-            ret.append("</tr>");
+            ret.append("/> "+paramRequest.getLocaleString("lblAdmin_cookieMode")+"</label>");
+            ret.append("</li>");
 
-            ret.append("<tr>");
-            ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_time")+" <span class=\"enfasis\">(" + paramRequest.getLocaleString("lblDoAdmin_minutes") + ")</span>:&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"text\" name=\"time\" dir=\"rtl\" maxlength=\"6\" value=\""+base.getAttribute("time", "20")+"\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\""+paramRequest.getLocaleString("lblDoAdmin_time")+"\" invalidMessage=\""+paramRequest.getLocaleString("lblDoAdmin_timeInvalid")+"\" regExp=\"\\d{1,6}\" />");
-            ret.append("</td>");
-            ret.append("</tr>");
-            ret.append("</table> ");
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label for=\"rtl\" class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_time")+" <span class=\"enfasis\">(" + paramRequest.getLocaleString("lblAdmin_minutes") + ")</span></label>");
+            ret.append("<input type=\"text\" name=\"time\" dir=\"rtl\" maxlength=\"6\" value=\""+base.getAttribute("time", "20")+"\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\""+paramRequest.getLocaleString("lblAdmin_time")+"\" invalidMessage=\""+paramRequest.getLocaleString("lblAdmin_timeInvalid")+"\" regExp=\"\\d{1,6}\" />");
+            ret.append("</li>");
+            ret.append("</ul> ");
             ret.append("</fieldset> ");
 
 
-
+            ret.append("<div title=\""+paramRequest.getLocaleString("lblAdmin_ResultsData")+"\" open=\"false\" dojoType=\"dijit.TitlePane\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
             ret.append("<fieldset> ");
-            ret.append("<legend>"+paramRequest.getLocaleString("lblDoAdmin_lookfeelPoll")+"</legend>");
-            ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"5\"> ");
-            ret.append("<tr><td width=\"250\"></td><td></td></tr>");
-
-            ret.append("<tr>");
-            ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_cssClass")+":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"text\" name=\"cssClass\" value=\""+base.getAttribute("cssClass","")+"\" maxlength=\"30\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" invalidMessage=\"to do\" regExp=\".+\" />");
-            ret.append("</td>");
-            ret.append("</tr>");
-
-            ret.append("<tr>");
-            ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_header")+":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"text\" name=\"header\" value=\""+base.getAttribute("header","")+"\" maxlength=\"80\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" invalidMessage=\"to do\" regExp=\".+\" />");
-            ret.append("</td>");
-            ret.append("</tr>");
-
-            ret.append("<tr>");
-            ret.append("<td class=\"datos\">" + paramRequest.getLocaleString("lblDoAdmin_imgTitle")+"&nbsp; <span class=\"enfasis\">(jpg, jpeg, gif, png)</span>:&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"file\" size=\"40\" name=\"imgencuesta\" onChange=\"isFileType(this, 'jpg|jpeg|gif|png');\" maxlength=\"80\" />");
-            ret.append("</td>");
-            ret.append("</tr>");
-            if( base.getAttribute("imgencuesta")!=null ) {
-                ret.append("<tr>");
-                ret.append("<td class=\"datos\">&nbsp;</td>");
-                ret.append("<td class=\"valores\">");
-                ret.append(admResUtils.displayImage(base, base.getAttribute("imgencuesta"), "imgencuesta") +"<br /><input type=\"checkbox\" name=\"noimgencuesta\" value=\"1\" /> <span class=\"enfasis\">"+paramRequest.getLocaleString("lblDoAdmin_removeImage")+" <i>"+base.getAttribute("imgencuesta")+"</i></span>");
-                ret.append("</td>");
-                ret.append("</tr>");
-            }
-
-            ret.append("<tr>");
-            ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_label")+" "+paramRequest.getLocaleString("lblDoAdmin_vote")+":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"text\" name=\"msg_tovote\" value=\""+base.getAttribute("msg_tovote","")+"\" maxlength=\"80\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" />");
-            ret.append("</td>");
-            ret.append("</tr>");
-
-            ret.append("<tr>");
-            ret.append("<td class=\"datos\">"+ paramRequest.getLocaleString("lblDoAdmin_imgVote") + "<span class=\"enfasis\">(jpg, jpeg, gif, png):</span>:&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"file\" size=\"40\" name=\"button\" onChange=\"isFileType(this, 'jpg|jpeg|gif|png');\" maxlength=\"180\"/>");
-            ret.append("</td>");
-            ret.append("</tr>");
-            if( base.getAttribute("button")!=null ) {
-                ret.append("<tr>");
-                ret.append("<td class=\"datos\">&nbsp;</td>");
-                ret.append("<td class=\"valores\">");
-                ret.append(admResUtils.displayImage(base, base.getAttribute("button"), "button") +"<br /><input type=\"checkbox\" name=\"noimgencuesta\" value=\"1\" /> <span class=\"enfasis\">"+paramRequest.getLocaleString("lblDoAdmin_removeImage")+" <i>"+base.getAttribute("button")+"</i></span>");
-                ret.append("</td>");
-                ret.append("</tr>");
-            }
-            ret.append("</table>");
-            ret.append("</fieldset>");
-
-
-            ret.append("<fieldset> ");
-            ret.append("<legend>"+paramRequest.getLocaleString("lblDoAdmin_ResultsData")+"</legend>");
-            ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"5\"> ");
-            ret.append("<tr><td width=\"250\"></td><td></td></tr>");
-
-            ret.append("<tr>");
-            ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_percentage")+":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
+            ret.append("<legend>"+paramRequest.getLocaleString("lblAdmin_onResults")+"</legend>");
+            ret.append("<ul class=\"swbform-ul\"> ");
             value = base.getAttribute("porcent", Boolean.TRUE.toString());
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_percentage")+"</label>");
             ret.append("<label for=\"porcenttrue\"><input type=\"radio\" name=\"porcent\" id=\"porcenttrue\" value=\""+Boolean.TRUE.toString()+"\" ");
-            if( Boolean.TRUE.toString().equals(value) )
+            //if(Boolean.TRUE.toString().equals(value))
+            if(Boolean.parseBoolean(value))
                 ret.append(" checked=\"checked\"");
-            ret.append("/> "+paramRequest.getLocaleString("lblDoAdmin_yes")+"</label>&nbsp;&nbsp;&nbsp;");
+            ret.append("/> "+paramRequest.getLocaleString("lblAdmin_yes")+"</label>&nbsp;&nbsp;&nbsp;");
             ret.append("<label for=\"porcentfalse\"><input type=\"radio\" name=\"porcent\" id=\"porcentfalse\" value=\""+Boolean.FALSE.toString()+"\" ");
-            if(Boolean.FALSE.toString().equals(value))
+            //if(Boolean.FALSE.toString().equals(value))
+            if(!Boolean.parseBoolean(value))
                 ret.append(" checked=\"checked\"");
-            ret.append("/> "+paramRequest.getLocaleString("lblDoAdmin_no")+"</label>");
-            ret.append("</td>");
-            ret.append("</tr>");
+            ret.append("/> "+paramRequest.getLocaleString("lblAdmin_no")+"</label>");
+            ret.append("</li>");
 
-            ret.append("<tr>");
-            ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_total")+":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
             value = base.getAttribute("totvote", Boolean.TRUE.toString());
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_total")+"</label>");
             ret.append("<label for=\"totvotetrue\"><input type=\"radio\" name=\"totvote\" id=\"totvotetrue\" value=\""+Boolean.TRUE.toString()+"\" ");
-            if(Boolean.TRUE.toString().equals(value))
+            if(Boolean.parseBoolean(value))
                 ret.append(" checked=\"checked\"");
-            ret.append("/> "+paramRequest.getLocaleString("lblDoAdmin_yes")+"</label>");
-            ret.append("&nbsp;&nbsp;&nbsp;");
+            ret.append("/> "+paramRequest.getLocaleString("lblAdmin_yes")+"</label>&nbsp;&nbsp;&nbsp;");
             ret.append("<label for=\"totvotefalse\"><input type=\"radio\" name=\"totvote\" id=\"totvotefalse\" value=\""+Boolean.FALSE.toString()+"\" ");
-            if(Boolean.FALSE.toString().equals(value))
+            if(!Boolean.parseBoolean(value))
                 ret.append(" checked=\"checked\"");
-            ret.append("/> "+paramRequest.getLocaleString("lblDoAdmin_no")+"</label>");
-            ret.append("</td>");
-            ret.append("</tr>");
-            ret.append("</table> ");
+            ret.append("/> "+paramRequest.getLocaleString("lblAdmin_no")+"</label>");
+            ret.append("</li>");
+            ret.append("</ul>");
             ret.append("</fieldset> ");
-
-
-
             ret.append("<fieldset> ");
-            ret.append("<legend>"+paramRequest.getLocaleString("lblDoAdmin_lookfeelResults")+"</legend>");
-            ret.append("<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"5\"> ");
-            ret.append("<tr><td width=\"250\"></td><td></td></tr>");
+            ret.append("<legend>"+paramRequest.getLocaleString("lblAdmin_SettingsPopUp")+"</legend>");
+            ret.append("<ul class=\"swbform-ul\"> ");
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("msgMenubar")+"</label>");
+            ret.append("<input type=\"checkbox\" name=\"menubar\" value=\"yes\"");
+            if("yes".equals(base.getAttribute("menubar", "")))
+                ret.append(" checked=\"checked\"");
+            ret.append("/>");
+            ret.append("</li>");
 
-            ret.append("<tr>");
-            ret.append("<td class=\"datos\">"+ paramRequest.getLocaleString("lblDoAdmin_display_results")+":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("msgToolbar") + "</label>");
+            ret.append("<input type=\"checkbox\" name=\"toolbar\" value=\"yes\"");
+            if ("yes".equals(base.getAttribute("toolbar", "")))
+                ret.append(" checked=\"checked\"");
+            ret.append("/>");
+            ret.append("</li>");
+
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("msgStatusbar")+"</label>");
+            ret.append("<input type=\"checkbox\" name=\"status\" value=\"yes\"");
+            if ("yes".equals(base.getAttribute("status", "")))
+                ret.append(" checked=\"checked\"");
+            ret.append("/>");
+            ret.append("</li>");
+
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("msgLocation")+"</label>");
+            ret.append("<input type=\"checkbox\" name=\"location\" value=\"yes\"");
+            if ("yes".equals(base.getAttribute("location", "")))
+                ret.append(" checked=\"checked\"");
+            ret.append("/>");
+            ret.append("</li>");
+
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("msgDirectories")+"</label>");
+            ret.append("<input type=\"checkbox\" name=\"directories\" value=\"yes\"");
+            if ("yes".equals(base.getAttribute("directories", "")))
+                ret.append(" checked=\"checked\"");
+            ret.append("/>");
+            ret.append("</li>");
+
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("msgScrollbars")+"</label>");
+            ret.append("<input type=\"checkbox\" name=\"scrollbars\" value=\"yes\"");
+            if ("yes".equals(base.getAttribute("scrollbars", "")))
+                ret.append(" checked=\"checked\"");
+            ret.append("/>");
+            ret.append("</li>");
+
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("msgResizable")+"</label>");
+            ret.append("<input type=\"checkbox\" name=\"resizable\" value=\"yes\"");
+            if ("yes".equals(base.getAttribute("resizable", "")))
+                ret.append(" checked=\"checked\"");
+            ret.append("/>");
+            ret.append("</li>");
+
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("msgWidth")+" "+paramRequest.getLocaleString("msgPixels") + "</label>");
+            ret.append("<input type=\"text\" size=\"4\" maxlength=\"4\" name=\"width\" value=\""+base.getAttribute("width","")+"\" />");
+            ret.append("</li>");
+
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("msgHeight")+" "+paramRequest.getLocaleString("msgPixels")+"</label>");
+            ret.append("<input type=\"text\" size=\"4\" maxlength=\"4\" name=\"height\" value=\""+base.getAttribute("height","")+"\" />");
+            ret.append("</li>");
+
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("msgTop")+" "+paramRequest.getLocaleString("msgPixels")+"</label>");
+            ret.append("<input type=\"text\" size=\"4\" maxlength=\"4\" name=\"top\" value=\""+base.getAttribute("top","")+"\" />");
+            ret.append("</li>");
+
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("msgLeft")+" "+paramRequest.getLocaleString("msgPixels")+"</label>");
+            ret.append("<input type=\"text\" size=\"4\" maxlength=\"4\" name=\"left\" value=\""+base.getAttribute("left","")+"\" />");
+            ret.append("</li>");
+            ret.append("</ul>");
+            ret.append("</fieldset>");
+            ret.append("</div>");
+
+
+            ret.append("<div title=\""+paramRequest.getLocaleString("lblAdmin_Style")+"\" open=\"false\" dojoType=\"dijit.TitlePane\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
+            ret.append("<fieldset> ");
+            ret.append("<legend>"+paramRequest.getLocaleString("lblAdmin_StyleQuestion")+"</legend>");
+            ret.append("<ul class=\"swbform-ul\"> ");
+
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label for=\"cssClass\" class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_cssClass")+"</label>");
+            ret.append("<input type=\"text\" name=\"cssClass\" id=\"cssClass\" value=\""+base.getAttribute("cssClass","")+"\" maxlength=\"30\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\""+paramRequest.getLocaleString("lblAdmin_cssClass")+"\" invalidMessage=\""+paramRequest.getLocaleString("lblAdmin_cssClass")+"\" regExp=\".+\" />");
+            ret.append("</li>");
+
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label for=\"header\" class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_header")+"</label>");
+            ret.append("<input type=\"text\" name=\"header\" id=\"header\" value=\""+base.getAttribute("header","")+"\" maxlength=\"80\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\""+paramRequest.getLocaleString("lblAdmin_header")+"\" invalidMessage=\""+paramRequest.getLocaleString("lblAdmin_header")+"\" regExp=\".+\" />");
+            ret.append("</li>");
+
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label for=\"\" class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_imgTitle")+"&nbsp; <span class=\"enfasis\">(jpg, jpeg, gif, png)</span></label>");
+            ret.append("<input type=\"file\" size=\"40\" name=\"imgencuesta\" id=\"imgencuesta\" onChange=\"isFileType(this, 'jpg|jpeg|gif|png');\" maxlength=\"80\" />");
+            ret.append("</li>");
+            if( base.getAttribute("imgencuesta")!=null ) {
+                ret.append("<li class=\"swbform-li\">");
+                ret.append("<label class=\"swbform-label\">&nbsp;</label>");
+                ret.append(admResUtils.displayImage(base, base.getAttribute("imgencuesta"), "imgencuesta") +"&nbsp;<label class=\"enfasis\"><input type=\"checkbox\" name=\"noimgencuesta\" id=\"noimg_encuesta\" value=\"1\" /> "+paramRequest.getLocaleString("lblAdmin_removeImage")+" <i>"+base.getAttribute("imgencuesta")+"</i></label>");
+                ret.append("</li>");
+            }
+
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label for=\"\" class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_label")+" "+paramRequest.getLocaleString("lblAdmin_vote")+"</label>");
+            ret.append("<input type=\"text\" name=\"msg_tovote\" value=\""+base.getAttribute("msg_tovote","")+"\" maxlength=\"80\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\""+paramRequest.getLocaleString("lblAdmin_vote")+"\" />");
+            ret.append("</li>");
+
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label for=\"\" class=\"swbform-label\">"+ paramRequest.getLocaleString("lblAdmin_imgVote") + "&nbsp; <span class=\"enfasis\">(jpg, jpeg, gif, png):</span></label>");
+            ret.append("<input type=\"file\" size=\"40\" name=\"button\" onChange=\"isFileType(this, 'jpg|jpeg|gif|png');\" maxlength=\"180\"/>");
+            ret.append("</li>");
+            if( base.getAttribute("button")!=null ) {
+                ret.append("<li class=\"swbform-li\">");
+                ret.append("<label class=\"swbform-label\">&nbsp;</label>");
+                ret.append(admResUtils.displayImage(base, base.getAttribute("button"), "button") +"&nbsp;<label class=\"enfasis\"><input type=\"checkbox\" name=\"noimg_button\" id=\"noimg_button\" value=\"1\" /> "+paramRequest.getLocaleString("lblAdmin_removeImage")+" <i>"+base.getAttribute("button")+"</i></label>");
+                ret.append("</li>");
+            }
+            ret.append("</ul>");
+            ret.append("</fieldset>");
+            ret.append("<fieldset> ");
+            ret.append("<legend>"+paramRequest.getLocaleString("lblAdmin_StyleResults")+"</legend>");
+            ret.append("<ul class=\"swbform-ul\"> ");
+
             value = base.getAttribute("display", Display.SLIDE.toString());
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+ paramRequest.getLocaleString("lblAdmin_display_results")+"</label>");
             ret.append("<label for=\"popup\"><input type=\"radio\" name=\"display\" id=\"popup\" value=\""+Display.POPUP.toString()+"\" ");
-            if( Display.POPUP.toString().equals(value) )
+            if(Display.POPUP.name().equals(value))
                 ret.append(" checked=\"checked\"");
-            ret.append("/> "+paramRequest.getLocaleString("lblDoAdmin_window")+"</label>");
-
-            ret.append("&nbsp;&nbsp;&nbsp;");
+            ret.append("/> "+paramRequest.getLocaleString("lblAdmin_window")+"</label>&nbsp;&nbsp;&nbsp;");
             ret.append("<label for=\"slide\"><input type=\"radio\" name=\"display\" id=\"slide\" value=\""+Display.SLIDE.toString()+"\" ");
-            if( Display.SLIDE.toString().equals(value) )
+            if(Display.SLIDE.name().equals(value))
                 ret.append(" checked=\"checked\"");
-            ret.append("/> "+paramRequest.getLocaleString("lblDoAdmin_slide")+"</label>");
-
-            ret.append("&nbsp;&nbsp;&nbsp;");
+            ret.append("/> "+paramRequest.getLocaleString("lblAdmin_slide")+"</label>&nbsp;&nbsp;&nbsp;");
             ret.append("<label for=\"simple\"><input type=\"radio\" name=\"display\" id=\"simple\" value=\""+Display.SIMPLE.toString()+"\" ");
-            if( Display.SIMPLE.toString().equals(value) )
+            if(Display.SIMPLE.name().equals(value))
                 ret.append(" checked=\"checked\"");
-            ret.append("/> "+paramRequest.getLocaleString("lblDoAdmin_accessible")+"</label>");
-            ret.append("</td>");
-            ret.append("</tr>");
+            ret.append("/> "+paramRequest.getLocaleString("lblAdmin_accessible")+"</label>");
+            ret.append("</li>");
 
-            ret.append("<tr>");
-            ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_message")+" "+paramRequest.getLocaleString("lblDoAdmin_msgResults")+":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_message")+" "+paramRequest.getLocaleString("lblAdmin_msgResults")+"</label>");
             ret.append("<input type=\"text\" name=\"msg_viewresults\" value=\""+base.getAttribute("msg_viewresults","")+"\" maxlength=\"25\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" />");
-            ret.append("</td>");
-            ret.append("</tr>");
+            ret.append("</li>");
 
-            ret.append("<tr>");
-            ret.append("<td align=\"right\">"+paramRequest.getLocaleString("lblDoAdmin_message")+" "+paramRequest.getLocaleString("lblDoAdmin_numVotes")+":&nbsp;</td>");
-            ret.append("<td>");
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_message")+" "+paramRequest.getLocaleString("lblAdmin_numVotes")+"</label>");
             ret.append("<input type=\"text\" name=\"msg_vote\" value=\""+base.getAttribute("msg_vote","")+"\" maxlength=\"55\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" />");
-            ret.append("</td>");
-            ret.append("</tr>");
+            ret.append("</li>");
 
-            ret.append("<tr>");
-            ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_message")+" "+paramRequest.getLocaleString("lblDoAdmin_windowClose")+":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_message")+" "+paramRequest.getLocaleString("lblAdmin_windowClose")+"</label>");
             ret.append("<input type=\"text\" name=\"msg_closewin\" value=\""+base.getAttribute("msg_closewin","")+"\" maxlength=\"25\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" />");
-            ret.append("</td>");
-            ret.append("</tr>");
+            ret.append("</li>");
 
-            ret.append("<tr>");
-            ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_message")+" "+paramRequest.getLocaleString("lblDoAdmin_totalVotes")+":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_message")+" "+paramRequest.getLocaleString("lblAdmin_totalVotes")+"</label>");
             ret.append("<input type=\"text\" name=\"msg_totvotes\" value=\""+base.getAttribute("msg_totvotes","")+"\" maxlength=\"25\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" />");
-            ret.append("</td>");
-            ret.append("</tr>");
+            ret.append("</li>");
 
-            ret.append("<tr>");
-            ret.append("<td class=\"datos\">"+ paramRequest.getLocaleString("lblDoAdmin_imgBackground") + "&nbsp, <span class=\"enfasis\">(jpg, jpeg, gif, png)</span>:&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+ paramRequest.getLocaleString("lblAdmin_imgBackground") + "&nbsp, <span class=\"enfasis\">(jpg, jpeg, gif, png)</span></label>");
             ret.append("<input type=\"file\" size=\"40\" name=\"backimgres\" onChange=\"isFileType(this,'jpg|jpeg|gif|png');\" maxlength=\"80\" />");
-            ret.append("</td>");
-            ret.append("</tr>");
             if( base.getAttribute("backimgres")!=null ) {
-                ret.append("<tr>");
-                ret.append("<td class=\"datos\">&nbsp;</td>");
-                ret.append("<td class=\"valores\">");
-                ret.append(admResUtils.displayImage(base, base.getAttribute("backimgres"), "backimgres") +"<br /><input type=\"checkbox\" name=\"nobackimgres\" value=\"1\" /> <span class=\"enfasis\">"+paramRequest.getLocaleString("lblDoAdmin_removeImage")+" <i>"+base.getAttribute("backimgres")+"</i></span>");
-                ret.append("</td>");
-                ret.append("</tr>");
+                ret.append("<label class=\"swbform-label\">&nbsp;</label>");
+                ret.append(admResUtils.displayImage(base, base.getAttribute("backimgres"), "backimgres") +"&nbsp;<label class=\"enfasis\" for=\"nobackimgres\"><input type=\"checkbox\" name=\"nobackimgres\" id=\"nobackimgres\" value=\"1\" />"+paramRequest.getLocaleString("lblAdmin_removeImage")+" <i>"+base.getAttribute("backimgres")+"</i></label>");
             }
-            ret.append("</table>");
+            ret.append("</li>");
+            ret.append("</ul>");
             ret.append("</fieldset>");
+            ret.append("</div>");
 
 
-
+            ret.append("<div title=\""+paramRequest.getLocaleString("lblAdmin_Advanced")+"\" open=\"false\" dojoType=\"dijit.TitlePane\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
             ret.append("<fieldset> ");
-            ret.append("<legend>"+paramRequest.getLocaleString("usrmsg_SettingsNewWindow")+"</legend>");
-            ret.append("<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"5\"> ");
-            ret.append("<tr><td width=\"250\"></td><td></td></tr>");
-            ret.append(admResUtils.loadWindowConfiguration(base, paramRequest));
-            ret.append("</table> ");
-            ret.append("</fieldset>");
+            ret.append("<legend>"+paramRequest.getLocaleString("lblAdmin_Advanced")+"</legend>");
+            ret.append("<ul class=\"swbform-ul\"> ");
 
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_jsp")+"</label>");
+            ret.append("<input type=\"text\" name=\"jspfile\" value=\""+base.getAttribute("jspfile", "")+"\" maxlength=\"80\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\""+paramRequest.getLocaleString("lblAdmin_jsp")+"\" />");
+            ret.append("</li>");
 
-
-            ret.append("<fieldset> ");
-            ret.append("<legend>"+paramRequest.getLocaleString("lblDoAdmin_Advanced")+"</legend>");
-            ret.append("<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"5\"> ");
-            ret.append("<tr><td width=\"250\"></td><td></td></tr>");
-
-            ret.append("<tr>");
-            ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_jsp")+":&nbsp;</td>");
-            ret.append("<td class=\"valores\"><input type=\"text\" name=\"jspfile\" value=\""+base.getAttribute("jspfile", "")+"\" maxlength=\"80\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" invalidMessage=\"to do\" regExp=\".+\" /></td> ");
-            ret.append("</tr>");
-
-            ret.append("<tr>");
-            ret.append("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_Template")+" <span class=\"enfasis\">(xsl, xslt)</span>:&nbsp;</td>");
-            ret.append("<td class=\"valores\"><input type=\"file\" size=\"40\" name=\"template\" onChange=\"isFileType(this, 'xsl|xslt');\" maxlength=\"80\" /></td>");
-            ret.append("</tr>");
-            ret.append("<tr>");
-            ret.append("<td class=\"datos\">&nbsp;</td>");
+            ret.append("<li class=\"swbform-li\">");
+            ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_Template")+" <span class=\"enfasis\">(xsl, xslt)</span></label>");
+            ret.append("<input type=\"file\" size=\"40\" name=\"template\" onChange=\"isFileType(this, 'xsl|xslt');\" maxlength=\"80\" />");
+            ret.append("</li>");
+            
+            ret.append("<li class=\"swbform-li\">");
             if(!"".equals(base.getAttribute("template", "").trim())) {
-                ret.append("<td class=\"valores\">"+paramRequest.getLocaleString("lblDoAdmin_curTemplate")+":&nbsp;");
+                ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_curTemplate")+"</label>");
                 ret.append("<a href=\"\">"+base.getAttribute("template")+"</a>");
-                ret.append("</td>");
             }else {
-                ret.append("<td class=\"valores\">"+paramRequest.getLocaleString("lblDoAdmin_defTemplate")+":&nbsp;Poll.xsl</td>");
+                ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_defTemplate")+":&nbsp;Poll.xsl</label>");
             }
-            ret.append("</tr>");
+            ret.append("</li>");
 
-            ret.append("</table> ");
+            ret.append("</ul> ");
             ret.append("</fieldset> ");
+            ret.append("</div>");
 
-
+            
             ret.append("<fieldset>");
-            ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\"> ");
-            ret.append(" <tr><td>");
-            ret.append(" <button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"submitImgGal\" value=\"Submit\" onclick=\"if(jsValida(dojo.byId('frmAdmRes'))) return true; else return false;\">"+paramRequest.getLocaleString("lblDoAdmin_submit")+"</button>&nbsp;");
-            ret.append(" <button dojoType=\"dijit.form.Button\" type=\"reset\">"+paramRequest.getLocaleString("lblDoAdmin_reset")+"</button>");
-            ret.append(" </td></tr>");
-            ret.append("</table> ");
+//            ret.append("<ul class=\"swbform-ul\"> ");
+//            ret.append("<li class=\"swbform-li\">");
+            ret.append(" <button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"submitImgGal\" value=\"Submit\" onclick=\"if(jsValida(dojo.byId('frmAdmRes'))) return true; else return false;\">"+paramRequest.getLocaleString("lblAdmin_submit")+"</button>&nbsp;");
+            ret.append(" <button dojoType=\"dijit.form.Button\" type=\"reset\">"+paramRequest.getLocaleString("lblAdmin_reset")+"</button>");
+//            ret.append("</li>");
+//            ret.append("</ul> ");
             ret.append("</fieldset>");
+
             ret.append("</form> ");
-            ret.append("<span class=\"requerido\">*</span> " + paramRequest.getLocaleString("lblDoAdmin_required"));
+            ret.append("<p><span class=\"requerido\">*</span> " + paramRequest.getLocaleString("lblAdmin_required")+"</p>");
             ret.append("</div>");
             ret.append(getAdminScript(paramRequest));
         }
@@ -1620,13 +1631,13 @@ public class Poll extends GenericResource {
         script.append("{");
         script.append("   if(pForm.question.value==null || pForm.question.value=='' || pForm.question.value==' ')");
         script.append("   {");
-        script.append("       alert('" + paramRequest.getLocaleString("lblDoAdmin_msgQuestion") + "');");
+        script.append("       alert('" + paramRequest.getLocaleString("lblAdmin_msgQuestion") + "');");
         script.append("       pForm.question.focus();");
         script.append("       return false;");
         script.append("   }");
         script.append("   if(pForm.selOption.length < 2)");
         script.append("   {");
-        script.append("       alert('" + paramRequest.getLocaleString("lblDoAdmin_msgOption") + "');");
+        script.append("       alert('" + paramRequest.getLocaleString("lblAdmin_msgOption") + "');");
         script.append("       pForm.txtOption.focus();");
         script.append("       return false;");
         script.append("   }");
@@ -1708,7 +1719,7 @@ public class Poll extends GenericResource {
         script.append("function buscaCookie(cocacola, rgName, isCLIValidable, url) {");
         script.append("  var numcom = getCookie(cocacola);");
         script.append("  if(numcom=='SI' && isCLIValidable) {");
-        script.append("    alert('"+paramRequest.getLocaleString("msgDoView_msgVote")+"');");
+        script.append("    alert('"+paramRequest.getLocaleString("msgView_msgVote")+"');");
         script.append("    return;");
         script.append("  }");
         script.append("  grabaEncuesta(rgName, url);");
@@ -1732,7 +1743,7 @@ public class Poll extends GenericResource {
         else
             script.append("   postHtml(url+'&radiobutton='+optValue,'"+PREF+base.getId()+"'); expande();");
         script.append("   }else {");
-        script.append("      alert('"+paramRequest.getLocaleString("msgDoView_msgAnswer")+"');");
+        script.append("      alert('"+paramRequest.getLocaleString("msgView_msgAnswer")+"');");
         script.append("   }");
         script.append("}");
 
