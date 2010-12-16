@@ -1,1 +1,2 @@
 "msgError1" = "Una actividad no puede tener flujos de secuencia provenientes de una compuerta basada en eventos"
+"msgError2" = "Una actividad no puede tener Flujos Por defecto de salida"
