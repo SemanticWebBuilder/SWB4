@@ -8,10 +8,16 @@ import com.arthurdo.parser.HtmlStreamTokenizer;
 import com.arthurdo.parser.HtmlTag;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 
 
@@ -191,44 +197,92 @@ public class IFrame
 
         return sb.toString();
     }
-    private String variablesubstituion(String html,User user,Gadget gadget,String language,String country)
+
+    private Map<String, String> getVariablesubstituion(User user, Gadget gadget, String language, String country, String moduleID)
     {
-        //__MSG_<KEY>__
-
-        html=html.replace("__MSG_LANG__",language);
-        html=html.replace("__MSG_COUNTRY__",country);
-
-
-        // User preferences sustitucion __UP_<KEY>__
-        Iterator<PersonalizedGadged> preferences=PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(user);
-        while(preferences.hasNext())
+        Map<String, String> getVariablesubstituion = new HashMap<String, String>();
+        getVariablesubstituion.put("__MODULE_ID__", moduleID);
+        getVariablesubstituion.put("__MSG_LANG__", language);
+        getVariablesubstituion.put("__MSG_COUNTRY__", country);
+        Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(user);
+        while (preferences.hasNext())
         {
-            PersonalizedGadged personalizedGadged=preferences.next();
-            if(personalizedGadged.getGadget().getURI().equals(gadget.getURI()))
+            PersonalizedGadged personalizedGadged = preferences.next();
+            if (personalizedGadged.getGadget().getURI().equals(gadget.getURI()))
             {
-                GenericIterator<UserPref> list=personalizedGadged.listUserPrefses();
-                while(list.hasNext())
+                GenericIterator<UserPref> list = personalizedGadged.listUserPrefses();
+                while (list.hasNext())
                 {
-                    UserPref pref=list.next();
-                    String toreplace="__UP_"+pref.getName()+"__";
-                    html=html.replace(toreplace, pref.getValue());
+                    UserPref pref = list.next();
+                    getVariablesubstituion.put("__UP_" + pref.getName() + "__", pref.getValue());
                 }
             }
         }
-        return html;
+        return getVariablesubstituion;
     }
+
+    private String getHTML(URL url)
+    {
+        StringBuilder sb = new StringBuilder();
+        try
+        {
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            Charset charset = Charset.defaultCharset();
+            String contentType = con.getHeaderField("Content-Type");
+            if (contentType != null && contentType.toLowerCase().indexOf("html") != -1)
+            {
+                int pos = contentType.indexOf("charset");
+                if (pos != -1)
+                {
+                    String scharset = contentType.substring(pos + 1);
+                    pos = scharset.indexOf("=");
+                    if (pos != -1)
+                    {
+                        scharset = scharset.substring(pos + 1);
+                        try
+                        {
+                            charset = Charset.forName(scharset);
+                        }
+                        catch (Exception e)
+                        {
+                            log.debug(e);
+                        }
+                    }
+                }
+            }
+            InputStream in = con.getInputStream();
+            byte[] buffer = new byte[1028];
+            int read = in.read(buffer);
+            while (read != -1)
+            {
+                sb.append(new String(buffer, 0, read, charset));
+                read = in.read(buffer);
+            }
+            in.close();
+        }
+        catch (Exception e)
+        {
+            log.debug(e);
+        }
+        return sb.toString();
+    }
+
     public void doProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         System.out.println("IFrame url: " + request.getParameter("url"));
         String url = request.getParameter("url");
         String country = request.getParameter("country");
         String lang = request.getParameter("lang");
+        String moduleid = request.getParameter("moduleid");
         String html = "";
+
         try
         {
-            Gadget gadget = SocialContainer.getGadget(url,paramRequest.getWebPage().getWebSite());
+            Gadget gadget = SocialContainer.getGadget(url, paramRequest.getWebPage().getWebSite());
+
             if (gadget != null)
             {
+                Map<String, String> variables = getVariablesubstituion(paramRequest.getUser(), gadget, lang, country, moduleid);
                 NodeList contents = gadget.getDocument().getElementsByTagName("Content");
                 for (int i = 0; i < contents.getLength(); i++)
                 {
@@ -245,9 +299,31 @@ public class IFrame
                                 {
                                     CDATASection section = (CDATASection) childs.item(j);
                                     html = section.getNodeValue();
-                                    html=variablesubstituion(html,paramRequest.getUser(),gadget,lang, country);
+                                    for (String key : variables.keySet())
+                                    {
+                                        String value = variables.get(key);
+                                        html = html.replace(key, value);
+                                    }
                                 }
                             }
+                        }
+                        if ("URL".equals(content.getAttribute("type")))
+                        {
+                            String href = content.getAttribute("href");
+                            URI urihref = new URI(href);
+                            URI urigadget = new URI(gadget.getUrl());
+                            if (!urihref.isAbsolute())
+                            {
+                                urigadget.resolve(urihref);
+                            }
+                            // sends the html result from the href
+                            String _url = urihref.toString() + "?";
+                            for (String key : variables.keySet())
+                            {
+                                String value = variables.get(key);
+                                _url+="&"+URLEncoder.encode(key)+"="+URLEncoder.encode(value);
+                            }
+                            html = getHTML(new URL(_url));
                         }
                     }
                 }
@@ -306,7 +382,7 @@ public class IFrame
         catch (Exception e)
         {
             log.debug(e);
-            response.setStatus(500,e.getMessage());
+            response.setStatus(500, e.getMessage());
         }
     }
 }
