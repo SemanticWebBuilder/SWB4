@@ -274,57 +274,91 @@ public class IFrame
         String country = request.getParameter("country");
         String lang = request.getParameter("lang");
         String moduleid = request.getParameter("moduleid");
+        String sview = request.getParameter("view");
         String html = "";
-
+        int iview=0;
+        try
+        {
+            iview=Integer.parseInt(sview);
+        }
+        catch(NumberFormatException nfe)
+        {
+            log.debug(nfe);
+        }
         try
         {
             Gadget gadget = SocialContainer.getGadget(url, paramRequest.getWebPage().getWebSite());
 
             if (gadget != null)
             {
+                int currentView=0;
                 Map<String, String> variables = getVariablesubstituion(paramRequest.getUser(), gadget, lang, country, moduleid);
                 NodeList contents = gadget.getDocument().getElementsByTagName("Content");
                 for (int i = 0; i < contents.getLength(); i++)
                 {
                     Node node = contents.item(i);
-                    if (node instanceof Element)
-                    {
+                    if (node instanceof Element && currentView==iview)
+                    {                        
                         Element content = (Element) node;
-                        if ("html".equals(content.getAttribute("type")))
+                        String type="html";
+                        if(content.getAttribute("type")!=null)
                         {
-                            NodeList childs = content.getChildNodes();
-                            for (int j = 0; j < childs.getLength(); j++)
+                            type=content.getAttribute("type");
+                        }
+                        if ("html".equals(type))
+                        {
+                            String href = content.getAttribute("href");
+                            if(href==null)
                             {
-                                if (childs.item(j) instanceof CDATASection)
+                                NodeList childs = content.getChildNodes();
+                                for (int j = 0; j < childs.getLength(); j++)
                                 {
-                                    CDATASection section = (CDATASection) childs.item(j);
-                                    html = section.getNodeValue();
-                                    for (String key : variables.keySet())
+                                    if (childs.item(j) instanceof CDATASection)
                                     {
-                                        String value = variables.get(key);
-                                        html = html.replace(key, value);
+                                        CDATASection section = (CDATASection) childs.item(j);
+                                        html = section.getNodeValue();
+                                        for (String key : variables.keySet())
+                                        {
+                                            String value = variables.get(key);
+                                            html = html.replace(key, value);
+                                        }
                                     }
                                 }
                             }
+                            else
+                            {
+                                URI urihref = new URI(href);
+                                URI urigadget = new URI(gadget.getUrl());
+                                if (!urihref.isAbsolute())
+                                {
+                                    urigadget.resolve(urihref);
+                                }
+                                html=getHTML(urigadget.toURL());
+                            }
                         }
-                        if ("URL".equals(content.getAttribute("type")))
+                        else if("URL".equals(type))
                         {
                             String href = content.getAttribute("href");
-                            URI urihref = new URI(href);
-                            URI urigadget = new URI(gadget.getUrl());
-                            if (!urihref.isAbsolute())
+                            if(href==null)
                             {
-                                urigadget.resolve(urihref);
+                                URI urihref = new URI(href);
+                                URI urigadget = new URI(gadget.getUrl());
+                                if (!urihref.isAbsolute())
+                                {
+                                    urigadget.resolve(urihref);
+                                }
+                                // sends the html result from the href
+                                String _url = urihref.toString() + "?";
+                                for (String key : variables.keySet())
+                                {
+                                    String value = variables.get(key);
+                                    _url+="&"+URLEncoder.encode(key)+"="+URLEncoder.encode(value);
+                                }
+                                html="<iframe src=\""+ _url +"\"></iframe>";
                             }
-                            // sends the html result from the href
-                            String _url = urihref.toString() + "?";
-                            for (String key : variables.keySet())
-                            {
-                                String value = variables.get(key);
-                                _url+="&"+URLEncoder.encode(key)+"="+URLEncoder.encode(value);
-                            }
-                            html = getHTML(new URL(_url));
+                            //html = getHTML(new URL(_url));
                         }
+                        currentView++;
                     }
                 }
                 /*RequestDispatcher dis = request.getRequestDispatcher(path);
