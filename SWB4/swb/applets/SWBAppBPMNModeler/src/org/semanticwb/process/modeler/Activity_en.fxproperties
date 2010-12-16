@@ -1,1 +1,2 @@
 "msgError1" = "Activity cannot have Sequence Flows coming from Event-based Gateway"
+"msgError2" = "Activity cannot have outgoing Default Flow"
