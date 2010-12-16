@@ -92,3 +92,5 @@
 "swpFileFilter" = "Archivos SWP"
 "exportFileFilter" = "Archivos PNG"
 "msgSent" = "Los datos fueron enviados correctamente"
+"msgSaveAlert" = "Se perderán los cambios que no haya guardado, ¿Desea continuar?"
+"alertMsg" = "Atención"
