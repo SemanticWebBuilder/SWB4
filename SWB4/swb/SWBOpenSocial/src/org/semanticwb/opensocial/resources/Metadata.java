@@ -18,9 +18,11 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.User;
+import org.semanticwb.opensocial.model.FeatureDetail;
 import org.semanticwb.opensocial.model.Gadget;
 import org.semanticwb.opensocial.model.PersonalizedGadged;
 import org.semanticwb.opensocial.model.UserPref;
+import org.semanticwb.opensocial.model.View;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
@@ -81,18 +83,69 @@ public class Metadata
             if (gadget != null)
             {
                 adduserPrefs(metadata, paramRequest.getUser(), gadget,moduleId);
-                //URL _url = new URL(gadget.getUrl() + queryString);
-                //adduserPrefs(metadata, paramRequest.getUser(), gadget);
-                /*NodeList requires = gadget.getDocument().getElementsByTagName("Require");
-                for (int i = 0; i < requires.getLength(); i++)
+                //String data = "{\"gadgets\":[{\"userPrefs\":{},\"moduleId\":1,\"screenshot\":\"\",\"singleton\":false,\"width\":0,\"authorLink\":\"\",\"links\":{},\"iframeUrl\":\"//http://localhost:8080/swb/gadgets/ifr?url=http%3A%2F%2Flocalhost%3A8080%2Fswb%2Fsamplecontainer%2Fexamples%2FSocialHelloWorld.xml&container=default&view=%25view%25&lang=%25lang%25&country=%25country%25&debug=%25debug%25&nocache=%25nocache%25&v=b4ea67fd7aa33422aa257ee3f534daf0&st=%25st%25\",\"url\":\"http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml\",\"scaling\":false,\"title\":\"Social Hello World\",\"height\":0,\"titleUrl\":\"\",\"thumbnail\":\"http://localhost:8080/\",\"scrolling\":false,\"views\":{\"default\":{\"preferredHeight\":0,\"quirks\":true,\"type\":\"html\",\"preferredWidth\":0}},\"featureDetails\":{\"dynamic-height\":{\"parameters\":{},\"required\":true},\"osapi\":{\"parameters\":{},\"required\":true},\"core\":{\"parameters\":{},\"required\":true},\"settitle\":{\"parameters\":{},\"required\":true}},\"features\":[\"dynamic-height\",\"osapi\",\"core\",\"settitle\"],\"showStats\":false,\"categories\":[\"\",\"\"],\"showInDirectory\":false,\"authorPhoto\":\"\"}]}";
+
+                metadata.put("title", gadget.getTitle());
+                metadata.put("titleUrl", gadget.getTitleUrl());
+                metadata.put("description", gadget.getDescription());
+                metadata.put("author", gadget.getAuthor());
+                metadata.put("screenshot",gadget.getScreenshot().toString());
+                metadata.put("author_email", gadget.getAuthorEmail());
+                metadata.put("thumbnail", gadget.getThumbnail().toString());
+                metadata.put("width", gadget.getWidth());
+                metadata.put("height", gadget.getHeight());
+
+                JSONArray features=new JSONArray();
+                for(String feature : gadget.getFeatures())
                 {
-                    if (requires.item(i) instanceof Element)
+                    features.put(feature);
+                }
+                metadata.put("features", features);
+                JSONArray categories=new JSONArray();
+                for(String category : gadget.getCategories())
+                {
+                    categories.put(category);
+                }
+                metadata.put("categories", categories);
+
+                View[] views=gadget.getViews();
+                if(views.length==1)
+                {
+                    metadata.put("views", views[0].toJSONObject());
+                }
+                else
+                {
+                    
+                    for(View oview : views)
                     {
-                        Element require = (Element) requires.item(i);
-                        String feature = require.getAttribute("feature");
-                        addfeature(feature, metadata);
+                        metadata.accumulate("views", oview.toJSONObject());
                     }
-                }*/
+                    
+                }
+                for(FeatureDetail detail : gadget.getFeatureDetails())
+                {
+                    metadata.accumulate("featureDetails", detail);
+                }
+                
+
+                //metadata.put("url", gadget.getUrl());
+                //metadata.put("singleton", false);
+                
+                /*metadata.put("authorLink", "");
+                metadata.put("links", "");
+                metadata.put("url", gadget.getUrl());
+                metadata.put("scaling", false);
+                
+                
+                
+                
+                metadata.put("views", new JSONObject());
+                
+                metadata.put("showStats",false);
+                metadata.put("showInDirectory",false);
+                metadata.put("authorPhoto",false);*/
+
+
                 String port = "";
                 if (request.getServerPort() != 80)
                 {
@@ -104,13 +157,10 @@ public class Metadata
                 ///&container=default&view=%25view%25&lang=%25lang%25&country=%25country%25&debug=%25debug%25&nocache=%25nocache%25&v=b4ea67fd7aa33422aa257ee3f534daf0&st=%25st%25
                 iframeurl.setParameter("url", gadget.getUrl());
                 iframeurl.setParameter("container", "default");
-                iframeurl.setParameter("view", "");
-                iframeurl.setParameter("lang", "");
-                iframeurl.setParameter("country", "");
-                iframeurl.setParameter("debug", "");
+                iframeurl.setParameter("view", "");                
                 iframeurl.setParameter("nocache", "");
                 iframeurl.setParameter("v", "b4ea67fd7aa33422aa257ee3f534daf0");
-                iframeurl.setParameter("st", "");
+                iframeurl.setParameter("st", ""); // Token
                 //String iframeUrl="http://localhost:8080/swb/gadgets/ifr?url=http%3A%2F%2Flocalhost%3A8080%2Fswb%2Fsamplecontainer%2Fexamples%2FSocialHelloWorld.xml&container=default&view=%25view%25&lang=%25lang%25&country=%25country%25&debug=%25debug%25&nocache=%25nocache%25&v=b4ea67fd7aa33422aa257ee3f534daf0&st=%25st%25";
                 //String iframeUrl="http://localhost:8080"+ SWBPortal.getContextPath()+SWBPortal.getDistributorPath()+"/"+config.getServletContextName()+"/ifr?url="+ URLEncoder.encode(url) +"";
                 metadata.put("iframeUrl", iframeurl.toString());
@@ -127,7 +177,19 @@ public class Metadata
         }
         return metadata;
     }
-
+    public static void main(String[] args)
+    {
+        String data = "{\"gadgets\":[{\"userPrefs\":{},\"moduleId\":1,\"screenshot\":\"\",\"singleton\":false,\"width\":0,\"authorLink\":\"\",\"links\":{},\"iframeUrl\":\"//http://localhost:8080/swb/gadgets/ifr?url=http%3A%2F%2Flocalhost%3A8080%2Fswb%2Fsamplecontainer%2Fexamples%2FSocialHelloWorld.xml&container=default&view=%25view%25&lang=%25lang%25&country=%25country%25&debug=%25debug%25&nocache=%25nocache%25&v=b4ea67fd7aa33422aa257ee3f534daf0&st=%25st%25\",\"url\":\"http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml\",\"scaling\":false,\"title\":\"Social Hello World\",\"height\":0,\"titleUrl\":\"\",\"thumbnail\":\"http://localhost:8080/\",\"scrolling\":false,\"views\":{\"default\":{\"preferredHeight\":0,\"quirks\":true,\"type\":\"html\",\"preferredWidth\":0}},\"featureDetails\":{\"dynamic-height\":{\"parameters\":{},\"required\":true},\"osapi\":{\"parameters\":{},\"required\":true},\"core\":{\"parameters\":{},\"required\":true},\"settitle\":{\"parameters\":{},\"required\":true}},\"features\":[\"dynamic-height\",\"osapi\",\"core\",\"settitle\"],\"showStats\":false,\"categories\":[\"\",\"\"],\"showInDirectory\":false,\"authorPhoto\":\"\"}]}";
+        try
+        {
+            JSONObject obj=new JSONObject(data);
+            System.out.println(obj.toString(10));
+        }
+        catch(Exception e)
+        {
+            
+        }
+    }
     public void doProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         if (paramRequest.getCallMethod() == paramRequest.Call_DIRECT && request.getContentType().startsWith("application/javascript"))
