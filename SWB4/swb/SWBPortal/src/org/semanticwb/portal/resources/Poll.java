@@ -50,7 +50,6 @@ import org.semanticwb.portal.util.SWBCookieMgr;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.portal.util.FileUpload;
 
-// TODO: Auto-generated Javadoc
 /**
  * Poll se encarga de desplegar y administrar una encuesta de opinion bajo
  * ciertos criterios(configuraci?n de recurso).
@@ -58,7 +57,6 @@ import org.semanticwb.portal.util.FileUpload;
  * Poll is in charge to unfold and to administer a survey of opinion under
  * certain criteria (resource configuration).
  *
- * @author  Jorge Jiménez Sandoval
  */
 
 public class Poll extends GenericResource {
