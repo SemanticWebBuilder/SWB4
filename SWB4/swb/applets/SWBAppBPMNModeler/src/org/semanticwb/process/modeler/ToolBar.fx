@@ -269,7 +269,7 @@ public class ToolBar extends CustomNode
            ele.put("isLoop", ge.isLoop);
            ele.put("isForCompensation", ge.isForCompensation);
         }
-        
+
         if(node instanceof ConnectionObject)
         {
            var ge=node as ConnectionObject;
@@ -348,6 +348,7 @@ public class ToolBar extends CustomNode
                 ge.isForCompensation = isForCompensation;
                 //println("uri:{ge.uri}");
                 ge.title=title;
+                //ge.setType(type);
                 ge.x=x;
                 ge.y=y;
                 if(w>0)ge.w=w;
@@ -477,11 +478,15 @@ public class ToolBar extends CustomNode
                     imageOver: "images/file_nuevo2.png"
                     action: function():Void
                     {
-                        ModelerUtils.clickedNode=null;
-                        ModelerUtils.setResizeNode(null);
-                        modeler.containerElement=null;
-                        modeler.disablePannable=false;
-                        delete modeler.contents;
+                        var tit = ##"alertMsg";
+                        var msg = ##"msgSaveAlert";
+                        if(Alert.confirm(tit, msg)) {
+                            ModelerUtils.clickedNode=null;
+                            ModelerUtils.setResizeNode(null);
+                            modeler.containerElement=null;
+                            modeler.disablePannable=false;
+                            delete modeler.contents;
+                        }
                     }
                 },
                 ImgButton {
@@ -533,7 +538,7 @@ public class ToolBar extends CustomNode
 //                    {
 //                        ModelerUtils.clickedNode=null;
 //                        modeler.disablePannable=false;
-//                        getXPDL();
+//                        //getXPDL();
 //                    }
 //                },
                 ImgButton {
@@ -1334,7 +1339,7 @@ public class ToolBar extends CustomNode
                             uri:"new:endevent:{counter++}"
                         }
                     }
-                }         
+                }
             ]
         };
 
@@ -1925,84 +1930,108 @@ public class ToolBar extends CustomNode
     }
 
     function validateProcess() {
-        
+
     }
 
 //    function getXPDL () : Void {
-//        var ids: String[];
-//        var ret = "";
-//        var headers = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-//        headers += "<Package xmlns=\"http://www.wfmc.org/2008/XPDL2.1\"\n";
-//        headers += "  xmlns:xpdl=\"http://www.wfmc.org/2008/XPDL2.1\"\n";
-//        headers += "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
-//        headers += "  xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"\n";
-//        headers += "  Id=\"1\" Name=\"p1\">\n";
-//        headers += "  <PackageHeader>\n";
-//        headers += "    <XPDLVersion>2.1</XPDLVersion>\n";
-//        headers += "    <Vendor>SemanticWebBuilder Process Modeler</Vendor>\n";
-//        headers += "    <Created></Created>\n";
-//        headers += "    <Documentation />\n";
-//        headers += "  </PackageHeader>\n";
+//        var dbf:DocumentBuilderFactory = DocumentBuilderFactory.newInstance();
+//        var docBuilder: DocumentBuilder = dbf.newDocumentBuilder();
+//        var doc:Document = docBuilder.newDocument();
+//        doc.setXmlStandalone(true);
 //
-//        var processBlock = "<WorkFlowProcesses>";
-//        var poolsBlock = "  <Pools>\n";
+//        var root:Element = doc.createElement("Package");
+//        root.setAttribute("xmlns", "http://www.wfmc.org/2008/XPDL2.1");
+//        root.setAttribute("xmlns:xpdl", "http://www.wfmc.org/2008/XPDL2.1");
+//        root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+//        root.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
+//        root.setAttribute("Id", "1");
+//        root.setAttribute("Name", "Process1");
+//        doc.appendChild(root);
+//
+//        var pkgHeader:Element = doc.createElement("PackageHeader");
+//        root.appendChild(pkgHeader);
+//
+//        var eNode:Element = doc.createElement("XPDLVersion");
+//        eNode.setTextContent("2.1");
+//        pkgHeader.appendChild(eNode);
+//
+//        eNode = doc.createElement("Vendor");
+//        eNode.setTextContent("SemanticWebBuilder Process Modeler");
+//        pkgHeader.appendChild(eNode);
+//
+//        eNode = doc.createElement("Created");
+//        eNode.setTextContent(new Date(System.currentTimeMillis()).toString());
+//        pkgHeader.appendChild(eNode);
+//
+//        var poolsNode = doc.createElement("Pools");
+//        root.appendChild(poolsNode);
+//
+//        var wfNodes = doc.createElement("WorkflowProcesses");
+//        root.appendChild(wfNodes);
+//
 //        for (ele in modeler.contents) {
-//            if (ele instanceof GraphicalElement) {
-//                var ge = ele as GraphicalElement;
-//                println("Analizando elemento {ge.title}");
-//            }
 //            if (ele instanceof Pool) {
 //                var p = ele as Pool;
-//                poolsBlock += "    <Pool Process=\"\" Id=\"{p.uri}\" BoundaryVisible=\"true\" Name=\"{p.title}\">\n";
-//                if (p.lanes.size() >= 1) {
-//                    poolsBlock += "      <Lanes>\n";
-//                    for (lane in p.lanes) {
-//                        var l = lane as Lane;
-//                        poolsBlock += "        <Lane Id=\"{l.uri}\" Name=\"{l.title}\" ParentLane=\"{p.uri}\">\n";
-//                        poolsBlock += "          <NodeGraphicsInfos>\n";
-//                        poolsBlock += "            <NodeGraphicsInfo Width=\"{l.w}\" Height=\"{l.h}\">\n";
-//                        poolsBlock += "              <Coordinates XCoordinate=\"{l.x}\" YCoordinate=\"{l.y}\" />\n";
-//                        poolsBlock += "            </NodeGraphicsInfo>\n";
-//                        poolsBlock += "          </NodeGraphicsInfos>\n";
-//                        poolsBlock += "        </Lane>\n";
+//                poolsNode.appendChild(getPoolBlock(doc, p));
 //
-//                        for (child in lane.graphChilds) {
-//                            if (child instanceof GraphicalElement) {
-//                                var c = child as GraphicalElement;
-//                                if (c instanceof SubProcess) {
-//                                    var sp = c as SubProcess;
-//                                    for(activity in sp.containerChilds) {
-//                                        if (activity instanceof GraphicalElement) {
-//                                            var ac = activity as GraphicalElement;
-//                                            println("    analizando {ac.title} en subproceso {sp.title}");
-//                                        }
-//                                    }
-//                                }
-//                                println("  Analizando {c.title}");
-//                            }
-//                        }
-//                    }
-//                    poolsBlock += "      </Lanes>\n";
-//                } else
-//                poolsBlock += "      <NodeGraphicsInfos>\n";
-//                poolsBlock += "        <NodeGraphicsInfo Width=\"{p.w}\" Height=\"{p.h}\">\n";
-//                poolsBlock += "          <Coordinates XCoordinate=\"{p.x}\" YCoordinate=\"{p.y}\" />\n";
-//                poolsBlock += "        </NodeGraphicsInfo>\n";
-//                poolsBlock += "      </NodeGraphicsInfos>\n";
-//                poolsBlock += "    </Pool>\n";
 //            } else if (ele instanceof Event) {
 //                var e = ele as Event;
-//                println(getEventBlock(e));
-//                println("--");
 //            }
 //
 //        }
-//        processBlock += "</WorkFlowProcesses>";
-//        poolsBlock += "  </Pools>\n";
-//        ret+= "{headers}{poolsBlock}</Package>";
+//        ////////////////////////
+//        var transfac:TransformerFactory = TransformerFactory.newInstance();
+//        var trans:Transformer = transfac.newTransformer();
+//        //trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+//        trans.setOutputProperty(OutputKeys.INDENT, "yes");
+//
+//        var sw:StringWriter = new StringWriter();
+//        var result:StreamResult = new StreamResult(sw);
+//        var source:DOMSource = new DOMSource(doc);
+//        trans.transform(source, result);
+//        var xmlString = sw.toString();
+//
+//        println("-----");
+//        println(xmlString);
 ////        println(ret);
 //    }
 
+//    function getPoolBlock(doc:Document, p:Pool) : Element {
+//        var pNode:Element = doc.createElement("Pool");
+//        var lNode:Element = doc.createElement("Lanes");
+//        pNode.setAttribute("Process", "pid");
+//        pNode.setAttribute("Id", p.uri);
+//        pNode.setAttribute("BoundaryVisible", "true");
+//        pNode.setAttribute("Name", p.title);
+//        for(lane in p.lanes) {
+//            lNode.appendChild(getLaneBlock(doc, lane, p));
+//        }
+//        pNode.appendChild(lNode);
+//        pNode.appendChild(getGraphicsInfos(doc, p as GraphicalElement));
+//        return pNode;
+//    }
+//
+//    function getLaneBlock(doc:Document, l:Lane, p:Pool) : Element {
+//        var lnNode = doc.createElement("Lane");
+//        lnNode.setAttribute("Id", l.uri);
+//        lnNode.setAttribute("ParentLane", p.uri);
+//        lnNode.appendChild(getGraphicsInfos(doc, l as GraphicalElement));
+//        return lnNode;
+//    }
+//
+//    function getGraphicsInfos(doc: Document, ge: GraphicalElement) : Element {
+//        var lgis = doc.createElement("NodeGraphicsInfos");
+//        var lgi = doc.createElement("NodeGraphicsInfo");
+//        lgi.setAttribute("Width", "{ge.w}");
+//        lgi.setAttribute("Height", "{ge.h}");
+//        var coord:Element = doc.createElement("Coordinates");
+//        coord.setAttribute("XCoordinate", "{ge.x}");
+//        coord.setAttribute("YCoordinate", "{ge.y}");
+//        lgi.appendChild(coord);
+//        lgis.appendChild(lgi);
+//        return lgis;
+//    }
+//
 //    function getEventBlock(e: Event) : String {
 //        var trigger = "None";
 //        var attachedTo = "";
