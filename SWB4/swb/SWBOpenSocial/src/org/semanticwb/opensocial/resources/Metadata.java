@@ -57,7 +57,19 @@ public class Metadata
         }
         metadata.put("userPrefs", adduserPrefs);
     }
-
+    /**
+     *
+     * @param request
+     * @param country
+     * @param language
+     * @param view
+     * @param container
+     * @param moduleId Número de gadget, cuando el mismo gadget puede tenerse más de una vez
+     * @param paramRequest
+     * @param gadget
+     * @return
+     * @throws Exception
+     */
     private JSONObject getMetadata(HttpServletRequest request, String country, String language, String view, String container, String moduleId, SWBParamRequest paramRequest, Gadget gadget) throws Exception
     {
         JSONObject metadata = new JSONObject();
