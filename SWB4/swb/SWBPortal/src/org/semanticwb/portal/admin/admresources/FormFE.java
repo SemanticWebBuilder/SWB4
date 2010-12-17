@@ -369,13 +369,15 @@ public class FormFE extends WBContainerFE
     private String getValHtml() {
         StringBuffer strb=new StringBuffer();
         strb.append("\n<script type=\"text/javascript\">");
+        //strb.append("\n<!--");
         strb.append("\n<![CDATA[");
         strb.append("\nfunction valida_"+getName()+"(forma) {");
         strb.append("\n     "+getJsFE());
         strb.append("\n     return true;");
         strb.append("\n}");
         strb.append("\n]]>");
-        strb.append("\n</script> ");
+        //strb.append("\n-->");
+        strb.append("\n</script>\n");
         return strb.toString();
     }
 
