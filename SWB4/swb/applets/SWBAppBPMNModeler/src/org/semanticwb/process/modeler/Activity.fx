@@ -34,4 +34,14 @@ public class Activity extends FlowNode
         }
         return ret;
     }
+
+    public override function canStartLink(link: ConnectionObject) : Boolean {
+        var ret = super.canStartLink(link);
+
+        if (link instanceof DefaultFlow) {
+            ModelerUtils.setErrorMessage(##"msgError2");
+            ret = false;
+        }
+        return ret;
+    }
 }
