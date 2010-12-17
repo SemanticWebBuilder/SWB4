@@ -21,9 +21,7 @@
 	<xsl:if test="string-length( @language ) &gt; 0"> language=&quot;<xsl:value-of select="@language" />&quot;</xsl:if>
 	<xsl:if test="string-length( @src ) &gt; 0"> src=&quot;<xsl:value-of select="@src" />&quot;</xsl:if>
 	<xsl:text disable-output-escaping="yes"> type="text/javascript" &gt;</xsl:text>
-        <xsl:text disable-output-escaping="yes">&lt;!--</xsl:text>
             <xsl:value-of select="." disable-output-escaping="yes"/>
-        <xsl:text disable-output-escaping="yes">--&gt;</xsl:text>
 	<xsl:text disable-output-escaping="yes">&lt;/</xsl:text><xsl:value-of select="name()" /><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     </xsl:template>
     <xsl:template match="form">
