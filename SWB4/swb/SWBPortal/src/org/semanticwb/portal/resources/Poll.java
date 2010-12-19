@@ -216,6 +216,7 @@ public class Poll extends GenericResource {
         String title = base.getAttribute("header");
         String imgTitle = base.getAttribute("imgencuesta");
         String question = base.getAttribute("question");
+        String imgVote = base.getAttribute("button");
         Display display = Display.valueOf(base.getAttribute("display", Display.SLIDE.name()));
 
         SWBResourceURL url = paramRequest.getRenderUrl();
@@ -264,10 +265,6 @@ public class Poll extends GenericResource {
             e.appendChild(dom.createTextNode(nodes.item(i).getChildNodes().item(0).getNodeValue()));
             options.appendChild(e);
         }
-
-
-        String imgVote = base.getAttribute("button");
-
 
         e = dom.createElement("vote");
         e.appendChild(dom.createTextNode(base.getAttribute("msg_tovote", paramRequest.getLocaleString("msg_tovote"))));
@@ -780,7 +777,7 @@ public class Poll extends GenericResource {
         System.out.println("1 backimgres="+backimgres);
         System.out.println("node.getLength()="+node.getLength());
         if(node.getLength()>0 && backimgres!=null)
-            backimgres = "style=\"background-image:"+webWorkPath+base.getWorkPath()+"/"+backimgres+";\"";
+            backimgres = "style=\"background:"+webWorkPath+base.getWorkPath()+"/"+backimgres+";\"";
         else
             backimgres = "";
         System.out.println("2 backimgres="+backimgres);
