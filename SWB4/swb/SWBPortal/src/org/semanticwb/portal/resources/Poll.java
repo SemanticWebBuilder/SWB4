@@ -216,18 +216,15 @@ public class Poll extends GenericResource {
         String title = base.getAttribute("header");
         String imgTitle = base.getAttribute("imgencuesta");
         String question = base.getAttribute("question");
-        String display = base.getAttribute("display", Display.SLIDE.toString());
+        Display display = Display.valueOf(base.getAttribute("display", Display.SLIDE.name()));
 
-        SWBResourceURL url;
-        if( Display.SIMPLE.toString().equals(display) ) {
-            url = paramRequest.getRenderUrl();
+        SWBResourceURL url = paramRequest.getRenderUrl();
+        url.setParameter("NombreCookie", "VotosEncuesta" + base.getId());
+        if(display==Display.SIMPLE) {
             url.setMode("accesible");
-            url.setParameter("NombreCookie", "VotosEncuesta" + base.getId());
         }else {
-            url = new SWBResourceURLImp(request, base, paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
             url.setMode("showResults");
             url.setCallMethod(paramRequest.Call_DIRECT);
-            url.setParameter("NombreCookie", "VotosEncuesta" + base.getId());
         }
 
         Document  dom = SWBUtils.XML.getNewDocument();
@@ -242,14 +239,14 @@ public class Poll extends GenericResource {
             e.appendChild(dom.createTextNode(title));
             root.appendChild(e);
         }
-
-        e = dom.createElement("imgTitle");
-        e.setAttribute("path", path);
-        if( imgTitle!=null ) {
+        
+        if( imgTitle!=null && !imgTitle.equals("null") ) {
+            e = dom.createElement("imgTitle");
+            e.setAttribute("path", path);
             e.setAttribute("src", webWorkPath+base.getWorkPath()+"/"+imgTitle);
             e.setAttribute("alt", base.getAttribute("header",question));
+            root.appendChild(e);
         }
-        root.appendChild(e);
 
         e = dom.createElement("question");
         e.appendChild(dom.createTextNode(question));
@@ -285,17 +282,16 @@ public class Poll extends GenericResource {
             e.setAttribute("action", "buscaCookie('VotosEncuesta"+base.getId()+"','radiobutton',"+isCLIValidable+",'"+url+"')");
         }
         root.appendChild(e);
-
-
+        
         e = dom.createElement("results");
-        if( Display.POPUP.toString().equals(display) )
+        e.setAttribute("title", base.getAttribute("msg_viewresults", paramRequest.getLocaleString("lblAdmin_msgResults").replaceAll("\"", "")));
+        if(display==Display.POPUP)
             e.setAttribute("action", "abreResultados('"+url.toString(true)+"')");
-        else if( Display.SLIDE.toString().equals(display) )
-            e.setAttribute("action", "postHtml('"+url+"','"+PREF+base.getId()+"'); expande();");
+        else if(display==Display.SLIDE)
+            e.setAttribute("action", "postHtml('"+url.toString(true)+"','"+PREF+base.getId()+"'); expande();");
         else {
-            e.setAttribute("label", base.getAttribute("msg_viewresults", paramRequest.getLocaleString("lblAdmin_msgResults").replaceAll("\"", "")));
-            url = new SWBResourceURLImp(request, base, paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
-            url.setMode("accesible");
+//            url = new SWBResourceURLImp(request, base, paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
+//            url.setMode("accesible");
             e.setAttribute("action", "window.location.href='"+url.toString(true)+"'");
         }
         e.setAttribute("path", path);
@@ -360,13 +356,15 @@ public class Poll extends GenericResource {
             response.setHeader("Pragma","no-cache"); //HTTP 1.0
             response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
             Document dom = getDom(request, response, paramRequest);
+            System.out.println("\n\n\ndom=\n"+SWBUtils.XML.domToXml(dom)+"\n*****************************");
             try {
-                String html = SWBUtils.XML.transformDom(tpl, dom);
-                boolean isPopup = Boolean.valueOf(base.getAttribute("display", "true")).booleanValue();
-                if( !isPopup )
-                    html += "<div id=\""+PREF+base.getId()+"\" class=\"swb-encuesta-res\"></div>";
-                html+=getRenderScript(paramRequest);
-                response.getWriter().println(html);
+                StringBuilder html = new StringBuilder(SWBUtils.XML.transformDom(tpl, dom));
+                html.append(getRenderScript(paramRequest));
+                Display display = Display.valueOf(base.getAttribute("display", Display.SLIDE.name()));
+                if(display==Display.SLIDE)
+                    html.append("<div id=\""+PREF+base.getId()+"\" class=\"swb-encuesta-res\">&nbsp;</div>");
+                System.out.println("\n\n\n..........................html=\n"+html);
+                response.getWriter().println(html.toString());
             }catch(TransformerException te) {
                 log.error(te);
             }
@@ -766,14 +764,28 @@ public class Poll extends GenericResource {
      */
     private String getPollResults(HttpServletRequest request, SWBParamRequest paramRequest, Document data) throws SWBResourceException, IOException {
         StringBuilder ret = new StringBuilder();
-        Resource base=getResourceBase();
-        boolean display = Boolean.valueOf(base.getAttribute("display","true")).booleanValue();
+        Resource base = getResourceBase();
+
+        Display display = Display.valueOf(base.getAttribute("display", Display.SLIDE.name()));
+        //boolean display = Boolean.valueOf(base.getAttribute("display","true")).booleanValue();
 
         Document dom = SWBUtils.XML.xmlToDom(base.getXml());
+        System.out.println("\n+++++++++++++++++++++++++\n\n\ngetPollResults.... base.getXml()=\n"+base.getXml());
         if(dom==null) {
             return ret.toString();
         }
-        if( display ) {
+
+        NodeList node = dom.getElementsByTagName("backimgres");
+        String backimgres = node.item(0).getChildNodes().item(0).getNodeValue();
+        System.out.println("1 backimgres="+backimgres);
+        System.out.println("node.getLength()="+node.getLength());
+        if(node.getLength()>0 && backimgres!=null)
+            backimgres = "style=\"background-image:"+webWorkPath+base.getWorkPath()+"/"+backimgres+";\"";
+        else
+            backimgres = "";
+        System.out.println("2 backimgres="+backimgres);
+
+        if(display==Display.POPUP) {
             ret.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
             ret.append("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
             ret.append("<head>");
@@ -783,12 +795,12 @@ public class Poll extends GenericResource {
             ret.append("<body>");
         }
 
-        NodeList node = dom.getElementsByTagName("option");
-        ret.append("<div class=\"swb-poll-res\">");
-        ret.append("<p class=\"swb-poll-res-title\">"+paramRequest.getLocaleString("msgResults_title")+"</p>");
-        ret.append("<table class=\"swb-poll-data\" \n>");
+        ret.append("<div class=\"swb-poll-res\" style=\"background-image:/work/models/G/Resource/6/fondo1.gif\" "+backimgres+">\n");
+        ret.append("<p class=\"swb-poll-res-title\">"+paramRequest.getLocaleString("msgResults_title")+"</p>\n");
+        ret.append("<table class=\"swb-poll-data\" "+backimgres+">\n");
 
-        if( !"".equals(base.getAttribute("question", "").trim()) && node.getLength()>1 )
+        node = dom.getElementsByTagName("option");
+        if( !"".equals(base.getAttribute("question", "").trim()) && node.getLength()>0 )
         {
             ret.append("<caption>" + base.getAttribute("question").trim() + "</caption> \n");
             ret.append("<tbody> \n");
@@ -820,8 +832,8 @@ public class Poll extends GenericResource {
                 boolean totvote = Boolean.valueOf(base.getAttribute("totvote","true")).booleanValue();
                 for (int i = 0; i < node.getLength(); i++) {
                     int num = i + 1;
-                    ret.append("<tr> \n");
-                    ret.append("  <td class=\"swb-res-opciones-h\">"+node.item(i).getChildNodes().item(0).getNodeValue()+"</td> \n");
+                    ret.append("<tr>\n");
+                    ret.append("  <td class=\"swb-res-opciones-h\">"+node.item(i).getChildNodes().item(0).getNodeValue()+"</td>\n");
                     String varia = "enc_votos";
                     NodeList nlist = data.getElementsByTagName(varia + num);
                     for (int j = 0; j < nlist.getLength(); j++)
@@ -864,7 +876,7 @@ public class Poll extends GenericResource {
                     ret.append("</tfoot> \n");
                 }
             }else {
-                ret.append("<tr><td>" + paramRequest.getLocaleString("usrmsg_Encuesta_getResultEnc_noVotes") +"</td></tr> \n");
+                ret.append("<tr><td>" + paramRequest.getLocaleString("msgResults_noVotes") +"</td></tr> \n");
             }
             ret.append("</table> \n");
             ret.append("</div> \n");
@@ -873,17 +885,16 @@ public class Poll extends GenericResource {
             if( LocLnks.INRESULTS.toString().equals(base.getAttribute("wherelinks")) || LocLnks.INBOTH.toString().equals(base.getAttribute("wherelinks")) )
                 ret.append(getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("usrmsg_Encuesta_doView_relatedLink"))+" \n");
 
-            if( display )
+            if(display==Display.POPUP)
                 ret.append("<p class=\"swb-poll-close\"><a href=\"#\" onclick=\"window.close();\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></p> \n");
-            else {
-                if( Display.SIMPLE.toString().equals(base.getAttribute("display")) )
-                    ret.append("<p class=\"swb-poll-close\"><a href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW).setCallMethod(paramRequest.Call_CONTENT)+"\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></p> \n");
-                else
-                    ret.append("<p class=\"swb-poll-close\"><a href=\"#\" onmousedown=\"collapse();\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></p> \n");
-            }
+            else if( display == Display.SIMPLE )
+                ret.append("<p class=\"swb-poll-close\"><a href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW).setCallMethod(paramRequest.Call_CONTENT)+"\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></p> \n");
+            else
+                ret.append("<p class=\"swb-poll-close\"><a href=\"#\" onmousedown=\"collapse();\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></p> \n");
+            
             ret.append("</div> \n");
         }
-        if(display){
+        if(display==Display.POPUP) {
             ret.append("</body> \n");
             ret.append("</html> \n");
         }
@@ -1156,71 +1167,8 @@ public class Poll extends GenericResource {
     }
 
     /**
-     * Sets the attribute.
-     * 
-     * @param base the base
-     * @param fup the fup
-     * @param att the att
-     */
-    protected void setAttribute(Resource base, FileUpload fup, String att) {
-        try
-        {
-            if(null != fup.getValue(att) && !"".equals(fup.getValue(att).trim())) {
-                base.setAttribute(att, fup.getValue(att).trim());
-            }
-            else {
-                base.removeAttribute(att);
-            }
-        }
-        catch(Exception e) {  log.error("Error while setting resource attribute: "+att + ", "+base.getId() +"-"+ base.getTitle(), e); }
-    }
-
-    /**
-     * Sets the attribute.
-     * 
-     * @param base the base
-     * @param fup the fup
-     * @param att the att
-     * @param value the value
-     */
-    protected void setAttribute(Resource base, FileUpload fup, String att, String value) {
-        try
-        {
-            if(null != fup.getValue(att) && value.equals(fup.getValue(att).trim())) {
-                base.setAttribute(att, fup.getValue(att).trim());
-            }
-            else {
-                base.removeAttribute(att);
-            }
-        }
-        catch(Exception e) {  log.error("Error while setting resource attribute: "+att + ", "+base.getId() +"-"+ base.getTitle(), e); }
-    }
-
-    /**
-     * Removes the all nodes.
-     * 
-     * @param dom the dom
-     * @param nodeType the node type
-     * @param name the name
-     */
-    private void removeAllNodes(Document dom, short nodeType, String name) {
-        NodeList list = dom.getElementsByTagName(name);
-        for (int i = 0; i < list.getLength(); i++)
-        {
-            Node node=list.item(i);
-            if (node.getNodeType() == nodeType)
-            {
-                node.getParentNode().removeChild(node);
-                if(node.hasChildNodes()) {
-                    removeAllNodes(dom, nodeType, name);
-                }
-            }
-        }
-    }
-
-    /**
      * Metodo que muestra la forma de la encuesta de opini?n en html.
-     * 
+     *
      * @param request the request
      * @param paramRequest the param request
      * @return the form
@@ -1243,7 +1191,7 @@ public class Poll extends GenericResource {
             ret.append("<label for=\"question\" class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_question")+"<span class=\"requerido\">*</span></label>");
             ret.append("<input type=\"text\" name=\"question\" id=\"question\" value=\""+base.getAttribute("question","").replaceAll("\"", "&#34;")+"\" maxlength=\"80\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\""+paramRequest.getLocaleString("lblAdmin_msgQuestion")+"\" required=\"true\" />");
             ret.append("</li>");
-            
+
             ret.append("<li class=\"swbform-li\">");
             ret.append("<label for=\"txtOption\" class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_option")+"<span class=\"requerido\">*</span></label>");
             ret.append("<input type=\"text\" name=\"txtOption\" id=\"txtOption\" maxlength=\"80\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\""+paramRequest.getLocaleString("lblAdmin_msgOption")+"\" />");
@@ -1269,7 +1217,7 @@ public class Poll extends GenericResource {
             ret.append("</select>");
             ret.append("<input type=\"button\" name=\"btnDel\" value=\""+paramRequest.getLocaleString("lblAdmin_btnDelete")+"\" onclick=\"deleteOption(this.form.selOption, this.form.txtOption)\" />");
             ret.append("</li>");
-            
+
             ret.append("<li class=\"swbform-li\">");
             ret.append("<label for=\"txtLink\" class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_link")+"</label>");
             ret.append("<input type=\"text\" name=\"txtLink\" id=\"txtLink\" maxlength=\"120\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\""+paramRequest.getLocaleString("lblAdmin_link")+"\" />");
@@ -1292,7 +1240,7 @@ public class Poll extends GenericResource {
             ret.append("</select>");
             ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblAdmin_btnDelete")+"\" onclick=\"deleteOption(this.form.selLink, this.form.txtLink)\" />");
             ret.append("</li>");
-            
+
             ret.append("<li class=\"swbform-li\">");
             ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_displayLinks")+"</label>");
             value = base.getAttribute("wherelinks", LocLnks.INPOLL.toString());
@@ -1327,7 +1275,7 @@ public class Poll extends GenericResource {
                 ret.append(" checked=\"checked\"");
             ret.append("/> "+paramRequest.getLocaleString("lblAdmin_no")+"</label>");
             ret.append("</li>");
-            
+
             value = base.getAttribute("vmode", VMode.IP.toString());
             ret.append("<li class=\"swbform-li\">");
             ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_vmode")+"</label>");
@@ -1514,18 +1462,18 @@ public class Poll extends GenericResource {
             ret.append("<legend>"+paramRequest.getLocaleString("lblAdmin_StyleResults")+"</legend>");
             ret.append("<ul class=\"swbform-ul\"> ");
 
-            value = base.getAttribute("display", Display.SLIDE.toString());
+            value = base.getAttribute("display", Display.SLIDE.name());
             ret.append("<li class=\"swbform-li\">");
             ret.append("<label class=\"swbform-label\">"+ paramRequest.getLocaleString("lblAdmin_display_results")+"</label>");
-            ret.append("<label for=\"popup\"><input type=\"radio\" name=\"display\" id=\"popup\" value=\""+Display.POPUP.toString()+"\" ");
+            ret.append("<label for=\"popup\"><input type=\"radio\" name=\"display\" id=\"popup\" value=\""+Display.POPUP.name()+"\" ");
             if(Display.POPUP.name().equals(value))
                 ret.append(" checked=\"checked\"");
             ret.append("/> "+paramRequest.getLocaleString("lblAdmin_window")+"</label>&nbsp;&nbsp;&nbsp;");
-            ret.append("<label for=\"slide\"><input type=\"radio\" name=\"display\" id=\"slide\" value=\""+Display.SLIDE.toString()+"\" ");
+            ret.append("<label for=\"slide\"><input type=\"radio\" name=\"display\" id=\"slide\" value=\""+Display.SLIDE.name()+"\" ");
             if(Display.SLIDE.name().equals(value))
                 ret.append(" checked=\"checked\"");
             ret.append("/> "+paramRequest.getLocaleString("lblAdmin_slide")+"</label>&nbsp;&nbsp;&nbsp;");
-            ret.append("<label for=\"simple\"><input type=\"radio\" name=\"display\" id=\"simple\" value=\""+Display.SIMPLE.toString()+"\" ");
+            ret.append("<label for=\"simple\"><input type=\"radio\" name=\"display\" id=\"simple\" value=\""+Display.SIMPLE.name()+"\" ");
             if(Display.SIMPLE.name().equals(value))
                 ret.append(" checked=\"checked\"");
             ret.append("/> "+paramRequest.getLocaleString("lblAdmin_accessible")+"</label>");
@@ -1555,8 +1503,10 @@ public class Poll extends GenericResource {
             ret.append("<label class=\"swbform-label\">"+ paramRequest.getLocaleString("lblAdmin_imgBackground") + "&nbsp, <span class=\"enfasis\">(jpg, jpeg, gif, png)</span></label>");
             ret.append("<input type=\"file\" size=\"40\" name=\"backimgres\" onChange=\"isFileType(this,'jpg|jpeg|gif|png');\" maxlength=\"80\" />");
             if( base.getAttribute("backimgres")!=null ) {
+                ret.append("<li class=\"swbform-li\">");
                 ret.append("<label class=\"swbform-label\">&nbsp;</label>");
                 ret.append(admResUtils.displayImage(base, base.getAttribute("backimgres"), "backimgres") +"&nbsp;<label class=\"enfasis\" for=\"nobackimgres\"><input type=\"checkbox\" name=\"nobackimgres\" id=\"nobackimgres\" value=\"1\" />"+paramRequest.getLocaleString("lblAdmin_removeImage")+" <i>"+base.getAttribute("backimgres")+"</i></label>");
+                ret.append("</li>");
             }
             ret.append("</li>");
             ret.append("</ul>");
@@ -1578,7 +1528,7 @@ public class Poll extends GenericResource {
             ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_Template")+" <span class=\"enfasis\">(xsl, xslt)</span></label>");
             ret.append("<input type=\"file\" size=\"40\" name=\"template\" onChange=\"isFileType(this, 'xsl|xslt');\" maxlength=\"80\" />");
             ret.append("</li>");
-            
+
             ret.append("<li class=\"swbform-li\">");
             if(!"".equals(base.getAttribute("template", "").trim())) {
                 ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_curTemplate")+"</label>");
@@ -1592,7 +1542,7 @@ public class Poll extends GenericResource {
             ret.append("</fieldset> ");
             ret.append("</div>");
 
-            
+
             ret.append("<fieldset>");
 //            ret.append("<ul class=\"swbform-ul\"> ");
 //            ret.append("<li class=\"swbform-li\">");
@@ -1612,6 +1562,70 @@ public class Poll extends GenericResource {
         }
         return ret.toString();
     }
+
+    /**
+     * Sets the attribute.
+     * 
+     * @param base the base
+     * @param fup the fup
+     * @param att the att
+     */
+    protected void setAttribute(Resource base, FileUpload fup, String att) {
+        try
+        {
+            if(null != fup.getValue(att) && !"".equals(fup.getValue(att).trim())) {
+                base.setAttribute(att, fup.getValue(att).trim());
+            }
+            else {
+                base.removeAttribute(att);
+            }
+        }
+        catch(Exception e) {  log.error("Error while setting resource attribute: "+att + ", "+base.getId() +"-"+ base.getTitle(), e); }
+    }
+
+    /**
+     * Sets the attribute.
+     * 
+     * @param base the base
+     * @param fup the fup
+     * @param att the att
+     * @param value the value
+     */
+    protected void setAttribute(Resource base, FileUpload fup, String att, String value) {
+        try
+        {
+            if(null != fup.getValue(att) && value.equals(fup.getValue(att).trim())) {
+                base.setAttribute(att, fup.getValue(att).trim());
+            }
+            else {
+                base.removeAttribute(att);
+            }
+        }
+        catch(Exception e) {  log.error("Error while setting resource attribute: "+att + ", "+base.getId() +"-"+ base.getTitle(), e); }
+    }
+
+    /**
+     * Removes the all nodes.
+     * 
+     * @param dom the dom
+     * @param nodeType the node type
+     * @param name the name
+     */
+    private void removeAllNodes(Document dom, short nodeType, String name) {
+        NodeList list = dom.getElementsByTagName(name);
+        for (int i = 0; i < list.getLength(); i++)
+        {
+            Node node=list.item(i);
+            if (node.getNodeType() == nodeType)
+            {
+                node.getParentNode().removeChild(node);
+                if(node.hasChildNodes()) {
+                    removeAllNodes(dom, nodeType, name);
+                }
+            }
+        }
+    }
+
     /**
      * Metodo de validaci?n en javascript para la encuesta.
      * 
