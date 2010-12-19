@@ -44,11 +44,20 @@
     </xsl:template>
 
     <xsl:template match="vote">
-        <p class="swb-poll-link">
-            <a href="#" onclick="{@action}">
-                <img src="{@path}images/votar.png" alt="vota" />
-            </a>
-        </p>
+        <xsl:if test = "string-length(@src)&gt;0">
+            <p class="swb-poll-link">
+                <a href="#" onclick="{@action}">
+                    <img src="{@src}" alt="vota" />
+                </a>
+            </p>
+        </xsl:if>
+        <xsl:if test = "string-length(@src)=0">
+            <p class="swb-poll-link">
+                <a href="#" onclick="{@action}">
+                    <img src="{@path}images/votar.png" alt="vota" />
+                </a>
+            </p>
+        </xsl:if>
     </xsl:template>
     <xsl:template match="results">
         <p class="swb-poll-link">
