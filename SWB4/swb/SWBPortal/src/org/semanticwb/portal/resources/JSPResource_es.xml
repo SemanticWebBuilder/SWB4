@@ -1,27 +1,20 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<!--
- * JSPResource_es.xml.xml
- *
- * Created on 4 de enero de 2005, 06:07 PM
- *
- * @author  Juan Antonio Fernández Arias
- -->
-	<xslfile>admresource.xslt</xslfile>
-	<form name="frmAdmin" action="true" method="POST" enctype="multipart/form-data">
-		<admdbconnmgr defconn="true"/>      
-        <fieldset>
-    		<input type="CHECKBOX" name="forward" label="Include / Forward:" value="1" />
-        	<input type="TEXT" name="jsppath" label="Ruta del JSP:" size="50"
-                   jspatron="[\w\/\-]+(\.jsp)$"
-                   invalidMessage="El archivo debe tener extensión: jsp" />
-            <input type="TEXT" name="jspactpath" label="Ruta del ProcesAction JSP:"
-                   size="50" jspatron="[\w\/\-]+(\.jsp)$"
-                   invalidMessage="El archivo debe tener extensión: jsp" />
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmAdmin" action="true" method="post" enctype="multipart/form-data" jsframework="dojo">
+    <admdbconnmgr defconn="true"/>
+    <fieldset>
+        <input type="checkbox" name="forward" label="Include(por defecto) / Forward" value="1" promptMessage="Marque la casilla para invocación Forward" />
+        <input type="text" name="jsppath" label="Ruta relativa del JSP" size="50" jspatron="[\w\/\-]+(\.jsp)$" jsrequired="true" invalidMessage="El archivo debe tener extensión jsp" promptMessage="Ruta relativa del archivo JSP. Por ejemplo /swbadmin/jsp/poll/poll.jsp" />
+    </fieldset>
+    <div title="Opciones avanzadas" open="false">
+        <fieldset legend="Configurar el ProcessAction">
+            <input type="text" name="jspactpath" label="Ruta del JSP de acción" size="50" jspatron="[\w\/\-]+(\.jsp)$" invalidMessage="El archivo debe tener extensión jsp" />
         </fieldset>
-        <fieldset>
-            <input type="SUBMIT" name="btnSave"  value="Guardar"/>
-            <input type="RESET"  name="btnReset" value="Cancelar"/>
-        </fieldset>
-    </form>
+    </div>
+    <fieldset>
+        <input type="submit" name="btnSave" id="btnSave" value="Guardar" />
+        <input type="reset"  name="btnReset" id="btnReset" value="Restablecer" />
+    </fieldset>
+</form>
 </admresource>

@@ -76,21 +76,17 @@ public class JSPResource extends GenericAdmResource
      * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String path = getResourceBase().getAttribute("jsppath");
         try {
             request.setAttribute("paramRequest", paramRequest);
             RequestDispatcher dispatcher = request.getRequestDispatcher(path);
-            if (dispatcher != null) {
-                //System.out.println("forward:"+getResourceBase().getAttribute("forward"));
-                if (getResourceBase().getAttribute("forward") != null) {
+            if(dispatcher != null) {
+                if(getResourceBase().getAttribute("forward")!=null) {
                     dispatcher.forward(request, response);
-                } else {
+                }else {
                     dispatcher.include(request, response);
                 }
-                //new Exception().printStackTrace();
             }
         } catch (Exception e) {
             log.error(paramRequest.getLocaleLogString("Process_Error") + "..." + path, e);
@@ -114,20 +110,17 @@ public class JSPResource extends GenericAdmResource
      * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
-    public void processAction(HttpServletRequest request,
-            SWBActionResponse actionResponse)
-            throws SWBResourceException, IOException
-    {            
+    public void processAction(HttpServletRequest request, SWBActionResponse actionResponse) throws SWBResourceException, IOException {
         String path = getResourceBase().getAttribute("jspactpath");
-        if (path == null) {
+        if(path == null) {
             return;
         }
         try {
             request.setAttribute("actionResponse", actionResponse);
             RequestDispatcher dispatcher = request.getRequestDispatcher(path);
-            if (getResourceBase().getAttribute("forward") != null) {
+            if(getResourceBase().getAttribute("forward")!=null) {
                 dispatcher.forward(request, new SWBResponse());
-            } else {
+            }else {
                 dispatcher.include(request, new SWBResponse());
             }
         } catch (Exception e) {
