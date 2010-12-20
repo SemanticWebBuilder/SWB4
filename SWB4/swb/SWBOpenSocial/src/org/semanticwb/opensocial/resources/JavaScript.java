@@ -14,6 +14,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.api.SWBResourceURL;
 
 /**
  *
@@ -27,6 +28,8 @@ public final class JavaScript
     static
     {
         scripts.put("core_rpc.js",SocialContainer.loadScript("core_rpc.js"));
+        scripts.put("core_rpc_pubsub_container.js",SocialContainer.loadScript("core_rpc_pubsub_container.js"));
+        scripts.put("samplecontainer.js",SocialContainer.loadScript("samplecontainer.js"));
     }
 
     
@@ -41,6 +44,21 @@ public final class JavaScript
             String js=scripts.get(fileName);
             if(js!=null)
             {
+                SWBResourceURL rpc=paramRequest.getRenderUrl();
+                rpc.setMode(SocialContainer.Mode_RPC);
+                rpc.setCallMethod(SWBResourceURL.Call_DIRECT);
+
+
+                SWBResourceURL ifr=paramRequest.getRenderUrl();
+                ifr.setMode(SocialContainer.Mode_IFRAME);
+                ifr.setCallMethod(SWBResourceURL.Call_DIRECT);
+
+                SWBResourceURL javascript=paramRequest.getRenderUrl();
+                javascript.setMode(SocialContainer.Mode_METADATA);
+                javascript.setCallMethod(SWBResourceURL.Call_DIRECT);
+                js=js.replace("<%=metadata%>", javascript.toString());
+                js=js.replace("<%=ifr%>", ifr.toString());
+                js=js.replace("<%=rpc%>", rpc.toString());
                 PrintWriter out=response.getWriter();
                 out.write(js);
                 out.close();
