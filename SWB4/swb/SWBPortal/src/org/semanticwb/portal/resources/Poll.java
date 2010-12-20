@@ -353,14 +353,12 @@ public class Poll extends GenericResource {
             response.setHeader("Pragma","no-cache"); //HTTP 1.0
             response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
             Document dom = getDom(request, response, paramRequest);
-            System.out.println("\n\n\ndom=\n"+SWBUtils.XML.domToXml(dom)+"\n*****************************");
             try {
                 StringBuilder html = new StringBuilder(SWBUtils.XML.transformDom(tpl, dom));
                 html.append(getRenderScript(paramRequest));
                 Display display = Display.valueOf(base.getAttribute("display", Display.SLIDE.name()));
                 if(display==Display.SLIDE)
                     html.append("<div id=\""+PREF+base.getId()+"\" class=\"swb-encuesta-res\">&nbsp;</div>");
-                System.out.println("\n\n\n..........................html=\n"+html);
                 response.getWriter().println(html.toString());
             }catch(TransformerException te) {
                 log.error(te);
@@ -767,20 +765,16 @@ public class Poll extends GenericResource {
         //boolean display = Boolean.valueOf(base.getAttribute("display","true")).booleanValue();
 
         Document dom = SWBUtils.XML.xmlToDom(base.getXml());
-        System.out.println("\n+++++++++++++++++++++++++\n\n\ngetPollResults.... base.getXml()=\n"+base.getXml());
         if(dom==null) {
             return ret.toString();
         }
 
         NodeList node = dom.getElementsByTagName("backimgres");
         String backimgres = node.item(0).getChildNodes().item(0).getNodeValue();
-        System.out.println("1 backimgres="+backimgres);
-        System.out.println("node.getLength()="+node.getLength());
         if(node.getLength()>0 && backimgres!=null)
-            backimgres = "style=\"background:"+webWorkPath+base.getWorkPath()+"/"+backimgres+";\"";
+            backimgres = "style=\"background-image:url("+webWorkPath+base.getWorkPath()+"/"+backimgres+");\"";
         else
             backimgres = "";
-        System.out.println("2 backimgres="+backimgres);
 
         if(display==Display.POPUP) {
             ret.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
@@ -792,7 +786,7 @@ public class Poll extends GenericResource {
             ret.append("<body>");
         }
 
-        ret.append("<div class=\"swb-poll-res\" style=\"background-image:/work/models/G/Resource/6/fondo1.gif\" "+backimgres+">\n");
+        ret.append("<div class=\"swb-poll-res\" "+backimgres+">\n");
         ret.append("<p class=\"swb-poll-res-title\">"+paramRequest.getLocaleString("msgResults_title")+"</p>\n");
         ret.append("<table class=\"swb-poll-data\" "+backimgres+">\n");
 
@@ -830,7 +824,7 @@ public class Poll extends GenericResource {
                 for (int i = 0; i < node.getLength(); i++) {
                     int num = i + 1;
                     ret.append("<tr>\n");
-                    ret.append("  <td class=\"swb-res-opciones-h\">"+node.item(i).getChildNodes().item(0).getNodeValue()+"</td>\n");
+                    ret.append("  <td class=\"swb-res-options-h\">"+node.item(i).getChildNodes().item(0).getNodeValue()+"</td>\n");
                     String varia = "enc_votos";
                     NodeList nlist = data.getElementsByTagName(varia + num);
                     for (int j = 0; j < nlist.getLength(); j++)
@@ -847,8 +841,8 @@ public class Poll extends GenericResource {
 
                         if (Integer.parseInt(nume) == num) {
                             largo = intPorcentaje;
-                            ret.append("  <td class=\"swb-res-porciento-h\"><div class=\"swb-res-porciento-no-h\"><div class=\"swb-res-porciento-si-h\" style=\"width:"+largo+"%\"></div></div></td> \n");
-                            ret.append("  <td class=\"swb-res-votos-h\"> \n");
+                            ret.append("  <td class=\"swb-res-percent-h\"><div class=\"swb-res-percent-no-h\"><div class=\"swb-res-percent-si-h\" style=\"width:"+largo+"%\"></div></div></td> \n");
+                            ret.append("  <td class=\"swv-res-votes-h\"> \n");
 
                             if (porcent) {
                                 ret.append("<span>"+largo+"%</span> \n");
@@ -878,7 +872,7 @@ public class Poll extends GenericResource {
             ret.append("</table> \n");
             ret.append("</div> \n");
 
-            ret.append("<div class=\"swb-poll-resume\"> \n");
+            ret.append("<div class=\"swb-poll-more\"> \n");
             if( LocLnks.INRESULTS.toString().equals(base.getAttribute("wherelinks")) || LocLnks.INBOTH.toString().equals(base.getAttribute("wherelinks")) )
                 ret.append(getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("usrmsg_Encuesta_doView_relatedLink"))+" \n");
 
@@ -1541,16 +1535,14 @@ public class Poll extends GenericResource {
 
 
             ret.append("<fieldset>");
-//            ret.append("<ul class=\"swbform-ul\"> ");
-//            ret.append("<li class=\"swbform-li\">");
             ret.append(" <button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"submitImgGal\" value=\"Submit\" onclick=\"if(jsValida(dojo.byId('frmAdmRes'))) return true; else return false;\">"+paramRequest.getLocaleString("lblAdmin_submit")+"</button>&nbsp;");
             ret.append(" <button dojoType=\"dijit.form.Button\" type=\"reset\">"+paramRequest.getLocaleString("lblAdmin_reset")+"</button>");
-//            ret.append("</li>");
-//            ret.append("</ul> ");
             ret.append("</fieldset>");
 
+            ret.append("<fieldset>");
+            ret.append("<span class=\"requerido\">*</span> " + paramRequest.getLocaleString("lblAdmin_required"));
+            ret.append("</fieldset>");
             ret.append("</form> ");
-            ret.append("<p><span class=\"requerido\">*</span> " + paramRequest.getLocaleString("lblAdmin_required")+"</p>");
             ret.append("</div>");
             ret.append(getAdminScript(paramRequest));
         }
