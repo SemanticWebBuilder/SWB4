@@ -74,9 +74,10 @@ public class Banner extends GenericAdmResource {
         PrintWriter out = response.getWriter();
 
         try {
-            String local = base.getAttribute("local", "0");
+//            String local = base.getAttribute("local", "0");
             String code =base.getAttribute("code");
-            if( local.equals("0")||code==null ) {
+//            if( local.equals("0")||code==null ) {
+            if(code==null) {
                 String img = base.getAttribute("img","");
                 String longdesc = base.getAttribute("longdesc");
                 String url = base.getAttribute("url");
@@ -155,7 +156,8 @@ public class Banner extends GenericAdmResource {
 
                 if( longdesc!=null )
                     out.println("<a class=\"swb-banner-hlp\" href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_HELP).toString()+"\">"+paramRequest.getLocaleString("longDesc")+"</a>");
-            }else { //publicidad externa
+            }else {
+                //publicidad externa
                 out.println(code);
             }
         }catch (Exception e) {
