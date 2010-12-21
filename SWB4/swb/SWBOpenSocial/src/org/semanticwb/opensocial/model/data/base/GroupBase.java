@@ -7,6 +7,8 @@ public abstract class GroupBase extends org.semanticwb.model.base.GenericObjectB
    * Indica si el elemento es válido
    */
     public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
+    public static final org.semanticwb.platform.SemanticClass data_Person=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#Person");
+    public static final org.semanticwb.platform.SemanticProperty opensocial_hasPerson=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial#hasPerson");
     public static final org.semanticwb.platform.SemanticClass data_Group=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#Group");
    /**
    * The semantic class that represents the currentObject
@@ -76,6 +78,29 @@ public abstract class GroupBase extends org.semanticwb.model.base.GenericObjectB
         {
             return (getGroup(id, model)!=null);
         }
+       /**
+       * Gets all org.semanticwb.opensocial.model.data.Group with a determined Person
+       * @param value Person of the type org.semanticwb.opensocial.model.data.Person
+       * @param model Model of the org.semanticwb.opensocial.model.data.Group
+       * @return Iterator with all the org.semanticwb.opensocial.model.data.Group
+       */
+
+        public static java.util.Iterator<org.semanticwb.opensocial.model.data.Group> listGroupByPerson(org.semanticwb.opensocial.model.data.Person value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.opensocial.model.data.Group> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(opensocial_hasPerson, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.opensocial.model.data.Group with a determined Person
+       * @param value Person of the type org.semanticwb.opensocial.model.data.Person
+       * @return Iterator with all the org.semanticwb.opensocial.model.data.Group
+       */
+
+        public static java.util.Iterator<org.semanticwb.opensocial.model.data.Group> listGroupByPerson(org.semanticwb.opensocial.model.data.Person value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.opensocial.model.data.Group> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(opensocial_hasPerson,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**
@@ -138,6 +163,71 @@ public abstract class GroupBase extends org.semanticwb.model.base.GenericObjectB
     {
         //Override this method in Group object
         getSemanticObject().setBooleanProperty(swb_valid, value,false);
+    }
+   /**
+   * Gets all the org.semanticwb.opensocial.model.data.Person
+   * @return A GenericIterator with all the org.semanticwb.opensocial.model.data.Person
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.opensocial.model.data.Person> listPersons()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.opensocial.model.data.Person>(getSemanticObject().listObjectProperties(opensocial_hasPerson));
+    }
+
+   /**
+   * Gets true if has a Person
+   * @param value org.semanticwb.opensocial.model.data.Person to verify
+   * @return true if the org.semanticwb.opensocial.model.data.Person exists, false otherwise
+   */
+    public boolean hasPerson(org.semanticwb.opensocial.model.data.Person value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(opensocial_hasPerson,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a Person
+   * @param value org.semanticwb.opensocial.model.data.Person to add
+   */
+
+    public void addPerson(org.semanticwb.opensocial.model.data.Person value)
+    {
+        getSemanticObject().addObjectProperty(opensocial_hasPerson, value.getSemanticObject());
+    }
+   /**
+   * Removes all the Person
+   */
+
+    public void removeAllPerson()
+    {
+        getSemanticObject().removeProperty(opensocial_hasPerson);
+    }
+   /**
+   * Removes a Person
+   * @param value org.semanticwb.opensocial.model.data.Person to remove
+   */
+
+    public void removePerson(org.semanticwb.opensocial.model.data.Person value)
+    {
+        getSemanticObject().removeObjectProperty(opensocial_hasPerson,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the Person
+   * @return a org.semanticwb.opensocial.model.data.Person
+   */
+    public org.semanticwb.opensocial.model.data.Person getPerson()
+    {
+         org.semanticwb.opensocial.model.data.Person ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(opensocial_hasPerson);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.opensocial.model.data.Person)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**
