@@ -5,7 +5,7 @@
     <admdbconnmgr defconn="true"/>
 
     <fieldset legend="Configuración básica">
-        <input type="text" id="url" name="url" label="Dirección Web" promptMessage="Dirección Web" />
+        <input type="text" id="url" name="url" label="Dirección web" promptMessage="Dirección web" />
         <statictext name="txtTarget">En una nueva ventana</statictext>
 	<input type="radio" name="target" id="target0" label="Si" value="true"/>
 	<input type="radio" name="target" id="target1" label="No" value="false" checked="true"/>
@@ -20,15 +20,15 @@
 
     <div title="Estilo" open="false">
     <fieldset legend="Configurar dimensiones">
-        <input type="text" id="width"  name="width" label="Ancho de la imagen" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Ancho inválido" promptMessage="Ancho de la imagen. Ejemplos: 90%, 350px, 854" />
-        <input type="text" id="height" name="height" label="Altura de la imagen" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválida" promptMessage="Altura de la imagen. Ejemplos: 90%, 350px, 854" />
+        <input type="text" id="width"  name="width" label="Ancho de la imagen" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Ancho Inválido" promptMessage="Ancho de la imagen. Ejemplos: 90%, 350px, 854" />
+        <input type="text" id="height" name="height" label="Altura de la imagen" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura Inválida" promptMessage="Altura de la imagen. Ejemplos: 90%, 350px, 854" />
     </fieldset>
     </div>
 
-    <div title="Configuración avanzada" open="false">
+    <div title="Configuración Avanzada" open="false">
     <fieldset legend="Banner externo">
         <textarea id="code" name="code" label="* Código" rows="5" cols="50" wrap="virtual"/>
-        <input type="text" id="index" name="index" label="Índice de ordenamiento" maxlength="7" regExp="\d{1,7}" invalidMessage="Índice inválido" promptMessage="Índice numérico de la imagen" />
+s        <input type="text" id="index" name="index" label="Índice de ordenamiento" maxlength="7" regExp="\d{1,7}" invalidMessage="Índice inválido" promptMessage="Índice numérico de la imagen" />
     </fieldset>
     </div>
 

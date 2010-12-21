@@ -3,33 +3,33 @@
     <xslfile>admresource.xslt</xslfile>
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
     <admdbconnmgr defconn="true"/>
-    <fieldset legend="Configuración de contenido">
-        <input type="file" id="audio" name="audio" label="Audio (au, wav, rm, mp3, wma):" showfile="true" filetype="au|wav|rm|mp3|wma" isshowfiletype="true" isremovefile="true" removemsg="Quitar audio" size="40" />
-        <statictext name="auto">Iniciar automáticamente:</statictext>
-        <input type="radio" id="automatic0" name="automatic" label="Si" value="true" />
-        <input type="radio" id="automatic1" name="automatic" label="No" value="false" checked="true" />
-        <statictext name="cntrls">Mostrar controles:</statictext>
-        <input type="radio" id="controls0" name="controls" label="Si" value="true" checked="true" />
-        <input type="radio" id="controls1" name="controls" label="No" value="false" />
-        <statictext name="lp">Reproducción continua:</statictext>
-        <input type="radio" id="loop0" name="loop" label="Si" value="true" />
-        <input type="radio" id="loop1" name="loop" label="No" value="false" checked="true" />
+    <fieldset legend="Configurações de Conteúdo">
+        <input type="file" id="audio" name="audio" label="Áudio (au, wav, rm, mp3, wma):" showfile="true" filetype="au|wav|rm|mp3|wma" isshowfiletype="true" isremovefile="true" removemsg="Remover áudio" size="40" />
+        <statictext name="auto">Iniciar automaticamente</statictext>
+        <input type="radio" id="automatic0" name="automatic" label="Se" value="true" />
+        <input type="radio" id="automatic1" name="automatic" label="Não" value="false" checked="true" />
+        <statictext name="cntrls">Show Controls</statictext>
+        <input type="radio" id="controls0" name="controls" label="Se" value="true" checked="true" />
+        <input type="radio" id="controls1" name="controls" label="Não" value="false" />
+        <statictext name="lp">Continuous Play</statictext>
+        <input type="radio" id="loop0" name="loop" label="Se" value="true" />
+        <input type="radio" id="loop1" name="loop" label="Não" value="false" checked="true" />
     </fieldset>
 
     <fieldset legend="Aspecto">
-        <input type="text" id="width"  name="width" label="Ancho:" maxlength="9" regExp="\d{1,6}" invalidMessage="Ancho inválido" promptMessage="Ancho de la imagen. Ejemplos: 320" />
-        <input type="text" id="height" name="height" label="Altura:" maxlength="9" regExp="\d{1,6}" invalidMessage="Altura inválida" promptMessage="Altura de la imagen. Ejemplos: 280" />
+        <input type="text" id="width"  name="width" label="Largura" maxlength="9" regExp="\d{1,6}" invalidMessage="Inválido larga" promptMessage="Largura da imagem. Exemplos: 320" />
+        <input type="text" id="height" name="height" label="Altura" maxlength="9" regExp="\d{1,6}" invalidMessage="Altura inválido" promptMessage="Altura da imagem. Exemplos: 280" />
 
-        <select name="align" label="Alinear">
-            <option value="left"></option>
-            <option value="right"></option>
-            <option value="center"></option>
+        <select name="align" label="Alinhar">
+            <option value="left">Esquerda</option>
+            <option value="right">Direito</option>
+            <option value="center">Centro</option>
         </select>
     </fieldset>
 
     <fieldset>
         <input type="submit" name="btnSave" id="btnSave" value="Guardar" onclick="return jsValida(this.form)" />
-        <input type="reset"  name="btnReset" id="btnReset" value="Restablecer" />
+        <input type="reset"  name="btnReset" id="btnReset" value="Reset" />
     </fieldset>
     </form>
 
@@ -37,7 +37,7 @@
         <![CDATA[
         function jsValida(frm) {
             if( isEmpty(dojo.byId('audio').value) && !dojo.byId('wbNoFile_audio') ) {
-                alert('Especifique un archivo de audio');
+                alert('Especifique um arquivo de áudio');
                 dojo.byId('audio').focus();
                 return false;
             }

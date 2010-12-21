@@ -3,33 +3,33 @@
     <xslfile>admresource.xslt</xslfile>
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
     <admdbconnmgr defconn="true"/>
-    <fieldset legend="Configuración de contenido">
-        <input type="file" id="audio" name="audio" label="Audio (au, wav, rm, mp3, wma):" showfile="true" filetype="au|wav|rm|mp3|wma" isshowfiletype="true" isremovefile="true" removemsg="Quitar audio" size="40" />
-        <statictext name="auto">Iniciar automáticamente:</statictext>
-        <input type="radio" id="automatic0" name="automatic" label="Si" value="true" />
+    <fieldset legend="Content Settings">
+        <input type="file" id="audio" name="audio" label="Audio (au, wav, rm, mp3, wma):" showfile="true" filetype="au|wav|rm|mp3|wma" isshowfiletype="true" isremovefile="true" removemsg="Remove audio" size="40" />
+        <statictext name="auto">Automatically start</statictext>
+        <input type="radio" id="automatic0" name="automatic" label="Yes" value="true" />
         <input type="radio" id="automatic1" name="automatic" label="No" value="false" checked="true" />
-        <statictext name="cntrls">Mostrar controles:</statictext>
-        <input type="radio" id="controls0" name="controls" label="Si" value="true" checked="true" />
+        <statictext name="cntrls">Show controls</statictext>
+        <input type="radio" id="controls0" name="controls" label="Yes" value="true" checked="true" />
         <input type="radio" id="controls1" name="controls" label="No" value="false" />
-        <statictext name="lp">Reproducción continua:</statictext>
-        <input type="radio" id="loop0" name="loop" label="Si" value="true" />
-        <input type="radio" id="loop1" name="loop" label="No" value="false" checked="true" />
+        <statictext name="lp">Continuous Play</statictext>
+        <input type="radio" id="loop0" name="loop" label="Yes" value="true" />
+        <input type="radio" id="loop1" name="loop" label="Yes" value="false" checked="true" />
     </fieldset>
 
-    <fieldset legend="Aspecto">
-        <input type="text" id="width"  name="width" label="Ancho:" maxlength="9" regExp="\d{1,6}" invalidMessage="Ancho inválido" promptMessage="Ancho de la imagen. Ejemplos: 320" />
-        <input type="text" id="height" name="height" label="Altura:" maxlength="9" regExp="\d{1,6}" invalidMessage="Altura inválida" promptMessage="Altura de la imagen. Ejemplos: 280" />
+    <fieldset legend="Aspect">
+        <input type="text" id="width"  name="width" label="Width" maxlength="9" regExp="\d{1,6}" invalidMessage="Invalid wide" promptMessage="Image width. Examples: 320" />
+        <input type="text" id="height" name="height" label="Height" maxlength="9" regExp="\d{1,6}" invalidMessage="Height invalid" promptMessage="Image height. Examples: 280" />
 
-        <select name="align" label="Alinear">
-            <option value="left"></option>
-            <option value="right"></option>
-            <option value="center"></option>
+        <select name="align" label="Align">
+            <option value="left">Left</option>
+            <option value="right">Right</option>
+            <option value="center">Center</option>
         </select>
     </fieldset>
 
     <fieldset>
-        <input type="submit" name="btnSave" id="btnSave" value="Guardar" onclick="return jsValida(this.form)" />
-        <input type="reset"  name="btnReset" id="btnReset" value="Restablecer" />
+        <input type="submit" name="btnSave" id="btnSave" value="Save" onclick="return jsValida(this.form)" />
+        <input type="reset"  name="btnReset" id="btnReset" value="Reset" />
     </fieldset>
     </form>
 
@@ -37,7 +37,7 @@
         <![CDATA[
         function jsValida(frm) {
             if( isEmpty(dojo.byId('audio').value) && !dojo.byId('wbNoFile_audio') ) {
-                alert('Especifique un archivo de audio');
+                alert('Specify an audio file');
                 dojo.byId('audio').focus();
                 return false;
             }

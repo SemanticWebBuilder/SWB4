@@ -3,45 +3,38 @@
     <xslfile>admresource.xslt</xslfile>
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
     <admdbconnmgr defconn="true"/>
-    <fieldset legend="Configuración básica">
-        <input type="radio" id="local0" name="local" label="Local" value="0" checked="true" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=true; else dojo.byId(&#34;code&#34;).disabled=false;'" />
 
+    <fieldset legend="Configuração básica">
         <input type="text" id="url" name="url" label="Endereço Web:" promptMessage="Endereço Web" />
         <statictext name="txtTarget">Em uma nova janela:</statictext>
         <input type="radio" name="target" id="target0" label="Sim" value="true"/>
 	<input type="radio" name="target" id="target1" label="Não" value="false" checked="true"/>
 
-        <input type="text" id="axn" name="axn" label="Acción:" promptMessage="Javascript ação, proposta no evento onclick" />
+        <input type="text" id="axn" name="axn" label="Ação" promptMessage="Javascript ação, proposta no evento onclick" />
 
-        <input type="FILE" name="img" label="Imagem (jpg, jpeg, gif, png, swf):" showfile="true" filetype="jpg|jpeg|gif|png|swf" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40" />
-        <input type="text" id="alt" name="alt" label="Texto alternativo:" promptMessage="Descrição indicativa do banner. Acessibilidade Orientação" />
+        <input type="file" name="img" label="Imagem (jpg, jpeg, gif, png, swf):" showfile="true" filetype="jpg|jpeg|gif|png|swf" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40" />
+        <input type="text" id="alt" name="alt" label="Texto alternativo" promptMessage="Descrição indicativa do banner. Acessibilidade Orientação" />
 
-        <textarea id="longdesc" name="longdesc" label="Descrição Long:" rows="5" cols="50" wrap="virtual" promptMessage="Indicativo contorno modo Ajuda banner da ação. Acessibilidade Orientação" />
+        <textarea id="longdesc" name="longdesc" label="Descrição Long" rows="5" cols="50" wrap="virtual" promptMessage="Indicativo contorno modo Ajuda banner da ação. Acessibilidade Orientação" />
     </fieldset>
 
+    <div title="Estilo" open="false">
     <fieldset legend="Aparência">
-        <input type="text" id="width"  name="width" label="Largura da imagem:" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Largura inválido" promptMessage="Largura da imagem. Ejemplos: 90%, 350px, 854" />
-        <input type="text" id="height" name="height" label="Altura da imagem:" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválido" promptMessage="Altura da imagem. Ejemplos: 90%, 350px, 854" />
+        <input type="text" id="width"  name="width" label="Largura da imagem" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Largura inválido" promptMessage="Largura da imagem. Ejemplos: 90%, 350px, 854" />
+        <input type="text" id="height" name="height" label="Altura da imagem" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválido" promptMessage="Altura da imagem. Ejemplos: 90%, 350px, 854" />
     </fieldset>
+    </div>
 
-    <fieldset legend="Avançado">
-        <input type="radio" id="local1" name="local" label="Externo" value="1" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=false; else dojo.byId(&#34;code&#34;).disabled=true;'" />
-        <textarea id="code" name="code" label="* Código:" rows="5" cols="50" wrap="virtual"/>
-        <input type="text" id="index" name="index" label="Índice de ordenamiento:" maxlength="7" regExp="\d{1,7}" invalidMessage="Índice inválido" promptMessage="Imagem de índice numérico" />
-
-        <statictext name="note">
-        <![CDATA[
-            <font style="color: #428AD4; font-family: Verdana; font-size:10px;">
-            * Dato requerido para publicidad externa
-            ** Dato requerido para publicidad local
-            </font>
-        ]]>
-        </statictext>
+        <div title="Configurações Avançadas" open="false">
+    <fieldset legend="Externas Banner">
+        <textarea id="code" name="code" label="* Código" rows="5" cols="50" wrap="virtual"/>
+s        <input type="text" id="index" name="index" label="Ordem do índice" maxlength="7" regExp="\d{1,7}" invalidMessage="Índice inválido" promptMessage="Índice numérico da imagem" />
     </fieldset>
+    </div>
 
     <fieldset>
-        <input type="submit" name="btnSave" id="btnSave" value="Salvar" onclick="return jsValida(this.form)" />
-        <input type="reset"  name="btnReset" id="btnReset" value="Restaurar" />
+        <input type="submit" name="btnSave" id="btnSave" value="Guardar" onclick="return jsValida(this.form)" />
+        <input type="reset"  name="btnReset" id="btnReset" value="Reset" />
     </fieldset>
     </form>
 
