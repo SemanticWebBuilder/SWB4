@@ -399,6 +399,7 @@ public class SWBProcessFormMgr implements SWBForms
         SWBFormMgr mgr=mgrs.get(cls.getURI());
         if(element!=null)
         {
+            element.setModel(mgr.getSemanticObject().getModel());
             return element.renderElement(request, mgr.getSemanticObject(), prop, m_type, mode, m_lang);
         }else
         {
