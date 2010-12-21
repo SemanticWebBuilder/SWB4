@@ -6,12 +6,11 @@
 
     <fieldset legend="Basic Configuration">
         <input type="text" id="url" name="url" label="Web address" promptMessage="Web address" />
-        <!--statictext name="txtTarget">In a new window:</statictext-->
-        <label>In a new window</label>
+        <statictext name="txtTarget">In a new window</statictext>
         <input type="radio" name="target" id="target0" label="Yes" value="true"/>
 	<input type="radio" name="target" id="target1" label="No" value="false" checked="true"/>
 
-        <input type="text" id="axn" name="axn" label="Acción" promptMessage="Action in javascript, considered in the onclick event" />
+        <input type="text" id="axn" name="axn" label="Action" promptMessage="Action in javascript, considered in the onclick event" />
 
         <input type="file" name="img" label="Image (jpg, jpeg, gif, png, swf)" showfile="true" filetype="jpg|jpeg|gif|png|swf" isshowfiletype="true" isremovefile="true" removemsg="Remove image" size="40" />
         <input type="text" id="alt" name="alt" label="Altern Text" promptMessage="Indicative outline of the banner. Accessibility Guideline" />
@@ -20,14 +19,14 @@
     </fieldset>
 
     <div title="Style" open="false">
-    <fieldset legend="">
+    <fieldset legend="Configure Dimensions">
         <input type="text" id="width"  name="width" label="Image widht" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Width invalid" promptMessage ="Image width. Examples: 90%, 350px, 854" />
         <input type="text" id="height" name="height" label="Image height" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Height invalid" promptMessage="Image height. Examples: 90%, 350px, 854" />
     </fieldset>
     </div>
 
     <div title="Advanced" open="false">
-    <fieldset legend="">
+    <fieldset legend="External Banner">
         <textarea id="code" name="code" label="Code" rows="5" cols="50" wrap="virtual"/>
         <input type="text" id="index" name="index" label="Order Index" maxlength="7" regExp="\d{1,7}" invalidMessage="Invalid index" promptMessage="Numeric index of the image" />
     </fieldset>
@@ -41,20 +40,19 @@
 
     <script type="text/javascript">
         <![CDATA[
-        /*if(!document.frmAdmRes.target[0].checked && !document.frmAdmRes.target[1].checked)
-		document.frmAdmRes.target[1].checked=true;*/
         dojo.require("dijit.form.Button");
         dojo.require("dijit.form.ValidationTextBox");
 
         function jsValida(frm) {
+            alert('1');
             if(!isEmpty(dojo.byId('url').value) && isEmpty(dojo.byId('img').value) && !dojo.byId('wbNoFile_img')) {
-                alert('Especifique una imagen para el banner');
+                alert('Specify an image for the banner');
                 dojo.byId('img').focus();
                 return false;
             }
-
-            if(isEmpty('img').value && isEmpty(dojo.byId('code').value)) {
-                alert('Defina una configuración básica');
+            alert('img'+isEmpty(dojo.byId('img').value)+', code='+isEmpty(dojo.byId('code').value));
+            if(isEmpty(dojo.byId('img').value) && isEmpty(dojo.byId('code').value)) {
+                alert('Define a basic configuration');
                 dojo.byId('url').focus();
                 return false;
             }
