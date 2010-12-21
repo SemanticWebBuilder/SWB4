@@ -385,7 +385,7 @@
     <xsl:template match="img">
 	<xsl:if test="name(parent::*)!='label'">
             <xsl:text disable-output-escaping="yes">&lt;</xsl:text>li class="swbform-li"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-            <label class="swbform-label">&amp;nbsp;</label>
+            <label class="swbform-label"></label>
 	</xsl:if>
         <xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="name()" />
         <xsl:if test="string-length( @id    ) &gt; 0"> id=&quot;<xsl:value-of select="@id" />&quot;</xsl:if>
