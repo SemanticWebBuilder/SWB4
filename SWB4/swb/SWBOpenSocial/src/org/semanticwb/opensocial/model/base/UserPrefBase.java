@@ -3,8 +3,8 @@ package org.semanticwb.opensocial.model.base;
 
 public abstract class UserPrefBase extends org.semanticwb.model.SWBClass 
 {
-    public static final org.semanticwb.platform.SemanticProperty opensocial_name=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial#name");
     public static final org.semanticwb.platform.SemanticProperty opensocial_value=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial#value");
+    public static final org.semanticwb.platform.SemanticProperty opensocial_key=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial#key");
     public static final org.semanticwb.platform.SemanticClass opensocial_UserPref=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/opensocial#UserPref");
    /**
    * The semantic class that represents the currentObject
@@ -92,24 +92,6 @@ public abstract class UserPrefBase extends org.semanticwb.model.SWBClass
     }
 
 /**
-* Gets the Name property
-* @return String with the Name
-*/
-    public String getName()
-    {
-        return getSemanticObject().getProperty(opensocial_name);
-    }
-
-/**
-* Sets the Name property
-* @param value long with the Name
-*/
-    public void setName(String value)
-    {
-        getSemanticObject().setProperty(opensocial_name, value);
-    }
-
-/**
 * Gets the Value property
 * @return String with the Value
 */
@@ -125,5 +107,23 @@ public abstract class UserPrefBase extends org.semanticwb.model.SWBClass
     public void setValue(String value)
     {
         getSemanticObject().setProperty(opensocial_value, value);
+    }
+
+/**
+* Gets the Key property
+* @return String with the Key
+*/
+    public String getKey()
+    {
+        return getSemanticObject().getProperty(opensocial_key);
+    }
+
+/**
+* Sets the Key property
+* @param value long with the Key
+*/
+    public void setKey(String value)
+    {
+        getSemanticObject().setProperty(opensocial_key, value);
     }
 }

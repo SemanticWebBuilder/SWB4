@@ -33,4 +33,11 @@ public class FeatureDetail
         }
         return obj;
     }
+
+    @Override
+    public String toString()
+    {
+        return toJSONObject().toString();
+    }
+
 }

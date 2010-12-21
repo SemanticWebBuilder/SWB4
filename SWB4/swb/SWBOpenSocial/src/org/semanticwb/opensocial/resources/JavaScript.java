@@ -44,6 +44,15 @@ public final class JavaScript
             String js=scripts.get(fileName);
             if(js!=null)
             {
+
+                SWBResourceURL makeRequest=paramRequest.getRenderUrl();
+                makeRequest.setMode(SocialContainer.Mode_MAKE_REQUEST);
+                makeRequest.setCallMethod(SWBResourceURL.Call_DIRECT);
+
+                SWBResourceURL proxy=paramRequest.getRenderUrl();
+                proxy.setMode(SocialContainer.Mode_PROXY);
+                proxy.setCallMethod(SWBResourceURL.Call_DIRECT);
+
                 SWBResourceURL rpc=paramRequest.getRenderUrl();
                 rpc.setMode(SocialContainer.Mode_RPC);
                 rpc.setCallMethod(SWBResourceURL.Call_DIRECT);
@@ -59,6 +68,8 @@ public final class JavaScript
                 js=js.replace("<%=metadata%>", javascript.toString());
                 js=js.replace("<%=ifr%>", ifr.toString());
                 js=js.replace("<%=rpc%>", rpc.toString());
+                js=js.replace("<%=proxy%>", proxy.toString());
+                js=js.replace("<%=makerequest%>", makeRequest.toString());
                 PrintWriter out=response.getWriter();
                 out.write(js);
                 out.close();

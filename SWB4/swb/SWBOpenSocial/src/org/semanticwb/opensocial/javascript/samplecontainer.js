@@ -155,7 +155,7 @@ shindig.samplecontainer = {};
     shindig.container.view_ = current_view;
     shindig.container.gadgets_ = {};
     for (var i = 0; i < metadata.gadgets.length; i++) {
-    	alert('metadata.gadgets[i].url: '+metadata.gadgets[i].url);
+    	
       gadget = shindig.container.createGadget({'specUrl': metadata.gadgets[i].url,
           'title': metadata.gadgets[i].title, 'userPrefs': metadata.gadgets[i].userPrefs});
       // Shindigs rpc code uses direct javascript calls when running on the same domain
