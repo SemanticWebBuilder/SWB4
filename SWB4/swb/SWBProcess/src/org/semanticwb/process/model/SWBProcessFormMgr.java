@@ -397,11 +397,13 @@ public class SWBProcessFormMgr implements SWBForms
     public String renderElement(HttpServletRequest request, SemanticClass cls, SemanticProperty prop, FormElement element, String mode)
     {
         SWBFormMgr mgr=mgrs.get(cls.getURI());
-        return element.renderElement(request, mgr.getSemanticObject(), prop, m_type, mode, m_lang);
+        if(element!=null)
+        {
+            return element.renderElement(request, mgr.getSemanticObject(), prop, m_type, mode, m_lang);
+        }else
+        {
+            return mgr.renderElement(request, prop, mode);
+        }
     }
-
-
-
-
     
 }
