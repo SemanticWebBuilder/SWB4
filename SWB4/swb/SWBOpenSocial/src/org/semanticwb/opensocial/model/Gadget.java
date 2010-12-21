@@ -22,8 +22,9 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
     public FeatureDetail[] getFeatureDetails()
     {
+        getDocument();
         ArrayList<FeatureDetail> getFeatureDetails = new ArrayList<FeatureDetail>();
-        if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
+        if (doc!=null && doc.getElementsByTagName("ModulePrefs").getLength() > 0)
         {
             Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
             NodeList childs = module.getChildNodes();

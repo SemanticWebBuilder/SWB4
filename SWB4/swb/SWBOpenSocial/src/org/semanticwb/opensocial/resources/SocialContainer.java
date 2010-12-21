@@ -6,11 +6,11 @@ package org.semanticwb.opensocial.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Iterator;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.XMLConstants;
@@ -30,7 +30,6 @@ import org.semanticwb.opensocial.model.Gadget;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.api.SWBResourceURL;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -235,12 +234,25 @@ public class SocialContainer extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        PrintWriter out = response.getWriter();
+        /*PrintWriter out = response.getWriter();
         SWBResourceURL frame = paramRequest.getRenderUrl();
         frame.setCallMethod(SWBResourceURL.Call_DIRECT);
         frame.setMode(SocialContainer.Mode_IFRAME);
         frame.setParameter("url", "http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml");
-        out.write("<a href=\"" + frame + "\">" + frame + "</a>");
+        out.write("<a href=\"" + frame + "\">" + frame + "</a>");*/
+        String path="/swbadmin/jsp/opensocial/samplecontainer.jsp";
+        
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        try
+        {
+            request.setAttribute("paramRequest", paramRequest);
+        
+            dis.include(request, response);
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+        }
     }
 
     public static boolean isValidGadGet(URL url)
@@ -270,6 +282,7 @@ public class SocialContainer extends GenericResource
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+        
     }
 
     public void docConfigGadgetForUser(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
