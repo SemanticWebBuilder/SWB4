@@ -3252,8 +3252,7 @@ gadgets.rpc = function() {
         // Assumed to be schemaless. Default to current protocol.
         url = window.location.protocol + "//" + url;
       }
-    }
-    alert('relayUrl[targetId]: '+url);
+    }    
     relayUrl[targetId] = url;
     useLegacyProtocol[targetId] = !!opt_useLegacy;
   }
@@ -6779,4 +6778,4 @@ gadgets.pubsubrouter = function() {
 }();
 
 ;
-gadgets.config.init({"shindig.auth":{"authToken":"-1:-1:*::*:0:default"},"osapi":{"endPoints":["http://%host%<%=rpc%>"]},"osapi.services":{"gadgets.rpc":["container.listMethods"],"http://%host%<%=rpc%>":["samplecontainer.update","albums.update","albums.supportedFields","activities.delete","activities.supportedFields","gadgets.metadata","activities.update","mediaItems.create","albums.get","activities.get","http.put","activitystreams.create","messages.modify","appdata.get","messages.get","system.listMethods","samplecontainer.get","cache.invalidate","people.supportedFields","http.head","http.delete","messages.create","people.get","activitystreams.get","mediaItems.supportedFields","mediaItems.delete","albums.delete","activitystreams.update","mediaItems.update","messages.delete","appdata.update","gadgets.tokenSupportedFields","http.post","activities.create","samplecontainer.create","http.get","albums.create","appdata.delete","gadgets.token","appdata.create","activitystreams.delete","gadgets.supportedFields","mediaItems.get","activitystreams.supportedFields"]},"rpc":{"parentRelayUrl":"/container/rpc_relay.html","useLegacyProtocol":false},"core.io":{"proxyUrl":"//%host%/swb/rest/gadgets/proxy?container=default&refresh=%refresh%&url=%url%%rewriteMime%","jsonProxyUrl":"//%host%/swb/rest/gadgets/makeRequest"}});
+gadgets.config.init({"shindig.auth":{"authToken":"-1:-1:*::*:0:default"},"osapi":{"endPoints":["http://%host%<%=rpc%>"]},"osapi.services":{"gadgets.rpc":["container.listMethods"],"http://%host%<%=rpc%>":["samplecontainer.update","albums.update","albums.supportedFields","activities.delete","activities.supportedFields","gadgets.metadata","activities.update","mediaItems.create","albums.get","activities.get","http.put","activitystreams.create","messages.modify","appdata.get","messages.get","system.listMethods","samplecontainer.get","cache.invalidate","people.supportedFields","http.head","http.delete","messages.create","people.get","activitystreams.get","mediaItems.supportedFields","mediaItems.delete","albums.delete","activitystreams.update","mediaItems.update","messages.delete","appdata.update","gadgets.tokenSupportedFields","http.post","activities.create","samplecontainer.create","http.get","albums.create","appdata.delete","gadgets.token","appdata.create","activitystreams.delete","gadgets.supportedFields","mediaItems.get","activitystreams.supportedFields"]},"rpc":{"parentRelayUrl":"/container/rpc_relay.html","useLegacyProtocol":false},"core.io":{"proxyUrl":"//%host%<%=proxy%>?container=default&refresh=%refresh%&url=%url%%rewriteMime%","jsonProxyUrl":"//%host%<%=makerequest%>"}});

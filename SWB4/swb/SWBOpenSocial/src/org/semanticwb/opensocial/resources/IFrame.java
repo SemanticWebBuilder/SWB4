@@ -214,7 +214,7 @@ public class IFrame
                 while (list.hasNext())
                 {
                     UserPref pref = list.next();
-                    getVariablesubstituion.put("__UP_" + pref.getName() + "__", pref.getValue());
+                    getVariablesubstituion.put("__UP_" + pref.getKey() + "__", pref.getValue());
                 }
             }
         }
@@ -276,6 +276,10 @@ public class IFrame
         String moduleid = request.getParameter("moduleid");
         String sview = request.getParameter("view");
         String html = "";
+        if(moduleid==null)
+        {
+            moduleid="0";
+        }
         int iview=0;
         try
         {
@@ -308,18 +312,18 @@ public class IFrame
                         {
                             String href = content.getAttribute("href");                            
                             if(href==null || href.trim().equals(""))
-                            {
+                            {                                
                                 NodeList childs = content.getChildNodes();
                                 for (int j = 0; j < childs.getLength(); j++)
-                                {
+                                {                                    
                                     if (childs.item(j) instanceof CDATASection)
-                                    {
+                                    {                                        
                                         CDATASection section = (CDATASection) childs.item(j);
                                         html = section.getNodeValue();
                                         for (String key : variables.keySet())
                                         {
-                                            String value = variables.get(key);
-                                            html = html.replace(key, value);
+                                            String value = variables.get(key);                                            
+                                            html = html.replace(key, value);                                            
                                         }
                                     }
                                 }
@@ -395,9 +399,9 @@ public class IFrame
                 proxy.setCallMethod(SWBResourceURL.Call_DIRECT);
                 proxy.setMode(SocialContainer.Mode_PROXY);
 
-                System.out.println("html: "+html);
+                
 
-                html = parseHTML(html, new URI(gadget.getUrl()), new URI(proxy.toString()));
+                html = parseHTML(html, new URI(gadget.getUrl()), new URI(proxy.toString()));                
                 SWBResourceURL javascript = paramRequest.getRenderUrl();
                 javascript.setMode(SocialContainer.Mode_JAVASCRIPT);
                 javascript.setCallMethod(SWBResourceURL.Call_DIRECT);
@@ -415,6 +419,7 @@ public class IFrame
         catch (Exception e)
         {
             log.debug(e);
+            e.printStackTrace();
             response.setStatus(500, e.getMessage());
         }
     }

@@ -51,7 +51,7 @@ public class Metadata
                 while (list.hasNext())
                 {
                     UserPref pref = list.next();
-                    adduserPrefs.put(pref.getName(), pref.getValue());
+                    adduserPrefs.put(pref.getKey(), pref.getValue());
                 }
                 break;
             }
@@ -226,8 +226,7 @@ public class Metadata
                     sb.append(new String(buffer, 0, read));
                     read = in.read(buffer);
                 }
-                in.close();
-                System.out.println("request RPCInternalServlet: " + sb.toString());
+                in.close();                
                 try
                 {
 
@@ -253,8 +252,7 @@ public class Metadata
                         if(!urigadget.isAbsolute())
                         {
                             urigadget=here.resolve(urigadget);
-                        }
-                        System.out.println("gadgetsurl: " + url);
+                        }                        
                         Gadget g = Gadget.ClassMgr.createGadget(paramRequest.getWebPage().getWebSite());
                         g.setUrl(urigadget.toString());
                         Gadget ogadget = SocialContainer.getGadget(urigadget.toString(), paramRequest.getWebPage().getWebSite());
@@ -263,8 +261,7 @@ public class Metadata
                         array.put(metadata);
                         g.remove();
                     }
-                    //String data = "{\"gadgets\":[{\"userPrefs\":{},\"moduleId\":1,\"screenshot\":\"\",\"singleton\":false,\"width\":0,\"authorLink\":\"\",\"links\":{},\"iframeUrl\":\"//http://localhost:8080/swb/gadgets/ifr?url=http%3A%2F%2Flocalhost%3A8080%2Fswb%2Fsamplecontainer%2Fexamples%2FSocialHelloWorld.xml&container=default&view=%25view%25&lang=%25lang%25&country=%25country%25&debug=%25debug%25&nocache=%25nocache%25&v=b4ea67fd7aa33422aa257ee3f534daf0&st=%25st%25\",\"url\":\"http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml\",\"scaling\":false,\"title\":\"Social Hello World\",\"height\":0,\"titleUrl\":\"\",\"thumbnail\":\"http://localhost:8080/\",\"scrolling\":false,\"views\":{\"default\":{\"preferredHeight\":0,\"quirks\":true,\"type\":\"html\",\"preferredWidth\":0}},\"featureDetails\":{\"dynamic-height\":{\"parameters\":{},\"required\":true},\"osapi\":{\"parameters\":{},\"required\":true},\"core\":{\"parameters\":{},\"required\":true},\"settitle\":{\"parameters\":{},\"required\":true}},\"features\":[\"dynamic-height\",\"osapi\",\"core\",\"settitle\"],\"showStats\":false,\"categories\":[\"\",\"\"],\"showInDirectory\":false,\"authorPhoto\":\"\"}]}";
-                    System.out.println("response RPCInternalServlet: " + objresponse.toString(2));
+                    //String data = "{\"gadgets\":[{\"userPrefs\":{},\"moduleId\":1,\"screenshot\":\"\",\"singleton\":false,\"width\":0,\"authorLink\":\"\",\"links\":{},\"iframeUrl\":\"//http://localhost:8080/swb/gadgets/ifr?url=http%3A%2F%2Flocalhost%3A8080%2Fswb%2Fsamplecontainer%2Fexamples%2FSocialHelloWorld.xml&container=default&view=%25view%25&lang=%25lang%25&country=%25country%25&debug=%25debug%25&nocache=%25nocache%25&v=b4ea67fd7aa33422aa257ee3f534daf0&st=%25st%25\",\"url\":\"http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml\",\"scaling\":false,\"title\":\"Social Hello World\",\"height\":0,\"titleUrl\":\"\",\"thumbnail\":\"http://localhost:8080/\",\"scrolling\":false,\"views\":{\"default\":{\"preferredHeight\":0,\"quirks\":true,\"type\":\"html\",\"preferredWidth\":0}},\"featureDetails\":{\"dynamic-height\":{\"parameters\":{},\"required\":true},\"osapi\":{\"parameters\":{},\"required\":true},\"core\":{\"parameters\":{},\"required\":true},\"settitle\":{\"parameters\":{},\"required\":true}},\"features\":[\"dynamic-height\",\"osapi\",\"core\",\"settitle\"],\"showStats\":false,\"categories\":[\"\",\"\"],\"showInDirectory\":false,\"authorPhoto\":\"\"}]}";                    
                     response.setContentType("JSON");
                     OutputStream out = response.getOutputStream();
                     out.write(objresponse.toString().getBytes());
