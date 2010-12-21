@@ -4,6 +4,9 @@
  */
 package org.semanticwb.process.resources;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -15,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.FormElement;
@@ -179,15 +183,13 @@ public class ProcessForm extends GenericResource {
             out.println("</form>");
 
         } else if (ADMINMODE_ADVANCE.equals(adminMode)) {
-//            SWBResourceURL urlAction = paramRequest.getActionUrl();
             if (action.equals("add") || action.equals("edit")) {
-//                urlAction.setAction("update");
-//                urlAction.setParameter("suri", suri);
-                String xml = base.getXmlConf(); //getFormHTML(request, null);
+                String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/";
+                String xml = SWBUtils.IO.getFileFromPath(basepath+"code.xml");
+                if(null==xml)  xml=base.getXmlConf(); //getFormHTML(request, null);
                 if (xml != null && xml.trim().length() > 0) {
                     SWBFormMgrLayer swbFormMgrLayer = new SWBFormMgrLayer(xml, paramRequest, request);
                     String html = swbFormMgrLayer.getHtml();
-                    //System.out.println("html final:"+html);
                     ret.append(html);
                 }
             }
@@ -343,28 +345,67 @@ public class ProcessForm extends GenericResource {
             }
 
         } else if( "updXMLConfig".equals(response.getAction())) {
-
-            //System.out.println("Genera el XML nuevo.");
-
-//            String newXML = request.getParameter("genXML");
-//            if(base.getXmlConf()==null||(base.getXmlConf()!=null&&base.getXmlConf().trim().length()==0))
-//            {
-//                newXML = "new";
+//            try {
+//                String xml = getFormHTML(request, response);
+//                if(xml!=null)
+//                {
+//                    base.setXmlConf(xml);
+//                    base.updateAttributesToDB();
+//                }
+//            } catch (Exception e) { log.error("Error al generar la Forma XML",e);
 //            }
-//
-//            if(newXML!=null&&newXML.equals("new"))
-//            {
-            try {
-                String xml = getFormHTML(request, response);
-                if(xml!=null)
-                {
-                    base.setXmlConf(xml);
-                    base.updateAttributesToDB();
-                }
-            } catch (Exception e) { log.error("Error al generar la Forma XML",e);
+
+            String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/";
+            File xmlFile = new File(basepath);
+            if (!xmlFile.exists()) {
+                xmlFile.mkdirs();
             }
+
+            if (xmlFile.exists()) {
+                try {
+                    String value = getFormHTML(request, response);
+                    xmlFile = new File(basepath + "code.xml");
+                    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(xmlFile)));
+                    out.print(value);
+                    out.flush();
+                    //response.setRenderParameter("result", this.saveOK);
+                } catch (Exception e) {
+                    //response.setRenderParameter("result", this.saveError);
+                    log.error("Error saving file: " + xmlFile.getAbsolutePath(), e);
+                }
+            }
+
+        }  else if("saveXMLFile".equals(response.getAction()))
+        {
+            String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/";
+            File xmlFile = new File(basepath);
+            if (xmlFile.exists()) {
+                try {
+                    String value = null;
+                    if (request.getParameter("hiddencode") != null &&request.getParameter("hiddencode").trim().length()>0) {
+                        value = request.getParameter("hiddencode");
+                    } else {
+                        value = request.getParameter("resource" + base.getId());
+                    }
+                    xmlFile = new File(basepath + "code.xml");
+                    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(xmlFile)));
+                    out.print(value);
+                    out.flush();
+                    //response.setRenderParameter("result", this.saveOK);
+                } catch (Exception e) {
+                    //response.setRenderParameter("result", this.saveError);
+                    log.error("Error saving file: " + xmlFile.getAbsolutePath(), e);
+                }
+            }
+
+//            try {
+//                base.setXmlConf(request.getParameter("hiddencode"));
+//                base.updateAttributesToDB();
+//            } catch (Exception e) {
 //            }
-        }  else if ("savecnf".equals(response.getAction())) {
+
+            response.setMode(SWBActionResponse.Mode_ADMIN);
+        } else if ("savecnf".equals(response.getAction())) {
             if (suri == null) {
                 return;
             }
@@ -412,7 +453,7 @@ public class ProcessForm extends GenericResource {
                     propid = stoken.nextToken();
                 }
 
-                hmprops.put(classid + "|" + propid, base.getAttribute("prop" + i));
+                hmprops.put(classid + "|" + propid, sprop);
                 i++;
             }
 
@@ -448,7 +489,6 @@ public class ProcessForm extends GenericResource {
             //find last prop
             int i = 1;
             while (!base.getAttribute("prop" + i, "").equals("")) {
-                System.out.println(i + " = " + base.getAttribute("prop" + i));
                 i++;
             }
             int max = i;
@@ -575,7 +615,6 @@ public class ProcessForm extends GenericResource {
             Iterator<Integer> itint = hmprops.keySet().iterator();
             while (itint.hasNext()) {
                 Integer num = itint.next();
-                //System.out.println("prop no." + num.intValue());
                 if (num.intValue() > maximo) {
                     maximo = num.intValue();
                 }
@@ -723,64 +762,16 @@ public class ProcessForm extends GenericResource {
                 }
             }
         } else if ("update".equals(response.getAction())) {
-
-//            if(action.equals("update"))
-//            {   //Add or update resource.
             try {
                 String xml = base.getXmlConf();//bundle.getBundle(getClass().getName(), new java.util.Locale(user.getLanguage()));
                 if (xml != null && xml.trim().length() > 0) {
                     SWBFormMgrLayer.update2DB(request, response, foi, xml);
                 }
-                //if(newSemObj!=null){
-                //    base.setAttribute("objInst", newSemObj.getURI());
-                //    base.updateAttributesToDB();
-                //response.setRenderParameter("msg", saveOK);
-                //}else{
-                //    response.setRenderParameter("msg", saveError);
-                //}
                 response.setAction(response.Action_EDIT);
             } catch (Exception e) {
                 log.error(e);
             }
-//            }
-//            else if(action.equals("remove"))
-//            {
-//                    response.setAction(response.Action_EDIT);
-//                    response.setRenderParameter("msg", saveOK);
-//            }
-        } else if("saveXMLFile".equals(response.getAction()))
-        {
-//            String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/";
-//            File xmlFile = new File(basepath);
-//            if (xmlFile.exists()) {
-//                try {
-//                    String value = null;
-//                    if (request.getParameter("hiddencode") != null &&
-//                            !request.getParameter("hiddencode").equalsIgnoreCase("")) {
-//                        value = request.getParameter("hiddencode");
-//                    } else {
-//                        value = request.getParameter("resource" + base.getId());
-//                    }
-//                    xmlFile = new File(basepath + "code.xml");
-//                    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(xmlFile)));
-//                    out.print(value);
-//                    out.flush();
-//                    response.setRenderParameter("result", this.saveOK);
-//                } catch (Exception e) {
-//                    response.setRenderParameter("result", this.saveError);
-//                    log.error("Error saving file: " + xmlFile.getAbsolutePath(), e);
-//                }
-//            }
-
-            try {
-
-                base.setXmlConf(request.getParameter("hiddencode"));
-                base.updateAttributesToDB();
-            } catch (Exception e) {
-            }
-
-            response.setMode(SWBActionResponse.Mode_ADMIN);
-        }
+        } 
 
         response.setRenderParameter("suri", suri);
     }
@@ -1202,9 +1193,10 @@ public class ProcessForm extends GenericResource {
                 out.println("</form>");
 
 
+                String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/";
+                String value = SWBUtils.IO.getFileFromPath(basepath+"code.xml");
 
-
-                String value = base.getXmlConf();
+                //value = base.getXmlConf();
 
                 if(null!=value&&value.trim().length()>0)
                 {
@@ -1313,6 +1305,7 @@ public class ProcessForm extends GenericResource {
     public boolean isViewProperty(SWBParameters paramRequest, SemanticClass cls, SemanticProperty prop, HashMap<String, String> hm) {
         boolean ret = false;
         String data = hm.get(cls.getClassId() + "|" + prop.getPropId());
+        //System.out.println("VIEW-PROP: "+data);
         if (data != null && data.indexOf(cls.getClassId() + "|" + prop.getPropId() + "|view") > -1) {
             return ret = true;
         }
@@ -1322,6 +1315,7 @@ public class ProcessForm extends GenericResource {
     public boolean isEditProperty(SWBParameters paramRequest, SemanticClass cls, SemanticProperty prop, HashMap<String, String> hm) {
         boolean ret = false;
         String data = hm.get(cls.getClassId() + "|" + prop.getPropId());
+        //System.out.println("EDIT-PROP: "+data);
         if (data != null && data.indexOf(cls.getClassId() + "|" + prop.getPropId() + "|edit") > -1) {
             return ret = true;
         }
