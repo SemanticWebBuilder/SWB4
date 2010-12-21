@@ -286,9 +286,8 @@ public class IFrame
             log.debug(nfe);
         }
         try
-        {
-            Gadget gadget = SocialContainer.getGadget(url, paramRequest.getWebPage().getWebSite());
-
+        {            
+            Gadget gadget = SocialContainer.getGadget(url, paramRequest.getWebPage().getWebSite());         
             if (gadget != null)
             {
                 int currentView=0;
@@ -307,8 +306,8 @@ public class IFrame
                         }
                         if ("html".equals(type))
                         {
-                            String href = content.getAttribute("href");
-                            if(href==null)
+                            String href = content.getAttribute("href");                            
+                            if(href==null || href.trim().equals(""))
                             {
                                 NodeList childs = content.getChildNodes();
                                 for (int j = 0; j < childs.getLength(); j++)
@@ -339,7 +338,7 @@ public class IFrame
                         else if("URL".equals(type))
                         {
                             String href = content.getAttribute("href");
-                            if(href==null)
+                            if(href!=null && !href.trim().equals(""))
                             {
                                 URI urihref = new URI(href);
                                 URI urigadget = new URI(gadget.getUrl());
@@ -396,7 +395,7 @@ public class IFrame
                 proxy.setCallMethod(SWBResourceURL.Call_DIRECT);
                 proxy.setMode(SocialContainer.Mode_PROXY);
 
-
+                System.out.println("html: "+html);
 
                 html = parseHTML(html, new URI(gadget.getUrl()), new URI(proxy.toString()));
                 SWBResourceURL javascript = paramRequest.getRenderUrl();
