@@ -9,7 +9,7 @@
         <input type="radio" name="modal" label="No Modal" value="false" checked="true" />
     </fieldset>
 
-    <fieldset legend="Strategy Setting">
+    <fieldset legend="Strategy Settings">
         <statictext name="txtTarget">How to access to Contact Resource?</statictext>
         <input type="text" name="link" label="Text link" maxlength="50" promptMessage="Text link" />
 
