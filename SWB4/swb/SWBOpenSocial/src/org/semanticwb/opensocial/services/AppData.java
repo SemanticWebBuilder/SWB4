@@ -27,63 +27,57 @@ public class AppData implements Service
         JSONObject response = new JSONObject();
         try
         {
-            ArrayList<Person> persons=new ArrayList<Person>();
+            ArrayList<Person> persons = new ArrayList<Person>();
             String groupId = params.getString("groupId").trim();
+            Person personUserID = Person.ClassMgr.getPerson(userid, site);
             if (groupId.equals("@self"))
-            {
-                Person person=Person.ClassMgr.getPerson(userid, site);
-                if(person==null)
-                {
-                    person=Person.ClassMgr.createPerson(userid, site);
-                    Name name=Name.ClassMgr.createName(site);
-                    name.setFormatted("Demo ");
-                    person.setName(name);
-                    person.setAge(37);
-                    person.setGender("male");
-                    person.setProfileUrl("http://www.infotec");
-                    person.setThumbnailUrl("a");
-
-                }
-                persons.add(person);
+            {                
+                persons.add(personUserID);
             }
-            else if(groupId.equals("@all"))
+            else if (groupId.equals("@all"))
             {
-                Iterator<Person> _persons=Person.ClassMgr.listPersons(site);
-                while(_persons.hasNext())
+                Iterator<Group> groups = personUserID.listGroups();
+                while (groups.hasNext())
                 {
-                    Person person=_persons.next();
-                    persons.add(person);
+                    Group group = groups.next();
+                    Iterator<Person> _persons = group.listPersons();
+                    while (_persons.hasNext())
+                    {
+                        Person person = _persons.next();
+                        persons.add(person);
+                    }
                 }
             }
             else
             {
-                Group group=Group.ClassMgr.getGroup(groupId, site);
-                if(group==null)
+                Iterator<Group> groups = personUserID.listGroups();
+                while (groups.hasNext())
                 {
-                    group=Group.ClassMgr.createGroup(groupId, site);
-                    group.setTitle("title");
-                    group.setDescription("description");
-                }
-                Iterator<Person> _persons=Person.ClassMgr.listPersonByGroup(group);
-                while(_persons.hasNext())
-                {
-                    Person person=_persons.next();
-                    persons.add(person);
+                    Group group = groups.next();
+                    if (group.getId().equals(groupId))
+                    {
+                        Iterator<Person> _persons = group.listPersons();
+                        while (_persons.hasNext())
+                        {
+                            Person person = _persons.next();
+                            persons.add(person);
+                        }
+                    }
                 }
             }
-            for(Person p : persons)
+            for (Person p : persons)
             {
-                JSONArray keys=params.getJSONArray("keys");
-                for(int i=0;i<keys.length();i++)
+                JSONArray keys = params.getJSONArray("keys");
+                for (int i = 0; i < keys.length(); i++)
                 {
-                    String key=keys.getString(i);
-                    GenericIterator<org.semanticwb.opensocial.model.data.AppData> data=p.listAppDatas();
-                    while(data.hasNext())
+                    String key = keys.getString(i);
+                    GenericIterator<org.semanticwb.opensocial.model.data.AppData> data = p.listAppDatas();
+                    while (data.hasNext())
                     {
-                        org.semanticwb.opensocial.model.data.AppData appData=data.next();
-                        if(key.equals(appData.getKey()))
+                        org.semanticwb.opensocial.model.data.AppData appData = data.next();
+                        if (key.equals(appData.getKey()))
                         {
-                            String value=appData.getValue();
+                            String value = appData.getValue();
                             response.put(key, value);
                         }
                     }

@@ -23,6 +23,51 @@ import org.semanticwb.opensocial.model.data.Person;
 public class People implements Service
 {
 
+    static
+    {
+        Iterator<Person> _persons = Person.ClassMgr.listPersons();
+        while (_persons.hasNext())
+        {
+            Person person = _persons.next();
+            person.remove();
+        }
+
+        Iterator<Group> groups = Group.ClassMgr.listGroups();
+        while (groups.hasNext())
+        {
+            Group g = groups.next();
+            g.remove();
+        }
+        WebSite site = WebSite.ClassMgr.getWebSite("reg_digital_demo");
+
+        Person john_doe = Person.ClassMgr.createPerson("john.doe", site);
+        Name name = Name.ClassMgr.createName(site);
+        name.setFormatted("Demo Friend");
+        john_doe.setName(name);
+        john_doe.setAge(20);
+        john_doe.setGender("male");
+        john_doe.setProfileUrl("http://www.infotec");
+        //john_doe.setThumbnailUrl("a");
+
+
+
+        Group friends = Group.ClassMgr.createGroup("@friends", site);
+        friends.setTitle("friends");
+        friends.setDescription("friends");
+        Person friend = Person.ClassMgr.createPerson("friend1", site);
+        name = Name.ClassMgr.createName(site);
+        name.setFormatted("Demo Friend");
+        friend.setName(name);
+        friend.setAge(37);
+        friend.setGender("male");
+        friend.setProfileUrl("http://www.infotec");
+        //friend.setThumbnailUrl("a");
+        friends.addPerson(friend);
+        john_doe.addGroup(friends);
+
+
+    }
+
     class PersonComparator implements Comparator<Person>
     {
 
@@ -46,26 +91,6 @@ public class People implements Service
     public JSONObject get(String userid, JSONObject params, WebSite site)
     {
 
-        Group friends = Group.ClassMgr.getGroup("@friends", site);
-        if (friends == null)
-        {
-            friends = Group.ClassMgr.createGroup("@friends", site);
-            friends.setTitle("friends");
-            friends.setDescription("friends");
-            Person friend = Person.ClassMgr.getPerson("friend1", site);
-            if (friend == null)
-            {
-                friend = Person.ClassMgr.createPerson("friend1", site);
-                Name name = Name.ClassMgr.createName(site);
-                name.setFormatted("Demo Friend");
-                friend.setName(name);
-                friend.setAge(37);
-                friend.setGender("male");
-                friend.setProfileUrl("http://www.infotec");
-                friend.setThumbnailUrl("a");
-                friends.addPerson(friend);
-            }
-        }
 
         JSONObject response = new JSONObject();
         JSONArray entries = new JSONArray();
@@ -74,51 +99,44 @@ public class People implements Service
             ArrayList<Person> persons = new ArrayList<Person>();
             response.put("entry", entries);
             String groupId = params.getString("groupId").trim();
+            Person personUserID = Person.ClassMgr.getPerson(userid, site);
             if (groupId.equals("@self")) //Defaults to "@self", which MUST return only the Person object(s) specified by the userId parameter
             {
-                Person person = Person.ClassMgr.getPerson(userid, site);
-                if (person != null)
+                if (personUserID != null)
                 {
-                    persons.add(person);
-                }
-                else
-                {
-                    person = Person.ClassMgr.createPerson(userid, site);
-                    Name name = Name.ClassMgr.createName(site);
-                    name.setFormatted("Demo ");
-                    person.setName(name);
-                    person.setAge(37);
-                    person.setGender("male");
-                    person.setProfileUrl("http://www.infotec");
-                    person.setThumbnailUrl("a");
-                    persons.add(person);
-                    // error
+                    persons.add(personUserID);
                 }
             }
             else if (groupId.equals("@all"))
             {
-                Iterator<Person> _persons = Person.ClassMgr.listPersons(site);
-                while (_persons.hasNext())
+                Iterator<Group> groups = personUserID.listGroups();
+                while (groups.hasNext())
                 {
-                    Person person = _persons.next();
-                    persons.add(person);
+                    Group group = groups.next();
+                    Iterator<Person> _persons = group.listPersons();
+                    while (_persons.hasNext())
+                    {
+                        Person person = _persons.next();
+                        persons.add(person);
+                    }
                 }
             }
             else
             {
 
-                Group group = Group.ClassMgr.getGroup(groupId, site);
-                if (group == null)
+                Iterator<Group> groups = personUserID.listGroups();
+                while (groups.hasNext())
                 {
-                    group = Group.ClassMgr.createGroup(groupId, site);
-                    group.setTitle("title");
-                    group.setDescription("description");
-                }
-                Iterator<Person> _persons = Person.ClassMgr.listPersonByGroup(group);
-                while (_persons.hasNext())
-                {
-                    Person person = _persons.next();
-                    persons.add(person);
+                    Group group = groups.next();
+                    if (group.getId().equals(groupId))
+                    {
+                        Iterator<Person> _persons = group.listPersons();
+                        while (_persons.hasNext())
+                        {
+                            Person person = _persons.next();
+                            persons.add(person);
+                        }
+                    }
                 }
             }
             String sortBy = params.getString("sortBy");
