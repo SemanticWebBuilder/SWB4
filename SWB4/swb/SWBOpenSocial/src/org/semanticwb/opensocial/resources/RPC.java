@@ -60,6 +60,10 @@ public class RPC
             {
                 return service.get(userId, params, site);
             }
+            if (method.equals("update"))
+            {
+                service.update(userId, params, site);
+            }
         }
         return execute;
     }
@@ -92,7 +96,7 @@ public class RPC
                 read = in.read(buffer);
             }
             in.close();
-
+            System.out.println("request RPC : " + sb.toString());
             String[] values = st.split(":");
             System.out.println("values.length: " + values.length);
             if (values.length == 7)
@@ -118,8 +122,8 @@ public class RPC
                         JSONArray responseJSONObject = new JSONArray();
 
                         JSONArray requestJSONObject = new JSONArray(sb.toString());
-                        System.out.println(requestJSONObject.toString(6));
-                        System.out.println("request RPC : " + requestJSONObject.toString(6));
+                        
+                        
                         for (int i = 0; i < requestJSONObject.length(); i++)
                         {
                             JSONObject obj = requestJSONObject.getJSONObject(i);

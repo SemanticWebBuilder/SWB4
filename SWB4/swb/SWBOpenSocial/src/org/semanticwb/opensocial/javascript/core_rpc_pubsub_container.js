@@ -4674,7 +4674,7 @@ shindig.uri = (function() {
 
       // Decorate the execute method with the information necessary for batching
       boundCall.method = method;
-      boundCall.transport = transport;
+      boundCall.transport = transport;      
       boundCall.rpc = rpc;
 
       return boundCall;
@@ -4917,7 +4917,7 @@ shindig.uri = (function() {
         if (endpointName.indexOf("http") == 0 ||
             endpointName.indexOf("//") == 0) {
           // Expand the host & append the security token
-          var endpointUrl = endpointName.replace("%host%", document.location.host);
+          var endpointUrl = endpointName.replace("%host%", document.location.host);          
           var transport = { name : endpointUrl, "execute" : execute };
           var methods = services[endpointName];
           for (var i=0; i < methods.length; i++) {
