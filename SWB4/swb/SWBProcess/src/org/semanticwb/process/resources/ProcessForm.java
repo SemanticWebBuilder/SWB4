@@ -814,7 +814,7 @@ public class ProcessForm extends GenericResource {
         }
 
         //FlowNodeInstance foi = (FlowNodeInstance) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
-        FlowNodeInstance foi = ut.getFlowObjectInstance();
+        //FlowNodeInstance foi = ut.getFlowObjectInstance();
 
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         SemanticVocabulary sv = SWBPlatform.getSemanticMgr().getVocabulary();
@@ -841,10 +841,9 @@ public class ProcessForm extends GenericResource {
             }
         }
 
-        Iterator<ProcessObject> it = foi.listHeraquicalProcessObjects().iterator();
+        Iterator<SemanticClass> it = ut.getContainer().listHerarquicalProcessClasses();
         while (it.hasNext()) {
-            ProcessObject obj = it.next();
-            SemanticClass cls = obj.getSemanticObject().getSemanticClass();
+            SemanticClass cls = it.next();
             System.out.println("ClassID: "+cls.getClassId());
             Iterator<SemanticProperty> itp = cls.listProperties();
             while (itp.hasNext()) {
