@@ -4,33 +4,33 @@
 
     <form name="frmAdmRes" id="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo">
     <fieldset legend="Configuración de contenido">
-        <statictext name="txtTarget">¿Cómo desea mostrar el recurso de contacto?:</statictext>
+        <statictext name="txtTarget">¿Cómo desea mostrar el recurso de contacto?</statictext>
         <input type="radio" name="modal" label="Modal" value="true"/>
         <input type="radio" name="modal" label="No Modal" value="false" checked="true" />
     </fieldset>
 
     <fieldset legend="Configuración de estrategia">
-        <statictext name="txtTarget">¿Cómo desea acceder al recurso de contacto?:</statictext>
-        <input type="text" name="link" label="Texto de la liga:" maxlength="50" promptMessage="Texto de la liga" />
+        <statictext name="txtTarget">¿Cómo desea acceder al recurso de contacto?</statictext>
+        <input type="text" name="link" label="Texto de la liga" maxlength="50" promptMessage="Texto de la liga" />
 
-        <input type="text" name="label" label="Etiqueta del botón:" maxlength="50" promptMessage="Etiqueta del botón" />
+        <input type="text" name="label" label="Etiqueta del botón" maxlength="50" promptMessage="Etiqueta del botón" />
 
-        <input type="file" name="image" label="Imagen (gif, jpg, jpeg, png):" showfile="true" filetype="jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40"/>
-        <input type="text" name="alt" label="Texto alterno:" maxlength="50" promptMessage="Texto alterno de la imagen" />
+        <input type="file" name="image" label="Imagen (gif, jpg, jpeg, png)" showfile="true" filetype="jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40"/>
+        <input type="text" name="alt" label="Texto alterno" maxlength="50" promptMessage="Texto alterno de la imagen" />
     </fieldset>
 
     <fieldset legend="Datos del contacto">
-        <input type="text" name="name" label="Nombre del contacto:"  maxlength="40" jsrequired="true" promptMessage="Nombre completo del contacto" />
-        <input type="text" name="email" label="Correo electrónico del contacto:" maxlength="40" jsrequired="true" regExp="^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$" promptMessage="Correo electrónico del contacto" invalidMessage="Correo electrónico inválido" />
-        <input type="text" name="degree" label="Cargo o puesto:" maxlength="40" jsrequired="true" promptMessage="Cargo o puesto del contacto" />
-        <input type="text" name="phone" label="Teléfono del contacto:" maxlength="12" jsrequired="true" promptMessage="Número telefónico del contacto" />
-        <input type="text" name="address" label="Domicilio del contact o de la razón social:" maxlength="60" promptMessage="Domicilio del contact o de la razón social" />
+        <input type="text" name="name" label="Nombre del contacto"  maxlength="40" jsrequired="true" promptMessage="Nombre completo del contacto" />
+        <input type="text" name="email" label="Correo electrónico del contacto" maxlength="40" jsrequired="true" regExp="^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$" promptMessage="Correo electrónico del contacto" invalidMessage="Correo electrónico inválido" />
+        <input type="text" name="degree" label="Cargo o puesto" maxlength="40" jsrequired="true" promptMessage="Cargo o puesto del contacto" />
+        <input type="text" name="phone" label="Teléfono del contacto" maxlength="12" jsrequired="true" promptMessage="Número telefónico del contacto" />
+        <input type="text" name="address" label="Domicilio del contact o de la razón social" maxlength="60" promptMessage="Domicilio del contact o de la razón social" />
     </fieldset>
 
     <fieldset legend="Aspecto">
-        <input type="text" name="title" label="Title:" maxlength="40" jsrequired="false" promptMessage="Razón social" />
-        <input type="text" id="width"  name="width" value="360" label="Ancho:" maxlength="4" regExp="\d{1,4}" invalidMessage="Ancho inválido" promptMessage="Ancho del cuadro de diálogo. Este valor se considera en pixeles" jsrequired="true" />
-        <input type="text" id="height" name="height" value="420" label="Alto:" maxlength="4" regExp="\d{1,4}" invalidMessage="Altura inválida" promptMessage="Altura del cuadro de diálogo. Este valor se considera en pixeles" jsrequired="true" />
+        <input type="text" name="title" label="Title" maxlength="40" jsrequired="false" promptMessage="Razón social" />
+        <input type="text" id="width"  name="width" value="360" label="Ancho" maxlength="4" regExp="\d{1,4}" invalidMessage="Ancho inválido" promptMessage="Ancho del cuadro de diálogo. Este valor se considera en pixeles" jsrequired="true" />
+        <input type="text" id="height" name="height" value="420" label="Alto" maxlength="4" regExp="\d{1,4}" invalidMessage="Altura inválida" promptMessage="Altura del cuadro de diálogo. Este valor se considera en pixeles" jsrequired="true" />
 
         <statictext name="note">
         <![CDATA[
