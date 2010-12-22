@@ -3,8 +3,8 @@
     <xslfile>admresource.xslt</xslfile>
     <form name="frmAdmRes" action="true" method="post" jsframework="dojo" >
         <admdbconnmgr defconn="true"/>
-        <fieldset legend="Configuración de contenido">
-            <input type="text" name="url" label="Web address:" promptMessage="Web address" jsrequired="true"/>
+        <fieldset legend="Content Settings">
+            <input type="text" name="url" label="Web address" promptMessage="Web address" jsrequired="true"/>
         </fieldset>
 
         <fieldset>
