@@ -49,7 +49,17 @@ public class SocialContainer extends GenericResource
     public static final String Mode_MAKE_REQUEST = "MAKEREQUEST";
     public static final String Mode_CONFIGGADGET = "CONFIGGADGET";
     public static final String Mode_RPC = "RPC";
-
+    static
+    {
+        WebSite site = WebSite.ClassMgr.getWebSite("reg_digital_demo");
+        Iterator<Gadget> gadgets=Gadget.ClassMgr.listGadgets();
+        while(gadgets.hasNext())
+        {
+            gadgets.next().remove();
+        }
+        Gadget g = Gadget.ClassMgr.createGadget(site);
+        g.setUrl("http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml");
+    }
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {

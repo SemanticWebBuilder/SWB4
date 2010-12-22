@@ -75,6 +75,7 @@ public class IFrame
                         if (tag.isEndTag())
                         {
                             ret.append(parseCSS(cssString.toString(), gadget, proxy));
+                            //ret.append(cssString.toString());
                             cssString = new StringBuilder();
                             css = false;
                             ret.append(tok.getRawString());
@@ -175,7 +176,7 @@ public class IFrame
                         sb.append(";");
                     }
                     else
-                    {
+                    {                        
                         for (String value : att.getValues())
                         {
                             sb.append(value);
@@ -265,8 +266,7 @@ public class IFrame
     }
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
-        System.out.println("IFrame url: " + request.getParameter("url"));
+    {        
         String url = request.getParameter("url");
         String country = request.getParameter("country");
         String lang = request.getParameter("lang");
