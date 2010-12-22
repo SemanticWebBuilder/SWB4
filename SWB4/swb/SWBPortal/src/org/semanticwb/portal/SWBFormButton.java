@@ -232,6 +232,17 @@ public class SWBFormButton
         return new SWBFormButton().setTitle("Restaurar", "es").setTitle("Reset", "en");
     }
 
+
+    public static SWBFormButton newAcceptProcessTaskButton()
+    {
+        return new SWBFormButton().setTitle("Aceptar Tarea","es").setTitle("Accept Task", "en").setAttribute("name", "accept");
+    }
+
+    public static SWBFormButton newRejectProcessTaskButton()
+    {
+        return new SWBFormButton().setTitle("Rechazar Tarea","es").setTitle("Reject Task", "en").setAttribute("name", "reject");
+    }
+
     /**
      * Checks if is busy button.
      * 
