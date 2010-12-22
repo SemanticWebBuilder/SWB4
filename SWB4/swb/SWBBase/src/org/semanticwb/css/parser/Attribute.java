@@ -6,7 +6,6 @@
 package org.semanticwb.css.parser;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.StringTokenizer;
 
 // TODO: Auto-generated Javadoc
