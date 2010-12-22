@@ -85,13 +85,11 @@ public class SWBButtonTag implements SWBFormLayer {
                 }else if(stype.equalsIgnoreCase("cancelbtn")) {
                     renderElement=SWBFormButton.newCancelButton().renderButton(request, htmlType, user.getLanguage());
                 }else if(stype.equalsIgnoreCase("acceptbtn")) {
-                    String msg="Concluir Tarea"; //TODO:Internacionalizar el recurso
-                    if(user.getLanguage().equalsIgnoreCase("en")) msg="Accept Task";
-                    renderElement=new SWBFormButton().setTitle(msg,user.getLanguage()).setAttribute("name", "accept").setAttribute("type", "submit").renderButton(request, htmlType, user.getLanguage());
+                    //renderElement=new SWBFormButton().setTitle(msg,user.getLanguage()).setAttribute("name", "accept").setAttribute("type", "submit").renderButton(request, htmlType, user.getLanguage());
+                    renderElement=new SWBFormButton().newAcceptProcessTaskButton().setAttribute("type", "submit").renderButton(request, htmlType, user.getLanguage());
                 }else if(stype.equalsIgnoreCase("rejectbtn")) {
-                     String msg="Concluir Tarea"; //TODO:Internacionalizar el recurso
-                    if(user.getLanguage().equalsIgnoreCase("en")) msg="Reject Task";
-                    renderElement=new SWBFormButton().setTitle(msg,user.getLanguage()).setAttribute("name", "reject").setAttribute("type", "submit").renderButton(request, htmlType, user.getLanguage());
+                    //renderElement=new SWBFormButton().setTitle(msg,user.getLanguage()).setAttribute("name", "reject").setAttribute("type", "submit").renderButton(request, htmlType, user.getLanguage());
+                    renderElement=new SWBFormButton().newRejectProcessTaskButton().setAttribute("type", "submit").renderButton(request, htmlType, user.getLanguage());
                 }else if(stype.equalsIgnoreCase("submit")) {
                     renderElement=renderGenericBtn();
                 }
