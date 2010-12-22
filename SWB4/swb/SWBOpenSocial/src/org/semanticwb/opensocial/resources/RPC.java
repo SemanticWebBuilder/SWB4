@@ -129,8 +129,7 @@ public class RPC
                             JSONObject responseMethod = execute(method, params, viewer, owner, paramRequest.getWebPage().getWebSite());
                             JSONObject part = new JSONObject();
                             part.put("id", id);
-                            part.put("result", responseMethod);
-                            System.out.println("part: "+part.toString(5));
+                            part.put("result", responseMethod);                            
                             responseJSONObject.put(part);
                         }
                         sendResponse(responseJSONObject.toString(4), response);
