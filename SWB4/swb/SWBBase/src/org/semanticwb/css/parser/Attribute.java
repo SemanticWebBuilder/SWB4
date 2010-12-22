@@ -5,6 +5,7 @@
 
 package org.semanticwb.css.parser;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.StringTokenizer;
 
@@ -20,7 +21,7 @@ public class Attribute {
     private String name;
     
     /** The values. */
-    private HashSet<String> values=new HashSet<String>();
+    private ArrayList<String> values=new ArrayList<String>();
     
     /**
      * Instantiates a new attribute.
@@ -31,7 +32,7 @@ public class Attribute {
     public Attribute(String name,String value)
     {
         this.name=name;
-        StringTokenizer st=new StringTokenizer(value," ");
+        StringTokenizer st=new StringTokenizer(value," ");        
         while(st.hasMoreTokens())
         {
             String nvalue=st.nextToken().trim();            
