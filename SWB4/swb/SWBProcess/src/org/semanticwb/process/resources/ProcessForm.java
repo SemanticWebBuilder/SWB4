@@ -207,15 +207,15 @@ public class ProcessForm extends GenericResource {
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         UserTask ut = (UserTask) base.getResourceable();
 
-
-        FlowNodeInstance foi = ut.getFlowObjectInstance();
+        //FlowNodeInstance foi = ut.getFlowObjectInstance();
 
         HashMap<String, SemanticClass> hmclass = new HashMap<String, SemanticClass>();
         HashMap<String, SemanticProperty> hmprops = new HashMap<String, SemanticProperty>();
-        Iterator<ProcessObject> it = foi.listHeraquicalProcessObjects().iterator();
+        Iterator<SemanticClass> it = ut.getContainer().listHerarquicalProcessClasses();
+        //Iterator<ProcessObject> it = foi.listHeraquicalProcessObjects().iterator();
         while (it.hasNext()) {
-            ProcessObject obj = it.next();
-            SemanticClass cls = obj.getSemanticObject().getSemanticClass();
+            SemanticClass cls = it.next();
+//            SemanticClass cls = obj.getSemanticObject().getSemanticClass();
 
             hmclass.put(cls.getClassId(), cls);
 
@@ -235,7 +235,7 @@ public class ProcessForm extends GenericResource {
         ret.append(">");
         
         ret.append("\n<table>");
-        ret.append("\n  <tr><td colspan=\"2\" align=\"center\">" + foi.getProcessWebPage().getDisplayName(user.getLanguage()) + "</td></tr>");
+        ret.append("\n  <tr><td colspan=\"2\" align=\"center\">" + ut.getProcess().getProcessWebPage().getDisplayName(user.getLanguage()) + "</td></tr>");
         ret.append("\n  <tr><td>");
         ret.append("\n    <fieldset>");
         //ret.append("<legend>Grupo de Elementos</legend>");
@@ -273,7 +273,7 @@ public class ProcessForm extends GenericResource {
                 }
                 SemanticObject sofe = ont.getSemanticObject(fe);
                 String strFE ="";
-                SWBProcessFormMgr fmgr = new SWBProcessFormMgr(foi);
+                //SWBProcessFormMgr fmgr = new SWBProcessFormMgr(foi);
                 FormElement frme = null;
                 if (null != sofe) {
                     frme = (FormElement) sofe.createGenericInstance();
