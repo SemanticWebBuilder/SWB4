@@ -558,7 +558,7 @@ public class Modeler extends GenericResource {
                             {
                                 Resource res = procsite.createResource();
                                 res.setResourceType(procsite.getResourceType("ProcessForm"));
-                                res.setTitle("Contenido autogenerado");
+                                res.setTitle(title);
                                 res.setActive(Boolean.TRUE);
                                 ((UserTask)gi).addResource(res);
                             }
