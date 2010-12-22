@@ -4,7 +4,7 @@
     <form name="frmAdmRes" action="true" method="post" jsframework="dojo" >
         <admdbconnmgr defconn="true"/>
         <fieldset legend="Configuración de contenido">
-            <input type="text" name="url" label="Dirección Web:" promptMessage="Dirección Web" jsrequired="true"/>
+            <input type="text" name="url" label="Dirección Web" promptMessage="Dirección Web" jsrequired="true"/>
         </fieldset>
 
         <fieldset>
