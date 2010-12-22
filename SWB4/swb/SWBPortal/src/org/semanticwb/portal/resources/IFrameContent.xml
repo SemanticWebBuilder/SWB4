@@ -4,23 +4,26 @@
     <form name="frmAdmRes" action="true" method="post" jsframework="dojo" >
         <admdbconnmgr defconn="true"/>
         <fieldset legend="Configuración de contenido">
-            <input type="text" name="url" label="Dirección Web:" promptMessage="Dirección Web" jsrequired="true"/>
+            <input type="text" name="url" label="Dirección web" promptMessage="Dirección web" jsrequired="true"/>
         </fieldset>
 
-        <fieldset legend="Aspecto">
-            <input type="text" name="width"  label="Ancho:" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Ancho inválido" promptMessage="Ancho. Ejemplos: 90%, 350px, 854" jsrequired="true" />
-            <input type="text" name="height" label="Alto:"  maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválida" promptMessage="Altura. Ejemplos: 90%, 350px, 854" jsrequired="true" />
+        <div title="Estilo" open="false">
+        <fieldset legend="Configurar Dimensiones">
+            <input type="text" name="width"  label="Ancho" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Ancho inválido" promptMessage="Ancho. Ejemplos: 90%, 350px, 854" jsrequired="true" />
+            <input type="text" name="height" label="Alto"  maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválida" promptMessage="Altura. Ejemplos: 90%, 350px, 854" jsrequired="true" />
+        </fieldset>
+        </div>
 
-            <statictext name="note">
+        <statictext name="note">
 		<![CDATA[
                     <font style="color: #428AD4; font-family: Verdana; font-size: 10px;">* Dato requerido</font>
 		]]>
-            </statictext>
-        </fieldset>
+        </statictext>
 
         <fieldset>
             <input type="submit" name="btnSave" id="btnSave" value="Guardar" onclick="return jsValida(this.form)" />
             <input type="reset"  name="btnReset" id="btnReset" value="Restablecer" />
         </fieldset>
+
     </form>
 </admresource>

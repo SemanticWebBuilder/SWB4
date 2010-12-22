@@ -3,24 +3,27 @@
     <xslfile>admresource.xslt</xslfile>
     <form name="frmAdmRes" action="true" method="post" jsframework="dojo" >
         <admdbconnmgr defconn="true"/>
-        <fieldset legend="Configuración de contenido">
-            <input type="text" name="url" label="Endereço Web:" promptMessage="Endereço Web" jsrequired="true"/>
+        <fieldset legend="Configurações de conteúdo">
+            <input type="text" name="url" label="Endereço web" promptMessage="Endereço web" jsrequired="true"/>
         </fieldset>
 
+        <div title="Opções" open="false">
         <fieldset legend="Aspecto">
-            <input type="text" name="width"  label="Anchura:" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Anchura inválido" promptMessage="Ancho. Ejemplos: 90%, 350px, 854" jsrequired="true" />
-            <input type="text" name="height" label="Altura:"  maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválida" promptMessage="Altura. Ejemplos: 90%, 350px, 854" jsrequired="true" />
+            <input type="text" name="width"  label="Largura" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Largura inválida" promptMessage="Largura. Exemplos: 90%, 350px, 854" jsrequired="true" />
+            <input type="text" name="height" label="Altura"  maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválida" promptMessage="Altura. Exemplos: 90%, 350px, 854" jsrequired="true" />
+        </fieldset>
+        </div>
 
-            <statictext name="note">
+        <statictext name="note">
 		<![CDATA[
                     <font style="color: #428AD4; font-family: Verdana; font-size: 10px;">* Dato requerido</font>
 		]]>
-            </statictext>
-        </fieldset>
-
+        </statictext>
+        
         <fieldset>
             <input type="submit" name="btnSave" id="btnSave" value="Salvar" onclick="return jsValida(this.form)" />
-            <input type="reset"  name="btnReset" id="btnReset" value="Restabelecer" />
+            <input type="reset"  name="btnReset" id="btnReset" value="Reset" />
         </fieldset>
+
     </form>
 </admresource>
