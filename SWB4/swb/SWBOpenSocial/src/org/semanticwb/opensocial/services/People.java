@@ -50,6 +50,15 @@ public class People implements Service
         //john_doe.setThumbnailUrl("a");
 
 
+        Person george_doe  = Person.ClassMgr.createPerson("George.doe", site);
+        name = Name.ClassMgr.createName(site);
+        name.setFormatted("George Doe");
+        george_doe.setName(name);
+        george_doe.setAge(20);
+        george_doe.setGender("famale");
+        george_doe.setProfileUrl("http://www.infotec");
+
+
 
         Group friends = Group.ClassMgr.createGroup("@friends", site);
         friends.setTitle("friends");
@@ -63,9 +72,15 @@ public class People implements Service
         friend.setProfileUrl("http://www.infotec");
         //friend.setThumbnailUrl("a");
         friends.addPerson(friend);
+        friends.addPerson(george_doe);
         john_doe.addGroup(friends);
 
 
+    }
+
+    public void update(String userid, JSONObject params, WebSite site)
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     class PersonComparator implements Comparator<Person>
@@ -104,7 +119,15 @@ public class People implements Service
             {
                 if (personUserID != null)
                 {
-                    persons.add(personUserID);
+                    JSONObject jsonperson = new JSONObject();
+                    JSONArray fields = params.getJSONArray("fields");
+                    for (int i = 0; i < fields.length(); i++)
+                    {
+                        String field = fields.getString(i);
+                        jsonperson.put(field, personUserID.getValueFromField(field));
+                    }
+                    return jsonperson;
+
                 }
             }
             else if (groupId.equals("@all"))

@@ -123,7 +123,7 @@ public class IFrame
             for (Selector selector : p.getSelectors())
             {
                 sb.append(selector.getName());
-                sb.append("{");
+                sb.append("\r\n{");
                 for (Attribute att : selector.getAttributes())
                 {
 
@@ -154,11 +154,11 @@ public class IFrame
                                     {
                                         uriValue = gadget.resolve(uriValue);
                                     }
-                                    sb.append("'");
+                                    sb.append("url('");
                                     sb.append(proxy.toString());
                                     sb.append("?url=");
                                     sb.append(URLEncoder.encode(uriValue.toString()));
-                                    sb.append("'");
+                                    sb.append("')");
 
                                 }
                                 else
@@ -179,11 +179,8 @@ public class IFrame
                         for (String value : att.getValues())
                         {
                             sb.append(value);
-                        }
-                        if (sb.lastIndexOf(",") != -1)
-                        {
-                            sb.deleteCharAt(sb.length() - 2);
-                        }
+                            sb.append(" ");
+                        }                        
                         sb.append(";");
                     }
                 }
