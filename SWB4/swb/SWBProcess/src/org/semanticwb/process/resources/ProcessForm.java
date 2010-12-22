@@ -788,20 +788,9 @@ public class ProcessForm extends GenericResource {
 
         String adminMode = base.getAttribute("adminMode", ADMINMODE_SIMPLE);
 
-        //System.out.println("action: "+action+", adminMode: "+adminMode);
-
         if (action != null && (action.equals(ADMINMODE_ADVANCE) || action.equals(ADMINMODE_SIMPLE))) {
             adminMode = action;
         }
-//        else {
-//
-//            base.setAttribute("adminMode", ADMINMODE_SIMPLE);
-//            try {
-//                base.updateAttributesToDB();
-//            } catch (Exception e) {
-//            }
-//            adminMode = ADMINMODE_SIMPLE;
-//        }
 
         HashMap<String, String> hmsc = new HashMap();
         HashMap<String, SemanticProperty> hmprops = new HashMap();
@@ -813,17 +802,11 @@ public class ProcessForm extends GenericResource {
 
         }
 
-//        if (suri == null) {
-//            out.println("Parámetro no definido...");
-//            return;
-//        }
-
         if (request.getParameter("errormsg") != null) {
             out.println("<script type=\"text/javascript\">");
             out.println("   alert('" + request.getParameter("errormsg") + "');");
             out.println("</script>");
         }
-
 
         if (ut == null) {
             out.println("Parámetro no definido...");
@@ -862,6 +845,7 @@ public class ProcessForm extends GenericResource {
         while (it.hasNext()) {
             ProcessObject obj = it.next();
             SemanticClass cls = obj.getSemanticObject().getSemanticClass();
+            System.out.println("ClassID: "+cls.getClassId());
             Iterator<SemanticProperty> itp = cls.listProperties();
             while (itp.hasNext()) {
                 SemanticProperty prop = itp.next();
@@ -952,7 +936,7 @@ public class ProcessForm extends GenericResource {
             out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\">");
             out.println("<fieldset>");
             out.println("<legend>" + "Configuración" + "</legend>");
-            out.println("<table border=\"0\" >");
+            out.println("<table border=\"0\" width=\"100%\" >");
             out.println("<tr>");
             out.println("<th>Propiedades");
             out.println("</th>");
@@ -964,40 +948,56 @@ public class ProcessForm extends GenericResource {
             out.println("<tr>");
             out.println("<td>");
             // select con la lista de propiedades existentes
-            out.println("<select size=\"10\" name=\"propiedades\" id=\"" + suri + "/propiedades\" multiple style=\"width:250px;\">");
+            out.println("<select size=\"10\" name=\"propiedades\" id=\"" + suri + "/propiedades\" multiple style=\"width: 100%;\">");
             Iterator<String> its = hmprops.keySet().iterator();
             while (its.hasNext()) {
                 String str = its.next();
+                String classid="";
+                String propid="";
+                StringTokenizer stoken = new StringTokenizer(str, "|");
+                if (stoken.hasMoreTokens()) {
+                    classid = stoken.nextToken();
+                    propid = stoken.nextToken();
+                 }
                 if (hmselected.get(str) == null) {
                     SemanticProperty sp = hmprops.get(str);
                     out.println("<option value=\"" + str + "\">");
-                    out.println(sp.getName());
+                    out.println(classid+"."+sp.getDisplayName(lang));
                     out.println("</option>");
                 }
             }
             out.println("</select>");
             out.println("</td>");
-            out.println("<td valign=\"middle\">");
+            out.println("<td valign=\"middle\" width=\"25px\">");
             // botones
             out.println("<button dojoType=\"dijit.form.Button\" type = \"button\" style=\"width: 25px;\" id = \"" + suri + "btnMoveLeft\" onclick = \"MoveItems('" + suri + "/existentes','" + suri + "/propiedades');\"><-</button><br>");
             out.println("<button dojoType=\"dijit.form.Button\" type = \"button\" style=\"width: 25px;\" id = \"" + suri + "btnMoveRight\" onclick = \"MoveItems('" + suri + "/propiedades','" + suri + "/existentes');\">-></button>");
             out.println("</td>");
             out.println("<td>");
             // select con la lista de propiedades seleccionadas
-            out.println("<select size=\"10\" name=\"existentes\" id=\"" + suri + "/existentes\" multiple style=\"width:250px;\">");
+            out.println("<select size=\"10\" name=\"existentes\" id=\"" + suri + "/existentes\" multiple style=\"width: 100%;\">");
             its = hmselected.keySet().iterator();
             while (its.hasNext()) {
                 String str = its.next();
+                String classid="";
+                String propid="";
+                StringTokenizer stoken = new StringTokenizer(str, "|");
+                if (stoken.hasMoreTokens()) {
+                    classid = stoken.nextToken();
+                    propid = stoken.nextToken();
+                 }
+
+
                 SemanticProperty sp = hmselected.get(str);
                 out.println("<option value=\"" + str + "\">");
-                out.println(sp.getName());
+                out.println(classid+"."+sp.getDisplayName(lang));
                 out.println("</option>");
             }
             out.println("</select>");
             out.println("</td>");
             out.println("</tr>");
             out.println("<tr>");
-            out.println("<td colspan=\"3\" align=\"center\">");
+            out.println("<td colspan=\"3\" >");
             // botones para guadar cambios
             out.println("<button  dojoType=\"dijit.form.Button\" type=\"submit\">Guardar</button>");
             out.println("</td>");
@@ -1068,7 +1068,7 @@ public class ProcessForm extends GenericResource {
                 out.println("</td>");
                 out.println("<td>");
 
-                out.println(hmsc.get(classid + "|" + propid));
+                out.println(classid + "." + hmsc.get(classid + "|" + propid));
 
                 out.println("</td>");
                 out.println("<td>");
@@ -1078,7 +1078,7 @@ public class ProcessForm extends GenericResource {
                 urlupd.setParameter("prop", "" + i);
                 urlupd.setParameter("suri", suri);
 
-                out.println("<select id=\"" + suri + "/" + i + "/sfe\" name=\"formElement\" style=\"width:200px;\" onchange=\"updItem('" + urlupd + "','feuri',this);\" >"); //
+                out.println("<select id=\"" + suri + "/" + i + "/sfe\" name=\"formElement\" style=\"width:300px;\" onchange=\"updItem('" + urlupd + "','feuri',this);\" >"); //
                 out.println(getFESelect(fe, paramRequest));
                 out.println("</select>");
                 out.println("</td>");
