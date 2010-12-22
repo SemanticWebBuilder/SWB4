@@ -9,6 +9,7 @@
         <input type="radio" name="modal" label="No Modal" value="false" checked="true" />
     </fieldset>
 
+    <div title="Strategy" open="false">
     <fieldset legend="Strategy Settings">
         <statictext name="txtTarget">How to access to Contact Resource?</statictext>
         <input type="text" name="link" label="Text link" maxlength="50" promptMessage="Text link" />
@@ -18,7 +19,9 @@
         <input type="file" name="image" label="Image (gif, jpg, jpeg, png)" showfile="true" filetype="jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Remove image" size="40"/>
         <input type="text" name="alt" label="Alternate Text" maxlength="50" promptMessage="Image alternate text" />
     </fieldset>
+    </div>
 
+    <div title="Contact" open="false">
     <fieldset legend="Contact Details">
         <input type="text" name="name" label="Full Name of Contact"  maxlength="40" jsrequired="true" promptMessage="Full Name of Contact" />
         <input type="text" name="email" label="Contact e-mail" maxlength="40" jsrequired="true" regExp="^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$" promptMessage="Contact e-mail" invalidMessage="Invalid email address" />
@@ -26,7 +29,9 @@
         <input type="text" name="phone" label="Contact phone" maxlength="12" jsrequired="true" promptMessage="Contact phone" />
         <input type="text" name="address" label="Contact address or business name" maxlength="60" promptMessage="Contact address or business name" />
     </fieldset>
+    </div>
 
+    <div title="Contact" open="false">
     <fieldset legend="Look and Feel">
         <input type="text" name="title" label="Title" maxlength="40" jsrequired="false" promptMessage="Title or Establishment name" />
         <input type="text" id="width"  name="width" value="360" label="Width" maxlength="4" regExp="\d{1,4}" invalidMessage="Ancho inválido" promptMessage="Width of the dialog box. This value is considered in pixels" jsrequired="true" />
@@ -40,7 +45,8 @@
         ]]>
         </statictext>
     </fieldset>
-
+    </div>
+    
     <fieldset>
         <input type="submit" name="btnSave" value="Save" onclick="return jsValida(this.form)" />
         <input type="reset"  name="btnReset" value="Reset" />
