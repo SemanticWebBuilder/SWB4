@@ -1,5 +1,7 @@
 package org.semanticwb.process.model;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
@@ -37,6 +39,16 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
             inst.addProcessObject((ProcessObject)ins.createGenericInstance());
         }
         return inst;
+    }
+
+    public Iterator<SemanticClass> listHerarquicalProcessClasses() {
+        HashSet<SemanticClass> arr=new HashSet();
+        Iterator<SemanticObject> it=listProcessClasses();
+        while (it.hasNext()) {
+            SemanticObject sobj = it.next();
+            arr.add(sobj.transformToSemanticClass());
+        }
+        return arr.iterator();
     }
 
 }
