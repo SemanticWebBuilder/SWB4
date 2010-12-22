@@ -769,10 +769,10 @@ public class Poll extends GenericResource {
             return ret.toString();
         }
 
+        String backimgres;
         NodeList node = dom.getElementsByTagName("backimgres");
-        String backimgres = node.item(0).getChildNodes().item(0).getNodeValue();
-        if(node.getLength()>0 && backimgres!=null)
-            backimgres = "style=\"background-image:url("+webWorkPath+base.getWorkPath()+"/"+backimgres+");\"";
+        if(node!=null && node.getLength()>0)
+            backimgres = "style=\"background-image:url("+webWorkPath+base.getWorkPath()+"/"+node.item(0).getChildNodes().item(0).getNodeValue()+");\"";
         else
             backimgres = "";
 
