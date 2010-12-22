@@ -17,8 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.opensocial.services.AppData;
-import org.semanticwb.opensocial.services.People;
+import org.semanticwb.opensocial.model.Gadget;
+import org.semanticwb.opensocial.services.AppDataService;
+import org.semanticwb.opensocial.services.PeopleService;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
@@ -33,11 +34,11 @@ public class RPC
 
     static
     {
-        services.put("people", new People());
-        services.put("appdata", new AppData());
+        services.put("people", new PeopleService());
+        services.put("appdata", new AppDataService());
     }
 
-    private JSONObject execute(String method, JSONObject params, String viewer, String owner, WebSite site) throws Exception
+    private JSONObject execute(String method, JSONObject params, String viewer, String owner, WebSite site,Gadget gadget) throws Exception
     {
         JSONObject execute = new JSONObject();
         int pos = method.indexOf(".");
@@ -58,11 +59,11 @@ public class RPC
             Service service = services.get(objectType);
             if (method.equals("get"))
             {
-                return service.get(userId, params, site);
+                return service.get(userId, params, site,gadget);
             }
             if (method.equals("update"))
             {
-                service.update(userId, params, site);
+                service.update(userId, params, site,gadget);
             }
         }
         return execute;
@@ -72,16 +73,18 @@ public class RPC
     {
         response.setContentType("JSON");
         OutputStream out = response.getOutputStream();
-
-        System.out.println("response:");
-        System.out.println(objresponse);
         out.write(objresponse.getBytes());
-
         out.close();
     }
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+        WebSite site=paramRequest.getWebPage().getWebSite();
+        String port = "";
+        if (request.getServerPort() != 80)
+        {
+            port = ":" + request.getServerPort();
+        }
         String st = request.getParameter("st");
         System.out.println("st: " + st); // security token
         if (st != null && request.getContentType().equals("application/json"))
@@ -98,45 +101,48 @@ public class RPC
             in.close();
             System.out.println("request RPC : " + sb.toString());
             String[] values = st.split(":");
-            System.out.println("values.length: " + values.length);
+
             if (values.length == 7)
             {
                 try
                 {
                     URI gadgetURL = new URI(values[4]);
-                    String viewer = values[1];
-                    String owner = values[0];
-                    System.out.println("viewer: " + viewer);
-                    System.out.println("owner: " + owner);
-                    if (sb.toString().startsWith("{"))
+                    URI here = new URI(request.getScheme() + "://" + request.getServerName() + port + request.getRequestURI());
+                    if (!gadgetURL.isAbsolute())
                     {
-                        JSONObject obj = new JSONObject(sb.toString());
-                        String method = obj.getString("method");
-                        String id = obj.getString("id");
-                        JSONObject params = obj.getJSONObject("params");
-                        JSONObject responseMethod = execute(method, params, viewer, owner, paramRequest.getWebPage().getWebSite());
+                        gadgetURL = here.resolve(gadgetURL);
                     }
-                    else
+                    Gadget gadget = SocialContainer.getGadget(gadgetURL.toString(), site);
+                    if (gadget != null)
                     {
-
-                        JSONArray responseJSONObject = new JSONArray();
-
-                        JSONArray requestJSONObject = new JSONArray(sb.toString());
-                        
-                        
-                        for (int i = 0; i < requestJSONObject.length(); i++)
+                        String viewer = values[1];
+                        String owner = values[0];
+                        if (sb.toString().startsWith("{"))
                         {
-                            JSONObject obj = requestJSONObject.getJSONObject(i);
+                            JSONObject obj = new JSONObject(sb.toString());
                             String method = obj.getString("method");
                             String id = obj.getString("id");
                             JSONObject params = obj.getJSONObject("params");
-                            JSONObject responseMethod = execute(method, params, viewer, owner, paramRequest.getWebPage().getWebSite());
-                            JSONObject part = new JSONObject();
-                            part.put("id", id);
-                            part.put("result", responseMethod);                            
-                            responseJSONObject.put(part);
+                            JSONObject responseMethod = execute(method, params, viewer, owner, site,gadget);
                         }
-                        sendResponse(responseJSONObject.toString(4), response);
+                        else
+                        {
+                            JSONArray responseJSONObject = new JSONArray();
+                            JSONArray requestJSONObject = new JSONArray(sb.toString());
+                            for (int i = 0; i < requestJSONObject.length(); i++)
+                            {
+                                JSONObject obj = requestJSONObject.getJSONObject(i);
+                                String method = obj.getString("method");
+                                String id = obj.getString("id");
+                                JSONObject params = obj.getJSONObject("params");
+                                JSONObject responseMethod = execute(method, params, viewer, owner, site,gadget);
+                                JSONObject part = new JSONObject();
+                                part.put("id", id);
+                                part.put("result", responseMethod);
+                                responseJSONObject.put(part);
+                            }
+                            sendResponse(responseJSONObject.toString(4), response);
+                        }
                     }
                 }
                 catch (Exception e)

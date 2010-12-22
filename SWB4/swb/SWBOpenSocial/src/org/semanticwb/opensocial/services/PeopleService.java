@@ -12,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.opensocial.model.Gadget;
 import org.semanticwb.opensocial.model.data.Group;
 import org.semanticwb.opensocial.model.data.Name;
 import org.semanticwb.opensocial.model.data.Person;
@@ -20,7 +21,7 @@ import org.semanticwb.opensocial.model.data.Person;
  *
  * @author victor.lorenzana
  */
-public class People implements Service
+public class PeopleService implements Service
 {
 
     static
@@ -63,14 +64,27 @@ public class People implements Service
         Group friends = Group.ClassMgr.createGroup("@friends", site);
         friends.setTitle("friends");
         friends.setDescription("friends");
-        Person friend = Person.ClassMgr.createPerson("friend1", site);
+
+
+        Person jane_doe  = Person.ClassMgr.createPerson("jane.doe", site);
         name = Name.ClassMgr.createName(site);
-        name.setFormatted("Demo Friend");
+        name.setFormatted("Jane Doe");
+        jane_doe.setName(name);
+        jane_doe.setAge(37);
+        jane_doe.setGender("male");
+        jane_doe.setProfileUrl("http://www.infotec");
+
+
+        Person friend  = Person.ClassMgr.createPerson("jane.doe", site);
+        name = Name.ClassMgr.createName(site);
+        name.setFormatted("Maija Meikäläinen");
         friend.setName(name);
         friend.setAge(37);
         friend.setGender("male");
         friend.setProfileUrl("http://www.infotec");
+
         //friend.setThumbnailUrl("a");
+        friends.addPerson(jane_doe);
         friends.addPerson(friend);
         friends.addPerson(george_doe);
         john_doe.addGroup(friends);
@@ -78,7 +92,7 @@ public class People implements Service
 
     }
 
-    public void update(String userid, JSONObject params, WebSite site)
+    public void update(String userid, JSONObject params, WebSite site,Gadget gadget)
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -103,7 +117,7 @@ public class People implements Service
         }
     }
 
-    public JSONObject get(String userid, JSONObject params, WebSite site)
+    public JSONObject get(String userid, JSONObject params, WebSite site,Gadget gadget)
     {
 
 
