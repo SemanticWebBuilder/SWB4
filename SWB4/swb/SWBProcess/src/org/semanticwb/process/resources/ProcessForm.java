@@ -97,12 +97,14 @@ public class ProcessForm extends GenericResource {
             ProcessObject obj = it.next();
             SemanticClass cls = obj.getSemanticObject().getSemanticClass();
 
+            System.out.println("Class ID:"+cls.getClassId());
+
             hmclass.put(cls.getClassId(), cls);
 
             Iterator<SemanticProperty> itp = cls.listProperties();
             while (itp.hasNext()) {
                 SemanticProperty prop = itp.next();
-                hmprops.put(prop.getPropId(), prop);
+                hmprops.put(cls.getClassId()+"|"+prop.getPropId(), prop);
             }
         }
 
@@ -138,7 +140,7 @@ public class ProcessForm extends GenericResource {
                     fe = stoken.nextToken();
                 }
 
-                SemanticProperty semprop = hmprops.get(propid);
+                SemanticProperty semprop = hmprops.get(classid+"|"+propid);
 
                 String strMode = "";
 
@@ -763,7 +765,9 @@ public class ProcessForm extends GenericResource {
             }
         } else if ("update".equals(response.getAction())) {
             try {
-                String xml = base.getXmlConf();//bundle.getBundle(getClass().getName(), new java.util.Locale(user.getLanguage()));
+                foi = (FlowNodeInstance) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
+                String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/code.xml";
+                String xml = SWBUtils.IO.getFileFromPath(basepath); //base.getXmlConf();//bundle.getBundle(getClass().getName(), new java.util.Locale(user.getLanguage()));
                 if (xml != null && xml.trim().length() > 0) {
                     SWBFormMgrLayer.update2DB(request, response, foi, xml);
                 }
