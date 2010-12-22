@@ -480,8 +480,8 @@ public class SWBAWebPageContents extends GenericResource {
                 urlpre.setParameter("sprop", idp);
                 urlpre.setParameter("act", "");
                 urlpre.setParameter("page", ""+p);
-                urlr.setParameter("search", (busqueda.trim().length()>0?busqueda:""));
-                urlr.setParameter("sval", sobj.getURI());
+                urlpre.setParameter("search", (busqueda.trim().length()>0?busqueda:""));
+                urlpre.setParameter("sval", sobj.getURI());
                 if (idptype != null) {
                     urlpre.setParameter("sproptype", idptype);
                 }
