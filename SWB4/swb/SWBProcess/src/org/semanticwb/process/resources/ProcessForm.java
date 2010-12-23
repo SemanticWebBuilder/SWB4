@@ -88,8 +88,6 @@ public class ProcessForm extends GenericResource {
         mgr.setAction(paramRequest.getActionUrl().setAction("process").toString());
         mgr.clearProperties();
 
-
-
         HashMap<String, SemanticClass> hmclass = new HashMap<String, SemanticClass>();
         HashMap<String, SemanticProperty> hmprops = new HashMap<String, SemanticProperty>();
         Iterator<ProcessObject> it = foi.listHeraquicalProcessObjects().iterator();
@@ -159,7 +157,7 @@ public class ProcessForm extends GenericResource {
 
                     SWBProcessFormMgr fmgr = new SWBProcessFormMgr(foi);
 
-                    out.println("<tr><td width=\"200px\" align=\"right\"><label for=\"title\">" + fmgr.renderLabel(request, semprop, modo) + "</label></td>");
+                    out.println("<tr><td width=\"200px\" align=\"right\"><label for=\"title\">" + fmgr.renderLabel(request, semprop, semclass, modo) + "</label></td>");
                     out.println("<td>");
                     if (null != sofe) {
                         FormElement frme = (FormElement) sofe.createGenericInstance();
