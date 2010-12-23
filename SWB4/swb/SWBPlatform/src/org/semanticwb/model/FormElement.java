@@ -41,6 +41,19 @@ import org.semanticwb.platform.SemanticProperty;
  */
 public interface FormElement extends GenericObject
 {
+
+    /**
+     * Render label.
+     *
+     * @param request the request
+     * @param obj the obj
+     * @param prop the prop
+     * @param type the type
+     * @param mode the mode
+     * @param lang the lang
+     * @return the string
+     */
+    public String renderLabel(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang);
     
     /**
      * Render label.
@@ -53,7 +66,20 @@ public interface FormElement extends GenericObject
      * @param lang the lang
      * @return the string
      */
-    public String renderLabel(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang);
+    public String renderLabel(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type, String mode, String lang);
+
+    /**
+     * Render element.
+     *
+     * @param request the request
+     * @param obj the obj
+     * @param prop the prop
+     * @param type the type
+     * @param mode the mode
+     * @param lang the lang
+     * @return the string
+     */
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang);
 
     /**
      * Render element.
@@ -66,7 +92,18 @@ public interface FormElement extends GenericObject
      * @param lang the lang
      * @return the string
      */
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang);
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type, String mode, String lang);
+
+
+    /**
+     * Validate.
+     *
+     * @param request the request
+     * @param obj the obj
+     * @param prop the prop
+     * @throws FormValidateException the form validate exception
+     */
+    public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) throws FormValidateException;
 
     /**
      * Validate.
@@ -76,7 +113,17 @@ public interface FormElement extends GenericObject
      * @param prop the prop
      * @throws FormValidateException the form validate exception
      */
-    public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) throws FormValidateException;
+    public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) throws FormValidateException;
+
+
+    /**
+     * Process.
+     *
+     * @param request the request
+     * @param obj the obj
+     * @param prop the prop
+     */
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop);
 
     /**
      * Process.
@@ -85,7 +132,7 @@ public interface FormElement extends GenericObject
      * @param obj the obj
      * @param prop the prop
      */
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop);
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName);
 
     /**
      * Sets the attribute.

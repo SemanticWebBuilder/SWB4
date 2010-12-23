@@ -205,30 +205,41 @@ public class SemanticObject
                 gen=getGenericInstance();
                 if(gen==null)
                 {
-                    SemanticClass clazz=getSemanticClass();
-                    if(clazz==null)
+                    gen=createNewGenericIntance();
+                    if(gen!=null)setGenericInstance(gen);
+                }
+            }
+        }
+        return gen;
+    }
+
+    /**
+     * Crea una nueva instancia del GenericObject asociado
+     * @return
+     */
+    public GenericObject createNewGenericIntance()
+    {
+        GenericObject gen=null;
+        SemanticClass clazz=getSemanticClass();
+        if(clazz==null)
+        {
+            log.error("SemanticObject("+this+") without SemanticClass...");
+        }else
+        {
+            if(clazz.isSWBInterface())
+            {
+                Iterator<SemanticClass> classes=listSemanticClasses();
+                while(classes.hasNext())
+                {
+                    SemanticClass tempClazz=classes.next();
+                    if(tempClazz.isSWBClass())
                     {
-                        log.error("SemanticObject("+this+") without SemanticClass...");
-                    }else
-                    {
-                        if(clazz.isSWBInterface())
-                        {
-                            Iterator<SemanticClass> classes=listSemanticClasses();
-                            while(classes.hasNext())
-                            {
-                                SemanticClass tempClazz=classes.next();
-                                if(tempClazz.isSWBClass())
-                                {
-                                    clazz=tempClazz;
-                                    break;
-                                }
-                            }
-                        }
-                        gen=clazz.construcGenericInstance(this);
-                        setGenericInstance(gen);
+                        clazz=tempClazz;
+                        break;
                     }
                 }
             }
+            gen=clazz.construcGenericInstance(this);
         }
         return gen;
     }
