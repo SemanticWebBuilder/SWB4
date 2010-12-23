@@ -67,13 +67,13 @@ public class FlashImageUpload extends org.semanticwb.model.base.FlashImageUpload
      * @see org.semanticwb.model.FlashFileUpload#process(HttpServletRequest, SemanticObject, SemanticProperty)
      */
     @Override
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop)
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName)
     {
         //System.out.println("********************** FlashImageUploader.process **********************");
-        //System.out.println("Prop:"+prop.getURI()+" - "+prop.getName());
-        if (request.getParameter(prop.getName() + "_delFile") != null)
+        //System.out.println("Prop:"+prop.getURI()+" - "+propName);
+        if (request.getParameter(propName + "_delFile") != null)
         {
-            if (prop.getName().startsWith("has"))
+            if (propName.startsWith("has"))
             {
                 Iterator<SemanticLiteral> list = obj.listLiteralProperties(prop);
 
@@ -82,11 +82,11 @@ public class FlashImageUpload extends org.semanticwb.model.base.FlashImageUpload
                 {
                     grupo.add(list.next().getString());
                 }
-                String[] params = request.getParameterValues(prop.getName() + "_delFile");
+                String[] params = request.getParameterValues(propName + "_delFile");
                 for (String valor : params)
                 {
-                    grupo.remove(prop.getName()+"_"+valor);
-                    delfile(obj, prop.getName()+"_"+valor);
+                    grupo.remove(propName+"_"+valor);
+                    delfile(obj, propName+"_"+valor);
                 }
                 obj.removeProperty(prop);
                 for (String valor : grupo)
@@ -95,7 +95,7 @@ public class FlashImageUpload extends org.semanticwb.model.base.FlashImageUpload
                 }
             } else
             {
-                delfile(obj, prop.getName()+"_"+request.getParameter(prop.getName() + "_delFile"));
+                delfile(obj, propName+"_"+request.getParameter(propName + "_delFile"));
                 obj.removeProperty(prop);
             }
         }
@@ -105,14 +105,14 @@ public class FlashImageUpload extends org.semanticwb.model.base.FlashImageUpload
         {
             throw new SWBRuntimeException("Can't create work directory " + dir);
         }
-        String cad = request.getParameter(prop.getName());
+        String cad = request.getParameter(propName);
         List<UploadedFile> lista = UploaderFileCacheUtils.get(cad);
 //        System.out.println("Lista:"+lista.size());
         for (UploadedFile arch : lista)
         {
             File orig = new File(arch.getTmpuploadedCanonicalFileName());
             String webpath = obj.getWorkPath() + arch.getOriginalName();
-            File dest = new File(dir, prop.getName()+"_"+arch.getOriginalName());
+            File dest = new File(dir, propName+"_"+arch.getOriginalName());
             if (!orig.renameTo(dest))
             {
                 try
@@ -125,9 +125,9 @@ public class FlashImageUpload extends org.semanticwb.model.base.FlashImageUpload
             }
             try{
             imgPrpcess(dest);
-            if (prop.getName().startsWith("has"))
+            if (propName.startsWith("has"))
             {
-                obj.addLiteralProperty(prop, new SemanticLiteral(prop.getName()+"_"+arch.getOriginalName()));
+                obj.addLiteralProperty(prop, new SemanticLiteral(propName+"_"+arch.getOriginalName()));
             } else
             {
                 //System.out.println("Prop:"+prop.getURI()+" - "+arch.getOriginalName());
@@ -177,12 +177,12 @@ public class FlashImageUpload extends org.semanticwb.model.base.FlashImageUpload
     /* (non-Javadoc)
      * @see org.semanticwb.model.FlashFileUpload#configFileRequest(SemanticProperty)
      */
-    protected UploadFileRequest configFileRequest(SemanticProperty prop)
+    protected UploadFileRequest configFileRequest(SemanticProperty prop, String propName)
     {
         //System.out.println("********************** FlashImageUploader.ConfigFileRequest **********************");
 
         //System.out.println("img Tengo filtro "+getFileFilter()+"|--");
-        //System.out.println("*Prop:"+prop.getName());
+        //System.out.println("*Prop:"+propName);
         //System.out.println("*getFileMaxSize:"+getFileMaxSize());
         //System.out.println("*getImgMaxHeight:"+getImgMaxHeight());
         //System.out.println("*getImgMaxWidth:"+getImgMaxWidth());
@@ -191,7 +191,7 @@ public class FlashImageUpload extends org.semanticwb.model.base.FlashImageUpload
         //System.out.println("*isImgCrop:"+isImgCrop());
         //System.out.println("*isImgThumbnail:"+isImgThumbnail());
 
-        boolean multiple = prop.getName().startsWith("has");
+        boolean multiple = propName.startsWith("has");
         //System.out.println("filter:"+getFileFilter());
         HashMap<String, String> filtros = new HashMap<String, String>();
         if (null == getFileFilter() || "".equals(getFileFilter()))

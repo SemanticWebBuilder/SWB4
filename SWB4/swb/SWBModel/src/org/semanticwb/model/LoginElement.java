@@ -1,4 +1,3 @@
-
 /**
  * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
  * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
@@ -56,19 +55,19 @@ public class LoginElement extends org.semanticwb.model.base.LoginElementBase {
      * @see org.semanticwb.model.Text#renderElement(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                                 String mode, String lang) {
         log.debug("Type: " + type);
 
         if (type.equals("dojo")) {
             setAttribute("isValid",
-                         "return validateElement('" + prop.getName() + "','" + getValidateURL(obj, prop)
+                         "return validateElement('" + propName + "','" + getValidateURL(obj, prop)
                          + "',this.textbox.value);");
         } else {
             setAttribute("isValid", null);
         }
 
-        return super.renderElement(request, obj, prop, type, mode, lang);
+        return super.renderElement(request, obj, prop, propName, type, mode, lang);
     }
 
     /* (non-Javadoc)
@@ -83,10 +82,10 @@ public class LoginElement extends org.semanticwb.model.base.LoginElementBase {
      * @throws FormValidateException the form validate exception
      */
     @Override
-    public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop)
+    public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName)
             throws FormValidateException
     {
-        super.validate(request, obj, prop);
+        super.validate(request, obj, prop, propName);
 
         String login = request.getParameter("usrLogin");
 

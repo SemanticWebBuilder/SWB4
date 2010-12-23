@@ -66,7 +66,7 @@ public class TextArea extends TextAreaBase {
      * @return the string
      */
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                                 String mode, String lang) 
     {
         if (obj == null) {
@@ -85,7 +85,7 @@ public class TextArea extends TextAreaBase {
             DOJO = true;
         }
         String         ret      = "";
-        String         name     = prop.getName();
+        String         name     = propName;
         String         label    = prop.getDisplayName(lang);
         SemanticObject sobj     = prop.getDisplayProperty();
         boolean        required = prop.isRequired();
@@ -111,7 +111,7 @@ public class TextArea extends TextAreaBase {
                 pmsg = "Enter " + label + ".";
             }
         }
-        String value = request.getParameter(prop.getName());
+        String value = request.getParameter(propName);
 
         if (value == null) {
             value = obj.getProperty(prop);

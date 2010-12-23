@@ -58,23 +58,23 @@ public class RichText extends org.semanticwb.model.base.RichTextBase {
      * @param prop the prop
      */
     @Override
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) {
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) {
         if (isFilterHTMLTags()) {
             setFilterHTMLTags(false);
         }
 
-        super.process(request, obj, prop);
+        super.process(request, obj, prop, propName);
     }
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.TextArea#renderXHTML(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                                 String mode, String lang)
     {
         String         ret      = "";
-        String         name     = prop.getName();
+        String         name     = propName;
         String         label    = prop.getDisplayName(lang);
         SemanticObject sobj     = prop.getDisplayProperty();
         boolean        required = prop.isRequired();
@@ -104,7 +104,7 @@ public class RichText extends org.semanticwb.model.base.RichTextBase {
             }
         }
 
-        String value = request.getParameter(prop.getName());
+        String value = request.getParameter(propName);
 
         if (value == null) {
             value = obj.getProperty(prop);
@@ -120,7 +120,6 @@ public class RichText extends org.semanticwb.model.base.RichTextBase {
         } else if (mode.equals("view")) {
             ret = "<span _id=\"" + name + "\" name=\"" + name + "\">" + value + "</span>";
         }
-
         return ret;
     }
 }

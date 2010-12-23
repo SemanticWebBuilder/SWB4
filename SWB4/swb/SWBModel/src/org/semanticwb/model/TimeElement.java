@@ -74,7 +74,7 @@ public class TimeElement extends org.semanticwb.model.base.TimeElementBase {
      * @return the string
      */
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                                 String mode, String lang) {
         if (obj == null) {
             obj = new SemanticObject();
@@ -94,7 +94,7 @@ public class TimeElement extends org.semanticwb.model.base.TimeElementBase {
         }
 
         StringBuffer   ret      = new StringBuffer();
-        String         name     = prop.getName();
+        String         name     = propName;
         String         label    = prop.getDisplayName(lang);
         SemanticObject sobj     = prop.getDisplayProperty();
         boolean        required = prop.isRequired();
@@ -142,7 +142,7 @@ public class TimeElement extends org.semanticwb.model.base.TimeElementBase {
             ext += " disabled=\"disabled\"";
         }
 
-        String value = request.getParameter(prop.getName());
+        String value = request.getParameter(propName);
 
         if (value != null) {
             System.out.println("from request: " + value);
@@ -224,14 +224,14 @@ public class TimeElement extends org.semanticwb.model.base.TimeElementBase {
      * @param prop the prop
      */
     @Override
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) {
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) {
 
         // System.out.println("process...:"+obj.getURI()+" "+prop.getURI());
         if (prop.getDisplayProperty() == null) {
             return;
         }
 
-        String value = request.getParameter(prop.getName());
+        String value = request.getParameter(propName);
 
         // System.out.println("com:"+old+"-"+value+"-");
         if ((value != null) && (value.length() > 0)) {

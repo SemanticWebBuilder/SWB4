@@ -62,7 +62,7 @@ public class ImageUpload extends org.semanticwb.model.base.ImageUploadBase
      */
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj,
-            SemanticProperty prop, String type, String mode, String lang)
+            SemanticProperty prop, String propName, String type, String mode, String lang)
     {
 //        System.out.println("obj: "+obj);
 //        System.out.println("objuri: "+obj.getURI());
@@ -91,7 +91,7 @@ public class ImageUpload extends org.semanticwb.model.base.ImageUploadBase
 
         StringBuilder buffer = new StringBuilder();
         String cad = UploaderFileCacheUtils.uniqueCad();
-        UploaderFileCacheUtils.putRequest(cad, configFileRequest(prop));
+        UploaderFileCacheUtils.putRequest(cad, configFileRequest(prop, propName));
         request.getSession(true).setAttribute("fuCad", cad);
         String page;
         if (obj.instanceOf(WebPage.sclass))
@@ -144,9 +144,9 @@ public class ImageUpload extends org.semanticwb.model.base.ImageUploadBase
         buffer.append("</script>\n");
         buffer.append("<table border=\"0\"><tr><td><iframe src=\"" + url + "\" frameborder=\"0\" width=\"305\" "
                 + "scrolling=\"no\" name=\"ifrupd" + cad + "\" id=\"ifrupd" + cad + "\" height=\"170\" ></iframe>\n");
-        buffer.append("<input type=\"hidden\" name=\"" + prop.getName() + "\" value=\"" + cad + "\" /></td>\n");
+        buffer.append("<input type=\"hidden\" name=\"" + propName + "\" value=\"" + cad + "\" /></td>\n");
         buffer.append("<td valign=\"top\">"+eliminar+":<br/><select dojoType=\"dijit.form.MultiSelect\" name=\""
-                + prop.getName() + "_delFile\" multiple=\"multiple\" size=\"4\">\n");
+                + propName + "_delFile\" multiple=\"multiple\" size=\"4\">\n");
         Iterator<SemanticLiteral>lista = obj.listLiteralProperties(prop);
         while (lista.hasNext()){
             SemanticLiteral lit = lista.next();
@@ -198,10 +198,10 @@ public class ImageUpload extends org.semanticwb.model.base.ImageUploadBase
      * @param prop the prop
      */
     @Override
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop)
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName)
     {
-        if (request.getParameter(prop.getName()+"_delFile")!=null){
-            if (prop.getName().startsWith("has")){
+        if (request.getParameter(propName+"_delFile")!=null){
+            if (propName.startsWith("has")){
                 Iterator<SemanticLiteral>list=obj.listLiteralProperties(prop);
 
             Set<String>grupo=new TreeSet<String>();
@@ -209,7 +209,7 @@ public class ImageUpload extends org.semanticwb.model.base.ImageUploadBase
             {
                 grupo.add(list.next().getString());
             }
-            String[]params = request.getParameterValues(prop.getName()+"_delFile");
+            String[]params = request.getParameterValues(propName+"_delFile");
             for (String valor:params){
                 grupo.remove(valor);
                 delfile(obj, valor);
@@ -220,7 +220,7 @@ public class ImageUpload extends org.semanticwb.model.base.ImageUploadBase
                 obj.addLiteralProperty(prop, new SemanticLiteral(valor));
             }
             } else {
-                delfile(obj, request.getParameter(prop.getName()+"_delFile"));
+                delfile(obj, request.getParameter(propName+"_delFile"));
                 obj.removeProperty(prop);
             }
         }
@@ -230,7 +230,7 @@ public class ImageUpload extends org.semanticwb.model.base.ImageUploadBase
         {
             throw new SWBRuntimeException("Can't create work directory " + dir);
         }
-        String cad = request.getParameter(prop.getName());
+        String cad = request.getParameter(propName);
         List<UploadedFile> lista = UploaderFileCacheUtils.get(cad);
         for (UploadedFile arch : lista)
         {
@@ -248,7 +248,7 @@ public class ImageUpload extends org.semanticwb.model.base.ImageUploadBase
                 }
             }
             imgPrpcess(dest);
-            if (prop.getName().startsWith("has"))
+            if (propName.startsWith("has"))
             {
                 obj.addLiteralProperty(prop, new SemanticLiteral(arch.getOriginalName()));
             } else
@@ -274,9 +274,9 @@ public class ImageUpload extends org.semanticwb.model.base.ImageUploadBase
      * @param prop the prop
      * @return the upload file request
      */
-    private UploadFileRequest configFileRequest(SemanticProperty prop)
+    private UploadFileRequest configFileRequest(SemanticProperty prop, String propName)
     {
-        boolean multiple = prop.getName().startsWith("has");
+        boolean multiple = propName.startsWith("has");
 //        System.out.println("filter:"+getFileFilter());
         HashMap<String, String> filtros = new HashMap<String, String>();
         if (null == getFileFilter() || "".equals(getFileFilter()))

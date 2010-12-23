@@ -60,7 +60,7 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
      */
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj,
-            SemanticProperty prop, String type, String mode, String lang) {
+            SemanticProperty prop, String propName, String type, String mode, String lang) {
 //        System.out.println("********************** DojoFileUploader.ConfigFileRequest **********************");
 //        System.out.println("obj: "+obj);
 //        System.out.println("objuri: "+obj.getURI());
@@ -74,7 +74,7 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
             throw new SWBRuntimeException("No Semantic Object present");
         }
 
-        String pname = getPropertyName(prop, obj);
+        String pname = getPropertyName(prop, obj, propName);
 
         String frmname = null;
         if (mode.equals("create")) {
@@ -177,8 +177,8 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
      * @param prop the prop
      */
     @Override
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) {
-        String pname = getPropertyName(prop, obj);
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) {
+        String pname = getPropertyName(prop, obj, propName);
         //System.out.println("********************** FlashFileUploader.process **********************");
         //System.out.println(request.getParameter(pname + "_delFile"));
         if (request.getParameter(pname + "_delFile") != null) {
@@ -264,7 +264,7 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
         dest.delete();
     }
 
-    protected String getPropertyName(SemanticProperty prop, SemanticObject obj) {
-        return prop.getName() + "_" + obj.getId();
+    protected String getPropertyName(SemanticProperty prop, SemanticObject obj, String propName) {
+        return propName + "_" + obj.getId();
     }
 }

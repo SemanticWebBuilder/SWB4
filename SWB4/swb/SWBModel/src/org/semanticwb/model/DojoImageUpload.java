@@ -36,9 +36,9 @@ public class DojoImageUpload extends org.semanticwb.model.base.DojoImageUploadBa
      * @see org.semanticwb.model.FlashFileUpload#process(HttpServletRequest, SemanticObject, SemanticProperty)
      */
     @Override
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop)
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName)
     {
-        String pname=getPropertyName(prop, obj);
+        String pname=getPropertyName(prop, obj, propName);
         //System.out.println("********************** FlashImageUploader.process **********************");
         System.out.println("Prop:"+prop.getURI()+" - "+pname);
         //System.out.println(request.getParameter(pname + "_delFile"));

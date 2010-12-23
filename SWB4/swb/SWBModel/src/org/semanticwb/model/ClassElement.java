@@ -50,17 +50,17 @@ public class ClassElement extends org.semanticwb.model.base.ClassElementBase
      * @see org.semanticwb.model.Text#renderElement(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                                 String mode, String lang) {
         if (type.equals("dojo")) {
             setAttribute("isValid",
-                         "return validateElement('" + prop.getName() + "','" + getValidateURL(obj, prop)
+                         "return validateElement('" + propName + "','" + getValidateURL(obj, prop)
                          + "',this.textbox.value);");
         } else {
             setAttribute("isValid", null);
         }
 
-        return super.renderElement(request, obj, prop, type, mode, lang);
+        return super.renderElement(request, obj, prop, propName, type, mode, lang);
     }
 
     /* (non-Javadoc)
@@ -75,11 +75,11 @@ public class ClassElement extends org.semanticwb.model.base.ClassElementBase
      * @throws FormValidateException the form validate exception
      */
     @Override
-    public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop)
+    public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName)
             throws FormValidateException {
-        super.validate(request, obj, prop);
+        super.validate(request, obj, prop, propName);
 
-        String value = request.getParameter(prop.getName());
+        String value = request.getParameter(propName);
 
         // System.out.println("validate:"+value);
         try {

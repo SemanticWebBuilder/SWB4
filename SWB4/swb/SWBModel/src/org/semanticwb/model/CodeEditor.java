@@ -51,12 +51,12 @@ public class CodeEditor extends org.semanticwb.model.base.CodeEditorBase {
      * @see org.semanticwb.model.TextArea#renderXHTML(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                                 String mode, String lang)
     {
         StringBuffer   ret      = new StringBuffer(250);
-        String         id       = obj.getURI() + "/" + prop.getName() + "_editArea";
-        String         name     = prop.getName();
+        String         id       = obj.getURI() + "/" + propName + "_editArea";
+        String         name     = propName;
         String         label    = prop.getDisplayName(lang);
         SemanticObject sobj     = prop.getDisplayProperty();
         boolean        required = prop.isRequired();
@@ -91,7 +91,7 @@ public class CodeEditor extends org.semanticwb.model.base.CodeEditorBase {
             language = lang;
         }
 
-        String value = request.getParameter(prop.getName());
+        String value = request.getParameter(propName);
 
         if (value == null) {
             value = obj.getProperty(prop);
