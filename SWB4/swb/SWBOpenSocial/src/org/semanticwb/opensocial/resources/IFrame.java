@@ -11,7 +11,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
@@ -23,6 +25,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.jdom.JDOMException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.css.parser.Attribute;
@@ -37,6 +40,7 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.w3c.dom.CDATASection;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -176,12 +180,12 @@ public class IFrame
                         sb.append(";");
                     }
                     else
-                    {                        
+                    {
                         for (String value : att.getValues())
                         {
                             sb.append(value);
                             sb.append(" ");
-                        }                        
+                        }
                         sb.append(";");
                     }
                 }
@@ -196,9 +200,107 @@ public class IFrame
         return sb.toString();
     }
 
+    private Map<String, String> getMesssages(Document docMessages)
+    {
+        Map<String, String> getMesssages = new HashMap<String, String>();
+        NodeList messages = docMessages.getElementsByTagName("msg");
+        for (int i = 0; i < messages.getLength(); i++)
+        {
+            if (messages.item(i) instanceof Element)
+            {
+                Element msg = (Element) messages.item(i);
+                String name = msg.getAttribute("name");
+                System.out.println("name: "+name);
+                String value = msg.getTextContent();
+                System.out.println("value: "+value);
+                if(name!=null && !name.equals("") && value!=null && !value.equals(""))
+                {
+                    System.out.println("name: "+name+" value: "+value);
+                    getMesssages.put("__MSG_"+name+"__", value);
+                }
+            }
+        }
+        return getMesssages;
+    }
+
+    private Map<String, String> getMessagesFromGadget(Gadget g, String language, String country)
+    {
+        Map<String, String> getMessagesFromGadget = new HashMap<String, String>();
+        if(language!=null && language.equals("ALL"))
+        {
+            language=null;
+        }
+        if(country!=null && country.equals("ALL"))
+        {
+            country=null;
+        }
+        String lang_toseach = "";
+        if (language != null)
+        {
+            lang_toseach = language;
+        }
+        if (country != null)
+        {
+            lang_toseach += lang_toseach + "-" + country;
+        }        
+        Document document = g.getDocument();
+        NodeList locales = document.getElementsByTagName("Locale");
+        for (int i = 0; i < locales.getLength(); i++)
+        {
+            if (locales.item(i) instanceof Element)
+            {
+                Element locale = (Element) locales.item(i);
+                String lang_test = locale.getAttribute("lang");
+                if (lang_test == null)
+                {
+                    lang_test = "";
+                }                
+                if (lang_test.equals(lang_toseach))
+                {
+                    String messages = locale.getAttribute("messages");                    
+                    if (messages != null && !messages.equals(""))
+                    {
+                        try
+                        {
+                            URI uriGadget = new URI(g.getUrl());
+                            URI uri = new URI(messages);
+                            if (!uri.isAbsolute())
+                            {
+                                uri = uriGadget.resolve(uri);
+                            }                            
+                            Document docMessages = SocialContainer.getXML(uri.toURL());
+                            return getMesssages(docMessages);
+                        }
+                        catch (URISyntaxException use)
+                        {
+                            log.debug(use);
+                        }
+                        catch (MalformedURLException use)
+                        {
+                            log.debug(use);
+                        }
+                        catch (IOException use)
+                        {
+                            log.debug(use);
+                        }
+                        catch (JDOMException use)
+                        {
+                            log.debug(use);
+                        }
+                    }
+                }
+
+            }
+        }
+        return getMessagesFromGadget;
+    }
+
     private Map<String, String> getVariablesubstituion(User user, Gadget gadget, String language, String country, String moduleID)
     {
+
         Map<String, String> getVariablesubstituion = new HashMap<String, String>();
+        getVariablesubstituion.putAll(getMessagesFromGadget(gadget, language, country));
+
         getVariablesubstituion.put("__MODULE_ID__", moduleID);
         getVariablesubstituion.put("__MSG_LANG__", language);
         getVariablesubstituion.put("__MSG_COUNTRY__", country);
@@ -264,70 +366,76 @@ public class IFrame
         }
         return sb.toString();
     }
-    private boolean isInView(String view,String attribute)
+
+    private boolean isInView(String view, String attribute)
     {
-        if(view.equals(attribute))
+        if (view.equals(attribute))
         {
             return true;
         }
-        String[] values=attribute.split(",");
-        for(String value : values)
+        String[] values = attribute.split(",");
+        for (String value : values)
         {
-            if(value.equals(view))
+            if (value.equals(view))
             {
                 return true;
             }
         }
         return false;
     }
+
     public void doProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {        
+    {
         String url = request.getParameter("url");
         String country = request.getParameter("country");
         String lang = request.getParameter("lang");
         String moduleid = request.getParameter("moduleid");
         String sview = request.getParameter("view");
-        System.out.println("sview: "+sview);
-        if(sview==null)
+        System.out.println("sview: " + sview);
+        System.out.println("lang: " + lang);
+        System.out.println("country: " + country);
+        if (sview == null)
         {
-            sview="default";
+            sview = "default";
         }
         String html = "";
-        if(moduleid==null)
+        if (moduleid == null)
         {
-            moduleid="0";
+            moduleid = "0";
         }
-        
+
         try
-        {            
-            Gadget gadget = SocialContainer.getGadget(url, paramRequest.getWebPage().getWebSite());         
+        {
+            Gadget gadget = SocialContainer.getGadget(url, paramRequest.getWebPage().getWebSite());
             if (gadget != null)
-            {                
+            {
+
                 Map<String, String> variables = getVariablesubstituion(paramRequest.getUser(), gadget, lang, country, moduleid);
+
                 NodeList contents = gadget.getDocument().getElementsByTagName("Content");
                 for (int i = 0; i < contents.getLength(); i++)
                 {
                     Node node = contents.item(i);
                     if (node instanceof Element)
-                    {                        
+                    {
                         Element content = (Element) node;
-                        String type="html";
-                        if(content.getAttribute("type")!=null)
+                        String type = "html";
+                        if (content.getAttribute("type") != null)
                         {
-                            type=content.getAttribute("type");
+                            type = content.getAttribute("type");
                         }
                         if ("html".equals(type))
                         {
 
                             String view = content.getAttribute("view");
-                            if(view==null || view.trim().equals(""))
+                            if (view == null || view.trim().equals(""))
                             {
-                                view="default";
+                                view = "default";
                             }
-                            if(isInView(sview, view))
+                            if (isInView(sview, view))
                             {
                                 String href = content.getAttribute("href");
-                                if(href==null || href.trim().equals(""))
+                                if (href == null || href.trim().equals(""))
                                 {
                                     NodeList childs = content.getChildNodes();
                                     for (int j = 0; j < childs.getLength(); j++)
@@ -352,14 +460,14 @@ public class IFrame
                                     {
                                         urigadget.resolve(urihref);
                                     }
-                                    html=getHTML(urigadget.toURL());
+                                    html = getHTML(urigadget.toURL());
                                 }
                             }
                         }
-                        else if("URL".equals(type))
+                        else if ("URL".equals(type))
                         {
                             String href = content.getAttribute("href");
-                            if(href!=null && !href.trim().equals(""))
+                            if (href != null && !href.trim().equals(""))
                             {
                                 URI urihref = new URI(href);
                                 URI urigadget = new URI(gadget.getUrl());
@@ -372,12 +480,12 @@ public class IFrame
                                 for (String key : variables.keySet())
                                 {
                                     String value = variables.get(key);
-                                    _url+="&"+URLEncoder.encode(key)+"="+URLEncoder.encode(value);
+                                    _url += "&" + URLEncoder.encode(key) + "=" + URLEncoder.encode(value);
                                 }
-                                html="<iframe src=\""+ _url +"\"></iframe>";
-                            }                            
+                                html = "<iframe src=\"" + _url + "\"></iframe>";
+                            }
                         }
-                        
+
                     }
                 }
                 /*RequestDispatcher dis = request.getRequestDispatcher(path);
@@ -415,9 +523,9 @@ public class IFrame
                 proxy.setCallMethod(SWBResourceURL.Call_DIRECT);
                 proxy.setMode(SocialContainer.Mode_PROXY);
 
-                
 
-                html = parseHTML(html, new URI(gadget.getUrl()), new URI(proxy.toString()));                
+
+                html = parseHTML(html, new URI(gadget.getUrl()), new URI(proxy.toString()));
                 SWBResourceURL javascript = paramRequest.getRenderUrl();
                 javascript.setMode(SocialContainer.Mode_JAVASCRIPT);
                 javascript.setCallMethod(SWBResourceURL.Call_DIRECT);
