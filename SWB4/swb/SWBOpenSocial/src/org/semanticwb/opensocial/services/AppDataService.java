@@ -45,9 +45,10 @@ public class AppDataService implements Service
             String groupId = params.getString("groupId").trim();
             Person personUserID = Person.ClassMgr.getPerson(userid, site);
             String appid=gadget.getId();
-            if(params.getString("appId")!=null && !params.getString("appId").equals(""))
+            
+            if(params.optString("appId")!=null && !params.optString("appId").equals(""))
             {
-                appid=params.getString("appId");
+                appid=params.optString("appId");
             }
             if (groupId.equals("@self"))
             {
@@ -130,9 +131,9 @@ public class AppDataService implements Service
             ArrayList<Person> persons = new ArrayList<Person>();
             String groupId = params.getString("groupId").trim();
             String appid=gadget.getId();
-            if(params.getString("appId")!=null && !params.getString("appId").equals(""))
+            if(params.optString("appId")!=null && !params.optString("appId").equals(""))
             {
-                appid=params.getString("appId");
+                appid=params.optString("appId");
             }
             Person personUserID = Person.ClassMgr.getPerson(userid, site);
             if (groupId.equals("@self"))

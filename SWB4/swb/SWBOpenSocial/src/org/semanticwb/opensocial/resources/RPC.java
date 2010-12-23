@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,9 +72,10 @@ public class RPC
 
     private void sendResponse(String objresponse, HttpServletResponse response) throws IOException
     {
-        response.setContentType("JSON");
+        Charset utf8=Charset.forName("utf-8");
+        response.setContentType("JSON;charset="+utf8.name());
         OutputStream out = response.getOutputStream();
-        out.write(objresponse.getBytes());
+        out.write(objresponse.getBytes(utf8));
         out.close();
     }
 
