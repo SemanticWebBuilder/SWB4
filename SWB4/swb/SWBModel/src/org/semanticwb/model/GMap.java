@@ -65,7 +65,7 @@ public class GMap extends org.semanticwb.model.base.GMapBase {
      * @return the string
      */
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type, String mode, String lang) {
         GMap map = null;
         String nombre = "";
         StringBuffer ret = new StringBuffer();
@@ -78,7 +78,7 @@ public class GMap extends org.semanticwb.model.base.GMapBase {
         int step = obj.getIntProperty(prop3);
         if (0 == step)
             step = 10;
-        String value = request.getParameter(prop.getName());
+        String value = request.getParameter(propName);
          /** Class Cast Exception in value = obj.getProperty(prop). */
         try {
             if (value == null)

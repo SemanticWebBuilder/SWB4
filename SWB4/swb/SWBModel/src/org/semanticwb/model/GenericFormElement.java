@@ -66,7 +66,7 @@ public class GenericFormElement extends FormElementBase {
      * @return the string
      */
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                                 String mode, String lang) {
         if (obj == null) {
             obj = new SemanticObject();
@@ -86,7 +86,7 @@ public class GenericFormElement extends FormElementBase {
         }
 
         StringBuffer   ret          = new StringBuffer();
-        String         name         = prop.getName();
+        String         name         = propName;
         String         label        = prop.getDisplayName(lang);
         SemanticObject sobj         = prop.getDisplayProperty();
         boolean        required     = prop.isRequired();
@@ -130,7 +130,7 @@ public class GenericFormElement extends FormElementBase {
 
         if (prop.isDataTypeProperty()) {
             if (selectValues != null) {
-                String value = request.getParameter(prop.getName());
+                String value = request.getParameter(propName);
 
                 if (value == null) {
                     value = obj.getProperty(prop);
@@ -175,7 +175,7 @@ public class GenericFormElement extends FormElementBase {
             } else if (prop.isBoolean()) {
                 String  checked = "";
                 boolean value   = false;
-                String  aux     = request.getParameter(prop.getName());
+                String  aux     = request.getParameter(propName);
 
                 if (aux != null) {
                     value = true;
@@ -215,7 +215,7 @@ public class GenericFormElement extends FormElementBase {
 
                 ret.append("/>");
             } else if (prop.isDateTime()) {
-                String value = request.getParameter(prop.getName());
+                String value = request.getParameter(propName);
 
                 if (value == null) {
                     value = obj.getProperty(prop);
@@ -227,7 +227,7 @@ public class GenericFormElement extends FormElementBase {
 
                 ret.append("<span _id=\"" + name + "\" name=\"" + name + "\">" + value + "</span>");
             } else if (prop.isInt() || prop.isLong()) {
-                String value = request.getParameter(prop.getName());
+                String value = request.getParameter(propName);
 
                 if (value == null) {
                     value = obj.getProperty(prop);
@@ -278,7 +278,7 @@ public class GenericFormElement extends FormElementBase {
                     ret.append("<span _id=\"" + name + "\" name=\"" + name + "\">" + value + "</span>");
                 }
             } else {
-                String value = request.getParameter(prop.getName());
+                String value = request.getParameter(propName);
 
                 if (value == null) {
                     value = obj.getProperty(prop);
@@ -329,7 +329,7 @@ public class GenericFormElement extends FormElementBase {
             if (!name.startsWith("has"))
             {
                 SemanticObject value = null;
-                String         aux   = request.getParameter(prop.getName());
+                String         aux   = request.getParameter(propName);
 
                 if (aux != null) {
                     value = SemanticObject.createSemanticObject(aux);

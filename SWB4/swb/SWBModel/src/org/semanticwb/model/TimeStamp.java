@@ -66,12 +66,12 @@ public class TimeStamp extends org.semanticwb.model.base.TimeStampBase {
      * @param prop the prop
      */
     @Override
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) {
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) {
         if (prop.getDisplayProperty() == null) {
             return;
         }
 
-        String value = request.getParameter(prop.getName());
+        String value = request.getParameter(propName);
 
         if (value != null && prop.isDateTime()) {
             // System.out.println("old:"+old+" value:"+value);
@@ -98,7 +98,7 @@ public class TimeStamp extends org.semanticwb.model.base.TimeStampBase {
      * @return the string
      */
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                                 String mode, String lang) {
         if (obj == null) {
             obj = new SemanticObject();
@@ -117,7 +117,7 @@ public class TimeStamp extends org.semanticwb.model.base.TimeStampBase {
 //        }
 
         StringBuffer ret   = new StringBuffer();
-        String       name  = prop.getName();
+        String       name  = propName;
         //String       label = prop.getDisplayName(lang);
         Date         ndate = new Date();
         Date         date  = null;

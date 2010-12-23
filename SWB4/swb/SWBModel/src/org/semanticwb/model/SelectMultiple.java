@@ -65,13 +65,13 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
      * @param prop the prop
      */
     @Override
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) {
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) {
 
         // super.process(request, obj, prop);
         // System.out.println("Process...");
         // System.out.println("Prop:"+prop);
         // System.out.println("obj:"+obj);
-        String vals[] = request.getParameterValues(prop.getName());
+        String vals[] = request.getParameterValues(propName);
 
         if (vals == null) {
             vals = new String[0];
@@ -107,7 +107,7 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
      * @return the string
      */
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                                 String mode, String lang) {
         if (obj == null) {
             obj = new SemanticObject();
@@ -127,7 +127,7 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
         }
 
         StringBuffer   ret          = new StringBuffer();
-        String         name         = prop.getName();
+        String         name         = propName;
         String         label        = prop.getDisplayName(lang);
         SemanticObject sobj         = prop.getDisplayProperty();
         boolean        required     = prop.isRequired();
@@ -179,7 +179,7 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
 
         if (prop.isObjectProperty()) {
             ArrayList<String> vals   = new ArrayList();
-            String            auxs[] = request.getParameterValues(prop.getName());
+            String            auxs[] = request.getParameterValues(propName);
 
             if (auxs == null) {
                 auxs = new String[0];
@@ -246,7 +246,7 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
         } else {
             if (selectValues != null) {
                 ArrayList<String> vals   = new ArrayList();
-                String            auxs[] = request.getParameterValues(prop.getName());
+                String            auxs[] = request.getParameterValues(propName);
 
                 if (auxs == null) {
                     auxs = new String[0];

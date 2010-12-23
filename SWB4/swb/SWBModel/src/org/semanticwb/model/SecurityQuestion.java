@@ -62,8 +62,8 @@ public class SecurityQuestion extends org.semanticwb.model.base.SecurityQuestion
      * @param prop the prop
      */
     @Override
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) {
-        super.process(request, obj, prop);
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) {
+        super.process(request, obj, prop, propName);
     }
 
     /* (non-Javadoc)
@@ -81,7 +81,7 @@ public class SecurityQuestion extends org.semanticwb.model.base.SecurityQuestion
      * @return the string
      */
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                                 String mode, String lang) {
         if (obj == null) {
             obj = new SemanticObject();
@@ -90,9 +90,9 @@ public class SecurityQuestion extends org.semanticwb.model.base.SecurityQuestion
         String ret = "";
 
         if (type.endsWith("iphone")) {
-            ret = renderIphone(obj, prop, type, mode, lang);
+            ret = renderIphone(obj, prop, propName, type, mode, lang);
         } else {
-            ret = renderXHTML(obj, prop, type, mode, lang);
+            ret = renderXHTML(obj, prop, propName, type, mode, lang);
         }
 
         return ret;
@@ -108,7 +108,7 @@ public class SecurityQuestion extends org.semanticwb.model.base.SecurityQuestion
      * @param lang the lang
      * @return the string
      */
-    public String renderIphone(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
+    public String renderIphone(SemanticObject obj, SemanticProperty prop, String propName, String type, String mode, String lang) {
         return "";
     }
 
@@ -122,9 +122,9 @@ public class SecurityQuestion extends org.semanticwb.model.base.SecurityQuestion
      * @param lang the lang
      * @return the string
      */
-    public String renderXHTML(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
+    public String renderXHTML(SemanticObject obj, SemanticProperty prop, String propName, String type, String mode, String lang) {
         StringBuilder  ret          = new StringBuilder(250);
-        String         name         = prop.getName();
+        String         name         = propName;
         String         label        = prop.getDisplayName(lang);
         SemanticObject sobj         = prop.getDisplayProperty();
         boolean        required     = prop.isRequired();

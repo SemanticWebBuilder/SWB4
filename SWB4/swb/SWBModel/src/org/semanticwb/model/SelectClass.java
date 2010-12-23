@@ -33,7 +33,7 @@ public class SelectClass extends org.semanticwb.model.base.SelectClassBase
      * @return the string
      */
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                                 String mode, String lang) {
         if (obj == null) {
             obj = new SemanticObject();
@@ -53,7 +53,7 @@ public class SelectClass extends org.semanticwb.model.base.SelectClassBase
         }
 
         StringBuffer   ret          = new StringBuffer();
-        String         name         = prop.getName();
+        String         name         = propName;
         String         label        = prop.getDisplayName(lang);
         SemanticObject sobj         = prop.getDisplayProperty();
         boolean        required     = prop.isRequired();
@@ -112,7 +112,7 @@ public class SelectClass extends org.semanticwb.model.base.SelectClassBase
         if (prop.isObjectProperty())
         {
             SemanticObject val = null;
-            String         aux = request.getParameter(prop.getName());
+            String         aux = request.getParameter(propName);
 
             if (aux != null) {
                 val = SemanticObject.createSemanticObject(aux);

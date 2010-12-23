@@ -58,7 +58,7 @@ public class Text extends TextBase {
      * @return the string
      */
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                                 String mode, String lang) {
         if (obj == null) {
             obj = new SemanticObject();
@@ -78,7 +78,7 @@ public class Text extends TextBase {
         }
 
         StringBuffer   ret      = new StringBuffer();
-        String         name     = prop.getName();
+        String         name     = propName;
         String         label    = prop.getDisplayName(lang);
         SemanticObject sobj     = prop.getDisplayProperty();
         boolean        required = prop.isRequired();
@@ -118,7 +118,7 @@ public class Text extends TextBase {
             ext += " disabled=\"disabled\"";
         }
 
-        String value = request.getParameter(prop.getName());
+        String value = request.getParameter(propName);
 
         if (value == null) {
             value = obj.getProperty(prop);

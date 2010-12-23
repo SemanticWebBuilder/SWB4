@@ -61,7 +61,7 @@ public class PasswordUpdate extends PasswordUpdateBase {
      * @return the string
      */
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                                 String mode, String lang) {
         if (obj == null) {
             obj = new SemanticObject();
@@ -70,9 +70,9 @@ public class PasswordUpdate extends PasswordUpdateBase {
         String ret = "";
 
         if (type.endsWith("iphone")) {
-            ret = renderIphone(request, obj, prop, type, mode, lang);
+            ret = renderIphone(request, obj, prop, propName, type, mode, lang);
         } else {
-            ret = renderXHTML(request, obj, prop, type, mode, lang);
+            ret = renderXHTML(request, obj, prop, propName, type, mode, lang);
         }
 
         return ret;
@@ -89,7 +89,7 @@ public class PasswordUpdate extends PasswordUpdateBase {
      * @param lang the lang
      * @return the string
      */
-    public String renderIphone(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
+    public String renderIphone(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                                String mode, String lang) {
         return "";
     }
@@ -105,10 +105,10 @@ public class PasswordUpdate extends PasswordUpdateBase {
      * @param lang the lang
      * @return the string
      */
-    public String renderXHTML(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
+    public String renderXHTML(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                               String mode, String lang) {
         String         ret      = "";
-        String         name     = prop.getName();
+        String         name     = propName;
         String         label    = prop.getDisplayName(lang);
         SemanticObject sobj     = prop.getDisplayProperty();
         boolean        required = prop.isRequired();
@@ -138,7 +138,7 @@ public class PasswordUpdate extends PasswordUpdateBase {
             }
         }
 
-        String value = request.getParameter(prop.getName());
+        String value = request.getParameter(propName);
 
         if (value == null) {
             value = obj.getProperty(prop);
@@ -179,9 +179,9 @@ public class PasswordUpdate extends PasswordUpdateBase {
      * @param prop the prop
      */
     @Override
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) {
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) {
         if (prop.isDataTypeProperty()) {
-            String value    = request.getParameter(prop.getName());
+            String value    = request.getParameter(propName);
             String chkvalue = request.getParameter("pwd_verify");
             String old      = obj.getProperty(prop);
 

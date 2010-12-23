@@ -74,7 +74,7 @@ public class DateElement extends org.semanticwb.model.base.DateElementBase {
      * @return the string
      */
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                                 String mode, String lang) {
         if (obj == null) {
             obj = new SemanticObject();
@@ -91,7 +91,7 @@ public class DateElement extends org.semanticwb.model.base.DateElementBase {
         }
 
         StringBuffer   ret      = new StringBuffer();
-        String         name     = prop.getName();
+        String         name     = propName;
         String         label    = prop.getDisplayName(lang);
         SemanticObject sobj     = prop.getDisplayProperty();
         boolean        required = prop.isRequired();
@@ -139,7 +139,7 @@ public class DateElement extends org.semanticwb.model.base.DateElementBase {
             ext += " disabled=\"disabled\"";
         }
 
-        String value = request.getParameter(prop.getName());
+        String value = request.getParameter(propName);
 
         if (value == null) {
             Date dt = obj.getDateProperty(prop);
@@ -193,11 +193,11 @@ public class DateElement extends org.semanticwb.model.base.DateElementBase {
      * @param prop the prop
      */
     @Override
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) {
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) {
 
         // System.out.println("process...:"+obj.getURI()+" "+prop.getURI());
         if (prop.getDisplayProperty() != null) {
-            String value = request.getParameter(prop.getName());
+            String value = request.getParameter(propName);
             String old   = obj.getProperty(prop);
 
             // System.out.println("com:"+old+"-"+value+"-");

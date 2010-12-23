@@ -65,7 +65,7 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
      * @return the string
      */
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                                 String mode, String lang) {
         if (obj == null) {
             obj = new SemanticObject();
@@ -74,9 +74,9 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
         String ret = "";
 
         if (type.endsWith("iphone")) {
-            ret = renderIphone(request, obj, prop, type, mode, lang);
+            ret = renderIphone(request, obj, prop, propName, type, mode, lang);
         } else {
-            ret = renderXHTML(request, obj, prop, type, mode, lang);
+            ret = renderXHTML(request, obj, prop, propName, type, mode, lang);
         }
 
         return ret;
@@ -93,7 +93,7 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
      * @param lang the lang
      * @return the string
      */
-    public String renderIphone(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
+    public String renderIphone(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                                String mode, String lang) {
         return "";
     }
@@ -109,14 +109,14 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
      * @param lang the lang
      * @return the string
      */
-    public String renderXHTML(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
+    public String renderXHTML(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                               String mode, String lang) {
 
 
         // boolean DOJO=false;
         // if(type.equals("dojo"))DOJO=true;
         String         ret      = "";
-        String         name     = prop.getName();
+        String         name     = propName;
         String         label    = prop.getDisplayName(lang);
         SemanticObject sobj     = prop.getDisplayProperty();
         boolean        required = prop.isRequired();

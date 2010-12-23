@@ -66,7 +66,7 @@ public class FlashFileUpload extends org.semanticwb.model.base.FlashFileUploadBa
      */
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj,
-            SemanticProperty prop, String type, String mode, String lang)
+            SemanticProperty prop, String propName, String type, String mode, String lang)
     {
         //System.out.println("********************** FlashFileUploader.ConfigFileRequest **********************");
         //System.out.println("obj: "+obj);
@@ -96,7 +96,7 @@ public class FlashFileUpload extends org.semanticwb.model.base.FlashFileUploadBa
 
         StringBuilder buffer = new StringBuilder();
         String cad = UploaderFileCacheUtils.uniqueCad();
-        UploaderFileCacheUtils.putRequest(cad, configFileRequest(prop));
+        UploaderFileCacheUtils.putRequest(cad, configFileRequest(prop, propName));
         request.getSession(true).setAttribute("fuCad", cad);
         String page;
         if (obj.instanceOf(WebPage.sclass))
@@ -149,17 +149,17 @@ public class FlashFileUpload extends org.semanticwb.model.base.FlashFileUploadBa
         buffer.append("</script>\n");
         buffer.append("<table border=\"0\"><tr><td><iframe src=\"" + url + "\" frameborder=\"0\" width=\"225\" "
                 + "scrolling=\"no\" name=\"ifrupd" + cad + "\" id=\"ifrupd" + cad + "\" height=\"170\" ></iframe>\n");
-        buffer.append("<input type=\"hidden\" name=\"" + prop.getName() + "\" value=\"" + cad + "\" /></td>\n");
-//        if (prop.getName().startsWith("has")){
+        buffer.append("<input type=\"hidden\" name=\"" + propName + "\" value=\"" + cad + "\" /></td>\n");
+//        if (propName.startsWith("has")){
         buffer.append("<td valign=\"top\">"+eliminar+":<br/><select dojoType=\"dijit.form.MultiSelect\" name=\""
-                + prop.getName() + "_delFile\" multiple=\"multiple\" size=\"4\">\n");
+                + propName + "_delFile\" multiple=\"multiple\" size=\"4\">\n");
         Iterator<SemanticLiteral>lista = obj.listLiteralProperties(prop);
         while (lista.hasNext()){
             SemanticLiteral lit = lista.next();
             String fname = lit.getString();
-            if (fname.startsWith(prop.getName()))
+            if (fname.startsWith(propName))
             {
-                fname = fname.substring(prop.getName().length()+1);
+                fname = fname.substring(propName.length()+1);
             }
             buffer.append("<option>"+fname+"</option>");
         }
@@ -213,11 +213,11 @@ public class FlashFileUpload extends org.semanticwb.model.base.FlashFileUploadBa
      * @param prop the prop
      */
     @Override
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop)
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName)
     {
         //System.out.println("********************** FlashFileUploader.process **********************");
-        if (request.getParameter(prop.getName()+"_delFile")!=null){
-            if (prop.getName().startsWith("has")){
+        if (request.getParameter(propName+"_delFile")!=null){
+            if (propName.startsWith("has")){
                 Iterator<SemanticLiteral>list=obj.listLiteralProperties(prop);
 
             Set<String>grupo=new TreeSet<String>();
@@ -225,10 +225,10 @@ public class FlashFileUpload extends org.semanticwb.model.base.FlashFileUploadBa
             {
                 grupo.add(list.next().getString());
             }
-            String[]params = request.getParameterValues(prop.getName()+"_delFile");
+            String[]params = request.getParameterValues(propName+"_delFile");
             for (String valor:params){
-                grupo.remove(prop.getName()+"_"+valor);
-                delfile(obj, prop.getName()+"_"+valor);
+                grupo.remove(propName+"_"+valor);
+                delfile(obj, propName+"_"+valor);
             }
             obj.removeProperty(prop);
             for (String valor:grupo)
@@ -236,7 +236,7 @@ public class FlashFileUpload extends org.semanticwb.model.base.FlashFileUploadBa
                 obj.addLiteralProperty(prop, new SemanticLiteral(valor));
             }
             } else {
-                delfile(obj, prop.getName()+"_"+request.getParameter(prop.getName()+"_delFile"));
+                delfile(obj, propName+"_"+request.getParameter(propName+"_delFile"));
                 obj.removeProperty(prop);
             }
         }
@@ -246,13 +246,13 @@ public class FlashFileUpload extends org.semanticwb.model.base.FlashFileUploadBa
         {
             throw new SWBRuntimeException("Can't create work directory " + dir);
         }
-        String cad = request.getParameter(prop.getName());
+        String cad = request.getParameter(propName);
         List<UploadedFile> lista = UploaderFileCacheUtils.get(cad);
         for (UploadedFile arch : lista)
         {
             File orig = new File(arch.getTmpuploadedCanonicalFileName());
             String webpath = obj.getWorkPath() + arch.getOriginalName();
-            File dest = new File(dir, prop.getName()+"_"+arch.getOriginalName());
+            File dest = new File(dir, propName+"_"+arch.getOriginalName());
             if (!orig.renameTo(dest))
             {
                 try
@@ -263,12 +263,12 @@ public class FlashFileUpload extends org.semanticwb.model.base.FlashFileUploadBa
                     throw new SWBRuntimeException("Can't copy files", ex);
                 }
             }
-            if (prop.getName().startsWith("has"))
+            if (propName.startsWith("has"))
             {
-                obj.addLiteralProperty(prop, new SemanticLiteral(prop.getName()+"_"+arch.getOriginalName()));
+                obj.addLiteralProperty(prop, new SemanticLiteral(propName+"_"+arch.getOriginalName()));
             } else
             {
-                obj.setProperty(prop, prop.getName()+"_"+arch.getOriginalName());
+                obj.setProperty(prop, propName+"_"+arch.getOriginalName());
             }
         }
         UploaderFileCacheUtils.clean(cad);
@@ -282,14 +282,14 @@ public class FlashFileUpload extends org.semanticwb.model.base.FlashFileUploadBa
      * @param prop the prop
      * @return the upload file request
      */
-    protected UploadFileRequest configFileRequest(SemanticProperty prop)
+    protected UploadFileRequest configFileRequest(SemanticProperty prop, String propName)
     {
         //System.out.println("********************** FlashFileUploader.configFileRequest **********************");
         //System.out.println("Tengo filtro "+getFileFilter()+"|--");
-        //System.out.println("*Prop:"+prop.getName());
+        //System.out.println("*Prop:"+propName);
         //System.out.println("*FileMaxSize:"+getFileMaxSize());
 
-        boolean multiple = prop.getName().startsWith("has");
+        boolean multiple = propName.startsWith("has");
         //System.out.println("filter:"+getFileFilter());
         HashMap<String, String> filtros = new HashMap<String, String>();
         if (null == getFileFilter() || "".equals(getFileFilter()))
