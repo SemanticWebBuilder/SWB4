@@ -690,7 +690,7 @@ public class SWBFormMgr implements SWBForms
             while(it.hasNext())
             {
                 SemanticProperty prop=it.next();
-                validateElement(request, prop);
+                validateElement(request, prop, prop.getName());
             }
         }
         return ret;
@@ -745,7 +745,7 @@ public class SWBFormMgr implements SWBForms
                 {
                     SemanticProperty prop=it.next();
                     //System.out.println("ProcessElement:"+prop);
-                    processElement(request, prop);
+                    processElement(request, prop, prop.getName());
                 }
             }
         }
@@ -763,8 +763,23 @@ public class SWBFormMgr implements SWBForms
      */
     public void renderProp(HttpServletRequest request, StringBuffer ret, SemanticProperty prop, FormElement ele)
     {
-        renderProp(request, ret, prop, ele, m_mode);
+        renderProp(request, ret, prop, prop.getName(), ele, m_mode);
     }
+
+    /**
+     * Rederea propiedad (metodo interno del SWBFormMgr.
+     *
+     * @param request the request
+     * @param ret the ret
+     * @param prop the prop
+     * @param ele the ele
+     * @param mode the mode
+     */
+    public void renderProp(HttpServletRequest request, StringBuffer ret, SemanticProperty prop, FormElement ele, String mode)
+    {
+        renderProp(request, ret, prop, prop.getName(), ele, mode);
+    }
+
 
     /**
      * Rederea propiedad (metodo interno del SWBFormMgr.
@@ -775,7 +790,7 @@ public class SWBFormMgr implements SWBForms
      * @param ele the ele
      * @param mode the mode
      */
-    public void renderProp(HttpServletRequest request, StringBuffer ret, SemanticProperty prop, FormElement ele, String mode)
+    public void renderProp(HttpServletRequest request, StringBuffer ret, SemanticProperty prop, String propName, FormElement ele, String mode)
     {
         SemanticObject obj=m_obj;
         if(obj==null)obj=new SemanticObject(m_ref.getModel(),m_cls);
@@ -795,12 +810,12 @@ public class SWBFormMgr implements SWBForms
             {
                 if(m_propmap!=null)
                 {
-                    label=ele.renderLabel(request, obj, prop, m_type, m_propmap.get(prop), m_lang);
-                    element=ele.renderElement(request, obj, prop, m_type, m_propmap.get(prop), m_lang);
+                    label=ele.renderLabel(request, obj, prop, propName, m_type, m_propmap.get(prop), m_lang);
+                    element=ele.renderElement(request, obj, prop, propName, m_type, m_propmap.get(prop), m_lang);
                 }else
                 {
-                    label=ele.renderLabel(request, obj, prop, m_type, mode, m_lang);
-                    element=ele.renderElement(request, obj, prop, m_type, mode, m_lang);
+                    label=ele.renderLabel(request, obj, prop, propName, m_type, mode, m_lang);
+                    element=ele.renderElement(request, obj, prop, propName, m_type, mode, m_lang);
                 }
             }catch(Exception e){log.error("Element:"+ele,e);}
             if(element!=null && element.length()>0)
@@ -874,7 +889,7 @@ public class SWBFormMgr implements SWBForms
         {
             SemanticProperty prop=m_obj.getSemanticClass().getProperty(propName);
             FormElement ele=getFormElement(prop);
-            ret=ele.renderElement(request, m_obj, prop, m_type, mode, m_lang);
+            ret=ele.renderElement(request, m_obj, prop, propName, m_type, mode, m_lang);
         }
         return ret;
     }
@@ -888,7 +903,7 @@ public class SWBFormMgr implements SWBForms
      */
     public String renderElement(HttpServletRequest request, String propName)
     {
-        return renderElement(request, propName,m_mode);
+        return renderElement(request, propName, m_mode);
     }
     
     /**
@@ -925,15 +940,38 @@ public class SWBFormMgr implements SWBForms
 
     /**
      * Validate element.
-     * 
+     *
      * @param request the request
      * @param prop the prop
      * @throws FormValidateException the form validate exception
      */
     public void validateElement(HttpServletRequest request, SemanticProperty prop) throws FormValidateException
     {
+        validateElement(request, prop, prop.getName());
+    }
+
+    /**
+     * Validate element.
+     * 
+     * @param request the request
+     * @param prop the prop
+     * @throws FormValidateException the form validate exception
+     */
+    public void validateElement(HttpServletRequest request, SemanticProperty prop, String propName) throws FormValidateException
+    {
         FormElement ele=getFormElement(prop);
-        ele.validate(request, m_obj, prop);
+        ele.validate(request, m_obj, prop, propName);
+    }
+
+    /**
+     * Process element.
+     *
+     * @param request the request
+     * @param prop the prop
+     */
+    public void processElement(HttpServletRequest request, SemanticProperty prop)
+    {
+        processElement(request, prop, prop.getName());
     }
     
     /**
@@ -942,12 +980,25 @@ public class SWBFormMgr implements SWBForms
      * @param request the request
      * @param prop the prop
      */
-    public void processElement(HttpServletRequest request, SemanticProperty prop)
+    public void processElement(HttpServletRequest request, SemanticProperty prop, String propName)
     {
         FormElement ele=getFormElement(prop);
-        ele.process(request, m_obj, prop);
+        ele.process(request, m_obj, prop, propName);
     }
-    
+
+    /**
+     * Render label.
+     *
+     * @param request the request
+     * @param prop the prop
+     * @param mode the mode
+     * @return the string
+     */
+    public String renderLabel(HttpServletRequest request, SemanticProperty prop, String mode)
+    {
+        return renderLabel(request, prop, prop.getName(), mode);
+    }
+
     /**
      * Render label.
      * 
@@ -956,13 +1007,26 @@ public class SWBFormMgr implements SWBForms
      * @param mode the mode
      * @return the string
      */
-    public String renderLabel(HttpServletRequest request, SemanticProperty prop, String mode)
+    public String renderLabel(HttpServletRequest request, SemanticProperty prop, String propName, String mode)
     {
         String ret=null;
         //System.out.println("prop:"+prop+" mode:"+mode);
         FormElement ele=getFormElement(prop);
-        ret=ele.renderLabel(request, m_obj, prop, m_type, mode, m_lang);
+        ret=ele.renderLabel(request, m_obj, prop, propName, m_type, mode, m_lang);
         return ret;
+    }
+
+    /**
+     * Render element.
+     *
+     * @param request the request
+     * @param prop the prop
+     * @param mode the mode
+     * @return the string
+     */
+    public String renderElement(HttpServletRequest request, SemanticProperty prop, String mode)
+    {
+        return renderElement(request, prop, prop.getName(), mode);
     }
 
     /**
@@ -973,12 +1037,12 @@ public class SWBFormMgr implements SWBForms
      * @param mode the mode
      * @return the string
      */
-    public String renderElement(HttpServletRequest request, SemanticProperty prop, String mode)
+    public String renderElement(HttpServletRequest request, SemanticProperty prop, String propName, String mode)
     {
         String ret=null;
         //System.out.println("prop:"+prop+" mode:"+mode);
         FormElement ele=getFormElement(prop);
-        ret=ele.renderElement(request, m_obj, prop, m_type, mode, m_lang);
+        ret=ele.renderElement(request, m_obj, prop, propName, m_type, mode, m_lang);
         return ret;
     }
     
