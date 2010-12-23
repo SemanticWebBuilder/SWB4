@@ -209,13 +209,10 @@ public class IFrame
             if (messages.item(i) instanceof Element)
             {
                 Element msg = (Element) messages.item(i);
-                String name = msg.getAttribute("name");
-                System.out.println("name: "+name);
-                String value = msg.getTextContent();
-                System.out.println("value: "+value);
+                String name = msg.getAttribute("name");                
+                String value = msg.getTextContent();                
                 if(name!=null && !name.equals("") && value!=null && !value.equals(""))
-                {
-                    System.out.println("name: "+name+" value: "+value);
+                {                    
                     getMesssages.put("__MSG_"+name+"__", value);
                 }
             }
@@ -390,10 +387,7 @@ public class IFrame
         String country = request.getParameter("country");
         String lang = request.getParameter("lang");
         String moduleid = request.getParameter("moduleid");
-        String sview = request.getParameter("view");
-        System.out.println("sview: " + sview);
-        System.out.println("lang: " + lang);
-        System.out.println("country: " + country);
+        String sview = request.getParameter("view");        
         if (sview == null)
         {
             sview = "default";
