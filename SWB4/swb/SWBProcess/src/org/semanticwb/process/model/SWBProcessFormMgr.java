@@ -198,7 +198,7 @@ public class SWBProcessFormMgr implements SWBForms
                     SWBFormMgr mgr=mgrs.get(pp.getSemanticClass().getURI());
                     SemanticProperty prop=pp.getSemanticProperty();
                     FormElement ele=mgr.getFormElement(prop);
-                    mgr.renderProp(request, ret, prop, ele, pp.getMode());
+                    mgr.renderProp(request, ret, prop, prop.getName()+"."+pp.getSemanticClass().getName(), ele, pp.getMode());
                 }
                 ret.append("	    </table>\n");
                 ret.append("	</fieldset>\n");
@@ -247,12 +247,11 @@ public class SWBProcessFormMgr implements SWBForms
                     if(MODE_EDIT.equals(views.get(cls).get(prop)))
                     {
                         //System.out.println("ProcessElement:"+prop);
-                        mgr.processElement(request, prop);
+                        mgr.processElement(request, prop, prop.getName()+"."+cls.getName());
                     }
                 }
 
             }
-
         }
     }
 
@@ -318,29 +317,30 @@ public class SWBProcessFormMgr implements SWBForms
         this.m_action = action;
     }
 
-    /**
-     * Render label.
-     *
-     * @param request the request
-     * @param prop the prop
-     * @param mode the mode
-     * @return the string
-     */
-    public String renderLabel(HttpServletRequest request, SemanticProperty prop, String mode)
-    {
-        Iterator<SWBFormMgr> it=mgrs.values().iterator();
-        SWBFormMgr mgr=null;
-        while (it.hasNext())
-        {
-            SWBFormMgr amgr = it.next();
-            if(amgr.getProperties().contains(prop))
-            {
-                mgr=amgr;
-                break;
-            }
-        }
-        return mgr.renderLabel(request, prop, mode);
-    }
+//    /**
+//     * Render label.
+//     *
+//     * @param request the request
+//     * @param prop the prop
+//     * @param mode the mode
+//     * @return the string
+//     */
+//    public String renderLabel(HttpServletRequest request, SemanticProperty prop, String mode)
+//    {
+//        Iterator<SWBFormMgr> it=mgrs.values().iterator();
+//        SWBFormMgr mgr=null;
+//        while (it.hasNext())
+//        {
+//            SWBFormMgr amgr = it.next();
+//            if(amgr.getProperties().contains(prop))
+//            {
+//                mgr=amgr;
+//                break;
+//            }
+//        }
+//        return mgr.renderLabel(request, prop, prop.getName(), mode);
+//    }
+
 
     /**
      * Render label.
@@ -353,32 +353,32 @@ public class SWBProcessFormMgr implements SWBForms
     public String renderLabel(HttpServletRequest request, SemanticProperty prop, SemanticClass cls, String mode)
     {
         SWBFormMgr mgr=mgrs.get(cls.getURI());
-        return mgr.renderLabel(request, prop, mode);
+        return mgr.renderLabel(request, prop, prop.getName()+"."+cls.getName(), mode);
     }
 
-    /**
-     * Render element.
-     *
-     * @param request the request
-     * @param prop the prop
-     * @param mode the mode
-     * @return the string
-     */
-    public String renderElement(HttpServletRequest request, SemanticProperty prop, String mode)
-    {
-        Iterator<SWBFormMgr> it=mgrs.values().iterator();
-        SWBFormMgr mgr=null;
-        while (it.hasNext())
-        {
-            SWBFormMgr amgr = it.next();
-            if(amgr.getProperties().contains(prop))
-            {
-                mgr=amgr;
-                break;
-            }
-        }
-        return mgr.renderElement(request, prop, mode);
-    }
+//    /**
+//     * Render element.
+//     *
+//     * @param request the request
+//     * @param prop the prop
+//     * @param mode the mode
+//     * @return the string
+//     */
+//    public String renderElement(HttpServletRequest request, SemanticProperty prop, String mode)
+//    {
+//        Iterator<SWBFormMgr> it=mgrs.values().iterator();
+//        SWBFormMgr mgr=null;
+//        while (it.hasNext())
+//        {
+//            SWBFormMgr amgr = it.next();
+//            if(amgr.getProperties().contains(prop))
+//            {
+//                mgr=amgr;
+//                break;
+//            }
+//        }
+//        return mgr.renderElement(request, prop, prop.getName(), mode);
+//    }
 
     /**
      * Render element.
@@ -391,7 +391,7 @@ public class SWBProcessFormMgr implements SWBForms
     public String renderElement(HttpServletRequest request, SemanticClass cls, SemanticProperty prop, String mode)
     {
         SWBFormMgr mgr=mgrs.get(cls.getURI());
-        return mgr.renderElement(request, prop, mode);
+        return mgr.renderElement(request, prop, prop.getName()+"."+cls.getName(), mode);
     }
 
     public String renderElement(HttpServletRequest request, SemanticClass cls, SemanticProperty prop, FormElement element, String mode)
@@ -400,10 +400,10 @@ public class SWBProcessFormMgr implements SWBForms
         if(element!=null)
         {
             element.setModel(mgr.getSemanticObject().getModel());
-            return element.renderElement(request, mgr.getSemanticObject(), prop, m_type, mode, m_lang);
+            return element.renderElement(request, mgr.getSemanticObject(), prop, prop.getName()+"."+cls.getName(), m_type, mode, m_lang);
         }else
         {
-            return mgr.renderElement(request, prop, mode);
+            return mgr.renderElement(request, prop, prop.getName()+"."+cls.getName(), mode);
         }
     }
     

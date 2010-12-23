@@ -94,7 +94,7 @@ public class SWBLabelTag implements SWBFormLayer {
                             while(itClassProps.hasNext()){
                                 SemanticProperty semProp=itClassProps.next();
                                 if(semProp.getURI().endsWith(sTagProp)){
-                                    renderElement=mgr.renderLabel(request, semProp, mgr.MODE_VIEW);
+                                    renderElement=mgr.renderLabel(request, semProp, cls, mgr.MODE_VIEW);
                                 }
                             }
                         }
