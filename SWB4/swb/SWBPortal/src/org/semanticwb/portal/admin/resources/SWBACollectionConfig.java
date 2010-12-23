@@ -1012,13 +1012,12 @@ public class SWBACollectionConfig extends GenericAdmResource {
                                 
                                 if(null!=sofe)
                                 {
-                                    
                                     if(sofe.transformToSemanticClass().isSWBFormElement())
                                     {
                                         //System.out.println("Antes del FERender");
                                         fe = fmgr.getFormElement(semanticProp);//FormElement) sofe;
                                         //out.println(fe.renderElement(request, gobj.getSemanticObject(), semProphm, SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_EDIT, user.getLanguage()));
-                                        out.println(fe.renderElement(request, gobj.getSemanticObject(), semanticProp, SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_EDIT, user.getLanguage()));
+                                        out.println(fe.renderElement(request, gobj.getSemanticObject(), semanticProp, semanticProp.getName(), SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_EDIT, user.getLanguage()));
                                     }
                                 }
                                 //if(null!=semanticProp) out.println(fmgr.renderElement(request, semanticProp, SWBFormMgr.MODE_EDIT));
