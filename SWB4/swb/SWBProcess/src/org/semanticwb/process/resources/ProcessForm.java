@@ -232,13 +232,10 @@ public class ProcessForm extends GenericResource {
         {
             ret.append(" htmlType=\"dojo\" ");
         }
-        ret.append(">");
+        ret.append(" class=\"swbform\">");
         
-        ret.append("\n<table>");
-        ret.append("\n  <tr><td colspan=\"2\" align=\"center\">" + ut.getProcess().getProcessWebPage().getDisplayName(user.getLanguage()) + "</td></tr>");
-        ret.append("\n  <tr><td>");
         ret.append("\n    <fieldset>");
-        //ret.append("<legend>Grupo de Elementos</legend>");
+        ret.append("\n      <legend>Datos Generales</legend>");
         ret.append("\n      <table>");
 
         int max = 1;
@@ -287,7 +284,7 @@ public class ProcessForm extends GenericResource {
                 }
 
                 ret.append("\n     <tr>");
-                ret.append("\n       <td><label class=\"" + classid + "\" prop=\"" + semprop.getName() + "\" prueba=\"\" /></td>");
+                ret.append("\n       <td width=\"200px\" align=\"right\"><label class=\"" + classid + "\" prop=\"" + semprop.getName() + "\" prueba=\"\" /></td>");
                 ret.append("\n       <td><property class=\"" + classid + "\" prop=\"" + semprop.getName() + "\" prueba1=\"\" " + strFE + " Mode=\"" + strMode + "\" /></td>");
                 ret.append("\n    </tr>");
             }
@@ -295,11 +292,7 @@ public class ProcessForm extends GenericResource {
         }
 
         ret.append("\n      </table> ");
-        ret.append("\n     </fieldset> ");
-        ret.append("\n    </td>");
-        ret.append("\n   </tr> ");
-        ret.append("\n   <tr> ");
-        ret.append("\n    <td colspan=\"2\" align=\"center\">");
+        ret.append("\n      </fieldset> ");
         ret.append("\n      <fieldset>");
         //ret.append("<legend>Botones</legend>");
 
@@ -312,9 +305,6 @@ public class ProcessForm extends GenericResource {
 
 
         ret.append("\n      </fieldset>");
-        ret.append("\n     </td>");
-        ret.append("\n   </tr>");
-        ret.append("\n </table>");
         ret.append("\n</form>");
 
         return ret.toString();
@@ -645,18 +635,19 @@ public class ProcessForm extends GenericResource {
 
                 SemanticProperty sempro = ont.getSemanticProperty(propid);
                 SemanticObject dp = sempro.getDisplayProperty();
+                System.out.println("sempro:"+sempro+" dp:"+dp);
                 if (dp != null) {
                     //tiene displayproperty
-                    DisplayProperty disprop = (DisplayProperty) dp.createGenericInstance();
+                    DisplayProperty disprop = new DisplayProperty(dp);
 
                     //FormElement por defecto
                     SemanticObject semobjFE = disprop.getFormElement();
+                    System.out.println("semobjFE:"+semobjFE);
                     if (semobjFE != null) {
                         defaultFE = semobjFE.getURI();
                     } else {
                         defaultFE = FE_DEFAULT;
                     }
-
                 }
 
                 String value = strnew + "|" + defaultMode + "|" + defaultFE;
