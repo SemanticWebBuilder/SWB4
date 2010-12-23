@@ -6066,7 +6066,7 @@ shindig.Gadget.prototype.getAdditionalParams = function() {
 
 shindig.BaseIfrGadget = function(opt_params) {
   shindig.Gadget.call(this, opt_params);
-  this.serverBase_ = '/swb/rpc/gadgets/'; // default gadget server
+  this.serverBase_ = '<%=rpc%>'; // default gadget server
   this.queryIfrGadgetType_();
 };
 
@@ -6300,8 +6300,8 @@ shindig.IfrGadget = {
   },
   
   getIframeUrl: function() {
-    //return this.serverBase_ + 'ifr?' +
-    return this.serverBase_ + '?' +
+    
+    return '<%=ifr%>' + '?' +
         'container=' + this.CONTAINER +
         '&mid=' +  this.id +
         '&nocache=' + shindig.container.nocache_ +
