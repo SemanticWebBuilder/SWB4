@@ -1,7 +1,7 @@
 package org.semanticwb.opensocial.model.data.base;
 
 
-public abstract class NameBase extends org.semanticwb.model.base.GenericObjectBase 
+public abstract class NameBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.opensocial.model.Formatteable
 {
     public static final org.semanticwb.platform.SemanticProperty data_honorificPrefix=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#honorificPrefix");
     public static final org.semanticwb.platform.SemanticProperty data_honorificSuffix=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#honorificSuffix");
@@ -11,7 +11,6 @@ public abstract class NameBase extends org.semanticwb.model.base.GenericObjectBa
    * Indica si el elemento es válido
    */
     public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
-    public static final org.semanticwb.platform.SemanticProperty data_formatted=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#formatted");
     public static final org.semanticwb.platform.SemanticProperty data_familyName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#familyName");
     public static final org.semanticwb.platform.SemanticClass data_Name=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#Name");
    /**
