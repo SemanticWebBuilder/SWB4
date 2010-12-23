@@ -88,8 +88,10 @@ public class RPC
             port = ":" + request.getServerPort();
         }
         String st = request.getParameter("st");
-        System.out.println("st: " + st); // security token
-        if (st != null && request.getContentType().equals("application/json"))
+        System.out.println("request.getRequestURI(): " + request.getRequestURI());
+        System.out.println("request.getQueryString(): " + request.getQueryString());
+        System.out.println("request.getContentType(): " + request.getContentType());
+        if (st != null && "application/json".equals(request.getContentType()))
         {
             InputStream in = request.getInputStream();
             StringBuilder sb = new StringBuilder();
