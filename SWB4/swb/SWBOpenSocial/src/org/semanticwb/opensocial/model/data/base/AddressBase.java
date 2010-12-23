@@ -3,11 +3,16 @@ package org.semanticwb.opensocial.model.data.base;
 
 public abstract class AddressBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.opensocial.model.Formatteable,org.semanticwb.model.Geolocalizable
 {
+    public static final org.semanticwb.platform.SemanticProperty data_region=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#region");
+    public static final org.semanticwb.platform.SemanticProperty data_postalCode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#postalCode");
+    public static final org.semanticwb.platform.SemanticProperty data_locality=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#locality");
+    public static final org.semanticwb.platform.SemanticProperty data_type=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#type");
    /**
    * Indica si el elemento es válido
    */
     public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
     public static final org.semanticwb.platform.SemanticProperty data_country=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#country");
+    public static final org.semanticwb.platform.SemanticProperty data_streetAddress=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#streetAddress");
     public static final org.semanticwb.platform.SemanticClass data_Address=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#Address");
    /**
    * The semantic class that represents the currentObject
@@ -89,6 +94,42 @@ public abstract class AddressBase extends org.semanticwb.model.base.GenericObjec
     }
 
 /**
+* Gets the Region property
+* @return String with the Region
+*/
+    public String getRegion()
+    {
+        return getSemanticObject().getProperty(data_region);
+    }
+
+/**
+* Sets the Region property
+* @param value long with the Region
+*/
+    public void setRegion(String value)
+    {
+        getSemanticObject().setProperty(data_region, value);
+    }
+
+/**
+* Gets the PostalCode property
+* @return String with the PostalCode
+*/
+    public String getPostalCode()
+    {
+        return getSemanticObject().getProperty(data_postalCode);
+    }
+
+/**
+* Sets the PostalCode property
+* @param value long with the PostalCode
+*/
+    public void setPostalCode(String value)
+    {
+        getSemanticObject().setProperty(data_postalCode, value);
+    }
+
+/**
 * Gets the Longitude property
 * @return double with the Longitude
 */
@@ -122,6 +163,42 @@ public abstract class AddressBase extends org.semanticwb.model.base.GenericObjec
     public void setStep(int value)
     {
         getSemanticObject().setIntProperty(swb_geoStep, value);
+    }
+
+/**
+* Gets the Locality property
+* @return String with the Locality
+*/
+    public String getLocality()
+    {
+        return getSemanticObject().getProperty(data_locality);
+    }
+
+/**
+* Sets the Locality property
+* @param value long with the Locality
+*/
+    public void setLocality(String value)
+    {
+        getSemanticObject().setProperty(data_locality, value);
+    }
+
+/**
+* Gets the Type property
+* @return String with the Type
+*/
+    public String getType()
+    {
+        return getSemanticObject().getProperty(data_type);
+    }
+
+/**
+* Sets the Type property
+* @param value long with the Type
+*/
+    public void setType(String value)
+    {
+        getSemanticObject().setProperty(data_type, value);
     }
 
 /**
@@ -178,6 +255,24 @@ public abstract class AddressBase extends org.semanticwb.model.base.GenericObjec
     public void setFormatted(String value)
     {
         getSemanticObject().setProperty(data_formatted, value);
+    }
+
+/**
+* Gets the StreetAddress property
+* @return String with the StreetAddress
+*/
+    public String getStreetAddress()
+    {
+        return getSemanticObject().getProperty(data_streetAddress);
+    }
+
+/**
+* Sets the StreetAddress property
+* @param value long with the StreetAddress
+*/
+    public void setStreetAddress(String value)
+    {
+        getSemanticObject().setProperty(data_streetAddress, value);
     }
 
 /**
