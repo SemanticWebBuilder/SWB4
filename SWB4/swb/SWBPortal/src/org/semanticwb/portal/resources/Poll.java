@@ -217,7 +217,15 @@ public class Poll extends GenericResource {
         String imgTitle = base.getAttribute("imgencuesta");
         String question = base.getAttribute("question");
         String imgVote = base.getAttribute("button");
-        Display display = Display.valueOf(base.getAttribute("display", Display.SLIDE.name()));
+
+        Display display;
+        try
+        {
+            display = Display.valueOf(base.getAttribute("display", Display.SLIDE.name()));
+        }catch(Exception noe)
+        {
+            display = Display.POPUP;
+        }
 
         SWBResourceURL url = paramRequest.getRenderUrl();
         url.setParameter("NombreCookie", "VotosEncuesta" + base.getId());
@@ -356,7 +364,14 @@ public class Poll extends GenericResource {
             try {
                 StringBuilder html = new StringBuilder(SWBUtils.XML.transformDom(tpl, dom));
                 html.append(getRenderScript(paramRequest));
-                Display display = Display.valueOf(base.getAttribute("display", Display.SLIDE.name()));
+                Display display;
+                try
+                {
+                    display = Display.valueOf(base.getAttribute("display", Display.SLIDE.name()));
+                }catch(Exception noe)
+                {
+                    display = Display.POPUP;
+                }
                 if(display==Display.SLIDE)
                     html.append("<div id=\""+PREF+base.getId()+"\" class=\"swb-encuesta-res\">&nbsp;</div>");
                 response.getWriter().println(html.toString());
@@ -761,8 +776,14 @@ public class Poll extends GenericResource {
         StringBuilder ret = new StringBuilder();
         Resource base = getResourceBase();
 
-        Display display = Display.valueOf(base.getAttribute("display", Display.SLIDE.name()));
-        //boolean display = Boolean.valueOf(base.getAttribute("display","true")).booleanValue();
+        Display display;
+        try
+        {
+            display = Display.valueOf(base.getAttribute("display", Display.SLIDE.name()));
+        }catch(Exception noe)
+        {
+            display = Display.POPUP;
+        }
 
         Document dom = SWBUtils.XML.xmlToDom(base.getXml());
         if(dom==null) {
