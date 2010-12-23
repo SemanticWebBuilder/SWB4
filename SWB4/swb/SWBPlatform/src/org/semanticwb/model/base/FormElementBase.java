@@ -79,7 +79,7 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
     /* (non-Javadoc)
      * @see org.semanticwb.model.FormElement#validate(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty)
      */
-    public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) throws FormValidateException
+    public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) throws FormValidateException
     {
 
     }
@@ -87,7 +87,7 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
     /* (non-Javadoc)
      * @see org.semanticwb.model.FormElement#process(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty)
      */
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop)
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName)
     {
         String smode=request.getParameter("smode");
         //System.out.println("process...:"+obj.getURI()+" "+prop.getURI()+" "+smode);
@@ -95,7 +95,7 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
         if(prop.getDisplayProperty()==null)return;
         if(prop.isDataTypeProperty())
         {
-            String value=request.getParameter(prop.getName());
+            String value=request.getParameter(propName);
             String old=obj.getProperty(prop);
             //System.out.println("com:"+old+"-"+value+"-");
             if(prop.isBoolean())
@@ -136,7 +136,7 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
             }
         }else if(prop.isObjectProperty())
         {
-            String name=prop.getName();
+            String name=propName;
             String uri=request.getParameter(name);
             if(uri!=null)
             {
@@ -169,10 +169,10 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
     /* (non-Javadoc)
      * @see org.semanticwb.model.FormElement#renderLabel(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
      */
-    public String renderLabel(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
+    public String renderLabel(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type, String mode, String lang)
     {
         String ret="";
-        String name=prop.getName();
+        String name=propName;
         String label=prop.getDisplayName(lang);
         SemanticObject sobj=prop.getDisplayProperty();
         boolean required=prop.isRequired();
@@ -187,7 +187,7 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
     /* (non-Javadoc)
      * @see org.semanticwb.model.FormElement#renderElement(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
      */
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type, String mode, String lang)
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -295,6 +295,22 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
      */
     public void setFilterHTMLTags(boolean filterHTMLTags) {
         this.filterHTMLTags = filterHTMLTags;
+    }
+
+    public String renderLabel(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
+        return renderLabel(request, obj, prop, prop.getName(), type, mode, lang);
+    }
+
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
+        return renderElement(request, obj, prop, prop.getName(), type, mode, lang);
+    }
+
+    public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) throws FormValidateException {
+        validate(request, obj, prop, prop.getName());
+    }
+
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) {
+        process(request, obj, prop, prop.getName());
     }
 
 
