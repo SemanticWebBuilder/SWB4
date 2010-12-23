@@ -16,6 +16,9 @@ import org.semanticwb.opensocial.model.Gadget;
 import org.semanticwb.opensocial.model.data.Group;
 import org.semanticwb.opensocial.model.data.Name;
 import org.semanticwb.opensocial.model.data.Person;
+import org.semanticwb.opensocial.util.HtmlScape;
+import org.semanticwb.opensocial.util.NoneScape;
+import org.semanticwb.opensocial.util.Scape;
 
 /**
  *
@@ -75,17 +78,17 @@ public class PeopleService implements Service
         jane_doe.setProfileUrl("http://www.infotec");
 
 
-        Person friend  = Person.ClassMgr.createPerson("jane.doe", site);
+        Person Maija  = Person.ClassMgr.createPerson("maija", site);
         name = Name.ClassMgr.createName(site);
         name.setFormatted("Maija Meikäläinen");
-        friend.setName(name);
-        friend.setAge(37);
-        friend.setGender("male");
-        friend.setProfileUrl("http://www.infotec");
+        Maija.setName(name);
+        Maija.setAge(37);
+        Maija.setGender("male");
+        Maija.setProfileUrl("http://www.infotec");
 
         //friend.setThumbnailUrl("a");
         friends.addPerson(jane_doe);
-        friends.addPerson(friend);
+        friends.addPerson(Maija);
         friends.addPerson(george_doe);
         john_doe.addGroup(friends);
 
@@ -127,6 +130,16 @@ public class PeopleService implements Service
         {
             ArrayList<Person> persons = new ArrayList<Person>();
             response.put("entry", entries);
+            Scape scape=new HtmlScape();
+            String escapeType="htmlEscape";
+            if(params.optString("escapeType")!=null && !params.optString("escapeType").equals(""))
+            {
+                escapeType=params.optString("escapeType");
+            }
+            if("none".equals(escapeType))
+            {
+                scape=new NoneScape();
+            }
             String groupId = params.getString("groupId").trim();
             Person personUserID = Person.ClassMgr.getPerson(userid, site);
             if (groupId.equals("@self")) //Defaults to "@self", which MUST return only the Person object(s) specified by the userId parameter
@@ -138,7 +151,7 @@ public class PeopleService implements Service
                     for (int i = 0; i < fields.length(); i++)
                     {
                         String field = fields.getString(i);
-                        jsonperson.put(field, personUserID.getValueFromField(field));
+                        jsonperson.put(field, personUserID.getValueFromField(field,scape));
                     }
                     return jsonperson;
 
@@ -189,7 +202,7 @@ public class PeopleService implements Service
                 for (int i = 0; i < fields.length(); i++)
                 {
                     String field = fields.getString(i);
-                    jsonperson.put(field, p.getValueFromField(field));
+                    jsonperson.put(field, p.getValueFromField(field,scape));
                 }
                 entries.put(jsonperson);
             }

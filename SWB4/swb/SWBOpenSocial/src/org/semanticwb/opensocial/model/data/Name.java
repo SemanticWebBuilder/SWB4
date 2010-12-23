@@ -2,6 +2,7 @@ package org.semanticwb.opensocial.model.data;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.semanticwb.opensocial.util.Scape;
 
 
 public class Name extends org.semanticwb.opensocial.model.data.base.NameBase implements JSONConvertible
@@ -11,12 +12,12 @@ public class Name extends org.semanticwb.opensocial.model.data.base.NameBase imp
         super(base);
     }
 
-    public JSONObject toJSONObject()
+    public JSONObject toJSONObject(Scape scape)
     {
         JSONObject obj=new JSONObject();
         try
         {
-            obj.put("formatted", this.getFormatted());
+            obj.put("formatted", scape.scape(this.getFormatted()));
         }
         catch(JSONException jse)
         {

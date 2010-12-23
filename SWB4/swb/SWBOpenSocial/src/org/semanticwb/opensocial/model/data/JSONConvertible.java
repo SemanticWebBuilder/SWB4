@@ -6,6 +6,7 @@
 package org.semanticwb.opensocial.model.data;
 
 import org.json.JSONObject;
+import org.semanticwb.opensocial.util.Scape;
 
 /**
  *
@@ -13,5 +14,5 @@ import org.json.JSONObject;
  */
 public interface JSONConvertible {
 
-    public JSONObject toJSONObject();
+    public JSONObject toJSONObject(Scape scape);
 }

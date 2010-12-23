@@ -50,7 +50,7 @@ shindig.samplecontainer = {};
 
   var gadgetUrlCookie = 'sampleContainerGadgetUrl';
 
-  var stateFileUrl = baseUrl + '../sampledata/canonicaldb.json';
+  var stateFileUrl = baseUrl + '/swb/sampledata/canonicaldb.json';
   var stateFileUrlCookie = 'sampleContainerStateFileUrl';
 
   var useCaja;

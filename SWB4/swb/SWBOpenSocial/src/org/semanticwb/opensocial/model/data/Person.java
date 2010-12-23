@@ -2,6 +2,7 @@ package org.semanticwb.opensocial.model.data;
 
 import java.util.Iterator;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.opensocial.util.Scape;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
@@ -12,7 +13,7 @@ public class Person extends org.semanticwb.opensocial.model.data.base.PersonBase
     {
         super(base);
     }
-    public Object getValueFromField(String field)
+    public Object getValueFromField(String field,Scape scape)
     {
         if(field.equals("id"))
         {
@@ -26,7 +27,8 @@ public class Person extends org.semanticwb.opensocial.model.data.base.PersonBase
             {
                 if(prop.isDataTypeProperty())
                 {
-                    return this.getSemanticObject().getProperty(prop);
+                    String value=this.getSemanticObject().getProperty(prop);
+                    return scape.scape(value);
                 }
                 else
                 {
@@ -34,7 +36,7 @@ public class Person extends org.semanticwb.opensocial.model.data.base.PersonBase
                     GenericObject go=value.createGenericInstance();
                     if(go instanceof JSONConvertible)
                     {
-                        return ((JSONConvertible)go).toJSONObject();
+                        return ((JSONConvertible)go).toJSONObject(scape);
                     }
                 }
             }
