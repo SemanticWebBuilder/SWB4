@@ -51,7 +51,12 @@ public class PeopleService implements Service
         john_doe.setAge(20);
         john_doe.setGender("male");
         john_doe.setProfileUrl("http://www.infotec");
-        //john_doe.setThumbnailUrl("a");
+
+        Group friendsOfGeorgeDoe = Group.ClassMgr.createGroup(john_doe.getId()+"@friends", site);
+        john_doe.addGroup(friendsOfGeorgeDoe);
+        friendsOfGeorgeDoe.setTitle("friends");
+        friendsOfGeorgeDoe.setDescription("friends");
+        
 
 
         Person george_doe  = Person.ClassMgr.createPerson("George.doe", site);
@@ -64,9 +69,7 @@ public class PeopleService implements Service
 
 
 
-        Group friends = Group.ClassMgr.createGroup("@friends", site);
-        friends.setTitle("friends");
-        friends.setDescription("friends");
+        
 
 
         Person jane_doe  = Person.ClassMgr.createPerson("jane.doe", site);
@@ -87,10 +90,10 @@ public class PeopleService implements Service
         Maija.setProfileUrl("http://www.infotec");
 
         //friend.setThumbnailUrl("a");
-        friends.addPerson(jane_doe);
-        friends.addPerson(Maija);
-        friends.addPerson(george_doe);
-        john_doe.addGroup(friends);
+        friendsOfGeorgeDoe.addPerson(jane_doe);
+        friendsOfGeorgeDoe.addPerson(Maija);
+        friendsOfGeorgeDoe.addPerson(george_doe);
+        
 
 
     }
@@ -155,6 +158,24 @@ public class PeopleService implements Service
                     }
                     return jsonperson;
 
+                }
+            }
+            else if (groupId.equals("@friends"))
+            {
+                Iterator<Group> groups = personUserID.listGroups();
+                while (groups.hasNext())
+                {
+                    Group group = groups.next();
+                    if ((personUserID.getId()+"@friends").equals(group.getId()))
+                    {
+                        Iterator<Person> _persons = group.listPersons();
+                        while (_persons.hasNext())
+                        {
+                            Person person = _persons.next();
+                            persons.add(person);
+                        }
+                        break;
+                    }
                 }
             }
             else if (groupId.equals("@all"))

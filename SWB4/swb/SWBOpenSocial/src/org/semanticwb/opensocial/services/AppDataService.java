@@ -67,6 +67,24 @@ public class AppDataService implements Service
                 response.put(personUserID.getId(), responseKeys);
                 return response;
             }
+            else if (groupId.equals("@friends"))
+            {
+                Iterator<Group> groups = personUserID.listGroups();
+                while (groups.hasNext())
+                {
+                    Group group = groups.next();
+                    if ((personUserID.getId()+"@friends").equals(group.getId()))
+                    {
+                        Iterator<Person> _persons = group.listPersons();
+                        while (_persons.hasNext())
+                        {
+                            Person person = _persons.next();
+                            persons.add(person);
+                        }
+                        break;
+                    }
+                }
+            }
             else if (groupId.equals("@all"))
             {
                 Iterator<Group> groups = personUserID.listGroups();
