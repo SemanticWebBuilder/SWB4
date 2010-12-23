@@ -1,7 +1,7 @@
 package org.semanticwb.opensocial.model.data.base;
 
 
-public abstract class AddressBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Geolocalizable
+public abstract class AddressBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.opensocial.model.Formatteable,org.semanticwb.model.Geolocalizable
 {
    /**
    * Indica si el elemento es válido
@@ -160,6 +160,24 @@ public abstract class AddressBase extends org.semanticwb.model.base.GenericObjec
     public void setCountry(String value)
     {
         getSemanticObject().setProperty(data_country, value);
+    }
+
+/**
+* Gets the Formatted property
+* @return String with the Formatted
+*/
+    public String getFormatted()
+    {
+        return getSemanticObject().getProperty(data_formatted);
+    }
+
+/**
+* Sets the Formatted property
+* @param value long with the Formatted
+*/
+    public void setFormatted(String value)
+    {
+        getSemanticObject().setProperty(data_formatted, value);
     }
 
 /**
