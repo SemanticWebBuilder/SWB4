@@ -446,7 +446,16 @@ public static final String SWB_ANNOT_PROPERTYCODENAME = URI + "propertyCodeName"
      */
     public SemanticProperty getSemanticPropertyById(String propId)
     {
-        //TODO
+        int i=propId.indexOf(":");
+        if(i>0)
+        {
+            String pref=propId.substring(0,i);
+            String name=propId.substring(i+1);
+            //System.out.println(pref+" "+name);
+            String uri=getNsPrefixMap().get(pref)+name;
+            //System.out.println(uri);
+            return getSemanticProperty(uri);
+        }
         return null;
     }
 
