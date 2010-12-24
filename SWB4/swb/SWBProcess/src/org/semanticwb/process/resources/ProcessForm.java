@@ -485,11 +485,13 @@ public class ProcessForm extends GenericResource {
             String prop = request.getParameter("prop");
             String default_FE = null;
             SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+            System.out.println("prop:"+prop);
             SemanticProperty sempro = ont.getSemanticProperty(prop);
             SemanticObject dp = sempro.getDisplayProperty();
+            //System.out.println("_sempro:"+sempro+" dp:"+dp);
             if (dp != null) {
                 //tiene displayproperty
-                DisplayProperty disprop = (DisplayProperty) dp.createGenericInstance();
+                DisplayProperty disprop = new DisplayProperty(dp);
 
                 //FormElement por defecto
                 SemanticObject semobjFE = disprop.getFormElement();
@@ -633,9 +635,11 @@ public class ProcessForm extends GenericResource {
                     propid = stoken.nextToken();
                 }
 
-                SemanticProperty sempro = ont.getSemanticProperty(propid);
+                System.out.println("propid:"+propid);
+                SemanticProperty sempro = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(propid);
+                System.out.println("sempro1:"+sempro.getURI());
                 SemanticObject dp = sempro.getDisplayProperty();
-                System.out.println("sempro:"+sempro+" dp:"+dp);
+                System.out.println("sempro2:"+sempro+" dp:"+dp);
                 if (dp != null) {
                     //tiene displayproperty
                     DisplayProperty disprop = new DisplayProperty(dp);
