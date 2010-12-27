@@ -1,8 +1,9 @@
 package org.semanticwb.model.base;
 
-/**
-* Elemento que muestra un componente grafico (Google Maps) para geolocalizar un punto 
-*/
+
+   /**
+   * Elemento que muestra un componente grafico (Google Maps) para geolocalizar un punto 
+   */
 public abstract class GMapBase extends org.semanticwb.model.base.FormElementBase 
 {
     public static final org.semanticwb.platform.SemanticProperty swbxf_initLatitude=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#initLatitude");

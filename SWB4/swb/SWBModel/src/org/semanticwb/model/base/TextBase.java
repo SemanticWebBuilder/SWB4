@@ -1,8 +1,9 @@
 package org.semanticwb.model.base;
 
-/**
-* Elemento que muestra un componente grafico para capturar texto (input type text) 
-*/
+
+   /**
+   * Elemento que muestra un componente grafico para capturar texto (input type text) 
+   */
 public abstract class TextBase extends org.semanticwb.model.base.FormElementBase 
 {
     public static final org.semanticwb.platform.SemanticProperty swbxf_textRegExp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#textRegExp");
