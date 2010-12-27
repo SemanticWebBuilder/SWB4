@@ -54,7 +54,7 @@ public class EditableText extends CustomNode
 
     public function stopEditing() :Void
     {
-        //textb.unselect();
+        textb.commit();
         text=textb.text;
         cancelEditing();
     }
