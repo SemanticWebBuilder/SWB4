@@ -103,6 +103,12 @@ public class SWBPortal
      * <p>Almacena los nombres y valores de las variables declaradas en el archivo {@literal web.properties}.</p>
      */
     private static Properties props = null;
+
+    /**
+     * Holds the names and values for the variables declared in {@literal security.properties} file.
+     * <p>Almacena los nombres y valores de las variables declaradas en el archivo {@literal security.properties}.</p>
+     */
+    private static Properties secProps = null;
     /**
      * Stores the context path's value configured for this portal instance.
      * <p>Almacena el valor de la ruta de contexto configurada para esta instancia de portal.</p>
@@ -355,6 +361,7 @@ public class SWBPortal
     private void init()
     {
         props = SWBUtils.TEXT.getPropertyFile("/web.properties");
+        secProps = SWBUtils.TEXT.getPropertyFile("/security.properties");
 
         workPath = getEnv("swb/workPath");
 
@@ -1007,6 +1014,34 @@ public class SWBPortal
         if (props != null)
         {
             obj = props.getProperty(name);
+        }
+        if (obj == null)
+        {
+            return defect;
+        }
+        return obj;
+    }
+
+    /**
+     * Retrieves the security environment variable's value whose name matches the value of.
+     *
+     * @param name un string que indica el nombre de la variable a buscar
+     * @param defect un string con el valor a devolder por defecto, en caso de no encontrar la variable.
+     * @return un string con el valor de la variable indicada por {@code name}, si existe,
+     * en caso contrario devuelve el valor de {@code defect}.
+     * {@code name}, or returns the value of {@code defect}. The searched variable
+     * might be declared in  security.properties files.
+     * <p>Obtiene el valor de la variable de ambiente cuyo nombre coincida con el valor
+     * contenido en {@code name}, o devuelve el valor de {@code defect}. La variable
+     * a buscar puede estar declarada en el archivo security.properties.</p>
+     */
+    public static String getSecEnv(String name, String defect)
+    {
+        String obj = null;
+
+        if (secProps != null)
+        {
+            obj = secProps.getProperty(name);
         }
         if (obj == null)
         {
