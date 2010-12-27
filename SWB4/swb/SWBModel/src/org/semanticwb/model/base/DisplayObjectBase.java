@@ -8,7 +8,14 @@ public abstract class DisplayObjectBase extends org.semanticwb.model.SWBClass im
 {
     public static final org.semanticwb.platform.SemanticProperty swbxf_doDispatcher=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#doDispatcher");
     public static final org.semanticwb.platform.SemanticProperty swbxf_doTreeController=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#doTreeController");
+   /**
+   * Define que este tipo de objeto soporta drag and drop en el arbol de administracion de SWB
+   */
     public static final org.semanticwb.platform.SemanticProperty swbxf_dragSupport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#dragSupport");
+   /**
+   * Define que no se puedan crear instancias de la clase en el arbol de administracion de SWB
+   */
+    public static final org.semanticwb.platform.SemanticProperty swbxf_doNotInstanceable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#doNotInstanceable");
     public static final org.semanticwb.platform.SemanticProperty swbxf_dropMatchLevel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#dropMatchLevel");
    /**
    * Objeto utilizado para definir caracteristicas visuales de una clase dentro de la administracion de SWB
@@ -163,6 +170,24 @@ public abstract class DisplayObjectBase extends org.semanticwb.model.SWBClass im
     public void setDragSupport(boolean value)
     {
         getSemanticObject().setBooleanProperty(swbxf_dragSupport, value);
+    }
+
+/**
+* Gets the DoNotInstanceable property
+* @return boolean with the DoNotInstanceable
+*/
+    public boolean isDoNotInstanceable()
+    {
+        return getSemanticObject().getBooleanProperty(swbxf_doNotInstanceable);
+    }
+
+/**
+* Sets the DoNotInstanceable property
+* @param value long with the DoNotInstanceable
+*/
+    public void setDoNotInstanceable(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swbxf_doNotInstanceable, value);
     }
 
 /**

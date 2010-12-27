@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso. 
    */
-public abstract class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.Expirable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Roleable,org.semanticwb.model.UserGroupable
+public abstract class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.CalendarRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.Expirable,org.semanticwb.model.Filterable,org.semanticwb.model.Roleable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Referensable
 {
    /**
    * Catalogo de paises
@@ -14,6 +14,10 @@ public abstract class UserBase extends org.semanticwb.model.SWBClass implements 
     public static final org.semanticwb.platform.SemanticProperty swb_usrLastName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrLastName");
     public static final org.semanticwb.platform.SemanticProperty swb_externalID=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#externalID");
     public static final org.semanticwb.platform.SemanticProperty swb_usrPhoto=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrPhoto");
+   /**
+   * Fecha de ultima actualización del password
+   */
+    public static final org.semanticwb.platform.SemanticProperty swb_usrLastPasswordChanged=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrLastPasswordChanged");
     public static final org.semanticwb.platform.SemanticProperty swb_usrReqConfirm=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrReqConfirm");
     public static final org.semanticwb.platform.SemanticProperty swb_usrSecondLastName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrSecondLastName");
    /**
@@ -417,6 +421,24 @@ public abstract class UserBase extends org.semanticwb.model.SWBClass implements 
     public void setPhoto(String value)
     {
         getSemanticObject().setProperty(swb_usrPhoto, value);
+    }
+
+/**
+* Gets the LastPasswordChanged property
+* @return java.util.Date with the LastPasswordChanged
+*/
+    public java.util.Date getLastPasswordChanged()
+    {
+        return getSemanticObject().getDateProperty(swb_usrLastPasswordChanged);
+    }
+
+/**
+* Sets the LastPasswordChanged property
+* @param value long with the LastPasswordChanged
+*/
+    public void setLastPasswordChanged(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_usrLastPasswordChanged, value);
     }
    /**
    * Gets all the org.semanticwb.model.CalendarRef
