@@ -78,14 +78,26 @@ public class SWBSessionObject implements HttpSessionBindingListener, Serializabl
     public Subject getSubject(String website)
     {
         String ur = SWBContext.getWebSite(website).getUserRepository().getId();
-        Subject sub = mapa.get(ur);
+        return getSubjectByUserRep(ur);
+    }
+
+    /**
+     * Gets the subject.
+     *
+     * @param userrep the User Repository ID
+     * @return the subject
+     */
+    public Subject getSubjectByUserRep(String userrep)
+    {
+        Subject sub = mapa.get(userrep);
         if (null == sub)
         {
             sub = new Subject();
-            mapa.put(ur, sub);
+            mapa.put(userrep, sub);
         }
         return sub;
     }
+
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpSessionBindingListener#valueBound(javax.servlet.http.HttpSessionBindingEvent)
