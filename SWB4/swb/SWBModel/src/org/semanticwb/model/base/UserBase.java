@@ -14,10 +14,6 @@ public abstract class UserBase extends org.semanticwb.model.SWBClass implements 
     public static final org.semanticwb.platform.SemanticProperty swb_usrLastName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrLastName");
     public static final org.semanticwb.platform.SemanticProperty swb_externalID=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#externalID");
     public static final org.semanticwb.platform.SemanticProperty swb_usrPhoto=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrPhoto");
-   /**
-   * Fecha de ultima actualización del password
-   */
-    public static final org.semanticwb.platform.SemanticProperty swb_usrLastPasswordChanged=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrLastPasswordChanged");
     public static final org.semanticwb.platform.SemanticProperty swb_usrReqConfirm=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrReqConfirm");
     public static final org.semanticwb.platform.SemanticProperty swb_usrSecondLastName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrSecondLastName");
    /**
@@ -421,24 +417,6 @@ public abstract class UserBase extends org.semanticwb.model.SWBClass implements 
     public void setPhoto(String value)
     {
         getSemanticObject().setProperty(swb_usrPhoto, value);
-    }
-
-/**
-* Gets the LastPasswordChanged property
-* @return java.util.Date with the LastPasswordChanged
-*/
-    public java.util.Date getLastPasswordChanged()
-    {
-        return getSemanticObject().getDateProperty(swb_usrLastPasswordChanged);
-    }
-
-/**
-* Sets the LastPasswordChanged property
-* @param value long with the LastPasswordChanged
-*/
-    public void setLastPasswordChanged(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_usrLastPasswordChanged, value);
     }
    /**
    * Gets all the org.semanticwb.model.CalendarRef
