@@ -4,13 +4,17 @@ package org.semanticwb.model.base;
    /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso. 
    */
-public abstract class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.CalendarRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.Expirable,org.semanticwb.model.Filterable,org.semanticwb.model.Roleable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Referensable
+public abstract class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Roleable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Expirable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupable
 {
    /**
    * Catalogo de paises
    */
     public static final org.semanticwb.platform.SemanticClass swb_Country=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Country");
     public static final org.semanticwb.platform.SemanticProperty swb_usrCountry=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrCountry");
+   /**
+   * Solicita al usuario cambiar de password, en el proximo acceso
+   */
+    public static final org.semanticwb.platform.SemanticProperty swb_usrRequestChangePassword=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrRequestChangePassword");
     public static final org.semanticwb.platform.SemanticProperty swb_usrLastName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrLastName");
     public static final org.semanticwb.platform.SemanticProperty swb_externalID=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#externalID");
     public static final org.semanticwb.platform.SemanticProperty swb_usrPhoto=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrPhoto");
@@ -345,6 +349,24 @@ public abstract class UserBase extends org.semanticwb.model.SWBClass implements 
              ret=(org.semanticwb.model.Country)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the RequestChangePassword property
+* @return boolean with the RequestChangePassword
+*/
+    public boolean isRequestChangePassword()
+    {
+        return getSemanticObject().getBooleanProperty(swb_usrRequestChangePassword);
+    }
+
+/**
+* Sets the RequestChangePassword property
+* @param value long with the RequestChangePassword
+*/
+    public void setRequestChangePassword(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_usrRequestChangePassword, value);
     }
 
 /**

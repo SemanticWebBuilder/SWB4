@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Referencia a un objeto de tipo Resource 
    */
-public abstract class ResourceRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Priorityable,org.semanticwb.model.Activeable
+public abstract class ResourceRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable,org.semanticwb.model.Priorityable
 {
    /**
    * Un recurso es un componente en una Página Web con el cual el usuario tiene interacción
