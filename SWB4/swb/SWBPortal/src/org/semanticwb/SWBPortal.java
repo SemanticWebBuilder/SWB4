@@ -361,7 +361,11 @@ public class SWBPortal
     private void init()
     {
         props = SWBUtils.TEXT.getPropertyFile("/web.properties");
+        try {
         secProps = SWBUtils.TEXT.getPropertyFile("/security.properties");
+        } catch (NullPointerException npe) {
+            secProps = null;
+        }
 
         workPath = getEnv("swb/workPath");
 
