@@ -330,12 +330,13 @@ public class SWBUserMgr
      */
     public Set<User> getSessionUsers(String website)
     {
+        String ur = SWBContext.getWebSite(website).getUserRepository().getId();
         HashSet<User> set=new HashSet();
         Iterator<SWBSessionObject> it=listSessionObjects();
         while (it.hasNext())
         {
             SWBSessionObject so = it.next();
-            Subject su=so.getSubject(website);
+            Subject su=so.getSubjectByUserRep(ur);
             Iterator<Principal> it2=su.getPrincipals().iterator();
             if(it2.hasNext())
             {
