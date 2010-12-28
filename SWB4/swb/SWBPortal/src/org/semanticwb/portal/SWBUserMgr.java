@@ -105,7 +105,7 @@ public class SWBUserMgr
     public Subject getSubject(HttpServletRequest request, String website)
     {
         HttpSession ses = request.getSession(true);
-        
+
         SWBSessionObject sessobj=(SWBSessionObject)ses.getAttribute(SUBJECTATT);
         if(sessobj==null)
         {
@@ -115,6 +115,16 @@ public class SWBUserMgr
             {
                 sessionobjects.put(ses.getId(), sessobj);
                 //sessions.put(ses.getId(), ses);
+            }
+        }
+        if("true".equalsIgnoreCase(SWBPortal.getSecEnv("session/restrictToSingleIP", "false")))
+        {
+            if(sessobj.getIpAddress()==null)
+            {
+                sessobj.setIpAddress(request.getRemoteAddr());
+            }else if(!sessobj.getIpAddress().equals(request.getRemoteAddr()))
+            {
+                throw new SWBIPValidationExeption("The Session IP has Changed, from "+sessobj.getIpAddress()+" to "+request.getRemoteAddr()+", nice try, but keep going...");
             }
         }
         return  sessobj.getSubject(website);

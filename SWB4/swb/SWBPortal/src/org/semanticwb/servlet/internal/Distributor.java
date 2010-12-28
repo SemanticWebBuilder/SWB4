@@ -43,7 +43,6 @@ import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
-import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.TemplateImp;
 import org.semanticwb.portal.api.SWBActionResponseImp;
 import org.semanticwb.portal.api.SWBParamRequestImp;
