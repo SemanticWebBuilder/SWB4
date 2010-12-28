@@ -55,6 +55,8 @@ public class SWBSessionObject implements HttpSessionBindingListener, Serializabl
 
     private long time;
 
+    private String ipAddress;
+
     /**
      * Instantiates a new sWB session object.
      */
@@ -177,5 +179,13 @@ public class SWBSessionObject implements HttpSessionBindingListener, Serializabl
             }
             mapa.put(key, act);
         }
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 }

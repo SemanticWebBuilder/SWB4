@@ -40,6 +40,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
+import org.semanticwb.portal.SWBIPValidationExeption;
 import org.semanticwb.servlet.internal.Admin;
 import org.semanticwb.servlet.internal.Distributor;
 import org.semanticwb.servlet.internal.DistributorParams;
@@ -245,7 +246,15 @@ public class SWBVirtualHostFilter implements Filter
             DistributorParams dparams = null;
             if (!(serv instanceof Admin))
             {
-                dparams = new DistributorParams(_request, auri,lang);
+                try
+                {
+                    dparams = new DistributorParams(_request, auri,lang);
+                }catch(SWBIPValidationExeption e)
+                {
+                    log.warn(e);
+                    _response.sendError(403, e.getMessage());
+                    return;
+                }
             }
             if (catchErrors && serv instanceof Distributor)
             {
