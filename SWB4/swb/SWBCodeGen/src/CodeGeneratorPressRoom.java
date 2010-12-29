@@ -43,13 +43,12 @@ public class CodeGeneratorPressRoom
     {
         String base=SWBUtils.getApplicationPath();
          System.out.println("Aplication Path: "+base);
-      //      System.exit(1);
         SWBPlatform.createInstance();
         
         //SWBPlatform.getSemanticMgr().initializeDB();
         SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb.owl");//\swbproys\pressroom\src\gob\segob\owl
-        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../../../swbproys/pressroom/src/gob/segob/owl/PressRoom.owl");
-        //SWBPlatform.getSemanticMgr().addBaseOntology(base+"WEB-INF/owl/oqp.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/PressRoom.owl");
+
         SWBPlatform.getSemanticMgr().loadBaseVocabulary();
         //SWBPlatform.getSemanticMgr().loadDBModels();owl
         SWBPlatform.getSemanticMgr().getOntology().rebind();
@@ -58,8 +57,7 @@ public class CodeGeneratorPressRoom
         {
            
             String path = getClass().getResource("/").getPath().replaceAll("%20", " ");
-            File dir = new File(path+"../../../../../swbproys/pressroom/src");
-            //System.out.println(dir);
+            File dir = new File(path+"../../../../../swbproys/pressroom/PRESSROOM/src");
             CodeGenerator codeGeneration = new CodeGenerator();
             codeGeneration.generateCode("swbpress", false, dir);
             System.out.println("Generación de clases completa");
