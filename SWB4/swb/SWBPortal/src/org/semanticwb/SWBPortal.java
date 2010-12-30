@@ -22,6 +22,7 @@
  **/
 package org.semanticwb;
 
+import org.semanticwb.security.SWBSecurityInstanceValues;
 import com.arthurdo.parser.HtmlStreamTokenizer;
 import com.arthurdo.parser.HtmlTag;
 import java.io.ByteArrayInputStream;
@@ -109,6 +110,9 @@ public class SWBPortal
      * <p>Almacena los nombres y valores de las variables declaradas en el archivo {@literal security.properties}.</p>
      */
     private static Properties secProps = null;
+
+    
+
     /**
      * Stores the context path's value configured for this portal instance.
      * <p>Almacena el valor de la ruta de contexto configurada para esta instancia de portal.</p>
@@ -419,6 +423,7 @@ public class SWBPortal
         platform.setAdminFile(getEnv("swb/adminFile", "/swbadmin/rdf/SWBAdmin.nt"));
         platform.setOntEditFile(getEnv("swb/ontEditFile", "/swbadmin/rdf/SWBOntEdit.nt"));
         platform.setProperties(props);
+        platform.setSecurityProperties(secProps);
 
         try
         {
