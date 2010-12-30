@@ -32,6 +32,8 @@ import java.util.Date;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBRuntimeException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticClass;
@@ -88,6 +90,24 @@ public class User extends UserBase implements Principal
 //        Encryptor t = new Encryptor(key);
 //        setProperty("encpwd",t.encode(password));
         //System.out.println("setPassword:"+password);
+//        System.out.print("Complex:"+SWBPlatform.getSecValues().getComplexity()+" >"+(!password.matches("^.*(?=.*[a-zA-Z])(?=.*[0-9])().*$")));
+        if (password.length()<SWBPlatform.getSecValues().getMinlength())
+        {
+            throw new SWBRuntimeException("Password don't comply with security measures: Minimal Longitude");
+        }
+        if (SWBPlatform.getSecValues().isDifferFromLogin() &&
+                getLogin().equalsIgnoreCase(password))
+        {
+            throw new SWBRuntimeException("Password don't comply with security measures: is equals to Login");
+        }
+        if (SWBPlatform.getSecValues().getComplexity()==1 && (!password.matches("^.*(?=.*[a-zA-Z])(?=.*[0-9])().*$")))
+        {
+            throw new SWBRuntimeException("Password don't comply with security measures: simple");
+        }
+        if (SWBPlatform.getSecValues().getComplexity()==2 && (!password.matches("^.*(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\\W])().*$")))
+        {
+            throw new SWBRuntimeException("Password don't comply with security measures: complex");
+        }
         String tmpPasswd = null;
         try
         {
