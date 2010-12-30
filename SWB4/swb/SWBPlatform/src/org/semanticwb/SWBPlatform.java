@@ -44,6 +44,7 @@ import org.semanticwb.platform.SemanticMgr;
 import org.semanticwb.platform.IDGenerator;
 import org.semanticwb.platform.SemanticVocabulary;
 import org.semanticwb.platform.ThreadObserver;
+import org.semanticwb.security.SWBSecurityInstanceValues;
 
 
 // TODO: Auto-generated Javadoc
@@ -64,6 +65,14 @@ public class SWBPlatform
 
     /** The props. */
     private static Properties props=null;
+
+    /**
+     * Holds the names and values for the variables declared in {@literal security.properties} file.
+     * <p>Almacena los nombres y valores de las variables declaradas en el archivo {@literal security.properties}.</p>
+     */
+    private static Properties secProps = null;
+
+    private static SWBSecurityInstanceValues secValues = null;
 
     /** The context path. */
     private static String contextPath = "";
@@ -149,6 +158,7 @@ public class SWBPlatform
         }
 
         idgen=new IDGenerator();
+        secValues = new SWBSecurityInstanceValues(null);
     }
     
     /**
@@ -160,7 +170,16 @@ public class SWBPlatform
     {
         SWBPlatform.props=props;
     }
-
+/**
+     * Sets the properties.
+     *
+     * @param props the new properties
+     */
+    public void setSecurityProperties(Properties props)
+    {
+        SWBPlatform.secProps=props;
+        secValues = new SWBSecurityInstanceValues(props);
+    }
     /**
      * Obtiene valor de variable de ambiente declarada en web.xml o web.properties.
      * 
@@ -193,6 +212,10 @@ public class SWBPlatform
         }
         if (obj == null) return defect;
         return obj;
+    }
+
+    public static SWBSecurityInstanceValues getSecValues(){
+        return secValues;
     }
 
     /**
@@ -325,7 +348,7 @@ public class SWBPlatform
      */
     public void writeFileToPlatformWorkPath(String path, InputStream in) throws SWBException {
         //System.out.println("writeFileToWorkPath:"+path);
-        //TOTO:Impementar Replicacion de archivos
+    //TODO:Impementar Replicacion de archivos
         try {
 //            String confCS = (String) AFUtils.getInstance().getEnv("wb/clientServer");
 //
@@ -363,7 +386,7 @@ public class SWBPlatform
      */
     public void removeFileFromPlatformWorkPath(String path)
     {
-        //TOTO:Impementar Replicacion de archivos
+        //TODO:Impementar Replicacion de archivos
         File file=new File(getPlatformWorkPath() + path);
         file.delete();
     }
@@ -378,7 +401,7 @@ public class SWBPlatform
      */
     public InputStream getFileFromPlatformWorkPath(String path) throws SWBException {
         InputStream ret = null;
-        //TOTO:Impementar Replicacion de archivos
+        //TODO:Impementar Replicacion de archivos
         try {
 //            String confCS = (String) getEnv("swb/clientServer");
 //
