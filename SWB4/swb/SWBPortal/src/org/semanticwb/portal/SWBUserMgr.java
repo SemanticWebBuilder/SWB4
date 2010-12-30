@@ -117,6 +117,10 @@ public class SWBUserMgr
                 //sessions.put(ses.getId(), ses);
             }
         }
+        if(sessobj.isHaveToChangePassword())
+        {
+            throw new SWBNeedToChangePassword("To proceed you need to change your password");
+        }
         if("true".equalsIgnoreCase(SWBPortal.getSecEnv("session/restrictToSingleIP", "false")))
         {
             if(sessobj.getIpAddress()==null)
