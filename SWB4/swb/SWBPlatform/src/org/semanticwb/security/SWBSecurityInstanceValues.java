@@ -46,8 +46,8 @@ public class SWBSecurityInstanceValues {
         if (null!=props){
             try { minlength = Integer.parseInt(props.getProperty("password/minlength", "0")); } catch (Exception noe) {} //if fails go for default value
             try { differFromLogin = Boolean.parseBoolean(props.getProperty("password/differFromLogin", "false")); } catch (Exception noe) {} //if fails go for default value
-            if ("simple".equalsIgnoreCase(props.getProperty("", "none"))){complexity=1;}
-            if ("complex".equalsIgnoreCase(props.getProperty("", "none"))){complexity=2;}
+            if ("simple".equalsIgnoreCase(props.getProperty("password/complexity", "none"))){complexity=1;}
+            if ("complex".equalsIgnoreCase(props.getProperty("password/complexity", "none"))){complexity=2;}
             try { forceChage = Boolean.parseBoolean(props.getProperty("password/forceChangeOnFirstLogon", "false")); } catch (Exception noe) {} //if fails go for default value
             try { expires = Integer.parseInt(props.getProperty("password/expiresInDays", "0")); } catch (Exception noe) {} //if fails go for default value
             try { inactive = Integer.parseInt(props.getProperty("account/inactiveInDays", "0")); } catch (Exception noe) {} //if fails go for default value
