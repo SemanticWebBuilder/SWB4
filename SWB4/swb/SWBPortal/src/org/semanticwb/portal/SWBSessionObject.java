@@ -57,6 +57,8 @@ public class SWBSessionObject implements HttpSessionBindingListener, Serializabl
 
     private String ipAddress;
 
+    private boolean haveToChangePassword=false;
+
     /**
      * Instantiates a new sWB session object.
      */
@@ -188,4 +190,15 @@ public class SWBSessionObject implements HttpSessionBindingListener, Serializabl
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
     }
+
+    public boolean isHaveToChangePassword()
+    {
+        return haveToChangePassword;
+    }
+
+    public void setHaveToChangePassword(boolean haveToChangePassword)
+    {
+        this.haveToChangePassword = haveToChangePassword;
+    }
+
 }
