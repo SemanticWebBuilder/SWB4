@@ -63,8 +63,23 @@ public class ProcessCase extends GenericResource {
     String[] highColours = {"#EB8EBF", "#AB91BC", "#637CB0", "#1589FF", "#0F79A7", "#69BF8E", "#B0D990", "#F7FA7B", "#F9DF82", "#E46F6A"};
 
     @Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        if ("add".equals(paramRequest.getAction()) || "edit".equals(paramRequest.getAction()))
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        SWBResourceURL edit = paramRequest.getRenderUrl().setMode(paramRequest.Mode_EDIT);
+        out.print("<div class=\"swbform\">\n");
+        out.print("  <fieldset>\n");
+        out.print("    <a href=\"" + edit + "\">" + paramRequest.getLocaleString("config") + "</a>");
+        out.print("  </fieldset>\n");
+        out.print("  <fieldset>\n");
+        out.print("    <legend>" + paramRequest.getLocaleString("PROCESS_INSTANCES") + "</legend>\n");
+        doGraph(request, response, paramRequest);
+        out.print("  </fieldset>\n");
+        out.print("</div>\n");
+    }
+
+    @Override
+    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        if (paramRequest.Action_EDIT.equals(paramRequest.getAction()))
             doAdminCase(response, paramRequest);
         else
             doAdminResume(request, response, paramRequest);
@@ -72,8 +87,7 @@ public class ProcessCase extends GenericResource {
 
     private void doAdminCase(HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        SWBResourceURL url = paramRequest.getRenderUrl();
-        url.setMode(paramRequest.Mode_ADMIN);
+        SWBResourceURL url = paramRequest.getRenderUrl().setMode(paramRequest.Mode_EDIT);
         url.setAction("properties");
         out.print("<div class=\"swbform\">\n");
         out.print("  <fieldset>\n");
@@ -135,6 +149,8 @@ public class ProcessCase extends GenericResource {
         out.print("     </fieldset>\n");
         out.print("     <fieldset>\n");
         out.print("         <button  dojoType=\"dijit.form.Button\" type=\"submit\" >"+paramRequest.getLocaleString("apply")+"</button>");
+        url = paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW);
+        out.print("         <button dojoType=\"dijit.form.Button\" onClick=location='" + url + "'>"+paramRequest.getLocaleString("return")+"</button>");
         out.print("     </fieldset>\n");
         out.print(" </form>\n");
         out.print("</div>\n");
@@ -142,6 +158,7 @@ public class ProcessCase extends GenericResource {
 
     private void doAdminResume(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
+        SWBResourceURL url = paramRequest.getRenderUrl().setMode(paramRequest.Mode_EDIT);
         updateAttributes(request);
         out.print("<div class=\"swbform\">\n");
         out.print("  <fieldset>\n");
@@ -201,39 +218,14 @@ public class ProcessCase extends GenericResource {
         else
             out.print("                  <td>" + paramRequest.getLocaleString("DEFAULT_VIEW") + "</td>\n");
         out.print("              </tr>\n");
-            out.print("         </table>\n");
-            out.print("     </fieldset>\n");
+        out.print("         </table>\n");
+        out.print("     </fieldset>\n");
+        out.print("     <fieldset>\n");
+        out.print("         <button dojoType=\"dijit.form.Button\" onClick=location='" + url + "'>"+paramRequest.getLocaleString("config")+"</button>");
+        url = paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW);
+        out.print("         <button dojoType=\"dijit.form.Button\" onClick=location='" + url + "'>"+paramRequest.getLocaleString("return")+"</button>");
+        out.print("     </fieldset>\n");
         out.print("</div>\n");
-    }
-
-    @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        /*Iterator isites = ProcessSite.ClassMgr.listProcessSites();
-        response.getWriter().print("<div class=\"swbform\">\n");
-        response.getWriter().print("  <fieldset>\n");
-        while (isites.hasNext()) {
-            ProcessSite site = (ProcessSite)isites.next();
-            Iterator<Process> it = site.listProcesses();
-            while (it.hasNext()) {
-                Process process = it.next();
-                ProcessCaseCount pcc = new ProcessCaseCount(process.getURI());
-                response.getWriter().println("<ul>");
-                response.getWriter().println("  <li>Número total de instancias del proceso " + process.getTitle() + ": " + pcc.totalProcessInstance() + "</li>");
-                pcc.addRestriction(new Restriction(CaseCountSys.STATUS,String.valueOf(Instance.STATUS_PROCESSING),null));
-                response.getWriter().println("  <li>Número total de instancias del proceso " + process.getTitle() + " en ejecución: " + pcc.totalProcessInstance()+"</li>");
-                new ProcessCaseCount(process.getURI());
-                pcc.addRestriction(new Restriction(CaseCountSys.USER,"admin",null));
-                response.getWriter().println("  <li>Número total de instancias del proceso " + process.getTitle() + " del usuario admin: " + pcc.totalProcessInstance()+"</li>");
-                response.getWriter().println("</ul>");
-            }
-        }
-        response.getWriter().print("  </fieldset>\n");
-        response.getWriter().print("</div>\n");*/
-        response.getWriter().println("<div class=\"swbform\">\n");
-        response.getWriter().print("  <fieldset>\n");
-        doGraph(request, response, paramRequest);
-        response.getWriter().print("  </fieldset>\n");
-        response.getWriter().println("</div>\n");
     }
 
     public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -276,7 +268,7 @@ public class ProcessCase extends GenericResource {
         out.println("   dojo.addOnLoad(makeObjects);");
         out.println("</script>");
         out.println("<div id=\"instances\" style=\"width: 400px; height: 300px;\"></div>");
-        out.println("<div id=\"title\" style=\"width:400px; height:50px; text-align:center;\"><label>" + paramRequest.getLocaleString("PROCESS_INSTANCES") + " " + getStatus(paramRequest) + "</label></div>\n");
+        //out.println("<div id=\"title\" style=\"width:400px; height:50px; text-align:center;\"><label>" + paramRequest.getLocaleString("PROCESS_INSTANCES") + " " + getStatus(paramRequest) + "</label></div>\n");
     }
 
     public void doBars(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, ArrayList<String> elements) throws SWBResourceException, IOException {
@@ -305,7 +297,7 @@ public class ProcessCase extends GenericResource {
             out.println("    );\n");
             out.println("</script>\n");
         }
-        out.println("<div id=\"title\" style=\"width:400px; height:50px; text-align:center;\"><label>" + paramRequest.getLocaleString("PROCESS_INSTANCES") + " " + getStatus(paramRequest) + "</label></div>\n");
+        //out.println("<div id=\"title\" style=\"width:400px; height:50px; text-align:center;\"><label>" + paramRequest.getLocaleString("PROCESS_INSTANCES") + " " + getStatus(paramRequest) + "</label></div>\n");
     }
 
     public void doArea(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, ArrayList<String> elements) throws SWBResourceException, IOException {
@@ -336,7 +328,7 @@ public class ProcessCase extends GenericResource {
             out.println("    );\n");
             out.println("</script>\n");
         }
-        out.println("<div id=\"title\" style=\"width:400px; height:50px; text-align:center;\"><label>" + paramRequest.getLocaleString("PROCESS_INSTANCES") + " " + getStatus(paramRequest) + "</label></div>\n");
+        //out.println("<div id=\"title\" style=\"width:400px; height:50px; text-align:center;\"><label>" + paramRequest.getLocaleString("PROCESS_INSTANCES") + " " + getStatus(paramRequest) + "</label></div>\n");
     }
 
     private void updateAttributes(HttpServletRequest request) {
@@ -347,7 +339,7 @@ public class ProcessCase extends GenericResource {
             getResourceBase().setAttribute("display_totals", request.getParameter("display_totals"));
             getResourceBase().updateAttributesToDB();
         }catch (SWBException swbe) {
-            swbe.printStackTrace();
+            log.error(swbe);
         }
     }
 
@@ -499,7 +491,7 @@ public class ProcessCase extends GenericResource {
         }
     }
 
-    private String getStatus(SWBParamRequest paramRequest) throws SWBResourceException {
+    /*private String getStatus(SWBParamRequest paramRequest) throws SWBResourceException {
         StringBuilder status = new StringBuilder();
         if (String.valueOf(Instance.STATUS_INIT).equalsIgnoreCase(getResourceBase().getAttribute("status","")))
             status.append(paramRequest.getLocaleString("totals"));
@@ -536,5 +528,5 @@ public class ProcessCase extends GenericResource {
         out.println("   board.unsuspendUpdate();\n");
         out.println("</script>\n");
         out.println("<div id=\"title\" style=\"width:400px; height:50px; text-align:center;\"><label>" + paramRequest.getLocaleString("title") + "</label></div>\n");
-    }
+    }*/
 }
