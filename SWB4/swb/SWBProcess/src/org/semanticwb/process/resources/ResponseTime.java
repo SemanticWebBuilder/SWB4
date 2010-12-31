@@ -1,8 +1,27 @@
-
+/**
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.process.resources;
 
-
-import java.io.File;
 import java.io.PrintWriter;
 import java.io.IOException;
 
@@ -22,25 +41,12 @@ import org.semanticwb.process.kpi.ResponseTimeStages;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBException;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBResourceException;
-
-import org.jfree.data.xy.XYDataset;
-import org.jfree.data.general.DatasetUtilities;
-
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartUtilities;
-import org.jfree.chart.plot.PlotOrientation;
-
-import org.jfree.data.function.Function2D;
-import org.jfree.data.function.NormalDistributionFunction2D;
-
 
 /**
  *
@@ -56,8 +62,8 @@ public class ResponseTime extends GenericResource {
     String[] highColours = {"#EB8EBF", "#AB91BC", "#637CB0", "#92C2DF", "#BDDDE4", "#69BF8E", "#B0D990", "#F7FA7B", "#F9DF82", "#E46F6A"};
 
     @Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        if ("add".equals(paramRequest.getAction()) || "edit".equals(paramRequest.getAction()))
+    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        if (paramRequest.Action_EDIT.equals(paramRequest.getAction()))
             doAdminCase(request, response, paramRequest);
         else
             doAdminResume(request, response, paramRequest);
@@ -65,61 +71,27 @@ public class ResponseTime extends GenericResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        /*PrintWriter out = response.getWriter();
-        Iterator isites = ProcessSite.ClassMgr.listProcessSites();
-        response.getWriter().print("<div class=\"swbform\">\n");
-        response.getWriter().print("  <fieldset>\n");
-        while (isites.hasNext()) {
-            ProcessSite site = (ProcessSite)isites.next();
-            Iterator <org.semanticwb.process.model.ProcessWebPage>itProcessWebPages = ProcessWebPage.ClassMgr.listProcessWebPages(site);
-            while (itProcessWebPages.hasNext()) {
-                ProcessWebPage pwp = (ProcessWebPage)itProcessWebPages.next();
-                org.semanticwb.process.model.Process process = SWBProcessMgr.getProcess(pwp);
-                if ("Soporte Técnico".equalsIgnoreCase(process.getTitle())) {
-                    out.println("<b>Soporte Técnico</b><ul>");
-                    out.println("<li>Tiempo promedio de ejecución del escenario Inicio-Solución: " + ResponseTimeStages.getAverageTimeStages(process,"Start Event","Solucion") + " milisegundos</li>");
-                    out.println("<li>Tiempo mínimo de ejecución del escenario Inicio-Solución: " + ResponseTimeStages.getMinimumTimeStages(process,"Start Event","Solucion") + " milisegundos</li>");
-                    out.println("<li>Tiempo máximo de ejecución del escenario Inicio-Solución: " + ResponseTimeStages.getMaximumTimeStages(process,"Start Event","Solucion") + " milisegundos</li>");
-                    out.println("<li>Tiempo promedio de ejecución del escenario Inicio-Fin: " + ResponseTimeStages.getAverageTimeStages(process,"Start Event","End Event") + " milisegundos</li>");
-                    out.println("<li>Tiempo mínimo de ejecución del escenario Solución-Verifica: " + ResponseTimeStages.getMinimumTimeStages(process,"Solucion","Verifica") + " milisegundos</li>");
-                    out.println("<li>Tiempo máximo de ejecución del escenario Solución-Fin: " + ResponseTimeStages.getMaximumTimeStages(process,"Solucion","End Event") + " milisegundos</li>");
-                    out.println("</ul>");
-                }
-            }
-        }
-        response.getWriter().print("  </fieldset>\n");
-        response.getWriter().print("</div>\n");*/
-        response.getWriter().println("<div class=\"swbform\">\n");
-        response.getWriter().print("  <fieldset>\n");
-        doGraph(request, response, paramRequest);
-        response.getWriter().print("  </fieldset>\n");
-        response.getWriter().println("</div>\n");
-    }
-
-    public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        Iterator isites = ProcessSite.ClassMgr.listProcessSites();
-        while (isites.hasNext()) {
-            ProcessSite site = (ProcessSite)isites.next();
-            Iterator<Process> it = site.listProcesses();
-            while (it.hasNext()) {
-                Process process = it.next();
-                if (process.getId().equals(getResourceBase().getAttribute("process",""))) {
-                    if ("1".equalsIgnoreCase(getResourceBase().getAttribute("plot","")))
-                        doBars(request, response, paramRequest, process);
-                    else if ("3".equalsIgnoreCase(getResourceBase().getAttribute("plot","")))
-                        doArea(request, response, paramRequest, process);
-                    else
-                        doPie(request, response, paramRequest, process);
-                }
-            }
-        }
+        PrintWriter out = response.getWriter();
+        SWBResourceURL edit = paramRequest.getRenderUrl().setMode(paramRequest.Mode_EDIT);
+        edit.setParameter("suri", request.getParameter("suri"));
+        out.print("<div class=\"swbform\">\n");
+        out.print("  <fieldset>\n");
+        out.print("    <a href=\"" + edit + "\">" + paramRequest.getLocaleString("config") + "</a>");
+        out.print("  </fieldset>\n");
+        out.print("  <fieldset>\n");
+        out.print("    <legend>" + paramRequest.getLocaleString("RESPONSE_TIME") + "</legend>\n");
+        if (null != request.getParameter("suri"))
+            doGraph(request, response, paramRequest, request.getParameter("suri"));
+        out.print("  </fieldset>\n");
+        out.print("</div>\n");
     }
 
     public void doAdminCase(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        SWBResourceURL url = paramRequest.getRenderUrl();
-        url.setMode(paramRequest.Mode_ADMIN);
+        String suri = request.getParameter("suri");
+        SWBResourceURL url = paramRequest.getRenderUrl().setMode(paramRequest.Mode_EDIT);
         url.setAction("edit");
+        url.setParameter("suri", suri);
         updateAttributes(request);
         out.print("<script>\n");
         out.print(" function stage(form) {\n");
@@ -133,7 +105,7 @@ public class ResponseTime extends GenericResource {
         out.print(paramRequest.getLocaleString("TIME_STAGE"));
         out.print("  </fieldset>\n");
         out.print("  <form id=\"case\" name=\"case\" action=" + url.toString() + " method=\"post\">\n");
-        out.print("      <fieldset>\n");
+        /*out.print("      <fieldset>\n");
         out.print("          <legend>" + paramRequest.getLocaleString("process") + "</legend>\n");
         out.print("          <table border=\"0\"  width=\"70%\" align=\"center\">\n");
         out.print("              <tr>\n");
@@ -153,19 +125,22 @@ public class ResponseTime extends GenericResource {
         out.print("                  </td>");
         out.print("              </tr>\n");
         out.print("         </table>\n");
-        out.print("     </fieldset>\n");
+        out.print("     </fieldset>\n");*/
         out.print("      <fieldset>\n");
         out.print("          <legend>" + paramRequest.getLocaleString("INIT_STAGE") + "</legend>\n");
         out.print("          <table border=\"0\" width=\"70%\" align=\"center\">\n");
         out.print("              <tr>\n");
         out.print("                  <td>\n");
         out.print("                      <select id=\"init_stage\" name=\"init_stage\" onchange=\"stage(form);\">\n");
-        ProcessInstance pinst = getProcessInstance(getResourceBase().getAttribute("process",""));
+        out.print("                          <option value=\"\">Seleccione</option>\n");
+        Process process = getProcess(suri);
+        //ProcessInstance pinst = getProcessInstance(getResourceBase().getAttribute("process",""));
+        ProcessInstance pinst = getProcessInstance(process.getId());
         if (null != pinst) {
             Iterator<FlowNodeInstance> flowbis = pinst.listFlowNodeInstances();
             while(flowbis.hasNext()) {
                 FlowNodeInstance obj = flowbis.next();
-                selectInitStage(obj, out, paramRequest);
+                selectInitStage(obj, out, paramRequest, suri);
             }
         }
         out.print("                      </select>\n");
@@ -183,7 +158,7 @@ public class ResponseTime extends GenericResource {
             Iterator<FlowNodeInstance> flowbis = pinst.listFlowNodeInstances();
             while(flowbis.hasNext()) {
                 FlowNodeInstance obj = flowbis.next();
-                selectFinalStage(obj, out, paramRequest);
+                selectFinalStage(obj, out, paramRequest, suri);
             }
         }
         out.print("                      </select>\n");
@@ -192,6 +167,59 @@ public class ResponseTime extends GenericResource {
         out.print("         </table>\n");
         out.print("     </fieldset>\n");
         out.print("      <fieldset>\n");
+        out.print("          <legend>" + paramRequest.getLocaleString("PLOT_TYPE") + "</legend>\n");
+        out.print("          <table border=\"0\" width=\"70%\" align=\"center\">\n");
+        out.print("              <tr>\n");
+        out.print("                  <td><input id=\"plot\" type=\"radio\" name=\"plot\" value=\"1\"" + ("1".equalsIgnoreCase(getAttribute(suri, "plot")) ? " checked" : "") + "> " + paramRequest.getLocaleString("bars") + "</td>\n");
+        out.print("              </tr>\n");
+        out.print("              <tr>\n");
+        out.print("                  <td><input id=\"plot\" type=\"radio\" name=\"plot\" value=\"2\"" + ("2".equalsIgnoreCase(getAttribute(suri, "plot")) ? " checked" : "") + "> " + paramRequest.getLocaleString("pie") + "</td>\n");
+        out.print("              </tr>\n");
+        out.print("              <tr>\n");
+        out.print("                  <td><input id=\"plot\" type=\"radio\" name=\"plot\" value=\"3\"" + ("3".equalsIgnoreCase(getAttribute(suri, "plot")) ? " checked" : "") + "> " + paramRequest.getLocaleString("area") + "</td>\n");
+        out.print("              </tr>\n");
+        out.print("         </table>\n");
+        out.print("     </fieldset>\n");
+        out.print("      <fieldset>\n");
+        out.print("          <legend>" + paramRequest.getLocaleString("PLOT_THEME") + "</legend>\n");
+        out.print("          <table border=\"0\" width=\"70%\" align=\"center\">\n");
+        out.print("              <tr>\n");
+        out.print("                  <td><input id=\"plot_theme\" type=\"radio\" name=\"plot_theme\" value=\"1\"" + ("1".equalsIgnoreCase(getAttribute(suri,"plot_theme")) ? " checked" : "") + "> " + paramRequest.getLocaleString("blue") + "</td>\n");
+        out.print("              </tr>\n");
+        out.print("              <tr>\n");
+        out.print("                  <td><input id=\"plot_theme\" type=\"radio\" name=\"plot_theme\" value=\"2\"" + ("2".equalsIgnoreCase(getAttribute(suri,"plot_theme")) ? " checked" : "") + "> " + paramRequest.getLocaleString("green") + "</td>\n");
+        out.print("              </tr>\n");
+        out.print("              <tr>\n");
+        out.print("                  <td><input id=\"plot_theme\" type=\"radio\" name=\"plot_theme\" value=\"3\"" + ("3".equalsIgnoreCase(getAttribute(suri,"plot_theme")) ? " checked" : "") + "> " + paramRequest.getLocaleString("red") + "</td>\n");
+        out.print("              </tr>\n");
+        out.print("         </table>\n");
+        out.print("     </fieldset>\n");
+        out.print("      <fieldset>\n");
+        out.print("          <legend>" + paramRequest.getLocaleString("TIME_UNIT") + "</legend>\n");
+        out.print("          <table border=\"0\" width=\"70%\" align=\"center\">\n");
+        out.print("              <tr>\n");
+        out.print("                  <td><input id=\"time_unit\" type=\"radio\" name=\"time_unit\" value=\"1\"" + ("1".equalsIgnoreCase(getAttribute(suri,"time_unit")) ? " checked" : "") + "> " + paramRequest.getLocaleString("seconds") + "</td>\n");
+        out.print("              </tr>\n");
+        out.print("              <tr>\n");
+        out.print("                  <td><input id=\"time_unit\" type=\"radio\" name=\"time_unit\" value=\"2\"" + ("2".equalsIgnoreCase(getAttribute(suri,"time_unit")) ? " checked" : "") + "> " + paramRequest.getLocaleString("minutes") + "</td>\n");
+        out.print("              </tr>\n");
+        out.print("              <tr>\n");
+        out.print("                  <td><input id=\"time_unit\" type=\"radio\" name=\"time_unit\" value=\"3\"" + ("3".equalsIgnoreCase(getAttribute(suri,"time_unit")) ? " checked" : "") + "> " + paramRequest.getLocaleString("hours") + "</td>\n");
+        out.print("              </tr>\n");
+        out.print("              <tr>\n");
+        out.print("                  <td><input id=\"time_unit\" type=\"radio\" name=\"time_unit\" value=\"4\"" + ("4".equalsIgnoreCase(getAttribute(suri,"time_unit")) ? " checked" : "") + "> " + paramRequest.getLocaleString("days") + "</td>\n");
+        out.print("              </tr>\n");
+        out.print("         </table>\n");
+        out.print("     </fieldset>\n");
+        out.print("      <fieldset>\n");
+        out.print("          <legend>" + paramRequest.getLocaleString("labels") + "</legend>\n");
+        out.print("          <table border=\"0\" width=\"70%\" align=\"center\">\n");
+        out.print("              <tr>\n");
+        out.print("                  <td><input id=\"display_totals\" type=\"checkbox\" name=\"display_totals\" value=\"1\"" + ("1".equalsIgnoreCase(getAttribute(suri,"display_totals")) ? " checked" : "") + "> " + paramRequest.getLocaleString("DISPLAY_TOTALS") + "</td>\n");
+        out.print("              </tr>\n");
+        out.print("         </table>\n");
+        out.print("     </fieldset>\n");
+        /*out.print("      <fieldset>\n");
         out.print("          <legend>" + paramRequest.getLocaleString("PLOT_TYPE") + "</legend>\n");
         out.print("          <table border=\"0\" width=\"70%\" align=\"center\">\n");
         out.print("              <tr>\n");
@@ -243,9 +271,12 @@ public class ResponseTime extends GenericResource {
         out.print("                  <td><input id=\"display_totals\" type=\"checkbox\" name=\"display_totals\" value=\"1\"" + (!"".equalsIgnoreCase(getResourceBase().getAttribute("display_totals","")) ? " checked" : "") + "> " + paramRequest.getLocaleString("DISPLAY_TOTALS") + "</td>\n");
         out.print("              </tr>\n");
         out.print("         </table>\n");
-        out.print("     </fieldset>\n");
+        out.print("     </fieldset>\n");*/
         out.print("     <fieldset>\n");
         out.print("         <button  dojoType=\"dijit.form.Button\" type=\"submit\" >"+paramRequest.getLocaleString("apply")+"</button>");
+        url = paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW);
+        url.setParameter("suri", suri);
+        out.print("         <button dojoType=\"dijit.form.Button\" onClick=location='" + url + "'>"+paramRequest.getLocaleString("return")+"</button>");
         out.print("     </fieldset>\n");
         out.print(" </form>\n");
         out.print("</div>\n");
@@ -253,7 +284,11 @@ public class ResponseTime extends GenericResource {
 
     private void doAdminResume(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
+        String suri = request.getParameter("suri");
+        SWBResourceURL url = paramRequest.getRenderUrl().setMode(paramRequest.Mode_EDIT);
+        url.setParameter("suri", suri);
         updateAttributes(request);
+        Process process = getProcess(suri);
         out.print("<div class=\"swbform\">\n");
         out.print("  <fieldset>\n");
         out.print(paramRequest.getLocaleString("TIME_STAGE"));
@@ -262,7 +297,8 @@ public class ResponseTime extends GenericResource {
         out.print("     <legend>" + paramRequest.getLocaleString("process") + "</legend>\n");
         out.print("     <table border=\"0\" width=\"70%\" align=\"center\">\n");
         out.print("         <tr>\n");
-        out.print("             <td>" + (!"".equalsIgnoreCase(getResourceBase().getAttribute("process","")) ? getProcessTitle(getResourceBase().getAttribute("process")) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "</td>\n");
+        out.print("             <td>" + (!"".equalsIgnoreCase(getResourceBase().getAttribute(encode(suri),"")) ? getProcessTitle(suri) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "</td>\n");
+        //out.print("             <td>" + (!"".equalsIgnoreCase(getResourceBase().getAttribute("process","")) ? getProcessTitle(getResourceBase().getAttribute("process")) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "</td>\n");
         out.print("         </tr>\n");
         out.print("     </table>\n");
         out.print("  </fieldset>\n");
@@ -270,7 +306,8 @@ public class ResponseTime extends GenericResource {
         out.print("     <legend>" + paramRequest.getLocaleString("INIT_STAGE") + "</legend>\n");
         out.print("     <table border=\"0\" width=\"70%\" align=\"center\">\n");
         out.print("         <tr>\n");
-        out.print("             <td>" + (!"".equalsIgnoreCase(getResourceBase().getAttribute("init_stage","")) ? getStageTitle(getResourceBase().getAttribute("process"), getResourceBase().getAttribute("init_stage"), paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "</td>\n");
+        out.print("             <td>" + (!"".equalsIgnoreCase(getAttribute(suri,"init_stage")) ? getStageTitle(process.getId(), getAttribute(suri,"init_stage"), paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "</td>\n");
+        //out.print("             <td>" + (!"".equalsIgnoreCase(getResourceBase().getAttribute("init_stage","")) ? getStageTitle(getResourceBase().getAttribute("process"), getResourceBase().getAttribute("init_stage"), paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "</td>\n");
         out.print("         </tr>\n");
         out.print("     </table>\n");
         out.print("  </fieldset>\n");
@@ -278,11 +315,12 @@ public class ResponseTime extends GenericResource {
         out.print("     <legend>" + paramRequest.getLocaleString("FINAL_STAGE") + "</legend>\n");
         out.print("     <table border=\"0\" width=\"70%\" align=\"center\">\n");
         out.print("         <tr>\n");
-        out.print("             <td>" + (!"".equalsIgnoreCase(getResourceBase().getAttribute("final_stage","")) ? getStageTitle(getResourceBase().getAttribute("process"), getResourceBase().getAttribute("final_stage"), paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "</td>\n");
+        out.print("             <td>" + (!"".equalsIgnoreCase(getAttribute(suri,"final_stage")) ? getStageTitle(process.getId(), getAttribute(suri,"final_stage"), paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "</td>\n");
+        //out.print("             <td>" + (!"".equalsIgnoreCase(getResourceBase().getAttribute("final_stage","")) ? getStageTitle(getResourceBase().getAttribute("process"), getResourceBase().getAttribute("final_stage"), paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "</td>\n");
         out.print("         </tr>\n");
         out.print("     </table>\n");
         out.print("  </fieldset>\n");
-        out.print("  <fieldset>\n");
+        /*out.print("  <fieldset>\n");
         out.print("     <legend>" + paramRequest.getLocaleString("PLOT_TYPE") + "</legend>\n");
         out.print("     <table border=\"0\" width=\"70%\" align=\"center\">\n");
         out.print("         <tr>\n");
@@ -336,9 +374,100 @@ public class ResponseTime extends GenericResource {
         else
             out.print("                  <td>" + paramRequest.getLocaleString("DEFAULT_VIEW") + "</td>\n");
         out.print("              </tr>\n");
-            out.print("         </table>\n");
-            out.print("     </fieldset>\n");
+        out.print("         </table>\n");
+        out.print("     </fieldset>\n");*/
+        out.print("  <fieldset>\n");
+        out.print("     <legend>" + paramRequest.getLocaleString("PLOT_TYPE") + "</legend>\n");
+        out.print("     <table border=\"0\" width=\"70%\" align=\"center\">\n");
+        out.print("         <tr>\n");
+        out.print("             <td>" + ("1".equalsIgnoreCase(getAttribute(suri, "plot")) ? paramRequest.getLocaleString("bars") : "") + "</td>\n");
+        out.print("              </tr>\n");
+        out.print("              <tr>\n");
+        out.print("                  <td>" + ("2".equalsIgnoreCase(getAttribute(suri, "plot")) ? paramRequest.getLocaleString("pie") : "") + "</td>\n");
+        out.print("              </tr>\n");
+        out.print("              <tr>\n");
+        out.print("                  <td>" + ("3".equalsIgnoreCase(getAttribute(suri, "plot")) ? paramRequest.getLocaleString("area") : "") + "</td>\n");
+        out.print("              </tr>\n");
+        out.print("         </table>\n");
+        out.print("     </fieldset>\n");
+        out.print("      <fieldset>\n");
+        out.print("          <legend>" + paramRequest.getLocaleString("PLOT_THEME") + "</legend>\n");
+        out.print("          <table border=\"0\" width=\"70%\" align=\"center\">\n");
+        out.print("              <tr>\n");
+        out.print("                  <td>" + ("1".equalsIgnoreCase(getAttribute(suri,"plot_theme")) ? paramRequest.getLocaleString("blue") : "") + "</td>\n");
+        out.print("              </tr>\n");
+        out.print("              <tr>\n");
+        out.print("                  <td>" + ("2".equalsIgnoreCase(getAttribute(suri,"plot_theme")) ? paramRequest.getLocaleString("green") : "") + "</td>\n");
+        out.print("              </tr>\n");
+        out.print("              <tr>\n");
+        out.print("                  <td>" + ("3".equalsIgnoreCase(getAttribute(suri,"plot_theme")) ? paramRequest.getLocaleString("red") : "") + "</td>\n");
+        out.print("              </tr>\n");
+        out.print("         </table>\n");
+        out.print("     </fieldset>\n");
+        out.print("      <fieldset>\n");
+        out.print("          <legend>" + paramRequest.getLocaleString("TIME_UNIT") + "</legend>\n");
+        out.print("          <table border=\"0\" width=\"70%\" align=\"center\">\n");
+        out.print("              <tr>\n");
+        out.print("                  <td>" + ("1".equalsIgnoreCase(getAttribute(suri,"time_unit")) ? paramRequest.getLocaleString("seconds") : "") + "</td>\n");
+        out.print("              </tr>\n");
+        out.print("              <tr>\n");
+        out.print("                  <td>" + ("2".equalsIgnoreCase(getAttribute(suri,"time_unit")) ? paramRequest.getLocaleString("minutes") : "") + "</td>\n");
+        out.print("              </tr>\n");
+        out.print("              <tr>\n");
+        out.print("                  <td>" + ("3".equalsIgnoreCase(getAttribute(suri,"time_unit")) ? paramRequest.getLocaleString("hours") : "") + "</td>\n");
+        out.print("              </tr>\n");
+        out.print("              <tr>\n");
+        out.print("                  <td>" + ("4".equalsIgnoreCase(getAttribute(suri,"time_unit")) ? paramRequest.getLocaleString("days") : "") + "</td>\n");
+        out.print("              </tr>\n");
+        out.print("         </table>\n");
+        out.print("     </fieldset>\n");
+        out.print("      <fieldset>\n");
+        out.print("          <legend>" + paramRequest.getLocaleString("labels") + "</legend>\n");
+        out.print("          <table border=\"0\" width=\"70%\" align=\"center\">\n");
+        out.print("              <tr>\n");
+        if ("1".equalsIgnoreCase(getAttribute(suri,"display_totals")))
+            out.print("                  <td>" + paramRequest.getLocaleString("DISPLAY_TOTALS") + "</td>\n");
+        else
+            out.print("                  <td>" + paramRequest.getLocaleString("DEFAULT_VIEW") + "</td>\n");
+        out.print("              </tr>\n");
+        out.print("         </table>\n");
+        out.print("     </fieldset>\n");
+        out.print("     <fieldset>\n");
+        out.print("         <button dojoType=\"dijit.form.Button\" onClick=location='" + url + "'>"+paramRequest.getLocaleString("config")+"</button>");
+        url = paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW);
+        url.setParameter("suri", suri);
+        out.print("         <button dojoType=\"dijit.form.Button\" onClick=location='" + url + "'>"+paramRequest.getLocaleString("return")+"</button>");
+        out.print("     </fieldset>\n");
         out.print("</div>\n");
+    }
+
+    public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String suri) throws SWBResourceException, IOException {
+        Process process = getProcess(suri);
+        if ("1".equalsIgnoreCase(getAttribute(suri,"plot")))
+            doBars(request, response, paramRequest, process);
+        else if ("3".equalsIgnoreCase(getAttribute(suri,"plot")))
+            doArea(request, response, paramRequest, process);
+        else
+            doPie(request, response, paramRequest, process);
+    }
+
+    /*public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String suri) throws SWBResourceException, IOException {
+        Iterator isites = ProcessSite.ClassMgr.listProcessSites();
+        while (isites.hasNext()) {
+            ProcessSite site = (ProcessSite)isites.next();
+            Iterator<Process> it = site.listProcesses();
+            while (it.hasNext()) {
+                Process process = it.next();
+                if (process.getId().equals(getResourceBase().getAttribute("process",""))) {
+                    if ("1".equalsIgnoreCase(getResourceBase().getAttribute("plot","")))
+                        doBars(request, response, paramRequest, process);
+                    else if ("3".equalsIgnoreCase(getResourceBase().getAttribute("plot","")))
+                        doArea(request, response, paramRequest, process);
+                    else
+                        doPie(request, response, paramRequest, process);
+                }
+            }
+        }
     }
 
     private void updateAttributes(HttpServletRequest request) {
@@ -356,6 +485,48 @@ public class ResponseTime extends GenericResource {
         }catch (SWBException swbe) {
             swbe.printStackTrace();
         }
+    }*/
+
+    private void updateAttributes(HttpServletRequest request) {
+        try {
+            if (null != request.getParameter("init_stage")) {
+                getResourceBase().setAttribute(encode(request.getParameter("suri")),getConfig(request.getParameter("init_stage"),request.getParameter("final_stage"),request.getParameter("plot"), request.getParameter("plot_theme"), request.getParameter("time_unit"), request.getParameter("display_totals"), request.getParameter("suri")));
+                getResourceBase().updateAttributesToDB();
+            }
+        }catch (SWBException swbe) {
+            log.error(swbe);
+        }
+    }
+
+    private String getConfig(String init_stage, String final_stage, String plot, String colours, String time, String totals, String suri) {
+        StringBuilder config = new StringBuilder();
+        if (null != plot && !"".equals(plot)) config.append(plot); else config.append(getAttribute(suri, "plot"));
+        if (null != colours && !"".equals(colours)) config.append(colours); else config.append(getAttribute(suri, "plot_theme"));
+        if (null != time && !"".equals(time)) config.append(time); else config.append(getAttribute(suri, "time_unit"));
+        if (null != totals && !"".equals(totals)) config.append(totals); else config.append(getAttribute(suri, "display_totals"));
+        if (null != init_stage && !"".equals(init_stage)) config.append("INIT_STAGE"+init_stage+"INIT_STAGE");
+        else { if (!"".equals(getAttribute(suri, "init_stage"))) config.append(getAttribute(suri, "init_stage")); }
+        if (null != final_stage && !"".equals(final_stage)) config.append("FINAL_STAGE"+final_stage+"FINAL_STAGE");
+        else { if (!"".equals(getAttribute(suri, "final_stage"))) config.append(getAttribute(suri, "final_stage")); }
+        return config.toString();
+    }
+
+    private String getAttribute(String suri, String title) {
+        String attribute = "";
+        String config = getResourceBase().getAttribute(encode(suri), "");
+        if ("plot".equals(title)) {
+            if (config.length() > 0) attribute = config.substring(0, 1); else attribute = "2";
+        }else if ("plot_theme".equals(title)) {
+            if (config.length() > 1) attribute = config.substring(1, 2); else attribute = "1";
+        }else if ("time_unit".equals(title)) {
+            if (config.length() > 2) attribute = config.substring(2, 3); else attribute = "1";
+        }else if ("display_totals".equals(title)) {
+            if (config.length() > 3) attribute = config.substring(3, 4); else attribute = "0";
+        }else if ("init_stage".equals(title) && config.indexOf("INIT_STAGE") > -1) {
+            attribute = config.substring(4+10, config.lastIndexOf("INIT_STAGE"));
+        }else if ("final_stage".equals(title) && config.indexOf("FINAL_STAGE") > -1)
+            attribute = config.substring(config.indexOf("FINAL_STAGE")+11, config.lastIndexOf("FINAL_STAGE"));
+        return attribute;
     }
 
     private ProcessInstance getProcessInstance(String processId) {
@@ -372,24 +543,26 @@ public class ResponseTime extends GenericResource {
         return null;
     }
 
-    private void selectInitStage(FlowNodeInstance ai, PrintWriter out, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        if (!"".equals(getTitle(ai,paramRequest)) && !"org.semanticwb.process.model.EndEvent".equalsIgnoreCase(ai.getFlowNodeType().getSemanticObject().getSemanticClass().getClassName()))
-            out.print("                  <option value=\"" +  ai.getFlowNodeType().hashCode() + "\"" + (getResourceBase().getAttribute("init_stage","").equalsIgnoreCase(("" + ai.getFlowNodeType().hashCode())) ? " selected" : "") + " >" + getTitle(ai,paramRequest) +  "</option>\n");
+    private void selectInitStage(FlowNodeInstance ai, PrintWriter out, SWBParamRequest paramRequest, String suri) throws SWBResourceException, IOException {
+        if (!"".equals(getTitle(ai,paramRequest)) && !"org.semanticwb.process.model.EndEvent".equalsIgnoreCase(ai.getFlowNodeType().getSemanticObject().getSemanticClass().getClassName()) && !"org.semanticwb.process.model.TimerIntermediateCatchEvent".equalsIgnoreCase(ai.getFlowNodeType().getSemanticObject().getSemanticClass().getClassName()))
+            out.print("                  <option value=\"" +  ai.getFlowNodeType().hashCode() + "\"" + (getAttribute(suri,"init_stage").equalsIgnoreCase(("" + ai.getFlowNodeType().hashCode())) ? " selected" : "") + " >" + getTitle(ai,paramRequest) +  "</option>\n");
+            //out.print("                  <option value=\"" +  ai.getFlowNodeType().hashCode() + "\"" + (getResourceBase().getAttribute("init_stage","").equalsIgnoreCase(("" + ai.getFlowNodeType().hashCode())) ? " selected" : "") + " >" + getTitle(ai,paramRequest) +  "</option>\n");
         if (ai instanceof SubProcessInstance) {
             SubProcessInstance spi = (SubProcessInstance)ai;
             Iterator<FlowNodeInstance> acit = spi.listFlowNodeInstances();
             if (acit.hasNext()) {
                 while(acit.hasNext()) {
                     FlowNodeInstance actinst =  acit.next();
-                    selectInitStage(actinst,out,paramRequest);
+                    selectInitStage(actinst,out,paramRequest,suri);
                 }
             }
         }
     }
 
-    private GenericIterator<FlowNodeInstance> getTargetStage(FlowNodeInstance ai) {
+    private GenericIterator<FlowNodeInstance> getTargetStage(FlowNodeInstance ai, String suri) {
         GenericIterator<FlowNodeInstance> targetInstances = null;
-        if (("" + ai.getFlowNodeType().hashCode()).equals(getResourceBase().getAttribute("init_stage","")))
+        //if (("" + ai.getFlowNodeType().hashCode()).equals(getResourceBase().getAttribute("init_stage","")))
+        if (("" + ai.getFlowNodeType().hashCode()).equals(getAttribute(suri,"init_stage")))
             targetInstances = ai.listTargetInstances();
         else if (ai instanceof SubProcessInstance) {
             SubProcessInstance spi = (SubProcessInstance)ai;
@@ -397,21 +570,22 @@ public class ResponseTime extends GenericResource {
             if (acit.hasNext()) {
                 while(acit.hasNext()) {
                     FlowNodeInstance actinst =  acit.next();
-                    getTargetStage(actinst);
+                    getTargetStage(actinst, suri);
                 }
             }
         }
         return targetInstances;
     }
 
-    private void selectFinalStage(FlowNodeInstance ai, PrintWriter out, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    private void selectFinalStage(FlowNodeInstance ai, PrintWriter out, SWBParamRequest paramRequest, String suri) throws SWBResourceException, IOException {
         ArrayList<FlowNodeInstance> stage = new ArrayList();
-        setReachableStage(getTargetStage(ai), stage);
+        setReachableStage(getTargetStage(ai, suri), stage);
         Iterator<FlowNodeInstance> targetStage = stage.listIterator();
         while (targetStage.hasNext()) {
             FlowNodeInstance fni =  targetStage.next();
             if (!"".equals(getTitle(fni, paramRequest)))
-                out.print("                  <option value=\"" +  fni.getFlowNodeType().hashCode() + "\"" + (getResourceBase().getAttribute("final_stage","").equalsIgnoreCase(("" + fni.getFlowNodeType().hashCode())) ? " selected" : "") + " >" + getTitle(fni, paramRequest) +  "</option>\n");
+                out.print("                  <option value=\"" +  fni.getFlowNodeType().hashCode() + "\"" + (getAttribute(suri,"final_stage").equalsIgnoreCase(("" + fni.getFlowNodeType().hashCode())) ? " selected" : "") + " >" + getTitle(fni, paramRequest) +  "</option>\n");
+                //out.print("                  <option value=\"" +  fni.getFlowNodeType().hashCode() + "\"" + (getResourceBase().getAttribute("final_stage","").equalsIgnoreCase(("" + fni.getFlowNodeType().hashCode())) ? " selected" : "") + " >" + getTitle(fni, paramRequest) +  "</option>\n");
         }
     }
 
@@ -455,40 +629,41 @@ public class ResponseTime extends GenericResource {
         }
         return title;
     }
-    
-    private Process getProcess(String processId) {
+
+    private Process getProcess(String suri) {
         Iterator isites = ProcessSite.ClassMgr.listProcessSites();
         while (isites.hasNext()) {
             ProcessSite site = (ProcessSite)isites.next();
             Iterator<Process> itprocess = site.listProcesses();
             while (itprocess.hasNext()) {
                 Process process = itprocess.next();
-                if (processId.equalsIgnoreCase(process.getId()))
+                if (suri.equalsIgnoreCase(process.getURI()))
                     return process;
             }
         }
         return null;
     }
 
-    private String getProcessTitle(String processId) {
-        Process process = getProcess(processId);
-        if (null != process)
-            return process.getTitle();
-        else
-            return "";
+    private void setPlotTheme(String plot_theme) {
+        String[] blueTheme = {"#3090C7", "#1589FF", "#0760F9", "#157DEC", "#6698FF", "#5CB3FF", "#87AFC7", "#659EC7", "#8BB381", "#348781"};
+        String[] redTheme = {"#FF0000","#E42217","#E41B17","#F62817","#F62217","#E42217","#F80000","#C80000","#B80000","#900000"};
+        String[] greenTheme = {"#4AA02C","#57E964","#59E817","#4CC552","#4CC417","#52D017","#41A317","#3EA99F","#348781","#387C44"};
+        if ("1".equalsIgnoreCase(plot_theme)) {
+            opacity = "0.4";
+            colour = "#3090C7";
+            colours = blueTheme;
+        }else if ("2".equalsIgnoreCase(plot_theme)) {
+            opacity = "0.4";
+            colour = "#4CC552";
+            colours = greenTheme;
+        }else if ("3".equalsIgnoreCase(plot_theme)) {
+            opacity = "0.7";
+            colour = "#FF0000";
+            colours = redTheme;
+        }
     }
 
-    private String getTitle(FlowNodeInstance fni, SWBParamRequest paramRequest) {
-        if (null != fni) {
-            if (null != fni.getFlowNodeType().getTitle(paramRequest.getUser().getLanguage()))
-                return fni.getFlowNodeType().getTitle(paramRequest.getUser().getLanguage());
-            else
-                return fni.getFlowNodeType().getTitle();
-        }else
-            return "";
-    }
-
-    private void setPlotTheme() {
+    /*private void setPlotTheme() {
         String[] blueTheme = {"#3090C7", "#1589FF", "#0760F9", "#157DEC", "#6698FF", "#5CB3FF", "#87AFC7", "#659EC7", "#8BB381", "#348781"};
         String[] redTheme = {"#FF0000","#E42217","#E41B17","#F62817","#F62217","#E42217","#F80000","#C80000","#B80000","#900000"};
         String[] greenTheme = {"#4CC417","#57E964","#59E817","#4CC552","#4AA02C","#52D017","#41A317","#3EA99F","#348781","#387C44"};
@@ -505,11 +680,13 @@ public class ResponseTime extends GenericResource {
             colour = "#FF0000";
             colours = redTheme;
         }
-    }
+    }*/
 
     public void doPie(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, Process process) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        setPlotTheme();
+        setPlotTheme(getAttribute(process.getURI(), "plot_theme"));
+        String init_stage = getAttribute(process.getURI(), "init_stage");
+        String final_stage = getAttribute(process.getURI(), "final_stage");
         out.println("<script type=\"text/javascript\">");
         out.println("   dojo.require(\"dojox.charting.Chart2D\");");
         out.println("   dojo.require(\"dojox.charting.themes.PlotKit.blue\");");
@@ -538,13 +715,16 @@ public class ResponseTime extends GenericResource {
         out.println("</script>");
         out.println("<div id=\"title\" style=\"width:400px; height:25px; text-align:center;\"><label>" + process.getTitle() + "</label></div>\n");
         out.println("<div id=\"instances\" style=\"width: 400px; height: 300px;\"></div>");
-        out.println("<div id=\"stage\" style=\"width:400px; height:50px; text-align:center;\"><label>" + (!"".equalsIgnoreCase(getResourceBase().getAttribute("init_stage","")) ? getStageTitle(getResourceBase().getAttribute("process"), getResourceBase().getAttribute("init_stage"), paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "-" + (!"".equalsIgnoreCase(getResourceBase().getAttribute("final_stage","")) ? getStageTitle(getResourceBase().getAttribute("process"), getResourceBase().getAttribute("final_stage"), paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) +"</label></div>\n");
+        out.println("<div id=\"stage\" style=\"width:400px; height:50px; text-align:center;\"><label>" + (!"".equalsIgnoreCase(init_stage) ? getStageTitle(process.getId(), init_stage, paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "-" + (!"".equalsIgnoreCase(final_stage) ? getStageTitle(process.getId(), final_stage, paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) +"</label></div>\n");
+        //out.println("<div id=\"stage\" style=\"width:400px; height:50px; text-align:center;\"><label>" + (!"".equalsIgnoreCase(getResourceBase().getAttribute("init_stage","")) ? getStageTitle(getResourceBase().getAttribute("process"), getResourceBase().getAttribute("init_stage"), paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "-" + (!"".equalsIgnoreCase(getResourceBase().getAttribute("final_stage","")) ? getStageTitle(getResourceBase().getAttribute("process"), getResourceBase().getAttribute("final_stage"), paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) +"</label></div>\n");
     }
 
     public void doArea(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, Process process) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        setPlotTheme();
+        setPlotTheme(getAttribute(process.getURI(), "plot_theme"));
         out.println(Ajax.getChartScript());
+        String init_stage = getAttribute(process.getURI(), "init_stage");
+        String final_stage = getAttribute(process.getURI(), "final_stage");
         out.println("<div id=\"title\" style=\"width:400px; height:25px; text-align:center;\"><label>" + process.getTitle() + "</label></div>\n");
         out.println("<div id='instances' style='width:400px; height:300px;'></div>\n");
         out.println("<script type=\"text/javascript\">\n");
@@ -557,7 +737,8 @@ public class ResponseTime extends GenericResource {
         out.println("           colors :              { workload: '" + colour + "' },");
         //out.println("           background_color :	  '#EFF5FB',");
         out.println("           label_color :         \"#348781\",");
-        if (!"".equalsIgnoreCase(getResourceBase().getAttribute("display_totals","")))
+        //if (!"".equalsIgnoreCase(getResourceBase().getAttribute("display_totals","")))
+        if ("1".equalsIgnoreCase(getAttribute(process.getURI(),"display_totals")))
             out.println("           markers :             \"value\",");
         out.println("           meanline :            false,");
         out.println("           draw_axis :           false,\n");
@@ -566,13 +747,16 @@ public class ResponseTime extends GenericResource {
         out.println("        }\n");
         out.println("    );\n");
         out.println("</script>\n");
-        out.println("<div id=\"stage\" style=\"width:400px; height:50px; text-align:center;\"><label>" + (!"".equalsIgnoreCase(getResourceBase().getAttribute("init_stage","")) ? getStageTitle(getResourceBase().getAttribute("process"), getResourceBase().getAttribute("init_stage"), paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "-" + (!"".equalsIgnoreCase(getResourceBase().getAttribute("final_stage","")) ? getStageTitle(getResourceBase().getAttribute("process"), getResourceBase().getAttribute("final_stage"), paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) +"</label></div>\n");
+        out.println("<div id=\"stage\" style=\"width:400px; height:50px; text-align:center;\"><label>" + (!"".equalsIgnoreCase(init_stage) ? getStageTitle(process.getId(), init_stage, paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "-" + (!"".equalsIgnoreCase(final_stage) ? getStageTitle(process.getId(), final_stage, paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) +"</label></div>\n");
+        //out.println("<div id=\"stage\" style=\"width:400px; height:50px; text-align:center;\"><label>" + (!"".equalsIgnoreCase(getResourceBase().getAttribute("init_stage","")) ? getStageTitle(getResourceBase().getAttribute("process"), getResourceBase().getAttribute("init_stage"), paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "-" + (!"".equalsIgnoreCase(getResourceBase().getAttribute("final_stage","")) ? getStageTitle(getResourceBase().getAttribute("process"), getResourceBase().getAttribute("final_stage"), paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) +"</label></div>\n");
     }
 
     public void doBars(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, Process process) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        setPlotTheme();
+        setPlotTheme(getAttribute(process.getURI(), "plot_theme"));
         out.println(Ajax.getChartScript());
+        String init_stage = getAttribute(process.getURI(), "init_stage");
+        String final_stage = getAttribute(process.getURI(), "final_stage");
         out.println("<div id=\"title\" style=\"width:400px; height:25px; text-align:center;\"><label>" + process.getTitle() + "</label></div>\n");
         out.println("<div id='instances' style='width:400px; height:300px;'></div>\n");
         out.println("<script type=\"text/javascript\">\n");
@@ -593,7 +777,7 @@ public class ResponseTime extends GenericResource {
         out.println("        }\n");
         out.println("    );\n");
         out.println("</script>\n");
-        out.println("<div id=\"stage\" style=\"width:400px; height:50px; text-align:center;\"><label>" + (!"".equalsIgnoreCase(getResourceBase().getAttribute("init_stage","")) ? getStageTitle(getResourceBase().getAttribute("process"), getResourceBase().getAttribute("init_stage"), paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "-" + (!"".equalsIgnoreCase(getResourceBase().getAttribute("final_stage","")) ? getStageTitle(getResourceBase().getAttribute("process"), getResourceBase().getAttribute("final_stage"), paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) +"</label></div>\n");
+        out.println("<div id=\"stage\" style=\"width:400px; height:50px; text-align:center;\"><label>" + (!"".equalsIgnoreCase(init_stage) ? getStageTitle(process.getId(), init_stage, paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "-" + (!"".equalsIgnoreCase(final_stage) ? getStageTitle(process.getId(), final_stage, paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) +"</label></div>\n");
     }
 
     private String getTitles(SWBParamRequest paramRequest) throws SWBResourceException {
@@ -609,17 +793,20 @@ public class ResponseTime extends GenericResource {
         long average = 0;
         long maximum = 0;
         StringBuilder data = new StringBuilder();
-        if (!"".equalsIgnoreCase(getResourceBase().getAttribute("init_stage", "")) && !"".equalsIgnoreCase(getResourceBase().getAttribute("final_stage", ""))) {
-            minimum = ResponseTimeStages.getMinimumTimeStages(process, getResourceBase().getAttribute("init_stage"), getResourceBase().getAttribute("final_stage"));
-            average = ResponseTimeStages.getAverageTimeStages(process, getResourceBase().getAttribute("init_stage"), getResourceBase().getAttribute("final_stage"));
-            maximum = ResponseTimeStages.getMaximumTimeStages(process, getResourceBase().getAttribute("init_stage"), getResourceBase().getAttribute("final_stage"));
+        String init_stage = getAttribute(process.getURI(), "init_stage");
+        String final_stage = getAttribute(process.getURI(), "final_stage");
+        String time_unit = getAttribute(process.getURI(), "time_unit");
+        if (!"".equalsIgnoreCase(init_stage) && !"".equalsIgnoreCase(final_stage)) {
+            minimum = ResponseTimeStages.getMinimumTimeStages(process, init_stage, final_stage);
+            average = ResponseTimeStages.getAverageTimeStages(process, init_stage, final_stage);
+            maximum = ResponseTimeStages.getMaximumTimeStages(process, init_stage, final_stage);
         }
         data.append("[");
-        if ("1".equalsIgnoreCase(getResourceBase().getAttribute("time_unit","")))
+        if ("1".equalsIgnoreCase(time_unit))
             data.append(minimum/1000 + "," + average/1000 + "," + maximum/1000);
-        else if ("2".equalsIgnoreCase(getResourceBase().getAttribute("time_unit","")))
+        else if ("2".equalsIgnoreCase(time_unit))
             data.append(minimum/60000 + "," + average/60000 + "," + maximum/60000);
-        else if ("3".equalsIgnoreCase(getResourceBase().getAttribute("time_unit","")))
+        else if ("3".equalsIgnoreCase(time_unit))
             data.append(minimum/3600000 + "," + average/3600000 + "," + maximum/3600000);
         else
             data.append(minimum/86400000 + "," + average/86400000 + "," + maximum/86400000);
@@ -632,41 +819,45 @@ public class ResponseTime extends GenericResource {
         long average = 0;
         long maximum = 0;
         StringBuilder data = new StringBuilder();
-        if (!"".equalsIgnoreCase(getResourceBase().getAttribute("init_stage", "")) && !"".equalsIgnoreCase(getResourceBase().getAttribute("final_stage", ""))) {
-            minimum = ResponseTimeStages.getMinimumTimeStages(process, getResourceBase().getAttribute("init_stage"), getResourceBase().getAttribute("final_stage"));
-            average = ResponseTimeStages.getAverageTimeStages(process, getResourceBase().getAttribute("init_stage"), getResourceBase().getAttribute("final_stage"));
-            maximum = ResponseTimeStages.getMaximumTimeStages(process, getResourceBase().getAttribute("init_stage"), getResourceBase().getAttribute("final_stage"));
+        String init_stage = getAttribute(process.getURI(), "init_stage");
+        String final_stage = getAttribute(process.getURI(), "final_stage");
+        String time_unit = getAttribute(process.getURI(), "time_unit");
+        String display_totals = getAttribute(process.getURI(), "display_totals");
+        if (!"".equalsIgnoreCase(init_stage) && !"".equalsIgnoreCase(final_stage)) {
+            minimum = ResponseTimeStages.getMinimumTimeStages(process, init_stage, final_stage);
+            average = ResponseTimeStages.getAverageTimeStages(process, init_stage, final_stage);
+            maximum = ResponseTimeStages.getMaximumTimeStages(process, init_stage, final_stage);
         }
         data.append("{y: ");
-        if ("1".equalsIgnoreCase(getResourceBase().getAttribute("time_unit","")))
+        if ("1".equalsIgnoreCase(time_unit))
             data.append(minimum/1000);
-        else if ("2".equalsIgnoreCase(getResourceBase().getAttribute("time_unit","")))
+        else if ("2".equalsIgnoreCase(time_unit))
             data.append(minimum/60000);
-        else if ("3".equalsIgnoreCase(getResourceBase().getAttribute("time_unit","")))
+        else if ("3".equalsIgnoreCase(time_unit))
             data.append(minimum/3600000);
         else
             data.append(minimum/86400000);
-        data.append(", text: \"" + paramRequest.getLocaleString("minimum") + "\", color: \"" + colours[0] + "\"" + (!"".equalsIgnoreCase(getResourceBase().getAttribute("display_totals","")) ? ", tooltip: " + getToolTips(paramRequest, getResourceBase().getAttribute("time_unit",""), "minimum", minimum) : "") + "},");
+        data.append(", text: \"" + paramRequest.getLocaleString("minimum") + "\", color: \"" + colours[0] + "\"" + ("1".equalsIgnoreCase(display_totals) ? ", tooltip: " + getToolTips(paramRequest, time_unit, "minimum", minimum) : "") + "},");
         data.append("{y: ");
-        if ("1".equalsIgnoreCase(getResourceBase().getAttribute("time_unit","")))
+        if ("1".equalsIgnoreCase(time_unit))
             data.append(average/1000);
-        else if ("2".equalsIgnoreCase(getResourceBase().getAttribute("time_unit","")))
+        else if ("2".equalsIgnoreCase(time_unit))
             data.append(average/60000);
-        else if ("3".equalsIgnoreCase(getResourceBase().getAttribute("time_unit","")))
+        else if ("3".equalsIgnoreCase(time_unit))
             data.append(average/3600000);
         else
             data.append(average/86400000);
-        data.append(", text: \"" + paramRequest.getLocaleString("average") + "\", color: \"" + colours[1] + "\"" + (!"".equalsIgnoreCase(getResourceBase().getAttribute("display_totals","")) ? ", tooltip: " + getToolTips(paramRequest, getResourceBase().getAttribute("time_unit",""), "average", average) : "") + "},");
+        data.append(", text: \"" + paramRequest.getLocaleString("average") + "\", color: \"" + colours[1] + "\"" + ("1".equalsIgnoreCase(display_totals) ? ", tooltip: " + getToolTips(paramRequest, time_unit, "average", average) : "") + "},");
         data.append("{y: ");
-        if ("1".equalsIgnoreCase(getResourceBase().getAttribute("time_unit","")))
+        if ("1".equalsIgnoreCase(time_unit))
             data.append(maximum/1000);
-        else if ("2".equalsIgnoreCase(getResourceBase().getAttribute("time_unit","")))
+        else if ("2".equalsIgnoreCase(time_unit))
             data.append(maximum/60000);
-        else if ("3".equalsIgnoreCase(getResourceBase().getAttribute("time_unit","")))
+        else if ("3".equalsIgnoreCase(time_unit))
             data.append(maximum/3600000);
         else
             data.append(maximum/86400000);
-        data.append(", text: \"" + paramRequest.getLocaleString("maximum") + "\", color: \"" + colours[2] + "\"" + (!"".equalsIgnoreCase(getResourceBase().getAttribute("display_totals","")) ? ", tooltip: " + getToolTips(paramRequest, getResourceBase().getAttribute("time_unit",""), "maximum", maximum) : "") + "}");
+        data.append(", text: \"" + paramRequest.getLocaleString("maximum") + "\", color: \"" + colours[2] + "\"" + ("1".equalsIgnoreCase(display_totals) ? ", tooltip: " + getToolTips(paramRequest, time_unit, "maximum", maximum) : "") + "}");
         return data.toString();
     }
 
@@ -678,20 +869,24 @@ public class ResponseTime extends GenericResource {
         StringBuilder minimum = new StringBuilder();
         StringBuilder average = new StringBuilder();
         StringBuilder maximum = new StringBuilder();
-        if (!"".equalsIgnoreCase(getResourceBase().getAttribute("init_stage", "")) && !"".equalsIgnoreCase(getResourceBase().getAttribute("final_stage", ""))) {
-            min = ResponseTimeStages.getMinimumTimeStages(process, getResourceBase().getAttribute("init_stage"), getResourceBase().getAttribute("final_stage"));
-            avg = ResponseTimeStages.getAverageTimeStages(process, getResourceBase().getAttribute("init_stage"), getResourceBase().getAttribute("final_stage"));
-            max = ResponseTimeStages.getMaximumTimeStages(process, getResourceBase().getAttribute("init_stage"), getResourceBase().getAttribute("final_stage"));
+        String init_stage = getAttribute(process.getURI(), "init_stage");
+        String final_stage = getAttribute(process.getURI(), "final_stage");
+        String time_unit = getAttribute(process.getURI(), "time_unit");
+        String display_totals = getAttribute(process.getURI(), "display_totals");
+        if (!"".equalsIgnoreCase(init_stage) && !"".equalsIgnoreCase(final_stage)) {
+            min = ResponseTimeStages.getMinimumTimeStages(process, init_stage, final_stage);
+            avg = ResponseTimeStages.getAverageTimeStages(process, init_stage, final_stage);
+            max = ResponseTimeStages.getMaximumTimeStages(process, init_stage, final_stage);
         }
-        if ("1".equalsIgnoreCase(getResourceBase().getAttribute("time_unit",""))) {
+        if ("1".equalsIgnoreCase(time_unit)) {
             minimum.append("" + min/1000 + " " + paramRequest.getLocaleString("seconds"));
             average.append("" + avg/1000 + " " + paramRequest.getLocaleString("seconds"));
             maximum.append("" + max/1000 + " " + paramRequest.getLocaleString("seconds"));
-        }else if ("2".equalsIgnoreCase(getResourceBase().getAttribute("time_unit",""))) {
+        }else if ("2".equalsIgnoreCase(time_unit)) {
             minimum.append("" + min/60000 + " " + paramRequest.getLocaleString("minutes"));
             average.append("" + avg/60000 + " " + paramRequest.getLocaleString("minutes"));
             maximum.append("" + max/60000 + " " + paramRequest.getLocaleString("minutes"));
-        }else if ("3".equalsIgnoreCase(getResourceBase().getAttribute("time_unit",""))) {
+        }else if ("3".equalsIgnoreCase(time_unit)) {
             minimum.append("" + min/3600000 + " " + paramRequest.getLocaleString("hours"));
             average.append("" + avg/3600000 + " " + paramRequest.getLocaleString("hours"));
             maximum.append("" + max/3600000 + " " + paramRequest.getLocaleString("hours"));
@@ -701,7 +896,7 @@ public class ResponseTime extends GenericResource {
             maximum.append("" + max/86400000 + " " + paramRequest.getLocaleString("days"));
         }
         labels.append("[");
-        labels.append("'" + paramRequest.getLocaleString("minimum") + " " + (!"".equalsIgnoreCase(getResourceBase().getAttribute("display_totals","")) ? minimum : "") + "', '" + paramRequest.getLocaleString("average") + " " + (!"".equalsIgnoreCase(getResourceBase().getAttribute("display_totals","")) ? average : "") + "','" + paramRequest.getLocaleString("maximum") + " " + (!"".equalsIgnoreCase(getResourceBase().getAttribute("display_totals","")) ? maximum : "") + "'");
+        labels.append("'" + paramRequest.getLocaleString("minimum") + " " + ("1".equalsIgnoreCase(display_totals) ? minimum : "") + "', '" + paramRequest.getLocaleString("average") + " " + ("1".equalsIgnoreCase(display_totals) ? average : "") + "','" + paramRequest.getLocaleString("maximum") + " " + ("1".equalsIgnoreCase(display_totals) ? maximum : "") + "'");
         labels.append("]");
         return labels.toString();
     }
@@ -712,10 +907,10 @@ public class ResponseTime extends GenericResource {
         if ("1".equalsIgnoreCase(timeUnit)) {
             total.append(" " + time/1000);
             total.append(" " + paramRequest.getLocaleString("seconds"));
-        }else if ("2".equalsIgnoreCase(getResourceBase().getAttribute("time_unit",""))) {
+        }else if ("2".equalsIgnoreCase(timeUnit)) {
             total.append(" " + time/60000);
             total.append(" " + paramRequest.getLocaleString("minutes"));
-        }else if ("3".equalsIgnoreCase(getResourceBase().getAttribute("time_unit",""))) {
+        }else if ("3".equalsIgnoreCase(timeUnit)) {
             total.append(" " + time/3600000);
             total.append(" " + paramRequest.getLocaleString("hours"));
         }else {
@@ -726,7 +921,53 @@ public class ResponseTime extends GenericResource {
         return labels.toString();
     }
 
-    public void doChart(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    /*private Process getProcess(String processId) {
+        Iterator isites = ProcessSite.ClassMgr.listProcessSites();
+        while (isites.hasNext()) {
+            ProcessSite site = (ProcessSite)isites.next();
+            Iterator<Process> itprocess = site.listProcesses();
+            while (itprocess.hasNext()) {
+                Process process = itprocess.next();
+                if (processId.equalsIgnoreCase(process.getId()))
+                    return process;
+            }
+        }
+        return null;
+    }*/
+
+    /*private String getProcessTitle(String processId) {
+        Process process = getProcess(processId);
+        if (null != process)
+            return process.getTitle();
+        else
+            return "";
+    }*/
+
+    private String getProcessTitle(String suri) {
+        String title = "";
+        if (null != suri) {
+            Process process = getProcess(suri);
+            if (null != process)
+                title = process.getTitle();
+        }
+        return title;
+    }
+
+    private String getTitle(FlowNodeInstance fni, SWBParamRequest paramRequest) {
+        if (null != fni) {
+            if (null != fni.getFlowNodeType().getTitle(paramRequest.getUser().getLanguage()))
+                return fni.getFlowNodeType().getTitle(paramRequest.getUser().getLanguage());
+            else
+                return fni.getFlowNodeType().getTitle();
+        }else
+            return "";
+    }
+
+    private String encode(String suri) {
+        return java.net.URLEncoder.encode(suri).replaceAll("%", "100");
+    }
+
+    /*public void doChart(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Iterator isites = ProcessSite.ClassMgr.listProcessSites();
         String pathFile = SWBPortal.getWorkPath() + getResourceBase().getWorkPath() + "/images";
         File filex = new File(pathFile);
@@ -750,5 +991,5 @@ public class ResponseTime extends GenericResource {
                 }
             }
         }
-    }
+    }*/
 }
