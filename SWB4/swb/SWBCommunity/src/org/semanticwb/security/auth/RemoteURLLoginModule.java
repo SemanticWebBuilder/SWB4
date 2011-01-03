@@ -144,7 +144,7 @@ public class RemoteURLLoginModule implements LoginModule
         {
             principal.checkCredential(credential);
             flag = true;
-        } catch (Exception ex)
+        } catch (java.security.GeneralSecurityException ex)
         //NoSuchAlgorithmException & UnsupportedEncodingException,
         //Wrapped up, it doesn't matter which one, we just can't do anything else
         {
