@@ -161,7 +161,7 @@ public class ChangePassword extends GenericAdmResource {
             } else {
                 msg = response.getLocaleString("msgErrNewPassword");
             }
-        }catch(NoSuchAlgorithmException nse) {
+        }catch(java.security.GeneralSecurityException nse) {
             msg = response.getLocaleString("msgErrUpdate");
         }
         request.getSession(true).setAttribute("_msg", msg);
