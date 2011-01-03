@@ -38,6 +38,7 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBSessionUser;
@@ -159,6 +160,7 @@ public class TripleStoreLoginModule implements LoginModule
                 {
                     throw new LoginException("Password Mistmatch:");
                 }
+
             } catch (Exception ex)
                     //NoSuchAlgorithmException & UnsupportedEncodingException,
                     //Wrapped up, it doesn't matter which one, we just can't do anything else
@@ -168,7 +170,6 @@ public class TripleStoreLoginModule implements LoginModule
             }
         }
         loginflag = true;
-        principal.setLastLogin(new Date());
         return loginflag;
     }
 

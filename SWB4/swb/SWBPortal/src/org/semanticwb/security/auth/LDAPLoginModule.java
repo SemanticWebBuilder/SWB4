@@ -154,7 +154,6 @@ public class LDAPLoginModule implements LoginModule
             }
 
         loginflag = principal.isSigned();
-        principal.setLastLogin(new Date());
         return loginflag;
     }
 

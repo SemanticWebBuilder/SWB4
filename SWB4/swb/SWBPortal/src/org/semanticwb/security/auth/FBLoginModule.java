@@ -191,7 +191,6 @@ public class FBLoginModule implements LoginModule
         }
 //        }
         loginflag = true;
-        principal.setLastLogin(new Date());
         return loginflag;
     }
 
