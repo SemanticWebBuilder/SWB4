@@ -235,7 +235,7 @@ public class FBLoginModule implements LoginModule
             {
                 tmp.checkCredential(credential);
             }
-        } catch (Exception ex)
+        } catch (java.security.GeneralSecurityException ex)
         //NoSuchAlgorithmException & UnsupportedEncodingException,
         //Wrapped up, it doesn't matter which one, we just can't do anything else
         {

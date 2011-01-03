@@ -175,7 +175,7 @@ public class SWBSessionObject implements HttpSessionBindingListener, Serializabl
             try
             {
                 ((User) p).checkCredential(cred);
-            } catch (NoSuchAlgorithmException ex)
+            } catch (java.security.GeneralSecurityException ex)
             {
                 log.error("Can't check credential, this shoudn't pass", ex);
             }
