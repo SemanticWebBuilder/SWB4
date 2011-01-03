@@ -144,7 +144,6 @@ public class RemoteURLLoginModule implements LoginModule
         {
             principal.checkCredential(credential);
             flag = true;
-            principal.setLastLogin(new Date());
         } catch (Exception ex)
         //NoSuchAlgorithmException & UnsupportedEncodingException,
         //Wrapped up, it doesn't matter which one, we just can't do anything else

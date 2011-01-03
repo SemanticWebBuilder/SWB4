@@ -152,7 +152,6 @@ public class GeoLoginModule implements LoginModule {
             }
         }
         loginflag = true;
-        principal.setLastLogin(new Date());
         return loginflag;
     }
 
