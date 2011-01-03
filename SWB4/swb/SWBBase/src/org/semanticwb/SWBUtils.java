@@ -5144,16 +5144,10 @@ public class SWBUtils {
          * of the SHA-512 algorithm available in the environment.
          * <p>si no hay una implementaci&oacute;n del algoritmo SHA-512
          * disponible en el ambiente.</p>
-         * @throws java.io.UnsupportedEncodingException if the character encoding
-         * used to obtain the bytes from the message received (ISO8859-1)
-         * is not supported.
-         * <p>si el c&oacute;digo de caracteres utilizado para obtener los
-         * bytes del mensaje recibido (ISO8859-1) no es soportado.</p>
-         * @throws NoSuchAlgorithmException the no such algorithm exception
-         * @throws UnsupportedEncodingException the unsupported encoding exception
+         * @throws GeneralSecurityException If something fails when comparing passwords
          */
         public static String comparablePassword(String toEncode)
-                throws NoSuchAlgorithmException, UnsupportedEncodingException
+                throws GeneralSecurityException
         {
             return comparablePassword(toEncode, "SHA-512");
         }
@@ -5175,21 +5169,21 @@ public class SWBUtils {
          * of the specified algorithm available in the environment.
          * <p>si no hay una implementaci&oacute;n del algoritmo especificado
          * disponible en el ambiente.</p>
-         * @throws java.io.UnsupportedEncodingException if the character encoding
-         * used to obtain the bytes from the message received (ISO8859-1)
-         * is not supported.
-         * <p>si el c&oacute;digo de caracteres utilizado para obtener los
-         * bytes del mensaje recibido (ISO8859-1) no es soportado.</p>
-         * @throws NoSuchAlgorithmException the no such algorithm exception
-         * @throws UnsupportedEncodingException the unsupported encoding exception
+         * @throws GeneralSecurityException If something fails when comparing passwords
          */
         public static String comparablePassword(String toEncode, String digestAlgorithm)
-                throws NoSuchAlgorithmException, UnsupportedEncodingException
+                throws GeneralSecurityException
         {
             MessageDigest messageDigest = MessageDigest.getInstance(digestAlgorithm);
+            byte[] bits = null;
+            try {
+                bits = toEncode.getBytes("ISO8859-1");
+            } catch (UnsupportedEncodingException uee){
+                throw new GeneralSecurityException("Can't get bytes from string in ISO8859-1", uee);
+            }
             //return "{SHA-512}" + new BASE64Encoder().encode(messageDigest.digest(toEncode.getBytes()));
             return "{SHA-512}"
-                    + SFBase64.encodeBytes(messageDigest.digest(toEncode.getBytes("ISO8859-1")),
+                    + SFBase64.encodeBytes(messageDigest.digest(bits),
                     false);
         }
 
