@@ -45,19 +45,7 @@ public class MakeRequest
         out.write(objresponse.getBytes(utf8));
         out.close();
     }
-
-    private String encode(String xml)
-    {
-        StringBuilder sb = new StringBuilder();
-        for (char c : xml.toCharArray())
-        {
-            if (c != '\n')
-            {
-                sb.append(c);
-            }
-        }
-        return sb.toString();
-    }
+    
 
     private void getDocument(URL url, String headers, HttpServletResponse response) throws IOException, JDOMException, JSONException
     {
@@ -101,8 +89,7 @@ public class MakeRequest
                 read=reader.read(buffer);
             }
             reader.close();
-            String xml=encode(sb.toString());
-            System.out.println("xml " + xml);
+            String xml=sb.toString();            
             response.setContentType("application/json");
             JSONObject responseJSONObject = new JSONObject();
             JSONObject body = new JSONObject();
