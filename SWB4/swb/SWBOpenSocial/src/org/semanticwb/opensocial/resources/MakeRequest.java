@@ -64,8 +64,7 @@ public class MakeRequest
             Charset charset = Charset.defaultCharset();
             //String contentType="text/xml;charset=" + charset.name();
             if (header != null)
-            {
-                System.out.println("header: " + header);
+            {                
                 int pos = header.indexOf("charset=");
                 if (pos != -1)
                 {
@@ -74,12 +73,7 @@ public class MakeRequest
                 }
             }
             InputStream in = con.getInputStream();
-            java.io.InputStreamReader reader = new InputStreamReader(in, charset);
-            /*DOMOutputter dOMOutputter = new DOMOutputter();
-            SAXBuilder builder = new SAXBuilder();
-            charset = Charset.forName("utf-8");
-            Document doc = dOMOutputter.output(builder.build(reader));
-            String xml = encode(SWBUtils.XML.domToXml(doc, charset.name(), false));*/
+            java.io.InputStreamReader reader = new InputStreamReader(in, charset);            
             StringBuilder sb=new StringBuilder();
             char[] buffer=new char[1028];
             int read=reader.read(buffer);

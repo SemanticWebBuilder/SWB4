@@ -61,7 +61,12 @@ public class SocialContainer extends GenericResource
         g.setUrl("http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml");
 
         g = Gadget.ClassMgr.createGadget(site);
-        g.setUrl("http://localhost:8080/swb/samplecontainer/examples/horoscope.xml");
+        //g.setUrl("http://localhost:8080/swb/samplecontainer/examples/horoscope.xml");
+        g.setUrl("http://www.google.com/ig/modules/horoscope/horoscope.xml");
+
+        g = Gadget.ClassMgr.createGadget(site);        
+        g.setUrl("http://www.google.com/ig/modules/test_setprefs_multiple_ifpc.xml");
+
     }
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
