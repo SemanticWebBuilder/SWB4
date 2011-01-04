@@ -206,7 +206,7 @@ public class Metadata
 
 
                 String st = request.getParameter("st");
-                System.out.println("st: " + st);
+                System.out.println("Metadata st: " + st);
                 InputStream in = request.getInputStream();
                 StringBuilder sb = new StringBuilder();
                 byte[] buffer = new byte[1028];

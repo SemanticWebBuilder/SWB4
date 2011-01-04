@@ -73,7 +73,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
     public Document getDocument()
     {
-        if (doc == null)
+        //if (doc == null)
         {
             try
             {

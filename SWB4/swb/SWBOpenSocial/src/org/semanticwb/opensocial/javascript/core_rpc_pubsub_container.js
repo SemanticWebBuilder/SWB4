@@ -510,7 +510,7 @@ gadgets['util'] = function() {
         var tmpArgs = baseArgs.slice();
         for (var i = 0, j = arguments.length; i < j; ++i) {
           tmpArgs.push(arguments[i]);
-        }
+        }        
         return callback.apply(scope, tmpArgs);
       };
     },
@@ -4102,7 +4102,7 @@ gadgets.io = function() {
     makeRequest : function (url, callback, opt_params) {
       // TODO: This method also needs to respect all members of
       // gadgets.io.RequestParameters, and validate them.
-
+      
       var params = opt_params || {};
 
       var httpMethod = params.METHOD || "GET";
@@ -4174,9 +4174,9 @@ gadgets.io = function() {
           }
         }
       }
-
+      
       var proxyUrl = config.jsonProxyUrl.replace("%host%", document.location.host);
-
+      
       // FIXME -- processResponse is not used in call
       if (!respondWithPreload(paramData, params, callback, processResponse)) {
         if (httpMethod === "GET" && refreshInterval > 0) {
@@ -4184,11 +4184,12 @@ gadgets.io = function() {
           // Add paramData to the URL
           var extraparams = "?refresh=" + refreshInterval + '&'
               + gadgets.io.encodeValues(paramData);
-
+          
           makeXhrRequest(url, proxyUrl + extraparams, callback,
               null, "GET", params, processResponse);
 
         } else {
+            
           makeXhrRequest(url, proxyUrl, callback,
               gadgets.io.encodeValues(paramData), "POST", params,
               processResponse);
