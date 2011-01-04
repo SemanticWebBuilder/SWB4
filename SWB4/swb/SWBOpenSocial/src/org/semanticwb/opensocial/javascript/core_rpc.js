@@ -70,8 +70,7 @@ N[I]=P(Q)
 }if(J){E=N
 }return N
 },makeClosure:function(L,N,M){var K=[];
-for(var J=2,I=arguments.length;
-J<I;
+for(var J=2,I=arguments.length;J<I;
 ++J){K.push(arguments[J])
 }return function(){var O=K.slice();
 for(var Q=0,P=arguments.length;
@@ -215,7 +214,7 @@ return true
 }var data={body:xobj.responseText};
 callback(transformResponseData(params,data))
 }var UNPARSEABLE_CRUFT="throw 1; < don't be evil' >";
-function processResponse(url,callback,params,xobj){if(hadError(xobj,callback)){return 
+function processResponse(url,callback,params,xobj){if(hadError(xobj,callback)){return
 }var txt=xobj.responseText;
 var offset=txt.indexOf(UNPARSEABLE_CRUFT)+UNPARSEABLE_CRUFT.length;
 if(offset<UNPARSEABLE_CRUFT.length){return 
@@ -240,7 +239,7 @@ dom.validateOnParse=false;
 dom.resolveExternals=false;
 if(!dom.loadXML(resp.text)){resp.errors.push("500 Failed to parse XML");
 resp.rc=500
-}else{resp.data=dom
+}else{resp.data=dom;
 }}else{var parser=new DOMParser();
 dom=parser.parseFromString(resp.text,"text/xml");
 if("parsererror"===dom.documentElement.nodeName){resp.errors.push("500 Failed to parse XML");
@@ -250,7 +249,7 @@ resp.rc=500
 default:resp.data=resp.text;
 break
 }}}return resp
-}function makeXhrRequest(realUrl,proxyUrl,callback,paramData,method,params,processResponseFunction,opt_contentType){var xhr=makeXhr();
+}function makeXhrRequest(realUrl,proxyUrl,callback,paramData,method,params,processResponseFunction,opt_contentType){var xhr=makeXhr();    
 if(proxyUrl.indexOf("//")==0){proxyUrl=document.location.protocol+proxyUrl
 }xhr.open(method,proxyUrl,true);
 if(callback){xhr.onreadystatechange=gadgets.util.makeClosure(null,processResponseFunction,realUrl,callback,params,xhr)
@@ -290,7 +289,8 @@ gadgets.io.oauthReceivedCallbackUrl_=null
 }paramData.oauthState=oauthState||"";
 for(var opt in params){if(params.hasOwnProperty(opt)){if(opt.indexOf("OAUTH_")===0){paramData[opt]=params[opt]
 }}}}var proxyUrl=config.jsonProxyUrl.replace("%host%",document.location.host);
-if(!respondWithPreload(paramData,params,callback,processResponse)){if(httpMethod==="GET"&&refreshInterval>0){var extraparams="?refresh="+refreshInterval+"&"+gadgets.io.encodeValues(paramData);
+var rwp=respondWithPreload(paramData,params,callback,processResponse);
+if(!rwp){if(httpMethod==="GET"&&refreshInterval>0){var extraparams="?refresh="+refreshInterval+"&"+gadgets.io.encodeValues(paramData);
 makeXhrRequest(url,proxyUrl+extraparams,callback,null,"GET",params,processResponse)
 }else{makeXhrRequest(url,proxyUrl,callback,gadgets.io.encodeValues(paramData),"POST",params,processResponse)
 }}},makeNonProxiedRequest:function(relativeUrl,callback,opt_params,opt_contentType){var params=opt_params||{};
@@ -369,17 +369,28 @@ gadgets.Prefs.prototype.getBool=function(K){var L=J[K];
 if(L){return L==="true"||L===true||!!parseInt(L,10)
 }return false
 };
-gadgets.Prefs.prototype.set=function(K,L){throw new Error("setprefs feature required to make this call.")
+gadgets.Prefs.prototype.set=function(D,E){var G=false;
+if(arguments.length>2){var F={};
+for(var C=0,B=arguments.length;
+C<B;
+C+=2){F[arguments[C]]=arguments[C+1]
+}G=gadgets.Prefs.setInternal_(F)
+}else{G=gadgets.Prefs.setInternal_(D,E)
+}if(!G){return
+}var A=[null,"set_pref",null,gadgets.util.getUrlParameters().ifpctok||gadgets.util.getUrlParameters().rpctoken||0].concat(Array.prototype.slice.call(arguments));
+gadgets.rpc.call.apply(gadgets.rpc,A)
 };
-gadgets.Prefs.prototype.getArray=function(N){var O=J[N];
-if(O){var K=O.split("|");
-for(var M=0,L=K.length;
-M<L;
-++M){K[M]=F(K[M].replace(/%7C/g,"|"))
-}return K
-}return[]
-};
-gadgets.Prefs.prototype.setArray=function(K,L){throw new Error("setprefs feature required to make this call.")
+
+
+
+gadgets.Prefs.prototype.setArray=function(C,D){for(var B=0,A=D.length;
+B<A;
+++B){if(typeof D[B]!=="number"){D[B]=D[B].replace(/\|/g,"%7C")
+}}this.set(C,D.join("|"))
+};;
+
+gadgets.window=gadgets.window||{};
+gadgets.window.setTitle=function(A){gadgets.rpc.call(null,"set_title",null,A)
 };
 gadgets.Prefs.prototype.getMsg=function(K){return D[K]||""
 };
@@ -419,6 +430,7 @@ if(D.refreshInterval){D.REFRESH_INTERVAL=D.refreshInterval
 }D.CONTENT_TYPE="DOM";
 var A=gadgets.util.makeClosure(null,_IG_Fetch_wrapper,E);
 gadgets.io.makeRequest(B,A,D)
+
 }function _IG_FetchFeedAsJSON(B,F,C,A,D){var E=D||{};
 E.CONTENT_TYPE="FEED";
 E.NUM_ENTRIES=C;
