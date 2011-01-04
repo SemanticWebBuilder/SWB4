@@ -220,9 +220,10 @@ public class Metadata
                 try
                 {
 
+                    System.out.println("peticion metadata:");
+                    System.out.println(sb.toString());
                     JSONObject json = new JSONObject(sb.toString());
-                    // peticion
-                    //String data="{\"context\":{\"country\":\"default\",\"language\":\"default\",\"view\":\"default\",\"container\":\"default\"},\"gadgets\":[{\"url\":\"http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml\",\"moduleId\":1}]}";
+                    
                     JSONObject context = json.getJSONObject("context");
                     String country = context.getString("country");
                     String language = context.getString("language");
