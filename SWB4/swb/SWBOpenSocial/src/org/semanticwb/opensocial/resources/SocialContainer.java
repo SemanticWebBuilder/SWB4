@@ -51,6 +51,7 @@ import org.xml.sax.SAXException;
  */
 public class SocialContainer extends GenericResource
 {
+    public static final String SOCIAL_USER_ATTRIBUTE = "socialuser";
 
     private static final String gadgetschema = SocialContainer.loadSchema("gadget.xml");
     private static final Logger log = SWBUtils.getLogger(SocialContainer.class);
@@ -205,6 +206,7 @@ public class SocialContainer extends GenericResource
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
         String url = request.getParameter("__url__");
+        String moduleid = request.getParameter("__moduleid__");
         WebSite site = response.getWebPage().getWebSite();
         User user = response.getUser();
         if (url != null)
@@ -212,27 +214,12 @@ public class SocialContainer extends GenericResource
             Gadget gadget = getGadget(url, site);
             if (gadget != null && user.getId() != null)
             {
-                PersonalizedGadged pgadget=null;
-                
-                Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(user);
-                while (preferences.hasNext())
+                SocialUser socialUser=(SocialUser)request.getSession().getAttribute(SOCIAL_USER_ATTRIBUTE);
+                if(socialUser==null)
                 {
-                    PersonalizedGadged personalizedGadged = preferences.next();
-                    String urltest = personalizedGadged.getGadget().getUrl();
-                    if (urltest.equals(gadget.getUrl()))
-                    {
-                        pgadget = personalizedGadged;
-                        break;
-                    }
+                    socialUser=new SocialUser(user);
+                    request.getSession().setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
                 }
-                if (pgadget==null)
-                {
-                    pgadget = PersonalizedGadged.ClassMgr.createPersonalizedGadged(site);
-                    pgadget.setGadget(gadget);
-                    pgadget.setUser(user);
-                }
-
-
                 Document doc = gadget.getDocument();
                 NodeList userPrefs = doc.getElementsByTagName("UserPref");
                 for (int i = 0; i < userPrefs.getLength(); i++)
@@ -240,29 +227,9 @@ public class SocialContainer extends GenericResource
                     if (userPrefs.item(i) instanceof Element)
                     {
                         Element userPref = (Element) userPrefs.item(i);
-                        String name = userPref.getAttribute("name");
-                        String value = request.getParameter(name);
-                        if(value!=null)
-                        {
-                            boolean exists=false;
-                            Iterator<UserPref> userprefs=pgadget.listUserPrefses();
-                            while(userprefs.hasNext())
-                            {
-                                UserPref pref=userprefs.next();
-                                if(pref.getKey().equals(name))
-                                {
-                                    pref.setValue(value);
-                                    exists=true;
-                                }
-                            }
-                            if(!exists)
-                            {
-                                UserPref pref=UserPref.ClassMgr.createUserPref(site);
-                                pref.setKey(name);
-                                pref.setValue(value);
-                                pgadget.addUserPrefs(pref);
-                            }
-                        }
+                        String key = userPref.getAttribute("name");
+                        String value = request.getParameter(key);
+                        socialUser.saveUserPref(gadget, moduleid, key, value, site);
                     }
                 }
             }

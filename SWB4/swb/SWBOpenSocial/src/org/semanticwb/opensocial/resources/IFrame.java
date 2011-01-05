@@ -11,36 +11,26 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.jdom.JDOMException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.css.parser.Attribute;
 import org.semanticwb.css.parser.CSSParser;
 import org.semanticwb.css.parser.Selector;
-import org.semanticwb.model.GenericIterator;
-import org.semanticwb.model.User;
 import org.semanticwb.opensocial.model.Gadget;
-import org.semanticwb.opensocial.model.PersonalizedGadged;
-import org.semanticwb.opensocial.model.UserPref;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.w3c.dom.CDATASection;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -74,7 +64,7 @@ public class IFrame
                         continue;
                     }
                     tok.parseTag(tok.getStringValue(), tag);
-                    if (tag.getTagString().toLowerCase().equals("script"))
+                    if (!tag.isEndTag() && tag.getTagString().toLowerCase().equals("script"))
                     {
                         ret.append("<");
                         ret.append(tag.getTagString());
