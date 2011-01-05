@@ -209,18 +209,20 @@ public class SocialContainer extends GenericResource
         SocialUser socialUser = (SocialUser) session.getAttribute(SOCIAL_USER_ATTRIBUTE);
         if (socialUser == null)
         {
+            System.out.println("creating a new social user");
             socialUser = new SocialUser(user);
             session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
         }
-        
-        if(user==null || socialUser.getUserId()==null)
+        String _userid=user==null?null:user.getId();
+
+
+        if(!(_userid==null && socialUser.getUserId()==null))
         {
             String user1 = user==null?null:user.getId();
             if (user1 == null)
             {
                 user1 = UUID.randomUUID().toString();
             }
-
             String user2 = socialUser.getUserId();
             if (user2 == null)
             {
@@ -228,10 +230,11 @@ public class SocialContainer extends GenericResource
             }
             if (!user1.equals(user2))
             {
+                System.out.println("renuew a new social user");
                 socialUser = new SocialUser(user);
                 session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
             }
-        }
+        }       
         
         return socialUser;
     }
@@ -246,14 +249,14 @@ public class SocialContainer extends GenericResource
         if (url != null)
         {
             Gadget gadget = getGadget(url, site);
-            if (gadget != null && user.getId() != null)
+            if (gadget != null)
             {
                 SocialUser socialUser=getSocialUser(user, request.getSession());
                 System.out.println("socialUser: "+socialUser.getUserId());
                 Document doc = gadget.getDocument();
                 NodeList userPrefs = doc.getElementsByTagName("UserPref");
                 String moduleid = UUID.randomUUID().toString().replace('-', '_');
-                if (user.getId() != null)
+                if (user!=null && user.getId() != null)
                 {
                     PersonalizedGadged pgadget = PersonalizedGadged.ClassMgr.createPersonalizedGadged(site);
                     pgadget.setGadget(gadget);
@@ -267,6 +270,7 @@ public class SocialContainer extends GenericResource
                         Element userPref = (Element) userPrefs.item(i);
                         String key = userPref.getAttribute("name");
                         String value = request.getParameter(key);
+                        System.out.println("Saving key: "+key+" value. "+value);
                         socialUser.saveUserPref(gadget, moduleid, key, value, site);
                     }
                 }
