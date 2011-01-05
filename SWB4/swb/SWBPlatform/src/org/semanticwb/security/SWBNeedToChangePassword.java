@@ -9,7 +9,7 @@ package org.semanticwb.security;
  *
  * @author serch
  */
-public class SWBNeedToChangePassword extends RuntimeException{
+public class SWBNeedToChangePassword extends RuntimeException {
 
     public SWBNeedToChangePassword(String message)
     {
