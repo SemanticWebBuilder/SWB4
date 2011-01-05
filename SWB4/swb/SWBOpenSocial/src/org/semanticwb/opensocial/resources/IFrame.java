@@ -74,7 +74,32 @@ public class IFrame
                         continue;
                     }
                     tok.parseTag(tok.getStringValue(), tag);
-                    if (tag.getTagString().toLowerCase().equals("style"))
+                    if (tag.getTagString().toLowerCase().equals("script"))
+                    {
+                        ret.append("<");
+                        ret.append(tag.getTagString());
+                        ret.append(" ");
+                        for(int iparam=0;iparam<tag.getParamCount();iparam++)
+                        {
+                            String paramName=tag.getParamName(iparam);
+                            String value=tag.getParamValue(iparam);
+                            if("src".equals(paramName))
+                            {
+                                URI uriSRC=new URI(value);
+                                if(!uriSRC.isAbsolute())
+                                {
+                                    uriSRC=gadget.resolve(uriSRC);
+                                }
+                                value=uriSRC.toString();
+                            }
+                            ret.append(paramName);
+                            ret.append("=");
+                            ret.append(value);
+                            ret.append(" ");
+                        }                        
+                        ret.append(">");
+                    }
+                    else if(tag.getTagString().toLowerCase().equals("style"))
                     {
                         if (tag.isEndTag())
                         {

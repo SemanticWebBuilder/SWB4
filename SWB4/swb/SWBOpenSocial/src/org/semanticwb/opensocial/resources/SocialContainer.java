@@ -394,7 +394,18 @@ public class SocialContainer extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        doList(request, response, paramRequest);
+        String path = "/swbadmin/jsp/opensocial/samplecontainer.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        try
+        {
+            request.setAttribute("paramRequest", paramRequest);
+            dis.include(request, response);
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+        }
+        //doList(request, response, paramRequest);
     }
 
     public static boolean isValidGadGet(URL url)

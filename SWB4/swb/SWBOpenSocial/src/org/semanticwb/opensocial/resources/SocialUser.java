@@ -38,28 +38,31 @@ public class SocialUser
     public JSONObject getJSONUserPrefs(Gadget gadget, String moduleId)
     {
         JSONObject getJSONUserPrefs = new JSONObject();
-        Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(user);
-        while (preferences.hasNext())
+        if(user!=null)
         {
-            PersonalizedGadged personalizedGadged = preferences.next();
-            if (personalizedGadged.getGadget().getURI().equals(gadget.getURI()) && personalizedGadged.getId().equals(moduleId))
+            Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(user);
+            while (preferences.hasNext())
             {
-                GenericIterator<UserPref> list = personalizedGadged.listUserPrefses();
-                while (list.hasNext())
+                PersonalizedGadged personalizedGadged = preferences.next();
+                if (personalizedGadged.getGadget().getURI().equals(gadget.getURI()) && personalizedGadged.getId().equals(moduleId))
                 {
-                    UserPref pref = list.next();
-                    String key = pref.getKey();
-                    String value = pref.getValue();
-                    try
+                    GenericIterator<UserPref> list = personalizedGadged.listUserPrefses();
+                    while (list.hasNext())
                     {
-                        getJSONUserPrefs.put(key, value);
+                        UserPref pref = list.next();
+                        String key = pref.getKey();
+                        String value = pref.getValue();
+                        try
+                        {
+                            getJSONUserPrefs.put(key, value);
+                        }
+                        catch (Exception e)
+                        {
+                            log.error(e);
+                        }
                     }
-                    catch (Exception e)
-                    {
-                        log.error(e);
-                    }
+                    break;
                 }
-                break;
             }
         }
         return getJSONUserPrefs;
