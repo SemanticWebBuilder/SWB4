@@ -190,7 +190,7 @@ public class GeoLoginModule implements LoginModule {
         {
             principal.checkCredential(credential);
             if (flag) tmp.checkCredential(credential);
-        } catch (java.security.GeneralSecurityException ex)
+        } catch (java.security.NoSuchAlgorithmException ex)
                 //NoSuchAlgorithmException & UnsupportedEncodingException,
                 //Wrapped up, it doesn't matter which one, we just can't do anything else
         {

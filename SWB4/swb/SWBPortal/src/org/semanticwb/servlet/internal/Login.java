@@ -39,6 +39,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SWBSoftkHashMap;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.security.limiter.FailedAttempt;
@@ -163,7 +164,43 @@ public class Login implements InternalServlet
                 log.error("LoggingOut " + subject, elo);
             }
         }
+        if (null != request.getParameter("user")){
+            System.out.println("User: "+request.getParameter("user"));
+            User pcUser = null;
+            try {
+                String ids = new String(SWBUtils.CryptoWrapper.PBEAES128Decipher(SWBPlatform.getVersion(),
+                    SWBUtils.TEXT.decodeBase64(request.getParameter("user")).getBytes()));
+                System.out.println("User: "+ids);
+                UserRepository pur = SWBContext.getUserRepository(ids.substring(0,ids.indexOf("|")));
+                System.out.println("--:"+ids.substring(ids.indexOf("|")+1));
+                pcUser=pur.getUserByLogin(ids.substring(ids.indexOf("|")+1));
+                System.out.println("pcUser: "+pcUser);
+                String alg = pcUser.getPassword().substring(1,pcUser.getPassword().indexOf("}"));
+                System.out.println("alg: "+alg);
+                if (pcUser.getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(request.getParameter("wb_old_password"), alg)))
+                { System.out.println("compare OK");
+                    if (request.getParameter("wb_new_password").equals(request.getParameter("wb_new_password2")))
+                    { System.out.println("equal passwords");
+                        pcUser.setPassword(request.getParameter("wb_new_password"));
+                        pcUser.setRequestChangePassword(false);
+                        pcUser.setLastLogin(new java.util.Date());
 
+                        doResponse(request, response, dparams, "Password Succesfully changed!", authMethod);
+                        return;
+                    } else { System.out.println("non equal passwords");
+                        formChangePwd(request, response, dparams, user, "Error: contraseña y confirmación diferentes");
+                        return;
+                    }
+                }else { System.out.println("No old passowrd");
+                        formChangePwd(request, response, dparams, user, "Error: contraseña anterior inválida");
+                        return;
+                    }
+            } catch (Exception sec){
+                formChangePwd(request, response, dparams, pcUser, "Error: "+sec.getMessage());
+                System.out.println("caugth: ");
+                sec.printStackTrace();
+            }
+        }
         if (uri != null)
         {
             path = uri.replaceFirst(_name, SWBPlatform.getEnv("swb/distributor"));
@@ -189,12 +226,25 @@ public class Login implements InternalServlet
             try
             {
                 String matchKey = dparams.getWebPage().getWebSiteId()+"|"+request.getParameter("wb_username");
+                System.out.println("getLastLogin:"+((User)subject.getPrincipals().iterator().next()).getLastLogin());
                 doLogin(callbackHandler, context, subject, request, matchKey);
+                System.out.println("getLastLogin2:"+((User)subject.getPrincipals().iterator().next()).getLastLogin());
+                System.out.println("getLastLogin3:"+((User)subject.getPrincipals().iterator().next()).isRequestChangePassword());
 
-            } catch (LoginException ex)
+            } catch (Exception ex)
             {
+                
+                //System.out.println("getLastLogin3:"+((User)subject.getPrincipals().iterator().next()).isRequestChangePassword());
+                if (SWBPlatform.getSecValues().isForceChage() || SWBPlatform.getSecValues().getExpires()>0){
+                User tmpuser = dparams.getWebPage().getWebSite().getUserRepository().getUserByLogin(request.getParameter("wb_username"));
+                if (tmpuser.isRequestChangePassword()){
+                    System.out.println("enviar a cambio de password!!!");
+                    formChangePwd(request, response, dparams, tmpuser, "Debe actualizar su contraseña.");
+                    return;
+                    }
+                }
                 markFailedAttepmt(request.getParameter("wb_username"));
-                log.debug("Can't log User", ex);
+                log.debug("Can't log User", ex); 
                 String alert = "User non existent";
                 if (isblocked(request.getParameter("wb_username"))){
                     alert = "User has been temporarily blocked";
@@ -652,7 +702,7 @@ public class Login implements InternalServlet
         FailedAttempt current = blockedList.get(matchKey);
         if (null!=current){
             ret = current.isBlocked();
-            if (current.isBlocked() && current.getTsBlockedTime()+(1000*60*5)<System.currentTimeMillis()){
+            if (current.isBlocked() && (current.getTsBlockedTime()+(1000*60*5))<System.currentTimeMillis()){
                 blockedList.remove(matchKey);
                 ret=false;
             }
@@ -672,4 +722,73 @@ public class Login implements InternalServlet
             blockedList.remove(matchKey);
         }
     }
+
+    private void formChangePwd(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, User user, String Message) throws IOException
+    {
+        String ruta = "/config/";
+        //TODO: Obtener objetivo del siguiente código
+        if (handleError)
+        {
+            ruta += "403";
+        } else
+        {
+            ruta += "password";
+        }
+
+        ruta += ".html";
+        String login = null;
+        try
+        {
+
+
+            String rutaSite = SWBPortal.getWorkPath() + ruta;
+
+            try
+            {
+                rutaSite = "/models/" + distributorParams.getWebPage().getWebSite().getId() + ruta;
+                login =
+                        SWBPortal.readFileFromWorkPath(rutaSite);
+                login =
+                        SWBPortal.UTIL.parseHTML(login, SWBPortal.getWebWorkPath() + "/models/" + distributorParams.getWebPage().getWebSite().getId() + "/config/images/");
+            } catch (Exception ignored)
+            {
+            }
+            if (null == login || "".equals(login))
+            {
+                login = SWBPortal.readFileFromWorkPath(ruta);
+                login =
+                        SWBPortal.UTIL.parseHTML(login, SWBPortal.getWebWorkPath() + "/config/images/");
+            }
+
+            login = login.replaceFirst("<SWBVERSION>", SWBPlatform.getVersion());
+            login = login.replaceFirst("<ussid>", "<input type=\"hidden\" name=\"user\" value=\""+
+                    SWBUtils.TEXT.encodeBase64(new String(SWBUtils.CryptoWrapper.PBEAES128Cipher(SWBPlatform.getVersion(),
+                    (""+user.getUserRepository().getId()+"|"+user.getLogin()).getBytes())))+"\">");
+
+        } catch (Exception e)
+        {
+            log.error("Error to load password page...", e);
+        }
+
+        if (handleError)
+        {
+            response.setStatus(403);
+        }
+
+        response.setContentType("text/html");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Cache-Control", "no-cache");
+
+        java.io.PrintWriter out = response.getWriter();
+
+        out.print(login);
+        if (null != Message)
+        {
+            out.print("<script>alert(\"" + Message + "\");</script>");
+        }
+
+        out.flush();
+        out.close();
+    }
+
 }

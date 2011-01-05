@@ -182,12 +182,12 @@ public class FBLoginModule implements LoginModule
                     throw new LoginException("Password Mistmatch:");
                 }
             }
-        } catch (Exception ex)
+        } catch ( java.security.NoSuchAlgorithmException ex)
         //NoSuchAlgorithmException & UnsupportedEncodingException,
         //Wrapped up, it doesn't matter which one, we just can't do anything else
         {
             log.error("User: Can't compare Passwords", ex);
-            throw new LoginException("Digest Failed");
+            //throw new LoginException("Digest Failed");
         }
 //        }
         loginflag = true;
@@ -235,7 +235,7 @@ public class FBLoginModule implements LoginModule
             {
                 tmp.checkCredential(credential);
             }
-        } catch (java.security.GeneralSecurityException ex)
+        } catch (java.security.NoSuchAlgorithmException ex)
         //NoSuchAlgorithmException & UnsupportedEncodingException,
         //Wrapped up, it doesn't matter which one, we just can't do anything else
         {
