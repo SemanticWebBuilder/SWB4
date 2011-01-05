@@ -20,6 +20,7 @@ import org.w3c.dom.NodeList;
 
 public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 {
+
     private static final Logger log = SWBUtils.getLogger(Gadget.class);
     private Document doc;
 
@@ -98,6 +99,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         }
         return getMesssages;
     }
+
     public Map<String, String> getMessagesFromGadget(String language, String country)
     {
         Map<String, String> getMessagesFromGadget = new HashMap<String, String>();
@@ -168,6 +170,19 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         }
         return getMessagesFromGadget;
     }
+
+    public Document getOriginalDocument()
+    {
+        try
+        {
+            return SocialContainer.getXML(new URL(this.getUrl()));
+        }
+        catch (Exception e)
+        {
+        }
+        return doc;
+    }
+
     public Document getDocument()
     {
         //if (doc == null)
@@ -175,14 +190,14 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             try
             {
                 doc = SocialContainer.getXML(new URL(this.getUrl()));
-                Map<String,String> variables=this.getMessagesFromGadget("ALL", "ALL");
-                String xml=SWBUtils.XML.domToXml(doc);
-                for(String key : variables.keySet())
+                Map<String, String> variables = this.getMessagesFromGadget("ALL", "ALL");
+                String xml = SWBUtils.XML.domToXml(doc);
+                for (String key : variables.keySet())
                 {
-                    String value=variables.get(key);
-                    xml=xml.replace(key, value);
+                    String value = variables.get(key);
+                    xml = xml.replace(key, value);
                 }
-                doc=SWBUtils.XML.xmlToDom(xml);
+                doc = SWBUtils.XML.xmlToDom(xml);
             }
             catch (Exception e)
             {
@@ -243,11 +258,11 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
     {
         getDocument();
         try
-        {            
+        {
             if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
             {
                 Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
-                String title = module.getAttribute("title");                
+                String title = module.getAttribute("title");
                 return title;
             }
         }
@@ -351,11 +366,11 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
     {
         getDocument();
         try
-        {            
+        {
             if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
             {
                 Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
-                String description=module.getAttribute("description");                
+                String description = module.getAttribute("description");
                 return description;
             }
         }

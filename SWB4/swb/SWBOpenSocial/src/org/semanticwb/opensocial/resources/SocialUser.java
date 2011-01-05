@@ -87,13 +87,7 @@ public class SocialUser
                         break;
                     }
                 }
-                if (pgadget == null)
-                {
-                    pgadget = PersonalizedGadged.ClassMgr.createPersonalizedGadged(site);
-                    pgadget.setGadget(gadget);
-                    pgadget.setUser(_user);
-                }
-                if (value != null)
+                if (pgadget != null && value!=null)
                 {
                     boolean exists = false;
                     Iterator<UserPref> userprefs = pgadget.listUserPrefses();
@@ -113,7 +107,7 @@ public class SocialUser
                         pref.setValue(value);
                         pgadget.addUserPrefs(pref);
                     }
-                }
+                }                
             }
         }
     }
@@ -123,21 +117,22 @@ public class SocialUser
         JSONObject getJSONUserPrefs = new JSONObject();
         if (user == null)
         {
-            if (!userprefsManager.contains(gadget, moduleId))
-            {
-                userprefsManager.add(new UserPrefs(gadget, moduleId));
-            }
+            System.out.println("getJSONUserPrefs moduleId: "+moduleId);
             UserPrefs prefs = userprefsManager.get(gadget, moduleId);
-            for (String key : prefs.keySet())
+            if(prefs!=null)
             {
-                String value = prefs.get(key);
-                try
+                System.out.println(" found "+moduleId);
+                for (String key : prefs.keySet())
                 {
-                    getJSONUserPrefs.put(key, value);
-                }
-                catch (Exception e)
-                {
-                    log.error(e);
+                    String value = prefs.get(key);
+                    try
+                    {
+                        getJSONUserPrefs.put(key, value);
+                    }
+                    catch (Exception e)
+                    {
+                        log.error(e);
+                    }
                 }
             }
         }

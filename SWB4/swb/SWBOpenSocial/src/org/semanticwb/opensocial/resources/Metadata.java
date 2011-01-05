@@ -197,9 +197,9 @@ public class Metadata
                 {
 
                     System.out.println("peticion metadata:" + st);
-                    System.out.println(sb.toString());
+                    
                     JSONObject json = new JSONObject(sb.toString());
-
+                    System.out.println(json.toString(4));
                     JSONObject context = json.getJSONObject("context");
                     String country = context.getString("country");
                     String language = context.getString("language");

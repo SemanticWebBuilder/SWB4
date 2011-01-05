@@ -310,7 +310,7 @@ public class IFrame
 
                 Map<String, String> variables = SocialContainer.getVariablesubstituion(paramRequest.getUser(), gadget, lang, country, moduleid);
 
-                NodeList contents = gadget.getDocument().getElementsByTagName("Content");
+                NodeList contents = gadget.getOriginalDocument().getElementsByTagName("Content");
                 for (int i = 0; i < contents.getLength(); i++)
                 {
                     Node node = contents.item(i);
@@ -386,26 +386,6 @@ public class IFrame
 
                     }
                 }
-                /*RequestDispatcher dis = request.getRequestDispatcher(path);
-                try
-                {
-                SWBResourceURL javascript=paramRequest.getRenderUrl();
-                javascript.setMode(SocialContainer.Mode_JAVASCRIPT);
-                javascript.setCallMethod(SWBResourceURL.Call_DIRECT);
-                javascript.setParameter("container", "default");
-                javascript.setParameter("nocache", "1");
-                javascript.setParameter("debug", "0");
-                javascript.setParameter("c", "0");
-                //request.setAttribute("jspath", "http://localhost:8080/swb/gadgets/js/core_rpc.js?container=default&amp;nocache=1&amp;debug=0&amp;c=0");
-                request.setAttribute("jspath", javascript.toString());//"http://localhost:8080/swb/gadgets/js/core_rpc.js?container=default&amp;nocache=1&amp;debug=0&amp;c=0");
-                request.setAttribute("html", html);
-                dis.include(request, response);
-                }
-                catch (Exception e)
-                {
-                e.printStackTrace();
-                }*/
-
                 SWBResourceURL makerequest = paramRequest.getRenderUrl();
                 makerequest.setCallMethod(SWBResourceURL.Call_DIRECT);
                 makerequest.setMode(SocialContainer.Mode_MAKE_REQUEST);
@@ -433,7 +413,7 @@ public class IFrame
                 HtmlResponse = HtmlResponse.replace("<%=proxy%>", proxy.toString());
                 HtmlResponse = HtmlResponse.replace("<%=makerequest%>", makerequest.toString());
                 HtmlResponse = HtmlResponse.replace("<%=html%>", html);
-                PrintWriter out = response.getWriter();
+                PrintWriter out = response.getWriter();                
                 out.write(HtmlResponse);
                 out.close();
             }

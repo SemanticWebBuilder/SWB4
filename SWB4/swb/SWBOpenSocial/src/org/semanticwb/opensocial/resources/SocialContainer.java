@@ -184,8 +184,6 @@ public class SocialContainer extends GenericResource
             }
         }
         response.setMode(SocialContainer.Mode_LISTGADGETS);
-
-
     }
 
     @Override
