@@ -192,7 +192,7 @@ public class User extends UserBase implements Principal
      * @throws NoSuchAlgorithmException the no such algorithm exception
      * @throws UnsupportedEncodingException the unsupported encoding exception
      */
-    public void checkCredential(Object credential) throws GeneralSecurityException
+    public void checkCredential(Object credential) throws NoSuchAlgorithmException, LoginException
     {
         if (getUserRepository().isExternal())
         {
