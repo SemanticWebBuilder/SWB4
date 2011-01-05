@@ -24,7 +24,8 @@
 package org.semanticwb.model;
 
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
+import java.security.GeneralSecurityException;
+import javax.security.auth.login.LoginException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -40,7 +41,8 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticVocabulary;
-import org.semanticwb.util.Encryptor;
+
+
 
 // TODO: Auto-generated Javadoc
 /**
@@ -190,7 +192,7 @@ public class User extends UserBase implements Principal
      * @throws NoSuchAlgorithmException the no such algorithm exception
      * @throws UnsupportedEncodingException the unsupported encoding exception
      */
-    public void checkCredential(Object credential) throws NoSuchAlgorithmException, UnsupportedEncodingException
+    public void checkCredential(Object credential) throws GeneralSecurityException
     {
         if (getUserRepository().isExternal())
         {
@@ -200,7 +202,35 @@ public class User extends UserBase implements Principal
             String alg = getPassword().substring(1,getPassword().indexOf("}"));
             this.login = getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential), alg));
         }
+        if (null==getLastLogin() && SWBPlatform.getSecValues().isForceChage()){
+            setRequestChangePassword(true);
+            this.login=false; 
+            throw new LoginException("Password needs to be reset: First Usage");
+        }
+        if (SWBPlatform.getSecValues().getExpires()>0){
+            java.util.Calendar passCal = java.util.Calendar.getInstance();
+            passCal.setTime(getPasswordChanged());
+            passCal.add(java.util.Calendar.DAY_OF_MONTH, SWBPlatform.getSecValues().getExpires());
+            if (passCal.getTime().before(new Date())){
+                setRequestChangePassword(true);
+                this.login=false; 
+                throw new LoginException("Password needs to be reset: time to renew");
+            }
 
+        }
+        if (null!=getLastLogin() && SWBPlatform.getSecValues().getInactive()>0 ){
+            java.util.Calendar passCal = java.util.Calendar.getInstance();
+            passCal.setTime(getLastLogin());
+            passCal.add(java.util.Calendar.DAY_OF_MONTH, SWBPlatform.getSecValues().getInactive());
+            if (passCal.getTime().before(new Date())){
+                setActive(false);
+                this.login=false; 
+                throw new LoginException("User Inactivated due to lack of usage of the account");
+            }
+        }
+        if (this.login) {
+            setLastLogin(new Date());
+        }
     }
 
     /**
