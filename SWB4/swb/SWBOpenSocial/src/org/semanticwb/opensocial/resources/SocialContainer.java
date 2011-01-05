@@ -37,6 +37,7 @@ import org.semanticwb.opensocial.model.Gadget;
 import org.semanticwb.opensocial.model.PersonalizedGadged;
 import org.semanticwb.opensocial.model.UserPref;
 import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.w3c.dom.Document;
@@ -201,7 +202,80 @@ public class SocialContainer extends GenericResource
     }
 
     @Override
-    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
+    {
+        String url = request.getParameter("__url__");
+        WebSite site = response.getWebPage().getWebSite();
+        User user = response.getUser();
+        if (url != null)
+        {
+            Gadget gadget = getGadget(url, site);
+            if (gadget != null && user.getId() != null)
+            {
+                PersonalizedGadged pgadget=null;
+                
+                Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(user);
+                while (preferences.hasNext())
+                {
+                    PersonalizedGadged personalizedGadged = preferences.next();
+                    String urltest = personalizedGadged.getGadget().getUrl();
+                    if (urltest.equals(gadget.getUrl()))
+                    {
+                        pgadget = personalizedGadged;
+                        break;
+                    }
+                }
+                if (pgadget==null)
+                {
+                    pgadget = PersonalizedGadged.ClassMgr.createPersonalizedGadged(site);
+                    pgadget.setGadget(gadget);
+                    pgadget.setUser(user);
+                }
+
+
+                Document doc = gadget.getDocument();
+                NodeList userPrefs = doc.getElementsByTagName("UserPref");
+                for (int i = 0; i < userPrefs.getLength(); i++)
+                {
+                    if (userPrefs.item(i) instanceof Element)
+                    {
+                        Element userPref = (Element) userPrefs.item(i);
+                        String name = userPref.getAttribute("name");
+                        String value = request.getParameter(name);
+                        if(value!=null)
+                        {
+                            boolean exists=false;
+                            Iterator<UserPref> userprefs=pgadget.listUserPrefses();
+                            while(userprefs.hasNext())
+                            {
+                                UserPref pref=userprefs.next();
+                                if(pref.getKey().equals(name))
+                                {
+                                    pref.setValue(value);
+                                    exists=true;
+                                }
+                            }
+                            if(!exists)
+                            {
+                                UserPref pref=UserPref.ClassMgr.createUserPref(site);
+                                pref.setKey(name);
+                                pref.setValue(value);
+                                pgadget.addUserPrefs(pref);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        response.setMode(SocialContainer.Mode_LISTGADGETS);
+
+
+    }
+
+    @Override
+    public void processRequest(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramRequest) throws SWBResourceException,
+            IOException
     {
         Iterator<Gadget> gadgets = Gadget.ClassMgr.listGadgets();
         while (gadgets.hasNext())
