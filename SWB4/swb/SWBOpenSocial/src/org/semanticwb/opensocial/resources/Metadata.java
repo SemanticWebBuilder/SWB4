@@ -38,7 +38,7 @@ public class Metadata
 
     private static final Logger log = SWBUtils.getLogger(Metadata.class);
 
-    private void adduserPrefs(JSONObject metadata, User user, Gadget gadget, String moduleId) throws JSONException
+    /*private void adduserPrefs(JSONObject metadata, User user, Gadget gadget, String moduleId) throws JSONException
     {
         // debe obtener las preferencias del usuario al momento de configurar el gadget
         JSONObject adduserPrefs = new JSONObject();
@@ -58,7 +58,7 @@ public class Metadata
             }
         }
         metadata.put("userPrefs", adduserPrefs);
-    }
+    }*/
 
     /**
      *
@@ -73,7 +73,7 @@ public class Metadata
      * @return
      * @throws Exception
      */
-    private JSONObject getMetadata(HttpServletRequest request, String country, String language, String view, String container, String moduleId, SWBParamRequest paramRequest, Gadget gadget) throws Exception
+    private JSONObject getMetadata(HttpServletRequest request, String moduleId, SocialUser user, Gadget gadget, SWBResourceURL renderURL) throws Exception
     {
         String port = "";
         if (request.getServerPort() != 80)
@@ -85,11 +85,14 @@ public class Metadata
         try
         {
 
-            //String queryString = "?country=" + country + "&lang=" + language + "&view=" + view + "&container=" + container + "&moduleId=" + moduleId;
+
 
             if (gadget != null)
             {
-                adduserPrefs(metadata, paramRequest.getUser(), gadget, moduleId);
+                if (user != null)
+                {
+                    metadata.put("userPrefs", user.getJSONUserPrefs(gadget, moduleId));                    
+                }
                 //String data = "{\"gadgets\":[{\"userPrefs\":{},\"moduleId\":1,\"screenshot\":\"\",\"singleton\":false,\"width\":0,\"authorLink\":\"\",\"links\":{},\"iframeUrl\":\"//http://localhost:8080/swb/gadgets/ifr?url=http%3A%2F%2Flocalhost%3A8080%2Fswb%2Fsamplecontainer%2Fexamples%2FSocialHelloWorld.xml&container=default&view=%25view%25&lang=%25lang%25&country=%25country%25&debug=%25debug%25&nocache=%25nocache%25&v=b4ea67fd7aa33422aa257ee3f534daf0&st=%25st%25\",\"url\":\"http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml\",\"scaling\":false,\"title\":\"Social Hello World\",\"height\":0,\"titleUrl\":\"\",\"thumbnail\":\"http://localhost:8080/\",\"scrolling\":false,\"views\":{\"default\":{\"preferredHeight\":0,\"quirks\":true,\"type\":\"html\",\"preferredWidth\":0}},\"featureDetails\":{\"dynamic-height\":{\"parameters\":{},\"required\":true},\"osapi\":{\"parameters\":{},\"required\":true},\"core\":{\"parameters\":{},\"required\":true},\"settitle\":{\"parameters\":{},\"required\":true}},\"features\":[\"dynamic-height\",\"osapi\",\"core\",\"settitle\"],\"showStats\":false,\"categories\":[\"\",\"\"],\"showInDirectory\":false,\"authorPhoto\":\"\"}]}";
 
                 metadata.put("title", gadget.getTitle());
@@ -160,11 +163,11 @@ public class Metadata
 
 
 
-                SWBResourceURL iframeurl = paramRequest.getRenderUrl();
+                SWBResourceURL iframeurl = renderURL;
                 iframeurl.setMode(SocialContainer.Mode_IFRAME);
                 iframeurl.setCallMethod(SWBResourceURL.Call_DIRECT);
                 ///&container=default&view=%25view%25&lang=%25lang%25&country=%25country%25&debug=%25debug%25&nocache=%25nocache%25&v=b4ea67fd7aa33422aa257ee3f534daf0&st=%25st%25
-                
+
                 iframeurl.setParameter("url", gadget.getUrl());
                 iframeurl.setParameter("container", "default");
                 iframeurl.setParameter("view", "");
@@ -188,8 +191,6 @@ public class Metadata
         return metadata;
     }
 
-    
-
     public void doProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         if (paramRequest.getCallMethod() == paramRequest.Call_DIRECT && request.getContentType().startsWith("application/javascript"))
@@ -206,7 +207,7 @@ public class Metadata
 
 
                 String st = request.getParameter("st");
-                System.out.println("Metadata st: " + st);
+                //System.out.println("Metadata st: " + st);
                 InputStream in = request.getInputStream();
                 StringBuilder sb = new StringBuilder();
                 byte[] buffer = new byte[1028];
@@ -216,14 +217,14 @@ public class Metadata
                     sb.append(new String(buffer, 0, read));
                     read = in.read(buffer);
                 }
-                in.close();                
+                in.close();
                 try
                 {
 
-                    System.out.println("peticion metadata:");
+                    System.out.println("peticion metadata:" + st);
                     System.out.println(sb.toString());
                     JSONObject json = new JSONObject(sb.toString());
-                    
+
                     JSONObject context = json.getJSONObject("context");
                     String country = context.getString("country");
                     String language = context.getString("language");
@@ -235,45 +236,71 @@ public class Metadata
                     JSONArray array = new JSONArray();
 
                     objresponse.put("gadgets", array);
+                    SocialUser socialuser=null;
+                    User user = null;
+                    if (st != null)
+                    {
+                        String[] values = st.split(":");
+                        if (values.length > 2)
+                        {
+                            String viewerId = values[1];
+                            if (viewerId != null && paramRequest.getUser().getId()!=null && viewerId.equals(paramRequest.getUser().getId()))
+                            {
+                                user = paramRequest.getUser();                                
+                            }
+                        }
+                    }
+
+                    socialuser=(SocialUser)request.getSession().getAttribute("socialuser");
+                    if(socialuser==null)
+                    {
+                        socialuser=new SocialUser(user);
+                        request.getSession().setAttribute("socialuser", socialuser);
+                    }                    
+
                     for (int i = 0; i < gadgets.length(); i++)
                     {
                         JSONObject gadget = gadgets.getJSONObject(i);
                         String url = gadget.getString("url");
-                        URI urigadget=new URI(url);
-                        if(!urigadget.isAbsolute())
+                        URI urigadget = new URI(url);
+                        if (!urigadget.isAbsolute())
                         {
-                            urigadget=here.resolve(urigadget);
-                        }                                                
+                            urigadget = here.resolve(urigadget);
+                        }
                         Gadget ogadget = SocialContainer.getGadget(urigadget.toString(), paramRequest.getWebPage().getWebSite());
                         String moduleId = gadget.getString("moduleId");
-                        if(ogadget!=null)
+                        if (ogadget != null)
                         {
-                            JSONObject metadata = getMetadata(request, country, language, view, container, moduleId, paramRequest, ogadget);
+                            JSONObject metadata = getMetadata(request, moduleId, socialuser, ogadget, paramRequest.getRenderUrl());
                             array.put(metadata);
                         }
                         else
                         {
-                            throw new Exception("The gadget was not found with url"+url);
+                            throw new Exception("The gadget was not found with url" + url);
                         }
-                    }
-                    //String data = "{\"gadgets\":[{\"userPrefs\":{},\"moduleId\":1,\"screenshot\":\"\",\"singleton\":false,\"width\":0,\"authorLink\":\"\",\"links\":{},\"iframeUrl\":\"//http://localhost:8080/swb/gadgets/ifr?url=http%3A%2F%2Flocalhost%3A8080%2Fswb%2Fsamplecontainer%2Fexamples%2FSocialHelloWorld.xml&container=default&view=%25view%25&lang=%25lang%25&country=%25country%25&debug=%25debug%25&nocache=%25nocache%25&v=b4ea67fd7aa33422aa257ee3f534daf0&st=%25st%25\",\"url\":\"http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml\",\"scaling\":false,\"title\":\"Social Hello World\",\"height\":0,\"titleUrl\":\"\",\"thumbnail\":\"http://localhost:8080/\",\"scrolling\":false,\"views\":{\"default\":{\"preferredHeight\":0,\"quirks\":true,\"type\":\"html\",\"preferredWidth\":0}},\"featureDetails\":{\"dynamic-height\":{\"parameters\":{},\"required\":true},\"osapi\":{\"parameters\":{},\"required\":true},\"core\":{\"parameters\":{},\"required\":true},\"settitle\":{\"parameters\":{},\"required\":true}},\"features\":[\"dynamic-height\",\"osapi\",\"core\",\"settitle\"],\"showStats\":false,\"categories\":[\"\",\"\"],\"showInDirectory\":false,\"authorPhoto\":\"\"}]}";
-                    Charset utf8=Charset.forName("utf-8");
-                    response.setContentType("JSON;charset="+ utf8.name() +"");
+                    }                    
+                    Charset utf8 = Charset.forName("utf-8");
+                    response.setContentType("JSON;charset=" + utf8.name() + "");
                     OutputStream out = response.getOutputStream();
+                    System.out.println("response");
+                    System.out.println(objresponse.toString(4));
                     out.write(objresponse.toString().getBytes(utf8));
                     out.close();
                 }
                 catch (JSONException jsone)
                 {
+                    log.error(jsone);
                     jsone.printStackTrace();
                 }
                 catch (Exception jsone)
                 {
+                    log.error(jsone);
                     jsone.printStackTrace();
                 }
             }
             catch (Exception e)
             {
+                log.error(e);
                 e.printStackTrace();
             }
         }

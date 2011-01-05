@@ -5984,9 +5984,9 @@ shindig.Gadget = function(params) {
   }
   if (!this.secureToken) {
     // Assume that the default security token implementation is
-    // in use on the server.    
-    this.secureToken = 'john.doe:john.doe:appid:cont:url:0:default';
-    alert('this.secureToken: '+this.secureToken);
+    // in use on the server.
+    
+    this.secureToken = 'john.doe:john.doe:appid:cont:url:0:default';    
   }
 };
 
