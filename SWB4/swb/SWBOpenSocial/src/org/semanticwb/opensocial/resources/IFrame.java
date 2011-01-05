@@ -83,9 +83,9 @@ public class IFrame
                                 value=uriSRC.toString();
                             }
                             ret.append(paramName);
-                            ret.append("=");
+                            ret.append("=\"");
                             ret.append(value);
-                            ret.append(" ");
+                            ret.append("\" ");
                         }                        
                         ret.append(">");
                     }
