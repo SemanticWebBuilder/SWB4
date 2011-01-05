@@ -38,28 +38,6 @@ public class Metadata
 
     private static final Logger log = SWBUtils.getLogger(Metadata.class);
 
-    /*private void adduserPrefs(JSONObject metadata, User user, Gadget gadget, String moduleId) throws JSONException
-    {
-        // debe obtener las preferencias del usuario al momento de configurar el gadget
-        JSONObject adduserPrefs = new JSONObject();
-        Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(user);
-        while (preferences.hasNext())
-        {
-            PersonalizedGadged personalizedGadged = preferences.next();
-            if (personalizedGadged.getGadget().getURI().equals(gadget.getURI()) && personalizedGadged.getId().equals(moduleId))
-            {
-                GenericIterator<UserPref> list = personalizedGadged.listUserPrefses();
-                while (list.hasNext())
-                {
-                    UserPref pref = list.next();
-                    adduserPrefs.put(pref.getKey(), pref.getValue());
-                }
-                break;
-            }
-        }
-        metadata.put("userPrefs", adduserPrefs);
-    }*/
-
     /**
      *
      * @param request
@@ -251,11 +229,11 @@ public class Metadata
                         }
                     }
 
-                    socialuser=(SocialUser)request.getSession().getAttribute("socialuser");
+                    socialuser=(SocialUser)request.getSession().getAttribute(SocialContainer.SOCIAL_USER_ATTRIBUTE);
                     if(socialuser==null)
                     {
                         socialuser=new SocialUser(user);
-                        request.getSession().setAttribute("socialuser", socialuser);
+                        request.getSession().setAttribute(SocialContainer.SOCIAL_USER_ATTRIBUTE, socialuser);
                     }                    
 
                     for (int i = 0; i < gadgets.length(); i++)
