@@ -4,9 +4,7 @@
  */
 package org.semanticwb.opensocial.resources;
 
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -26,7 +24,7 @@ public class SocialUser
 
     private static final Logger log = SWBUtils.getLogger(SocialUser.class);
     private final User user;
-    private final Map<Gadget, UserPrefs> userprefsManager = new HashMap<Gadget, UserPrefs>();
+    private final UserPrefManager userprefsManager=new UserPrefManager();
 
     public SocialUser(User user)
     {
@@ -40,13 +38,13 @@ public class SocialUser
 
     public void saveUserPref(Gadget gadget, String moduleId, String key, String value, WebSite site)
     {
-        if (user == null)
+        if (user.getId() == null)
         {
-            if (!userprefsManager.containsKey(gadget))
+            if (!userprefsManager.contains(gadget,moduleId))
             {
-                userprefsManager.put(gadget, new UserPrefs());
+                userprefsManager.add(new UserPrefs(gadget,moduleId));
             }
-            UserPrefs prefs = userprefsManager.get(gadget);
+            UserPrefs prefs = userprefsManager.get(gadget,moduleId);
             prefs.put(key, value);
         }
         else
@@ -97,13 +95,13 @@ public class SocialUser
     public JSONObject getJSONUserPrefs(Gadget gadget, String moduleId)
     {
         JSONObject getJSONUserPrefs = new JSONObject();
-        if (user == null)
+        if (user.getId() == null)
         {
-            if (!userprefsManager.containsKey(gadget))
+            if (!userprefsManager.contains(gadget,moduleId))
             {
-                userprefsManager.put(gadget, new UserPrefs());
+                userprefsManager.add(new UserPrefs(gadget,moduleId));
             }
-            UserPrefs prefs = userprefsManager.get(gadget);
+            UserPrefs prefs = userprefsManager.get(gadget,moduleId);
             for (String key : prefs.keySet())
             {
                 String value = prefs.get(key);
