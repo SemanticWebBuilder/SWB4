@@ -200,123 +200,11 @@ public class IFrame
         return sb.toString();
     }
 
-    private Map<String, String> getMesssages(Document docMessages)
-    {
-        Map<String, String> getMesssages = new HashMap<String, String>();
-        NodeList messages = docMessages.getElementsByTagName("msg");
-        for (int i = 0; i < messages.getLength(); i++)
-        {
-            if (messages.item(i) instanceof Element)
-            {
-                Element msg = (Element) messages.item(i);
-                String name = msg.getAttribute("name");                
-                String value = msg.getTextContent();                
-                if(name!=null && !name.equals("") && value!=null && !value.equals(""))
-                {                    
-                    getMesssages.put("__MSG_"+name+"__", value);
-                }
-            }
-        }
-        return getMesssages;
-    }
+    
 
-    private Map<String, String> getMessagesFromGadget(Gadget g, String language, String country)
-    {
-        Map<String, String> getMessagesFromGadget = new HashMap<String, String>();
-        if(language!=null && language.equals("ALL"))
-        {
-            language=null;
-        }
-        if(country!=null && country.equals("ALL"))
-        {
-            country=null;
-        }
-        String lang_toseach = "";
-        if (language != null)
-        {
-            lang_toseach = language;
-        }
-        if (country != null)
-        {
-            lang_toseach += lang_toseach + "-" + country;
-        }        
-        Document document = g.getDocument();
-        NodeList locales = document.getElementsByTagName("Locale");
-        for (int i = 0; i < locales.getLength(); i++)
-        {
-            if (locales.item(i) instanceof Element)
-            {
-                Element locale = (Element) locales.item(i);
-                String lang_test = locale.getAttribute("lang");
-                if (lang_test == null)
-                {
-                    lang_test = "";
-                }                
-                if (lang_test.equals(lang_toseach))
-                {
-                    String messages = locale.getAttribute("messages");                    
-                    if (messages != null && !messages.equals(""))
-                    {
-                        try
-                        {
-                            URI uriGadget = new URI(g.getUrl());
-                            URI uri = new URI(messages);
-                            if (!uri.isAbsolute())
-                            {
-                                uri = uriGadget.resolve(uri);
-                            }                            
-                            Document docMessages = SocialContainer.getXML(uri.toURL());
-                            return getMesssages(docMessages);
-                        }
-                        catch (URISyntaxException use)
-                        {
-                            log.debug(use);
-                        }
-                        catch (MalformedURLException use)
-                        {
-                            log.debug(use);
-                        }
-                        catch (IOException use)
-                        {
-                            log.debug(use);
-                        }
-                        catch (JDOMException use)
-                        {
-                            log.debug(use);
-                        }
-                    }
-                }
+   
 
-            }
-        }
-        return getMessagesFromGadget;
-    }
-
-    private Map<String, String> getVariablesubstituion(User user, Gadget gadget, String language, String country, String moduleID)
-    {
-
-        Map<String, String> getVariablesubstituion = new HashMap<String, String>();
-        getVariablesubstituion.putAll(getMessagesFromGadget(gadget, language, country));
-
-        getVariablesubstituion.put("__MODULE_ID__", moduleID);
-        getVariablesubstituion.put("__MSG_LANG__", language);
-        getVariablesubstituion.put("__MSG_COUNTRY__", country);
-        Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(user);
-        while (preferences.hasNext())
-        {
-            PersonalizedGadged personalizedGadged = preferences.next();
-            if (personalizedGadged.getGadget().getURI().equals(gadget.getURI()))
-            {
-                GenericIterator<UserPref> list = personalizedGadged.listUserPrefses();
-                while (list.hasNext())
-                {
-                    UserPref pref = list.next();
-                    getVariablesubstituion.put("__UP_" + pref.getKey() + "__", pref.getValue());
-                }
-            }
-        }
-        return getVariablesubstituion;
-    }
+    
 
     private String getHTML(URL url)
     {
@@ -405,7 +293,7 @@ public class IFrame
             if (gadget != null)
             {
 
-                Map<String, String> variables = getVariablesubstituion(paramRequest.getUser(), gadget, lang, country, moduleid);
+                Map<String, String> variables = SocialContainer.getVariablesubstituion(paramRequest.getUser(), gadget, lang, country, moduleid);
 
                 NodeList contents = gadget.getDocument().getElementsByTagName("Content");
                 for (int i = 0; i < contents.getLength(); i++)
