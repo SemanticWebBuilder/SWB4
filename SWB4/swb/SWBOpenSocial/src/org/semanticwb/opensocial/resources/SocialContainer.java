@@ -15,9 +15,11 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;
@@ -51,8 +53,8 @@ import org.xml.sax.SAXException;
  */
 public class SocialContainer extends GenericResource
 {
-    public static final String SOCIAL_USER_ATTRIBUTE = "socialuser";
 
+    private static final String SOCIAL_USER_ATTRIBUTE = "socialuser";
     private static final String gadgetschema = SocialContainer.loadSchema("gadget.xml");
     private static final Logger log = SWBUtils.getLogger(SocialContainer.class);
     public static final String Mode_METADATA = "METADATA";
@@ -202,11 +204,37 @@ public class SocialContainer extends GenericResource
         return getVariablesubstituion;
     }
 
+    public static SocialUser getSocialUser(User user, HttpSession session)
+    {
+        SocialUser socialUser = (SocialUser) session.getAttribute(SOCIAL_USER_ATTRIBUTE);
+        if (socialUser == null)
+        {
+            socialUser = new SocialUser(user);
+            session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
+        }
+        String user1 = user.getId();
+        if (user1 == null)
+        {
+            user1 = UUID.randomUUID().toString();
+        }
+
+        String user2 = socialUser.getUser().getId();
+        if (user2 == null)
+        {
+            user2 = UUID.randomUUID().toString();
+        }
+        if (!user1.equals(user2))
+        {
+            socialUser = new SocialUser(user);
+            session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
+        }
+        return socialUser;
+    }
+
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
         String url = request.getParameter("__url__");
-        String moduleid = request.getParameter("__moduleid__");
         WebSite site = response.getWebPage().getWebSite();
         User user = response.getUser();
         if (url != null)
@@ -214,14 +242,17 @@ public class SocialContainer extends GenericResource
             Gadget gadget = getGadget(url, site);
             if (gadget != null && user.getId() != null)
             {
-                SocialUser socialUser=(SocialUser)request.getSession().getAttribute(SOCIAL_USER_ATTRIBUTE);
-                if(socialUser==null)
-                {
-                    socialUser=new SocialUser(user);
-                    request.getSession().setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
-                }
+                SocialUser socialUser=getSocialUser(user, request.getSession());
                 Document doc = gadget.getDocument();
                 NodeList userPrefs = doc.getElementsByTagName("UserPref");
+                String moduleid = UUID.randomUUID().toString().replace('-', '_');
+                if (user.getId() != null)
+                {
+                    PersonalizedGadged pgadget = PersonalizedGadged.ClassMgr.createPersonalizedGadged(site);
+                    pgadget.setGadget(gadget);
+                    pgadget.setUser(user);
+                    moduleid = pgadget.getId();
+                }
                 for (int i = 0; i < userPrefs.getLength(); i++)
                 {
                     if (userPrefs.item(i) instanceof Element)
@@ -435,18 +466,18 @@ public class SocialContainer extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        String path = "/swbadmin/jsp/opensocial/samplecontainer.jsp";
+        /*String path = "/swbadmin/jsp/opensocial/samplecontainer.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
         {
-            request.setAttribute("paramRequest", paramRequest);
-            dis.include(request, response);
+        request.setAttribute("paramRequest", paramRequest);
+        dis.include(request, response);
         }
         catch (Exception e)
         {
-            log.error(e);
-        }
-        //doList(request, response, paramRequest);
+        log.error(e);
+        }*/
+        doList(request, response, paramRequest);
     }
 
     public static boolean isValidGadGet(URL url)

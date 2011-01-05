@@ -442,4 +442,5 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         }
         return false;
     }
+    
 }

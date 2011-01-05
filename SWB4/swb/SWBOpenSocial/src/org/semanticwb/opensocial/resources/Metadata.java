@@ -9,8 +9,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.nio.charset.Charset;
-import java.util.Iterator;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
@@ -18,12 +16,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.User;
 import org.semanticwb.opensocial.model.FeatureDetail;
 import org.semanticwb.opensocial.model.Gadget;
-import org.semanticwb.opensocial.model.PersonalizedGadged;
-import org.semanticwb.opensocial.model.UserPref;
 import org.semanticwb.opensocial.model.View;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -229,12 +224,7 @@ public class Metadata
                         }
                     }
 
-                    socialuser=(SocialUser)request.getSession().getAttribute(SocialContainer.SOCIAL_USER_ATTRIBUTE);
-                    if(socialuser==null)
-                    {
-                        socialuser=new SocialUser(user);
-                        request.getSession().setAttribute(SocialContainer.SOCIAL_USER_ATTRIBUTE, socialuser);
-                    }                    
+                    socialuser=SocialContainer.getSocialUser(user, request.getSession());
 
                     for (int i = 0; i < gadgets.length(); i++)
                     {
