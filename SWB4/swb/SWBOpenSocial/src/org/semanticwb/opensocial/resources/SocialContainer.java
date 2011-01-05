@@ -212,22 +212,27 @@ public class SocialContainer extends GenericResource
             socialUser = new SocialUser(user);
             session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
         }
-        String user1 = user.getId();
-        if (user1 == null)
+        
+        if(user==null || socialUser.getUserId()==null)
         {
-            user1 = UUID.randomUUID().toString();
-        }
+            String user1 = user==null?null:user.getId();
+            if (user1 == null)
+            {
+                user1 = UUID.randomUUID().toString();
+            }
 
-        String user2 = socialUser.getUser().getId();
-        if (user2 == null)
-        {
-            user2 = UUID.randomUUID().toString();
+            String user2 = socialUser.getUserId();
+            if (user2 == null)
+            {
+                user2 = UUID.randomUUID().toString();
+            }
+            if (!user1.equals(user2))
+            {
+                socialUser = new SocialUser(user);
+                session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
+            }
         }
-        if (!user1.equals(user2))
-        {
-            socialUser = new SocialUser(user);
-            session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
-        }
+        
         return socialUser;
     }
 
@@ -235,6 +240,7 @@ public class SocialContainer extends GenericResource
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
         String url = request.getParameter("__url__");
+        System.out.println("url: "+url);
         WebSite site = response.getWebPage().getWebSite();
         User user = response.getUser();
         if (url != null)
@@ -243,6 +249,7 @@ public class SocialContainer extends GenericResource
             if (gadget != null && user.getId() != null)
             {
                 SocialUser socialUser=getSocialUser(user, request.getSession());
+                System.out.println("socialUser: "+socialUser.getUserId());
                 Document doc = gadget.getDocument();
                 NodeList userPrefs = doc.getElementsByTagName("UserPref");
                 String moduleid = UUID.randomUUID().toString().replace('-', '_');
@@ -466,7 +473,7 @@ public class SocialContainer extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        /*String path = "/swbadmin/jsp/opensocial/samplecontainer.jsp";
+        String path = "/swbadmin/jsp/opensocial/samplecontainer.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
         {
@@ -476,8 +483,8 @@ public class SocialContainer extends GenericResource
         catch (Exception e)
         {
         log.error(e);
-        }*/
-        doList(request, response, paramRequest);
+        }
+        //doList(request, response, paramRequest);
     }
 
     public static boolean isValidGadGet(URL url)
