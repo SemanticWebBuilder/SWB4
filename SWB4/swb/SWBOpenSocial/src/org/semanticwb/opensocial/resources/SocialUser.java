@@ -4,6 +4,7 @@
  */
 package org.semanticwb.opensocial.resources;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -49,40 +50,54 @@ public class SocialUser
         {
             Set<UserPrefs> getUserPrefs = new HashSet<UserPrefs>();
             Iterator<PersonalizedGadged> personalizedGadgeds = PersonalizedGadged.ClassMgr.listPersonalizedGadgeds(site);
+            ArrayList<PersonalizedGadged> toDelete = new ArrayList<PersonalizedGadged>();
             while (personalizedGadgeds.hasNext())
             {
                 PersonalizedGadged pgadget = personalizedGadgeds.next();
-                UserPrefs pref = new UserPrefs(pgadget.getGadget(), pgadget.getId());
-                getUserPrefs.add(pref);
+                if (pgadget.getGadget() != null && pgadget.getId() != null)
+                {
+                    UserPrefs pref = new UserPrefs(pgadget.getGadget(), pgadget.getId());
+                    getUserPrefs.add(pref);
+                }
+                else
+                {
+                    toDelete.add(pgadget);
+                }
+            }
+            for (PersonalizedGadged pgadget : toDelete)
+            {
+                pgadget.remove();
             }
             return getUserPrefs.toArray(new UserPrefs[getUserPrefs.size()]);
         }
     }
-    public boolean canAdd(Gadget gadget,WebSite site)
+
+    public boolean canAdd(Gadget gadget, WebSite site)
     {
-        for(String feature : gadget.getFeatures())
+        for (String feature : gadget.getFeatures())
         {
-            if("osapi".equals(feature)) // osapi is not valid for non register users
+            if ("osapi".equals(feature)) // osapi is not valid for non register users
             {
-                if(user==null || Person.ClassMgr.getPerson(user, site)==null)
+                if (user == null || Person.ClassMgr.getPerson(user, site) == null)
                 {
                     return false;
-                }                
+                }
             }
         }
         return true;
     }
+
     public void saveUserPref(Gadget gadget, String moduleId, String key, String value, WebSite site)
     {
         if (user == null)
         {
             if (!userprefsManager.contains(gadget, moduleId))
             {
-                System.out.println("adding a new anonimous UserPrefs "+moduleId);
+                System.out.println("adding a new anonimous UserPrefs " + moduleId);
                 userprefsManager.add(new UserPrefs(gadget, moduleId));
             }
             UserPrefs prefs = userprefsManager.get(gadget, moduleId);
-            if(key!=null && value!=null)
+            if (key != null && value != null)
             {
                 prefs.put(key, value);
             }
@@ -91,21 +106,24 @@ public class SocialUser
         {
             PersonalizedGadged pgadget = null;
 
-            User _user = User.ClassMgr.getUser(user, site);
+            User _user = site.getUserRepository().getUser(user);
             if (_user != null)
             {
-                Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(_user);
+                Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(_user, site);
                 while (preferences.hasNext())
                 {
                     PersonalizedGadged personalizedGadged = preferences.next();
-                    String urltest = personalizedGadged.getGadget().getUrl();
-                    if (urltest.equals(gadget.getUrl()) && personalizedGadged.getId().equals(moduleId))
+                    if (personalizedGadged.getGadget() != null)
                     {
-                        pgadget = personalizedGadged;
-                        break;
+                        String urltest = personalizedGadged.getGadget().getUrl();
+                        if (urltest.equals(gadget.getUrl()) && personalizedGadged.getId().equals(moduleId))
+                        {
+                            pgadget = personalizedGadged;
+                            break;
+                        }
                     }
                 }
-                if (pgadget != null && value!=null)
+                if (pgadget != null && value != null)
                 {
                     boolean exists = false;
                     Iterator<UserPref> userprefs = pgadget.listUserPrefses();
@@ -125,19 +143,19 @@ public class SocialUser
                         pref.setValue(value);
                         pgadget.addUserPrefs(pref);
                     }
-                }                
+                }
             }
         }
     }
 
-    public JSONObject getJSONUserPrefs(Gadget gadget, String moduleId,WebSite site)
+    public JSONObject getJSONUserPrefs(Gadget gadget, String moduleId, WebSite site)
     {
         JSONObject getJSONUserPrefs = new JSONObject();
         if (user == null)
-        {            
+        {
             UserPrefs prefs = userprefsManager.get(gadget, moduleId);
-            if(prefs!=null)
-            {                
+            if (prefs != null)
+            {
                 for (String key : prefs.keySet())
                 {
                     String value = prefs.get(key);
@@ -154,10 +172,10 @@ public class SocialUser
         }
         else
         {
-            User _user = User.ClassMgr.getUser(user, site);
+            User _user = site.getUserRepository().getUser(user);
             if (_user != null)
             {
-                Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(_user);
+                Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(_user, site);
                 while (preferences.hasNext())
                 {
                     PersonalizedGadged personalizedGadged = preferences.next();
@@ -169,6 +187,8 @@ public class SocialUser
                             UserPref pref = list.next();
                             String key = pref.getKey();
                             String value = pref.getValue();
+                            System.out.println("key: " + key);
+                            System.out.println("value: " + value);
                             try
                             {
                                 getJSONUserPrefs.put(key, value);

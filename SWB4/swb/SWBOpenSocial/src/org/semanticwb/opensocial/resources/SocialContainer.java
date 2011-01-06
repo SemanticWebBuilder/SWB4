@@ -135,7 +135,7 @@ public class SocialContainer extends GenericResource
             }
             if (!user1.equals(user2))
             {
-                System.out.println("renuew a new social user");
+                System.out.println("renuew a new social user old: "+user2+" new: "+user1+" session:"+session.getId() );
                 socialUser = new SocialUser(user);
                 session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
             }
@@ -156,8 +156,7 @@ public class SocialContainer extends GenericResource
             Gadget gadget = getGadget(url, site);
             if (gadget != null)
             {
-                SocialUser socialUser = getSocialUser(user, request.getSession());
-                System.out.println("socialUser: " + socialUser.getUserId());
+                SocialUser socialUser = getSocialUser(user, request.getSession());                
                 Document doc = gadget.getDocument();
                 NodeList userPrefs = doc.getElementsByTagName("UserPref");
                 String moduleid = UUID.randomUUID().toString().replace('-', '_');
@@ -183,6 +182,7 @@ public class SocialContainer extends GenericResource
                         Element userPref = (Element) userPrefs.item(i);
                         String key = userPref.getAttribute("name");
                         String value = request.getParameter(key);
+                        System.out.println("saving data for user "+socialUser.getUserId()+" key: "+key+" value: "+value+" moduleId: "+moduleid);
                         socialUser.saveUserPref(gadget, moduleid, key, value, site);
                     }
                 }
@@ -396,6 +396,7 @@ public class SocialContainer extends GenericResource
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             log.error(e);
         }
         //doList(request, response, paramRequest);
