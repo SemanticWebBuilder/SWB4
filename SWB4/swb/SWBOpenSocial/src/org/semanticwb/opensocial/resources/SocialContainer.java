@@ -181,8 +181,7 @@ public class SocialContainer extends GenericResource
                     {
                         Element userPref = (Element) userPrefs.item(i);
                         String key = userPref.getAttribute("name");
-                        String value = request.getParameter(key);
-                        System.out.println("saving data for user "+socialUser.getUserId()+" key: "+key+" value: "+value+" moduleId: "+moduleid);
+                        String value = request.getParameter(key);                        
                         socialUser.saveUserPref(gadget, moduleid, key, value, site);
                     }
                 }

@@ -421,7 +421,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             {
                 Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
                 String category = module.getAttribute("category");
-                if (category != null)
+                if (category != null && !"".equals(category.trim()))
                 {
                     StringTokenizer st = new StringTokenizer(",");
                     while (st.hasMoreTokens())

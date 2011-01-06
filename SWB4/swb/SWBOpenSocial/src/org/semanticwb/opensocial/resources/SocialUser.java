@@ -48,8 +48,9 @@ public class SocialUser
         }
         else
         {
+            User _user = site.getUserRepository().getUser(user);
             Set<UserPrefs> getUserPrefs = new HashSet<UserPrefs>();
-            Iterator<PersonalizedGadged> personalizedGadgeds = PersonalizedGadged.ClassMgr.listPersonalizedGadgeds(site);
+            Iterator<PersonalizedGadged> personalizedGadgeds = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(_user,site);
             ArrayList<PersonalizedGadged> toDelete = new ArrayList<PersonalizedGadged>();
             while (personalizedGadgeds.hasNext())
             {
@@ -105,7 +106,6 @@ public class SocialUser
         else
         {
             PersonalizedGadged pgadget = null;
-
             User _user = site.getUserRepository().getUser(user);
             if (_user != null)
             {
@@ -186,9 +186,7 @@ public class SocialUser
                         {
                             UserPref pref = list.next();
                             String key = pref.getKey();
-                            String value = pref.getValue();
-                            System.out.println("key: " + key);
-                            System.out.println("value: " + value);
+                            String value = pref.getValue();                            
                             try
                             {
                                 getJSONUserPrefs.put(key, value);
