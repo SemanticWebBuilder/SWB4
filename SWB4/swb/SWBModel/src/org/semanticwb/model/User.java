@@ -202,6 +202,11 @@ public class User extends UserBase implements Principal
             String alg = getPassword().substring(1,getPassword().indexOf("}"));
             this.login = getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential), alg));
         }
+        if (isRequestChangePassword())
+        {
+            this.login=false;
+            throw new LoginException("Password was asked to be reset by an admin");
+        }
         if (null==getLastLogin() && SWBPlatform.getSecValues().isForceChage()){
             setRequestChangePassword(true);
             this.login=false; 

@@ -165,22 +165,22 @@ public class Login implements InternalServlet
             }
         }
         if (null != request.getParameter("user")){
-            System.out.println("User: "+request.getParameter("user"));
+            //System.out.println("User: "+request.getParameter("user"));
             User pcUser = null;
             try {
                 String ids = new String(SWBUtils.CryptoWrapper.PBEAES128Decipher(SWBPlatform.getVersion(),
                     SWBUtils.TEXT.decodeBase64(request.getParameter("user")).getBytes()));
-                System.out.println("User: "+ids);
+                //System.out.println("User: "+ids);
                 UserRepository pur = SWBContext.getUserRepository(ids.substring(0,ids.indexOf("|")));
-                System.out.println("--:"+ids.substring(ids.indexOf("|")+1));
+                //System.out.println("--:"+ids.substring(ids.indexOf("|")+1));
                 pcUser=pur.getUserByLogin(ids.substring(ids.indexOf("|")+1));
-                System.out.println("pcUser: "+pcUser);
+                //System.out.println("pcUser: "+pcUser);
                 String alg = pcUser.getPassword().substring(1,pcUser.getPassword().indexOf("}"));
-                System.out.println("alg: "+alg);
+                //System.out.println("alg: "+alg);
                 if (pcUser.getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(request.getParameter("wb_old_password"), alg)))
-                { System.out.println("compare OK");
+                { //System.out.println("compare OK");
                     if (request.getParameter("wb_new_password").equals(request.getParameter("wb_new_password2")))
-                    { System.out.println("equal passwords");
+                    { //System.out.println("equal passwords");
                         pcUser.setPassword(request.getParameter("wb_new_password"));
                         pcUser.setRequestChangePassword(false);
                         
@@ -189,20 +189,20 @@ public class Login implements InternalServlet
                         pcUser.setLastLogin(new java.util.Date());
                         pcUser.checkCredential(request.getParameter("wb_new_password").toCharArray());
                         uri = uri.replaceFirst("/login/", "/swb/");
-                        System.out.println("URI: "+uri);
+                        //System.out.println("URI: "+uri);
                         sendRedirect(response, uri);
                         return;
-                    } else { System.out.println("non equal passwords");
+                    } else { //System.out.println("non equal passwords");
                         formChangePwd(request, response, dparams, user, "Error: contraseña y confirmación diferentes");
                         return;
                     }
-                }else { System.out.println("No old passowrd");
+                }else { //System.out.println("No old passowrd");
                         formChangePwd(request, response, dparams, user, "Error: contraseña anterior inválida");
                         return;
                     }
             } catch (Exception sec){
                 formChangePwd(request, response, dparams, pcUser, "Error: "+sec.getMessage());
-                System.out.println("caugth: ");
+                //System.out.println("caugth: ");
                 sec.printStackTrace();
             }
         }
@@ -242,7 +242,7 @@ public class Login implements InternalServlet
                     String alg = tmpuser.getPassword().substring(1,tmpuser.getPassword().indexOf("}"));
                     if (tmpuser.getPassword().equals(
                             SWBUtils.CryptoWrapper.comparablePassword(request.getParameter("wb_password"), alg)) && tmpuser.isRequestChangePassword()){
-                        System.out.println("enviar a cambio de password!!!");
+                        //System.out.println("enviar a cambio de password!!!");
                         formChangePwd(request, response, dparams, tmpuser, "Debe actualizar su contraseña.");
                         return;
                         }
@@ -759,6 +759,9 @@ public class Login implements InternalServlet
             login = login.replaceFirst("<ussid>", "<input type=\"hidden\" name=\"user\" value=\""+
                     SWBUtils.TEXT.encodeBase64(new String(SWBUtils.CryptoWrapper.PBEAES128Cipher(SWBPlatform.getVersion(),
                     (""+user.getUserRepository().getId()+"|"+user.getLogin()).getBytes())))+"\">");
+            login = login.replaceFirst("<val01>", "");
+            login = login.replaceFirst("<val02>", "");
+            login = login.replaceFirst("<val03>", "");
 
         } catch (Exception e)
         {
