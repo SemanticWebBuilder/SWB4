@@ -145,12 +145,9 @@ public class RPC
                                 JSONObject responseMethod = execute(method, params, viewer, owner, site,gadget);
                                 JSONObject part = new JSONObject();
                                 part.put("id", id);
-                                part.put("result", responseMethod);
-                                System.out.println("part... "+part.toString(4));
+                                part.put("result", responseMethod);                                
                                 responseJSONObject.put(part);
-                            }
-                            System.out.println("response");
-                            System.out.println(responseJSONObject.toString(4));
+                            }                            
                             sendResponse(responseJSONObject.toString(4), response);
 
                             

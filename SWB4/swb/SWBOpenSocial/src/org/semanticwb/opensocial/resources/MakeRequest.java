@@ -82,6 +82,10 @@ public class MakeRequest
                 }
                 reader.close();
             }
+            else
+            {
+                System.out.println("Make request "+con.getURL()+" code: "+con.getResponseCode()+" msg: "+con.getResponseMessage());
+            }
             String xml = sb.toString();            
             response.setContentType("application/json");
             JSONObject body = new JSONObject();
