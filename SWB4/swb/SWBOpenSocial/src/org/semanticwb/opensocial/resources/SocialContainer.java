@@ -119,8 +119,7 @@ public class SocialContainer extends GenericResource
     {
         SocialUser socialUser = (SocialUser) session.getAttribute(SOCIAL_USER_ATTRIBUTE);
         if (socialUser == null)
-        {
-            System.out.println("creating a new social user");
+        {            
             socialUser = new SocialUser(user);
             session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
         }
@@ -141,7 +140,6 @@ public class SocialContainer extends GenericResource
             }
             if (!user1.equals(user2))
             {
-                System.out.println("renuew a new social user old: "+user2+" new: "+user1+" session:"+session.getId() );
                 socialUser = new SocialUser(user);
                 session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
             }
@@ -153,8 +151,7 @@ public class SocialContainer extends GenericResource
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
-        String url = request.getParameter("__url__");
-        System.out.println("url: " + url);
+        String url = request.getParameter("__url__");        
         WebSite site = response.getWebPage().getWebSite();
         User user = response.getUser();
         if (url != null)

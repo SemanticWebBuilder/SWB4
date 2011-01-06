@@ -119,6 +119,7 @@ public class SocialUser
                             if(name==null)
                             {
                                 name = Name.ClassMgr.createName(site);
+                                person.setName(name);
                             }
                             name.setGivenName(_user.getFirstName());
                             name.setFamilyName(_user.getLastName());

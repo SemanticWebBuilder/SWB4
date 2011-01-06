@@ -141,8 +141,7 @@ public class RPC
                                 JSONObject obj = requestJSONObject.getJSONObject(i);
                                 String method = obj.getString("method");
                                 String id = obj.getString("id");
-                                JSONObject params = obj.getJSONObject("params");
-                                System.out.println("Executing... ");
+                                JSONObject params = obj.getJSONObject("params");                                
                                 JSONObject responseMethod = execute(method, params, viewer, owner, site,gadget);
                                 JSONObject part = new JSONObject();
                                 part.put("id", id);

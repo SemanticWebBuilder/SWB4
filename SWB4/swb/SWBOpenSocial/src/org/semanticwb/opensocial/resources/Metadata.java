@@ -194,10 +194,8 @@ public class Metadata
                 in.close();
                 try
                 {
-
-                    System.out.println("peticion metadata:" + st);
-                    JSONObject json = new JSONObject(sb.toString());
-                    System.out.println(json.toString(4));
+                    
+                    JSONObject json = new JSONObject(sb.toString());                    
                     JSONObject context = json.getJSONObject("context");
                     String country = context.getString("country");
                     String language = context.getString("language");
@@ -253,9 +251,7 @@ public class Metadata
                     }
                     Charset utf8 = Charset.forName("utf-8");
                     response.setContentType("JSON;charset=" + utf8.name() + "");
-                    OutputStream out = response.getOutputStream();
-                    System.out.println("response");
-                    System.out.println(objresponse.toString(4));
+                    OutputStream out = response.getOutputStream();                    
                     out.write(objresponse.toString().getBytes(utf8));
                     out.close();
 

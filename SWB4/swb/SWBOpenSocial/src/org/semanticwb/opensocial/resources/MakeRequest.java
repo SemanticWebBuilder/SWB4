@@ -45,8 +45,7 @@ public class MakeRequest
     }
 
     private void getDocument(URL url, String headers, HttpServletResponse response) throws IOException, JDOMException, JSONException
-    {
-        System.out.println("get document " + url);
+    {        
         try
         {
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -58,15 +57,13 @@ public class MakeRequest
                 }
             }
             String header = con.getHeaderField("Content-Type");
-            Charset charset = Charset.defaultCharset();
-            System.out.println("header " + header);
+            Charset charset = Charset.defaultCharset();            
             if (header != null)
             {
                 int pos = header.indexOf("charset=");
                 if (pos != -1)
                 {
-                    String scharset = header.substring(pos + 8).trim();
-                    System.out.println("scharset " + scharset);
+                    String scharset = header.substring(pos + 8).trim();                    
                     charset = Charset.forName(scharset);
                 }
             }
@@ -85,15 +82,12 @@ public class MakeRequest
                 }
                 reader.close();
             }
-            String xml = sb.toString();
-            System.out.println("Make request xml :" + xml);
+            String xml = sb.toString();            
             response.setContentType("application/json");
             JSONObject body = new JSONObject();
             body.put("body", xml);
             responseJSONObject.put(url.toString(), body);
-            responseJSONObject.put("rc", con.getResponseCode());
-            System.out.println("response");
-            System.out.println(responseJSONObject.toString(4));
+            responseJSONObject.put("rc", con.getResponseCode());            
             sendResponse(responseJSONObject.toString(4), response);
         }
         catch (IOException e)
@@ -120,8 +114,7 @@ public class MakeRequest
         Charset defaultCharset = Charset.defaultCharset();
         response.setContentType("text/xml;charset=" + defaultCharset.name());
         OutputStream out = response.getOutputStream();
-        String xml = SWBUtils.XML.domToXml(objresponse, defaultCharset.name(), false);
-        System.out.println("response: " + xml);
+        String xml = SWBUtils.XML.domToXml(objresponse, defaultCharset.name(), false);        
         out.write(xml.getBytes());
         out.close();
     }
