@@ -114,7 +114,7 @@ public class Metadata
                 }
                 for (FeatureDetail detail : gadget.getFeatureDetails())
                 {
-                    metadata.accumulate("featureDetails", detail);
+                    metadata.accumulate("featureDetails", detail.toJSONObject());
                 }
 
 
@@ -181,8 +181,7 @@ public class Metadata
                 URI here = new URI(request.getScheme() + "://" + request.getServerName() + port + request.getRequestURI());
 
 
-                String st = request.getParameter("st");
-                //System.out.println("Metadata st: " + st);
+                String st = request.getParameter("st");                
                 InputStream in = request.getInputStream();
                 StringBuilder sb = new StringBuilder();
                 byte[] buffer = new byte[1028];
@@ -196,8 +195,7 @@ public class Metadata
                 try
                 {
 
-                    System.out.println("peticion metadata:" + st);
-                    
+                    System.out.println("peticion metadata:" + st);                    
                     JSONObject json = new JSONObject(sb.toString());
                     System.out.println(json.toString(4));
                     JSONObject context = json.getJSONObject("context");

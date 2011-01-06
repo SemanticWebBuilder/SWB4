@@ -57,17 +57,31 @@ public class SocialUser
             return getUserPrefs.toArray(new UserPrefs[getUserPrefs.size()]);
         }
     }
-
+    public boolean canAdd(Gadget gadget)
+    {
+        for(String feature : gadget.getFeatures())
+        {
+            if("osapi".equals(feature) && user==null) // osapi is not valid for non register users
+            {
+                return false;
+            }
+        }
+        return true;
+    }
     public void saveUserPref(Gadget gadget, String moduleId, String key, String value, WebSite site)
     {
         if (user == null)
         {
             if (!userprefsManager.contains(gadget, moduleId))
             {
+                System.out.println("adding a new anonimous UserPrefs "+moduleId);
                 userprefsManager.add(new UserPrefs(gadget, moduleId));
             }
             UserPrefs prefs = userprefsManager.get(gadget, moduleId);
-            prefs.put(key, value);
+            if(key!=null && value!=null)
+            {
+                prefs.put(key, value);
+            }
         }
         else
         {
@@ -116,12 +130,10 @@ public class SocialUser
     {
         JSONObject getJSONUserPrefs = new JSONObject();
         if (user == null)
-        {
-            System.out.println("getJSONUserPrefs moduleId: "+moduleId);
+        {            
             UserPrefs prefs = userprefsManager.get(gadget, moduleId);
             if(prefs!=null)
-            {
-                System.out.println(" found "+moduleId);
+            {                
                 for (String key : prefs.keySet())
                 {
                     String value = prefs.get(key);

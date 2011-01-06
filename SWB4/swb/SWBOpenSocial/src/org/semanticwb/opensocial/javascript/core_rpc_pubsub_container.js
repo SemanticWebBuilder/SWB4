@@ -5793,9 +5793,15 @@ shindig.IfrGadgetService.prototype.setTitle = function(title) {
 shindig.IfrGadgetService.prototype.setUserPref = function(editToken, name,
     value) {
   var id = shindig.container.gadgetService.getGadgetIdFromModuleId(this.f);
-  var gadget = shindig.container.getGadget(id);
+  var gadget = shindig.container.getGadget(id);  
   for (var i = 1, j = arguments.length; i < j; i += 2) {
-    this.userPrefs[arguments[i]].value = arguments[i + 1];
+
+   
+    try
+    {
+        this.userPrefs[arguments[i]].value = arguments[i + 1];
+    }
+    catch(err){}
   }
   gadget.saveUserPrefs();
 };

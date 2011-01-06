@@ -285,8 +285,7 @@ public class IFrame
     }
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
-        System.out.println("Iframe request"+request.getQueryString());
+    {        
         String url = request.getParameter("url");
         String country = request.getParameter("country");
         String lang = request.getParameter("lang");

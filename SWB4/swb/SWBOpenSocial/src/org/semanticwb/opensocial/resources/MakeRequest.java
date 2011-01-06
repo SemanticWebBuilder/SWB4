@@ -15,8 +15,6 @@ import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.DOMOutputter;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
@@ -45,7 +43,6 @@ public class MakeRequest
         out.write(objresponse.getBytes(utf8));
         out.close();
     }
-    
 
     private void getDocument(URL url, String headers, HttpServletResponse response) throws IOException, JDOMException, JSONException
     {
@@ -62,48 +59,53 @@ public class MakeRequest
             }
             String header = con.getHeaderField("Content-Type");
             Charset charset = Charset.defaultCharset();
-            //String contentType="text/xml;charset=" + charset.name();
+            System.out.println("header " + header);
             if (header != null)
-            {                
+            {
                 int pos = header.indexOf("charset=");
                 if (pos != -1)
                 {
-                    String scharset = header.substring(pos + 6).trim();
+                    String scharset = header.substring(pos + 8).trim();
+                    System.out.println("scharset " + scharset);
                     charset = Charset.forName(scharset);
                 }
             }
-            InputStream in = con.getInputStream();
-            java.io.InputStreamReader reader = new InputStreamReader(in, charset);            
-            StringBuilder sb=new StringBuilder();
-            char[] buffer=new char[1028];
-            int read=reader.read(buffer);
-            while(read!=-1)
-            {
-                sb.append(buffer,0,read);
-                read=reader.read(buffer);
-            }
-            reader.close();
-            String xml=sb.toString();            
-            response.setContentType("application/json");
+            StringBuilder sb = new StringBuilder();
             JSONObject responseJSONObject = new JSONObject();
+            if (con.getResponseCode() == 200)
+            {
+                InputStream in = con.getInputStream();
+                java.io.InputStreamReader reader = new InputStreamReader(in, charset);
+                char[] buffer = new char[1028];
+                int read = reader.read(buffer);
+                while (read != -1)
+                {
+                    sb.append(buffer, 0, read);
+                    read = reader.read(buffer);
+                }
+                reader.close();
+            }
+            String xml = sb.toString();
+            System.out.println("Make request xml :" + xml);
+            response.setContentType("application/json");
             JSONObject body = new JSONObject();
             body.put("body", xml);
             responseJSONObject.put(url.toString(), body);
             responseJSONObject.put("rc", con.getResponseCode());
-
             System.out.println("response");
             System.out.println(responseJSONObject.toString(4));
             sendResponse(responseJSONObject.toString(4), response);
         }
         catch (IOException e)
         {
+            e.printStackTrace();
             log.debug(e);
             throw e;
         }
         /*catch (JDOMException e)
         {
-            log.debug(e);
-            throw e;
+        log.debug(e);
+        throw e;
         }*/
         catch (JSONException e)
         {
@@ -177,6 +179,7 @@ public class MakeRequest
                     {
                         log.debug(e);
                         response.sendError(505, e.getLocalizedMessage());
+                        return;
                     }
                 }
                 else if ("FEED".equals(contentType.trim()))
