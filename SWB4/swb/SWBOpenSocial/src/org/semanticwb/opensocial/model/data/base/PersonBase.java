@@ -14,6 +14,7 @@ public abstract class PersonBase extends org.semanticwb.model.base.GenericObject
     public static final org.semanticwb.platform.SemanticProperty data_Age=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#Age");
     public static final org.semanticwb.platform.SemanticProperty data_hasActivity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#hasActivity");
     public static final org.semanticwb.platform.SemanticProperty data_hasCar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#hasCar");
+    public static final org.semanticwb.platform.SemanticProperty data_hasEmail=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#hasEmail");
     public static final org.semanticwb.platform.SemanticProperty data_hasBook=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#hasBook");
     public static final org.semanticwb.platform.SemanticProperty data_aboutMe=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#aboutMe");
     public static final org.semanticwb.platform.SemanticClass data_Group=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#Group");
@@ -389,6 +390,33 @@ public abstract class PersonBase extends org.semanticwb.model.base.GenericObject
     public void removeCar(String value)
     {
         getSemanticObject().removeLiteralProperty(data_hasCar,new org.semanticwb.platform.SemanticLiteral(value));
+    }
+
+    public java.util.Iterator<String> listEmails()
+    {
+        java.util.ArrayList<String> values=new java.util.ArrayList<String>();
+        java.util.Iterator<org.semanticwb.platform.SemanticLiteral> it=getSemanticObject().listLiteralProperties(data_hasEmail);
+        while(it.hasNext())
+        {
+                org.semanticwb.platform.SemanticLiteral literal=it.next();
+                values.add(literal.getString());
+        }
+        return values.iterator();
+    }
+
+    public void addEmail(String value)
+    {
+        getSemanticObject().addLiteralProperty(data_hasEmail, new org.semanticwb.platform.SemanticLiteral(value));
+    }
+
+    public void removeAllEmail()
+    {
+        getSemanticObject().removeProperty(data_hasEmail);
+    }
+
+    public void removeEmail(String value)
+    {
+        getSemanticObject().removeLiteralProperty(data_hasEmail,new org.semanticwb.platform.SemanticLiteral(value));
     }
 
     public java.util.Iterator<String> listBooks()

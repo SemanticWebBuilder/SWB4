@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.Set;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.User;
@@ -17,6 +18,8 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.opensocial.model.Gadget;
 import org.semanticwb.opensocial.model.PersonalizedGadged;
 import org.semanticwb.opensocial.model.UserPref;
+import org.semanticwb.opensocial.model.data.Group;
+import org.semanticwb.opensocial.model.data.Name;
 import org.semanticwb.opensocial.model.data.Person;
 
 /**
@@ -50,7 +53,7 @@ public class SocialUser
         {
             User _user = site.getUserRepository().getUser(user);
             Set<UserPrefs> getUserPrefs = new HashSet<UserPrefs>();
-            Iterator<PersonalizedGadged> personalizedGadgeds = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(_user,site);
+            Iterator<PersonalizedGadged> personalizedGadgeds = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(_user, site);
             ArrayList<PersonalizedGadged> toDelete = new ArrayList<PersonalizedGadged>();
             while (personalizedGadgeds.hasNext())
             {
@@ -67,11 +70,69 @@ public class SocialUser
             }
             for (PersonalizedGadged pgadget : toDelete)
             {
-                System.out.println("deleting pgadget "+pgadget.getId());
+                System.out.println("deleting pgadget " + pgadget.getId());
                 pgadget.remove();
             }
             return getUserPrefs.toArray(new UserPrefs[getUserPrefs.size()]);
         }
+    }
+
+    public void checkOsapiFeature(Gadget gadget, WebSite site)
+    {
+        checkOsapiFeature(gadget, site, false);
+    }
+    public void checkOsapiFeature(Gadget gadget, WebSite site, boolean forceupdate)
+    {
+        for (String feature : gadget.getFeatures())
+        {
+            if ("osapi".equals(feature)) // osapi is not valid for non register users
+            {
+                if (user != null)
+                {
+                    User _user = site.getUserRepository().getUser(user);
+                    Person person = Person.ClassMgr.createPerson(user, site);
+                    if (person == null)
+                    {
+                        person = Person.ClassMgr.createPerson(user, site);
+                        Name name = Name.ClassMgr.createName(site);
+                        name.setGivenName(_user.getFirstName());
+                        name.setFamilyName(_user.getLastName());
+                        name.setMiddleName(_user.getSecondLastName());
+                        name.setFormatted(_user.getFullName());
+                        name.setGivenName(_user.getFirstName());
+                        person.setThumbnailUrl(SWBPortal.getDistributorPath() + SWBPortal.getWebWorkPath() + _user.getPhoto());
+                        person.setName(name);
+                        if(_user.getEmail()!=null)
+                        {
+                            person.addEmail(_user.getEmail());
+                        }
+                        Group friends = Group.ClassMgr.createGroup("@friends", site);
+                        friends.setTitle("friends");
+                        friends.setDescription("friends");
+                        person.addGroup(friends);
+                    }
+                    else
+                    {
+                        if (forceupdate)
+                        {
+                            Name name = person.getName();
+                            if(name==null)
+                            {
+                                name = Name.ClassMgr.createName(site);
+                            }
+                            name.setGivenName(_user.getFirstName());
+                            name.setFamilyName(_user.getLastName());
+                            name.setMiddleName(_user.getSecondLastName());
+                            name.setFormatted(_user.getFullName());
+                            name.setGivenName(_user.getFirstName());
+                            person.setThumbnailUrl(SWBPortal.getDistributorPath() + SWBPortal.getWebWorkPath() + _user.getPhoto());
+                        }
+                    }
+
+                }
+            }
+        }
+
     }
 
     public boolean canAdd(Gadget gadget, WebSite site)
@@ -80,10 +141,11 @@ public class SocialUser
         {
             if ("osapi".equals(feature)) // osapi is not valid for non register users
             {
-                if (user == null || Person.ClassMgr.getPerson(user, site) == null)
+                if (user == null)
                 {
                     return false;
                 }
+                checkOsapiFeature(gadget, site);
             }
         }
         return true;
@@ -187,7 +249,7 @@ public class SocialUser
                         {
                             UserPref pref = list.next();
                             String key = pref.getKey();
-                            String value = pref.getValue();                            
+                            String value = pref.getValue();
                             try
                             {
                                 getJSONUserPrefs.put(key, value);

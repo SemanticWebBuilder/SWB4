@@ -392,6 +392,17 @@ public class SocialContainer extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+        WebSite site=paramRequest.getWebPage().getWebSite();
+        User user=paramRequest.getUser();
+        SocialUser socialuser=new SocialUser(user);
+        for(UserPrefs pref : socialuser.getUserPrefs(site))
+        {
+            if(pref.getGadget()!=null)
+            {
+                Gadget g=pref.getGadget();
+                socialuser.checkOsapiFeature(g, site,true);
+            }
+        }
         String path = "/swbadmin/jsp/opensocial/samplecontainer.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
