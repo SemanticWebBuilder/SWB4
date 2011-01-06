@@ -65,21 +65,27 @@ public class SocialContainer extends GenericResource
 
     static
     {
+        String[] urls={"http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml","http://www.google.com/ig/modules/horoscope/horoscope.xml","http://www.google.com/ig/modules/test_setprefs_multiple_ifpc.xml"};
         WebSite site = WebSite.ClassMgr.getWebSite("reg_digital_demo");
-        Iterator<Gadget> gadgets = Gadget.ClassMgr.listGadgets();
-        while (gadgets.hasNext())
+        for(String url : urls )
         {
-            gadgets.next().remove();
+            boolean exists=false;
+            Iterator<Gadget> gadgets = Gadget.ClassMgr.listGadgets();
+            while (gadgets.hasNext())
+            {
+                Gadget gadget=gadgets.next();
+                if(gadget.getUrl().equals(url))
+                {
+                    exists=true;
+                    break;
+                }
+            }
+            if(!exists)
+            {
+                Gadget g = Gadget.ClassMgr.createGadget(site);
+                g.setUrl(url);
+            }
         }
-        Gadget g = Gadget.ClassMgr.createGadget(site);
-        g.setUrl("http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml");
-
-        g = Gadget.ClassMgr.createGadget(site);
-        //g.setUrl("http://localhost:8080/swb/samplecontainer/examples/horoscope.xml");
-        g.setUrl("http://www.google.com/ig/modules/horoscope/horoscope.xml");
-
-        g = Gadget.ClassMgr.createGadget(site);
-        g.setUrl("http://www.google.com/ig/modules/test_setprefs_multiple_ifpc.xml");
 
     }
 

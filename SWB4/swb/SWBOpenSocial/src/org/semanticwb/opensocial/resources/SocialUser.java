@@ -67,6 +67,7 @@ public class SocialUser
             }
             for (PersonalizedGadged pgadget : toDelete)
             {
+                System.out.println("deleting pgadget "+pgadget.getId());
                 pgadget.remove();
             }
             return getUserPrefs.toArray(new UserPrefs[getUserPrefs.size()]);
