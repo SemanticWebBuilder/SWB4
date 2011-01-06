@@ -125,7 +125,7 @@ public class SocialUser
                             name.setMiddleName(_user.getSecondLastName());
                             name.setFormatted(_user.getFullName());
                             name.setGivenName(_user.getFirstName());
-                            person.setThumbnailUrl(SWBPortal.getDistributorPath() + SWBPortal.getWebWorkPath() + _user.getPhoto());
+                            person.setThumbnailUrl(SWBPortal.getWebWorkPath() + _user.getPhoto());
                         }
                     }
 
