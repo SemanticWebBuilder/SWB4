@@ -65,7 +65,7 @@ public class SocialContainer extends GenericResource
 
     static
     {
-        String[] urls={"http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml","http://www.google.com/ig/modules/horoscope/horoscope.xml","http://www.google.com/ig/modules/test_setprefs_multiple_ifpc.xml"};
+        String[] urls={"http://localhost:8080/swb/samplecontainer/examples/horoscope.xml","http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml","http://www.google.com/ig/modules/horoscope/horoscope.xml","http://www.google.com/ig/modules/test_setprefs_multiple_ifpc.xml"};
         WebSite site = WebSite.ClassMgr.getWebSite("reg_digital_demo");
         for(String url : urls )
         {
