@@ -4,15 +4,15 @@
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
     <admdbconnmgr defconn="true"/>
     <fieldset legend="Setting Strategy">
-        <input type="text" name="title" label="Title:" maxlength="50" promptMessage="Title" />
-        <input type="text" name="subtitle" label="Subtitle:" maxlength="50" promptMessage="Subtitle" />
-        <input type="file" name="imgfile" label="Image (gif, jpg, jpeg, png):" showfile="true" filetype="jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Remove image" size="40"/>
-        <input type="text" name="caption" label="Caption:" maxlength="50" promptMessage="Caption" />
-        <textarea name="text" label="Text:" rows="5" cols="50"  jsrequired="true"/>
-        <input type="text" name="more" label="Link text:" maxlength="50" promptMessage="Link text" />
-        <input type="text" name="url" label="Web address:" promptMessage="Web address" />
+        <input type="text" name="title" label="Title" maxlength="50" promptMessage="Title" />
+        <input type="text" name="subtitle" label="Subtitle" maxlength="50" promptMessage="Subtitle" />
+        <input type="file" name="imgfile" label="Image (gif, jpg, jpeg, png)" showfile="true" filetype="jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Remove image" size="40"/>
+        <input type="text" name="caption" label="Caption" maxlength="50" promptMessage="Caption" />
+        <textarea name="text" label="Text" rows="5" cols="50"  jsrequired="true"/>
+        <input type="text" name="more" label="Link text" maxlength="50" promptMessage="Link text" />
+        <input type="text" name="url" label="Web address" promptMessage="Web address" />
 
-        <statictext name="txtTarget">Send to new Window:</statictext>
+        <statictext name="txtTarget">Send to new Window</statictext>
         <input type="radio" id="target1" name="target" label="Yes" value="1"/>
         <input type="radio" id="target0" name="target" label="No" value="0" checked="true"/>
 
@@ -25,11 +25,13 @@
         </statictext>
     </fieldset>
 
+    <div title="Style" open="false">
     <fieldset legend="Look and Feel">
-        <input type="file" name="template" label="Template (xsl, xslt): " showfile="true" filetype="xsl|xslt" isshowfiletype="true" isremovefile="true" removemsg="Remove template: " msg="Current template: " bydefault="{@webpath}swbadmin/xsl/Promo/Promo.xsl" msgbydefault="Default template: " jsrequired="false" />
-        <input type="text" id="imgWidth" name="imgWidth" label="Image width (pixels):" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Invalid width"  promptMessage="Image width. Examples: 90%, 350px, 854" />
-        <input type="text" id="imgHeight" name="imgHeight" label="Image height (pixels):" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Invalid height" promptMessage="Image height. Examples: 90%, 350px, 854" />
+        <input type="file" name="template" label="Template (xsl, xslt) " showfile="true" filetype="xsl|xslt" isshowfiletype="true" isremovefile="true" removemsg="Remove template " msg="Current template " bydefault="{@webpath}swbadmin/xsl/Promo/Promo.xsl" msgbydefault="Default template: " jsrequired="false" />
+        <input type="text" id="imgWidth" name="imgWidth" label="Image width (pixels)" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Invalid width"  promptMessage="Image width. Examples: 90%, 350px, 854" />
+        <input type="text" id="imgHeight" name="imgHeight" label="Image height (pixels)" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Invalid height" promptMessage="Image height. Examples: 90%, 350px, 854" />
     </fieldset>
+    </div>
 
     <fieldset>
         <input type="submit" name="btnSave" value="Save" />
