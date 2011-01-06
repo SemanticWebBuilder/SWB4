@@ -165,22 +165,17 @@ public class Login implements InternalServlet
             }
         }
         if (null != request.getParameter("user")){
-            //System.out.println("User: "+request.getParameter("user"));
             User pcUser = null;
             try {
                 String ids = new String(SWBUtils.CryptoWrapper.PBEAES128Decipher(SWBPlatform.getVersion(),
                     SWBUtils.TEXT.decodeBase64(request.getParameter("user")).getBytes()));
-                //System.out.println("User: "+ids);
                 UserRepository pur = SWBContext.getUserRepository(ids.substring(0,ids.indexOf("|")));
-                //System.out.println("--:"+ids.substring(ids.indexOf("|")+1));
                 pcUser=pur.getUserByLogin(ids.substring(ids.indexOf("|")+1));
-                //System.out.println("pcUser: "+pcUser);
                 String alg = pcUser.getPassword().substring(1,pcUser.getPassword().indexOf("}"));
-                //System.out.println("alg: "+alg);
                 if (pcUser.getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(request.getParameter("wb_old_password"), alg)))
-                { //System.out.println("compare OK");
+                {
                     if (request.getParameter("wb_new_password").equals(request.getParameter("wb_new_password2")))
-                    { //System.out.println("equal passwords");
+                    {
                         pcUser.setPassword(request.getParameter("wb_new_password"));
                         pcUser.setRequestChangePassword(false);
                         
@@ -189,28 +184,29 @@ public class Login implements InternalServlet
                         pcUser.setLastLogin(new java.util.Date());
                         pcUser.checkCredential(request.getParameter("wb_new_password").toCharArray());
                         uri = uri.replaceFirst("/login/", "/swb/");
-                        //System.out.println("URI: "+uri);
                         sendRedirect(response, uri);
                         return;
-                    } else { //System.out.println("non equal passwords");
+                    } else {
                         formChangePwd(request, response, dparams, user, "Error: contraseña y confirmación diferentes");
                         return;
                     }
-                }else { //System.out.println("No old passowrd");
+                }else {
                         formChangePwd(request, response, dparams, user, "Error: contraseña anterior inválida");
                         return;
                     }
-            } catch (Exception sec){
+            } catch (NullPointerException npe)
+            {
+                doResponse(request, response, dparams, null, authMethod);
+                return;
+            }catch (Exception sec){
                 formChangePwd(request, response, dparams, pcUser, "Error: "+sec.getMessage());
-                //System.out.println("caugth: ");
-                sec.printStackTrace();
+                return;
             }
         }
         if (uri != null)
         {
             path = uri.replaceFirst(_name, SWBPlatform.getEnv("swb/distributor"));
         }
-        //
         if (null == request.getParameter("wb_username"))
         {
             log.debug("Request a new username...");
@@ -236,18 +232,22 @@ public class Login implements InternalServlet
             } catch (Exception ex)
             {
                 try {
-                    //System.out.println("getLastLogin3:"+((User)subject.getPrincipals().iterator().next()).isRequestChangePassword());
-                    if (SWBPlatform.getSecValues().isForceChage() || SWBPlatform.getSecValues().getExpires()>0){
-                    User tmpuser = dparams.getWebPage().getWebSite().getUserRepository().getUserByLogin(request.getParameter("wb_username"));
-                    String alg = tmpuser.getPassword().substring(1,tmpuser.getPassword().indexOf("}"));
-                    if (tmpuser.getPassword().equals(
-                            SWBUtils.CryptoWrapper.comparablePassword(request.getParameter("wb_password"), alg)) && tmpuser.isRequestChangePassword()){
-                        //System.out.println("enviar a cambio de password!!!");
-                        formChangePwd(request, response, dparams, tmpuser, "Debe actualizar su contraseña.");
-                        return;
+                    if (SWBPlatform.getSecValues().isForceChage() || SWBPlatform.getSecValues().getExpires()>0)
+                    {
+                        User tmpuser = dparams.getWebPage().getWebSite().getUserRepository().getUserByLogin(request.getParameter("wb_username"));
+                        String alg = tmpuser.getPassword().substring(1,tmpuser.getPassword().indexOf("}"));
+                        if (tmpuser.getPassword().equals(
+                                SWBUtils.CryptoWrapper.comparablePassword(
+                                request.getParameter("wb_password"), alg)) && tmpuser.isRequestChangePassword())
+                        {
+                            formChangePwd(request, response, dparams, tmpuser, "Debe actualizar su contraseña.");
+                            return;
                         }
                     }
-                } catch (Exception ne) {ne.printStackTrace();} //continuar como nuevo logueo
+                } catch (Exception ne)
+                {
+                    log.debug("Problema al intentar cambiar password!", ne); //continuar como nuevo logueo
+                }
                 markFailedAttepmt(request.getParameter("wb_username"));
                 log.debug("Can't log User", ex); 
                 String alert = "User non existent";
@@ -261,7 +261,6 @@ public class Login implements InternalServlet
         }
 
 
-        //
         String url = request.getParameter("wb_goto");
         if (user.getUserRepository().isExternal())
         {
@@ -759,9 +758,10 @@ public class Login implements InternalServlet
             login = login.replaceFirst("<ussid>", "<input type=\"hidden\" name=\"user\" value=\""+
                     SWBUtils.TEXT.encodeBase64(new String(SWBUtils.CryptoWrapper.PBEAES128Cipher(SWBPlatform.getVersion(),
                     (""+user.getUserRepository().getId()+"|"+user.getLogin()).getBytes())))+"\">");
-            login = login.replaceFirst("<val01>", "");
-            login = login.replaceFirst("<val02>", "");
-            login = login.replaceFirst("<val03>", "");
+            login = login.replaceFirst("<val01>", (SWBPlatform.getSecValues().isDifferFromLogin())?"if (form.wb_new_password.value == '"+user.getLogin()+"') { ret=false; alert('Error: password must be diferent from login.');}":"");
+            login = login.replaceFirst("<val02>", (SWBPlatform.getSecValues().getMinlength()>0)?"if (form.wb_new_password.value.length < "+SWBPlatform.getSecValues().getMinlength()+") { ret=false; alert('Error: password must have at least "+SWBPlatform.getSecValues().getMinlength()+" characters.');}":"");
+            login = login.replaceFirst("<val03>", (SWBPlatform.getSecValues().getComplexity()==1)?"if (!form.wb_new_password.value.match(/^.*(?=.*[a-zA-Z])(?=.*[0-9])().*$/) ) { ret=false; alert('Error: password must have leters and numbers.');}":"");
+            login = login.replaceFirst("<val04>", (SWBPlatform.getSecValues().getComplexity()==1)?"if (!form.wb_new_password.value.match(/^.*(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\\W])().*$/) ) { ret=false; alert('Error: password must have leters, numbres and special symbols.');}":"");
 
         } catch (Exception e)
         {
