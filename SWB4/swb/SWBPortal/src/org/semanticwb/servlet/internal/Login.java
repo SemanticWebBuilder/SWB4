@@ -183,9 +183,14 @@ public class Login implements InternalServlet
                     { System.out.println("equal passwords");
                         pcUser.setPassword(request.getParameter("wb_new_password"));
                         pcUser.setRequestChangePassword(false);
+                        
+                        subject.getPrincipals().clear();
+                        subject.getPrincipals().add(pcUser);
                         pcUser.setLastLogin(new java.util.Date());
-
-                        doResponse(request, response, dparams, "Password Succesfully changed!", authMethod);
+                        pcUser.checkCredential(request.getParameter("wb_new_password").toCharArray());
+                        uri = uri.replaceFirst("/login/", "/swb/");
+                        System.out.println("URI: "+uri);
+                        sendRedirect(response, uri);
                         return;
                     } else { System.out.println("non equal passwords");
                         formChangePwd(request, response, dparams, user, "Error: contraseña y confirmación diferentes");
@@ -226,23 +231,23 @@ public class Login implements InternalServlet
             try
             {
                 String matchKey = dparams.getWebPage().getWebSiteId()+"|"+request.getParameter("wb_username");
-                System.out.println("getLastLogin:"+((User)subject.getPrincipals().iterator().next()).getLastLogin());
                 doLogin(callbackHandler, context, subject, request, matchKey);
-                System.out.println("getLastLogin2:"+((User)subject.getPrincipals().iterator().next()).getLastLogin());
-                System.out.println("getLastLogin3:"+((User)subject.getPrincipals().iterator().next()).isRequestChangePassword());
 
             } catch (Exception ex)
             {
-                
-                //System.out.println("getLastLogin3:"+((User)subject.getPrincipals().iterator().next()).isRequestChangePassword());
-                if (SWBPlatform.getSecValues().isForceChage() || SWBPlatform.getSecValues().getExpires()>0){
-                User tmpuser = dparams.getWebPage().getWebSite().getUserRepository().getUserByLogin(request.getParameter("wb_username"));
-                if (tmpuser.isRequestChangePassword()){
-                    System.out.println("enviar a cambio de password!!!");
-                    formChangePwd(request, response, dparams, tmpuser, "Debe actualizar su contraseña.");
-                    return;
+                try {
+                    //System.out.println("getLastLogin3:"+((User)subject.getPrincipals().iterator().next()).isRequestChangePassword());
+                    if (SWBPlatform.getSecValues().isForceChage() || SWBPlatform.getSecValues().getExpires()>0){
+                    User tmpuser = dparams.getWebPage().getWebSite().getUserRepository().getUserByLogin(request.getParameter("wb_username"));
+                    String alg = tmpuser.getPassword().substring(1,tmpuser.getPassword().indexOf("}"));
+                    if (tmpuser.getPassword().equals(
+                            SWBUtils.CryptoWrapper.comparablePassword(request.getParameter("wb_password"), alg)) && tmpuser.isRequestChangePassword()){
+                        System.out.println("enviar a cambio de password!!!");
+                        formChangePwd(request, response, dparams, tmpuser, "Debe actualizar su contraseña.");
+                        return;
+                        }
                     }
-                }
+                } catch (Exception ne) {ne.printStackTrace();} //continuar como nuevo logueo
                 markFailedAttepmt(request.getParameter("wb_username"));
                 log.debug("Can't log User", ex); 
                 String alert = "User non existent";
@@ -725,17 +730,7 @@ public class Login implements InternalServlet
 
     private void formChangePwd(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, User user, String Message) throws IOException
     {
-        String ruta = "/config/";
-        //TODO: Obtener objetivo del siguiente código
-        if (handleError)
-        {
-            ruta += "403";
-        } else
-        {
-            ruta += "password";
-        }
-
-        ruta += ".html";
+        String ruta = "/config/password.html";
         String login = null;
         try
         {
