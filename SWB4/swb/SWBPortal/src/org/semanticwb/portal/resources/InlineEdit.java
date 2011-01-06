@@ -146,11 +146,9 @@ public class InlineEdit extends GenericResource {
         }
 
         String action = response.getAction();        
-        if(response.Action_EDIT.equals(action))
-        {
+        if(response.Action_EDIT.equals(action)) {
             String editaccess = request.getParameter("editar");
-            if(editaccess!=null)
-            {
+            if(editaccess!=null) {
                 //getResourceBase().setAttribute("editRole", editaccess);
                 base.setAttribute("editRole", editaccess);
                 try {
@@ -202,11 +200,11 @@ public class InlineEdit extends GenericResource {
 
         String str_role = base.getAttribute("editRole", "0");
 
-        SWBResourceURL urlA = paramRequest.getActionUrl();
-        urlA.setAction(paramRequest.Action_EDIT);
+        SWBResourceURL urlAction = paramRequest.getActionUrl();
+        urlAction.setAction(paramRequest.Action_EDIT);
 
         out.println("<div class=\"swbform\">");
-        out.println("<form id=\"" + base.getId() + "/InLineEditRes\" name=\"" + getResourceBase().getId() + "/InLineEditRes\" action=\"" + urlA + "\" method=\"post\" >");
+        out.println("<form id=\"" + base.getId() + "/InLineEditRes\" name=\"" + getResourceBase().getId() + "/InLineEditRes\" action=\""+urlAction+"\" method=\"post\" >");
         out.println("<fieldset>");
         out.println("<legend>");
         out.println(fieldsetText);//Texto a desplegar dentro del fieldset
