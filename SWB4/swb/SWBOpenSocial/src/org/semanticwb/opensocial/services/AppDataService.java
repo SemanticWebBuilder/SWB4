@@ -24,13 +24,16 @@ public class AppDataService implements Service
 
     private String getData(String key, Person person, String appid)
     {
-        GenericIterator<org.semanticwb.opensocial.model.data.AppData> data = person.listAppDatas();
-        while (data.hasNext())
+        if (person != null)
         {
-            org.semanticwb.opensocial.model.data.AppData appData = data.next();
-            if (key.equals(appData.getKey()) && appid.equals(appData.getAppid()))
+            GenericIterator<org.semanticwb.opensocial.model.data.AppData> data = person.listAppDatas();
+            while (data.hasNext())
             {
-                return appData.getValue();
+                org.semanticwb.opensocial.model.data.AppData appData = data.next();
+                if (key.equals(appData.getKey()) && appid.equals(appData.getAppid()))
+                {
+                    return appData.getValue();
+                }
             }
         }
         return null;
@@ -52,66 +55,78 @@ public class AppDataService implements Service
             }
             if (groupId.equals("@self"))
             {
-                JSONObject responseKeys = new JSONObject();
-                JSONArray keys = params.getJSONArray("keys");
-                for (int i = 0; i < keys.length(); i++)
+                if (personUserID != null)
                 {
-                    String key = keys.getString(i);
-                    String data = getData(key, personUserID, appid);
-                    if (data != null)
+                    JSONObject responseKeys = new JSONObject();
+                    JSONArray keys = params.getJSONArray("keys");
+                    for (int i = 0; i < keys.length(); i++)
                     {
-                        responseKeys.accumulate(key, data);
-                    }
+                        String key = keys.getString(i);
+                        String data = getData(key, personUserID, appid);
+                        if (data != null)
+                        {
+                            responseKeys.accumulate(key, data);
+                        }
 
+                    }
+                    response.put(personUserID.getId(), responseKeys);
+                    return response;
                 }
-                response.put(personUserID.getId(), responseKeys);
-                return response;
             }
             else if (groupId.equals("@friends"))
             {
-                Iterator<Group> groups = personUserID.listGroups();
-                while (groups.hasNext())
+                if (personUserID != null)
                 {
-                    Group group = groups.next();
-                    if ((personUserID.getId() + "@friends").equals(group.getId()))
+                    Iterator<Group> groups = personUserID.listGroups();
+                    while (groups.hasNext())
                     {
+                        Group group = groups.next();
+                        if ((personUserID.getId() + "@friends").equals(group.getId()))
+                        {
+                            Iterator<Person> _persons = group.listPersons();
+                            while (_persons.hasNext())
+                            {
+                                Person person = _persons.next();
+                                persons.add(person);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            else if (groupId.equals("@all"))
+            {
+                if (personUserID != null)
+                {
+                    Iterator<Group> groups = personUserID.listGroups();
+                    while (groups.hasNext())
+                    {
+                        Group group = groups.next();
                         Iterator<Person> _persons = group.listPersons();
                         while (_persons.hasNext())
                         {
                             Person person = _persons.next();
                             persons.add(person);
                         }
-                        break;
-                    }
-                }
-            }
-            else if (groupId.equals("@all"))
-            {
-                Iterator<Group> groups = personUserID.listGroups();
-                while (groups.hasNext())
-                {
-                    Group group = groups.next();
-                    Iterator<Person> _persons = group.listPersons();
-                    while (_persons.hasNext())
-                    {
-                        Person person = _persons.next();
-                        persons.add(person);
                     }
                 }
             }
             else
             {
-                Iterator<Group> groups = personUserID.listGroups();
-                while (groups.hasNext())
+                if (personUserID != null)
                 {
-                    Group group = groups.next();
-                    if (group.getId().equals(groupId))
+                    Iterator<Group> groups = personUserID.listGroups();
+                    while (groups.hasNext())
                     {
-                        Iterator<Person> _persons = group.listPersons();
-                        while (_persons.hasNext())
+                        Group group = groups.next();
+                        if (group.getId().equals(groupId))
                         {
-                            Person person = _persons.next();
-                            persons.add(person);
+                            Iterator<Person> _persons = group.listPersons();
+                            while (_persons.hasNext())
+                            {
+                                Person person = _persons.next();
+                                persons.add(person);
+                            }
                         }
                     }
                 }

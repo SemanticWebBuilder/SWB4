@@ -16,6 +16,7 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.opensocial.model.Gadget;
 import org.semanticwb.opensocial.model.PersonalizedGadged;
 import org.semanticwb.opensocial.model.UserPref;
+import org.semanticwb.opensocial.model.data.Person;
 
 /**
  *
@@ -57,13 +58,16 @@ public class SocialUser
             return getUserPrefs.toArray(new UserPrefs[getUserPrefs.size()]);
         }
     }
-    public boolean canAdd(Gadget gadget)
+    public boolean canAdd(Gadget gadget,WebSite site)
     {
         for(String feature : gadget.getFeatures())
         {
-            if("osapi".equals(feature) && user==null) // osapi is not valid for non register users
+            if("osapi".equals(feature)) // osapi is not valid for non register users
             {
-                return false;
+                if(user==null || Person.ClassMgr.getPerson(user, site)==null)
+                {
+                    return false;
+                }                
             }
         }
         return true;
