@@ -52,14 +52,14 @@ public class PeopleService implements Service
         john_doe.setGender("male");
         john_doe.setProfileUrl("http://www.infotec");
 
-        Group friendsOfGeorgeDoe = Group.ClassMgr.createGroup(john_doe.getId()+"@friends", site);
+        Group friendsOfGeorgeDoe = Group.ClassMgr.createGroup(john_doe.getId() + "@friends", site);
         john_doe.addGroup(friendsOfGeorgeDoe);
         friendsOfGeorgeDoe.setTitle("friends");
         friendsOfGeorgeDoe.setDescription("friends");
-        
 
 
-        Person george_doe  = Person.ClassMgr.createPerson("George.doe", site);
+
+        Person george_doe = Person.ClassMgr.createPerson("George.doe", site);
         name = Name.ClassMgr.createName(site);
         name.setFormatted("George Doe");
         george_doe.setName(name);
@@ -69,10 +69,10 @@ public class PeopleService implements Service
 
 
 
-        
 
 
-        Person jane_doe  = Person.ClassMgr.createPerson("jane.doe", site);
+
+        Person jane_doe = Person.ClassMgr.createPerson("jane.doe", site);
         name = Name.ClassMgr.createName(site);
         name.setFormatted("Jane Doe");
         jane_doe.setName(name);
@@ -81,7 +81,7 @@ public class PeopleService implements Service
         jane_doe.setProfileUrl("http://www.infotec");
 
 
-        Person Maija  = Person.ClassMgr.createPerson("maija", site);
+        Person Maija = Person.ClassMgr.createPerson("maija", site);
         name = Name.ClassMgr.createName(site);
         name.setFormatted("Maija Meikäläinen");
         Maija.setName(name);
@@ -93,12 +93,12 @@ public class PeopleService implements Service
         friendsOfGeorgeDoe.addPerson(jane_doe);
         friendsOfGeorgeDoe.addPerson(Maija);
         friendsOfGeorgeDoe.addPerson(george_doe);
-        
+
 
 
     }
 
-    public void update(String userid, JSONObject params, WebSite site,Gadget gadget)
+    public void update(String userid, JSONObject params, WebSite site, Gadget gadget)
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -123,7 +123,7 @@ public class PeopleService implements Service
         }
     }
 
-    public JSONObject get(String userid, JSONObject params, WebSite site,Gadget gadget)
+    public JSONObject get(String userid, JSONObject params, WebSite site, Gadget gadget)
     {
 
 
@@ -133,15 +133,15 @@ public class PeopleService implements Service
         {
             ArrayList<Person> persons = new ArrayList<Person>();
             response.put("entry", entries);
-            Scape scape=new HtmlScape();
-            String escapeType="htmlEscape";
-            if(params.optString("escapeType")!=null && !params.optString("escapeType").equals(""))
+            Scape scape = new HtmlScape();
+            String escapeType = "htmlEscape";
+            if (params.optString("escapeType") != null && !params.optString("escapeType").equals(""))
             {
-                escapeType=params.optString("escapeType");
+                escapeType = params.optString("escapeType");
             }
-            if("none".equals(escapeType))
+            if ("none".equals(escapeType))
             {
-                scape=new NoneScape();
+                scape = new NoneScape();
             }
             String groupId = params.getString("groupId").trim();
             Person personUserID = Person.ClassMgr.getPerson(userid, site);
@@ -154,7 +154,7 @@ public class PeopleService implements Service
                     for (int i = 0; i < fields.length(); i++)
                     {
                         String field = fields.getString(i);
-                        jsonperson.put(field, personUserID.getValueFromField(field,scape));
+                        jsonperson.put(field, personUserID.getValueFromField(field, scape));
                     }
                     return jsonperson;
 
@@ -162,50 +162,59 @@ public class PeopleService implements Service
             }
             else if (groupId.equals("@friends"))
             {
-                Iterator<Group> groups = personUserID.listGroups();
-                while (groups.hasNext())
+                if (personUserID != null)
                 {
-                    Group group = groups.next();
-                    if ((personUserID.getId()+"@friends").equals(group.getId()))
+                    Iterator<Group> groups = personUserID.listGroups();
+                    while (groups.hasNext())
                     {
+                        Group group = groups.next();
+                        if ((personUserID.getId() + "@friends").equals(group.getId()))
+                        {
+                            Iterator<Person> _persons = group.listPersons();
+                            while (_persons.hasNext())
+                            {
+                                Person person = _persons.next();
+                                persons.add(person);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            else if (groupId.equals("@all"))
+            {
+                if (personUserID != null)
+                {
+                    Iterator<Group> groups = personUserID.listGroups();
+                    while (groups.hasNext())
+                    {
+                        Group group = groups.next();
                         Iterator<Person> _persons = group.listPersons();
                         while (_persons.hasNext())
                         {
                             Person person = _persons.next();
                             persons.add(person);
                         }
-                        break;
-                    }
-                }
-            }
-            else if (groupId.equals("@all"))
-            {
-                Iterator<Group> groups = personUserID.listGroups();
-                while (groups.hasNext())
-                {
-                    Group group = groups.next();
-                    Iterator<Person> _persons = group.listPersons();
-                    while (_persons.hasNext())
-                    {
-                        Person person = _persons.next();
-                        persons.add(person);
                     }
                 }
             }
             else
             {
 
-                Iterator<Group> groups = personUserID.listGroups();
-                while (groups.hasNext())
+                if(personUserID!=null)
                 {
-                    Group group = groups.next();
-                    if (group.getId().equals(groupId))
+                    Iterator<Group> groups = personUserID.listGroups();
+                    while (groups.hasNext())
                     {
-                        Iterator<Person> _persons = group.listPersons();
-                        while (_persons.hasNext())
+                        Group group = groups.next();
+                        if (group.getId().equals(groupId))
                         {
-                            Person person = _persons.next();
-                            persons.add(person);
+                            Iterator<Person> _persons = group.listPersons();
+                            while (_persons.hasNext())
+                            {
+                                Person person = _persons.next();
+                                persons.add(person);
+                            }
                         }
                     }
                 }
@@ -223,7 +232,7 @@ public class PeopleService implements Service
                 for (int i = 0; i < fields.length(); i++)
                 {
                     String field = fields.getString(i);
-                    jsonperson.put(field, p.getValueFromField(field,scape));
+                    jsonperson.put(field, p.getValueFromField(field, scape));
                 }
                 entries.put(jsonperson);
             }
