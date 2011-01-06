@@ -5147,7 +5147,7 @@ public class SWBUtils {
          * @throws GeneralSecurityException If something fails when comparing passwords
          */
         public static String comparablePassword(String toEncode)
-                throws GeneralSecurityException
+                throws NoSuchAlgorithmException
         {
             return comparablePassword(toEncode, "SHA-512");
         }
@@ -5172,14 +5172,14 @@ public class SWBUtils {
          * @throws GeneralSecurityException If something fails when comparing passwords
          */
         public static String comparablePassword(String toEncode, String digestAlgorithm)
-                throws GeneralSecurityException
+                throws NoSuchAlgorithmException
         {
             MessageDigest messageDigest = MessageDigest.getInstance(digestAlgorithm);
             byte[] bits = null;
             try {
                 bits = toEncode.getBytes("ISO8859-1");
             } catch (UnsupportedEncodingException uee){
-                throw new GeneralSecurityException("Can't get bytes from string in ISO8859-1", uee);
+                throw new NoSuchAlgorithmException("Can't get bytes from string in ISO8859-1", uee);
             }
             //return "{SHA-512}" + new BASE64Encoder().encode(messageDigest.digest(toEncode.getBytes()));
             return "{SHA-512}"
