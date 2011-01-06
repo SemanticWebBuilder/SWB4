@@ -8,9 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -85,6 +82,7 @@ public class SocialContainer extends GenericResource
         g.setUrl("http://www.google.com/ig/modules/test_setprefs_multiple_ifpc.xml");
 
     }
+
     public static Map<String, String> getVariablesubstituion(User user, Gadget gadget, String language, String country, String moduleID)
     {
 
@@ -120,12 +118,12 @@ public class SocialContainer extends GenericResource
             socialUser = new SocialUser(user);
             session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
         }
-        String _userid=user==null?null:user.getId();
+        String _userid = user == null ? null : user.getId();
 
 
-        if(!(_userid==null && socialUser.getUserId()==null))
+        if (!(_userid == null && socialUser.getUserId() == null))
         {
-            String user1 = user==null?null:user.getId();
+            String user1 = user == null ? null : user.getId();
             if (user1 == null)
             {
                 user1 = UUID.randomUUID().toString();
@@ -141,8 +139,8 @@ public class SocialContainer extends GenericResource
                 socialUser = new SocialUser(user);
                 session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
             }
-        }       
-        
+        }
+
         return socialUser;
     }
 
@@ -150,7 +148,7 @@ public class SocialContainer extends GenericResource
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
         String url = request.getParameter("__url__");
-        System.out.println("url: "+url);
+        System.out.println("url: " + url);
         WebSite site = response.getWebPage().getWebSite();
         User user = response.getUser();
         if (url != null)
@@ -158,18 +156,26 @@ public class SocialContainer extends GenericResource
             Gadget gadget = getGadget(url, site);
             if (gadget != null)
             {
-                SocialUser socialUser=getSocialUser(user, request.getSession());
-                System.out.println("socialUser: "+socialUser.getUserId());
+                SocialUser socialUser = getSocialUser(user, request.getSession());
+                System.out.println("socialUser: " + socialUser.getUserId());
                 Document doc = gadget.getDocument();
                 NodeList userPrefs = doc.getElementsByTagName("UserPref");
                 String moduleid = UUID.randomUUID().toString().replace('-', '_');
-                if (user!=null && user.getId() != null)
+                if (user != null && user.getId() != null)
                 {
                     PersonalizedGadged pgadget = PersonalizedGadged.ClassMgr.createPersonalizedGadged(site);
                     pgadget.setGadget(gadget);
                     pgadget.setUser(user);
                     moduleid = pgadget.getId();
                 }
+                else
+                {
+                    if (userPrefs.getLength() == 0)
+                    {
+                        socialUser.saveUserPref(gadget, moduleid, null, null, site);
+                    }
+                }
+
                 for (int i = 0; i < userPrefs.getLength(); i++)
                 {
                     if (userPrefs.item(i) instanceof Element)
@@ -177,7 +183,6 @@ public class SocialContainer extends GenericResource
                         Element userPref = (Element) userPrefs.item(i);
                         String key = userPref.getAttribute("name");
                         String value = request.getParameter(key);
-                        System.out.println("Saving key: "+key+" value. "+value);
                         socialUser.saveUserPref(gadget, moduleid, key, value, site);
                     }
                 }
@@ -386,12 +391,12 @@ public class SocialContainer extends GenericResource
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
         {
-        request.setAttribute("paramRequest", paramRequest);
-        dis.include(request, response);
+            request.setAttribute("paramRequest", paramRequest);
+            dis.include(request, response);
         }
         catch (Exception e)
         {
-        log.error(e);
+            log.error(e);
         }
         //doList(request, response, paramRequest);
     }

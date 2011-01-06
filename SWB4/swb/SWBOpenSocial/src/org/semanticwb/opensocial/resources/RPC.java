@@ -87,10 +87,9 @@ public class RPC
         {
             port = ":" + request.getServerPort();
         }
-        String st = request.getParameter("st");
-        System.out.println("request.getRequestURI(): " + request.getRequestURI());
+        String st = request.getParameter("st");        
         System.out.println("request.getQueryString(): " + request.getQueryString());
-        System.out.println("request.getContentType(): " + request.getContentType());
+        
         if (st != null && "application/json".equals(request.getContentType()))
         {
             InputStream in = request.getInputStream();
@@ -106,11 +105,21 @@ public class RPC
             System.out.println("request RPC : " + sb.toString());
             String[] values = st.split(":");
 
-            if (values.length == 7)
+            if (values.length >= 7)
             {
                 try
                 {
-                    URI gadgetURL = new URI(values[4]);
+                    String urlgadget=values[4];
+                    if(values.length==7)
+                    {
+                        urlgadget=values[4];
+                    }
+                    if(values.length==9)
+                    {
+                        urlgadget=values[4]+":"+values[5]+":"+values[6];
+                    }
+                    System.out.println("urlgadget: "+urlgadget);
+                    URI gadgetURL = new URI(urlgadget);
                     URI here = new URI(request.getScheme() + "://" + request.getServerName() + port + request.getRequestURI());
                     if (!gadgetURL.isAbsolute())
                     {
@@ -121,15 +130,9 @@ public class RPC
                     {
                         String viewer = values[1];
                         String owner = values[0];
-                        if (sb.toString().startsWith("{"))
-                        {
-                            JSONObject obj = new JSONObject(sb.toString());
-                            String method = obj.getString("method");
-                            String id = obj.getString("id");
-                            JSONObject params = obj.getJSONObject("params");
-                            JSONObject responseMethod = execute(method, params, viewer, owner, site,gadget);
-                        }
-                        else
+                        System.out.println("viewer: "+viewer);
+                        System.out.println("owner: "+owner);
+                        if (sb.toString().startsWith("["))
                         {
                             JSONArray responseJSONObject = new JSONArray();
                             JSONArray requestJSONObject = new JSONArray(sb.toString());
@@ -139,13 +142,23 @@ public class RPC
                                 String method = obj.getString("method");
                                 String id = obj.getString("id");
                                 JSONObject params = obj.getJSONObject("params");
+                                System.out.println("Executing... ");
                                 JSONObject responseMethod = execute(method, params, viewer, owner, site,gadget);
                                 JSONObject part = new JSONObject();
                                 part.put("id", id);
                                 part.put("result", responseMethod);
+                                System.out.println("part... "+part.toString(4));
                                 responseJSONObject.put(part);
                             }
+                            System.out.println("response");
+                            System.out.println(responseJSONObject.toString(4));
                             sendResponse(responseJSONObject.toString(4), response);
+
+                            
+                        }
+                        else
+                        {
+                            System.out.println("warning: "+sb.toString());                            
                         }
                     }
                 }
@@ -154,6 +167,14 @@ public class RPC
                     e.printStackTrace();
                 }
             }
+            else
+            {
+                System.out.println("warning values: "+values.length);
+            }
+        }
+        else
+        {
+            System.out.println("warning request.getContentType(): " + request.getContentType());
         }
 
 
