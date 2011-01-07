@@ -1870,7 +1870,7 @@ gadgets.rpctx.nix = function() {
     }
 
     // Try again.
-    window.setTimeout(function() { conductHandlerSearch(); },
+    window.setTimeout(function() {conductHandlerSearch();},
                       NIX_SEARCH_PERIOD);
   }
 
@@ -1942,7 +1942,7 @@ gadgets.rpctx.nix = function() {
       if (typeof window[NIX_GET_WRAPPER] !== 'unknown') {
         window[NIX_HANDLE_MESSAGE] = function(data) {
           window.setTimeout(
-              function() { processFn(gadgets.json.parse(data)); }, 0);
+              function() {processFn(gadgets.json.parse(data));}, 0);
         };
 
         window[NIX_CREATE_CHANNEL] = function(name, channel, token) {
@@ -2173,7 +2173,7 @@ gadgets.rpctx.rmr = function() {
     } else {
       // Common gadget case: attaching header during in-gadget handshake,
       // when we may still be in script in head. Attach onload.
-      gadgets.util.registerOnLoadHandler(function() { appendFn(); });
+      gadgets.util.registerOnLoadHandler(function() {appendFn();});
     }
   }
 
@@ -2687,11 +2687,11 @@ gadgets.rpctx.ifpc = function() {
       iframe.style.border = iframe.style.width = iframe.style.height = '0px';
       iframe.style.visibility = 'hidden';
       iframe.style.position = 'absolute';
-      iframe.onload = function() { this.recyclable = true; };
+      iframe.onload = function() {this.recyclable = true;};
       iframePool.push(iframe);
     }
     iframe.src = src;
-    window.setTimeout(function() { document.body.appendChild(iframe); }, 0);
+    window.setTimeout(function() {document.body.appendChild(iframe);}, 0);
   }
 
   return {
@@ -3023,7 +3023,7 @@ gadgets.rpc = function() {
 
       if (rpc.s === ACK) {
         // Acknowledgement API, used to indicate a receiver is ready.
-        window.setTimeout(function() { transportReady(rpc.f, true); }, 0);
+        window.setTimeout(function() {transportReady(rpc.f, true);}, 0);
         return;
       }
 
@@ -3181,7 +3181,7 @@ gadgets.rpc = function() {
 
     if (setup[frameId] !== true && setup[frameId]++ < SETUP_FRAME_MAX_TRIES) {
       // Try again in a bit, assuming that frame will soon exist.
-      window.setTimeout(function() { setupFrame(frameId, token, forcesecure) },
+      window.setTimeout(function() {setupFrame(frameId, token, forcesecure)},
                         SETUP_FRAME_TIMEOUT);
     } else {
       // Fail: fall back for this gadget.
@@ -3661,7 +3661,7 @@ gadgets.rpc = function() {
     receiveSameDomain: function(rpc) {
       // Pass through to local process method but converting to a local Array
       rpc.a = Array.prototype.slice.call(rpc.a);
-      window.setTimeout(function() { process(rpc); }, 0);
+      window.setTimeout(function() {process(rpc);}, 0);
     },
 
     // Helper method to get the protocol://host:port of an input URL.
@@ -3734,7 +3734,7 @@ gadgets.rpc = function() {
       if (document.body) {
         appendFn();
       } else {
-        gadgets.util.registerOnLoadHandler(function() { appendFn(); });
+        gadgets.util.registerOnLoadHandler(function() {appendFn();});
       }
       
       return iframe;
@@ -4573,21 +4573,21 @@ shindig.uri = (function() {
 
     bundle = {
       // Getters
-      getSchema: function() { return schema_; },
-      getAuthority: function() { return authority_; },
+      getSchema: function() {return schema_;},
+      getAuthority: function() {return authority_;},
       getOrigin: getOrigin,
-      getPath: function() { return path_; },
+      getPath: function() {return path_;},
       getQuery: getQuery,
       getFragment: getFragment,
       getQP: getQP,
       getFP: getFP,
 
       // Setters
-      setSchema: function(schema) { schema_ = schema; return bundle; },
-      setAuthority: function(authority) { authority_ = authority; return bundle; },
-      setPath: function(path) { path_ = (path[0] === "/" ? "" : "/") + path; return bundle; },
-      setQuery: function(query) { qparms_ = null; query_ = stripPrefix(query, '?'); return bundle; },
-      setFragment: function(fragment) { fparms_ = null; fragment_ = stripPrefix(fragment, '#'); return bundle; },
+      setSchema: function(schema) {schema_ = schema;return bundle;},
+      setAuthority: function(authority) {authority_ = authority;return bundle;},
+      setPath: function(path) {path_ = (path[0] === "/" ? "" : "/") + path;return bundle;},
+      setQuery: function(query) {qparms_ = null;query_ = stripPrefix(query, '?');return bundle;},
+      setFragment: function(fragment) {fparms_ = null;fragment_ = stripPrefix(fragment, '#');return bundle;},
       setQP: setQP,
       setFP: setFP,
       setExistingP: function(key, val) {
@@ -4919,7 +4919,7 @@ shindig.uri = (function() {
             endpointName.indexOf("//") == 0) {
           // Expand the host & append the security token
           var endpointUrl = endpointName.replace("%host%", document.location.host);          
-          var transport = { name : endpointUrl, "execute" : execute };
+          var transport = {name : endpointUrl, "execute" : execute};
           var methods = services[endpointName];
           for (var i=0; i < methods.length; i++) {
             osapi._registerMethod(methods[i], transport);
@@ -4974,7 +4974,7 @@ if (gadgets && gadgets.rpc) { //Dont bind if gadgets.rpc not defined
     function execute(requests, callback) {
         var rpcCallback = function(response) {
         if (!response) {
-          callback({ code : 500, message : 'Container refused the request' });
+          callback({code : 500, message : 'Container refused the request'});
         } else if (response.error) {
           callback(response);
         } else {
@@ -4990,7 +4990,7 @@ if (gadgets && gadgets.rpc) { //Dont bind if gadgets.rpc not defined
     }
 
     function init(config) {
-      var transport = { name : "gadgets.rpc", "execute" : execute };
+      var transport = {name : "gadgets.rpc", "execute" : execute};
       var services = config["osapi.services"];
       if (services) {
         // Iterate over the defined services, extract the gadget.rpc endpoint and
@@ -5993,7 +5993,7 @@ shindig.Gadget = function(params) {
     // in use on the server.
     
     this.secureToken = 'john.doe:john.doe:appid:cont:url:0:default';    
-  }
+  }  
 };
 
 shindig.Gadget.prototype.getUserPrefs = function() {
@@ -6005,7 +6005,7 @@ shindig.Gadget.prototype.saveUserPrefs = function() {
 };
 
 shindig.Gadget.prototype.getUserPrefValue = function(name) {
-  var pref = this.userPrefs[name];
+  var pref = this.userPrefs[name];  
   return typeof(pref.value) != 'undefined' && pref.value != null ?
       pref.value : pref['default'];
 };
@@ -6146,6 +6146,7 @@ shindig.BaseIfrGadget.prototype.getUserPrefsDialogId = function() {
 shindig.BaseIfrGadget.prototype.getUserPrefsParams = function() {
   var params = '';
   for(var name in this.getUserPrefs()) {
+      
     params += '&up_' + encodeURIComponent(name) + '=' +
         encodeURIComponent(this.getUserPrefValue(name));
   }
@@ -6625,7 +6626,7 @@ if (gadgets && gadgets.rpc) { //Only define if gadgets rpc exists
       current(requests[i].params, function(i) {
         return function(response) {
           // Put back in json-rpc format
-          responses[i] = { id : requests[i].id, data : response};
+          responses[i] = {id : requests[i].id, data : response};
           callCount++;
           if (callCount == requests.length) {
             callback(responses);
