@@ -183,17 +183,40 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         return doc;
     }
 
+    public void reload()
+    {
+        try
+        {
+            doc = SocialContainer.getXML(new URL(this.getUrl()));
+            Map<String, String> variables = this.getMessagesFromGadget("ALL", "ALL");
+            if (!variables.isEmpty() && doc != null)
+            {
+                String xml = SWBUtils.XML.domToXml(SocialContainer.getXML(new URL(this.getUrl())));
+                for (String key : variables.keySet())
+                {
+                    String value = variables.get(key);
+                    xml = xml.replace(key, value);
+                }
+                doc = SWBUtils.XML.xmlToDom(xml);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     public Document getDocument()
     {
-        //if (doc == null)
+        if (doc == null)
         {
             try
             {
                 doc = SocialContainer.getXML(new URL(this.getUrl()));
                 Map<String, String> variables = this.getMessagesFromGadget("ALL", "ALL");
-                if(!variables.isEmpty() && doc!=null)
+                if (!variables.isEmpty() && doc != null)
                 {
-                    String xml = SWBUtils.XML.domToXml(doc);
+                    String xml = SWBUtils.XML.domToXml(SocialContainer.getXML(new URL(this.getUrl())));
                     for (String key : variables.keySet())
                     {
                         String value = variables.get(key);

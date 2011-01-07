@@ -42,7 +42,7 @@ public class SocialUser
     {
         return user;
     }
-
+    
     public UserPrefs[] getUserPrefs(WebSite site)
     {
         if (user == null)
