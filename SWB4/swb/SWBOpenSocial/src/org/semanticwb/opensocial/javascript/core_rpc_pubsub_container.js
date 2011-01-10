@@ -6238,8 +6238,7 @@ shindig.BaseIfrGadget.prototype.handleCancelUserPrefs = function() {
 };
 
 shindig.BaseIfrGadget.prototype.refresh = function() {
-  var iframeId = this.getIframeId();
-  alert('this.getIframeUrl(): '+this.getIframeUrl());
+  var iframeId = this.getIframeId();  
   document.getElementById(iframeId).src = this.getIframeUrl();
 };
 
