@@ -28,18 +28,14 @@ public class AppDataService implements Service
 
     private static final Logger log = SWBUtils.getLogger(AppDataService.class);
 
-    private String getData(String key, Person person, String appid)
+    private String getData(String key, Person person, String appid,WebSite site)
     {
         if (person != null)
         {
-            GenericIterator<org.semanticwb.opensocial.model.data.AppData> data = person.listAppDatas();
-            while (data.hasNext())
+            AppData appdata=AppData.getAppData(key, person, site);
+            if(appdata!=null && appid.equals(appdata))
             {
-                org.semanticwb.opensocial.model.data.AppData appData = data.next();
-                if (key.equals(appData.getKey()) && appid.equals(appData.getAppid()))
-                {
-                    return appData.getValue();
-                }
+                return appdata.getValue();
             }
         }
         return null;
@@ -66,7 +62,7 @@ public class AppDataService implements Service
                     for (int i = 0; i < keys.length(); i++)
                     {
                         String key = keys.getString(i);
-                        String data = getData(key, person, appid);
+                        String data = getData(key, person, appid,site);
                         if (data != null)
                         {
                             responseKeys.accumulate(key, data);
@@ -138,7 +134,7 @@ public class AppDataService implements Service
                 for (int i = 0; i < keys.length(); i++)
                 {
                     String key = keys.getString(i);
-                    String data = getData(key, p, appid);
+                    String data = getData(key, p, appid,site);
                     if (data != null)
                     {
                         responseKeys.accumulate(key, data);
@@ -215,9 +211,9 @@ public class AppDataService implements Service
                     {
                         String key = keys.next().toString();
                         String value = data.get(key).toString();
-                        if (getData(key, p, appid) == null)
+                        if (getData(key, p, appid,site) == null)
                         {
-                            org.semanticwb.opensocial.model.data.AppData appdata = org.semanticwb.opensocial.model.data.AppData.ClassMgr.createAppData(key, site);
+                            AppData appdata = AppData.ClassMgr.createAppData(key, site);
                             appdata.setKey(key);
                             appdata.setValue(value);
                             appdata.setAppid(gadget.getId());
@@ -225,10 +221,10 @@ public class AppDataService implements Service
                         }
                         else
                         {
-                            GenericIterator<org.semanticwb.opensocial.model.data.AppData> appdatas = p.listAppDatas();
+                            GenericIterator<AppData> appdatas = p.listAppDatas();
                             while (appdatas.hasNext())
                             {
-                                org.semanticwb.opensocial.model.data.AppData appdata = appdatas.next();
+                                AppData appdata = appdatas.next();
                                 if (appdata.getKey().equals(key) && appid.equals(appdata.getAppid()))
                                 {
                                     appdata.setValue(value);
@@ -252,11 +248,11 @@ public class AppDataService implements Service
     {
         JSONObject result=new JSONObject();
         String appid = gadget.getId();
-        GenericIterator<org.semanticwb.opensocial.model.data.AppData> data = person.listAppDatas();
+        GenericIterator<AppData> data = person.listAppDatas();
         ArrayList<AppData> appdatas=new ArrayList<AppData>();
         while (data.hasNext())
         {
-            org.semanticwb.opensocial.model.data.AppData appData = data.next();
+            AppData appData = data.next();
             if (appid.equals(appData.getAppid()))
             {
                 appdatas.add(appData);
@@ -288,9 +284,9 @@ public class AppDataService implements Service
                 String key = keys.next().toString();
                 String value = data.getString(key);
                 String appid = gadget.getId();
-                if (getData(key, person, appid) == null)
+                if (getData(key, person, appid,site) == null)
                 {
-                    org.semanticwb.opensocial.model.data.AppData appdata = org.semanticwb.opensocial.model.data.AppData.ClassMgr.createAppData(key, site);
+                    AppData appdata = AppData.ClassMgr.createAppData(key, site);
                     appdata.setKey(key);
                     appdata.setValue(value);
                     appdata.setAppid(gadget.getId());
@@ -298,10 +294,10 @@ public class AppDataService implements Service
                 }
                 else
                 {
-                    GenericIterator<org.semanticwb.opensocial.model.data.AppData> appdatas = person.listAppDatas();
+                    GenericIterator<AppData> appdatas = person.listAppDatas();
                     while (appdatas.hasNext())
                     {
-                        org.semanticwb.opensocial.model.data.AppData appdata = appdatas.next();
+                        AppData appdata = appdatas.next();
                         if (appdata.getKey().equals(key) && appid.equals(appdata.getAppid()))
                         {
                             appdata.setValue(value);
