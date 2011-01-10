@@ -1,7 +1,11 @@
 package org.semanticwb.opensocial.model.data;
 
 import java.util.Iterator;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.opensocial.util.Scape;
 import org.semanticwb.platform.SemanticLiteral;
@@ -12,6 +16,7 @@ import org.semanticwb.platform.SemanticVocabulary;
 
 public class Person extends org.semanticwb.opensocial.model.data.base.PersonBase 
 {
+    private static final Logger log = SWBUtils.getLogger(Person.class);
     public Person(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
@@ -62,5 +67,19 @@ public class Person extends org.semanticwb.opensocial.model.data.base.PersonBase
             }
         }
         return null;
+    }
+
+    public JSONObject toJSONObject()
+    {
+        JSONObject person=new JSONObject();
+        try
+        {
+            person.put("id", this.getId());
+        }
+        catch(JSONException e)
+        {
+            log.debug(e);
+        }
+        return person;
     }
 }
