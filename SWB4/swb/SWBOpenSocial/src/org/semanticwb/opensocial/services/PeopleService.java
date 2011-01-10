@@ -27,8 +27,6 @@ import org.semanticwb.opensocial.util.Scape;
 public class PeopleService implements Service
 {
 
-    private static final String ALL = "@all";
-    private static final String FRIENDS = "@friends";
     private static final String SELF = "@self";
     /*static
     {
@@ -110,7 +108,7 @@ public class PeopleService implements Service
         }
 
         try
-        {            
+        {
             Group group = Group.createGroup(groupid, person, site);
             if (group != null)
             {
@@ -145,14 +143,14 @@ public class PeopleService implements Service
      */
     public JSONObject create(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
-        String groupid = FRIENDS;
+        String groupid = Group.FRIENDS;
         if (params.optString("groupId") != null && !params.optString("groupId").equals(""))
         {
             groupid = params.optString("groupId");
         }
         try
         {
-            JSONObject personParam = params.getJSONObject("Person");            
+            JSONObject personParam = params.getJSONObject("Person");
             Group group = Group.getGroup(groupid, person, site);
             if (group != null)
             {
@@ -219,29 +217,21 @@ public class PeopleService implements Service
 
                 }
             }
-            else if (groupId.equals(FRIENDS))
+            else if (groupId.equals(Group.FRIENDS))
             {
-                if (person != null)
+                if (person != null && Group.getGroup(Group.FRIENDS, person, site) != null)
                 {
-                    Iterator<Group> groups = person.listGroups();
-                    while (groups.hasNext())
+                    Group group = Group.getGroup(Group.FRIENDS, person, site);
+                    Iterator<Person> _persons = group.listPersons();
+                    while (_persons.hasNext())
                     {
-                        Group group = groups.next();
-                        String groupid=person.getId() + FRIENDS;
-                        if (groupid.equals(group.getId()))
-                        {
-                            Iterator<Person> _persons = group.listPersons();
-                            while (_persons.hasNext())
-                            {
-                                Person persontoadd = _persons.next();
-                                persons.add(persontoadd);
-                            }
-                            break;
-                        }
+                        Person persontoadd = _persons.next();
+                        persons.add(persontoadd);
                     }
+
                 }
             }
-            else if (groupId.equals(ALL))
+            else if (groupId.equals(Group.ALL))
             {
                 if (person != null)
                 {
@@ -271,7 +261,7 @@ public class PeopleService implements Service
                         {
                             Iterator<Person> _persons = group.listPersons();
                             while (_persons.hasNext())
-                            {                                
+                            {
                                 persons.add(_persons.next());
                             }
                         }
@@ -307,24 +297,25 @@ public class PeopleService implements Service
 
     public void delete(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
-        String groupid = FRIENDS;
+        String groupid = Group.FRIENDS;
         if (params.optString("groupId") != null && !params.optString("groupId").equals(""))
         {
             groupid = params.optString("groupId");
         }
         try
         {
-
-
-            JSONObject personParam = params.getJSONObject("Person");            
-            Group group = Group.getGroup(groupid, person, site);
-            if (group != null)
+            if (!groupid.equals(Group.FRIENDS))
             {
-                String personid = personParam.getString("id");
-                if (personid != null && !personid.equals(""))
+                JSONObject personParam = params.getJSONObject("Person");
+                Group group = Group.getGroup(groupid, person, site);
+                if (group != null)
                 {
-                    Person persontoRemove = Person.ClassMgr.getPerson(personid, site);
-                    group.removePerson(persontoRemove);
+                    String personid = personParam.getString("id");
+                    if (personid != null && !personid.equals(""))
+                    {
+                        Person persontoRemove = Person.ClassMgr.getPerson(personid, site);
+                        group.removePerson(persontoRemove);
+                    }
                 }
             }
 
