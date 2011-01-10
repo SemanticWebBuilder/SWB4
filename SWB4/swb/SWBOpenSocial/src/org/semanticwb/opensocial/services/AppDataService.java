@@ -244,14 +244,14 @@ public class AppDataService implements Service
         {
             je.printStackTrace();
         }
-        return new JSONObject();
+        return null;
     }
     public void delete(Person personUserID,JSONObject params,WebSite site,Gadget gadget) throws RPCException
     {
         
     }
 
-    public void create(Person personUserID, JSONObject params, WebSite site, Gadget gadget) throws RPCException
+    public JSONObject create(Person personUserID, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
