@@ -24,6 +24,10 @@
 package org.semanticwb.model;
 
 // TODO: Auto-generated Javadoc
+
+import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticObject;
+
 /**
  * The Class DisplayObject.
  */
@@ -36,6 +40,16 @@ public class DisplayObject extends org.semanticwb.model.base.DisplayObjectBase {
      */
     public DisplayObject(org.semanticwb.platform.SemanticObject base) {
         super(base);
+    }
+
+    public static DisplayObject getDisplayObject(SemanticClass cls)
+    {
+        SemanticObject dispobj=cls.getDisplayObject();
+        if(dispobj!=null)
+        {
+            return (DisplayObject)dispobj.createGenericInstance();
+        }
+        return null;
     }
 }
 
