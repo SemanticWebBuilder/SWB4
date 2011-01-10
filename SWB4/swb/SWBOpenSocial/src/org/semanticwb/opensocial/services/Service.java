@@ -19,6 +19,6 @@ public interface Service {
 
     public JSONObject get(Person person,JSONObject params,WebSite site,Gadget gadget) throws RPCException;
     public JSONObject update(Person person,JSONObject params,WebSite site,Gadget gadget) throws RPCException;
-    public void delete(Person person,JSONObject params,WebSite site,Gadget gadget) throws RPCException;
+    public JSONObject delete(Person person,JSONObject params,WebSite site,Gadget gadget) throws RPCException;
     public JSONObject create(Person person,JSONObject params,WebSite site,Gadget gadget) throws RPCException;
 }

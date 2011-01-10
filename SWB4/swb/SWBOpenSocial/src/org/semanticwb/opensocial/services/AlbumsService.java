@@ -150,7 +150,7 @@ public class AlbumsService implements Service
         return null;
     }
 
-    public void delete(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
+    public JSONObject delete(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
         try
         {
@@ -166,6 +166,7 @@ public class AlbumsService implements Service
         {
             log.debug(e);
         }
+        return null;
     }
 
     public JSONObject create(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
@@ -177,6 +178,7 @@ public class AlbumsService implements Service
             if (Album.getAlbum(id, person, site) == null)
             {
                 Album album = Album.createAlbum(id, person, site);
+                album.setAppId(gadget.getId());
                 person.addAlbumns(album);
                 JSONObject value = new JSONObject();
                 value.put("Album-Id", id);

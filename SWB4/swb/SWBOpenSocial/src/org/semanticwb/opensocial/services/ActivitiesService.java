@@ -27,7 +27,7 @@ public class ActivitiesService implements Service {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void delete(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
+    public JSONObject delete(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }

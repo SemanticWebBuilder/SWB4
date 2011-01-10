@@ -297,7 +297,7 @@ public class PeopleService implements Service
         return response;
     }
 
-    public void delete(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
+    public JSONObject delete(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
         String groupid = Group.FRIENDS;
         if (params.optString("groupId") != null && !params.optString("groupId").equals(""))
@@ -326,6 +326,7 @@ public class PeopleService implements Service
         {
             throw new RPCException(e);
         }
+        return null;
     }
 
     class PersonComparator implements Comparator<Person>

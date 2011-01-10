@@ -9,9 +9,12 @@ import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.opensocial.model.Gadget;
+import org.semanticwb.opensocial.model.data.AppData;
 import org.semanticwb.opensocial.model.data.Group;
 import org.semanticwb.opensocial.model.data.Person;
 import org.semanticwb.opensocial.resources.RPCException;
@@ -22,6 +25,8 @@ import org.semanticwb.opensocial.resources.RPCException;
  */
 public class AppDataService implements Service
 {
+
+    private static final Logger log = SWBUtils.getLogger(AppDataService.class);
 
     private String getData(String key, Person person, String appid)
     {
@@ -86,7 +91,7 @@ public class AppDataService implements Service
                             persons.add(personToAdd);
                         }
 
-                    }                    
+                    }
                 }
             }
             else if (groupId.equals("@all"))
@@ -243,12 +248,74 @@ public class AppDataService implements Service
         return null;
     }
 
-    public void delete(Person personUserID, JSONObject params, WebSite site, Gadget gadget) throws RPCException
+    public JSONObject delete(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
+        JSONObject result=new JSONObject();
+        String appid = gadget.getId();
+        GenericIterator<org.semanticwb.opensocial.model.data.AppData> data = person.listAppDatas();
+        ArrayList<AppData> appdatas=new ArrayList<AppData>();
+        while (data.hasNext())
+        {
+            org.semanticwb.opensocial.model.data.AppData appData = data.next();
+            if (appid.equals(appData.getAppid()))
+            {
+                appdatas.add(appData);
+            }
+        }
+        for(AppData appdata : appdatas)
+        {
+            try
+            {
+                result.put(appdata.getKey(), appdata.getValue());
+                appdata.remove();
+            }
+            catch(JSONException e)
+            {
+                log.debug(e);
+            }
+        }
+        return result;
     }
 
-    public JSONObject create(Person personUserID, JSONObject params, WebSite site, Gadget gadget) throws RPCException
+    public JSONObject create(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try
+        {
+            JSONObject data = params.getJSONObject("data");
+            Iterator keys = data.keys();
+            while (keys.hasNext())
+            {
+                String key = keys.next().toString();
+                String value = data.getString(key);
+                String appid = gadget.getId();
+                if (getData(key, person, appid) == null)
+                {
+                    org.semanticwb.opensocial.model.data.AppData appdata = org.semanticwb.opensocial.model.data.AppData.ClassMgr.createAppData(key, site);
+                    appdata.setKey(key);
+                    appdata.setValue(value);
+                    appdata.setAppid(gadget.getId());
+                    person.addAppData(appdata);
+                }
+                else
+                {
+                    GenericIterator<org.semanticwb.opensocial.model.data.AppData> appdatas = person.listAppDatas();
+                    while (appdatas.hasNext())
+                    {
+                        org.semanticwb.opensocial.model.data.AppData appdata = appdatas.next();
+                        if (appdata.getKey().equals(key) && appid.equals(appdata.getAppid()))
+                        {
+                            appdata.setValue(value);
+                            break;
+                        }
+                    }
+                }
+            }
+
+        }
+        catch (JSONException e)
+        {
+            log.debug(e);
+        }
+        return null;
     }
 }
