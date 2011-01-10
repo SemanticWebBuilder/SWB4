@@ -136,7 +136,7 @@ public class AlbumsService implements Service
     {
         try
         {
-            JSONObject albumparams = params.getJSONObject("Album");
+            JSONObject albumparams = params.getJSONObject("data");
             String id = albumparams.getString("id");
             if (Album.getAlbum(id, person, site) != null)
             {
@@ -154,7 +154,7 @@ public class AlbumsService implements Service
     {
         try
         {
-            JSONObject albumparams = params.getJSONObject("Album");
+            JSONObject albumparams = params.getJSONObject("data");
             String id = albumparams.getString("id");
             if (Album.getAlbum(id, person, site) != null)
             {
@@ -172,7 +172,7 @@ public class AlbumsService implements Service
     {
         try
         {
-            JSONObject albumparams = params.getJSONObject("Album");
+            JSONObject albumparams = params.getJSONObject("data");
             String id = albumparams.getString("id");
             if (Album.getAlbum(id, person, site) == null)
             {
