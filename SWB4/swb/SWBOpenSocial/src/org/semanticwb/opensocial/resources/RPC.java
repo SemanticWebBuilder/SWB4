@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.opensocial.model.Gadget;
+import org.semanticwb.opensocial.model.data.Person;
 import org.semanticwb.opensocial.services.ActivitiesService;
 import org.semanticwb.opensocial.services.AlbumsService;
 import org.semanticwb.opensocial.services.AppDataService;
@@ -66,15 +67,27 @@ public class RPC
             {
                 userId = viewer;
             }
-            params.remove("userId");
-            Service service = services.get(objectType);
-            if (method.equals("get"))
+            Person person=Person.ClassMgr.getPerson(userId, site);
+            if(person!=null)
             {
-                return service.get(userId, params, site,gadget);
-            }
-            if (method.equals("update"))
-            {
-                service.update(userId, params, site,gadget);
+                params.remove("userId");
+                Service service = services.get(objectType);
+                if (method.equals("get"))
+                {
+                    return service.get(person, params, site,gadget);
+                }
+                else if(method.equals("update"))
+                {
+                    service.update(person, params, site,gadget);
+                }
+                else if(method.equals("create"))
+                {
+                    service.create(person, params, site,gadget);
+                }
+                else if(method.equals("delete"))
+                {
+                    service.delete(person, params, site,gadget);
+                }
             }
         }
         return execute;

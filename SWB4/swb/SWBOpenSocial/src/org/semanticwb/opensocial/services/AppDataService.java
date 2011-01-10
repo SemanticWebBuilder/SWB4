@@ -39,16 +39,14 @@ public class AppDataService implements Service
         return null;
     }
 
-    public JSONObject get(String userid, JSONObject params, WebSite site, Gadget gadget)
+    public JSONObject get(Person personUserID, JSONObject params, WebSite site, Gadget gadget)
     {
         JSONObject response = new JSONObject();
         try
         {
             ArrayList<Person> persons = new ArrayList<Person>();
-            String groupId = params.getString("groupId").trim();
-            Person personUserID = Person.ClassMgr.getPerson(userid, site);
+            String groupId = params.getString("groupId").trim();            
             String appid = gadget.getId();
-
             if (params.optString("appId") != null && !params.optString("appId").equals(""))
             {
                 appid = params.optString("appId");
@@ -156,7 +154,7 @@ public class AppDataService implements Service
         return response;
     }
 
-    public void update(String userid, JSONObject params, WebSite site, Gadget gadget)
+    public void update(Person personUserID, JSONObject params, WebSite site, Gadget gadget)
     {
 
         try
@@ -167,8 +165,7 @@ public class AppDataService implements Service
             if (params.optString("appId") != null && !params.optString("appId").equals(""))
             {
                 appid = params.optString("appId");
-            }
-            Person personUserID = Person.ClassMgr.getPerson(userid, site);
+            }            
             if (groupId.equals("@self"))
             {
                 persons.add(personUserID);
@@ -248,12 +245,12 @@ public class AppDataService implements Service
         }
 
     }
-    public void delete(String userid,JSONObject params,WebSite site,Gadget gadget)
+    public void delete(Person personUserID,JSONObject params,WebSite site,Gadget gadget)
     {
         
     }
 
-    public void create(String userid, JSONObject params, WebSite site, Gadget gadget)
+    public void create(Person personUserID, JSONObject params, WebSite site, Gadget gadget)
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
