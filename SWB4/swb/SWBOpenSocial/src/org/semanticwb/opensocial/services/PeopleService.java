@@ -30,77 +30,6 @@ public class PeopleService implements Service
 {
 
     private static final Logger log = SWBUtils.getLogger(PeopleService.class);
-    /*static
-    {
-    Iterator<Person> _persons = Person.ClassMgr.listPersons();
-    while (_persons.hasNext())
-    {
-    Person person = _persons.next();
-    person.remove();
-    }
-
-    Iterator<Group> groups = Group.ClassMgr.listGroups();
-    while (groups.hasNext())
-    {
-    Group g = groups.next();
-    g.remove();
-    }
-    WebSite site = WebSite.ClassMgr.getWebSite("reg_digital_demo");
-
-    Person john_doe = Person.ClassMgr.createPerson("john.doe", site);
-    Name name = Name.ClassMgr.createName(site);
-    name.setFormatted("Demo Friend");
-    john_doe.setName(name);
-    john_doe.setAge(20);
-    john_doe.setGender("male");
-    john_doe.setProfileUrl("http://www.infotec");
-
-    Group friendsOfGeorgeDoe = Group.ClassMgr.createGroup(john_doe.getId() + FRIENDS, site);
-    john_doe.addGroup(friendsOfGeorgeDoe);
-    friendsOfGeorgeDoe.setTitle("friends");
-    friendsOfGeorgeDoe.setDescription("friends");
-
-
-
-    Person george_doe = Person.ClassMgr.createPerson("George.doe", site);
-    name = Name.ClassMgr.createName(site);
-    name.setFormatted("George Doe");
-    george_doe.setName(name);
-    george_doe.setAge(20);
-    george_doe.setGender("famale");
-    george_doe.setProfileUrl("http://www.infotec");
-
-
-
-
-
-
-    Person jane_doe = Person.ClassMgr.createPerson("jane.doe", site);
-    name = Name.ClassMgr.createName(site);
-    name.setFormatted("Jane Doe");
-    jane_doe.setName(name);
-    jane_doe.setAge(37);
-    jane_doe.setGender("male");
-    jane_doe.setProfileUrl("http://www.infotec");
-
-
-    Person Maija = Person.ClassMgr.createPerson("maija", site);
-    name = Name.ClassMgr.createName(site);
-    name.setFormatted("Maija Meikäläinen");
-    Maija.setName(name);
-    Maija.setAge(37);
-    Maija.setGender("male");
-    Maija.setProfileUrl("http://www.infotec");
-
-    //friend.setThumbnailUrl("a");
-    friendsOfGeorgeDoe.addPerson(jane_doe);
-    friendsOfGeorgeDoe.addPerson(Maija);
-    friendsOfGeorgeDoe.addPerson(george_doe);
-
-
-
-    }*/
-
     public JSONObject update(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
         String groupid = Group.SELF;
@@ -128,6 +57,7 @@ public class PeopleService implements Service
         }
         catch (JSONException e)
         {
+            log.debug(e);
             throw new RPCException(e);
         }
         return null;
@@ -180,6 +110,7 @@ public class PeopleService implements Service
         }
         catch (JSONException e)
         {
+            log.debug(e);
             throw new RPCException(e);
         }
         return null;
@@ -292,7 +223,8 @@ public class PeopleService implements Service
         }
         catch (JSONException jsone)
         {
-            jsone.printStackTrace();
+            log.debug(jsone);
+            throw new RPCException(jsone);
         }
         return response;
     }
@@ -324,6 +256,7 @@ public class PeopleService implements Service
         }
         catch (JSONException e)
         {
+            log.debug(e);
             throw new RPCException(e);
         }
         return null;
