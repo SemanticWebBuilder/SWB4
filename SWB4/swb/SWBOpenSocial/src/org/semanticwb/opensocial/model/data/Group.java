@@ -9,6 +9,7 @@ import org.semanticwb.model.WebSite;
 
 public class Group extends org.semanticwb.opensocial.model.data.base.GroupBase 
 {
+    public static final String SELF = "@self";
     public static final String ALL = "@all";
     public static final String FRIENDS = "@friends";
     private static final Logger log = SWBUtils.getLogger(Group.class);

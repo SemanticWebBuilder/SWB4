@@ -3,10 +3,13 @@ package org.semanticwb.opensocial.model.data.base;
 
 public abstract class AlbumBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Descriptiveable
 {
+    public static final org.semanticwb.platform.SemanticProperty data_appId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#appId");
    /**
    * Indica si el elemento es válido
    */
     public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
+    public static final org.semanticwb.platform.SemanticClass data_MediaItem=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#MediaItem");
+    public static final org.semanticwb.platform.SemanticProperty data_hasMediaItem=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#hasMediaItem");
     public static final org.semanticwb.platform.SemanticClass data_Album=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#Album");
    /**
    * The semantic class that represents the currentObject
@@ -82,6 +85,29 @@ public abstract class AlbumBase extends org.semanticwb.model.base.GenericObjectB
         {
             return (getAlbum(id, model)!=null);
         }
+       /**
+       * Gets all org.semanticwb.opensocial.model.data.Album with a determined MediaItem
+       * @param value MediaItem of the type org.semanticwb.opensocial.model.data.MediaItem
+       * @param model Model of the org.semanticwb.opensocial.model.data.Album
+       * @return Iterator with all the org.semanticwb.opensocial.model.data.Album
+       */
+
+        public static java.util.Iterator<org.semanticwb.opensocial.model.data.Album> listAlbumByMediaItem(org.semanticwb.opensocial.model.data.MediaItem value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.opensocial.model.data.Album> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(data_hasMediaItem, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.opensocial.model.data.Album with a determined MediaItem
+       * @param value MediaItem of the type org.semanticwb.opensocial.model.data.MediaItem
+       * @return Iterator with all the org.semanticwb.opensocial.model.data.Album
+       */
+
+        public static java.util.Iterator<org.semanticwb.opensocial.model.data.Album> listAlbumByMediaItem(org.semanticwb.opensocial.model.data.MediaItem value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.opensocial.model.data.Album> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(data_hasMediaItem,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**
@@ -91,6 +117,24 @@ public abstract class AlbumBase extends org.semanticwb.model.base.GenericObjectB
     public AlbumBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the AppId property
+* @return String with the AppId
+*/
+    public String getAppId()
+    {
+        return getSemanticObject().getProperty(data_appId);
+    }
+
+/**
+* Sets the AppId property
+* @param value long with the AppId
+*/
+    public void setAppId(String value)
+    {
+        getSemanticObject().setProperty(data_appId, value);
     }
 
 /**
@@ -144,6 +188,71 @@ public abstract class AlbumBase extends org.semanticwb.model.base.GenericObjectB
     {
         //Override this method in Album object
         getSemanticObject().setBooleanProperty(swb_valid, value,false);
+    }
+   /**
+   * Gets all the org.semanticwb.opensocial.model.data.MediaItem
+   * @return A GenericIterator with all the org.semanticwb.opensocial.model.data.MediaItem
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.opensocial.model.data.MediaItem> listMediaItems()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.opensocial.model.data.MediaItem>(getSemanticObject().listObjectProperties(data_hasMediaItem));
+    }
+
+   /**
+   * Gets true if has a MediaItem
+   * @param value org.semanticwb.opensocial.model.data.MediaItem to verify
+   * @return true if the org.semanticwb.opensocial.model.data.MediaItem exists, false otherwise
+   */
+    public boolean hasMediaItem(org.semanticwb.opensocial.model.data.MediaItem value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(data_hasMediaItem,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a MediaItem
+   * @param value org.semanticwb.opensocial.model.data.MediaItem to add
+   */
+
+    public void addMediaItem(org.semanticwb.opensocial.model.data.MediaItem value)
+    {
+        getSemanticObject().addObjectProperty(data_hasMediaItem, value.getSemanticObject());
+    }
+   /**
+   * Removes all the MediaItem
+   */
+
+    public void removeAllMediaItem()
+    {
+        getSemanticObject().removeProperty(data_hasMediaItem);
+    }
+   /**
+   * Removes a MediaItem
+   * @param value org.semanticwb.opensocial.model.data.MediaItem to remove
+   */
+
+    public void removeMediaItem(org.semanticwb.opensocial.model.data.MediaItem value)
+    {
+        getSemanticObject().removeObjectProperty(data_hasMediaItem,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the MediaItem
+   * @return a org.semanticwb.opensocial.model.data.MediaItem
+   */
+    public org.semanticwb.opensocial.model.data.MediaItem getMediaItem()
+    {
+         org.semanticwb.opensocial.model.data.MediaItem ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(data_hasMediaItem);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.opensocial.model.data.MediaItem)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**

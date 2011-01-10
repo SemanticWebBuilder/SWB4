@@ -11,6 +11,8 @@ import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.opensocial.model.Gadget;
 import org.semanticwb.opensocial.model.data.Group;
@@ -27,7 +29,7 @@ import org.semanticwb.opensocial.util.Scape;
 public class PeopleService implements Service
 {
 
-    private static final String SELF = "@self";
+    private static final Logger log = SWBUtils.getLogger(PeopleService.class);
     /*static
     {
     Iterator<Person> _persons = Person.ClassMgr.listPersons();
@@ -101,7 +103,7 @@ public class PeopleService implements Service
 
     public JSONObject update(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
-        String groupid = SELF;
+        String groupid = Group.SELF;
         if (params.optString("groupId") != null && !params.optString("groupId").equals(""))
         {
             groupid = params.optString("groupId");
@@ -202,7 +204,7 @@ public class PeopleService implements Service
                 scape = new NoneScape();
             }
             String groupId = params.getString("groupId").trim();
-            if (groupId.equals(SELF)) //Defaults to "@self", which MUST return only the Person object(s) specified by the userId parameter
+            if (groupId.equals(Group.SELF)) //Defaults to "@self", which MUST return only the Person object(s) specified by the userId parameter
             {
                 if (person != null)
                 {
