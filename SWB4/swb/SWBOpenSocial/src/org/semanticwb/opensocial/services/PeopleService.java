@@ -101,27 +101,27 @@ public class PeopleService implements Service
 
     }*/
 
-    public JSONObject update(Person personUserID, JSONObject params, WebSite site, Gadget gadget) throws RPCException
+    public JSONObject update(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
-        String groupid=SELF;
+        String groupid = SELF;
         if (params.optString("groupId") != null && !params.optString("groupId").equals(""))
         {
             groupid = params.optString("groupId");
         }
-        
+
         try
-        {
-            groupid = personUserID.getId() + groupid;
-            Group group = Group.ClassMgr.getGroup(groupid, site);
-            if(group!=null)
+        {            
+            Group group = Group.createGroup(groupid, person, site);
+            if (group != null)
             {
                 JSONObject personParam = params.getJSONObject("Person");
                 String personid = personParam.getString("id");
-                if(personid!=null && !personid.equals(""))
+                if (personid != null && !personid.equals(""))
                 {
-                    Person person = Person.ClassMgr.getPerson(personid, site);
-                    JSONObject returnJSON=new JSONObject();
-                    returnJSON.put("person",person.toJSONObject());
+                    Person personToUpdate = Person.ClassMgr.getPerson(personid, site);
+                    JSONObject returnJSON = new JSONObject();
+                    // TODO: falta actalizar a la persona
+                    returnJSON.put("person", personToUpdate.toJSONObject());
                     return returnJSON;
                 }
             }
@@ -130,7 +130,7 @@ public class PeopleService implements Service
         {
             throw new RPCException(e);
         }
-        return new JSONObject();
+        return null;
     }
 
 
@@ -143,7 +143,7 @@ public class PeopleService implements Service
     person Person The target of the relationship.
 
      */
-    public void create(Person personUserID, JSONObject params, WebSite site, Gadget gadget) throws RPCException
+    public JSONObject create(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
         String groupid = FRIENDS;
         if (params.optString("groupId") != null && !params.optString("groupId").equals(""))
@@ -152,18 +152,28 @@ public class PeopleService implements Service
         }
         try
         {
-
-
-            JSONObject personParam = params.getJSONObject("Person");
-            groupid = personUserID.getId() + groupid;
-            Group group = Group.ClassMgr.getGroup(groupid, site);
-            if(group!=null)
+            JSONObject personParam = params.getJSONObject("Person");            
+            Group group = Group.getGroup(groupid, person, site);
+            if (group != null)
             {
                 String personid = personParam.getString("id");
-                if(personid!=null && !personid.equals(""))
+                if (personid != null && !personid.equals(""))
                 {
-                    Person person = Person.ClassMgr.getPerson(personid, site);
-                    group.addPerson(person);
+                    Person personToAdd = Person.ClassMgr.getPerson(personid, site);
+                    boolean exists = false;
+                    Iterator<Person> persons = group.listPersons();
+                    while (persons.hasNext())
+                    {
+                        if (persons.next().getId().equals(personid))
+                        {
+                            exists = true;
+                            break;
+                        }
+                    }
+                    if (!exists)
+                    {
+                        group.addPerson(personToAdd);
+                    }
                 }
             }
 
@@ -171,13 +181,12 @@ public class PeopleService implements Service
         catch (JSONException e)
         {
             throw new RPCException(e);
-        }        
+        }
+        return null;
     }
 
-    public JSONObject get(Person personUserID, JSONObject params, WebSite site, Gadget gadget) throws RPCException
+    public JSONObject get(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
-
-
         JSONObject response = new JSONObject();
         JSONArray entries = new JSONArray();
         try
@@ -197,14 +206,14 @@ public class PeopleService implements Service
             String groupId = params.getString("groupId").trim();
             if (groupId.equals(SELF)) //Defaults to "@self", which MUST return only the Person object(s) specified by the userId parameter
             {
-                if (personUserID != null)
+                if (person != null)
                 {
                     JSONObject jsonperson = new JSONObject();
                     JSONArray fields = params.getJSONArray("fields");
                     for (int i = 0; i < fields.length(); i++)
                     {
                         String field = fields.getString(i);
-                        jsonperson.put(field, personUserID.getValueFromField(field, scape));
+                        jsonperson.put(field, person.getValueFromField(field, scape));
                     }
                     return jsonperson;
 
@@ -212,19 +221,20 @@ public class PeopleService implements Service
             }
             else if (groupId.equals(FRIENDS))
             {
-                if (personUserID != null)
+                if (person != null)
                 {
-                    Iterator<Group> groups = personUserID.listGroups();
+                    Iterator<Group> groups = person.listGroups();
                     while (groups.hasNext())
                     {
                         Group group = groups.next();
-                        if ((personUserID.getId() + FRIENDS).equals(group.getId()))
+                        String groupid=person.getId() + FRIENDS;
+                        if (groupid.equals(group.getId()))
                         {
                             Iterator<Person> _persons = group.listPersons();
                             while (_persons.hasNext())
                             {
-                                Person person = _persons.next();
-                                persons.add(person);
+                                Person persontoadd = _persons.next();
+                                persons.add(persontoadd);
                             }
                             break;
                         }
@@ -233,17 +243,17 @@ public class PeopleService implements Service
             }
             else if (groupId.equals(ALL))
             {
-                if (personUserID != null)
+                if (person != null)
                 {
-                    Iterator<Group> groups = personUserID.listGroups();
+                    Iterator<Group> groups = person.listGroups();
                     while (groups.hasNext())
                     {
                         Group group = groups.next();
                         Iterator<Person> _persons = group.listPersons();
                         while (_persons.hasNext())
                         {
-                            Person person = _persons.next();
-                            persons.add(person);
+                            Person personToAdd = _persons.next();
+                            persons.add(personToAdd);
                         }
                     }
                 }
@@ -251,9 +261,9 @@ public class PeopleService implements Service
             else
             {
 
-                if (personUserID != null)
+                if (person != null)
                 {
-                    Iterator<Group> groups = personUserID.listGroups();
+                    Iterator<Group> groups = person.listGroups();
                     while (groups.hasNext())
                     {
                         Group group = groups.next();
@@ -261,9 +271,8 @@ public class PeopleService implements Service
                         {
                             Iterator<Person> _persons = group.listPersons();
                             while (_persons.hasNext())
-                            {
-                                Person person = _persons.next();
-                                persons.add(person);
+                            {                                
+                                persons.add(_persons.next());
                             }
                         }
                     }
@@ -296,8 +305,34 @@ public class PeopleService implements Service
         return response;
     }
 
-    public void delete(Person personUserID, JSONObject params, WebSite site, Gadget gadget) throws RPCException
+    public void delete(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
+        String groupid = FRIENDS;
+        if (params.optString("groupId") != null && !params.optString("groupId").equals(""))
+        {
+            groupid = params.optString("groupId");
+        }
+        try
+        {
+
+
+            JSONObject personParam = params.getJSONObject("Person");            
+            Group group = Group.getGroup(groupid, person, site);
+            if (group != null)
+            {
+                String personid = personParam.getString("id");
+                if (personid != null && !personid.equals(""))
+                {
+                    Person persontoRemove = Person.ClassMgr.getPerson(personid, site);
+                    group.removePerson(persontoRemove);
+                }
+            }
+
+        }
+        catch (JSONException e)
+        {
+            throw new RPCException(e);
+        }
     }
 
     class PersonComparator implements Comparator<Person>

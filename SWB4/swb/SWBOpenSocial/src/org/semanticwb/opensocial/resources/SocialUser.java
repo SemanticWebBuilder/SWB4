@@ -111,7 +111,7 @@ public class SocialUser
                         {
                             person.addEmail(_user.getEmail());
                         }
-                        Group friends = Group.ClassMgr.createGroup("@friends", site);
+                        Group friends = Group.createGroup("@friends", person, site);
                         friends.setTitle("friends");
                         friends.setDescription("friends");
                         person.addGroup(friends);
