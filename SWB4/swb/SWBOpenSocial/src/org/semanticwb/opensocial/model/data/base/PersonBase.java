@@ -24,6 +24,8 @@ public abstract class PersonBase extends org.semanticwb.model.base.GenericObject
     public static final org.semanticwb.platform.SemanticProperty data_birthday=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#birthday");
     public static final org.semanticwb.platform.SemanticProperty data_thumbnailUrl=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#thumbnailUrl");
     public static final org.semanticwb.platform.SemanticProperty data_anniversary=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#anniversary");
+    public static final org.semanticwb.platform.SemanticClass data_Album=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#Album");
+    public static final org.semanticwb.platform.SemanticProperty data_hasAlbumns=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#hasAlbumns");
     public static final org.semanticwb.platform.SemanticClass data_Address=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#Address");
     public static final org.semanticwb.platform.SemanticProperty data_hasAddress=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#hasAddress");
     public static final org.semanticwb.platform.SemanticProperty data_children=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#children");
@@ -163,6 +165,29 @@ public abstract class PersonBase extends org.semanticwb.model.base.GenericObject
         public static java.util.Iterator<org.semanticwb.opensocial.model.data.Person> listPersonByName(org.semanticwb.opensocial.model.data.Name value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.opensocial.model.data.Person> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(data_name,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.opensocial.model.data.Person with a determined Albumns
+       * @param value Albumns of the type org.semanticwb.opensocial.model.data.Album
+       * @param model Model of the org.semanticwb.opensocial.model.data.Person
+       * @return Iterator with all the org.semanticwb.opensocial.model.data.Person
+       */
+
+        public static java.util.Iterator<org.semanticwb.opensocial.model.data.Person> listPersonByAlbumns(org.semanticwb.opensocial.model.data.Album value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.opensocial.model.data.Person> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(data_hasAlbumns, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.opensocial.model.data.Person with a determined Albumns
+       * @param value Albumns of the type org.semanticwb.opensocial.model.data.Album
+       * @return Iterator with all the org.semanticwb.opensocial.model.data.Person
+       */
+
+        public static java.util.Iterator<org.semanticwb.opensocial.model.data.Person> listPersonByAlbumns(org.semanticwb.opensocial.model.data.Album value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.opensocial.model.data.Person> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(data_hasAlbumns,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -619,6 +644,71 @@ public abstract class PersonBase extends org.semanticwb.model.base.GenericObject
     public void setAnniversary(java.util.Date value)
     {
         getSemanticObject().setDateProperty(data_anniversary, value);
+    }
+   /**
+   * Gets all the org.semanticwb.opensocial.model.data.Album
+   * @return A GenericIterator with all the org.semanticwb.opensocial.model.data.Album
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.opensocial.model.data.Album> listAlbumnses()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.opensocial.model.data.Album>(getSemanticObject().listObjectProperties(data_hasAlbumns));
+    }
+
+   /**
+   * Gets true if has a Albumns
+   * @param value org.semanticwb.opensocial.model.data.Album to verify
+   * @return true if the org.semanticwb.opensocial.model.data.Album exists, false otherwise
+   */
+    public boolean hasAlbumns(org.semanticwb.opensocial.model.data.Album value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(data_hasAlbumns,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a Albumns
+   * @param value org.semanticwb.opensocial.model.data.Album to add
+   */
+
+    public void addAlbumns(org.semanticwb.opensocial.model.data.Album value)
+    {
+        getSemanticObject().addObjectProperty(data_hasAlbumns, value.getSemanticObject());
+    }
+   /**
+   * Removes all the Albumns
+   */
+
+    public void removeAllAlbumns()
+    {
+        getSemanticObject().removeProperty(data_hasAlbumns);
+    }
+   /**
+   * Removes a Albumns
+   * @param value org.semanticwb.opensocial.model.data.Album to remove
+   */
+
+    public void removeAlbumns(org.semanticwb.opensocial.model.data.Album value)
+    {
+        getSemanticObject().removeObjectProperty(data_hasAlbumns,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the Albumns
+   * @return a org.semanticwb.opensocial.model.data.Album
+   */
+    public org.semanticwb.opensocial.model.data.Album getAlbumns()
+    {
+         org.semanticwb.opensocial.model.data.Album ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(data_hasAlbumns);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.opensocial.model.data.Album)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Gets all the org.semanticwb.opensocial.model.data.Address
