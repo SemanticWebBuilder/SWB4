@@ -81,7 +81,7 @@ public class GroupsService implements Service {
         return null;
     }
 
-    public void delete(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
+    public JSONObject delete(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
         String groupid=null;
         if (params.optString("groupId") != null && !params.optString("groupId").equals(""))
@@ -94,7 +94,8 @@ public class GroupsService implements Service {
             {
                 Group.getGroup(groupid, person, site).remove();
             }
-        }        
+        }
+        return null;
     }
 
     public JSONObject create(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException

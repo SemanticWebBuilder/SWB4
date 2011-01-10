@@ -30,11 +30,6 @@ public class MediaItemsService implements Service
 
     public JSONObject get(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public JSONObject update(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
-    {
         String groupId = Group.SELF;
         if (params.optString("groupId") != null && !params.optString("groupId").equals(""))
         {
@@ -166,12 +161,36 @@ public class MediaItemsService implements Service
             catch (JSONException e)
             {
                 log.debug(e);
-            }            
+            }
         }
         return null;
     }
 
-    public void delete(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
+    public JSONObject update(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
+    {
+        try
+        {
+            JSONObject mediaitem = params.getJSONObject("data");
+            String id=mediaitem.getString("id");
+            String albumid=mediaitem.getString("Album-id");
+            Album album=Album.getAlbum(albumid, person, site);
+            if(album!=null && MediaItem.getMediaItem(id, person, site)!=null)
+            {
+                MediaItem item=MediaItem.getMediaItem(id, person, site);
+                JSONObject value=new JSONObject();
+                value.put("", id);
+                value.put("", albumid);
+            }
+
+        }
+        catch (JSONException e)
+        {
+            log.debug(e);
+        }
+        return null;
+    }
+
+    public JSONObject delete(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
         try
         {
@@ -186,6 +205,7 @@ public class MediaItemsService implements Service
         {
             log.debug(e);
         }
+        return null;
     }
 
     public JSONObject create(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
@@ -199,6 +219,7 @@ public class MediaItemsService implements Service
             if (album != null && MediaItem.getMediaItem(id, person, site) == null)
             {
                 MediaItem item = MediaItem.createMediaItem(id, person, site);
+                item.setAppId(gadget.getId());
                 album.addMediaItem(item);
                 JSONObject value = new JSONObject();
                 value.put("MediaItem-Id", id);

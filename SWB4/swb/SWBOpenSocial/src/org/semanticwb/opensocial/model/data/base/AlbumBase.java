@@ -4,6 +4,8 @@ package org.semanticwb.opensocial.model.data.base;
 public abstract class AlbumBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty data_appId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#appId");
+    public static final org.semanticwb.platform.SemanticClass data_Address=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#Address");
+    public static final org.semanticwb.platform.SemanticProperty data_location=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#location");
    /**
    * Indica si el elemento es válido
    */
@@ -84,6 +86,29 @@ public abstract class AlbumBase extends org.semanticwb.model.base.GenericObjectB
         public static boolean hasAlbum(String id, org.semanticwb.model.SWBModel model)
         {
             return (getAlbum(id, model)!=null);
+        }
+       /**
+       * Gets all org.semanticwb.opensocial.model.data.Album with a determined Location
+       * @param value Location of the type org.semanticwb.opensocial.model.data.Address
+       * @param model Model of the org.semanticwb.opensocial.model.data.Album
+       * @return Iterator with all the org.semanticwb.opensocial.model.data.Album
+       */
+
+        public static java.util.Iterator<org.semanticwb.opensocial.model.data.Album> listAlbumByLocation(org.semanticwb.opensocial.model.data.Address value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.opensocial.model.data.Album> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(data_location, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.opensocial.model.data.Album with a determined Location
+       * @param value Location of the type org.semanticwb.opensocial.model.data.Address
+       * @return Iterator with all the org.semanticwb.opensocial.model.data.Album
+       */
+
+        public static java.util.Iterator<org.semanticwb.opensocial.model.data.Album> listAlbumByLocation(org.semanticwb.opensocial.model.data.Address value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.opensocial.model.data.Album> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(data_location,value.getSemanticObject(),sclass));
+            return it;
         }
        /**
        * Gets all org.semanticwb.opensocial.model.data.Album with a determined MediaItem
@@ -168,6 +193,44 @@ public abstract class AlbumBase extends org.semanticwb.model.base.GenericObjectB
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(swb_title, title, lang);
+    }
+   /**
+   * Sets the value for the property Location
+   * @param value Location to set
+   */
+
+    public void setLocation(org.semanticwb.opensocial.model.data.Address value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(data_location, value.getSemanticObject());
+        }else
+        {
+            removeLocation();
+        }
+    }
+   /**
+   * Remove the value for Location property
+   */
+
+    public void removeLocation()
+    {
+        getSemanticObject().removeProperty(data_location);
+    }
+
+   /**
+   * Gets the Location
+   * @return a org.semanticwb.opensocial.model.data.Address
+   */
+    public org.semanticwb.opensocial.model.data.Address getLocation()
+    {
+         org.semanticwb.opensocial.model.data.Address ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(data_location);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.opensocial.model.data.Address)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**

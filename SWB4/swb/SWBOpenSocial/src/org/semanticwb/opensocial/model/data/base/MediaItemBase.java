@@ -1,12 +1,14 @@
 package org.semanticwb.opensocial.model.data.base;
 
 
-public abstract class MediaItemBase extends org.semanticwb.model.base.GenericObjectBase 
+public abstract class MediaItemBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Traceable
 {
+    public static final org.semanticwb.platform.SemanticProperty data_appId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#appId");
    /**
    * Indica si el elemento es válido
    */
     public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
+    public static final org.semanticwb.platform.SemanticProperty data_mime_type=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#mime_type");
     public static final org.semanticwb.platform.SemanticClass data_MediaItem=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#MediaItem");
    /**
    * The semantic class that represents the currentObject
@@ -76,6 +78,52 @@ public abstract class MediaItemBase extends org.semanticwb.model.base.GenericObj
         {
             return (getMediaItem(id, model)!=null);
         }
+       /**
+       * Gets all org.semanticwb.opensocial.model.data.MediaItem with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.opensocial.model.data.MediaItem
+       * @return Iterator with all the org.semanticwb.opensocial.model.data.MediaItem
+       */
+
+        public static java.util.Iterator<org.semanticwb.opensocial.model.data.MediaItem> listMediaItemByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.opensocial.model.data.MediaItem> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.opensocial.model.data.MediaItem with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.opensocial.model.data.MediaItem
+       */
+
+        public static java.util.Iterator<org.semanticwb.opensocial.model.data.MediaItem> listMediaItemByModifiedBy(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.opensocial.model.data.MediaItem> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.opensocial.model.data.MediaItem with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.opensocial.model.data.MediaItem
+       * @return Iterator with all the org.semanticwb.opensocial.model.data.MediaItem
+       */
+
+        public static java.util.Iterator<org.semanticwb.opensocial.model.data.MediaItem> listMediaItemByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.opensocial.model.data.MediaItem> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.opensocial.model.data.MediaItem with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.opensocial.model.data.MediaItem
+       */
+
+        public static java.util.Iterator<org.semanticwb.opensocial.model.data.MediaItem> listMediaItemByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.opensocial.model.data.MediaItem> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**
@@ -85,6 +133,98 @@ public abstract class MediaItemBase extends org.semanticwb.model.base.GenericObj
     public MediaItemBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
+    }
+   /**
+   * Sets the value for the property ModifiedBy
+   * @param value ModifiedBy to set
+   */
+
+    public void setModifiedBy(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
+    }
+   /**
+   * Remove the value for ModifiedBy property
+   */
+
+    public void removeModifiedBy()
+    {
+        getSemanticObject().removeProperty(swb_modifiedBy);
+    }
+
+   /**
+   * Gets the ModifiedBy
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getModifiedBy()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
+* Gets the AppId property
+* @return String with the AppId
+*/
+    public String getAppId()
+    {
+        return getSemanticObject().getProperty(data_appId);
+    }
+
+/**
+* Sets the AppId property
+* @param value long with the AppId
+*/
+    public void setAppId(String value)
+    {
+        getSemanticObject().setProperty(data_appId, value);
+    }
+
+/**
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
 /**
@@ -105,6 +245,62 @@ public abstract class MediaItemBase extends org.semanticwb.model.base.GenericObj
     {
         //Override this method in MediaItem object
         getSemanticObject().setBooleanProperty(swb_valid, value,false);
+    }
+
+/**
+* Gets the Mime_type property
+* @return String with the Mime_type
+*/
+    public String getMime_type()
+    {
+        return getSemanticObject().getProperty(data_mime_type);
+    }
+
+/**
+* Sets the Mime_type property
+* @param value long with the Mime_type
+*/
+    public void setMime_type(String value)
+    {
+        getSemanticObject().setProperty(data_mime_type, value);
+    }
+   /**
+   * Sets the value for the property Creator
+   * @param value Creator to set
+   */
+
+    public void setCreator(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
+    }
+   /**
+   * Remove the value for Creator property
+   */
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(swb_creator);
+    }
+
+   /**
+   * Gets the Creator
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getCreator()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
     }
 
     public void remove()
