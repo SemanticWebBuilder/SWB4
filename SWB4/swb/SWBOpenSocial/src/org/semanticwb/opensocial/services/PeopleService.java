@@ -11,10 +11,10 @@ import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.opensocial.model.Gadget;
 import org.semanticwb.opensocial.model.data.Group;
-import org.semanticwb.opensocial.model.data.Name;
 import org.semanticwb.opensocial.model.data.Person;
 import org.semanticwb.opensocial.util.HtmlScape;
 import org.semanticwb.opensocial.util.NoneScape;
@@ -26,8 +26,10 @@ import org.semanticwb.opensocial.util.Scape;
  */
 public class PeopleService implements Service
 {
-
-    static
+    private static final String ALL = "@all";
+    private static final String FRIENDS = "@friends";
+    private static final String SELF = "@self";
+    /*static
     {
         Iterator<Person> _persons = Person.ClassMgr.listPersons();
         while (_persons.hasNext())
@@ -52,7 +54,7 @@ public class PeopleService implements Service
         john_doe.setGender("male");
         john_doe.setProfileUrl("http://www.infotec");
 
-        Group friendsOfGeorgeDoe = Group.ClassMgr.createGroup(john_doe.getId() + "@friends", site);
+        Group friendsOfGeorgeDoe = Group.ClassMgr.createGroup(john_doe.getId() + FRIENDS, site);
         john_doe.addGroup(friendsOfGeorgeDoe);
         friendsOfGeorgeDoe.setTitle("friends");
         friendsOfGeorgeDoe.setDescription("friends");
@@ -96,15 +98,48 @@ public class PeopleService implements Service
 
 
 
-    }
+    }*/
+    
 
-    public void update(String userid, JSONObject params, WebSite site, Gadget gadget)
+
+    public void update(Person personUserID, JSONObject params, WebSite site, Gadget gadget)
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void create(String userid, JSONObject params, WebSite site, Gadget gadget)
+    /*
+     * Containers MAY support request to create a new relationships between users. This is a generalization of many use cases including invitation, and contact creation. Containers MAY require a dual opt-in process before the friend record appears in the collection, and in this case SHOULD return a 202 Accepted response, indicating that the request is 'in flight' and may or may not be ultimately successful.
+     * A request to create a relationship MUST support the Standard-Request-Parameters and the following additional parameters:
+        Name Type Description
+        userId User-Id User ID of the person initiating the relationship request. Defaults to "@me", which MUST return the currently logged in user.
+        groupId Group-Id The Group ID specifying the type of relationship. Defaults to "@friends".
+        person Person The target of the relationship.
+
+     */
+    public void create(Person personUserID, JSONObject params, WebSite site, Gadget gadget)
     {
+        String groupid=FRIENDS;
+        if(params.optString("groupId")!=null && !params.optString("groupId").equals(""))
+        {
+            groupid=params.optString("groupId");
+        }       
+        try
+        {
+            
+            
+                JSONObject personParam=params.getJSONObject("Person");
+                groupid=personUserID.getId()+groupid;
+                Group group=Group.ClassMgr.getGroup(groupid, site);
+                String personid=personParam.getString("id");
+                Person person=Person.ClassMgr.getPerson(personid, site);
+                group.addPerson(person);
+            
+        }
+        catch(JSONException e)
+        {
+
+        }
+        
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -128,7 +163,7 @@ public class PeopleService implements Service
         }
     }
 
-    public JSONObject get(String userid, JSONObject params, WebSite site, Gadget gadget)
+    public JSONObject get(Person personUserID, JSONObject params, WebSite site, Gadget gadget)
     {
 
 
@@ -148,9 +183,8 @@ public class PeopleService implements Service
             {
                 scape = new NoneScape();
             }
-            String groupId = params.getString("groupId").trim();
-            Person personUserID = Person.ClassMgr.getPerson(userid, site);
-            if (groupId.equals("@self")) //Defaults to "@self", which MUST return only the Person object(s) specified by the userId parameter
+            String groupId = params.getString("groupId").trim();            
+            if (groupId.equals(SELF)) //Defaults to "@self", which MUST return only the Person object(s) specified by the userId parameter
             {
                 if (personUserID != null)
                 {
@@ -165,7 +199,7 @@ public class PeopleService implements Service
 
                 }
             }
-            else if (groupId.equals("@friends"))
+            else if (groupId.equals(FRIENDS))
             {
                 if (personUserID != null)
                 {
@@ -173,7 +207,7 @@ public class PeopleService implements Service
                     while (groups.hasNext())
                     {
                         Group group = groups.next();
-                        if ((personUserID.getId() + "@friends").equals(group.getId()))
+                        if ((personUserID.getId() + FRIENDS).equals(group.getId()))
                         {
                             Iterator<Person> _persons = group.listPersons();
                             while (_persons.hasNext())
@@ -186,7 +220,7 @@ public class PeopleService implements Service
                     }
                 }
             }
-            else if (groupId.equals("@all"))
+            else if (groupId.equals(ALL))
             {
                 if (personUserID != null)
                 {
@@ -250,7 +284,7 @@ public class PeopleService implements Service
         }
         return response;
     }
-    public void delete(String userid,JSONObject params,WebSite site,Gadget gadget)
+    public void delete(Person personUserID,JSONObject params,WebSite site,Gadget gadget)
     {
         
     }
