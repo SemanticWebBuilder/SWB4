@@ -8,11 +8,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
 import org.jdom.JDOMException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.opensocial.resources.SocialContainer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -27,6 +29,42 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
     public Gadget(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public static String[] getAllCategories(WebSite site)
+    {
+        HashSet<String> getCategories = new HashSet<String>();
+        Iterator<Gadget> gadgets = Gadget.ClassMgr.listGadgets(site);
+        while (gadgets.hasNext())
+        {
+            Gadget g = gadgets.next();
+            for (String cat : g.getCategories())
+            {
+                if (cat != null && !cat.equals(""))
+                {
+                    getCategories.add(cat);
+                }
+            }
+        }
+        return getCategories.toArray(new String[getCategories.size()]);
+    }
+
+    public static Gadget[] getGadgetsByCategory(String category, WebSite site)
+    {
+        HashSet<Gadget> getCategories = new HashSet<Gadget>();
+        Iterator<Gadget> gadgets = Gadget.ClassMgr.listGadgets(site);
+        while (gadgets.hasNext())
+        {
+            Gadget g = gadgets.next();
+            for (String cat : g.getCategories())
+            {
+                if (cat != null && !cat.equals("") && cat.equals(category))
+                {
+                    getCategories.add(g);
+                }
+            }
+        }
+        return getCategories.toArray(new Gadget[getCategories.size()]);
     }
 
     public FeatureDetail[] getFeatureDetails()
@@ -589,5 +627,26 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         {
         }
         return false;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final Gadget other = (Gadget) obj;
+        if ((this.getUrl() == null) ? (other.getUrl() != null) : !this.getUrl().equals(other.getUrl()))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 5;
+        hash = 71 * hash + (this.getUrl() != null ? this.getUrl().hashCode() : 0);
+        return hash;
     }
 }
