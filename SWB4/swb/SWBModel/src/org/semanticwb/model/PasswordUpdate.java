@@ -27,6 +27,7 @@ import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import javax.servlet.http.HttpServletRequest;
+import org.semanticwb.SWBPlatform;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -122,11 +123,11 @@ public class PasswordUpdate extends PasswordUpdateBase {
             imsg = dobj.getInvalidMessage();
         }
 
-        if (required && imsg == null) {
-            imsg = label + " es requerido.";
+        if (imsg == null) {
+            imsg = label + " es requerido y debe conformarse al nivel de seguridad del portal.";
 
             if (lang.equals("en")) {
-                imsg = label + " is required.";
+                imsg = label + " is required and must conform to the portal security level.";
             }
         }
 
@@ -153,14 +154,15 @@ public class PasswordUpdate extends PasswordUpdateBase {
                                 ? ""
                                 : passphrase;
 
-            ret = "<input name=\"" + name + "\" type=\"password\" " + " dojoType=\"dijit.form.ValidationTextBox\""
+            ret = "<input name=\"" + name + "\" id=\"" + name + "\" type=\"password\" " + " dojoType=\"dijit.form.ValidationTextBox\""
                   + " required=\"" + required + "\""    // + " propercase=\"true\""
                   + " promptMessage=\"" + pmsg + "\"" + " invalidMessage=\"" + imsg + "\"" + " trim=\"true\""
-                  + " value=\"" + localValue + "\"" + ">";
+                  + " value=\"" + localValue + "\"" + "isValid=\"return validateElement('" + propName + "','" + getValidateURL(obj, prop)
+                         + "',this.textbox.value);\" >";
             ret += "<br/><input name=\"pwd_verify\" type=\"password\" " + " dojoType=\"dijit.form.ValidationTextBox\""
                    + " required=\"" + required + "\""    // + " propercase=\"true\""
                    + " promptMessage=\"" + pmsg + "\"" + " invalidMessage=\"" + imsg + "\"" + " trim=\"true\""
-                   + " value=\"" + localValue + "\"" + ">";
+                   + " value=\"" + localValue + "\" isValid=\"return this.textbox.value==dijit.byId('"+name+"').textbox.value;\" " + ">";
         } else if (mode.equals("view")) {
             ret = "<span _id=\"" + name + "\" name=\"" + name + "\">" + value + "</span>";
         }
@@ -197,5 +199,30 @@ public class PasswordUpdate extends PasswordUpdateBase {
                 throw new FormRuntimeException("Passwords mistmatch or invalid");
             }
         }
+    }
+
+    @Override
+    public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName)
+            throws FormValidateException {
+        super.validate(request, obj, prop, propName);
+        String password = request.getParameter(propName);
+        if (password.length()<SWBPlatform.getSecValues().getMinlength())
+        {
+            throw new FormValidateException("Password don't comply with security measures: Minimal Longitude");
+        }
+        if (null!=obj && SWBPlatform.getSecValues().isDifferFromLogin() &&
+                obj.getProperty(User.swb_usrLogin).equalsIgnoreCase(password))
+        {
+            throw new FormValidateException("Password don't comply with security measures: is equals to Login");
+        }
+        if (SWBPlatform.getSecValues().getComplexity()==1 && (!password.matches("^.*(?=.*[a-zA-Z])(?=.*[0-9])().*$")))
+        {
+            throw new FormValidateException("Password don't comply with security measures: simple");
+        }
+        if (SWBPlatform.getSecValues().getComplexity()==2 && (!password.matches("^.*(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\\W])().*$")))
+        {
+            throw new FormValidateException("Password don't comply with security measures: complex");
+        }
+
     }
 }
