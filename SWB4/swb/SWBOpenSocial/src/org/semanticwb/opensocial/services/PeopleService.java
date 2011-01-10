@@ -103,6 +103,11 @@ public class PeopleService implements Service
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    public void create(String userid, JSONObject params, WebSite site, Gadget gadget)
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
     class PersonComparator implements Comparator<Person>
     {
 

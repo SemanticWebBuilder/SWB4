@@ -18,4 +18,5 @@ public interface Service {
     public JSONObject get(String userid,JSONObject params,WebSite site,Gadget gadget);
     public void update(String userid,JSONObject params,WebSite site,Gadget gadget);
     public void delete(String userid,JSONObject params,WebSite site,Gadget gadget);
+    public void create(String userid,JSONObject params,WebSite site,Gadget gadget);
 }

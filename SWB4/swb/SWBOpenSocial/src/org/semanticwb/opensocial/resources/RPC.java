@@ -19,7 +19,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.opensocial.model.Gadget;
+import org.semanticwb.opensocial.services.ActivitiesService;
+import org.semanticwb.opensocial.services.AlbumsService;
 import org.semanticwb.opensocial.services.AppDataService;
+import org.semanticwb.opensocial.services.GroupsService;
+import org.semanticwb.opensocial.services.MediaItemsService;
+import org.semanticwb.opensocial.services.MessagesService;
 import org.semanticwb.opensocial.services.PeopleService;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -37,6 +42,11 @@ public class RPC
     {
         services.put("people", new PeopleService());
         services.put("appdata", new AppDataService());
+        services.put("groups", new GroupsService());
+        services.put("activities", new ActivitiesService());
+        services.put("albums", new AlbumsService());
+        services.put("mediaItems", new MediaItemsService());
+        services.put("messages", new MessagesService());
     }
 
     private JSONObject execute(String method, JSONObject params, String viewer, String owner, WebSite site,Gadget gadget) throws Exception

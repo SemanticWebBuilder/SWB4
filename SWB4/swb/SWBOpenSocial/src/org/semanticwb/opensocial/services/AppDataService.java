@@ -252,4 +252,9 @@ public class AppDataService implements Service
     {
         
     }
+
+    public void create(String userid, JSONObject params, WebSite site, Gadget gadget)
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
