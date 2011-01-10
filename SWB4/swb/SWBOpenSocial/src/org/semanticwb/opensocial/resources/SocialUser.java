@@ -111,13 +111,23 @@ public class SocialUser
                         {
                             person.addEmail(_user.getEmail());
                         }
-                        Group friends = Group.createGroup("@friends", person, site);
-                        friends.setTitle("friends");
-                        friends.setDescription("friends");
-                        person.addGroup(friends);
+                        if (Group.getGroup(Group.FRIENDS, person, site) == null)
+                        {
+                            Group friends = Group.createGroup(Group.FRIENDS, person, site);
+                            friends.setTitle("friends");
+                            friends.setDescription("friends");
+                            person.addGroup(friends);
+                        }
                     }
                     else
                     {
+                        if (Group.getGroup(Group.FRIENDS, person, site) == null)
+                        {
+                            Group friends = Group.createGroup(Group.FRIENDS, person, site);
+                            friends.setTitle("friends");
+                            friends.setDescription("friends");
+                            person.addGroup(friends);
+                        }
                         if (forceupdate)
                         {
                             Name name = person.getName();
@@ -132,6 +142,13 @@ public class SocialUser
                             name.setFormatted(_user.getFullName());
                             name.setGivenName(_user.getFirstName());
                             person.setThumbnailUrl(SWBPortal.getWebWorkPath() + _user.getPhoto());
+                            if (Group.getGroup(Group.FRIENDS, person, site) == null)
+                            {
+                                Group friends = Group.createGroup(Group.FRIENDS, person, site);
+                                friends.setTitle("friends");
+                                friends.setDescription("friends");
+                                person.addGroup(friends);
+                            }
                         }
                     }
 
@@ -312,17 +329,17 @@ public class SocialUser
                                 Element enumValue = (Element) nodelist_enumValues.item(j);
                                 String value = enumValue.getAttribute("value");
                                 String dp = enumValue.getAttribute("display_value");
-                                JSONObject ordenadedValue=new JSONObject();
+                                JSONObject ordenadedValue = new JSONObject();
                                 ordenadedValue.put("value", value);
                                 ordenadedValue.put("displayValue", dp);
                                 orderedEnumValues.put(ordenadedValue);
                                 enumValues.put(value, dp);
                             }
                         }
-                        
+
                         JSONDefault.put("orderedEnumValues", orderedEnumValues);
 
-                        
+
                         JSONDefault.put("enumValues", enumValues);
                         JSONDefault.put("type", dataType);
                         JSONDefault.put("displayName", displayName);

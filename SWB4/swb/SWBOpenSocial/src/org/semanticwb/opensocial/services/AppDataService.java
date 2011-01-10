@@ -40,13 +40,13 @@ public class AppDataService implements Service
         return null;
     }
 
-    public JSONObject get(Person personUserID, JSONObject params, WebSite site, Gadget gadget) throws RPCException
+    public JSONObject get(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
         JSONObject response = new JSONObject();
         try
         {
             ArrayList<Person> persons = new ArrayList<Person>();
-            String groupId = params.getString("groupId").trim();            
+            String groupId = params.getString("groupId").trim();
             String appid = gadget.getId();
             if (params.optString("appId") != null && !params.optString("appId").equals(""))
             {
@@ -54,67 +54,63 @@ public class AppDataService implements Service
             }
             if (groupId.equals("@self"))
             {
-                if (personUserID != null)
+                if (person != null)
                 {
                     JSONObject responseKeys = new JSONObject();
                     JSONArray keys = params.getJSONArray("keys");
                     for (int i = 0; i < keys.length(); i++)
                     {
                         String key = keys.getString(i);
-                        String data = getData(key, personUserID, appid);
+                        String data = getData(key, person, appid);
                         if (data != null)
                         {
                             responseKeys.accumulate(key, data);
                         }
 
                     }
-                    response.put(personUserID.getId(), responseKeys);
+                    response.put(person.getId(), responseKeys);
                     return response;
                 }
             }
-            else if (groupId.equals("@friends"))
+            else if (groupId.equals(Group.FRIENDS))
             {
-                if (personUserID != null)
+                if (person != null)
                 {
-                    Iterator<Group> groups = personUserID.listGroups();
-                    while (groups.hasNext())
+                    Group group = Group.getGroup(Group.FRIENDS, person, site);
+                    if (group != null)
                     {
-                        Group group = groups.next();
-                        if ((personUserID.getId() + "@friends").equals(group.getId()))
+                        Iterator<Person> _persons = group.listPersons();
+                        while (_persons.hasNext())
                         {
-                            Iterator<Person> _persons = group.listPersons();
-                            while (_persons.hasNext())
-                            {
-                                Person person = _persons.next();
-                                persons.add(person);
-                            }
-                            break;
+                            Person personToAdd = _persons.next();
+                            persons.add(personToAdd);
                         }
-                    }
+
+                    }                    
                 }
             }
             else if (groupId.equals("@all"))
             {
-                if (personUserID != null)
+                if (person != null)
                 {
-                    Iterator<Group> groups = personUserID.listGroups();
+                    Iterator<Group> groups = person.listGroups();
                     while (groups.hasNext())
                     {
                         Group group = groups.next();
                         Iterator<Person> _persons = group.listPersons();
                         while (_persons.hasNext())
                         {
-                            Person person = _persons.next();
-                            persons.add(person);
+                            Person personToAdd = _persons.next();
+                            persons.add(personToAdd);
                         }
                     }
                 }
             }
             else
             {
-                if (personUserID != null)
+                if (person != null)
                 {
-                    Iterator<Group> groups = personUserID.listGroups();
+                    Iterator<Group> groups = person.listGroups();
                     while (groups.hasNext())
                     {
                         Group group = groups.next();
@@ -123,8 +119,8 @@ public class AppDataService implements Service
                             Iterator<Person> _persons = group.listPersons();
                             while (_persons.hasNext())
                             {
-                                Person person = _persons.next();
-                                persons.add(person);
+                                Person personToAdd = _persons.next();
+                                persons.add(personToAdd);
                             }
                         }
                     }
@@ -166,7 +162,7 @@ public class AppDataService implements Service
             if (params.optString("appId") != null && !params.optString("appId").equals(""))
             {
                 appid = params.optString("appId");
-            }            
+            }
             if (groupId.equals("@self"))
             {
                 persons.add(personUserID);
@@ -246,9 +242,9 @@ public class AppDataService implements Service
         }
         return null;
     }
-    public void delete(Person personUserID,JSONObject params,WebSite site,Gadget gadget) throws RPCException
+
+    public void delete(Person personUserID, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
-        
     }
 
     public JSONObject create(Person personUserID, JSONObject params, WebSite site, Gadget gadget) throws RPCException
