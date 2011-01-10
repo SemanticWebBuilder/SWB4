@@ -285,7 +285,9 @@ public class IFrame
     }
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {        
+    {
+        System.out.println("request.getRequestURI(): "+request.getRequestURI());
+        System.out.println("request.getQueryString(): "+request.getQueryString());
         String url = request.getParameter("url");
         String country = request.getParameter("country");
         String lang = request.getParameter("lang");
@@ -303,6 +305,8 @@ public class IFrame
 
         try
         {
+            System.out.println("url: "+url);
+            System.out.println("view: "+sview);
             Gadget gadget = SocialContainer.getGadget(url, paramRequest.getWebPage().getWebSite());
             if (gadget != null)
             {
@@ -412,7 +416,8 @@ public class IFrame
                 HtmlResponse = HtmlResponse.replace("<%=proxy%>", proxy.toString());
                 HtmlResponse = HtmlResponse.replace("<%=makerequest%>", makerequest.toString());
                 HtmlResponse = HtmlResponse.replace("<%=html%>", html);
-                PrintWriter out = response.getWriter();                
+                PrintWriter out = response.getWriter();
+                System.out.println(HtmlResponse);
                 out.write(HtmlResponse);
                 out.close();
             }

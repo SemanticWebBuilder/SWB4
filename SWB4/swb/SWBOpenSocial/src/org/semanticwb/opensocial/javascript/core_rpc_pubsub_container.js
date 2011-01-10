@@ -3201,11 +3201,12 @@ gadgets.rpc = function() {
    * @return {boolean}
    */
   function callSameDomain(target, rpc) {
+    
     if (typeof sameDomain[target] === 'undefined') {
       // Seed with a negative, typed value to avoid
       // hitting this code path repeatedly.
       sameDomain[target] = false;
-      var targetRelay = gadgets.rpc.getRelayUrl(target);
+      var targetRelay = gadgets.rpc.getRelayUrl(target);      
       if (getOrigin(targetRelay) !== getOrigin(window.location.href)) {
         // Not worth trying -- avoid the error and just return.
         return false;
@@ -3224,6 +3225,7 @@ gadgets.rpc = function() {
 
     if (typeof sameDomain[target] === 'function') {
       // Call target's receive method
+      //alert('sameDomain[target]: '+sameDomain[target]+" rpc: "+rpc);
       sameDomain[target](rpc);
       return true;
     }
@@ -3550,7 +3552,7 @@ gadgets.rpc = function() {
         gadgets.log("WARNING: attempted send to nonexistent frame: " + targetId);
         return;
       }
-
+      
       // If target is on the same domain, call method directly
       if (callSameDomain(targetId, rpc)) {
         return;
@@ -3594,14 +3596,14 @@ gadgets.rpc = function() {
     getRelayUrl: function(targetId) {
       var url = relayUrl[targetId];
       // Some RPC methods (wpm, for one) are unhappy with schemeless URLs.
+      
       if (url && url.substring(0,1) === '/') {
         if (url.substring(1,2) === '/') {    // starts with '//'
           url = document.location.protocol + url;
         } else {    // relative URL, starts with '/'
           url = document.location.protocol + '//' + document.location.host + url;
         }
-      }
-      
+      }      
       return url;
     },
 
@@ -6096,7 +6098,8 @@ shindig.BaseIfrGadget.prototype.cssClassGadgetUserPrefsDialogActionBar =
 shindig.BaseIfrGadget.prototype.cssClassTitleButton = 'gadgets-gadget-title-button';
 shindig.BaseIfrGadget.prototype.cssClassGadgetContent = 'gadgets-gadget-content';
 shindig.BaseIfrGadget.prototype.rpcToken = (0x7FFFFFFF * Math.random()) | 0;
-shindig.BaseIfrGadget.prototype.rpcRelay = '../container/rpc_relay.html';
+//shindig.BaseIfrGadget.prototype.rpcRelay = '../container/rpc_relay.html';
+shindig.BaseIfrGadget.prototype.rpcRelay = '<%=rpc_relay%>';
 
 shindig.BaseIfrGadget.prototype.getTitleBarContent = function(continuation) {
   var settingsButton = this.hasViewablePrefs_() ?
@@ -6236,6 +6239,7 @@ shindig.BaseIfrGadget.prototype.handleCancelUserPrefs = function() {
 
 shindig.BaseIfrGadget.prototype.refresh = function() {
   var iframeId = this.getIframeId();
+  alert('this.getIframeUrl(): '+this.getIframeUrl());
   document.getElementById(iframeId).src = this.getIframeUrl();
 };
 
