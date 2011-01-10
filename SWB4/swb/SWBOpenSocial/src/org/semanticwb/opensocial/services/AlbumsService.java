@@ -134,12 +134,38 @@ public class AlbumsService implements Service
 
     public JSONObject update(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try
+        {
+            JSONObject albumparams = params.getJSONObject("Album");
+            String id = albumparams.getString("id");
+            if (Album.getAlbum(id, person, site) != null)
+            {
+                Album album = Album.getAlbum(id, person, site);
+            }
+        }
+        catch (JSONException e)
+        {
+            log.debug(e);
+        }
+        return null;
     }
 
     public void delete(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try
+        {
+            JSONObject albumparams = params.getJSONObject("Album");
+            String id = albumparams.getString("id");
+            if (Album.getAlbum(id, person, site) != null)
+            {
+                Album album = Album.createAlbum(id, person, site);
+                album.remove();
+            }
+        }
+        catch (JSONException e)
+        {
+            log.debug(e);
+        }
     }
 
     public JSONObject create(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
@@ -154,6 +180,7 @@ public class AlbumsService implements Service
                 person.addAlbumns(album);
                 JSONObject value = new JSONObject();
                 value.put("Album-Id", id);
+                return value;
             }
         }
         catch (JSONException e)
