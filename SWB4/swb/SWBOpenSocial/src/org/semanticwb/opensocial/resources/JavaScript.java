@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -61,6 +62,8 @@ public final class JavaScript
                 SWBResourceURL ifr=paramRequest.getRenderUrl();
                 ifr.setMode(SocialContainer.Mode_IFRAME);
                 ifr.setCallMethod(SWBResourceURL.Call_DIRECT);
+                String relaypath=SWBPortal.getContextPath()+"/swbadmin/jsp/opensocial/rpc_relay.html";
+                System.out.println("relaypath: "+relaypath);
 
                 SWBResourceURL javascript=paramRequest.getRenderUrl();
                 javascript.setMode(SocialContainer.Mode_METADATA);
@@ -70,6 +73,8 @@ public final class JavaScript
                 js=js.replace("<%=rpc%>", rpc.toString());
                 js=js.replace("<%=proxy%>", proxy.toString());
                 js=js.replace("<%=makerequest%>", makeRequest.toString());
+                js=js.replace("<%=rpc_relay%>",relaypath);
+
                 PrintWriter out=response.getWriter();
                 out.write(js);
                 out.close();

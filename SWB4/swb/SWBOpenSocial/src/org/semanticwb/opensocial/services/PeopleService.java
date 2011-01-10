@@ -245,4 +245,8 @@ public class PeopleService implements Service
         }
         return response;
     }
+    public void delete(String userid,JSONObject params,WebSite site,Gadget gadget)
+    {
+        
+    }
 }

@@ -248,4 +248,8 @@ public class AppDataService implements Service
         }
 
     }
+    public void delete(String userid,JSONObject params,WebSite site,Gadget gadget)
+    {
+        
+    }
 }
