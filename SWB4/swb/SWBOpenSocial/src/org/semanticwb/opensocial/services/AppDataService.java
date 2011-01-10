@@ -14,6 +14,7 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.opensocial.model.Gadget;
 import org.semanticwb.opensocial.model.data.Group;
 import org.semanticwb.opensocial.model.data.Person;
+import org.semanticwb.opensocial.resources.RPCException;
 
 /**
  *
@@ -39,7 +40,7 @@ public class AppDataService implements Service
         return null;
     }
 
-    public JSONObject get(Person personUserID, JSONObject params, WebSite site, Gadget gadget)
+    public JSONObject get(Person personUserID, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
         JSONObject response = new JSONObject();
         try
@@ -154,7 +155,7 @@ public class AppDataService implements Service
         return response;
     }
 
-    public void update(Person personUserID, JSONObject params, WebSite site, Gadget gadget)
+    public JSONObject update(Person personUserID, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
 
         try
@@ -243,14 +244,14 @@ public class AppDataService implements Service
         {
             je.printStackTrace();
         }
-
+        return new JSONObject();
     }
-    public void delete(Person personUserID,JSONObject params,WebSite site,Gadget gadget)
+    public void delete(Person personUserID,JSONObject params,WebSite site,Gadget gadget) throws RPCException
     {
         
     }
 
-    public void create(Person personUserID, JSONObject params, WebSite site, Gadget gadget)
+    public void create(Person personUserID, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }

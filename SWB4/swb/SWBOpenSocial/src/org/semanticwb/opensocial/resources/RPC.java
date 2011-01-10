@@ -50,7 +50,7 @@ public class RPC
         services.put("messages", new MessagesService());
     }
 
-    private JSONObject execute(String method, JSONObject params, String viewer, String owner, WebSite site,Gadget gadget) throws Exception
+    private JSONObject execute(String method, JSONObject params, String viewer, String owner, WebSite site, Gadget gadget) throws Exception
     {
         JSONObject execute = new JSONObject();
         int pos = method.indexOf(".");
@@ -67,26 +67,33 @@ public class RPC
             {
                 userId = viewer;
             }
-            Person person=Person.ClassMgr.getPerson(userId, site);
-            if(person!=null)
+            Person person = Person.ClassMgr.getPerson(userId, site);
+            if (person != null)
             {
                 params.remove("userId");
                 Service service = services.get(objectType);
-                if (method.equals("get"))
+                try
                 {
-                    return service.get(person, params, site,gadget);
+                    if (method.equals("get"))
+                    {
+                        return service.get(person, params, site, gadget);
+                    }
+                    else if (method.equals("update"))
+                    {
+                        service.update(person, params, site, gadget);
+                    }
+                    else if (method.equals("create"))
+                    {
+                        service.create(person, params, site, gadget);
+                    }
+                    else if (method.equals("delete"))
+                    {
+                        service.delete(person, params, site, gadget);
+                    }
                 }
-                else if(method.equals("update"))
+                catch (RPCException e)
                 {
-                    service.update(person, params, site,gadget);
-                }
-                else if(method.equals("create"))
-                {
-                    service.create(person, params, site,gadget);
-                }
-                else if(method.equals("delete"))
-                {
-                    service.delete(person, params, site,gadget);
+                    e.printStackTrace();
                 }
             }
         }
@@ -95,8 +102,8 @@ public class RPC
 
     private void sendResponse(String objresponse, HttpServletResponse response) throws IOException
     {
-        Charset utf8=Charset.forName("utf-8");
-        response.setContentType("JSON;charset="+utf8.name());
+        Charset utf8 = Charset.forName("utf-8");
+        response.setContentType("JSON;charset=" + utf8.name());
         OutputStream out = response.getOutputStream();
         out.write(objresponse.getBytes(utf8));
         out.close();
@@ -104,15 +111,15 @@ public class RPC
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        WebSite site=paramRequest.getWebPage().getWebSite();
+        WebSite site = paramRequest.getWebPage().getWebSite();
         String port = "";
         if (request.getServerPort() != 80)
         {
             port = ":" + request.getServerPort();
         }
-        String st = request.getParameter("st");        
+        String st = request.getParameter("st");
         System.out.println("request.getQueryString(): " + request.getQueryString());
-        
+
         if (st != null && "application/json".equals(request.getContentType()))
         {
             InputStream in = request.getInputStream();
@@ -132,16 +139,16 @@ public class RPC
             {
                 try
                 {
-                    String urlgadget=values[4];
-                    if(values.length==7)
+                    String urlgadget = values[4];
+                    if (values.length == 7)
                     {
-                        urlgadget=values[4];
+                        urlgadget = values[4];
                     }
-                    if(values.length==9)
+                    if (values.length == 9)
                     {
-                        urlgadget=values[4]+":"+values[5]+":"+values[6];
+                        urlgadget = values[4] + ":" + values[5] + ":" + values[6];
                     }
-                    System.out.println("urlgadget: "+urlgadget);
+                    System.out.println("urlgadget: " + urlgadget);
                     URI gadgetURL = new URI(urlgadget);
                     URI here = new URI(request.getScheme() + "://" + request.getServerName() + port + request.getRequestURI());
                     if (!gadgetURL.isAbsolute())
@@ -153,8 +160,8 @@ public class RPC
                     {
                         String viewer = values[1];
                         String owner = values[0];
-                        System.out.println("viewer: "+viewer);
-                        System.out.println("owner: "+owner);
+                        System.out.println("viewer: " + viewer);
+                        System.out.println("owner: " + owner);
                         if (sb.toString().startsWith("["))
                         {
                             JSONArray responseJSONObject = new JSONArray();
@@ -164,20 +171,20 @@ public class RPC
                                 JSONObject obj = requestJSONObject.getJSONObject(i);
                                 String method = obj.getString("method");
                                 String id = obj.getString("id");
-                                JSONObject params = obj.getJSONObject("params");                                
-                                JSONObject responseMethod = execute(method, params, viewer, owner, site,gadget);
+                                JSONObject params = obj.getJSONObject("params");
+                                JSONObject responseMethod = execute(method, params, viewer, owner, site, gadget);
                                 JSONObject part = new JSONObject();
                                 part.put("id", id);
-                                part.put("result", responseMethod);                                
+                                part.put("result", responseMethod);
                                 responseJSONObject.put(part);
-                            }                            
+                            }
                             sendResponse(responseJSONObject.toString(4), response);
 
-                            
+
                         }
                         else
                         {
-                            System.out.println("warning: "+sb.toString());                            
+                            System.out.println("warning: " + sb.toString());
                         }
                     }
                 }
@@ -188,7 +195,7 @@ public class RPC
             }
             else
             {
-                System.out.println("warning values: "+values.length);
+                System.out.println("warning values: " + values.length);
             }
         }
         else

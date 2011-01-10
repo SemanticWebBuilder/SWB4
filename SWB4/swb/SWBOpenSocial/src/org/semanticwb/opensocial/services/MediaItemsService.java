@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.opensocial.model.Gadget;
 import org.semanticwb.opensocial.model.data.Person;
+import org.semanticwb.opensocial.resources.RPCException;
 
 /**
  *
@@ -16,25 +17,27 @@ import org.semanticwb.opensocial.model.data.Person;
  */
 public class MediaItemsService implements Service{
 
-    public JSONObject get(Person person, JSONObject params, WebSite site, Gadget gadget)
+    public JSONObject get(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void update(Person person, JSONObject params, WebSite site, Gadget gadget)
+    public JSONObject update(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void delete(Person person, JSONObject params, WebSite site, Gadget gadget)
+    public void delete(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void create(Person person, JSONObject params, WebSite site, Gadget gadget)
+    public void create(Person person, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    
 
     
 

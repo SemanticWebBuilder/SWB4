@@ -11,11 +11,11 @@ import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.opensocial.model.Gadget;
 import org.semanticwb.opensocial.model.data.Group;
 import org.semanticwb.opensocial.model.data.Person;
+import org.semanticwb.opensocial.resources.RPCException;
 import org.semanticwb.opensocial.util.HtmlScape;
 import org.semanticwb.opensocial.util.NoneScape;
 import org.semanticwb.opensocial.util.Scape;
@@ -26,144 +26,155 @@ import org.semanticwb.opensocial.util.Scape;
  */
 public class PeopleService implements Service
 {
+
     private static final String ALL = "@all";
     private static final String FRIENDS = "@friends";
     private static final String SELF = "@self";
     /*static
     {
-        Iterator<Person> _persons = Person.ClassMgr.listPersons();
-        while (_persons.hasNext())
-        {
-            Person person = _persons.next();
-            person.remove();
-        }
+    Iterator<Person> _persons = Person.ClassMgr.listPersons();
+    while (_persons.hasNext())
+    {
+    Person person = _persons.next();
+    person.remove();
+    }
 
-        Iterator<Group> groups = Group.ClassMgr.listGroups();
-        while (groups.hasNext())
-        {
-            Group g = groups.next();
-            g.remove();
-        }
-        WebSite site = WebSite.ClassMgr.getWebSite("reg_digital_demo");
+    Iterator<Group> groups = Group.ClassMgr.listGroups();
+    while (groups.hasNext())
+    {
+    Group g = groups.next();
+    g.remove();
+    }
+    WebSite site = WebSite.ClassMgr.getWebSite("reg_digital_demo");
 
-        Person john_doe = Person.ClassMgr.createPerson("john.doe", site);
-        Name name = Name.ClassMgr.createName(site);
-        name.setFormatted("Demo Friend");
-        john_doe.setName(name);
-        john_doe.setAge(20);
-        john_doe.setGender("male");
-        john_doe.setProfileUrl("http://www.infotec");
+    Person john_doe = Person.ClassMgr.createPerson("john.doe", site);
+    Name name = Name.ClassMgr.createName(site);
+    name.setFormatted("Demo Friend");
+    john_doe.setName(name);
+    john_doe.setAge(20);
+    john_doe.setGender("male");
+    john_doe.setProfileUrl("http://www.infotec");
 
-        Group friendsOfGeorgeDoe = Group.ClassMgr.createGroup(john_doe.getId() + FRIENDS, site);
-        john_doe.addGroup(friendsOfGeorgeDoe);
-        friendsOfGeorgeDoe.setTitle("friends");
-        friendsOfGeorgeDoe.setDescription("friends");
-
-
-
-        Person george_doe = Person.ClassMgr.createPerson("George.doe", site);
-        name = Name.ClassMgr.createName(site);
-        name.setFormatted("George Doe");
-        george_doe.setName(name);
-        george_doe.setAge(20);
-        george_doe.setGender("famale");
-        george_doe.setProfileUrl("http://www.infotec");
+    Group friendsOfGeorgeDoe = Group.ClassMgr.createGroup(john_doe.getId() + FRIENDS, site);
+    john_doe.addGroup(friendsOfGeorgeDoe);
+    friendsOfGeorgeDoe.setTitle("friends");
+    friendsOfGeorgeDoe.setDescription("friends");
 
 
+
+    Person george_doe = Person.ClassMgr.createPerson("George.doe", site);
+    name = Name.ClassMgr.createName(site);
+    name.setFormatted("George Doe");
+    george_doe.setName(name);
+    george_doe.setAge(20);
+    george_doe.setGender("famale");
+    george_doe.setProfileUrl("http://www.infotec");
 
 
 
 
-        Person jane_doe = Person.ClassMgr.createPerson("jane.doe", site);
-        name = Name.ClassMgr.createName(site);
-        name.setFormatted("Jane Doe");
-        jane_doe.setName(name);
-        jane_doe.setAge(37);
-        jane_doe.setGender("male");
-        jane_doe.setProfileUrl("http://www.infotec");
 
 
-        Person Maija = Person.ClassMgr.createPerson("maija", site);
-        name = Name.ClassMgr.createName(site);
-        name.setFormatted("Maija Meikäläinen");
-        Maija.setName(name);
-        Maija.setAge(37);
-        Maija.setGender("male");
-        Maija.setProfileUrl("http://www.infotec");
+    Person jane_doe = Person.ClassMgr.createPerson("jane.doe", site);
+    name = Name.ClassMgr.createName(site);
+    name.setFormatted("Jane Doe");
+    jane_doe.setName(name);
+    jane_doe.setAge(37);
+    jane_doe.setGender("male");
+    jane_doe.setProfileUrl("http://www.infotec");
 
-        //friend.setThumbnailUrl("a");
-        friendsOfGeorgeDoe.addPerson(jane_doe);
-        friendsOfGeorgeDoe.addPerson(Maija);
-        friendsOfGeorgeDoe.addPerson(george_doe);
+
+    Person Maija = Person.ClassMgr.createPerson("maija", site);
+    name = Name.ClassMgr.createName(site);
+    name.setFormatted("Maija Meikäläinen");
+    Maija.setName(name);
+    Maija.setAge(37);
+    Maija.setGender("male");
+    Maija.setProfileUrl("http://www.infotec");
+
+    //friend.setThumbnailUrl("a");
+    friendsOfGeorgeDoe.addPerson(jane_doe);
+    friendsOfGeorgeDoe.addPerson(Maija);
+    friendsOfGeorgeDoe.addPerson(george_doe);
 
 
 
     }*/
-    
 
-
-    public void update(Person personUserID, JSONObject params, WebSite site, Gadget gadget)
+    public JSONObject update(Person personUserID, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String groupid=SELF;
+        if (params.optString("groupId") != null && !params.optString("groupId").equals(""))
+        {
+            groupid = params.optString("groupId");
+        }
+        
+        try
+        {
+            groupid = personUserID.getId() + groupid;
+            Group group = Group.ClassMgr.getGroup(groupid, site);
+            if(group!=null)
+            {
+                JSONObject personParam = params.getJSONObject("Person");
+                String personid = personParam.getString("id");
+                if(personid!=null && !personid.equals(""))
+                {
+                    Person person = Person.ClassMgr.getPerson(personid, site);
+                    JSONObject returnJSON=new JSONObject();
+                    returnJSON.put("person",person.toJSONObject());
+                    return returnJSON;
+                }
+            }
+        }
+        catch (JSONException e)
+        {
+            throw new RPCException(e);
+        }
+        return new JSONObject();
     }
+
 
     /*
      * Containers MAY support request to create a new relationships between users. This is a generalization of many use cases including invitation, and contact creation. Containers MAY require a dual opt-in process before the friend record appears in the collection, and in this case SHOULD return a 202 Accepted response, indicating that the request is 'in flight' and may or may not be ultimately successful.
      * A request to create a relationship MUST support the Standard-Request-Parameters and the following additional parameters:
-        Name Type Description
-        userId User-Id User ID of the person initiating the relationship request. Defaults to "@me", which MUST return the currently logged in user.
-        groupId Group-Id The Group ID specifying the type of relationship. Defaults to "@friends".
-        person Person The target of the relationship.
+    Name Type Description
+    userId User-Id User ID of the person initiating the relationship request. Defaults to "@me", which MUST return the currently logged in user.
+    groupId Group-Id The Group ID specifying the type of relationship. Defaults to "@friends".
+    person Person The target of the relationship.
 
      */
-    public void create(Person personUserID, JSONObject params, WebSite site, Gadget gadget)
+    public void create(Person personUserID, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
-        String groupid=FRIENDS;
-        if(params.optString("groupId")!=null && !params.optString("groupId").equals(""))
+        String groupid = FRIENDS;
+        if (params.optString("groupId") != null && !params.optString("groupId").equals(""))
         {
-            groupid=params.optString("groupId");
-        }       
+            groupid = params.optString("groupId");
+        }
         try
         {
-            
-            
-                JSONObject personParam=params.getJSONObject("Person");
-                groupid=personUserID.getId()+groupid;
-                Group group=Group.ClassMgr.getGroup(groupid, site);
-                String personid=personParam.getString("id");
-                Person person=Person.ClassMgr.getPerson(personid, site);
-                group.addPerson(person);
-            
-        }
-        catch(JSONException e)
-        {
 
-        }
-        
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
-    class PersonComparator implements Comparator<Person>
-    {
-
-        private final String field;
-
-        public PersonComparator(String field)
-        {
-            this.field = field;
-        }
-
-        public int compare(Person o1, Person o2)
-        {
-            if ("name".equals(field))
+            JSONObject personParam = params.getJSONObject("Person");
+            groupid = personUserID.getId() + groupid;
+            Group group = Group.ClassMgr.getGroup(groupid, site);
+            if(group!=null)
             {
-                return o1.getName().getFormatted().compareTo(o2.getName().getFormatted());
+                String personid = personParam.getString("id");
+                if(personid!=null && !personid.equals(""))
+                {
+                    Person person = Person.ClassMgr.getPerson(personid, site);
+                    group.addPerson(person);
+                }
             }
-            return 0;
+
         }
+        catch (JSONException e)
+        {
+            throw new RPCException(e);
+        }        
     }
 
-    public JSONObject get(Person personUserID, JSONObject params, WebSite site, Gadget gadget)
+    public JSONObject get(Person personUserID, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
 
 
@@ -183,7 +194,7 @@ public class PeopleService implements Service
             {
                 scape = new NoneScape();
             }
-            String groupId = params.getString("groupId").trim();            
+            String groupId = params.getString("groupId").trim();
             if (groupId.equals(SELF)) //Defaults to "@self", which MUST return only the Person object(s) specified by the userId parameter
             {
                 if (personUserID != null)
@@ -240,7 +251,7 @@ public class PeopleService implements Service
             else
             {
 
-                if(personUserID!=null)
+                if (personUserID != null)
                 {
                     Iterator<Group> groups = personUserID.listGroups();
                     while (groups.hasNext())
@@ -284,8 +295,28 @@ public class PeopleService implements Service
         }
         return response;
     }
-    public void delete(Person personUserID,JSONObject params,WebSite site,Gadget gadget)
+
+    public void delete(Person personUserID, JSONObject params, WebSite site, Gadget gadget) throws RPCException
     {
-        
+    }
+
+    class PersonComparator implements Comparator<Person>
+    {
+
+        private final String field;
+
+        public PersonComparator(String field)
+        {
+            this.field = field;
+        }
+
+        public int compare(Person o1, Person o2)
+        {
+            if ("name".equals(field))
+            {
+                return o1.getName().getFormatted().compareTo(o2.getName().getFormatted());
+            }
+            return 0;
+        }
     }
 }
