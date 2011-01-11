@@ -147,9 +147,7 @@ public class Metadata
                 iframeurl.setParameter("view", "");
                 iframeurl.setParameter("nocache", "");
                 iframeurl.setParameter("v", "b4ea67fd7aa33422aa257ee3f534daf0");
-                iframeurl.setParameter("st", ""); // Token
-                //String iframeUrl="http://localhost:8080/swb/gadgets/ifr?url=http%3A%2F%2Flocalhost%3A8080%2Fswb%2Fsamplecontainer%2Fexamples%2FSocialHelloWorld.xml&container=default&view=%25view%25&lang=%25lang%25&country=%25country%25&debug=%25debug%25&nocache=%25nocache%25&v=b4ea67fd7aa33422aa257ee3f534daf0&st=%25st%25";
-                //String iframeUrl="http://localhost:8080"+ SWBPortal.getContextPath()+SWBPortal.getDistributorPath()+"/"+config.getServletContextName()+"/ifr?url="+ URLEncoder.encode(url) +"";
+                iframeurl.setParameter("st", ""); // Token                
                 metadata.put("iframeUrl", iframeurl.toString());
             }
             else

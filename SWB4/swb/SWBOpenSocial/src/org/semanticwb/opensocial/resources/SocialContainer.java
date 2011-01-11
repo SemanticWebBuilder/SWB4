@@ -419,7 +419,7 @@ public class SocialContainer extends GenericResource
                 socialuser.checkOsapiFeature(g, site,true);
             }
         }
-        String path = "/swbadmin/jsp/opensocial/samplecontainer.jsp";
+        String path = "/swbadmin/jsp/opensocial/container.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
         {
