@@ -1,5 +1,10 @@
   4.0.2.2
-    - Serch seguridad
+    - Se agregó un atributo para forzar el cambio de contraseña de un usuario (Serch)
+    - Se agregó un archivo de configuración para especificar el nivel de seguridad en el manejo de contraseñas y sesiones (Serch)
+    - Se agregó validación de contraseña contra, igualdad al login, tamaño, complejidad y tiempo de expiración (Serch)
+    - Se agregó validación para forzar cambio de contraseña en el primer acceso del usuario (Serch)
+    - se agregó inactivación de usuarios por falta de uso de la cuenta (Serch)
+
   4.0.2.0
     - Se agregó al recurso de búsqueda la capacidad de buscar por más de un tipo de clase (Hasdai).
     - Se elimino necesidad de tener un archivo index.html dentro del directorio raiz (Jei).
