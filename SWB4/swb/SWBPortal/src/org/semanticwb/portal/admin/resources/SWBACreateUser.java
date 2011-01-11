@@ -64,6 +64,18 @@ public class SWBACreateUser extends GenericResource {
         "                   dojo.require(\"dijit.layout.ContentPane\");\n"+
         "                   dojo.require(\"dijit.form.FilteringSelect\");\n"+
         "                   dojo.require(\"dijit.form.CheckBox\");\n"+
+                         "function validpwd(pwd){\n" +
+                         "var ret=true;\n"+
+                         ((SWBPlatform.getSecValues().isDifferFromLogin())?
+                             "if (dijit.byId('Ulogin').textbox.value == pwd) { ret=false;}":"")+
+                         ((SWBPlatform.getSecValues().getMinlength()>0)?
+                             "if (pwd < "+SWBPlatform.getSecValues().getMinlength()+") { ret=false;}":"")+
+                         ((SWBPlatform.getSecValues().getComplexity()==1)?
+                             "if (!pwd.match(/^.*(?=.*[a-zA-Z])(?=.*[0-9])().*$/) ) { ret=false;}":"")+
+                         ((SWBPlatform.getSecValues().getComplexity()==2)?
+                             "if (!pwd.match(/^.*(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\\W])().*$/) ) { ret=false;}":"")+
+                         "return ret;\n"+
+                          "}\n"+
         "        </script>\n");
       //http://www.semanticwebbuilder.org/swb4/ontology#User
         ret.append("<form id=\""+User.swb_User.getClassName()+"/create\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
@@ -82,7 +94,7 @@ public class SWBACreateUser extends GenericResource {
         ret.append("\n\t\t\t\t</select>\n\t\t\t</td>\n\t\t</tr>");
         ret.append("\n\t\t<tr>\n\t\t\t<td align=\"right\">\n\t\t\t\t<label>"+paramRequest.getLocaleString("userID")
                 +" <em>*</em></label>\n\t\t\t</td>\n\t\t\t<td>");
-        ret.append("<input type=\"text\" name=\"login\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" " +
+        ret.append("<input type=\"text\" id=\"Ulogin\" name=\"login\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" " +
                 "promptMessage=\""+paramRequest.getLocaleString("userMsgID")
                 +"\" invalidMessage=\""+paramRequest.getLocaleString("userErrID")
                 +"\" isValid=\"return canAddLogin(dijit.byId('userRepository').value,this.textbox.value);\" trim=\"true\" />");
@@ -91,7 +103,7 @@ public class SWBACreateUser extends GenericResource {
                 +" <em>*</em></label>\n\t\t\t</td>\n\t\t\t<td>");
         ret.append("<input type=\"password\" name=\"passwd\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" ");
         ret.append("promptMessage=\""+paramRequest.getLocaleString("userMsgPWD")
-                +"\" invalidMessage=\""+paramRequest.getLocaleString("userErrPWD")+"\" trim=\"true\" />");
+                +"\" invalidMessage=\""+paramRequest.getLocaleString("userErrPWD")+"\" trim=\"true\" isValid=\"return validpwd(this.textbox.value);\" />");
         ret.append("\n\t\t\t</td>\n\t\t</tr>\n\t<tr>\n\t\t<td align=\"center\" colspan=\"2\">");
         ret.append("<button dojoType='dijit.form.Button' type=\"submit\">"+paramRequest.getLocaleString("SveBtn")+"</button>\n");
         ret.append("<button dojoType='dijit.form.Button' onclick=\"dijit.byId('swbDialog').hide();\">"+paramRequest.getLocaleString("CnlBtn")+"</button>\n");
