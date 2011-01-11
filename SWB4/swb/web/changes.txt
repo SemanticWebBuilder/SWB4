@@ -1,4 +1,8 @@
   4.0.2.2
+    - Se corrigio depliegue de contenidos por defecto con Orden = 0
+    - Se corrigio despliegue de elementos enviados a papelera (Jei)
+    - Se agregó atributo (session/restrictMultipleLogon) en security.properties para restringir acceso un solo usuarios por session. (Jei)
+    - Se agregó atributo (session/restrictToSingleIP) en security.properties para restringir acceso a usuarios por un sola ip por session. (Jei)
     - Se agregó un atributo para forzar el cambio de contraseña de un usuario (Serch)
     - Se agregó un archivo de configuración para especificar el nivel de seguridad en el manejo de contraseñas y sesiones (Serch)
     - Se agregó validación de contraseña contra, igualdad al login, tamaño, complejidad y tiempo de expiración (Serch)
@@ -14,7 +18,6 @@
     - Se corrigio Indexación de contenidos con padre desactivado.
     - Se modificaron headers de sitemap.xml para pasar validación w3c
     - Optimización en el proceso de parseo del archivo a cargar para modificar las rutas de los archivos asociados en HTMLContent (Jose R).
-
 
   4.0.1.8
     - Mejora cuando limpia estilos el recurso de Word (Victor L)
