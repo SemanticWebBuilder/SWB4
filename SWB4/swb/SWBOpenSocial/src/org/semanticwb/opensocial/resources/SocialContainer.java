@@ -90,7 +90,7 @@ public class SocialContainer extends GenericResource
 
     }
 
-    public static Map<String, String> getVariablesubstituion(User user, Gadget gadget, String language, String country, String moduleID)
+    public static Map<String, String> getVariablesubstituion(User user, Gadget gadget, String language, String country, String moduleID,WebSite site)
     {
 
         Map<String, String> getVariablesubstituion = new HashMap<String, String>();
@@ -99,11 +99,16 @@ public class SocialContainer extends GenericResource
         getVariablesubstituion.put("__MODULE_ID__", moduleID);
         getVariablesubstituion.put("__MSG_LANG__", language);
         getVariablesubstituion.put("__MSG_COUNTRY__", country);
-        Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(user);
+        System.out.println("user: "+user.getId());
+        System.out.println("moduleID: "+moduleID);
+        Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(user,site);
         while (preferences.hasNext())
         {
             PersonalizedGadged personalizedGadged = preferences.next();
-            if (personalizedGadged.getGadget().getURI().equals(gadget.getURI()))
+            System.out.println("personalizedGadged.getGadget().getURI(): "+personalizedGadged.getGadget().getURI());
+            System.out.println("gadget.getURI(): "+gadget.getURI());
+            System.out.println("personalizedGadged.getId(): "+personalizedGadged.getId());
+            if (personalizedGadged.getGadget().getURI().equals(gadget.getURI()) && personalizedGadged.getId().equals(moduleID))
             {
                 GenericIterator<UserPref> list = personalizedGadged.listUserPrefses();
                 while (list.hasNext())
