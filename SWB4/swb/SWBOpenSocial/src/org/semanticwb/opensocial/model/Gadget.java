@@ -342,7 +342,26 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         }
         return null;
     }
-
+    public String getDirectoryTitle()
+    {
+        getDocument();
+        try
+        {
+            if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
+            {
+                Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
+                String directory_title=module.getAttribute("directory_title");
+                if(directory_title!=null && !directory_title.equals(""))
+                {
+                    return directory_title;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+        }
+        return null;
+    }
     public String getTitle()
     {
         getDocument();
@@ -351,7 +370,11 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
             {
                 Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
-                return module.getAttribute("title");
+                String title=module.getAttribute("title");
+                if(title!=null && !title.equals(""))
+                {
+                    return title;
+                }
             }
         }
         catch (Exception e)

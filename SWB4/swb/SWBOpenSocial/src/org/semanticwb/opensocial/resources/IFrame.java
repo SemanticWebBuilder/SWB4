@@ -348,6 +348,9 @@ public class IFrame
                                             for (String key : variables.keySet())
                                             {
                                                 String value = variables.get(key);
+                                                System.out.println("key: "+key);
+                                                System.out.println("value: "+value);
+                                                
                                                 html = html.replace(key, value);
                                             }
                                         }
@@ -365,7 +368,7 @@ public class IFrame
                                 }
                             }
                         }
-                        else if ("URL".equalsIgnoreCase(type))
+                        else if ("url".equalsIgnoreCase(type))
                         {
                             String href = content.getAttribute("href");
 
@@ -418,7 +421,7 @@ public class IFrame
                 HtmlResponse = HtmlResponse.replace("<%=makerequest%>", makerequest.toString());
                 HtmlResponse = HtmlResponse.replace("<%=html%>", html);
                 PrintWriter out = response.getWriter();
-                System.out.println(HtmlResponse);
+                //System.out.println(HtmlResponse);
                 out.write(HtmlResponse);
                 out.close();
             }
