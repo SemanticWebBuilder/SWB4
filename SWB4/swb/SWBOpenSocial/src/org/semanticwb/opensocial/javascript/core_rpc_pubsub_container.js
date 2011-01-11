@@ -6316,6 +6316,7 @@ shindig.IfrGadget = {
     return '<%=ifr%>' + '?' +
         'container=' + this.CONTAINER +
         '&mid=' +  this.id +
+        '&moduleid=' +  this.moduleId +
         '&nocache=' + shindig.container.nocache_ +
         '&country=' + shindig.container.country_ +
         '&lang=' + shindig.container.language_ +
