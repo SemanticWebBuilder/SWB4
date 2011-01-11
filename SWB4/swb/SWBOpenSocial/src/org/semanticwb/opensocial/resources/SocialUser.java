@@ -46,7 +46,30 @@ public class SocialUser
     {
         return user;
     }
-
+    public void clearUserPrefs(WebSite site)
+    {
+        if (user == null)
+        {
+            userprefsManager.clear();
+        }
+        else
+        {
+            User _user = site.getUserRepository().getUser(user);
+            Set<UserPrefs> getUserPrefs = new HashSet<UserPrefs>();
+            Iterator<PersonalizedGadged> personalizedGadgeds = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(_user, site);
+            ArrayList<PersonalizedGadged> toDelete = new ArrayList<PersonalizedGadged>();
+            while (personalizedGadgeds.hasNext())
+            {
+                PersonalizedGadged pgadget = personalizedGadgeds.next();
+                toDelete.add(pgadget);
+            }
+            for (PersonalizedGadged pgadget : toDelete)
+            {
+                System.out.println("deleting pgadget " + pgadget.getId());
+                pgadget.remove();
+            }            
+        }
+    }
     public UserPrefs[] getUserPrefs(WebSite site)
     {
         if (user == null)
