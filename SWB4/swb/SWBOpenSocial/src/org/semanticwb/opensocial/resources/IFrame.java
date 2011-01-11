@@ -325,7 +325,7 @@ public class IFrame
                         {
                             type = content.getAttribute("type");
                         }
-                        if ("html".equals(type))
+                        if ("html".equalsIgnoreCase(type))
                         {
 
                             String view = content.getAttribute("view");
@@ -365,9 +365,10 @@ public class IFrame
                                 }
                             }
                         }
-                        else if ("URL".equals(type))
+                        else if ("URL".equalsIgnoreCase(type))
                         {
                             String href = content.getAttribute("href");
+
                             if (href != null && !href.trim().equals(""))
                             {
                                 URI urihref = new URI(href);
@@ -383,7 +384,7 @@ public class IFrame
                                     String value = variables.get(key);
                                     _url += "&" + URLEncoder.encode(key) + "=" + URLEncoder.encode(value);
                                 }
-                                html = "<iframe src=\"" + _url + "\"></iframe>";
+                                html = "<iframe frameborder=\"0\" src=\"" + _url + "\"></iframe>";
                             }
                         }
 
