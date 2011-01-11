@@ -54,8 +54,7 @@ public class SocialUser
         }
         else
         {
-            User _user = site.getUserRepository().getUser(user);
-            Set<UserPrefs> getUserPrefs = new HashSet<UserPrefs>();
+            User _user = site.getUserRepository().getUser(user);            
             Iterator<PersonalizedGadged> personalizedGadgeds = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(_user, site);
             ArrayList<PersonalizedGadged> toDelete = new ArrayList<PersonalizedGadged>();
             while (personalizedGadgeds.hasNext())
