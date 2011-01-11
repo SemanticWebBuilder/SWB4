@@ -1,6 +1,7 @@
 package org.semanticwb.opensocial.model;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -280,19 +281,39 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             {
                 Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
                 String thumbnail = module.getAttribute("thumbnail");
-                URI urlthumbnail = new URI(thumbnail);
-                URI gadget = new URI(this.getUrl());
-                if (!urlthumbnail.isAbsolute())
+                if (thumbnail != null && !thumbnail.trim().equals(""))
                 {
-                    urlthumbnail = gadget.resolve(urlthumbnail);
+                    URI urlthumbnail = new URI(thumbnail);
+                    URI gadget = new URI(this.getUrl());
+                    if (!urlthumbnail.isAbsolute())
+                    {
+                        urlthumbnail = gadget.resolve(urlthumbnail);
+                    }
+                    return urlthumbnail.toURL();
                 }
-                return urlthumbnail.toURL();
             }
         }
         catch (Exception e)
         {
         }
         return null;
+    }
+
+    public static boolean existImage(URL url)
+    {
+        try
+        {
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            if (con.getResponseCode() == 200)
+            {
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public URL getScreenshot()
@@ -304,13 +325,16 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             {
                 Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
                 String screenshot = module.getAttribute("screenshot");
-                URI urlscreenshot = new URI(screenshot);
-                URI gadget = new URI(this.getUrl());
-                if (!urlscreenshot.isAbsolute())
+                if (screenshot != null && !screenshot.trim().equals(""))
                 {
-                    urlscreenshot = gadget.resolve(urlscreenshot);
+                    URI urlscreenshot = new URI(screenshot);
+                    URI gadget = new URI(this.getUrl());
+                    if (!urlscreenshot.isAbsolute())
+                    {
+                        urlscreenshot = gadget.resolve(urlscreenshot);
+                    }
+                    return urlscreenshot.toURL();
                 }
-                return urlscreenshot.toURL();
             }
         }
         catch (Exception e)
