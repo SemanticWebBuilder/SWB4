@@ -134,11 +134,8 @@ function generateGadgets(metadata)
 	for (var i = 0; i < metadata.gadgets.length; i++) 
 	{
 		var url=metadata.gadgets[i].url;		
-		var secureToken0=generateSecureToken(url);
-                var pref=gadgets.json.stringify(metadata.gadgets[i].userPrefs);
-                //alert('pref: '+pref+' url: '+url);
-		//var gadget=shindig.container.createGadget({'secureToken':secureToken0,'specUrl': url,'userPrefs': metadata.gadgets[i].userPrefs});
-                var gadget=shindig.container.createGadget({'secureToken':secureToken0,'specUrl': url});
+		var secureToken0=generateSecureToken(url);                
+		var gadget=shindig.container.createGadget({'secureToken':secureToken0,'specUrl': url,'userPrefs': metadata.gadgets[i].userPrefs});                
 		shindig.container.addGadget(gadget);
 	}
 	renderGadgets();
@@ -156,87 +153,5 @@ function renderGadgets() {
 
 
 
-
-
-
-<%-- <link rel="stylesheet" href="/swb/swbadmin/jsp/opensocial/gadgets.css">
-<style type="text/css">
-  body {
-    font-family: arial, sans-serif;
-  }
-
-  #headerDiv {
-    padding: 10px;
-    margin-bottom: 20px;
-    background-color: #e5ecf9;
-    color: #3366cc;
-    font-size: larger;
-    font-weight: bold;
-  }
-
-  .subTitle {
-    font-size: smaller;
-    float: right;
-  }
-
-  .gadgets-gadget-chrome {
-    width: 60%;
-    float: none;
-    margin: auto;
-  }
-
-  .gadgets-gadget {
-    width: 100%;
-  }
-
-</style>
-
-<script type="text/javascript" src="<%=script%>"></script>
-<%
-        script=paramRequest.getRenderUrl();
-        script.setCallMethod(SWBResourceURL.Call_DIRECT);
-        script.setMode(SocialContainer.Mode_JAVASCRIPT);
-        script.setParameter("script", "samplecontainer.js");
-%>
-
-<script type="text/javascript" src="<%=script%>"></script>
-
-</head>
-<body onLoad="shindig.samplecontainer.initSampleContainer();
-    shindig.samplecontainer.unpackFormState(); shindig.samplecontainer.initGadget();">
-  <div id="headerDiv">
-    <div style="float:left">Gadget testing container</div>
-    <div class="subTitle">
-      Displaying gadget: <input type="text" size="75" id="gadgetUrl"/>
-      <input type="checkbox" id="useCacheCheckbox" checked="true"
-       /><label for="useCacheCheckbox">use cache</label>
-      <input type="checkbox" id="useCajaCheckbox"
-       /><label for="useCajaCheckbox">use caja</label>
-      <input type="checkbox" id="useDebugCheckbox"
-       /><label for="useDebugCheckbox">use debug</label>
-
-      <br/>
-
-      Using state: <input type="text" size="75" id="stateFileUrl"/>
-      <input type="checkbox" id="doEvilCheckbox"
-       /><label for="doEvilCheckbox">do evil</label>
-
-      <br/>
-      <br/>
-      Viewer id: <input type="text" size="20" id="viewerId"/>
-      Owner id: <input type="text" size="20" id="ownerId"/>
-
-      <br/>
-
-      <input type="button" value="reset all" onclick="shindig.samplecontainer.changeGadgetUrl();"/>
-      <input type="button" value="dump state" onclick="shindig.samplecontainer.dumpStateFile();"/>
-      <input type="button" value="Send Hello" onclick="shindig.samplecontainer.sendHello();"/>
-    </div>
-    <div style="clear:both; height: 1px;">&nbsp;</div>
-  </div>
-
-  <div id="gadgetState" style="font-size:smaller"></div>
-  <div id="gadget-chrome" class="gadgets-gadget-chrome"></div>
-   --%>
 </body>
 </html>

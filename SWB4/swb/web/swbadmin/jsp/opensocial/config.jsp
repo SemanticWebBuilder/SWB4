@@ -18,9 +18,37 @@
     <%=description%>
 </p>
 <form name="frmedit" action="<%=processAction%>" onsubmit="validate(this)">
-    <input type="hidden" value="<%=url%>" name="__url__">    
+    <input type="hidden" value="<%=url%>" name="__url__">
+    Lenguaje: <select name="__lang__">
 <%
     Document doc=gadget.getDocument();
+    NodeList locales=doc.getElementsByTagName("Locale");
+    for(int i=0;i<locales.getLength();i++)
+    {
+        if(locales.item(i) instanceof Element)
+        {
+            Element elocale=(Element)locales.item(i);
+            String lang=elocale.getAttribute("lang");
+            if(lang!=null && !lang.equals(""))
+            {
+                int pos=lang.indexOf("-");
+                if(pos!=-1)
+                {
+                    lang=lang.substring(0,pos);
+                }                
+                Locale locale=new Locale(lang);
+                String title_lang=locale.getDisplayLanguage().toUpperCase();
+                %>
+                <option value="<%=lang%>"><%=title_lang%></option>
+                <%
+            }
+        }
+    }
+
+    %>
+    </select><br>
+    <%
+
     NodeList userPrefs=doc.getElementsByTagName("UserPref");
     for(int i=0;i<userPrefs.getLength();i++)
     {
@@ -62,9 +90,14 @@
                         {
                             Element enumValue=(Element)enumValues.item(j);
                             String value=enumValue.getAttribute("value");
-                            String dp=enumValue.getAttribute("display_value");                            
+                            String dp=enumValue.getAttribute("display_value");
+                            String selected="";
+                            if(default_value.equals(value))
+                            {
+                                selected="selected";
+                            }
                             %>
-                            <option value="<%=value%>"><%=dp%></option>
+                            <option <%=selected%>  value="<%=value%>"><%=dp%></option>
                             <%
                         }
                     %>
