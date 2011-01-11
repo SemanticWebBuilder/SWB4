@@ -29,8 +29,7 @@ public final class JavaScript
     static
     {
         scripts.put("core_rpc.js",SocialContainer.loadScript("core_rpc.js"));
-        scripts.put("core_rpc_pubsub_container.js",SocialContainer.loadScript("core_rpc_pubsub_container.js"));
-        scripts.put("samplecontainer.js",SocialContainer.loadScript("samplecontainer.js"));
+        scripts.put("core_rpc_pubsub_container.js",SocialContainer.loadScript("core_rpc_pubsub_container.js"));        
     }
 
     
