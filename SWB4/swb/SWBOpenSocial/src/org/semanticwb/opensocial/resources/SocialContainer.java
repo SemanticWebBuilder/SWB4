@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.UUID;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -184,7 +185,25 @@ public class SocialContainer extends GenericResource
                     {
                         Element userPref = (Element) userPrefs.item(i);
                         String key = userPref.getAttribute("name");
-                        String value = request.getParameter(key);                        
+                        String value = request.getParameter(key);
+                        String type="String";
+                        if(userPref.getAttribute("type")!=null && !userPref.getAttribute("type").equals(""))
+                        {
+                            type=userPref.getAttribute("type");
+                        }
+                        if("list".equals(type))
+                        {
+                            StringTokenizer st=new StringTokenizer(value,"\r\n");
+                            while(st.hasMoreTokens())
+                            {
+                                String temp=st.nextToken();
+                                value+=temp+"|";
+                            }
+                            if(value.endsWith("|"))
+                            {
+                                value=value.substring(0,value.length()-2);
+                            }
+                        }
                         socialUser.saveUserPref(gadget, moduleid, key, value, site);
                     }
                 }
