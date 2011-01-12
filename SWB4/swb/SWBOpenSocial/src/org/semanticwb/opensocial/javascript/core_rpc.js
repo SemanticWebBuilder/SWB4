@@ -392,7 +392,7 @@ B<A;
 gadgets.window=gadgets.window||{};
 gadgets.window.setTitle=function(A){gadgets.rpc.call(null,"set_title",null,A)
 };
-gadgets.Prefs.prototype.getMsg=function(K){return D[K]||""
+gadgets.Prefs.prototype.getMsg=function(K){alert('K: '+K+' D'+window.JSON.stringify(D));return D[K]||""
 };
 gadgets.Prefs.prototype.getCountry=function(){return B
 };
