@@ -18,10 +18,34 @@ public class View {
     boolean scrolling;
     int preferredWidth;
 
+    public String getName()
+    {
+        return name;
+    }
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final View other = (View) obj;
+        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 7;
+        hash = 89 * hash + (this.name != null ? this.name.hashCode() : 0);
+        return hash;
+    }
+
 
     public JSONObject toJSONObject()
-    {
-        JSONObject obj=new JSONObject();
+    {        
         JSONObject content=new JSONObject();
         try
         {
@@ -29,12 +53,12 @@ public class View {
             content.put("type", type);
             content.put("quirks", scrolling);
             content.put("preferredWidth", preferredWidth);
-            obj.put(name, content);
+            
         }
         catch(Exception e)
         {
-            
+            e.printStackTrace();
         }
-        return obj;
+        return content;
     }
 }

@@ -98,45 +98,17 @@ public class Metadata
                 }
                 metadata.put("categories", categories);
 
-                View[] views = gadget.getViews();
-                if (views.length == 1)
-                {
-                    metadata.put("views", views[0].toJSONObject());
-                }
-                else
-                {
-
-                    for (View oview : views)
-                    {
-                        metadata.accumulate("views", oview.toJSONObject());
-                    }
-
+                View[] views = gadget.getViews();                
+                JSONObject jviews=new JSONObject();
+                metadata.put("views", jviews);
+                for (View oview : views)
+                {                    
+                    jviews.put(oview.getName(), oview.toJSONObject());
                 }
                 for (FeatureDetail detail : gadget.getFeatureDetails())
                 {
                     metadata.accumulate("featureDetails", detail.toJSONObject());
                 }
-
-
-                //metadata.put("url", gadget.getUrl());
-                //metadata.put("singleton", false);
-
-                /*metadata.put("authorLink", "");
-                metadata.put("links", "");
-                metadata.put("url", gadget.getUrl());
-                metadata.put("scaling", false);
-                
-                
-                
-                
-                metadata.put("views", new JSONObject());
-                
-                metadata.put("showStats",false);
-                metadata.put("showInDirectory",false);
-                metadata.put("authorPhoto",false);*/
-
-
-
                 SWBResourceURL iframeurl = renderURL;
                 iframeurl.setMode(SocialContainer.Mode_IFRAME);
                 iframeurl.setCallMethod(SWBResourceURL.Call_DIRECT);

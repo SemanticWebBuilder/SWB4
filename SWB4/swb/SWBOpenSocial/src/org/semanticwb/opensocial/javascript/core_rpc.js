@@ -1121,6 +1121,10 @@ gadgets.flash = function() {
           div.innerHTML=code;
       }
     },
+    'getMajorVersion':
+        function() {
+        
+    },
     'getEmbedCode':
         function(swfURL, flashVars, opt)
         {
@@ -1175,7 +1179,3 @@ gadgets.flash = function() {
 }();
 ;
 
-function _IG_EmbedCachedFlash(swf_url, swf_container, opt_params)
-{   
-    return gadgets.flash.embedCachedFlash(swf_url,swf_container,opt_params.swf_version,opt_params);
-};;
