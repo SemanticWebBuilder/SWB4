@@ -21,6 +21,7 @@ public abstract class SWBForumCatResourceBase extends org.semanticwb.portal.api.
     public static final org.semanticwb.platform.SemanticProperty forumCat_maxInnapropiateCount=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#maxInnapropiateCount");
     public static final org.semanticwb.platform.SemanticProperty forumCat_attachFilesTypes=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#attachFilesTypes");
     public static final org.semanticwb.platform.SemanticProperty forumCat_isAnswerVotable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#isAnswerVotable");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_idCatPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#idCatPage");
     public static final org.semanticwb.platform.SemanticProperty forumCat_selectCategory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#selectCategory");
     public static final org.semanticwb.platform.SemanticProperty forumCat_attachFilesSize=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#attachFilesSize");
     public static final org.semanticwb.platform.SemanticProperty forumCat_isQuestionVotable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#isQuestionVotable");
@@ -367,6 +368,24 @@ public abstract class SWBForumCatResourceBase extends org.semanticwb.portal.api.
     public void setIsAnswerVotable(boolean value)
     {
         getSemanticObject().setBooleanProperty(forumCat_isAnswerVotable, value);
+    }
+
+/**
+* Gets the IdCatPage property
+* @return String with the IdCatPage
+*/
+    public String getIdCatPage()
+    {
+        return getSemanticObject().getProperty(forumCat_idCatPage);
+    }
+
+/**
+* Sets the IdCatPage property
+* @param value long with the IdCatPage
+*/
+    public void setIdCatPage(String value)
+    {
+        getSemanticObject().setProperty(forumCat_idCatPage, value);
     }
 
 /**
