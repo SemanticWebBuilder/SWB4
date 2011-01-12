@@ -16,7 +16,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -482,14 +481,13 @@ public class IFrame
                 javascript.setCallMethod(SWBResourceURL.Call_DIRECT);
                 javascript.setParameter("script", "core_rpc.js");
                 JSONObject msg=new JSONObject();
-                Map<String,String> messages=gadget.getMessagesFromGadget(lang, country);
+                Map<String,String> messages=gadget.getMessagesFromGadget(lang, country,false);
                 for(String key : messages.keySet())
                 {
-                    String value=messages.get(key);
-                    msg.put(key, value);
-                }
+                    msg.put(key, messages.get(key));
+                }                
                 String HtmlResponse = frame.replace("<%=msg%>",msg.toString());
-                HtmlResponse = frame.replace("<%=js%>", javascript.toString());
+                HtmlResponse = HtmlResponse.replace("<%=js%>", javascript.toString());
                 HtmlResponse = HtmlResponse.replace("<%=rpc%>", rpc.toString());
                 HtmlResponse = HtmlResponse.replace("<%=proxy%>", proxy.toString());
                 HtmlResponse = HtmlResponse.replace("<%=makerequest%>", makerequest.toString());
