@@ -6311,8 +6311,7 @@ shindig.IfrGadget = {
     window.frames[this.getIframeId()].location = this.getIframeUrl();
   },
   
-  getIframeUrl: function() {
-    
+  getIframeUrl: function() {    
     return '<%=ifr%>' + '?' +
         'container=' + this.CONTAINER +
         '&mid=' +  this.id +

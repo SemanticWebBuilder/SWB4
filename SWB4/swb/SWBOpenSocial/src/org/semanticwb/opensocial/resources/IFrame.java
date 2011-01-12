@@ -28,6 +28,7 @@ import org.semanticwb.css.parser.CSSParser;
 import org.semanticwb.css.parser.Selector;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.opensocial.model.Gadget;
+import org.semanticwb.opensocial.model.View;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
@@ -270,14 +271,14 @@ public class IFrame
 
     private boolean isInView(String view, String attribute)
     {
-        if (view.equals(attribute))
+        if (view.equalsIgnoreCase(attribute))
         {
             return true;
         }
         String[] values = attribute.split(",");
         for (String value : values)
         {
-            if (value.equals(view))
+            if (value.equalsIgnoreCase(view))
             {
                 return true;
             }
@@ -312,7 +313,19 @@ public class IFrame
             Gadget gadget = SocialContainer.getGadget(url, paramRequest.getWebPage().getWebSite());
             if (gadget != null)
             {
-
+                boolean exists=false;
+                for(View oview : gadget.getViews())
+                {
+                    if(oview.getName().equalsIgnoreCase(sview))
+                    {
+                        exists=true;
+                        break;
+                    }
+                }
+                if(!exists)
+                {
+                    sview="default";
+                }
                 Map<String, String> variables = SocialContainer.getVariablesubstituion(paramRequest.getUser(), gadget, lang, country, moduleid,site);
 
                 NodeList contents = gadget.getOriginalDocument().getElementsByTagName("Content");
@@ -350,9 +363,6 @@ public class IFrame
                                             for (String key : variables.keySet())
                                             {
                                                 String value = variables.get(key);
-                                                System.out.println("key: "+key);
-                                                System.out.println("value: "+value);
-                                                
                                                 html = html.replace(key, value);
                                             }
                                         }

@@ -86,7 +86,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                         String feature = require.getAttribute("feature");
                         if (feature != null)
                         {
-                            StringTokenizer st = new StringTokenizer(",");
+                            StringTokenizer st = new StringTokenizer(feature, ",");
                             while (st.hasMoreTokens())
                             {
                                 String featureName = st.nextToken().trim();
@@ -342,6 +342,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         }
         return null;
     }
+
     public String getDirectoryTitle()
     {
         getDocument();
@@ -350,8 +351,8 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
             {
                 Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
-                String directory_title=module.getAttribute("directory_title");
-                if(directory_title!=null && !directory_title.equals(""))
+                String directory_title = module.getAttribute("directory_title");
+                if (directory_title != null && !directory_title.equals(""))
                 {
                     return directory_title;
                 }
@@ -362,6 +363,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         }
         return null;
     }
+
     public String getTitle()
     {
         getDocument();
@@ -370,8 +372,8 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
             {
                 Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
-                String title=module.getAttribute("title");
-                if(title!=null && !title.equals(""))
+                String title = module.getAttribute("title");
+                if (title != null && !title.equals(""))
                 {
                     return title;
                 }
@@ -529,13 +531,17 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
             {
                 Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
-                String category = module.getAttribute("category");
-                if (category != null && !"".equals(category.trim()))
+                String _category = module.getAttribute("category");
+                if (_category != null && !"".equals(_category.trim()))
                 {
-                    StringTokenizer st = new StringTokenizer(",");
+                    StringTokenizer st = new StringTokenizer(_category, ",");
                     while (st.hasMoreTokens())
                     {
-                        getFeatures.add(st.nextToken().trim());
+                        String category = st.nextToken().trim();
+                        if (!"".equals(category))
+                        {
+                            getFeatures.add(category);
+                        }
                     }
                 }
             }
@@ -606,34 +612,35 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         getDocument();
         try
         {
-            if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
+            NodeList contents = doc.getElementsByTagName("Content");
+            for (int i = 0; i < contents.getLength(); i++)
             {
-                Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
-                NodeList childs = module.getChildNodes();
-                for (int i = 0; i < childs.getLength(); i++)
+                if (contents.item(i) instanceof Element)
                 {
-                    if (childs.item(i) instanceof Element && ((Element) childs.item(i)).getTagName().equals("Content"))
+                    Element content = (Element) contents.item(i);
+                    String _view = content.getAttribute("view");                    
+                    if (_view != null)
                     {
-                        Element content = (Element) childs.item(i);
-                        String view = content.getAttribute("view");
-                        if (view != null)
-                        {
-                            StringTokenizer st = new StringTokenizer(",");
-                            while (st.hasMoreTokens())
-                            {
-                                getViews.add(createView(content, st.nextToken().trim()));
+                        StringTokenizer st = new StringTokenizer(_view, ",");
+                        while (st.hasMoreTokens())                        {
+                            String view = st.nextToken().trim();                            
+                            if (!"".equals(view))
+                            {                                
+                                getViews.add(createView(content, view));
                             }
                         }
-                        else
-                        {
-                            getViews.add(createView(content, "default"));
-                        }
+                    }
+                    else
+                    {
+                        getViews.add(createView(content, "default"));
                     }
                 }
             }
+
         }
         catch (Exception e)
         {
+            e.printStackTrace();
         }
         return getViews.toArray(new View[getViews.size()]);
     }
