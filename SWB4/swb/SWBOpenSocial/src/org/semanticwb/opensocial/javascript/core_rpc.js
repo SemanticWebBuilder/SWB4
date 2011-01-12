@@ -1104,4 +1104,78 @@ r.src=u
 },ACK:h,RPC_ID:O,SEC_ERROR_LOAD_TIMEOUT:d,SEC_ERROR_FRAME_PHISH:m,SEC_ERROR_FORGED_MSG:A}
 }();
 gadgets.rpc.init()
+
+};;
+
+gadgets.flash = function() {
+  
+
+  return {
+    'embedCachedFlash':
+    function(swf_url, swf_container, version,opt_params) {
+      var div=document.getElementById(swf_container);
+      if(div)
+      {          
+          var vars=opt_params.flashVars;          
+          var code=gadgets.flash.getEmbedCode(swf_url,vars,opt_params);          
+          div.innerHTML=code;
+      }
+    },
+    'getEmbedCode':
+        function(swfURL, flashVars, opt)
+        {
+        var h = 200;
+        var w = 300;
+        
+        if(opt.height != undefined){
+            h = opt.height;
+        }
+
+        if(opt.width != undefined){
+            w = opt.width;
+        }
+
+        var str= '<object type="application/x-shockwave-flash" style="outline:none;" data="'+ swfURL +'?'+ flashVars +'" width="'+ w +'" height="'+ h +'"><param name="movie" value="';
+        str += swfURL;
+        str += '?'+ flashVars;
+        str += '">';
+
+        if(opt.AllowScriptAccess != undefined){
+           str += '<param name="AllowScriptAccess" value="'+ opt.AllowScriptAccess +'"/>';
+        }
+
+        if(opt.wmode != undefined){
+           str += '<param name="wmode" value="'+ opt.wmode +'"/>';
+        }
+
+
+
+        if(opt.scale != undefined){
+           str += '<param name="scale" value="'+ opt.scale +'"/>';
+        }
+
+        if(opt.salign != undefined){
+           str += '<param name="salign" value="'+ opt.salign +'"/>';
+        }
+
+         if(opt.bgcolor != undefined){
+           str += '<param name="bgcolor" value="'+ opt.bgcolor +'"/>';
+        }
+
+        if(opt.bgColor != undefined){
+           str += '<param name="bgcolor" value="'+ opt.bgColor +'"/>';
+        }
+        str += '</object>';
+
+        return str;
+
+        }
+        
+  };
+}();
+;
+
+function _IG_EmbedCachedFlash(swf_url, swf_container, opt_params)
+{   
+    return gadgets.flash.embedCachedFlash(swf_url,swf_container,opt_params.swf_version,opt_params);
 };;

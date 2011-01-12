@@ -62,7 +62,7 @@ public final class JavaScript
                 ifr.setMode(SocialContainer.Mode_IFRAME);
                 ifr.setCallMethod(SWBResourceURL.Call_DIRECT);
                 String relaypath=SWBPortal.getContextPath()+"/swbadmin/jsp/opensocial/rpc_relay.html";
-                System.out.println("relaypath: "+relaypath);
+                
 
                 SWBResourceURL javascript=paramRequest.getRenderUrl();
                 javascript.setMode(SocialContainer.Mode_METADATA);
