@@ -1,26 +1,26 @@
-/**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
+/**
+* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+*
+* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+* del SemanticWebBuilder 4.0.
+*
+* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+* de la misma.
+*
+* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+* dirección electrónica:
 *  http://www.semanticwebbuilder.org
-**/ 
- 
+**/
+
 
 
 /*
@@ -43,7 +43,6 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.Template;
-import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.TemplateImp;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 import org.semanticwb.portal.api.GenericResource;
@@ -55,44 +54,45 @@ import org.semanticwb.portal.util.FileUpload;
 
 // TODO: Auto-generated Javadoc
 /** Objeto que se encarga de desplegar y administrar una interfaz parar imprimir topicos bajo ciertos
- * criterios(configuraci�n de recurso).
+ * criterios(configuraci?n de recurso).
  *
  * Object that is in charge to unfold and to administer an interface to print topics under certain
  * criteria (resource configuration).
  *
- * @author : Vanessa Arredondo N��ez
+ * @author : Vanessa Arredondo N??ez
  * @Modified: Jorge Jiménez
  * @version 1.0
  */
 public class Print extends GenericResource
 {
-    
+
     /** The log. */
     private static Logger log = SWBUtils.getLogger(Print.class);
 
     /** The work path. */
     String workPath = "";
-    
+
     /** The web work path. */
     String webWorkPath = "/work";
-    
+
     /** The windowconf. */
     String windowconf="";
-    
+
     /** The adm res utils. */
     WBAdmResourceUtils admResUtils=new WBAdmResourceUtils();
 
     /**
-     * Creates a new instance of Imprimir.
+     * Creates a new instance of Print.
      */
     public Print() {
     }
 
     /**
      * Sets the resource base.
-     * 
+     *
      * @param base the new resource base
      */
+    @Override
     public void setResourceBase(Resource base)
     {
         try
@@ -107,7 +107,7 @@ public class Print extends GenericResource
 
     /**
      * Gets the params.
-     * 
+     *
      * @param request the request
      * @param url the url
      * @return the params
@@ -130,7 +130,7 @@ public class Print extends GenericResource
                         //{
                             url.setParameter(key,(String[])q.get(key));
                         //}
-                        
+
                     }
                 }
             }
@@ -139,27 +139,28 @@ public class Print extends GenericResource
 
     /**
      * Do view.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramRequest the param request
      * @throws IOException Signals that an I/O exception has occurred.
      * @throws SWBResourceException the sWB resource exception
      */
+    @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         String action = null != request.getParameter("imp_act") && !"".equals(request.getParameter("imp_act").trim()) ? request.getParameter("imp_act").trim() : "imp_step1";
         setWindowConf();
         if("imp_step2".equals(action))  {
-            printByPage(request, response, paramRequest); // Imprimir por p�gina o documento completo
+            printByPage(request, response, paramRequest); // Imprimir por p?gina o documento completo
         }
         else if("imp_step3".equals(action))  {
             printContent(request, response, paramRequest); // Nueva ventana con el contenido a imprimir
         }
         else
         {
-            // Objeto(imagen/bot�n) para invocar la nueva ventana
-            StringBuffer ret = new StringBuffer("");
+            // Objeto(imagen/bot?n) para invocar la nueva ventana
+            StringBuilder ret = new StringBuilder("");
             Resource base=getResourceBase();
 
             SWBResourceURLImp url=new SWBResourceURLImp(request, base, paramRequest.getWebPage(),SWBResourceURL.UrlType_RENDER);
@@ -185,40 +186,62 @@ public class Print extends GenericResource
             {
                 if (!"".equals(base.getAttribute("img", "").trim()))
                 {
-                    ret.append("\n<a href=\""+onclick+"\"><img onClick=\""+ onclick +"\" src=\"");
-                    ret.append(webWorkPath +"/"+ base.getAttribute("img").trim() +"\"");
+                    ret = ret.append("\n<a href=\"");
+                    ret = ret.append(onclick);
+                    ret = ret.append("\">");
+                    ret = ret.append("<img onClick=\"");
+                    ret = ret.append(onclick);
+                    ret = ret.append("\"");
+                    ret = ret.append(" src=\"");
+                    ret = ret.append(webWorkPath);
+                    ret = ret.append("/");
+                    ret = ret.append(base.getAttribute("img").trim());
+                    ret = ret.append("\"");
                     if (!"".equals(base.getAttribute("alt","").trim())) {
-                        ret.append(" alt=\"" + base.getAttribute("alt").trim().replaceAll("\"", "&#34;") + "\"");
+                        ret = ret.append(" alt=\"");
+                        ret = ret.append(base.getAttribute("alt").trim().replaceAll("\"", "&#34;"));
+                        ret = ret.append("\"");
                     }
-                    ret.append(" border=0></a>");
+                    ret = ret.append(" border=0></a>");
                 }
                 else if (!"".equals(base.getAttribute("btntexto", "").trim()))
                 {
-                    ret.append("\n<form name=\"frmImprimir\" action=\"\">");
-                    ret.append("\n<input type=button name=btnImprimir onClick=\""+ onclick +"\" value=");
-                    ret.append("\"" + base.getAttribute("btntexto").trim().replaceAll("\"", "&#34;") + "\"");
+                    ret = ret.append("\n<form name=\"frmImprimir\" action=\"\">");
+                    ret = ret.append("\n<input type=button name=btnImprimir onClick=\"");
+                    ret = ret.append(onclick);
+                    ret = ret.append("\" value=");
+                    ret = ret.append("\"");
+                    ret = ret.append(base.getAttribute("btntexto").trim().replaceAll("\"", "&#34;"));
+                    ret = ret.append("\"");
                     if (!"".equals(base.getAttribute("blnstyle", "").trim())) {
-                        ret.append(" style=\"" + base.getAttribute("blnstyle").trim().replaceAll("\"", "&#34;") + "\"");
+                        ret = ret.append(" style=\"");
+                        ret = ret.append(base.getAttribute("blnstyle").trim().replaceAll("\"", "&#34;"));
+                        ret = ret.append("\"");
                     }
-                    ret.append("\n></form>");
+                    ret = ret.append("\n></form>");
                 }
                 else
                 {
-                    ret.append("\n<a href=\""+onclick+"\" onClick=\""+ onclick +"\"");
+                    ret = ret.append("\n<a href=\"");
+                    ret = ret.append(onclick);
+                    ret = ret.append("\" onClick=\"");
+                    ret = ret.append(onclick);
+                    ret = ret.append("\"");
                     if (!"".equals(base.getAttribute("blnstyle", "").trim())) {
-                        ret.append(" style=\"" + base.getAttribute("blnstyle").trim().replaceAll("\"", "&#34;") + "\"");
+                        ret = ret.append(" style=\"" );
+                        ret = ret.append(base.getAttribute("blnstyle").trim().replaceAll("\"", "&#34;"));
+                        ret = ret.append("\"");
                     }
-                    ret.append(">");
+                    ret = ret.append(">");
                     if (!"".equals(base.getAttribute("lnktexto", "").trim())) {
-                        ret.append(base.getAttribute("lnktexto").trim());
+                        ret = ret.append(base.getAttribute("lnktexto").trim());
                     }
                     else {
-                        ret.append(paramRequest.getLocaleString("msgPrint"));
+                        ret = ret.append(paramRequest.getLocaleString("msgPrint"));
                     }
-                    ret.append("</a>");
+                    ret = ret.append("</a>");
                 }
             }
-
             PrintWriter out = response.getWriter();
             out.println(ret.toString());
         }
@@ -226,7 +249,7 @@ public class Print extends GenericResource
 
     /**
      * Prints the by page.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramRequest the param request
@@ -235,7 +258,7 @@ public class Print extends GenericResource
      */
     public void printByPage(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        StringBuffer ret = new StringBuffer("");
+        StringBuilder ret = new StringBuilder("");
         SWBResourceURLImp url=new SWBResourceURLImp(request, getResourceBase(), paramRequest.getWebPage(),SWBResourceURL.UrlType_RENDER);
         url.setResourceBase(getResourceBase());
         url.setMode(url.Mode_VIEW);
@@ -247,39 +270,48 @@ public class Print extends GenericResource
 
         url.setParameter("imp_act","imp_step3");
 
-
-        ret.append("\n<script language=\"JavaScript\">");
-        ret.append("\nfunction wbPrint(frm)");
-        ret.append("\n{");
-        ret.append("\n   var pOk=0;");
-        ret.append("\n   for(var i=0; i < frm.page.length ;i++)");
-        ret.append("\n   {");
-        ret.append("\n       if(frm.page[i].checked) pOk=frm.page[i].value;");
-        ret.append("\n   }");
-        ret.append("\n   window.open('" + url.toString() +"&amp;page='+pOk");
-        ret.append(",'_preview','"+ getWindowConf() +"');");
-        ret.append("\n   window.self.close();");
-        ret.append("\n   return true;");
-        ret.append("\n}");
-        ret.append("\n</script>");
-        ret.append("\n<form name=frmPrint>");
-        ret.append("\n<table width=\"100%\" height=\"100%\" border=\"1\"><tr><td align=\"center\" valign=\"center\">");
-        ret.append("\n<table border=\"0\" cellspacing=\"5\" cellpadding=\"5\">");
-        ret.append("\n<tr><td>");
-        ret.append("\n<input type=radio  name=page value=\"0\" checked> " + paramRequest.getLocaleString("msgAllDocument"));
-        ret.append("\n</td></tr><tr><td>");
-        ret.append("\n<input type=radio  name=page value=\"");
+        ret = ret.append("\n<script language=\"JavaScript\">");
+        ret = ret.append("\nfunction wbPrint(frm)");
+        ret = ret.append("\n{");
+        ret = ret.append("\n   var pOk=0;");
+        ret = ret.append("\n   for(var i=0; i < frm.page.length ;i++)");
+        ret = ret.append("\n   {");
+        ret = ret.append("\n       if(frm.page[i].checked) pOk=frm.page[i].value;");
+        ret = ret.append("\n   }");
+        ret = ret.append("\n   window.open('");
+        ret = ret.append(url.toString());
+        ret = ret.append("&amp;page='+pOk");
+        ret = ret.append(",'_preview','");
+        ret = ret.append(getWindowConf());
+        ret = ret.append("');");
+        ret = ret.append("\n   window.self.close();");
+        ret = ret.append("\n   return true;");
+        ret = ret.append("\n}");
+        ret = ret.append("\n</script>");
+        ret = ret.append("\n<form name=frmPrint>");
+        ret = ret.append("\n<table width=\"100%\" height=\"100%\" border=\"1\"><tr><td align=\"center\" valign=\"center\">");
+        ret = ret.append("\n<table border=\"0\" cellspacing=\"5\" cellpadding=\"5\">");
+        ret = ret.append("\n<tr><td>");
+        ret = ret.append("\n<input type=radio  name=page value=\"0\" checked> " );
+        ret = ret.append(paramRequest.getLocaleString("msgAllDocument"));
+        ret = ret.append("\n</td></tr><tr><td>");
+        ret = ret.append("\n<input type=radio  name=page value=\"");
         if(request.getParameter("page")!=null && !request.getParameter("page").trim().equals("")) {
-            ret.append(request.getParameter("page"));
+            ret = ret.append(request.getParameter("page"));
         }
-        else ret.append("1");
-        ret.append("\"> "+ paramRequest.getLocaleString("msgCurrentPage"));
-        ret.append("\n</td></tr><tr><td align=center>");
-        ret.append("\n<input type=button name=btnPrint onClick=\"wbPrint(this.form)\" value=\""+ paramRequest.getLocaleString("btnPrint") +"\">");
-        ret.append("\n</td></tr>");
-        ret.append("\n</table>");
-        ret.append("\n</td></tr></table>");
-        ret.append("\n</form>");
+        else{
+            ret = ret.append("1");
+        }
+        ret = ret.append("\"> ");
+        ret = ret.append(paramRequest.getLocaleString("msgCurrentPage"));
+        ret = ret.append("\n</td></tr><tr><td align=center>");
+        ret = ret.append("\n<input type=button name=btnPrint onClick=\"wbPrint(this.form)\" value=\"");
+        ret = ret.append(paramRequest.getLocaleString("btnPrint"));
+        ret = ret.append("\">");
+        ret = ret.append("\n</td></tr>");
+        ret = ret.append("\n</table>");
+        ret = ret.append("\n</td></tr></table>");
+        ret = ret.append("\n</form>");
         response.getWriter().print(ret.toString());
 
 //        response.setContentType("text/html");
@@ -297,7 +329,7 @@ public class Print extends GenericResource
 
     /**
      * Prints the content.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramRequest the param request
@@ -306,7 +338,7 @@ public class Print extends GenericResource
      */
     public void printContent(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        PrintWriter out=response.getWriter();
+        //PrintWriter out=response.getWriter();
         response.setContentType("text/html");
         Resource base=getResourceBase();
         if (!"".equals(base.getAttribute("template", "").trim()))
@@ -349,7 +381,7 @@ public class Print extends GenericResource
 
     /**
      * Gets the window conf.
-     * 
+     *
      * @return the window conf
      * @return
      */
@@ -360,21 +392,23 @@ public class Print extends GenericResource
 
     /**
      * Do admin.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramRequest the param request
      * @throws IOException Signals that an I/O exception has occurred.
      * @throws SWBResourceException the sWB resource exception
      */
+    @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         Resource base=getResourceBase();
-        StringBuffer ret = new StringBuffer("");
+        StringBuilder ret = new StringBuilder("");
         String msg=paramRequest.getLocaleString("msgUndefinedOperation");
         String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
 
-        if(action.equals("add") || action.equals("edit"))  ret.append(getForm(request, paramRequest));
+        if(action.equals("add") || action.equals("edit"))
+            ret = ret.append(getForm(request, paramRequest));
         else if(action.equals("update"))
         {
             FileUpload fup = new FileUpload();
@@ -436,11 +470,15 @@ public class Print extends GenericResource
 
                     base.updateAttributesToDB();
                     msg=paramRequest.getLocaleString("msgOkUpdateResource") +" "+ base.getId();
-                    ret.append(
-                        "<script language=\"JavaScript\">\n"+
-                        "   alert('"+msg+"');\n"+
-                        "   location='"+paramRequest.getRenderUrl().setAction("edit").toString()+"';\n"+
-                        "</script>\n");
+
+                    ret = ret.append("<script language=\"JavaScript\">\n");
+                    ret = ret.append("   alert('");
+                    ret = ret.append(msg);
+                    ret = ret.append("');\n");
+                    ret = ret.append("   location='");
+                    ret = ret.append(paramRequest.getRenderUrl().setAction("edit").toString());
+                    ret = ret.append("';\n");
+                    ret = ret.append("</script>\n");
                 }
                 else msg=paramRequest.getLocaleString("msgTemplateRequired");
             }
@@ -449,17 +487,18 @@ public class Print extends GenericResource
         else if(action.equals("remove"))
         {
             msg=admResUtils.removeResource(base);
-            ret.append(
-                "<script language=\"JavaScript\">\n"+
-                "   alert('"+msg+"');\n"+
-                "</script>\n");
+
+            String alert=   "<script language=\"JavaScript\">\n"+
+                            "   alert('"+msg+"');\n"+
+                            "</script>\n";
+            ret = ret.append(alert);
         }
         response.getWriter().print(ret.toString());
     }
 
     /**
      * Sets the attribute.
-     * 
+     *
      * @param base the base
      * @param fup the fup
      * @param att the att
@@ -478,7 +517,7 @@ public class Print extends GenericResource
 
     /**
      * Sets the attribute.
-     * 
+     *
      * @param base the base
      * @param fup the fup
      * @param att the att
@@ -500,7 +539,7 @@ public class Print extends GenericResource
 
     /**
      * Gets the form.
-     * 
+     *
      * @param request the request
      * @param paramsRequest the params request
      * @return the form
@@ -509,105 +548,138 @@ public class Print extends GenericResource
     private String getForm(javax.servlet.http.HttpServletRequest request, SWBParamRequest paramsRequest)
     {
         Resource base=getResourceBase();
-        StringBuffer ret=new StringBuffer("");
+        StringBuilder ret=new StringBuilder("");
         try
         {
             SWBResourceURL url = paramsRequest.getRenderUrl().setAction("update");
-            ret.append("<form name=\"frmResource\" method=\"post\" enctype=\"multipart/form-data\" action=\""+ url.toString()+"\"> \n");
-            ret.append("<div class=box>");
-            ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\">");
-            ret.append("<tr> \n");
-            ret.append("<td colspan=2>");
-            ret.append("<font style=\"color: #428AD4; text-decoration: none; font-family: Verdana; font-size: 12px; font-weight: normal;\">");
-            ret.append(paramsRequest.getLocaleString("msgStep1") +"</font>");
-            ret.append("</td> \n");
-            ret.append("</tr> \n");
-            ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">* "+paramsRequest.getLocaleString("msgTemplate")+" (xsl, xslt):</td> \n");
-            ret.append("<td class=\"valores\">");
-            ret.append("\n<select name=template>");
-            ret.append("\n<option value=\"\">" + paramsRequest.getLocaleString("msgOption") + "</option>");
+            ret = ret.append("<div class=\"swbform\">");//div principal
+            ret = ret.append("<form name=\"frmResource\" method=\"post\" enctype=\"multipart/form-data\" action=\"");
+            ret = ret.append(url.toString());
+            ret = ret.append("\"> \n");
+            ret = ret.append("<fieldset>");
+            ret = ret.append("<legend>");
+            ret = ret.append(paramsRequest.getLocaleString("msgStep1"));
+            ret = ret.append("</legend>");
+            ret = ret.append("<ul class=\"swbform-ul\">");
+            ret = ret.append("<li class=\"swbform-li\">");
+            ret = ret.append("<label for=\"cssClass\" class=\"swbform-label\">");
+            ret = ret.append(paramsRequest.getLocaleString("msgTemplate"));
+            ret = ret.append(" (xsl, xslt)\n");
+            ret = ret.append("</label>");
+            ret = ret.append("\n<select name=template>");
+            ret = ret.append("\n<option value=\"\">");
+            ret = ret.append(paramsRequest.getLocaleString("msgOption"));
+            ret = ret.append("</option>");
             Iterator <Template> itTpl=paramsRequest.getWebPage().getWebSite().listTemplates();
             while (itTpl.hasNext())
             {
                 Template tpl = itTpl.next();
-                ret.append("\n<option value=\"" + tpl.getId() + "\"");
+                ret = ret.append("\n<option value=\"");
+                ret = ret.append(tpl.getId());
+                ret = ret.append("\"");
                 if (String.valueOf(tpl.getId()).equals(base.getAttribute("template", "").trim())) {
-                    ret.append(" selected");
+                    ret = ret.append(" selected");
                 }
-                ret.append(">" + tpl.getTitle() + "</option>");
+                ret = ret.append(">");
+                ret = ret.append(tpl.getTitle());
+                ret = ret.append("</option>");
             }
-            ret.append("\n</select>");
-            ret.append("</td> \n");
-            ret.append("</tr> \n");
-            ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">"+paramsRequest.getLocaleString("msgImage")+" (bmp, gif, jpg, jpeg, png):</td> \n");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"file\" name=\"img\" size=\"40\" onClick=\"this.form.btntexto.value=''; this.form.lnktexto.value=''\" onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif|png');\"/>");
+            ret = ret.append("\n</select>");
+            ret = ret.append("</li> \n");
+
+            ret = ret.append("<li class=\"swbform-li\">");
+            ret = ret.append("<label for=\"img\" class=\"swbform-label\">");
+            ret = ret.append(paramsRequest.getLocaleString("msgImage"));
+            ret = ret.append(" (gif, jpg, jpeg, png)\n");
+            ret = ret.append("</label>");
+            ret = ret.append("<input type=\"file\" name=\"img\" size=\"40\" onClick=\"this.form.btntexto.value=''; this.form.lnktexto.value=''\" onChange=\"isFileType(this, 'jpg|jpeg|gif|png');\"/>");
             if (!"".equals(base.getAttribute("img", "").trim())) {
-                ret.append("<p>"+admResUtils.displayImage(base, base.getAttribute("img").trim(), "img") +"<input type=checkbox name=noimg value=1>" + paramsRequest.getLocaleString("msgCutImage") + " <i>" + base.getAttribute("img").trim() + "</i></p>");
+                ret = ret.append("<p>");
+                ret = ret.append(admResUtils.displayImage(base, base.getAttribute("img").trim(), "img"));
+                ret = ret.append("<input type=checkbox name=noimg value=1>");
+                ret = ret.append(paramsRequest.getLocaleString("msgCutImage") );
+                ret = ret.append(" ");
+                ret = ret.append("<i>");
+                ret = ret.append(base.getAttribute("img").trim());
+                ret = ret.append("</i></p>");
             }
-            ret.append("</td> \n");
-            ret.append("</tr> \n");
-            ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">"+paramsRequest.getLocaleString("msgAlt")+"</td> \n");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=text size=50 name=alt ");
+            ret = ret.append("</li> \n");         
+            
+            ret = ret.append("<li class=\"swbform-li\">");
+            ret = ret.append("<label for=\"alt\" class=\"swbform-label\">");
+            ret = ret.append(paramsRequest.getLocaleString("msgAlt"));
+            ret = ret.append("</label>");
+            ret = ret.append("<input type=text size=50 name=alt ");
             if (!"".equals(base.getAttribute("alt", "").trim()))  {
-                ret.append(" value=\"" + base.getAttribute("alt").trim().replaceAll("\"", "&#34;") + "\"");
+                ret = ret.append(" value=\"");
+                ret = ret.append(base.getAttribute("alt").trim().replaceAll("\"", "&#34;"));
+                ret = ret.append("\"");
             }
-            ret.append("></td> \n");
-            ret.append("</tr> \n");
-            ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">"+paramsRequest.getLocaleString("msgButton")+"</td> \n");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=text size=50 name=btntexto ");
+            ret = ret.append("></li> \n");
+            
+            ret = ret.append("<li class=\"swbform-li\">");
+            ret = ret.append("<label for=\"btntexto\" class=\"swbform-label\">");
+            ret = ret.append(paramsRequest.getLocaleString("msgButton"));
+            ret = ret.append("</label>");
+            ret = ret.append("<input type=text size=50 name=btntexto ");
             if (!"".equals(base.getAttribute("btntexto", "").trim()))  {
-                ret.append(" value=\"" + base.getAttribute("btntexto").trim().replaceAll("\"", "&#34;") + "\"");
+                ret = ret.append(" value=\"");
+                ret = ret.append(base.getAttribute("btntexto").trim().replaceAll("\"", "&#34;"));
+                ret = ret.append("\"");
             }
-            ret.append("></td> \n");
-            ret.append("</tr> \n");
-            ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">"+paramsRequest.getLocaleString("msgLink")+"</td> \n");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=text size=50 name=lnktexto ");
+            ret = ret.append("></li> \n");
+
+            ret = ret.append("<li class=\"swbform-li\">");
+            ret = ret.append("<label for=\"lnktexto\" class=\"swbform-label\">");
+            ret = ret.append(paramsRequest.getLocaleString("msgLink"));
+            ret = ret.append("</label>");
+            ret = ret.append("<input type=text size=50 name=lnktexto ");
             if (!"".equals(base.getAttribute("lnktexto", "").trim()))  {
-                ret.append(" value=\"" + base.getAttribute("lnktexto").trim().replaceAll("\"", "&#34;") + "\"");
+                ret = ret.append(" value=\"");
+                ret = ret.append(base.getAttribute("lnktexto").trim().replaceAll("\"", "&#34;"));
+                ret = ret.append("\"");
             }
-            ret.append("></td> \n");
-            ret.append("</tr> \n");
-            ret.append("<tr> \n");
-            ret.append("<td class=\"datos\">"+paramsRequest.getLocaleString("msgStyle")+"</td> \n");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=text size=50 name=blnstyle ");
+            ret = ret.append("></li> \n");
+
+            ret = ret.append("<li class=\"swbform-li\">");
+            ret = ret.append("<label for=\"blnstyle\" class=\"swbform-label\">");
+            ret = ret.append(paramsRequest.getLocaleString("msgStyle"));
+            ret = ret.append("</label>");
+            ret = ret.append("<input type=text size=50 name=blnstyle ");
             if (!"".equals(base.getAttribute("blnstyle", "").trim()))  {
-                ret.append(" value=\"" + base.getAttribute("blnstyle").trim().replaceAll("\"", "&#34;") + "\"");
+                ret = ret.append(" value=\"");
+                ret = ret.append(base.getAttribute("blnstyle").trim().replaceAll("\"", "&#34;"));
+                ret = ret.append("\"");
             }
-            ret.append("></td> \n");
-            ret.append("</tr> \n");
-            ret.append("<tr> \n");
-            ret.append("<td colspan=2>");
-            ret.append("<br><br><font style=\"color: #428AD4; text-decoration: none; font-family: Verdana; font-size: 12px; font-weight: normal;\">");
-            ret.append(paramsRequest.getLocaleString("msgStep2")+"</font>");
-            ret.append("</td> \n");
-            ret.append("</tr> \n");
-            ret.append(admResUtils.loadWindowConfiguration(base, paramsRequest));
-            ret.append("<tr> \n");
-            ret.append("<td colspan=2 align=right> \n");
-            ret.append("<br><hr size=1 noshade> \n");
-            ret.append("<input type=submit name=btnSave value=" + paramsRequest.getLocaleString("btnSubmit") + " onClick=\"if(jsValida(this.form)) return true; else return false;\" class=boton>&nbsp;");
-            ret.append("<input type=reset name=btnReset value=" + paramsRequest.getLocaleString("btnReset") + " class=boton> \n");
-            ret.append("</td> \n");
-            ret.append("</tr> \n");
-            ret.append("<tr> \n");
-            ret.append("<td colspan=2 class=datos><br><font style=\"color: #428AD4; font-family: Verdana; font-size: 10px;\"> \n");
-            ret.append("* " + paramsRequest.getLocaleString("msgDataRequired"));
-            ret.append("</font></td> \n");
-            ret.append("</tr> \n");
-            ret.append("</table> \n");
-            ret.append("</div> \n");
-            ret.append("</form> \n");
-            ret.append(getScript(request, paramsRequest));
+            ret = ret.append("></li> \n");
+            ret = ret.append("</ul>");
+            ret = ret.append("</fieldset>");
+            
+            ret = ret.append("<div class=\"swbform\" dojoType=\"dijit.TitlePane\" open=\"false\" title=\"");
+            ret = ret.append(paramsRequest.getLocaleString("msgStep2"));
+            ret = ret.append("\"> \n");
+            ret = ret.append("  <fieldset>");
+            ret = ret.append("<ul class=\"swbform-ul\">");
+
+            ret = ret.append(admResUtils.loadWindowConfiguration(base, paramsRequest));
+            
+            ret = ret.append("</ul>");
+            ret = ret.append("</fieldset>");
+            ret = ret.append("</div> \n");
+
+            ret = ret.append("<fieldset>");
+            ret = ret.append("<button id=\"botonEnviar\" dojoType=\"dijit.form.Button\" type=\"submit\" name=\"btnSave\" ");
+            
+            ret = ret.append(" onclick=\"if(jsValida(this.form)) return true; else return false;\">");
+            ret = ret.append(paramsRequest.getLocaleString("btnSubmit"));
+            ret = ret.append("</button>");
+            ret = ret.append("<button id=\"botonReset\" dojoType=\"dijit.form.Button\" type=\"reset\" name=\"btnReset\" >");
+            ret = ret.append(paramsRequest.getLocaleString("btnReset"));
+            ret = ret.append("</button>\n");
+            ret = ret.append("</fieldset>");
+            ret = ret.append("</form> \n");
+            ret = ret.append("</div>"); // cerramos el div principal
+            ret = ret.append(getScript(request, paramsRequest));
         }
         catch(Exception e) {  log.error(e); }
         return ret.toString();
@@ -615,7 +687,7 @@ public class Print extends GenericResource
 
     /**
      * Gets the script.
-     * 
+     *
      * @param request the request
      * @param paramsRequest the params request
      * @return the script
@@ -623,28 +695,30 @@ public class Print extends GenericResource
      */
     private String getScript(javax.servlet.http.HttpServletRequest request, SWBParamRequest paramsRequest)
     {
-        StringBuffer ret = new StringBuffer("");
+        StringBuilder ret = new StringBuilder("");
         try
         {
-            ret.append("\n<script>");
-            ret.append("\nfunction jsValida(pForm)");
-            ret.append("\n{");
-            ret.append("\n   if(pForm.template.selectedIndex==0 || pForm.template.options[pForm.template.selectedIndex].value=='' || pForm.template.options[pForm.template.selectedIndex].value==' ')");
-            ret.append("\n   {");
-            ret.append("\n      alert('" + paramsRequest.getLocaleString("msgTemplateRequired") + "');");
-            ret.append("\n      pForm.template.focus();");
-            ret.append("\n      return false;");
-            ret.append("\n   }");
-            ret.append("\n   if(!isFileType(pForm.img, 'bmp|jpg|jpeg|gif|png')) return false;");
-            ret.append("\n   if(!isNumber(pForm.width)) return false;");
-            ret.append("\n   if(!isNumber(pForm.height)) return false;");
-            ret.append("\n   if(!isNumber(pForm.top)) return false;");
-            ret.append("\n   if(!isNumber(pForm.left)) return false;");
-            ret.append("\n   return true;");
-            ret.append("\n}");
-            ret.append(admResUtils.loadIsFileType());
-            ret.append(admResUtils.loadIsNumber());
-            ret.append("\n</script>");
+            ret = ret.append("\n<script>");
+            ret = ret.append("\nfunction jsValida(pForm)");
+            ret = ret.append("\n{");
+            ret = ret.append("\n   if(pForm.template.selectedIndex==0 || pForm.template.options[pForm.template.selectedIndex].value=='' || pForm.template.options[pForm.template.selectedIndex].value==' ')");
+            ret = ret.append("\n   {");
+            ret = ret.append("\n      alert('");
+            ret = ret.append(paramsRequest.getLocaleString("msgTemplateRequired"));
+            ret = ret.append("');");
+            ret = ret.append("\n      pForm.template.focus();");
+            ret = ret.append("\n      return false;");
+            ret = ret.append("\n   }");
+            ret = ret.append("\n   if(!isFileType(pForm.img, 'bmp|jpg|jpeg|gif|png')) return false;");
+            ret = ret.append("\n   if(!isNumber(pForm.width)) return false;");
+            ret = ret.append("\n   if(!isNumber(pForm.height)) return false;");
+            ret = ret.append("\n   if(!isNumber(pForm.top)) return false;");
+            ret = ret.append("\n   if(!isNumber(pForm.left)) return false;");
+            ret = ret.append("\n   return true;");
+            ret = ret.append("\n}");
+            ret = ret.append(admResUtils.loadIsFileType());
+            ret = ret.append(admResUtils.loadIsNumber());
+            ret = ret.append("\n</script>");
         }
         catch(Exception e) {  log.error(e); }
         return ret.toString();
