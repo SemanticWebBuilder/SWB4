@@ -16,12 +16,14 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.Map;
 
 
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.css.parser.Attribute;
@@ -384,7 +386,7 @@ public class IFrame
         }
         return html;
     }
-
+    
     private boolean isInView(String view, String attribute)
     {
         if (view.equalsIgnoreCase(attribute))
@@ -479,7 +481,15 @@ public class IFrame
                 javascript.setMode(SocialContainer.Mode_JAVASCRIPT);
                 javascript.setCallMethod(SWBResourceURL.Call_DIRECT);
                 javascript.setParameter("script", "core_rpc.js");
-                String HtmlResponse = frame.replace("<%=js%>", javascript.toString());
+                JSONObject msg=new JSONObject();
+                Map<String,String> messages=gadget.getMessagesFromGadget(lang, country);
+                for(String key : messages.keySet())
+                {
+                    String value=messages.get(key);
+                    msg.put(key, value);
+                }
+                String HtmlResponse = frame.replace("<%=msg%>",msg.toString());
+                HtmlResponse = frame.replace("<%=js%>", javascript.toString());
                 HtmlResponse = HtmlResponse.replace("<%=rpc%>", rpc.toString());
                 HtmlResponse = HtmlResponse.replace("<%=proxy%>", proxy.toString());
                 HtmlResponse = HtmlResponse.replace("<%=makerequest%>", makerequest.toString());
