@@ -1317,111 +1317,128 @@ public class WBAdmResourceUtils {
      * @return the string
      */
     public String loadWindowConfiguration(Resource base, org.semanticwb.portal.api.SWBParamRequest paramsRequest) {
-        StringBuffer ret = new StringBuffer("");
+        StringBuilder ret = new StringBuilder("");
         try {
-            ret.append("\n<tr>");
-            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgMenubar") + ":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"checkbox\" name=\"menubar\" value=\"yes\"");
+            //--------------------
+            ret = ret.append("<li class=\"swbform-li\">");
+            ret = ret.append("<label for=\"menubar\" class=\"swbform-label\">");
+            ret = ret.append(paramsRequest.getLocaleString("msgMenubar"));
+            ret = ret.append("</label>");
+            ret = ret.append("<input type=\"checkbox\" name=\"menubar\" value=\"yes\"");
             if ("yes".equals(base.getAttribute("menubar", "")))
-                ret.append(" checked=\"checked\"");
-            ret.append("/>");
-            ret.append("</td>");
-            ret.append("</tr>");
-
-            ret.append("\n<tr>");
-            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgToolbar") + ":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"checkbox\" name=\"toolbar\" value=\"yes\"");
+                ret = ret.append(" checked=\"checked\"");
+            ret = ret.append(" />");
+            ret = ret.append("</li>");
+            //--------------------
+            ret = ret.append("<li class=\"swbform-li\">");
+            ret = ret.append("<label for=\"toolbar\" class=\"swbform-label\">");
+            ret = ret.append(paramsRequest.getLocaleString("msgToolbar"));
+            ret = ret.append("</label>");
+            ret = ret.append("<input type=\"checkbox\" name=\"toolbar\" value=\"yes\"");
             if ("yes".equals(base.getAttribute("toolbar", ""))) {
-                ret.append(" checked=\"checked\"");
+                ret = ret.append(" checked=\"checked\"");
             }
-            ret.append("/>");
-            ret.append("</td>");
-            ret.append("</tr>");
-
-            ret.append("\n<tr>");
-            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgStatusbar") + ":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"checkbox\" name=\"status\" value=\"yes\"");
+            ret = ret.append(" />");
+            ret = ret.append("</li>");
+            //--------------------
+            ret = ret.append("<li class=\"swbform-li\">");
+            ret = ret.append("<label for=\"status\" class=\"swbform-label\">");
+            ret = ret.append(paramsRequest.getLocaleString("msgStatusbar"));
+            ret = ret.append("</label>");
+            ret = ret.append("<input type=\"checkbox\" name=\"status\" value=\"yes\"");
             if ("yes".equals(base.getAttribute("status", ""))) {
-                ret.append(" checked=\"checked\"");
+                ret = ret.append(" checked=\"checked\"");
             }
-            ret.append("/>");
-            ret.append("</td>");
-            ret.append("</tr>");
-
-            ret.append("\n<tr>");
-            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgLocation") + ":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"checkbox\" name=\"location\" value=\"yes\"");
+            ret = ret.append(" />");
+            ret = ret.append("</li>");
+            //--------------------
+            ret = ret.append("<li class=\"swbform-li\">");
+            ret = ret.append("<label for=\"location\" class=\"swbform-label\">");
+            ret = ret.append(paramsRequest.getLocaleString("msgLocation"));
+            ret = ret.append("</label>");
+            ret = ret.append("<input type=\"checkbox\" name=\"location\" value=\"yes\"");
             if ("yes".equals(base.getAttribute("location", ""))) {
-                ret.append(" checked=\"checked\"");
+                ret = ret.append(" checked=\"checked\"");
             }
-            ret.append("/>");
-            ret.append("</td>");
-            ret.append("</tr>");
-
-            ret.append("\n<tr>");
-            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgDirectories") + ":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"checkbox\" name=\"directories\" value=\"yes\"");
+            ret = ret.append(" />");
+            ret = ret.append("</li>");
+            //--------------------
+            ret = ret.append("<li class=\"swbform-li\">");
+            ret = ret.append("<label for=\"directories\" class=\"swbform-label\">");
+            ret = ret.append(paramsRequest.getLocaleString("msgDirectories"));
+            ret = ret.append("</label>");
+            ret = ret.append("<input type=\"checkbox\" name=\"directories\" value=\"yes\"");
             if ("yes".equals(base.getAttribute("directories", ""))) {
-                ret.append(" checked=\"checked\"");
+                ret = ret.append(" checked=\"checked\"");
             }
-            ret.append("/>");
-            ret.append("</td>");
-            ret.append("</tr>");
-
-            ret.append("\n<tr>");
-            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgScrollbars") + ":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"checkbox\" name=\"scrollbars\" value=\"yes\"");
+            ret = ret.append(" />");
+            ret = ret.append("</li>");
+            //--------------------
+            ret = ret.append("<li class=\"swbform-li\">");
+            ret = ret.append("<label for=\"scrollbars\" class=\"swbform-label\">");
+            ret = ret.append(paramsRequest.getLocaleString("msgScrollbars"));
+            ret = ret.append("</label>");
+            ret = ret.append("<input type=\"checkbox\" name=\"scrollbars\" value=\"yes\"");
             if ("yes".equals(base.getAttribute("scrollbars", ""))) {
-                ret.append(" checked=\"checked\"");
+                ret = ret.append(" checked=\"checked\"");
             }
-            ret.append("/>");
-            ret.append("</td>");
-            ret.append("</tr>");
-
-            ret.append("\n<tr>");
-            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgResizable") + ":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"checkbox\" name=\"resizable\" value=\"yes\"");
+            ret = ret.append(" />");
+            ret = ret.append("</li>");
+            //--------------------
+            ret = ret.append("<li class=\"swbform-li\">");
+            ret = ret.append("<label for=\"resizable\" class=\"swbform-label\">");
+            ret = ret.append(paramsRequest.getLocaleString("msgResizable"));
+            ret = ret.append("</label>");
+            ret = ret.append("<input type=\"checkbox\" name=\"resizable\" value=\"yes\"");
             if ("yes".equals(base.getAttribute("resizable", ""))) {
-                ret.append(" checked=\"checked\"");
+                ret = ret.append(" checked=\"checked\"");
             }
-            ret.append("/>");
-            ret.append("</td>");
-            ret.append("</tr>");
-
-            ret.append("\n<tr>");
-            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgWidth") + " " + paramsRequest.getLocaleString("msgPixels") + ":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"text\" size=\"4\" maxlength=\"4\" name=\"width\" value=\""+base.getAttribute("width","")+"\" />");
-            ret.append("</td>");
-            ret.append("</tr>");
-
-            ret.append("\n<tr>");
-            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgHeight") + " " + paramsRequest.getLocaleString("msgPixels") + ":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"text\" size=\"4\" maxlength=\"4\" name=\"height\" value=\""+base.getAttribute("height","")+"\" />");
-            ret.append("</td>");
-            ret.append("</tr>");
-
-            ret.append("\n<tr>");
-            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgTop") + " " + paramsRequest.getLocaleString("msgPixels") + ":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"text\" size=\"4\" maxlength=\"4\" name=\"top\" value=\""+base.getAttribute("top","")+"\" />");
-            ret.append("</td>");
-            ret.append("</tr>");
-
-            ret.append("\n<tr>");
-            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgLeft") + " " + paramsRequest.getLocaleString("msgPixels") + ":&nbsp;</td>");
-            ret.append("<td class=\"valores\">");
-            ret.append("<input type=\"text\" size=\"4\" maxlength=\"4\" name=\"left\" value=\""+base.getAttribute("left","")+"\" />");
-            ret.append("</td>");
-            ret.append("</tr>");
+            ret = ret.append(" />");
+            ret = ret.append("</li>");
+            //--------------------
+            ret = ret.append("<li class=\"swbform-li\">");
+            ret = ret.append("<label for=\"width\" class=\"swbform-label\">");
+            ret = ret.append(paramsRequest.getLocaleString("msgWidth"));
+            ret = ret.append(" ");
+            ret = ret.append(paramsRequest.getLocaleString("msgPixels"));
+            ret = ret.append("</label>");
+            ret = ret.append("<input type=\"text\" size=\"4\" maxlength=\"4\" name=\"width\" value=\"");
+            ret = ret.append(base.getAttribute("width",""));
+            ret = ret.append("\" />");
+            ret = ret.append("</li>");
+            //--------------------
+            ret = ret.append("<li class=\"swbform-li\">");
+            ret = ret.append("<label for=\"height\" class=\"swbform-label\">");
+            ret = ret.append(paramsRequest.getLocaleString("msgHeight"));
+            ret = ret.append(" ");
+            ret = ret.append(paramsRequest.getLocaleString("msgPixels"));
+            ret = ret.append("</label>");
+            ret = ret.append("<input type=\"text\" size=\"4\" maxlength=\"4\" name=\"height\" value=\"");
+            ret = ret.append(base.getAttribute("height",""));
+            ret = ret.append("\" />");
+            ret = ret.append("</li>");
+            //--------------------
+            ret = ret.append("<li class=\"swbform-li\">");
+            ret = ret.append("<label for=\"top\" class=\"swbform-label\">");
+            ret = ret.append(paramsRequest.getLocaleString("msgTop"));
+            ret = ret.append(" ");
+            ret = ret.append(paramsRequest.getLocaleString("msgPixels"));
+            ret = ret.append("</label>");
+            ret = ret.append("<input type=\"text\" size=\"4\" maxlength=\"4\" name=\"top\" value=\"");
+            ret = ret.append(base.getAttribute("top",""));
+            ret = ret.append("\" />");
+            ret = ret.append("</li>");
+            //--------------------
+            ret = ret.append("<li class=\"swbform-li\">");
+            ret = ret.append("<label for=\"left\" class=\"swbform-label\">");
+            ret = ret.append(paramsRequest.getLocaleString("msgLeft"));
+            ret = ret.append(" ");
+            ret = ret.append(paramsRequest.getLocaleString("msgPixels"));
+            ret = ret.append("</label>");
+            ret = ret.append("<input type=\"text\" size=\"4\" maxlength=\"4\" name=\"left\" value=\"");
+            ret = ret.append(base.getAttribute("left",""));
+            ret = ret.append("\" />");
+            ret = ret.append("</li>");
         } catch (Exception e) {
             log.error("Error while generating form to load window configuration in resource " + base.getId() + ".", e);
         }
