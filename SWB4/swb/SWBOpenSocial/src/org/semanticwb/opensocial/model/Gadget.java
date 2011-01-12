@@ -15,8 +15,10 @@ import java.util.StringTokenizer;
 import org.jdom.JDOMException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.opensocial.resources.SocialContainer;
+import org.semanticwb.opensocial.resources.SocialUser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -363,7 +365,26 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         }
         return null;
     }
-
+    public String getTitle(SocialUser user,WebSite site,String moduleid)
+    {
+        String title=getTitle();
+        if(title!=null && user.getUserId()!=null)
+        {
+            User _user=site.getUserRepository().getUser(user.getUserId());
+            if(_user!=null)
+            {
+                Map<String,String> variables=SocialContainer.getVariablesubstituion(_user, this, "ALL", "ALL", moduleid, site);
+                if(!variables.isEmpty())
+                {
+                    for(String key : variables.keySet())
+                    {
+                        title=title.replace(key, variables.get(key));
+                    }
+                }
+            }
+        }
+        return title;
+    }
     public String getTitle()
     {
         getDocument();
@@ -492,7 +513,31 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         }
         return null;
     }
-
+    public String[] getUserPrefsNames()
+    {
+        HashSet<String> getUserPrefsNames = new HashSet<String>();
+        getDocument();
+        try
+        {
+            if (doc.getElementsByTagName("UserPref").getLength() > 0)
+            {
+                NodeList userprefs=doc.getElementsByTagName("UserPref");
+                for(int i=0;i<userprefs.getLength();i++)
+                {
+                    Element userpref=(Element)userprefs.item(i);
+                    String name=userpref.getAttribute("name");
+                    if(name!=null && !"".equals(name))
+                    {
+                        getUserPrefsNames.add(name);
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+        }
+        return getUserPrefsNames.toArray(new String[getUserPrefsNames.size()]);
+    }
     public String[] getFeatures()
     {
         HashSet<String> getFeatures = new HashSet<String>();
