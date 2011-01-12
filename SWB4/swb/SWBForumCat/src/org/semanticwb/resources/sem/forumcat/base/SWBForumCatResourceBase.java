@@ -10,6 +10,7 @@ public abstract class SWBForumCatResourceBase extends org.semanticwb.portal.api.
     public static final org.semanticwb.platform.SemanticProperty forumCat_markInnapropiateQuestions=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#markInnapropiateQuestions");
     public static final org.semanticwb.platform.SemanticProperty forumCat_isCategorySubscription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#isCategorySubscription");
     public static final org.semanticwb.platform.SemanticProperty forumCat_isModerate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#isModerate");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_viewJSP=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#viewJSP");
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_semanticResourceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#semanticResourceInv");
     public static final org.semanticwb.platform.SemanticProperty forumCat_acceptAttachements=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#acceptAttachements");
@@ -163,6 +164,24 @@ public abstract class SWBForumCatResourceBase extends org.semanticwb.portal.api.
     public void setIsModerate(boolean value)
     {
         getSemanticObject().setBooleanProperty(forumCat_isModerate, value);
+    }
+
+/**
+* Gets the ViewJSP property
+* @return String with the ViewJSP
+*/
+    public String getViewJSP()
+    {
+        return getSemanticObject().getProperty(forumCat_viewJSP);
+    }
+
+/**
+* Sets the ViewJSP property
+* @param value long with the ViewJSP
+*/
+    public void setViewJSP(String value)
+    {
+        getSemanticObject().setProperty(forumCat_viewJSP, value);
     }
    /**
    * Sets the value for the property Resource
