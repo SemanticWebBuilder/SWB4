@@ -439,7 +439,7 @@ public class IFrame
                 HtmlResponse = HtmlResponse.replace("<%=makerequest%>", makerequest.toString());
                 HtmlResponse = HtmlResponse.replace("<%=html%>", html);
                 PrintWriter out = response.getWriter();
-                System.out.println(HtmlResponse);
+                //System.out.println(HtmlResponse);
                 out.write(HtmlResponse);
                 out.close();
             }
