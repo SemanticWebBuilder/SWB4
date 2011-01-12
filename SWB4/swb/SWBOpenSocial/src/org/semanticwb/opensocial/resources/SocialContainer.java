@@ -89,8 +89,11 @@ public class SocialContainer extends GenericResource
         }
 
     }
-
     public static Map<String, String> getVariablesubstituion(User user, Gadget gadget, String language, String country, String moduleID,WebSite site)
+    {
+        return getVariablesubstituion(user, gadget, language, country, moduleID, site, true);
+    }
+    public static Map<String, String> getVariablesubstituion(User user, Gadget gadget, String language, String country, String moduleID,WebSite site,boolean formated)
     {
 
         Map<String, String> getVariablesubstituion = new HashMap<String, String>();

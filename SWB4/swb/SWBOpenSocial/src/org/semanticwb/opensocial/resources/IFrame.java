@@ -480,13 +480,23 @@ public class IFrame
                 javascript.setMode(SocialContainer.Mode_JAVASCRIPT);
                 javascript.setCallMethod(SWBResourceURL.Call_DIRECT);
                 javascript.setParameter("script", "core_rpc.js");
+
+                JSONObject j_default_values=new JSONObject();
+                Map<String,String> default_values=gadget.getDefaultUserPref(lang, country,false);
+                for(String key : default_values.keySet())
+                {
+                    j_default_values.put(key, j_default_values.get(key));
+                }
+
                 JSONObject msg=new JSONObject();
                 Map<String,String> messages=gadget.getMessagesFromGadget(lang, country,false);
                 for(String key : messages.keySet())
                 {
                     msg.put(key, messages.get(key));
-                }                
+                }
+
                 String HtmlResponse = frame.replace("<%=msg%>",msg.toString());
+                HtmlResponse = HtmlResponse.replace("<%=default_values%>", j_default_values.toString());
                 HtmlResponse = HtmlResponse.replace("<%=js%>", javascript.toString());
                 HtmlResponse = HtmlResponse.replace("<%=rpc%>", rpc.toString());
                 HtmlResponse = HtmlResponse.replace("<%=proxy%>", proxy.toString());

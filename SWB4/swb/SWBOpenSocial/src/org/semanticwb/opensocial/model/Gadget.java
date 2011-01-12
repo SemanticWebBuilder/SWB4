@@ -125,7 +125,8 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
     {
         return getMesssages(docMessages, true);
     }
-    private Map<String, String> getMesssages(Document docMessages,boolean formated)
+
+    private Map<String, String> getMesssages(Document docMessages, boolean formated)
     {
         Map<String, String> getMesssages = new HashMap<String, String>();
         NodeList messages = docMessages.getElementsByTagName("msg");
@@ -138,7 +139,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                 String value = msg.getTextContent();
                 if (name != null && !name.equals("") && value != null && !value.equals(""))
                 {
-                    if(formated)
+                    if (formated)
                     {
                         getMesssages.put("__MSG_" + name + "__", value);
                     }
@@ -152,11 +153,65 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         return getMesssages;
     }
 
+    public Map<String, String> getDefaultUserPref(String language, String country, boolean formated)
+    {
+        Map<String, String> getDefaultUserPref = new HashMap<String, String>();
+        getDocument();
+        try
+        {
+            if (doc.getElementsByTagName("UserPref").getLength() > 0)
+            {
+                NodeList userprefs = doc.getElementsByTagName("UserPref");
+                for (int i = 0; i < userprefs.getLength(); i++)
+                {
+                    Element userpref = (Element) userprefs.item(i);
+                    String name = userpref.getAttribute("name");
+                    String default_value = userpref.getAttribute("default_value");
+                    String type = userpref.getAttribute("type");
+                    if (type == null || "".equals(type))
+                    {
+                        type = "string";
+                    }
+                    if (name != null && !"".equals(name))
+                    {
+                        if (("hidden".equalsIgnoreCase(type) || "list".equalsIgnoreCase(type) || "string".equalsIgnoreCase(type)) && (default_value == null || "".equals(default_value)))
+                        {
+                            default_value = "";
+                        }
+                        else if ("bool".equalsIgnoreCase(type) && (default_value == null || "".equals(default_value)))
+                        {
+                            default_value = "false";
+                        }
+                        else if ("enum".equalsIgnoreCase(type) && (default_value == null || "".equals(default_value)))
+                        {
+                            NodeList enumValues = userpref.getElementsByTagName("EnumValue");
+                            if(enumValues.getLength()>0)
+                            {
+                                Element enumValue = (Element) enumValues.item(0);
+                                default_value = enumValue.getAttribute("value");
+                            }
+                            else
+                            {
+                                default_value="";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            log.debug(e);
+        }
+        return getDefaultUserPref;
+    }
+
     public Map<String, String> getMessagesFromGadget(String language, String country)
     {
         return getMessagesFromGadget(language, country, true);
     }
-    public Map<String, String> getMessagesFromGadget(String language, String country,boolean formated)
+
+    public Map<String, String> getMessagesFromGadget(String language, String country, boolean formated)
     {
         Map<String, String> getMessagesFromGadget = new HashMap<String, String>();
         if (language != null && language.equals("ALL"))
@@ -201,7 +256,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                                 uri = uriGadget.resolve(uri);
                             }
                             Document docMessages = SocialContainer.getXML(uri.toURL());
-                            return getMesssages(docMessages,formated);
+                            return getMesssages(docMessages, formated);
                         }
                         catch (URISyntaxException use)
                         {
@@ -380,26 +435,28 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         }
         return null;
     }
-    public String getTitle(SocialUser user,WebSite site,String moduleid)
+
+    public String getTitle(SocialUser user, WebSite site, String moduleid)
     {
-        String title=getTitle();
-        if(title!=null && user.getUserId()!=null)
+        String title = getTitle();
+        if (title != null && user.getUserId() != null)
         {
-            User _user=site.getUserRepository().getUser(user.getUserId());
-            if(_user!=null)
+            User _user = site.getUserRepository().getUser(user.getUserId());
+            if (_user != null)
             {
-                Map<String,String> variables=SocialContainer.getVariablesubstituion(_user, this, "ALL", "ALL", moduleid, site);
-                if(!variables.isEmpty())
+                Map<String, String> variables = SocialContainer.getVariablesubstituion(_user, this, "ALL", "ALL", moduleid, site);
+                if (!variables.isEmpty())
                 {
-                    for(String key : variables.keySet())
+                    for (String key : variables.keySet())
                     {
-                        title=title.replace(key, variables.get(key));
+                        title = title.replace(key, variables.get(key));
                     }
                 }
             }
         }
         return title;
     }
+
     public String getTitle()
     {
         getDocument();
@@ -528,6 +585,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         }
         return null;
     }
+
     public String[] getUserPrefsNames()
     {
         HashSet<String> getUserPrefsNames = new HashSet<String>();
@@ -536,12 +594,12 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         {
             if (doc.getElementsByTagName("UserPref").getLength() > 0)
             {
-                NodeList userprefs=doc.getElementsByTagName("UserPref");
-                for(int i=0;i<userprefs.getLength();i++)
+                NodeList userprefs = doc.getElementsByTagName("UserPref");
+                for (int i = 0; i < userprefs.getLength(); i++)
                 {
-                    Element userpref=(Element)userprefs.item(i);
-                    String name=userpref.getAttribute("name");
-                    if(name!=null && !"".equals(name))
+                    Element userpref = (Element) userprefs.item(i);
+                    String name = userpref.getAttribute("name");
+                    if (name != null && !"".equals(name))
                     {
                         getUserPrefsNames.add(name);
                     }
@@ -553,6 +611,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         }
         return getUserPrefsNames.toArray(new String[getUserPrefsNames.size()]);
     }
+
     public String[] getFeatures()
     {
         HashSet<String> getFeatures = new HashSet<String>();
@@ -678,14 +737,15 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                 if (contents.item(i) instanceof Element)
                 {
                     Element content = (Element) contents.item(i);
-                    String _view = content.getAttribute("view");                    
+                    String _view = content.getAttribute("view");
                     if (_view != null)
                     {
                         StringTokenizer st = new StringTokenizer(_view, ",");
-                        while (st.hasMoreTokens())                        {
-                            String view = st.nextToken().trim();                            
+                        while (st.hasMoreTokens())
+                        {
+                            String view = st.nextToken().trim();
                             if (!"".equals(view))
-                            {                                
+                            {
                                 getViews.add(createView(content, view));
                             }
                         }
