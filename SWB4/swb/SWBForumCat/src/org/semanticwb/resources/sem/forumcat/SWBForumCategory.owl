@@ -426,6 +426,23 @@
     <rdfs:label xml:lang="es">Usar sistema de puntaje</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="viewJSP">
+    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
+    <rdfs:label xml:lang="es">JSP para vista</rdfs:label>
+    <rdfs:label xml:lang="en">View JSP</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Almacena la ruta al JSP que será usado para mostrar la vista del recurso</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_viewJSP">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >1</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <rdfs:label xml:lang="es">JSP de vista</rdfs:label>
+        <rdfs:label xml:lang="en">View JSP</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="markIrrelevantAnswers">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#SWBForumCatResource"/>
