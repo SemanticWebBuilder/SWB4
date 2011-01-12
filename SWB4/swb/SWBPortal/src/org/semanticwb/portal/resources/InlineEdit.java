@@ -206,6 +206,7 @@ public class InlineEdit extends GenericResource {
         out.println("<div class=\"swbform\">");
         out.println("<form id=\"" + base.getId() + "/InLineEditRes\" name=\"" + getResourceBase().getId() + "/InLineEditRes\" action=\""+urlAction+"\" method=\"post\" >");
         out.println("<fieldset>");
+        out.println("<ul class=\"swbform-ul\">");
         out.println("<legend>");
         out.println(fieldsetText);//Texto a desplegar dentro del fieldset
         out.println("</legend>");
@@ -216,18 +217,32 @@ public class InlineEdit extends GenericResource {
             selected = "selected";
         }
         StringBuilder strRules = new StringBuilder();
-        strRules.append("\n<option value=\"0\" " + selected + " >" + listMessage + "</option>"); //1ra. opción mostrada en la lista desplegable
-        strRules.append("\n<optgroup label=\"" + rolesMessage + "\">");
+        strRules = strRules.append("\n<option value=\"0\" ");
+        strRules = strRules.append(selected);
+        strRules = strRules.append(">");
+        strRules = strRules.append(listMessage);
+        strRules = strRules.append("</option>");
+        strRules = strRules.append("\n<optgroup label=\"");
+        strRules = strRules.append(rolesMessage);
+        strRules = strRules.append("\">");
         while (iRoles.hasNext()) {
             Role oRole = iRoles.next();
             selected = "";
             if (str_role.trim().equals(oRole.getURI())) {
                 selected = "selected";
             }
-            strRules.append("\n<option value=\"" + oRole.getURI() + "\" " + selected + ">" + oRole.getDisplayTitle(user.getLanguage()) + "</option>");
+            strRules = strRules.append("\n<option value=\"");
+            strRules = strRules.append(oRole.getURI());
+            strRules = strRules.append("\"");
+            strRules = strRules.append(selected);
+            strRules = strRules.append(">");
+            strRules = strRules.append(oRole.getDisplayTitle(user.getLanguage()));
+            strRules = strRules.append("</option>");
         }
-        strRules.append("\n</optgroup>");
-        strRules.append("\n<optgroup label=\"" + userGroupsMessage + "\">");
+        strRules = strRules.append("\n</optgroup>");
+        strRules = strRules.append("\n<optgroup label=\"");
+        strRules = strRules.append(userGroupsMessage );
+        strRules = strRules.append("\">");
         Iterator<UserGroup> iugroups = wsite.getUserRepository().listUserGroups();
         while (iugroups.hasNext()) {
             UserGroup oUG = iugroups.next();
@@ -235,16 +250,27 @@ public class InlineEdit extends GenericResource {
             if (str_role.trim().equals(oUG.getURI())) {
                 selected = "selected";
             }
-            strRules.append("\n<option value=\"" + oUG.getURI() + "\" " + selected + " >" + oUG.getDisplayTitle(user.getLanguage()) + "</option>");
+            strRules = strRules.append("\n<option value=\"");
+            strRules = strRules.append(oUG.getURI());
+            strRules = strRules.append("\"");
+            strRules = strRules.append(selected);
+            strRules = strRules.append(">");
+            strRules = strRules.append(oUG.getDisplayTitle(user.getLanguage()));
+            strRules = strRules.append("</option>");
         }
         strRules.append("\n</optgroup>");
         if (strRules.toString().length() > 0) {
             strTemp = strRules.toString();
         }
-        out.println("<statictext name=\"leyenda1\"><strong>" + staticText1 + "</strong></statictext>");
-        out.print("<br/>");
-        out.println("<statictext name=\"Leyenda2\">" + staticText2 + "</statictext>");
-        out.println("<select name=\"editar\">" + strTemp + "</select>");
+        out.println("   <li class=\"swbform-li\">");
+        out.println("       <label for=\"leyenda1\" class=\"swbform-label\"><strong>"+staticText1+"</strong></label>");
+        out.print("     </li>");
+        
+        out.println("   <li class=\"swbform-li\">");
+        out.println("       <label for=\"editar\" class=\"swbform-label\">"+staticText2+"</label>");
+        out.println("       <select name=\"editar\">" + strTemp + "</select>");
+        out.print("     </li>");
+        out.print("</ul>");
         out.println("</fieldset>");
         out.println("<fieldset>");
         out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"btn\" >" + buttonText + "</button>");
