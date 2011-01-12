@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
@@ -78,18 +79,26 @@ public class IFrame
                             String value = tag.getParamValue(iparam);
                             if ("src".equals(paramName))
                             {
-                                URI uriSRC = new URI(value);
-                                if (!uriSRC.isAbsolute())
+                                try
                                 {
-                                    uriSRC = gadget.resolve(uriSRC);
+                                    URI uriSRC = new URI(value);
+                                    if (!uriSRC.isAbsolute())
+                                    {
+                                        uriSRC = gadget.resolve(uriSRC);
+                                    }
+                                    String url = uriSRC.toString();
+                                    int pos = url.indexOf("?"); // elimina parametros por seguridad
+                                    if (pos != -1)
+                                    {
+                                        url = url.substring(0, pos);
+                                    }
+                                    value = proxy + "?url=" + URLEncoder.encode(url);
                                 }
-                                String url = uriSRC.toString();
-                                int pos = url.indexOf("?"); // elimina parametros por seguridad
-                                if (pos != -1)
+                                catch (URISyntaxException use)
                                 {
-                                    url = url.substring(0, pos);
+                                    log.debug(use);
+                                    System.out.println("value: " + value);
                                 }
-                                value = proxy + "?url=" + URLEncoder.encode(url);
                                 //value=uriSRC.toString();
                             }
                             ret.append(paramName);
@@ -179,21 +188,29 @@ public class IFrame
                                     {
                                         value = value.substring(1, value.length() - 1);
                                     }
-                                    URI uriValue = new URI(value);
-                                    if (!uriValue.isAbsolute())
+                                    try
                                     {
-                                        uriValue = gadget.resolve(uriValue);
+                                        URI uriValue = new URI(value);
+                                        if (!uriValue.isAbsolute())
+                                        {
+                                            uriValue = gadget.resolve(uriValue);
+                                        }
+                                        String url = uriValue.toString();
+                                        int pos2 = url.indexOf("?"); // elimina parametros por seguridad
+                                        if (pos2 != -1)
+                                        {
+                                            url = url.substring(0, pos2);
+                                        }
+                                        value=url;
                                     }
-                                    String url = uriValue.toString();
-                                    int pos2 = url.indexOf("?"); // elimina parametros por seguridad
-                                    if (pos2 != -1)
+                                    catch (URISyntaxException uie)
                                     {
-                                        url = url.substring(0, pos2);
+                                        log.debug(uie);
                                     }
                                     sb.append("url('");
                                     sb.append(proxy.toString());
                                     sb.append("?url=");
-                                    sb.append(URLEncoder.encode(url));
+                                    sb.append(URLEncoder.encode(value));
                                     sb.append("')");
 
                                 }
@@ -277,7 +294,7 @@ public class IFrame
         return sb.toString();
     }
 
-    private String getHTMLfromView(Gadget gadget,Element content, String sview, Map<String, String> variables)
+    private String getHTMLfromView(Gadget gadget, Element content, String sview, Map<String, String> variables)
     {
         String html = "";
         String type = "html";
@@ -319,15 +336,15 @@ public class IFrame
                 {
                     try
                     {
-                    URI urihref = new URI(href);
-                    URI urigadget = new URI(gadget.getUrl());
-                    if (!urihref.isAbsolute())
-                    {
-                        urigadget.resolve(urihref);
+                        URI urihref = new URI(href);
+                        URI urigadget = new URI(gadget.getUrl());
+                        if (!urihref.isAbsolute())
+                        {
+                            urigadget.resolve(urihref);
+                        }
+                        html = getHTML(urigadget.toURL());
                     }
-                    html = getHTML(urigadget.toURL());
-                    }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         log.debug(e);
                         e.printStackTrace();
@@ -343,22 +360,22 @@ public class IFrame
             {
                 try
                 {
-                URI urihref = new URI(href);
-                URI urigadget = new URI(gadget.getUrl());
-                if (!urihref.isAbsolute())
-                {
-                    urigadget.resolve(urihref);
+                    URI urihref = new URI(href);
+                    URI urigadget = new URI(gadget.getUrl());
+                    if (!urihref.isAbsolute())
+                    {
+                        urigadget.resolve(urihref);
+                    }
+                    // sends the html result from the href
+                    String _url = urihref.toString() + "?";
+                    for (String key : variables.keySet())
+                    {
+                        String value = variables.get(key);
+                        _url += "&" + URLEncoder.encode(key) + "=" + URLEncoder.encode(value);
+                    }
+                    html = "<iframe frameborder=\"0\" src=\"" + _url + "\"></iframe>";
                 }
-                // sends the html result from the href
-                String _url = urihref.toString() + "?";
-                for (String key : variables.keySet())
-                {
-                    String value = variables.get(key);
-                    _url += "&" + URLEncoder.encode(key) + "=" + URLEncoder.encode(value);
-                }
-                html = "<iframe frameborder=\"0\" src=\"" + _url + "\"></iframe>";
-                }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     log.debug(e);
                     e.printStackTrace();
@@ -432,10 +449,10 @@ public class IFrame
                     if (node instanceof Element)
                     {
                         Element content = (Element) node;
-                        html=getHTMLfromView(gadget,content, sview, variables);
-                        if("".equals(html))
+                        html = getHTMLfromView(gadget, content, sview, variables);
+                        if ("".equals(html))
                         {
-                            html=getHTMLfromView(gadget,content, "default", variables);
+                            html = getHTMLfromView(gadget, content, "default", variables);
                         }
 
                     }
