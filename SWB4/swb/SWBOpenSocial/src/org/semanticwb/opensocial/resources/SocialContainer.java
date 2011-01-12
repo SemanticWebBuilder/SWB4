@@ -98,16 +98,11 @@ public class SocialContainer extends GenericResource
 
         getVariablesubstituion.put("__MODULE_ID__", moduleID);
         getVariablesubstituion.put("__MSG_LANG__", language);
-        getVariablesubstituion.put("__MSG_COUNTRY__", country);
-        System.out.println("user: "+user.getId());
-        System.out.println("moduleID: "+moduleID);
+        getVariablesubstituion.put("__MSG_COUNTRY__", country);        
         Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(user,site);
         while (preferences.hasNext())
         {
-            PersonalizedGadged personalizedGadged = preferences.next();
-            System.out.println("personalizedGadged.getGadget().getURI(): "+personalizedGadged.getGadget().getURI());
-            System.out.println("gadget.getURI(): "+gadget.getURI());
-            System.out.println("personalizedGadged.getId(): "+personalizedGadged.getId());
+            PersonalizedGadged personalizedGadged = preferences.next();            
             if (personalizedGadged.getGadget().getURI().equals(gadget.getURI()) && personalizedGadged.getId().equals(moduleID))
             {
                 GenericIterator<UserPref> list = personalizedGadged.listUserPrefses();
