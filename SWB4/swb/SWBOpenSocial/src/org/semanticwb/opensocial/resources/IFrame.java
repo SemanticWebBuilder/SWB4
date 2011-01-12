@@ -485,7 +485,7 @@ public class IFrame
                 Map<String,String> default_values=gadget.getDefaultUserPref(lang, country,false);
                 for(String key : default_values.keySet())
                 {
-                    j_default_values.put(key, j_default_values.get(key));
+                    j_default_values.put(key, default_values.get(key));
                 }
 
                 JSONObject msg=new JSONObject();
