@@ -195,6 +195,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                                 default_value="";
                             }
                         }
+                        getDefaultUserPref.put(name, default_value);
                     }
                 }
             }
