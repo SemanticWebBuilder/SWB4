@@ -123,6 +123,10 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
     private Map<String, String> getMesssages(Document docMessages)
     {
+        return getMesssages(docMessages, true);
+    }
+    private Map<String, String> getMesssages(Document docMessages,boolean formated)
+    {
         Map<String, String> getMesssages = new HashMap<String, String>();
         NodeList messages = docMessages.getElementsByTagName("msg");
         for (int i = 0; i < messages.getLength(); i++)
@@ -134,7 +138,14 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                 String value = msg.getTextContent();
                 if (name != null && !name.equals("") && value != null && !value.equals(""))
                 {
-                    getMesssages.put("__MSG_" + name + "__", value);
+                    if(formated)
+                    {
+                        getMesssages.put("__MSG_" + name + "__", value);
+                    }
+                    else
+                    {
+                        getMesssages.put(name, value);
+                    }
                 }
             }
         }
@@ -142,6 +153,10 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
     }
 
     public Map<String, String> getMessagesFromGadget(String language, String country)
+    {
+        return getMessagesFromGadget(language, country, true);
+    }
+    public Map<String, String> getMessagesFromGadget(String language, String country,boolean formated)
     {
         Map<String, String> getMessagesFromGadget = new HashMap<String, String>();
         if (language != null && language.equals("ALL"))
@@ -186,7 +201,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                                 uri = uriGadget.resolve(uri);
                             }
                             Document docMessages = SocialContainer.getXML(uri.toURL());
-                            return getMesssages(docMessages);
+                            return getMesssages(docMessages,formated);
                         }
                         catch (URISyntaxException use)
                         {
