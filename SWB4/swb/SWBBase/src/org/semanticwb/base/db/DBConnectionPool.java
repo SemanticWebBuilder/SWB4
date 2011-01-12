@@ -31,6 +31,7 @@ import java.sql.*;
 import java.util.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.base.util.SFBase64;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -77,6 +78,8 @@ public class DBConnectionPool {
     /** The hits time. */
     private long hitsTime = 0;
 
+    private static final String KEY="akdhfyehe38";
+
     /**
      * Crea un nuevo objeto connection pool.
      * 
@@ -95,7 +98,7 @@ public class DBConnectionPool {
         this.name = name;
         setURL(URL);
         this.user = user;
-        this.password = password;
+        setPassword(password);
         this.maxConn = maxConn;
         this.idle_time = idle_time * 1000;
     }
@@ -285,7 +288,7 @@ public class DBConnectionPool {
                 con = DriverManager.getConnection(URL);
             } else
             {
-                con = DriverManager.getConnection(URL, user, password);
+                con = DriverManager.getConnection(URL, user, getDescriptedPassword());
             }
             log.debug("Created a new connection in pool " + name);
         } catch (SQLException e)
@@ -313,7 +316,7 @@ public class DBConnectionPool {
                 con = DriverManager.getConnection(URL);
             } else
             {
-                con = DriverManager.getConnection(URL, user, password);
+                con = DriverManager.getConnection(URL, user, getDescriptedPassword());
             }
             log.debug("Created a new connection in pool " + name);
         } catch (SQLException e)
@@ -345,7 +348,7 @@ public class DBConnectionPool {
                 con = DriverManager.getConnection(URL);
             } else
             {
-                con = DriverManager.getConnection(URL, user, password);
+                con = DriverManager.getConnection(URL, user, getDescriptedPassword());
             }
             log.debug("Created a new connection in pool " + name);
         } catch (SQLException e)
@@ -371,13 +374,45 @@ public class DBConnectionPool {
         return name;
     }
 
+    public void setPassword(String password)
+    {
+        if(password==null)password="";
+        this.password=password;
+    }
+
     /** Getter for property name.
      * @return Value of property name.
      *
      */
     public java.lang.String getPassword()
     {
-        return password;
+        if(password.startsWith("{") && password.endsWith("}"))
+        {
+            return password;
+        }else
+        {
+            try
+            {
+                return "{"+SFBase64.encodeBytes(SWBUtils.CryptoWrapper.PBEAES128Cipher(KEY, password.getBytes()))+"}";
+            }catch(Exception e){log.error(e);}
+            return null;
+        }
+    }
+
+    private String getDescriptedPassword()
+    {
+        if(password.startsWith("{") && password.endsWith("}"))
+        {
+            String pwd=password.substring(1,password.length()-1);
+            try
+            {
+                return new String(SWBUtils.CryptoWrapper.PBEAES128Decipher(KEY, SFBase64.decode(pwd)));
+            }catch(Exception e){log.error(e);}
+            return null;
+        }else
+        {
+            return password;
+        }
     }
 
     /** Getter for property maxConn.
