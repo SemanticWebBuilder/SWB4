@@ -66,7 +66,8 @@ public class IFrame
                         continue;
                     }
                     tok.parseTag(tok.getStringValue(), tag);
-                    if (!tag.isEndTag() && tag.getTagString().toLowerCase().equals("script"))
+                    
+                    if (!tag.isEndTag() && (tag.getTagString().toLowerCase().equals("script") || tag.getTagString().toLowerCase().equals("img")))
                     {
                         ret.append("<");
                         ret.append(tag.getTagString());
@@ -82,7 +83,14 @@ public class IFrame
                                 {
                                     uriSRC=gadget.resolve(uriSRC);
                                 }
-                                value=uriSRC.toString();
+                                String url=uriSRC.toString();
+                                int pos=url.indexOf("?"); // elimina parametros por seguridad
+                                if(pos!=-1)
+                                {
+                                    url=url.substring(0,pos);
+                                }
+                                value=proxy+"?url="+URLEncoder.encode(url);
+                                //value=uriSRC.toString();
                             }
                             ret.append(paramName);
                             ret.append("=\"");
@@ -176,10 +184,16 @@ public class IFrame
                                     {
                                         uriValue = gadget.resolve(uriValue);
                                     }
+                                    String url=uriValue.toString();
+                                    int pos2=url.indexOf("?"); // elimina parametros por seguridad
+                                    if(pos2!=-1)
+                                    {
+                                        url=url.substring(0,pos2);
+                                    }
                                     sb.append("url('");
                                     sb.append(proxy.toString());
                                     sb.append("?url=");
-                                    sb.append(URLEncoder.encode(uriValue.toString()));
+                                    sb.append(URLEncoder.encode(url));
                                     sb.append("')");
 
                                 }
@@ -216,12 +230,6 @@ public class IFrame
 
         return sb.toString();
     }
-
-    
-
-   
-
-    
 
     private String getHTML(URL url)
     {
@@ -431,7 +439,7 @@ public class IFrame
                 HtmlResponse = HtmlResponse.replace("<%=makerequest%>", makerequest.toString());
                 HtmlResponse = HtmlResponse.replace("<%=html%>", html);
                 PrintWriter out = response.getWriter();
-                //System.out.println(HtmlResponse);
+                System.out.println(HtmlResponse);
                 out.write(HtmlResponse);
                 out.close();
             }
