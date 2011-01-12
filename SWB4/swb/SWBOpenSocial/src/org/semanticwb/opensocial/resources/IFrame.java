@@ -307,9 +307,7 @@ public class IFrame
         }
 
         try
-        {
-            System.out.println("url: "+url);
-            System.out.println("view: "+sview);
+        {            
             Gadget gadget = SocialContainer.getGadget(url, paramRequest.getWebPage().getWebSite());
             if (gadget != null)
             {
