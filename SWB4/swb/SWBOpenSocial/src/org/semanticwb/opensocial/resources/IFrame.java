@@ -66,40 +66,40 @@ public class IFrame
                         continue;
                     }
                     tok.parseTag(tok.getStringValue(), tag);
-                    
+
                     if (!tag.isEndTag() && (tag.getTagString().toLowerCase().equals("script") || tag.getTagString().toLowerCase().equals("img")))
                     {
                         ret.append("<");
                         ret.append(tag.getTagString());
                         ret.append(" ");
-                        for(int iparam=0;iparam<tag.getParamCount();iparam++)
+                        for (int iparam = 0; iparam < tag.getParamCount(); iparam++)
                         {
-                            String paramName=tag.getParamName(iparam);
-                            String value=tag.getParamValue(iparam);
-                            if("src".equals(paramName))
+                            String paramName = tag.getParamName(iparam);
+                            String value = tag.getParamValue(iparam);
+                            if ("src".equals(paramName))
                             {
-                                URI uriSRC=new URI(value);
-                                if(!uriSRC.isAbsolute())
+                                URI uriSRC = new URI(value);
+                                if (!uriSRC.isAbsolute())
                                 {
-                                    uriSRC=gadget.resolve(uriSRC);
+                                    uriSRC = gadget.resolve(uriSRC);
                                 }
-                                String url=uriSRC.toString();
-                                int pos=url.indexOf("?"); // elimina parametros por seguridad
-                                if(pos!=-1)
+                                String url = uriSRC.toString();
+                                int pos = url.indexOf("?"); // elimina parametros por seguridad
+                                if (pos != -1)
                                 {
-                                    url=url.substring(0,pos);
+                                    url = url.substring(0, pos);
                                 }
-                                value=proxy+"?url="+URLEncoder.encode(url);
+                                value = proxy + "?url=" + URLEncoder.encode(url);
                                 //value=uriSRC.toString();
                             }
                             ret.append(paramName);
                             ret.append("=\"");
                             ret.append(value);
                             ret.append("\" ");
-                        }                        
+                        }
                         ret.append(">");
                     }
-                    else if(tag.getTagString().toLowerCase().equals("style"))
+                    else if (tag.getTagString().toLowerCase().equals("style"))
                     {
                         if (tag.isEndTag())
                         {
@@ -184,11 +184,11 @@ public class IFrame
                                     {
                                         uriValue = gadget.resolve(uriValue);
                                     }
-                                    String url=uriValue.toString();
-                                    int pos2=url.indexOf("?"); // elimina parametros por seguridad
-                                    if(pos2!=-1)
+                                    String url = uriValue.toString();
+                                    int pos2 = url.indexOf("?"); // elimina parametros por seguridad
+                                    if (pos2 != -1)
                                     {
-                                        url=url.substring(0,pos2);
+                                        url = url.substring(0, pos2);
                                     }
                                     sb.append("url('");
                                     sb.append(proxy.toString());
@@ -277,6 +277,97 @@ public class IFrame
         return sb.toString();
     }
 
+    private String getHTMLfromView(Gadget gadget,Element content, String sview, Map<String, String> variables)
+    {
+        String html = "";
+        String type = "html";
+        if (content.getAttribute("type") != null)
+        {
+            type = content.getAttribute("type");
+        }
+        if ("html".equalsIgnoreCase(type))
+        {
+
+            String view = content.getAttribute("view");
+            if (view == null || view.trim().equals(""))
+            {
+                view = "default";
+            }
+            if (isInView(sview, view))
+            {
+                String href = content.getAttribute("href");
+                if (href == null || href.trim().equals(""))
+                {
+
+                    NodeList childs = content.getChildNodes();
+                    for (int j = 0; j < childs.getLength(); j++)
+                    {
+                        if (childs.item(j) instanceof CDATASection)
+                        {
+                            CDATASection section = (CDATASection) childs.item(j);
+                            String htmltemp = section.getNodeValue();
+                            for (String key : variables.keySet())
+                            {
+                                String value = variables.get(key);
+                                htmltemp = htmltemp.replace(key, value);
+                            }
+                            html += htmltemp;
+                        }
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                    URI urihref = new URI(href);
+                    URI urigadget = new URI(gadget.getUrl());
+                    if (!urihref.isAbsolute())
+                    {
+                        urigadget.resolve(urihref);
+                    }
+                    html = getHTML(urigadget.toURL());
+                    }
+                    catch(Exception e)
+                    {
+                        log.debug(e);
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        else if ("url".equalsIgnoreCase(type))
+        {
+            String href = content.getAttribute("href");
+
+            if (href != null && !href.trim().equals(""))
+            {
+                try
+                {
+                URI urihref = new URI(href);
+                URI urigadget = new URI(gadget.getUrl());
+                if (!urihref.isAbsolute())
+                {
+                    urigadget.resolve(urihref);
+                }
+                // sends the html result from the href
+                String _url = urihref.toString() + "?";
+                for (String key : variables.keySet())
+                {
+                    String value = variables.get(key);
+                    _url += "&" + URLEncoder.encode(key) + "=" + URLEncoder.encode(value);
+                }
+                html = "<iframe frameborder=\"0\" src=\"" + _url + "\"></iframe>";
+                }
+                catch(Exception e)
+                {
+                    log.debug(e);
+                    e.printStackTrace();
+                }
+            }
+        }
+        return html;
+    }
+
     private boolean isInView(String view, String attribute)
     {
         if (view.equalsIgnoreCase(attribute))
@@ -296,43 +387,43 @@ public class IFrame
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        WebSite site=paramRequest.getWebPage().getWebSite();
-        System.out.println("request.getRequestURI(): "+request.getRequestURI());
-        System.out.println("request.getQueryString(): "+request.getQueryString());
+        WebSite site = paramRequest.getWebPage().getWebSite();
+        System.out.println("request.getRequestURI(): " + request.getRequestURI());
+        System.out.println("request.getQueryString(): " + request.getQueryString());
         String url = request.getParameter("url");
         String country = request.getParameter("country");
         String lang = request.getParameter("lang");
         String moduleid = request.getParameter("moduleid");
-        String sview = request.getParameter("view");        
+        String sview = request.getParameter("view");
         if (sview == null)
         {
             sview = "default";
         }
         String html = "";
         if (moduleid == null)
-        {            
+        {
             moduleid = "0";
         }
 
         try
-        {            
+        {
             Gadget gadget = SocialContainer.getGadget(url, paramRequest.getWebPage().getWebSite());
             if (gadget != null)
             {
-                boolean exists=false;
-                for(View oview : gadget.getViews())
+                boolean exists = false;
+                for (View oview : gadget.getViews())
                 {
-                    if(oview.getName().equalsIgnoreCase(sview))
+                    if (oview.getName().equalsIgnoreCase(sview))
                     {
-                        exists=true;
+                        exists = true;
                         break;
                     }
                 }
-                if(!exists)
+                if (!exists)
                 {
-                    sview="default";
+                    sview = "default";
                 }
-                Map<String, String> variables = SocialContainer.getVariablesubstituion(paramRequest.getUser(), gadget, lang, country, moduleid,site);
+                Map<String, String> variables = SocialContainer.getVariablesubstituion(paramRequest.getUser(), gadget, lang, country, moduleid, site);
 
                 NodeList contents = gadget.getOriginalDocument().getElementsByTagName("Content");
                 for (int i = 0; i < contents.getLength(); i++)
@@ -341,72 +432,10 @@ public class IFrame
                     if (node instanceof Element)
                     {
                         Element content = (Element) node;
-                        String type = "html";
-                        if (content.getAttribute("type") != null)
+                        html=getHTMLfromView(gadget,content, sview, variables);
+                        if("".equals(html))
                         {
-                            type = content.getAttribute("type");
-                        }
-                        if ("html".equalsIgnoreCase(type))
-                        {
-
-                            String view = content.getAttribute("view");
-                            if (view == null || view.trim().equals(""))
-                            {
-                                view = "default";
-                            }
-                            if (isInView(sview, view))
-                            {
-                                String href = content.getAttribute("href");
-                                if (href == null || href.trim().equals(""))
-                                {
-                                    NodeList childs = content.getChildNodes();
-                                    for (int j = 0; j < childs.getLength(); j++)
-                                    {
-                                        if (childs.item(j) instanceof CDATASection)
-                                        {
-                                            CDATASection section = (CDATASection) childs.item(j);
-                                            html = section.getNodeValue();
-                                            for (String key : variables.keySet())
-                                            {
-                                                String value = variables.get(key);
-                                                html = html.replace(key, value);
-                                            }
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    URI urihref = new URI(href);
-                                    URI urigadget = new URI(gadget.getUrl());
-                                    if (!urihref.isAbsolute())
-                                    {
-                                        urigadget.resolve(urihref);
-                                    }
-                                    html = getHTML(urigadget.toURL());
-                                }
-                            }
-                        }
-                        else if ("url".equalsIgnoreCase(type))
-                        {
-                            String href = content.getAttribute("href");
-
-                            if (href != null && !href.trim().equals(""))
-                            {
-                                URI urihref = new URI(href);
-                                URI urigadget = new URI(gadget.getUrl());
-                                if (!urihref.isAbsolute())
-                                {
-                                    urigadget.resolve(urihref);
-                                }
-                                // sends the html result from the href
-                                String _url = urihref.toString() + "?";
-                                for (String key : variables.keySet())
-                                {
-                                    String value = variables.get(key);
-                                    _url += "&" + URLEncoder.encode(key) + "=" + URLEncoder.encode(value);
-                                }
-                                html = "<iframe frameborder=\"0\" src=\"" + _url + "\"></iframe>";
-                            }
+                            html=getHTMLfromView(gadget,content, "default", variables);
                         }
 
                     }
