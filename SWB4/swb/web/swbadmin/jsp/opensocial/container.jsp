@@ -31,12 +31,13 @@
         {
             defaultview="canvas";
         }
+        String swbadmin=SWBPortal.getDistributorPath();
 %>
 <html>
 <head>
-<script type="text/javascript" src="/swb/swbadmin/js/dojo/dojo/dojo.js" ></script>
+<script type="text/javascript" src="<%=swbadmin%>/js/dojo/dojo/dojo.js" ></script>
 
-<link rel="stylesheet" href="/swb/swbadmin/jsp/opensocial/gadgets.css">
+<link rel="stylesheet" href="<%=swbadmin%>/jsp/opensocial/gadgets.css">
 <script type="text/javascript" >
         var djConfig = {
             parseOnLoad: true,
