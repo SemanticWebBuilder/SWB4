@@ -141,6 +141,7 @@
   <owl:ObjectProperty rdf:ID="gadget">
     <rdfs:range>
       <swb:Class rdf:ID="Gadget">
+        <rdfs:label>Gadget</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
@@ -309,15 +310,19 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#Name"/>
   </owl:DatatypeProperty>
-  <swbxf:HerarquicalNode rdf:ID="hn_Gadgets">
-    <swbxf:heClass rdf:resource="#Gadget"/>
-    <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >OpenSocial Gadgets</swb:title>
-    <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >swbIconResources</swb:iconClass>
-    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >78</swb:index>
-  </swbxf:HerarquicalNode>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org/swb4/ontology#WebSite">
+    <swb:hasHerarquicalNode>
+      <swbxf:HerarquicalNode rdf:ID="hn_Gadgets">
+        <swbxf:heClass rdf:resource="#Gadget"/>
+        <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >OpenSocial Gadgets</swb:title>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconResources</swb:iconClass>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >78</swb:index>
+      </swbxf:HerarquicalNode>
+    </swb:hasHerarquicalNode>
+  </rdf:Description>
   <data:Name rdf:ID="name">
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#Person"/>
   </data:Name>
