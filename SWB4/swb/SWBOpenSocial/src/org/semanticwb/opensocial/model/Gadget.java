@@ -469,6 +469,10 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                     {
                         default_value = "false";
                     }
+                    else if ("number".equalsIgnoreCase(type) && (default_value == null || "".equals(default_value)))
+                    {
+                        default_value = "0";
+                    }
                     else if ("enum".equalsIgnoreCase(type) && (default_value == null || "".equals(default_value)))
                     {
                         NodeList enumValues = userpref.getElementsByTagName("EnumValue");
