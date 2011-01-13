@@ -28,6 +28,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.css.parser.Attribute;
 import org.semanticwb.css.parser.CSSParser;
 import org.semanticwb.css.parser.Selector;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.opensocial.model.Gadget;
 import org.semanticwb.opensocial.model.View;
@@ -404,6 +405,7 @@ public class IFrame
     public void doProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         WebSite site = paramRequest.getWebPage().getWebSite();
+        User user=paramRequest.getUser();
         System.out.println("request.getRequestURI(): " + request.getRequestURI());
         System.out.println("request.getQueryString(): " + request.getQueryString());
         String url = request.getParameter("url");
@@ -439,7 +441,8 @@ public class IFrame
                 {
                     sview = "default";
                 }
-                Map<String, String> variables = SocialContainer.getVariablesubstituion(paramRequest.getUser(), gadget, lang, country, moduleid, site);
+                SocialUser socialuser=SocialContainer.getSocialUser(user, request.getSession());
+                Map<String, String> variables = socialuser.getVariablesubstituion(gadget, lang, country, moduleid, site);
 
                 NodeList contents = gadget.getOriginalDocument().getElementsByTagName("Content");
                 for (int i = 0; i < contents.getLength(); i++)
