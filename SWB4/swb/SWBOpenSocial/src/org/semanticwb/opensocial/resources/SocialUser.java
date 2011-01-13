@@ -5,8 +5,10 @@
 package org.semanticwb.opensocial.resources;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -198,6 +200,51 @@ public class SocialUser
     public int getNumberOfGadgets()
     {
         return userprefsManager.size();
+    }
+    public Map<String, String> getVariablesubstituion(Gadget gadget, String language, String country, String moduleID,WebSite site)
+    {
+        return getVariablesubstituion(gadget, language, country, moduleID, site, true);
+    }
+    public Map<String, String> getVariablesubstituion(Gadget gadget, String language, String country, String moduleID,WebSite site,boolean formated)
+    {
+
+        Map<String, String> getVariablesubstituion = new HashMap<String, String>();
+        getVariablesubstituion.putAll(gadget.getMessagesFromGadget(language, country));
+
+        getVariablesubstituion.put("__MODULE_ID__", moduleID);
+        getVariablesubstituion.put("__MSG_LANG__", language);
+        getVariablesubstituion.put("__MSG_COUNTRY__", country);
+        if(user!=null)
+        {
+            User _user=site.getUserRepository().getUser(user);
+            Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(_user,site);
+            while (preferences.hasNext())
+            {
+                PersonalizedGadged personalizedGadged = preferences.next();
+                if (personalizedGadged.getGadget().getURI().equals(gadget.getURI()) && personalizedGadged.getId().equals(moduleID))
+                {
+                    GenericIterator<UserPref> list = personalizedGadged.listUserPrefses();
+                    while (list.hasNext())
+                    {
+                        UserPref pref = list.next();
+                        getVariablesubstituion.put("__UP_" + pref.getKey() + "__", pref.getValue());
+                    }
+                }
+            }
+        }
+        else
+        {
+            UserPrefs prefs = userprefsManager.get(gadget, moduleID);
+            if(prefs!=null)
+            {
+                for(String key : prefs.keySet())
+                {
+                    String value=prefs.get(key);
+                    getVariablesubstituion.put("__UP_" + key + "__", value);
+                }
+            }
+        }
+        return getVariablesubstituion;
     }
     public void saveUserPref(Gadget gadget, String moduleId, String key, String value, WebSite site)
     {

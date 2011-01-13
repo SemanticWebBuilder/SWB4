@@ -130,35 +130,7 @@ public class SocialContainer extends GenericResource
         }
         return true;
     }
-    public static Map<String, String> getVariablesubstituion(User user, Gadget gadget, String language, String country, String moduleID,WebSite site)
-    {
-        return getVariablesubstituion(user, gadget, language, country, moduleID, site, true);
-    }
-    public static Map<String, String> getVariablesubstituion(User user, Gadget gadget, String language, String country, String moduleID,WebSite site,boolean formated)
-    {
-
-        Map<String, String> getVariablesubstituion = new HashMap<String, String>();
-        getVariablesubstituion.putAll(gadget.getMessagesFromGadget(language, country));
-
-        getVariablesubstituion.put("__MODULE_ID__", moduleID);
-        getVariablesubstituion.put("__MSG_LANG__", language);
-        getVariablesubstituion.put("__MSG_COUNTRY__", country);        
-        Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(user,site);
-        while (preferences.hasNext())
-        {
-            PersonalizedGadged personalizedGadged = preferences.next();            
-            if (personalizedGadged.getGadget().getURI().equals(gadget.getURI()) && personalizedGadged.getId().equals(moduleID))
-            {
-                GenericIterator<UserPref> list = personalizedGadged.listUserPrefses();
-                while (list.hasNext())
-                {
-                    UserPref pref = list.next();
-                    getVariablesubstituion.put("__UP_" + pref.getKey() + "__", pref.getValue());
-                }
-            }
-        }
-        return getVariablesubstituion;
-    }
+    
 
     public static SocialUser getSocialUser(User user, HttpSession session)
     {
