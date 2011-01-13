@@ -208,8 +208,7 @@ public class Metadata
                             String moduleId = gadget.getString("moduleId");
                             if (ogadget != null)
                             {
-                                JSONObject metadata = getMetadata(request, moduleId, socialuser, ogadget, paramRequest.getRenderUrl(), site);
-                                System.out.println("metadata: " + metadata.toString(4));
+                                JSONObject metadata = getMetadata(request, moduleId, socialuser, ogadget, paramRequest.getRenderUrl(), site);                                
                                 array.put(metadata);
                             }
                             else
