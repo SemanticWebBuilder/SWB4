@@ -605,18 +605,15 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         String _title = getGadgetTitle();
         if (_title != null)
         {
-            User _user = site.getUserRepository().getUser(user.getUserId());
-            if (_user != null)
+            Map<String, String> variables = user.getVariablesubstituion(this, "ALL", "ALL", moduleid, site);
+            if (!variables.isEmpty())
             {
-                Map<String, String> variables = user.getVariablesubstituion(this, "ALL", "ALL", moduleid, site);
-                if (!variables.isEmpty())
+                for (String key : variables.keySet())
                 {
-                    for (String key : variables.keySet())
-                    {
-                        _title = _title.replace(key, variables.get(key));
-                    }
+                    _title = _title.replace(key, variables.get(key));
                 }
             }
+
         }
         return _title;
     }
@@ -624,20 +621,17 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
     public String getDescription(SocialUser user, WebSite site, String moduleid)
     {
         String _description = getGadgetDescription();
-        if (_description != null && user.getUserId() != null)
+        if (_description != null)
         {
-            User _user = site.getUserRepository().getUser(user.getUserId());
-            if (_user != null)
+            Map<String, String> variables = user.getVariablesubstituion(this, "ALL", "ALL", moduleid, site);
+            if (!variables.isEmpty())
             {
-                Map<String, String> variables = user.getVariablesubstituion(this, "ALL", "ALL", moduleid, site);
-                if (!variables.isEmpty())
+                for (String key : variables.keySet())
                 {
-                    for (String key : variables.keySet())
-                    {
-                        _description = _description.replace(key, variables.get(key));
-                    }
+                    _description = _description.replace(key, variables.get(key));
                 }
             }
+
         }
         return _description;
     }
