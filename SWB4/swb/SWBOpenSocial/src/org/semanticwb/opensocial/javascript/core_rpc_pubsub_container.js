@@ -6272,8 +6272,7 @@ shindig.BaseIfrGadget.prototype.queryIfrGadgetType_ = function() {
 
   var gadget = this;
   function handleJSONResponse(obj) {
-    var requiresPubSub2 = false;
-    
+    var requiresPubSub2 = false;    
     var arr = obj.data.gadgets[0].features;
     for(var i = 0; i < arr.length; i++) {
       if (arr[i] === "pubsub-2") {
