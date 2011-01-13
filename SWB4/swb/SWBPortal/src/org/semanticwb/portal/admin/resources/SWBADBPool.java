@@ -160,6 +160,7 @@ public class SWBADBPool extends GenericResource {
             String dbversion = "-";
             String drivername = "-";
             String driverversion = "-";
+            String encpasswd = selectedPool.getPassword();
             try {
                 Connection con = SWBUtils.DB.getConnection(selectedPool.getName(), "WBADBPool");
                 java.sql.DatabaseMetaData md = con.getMetaData();
@@ -183,6 +184,8 @@ public class SWBADBPool extends GenericResource {
             out.println("        <td>" + paramsRequest.getLocaleString("free") + ":</td><td>" + free + "</td></tr>");
             out.println("    <tr><td>" + paramsRequest.getLocaleString("user") + ":</td><td>" + selectedPool.getUser() + "</td>");
             out.println("        <td>" + paramsRequest.getLocaleString("max") + ":</td><td>" + selectedPool.getMaxConn() + "</td></tr>");
+            out.println("    <tr><td>" + paramsRequest.getLocaleString("password") + ":</td><td>" + selectedPool.getPassword() + "</td>");
+            out.println("        <td>Hits:</td><td>" + selectedPool.getHits() + "</td></tr>");
             out.println("  </table>");
             out.println("</fieldset>");
             out.println("<fieldset>");
