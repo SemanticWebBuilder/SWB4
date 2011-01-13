@@ -207,11 +207,8 @@ public class SocialContainer extends GenericResource
                 SocialUser socialUser = getSocialUser(user, request.getSession());                
                 Document doc = gadget.getDocument();
                 NodeList userPrefs = doc.getElementsByTagName("UserPref");
-                String moduleid = UUID.randomUUID().toString().replace('-', '_');
-                if(user==null || user.getId()==null)
-                {
-                    moduleid=String.valueOf(socialUser.getNumberOfGadgets()+1);
-                }
+                String moduleid = null;
+                
                 if (user != null && user.getId() != null)
                 {
                     PersonalizedGadged pgadget = PersonalizedGadged.ClassMgr.createPersonalizedGadged(site);
@@ -221,6 +218,7 @@ public class SocialContainer extends GenericResource
                 }
                 else
                 {
+                    moduleid=String.valueOf(socialUser.getNumberOfGadgets()+1);
                     if (userPrefs.getLength() == 0)
                     {
                         socialUser.saveUserPref(gadget, moduleid, null, null, site);
