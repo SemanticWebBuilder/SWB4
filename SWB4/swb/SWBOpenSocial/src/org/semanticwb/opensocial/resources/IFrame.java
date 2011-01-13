@@ -97,10 +97,8 @@ public class IFrame
                                 }
                                 catch (URISyntaxException use)
                                 {
-                                    log.debug(use);
-                                    System.out.println("value: " + value);
+                                    log.debug(use);                                    
                                 }
-                                //value=uriSRC.toString();
                             }
                             ret.append(paramName);
                             ret.append("=\"");
