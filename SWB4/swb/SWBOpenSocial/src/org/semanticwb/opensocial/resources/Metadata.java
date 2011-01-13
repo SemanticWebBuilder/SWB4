@@ -64,15 +64,15 @@ public class Metadata
             if (gadget != null)
             {
                 if (user != null)
-                {                    
+                {
                     metadata.put("userPrefs", user.getJSONUserPrefs(gadget, moduleId, site));
                 }
                 //String data = "{\"gadgets\":[{\"userPrefs\":{},\"moduleId\":1,\"screenshot\":\"\",\"singleton\":false,\"width\":0,\"authorLink\":\"\",\"links\":{},\"iframeUrl\":\"//http://localhost:8080/swb/gadgets/ifr?url=http%3A%2F%2Flocalhost%3A8080%2Fswb%2Fsamplecontainer%2Fexamples%2FSocialHelloWorld.xml&container=default&view=%25view%25&lang=%25lang%25&country=%25country%25&debug=%25debug%25&nocache=%25nocache%25&v=b4ea67fd7aa33422aa257ee3f534daf0&st=%25st%25\",\"url\":\"http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml\",\"scaling\":false,\"title\":\"Social Hello World\",\"height\":0,\"titleUrl\":\"\",\"thumbnail\":\"http://localhost:8080/\",\"scrolling\":false,\"views\":{\"default\":{\"preferredHeight\":0,\"quirks\":true,\"type\":\"html\",\"preferredWidth\":0}},\"featureDetails\":{\"dynamic-height\":{\"parameters\":{},\"required\":true},\"osapi\":{\"parameters\":{},\"required\":true},\"core\":{\"parameters\":{},\"required\":true},\"settitle\":{\"parameters\":{},\"required\":true}},\"features\":[\"dynamic-height\",\"osapi\",\"core\",\"settitle\"],\"showStats\":false,\"categories\":[\"\",\"\"],\"showInDirectory\":false,\"authorPhoto\":\"\"}]}";
                 metadata.put("title", gadget.getTitle(user, site, moduleId));
                 metadata.put("moduleId", moduleId);
-                metadata.put("titleUrl", gadget.getTitleUrl()==null?"":gadget.getTitleUrl().toString());
-                metadata.put("description", gadget.getDescription()==null?"":gadget.getDescription());
-                metadata.put("author", gadget.getAuthor()==null?"":gadget.getAuthor());
+                metadata.put("titleUrl", gadget.getTitleUrl() == null ? "" : gadget.getTitleUrl().toString());
+                metadata.put("description", gadget.getDescription() == null ? "" : gadget.getDescription());
+                metadata.put("author", gadget.getAuthor() == null ? "" : gadget.getAuthor());
                 metadata.put("screenshot", gadget.getScreenshot() != null ? gadget.getScreenshot().toString() : "");
                 metadata.put("author_email", gadget.getAuthorEmail() != null ? gadget.getAuthorEmail() : "");
                 metadata.put("thumbnail", gadget.getThumbnail() != null ? gadget.getThumbnail().toString() : "");
@@ -98,11 +98,11 @@ public class Metadata
                 }
                 metadata.put("categories", categories);
 
-                View[] views = gadget.getViews();                
-                JSONObject jviews=new JSONObject();
+                View[] views = gadget.getViews();
+                JSONObject jviews = new JSONObject();
                 metadata.put("views", jviews);
                 for (View oview : views)
-                {                    
+                {
                     jviews.put(oview.getName(), oview.toJSONObject());
                 }
                 for (FeatureDetail detail : gadget.getFeatureDetails())
@@ -164,8 +164,8 @@ public class Metadata
                 in.close();
                 try
                 {
-                    
-                    JSONObject json = new JSONObject(sb.toString());                    
+
+                    JSONObject json = new JSONObject(sb.toString());
                     JSONObject context = json.getJSONObject("context");
                     String country = context.getString("country");
                     String language = context.getString("language");
@@ -185,43 +185,42 @@ public class Metadata
                         if (values.length > 2)
                         {
                             String viewerId = values[1];
-                            if(!(user!=null && user.getId()!=null && user.getId().equals(viewerId)))
+                            if (!(user != null && user.getId() != null && user.getId().equals(viewerId)))
                             {
-                                user=null;
+                                user = null;
                             }
                         }
                     }
-                    if (user != null)
+
+                    socialuser = SocialContainer.getSocialUser(user, request.getSession());
+                    if (socialuser != null)
                     {
-                        socialuser = SocialContainer.getSocialUser(user, request.getSession());                        
-                        if (socialuser != null)
+                        for (int i = 0; i < gadgets.length(); i++)
                         {
-                            for (int i = 0; i < gadgets.length(); i++)
+                            JSONObject gadget = gadgets.getJSONObject(i);
+                            String url = gadget.getString("url");
+                            URI urigadget = new URI(url);
+                            if (!urigadget.isAbsolute())
                             {
-                                JSONObject gadget = gadgets.getJSONObject(i);
-                                String url = gadget.getString("url");
-                                URI urigadget = new URI(url);
-                                if (!urigadget.isAbsolute())
-                                {
-                                    urigadget = here.resolve(urigadget);
-                                }
-                                Gadget ogadget = SocialContainer.getGadget(urigadget.toString(), paramRequest.getWebPage().getWebSite());
-                                String moduleId = gadget.getString("moduleId");
-                                if (ogadget != null)
-                                {
-                                    JSONObject metadata = getMetadata(request, moduleId, socialuser, ogadget, paramRequest.getRenderUrl(), site);
-                                    array.put(metadata);
-                                }
-                                else
-                                {
-                                    throw new Exception("The gadget was not found with url" + url);
-                                }
+                                urigadget = here.resolve(urigadget);
+                            }
+                            Gadget ogadget = SocialContainer.getGadget(urigadget.toString(), paramRequest.getWebPage().getWebSite());
+                            String moduleId = gadget.getString("moduleId");
+                            if (ogadget != null)
+                            {
+                                JSONObject metadata = getMetadata(request, moduleId, socialuser, ogadget, paramRequest.getRenderUrl(), site);
+                                System.out.println("metadata: " + metadata.toString(4));
+                                array.put(metadata);
+                            }
+                            else
+                            {
+                                throw new Exception("The gadget was not found with url" + url);
                             }
                         }
                     }
                     Charset utf8 = Charset.forName("utf-8");
                     response.setContentType("JSON;charset=" + utf8.name() + "");
-                    OutputStream out = response.getOutputStream();                    
+                    OutputStream out = response.getOutputStream();
                     out.write(objresponse.toString().getBytes(utf8));
                     out.close();
 
