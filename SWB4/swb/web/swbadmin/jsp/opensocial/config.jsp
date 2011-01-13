@@ -5,7 +5,7 @@
     StringBuilder validation=new StringBuilder();
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");    
     Gadget gadget=(Gadget) request.getAttribute("gadget");
-    String title=gadget.getTitle();
+    String title=gadget.getGadgetTitle();
     if(title==null)
     {
         title=gadget.getDirectoryTitle();
@@ -102,9 +102,9 @@ Document doc=gadget.getDocument();
         }
 
 
-        if(gadget.getTitle()!=null && gadget.getTitle().indexOf("__UP_")!=-1)
+        if(gadget.getGadgetTitle()!=null && gadget.getGadgetTitle().indexOf("__UP_")!=-1)
         {            
-            String name=gadget.getTitle();
+            String name=gadget.getGadgetTitle();
             int pos=name.indexOf("__UP_");
             if(pos!=-1)
             {
@@ -147,7 +147,7 @@ Document doc=gadget.getDocument();
                     Título:
                     </div>
                     <div class="content">
-                        <input type="text" size="40" value="<%=gadget.getTitle()%>" name="<%=name%>">
+                        <input type="text" size="40" value="<%=gadget.getGadgetTitle()%>" name="<%=name%>">
                     </div><hr/></div>
                 <%
             }
