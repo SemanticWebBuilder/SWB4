@@ -195,7 +195,10 @@ public class SocialUser
         }
         return true;
     }
-
+    public int getNumberOfGadgets()
+    {
+        return userprefsManager.size();
+    }
     public void saveUserPref(Gadget gadget, String moduleId, String key, String value, WebSite site)
     {
         if (user == null)
