@@ -86,7 +86,7 @@ public class Metadata
                 metadata.put("url", uri.toURL());
 
                 JSONArray features = new JSONArray();
-                for (String feature : gadget.getFeatures())
+                for (String feature : gadget.getAllFeatures())
                 {
                     features.put(feature);
                 }

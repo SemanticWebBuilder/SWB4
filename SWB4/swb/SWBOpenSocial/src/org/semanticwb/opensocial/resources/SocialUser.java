@@ -110,7 +110,7 @@ public class SocialUser
 
     public void checkOsapiFeature(Gadget gadget, WebSite site, boolean forceupdate)
     {
-        for (String feature : gadget.getFeatures())
+        for (String feature : gadget.getAllFeatures())
         {
             if ("osapi".equals(feature)) // osapi is not valid for non register users
             {
@@ -182,7 +182,7 @@ public class SocialUser
 
     public boolean canAdd(Gadget gadget, WebSite site)
     {
-        for (String feature : gadget.getFeatures())
+        for (String feature : gadget.getAllFeatures())
         {
             if ("osapi".equals(feature)) // osapi is not valid for non register users
             {
