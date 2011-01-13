@@ -18,7 +18,7 @@
         }
     }
     String url=gadget.getUrl();
-    String description=gadget.getDescription();    
+    String description=gadget.getGadgetDescription();
     SWBResourceURL processAction=paramRequest.getActionUrl();
 
 
