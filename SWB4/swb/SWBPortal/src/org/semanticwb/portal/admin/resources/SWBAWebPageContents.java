@@ -313,7 +313,8 @@ public class SWBAWebPageContents extends GenericResource {
             }
             out.println("</tr>");
             out.println("</thead>");
-            out.println("<tbody>");
+            out.println("<tbody >");
+            out.println("<div dojoType=\"dojo.dnd.Source\" class=\"container\" copyOnly=\"true\">");
 
 
             PFlowManager pfmgr = SWBPortal.getPFlowManager();
@@ -540,7 +541,7 @@ public class SWBAWebPageContents extends GenericResource {
                 urlchoose.setParameter("sprop", idp);
                 urlchoose.setParameter("sobj", sobj.getURI());
                 urlchoose.setParameter("act", "edit");
-                out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(sobj.getDisplayName()),25) + "');return false;\">" + stitle + "</a>");
+                out.println("<div class=\"dojoDndItem\"><a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(sobj.getDisplayName()),25) + "');return false;\">" + stitle + "</a></div>");
                 out.println("</td>");
                 if (hmprop.get(Resource.swb_resourceType) != null) {
                     semprop = (SemanticProperty) hmprop.get(Resource.swb_resourceType);
@@ -601,6 +602,7 @@ public class SWBAWebPageContents extends GenericResource {
                 }
                 out.println("</tr>");
             }
+            out.println("</div>");
             out.println("</tbody>");
             out.println("</table>");
             out.println("</fieldset>");
