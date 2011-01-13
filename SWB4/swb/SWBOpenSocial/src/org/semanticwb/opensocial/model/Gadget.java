@@ -28,10 +28,38 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
     private static final Logger log = SWBUtils.getLogger(Gadget.class);
     private Document doc;
+    private String title;
+    private final HashSet<String> categories = new HashSet<String>();
+    private final ArrayList<FeatureDetail> getFeatureDetails = new ArrayList<FeatureDetail>();
+    private URL thumbnail;
+    private final Map<String, String> getDefaultUserPref = new HashMap<String, String>();
+    private URL screenshot;
+    private String directoryTitle;
+    private String author;
+    private String authorEmail;
+    private int width;
+    private int height;
+    private String description;
+    private final HashSet<String> userPrefsNames = new HashSet<String>();
+    private final HashSet<String> features = new HashSet<String>();
+    private final HashSet<View> views = new HashSet<View>();
+    private URL titleUrl;
+    private boolean scrolling;
 
     public Gadget(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+        if (this.getUrl() != null)
+        {
+            reload();
+        }
+    }
+
+    @Override
+    public void setUrl(String value)
+    {
+        super.setUrl(value);
+        reload();
     }
 
     public static String[] getAllCategories(WebSite site)
@@ -72,52 +100,6 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
     public FeatureDetail[] getFeatureDetails()
     {
-        getDocument();
-        ArrayList<FeatureDetail> getFeatureDetails = new ArrayList<FeatureDetail>();
-        if (doc != null && doc.getElementsByTagName("ModulePrefs").getLength() > 0)
-        {
-            Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
-            NodeList childs = module.getChildNodes();
-            for (int i = 0; i < childs.getLength(); i++)
-            {
-                if (childs.item(i) instanceof Element && ((Element) childs.item(i)).getTagName().equals("Require"))
-                {
-                    Element require = (Element) childs.item(i);
-                    if (require.getAttribute("feature") != null && !"".equals(require.getAttribute("feature")))
-                    {
-                        String feature = require.getAttribute("feature");
-                        if (feature != null)
-                        {
-                            StringTokenizer st = new StringTokenizer(feature, ",");
-                            while (st.hasMoreTokens())
-                            {
-                                String featureName = st.nextToken().trim();
-                                FeatureDetail detail = new FeatureDetail();
-                                detail.name = featureName;
-                                NodeList params = require.getChildNodes();
-                                ArrayList<Parameter> parameters = new ArrayList<Parameter>();
-                                for (int j = 0; j < params.getLength(); j++)
-                                {
-                                    if (params.item(j) instanceof Element && ((Element) params.item(j)).getTagName().equals("Param"))
-                                    {
-                                        Element param = (Element) params.item(j);
-                                        String name = param.getAttribute("name");
-                                        if (name != null)
-                                        {
-                                            Parameter p = new Parameter();
-                                            p.name = name;
-                                            parameters.add(p);
-                                        }
-                                    }
-                                }
-                                detail.parameters = parameters.toArray(new Parameter[parameters.size()]);
-                                getFeatureDetails.add(detail);
-                            }
-                        }
-                    }
-                }
-            }
-        }
         return getFeatureDetails.toArray(new FeatureDetail[getFeatureDetails.size()]);
     }
 
@@ -155,55 +137,6 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
     public Map<String, String> getDefaultUserPref(String language, String country, boolean formated)
     {
-        Map<String, String> getDefaultUserPref = new HashMap<String, String>();
-        getDocument();
-        try
-        {
-            if (doc.getElementsByTagName("UserPref").getLength() > 0)
-            {
-                NodeList userprefs = doc.getElementsByTagName("UserPref");
-                for (int i = 0; i < userprefs.getLength(); i++)
-                {
-                    Element userpref = (Element) userprefs.item(i);
-                    String name = userpref.getAttribute("name");
-                    String default_value = userpref.getAttribute("default_value");
-                    String type = userpref.getAttribute("type");
-                    if (type == null || "".equals(type))
-                    {
-                        type = "string";
-                    }
-                    if (name != null && !"".equals(name))
-                    {
-                        if (("hidden".equalsIgnoreCase(type) || "list".equalsIgnoreCase(type) || "string".equalsIgnoreCase(type)) && (default_value == null || "".equals(default_value)))
-                        {
-                            default_value = "";
-                        }
-                        else if ("bool".equalsIgnoreCase(type) && (default_value == null || "".equals(default_value)))
-                        {
-                            default_value = "false";
-                        }
-                        else if ("enum".equalsIgnoreCase(type) && (default_value == null || "".equals(default_value)))
-                        {
-                            NodeList enumValues = userpref.getElementsByTagName("EnumValue");
-                            if(enumValues.getLength()>0)
-                            {
-                                Element enumValue = (Element) enumValues.item(0);
-                                default_value = enumValue.getAttribute("value");
-                            }
-                            else
-                            {
-                                default_value="";
-                            }
-                        }
-                        getDefaultUserPref.put(name, default_value);
-                    }
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            log.debug(e);
-        }
         return getDefaultUserPref;
     }
 
@@ -295,13 +228,31 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         return doc;
     }
 
-    public void reload()
+    private String getKey(Element module, String key)
     {
+        String value = (module.getAttribute(key) != null || "".equals(module.getAttribute(key))) ? module.getAttribute(key) : null;
+        return value;
+    }
+
+    public final void reload()
+    {
+        doc = null;
         try
         {
             doc = SocialContainer.getXML(new URL(this.getUrl()));
-            Map<String, String> variables = this.getMessagesFromGadget("ALL", "ALL");
-            if (!variables.isEmpty() && doc != null)
+        }
+        catch (IOException e)
+        {
+            log.debug(e);
+        }
+        catch (JDOMException e)
+        {
+            log.debug(e);
+        }
+        Map<String, String> variables = this.getMessagesFromGadget("ALL", "ALL");
+        if (!variables.isEmpty() && doc != null)
+        {
+            try
             {
                 String xml = SWBUtils.XML.domToXml(SocialContainer.getXML(new URL(this.getUrl())));
                 for (String key : variables.keySet())
@@ -311,11 +262,284 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                 }
                 doc = SWBUtils.XML.xmlToDom(xml);
             }
+            catch (IOException e)
+            {
+                log.debug(e);
+            }
+            catch (JDOMException e)
+            {
+                log.debug(e);
+            }
         }
-        catch (Exception e)
+        categories.clear();
+        getDefaultUserPref.clear();
+        views.clear();
+        features.clear();
+        userPrefsNames.clear();
+        getDefaultUserPref.clear();
+        getFeatureDetails.clear();
+        directoryTitle = null;
+        titleUrl = null;
+        authorEmail = null;
+        author = null;
+        title = null;
+        width = 0;
+        height = 0;
+        thumbnail = null;
+        screenshot = null;
+        description = null;
+        scrolling = false;
+        if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
         {
-            e.printStackTrace();
+            Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
+            directoryTitle = getKey(module, "directory_title");
+            String _titleUrl = getKey(module, "title_url");
+            authorEmail = getKey(module, "author_email");
+            author = getKey(module, "author");
+            title = getKey(module, "title");
+            String _thumbnail = getKey(module, "thumbnail");
+            String _screenshot = getKey(module, "screenshot");
+            String _width = getKey(module, "width");
+            String _height = getKey(module, "height");
+            description = getKey(module, "description");
+            String _scrolling = getKey(module, "scrolling");
+            String _category = getKey(module, "category");
+
+            NodeList contents = doc.getElementsByTagName("Content");
+            for (int i = 0; i < contents.getLength(); i++)
+            {
+                if (contents.item(i) instanceof Element)
+                {
+                    Element content = (Element) contents.item(i);
+                    String _view = content.getAttribute("view");
+                    if (_view != null)
+                    {
+                        StringTokenizer st = new StringTokenizer(_view, ",");
+                        while (st.hasMoreTokens())
+                        {
+                            String view = st.nextToken().trim();
+                            if (!"".equals(view))
+                            {
+                                views.add(createView(content, view));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        views.add(createView(content, "default"));
+                    }
+                }
+            }
+
+            NodeList childs = module.getChildNodes();
+            for (int i = 0; i < childs.getLength(); i++)
+            {
+                if (childs.item(i) instanceof Element && ((Element) childs.item(i)).getTagName().equals("Require"))
+                {
+                    Element require = (Element) childs.item(i);
+                    if (require.getAttribute("feature") != null && !"".equals(require.getAttribute("feature")))
+                    {
+                        features.add(require.getAttribute("feature").trim());
+                    }
+                }
+            }
+
+
+            if (_titleUrl != null && !_titleUrl.trim().equals(""))
+            {
+                try
+                {
+                    URI url_title_url = new URI(_titleUrl);
+                    URI gadget = new URI(this.getUrl());
+                    if (!url_title_url.isAbsolute())
+                    {
+                        url_title_url = gadget.resolve(url_title_url);
+                    }
+                    titleUrl = url_title_url.toURL();
+                }
+                catch (URISyntaxException use)
+                {
+                    log.debug(use);
+                }
+                catch (MalformedURLException use)
+                {
+                    log.debug(use);
+                }
+            }
+
+            if (_screenshot != null && !_screenshot.trim().equals(""))
+            {
+                try
+                {
+                    URI urlscreenshot = new URI(_screenshot);
+                    URI gadget = new URI(this.getUrl());
+                    if (!urlscreenshot.isAbsolute())
+                    {
+                        urlscreenshot = gadget.resolve(urlscreenshot);
+                    }
+                    screenshot = urlscreenshot.toURL();
+                }
+                catch (URISyntaxException use)
+                {
+                    log.debug(use);
+                }
+                catch (MalformedURLException use)
+                {
+                    log.debug(use);
+                }
+            }
+
+
+            if (_thumbnail != null && !_thumbnail.trim().equals(""))
+            {
+                try
+                {
+                    URI urlthumbnail = new URI(_thumbnail);
+                    URI gadget = new URI(this.getUrl());
+                    if (!urlthumbnail.isAbsolute())
+                    {
+                        urlthumbnail = gadget.resolve(urlthumbnail);
+                    }
+                    thumbnail = urlthumbnail.toURL();
+                }
+                catch (URISyntaxException use)
+                {
+                    log.debug(use);
+                }
+                catch (MalformedURLException use)
+                {
+                    log.debug(use);
+                }
+            }
+
+            if (_width != null)
+            {
+                try
+                {
+                    width = Integer.parseInt(_width);
+                }
+                catch (NumberFormatException nfe)
+                {
+                    log.debug(nfe);
+                }
+            }
+
+
+            if (_height != null)
+            {
+                try
+                {
+                    height = Integer.parseInt(_height);
+                }
+                catch (NumberFormatException nfe)
+                {
+                    log.debug(nfe);
+                }
+            }
+
+
+            if (_category != null && !"".equals(_category.trim()))
+            {
+                StringTokenizer st = new StringTokenizer(_category, ",");
+                while (st.hasMoreTokens())
+                {
+                    String category = st.nextToken().trim();
+                    if (!"".equals(category))
+                    {
+                        categories.add(category);
+                    }
+                }
+            }
+
+
+            if ("true".equals(_scrolling))
+            {
+                scrolling = true;
+            }
+            else
+            {
+                scrolling = false;
+            }
+            NodeList userprefs = doc.getElementsByTagName("UserPref");
+            for (int i = 0; i < userprefs.getLength(); i++)
+            {
+                Element userpref = (Element) userprefs.item(i);
+                String name = userpref.getAttribute("name");
+                String default_value = userpref.getAttribute("default_value");
+                String type = userpref.getAttribute("type");
+                if (type == null || "".equals(type))
+                {
+                    type = "string";
+                }
+                if (name != null && !"".equals(name))
+                {
+                    userPrefsNames.add(name);
+                    if (("hidden".equalsIgnoreCase(type) || "list".equalsIgnoreCase(type) || "string".equalsIgnoreCase(type)) && (default_value == null || "".equals(default_value)))
+                    {
+                        default_value = "";
+                    }
+                    else if ("bool".equalsIgnoreCase(type) && (default_value == null || "".equals(default_value)))
+                    {
+                        default_value = "false";
+                    }
+                    else if ("enum".equalsIgnoreCase(type) && (default_value == null || "".equals(default_value)))
+                    {
+                        NodeList enumValues = userpref.getElementsByTagName("EnumValue");
+                        if (enumValues.getLength() > 0)
+                        {
+                            Element enumValue = (Element) enumValues.item(0);
+                            default_value = enumValue.getAttribute("value");
+                        }
+                        else
+                        {
+                            default_value = "";
+                        }
+                    }
+                    getDefaultUserPref.put(name, default_value);
+                }
+            }
+            childs = module.getChildNodes();
+            for (int i = 0; i < childs.getLength(); i++)
+            {
+                if (childs.item(i) instanceof Element && ((Element) childs.item(i)).getTagName().equals("Require"))
+                {
+                    Element require = (Element) childs.item(i);
+                    if (require.getAttribute("feature") != null && !"".equals(require.getAttribute("feature")))
+                    {
+                        String feature = require.getAttribute("feature");
+                        if (feature != null)
+                        {
+                            StringTokenizer st = new StringTokenizer(feature, ",");
+                            while (st.hasMoreTokens())
+                            {
+                                String featureName = st.nextToken().trim();
+                                FeatureDetail detail = new FeatureDetail();
+                                detail.name = featureName;
+                                NodeList params = require.getChildNodes();
+                                ArrayList<Parameter> parameters = new ArrayList<Parameter>();
+                                for (int j = 0; j < params.getLength(); j++)
+                                {
+                                    if (params.item(j) instanceof Element && ((Element) params.item(j)).getTagName().equals("Param"))
+                                    {
+                                        Element param = (Element) params.item(j);
+                                        String name = param.getAttribute("name");
+                                        if (name != null)
+                                        {
+                                            Parameter p = new Parameter();
+                                            p.name = name;
+                                            parameters.add(p);
+                                        }
+                                    }
+                                }
+                                detail.parameters = parameters.toArray(new Parameter[parameters.size()]);
+                                getFeatureDetails.add(detail);
+                            }
+                        }
+                    }
+                }
+            }
         }
+
     }
 
     public Document getDocument()
@@ -347,29 +571,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
     public URL getThumbnail()
     {
-        getDocument();
-        try
-        {
-            if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
-            {
-                Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
-                String thumbnail = module.getAttribute("thumbnail");
-                if (thumbnail != null && !thumbnail.trim().equals(""))
-                {
-                    URI urlthumbnail = new URI(thumbnail);
-                    URI gadget = new URI(this.getUrl());
-                    if (!urlthumbnail.isAbsolute())
-                    {
-                        urlthumbnail = gadget.resolve(urlthumbnail);
-                    }
-                    return urlthumbnail.toURL();
-                }
-            }
-        }
-        catch (Exception e)
-        {
-        }
-        return null;
+        return thumbnail;
     }
 
     public static boolean existImage(URL url)
@@ -391,56 +593,18 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
     public URL getScreenshot()
     {
-        getDocument();
-        try
-        {
-            if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
-            {
-                Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
-                String screenshot = module.getAttribute("screenshot");
-                if (screenshot != null && !screenshot.trim().equals(""))
-                {
-                    URI urlscreenshot = new URI(screenshot);
-                    URI gadget = new URI(this.getUrl());
-                    if (!urlscreenshot.isAbsolute())
-                    {
-                        urlscreenshot = gadget.resolve(urlscreenshot);
-                    }
-                    return urlscreenshot.toURL();
-                }
-            }
-        }
-        catch (Exception e)
-        {
-        }
-        return null;
+        return screenshot;
     }
 
     public String getDirectoryTitle()
     {
-        getDocument();
-        try
-        {
-            if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
-            {
-                Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
-                String directory_title = module.getAttribute("directory_title");
-                if (directory_title != null && !directory_title.equals(""))
-                {
-                    return directory_title;
-                }
-            }
-        }
-        catch (Exception e)
-        {
-        }
-        return null;
+        return directoryTitle;
     }
 
     public String getTitle(SocialUser user, WebSite site, String moduleid)
     {
-        String title = getTitle();
-        if (title != null && user.getUserId() != null)
+        String _title = getTitle();
+        if (_title != null && user.getUserId() != null)
         {
             User _user = site.getUserRepository().getUser(user.getUserId());
             if (_user != null)
@@ -450,226 +614,78 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                 {
                     for (String key : variables.keySet())
                     {
-                        title = title.replace(key, variables.get(key));
+                        _title = _title.replace(key, variables.get(key));
                     }
                 }
             }
         }
-        return title;
+        return _title;
+    }
+
+    public String getDescription(SocialUser user, WebSite site, String moduleid)
+    {
+        String _description = getDescription();
+        if (_description != null && user.getUserId() != null)
+        {
+            User _user = site.getUserRepository().getUser(user.getUserId());
+            if (_user != null)
+            {
+                Map<String, String> variables = SocialContainer.getVariablesubstituion(_user, this, "ALL", "ALL", moduleid, site);
+                if (!variables.isEmpty())
+                {
+                    for (String key : variables.keySet())
+                    {
+                        _description = _description.replace(key, variables.get(key));
+                    }
+                }
+            }
+        }
+        return _description;
     }
 
     public String getTitle()
     {
-        getDocument();
-        try
-        {
-            if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
-            {
-                Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
-                String title = module.getAttribute("title");
-                if (title != null && !title.equals(""))
-                {
-                    return title;
-                }
-            }
-        }
-        catch (Exception e)
-        {
-        }
-        return null;
+        return title;
     }
 
     public String getAuthor()
     {
-        getDocument();
-        try
-        {
-            if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
-            {
-                Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
-                return module.getAttribute("author");
-            }
-        }
-        catch (Exception e)
-        {
-        }
-        return null;
+        return this.author;
     }
 
     public String getAuthorEmail()
     {
-        getDocument();
-        try
-        {
-            if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
-            {
-                Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
-                return module.getAttribute("author_email");
-            }
-        }
-        catch (Exception e)
-        {
-        }
-        return null;
+        return authorEmail;
     }
 
     public int getWidth()
     {
-        getDocument();
-        try
-        {
-            if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
-            {
-                Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
-                String width = module.getAttribute("width");
-                if (width != null)
-                {
-                    try
-                    {
-                        return Integer.parseInt(width);
-                    }
-                    catch (NumberFormatException nfe)
-                    {
-                        return 0;
-                    }
-                }
-            }
-        }
-        catch (Exception e)
-        {
-        }
-        return 0;
+        return width;
     }
 
     public int getHeight()
     {
-        getDocument();
-        try
-        {
-            if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
-            {
-                Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
-                String width = module.getAttribute("height");
-                if (width != null)
-                {
-                    try
-                    {
-                        return Integer.parseInt(width);
-                    }
-                    catch (NumberFormatException nfe)
-                    {
-                        return 0;
-                    }
-                }
-            }
-        }
-        catch (Exception e)
-        {
-        }
-        return 0;
+        return height;
     }
 
     public String getDescription()
     {
-        getDocument();
-        try
-        {
-            if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
-            {
-                Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
-                String description = module.getAttribute("description");
-                return description;
-            }
-        }
-        catch (Exception e)
-        {
-        }
-        return null;
+        return description;
     }
 
     public String[] getUserPrefsNames()
     {
-        HashSet<String> getUserPrefsNames = new HashSet<String>();
-        getDocument();
-        try
-        {
-            if (doc.getElementsByTagName("UserPref").getLength() > 0)
-            {
-                NodeList userprefs = doc.getElementsByTagName("UserPref");
-                for (int i = 0; i < userprefs.getLength(); i++)
-                {
-                    Element userpref = (Element) userprefs.item(i);
-                    String name = userpref.getAttribute("name");
-                    if (name != null && !"".equals(name))
-                    {
-                        getUserPrefsNames.add(name);
-                    }
-                }
-            }
-        }
-        catch (Exception e)
-        {
-        }
-        return getUserPrefsNames.toArray(new String[getUserPrefsNames.size()]);
+        return userPrefsNames.toArray(new String[userPrefsNames.size()]);
     }
 
     public String[] getFeatures()
     {
-        HashSet<String> getFeatures = new HashSet<String>();
-        getDocument();
-        try
-        {
-            if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
-            {
-                Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
-                NodeList childs = module.getChildNodes();
-                for (int i = 0; i < childs.getLength(); i++)
-                {
-                    if (childs.item(i) instanceof Element && ((Element) childs.item(i)).getTagName().equals("Require"))
-                    {
-                        Element require = (Element) childs.item(i);
-                        if (require.getAttribute("feature") != null && !"".equals(require.getAttribute("feature")))
-                        {
-                            getFeatures.add(require.getAttribute("feature").trim());
-                        }
-                    }
-                }
-            }
-        }
-        catch (Exception e)
-        {
-        }
-        return getFeatures.toArray(new String[getFeatures.size()]);
+        return features.toArray(new String[features.size()]);
     }
 
     public String[] getCategories()
     {
-        HashSet<String> getFeatures = new HashSet<String>();
-        getDocument();
-        try
-        {
-            if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
-            {
-                Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
-                String _category = module.getAttribute("category");
-                if (_category != null && !"".equals(_category.trim()))
-                {
-                    StringTokenizer st = new StringTokenizer(_category, ",");
-                    while (st.hasMoreTokens())
-                    {
-                        String category = st.nextToken().trim();
-                        if (!"".equals(category))
-                        {
-                            getFeatures.add(category);
-                        }
-                    }
-                }
-            }
-        }
-        catch (Exception e)
-        {
-        }
-        return getFeatures.toArray(new String[getFeatures.size()]);
+        return categories.toArray(new String[categories.size()]);
     }
 
     private View createView(Element content, String viewName)
@@ -728,80 +744,17 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
     public View[] getViews()
     {
-        HashSet<View> getViews = new HashSet<View>();
-        getDocument();
-        try
-        {
-            NodeList contents = doc.getElementsByTagName("Content");
-            for (int i = 0; i < contents.getLength(); i++)
-            {
-                if (contents.item(i) instanceof Element)
-                {
-                    Element content = (Element) contents.item(i);
-                    String _view = content.getAttribute("view");
-                    if (_view != null)
-                    {
-                        StringTokenizer st = new StringTokenizer(_view, ",");
-                        while (st.hasMoreTokens())
-                        {
-                            String view = st.nextToken().trim();
-                            if (!"".equals(view))
-                            {
-                                getViews.add(createView(content, view));
-                            }
-                        }
-                    }
-                    else
-                    {
-                        getViews.add(createView(content, "default"));
-                    }
-                }
-            }
-
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return getViews.toArray(new View[getViews.size()]);
+        return views.toArray(new View[views.size()]);
     }
 
-    public String getTitleUrl()
+    public URL getTitleUrl()
     {
-        getDocument();
-        try
-        {
-            if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
-            {
-                Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
-                return module.getAttribute("title_url");
-            }
-        }
-        catch (Exception e)
-        {
-        }
-        return null;
+        return titleUrl;
     }
 
     public boolean getScrolling()
     {
-        getDocument();
-        try
-        {
-            if (doc.getElementsByTagName("ModulePrefs").getLength() > 0)
-            {
-                Element module = (Element) doc.getElementsByTagName("ModulePrefs").item(0);
-                String scrolling = module.getAttribute("scrolling");
-                if ("true".equals(scrolling))
-                {
-                    return true;
-                }
-            }
-        }
-        catch (Exception e)
-        {
-        }
-        return false;
+        return scrolling;
     }
 
     @Override
