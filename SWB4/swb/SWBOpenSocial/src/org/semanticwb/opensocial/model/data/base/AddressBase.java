@@ -1,7 +1,7 @@
 package org.semanticwb.opensocial.model.data.base;
 
 
-public abstract class AddressBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Geolocalizable,org.semanticwb.opensocial.model.Formatteable
+public abstract class AddressBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.opensocial.model.Formatteable,org.semanticwb.model.Geolocalizable
 {
     public static final org.semanticwb.platform.SemanticProperty data_region=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#region");
     public static final org.semanticwb.platform.SemanticProperty data_postalCode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/opensocial/socialdata#postalCode");

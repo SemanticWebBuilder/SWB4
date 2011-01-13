@@ -599,7 +599,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
     public String getTitle(SocialUser user, WebSite site, String moduleid)
     {
-        String _title = getTitle();
+        String _title = getGadgetTitle();
         if (_title != null && user.getUserId() != null)
         {
             User _user = site.getUserRepository().getUser(user.getUserId());
@@ -620,7 +620,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
     public String getDescription(SocialUser user, WebSite site, String moduleid)
     {
-        String _description = getDescription();
+        String _description = getGadgetDescription();
         if (_description != null && user.getUserId() != null)
         {
             User _user = site.getUserRepository().getUser(user.getUserId());
@@ -639,7 +639,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         return _description;
     }
 
-    public String getTitle()
+    public String getGadgetTitle()
     {
         return title;
     }
@@ -664,7 +664,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         return height;
     }
 
-    public String getDescription()
+    public String getGadgetDescription()
     {
         return description;
     }
