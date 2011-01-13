@@ -27,6 +27,7 @@ import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
+import java.security.Principal;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
@@ -42,6 +43,7 @@ import org.semanticwb.base.util.SWBSoftkHashMap;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
+import org.semanticwb.portal.SWBSessionObject;
 import org.semanticwb.security.limiter.FailedAttempt;
 
 
@@ -227,7 +229,7 @@ public class Login implements InternalServlet
             try
             {
                 String matchKey = dparams.getWebPage().getWebSiteId()+"|"+request.getParameter("wb_username");
-                doLogin(callbackHandler, context, subject, request, matchKey);
+                doLogin(callbackHandler, context, subject, request, matchKey, dparams.getWebPage().getWebSite().getUserRepository().getId());
 
             } catch (Exception ex)
             {
@@ -655,10 +657,20 @@ public class Login implements InternalServlet
      * @param matchKey the match key
      * @throws LoginException the login exception
      */
-    public static void doLogin(CallbackHandler callbackHandler, String context, Subject subject, HttpServletRequest request, String matchKey) throws LoginException
+    public static void doLogin(CallbackHandler callbackHandler, String context, Subject subject, HttpServletRequest request, String matchKey, String usserrep) throws LoginException
     {
         if (isblocked(matchKey)){
             throw new LoginException("Login blocked for repeated attempts");
+        }
+        if (SWBPlatform.getSecValues().isMultiple()){
+            String login = request.getParameter("wb_username");
+             Iterator<SWBSessionObject> llist =SWBPortal.getUserMgr().listSessionObjects();
+             while(llist.hasNext()){
+                 SWBSessionObject so = llist.next();
+                 Iterator<Principal> lpri = so.getSubjectByUserRep(usserrep).getPrincipals().iterator();
+                 if (lpri.hasNext() && ((User)lpri.next()).getLogin().equalsIgnoreCase(login))
+                     throw new LoginException("User already logged in");
+             }
         }
         LoginContext lc;
         User user=null;
