@@ -30,7 +30,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
     private Document doc;
     private String title;
     private final HashSet<String> categories = new HashSet<String>();
-    private final ArrayList<FeatureDetail> getFeatureDetails = new ArrayList<FeatureDetail>();
+    private final Map<String,FeatureDetail> featureDetails = new HashMap<String, FeatureDetail>();
     private URL thumbnail;
     private final Map<String, String> getDefaultUserPref = new HashMap<String, String>();
     private URL screenshot;
@@ -40,8 +40,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
     private int width;
     private int height;
     private String description;
-    private final HashSet<String> userPrefsNames = new HashSet<String>();
-    private final HashSet<String> features = new HashSet<String>();
+    private final HashSet<String> userPrefsNames = new HashSet<String>();    
     private final HashSet<View> views = new HashSet<View>();
     private URL titleUrl;
     private boolean scrolling;
@@ -100,7 +99,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
     public FeatureDetail[] getFeatureDetails()
     {
-        return getFeatureDetails.toArray(new FeatureDetail[getFeatureDetails.size()]);
+        return featureDetails.values().toArray(new FeatureDetail[featureDetails.values().size()]);
     }
 
     private Map<String, String> getMesssages(Document docMessages)
@@ -273,11 +272,10 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         }
         categories.clear();
         getDefaultUserPref.clear();
-        views.clear();
-        features.clear();
+        views.clear();        
         userPrefsNames.clear();
         getDefaultUserPref.clear();
-        getFeatureDetails.clear();
+        featureDetails.clear();
         directoryTitle = null;
         titleUrl = null;
         authorEmail = null;
@@ -331,18 +329,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                 }
             }
 
-            NodeList childs = module.getChildNodes();
-            for (int i = 0; i < childs.getLength(); i++)
-            {
-                if (childs.item(i) instanceof Element && ((Element) childs.item(i)).getTagName().equals("Require"))
-                {
-                    Element require = (Element) childs.item(i);
-                    if (require.getAttribute("feature") != null && !"".equals(require.getAttribute("feature")))
-                    {
-                        features.add(require.getAttribute("feature").trim());
-                    }
-                }
-            }
+            
 
 
             if (_titleUrl != null && !_titleUrl.trim().equals(""))
@@ -498,23 +485,28 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                     getDefaultUserPref.put(name, default_value);
                 }
             }
-            childs = module.getChildNodes();
+
+            
+
+            NodeList childs = module.getChildNodes();
             for (int i = 0; i < childs.getLength(); i++)
             {
-                if (childs.item(i) instanceof Element && ((Element) childs.item(i)).getTagName().equals("Require"))
+                Element echild=(Element)childs.item(i);
+                if ("Require".equals(echild.getTagName()) || "Optional".equals(echild.getTagName()))
                 {
-                    Element require = (Element) childs.item(i);
+                    Element require = echild;
                     if (require.getAttribute("feature") != null && !"".equals(require.getAttribute("feature")))
                     {
-                        String feature = require.getAttribute("feature");
+                        String feature = getKey(require, "feature");
                         if (feature != null)
                         {
                             StringTokenizer st = new StringTokenizer(feature, ",");
                             while (st.hasMoreTokens())
                             {
-                                String featureName = st.nextToken().trim();
+                                String featureName = st.nextToken().trim();                                
                                 FeatureDetail detail = new FeatureDetail();
                                 detail.name = featureName;
+                                detail.required="Optional".equals(echild.getTagName())?false:true;
                                 NodeList params = require.getChildNodes();
                                 ArrayList<Parameter> parameters = new ArrayList<Parameter>();
                                 for (int j = 0; j < params.getLength(); j++)
@@ -532,7 +524,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                                     }
                                 }
                                 detail.parameters = parameters.toArray(new Parameter[parameters.size()]);
-                                getFeatureDetails.add(detail);
+                                featureDetails.put(featureName,detail);
                             }
                         }
                     }
@@ -678,9 +670,37 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         return userPrefsNames.toArray(new String[userPrefsNames.size()]);
     }
 
-    public String[] getFeatures()
+    public String[] getAllFeatures()
     {
-        return features.toArray(new String[features.size()]);
+        return featureDetails.keySet().toArray(new String[featureDetails.keySet().size()]);
+    }
+
+    public String[] getRequiredFeatures()
+    {
+        HashSet<String> getRequiredFeatures=new HashSet<String>();
+        for(String key : featureDetails.keySet())
+        {
+            FeatureDetail detail=featureDetails.get(key);
+            if(detail.required)
+            {
+                getRequiredFeatures.add(key);
+            }
+        }
+        return getRequiredFeatures.toArray(new String[getRequiredFeatures.size()]);
+    }
+
+    public String[] getOptionalFeatures()
+    {
+        HashSet<String> getOptionalFeatures=new HashSet<String>();
+        for(String key : featureDetails.keySet())
+        {
+            FeatureDetail detail=featureDetails.get(key);
+            if(!detail.required)
+            {
+                getOptionalFeatures.add(key);
+            }
+        }
+        return getOptionalFeatures.toArray(new String[getOptionalFeatures.size()]);
     }
 
     public String[] getCategories()

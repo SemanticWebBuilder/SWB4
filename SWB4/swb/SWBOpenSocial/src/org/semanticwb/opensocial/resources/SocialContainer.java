@@ -10,8 +10,10 @@ import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.UUID;
 import javax.servlet.RequestDispatcher;
@@ -63,9 +65,14 @@ public class SocialContainer extends GenericResource
     public static final String Mode_CONFIGGADGET = "CONFIGGADGET";
     public static final String Mode_LISTGADGETS = "LISTGADGETS";
     public static final String Mode_RPC = "RPC";
-
+    private static final Set<String> supportedFeatures=new HashSet<String>();
     static
     {
+        supportedFeatures.add("settile");
+        supportedFeatures.add("flash");
+        supportedFeatures.add("rpc");
+        supportedFeatures.add("setprefs");
+        supportedFeatures.add("dynamic-height");
         String[] urls={"http://www.delsearegional.us/academic/classes/highschool/science/physics/age/age.xml","http://midots.com/gadgets/xmldocs/midotsImgViewBeautifulPhotosOfIslands_11.xml","http://hosting.gmodules.com/ig/gadgets/file/112581010116074801021/spider.xml","http://www.donalobrien.net/apps/google/currency.xml","http://opensocial-resources.googlecode.com/svn/tests/trunk/suites/0.8/compliance/reference.xml","http://localhost:8080/swb/samplecontainer/examples/horoscope.xml","http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml","http://www.google.com/ig/modules/horoscope/horoscope.xml","http://www.google.com/ig/modules/test_setprefs_multiple_ifpc.xml"};
         WebSite site = WebSite.ClassMgr.getWebSite("reg_digital_demo");
         for(String url : urls )
@@ -88,6 +95,39 @@ public class SocialContainer extends GenericResource
             }
         }
 
+    }
+    public static boolean supportAllFeatures(Gadget gadget)
+    {
+        for(String feature : gadget.getAllFeatures())
+        {
+            if(!supportedFeatures.contains(feature))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    public static boolean supportRequiredFeatures(Gadget gadget)
+    {
+        for(String feature : gadget.getRequiredFeatures())
+        {
+            if(!supportedFeatures.contains(feature))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    public static boolean supportOptionalFeatures(Gadget gadget)
+    {
+        for(String feature : gadget.getOptionalFeatures())
+        {
+            if(!supportedFeatures.contains(feature))
+            {
+                return false;
+            }
+        }
+        return true;
     }
     public static Map<String, String> getVariablesubstituion(User user, Gadget gadget, String language, String country, String moduleID,WebSite site)
     {
