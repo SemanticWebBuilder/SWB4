@@ -2,27 +2,170 @@
 <%@page import="org.w3c.dom.*,org.semanticwb.opensocial.model.*,org.semanticwb.opensocial.resources.*,java.util.Date, java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 
 <%
+    StringBuilder validation=new StringBuilder();
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");    
     Gadget gadget=(Gadget) request.getAttribute("gadget");
     String title=gadget.getTitle();
+    if(title==null)
+    {
+        title=gadget.getDirectoryTitle();
+    }
+    else
+    {
+        if(title.startsWith("__UP_") && gadget.getDirectoryTitle()!=null)
+        {
+            title=gadget.getDirectoryTitle();
+        }
+    }
     String url=gadget.getUrl();
     String description=gadget.getDescription();    
     SWBResourceURL processAction=paramRequest.getActionUrl();
+
+
+    SWBResourceURL add=paramRequest.getRenderUrl();
+	add.setCallMethod(SWBResourceURL.Call_DIRECT);
+        add.setMode(SocialContainer.Mode_LISTGADGETS);
     
 %>
 
-<p>
+<style type="text/css">
+    div.wrapper {
+width:600px;
+}
+div.left_column {
+width:150px;
+float:left;
+text-align:left;
+vertical-align:middle;
+}
+div.content {
+width:300px;
+float:left;
+text-align:left;
+}
+div.rightcolumn {
+width:150px;
+float:right;
+text-align:center;
+vertical-align:middle;
+}
+hr {
+clear:both;
+display:block;
+visibility:hidden;}
+
+
+</style>
+
+<h1>
     <%=title%>
-</p>
+</h1>
 <p>
     <%=description%>
 </p>
-<form name="frmedit" action="<%=processAction%>" onsubmit="validate(this)">
-    <input type="hidden" value="<%=url%>" name="__url__">
-    Lenguaje: <select name="__lang__">
 <%
-    Document doc=gadget.getDocument();
-    NodeList locales=doc.getElementsByTagName("Locale");
+Document doc=gadget.getDocument();
+%>
+
+
+
+    <form name="frmedit" action="<%=processAction%>" onsubmit="validate()">
+        <input type="hidden" value="<%=url%>" name="__url__">
+        <%
+        NodeList userPrefs=doc.getElementsByTagName("UserPref");
+        for(int i=0;i<userPrefs.getLength();i++)
+        {
+            if(userPrefs.item(i) instanceof Element)
+            {
+                Element userPref=(Element)userPrefs.item(i);
+                String default_value=userPref.getAttribute("default_value");                
+                String name=userPref.getAttribute("name");
+                String dataType="string";
+                if(userPref.getAttribute("datatype")!=null && !userPref.getAttribute("datatype").equals(""))
+                {
+                    dataType=userPref.getAttribute("datatype");
+                }
+                if("hidden".equals(dataType))
+                {
+                    %>
+                    <input type="hidden" value="<%=default_value%>" name="<%=name%>">
+                    <%
+                }
+                if("bool".equals(dataType))
+                {
+                    %>
+                    <input type="hidden" value="<%=default_value%>" name="<%=name%>">
+                    <%
+                }
+
+            }
+        }
+
+
+        if(gadget.getTitle()!=null && gadget.getTitle().indexOf("__UP_")!=-1)
+        {            
+            String name=gadget.getTitle();
+            int pos=name.indexOf("__UP_");
+            if(pos!=-1)
+            {
+                name=name.substring(pos);
+                pos=name.lastIndexOf("__");
+                if(pos!=-1)
+                {
+                    name=name.substring(0,pos);
+                }
+            }
+            if(name.startsWith("__UP_"))
+            {
+                name=name.substring(5);
+            }
+            boolean exists=false;
+            for(String prefname : gadget.getUserPrefsNames())
+            {
+                if(prefname.equals(name))
+                {
+                    exists=true;
+                    break;
+                }
+            }
+            if(!exists)
+            {
+                validation.append("\r\nif(document.frmedit.");
+                validation.append(name);
+                validation.append(".value==''){\r\n");
+                validation.append("alert('El valor para ");
+                validation.append("Título");
+                validation.append(" es obligatorio');\r\n");
+                validation.append("document.frmedit.");
+                validation.append(name);
+                validation.append(".focus();\r\n");
+                validation.append("\r\nreturn;");
+                validation.append("\r\n}\r\n");
+                %>
+                    <div class="wrapper">
+                    <div class="left_column">
+                    Título:
+                    </div>
+                    <div class="content">
+                        <input type="text" size="40" value="<%=gadget.getTitle()%>" name="<%=name%>">
+                    </div><hr/></div>
+                <%
+            }
+        }
+
+        NodeList locales=doc.getElementsByTagName("Locale");
+        if(locales.getLength()>0)
+        {
+
+        %>
+        <div class="wrapper">
+<div class="left_column">
+Lenguaje:
+</div>
+<div class="content">
+<select name="__lang__">
+    <%
+    
     for(int i=0;i<locales.getLength();i++)
     {
         if(locales.item(i) instanceof Element)
@@ -35,7 +178,7 @@
                 if(pos!=-1)
                 {
                     lang=lang.substring(0,pos);
-                }                
+                }
                 Locale locale=new Locale(lang);
                 String title_lang=locale.getDisplayLanguage().toUpperCase();
                 %>
@@ -44,17 +187,25 @@
             }
         }
     }
-
     %>
-    </select><br>
-    <%
+    </select>
+</div>
+    <hr/>
+</div>
 
-    NodeList userPrefs=doc.getElementsByTagName("UserPref");
+
+
+    
+   
+<%
+    }
+    
+    userPrefs=doc.getElementsByTagName("UserPref");
     for(int i=0;i<userPrefs.getLength();i++)
     {
         if(userPrefs.item(i) instanceof Element)
         {
-            Element userPref=(Element)userPrefs.item(i);
+            Element userPref=(Element)userPrefs.item(i);            
             String dataType="string";
             if(userPref.getAttribute("datatype")!=null && !userPref.getAttribute("datatype").equals(""))
             {
@@ -62,28 +213,147 @@
             }
             String name=userPref.getAttribute("name");
             String default_value=userPref.getAttribute("default_value");
+            if(default_value==null)
+            {
+                default_value="";
+            }
             String displayName=userPref.getAttribute("display_name");
+            boolean required=false;
+            String srequired=userPref.getAttribute("required");
+            if("true".equalsIgnoreCase(srequired))
+            {
+                required=true;
+            }            
             if(displayName==null || displayName.equals(""))
             {
                 displayName=name;
             }
-            if("string".equals(dataType))
+            if("bool".equals(dataType))
             {
+                String checked="";
+                if("true".equalsIgnoreCase(default_value))
+                {
+                    checked="checked";
+                }
                 %>
-                <%=displayName%>&nbsp;<input type="text" value="<%=default_value%>" name="<%=name%>"><br>
+                <div class="wrapper">
+                <div class="left_column">
+                <%=displayName%>:
+                </div>
+                <div class="content">
+                    <input <%=checked%> type="checkbox" onclick="changeRadio('<%=name%>')" size="40" value="<%=default_value%>" name="_<%=name%>">
+                </div><hr/></div>
+
                 <%
             }
-            if("hidden".equals(dataType))
+            if("string".equals(dataType))
             {
+                if(required)
+                {
+                    validation.append("\r\nif(document.frmedit.");
+                    validation.append(name);
+                    validation.append(".value==''){\r\n");
+                    validation.append("alert('El valor para ");
+                    validation.append(displayName);
+                    validation.append(" es obligatorio');\r\n");
+                    validation.append("document.frmedit.");
+                    validation.append(name);
+                    validation.append(".focus();\r\n");
+                    validation.append("\r\nreturn;");
+                    validation.append("\r\n}\r\n");
+                }
                 %>
-                <input type="hidden" value="<%=default_value%>" name="<%=name%>">
+                <div class="wrapper">
+                <div class="left_column">
+                <%=displayName%>:
+                </div>
+                <div class="content">
+                    <input type="text" size="40" value="<%=default_value%>" name="<%=name%>">
+                </div><hr/></div>
+
+                <%
+            }   
+            if("number".equals(dataType))
+            {
+                if(required)
+                {
+                    validation.append("\r\nvar _number=document.frmedit.");
+                    validation.append(name);
+                    validation.append(".value;\r\n");
+                    validation.append("\r\nif(_number==''){\r\n");
+                    validation.append("alert('El valor para ");
+                    validation.append(displayName);
+                    validation.append(" es obligatorio');\r\n");
+                    validation.append("document.frmedit.");
+                    validation.append(name);
+                    validation.append(".focus();\r\n");
+                    validation.append("\r\nreturn;");
+                    validation.append("if(validarNumero(_number)=='NaN'){\r\n");
+                    validation.append("document.frmedit.");
+                    validation.append(name);
+                    validation.append(".focus();\r\n");
+                    validation.append("alert('El valor para ");
+                    validation.append(displayName);
+                    validation.append(" debe ser un número');\r\n");
+                    validation.append("return\r\n");
+                    validation.append("}\r\n");
+                    validation.append("\r\n}\r\n");
+                }
+                %>
+                <div class="wrapper">
+                <div class="left_column">
+                <%=displayName%>:
+                </div>
+                <div class="content">
+                    <input type="text" size="8" value="<%=default_value%>" name="<%=name%>">
+                </div><hr/></div>
+
+                <%
+            }
+            if("list".equals(dataType))
+            {
+                if(required)
+                {
+                    validation.append("\r\nif(document.frmedit.");
+                    validation.append(name);
+                    validation.append(".value==''){\r\n");
+                    validation.append("alert('El valor para ");
+                    validation.append(displayName);
+                    validation.append(" es obligatorio');\r\n");
+                    validation.append("document.frmedit.");
+                    validation.append(name);
+                    validation.append(".focus();\r\n");
+                    validation.append("\r\nreturn;");
+                    validation.append("\r\n}\r\n");
+                }
+                StringTokenizer st=new StringTokenizer(default_value,"|");
+                int rows=st.countTokens();
+                %>
+                <div class="wrapper">
+                <div class="left_column">
+                    <%=displayName%>
+                </div>
+                <div class="content">
+                    <textarea cols="40" rows="<%=rows%>" readonly name="<%=name%>"><%
+                while(st.hasMoreTokens())
+                {
+                    String value=st.nextToken()+"\r\n";
+                    %><%=value%><%
+                }
+                %></textarea>
+                </div><hr/></div>
                 <%
             }
             if("enum".equals(dataType))
             {
                 
                 %>
-                <%=displayName%>&nbsp;<select name="<%=name%>">
+                <div class="wrapper">
+                <div class="left_column">
+                    <%=displayName%>
+                </div>
+                <div class="content">
+                <select name="<%=name%>">
                     <%
                         NodeList enumValues=userPref.getElementsByTagName("EnumValue");
                         for(int j=0;j<enumValues.getLength();j++)
@@ -101,22 +371,66 @@
                             <%
                         }
                     %>
-                </select><br>
+                </select></div><hr/></div>
                 <%
             }
         }
     }
     
 %>
-<input type="submit" name="add" value="Agregar">
-<input type="button" name="cancel" value="cancelar">
+<div class="wrapper">
+    <div class="left_column">
+        <input type="submit" name="add" value="Agregar">
+    </div>
+    <div class="content">
+        <input type="button" onclick="closeWindow();" name="cancel" value="cancelar">
+    </div>
+</div>
 </form>
+<br>
+<br>
+<br>
 
 <script type="text/javascript">
     <!--
-    function validate(form)
+    function closeWindow()
     {
-        
+        this.location='<%=add%>';
     }
+    function validate()
+    {
+        <%=validation%>
+    }
+    function changeRadio(radioname)
+    {
+        var checked=document.frmedit[radioname].checked;
+        if(checked)
+        {
+            document.frmedit[radioname].value='true';
+        }
+        else
+        {
+            document.frmedit[radioname].value='false';
+        }
+    }
+    function validarNumero(c_numero)
+    {
+
+       if (c_numero.length == 0)
+       {
+           return "NaN";
+       }
+       else
+       {
+
+           for (i = 0; i < c_numero.length; i++)
+           {
+              if (!((c_numero.charAt(i) >= "0") && (c_numero.charAt(i) <= "9")))
+              return "NaN";
+           }
+           return c_numero;
+       }
+    }
+
     -->
 </script>
