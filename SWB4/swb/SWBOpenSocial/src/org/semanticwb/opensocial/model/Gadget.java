@@ -603,12 +603,12 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
     public String getTitle(SocialUser user, WebSite site, String moduleid)
     {
         String _title = getGadgetTitle();
-        if (_title != null && user.getUserId() != null)
+        if (_title != null)
         {
             User _user = site.getUserRepository().getUser(user.getUserId());
             if (_user != null)
             {
-                Map<String, String> variables = SocialContainer.getVariablesubstituion(_user, this, "ALL", "ALL", moduleid, site);
+                Map<String, String> variables = user.getVariablesubstituion(this, "ALL", "ALL", moduleid, site);
                 if (!variables.isEmpty())
                 {
                     for (String key : variables.keySet())
@@ -629,7 +629,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             User _user = site.getUserRepository().getUser(user.getUserId());
             if (_user != null)
             {
-                Map<String, String> variables = SocialContainer.getVariablesubstituion(_user, this, "ALL", "ALL", moduleid, site);
+                Map<String, String> variables = user.getVariablesubstituion(this, "ALL", "ALL", moduleid, site);
                 if (!variables.isEmpty())
                 {
                     for (String key : variables.keySet())
