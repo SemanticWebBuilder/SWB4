@@ -30,7 +30,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
     private Document doc;
     private String title;
     private final HashSet<String> categories = new HashSet<String>();
-    private final Map<String,FeatureDetail> featureDetails = new HashMap<String, FeatureDetail>();
+    private final Map<String, FeatureDetail> featureDetails = new HashMap<String, FeatureDetail>();
     private URL thumbnail;
     private final Map<String, String> getDefaultUserPref = new HashMap<String, String>();
     private URL screenshot;
@@ -40,7 +40,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
     private int width;
     private int height;
     private String description;
-    private final HashSet<String> userPrefsNames = new HashSet<String>();    
+    private final HashSet<String> userPrefsNames = new HashSet<String>();
     private final HashSet<View> views = new HashSet<View>();
     private URL titleUrl;
     private boolean scrolling;
@@ -272,7 +272,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         }
         categories.clear();
         getDefaultUserPref.clear();
-        views.clear();        
+        views.clear();
         userPrefsNames.clear();
         getDefaultUserPref.clear();
         featureDetails.clear();
@@ -329,7 +329,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                 }
             }
 
-            
+
 
 
             if (_titleUrl != null && !_titleUrl.trim().equals(""))
@@ -490,45 +490,48 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                 }
             }
 
-            
+
 
             NodeList childs = module.getChildNodes();
             for (int i = 0; i < childs.getLength(); i++)
             {
-                Element echild=(Element)childs.item(i);
-                if ("Require".equals(echild.getTagName()) || "Optional".equals(echild.getTagName()))
+                if (childs.item(i) instanceof Element)
                 {
-                    Element require = echild;
-                    if (require.getAttribute("feature") != null && !"".equals(require.getAttribute("feature")))
+                    Element echild = (Element) childs.item(i);
+                    if ("Require".equals(echild.getTagName()) || "Optional".equals(echild.getTagName()))
                     {
-                        String feature = getKey(require, "feature");
-                        if (feature != null)
+                        Element require = echild;
+                        if (require.getAttribute("feature") != null && !"".equals(require.getAttribute("feature")))
                         {
-                            StringTokenizer st = new StringTokenizer(feature, ",");
-                            while (st.hasMoreTokens())
+                            String feature = getKey(require, "feature");
+                            if (feature != null)
                             {
-                                String featureName = st.nextToken().trim();                                
-                                FeatureDetail detail = new FeatureDetail();
-                                detail.name = featureName;
-                                detail.required="Optional".equals(echild.getTagName())?false:true;
-                                NodeList params = require.getChildNodes();
-                                ArrayList<Parameter> parameters = new ArrayList<Parameter>();
-                                for (int j = 0; j < params.getLength(); j++)
+                                StringTokenizer st = new StringTokenizer(feature, ",");
+                                while (st.hasMoreTokens())
                                 {
-                                    if (params.item(j) instanceof Element && ((Element) params.item(j)).getTagName().equals("Param"))
+                                    String featureName = st.nextToken().trim();
+                                    FeatureDetail detail = new FeatureDetail();
+                                    detail.name = featureName;
+                                    detail.required = "Optional".equals(echild.getTagName()) ? false : true;
+                                    NodeList params = require.getChildNodes();
+                                    ArrayList<Parameter> parameters = new ArrayList<Parameter>();
+                                    for (int j = 0; j < params.getLength(); j++)
                                     {
-                                        Element param = (Element) params.item(j);
-                                        String name = param.getAttribute("name");
-                                        if (name != null)
+                                        if (params.item(j) instanceof Element && ((Element) params.item(j)).getTagName().equals("Param"))
                                         {
-                                            Parameter p = new Parameter();
-                                            p.name = name;
-                                            parameters.add(p);
+                                            Element param = (Element) params.item(j);
+                                            String name = param.getAttribute("name");
+                                            if (name != null)
+                                            {
+                                                Parameter p = new Parameter();
+                                                p.name = name;
+                                                parameters.add(p);
+                                            }
                                         }
                                     }
+                                    detail.parameters = parameters.toArray(new Parameter[parameters.size()]);
+                                    featureDetails.put(featureName, detail);
                                 }
-                                detail.parameters = parameters.toArray(new Parameter[parameters.size()]);
-                                featureDetails.put(featureName,detail);
                             }
                         }
                     }
@@ -681,11 +684,11 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
     public String[] getRequiredFeatures()
     {
-        HashSet<String> getRequiredFeatures=new HashSet<String>();
-        for(String key : featureDetails.keySet())
+        HashSet<String> getRequiredFeatures = new HashSet<String>();
+        for (String key : featureDetails.keySet())
         {
-            FeatureDetail detail=featureDetails.get(key);
-            if(detail.required)
+            FeatureDetail detail = featureDetails.get(key);
+            if (detail.required)
             {
                 getRequiredFeatures.add(key);
             }
@@ -695,11 +698,11 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
     public String[] getOptionalFeatures()
     {
-        HashSet<String> getOptionalFeatures=new HashSet<String>();
-        for(String key : featureDetails.keySet())
+        HashSet<String> getOptionalFeatures = new HashSet<String>();
+        for (String key : featureDetails.keySet())
         {
-            FeatureDetail detail=featureDetails.get(key);
-            if(!detail.required)
+            FeatureDetail detail = featureDetails.get(key);
+            if (!detail.required)
             {
                 getOptionalFeatures.add(key);
             }
