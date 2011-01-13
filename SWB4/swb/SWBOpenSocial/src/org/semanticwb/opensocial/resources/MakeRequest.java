@@ -125,8 +125,7 @@ public class MakeRequest
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        WebSite site = paramRequest.getWebPage().getWebSite();
-        System.out.println("MakeRequest request.getRequestURI(): " + request.getRequestURI());
+        WebSite site = paramRequest.getWebPage().getWebSite();        
         System.out.println("MakeRequest request.getQueryString(): " + request.getQueryString());
         System.out.println("MakeRequest request.getContentType(): " + request.getContentType());
         String refresh = request.getParameter("refresh");
