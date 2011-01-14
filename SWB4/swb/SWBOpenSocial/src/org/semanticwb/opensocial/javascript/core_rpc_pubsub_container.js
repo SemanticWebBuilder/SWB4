@@ -680,7 +680,7 @@ gadgets['util'] = function() {
     'attachBrowserEvent': function(elem, eventName, callback, useCapture) {
       if (typeof elem.addEventListener != 'undefined') {
         elem.addEventListener(eventName, callback, useCapture);
-      } else if (typeof elem.attachEvent != 'undefined') {
+      }else if (typeof elem.attachEvent != 'undefined') {
         elem.attachEvent('on' + eventName, callback);
       } else {
         gadgets.warn("cannot attachBrowserEvent: " + eventName);
@@ -850,7 +850,7 @@ gadgets['setLogLevel'] = function(logLevel) {
     _console.warn(message);
   } else if (level === error_ && _console.error) {
     _console.error(message);
-  } else if (_console.log) {
+  }else if (_console.log) {
     _console.log(message);
   }
 };
@@ -1547,7 +1547,7 @@ gadgets.rpctx.wpm = function() {
         postMessage = function(win, msg, origin) {
           win.postMessage(msg, origin);
         };
-      } else {
+      }else {
         postMessage = function(win, msg, origin) {
           window.setTimeout( function() {
             win.postMessage(msg, origin);
@@ -1569,7 +1569,7 @@ gadgets.rpctx.wpm = function() {
       if (receiverId === '..') {
         if (isForceSecure) {
           gadgets.rpc._createRelayIframe(token);
-        } else {
+        }else {
           gadgets.rpc.call(receiverId, gadgets.rpc.ACK);
         }
       }
@@ -1584,7 +1584,7 @@ gadgets.rpctx.wpm = function() {
       var origin = gadgets.rpc.getOrigin(origRelay);
       if (origin) {
         postMessage(targetWin, gadgets.json.stringify(rpc), origin);
-      } else {
+      }else {
         gadgets.error("No relay set (used as window.postMessage targetOrigin)" +
             ", cannot send cross-domain message");
       }
@@ -1668,7 +1668,7 @@ gadgets.rpctx.frameElement = function() {
           fe[FE_G2C_CHANNEL](gadgets.json.stringify(rpc));
           return true;
         }
-      } else {
+      }else {
         // Call from container to gadget[targetId].
         var frame = document.getElementById(targetId);
 
@@ -5978,32 +5978,25 @@ shindig.DojoPorletManager = function(layoutRootId) {
 shindig.DojoPorletManager.inherits(shindig.LayoutManager);
 
 shindig.DojoPorletManager.prototype.getGadgetChrome =
-    function(gadget) {
-  var layoutRoot = document.getElementById(this.layoutRootId_);
-  if (layoutRoot) {
+    function(gadget) {  
+    var grid=dijit.byId('grid');
+    if(grid)
+    {
+            return grid;
+    }
+    else
+    {
+        var layoutRoot = document.getElementById(this.layoutRootId_);
+        if (layoutRoot) {
+            var widget = new dojox.layout.GridContainer({minColWidth:40,minChildWidth:200,region:'center',handleClasses:'dijitTitlePaneTitle',withHandles:true,allowAutoScroll:true,columnReordering:true,hasResizableColumns:false,acceptTypes:'dijit.TitlePane',id:'grid',nbZones: 3}, layoutRoot);
+            return widget;
+        }
+        else
+            {
+                return null;
+            }
+    }
 
-    var widget = new dojox.layout.GridContainer({minColWidth:40,minChildWidth:200,region:'center',handleClasses:'dijitTitlePaneTitle',withHandles:true,allowAutoScroll:true,hasResizableColumns:false,acceptTypes:'dijit.TitlePane',id:'grid',nbZones: 2}, layoutRoot);
-    //layoutRoot.appendChild(widget);
-    return widget;
-    /*var chrome = document.createElement('div');
-    chrome.setAttribute('dojoType','dojox.layout.GridContainer');
-    chrome.setAttribute('acceptTypes','dijit.TitlePane');
-    chrome.setAttribute('hasResizableColumns','false');
-    chrome.setAttribute('nbZones','2');
-    chrome.setAttribute('allowAutoScroll','true');
-    chrome.setAttribute('withHandles','true');
-    chrome.setAttribute('handleClasses','dijitTitlePaneTitle');
-    chrome.setAttribute('region','center');
-    chrome.setAttribute('minChildWidth','200');
-    chrome.setAttribute('minColWidth','40');
-    //chrome.className = 'gadgets-gadget-chrome';
-    //chrome.style.cssFloat = 'left';
-    layoutRoot.appendChild(chrome);
-    return chrome;*/
-
-  } else {
-    return null;
-  }
 };
 // ------
 // Gadget
@@ -6064,17 +6057,17 @@ shindig.Gadget.prototype.getUserPrefValue = function(name) {
 shindig.Gadget.prototype.render = function(chrome) {
   if (chrome) {
 
-    var gadget = this;
+    var gadget = this;    
     var grid=dijit.byId('grid');
     if(grid)
-    {
-      
-
+    {      
+      var title=(gadget.title ? gadget.title : 'Title');      
+      var _id='pane_'+gadget.id;
+      var pane=new dijit.TitlePane({'id':_id,'title':title});
+      grid.addChild(pane);
       
       this.getContent(function(content) {
-        var title=(this.title ? this.title : 'Title');
-        var pane=new dijit.TitlePane({'title':title,'content':content});
-        grid.domNode.appendChild(pane.domNode);
+        pane.setContent(content);
         gadget.finishRender(chrome);
         pane.startup();
         });
@@ -6574,8 +6567,8 @@ shindig.Container.prototype.addGadgets = function(gadgets) {
  * Renders all gadgets in the container.
  */
 shindig.Container.prototype.renderGadgets = function() {
-  for (var key in this.gadgets_) {
-      
+
+  for (var key in this.gadgets_) {    
     this.renderGadget(this.gadgets_[key]);
   }
 };
@@ -6635,7 +6628,7 @@ shindig.IfrContainer.prototype.setParentUrl = function(url) {
  */
 shindig.IfrContainer.prototype.renderGadget = function(gadget) {
     
-  var chrome = this.layoutManager.getGadgetChrome(gadget);
+  var chrome = this.layoutManager.getGadgetChrome(gadget);  
   gadget.render(chrome);
 };
 
