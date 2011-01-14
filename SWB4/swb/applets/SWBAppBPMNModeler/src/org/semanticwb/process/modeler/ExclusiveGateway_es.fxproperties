@@ -1,2 +1,3 @@
 "msgError1" = "Una compuerta exclusiva basada en datos no puede tener flujos de secuencia salientes"
 "msgError2" = "Una compuerta exclusiva basada en datos no puede tener más de un flujo por defecto"
+"msgError3" = "Una compuerta exclusiva basada en eventos sólo puede ligarse con Eventos"
