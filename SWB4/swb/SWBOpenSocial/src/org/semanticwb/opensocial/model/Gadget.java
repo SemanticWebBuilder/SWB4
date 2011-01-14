@@ -15,7 +15,6 @@ import java.util.StringTokenizer;
 import org.jdom.JDOMException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.opensocial.resources.SocialContainer;
 import org.semanticwb.opensocial.resources.SocialUser;
