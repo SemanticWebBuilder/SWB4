@@ -12,6 +12,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import org.semanticwb.process.modeler.ModelerUtils;
 import org.semanticwb.process.modeler.DefaultFlow;
+import org.semanticwb.process.modeler.EventBasedGateway;
 /**
  * @author javier.solis
  */
@@ -91,4 +92,14 @@ public class ExclusiveGateway extends Gateway
         return ret;
     }
 
+    override public function canEndLink(link: ConnectionObject) : Boolean {
+        var ret = super.canEndLink(link);
+
+        if (link.ini instanceof EventBasedGateway) {
+            ret = false;
+            ModelerUtils.setErrorMessage(##"msgError3");
+        }
+
+        return ret;
+    }
 }
