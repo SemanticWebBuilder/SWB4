@@ -48,7 +48,9 @@
     </script>
 
 <script type="text/javascript" >
-
+dojo.require("dijit.dijit");
+  
+  //dojo.require("dojox.widget.Portlet");
 dojo.require("dojo.parser");
 dojo.addOnLoad(function(){
       dojo.parser.parse(); // or set djConfig.parseOnLoad = true
@@ -175,7 +177,7 @@ function requestGadgetMetaData(opt_callback) {
 
 function init() {
   shindig.container.layoutManager.setGadgetChromeIds(['gadget-chrome']);
-  shindig.container.layoutManager =new shindig.FloatLeftLayoutManager('layout-root');
+  shindig.container.layoutManager =new shindig.DojoPorletManager('layout-root');
   shindig.container.setView('<%=defaultview%>');
   requestGadgetMetaData(generateGadgets);
   
@@ -183,9 +185,8 @@ function init() {
 function generateGadgets(metadata) 
 {        
     for (var i = 0; i < metadata.gadgets.length; i++)
-    {
-
-            var url=metadata.gadgets[i].url;
+    {            
+            var url=metadata.gadgets[i].url;            
             var title=metadata.gadgets[i].title;            
             var moduleId=metadata.gadgets[i].moduleId;
             var secureToken0=generateSecureToken(url);
@@ -195,15 +196,32 @@ function generateGadgets(metadata)
     renderGadgets();
 };
 function renderGadgets() {  
-  shindig.container.renderGadgets();
+  shindig.container.renderGadgets();  
+  var grid=dijit.byId('grid');
+  if(grid)
+      {
+          grid.startup();
+      }
+  /*chrome.startup();
+  alert(typeof chrome);
+  if(typeof chrome=='dojox.layout.GridContainer')
+      {
+          alert('a');
+          chrome.startup();
+      }*/
 };
 
 </script>
+<link rel="stylesheet" type="text/css" media="all" href="/swb/swbadmin/js/dojo/dijit/themes/soria/soria.css" >
 <link rel="stylesheet" type="text/css" media="all" href="/swb/swbadmin/js/dojo/dijit/themes/soria/soria.css" >
 </head>
 
 <script type="text/javascript">
   dojo.require("dijit.Dialog");
+  
+  dojo.require("dojox.layout.GridContainer");
+  dojo.require("dijit.TitlePane");
+
   formDlg = dijit.byId("formDialog");  
   function showDialogEmail()
   {
@@ -228,6 +246,18 @@ function renderGadgets() {
 </div>
         <p><a href="#" onclick="showDialogEmail();">add</a></p>
 <div id="layout-root" class="gadgets-layout-root"></div>
+
+
+
+<div dojoType="dojox.layout.GridContainer" id="g" acceptTypes="dijit.TitlePane"
+hasResizableColumns="false" opacity="0.9" nbZones="3" allowAutoScroll="false"
+withHandles="true" handleClasses="dijitTitlePaneTitle" region="center"
+minChildWidth="200" minColWidth="40">
+    <div dojoType="dijit.TitlePane" href="foobar.html" title="Title"></div>
+    <div dojoType="dijit.TitlePane" href="foobar.html" title="Title 2"></div>
+    <div dojoType="dijit.TitlePane" href="foobar.html" title="Title 3"></div>
+    <div dojoType="dijit.TitlePane" href="foobar.html" title="Title 4"></div>
+</div> 
 
 
 
