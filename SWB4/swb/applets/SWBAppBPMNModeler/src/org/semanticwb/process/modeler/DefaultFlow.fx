@@ -46,23 +46,23 @@ public class DefaultFlow extends SequenceFlow
                         line,
                         arrow
                     ]
-                },
-                text
+                }
+                //text
             ]
             visible: bind canView()
         }
     }
 
-    override var onMousePressed = function( e: MouseEvent ):Void
-    {
-        if(ModelerUtils.clickedNode==null)
-        {
-            ModelerUtils.clickedNode=this;
-            modeler.setFocusedNode(this);
-            if(e.clickCount >= 2)
-            {
-                text.startEditing();
-            }
-        }
-    }
+//    override var onMousePressed = function( e: MouseEvent ):Void
+//    {
+//        if(ModelerUtils.clickedNode==null)
+//        {
+//            ModelerUtils.clickedNode=this;
+//            modeler.setFocusedNode(this);
+//            if(e.clickCount >= 2)
+//            {
+//                text.startEditing();
+//            }
+//        }
+//    }
 }
