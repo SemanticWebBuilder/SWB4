@@ -20,6 +20,10 @@
  * @namespace The global gadgets namespace
  * @type {Object} 
  */
+
+
+    
+
 var gadgets = gadgets || {}; 
 
 /** 
@@ -5956,6 +5960,51 @@ shindig.FloatLeftLayoutManager.prototype.getGadgetChrome =
 };
 
 
+
+// ----------------------
+// DojoPorletManager
+
+/**
+ * DojoPorletManager
+ * @constructor
+ * @param {String} layoutRootId Id of the element that is the parent of all
+ *     gadgets.
+ */
+shindig.DojoPorletManager = function(layoutRootId) {
+  shindig.LayoutManager.call(this);
+  this.layoutRootId_ = layoutRootId;
+};
+
+shindig.DojoPorletManager.inherits(shindig.LayoutManager);
+
+shindig.DojoPorletManager.prototype.getGadgetChrome =
+    function(gadget) {
+  var layoutRoot = document.getElementById(this.layoutRootId_);
+  if (layoutRoot) {
+
+    var widget = new dojox.layout.GridContainer({minColWidth:40,minChildWidth:200,region:'center',handleClasses:'dijitTitlePaneTitle',withHandles:true,allowAutoScroll:true,hasResizableColumns:false,acceptTypes:'dijit.TitlePane',id:'grid',nbZones: 2}, layoutRoot);
+    //layoutRoot.appendChild(widget);
+    return widget;
+    /*var chrome = document.createElement('div');
+    chrome.setAttribute('dojoType','dojox.layout.GridContainer');
+    chrome.setAttribute('acceptTypes','dijit.TitlePane');
+    chrome.setAttribute('hasResizableColumns','false');
+    chrome.setAttribute('nbZones','2');
+    chrome.setAttribute('allowAutoScroll','true');
+    chrome.setAttribute('withHandles','true');
+    chrome.setAttribute('handleClasses','dijitTitlePaneTitle');
+    chrome.setAttribute('region','center');
+    chrome.setAttribute('minChildWidth','200');
+    chrome.setAttribute('minColWidth','40');
+    //chrome.className = 'gadgets-gadget-chrome';
+    //chrome.style.cssFloat = 'left';
+    layoutRoot.appendChild(chrome);
+    return chrome;*/
+
+  } else {
+    return null;
+  }
+};
 // ------
 // Gadget
 
@@ -6014,18 +6063,41 @@ shindig.Gadget.prototype.getUserPrefValue = function(name) {
 
 shindig.Gadget.prototype.render = function(chrome) {
   if (chrome) {
-    var gadget = this;    
-    this.getContent(function(content) {
-        
-      chrome.innerHTML = content;
-      gadget.finishRender(chrome);
-    });
+
+    var gadget = this;
+    var grid=dijit.byId('grid');
+    if(grid)
+    {
+      
+
+      
+      this.getContent(function(content) {
+        var title=(this.title ? this.title : 'Title');
+        var pane=new dijit.TitlePane({'title':title,'content':content});
+        grid.domNode.appendChild(pane.domNode);
+        gadget.finishRender(chrome);
+        pane.startup();
+        });
+    }
+    else
+    {
+              this.getContent(function(content) {
+        chrome.innerHTML = content;
+        gadget.finishRender(chrome);
+        });
+    }
+
+    
   }
 };
 
 shindig.Gadget.prototype.getContent = function(continuation) {
-  shindig.callAsyncAndJoin([
+  /*shindig.callAsyncAndJoin([
       'getTitleBarContent', 'getUserPrefsDialogContent',
+      'getMainContent'], function(results) {
+        continuation(results.join(''));
+      }, this);*/
+    shindig.callAsyncAndJoin([
       'getMainContent'], function(results) {
         continuation(results.join(''));
       }, this);
@@ -6303,6 +6375,15 @@ shindig.IfrGadget = {
         (this.height ? ' height="' + this.height + '"' : '') +
         (this.width ? ' width="' + this.width + '"' : '') +
         '></iframe></div>');
+      
+      /*continuation('<div dojoType="dijit.TitlePane" title="Title"><iframe id="' +
+        iframeId + '" name="' + iframeId + '" class="' + this.cssClassGadget +
+        '" src="about:blank' +
+        '" frameborder="no" scrolling="no"' +
+        (this.height ? ' height="' + this.height + '"' : '') +
+        (this.width ? ' width="' + this.width + '"' : '') +
+        '></iframe></div>');*/
+
   },
   
   finishRender: function(chrome) {
@@ -6787,6 +6868,7 @@ gadgets.pubsubrouter = function() {
     }
   };
 }();
+
 
 ;
 gadgets.config.init({"shindig.auth":{"authToken":"-1:-1:*::*:0:default"},"osapi":{"endPoints":["http://%host%<%=rpc%>"]},"osapi.services":{"gadgets.rpc":["container.listMethods"],"http://%host%<%=rpc%>":["samplecontainer.update","albums.update","albums.supportedFields","activities.delete","activities.supportedFields","gadgets.metadata","activities.update","mediaItems.create","albums.get","activities.get","http.put","activitystreams.create","messages.modify","appdata.get","messages.get","system.listMethods","samplecontainer.get","cache.invalidate","people.supportedFields","http.head","http.delete","messages.create","people.get","activitystreams.get","mediaItems.supportedFields","mediaItems.delete","albums.delete","activitystreams.update","mediaItems.update","messages.delete","appdata.update","gadgets.tokenSupportedFields","http.post","activities.create","samplecontainer.create","http.get","albums.create","appdata.delete","gadgets.token","appdata.create","activitystreams.delete","gadgets.supportedFields","mediaItems.get","activitystreams.supportedFields"]},"rpc":{"parentRelayUrl":"/container/rpc_relay.html","useLegacyProtocol":false},"core.io":{"proxyUrl":"//%host%<%=proxy%>?container=default&refresh=%refresh%&url=%url%%rewriteMime%","jsonProxyUrl":"//%host%<%=makerequest%>"}});
