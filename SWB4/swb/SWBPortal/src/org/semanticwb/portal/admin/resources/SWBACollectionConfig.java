@@ -985,7 +985,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
 //                                if(sc.equals(User.swb_User))
 //                                {
 
-                                    sobj = sc.listInstances();
+                                    //sobj = sc.listInstances();
 //                                    if(col!=null && col.getWebSite() !=null && col.getWebSite().getUserRepository() !=null )
 //                                    {
 //                                      sobj =  col.getWebSite().getUserRepository().getSemanticObject().getModel().listInstancesOfClass(sc);
@@ -994,11 +994,16 @@ public class SWBACollectionConfig extends GenericAdmResource {
 
                                 
 
+                                HashMap<String, SemanticObject> hmShow = new HashMap<String, SemanticObject>();
                                 while (sobj.hasNext()) {
                                     SemanticObject semanticObject = sobj.next();
-                                    out.println("<option value=\"" + semanticObject.getURI() + "\" "+(paramsearch!=null&&paramsearch.equals(semanticObject.getURI())?"selected":"")+">");
-                                    out.println(semanticObject.getDisplayName(user.getLanguage()));
-                                    out.println("</option>");
+                                    if(hmShow.get(semanticObject.getURI())==null)
+                                    {
+                                        hmShow.put(semanticObject.getURI(), semanticObject);
+                                        out.println("<option value=\"" + semanticObject.getURI() + "\" "+(paramsearch!=null&&paramsearch.equals(semanticObject.getURI())?"selected":"")+">");
+                                        out.println(semanticObject.getDisplayName(user.getLanguage()));
+                                        out.println("</option>");
+                                    }
                                     if(paramsearch!=null&&paramsearch.equals(semanticObject.getURI()))hmFilterSearch.put(semanticObject.getURI(), semanticObject);
                                 }
                                 out.println("</select>");
