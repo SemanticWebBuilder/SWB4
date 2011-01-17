@@ -26,6 +26,7 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="Question">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Viewable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Searchable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Tagable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
@@ -47,7 +48,7 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:ObjectProperty rdf:ID="webpage">
-    <rdfs:domain rdf:resource="#Question"/>
+    <rdfs:label xml:lang="en">Category</rdfs:label>
     <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
     <swb:notCodeGeneration rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</swb:notCodeGeneration>
@@ -55,7 +56,7 @@
       <owl:ObjectProperty rdf:ID="hasQuetionInv"/>
     </owl:inverseOf>
     <rdfs:label xml:lang="es">Categoría</rdfs:label>
-    <rdfs:label xml:lang="es">Category</rdfs:label>
+    <rdfs:domain rdf:resource="#Question"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="questionObjInv"/>
   <owl:ObjectProperty rdf:ID="hasQuestions">
@@ -127,14 +128,14 @@
     <rdfs:domain rdf:resource="#AnswerVote"/>
     <rdfs:range rdf:resource="#Answer"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="questionVote">
+    <rdfs:domain rdf:resource="#QuestionVote"/>
+    <rdfs:range rdf:resource="#Question"/>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="categoryWebpage">
     <owl:inverseOf rdf:resource="#categoryWebpageInv"/>
     <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
     <rdfs:domain rdf:resource="#CategorySubscription"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="questionVote">
-    <rdfs:domain rdf:resource="#QuestionVote"/>
-    <rdfs:range rdf:resource="#Question"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="ansQuestion">
     <rdfs:domain rdf:resource="#Answer"/>
@@ -162,11 +163,26 @@
     <rdfs:domain rdf:resource="#SWBForumCatResource"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="references">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_references">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+        <rdfs:label xml:lang="en">References</rdfs:label>
+        <rdfs:label xml:lang="es">Referencias</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
     <rdfs:comment>Sirve para poner ligas de referencias a la respuesta que se esta dando</rdfs:comment>
     <rdfs:label xml:lang="en">References</rdfs:label>
     <rdfs:label xml:lang="es">Referencias</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Answer"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="queInappropriate">
+    <rdfs:domain rdf:resource="#Question"/>
+    <rdfs:label xml:lang="en">Select as inappropriate</rdfs:label>
+    <rdfs:label xml:lang="es">Marcar como Inapropiada</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="askPoints">
     <rdfs:label xml:lang="es">Puntos por preguntar</rdfs:label>
@@ -174,12 +190,6 @@
     <rdfs:label xml:lang="en">Points for asking</rdfs:label>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Cantidad de puntos sumados al usuario por responder una pregunta</rdfs:comment>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="queInappropriate">
-    <rdfs:domain rdf:resource="#Question"/>
-    <rdfs:label xml:lang="en">Select as inappropriate</rdfs:label>
-    <rdfs:label xml:lang="es">Marcar como Inapropiada</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="maxInnapropiateCount">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
@@ -209,6 +219,16 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#Question"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="markInnapropiateAnswers">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_markInnapropiateAnswers">
+        <rdfs:label xml:lang="es">Permitir marcar respuestas como inapropiadas</rdfs:label>
+        <rdfs:label xml:lang="en">Allow to mark answers as inappropiate</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="answer">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
@@ -224,16 +244,6 @@
     <rdfs:label xml:lang="es">Respuesta</rdfs:label>
     <rdfs:label xml:lang="en">Answer</rdfs:label>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="markInnapropiateAnswers">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_markInnapropiateAnswers">
-        <rdfs:label xml:lang="es">Permitir marcar respuestas como inapropiadas</rdfs:label>
-        <rdfs:label xml:lang="en">Allow to mark answers as inappropiate</rdfs:label>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="isQuestionVotable">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_isQuestionVotable">
@@ -246,12 +256,12 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#SWBForumCatResource"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="likeVote">
-    <rdfs:domain rdf:resource="#QuestionVote"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="likeAnswer">
     <rdfs:domain rdf:resource="#AnswerVote"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="likeVote">
+    <rdfs:domain rdf:resource="#QuestionVote"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="attachFilesSize">
@@ -339,32 +349,6 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="attachements">
-    <rdfs:domain rdf:resource="#Answer"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_attachements">
-        <rdfs:label xml:lang="es">Adjuntos</rdfs:label>
-        <rdfs:label xml:lang="en">Attachments</rdfs:label>
-        <swbxf:formElement>
-          <swb:DojoImageUpload rdf:ID="fe_Attachments">
-            <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >JPEG files:*.jpeg|JPG files:*.jpg|PNG files:*.png</swbxf:fileFilter>
-            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
-            >5000000</swbxf:fileMaxSize>
-            <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swbxf:imgCrop>
-            <swbxf:imgThumbnail rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swbxf:imgThumbnail>
-            <swbxf:imgThumbnailHeight rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >120</swbxf:imgThumbnailHeight>
-            <swbxf:imgThumbnailWidth rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >120</swbxf:imgThumbnailWidth>
-          </swb:DojoImageUpload>
-        </swbxf:formElement>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="ansCommentVote">
     <rdfs:domain rdf:resource="#AnswerVote"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -376,6 +360,18 @@
         <rdfs:label xml:lang="es">Permitir suscribirse a categorías</rdfs:label>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >80</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="questionClosable">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_questionClosable">
+        <rdfs:label xml:lang="en">Allow to close questions</rdfs:label>
+        <rdfs:label xml:lang="es">Permitir cerrar preguntas</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >210</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
@@ -395,18 +391,6 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:label xml:lang="es">Pregunta</rdfs:label>
     <rdfs:label xml:lang="en">Question</rdfs:label>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="questionClosable">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_questionClosable">
-        <rdfs:label xml:lang="en">Allow to close questions</rdfs:label>
-        <rdfs:label xml:lang="es">Permitir cerrar preguntas</rdfs:label>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >210</swb:index>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="closed">
     <rdfs:domain rdf:resource="#Question"/>
@@ -452,12 +436,6 @@
     <rdfs:domain rdf:resource="#SWBForumCatResource"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="irrelevantVote">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="#AnswerVote"/>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Indica si la respuesta ha sido marcada como irrelevante</rdfs:label>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="specifications">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
@@ -472,6 +450,34 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:label xml:lang="es">Añadir especificaciones</rdfs:label>
     <rdfs:label xml:lang="en">Add specifications</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="irrelevantVote">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#AnswerVote"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Indica si la respuesta ha sido marcada como irrelevante</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="hasAttachements">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_attachements">
+        <rdfs:label xml:lang="es">Adjuntos</rdfs:label>
+        <rdfs:label xml:lang="en">Attachments</rdfs:label>
+        <swbxf:formElement>
+          <swb:DojoFileUpload rdf:ID="fc_atachments">
+            <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >WORD Files:*.doc|JPG files:*.jpg|PNG files:*.png|JPEG files:*.jpeg</swbxf:fileFilter>
+            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+            >50000000</swbxf:fileMaxSize>
+          </swb:DojoFileUpload>
+        </swbxf:formElement>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Answer"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="ansIsAppropiate">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
@@ -557,6 +563,20 @@
     <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >forumCat</swb:prefix>
   </swb:CodePackage>
+  <swb:DojoImageUpload rdf:ID="fe_Attachments">
+    <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >JPEG files:*.jpeg|JPG files:*.jpg|PNG files:*.png</swbxf:fileFilter>
+    <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+    >5000000</swbxf:fileMaxSize>
+    <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swbxf:imgCrop>
+    <swbxf:imgThumbnailWidth rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >120</swbxf:imgThumbnailWidth>
+    <swbxf:imgThumbnailHeight rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >120</swbxf:imgThumbnailHeight>
+    <swbxf:imgThumbnail rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swbxf:imgThumbnail>
+  </swb:DojoImageUpload>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org/swb4/ontology#fe_DojoImageUpload">
     <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
     >5000000</swbxf:fileMaxSize>
@@ -571,6 +591,13 @@
     <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >jpg file:*.jpg|jpeg file:*.jpeg|png file:*.png</swbxf:fileFilter>
   </swb:FlashImageUpload>
+  <swbxf:DisplayProperty rdf:ID="dp_youtubeRefs">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >20</swb:index>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+    <rdfs:label xml:lang="es">Referencias a YouTube</rdfs:label>
+    <rdfs:label xml:lang="en">YouTube references</rdfs:label>
+  </swbxf:DisplayProperty>
 </rdf:RDF>
 
 <!-- Created with TopBraid Composer -->
