@@ -3,6 +3,7 @@ package org.semanticwb.resources.sem.forumcat.base;
 
 public abstract class AnswerBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Searchable,org.semanticwb.model.Traceable
 {
+    public static final org.semanticwb.platform.SemanticProperty forumCat_hasAttachements=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#hasAttachements");
     public static final org.semanticwb.platform.SemanticProperty forumCat_ansInappropriate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#ansInappropriate");
     public static final org.semanticwb.platform.SemanticProperty forumCat_ansStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#ansStatus");
    /**
@@ -11,7 +12,6 @@ public abstract class AnswerBase extends org.semanticwb.model.SWBClass implement
     public static final org.semanticwb.platform.SemanticProperty forumCat_references=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#references");
     public static final org.semanticwb.platform.SemanticProperty forumCat_ansIsAppropiate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#ansIsAppropiate");
     public static final org.semanticwb.platform.SemanticProperty forumCat_answer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#answer");
-    public static final org.semanticwb.platform.SemanticProperty forumCat_attachements=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#attachements");
     public static final org.semanticwb.platform.SemanticClass forumCat_Question=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#Question");
     public static final org.semanticwb.platform.SemanticProperty forumCat_ansQuestion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#ansQuestion");
    /**
@@ -172,6 +172,33 @@ public abstract class AnswerBase extends org.semanticwb.model.SWBClass implement
     public AnswerBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public java.util.Iterator<String> listAttachementses()
+    {
+        java.util.ArrayList<String> values=new java.util.ArrayList<String>();
+        java.util.Iterator<org.semanticwb.platform.SemanticLiteral> it=getSemanticObject().listLiteralProperties(forumCat_hasAttachements);
+        while(it.hasNext())
+        {
+                org.semanticwb.platform.SemanticLiteral literal=it.next();
+                values.add(literal.getString());
+        }
+        return values.iterator();
+    }
+
+    public void addAttachements(String value)
+    {
+        getSemanticObject().addLiteralProperty(forumCat_hasAttachements, new org.semanticwb.platform.SemanticLiteral(value));
+    }
+
+    public void removeAllAttachements()
+    {
+        getSemanticObject().removeProperty(forumCat_hasAttachements);
+    }
+
+    public void removeAttachements(String value)
+    {
+        getSemanticObject().removeLiteralProperty(forumCat_hasAttachements,new org.semanticwb.platform.SemanticLiteral(value));
     }
    /**
    * Sets the value for the property ModifiedBy
@@ -336,24 +363,6 @@ public abstract class AnswerBase extends org.semanticwb.model.SWBClass implement
     public void setAnswer(String value)
     {
         getSemanticObject().setProperty(forumCat_answer, value);
-    }
-
-/**
-* Gets the Attachements property
-* @return String with the Attachements
-*/
-    public String getAttachements()
-    {
-        return getSemanticObject().getProperty(forumCat_attachements);
-    }
-
-/**
-* Sets the Attachements property
-* @param value long with the Attachements
-*/
-    public void setAttachements(String value)
-    {
-        getSemanticObject().setProperty(forumCat_attachements, value);
     }
    /**
    * Sets the value for the property Creator

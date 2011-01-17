@@ -1,7 +1,7 @@
 package org.semanticwb.resources.sem.forumcat.base;
 
 
-public abstract class QuestionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Searchable,org.semanticwb.model.Traceable,org.semanticwb.model.Tagable
+public abstract class QuestionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Searchable,org.semanticwb.model.Traceable,org.semanticwb.model.Tagable,org.semanticwb.model.Viewable
 {
     public static final org.semanticwb.platform.SemanticClass forumCat_SWBForumCatResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#SWBForumCatResource");
     public static final org.semanticwb.platform.SemanticProperty forumCat_forumResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#forumResource");
@@ -636,5 +636,43 @@ public abstract class QuestionBase extends org.semanticwb.model.SWBClass impleme
     public void setQueInappropriate(int value)
     {
         getSemanticObject().setIntProperty(forumCat_queInappropriate, value);
+    }
+
+/**
+* Gets the MaxViews property
+* @return long with the MaxViews
+*/
+    public long getMaxViews()
+    {
+        return getSemanticObject().getLongProperty(swb_maxViews);
+    }
+
+/**
+* Sets the MaxViews property
+* @param value long with the MaxViews
+*/
+    public void setMaxViews(long value)
+    {
+        getSemanticObject().setLongProperty(swb_maxViews, value);
+    }
+
+/**
+* Gets the Views property
+* @return long with the Views
+*/
+    public long getViews()
+    {
+        //Override this method in Question object
+        return getSemanticObject().getLongProperty(swb_views,false);
+    }
+
+/**
+* Sets the Views property
+* @param value long with the Views
+*/
+    public void setViews(long value)
+    {
+        //Override this method in Question object
+        getSemanticObject().setLongProperty(swb_views, value,false);
     }
 }
