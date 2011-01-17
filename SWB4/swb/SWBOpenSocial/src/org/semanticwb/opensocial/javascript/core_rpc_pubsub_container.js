@@ -5988,13 +5988,13 @@ shindig.DojoPorletManager.prototype.getGadgetChrome =
     {
         var layoutRoot = document.getElementById(this.layoutRootId_);
         if (layoutRoot) {
-            var widget = new dojox.layout.GridContainer({minColWidth:40,minChildWidth:200,region:'center',handleClasses:'dijitTitlePaneTitle',withHandles:true,allowAutoScroll:true,columnReordering:true,hasResizableColumns:false,acceptTypes:'dijit.TitlePane',id:'grid',nbZones: 3}, layoutRoot);
+            var widget = new dojox.layout.GridContainer({id:'grid',acceptTypes:'dijit.TitlePane',hasResizableColumns:'false',opacity:'0.3',nbZones:'2',allowAutoScroll:'true',withHandles:'true',handleClasses:'dijitTitlePaneTitle',region:'center',minChildWidth:'200',minColWidth:'40'},layoutRoot);
             return widget;
         }
         else
-            {
+        {                
                 return null;
-            }
+        }
     }
 
 };
@@ -6056,7 +6056,7 @@ shindig.Gadget.prototype.getUserPrefValue = function(name) {
 
 shindig.Gadget.prototype.render = function(chrome) {
   if (chrome) {
-
+    var type=typeof chrome;    
     var gadget = this;    
     var grid=dijit.byId('grid');
     if(grid)
@@ -6066,7 +6066,7 @@ shindig.Gadget.prototype.render = function(chrome) {
       var pane=new dijit.TitlePane({'id':_id,'title':title});
       grid.addChild(pane);
       
-      this.getContent(function(content) {
+      this.getContent(function(content) {          
         pane.setContent(content);
         gadget.finishRender(chrome);
         pane.startup();
@@ -6357,8 +6357,7 @@ shindig.BaseIfrGadget.prototype.queryIfrGadgetType_ = function() {
 
 shindig.IfrGadget = {
   getMainContent: function(continuation) {
-    var iframeId = this.getIframeId();
-    
+    var iframeId = this.getIframeId();    
     gadgets.rpc.setRelayUrl(iframeId, this.serverBase_ + this.rpcRelay);
     gadgets.rpc.setAuthToken(iframeId, this.rpcToken);
     continuation('<div class="' + this.cssClassGadgetContent + '"><iframe id="' +
