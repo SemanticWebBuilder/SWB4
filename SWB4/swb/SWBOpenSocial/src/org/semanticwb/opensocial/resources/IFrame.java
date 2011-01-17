@@ -17,6 +17,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 
 
@@ -98,7 +99,7 @@ public class IFrame
                                 }
                                 catch (URISyntaxException use)
                                 {
-                                    log.debug(use);                                    
+                                    log.debug(use);
                                 }
                             }
                             ret.append(paramName);
@@ -201,7 +202,7 @@ public class IFrame
                                         {
                                             url = url.substring(0, pos2);
                                         }
-                                        value=url;
+                                        value = url;
                                     }
                                     catch (URISyntaxException uie)
                                     {
@@ -304,31 +305,30 @@ public class IFrame
         }
         if ("html".equalsIgnoreCase(type))
         {
-
             String view = content.getAttribute("view");
             if (view == null || view.trim().equals(""))
             {
                 view = "default";
             }
-            if (isInView(sview, view))
+            boolean isinView = isInView(sview, view);            
+            if (isinView)
             {
                 String href = content.getAttribute("href");
                 if (href == null || href.trim().equals(""))
                 {
-
                     NodeList childs = content.getChildNodes();
                     for (int j = 0; j < childs.getLength(); j++)
                     {
                         if (childs.item(j) instanceof CDATASection)
                         {
                             CDATASection section = (CDATASection) childs.item(j);
-                            String htmltemp = section.getNodeValue();
+                            String htmltemp = section.getNodeValue();                            
                             for (String key : variables.keySet())
                             {
                                 String value = variables.get(key);
                                 htmltemp = htmltemp.replace(key, value);
                             }
-                            html += htmltemp;
+                            html += htmltemp;                            
                         }
                     }
                 }
@@ -384,16 +384,17 @@ public class IFrame
         }
         return html;
     }
-    
+
     private boolean isInView(String view, String attribute)
     {
         if (view.equalsIgnoreCase(attribute))
         {
             return true;
         }
-        String[] values = attribute.split(",");
-        for (String value : values)
+        StringTokenizer st=new StringTokenizer(view,",");
+        while(st.hasMoreTokens())
         {
+            String value=st.nextToken();
             if (value.equalsIgnoreCase(view))
             {
                 return true;
@@ -405,7 +406,7 @@ public class IFrame
     public void doProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         WebSite site = paramRequest.getWebPage().getWebSite();
-        User user=paramRequest.getUser();
+        User user = paramRequest.getUser();
         System.out.println("request.getRequestURI(): " + request.getRequestURI());
         System.out.println("request.getQueryString(): " + request.getQueryString());
         String url = request.getParameter("url");
@@ -416,7 +417,7 @@ public class IFrame
         if (sview == null)
         {
             sview = "default";
-        }
+        }        
         String html = "";
         if (moduleid == null)
         {
@@ -430,7 +431,7 @@ public class IFrame
             {
                 boolean exists = false;
                 for (View oview : gadget.getViews())
-                {
+                {                    
                     if (oview.getName().equalsIgnoreCase(sview))
                     {
                         exists = true;
@@ -440,8 +441,8 @@ public class IFrame
                 if (!exists)
                 {
                     sview = "default";
-                }
-                SocialUser socialuser=SocialContainer.getSocialUser(user, request.getSession());
+                }                
+                SocialUser socialuser = SocialContainer.getSocialUser(user, request.getSession());
                 Map<String, String> variables = socialuser.getVariablesubstituion(gadget, lang, country, moduleid, site);
 
                 NodeList contents = gadget.getOriginalDocument().getElementsByTagName("Content");
@@ -450,13 +451,13 @@ public class IFrame
                     Node node = contents.item(i);
                     if (node instanceof Element)
                     {
-                        Element content = (Element) node;
-                        html = getHTMLfromView(gadget, content, sview, variables);
+                        Element content = (Element) node;                        
+                        html = getHTMLfromView(gadget, content, sview, variables);                        
                         if ("".equals(html))
                         {
-                            html = getHTMLfromView(gadget, content, "default", variables);
-                        }
-
+                            sview = "default";
+                            html = getHTMLfromView(gadget, content, sview, variables);
+                        }                        
                     }
                 }
                 SWBResourceURL makerequest = paramRequest.getRenderUrl();
@@ -482,21 +483,21 @@ public class IFrame
                 javascript.setCallMethod(SWBResourceURL.Call_DIRECT);
                 javascript.setParameter("script", "core_rpc.js");
 
-                JSONObject j_default_values=new JSONObject();
-                Map<String,String> default_values=gadget.getDefaultUserPref(lang, country,false);
-                for(String key : default_values.keySet())
+                JSONObject j_default_values = new JSONObject();
+                Map<String, String> default_values = gadget.getDefaultUserPref(lang, country, false);
+                for (String key : default_values.keySet())
                 {
                     j_default_values.put(key, default_values.get(key));
                 }
 
-                JSONObject msg=new JSONObject();
-                Map<String,String> messages=gadget.getMessagesFromGadget(lang, country,false);
-                for(String key : messages.keySet())
+                JSONObject msg = new JSONObject();
+                Map<String, String> messages = gadget.getMessagesFromGadget(lang, country, false);
+                for (String key : messages.keySet())
                 {
                     msg.put(key, messages.get(key));
                 }
 
-                String HtmlResponse = frame.replace("<%=msg%>",msg.toString());
+                String HtmlResponse = frame.replace("<%=msg%>", msg.toString());
                 HtmlResponse = HtmlResponse.replace("<%=default_values%>", j_default_values.toString());
                 HtmlResponse = HtmlResponse.replace("<%=js%>", javascript.toString());
                 HtmlResponse = HtmlResponse.replace("<%=rpc%>", rpc.toString());
@@ -504,7 +505,6 @@ public class IFrame
                 HtmlResponse = HtmlResponse.replace("<%=makerequest%>", makerequest.toString());
                 HtmlResponse = HtmlResponse.replace("<%=html%>", html);
                 PrintWriter out = response.getWriter();
-                //System.out.println(HtmlResponse);
                 out.write(HtmlResponse);
                 out.close();
             }

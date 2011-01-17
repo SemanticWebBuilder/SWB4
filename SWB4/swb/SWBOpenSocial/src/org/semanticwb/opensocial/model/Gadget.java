@@ -308,7 +308,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                 if (contents.item(i) instanceof Element)
                 {
                     Element content = (Element) contents.item(i);
-                    String _view = content.getAttribute("view");
+                    String _view =   getKey(content, "view");
                     if (_view != null)
                     {
                         StringTokenizer st = new StringTokenizer(_view, ",");
@@ -759,6 +759,8 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             }
         }
         view.scrolling = scrolling;
+
+
         return view;
     }
 

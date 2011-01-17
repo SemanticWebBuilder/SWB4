@@ -17,7 +17,7 @@ public class View {
     String type;
     boolean scrolling;
     int preferredWidth;
-
+    
     public String getName()
     {
         return name;
