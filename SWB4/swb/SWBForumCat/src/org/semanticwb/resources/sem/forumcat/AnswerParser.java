@@ -26,7 +26,6 @@ import org.semanticwb.portal.indexer.parser.GenericParser;
 public class AnswerParser extends GenericParser {
     public static String ATT_CREATOR = "creator";
     public static String ATT_FORUM = "forum";
-    public static String ATT_CAT = "forumcat";
     private static Logger log = SWBUtils.getLogger(QuestionParser.class);
 
     @Override
