@@ -61,6 +61,8 @@
  dojo.require("dijit.Dialog");
   dojo.require("dojox.layout.GridContainer");
   dojo.require("dojox.widget.Portlet");
+  dojo.require("dojox.layout.TableContainer");
+  dojo.require("dijit.form.TextBox");
  dojo.addOnLoad(function(){
       dojo.parser.parse(); // or set djConfig.parseOnLoad = true      
 });
