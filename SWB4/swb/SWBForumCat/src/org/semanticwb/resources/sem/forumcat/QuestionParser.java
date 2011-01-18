@@ -39,7 +39,6 @@ public class QuestionParser extends GenericParser {
     }
 
     public String getIndexForumCat(Searchable gen) {
-        System.out.println("--Indexando pregunta " + ((Question)gen).getQuestion() + " con categoría " + ((Question)gen).getWebpage().getTitle());
         return ((Question)gen).getWebpage().getTitle();
     }
 
