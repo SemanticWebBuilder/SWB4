@@ -38,11 +38,12 @@ public class Proxy {
             out.write(buffer, 0, read);
             read=in.read(buffer);
         }
+        response.setStatus(con.getResponseCode());
         in.close();
     }
     public void doProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        System.out.println("Proxy request"+request.getQueryString());
+        System.out.println("Proxy request.getQueryString(): "+request.getQueryString());
         String url = request.getParameter("url");        
         if(url!=null && !"".equals(url))
         {

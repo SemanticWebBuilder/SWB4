@@ -5979,22 +5979,32 @@ shindig.DojoPorletManager.inherits(shindig.LayoutManager);
 
 shindig.DojoPorletManager.prototype.getGadgetChrome =
     function(gadget) {  
+    
+    
     var grid=dijit.byId('grid');
+    
     if(grid)
     {
+    
             return grid;
     }
     else
     {
-        var layoutRoot = document.getElementById(this.layoutRootId_);
+    
+        /*var layoutRoot = document.getElementById(this.layoutRootId_);
         if (layoutRoot) {
-            var widget = new dojox.layout.GridContainer({id:'grid',acceptTypes:'dijit.TitlePane',hasResizableColumns:'false',opacity:'0.3',nbZones:'2',allowAutoScroll:'true',withHandles:'true',handleClasses:'dijitTitlePaneTitle',region:'center',minChildWidth:'200',minColWidth:'40'},layoutRoot);
+
+            alert('before');
+            var widget = new dojox.layout.GridContainer({id:'grid',acceptTypes:'dojox.widget.Portlet',hasResizableColumns:'false',opacity:'0.3',nbZones:'2',allowAutoScroll:'true',withHandles:'true',handleClasses:'dijitTitlePaneTitle',region:'center',minChildWidth:'200',minColWidth:'40'},layoutRoot);
+            alert('yyyy');
             return widget;
         }
         else
-        {                
+        {
+    
                 return null;
-        }
+        }*/
+        return null;
     }
 
 };
@@ -6056,21 +6066,34 @@ shindig.Gadget.prototype.getUserPrefValue = function(name) {
 
 shindig.Gadget.prototype.render = function(chrome) {
   if (chrome) {
-    var type=typeof chrome;    
+    
     var gadget = this;    
     var grid=dijit.byId('grid');
     if(grid)
-    {      
+    {
+        try
+        {
       var title=(gadget.title ? gadget.title : 'Title');      
       var _id='pane_'+gadget.id;
-      var pane=new dijit.TitlePane({'id':_id,'title':title});
-      grid.addChild(pane);
+      var porlet=new dojox.widget.Portlet({'id':_id,'title':title});
+      
+      /*var idsetting='setting_'+gadget.id;
+      var settings = new dojox.widget.PortletSettings({'id':idsetting});
+      var table=new dojox.layout.TableContainer({cols:'1'});
+      var t1=new dijit.form.TextBox({title:'settings'});
+      table.addChild(t1);
+      settings.addChild(table);
+      pane.addChild(settings);
+      grid.addChild(porlet);*/
+      
       
       this.getContent(function(content) {          
-        pane.setContent(content);
+        porlet.setContent(content);
         gadget.finishRender(chrome);
-        pane.startup();
+              
+
         });
+        }catch(e){alert('e: '+e);}
     }
     else
     {
@@ -6625,8 +6648,7 @@ shindig.IfrContainer.prototype.setParentUrl = function(url) {
  * Renders a gadget using ifr.
  * @param {Object} gadget Gadget object
  */
-shindig.IfrContainer.prototype.renderGadget = function(gadget) {
-    
+shindig.IfrContainer.prototype.renderGadget = function(gadget) {    
   var chrome = this.layoutManager.getGadgetChrome(gadget);  
   gadget.render(chrome);
 };

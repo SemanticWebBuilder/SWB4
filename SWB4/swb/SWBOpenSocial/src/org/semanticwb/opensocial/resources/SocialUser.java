@@ -251,8 +251,7 @@ public class SocialUser
         if (user == null)
         {
             if (!userprefsManager.contains(gadget, moduleId))
-            {
-                System.out.println("adding a new anonimous UserPrefs " + moduleId);
+            {                
                 userprefsManager.add(new UserPrefs(gadget, moduleId));
             }
             UserPrefs prefs = userprefsManager.get(gadget, moduleId);

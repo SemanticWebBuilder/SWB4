@@ -5,6 +5,7 @@
 
 package org.semanticwb.opensocial.model;
 
+import java.net.URL;
 import org.json.JSONObject;
 
 /**
@@ -12,12 +13,49 @@ import org.json.JSONObject;
  * @author victor.lorenzana
  */
 public class View {
-    String name;
-    int preferredHeight;
-    String type;
-    boolean scrolling;
-    int preferredWidth;
-    
+    private String name="default";
+    private int preferredHeight;
+    private String type="html";
+    private boolean scrolling;
+    private int preferredWidth;
+    private String content;
+    private URL urlcontent;
+    public View(String name)
+    {
+        this.name=name;
+    }
+    public void setContent(String  content)
+    {
+        this.content=content;
+    }
+    public String getContent()
+    {
+        return content;
+    }
+    public URL getUrlcontent()
+    {
+        return urlcontent;
+    }
+    public void setType(String  type)
+    {
+        this.type=type;
+    }
+    public void setUrlContent(URL  urlcontent)
+    {
+        this.urlcontent=urlcontent;
+    }
+    public void setScrolling(boolean scrolling)
+    {
+        this.scrolling=scrolling;
+    }
+    public void setPreferredWidth(int preferredWidth)
+    {
+        this.preferredWidth=preferredWidth;
+    }
+    public void setPreferredHeight(int preferredHeight)
+    {
+        this.preferredHeight=preferredHeight;
+    }
     public String getName()
     {
         return name;
