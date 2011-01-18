@@ -6078,8 +6078,10 @@ shindig.Gadget.prototype.render = function(chrome) {
       var porlet=new dojox.widget.Portlet({'id':_id,'title':title});
       var idsetting='setting_'+gadget.id;
       var settings = new dojox.widget.PortletSettings({'id':idsetting},porlet);
-      //var table=new dojox.layout.TableContainer({cols:'1'});
-      //var t1=new dijit.form.TextBox({title:'settings'},table);
+      var id_table='table_'+gadget.id;
+      var table=new dojox.layout.TableContainer({id:id_table,cols:'1'},settings);
+      var id_text='t_'+gadget.id;
+      var t1=new dijit.form.TextBox({'id':id_text,title:'settings'},table);
       grid.addChild(porlet);
       porlet.startup();
       
