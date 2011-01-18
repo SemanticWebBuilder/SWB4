@@ -24,36 +24,37 @@ import org.semanticwb.portal.indexer.parser.GenericParser;
  * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 public class AnswerParser extends GenericParser {
-    public static String ATT_USER = "creator";
+    public static String ATT_CREATOR = "creator";
+    public static String ATT_FORUM = "forum";
+    public static String ATT_CAT = "forumcat";
     private static Logger log = SWBUtils.getLogger(QuestionParser.class);
 
     @Override
     public Map<String, IndexTerm> getIndexTerms(Searchable gen) {
         Map map = super.getIndexTerms(gen);
-        map.put(ATT_USER, new IndexTerm(ATT_USER, getIndexCreator(gen), false, IndexTerm.INDEXED_ANALYZED));
+        map.put(ATT_CREATOR, new IndexTerm(ATT_CREATOR, getIndexCreator(gen), false, IndexTerm.INDEXED_NO_ANALYZED));
+        map.put(ATT_FORUM, new IndexTerm(ATT_FORUM, getIndexForum(gen), false, IndexTerm.INDEXED_NO_ANALYZED));
         return map;
+    }
+
+    public String getIndexForum(Searchable gen) {
+        return ((Answer)gen).getAnsQuestion().getForumResource().getId();
     }
 
     @Override
     public String getIndexTitle(Searchable gen) {
-        Answer a = (Answer) gen;
-        return a.getAnswer();
+        return ((Answer)gen).getAnswer();
     }
 
     @Override
     public String getTitle(Searchable gen, String lang) {
-        Answer a = (Answer) gen;
-        return a.getAnswer();
+        return ((Answer)gen).getAnswer();
     }
 
     public String getIndexCreator(Searchable gen) {
-        String ret = "";
-        Answer a = (Answer) gen;
-        if (a.getCreator().getFullName() != null && !a.getCreator().getFullName().equals("")) {
-            ret = a.getCreator().getFullName();
-        }
-        return ret;
+        return ((Answer)gen).getAnsQuestion().getCreator().getURI();
     }
+
     @Override
     public String getType(Searchable gen) {
         return "Answer";
@@ -102,6 +103,17 @@ public class AnswerParser extends GenericParser {
                     break;
                 }
             }
+        }
+        return ret;
+    }
+
+    @Override
+    public String getIndexCategory(Searchable gen) {
+        String ret = "";
+        Answer a = (Answer) gen;
+        WebPage page = getWebPage(a.getAnsQuestion().getForumResource().getResource());
+        if (page != null) {
+            ret = super.getIndexCategory(page);
         }
         return ret;
     }
