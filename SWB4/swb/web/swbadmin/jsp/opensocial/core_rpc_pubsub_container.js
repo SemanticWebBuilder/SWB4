@@ -6076,10 +6076,15 @@ shindig.Gadget.prototype.render = function(chrome) {
       var title=(gadget.title ? gadget.title : 'Title');      
       var _id='pane_'+gadget.id;
       var porlet=new dojox.widget.Portlet({'id':_id,'title':title});
+      var idsetting='setting_'+gadget.id;
+      var settings = new dojox.widget.PortletSettings({'id':idsetting},porlet);
+      //var table=new dojox.layout.TableContainer({cols:'1'});
+      //var t1=new dijit.form.TextBox({title:'settings'},table);
+      grid.addChild(porlet);
+      porlet.startup();
       
-      /*var idsetting='setting_'+gadget.id;
-      var settings = new dojox.widget.PortletSettings({'id':idsetting});
-      var table=new dojox.layout.TableContainer({cols:'1'});
+      
+      /*var table=new dojox.layout.TableContainer({cols:'1'});
       var t1=new dijit.form.TextBox({title:'settings'});
       table.addChild(t1);
       settings.addChild(table);
@@ -6087,13 +6092,18 @@ shindig.Gadget.prototype.render = function(chrome) {
       grid.addChild(porlet);*/
       
       
-      this.getContent(function(content) {          
+      this.getContent(function(content) {
+          
         porlet.setContent(content);
         gadget.finishRender(chrome);
               
 
         });
-        }catch(e){alert('e: '+e);}
+        }
+        catch(err)
+        {
+            alert('e: '+err.description);
+        }
     }
     else
     {
@@ -6402,7 +6412,7 @@ shindig.IfrGadget = {
   },
   
   finishRender: function(chrome) {
-      
+    
     window.frames[this.getIframeId()].location = this.getIframeUrl();
   },
   
