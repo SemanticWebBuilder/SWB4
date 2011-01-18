@@ -20,7 +20,7 @@ import org.semanticwb.portal.indexer.IndexTerm;
 import org.semanticwb.portal.indexer.parser.GenericParser;
 
 /**
- *
+ * Parser para respuestas del foro.
  * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 public class AnswerParser extends GenericParser {
