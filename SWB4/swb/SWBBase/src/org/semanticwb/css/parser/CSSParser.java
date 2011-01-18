@@ -31,7 +31,7 @@ public class CSSParser
      * @param data the data
      */
     public CSSParser(String data)
-    {
+    {        
         data = cleanComments(data);
         String header = null;
         if (data.startsWith("@"))
@@ -60,7 +60,22 @@ public class CSSParser
                 while (st.hasMoreTokens())
                 {
                     String attribute = st.nextToken();
-                    StringTokenizer st2 = new StringTokenizer(attribute, ":");
+                    pos=attribute.indexOf(":");
+                    if(pos!=-1)
+                    {
+                        String name=attribute.substring(0,pos);
+                        String value=attribute.substring(pos+1);
+                        Attribute att = new Attribute(name, value);
+                        atts.add(att);
+                    }
+                    else
+                    {
+                        String name = attribute;
+                        String value = "";
+                        Attribute att = new Attribute(name, value);
+                        atts.add(att);
+                    }
+                    /*StringTokenizer st2 = new StringTokenizer(attribute, ":");
                     if (st2.countTokens() == 2)
                     {
                         String name = st2.nextToken().trim();
@@ -77,8 +92,10 @@ public class CSSParser
                     }
                     else
                     {
+                        System.out.println("attribute: "+attribute);
+                        System.out.println("st2.countTokens(): "+st2.countTokens());
                         throw new IllegalArgumentException("The css is invalid");
-                    }
+                    }*/
                 }
             }
             else
