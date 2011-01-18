@@ -1,5 +1,5 @@
 <%@page contentType="text/html"%>
-<%@page import="org.semanticwb.opensocial.model.*,org.semanticwb.opensocial.resources.*,java.util.Date, java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="org.semanticwb.opensocial.resources.*,org.semanticwb.opensocial.model.*,org.semanticwb.opensocial.resources.*,java.util.Date, java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 
 <%
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
@@ -35,9 +35,10 @@
 %>
 <html>
 <head>
-<script type="text/javascript" src="<%=context%>/swbadmin/js/dojo/dojo/dojo.js" ></script>
-
-<link rel="stylesheet" href="<%=context%>/swbadmin/jsp/opensocial/gadgets.css">
+    <style type="text/css">
+        .dndDropIndicator
+    { border: 2px dashed #99BBE8; cursor:default; margin-bottom:5px; }
+    </style>
 <script type="text/javascript" >
         var djConfig = {
             parseOnLoad: true,
@@ -45,16 +46,27 @@
             locale: 'en-us',
             extraLocale: ['ja-jp']
         };
+        
     </script>
 
+<script type="text/javascript" src="<%=context%>/swbadmin/dojo1_5/dojo/dojo.js" ></script>
+<link rel="stylesheet" href="<%=context%>/swbadmin/dojo1_5/dojox/widget/Portlet/Portlet.css">
+<link rel="stylesheet" href="<%=context%>/swbadmin/dojo1_5/dojox/layout/resources/GridContainer.css">
+<link rel="stylesheet" href="<%=context%>/swbadmin/jsp/opensocial/gadgets.css">
+
+
 <script type="text/javascript" >
-dojo.require("dijit.dijit");
-  
-  //dojo.require("dojox.widget.Portlet");
-dojo.require("dojo.parser");
-dojo.addOnLoad(function(){
-      dojo.parser.parse(); // or set djConfig.parseOnLoad = true
+ dojo.require("dijit.dijit");
+ dojo.require("dojo.parser");
+ dojo.require("dijit.Dialog");
+  dojo.require("dojox.layout.GridContainer");
+  dojo.require("dojox.widget.Portlet");
+ dojo.addOnLoad(function(){
+      dojo.parser.parse(); // or set djConfig.parseOnLoad = true      
 });
+
+  
+  
 </script>
 <script type="text/javascript" src="<%=script%>"></script>
 <script type="text/javascript"> 
@@ -189,25 +201,19 @@ function generateGadgets(metadata)
             var url=metadata.gadgets[i].url;            
             var title=metadata.gadgets[i].title;            
             var moduleId=metadata.gadgets[i].moduleId;
-            var secureToken0=generateSecureToken(url);
+            var secureToken0=generateSecureToken(url);            
             var gadget=shindig.container.createGadget({'title':title,'moduleId':moduleId,'secureToken':secureToken0,'specUrl': url,'userPrefs': metadata.gadgets[i].userPrefs});
             shindig.container.addGadget(gadget);
     }
     renderGadgets();
 };
-function renderGadgets() {  
-  shindig.container.renderGadgets();  
-  var grid=dijit.byId('grid');
+function renderGadgets() {    
+  shindig.container.renderGadgets();
+  //alert('ab');
+  /*var grid=dijit.byId('grid');
   if(grid)
       {
           grid.startup();
-      }
-  /*chrome.startup();
-  alert(typeof chrome);
-  if(typeof chrome=='dojox.layout.GridContainer')
-      {
-          alert('a');
-          chrome.startup();
       }*/
 };
 
@@ -217,49 +223,69 @@ function renderGadgets() {
 </head>
 
 <script type="text/javascript">
-  dojo.require("dijit.Dialog");
-  
-  dojo.require("dojox.layout.GridContainer");
-  dojo.require("dijit.TitlePane");
 
-  formDlg = dijit.byId("formDialog");  
+  
+  //dojo.require("dojox.layout.TableContainer");
+  //dojo.require("dijit.form.TextBox");
+  
+  
   function showDialogEmail()
   {
-     var dlg=dijit.byId('formDialog');
-     if(dlg)
-     {
-         dlg.show();
-     }
-
+      //dojo.require("dijit.dijit");
+      var edialog=dijit.byId('dialog');
+      
+    if(edialog)
+    {
+        edialog.show();
+    }
   }
+  function initContainer()
+  {
+      var edialog=dijit.byId('dialog');
+      /*if(edialog)
+      {          
+          edialog.startup();
+      }*/
+    
+  }
+
 </script>
-
-<body class="soria" onLoad="init();renderGadgets();">
-
-    <div dojoType="dijit.Dialog" id="formDialog" title="Agregar un gadget" style="width: 600px;height: 500px">
-    <script type="text/javascript">
-        <!--
-        document.write('<iframe src="<%=add%>" frameborder="0" width="580" height="500"></iframe>');
-        -->
-    </script>
+<body class="soria" onLoad="initContainer();init();renderGadgets();">
+<div dojoType="dijit.Dialog" title="Agregar un gadget" id="dialog" style="width: 600px;height: 500px">
+    <iframe src="<%=add%>" frameborder="0" width="580" height="500"></iframe>
+</div>
+<p><a href="#" onclick="showDialogEmail();">add</a></p>
+<div id="layout-root" class="gadgets-layout-root">
+    <div dojoType="dojox.layout.GridContainer"
+							id="grid"
+							region="center"
+							acceptTypes="dojox.widget.Portlet,dojox.widget.FeedPortlet"
+							hasResizableColumns="false"
+							opacity="0.3"
+							nbZones="3"
+							allowAutoScroll="true"
+							withHandles="true"
+							handleClasses="dijitTitlePaneTitle"
+							minChildWidth="200"
+							minColWidth="10"
+						></div>
 
 </div>
-        <p><a href="#" onclick="showDialogEmail();">add</a></p>
-<div id="layout-root" class="gadgets-layout-root"></div>
 
 
+<!-- <div dojoType="dojox.widget.Portlet" title="My Flickr">
 
-<div dojoType="dojox.layout.GridContainer" id="g" acceptTypes="dijit.TitlePane"
-hasResizableColumns="false" opacity="0.9" nbZones="3" allowAutoScroll="false"
-withHandles="true" handleClasses="dijitTitlePaneTitle" region="center"
-minChildWidth="200" minColWidth="40">
-    <div dojoType="dijit.TitlePane" href="foobar.html" title="Title"></div>
-    <div dojoType="dijit.TitlePane" href="foobar.html" title="Title 2"></div>
-    <div dojoType="dijit.TitlePane" href="foobar.html" title="Title 3"></div>
-    <div dojoType="dijit.TitlePane" href="foobar.html" title="Title 4"></div>
-</div> 
+  <div dojoType="dojox.widget.PortletSettings" id="axxxxx">
+    <div dojoType="dojox.layout.TableContainer" cols="1">
+      <div dojoType="dijit.form.TextBox" title="Option 3"></div>
+      <div dojoType="dijit.form.TextBox" title="Option 4"></div>
+    </div>
+  </div>
 
-
-
+  <div>
+    The Contents of the portlet go here
+  </div>
+</div>--
 </body>
 </html>
+
