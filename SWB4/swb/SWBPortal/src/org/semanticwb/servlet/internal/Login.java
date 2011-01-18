@@ -73,21 +73,19 @@ public class Login implements InternalServlet
     /** The blocked list. */
     private static SWBSoftkHashMap<String, FailedAttempt> blockedList = new SWBSoftkHashMap<String, FailedAttempt>();
 
-    private static java.security.KeyPair rsakey = SWBUtils.CryptoWrapper.getRSAKey();
+    //private static java.security.KeyPair rsakey = SWBUtils.CryptoWrapper.getRSAKey();
 
-    private static String codigoRSA = "\n"
+    private static String codigoRSA1 = "\n"
             + "<script language=\"JavaScript\" type=\"text/javascript\" src=\"/swbadmin/js/crypto/jsbn.js\"></script>\n"
             + "<script language=\"JavaScript\" type=\"text/javascript\" src=\"/swbadmin/js/crypto/prng4.js\"></script>\n"
             + "<script language=\"JavaScript\" type=\"text/javascript\" src=\"/swbadmin/js/crypto/rng.js\"></script>\n"
             + "<script language=\"JavaScript\" type=\"text/javascript\" src=\"/swbadmin/js/crypto/rsa.js\"></script>\n"
             + "<script> \n"
-            + "var rsa = new RSAKey();\n"
-            + "rsa.setPublic(\""+ ((java.security.interfaces.RSAPublicKey)rsakey.getPublic()).getModulus().toString(16)+"\", \""
-            +((java.security.interfaces.RSAPublicKey)rsakey.getPublic()).getPublicExponent().toString(16)+"\");\n"
-            + "function encrypt(){\n"
+            + "var rsa = new RSAKey();\n";
+    private static String codigoRSA2 = "function encrypt(){\n"
             + "var res = rsa.encrypt(document.login.wb_password.value);\n"
             + "if (res){ document.login.wb_password.value=res; return true;}\n"
-            + "else {return false;}}\n"
+            + "else {return false;}\n}\n"
             + "document.login.onsubmit=encrypt;\n"
             + "</script>";
     
@@ -149,7 +147,7 @@ public class Login implements InternalServlet
         if (null == dparams.getWebPage())
         {
             return;
-        }
+        } 
         UserRepository ur = dparams.getWebPage().getWebSite().getUserRepository();
         String authMethod = ur.getAuthMethod();
         String context = ur.getLoginContext();
@@ -257,7 +255,8 @@ public class Login implements InternalServlet
                         User tmpuser = dparams.getWebPage().getWebSite().getUserRepository().getUserByLogin(request.getParameter("wb_username"));
                         String alg = tmpuser.getPassword().substring(1,tmpuser.getPassword().indexOf("}"));
                         String tmpPass = request.getParameter("wb_password");
-                        if (SWBPlatform.getSecValues().isEncrypt()) tmpPass = SWBUtils.CryptoWrapper.decryptPassword(tmpPass);
+                        if (SWBPlatform.getSecValues().isEncrypt()) tmpPass = SWBUtils.CryptoWrapper.decryptPassword(tmpPass, 
+                                SWBPortal.getUserMgr().getSessionKey(request));
                         if (tmpuser.getPassword().equals(
                                 SWBUtils.CryptoWrapper.comparablePassword(
                                 tmpPass, alg)) && tmpuser.isRequestChangePassword())
@@ -571,6 +570,10 @@ public class Login implements InternalServlet
 
             login = login.replaceFirst("<SWBVERSION>", SWBPlatform.getVersion());
             if (SWBPlatform.getSecValues().isEncrypt()){
+                java.security.KeyPair key = SWBPortal.getUserMgr().getSessionKey(request);
+                String codigoRSA = codigoRSA1 + "rsa.setPublic(\""+ ((java.security.interfaces.RSAPublicKey)key.getPublic()).getModulus().toString(16)+"\", \""
+            +((java.security.interfaces.RSAPublicKey)key.getPublic()).getPublicExponent().toString(16)+"\");\n"
+                        +codigoRSA2;
                 login = login.replaceFirst("<SWBSECURITY>", codigoRSA);
             } else {
                 login = login.replaceFirst("<SWBSECURITY>", "");
