@@ -1,5 +1,9 @@
+
 package org.semanticwb.opensocial.model;
 
+
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -18,6 +22,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.opensocial.resources.SocialContainer;
 import org.semanticwb.opensocial.resources.SocialUser;
+import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -213,22 +218,9 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         }
         return getMessagesFromGadget;
     }
-
-    public Document getOriginalDocument()
-    {
-        try
-        {
-            return SocialContainer.getXML(new URL(this.getUrl()));
-        }
-        catch (Exception e)
-        {
-        }
-        return doc;
-    }
-
     private String getKey(Element module, String key)
     {
-        String value = (module.getAttribute(key) != null || "".equals(module.getAttribute(key))) ? module.getAttribute(key) : null;
+        String value = module.getAttribute(key)==null || "".equals(module.getAttribute(key).trim())?null:module.getAttribute(key);//(module.getAttribute(key) != null || "".equals(module.getAttribute(key))) ? module.getAttribute(key) : null;
         return value;
     }
 
@@ -300,15 +292,14 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             String _height = getKey(module, "height");
             description = getKey(module, "description");
             String _scrolling = getKey(module, "scrolling");
-            String _category = getKey(module, "category");
-
+            String _category = getKey(module, "category");            
             NodeList contents = doc.getElementsByTagName("Content");
             for (int i = 0; i < contents.getLength(); i++)
             {
                 if (contents.item(i) instanceof Element)
                 {
                     Element content = (Element) contents.item(i);
-                    String _view =   getKey(content, "view");
+                    String _view = getKey(content, "view");                    
                     if (_view != null)
                     {
                         StringTokenizer st = new StringTokenizer(_view, ",");
@@ -316,13 +307,13 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                         {
                             String view = st.nextToken().trim();
                             if (!"".equals(view))
-                            {
+                            {                                
                                 views.add(createView(content, view));
                             }
                         }
                     }
                     else
-                    {
+                    {                        
                         views.add(createView(content, "default"));
                     }
                 }
@@ -561,7 +552,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                log.debug(e);
             }
         }
         return doc;
@@ -584,6 +575,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         }
         catch (Exception e)
         {
+            log.debug(e);
             e.printStackTrace();
         }
         return false;
@@ -707,19 +699,60 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
     {
         return categories.toArray(new String[categories.size()]);
     }
+    private String getHTML(URL url)
+    {
+        StringBuilder sb = new StringBuilder();
+        try
+        {
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            Charset charset = Charset.defaultCharset();
+            String contentType = con.getHeaderField("Content-Type");
+            if (contentType != null && contentType.toLowerCase().indexOf("html") != -1)
+            {
+                int pos = contentType.indexOf("charset");
+                if (pos != -1)
+                {
+                    String scharset = contentType.substring(pos + 1);
+                    pos = scharset.indexOf("=");
+                    if (pos != -1)
+                    {
+                        scharset = scharset.substring(pos + 1);
+                        try
+                        {
+                            charset = Charset.forName(scharset);
+                        }
+                        catch (Exception e)
+                        {
+                            log.debug(e);
+                        }
+                    }
+                }
+            }
+            InputStream in = con.getInputStream();
+            byte[] buffer = new byte[1028];
+            int read = in.read(buffer);
+            while (read != -1)
+            {
+                sb.append(new String(buffer, 0, read, charset));
+                read = in.read(buffer);
+            }
+            in.close();
+        }
+        catch (Exception e)
+        {
+            log.debug(e);
+        }
+        return sb.toString();
+    }
 
     private View createView(Element content, String viewName)
     {
-        View view = new View();
-        view.name = viewName;
-        String type = "html";
-        if (content.getAttribute("type") != null)
-        {
-            type = content.getAttribute("type");
-        }
-        view.type = type;
+
+        View view = new View(viewName);
+        String type = getKey(content, "type");
+        view.setType(type);
         int preferredHeight = 0;
-        if (content.getAttribute("preferred_height") != null)
+        if (getKey(content, "preferred_height") != null)
         {
             try
             {
@@ -727,13 +760,14 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             }
             catch (NumberFormatException bfe)
             {
+                log.debug(bfe);
             }
         }
-        view.preferredHeight = preferredHeight;
+        view.setPreferredHeight(preferredHeight);
 
 
         int preferredWidth = 0;
-        if (content.getAttribute("preferred_width") != null)
+        if (getKey(content, "preferred_width") != null)
         {
             try
             {
@@ -741,25 +775,88 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             }
             catch (NumberFormatException bfe)
             {
+                log.debug(bfe);
             }
         }
-        view.preferredWidth = preferredWidth;
+        view.setPreferredWidth(preferredWidth);
 
 
 
-        boolean scrolling = true;
-        if (content.getAttribute("scrolling") != null)
+        boolean _scrolling = true;
+        if (getKey(content, "scrolling") != null)
         {
             try
             {
-                scrolling = Boolean.parseBoolean(content.getAttribute("scrolling"));
+                _scrolling = Boolean.parseBoolean(content.getAttribute("scrolling"));
             }
             catch (NumberFormatException bfe)
             {
+                log.debug(bfe);
             }
         }
-        view.scrolling = scrolling;
+        view.setScrolling(_scrolling);
 
+        String href = getKey(content, "href");
+        if ("url".equalsIgnoreCase(type))
+        {
+            if (href != null)
+            {
+                try
+                {
+                    URI urihref = new URI(href);
+                    URI urigadget = new URI(this.getUrl());
+                    if (!urihref.isAbsolute())
+                    {
+                        urigadget.resolve(urihref);
+                    }
+                    view.setUrlContent(urihref.toURL());
+                }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                    e.printStackTrace();
+                }
+            }            
+        }
+        else
+        {
+            if (href != null)
+            {
+                try
+                {
+                    URI urihref = new URI(href);
+                    URI urigadget = new URI(this.getUrl());
+                    if (!urihref.isAbsolute())
+                    {
+                        urihref=urigadget.resolve(urihref);
+                    }
+                    String html=getHTML(urihref.toURL());
+                    view.setContent(html);
+                }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                    e.printStackTrace();
+                }
+            }
+            else
+            {
+                StringBuilder html = new StringBuilder();
+                NodeList childs = content.getChildNodes();
+                for (int j = 0; j < childs.getLength(); j++)
+                {
+                    if (childs.item(j) instanceof CDATASection)
+                    {
+                        CDATASection section = (CDATASection) childs.item(j);
+                        if (section.getNodeValue() != null)
+                        {
+                            html.append(section.getNodeValue());
+                        }
+                    }
+                }
+                view.setContent(html.toString());
+            }
+        }
 
         return view;
     }

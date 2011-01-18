@@ -43,8 +43,7 @@ public final class JavaScript
         {
             int pos = script.lastIndexOf("/");
             String fileName = script.substring(pos + 1);            
-            fileName=SWBUtils.getApplicationPath()+"swbadmin/jsp/opensocial/"+fileName;
-            System.out.println(fileName);
+            fileName=SWBUtils.getApplicationPath()+"swbadmin/jsp/opensocial/"+fileName;            
             File file=new File(fileName);
 
             FileInputStream in=new FileInputStream(file);
