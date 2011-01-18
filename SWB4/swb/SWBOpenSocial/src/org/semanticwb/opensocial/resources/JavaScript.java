@@ -4,6 +4,8 @@
  */
 package org.semanticwb.opensocial.resources;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -41,7 +43,22 @@ public final class JavaScript
         {
             int pos = script.lastIndexOf("/");
             String fileName = script.substring(pos + 1);            
-            String js=scripts.get(fileName);
+            fileName=SWBUtils.getApplicationPath()+"swbadmin/jsp/opensocial/"+fileName;
+            System.out.println(fileName);
+            File file=new File(fileName);
+
+            FileInputStream in=new FileInputStream(file);
+            StringBuilder sb=new StringBuilder();
+            byte[] buffer=new byte[1028];
+            int read=in.read(buffer);
+            while(read!=-1)
+            {
+                String data=new String(buffer,0,read);
+                read=in.read(buffer);
+                sb.append(data);
+            }
+            String js=sb.toString();
+            //String js=scripts.get(fileName);
             if(js!=null)
             {
 
