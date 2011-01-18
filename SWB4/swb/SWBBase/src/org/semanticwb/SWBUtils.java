@@ -193,6 +193,8 @@ public class SWBUtils {
      */
     private static int errorElementSize = 200;
 
+    private static java.security.KeyPair RSA512key = SWBUtils.CryptoWrapper.genRSA512KeyPair();
+
     /**
      * Creates a new object of this class.
      */
@@ -5288,6 +5290,26 @@ public class SWBUtils {
         }
 
         /**
+         * Generates a new RSA 512 bits KeyPair
+         * @return a new 512 bits KeyPair
+         */
+        public static KeyPair genRSA512KeyPair()
+        {
+            try{
+                String seed = java.lang.management.ManagementFactory.getRuntimeMXBean().getName() + System.currentTimeMillis();
+                KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+                keyGen.initialize(512);
+                KeyPair keypair = keyGen.genKeyPair(); 
+                return keypair;
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+                assert (false);
+            }
+            return null;
+        }
+
+        /**
          * Storable kp.
          * 
          * @return the string[]
@@ -5300,7 +5322,44 @@ public class SWBUtils {
             llaves[1] = kp.getPublic().getFormat() + "|" + SFBase64.encodeBytes(kp.getPublic().getEncoded(), false);
             return llaves;
         }
+
+        /**
+         * returns a 512 bit RSA KeyPair, it changes every restart
+         * @return 512 RSA KeyPair
+         */
+        public static KeyPair getRSAKey(){
+            return RSA512key;
+        }
+        
+        /**
+         * Converts an Hex String into a byte array
+         * @param s String to convert
+         * @return byte array of converted string
+         */
+        public static byte[] hexStringToByteArray(String s) {
+            int len = s.length(); 
+            byte[] data = new byte[len / 2]; 
+            for (int i = 0; i < len; i += 2) {
+                data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                                     + Character.digit(s.charAt(i+1), 16)); 
+            } 
+            return data;
+        }
+
+        /**
+         * decrypt an RSA passowrd
+         * @param password
+         * @return
+         */
+        public static String decryptPassword(String password) throws GeneralSecurityException{
+            Cipher c = Cipher.getInstance("RSA");
+            c.init(Cipher.DECRYPT_MODE, RSA512key.getPrivate());
+            String ret = new String(c.doFinal(hexStringToByteArray(password)));
+            return ret;
+        }
     }
+
+   
 
     /**
      * Container for operations on collections of data.

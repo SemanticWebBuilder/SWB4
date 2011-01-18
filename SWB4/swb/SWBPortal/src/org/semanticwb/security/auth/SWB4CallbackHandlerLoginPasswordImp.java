@@ -32,6 +32,7 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
@@ -156,6 +157,11 @@ private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordI
     private void getFormCredentials(Callback[] callbacks) {
         String login = request.getParameter("wb_username");
         String password = request.getParameter("wb_password");
+        if (SWBPlatform.getSecValues().isEncrypt()){
+            try {
+                password = SWBUtils.CryptoWrapper.decryptPassword(password);
+            }catch (Exception e){throw new RuntimeException("Password decryption failed", e);}
+        }log.trace("password:"+password);
         for (int i = 0; i < callbacks.length; i++) {
             if (callbacks[i] instanceof NameCallback) {
                 NameCallback nameCallback = (NameCallback) callbacks[i];
