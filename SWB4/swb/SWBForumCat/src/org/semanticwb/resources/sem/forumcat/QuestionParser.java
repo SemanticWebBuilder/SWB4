@@ -24,35 +24,41 @@ import org.semanticwb.portal.indexer.parser.GenericParser;
  * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 public class QuestionParser extends GenericParser {
-    public static String ATT_USER = "creator";
+    public static String ATT_CREATOR = "creator";
+    public static String ATT_FORUM = "forum";
+    public static String ATT_CAT = "forumcat";
     private static Logger log = SWBUtils.getLogger(QuestionParser.class);
 
     @Override
     public Map<String, IndexTerm> getIndexTerms(Searchable gen) {
         Map map = super.getIndexTerms(gen);
-        map.put(ATT_USER, new IndexTerm(ATT_USER, getIndexCreator(gen), false, IndexTerm.INDEXED_ANALYZED));
+        map.put(ATT_CREATOR, new IndexTerm(ATT_CREATOR, getIndexCreator(gen), false, IndexTerm.INDEXED_NO_ANALYZED));
+        map.put(ATT_FORUM, new IndexTerm(ATT_FORUM, getIndexForum(gen), false, IndexTerm.INDEXED_NO_ANALYZED));
+        map.put(ATT_CAT, new IndexTerm(ATT_CAT, getIndexForumCat(gen), false, IndexTerm.INDEXED_ANALYZED));
         return map;
     }
 
+    public String getIndexForumCat(Searchable gen) {
+        System.out.println("--Indexando pregunta " + ((Question)gen).getQuestion() + " con categoría " + ((Question)gen).getWebpage().getTitle());
+        return ((Question)gen).getWebpage().getTitle();
+    }
+
+    public String getIndexForum(Searchable gen) {
+        return ((Question)gen).getForumResource().getId();
+    }
+
     public String getIndexCreator(Searchable gen) {
-        String ret = "";
-        Question q = (Question) gen;
-        if (q.getCreator().getFullName() != null && !q.getCreator().getFullName().equals("")) {
-            ret = q.getCreator().getFullName();
-        }
-        return ret;
+        return ((Question)gen).getCreator().getURI();
     }
 
     @Override
     public String getIndexTitle(Searchable gen) {
-        Question q = (Question) gen;
-        return q.getQuestion();
+        return ((Question) gen).getQuestion();
     }
 
     @Override
     public String getTitle(Searchable gen, String lang) {
-        Question q = (Question) gen;
-        return q.getQuestion();
+        return ((Question) gen).getQuestion();
     }
 
     @Override
@@ -103,6 +109,17 @@ public class QuestionParser extends GenericParser {
                     break;
                 }
             }
+        }
+        return ret;
+    }
+
+    @Override
+    public String getIndexCategory(Searchable gen) {
+        String ret = "";
+        Question q = (Question) gen;
+        WebPage page = getWebPage(q.getForumResource().getResource());
+        if (page != null) {
+            ret = super.getIndexCategory(page);
         }
         return ret;
     }
