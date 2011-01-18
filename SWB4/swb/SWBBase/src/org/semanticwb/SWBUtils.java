@@ -193,7 +193,7 @@ public class SWBUtils {
      */
     private static int errorElementSize = 200;
 
-    private static java.security.KeyPair RSA512key = SWBUtils.CryptoWrapper.genRSA512KeyPair();
+//    private static java.security.KeyPair RSA512key = SWBUtils.CryptoWrapper.genRSA512KeyPair();
 
     /**
      * Creates a new object of this class.
@@ -5290,15 +5290,15 @@ public class SWBUtils {
         }
 
         /**
-         * Generates a new RSA 512 bits KeyPair
-         * @return a new 512 bits KeyPair
+         * Generates a new RSA KeyPair
+         * @return a new RSA KeyPair
          */
-        public static KeyPair genRSA512KeyPair()
+        public static KeyPair genRSAKeyPair()
         {
             try{
                 String seed = java.lang.management.ManagementFactory.getRuntimeMXBean().getName() + System.currentTimeMillis();
                 KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-                keyGen.initialize(512);
+                keyGen.initialize(1024);
                 KeyPair keypair = keyGen.genKeyPair(); 
                 return keypair;
             } catch (Exception e)
@@ -5323,13 +5323,13 @@ public class SWBUtils {
             return llaves;
         }
 
-        /**
-         * returns a 512 bit RSA KeyPair, it changes every restart
-         * @return 512 RSA KeyPair
-         */
-        public static KeyPair getRSAKey(){
-            return RSA512key;
-        }
+//        /**
+//         * returns a 512 bit RSA KeyPair, it changes every restart
+//         * @return 512 RSA KeyPair
+//         */
+//        public static KeyPair getRSAKey(){
+//            return RSA512key;
+//        }
         
         /**
          * Converts an Hex String into a byte array
@@ -5351,7 +5351,7 @@ public class SWBUtils {
          * @param password
          * @return
          */
-        public static String decryptPassword(String password) throws GeneralSecurityException{
+        public static String decryptPassword(String password, java.security.KeyPair RSA512key) throws GeneralSecurityException{
             Cipher c = Cipher.getInstance("RSA");
             c.init(Cipher.DECRYPT_MODE, RSA512key.getPrivate());
             String ret = new String(c.doFinal(hexStringToByteArray(password)));

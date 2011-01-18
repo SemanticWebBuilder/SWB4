@@ -32,6 +32,7 @@ import javax.security.auth.Subject;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
@@ -59,6 +60,8 @@ public class SWBSessionObject implements HttpSessionBindingListener, Serializabl
 
     private boolean haveToChangePassword=false;
 
+    private java.security.KeyPair RSAkey = null;
+
     /**
      * Instantiates a new sWB session object.
      */
@@ -66,6 +69,7 @@ public class SWBSessionObject implements HttpSessionBindingListener, Serializabl
     {
         mapa = new HashMap<String, Subject>();
         time=System.currentTimeMillis();
+        if (SWBPlatform.getSecValues().isEncrypt()) RSAkey = SWBUtils.CryptoWrapper.genRSAKeyPair();
     }
 
     public long getTime() {
@@ -199,6 +203,11 @@ public class SWBSessionObject implements HttpSessionBindingListener, Serializabl
     public void setHaveToChangePassword(boolean haveToChangePassword)
     {
         this.haveToChangePassword = haveToChangePassword;
+    }
+
+    public java.security.KeyPair getKey()
+    {
+        return RSAkey;
     }
 
 }

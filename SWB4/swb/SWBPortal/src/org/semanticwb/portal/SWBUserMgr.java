@@ -360,4 +360,7 @@ public class SWBUserMgr
         return set;
     }
 
+    public java.security.KeyPair getSessionKey(HttpServletRequest request){
+        return sessionobjects.get(request.getSession().getId()).getKey();
+    }
 }

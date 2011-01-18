@@ -36,6 +36,8 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.portal.SWBSessionObject;
+import org.semanticwb.portal.SWBUserMgr;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -159,7 +161,8 @@ private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordI
         String password = request.getParameter("wb_password");
         if (SWBPlatform.getSecValues().isEncrypt()){
             try {
-                password = SWBUtils.CryptoWrapper.decryptPassword(password);
+                password = SWBUtils.CryptoWrapper.decryptPassword(password,
+                        SWBPortal.getUserMgr().getSessionKey(request));
             }catch (Exception e){throw new RuntimeException("Password decryption failed", e);}
         }log.trace("password:"+password);
         for (int i = 0; i < callbacks.length; i++) {
