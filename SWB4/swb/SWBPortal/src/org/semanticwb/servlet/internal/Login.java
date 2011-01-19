@@ -253,16 +253,18 @@ public class Login implements InternalServlet
                     if (SWBPlatform.getSecValues().isForceChage() || SWBPlatform.getSecValues().getExpires()>0)
                     {
                         User tmpuser = dparams.getWebPage().getWebSite().getUserRepository().getUserByLogin(request.getParameter("wb_username"));
-                        String alg = tmpuser.getPassword().substring(1,tmpuser.getPassword().indexOf("}"));
-                        String tmpPass = request.getParameter("wb_password");
-                        if (SWBPlatform.getSecValues().isEncrypt()) tmpPass = SWBUtils.CryptoWrapper.decryptPassword(tmpPass, 
-                                SWBPortal.getUserMgr().getSessionKey(request));
-                        if (tmpuser.getPassword().equals(
-                                SWBUtils.CryptoWrapper.comparablePassword(
-                                tmpPass, alg)) && tmpuser.isRequestChangePassword())
-                        {
-                            formChangePwd(request, response, dparams, tmpuser, "Debe actualizar su contraseña.");
-                            return;
+                        if (null!=tmpuser){
+                            String alg = tmpuser.getPassword().substring(1,tmpuser.getPassword().indexOf("}"));
+                            String tmpPass = request.getParameter("wb_password");
+                            if (SWBPlatform.getSecValues().isEncrypt()) tmpPass = SWBUtils.CryptoWrapper.decryptPassword(tmpPass,
+                                    SWBPortal.getUserMgr().getSessionKey(request));
+                            if (tmpuser.getPassword().equals(
+                                    SWBUtils.CryptoWrapper.comparablePassword(
+                                    tmpPass, alg)) && tmpuser.isRequestChangePassword())
+                            {
+                                formChangePwd(request, response, dparams, tmpuser, "Debe actualizar su contraseña.");
+                                return;
+                            }
                         }
                     }
                 } catch (Exception ne)
@@ -295,8 +297,8 @@ public class Login implements InternalServlet
             log.debug("PATHs: Path:" + path + " - " + dparams.getWebPage().getWebSiteId() + " - " + dparams.getWebPage().getId());
             url =
                     SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor") + "/" + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
-        }
-
+        } 
+        url = url+"?"+request.getQueryString();
         sendRedirect(response, url);
     }
 
@@ -732,7 +734,7 @@ public class Login implements InternalServlet
             blockedList.put(matchKey, fa);
             failedAttempt = fa;
         }
-        failedAttempt.failedAttempt();
+        failedAttempt.failedAttempt(); //System.out.println("******************************:"+failedAttempt.getLogin()+":"+failedAttempt.getCont()+":"+failedAttempt.isBlocked()+":"+failedAttempt.getTsBlockedTime());
     }
 
     /**
