@@ -48,6 +48,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Country;
 import org.semanticwb.model.Device;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.SWBContext;
@@ -220,6 +221,22 @@ public class SWBUserMgr
                 ret.setDevice(dev);
             }
             ret.setIp(request.getRemoteAddr());
+
+            //Validacion de pais
+            String scountry = SWBPortal.UTIL.getIPCountryCode(request.getRemoteAddr());
+            Country c=null;
+            if(scountry!=null)
+            {
+                c=site.getCountry(scountry.toLowerCase());
+                if(c==null)c=site.getCountry();
+
+                if(c==null)
+                {
+                    Iterator<Country> i=SWBUtils.Collections.copyIterator(site.listCountries()).iterator();
+                    if(i.hasNext())c=i.next();
+                }
+            }
+            if(c!=null)ret.setCountry(c.getId());
 
             //User session log
             {
