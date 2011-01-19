@@ -5783,6 +5783,14 @@ shindig.IfrGadgetService.prototype.setHeight = function(height) {
 };
 
 shindig.IfrGadgetService.prototype.setTitle = function(title) {
+    var _id='porlet_'+this.f;    
+    var porlet=dijit.byId(_id);
+    if(porlet)
+    {
+        try{
+        porlet.setTitle(title);}catch(e){}
+    }
+
   var element = document.getElementById(this.f + '_title');
   if (element) {
     element.innerHTML = title.replace(/&/g, '&amp;').replace(/</g, '&lt;');
@@ -6074,7 +6082,7 @@ shindig.Gadget.prototype.render = function(chrome) {
         try
         {
       var title=(gadget.title ? gadget.title : 'Title');      
-      var _id='pane_'+gadget.id;
+      var _id='porlet_'+gadget.getIframeId();
       var porlet=new dojox.widget.Portlet({'id':_id,'title':title});
       var idsetting='setting_'+gadget.id;
       var settings = new dojox.widget.PortletSettings({'id':idsetting},porlet);
@@ -6897,4 +6905,7 @@ gadgets.pubsubrouter = function() {
 
 
 ;
+
+
+
 gadgets.config.init({"shindig.auth":{"authToken":"-1:-1:*::*:0:default"},"osapi":{"endPoints":["http://%host%<%=rpc%>"]},"osapi.services":{"gadgets.rpc":["container.listMethods"],"http://%host%<%=rpc%>":["samplecontainer.update","albums.update","albums.supportedFields","activities.delete","activities.supportedFields","gadgets.metadata","activities.update","mediaItems.create","albums.get","activities.get","http.put","activitystreams.create","messages.modify","appdata.get","messages.get","system.listMethods","samplecontainer.get","cache.invalidate","people.supportedFields","http.head","http.delete","messages.create","people.get","activitystreams.get","mediaItems.supportedFields","mediaItems.delete","albums.delete","activitystreams.update","mediaItems.update","messages.delete","appdata.update","gadgets.tokenSupportedFields","http.post","activities.create","samplecontainer.create","http.get","albums.create","appdata.delete","gadgets.token","appdata.create","activitystreams.delete","gadgets.supportedFields","mediaItems.get","activitystreams.supportedFields"]},"rpc":{"parentRelayUrl":"/container/rpc_relay.html","useLegacyProtocol":false},"core.io":{"proxyUrl":"//%host%<%=proxy%>?container=default&refresh=%refresh%&url=%url%%rewriteMime%","jsonProxyUrl":"//%host%<%=makerequest%>"}});
