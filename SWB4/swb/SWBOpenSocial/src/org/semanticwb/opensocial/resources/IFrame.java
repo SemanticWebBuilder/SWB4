@@ -24,9 +24,6 @@ import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.css.parser.Attribute;
-import org.semanticwb.css.parser.CSSParser;
-import org.semanticwb.css.parser.Selector;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.opensocial.model.Gadget;
@@ -108,9 +105,9 @@ public class IFrame
                     {
                         if (tag.isEndTag())
                         {
-                            
-                            //ret.append(parseCSS(cssString.toString(), gadget, proxy));
-                            ret.append(cssString.toString());
+
+                            ret.append(parseCSS(cssString.toString(), gadget, proxy));
+                            //ret.append(cssString.toString());
                             cssString = new StringBuilder();
                             css = false;
                             ret.append(tok.getRawString());
@@ -153,106 +150,152 @@ public class IFrame
 
     public static String parseCSS(String cssbody, URI gadget, URI proxy)
     {
-        StringBuilder sb = new StringBuilder("\r\n");
+        StringBuilder sb = new StringBuilder();
+        int pos = cssbody.indexOf("url(");
+        while (pos != -1)
+        {
+            sb.append(cssbody.substring(0, pos + 4));
+            cssbody = cssbody.substring(pos + 4);
+            pos = cssbody.indexOf(")");
+            if (pos != -1)
+            {
+                String value = cssbody.substring(0, pos);
+                if(value.startsWith("'"))
+                {
+                    value=value.substring(1);
+                }
+                if(value.endsWith("'"))
+                {
+                    value=value.substring(0,value.length()-1);
+                }
+                try
+                {
+                    URI uriValue = new URI(value);
+                    if (!uriValue.isAbsolute())
+                    {
+                        uriValue = gadget.resolve(uriValue);
+                    }
+                    String url = uriValue.toString();
+                    int pos2 = url.indexOf("?"); // elimina parametros por seguridad
+                    if (pos2 != -1)
+                    {
+                        url = url.substring(0, pos2);
+                    }
+                    value = proxy.toString()+"?url="+URLEncoder.encode(url);
+                }
+                catch (URISyntaxException e)
+                {
+                    log.debug(e);
+                }
+                sb.append("'");
+                sb.append(value);
+                sb.append("'");
+                cssbody = cssbody.substring(pos);
+            }
+            pos = cssbody.indexOf("url(");
+        }        
+        return sb.toString();
+
+        /*StringBuilder sb = new StringBuilder("\r\n");
         try
         {
-            CSSParser p = new CSSParser(cssbody);
-            for (Selector selector : p.getSelectors())
-            {
-                sb.append(selector.getName());
-                sb.append("{");
-                for (Attribute att : selector.getAttributes())
-                {
+        CSSParser p = new CSSParser(cssbody);
+        for (Selector selector : p.getSelectors())
+        {
+        sb.append(selector.getName());
+        sb.append("{");
+        for (Attribute att : selector.getAttributes())
+        {
 
-                    //sb.append("\r\n");
-                    sb.append(att.getName());
-                    sb.append(":");
-                    if (att.getName().equals("background-image") || att.getName().equals("background") || att.getName().equals("list-style"))
-                    {
-                        for (String value : att.getValues())
-                        {
-                            
-                            if (value.startsWith("url("))
-                            {
-                                value = value.substring(4);
-                                int pos = value.indexOf(")");
-                                if (pos != -1)
-                                {
-                                    value = value.substring(0, pos).trim();
-                                    if (value.startsWith("\"") && value.endsWith("\""))
-                                    {
-                                        value = value.substring(1, value.length() - 1);
-                                    }
-                                    if (value.startsWith("'") && value.endsWith("'"))
-                                    {
-                                        value = value.substring(1, value.length() - 1);
-                                    }
-                                    try
-                                    {
-                                        URI uriValue = new URI(value);
-                                        if (!uriValue.isAbsolute())
-                                        {
-                                            uriValue = gadget.resolve(uriValue);
-                                        }
-                                        String url = uriValue.toString();
-                                        int pos2 = url.indexOf("?"); // elimina parametros por seguridad
-                                        if (pos2 != -1)
-                                        {
-                                            url = url.substring(0, pos2);
-                                        }
-                                        value = url;
-                                    }
-                                    catch (URISyntaxException uie)
-                                    {
-                                        log.debug(uie);
-                                    }
-                                    sb.append("url('");
-                                    sb.append(proxy.toString());
-                                    sb.append("?url=");
-                                    sb.append(URLEncoder.encode(value));
-                                    sb.append("') ");
+        //sb.append("\r\n");
+        sb.append(att.getName());
+        sb.append(":");
+        if (att.getName().equals("background-image") || att.getName().equals("background") || att.getName().equals("list-style"))
+        {
+        for (String value : att.getValues())
+        {
 
-                                }
-                                else
-                                {
-                                    sb.append(value);
-                                }
-                            }
-                            else
-                            {
-                                sb.append(value);
-                                sb.append(" ");
-                            }
-                        }
-                        if(sb.charAt(sb.length()-1)==' ')
-                        {
-                            sb.deleteCharAt(sb.length()-1);
-                        }
-                        sb.append(";");
-                    }
-                    else
-                    {
-                        for (String value : att.getValues())
-                        {
-                            sb.append(value);
-                            sb.append(" ");
-                        }
-                        if(sb.charAt(sb.length()-1)==' ')
-                        {
-                            sb.deleteCharAt(sb.length()-1);
-                        }
-                        sb.append(";");
-                    }
-                }
-                sb.append("}");
-            }
+        if (value.startsWith("url("))
+        {
+        value = value.substring(4);
+        int pos = value.indexOf(")");
+        if (pos != -1)
+        {
+        value = value.substring(0, pos).trim();
+        if (value.startsWith("\"") && value.endsWith("\""))
+        {
+        value = value.substring(1, value.length() - 1);
+        }
+        if (value.startsWith("'") && value.endsWith("'"))
+        {
+        value = value.substring(1, value.length() - 1);
+        }
+        try
+        {
+        URI uriValue = new URI(value);
+        if (!uriValue.isAbsolute())
+        {
+        uriValue = gadget.resolve(uriValue);
+        }
+        String url = uriValue.toString();
+        int pos2 = url.indexOf("?"); // elimina parametros por seguridad
+        if (pos2 != -1)
+        {
+        url = url.substring(0, pos2);
+        }
+        value = url;
+        }
+        catch (URISyntaxException uie)
+        {
+        log.debug(uie);
+        }
+        sb.append("url('");
+        sb.append(proxy.toString());
+        sb.append("?url=");
+        sb.append(URLEncoder.encode(value));
+        sb.append("') ");
+
+        }
+        else
+        {
+        sb.append(value);
+        }
+        }
+        else
+        {
+        sb.append(value);
+        sb.append(" ");
+        }
+        }
+        if(sb.charAt(sb.length()-1)==' ')
+        {
+        sb.deleteCharAt(sb.length()-1);
+        }
+        sb.append(";");
+        }
+        else
+        {
+        for (String value : att.getValues())
+        {
+        sb.append(value);
+        sb.append(" ");
+        }
+        if(sb.charAt(sb.length()-1)==' ')
+        {
+        sb.deleteCharAt(sb.length()-1);
+        }
+        sb.append(";");
+        }
+        }
+        sb.append("}");
+        }
         }
         catch (Throwable e)
         {
-            log.error(e);
+        log.error(e);
         }
 
-        return sb.toString();
+        return sb.toString();*/
     }
 
     private String getHTMLFromView(String view, Gadget gadget, Map<String, String> variables)
@@ -439,7 +482,7 @@ public class IFrame
                     read = in.read(buffer);
                     sb.append(data);
                 }
-                               
+
                 String _frame = sb.toString();
                 String HtmlResponse = _frame.replace("<%=msg%>", msg.toString());
                 HtmlResponse = HtmlResponse.replace("<%=context%>", SWBPortal.getContextPath());
