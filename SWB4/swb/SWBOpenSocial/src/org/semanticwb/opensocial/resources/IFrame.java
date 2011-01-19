@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.css.parser.Attribute;
 import org.semanticwb.css.parser.CSSParser;
@@ -107,8 +108,9 @@ public class IFrame
                     {
                         if (tag.isEndTag())
                         {
-                            ret.append(parseCSS(cssString.toString(), gadget, proxy));
-                            //ret.append(cssString.toString());
+                            
+                            //ret.append(parseCSS(cssString.toString(), gadget, proxy));
+                            ret.append(cssString.toString());
                             cssString = new StringBuilder();
                             css = false;
                             ret.append(tok.getRawString());
@@ -146,6 +148,7 @@ public class IFrame
             log.error(e);
         }
         return ret.toString();
+        //return datos;
     }
 
     public static String parseCSS(String cssbody, URI gadget, URI proxy)
@@ -157,17 +160,18 @@ public class IFrame
             for (Selector selector : p.getSelectors())
             {
                 sb.append(selector.getName());
-                sb.append("\r\n{");
+                sb.append("{");
                 for (Attribute att : selector.getAttributes())
                 {
 
-                    sb.append("\r\n");
+                    //sb.append("\r\n");
                     sb.append(att.getName());
                     sb.append(":");
                     if (att.getName().equals("background-image") || att.getName().equals("background") || att.getName().equals("list-style"))
                     {
                         for (String value : att.getValues())
                         {
+                            
                             if (value.startsWith("url("))
                             {
                                 value = value.substring(4);
@@ -220,6 +224,10 @@ public class IFrame
                                 sb.append(" ");
                             }
                         }
+                        if(sb.charAt(sb.length()-1)==' ')
+                        {
+                            sb.deleteCharAt(sb.length()-1);
+                        }
                         sb.append(";");
                     }
                     else
@@ -229,10 +237,14 @@ public class IFrame
                             sb.append(value);
                             sb.append(" ");
                         }
+                        if(sb.charAt(sb.length()-1)==' ')
+                        {
+                            sb.deleteCharAt(sb.length()-1);
+                        }
                         sb.append(";");
                     }
                 }
-                sb.append("\r\n}\r\n\r\n");
+                sb.append("}");
             }
         }
         catch (Throwable e)
@@ -427,14 +439,17 @@ public class IFrame
                     read = in.read(buffer);
                     sb.append(data);
                 }
+                               
                 String _frame = sb.toString();
                 String HtmlResponse = _frame.replace("<%=msg%>", msg.toString());
+                HtmlResponse = HtmlResponse.replace("<%=context%>", SWBPortal.getContextPath());
                 HtmlResponse = HtmlResponse.replace("<%=default_values%>", j_default_values.toString());
                 HtmlResponse = HtmlResponse.replace("<%=js%>", javascript.toString());
                 HtmlResponse = HtmlResponse.replace("<%=rpc%>", rpc.toString());
                 HtmlResponse = HtmlResponse.replace("<%=proxy%>", proxy.toString());
                 HtmlResponse = HtmlResponse.replace("<%=makerequest%>", makerequest.toString());
                 HtmlResponse = HtmlResponse.replace("<%=html%>", body);
+
                 PrintWriter out = response.getWriter();
                 out.write(HtmlResponse);
                 out.close();
