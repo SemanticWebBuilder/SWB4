@@ -7,17 +7,14 @@ package org.semanticwb.opensocial.resources;
 import com.arthurdo.parser.HtmlStreamTokenizer;
 import com.arthurdo.parser.HtmlTag;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 
 
@@ -36,10 +33,6 @@ import org.semanticwb.opensocial.model.View;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.w3c.dom.CDATASection;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  *
@@ -48,7 +41,7 @@ import org.w3c.dom.NodeList;
 public class IFrame
 {
 
-    private static final String frame = SocialContainer.loadFrame("demoframe.html");
+    private static final String frame = SocialContainer.loadFrame("frame.html");
     private static final Logger log = SWBUtils.getLogger(IFrame.class);
 
     public static String parseHTML(String datos, URI gadget, URI proxy)
@@ -71,7 +64,7 @@ public class IFrame
                     }
                     tok.parseTag(tok.getStringValue(), tag);
 
-                    if (!tag.isEndTag() && (tag.getTagString().toLowerCase().equals("script") || tag.getTagString().toLowerCase().equals("img")))
+                    if (!tag.isEndTag() && (tag.getTagString().equalsIgnoreCase("script") || tag.getTagString().equalsIgnoreCase("img")))
                     {
                         ret.append("<");
                         ret.append(tag.getTagString());
@@ -108,6 +101,7 @@ public class IFrame
                             ret.append("\" ");
                         }
                         ret.append(">");
+
                     }
                     else if (tag.getTagString().toLowerCase().equals("style"))
                     {
@@ -212,7 +206,7 @@ public class IFrame
                                     sb.append(proxy.toString());
                                     sb.append("?url=");
                                     sb.append(URLEncoder.encode(value));
-                                    sb.append("')");
+                                    sb.append("') ");
 
                                 }
                                 else
@@ -223,7 +217,7 @@ public class IFrame
                             else
                             {
                                 sb.append(value);
-                                sb.append(",");
+                                sb.append(" ");
                             }
                         }
                         sb.append(";");
@@ -249,13 +243,11 @@ public class IFrame
         return sb.toString();
     }
 
-    
-
     private String getHTMLFromView(String view, Gadget gadget, Map<String, String> variables)
     {
-        String html = null;        
+        String html = null;
         for (View oview : gadget.getViews())
-        {            
+        {
             if (view.equals(oview.getName()))
             {
                 if (oview.getContent() != null)
@@ -265,7 +257,7 @@ public class IFrame
                     {
                         String value = variables.get(key);
                         html = html.replace(key, value);
-                    }                    
+                    }
                 }
                 else if (oview.getUrlcontent() != null)
                 {
@@ -280,6 +272,62 @@ public class IFrame
             }
         }
         return html;
+    }
+
+    private String prepareScript(String script)
+    {
+        StringBuilder sb = new StringBuilder();
+        int pos = script.indexOf(">");
+        if (pos != -1)
+        {
+            String bodyScript = script.substring(pos + 1);
+            sb.append(script.substring(0, pos + 1));
+            pos = bodyScript.toLowerCase().indexOf("</script>");
+            if (pos != -1)
+            {
+                bodyScript = bodyScript.substring(0, pos);
+                pos = bodyScript.indexOf("<!--");
+                if (pos == -1 && !"".equals(bodyScript.trim()))
+                {
+                    sb.append("\r\n<!-- \r\n ");
+                    sb.append(bodyScript);
+                    sb.append("\r\n -->\r\n");
+                    sb.append("</script>");
+                }
+                else
+                {
+                    return script;
+                }
+            }
+            else
+            {
+                return script;
+            }
+        }
+        return sb.toString();
+    }
+
+    private String prepare(String body)
+    {
+        StringBuilder sb = new StringBuilder();
+        int pos = body.toLowerCase().indexOf("<script");
+        while (pos != -1)
+        {
+            String script = body.substring(pos);
+            sb.append(body.substring(0, pos));
+            body = body.substring(pos);
+            pos = body.toLowerCase().indexOf("</script>");
+            if (pos != -1)
+            {
+                script = script.substring(0, pos + 9);
+                body = body.substring(pos + 9);
+                script = prepareScript(script);
+                sb.append(script);
+            }
+            pos = body.toLowerCase().indexOf("<script>");
+        }
+        sb.append(body);
+        return sb.toString();
     }
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -297,7 +345,7 @@ public class IFrame
         {
             sview = "default";
         }
-        String html = "";
+        String body = "";
         if (moduleid == null)
         {
             moduleid = "0";
@@ -307,23 +355,19 @@ public class IFrame
         {
             Gadget gadget = SocialContainer.getGadget(url, paramRequest.getWebPage().getWebSite());
             if (gadget != null)
-            {                
+            {
                 SocialUser socialuser = SocialContainer.getSocialUser(user, request.getSession());
                 Map<String, String> variables = socialuser.getVariablesubstituion(gadget, lang, country, moduleid, site);
-                html=getHTMLFromView(sview, gadget, variables);
-                System.out.println(sview);
-                System.out.println(html);
-                if(html==null)
+                body = getHTMLFromView(sview, gadget, variables);
+                if (body == null)
                 {
-                    sview="default";
-                    html=getHTMLFromView(sview, gadget, variables);
-                    System.out.println(sview);
-                    System.out.println(html);
+                    sview = "default";
+                    body = getHTMLFromView(sview, gadget, variables);
                 }
-                
-                if (html == null)
+
+                if (body == null)
                 {
-                    html = "";
+                    body = "";
                 }
                 SWBResourceURL makerequest = paramRequest.getRenderUrl();
                 makerequest.setCallMethod(SWBResourceURL.Call_DIRECT);
@@ -342,7 +386,14 @@ public class IFrame
 
 
 
-                html = parseHTML(html, new URI(gadget.getUrl()), new URI(proxy.toString()));
+                body = prepare(body);
+
+
+
+
+                body = parseHTML(body, new URI(gadget.getUrl()), new URI(proxy.toString()));
+
+
                 SWBResourceURL javascript = paramRequest.getRenderUrl();
                 javascript.setMode(SocialContainer.Mode_JAVASCRIPT);
                 javascript.setCallMethod(SWBResourceURL.Call_DIRECT);
@@ -362,15 +413,29 @@ public class IFrame
                     msg.put(key, messages.get(key));
                 }
 
-                String HtmlResponse = frame.replace("<%=msg%>", msg.toString());
+
+                String fileName = SWBUtils.getApplicationPath() + "swbadmin/jsp/opensocial/frame.html";
+                File file = new File(fileName);
+
+                FileInputStream in = new FileInputStream(file);
+                StringBuilder sb = new StringBuilder();
+                byte[] buffer = new byte[1028];
+                int read = in.read(buffer);
+                while (read != -1)
+                {
+                    String data = new String(buffer, 0, read);
+                    read = in.read(buffer);
+                    sb.append(data);
+                }
+                String _frame = sb.toString();
+                String HtmlResponse = _frame.replace("<%=msg%>", msg.toString());
                 HtmlResponse = HtmlResponse.replace("<%=default_values%>", j_default_values.toString());
                 HtmlResponse = HtmlResponse.replace("<%=js%>", javascript.toString());
                 HtmlResponse = HtmlResponse.replace("<%=rpc%>", rpc.toString());
                 HtmlResponse = HtmlResponse.replace("<%=proxy%>", proxy.toString());
                 HtmlResponse = HtmlResponse.replace("<%=makerequest%>", makerequest.toString());
-                HtmlResponse = HtmlResponse.replace("<%=html%>", html);
+                HtmlResponse = HtmlResponse.replace("<%=html%>", body);
                 PrintWriter out = response.getWriter();
-                
                 out.write(HtmlResponse);
                 out.close();
             }

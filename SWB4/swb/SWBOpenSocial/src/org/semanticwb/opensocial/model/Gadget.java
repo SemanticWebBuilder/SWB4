@@ -32,6 +32,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
     private static final Logger log = SWBUtils.getLogger(Gadget.class);
     private Document doc;
+    private Document original;
     private String title;
     private final HashSet<String> categories = new HashSet<String>();
     private final Map<String, FeatureDetail> featureDetails = new HashMap<String, FeatureDetail>();
@@ -229,7 +230,8 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         doc = null;
         try
         {
-            doc = SocialContainer.getXML(new URL(this.getUrl()));
+            original = SocialContainer.getXML(new URL(this.getUrl()));
+            doc=original;
         }
         catch (IOException e)
         {
@@ -293,7 +295,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             description = getKey(module, "description");
             String _scrolling = getKey(module, "scrolling");
             String _category = getKey(module, "category");            
-            NodeList contents = doc.getElementsByTagName("Content");
+            NodeList contents = original.getElementsByTagName("Content");
             for (int i = 0; i < contents.getLength(); i++)
             {
                 if (contents.item(i) instanceof Element)
@@ -745,6 +747,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         return sb.toString();
     }
 
+    
     private View createView(Element content, String viewName)
     {
 
@@ -842,7 +845,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             else
             {
                 StringBuilder html = new StringBuilder();
-                NodeList childs = content.getChildNodes();
+                NodeList childs = content.getChildNodes();                
                 for (int j = 0; j < childs.getLength(); j++)
                 {
                     if (childs.item(j) instanceof CDATASection)
@@ -851,9 +854,9 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                         if (section.getNodeValue() != null)
                         {
                             html.append(section.getNodeValue());
-                        }
+                        }                        
                     }
-                }
+                }                
                 view.setContent(html.toString());
             }
         }
