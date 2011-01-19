@@ -262,6 +262,11 @@ public class SWBPortal
     private static SWBIndexMgr indmgr = null;
 
     /**
+     * GeoIp Service Interface
+     */
+    private static com.maxmind.geoip.LookupService geoip = null;
+
+    /**
      * Creates an object of this class, calling method {@code createInstance(ServletContext, Filter) with.
      * 
      * @param servletContext the {@code ServletContex} agregated to the new instance
@@ -290,6 +295,13 @@ public class SWBPortal
             SWBPortal.virtualHostFilter = filter;
             instance = new SWBPortal();
             SWBPortal.servletContext = servletContext;
+            String dbfile = SWBUtils.getApplicationPath()+"/swbadmin/geoip/GeoIP.dat";
+            try {
+                SWBPortal.geoip = new com.maxmind.geoip.LookupService(dbfile, com.maxmind.geoip.LookupService.GEOIP_MEMORY_CACHE);
+            } catch (IOException ioe) {
+                log.warn("can't find GeoIP.dat file", ioe);
+                SWBPortal.geoip = null;
+            }
 
         }
         return instance;
@@ -2842,6 +2854,18 @@ public class SWBPortal
                 log.error("Check if you have the necesary owl files in the owl directory", e);
             }
             return null;
+        }
+
+        public static String getIPCountryCode(String ip){
+            return SWBPortal.geoip.getCountry(ip).getCode();
+        }
+
+        public static String getIPCountryName(String ip){
+            return SWBPortal.geoip.getCountry(ip).getName();
+        }
+
+        public static com.maxmind.geoip.Country getIPCountry(String ip){
+            return SWBPortal.geoip.getCountry(ip);
         }
     }
 
