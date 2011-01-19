@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto que define un Sitio Web 
    */
-public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable,org.semanticwb.model.Indexable,org.semanticwb.model.Filterable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableNode
+public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Trashable,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Localeable,org.semanticwb.model.Countryable
 {
    /**
    * Superclase de todos los tipos de Modelos de SemanticWebBuilder
@@ -424,6 +424,29 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
         public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSiteByHomePage(org.semanticwb.model.WebPage value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.WebSite> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_homePage,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.WebSite with a determined Country
+       * @param value Country of the type org.semanticwb.model.Country
+       * @param model Model of the org.semanticwb.model.WebSite
+       * @return Iterator with all the org.semanticwb.model.WebSite
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSiteByCountry(org.semanticwb.model.Country value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.WebSite> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_country, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.WebSite with a determined Country
+       * @param value Country of the type org.semanticwb.model.Country
+       * @return Iterator with all the org.semanticwb.model.WebSite
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSiteByCountry(org.semanticwb.model.Country value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.WebSite> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_country,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -917,6 +940,44 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
          if(obj!=null)
          {
              ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property Country
+   * @param value Country to set
+   */
+
+    public void setCountry(org.semanticwb.model.Country value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_country, value.getSemanticObject());
+        }else
+        {
+            removeCountry();
+        }
+    }
+   /**
+   * Remove the value for Country property
+   */
+
+    public void removeCountry()
+    {
+        getSemanticObject().removeProperty(swb_country);
+    }
+
+   /**
+   * Gets the Country
+   * @return a org.semanticwb.model.Country
+   */
+    public org.semanticwb.model.Country getCountry()
+    {
+         org.semanticwb.model.Country ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_country);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Country)obj.createGenericInstance();
          }
          return ret;
     }

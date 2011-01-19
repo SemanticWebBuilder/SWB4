@@ -4,12 +4,8 @@ package org.semanticwb.model.base;
    /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso. 
    */
-public abstract class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Roleable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Expirable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupable
+public abstract class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Referensable,org.semanticwb.model.Roleable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Traceable,org.semanticwb.model.Expirable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable
 {
-   /**
-   * Catalogo de paises
-   */
-    public static final org.semanticwb.platform.SemanticClass swb_Country=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Country");
     public static final org.semanticwb.platform.SemanticProperty swb_usrCountry=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrCountry");
    /**
    * Solicita al usuario cambiar de password, en el proximo acceso
@@ -117,29 +113,6 @@ public abstract class UserBase extends org.semanticwb.model.SWBClass implements 
         public static boolean hasUser(String id, org.semanticwb.model.SWBModel model)
         {
             return (getUser(id, model)!=null);
-        }
-       /**
-       * Gets all org.semanticwb.model.User with a determined Country
-       * @param value Country of the type org.semanticwb.model.Country
-       * @param model Model of the org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.model.User
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.User> listUserByCountry(org.semanticwb.model.Country value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_usrCountry, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.User with a determined Country
-       * @param value Country of the type org.semanticwb.model.Country
-       * @return Iterator with all the org.semanticwb.model.User
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.User> listUserByCountry(org.semanticwb.model.Country value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.User> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_usrCountry,value.getSemanticObject(),sclass));
-            return it;
         }
        /**
        * Gets all org.semanticwb.model.User with a determined CalendarRef
@@ -312,43 +285,23 @@ public abstract class UserBase extends org.semanticwb.model.SWBClass implements 
     {
         super(base);
     }
-   /**
-   * Sets the value for the property Country
-   * @param value Country to set
-   */
 
-    public void setCountry(org.semanticwb.model.Country value)
+/**
+* Gets the Country property
+* @return String with the Country
+*/
+    public String getCountry()
     {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_usrCountry, value.getSemanticObject());
-        }else
-        {
-            removeCountry();
-        }
-    }
-   /**
-   * Remove the value for Country property
-   */
-
-    public void removeCountry()
-    {
-        getSemanticObject().removeProperty(swb_usrCountry);
+        return getSemanticObject().getProperty(swb_usrCountry);
     }
 
-   /**
-   * Gets the Country
-   * @return a org.semanticwb.model.Country
-   */
-    public org.semanticwb.model.Country getCountry()
+/**
+* Sets the Country property
+* @param value long with the Country
+*/
+    public void setCountry(String value)
     {
-         org.semanticwb.model.Country ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_usrCountry);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.Country)obj.createGenericInstance();
-         }
-         return ret;
+        getSemanticObject().setProperty(swb_usrCountry, value);
     }
 
 /**
