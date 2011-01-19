@@ -1298,6 +1298,13 @@ gadgets.Tab.prototype.getName = function() {
 gadgets.TabSet = function(opt_moduleId,opt_defaultTab,opt_container) {
     var root='layout-root';
     var aleatorio = Math.round(Math.random()*99);
+    this.id_tablecontainer_='tablecontainer-'+aleatorio;
+    var element=document.getElementById(root);
+    if(element)
+    {
+        element.innerHTML='<table id="'+this.id_tablecontainer_+'"><tr><td></td></tr></table>';
+    }
+    aleatorio = Math.round(Math.random()*99);
     var id_tab='tabcontainer-'+aleatorio;
     this.tabcontainer=new dijit.layout.TabContainer({'id':id_tab,style:'width:100%;height:100%'},root);
     this.tabcontainer.startup();    
@@ -1363,7 +1370,7 @@ gadgets.TabSet.prototype.displayTabs = function(display) {
 
 };
 gadgets.TabSet.prototype.getHeaderContainer = function() {
-    var tablecontainer=document.getElementById('tablecontainer');
+    var tablecontainer=document.getElementById(this.id_tablecontainer_);
     return tablecontainer;
 };
 gadgets.TabSet.prototype.getSelectedTab = function() {
