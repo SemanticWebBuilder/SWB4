@@ -14,6 +14,7 @@ import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.Searchable;
+import org.semanticwb.model.Tagable;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.indexer.IndexTerm;
@@ -27,6 +28,7 @@ public class QuestionParser extends GenericParser {
     public static String ATT_CREATOR = "creator";
     public static String ATT_FORUM = "forum";
     public static String ATT_CAT = "forumcat";
+    public static String ATT_TAGS = "tags";
     private static Logger log = SWBUtils.getLogger(QuestionParser.class);
 
     @Override
@@ -35,6 +37,7 @@ public class QuestionParser extends GenericParser {
         map.put(ATT_CREATOR, new IndexTerm(ATT_CREATOR, getIndexCreator(gen), false, IndexTerm.INDEXED_NO_ANALYZED));
         map.put(ATT_FORUM, new IndexTerm(ATT_FORUM, getIndexForum(gen), false, IndexTerm.INDEXED_NO_ANALYZED));
         map.put(ATT_CAT, new IndexTerm(ATT_CAT, getIndexForumCat(gen), false, IndexTerm.INDEXED_ANALYZED));
+        map.put(ATT_TAGS, new IndexTerm(ATT_TAGS, getIndexTags(gen), true, IndexTerm.INDEXED_ANALYZED));
         return map;
     }
 
@@ -44,6 +47,15 @@ public class QuestionParser extends GenericParser {
 
     public String getIndexForum(Searchable gen) {
         return ((Question)gen).getForumResource().getId();
+    }
+
+    @Override
+    public String getIndexTags(Searchable gen) {
+        String ret = "";
+        if (gen instanceof Tagable) {
+            ret = ((Question)gen).getTags();
+        }
+        return ret;
     }
 
     public String getIndexCreator(Searchable gen) {
