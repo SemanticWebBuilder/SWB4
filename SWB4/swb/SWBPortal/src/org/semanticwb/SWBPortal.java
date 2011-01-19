@@ -2857,15 +2857,39 @@ public class SWBPortal
         }
 
         public static String getIPCountryCode(String ip){
-            return SWBPortal.geoip.getCountry(ip).getCode();
+            String ret = null;
+            if (ip.indexOf(":")>-1)
+            {
+                ret = SWBPortal.geoip.getCountryV6(ip).getCode();
+            }else
+            {
+                ret = SWBPortal.geoip.getCountry(ip).getCode();
+            }
+            return ret;
         }
 
         public static String getIPCountryName(String ip){
-            return SWBPortal.geoip.getCountry(ip).getName();
+            String ret = null;
+            if (ip.indexOf(":")>-1)
+            {
+                ret = SWBPortal.geoip.getCountryV6(ip).getName();
+            }else
+            {
+                ret = SWBPortal.geoip.getCountry(ip).getName();
+            }
+            return ret;
         }
 
         public static com.maxmind.geoip.Country getIPCountry(String ip){
-            return SWBPortal.geoip.getCountry(ip);
+            com.maxmind.geoip.Country ret = null;
+            if (ip.indexOf(":")>-1)
+            {
+                ret = SWBPortal.geoip.getCountryV6(ip);
+            }else
+            {
+                ret = SWBPortal.geoip.getCountry(ip);
+            }
+            return ret;
         }
     }
 
