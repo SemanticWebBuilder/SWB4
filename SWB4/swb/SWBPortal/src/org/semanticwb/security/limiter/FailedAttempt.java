@@ -60,9 +60,11 @@ public class FailedAttempt {
      */
     public void failedAttempt()
     {
-        cont++;
-        if (cont>4){
-            block();
+        if (!blocked){
+            cont++;
+            if (cont>4){
+                block();
+            }
         }
     }
 
