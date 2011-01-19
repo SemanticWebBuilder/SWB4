@@ -1106,31 +1106,30 @@ r.src=u
 gadgets.rpc.init()
 
 };;
-
 gadgets.flash = function() {
-  
+
 
   return {
     'embedCachedFlash':
     function(swf_url, swf_container, version,opt_params) {
       var div=document.getElementById(swf_container);
       if(div)
-      {          
-          var vars=opt_params.flashVars;          
-          var code=gadgets.flash.getEmbedCode(swf_url,vars,opt_params);          
+      {
+          var vars=opt_params.flashVars;
+          var code=gadgets.flash.getEmbedCode(swf_url,vars,opt_params);
           div.innerHTML=code;
       }
     },
     'getMajorVersion':
         function() {
-        
+
     },
     'getEmbedCode':
         function(swfURL, flashVars, opt)
         {
         var h = 200;
         var w = 300;
-        
+
         if(opt.height != undefined){
             h = opt.height;
         }
@@ -1174,8 +1173,161 @@ gadgets.flash = function() {
         return str;
 
         }
-        
+
   };
-}();
-;
+}();;
+
+
+
+gadgets.views = function() {
+
+
+  return {
+    'bind':
+    function(urlTemplate,environment) {
+
+    },
+    'getCurrentView':
+        function() {
+        var currentview=new gadgets.views.View('home');
+        return currentview;
+    },
+    'getSupportedViews':
+        function() {
+
+    },
+    'requestNavigateTo':
+        function() {
+        alert('requestNavigateTo');
+    },
+    'getParams':
+        function()
+        {
+
+
+        }
+
+  };
+}();;
+
+
+
+
+gadgets.views.View = function(name) {
+    this.name_=name;
+};
+
+gadgets.views.View.prototype.bind = function() {
+
+};
+
+gadgets.views.View.prototype.getName = function() {
+  return this.name_;
+};
+
+gadgets.views.View.prototype.getUrlTemplate = function() {
+
+};
+gadgets.views.View.prototype.isOnlyVisibleGadget = function() {
+
+};;
+
+gadgets.MiniMessage = function(opt_moduleId,opt_container) {
+
+};
+
+gadgets.MiniMessage.prototype.createDismissibleMessage = function() {
+
+};
+
+gadgets.MiniMessage.prototype.createStaticMessage = function() {
+
+};
+
+gadgets.MiniMessage.prototype.createTimerMessage = function() {
+
+};
+
+gadgets.MiniMessage.prototype.dismissMessage = function() {
+
+};
+
+var _IG_MiniMessage=function(){
+    var A=null;
+    if(!A){A=new gadgets.MiniMessage();return A;}
+    else{return A;}
+};;
+
+/*var _IG_AdjustIFrameHeight=function(){
+    alert('_IG_AdjustIFrameHeight');
+    var A=null;
+    if(!A){A=new gadgets.MiniMessage();return A;}
+    else{return A;}
+};;*/
+
+
+gadgets.Tab = function() {
+
+};
+
+gadgets.Tab.prototype.getCallback = function() {
+
+};
+
+gadgets.Tab.prototype.getContentContainer = function() {
+
+};
+
+gadgets.Tab.prototype.getIndex = function() {
+
+};
+
+gadgets.Tab.prototype.getNameContainer = function() {
+
+};
+gadgets.Tab.prototype.getName = function() {
+
+};
+
+
+gadgets.TabSet = function(opt_moduleId,opt_defaultTab,opt_container) {
+
+};
+
+gadgets.TabSet.prototype.addTab = function(tabName,opt_params) {
+
+};
+
+gadgets.TabSet.prototype.alignTabs = function(align,opt_offset) {
+
+};
+
+gadgets.TabSet.prototype.displayTabs = function(display) {
+
+};
+gadgets.TabSet.prototype.getHeaderContainer = function() {
+
+};
+gadgets.TabSet.prototype.getSelectedTab = function() {
+
+};
+gadgets.TabSet.prototype.getTabs = function() {
+
+};
+
+gadgets.TabSet.prototype.removeTab = function(tabIndex) {
+
+};
+gadgets.TabSet.prototype.setSelectedTab = function(tabIndex) {
+
+};
+gadgets.TabSet.prototype.swapTabs = function(tabIndex1,tabIndex2) {
+
+};
+
+var _IG_Tabs=function(){
+    var A=null;
+    if(!A){A=new gadgets.TabSet();return A;}
+    else{return A;}
+};;
 
