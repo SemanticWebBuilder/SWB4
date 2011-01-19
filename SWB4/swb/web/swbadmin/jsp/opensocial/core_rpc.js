@@ -1266,36 +1266,44 @@ var _IG_MiniMessage=function(){
 };;*/
 
 
-gadgets.Tab = function() {
-
+gadgets.Tab = function(name,callback,index,contentContainer) {
+this.name_=name;
+this.callback_=callback;
+this.index_=index;
+this.contentContainer_=contentContainer;
 };
 
 gadgets.Tab.prototype.getCallback = function() {
-
+    return this.callback_;
 };
 
 gadgets.Tab.prototype.getContentContainer = function() {
-
+    return this.contentContainer_;
 };
 
 gadgets.Tab.prototype.getIndex = function() {
-
+    return this.index_;
 };
 
 gadgets.Tab.prototype.getNameContainer = function() {
 
 };
 gadgets.Tab.prototype.getName = function() {
-
+    return name_;
 };
 
 
 gadgets.TabSet = function(opt_moduleId,opt_defaultTab,opt_container) {
-
+this.tabs={};
 };
 
 gadgets.TabSet.prototype.addTab = function(tabName,opt_params) {
-
+    alert('tabName: '+tabName);
+    var index_=opt_params.index;
+    var callback=opt_params.callback;
+    var contentContainer=opt_params.contentContainer;
+    var tab=new gadgets.Tab(tabName,callback,index_,contentContainer);
+    return tabName;
 };
 
 gadgets.TabSet.prototype.alignTabs = function(align,opt_offset) {
@@ -1313,6 +1321,10 @@ gadgets.TabSet.prototype.getSelectedTab = function() {
 };
 gadgets.TabSet.prototype.getTabs = function() {
 
+};
+gadgets.TabSet.prototype.addDynamicTab = function(tabName,opt_params) {
+    
+    this.addTab(tabName,opt_params);
 };
 
 gadgets.TabSet.prototype.removeTab = function(tabIndex) {
