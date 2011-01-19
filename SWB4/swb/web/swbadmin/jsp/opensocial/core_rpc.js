@@ -1180,7 +1180,7 @@ gadgets.flash = function() {
 
 
 gadgets.views = function() {
-
+    this.currentview_='home';
 
   return {
     'bind':
@@ -1189,7 +1189,7 @@ gadgets.views = function() {
     },
     'getCurrentView':
         function() {
-        var currentview=new gadgets.views.View('home');
+        var currentview=new gadgets.views.View(this.currentview_);
         return currentview;
     },
     'getSupportedViews':
@@ -1197,8 +1197,11 @@ gadgets.views = function() {
 
     },
     'requestNavigateTo':
-        function() {
-        alert('requestNavigateTo');
+        function(view) {
+        if(view)
+        {
+            //alert('view:  '+view.getName());
+        }
     },
     'getParams':
         function()
