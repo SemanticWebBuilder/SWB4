@@ -1180,16 +1180,17 @@ gadgets.flash = function() {
 
 
 gadgets.views = function() {
-    this.currentview_='home';
+    
 
   return {
+      
     'bind':
     function(urlTemplate,environment) {
 
     },
     'getCurrentView':
         function() {
-        var currentview=new gadgets.views.View(this.currentview_);
+        var currentview=new gadgets.views.View('home');
         return currentview;
     },
     'getSupportedViews':
@@ -1198,10 +1199,7 @@ gadgets.views = function() {
     },
     'requestNavigateTo':
         function(view) {
-        if(view)
-        {
-            //alert('view:  '+view.getName());
-        }
+        
     },
     'getParams':
         function()

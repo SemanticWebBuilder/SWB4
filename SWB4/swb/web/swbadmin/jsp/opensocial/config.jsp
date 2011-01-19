@@ -139,7 +139,7 @@ Document doc=gadget.getDocument();
                 validation.append("document.frmedit.");
                 validation.append(name);
                 validation.append(".focus();\r\n");
-                validation.append("\r\nreturn;");
+                validation.append("\r\nreturn false;");
                 validation.append("\r\n}\r\n");
                 %>
                     <div class="wrapper">
@@ -259,7 +259,7 @@ Lenguaje:
                     validation.append("document.frmedit.");
                     validation.append(name);
                     validation.append(".focus();\r\n");
-                    validation.append("\r\nreturn;");
+                    validation.append("\r\nreturn false;");
                     validation.append("\r\n}\r\n");
                 }
                 %>
@@ -287,7 +287,7 @@ Lenguaje:
                     validation.append("document.frmedit.");
                     validation.append(name);
                     validation.append(".focus();\r\n");
-                    validation.append("\r\nreturn;");
+                    validation.append("\r\nreturn false;");
                     validation.append("if(validarNumero(_number)=='NaN'){\r\n");
                     validation.append("document.frmedit.");
                     validation.append(name);
@@ -295,7 +295,7 @@ Lenguaje:
                     validation.append("alert('El valor para ");
                     validation.append(displayName);
                     validation.append(" debe ser un número');\r\n");
-                    validation.append("return\r\n");
+                    validation.append("return false;\r\n");
                     validation.append("}\r\n");
                     validation.append("\r\n}\r\n");
                 }
@@ -323,7 +323,7 @@ Lenguaje:
                     validation.append("document.frmedit.");
                     validation.append(name);
                     validation.append(".focus();\r\n");
-                    validation.append("\r\nreturn;");
+                    validation.append("\r\nreturn false;");
                     validation.append("\r\n}\r\n");
                 }
                 StringTokenizer st=new StringTokenizer(default_value,"|");
@@ -380,10 +380,10 @@ Lenguaje:
 %>
 <div class="wrapper">
     <div class="left_column">
-        <input type="submit" name="add" value="Agregar">
+        <input id="add" type="submit" name="add" value="Agregar">
     </div>
     <div class="content">
-        <input type="button" onclick="closeWindow();" name="cancel" value="cancelar">
+        <input id="cancel" type="button" onclick="closeWindow();" name="cancel" value="cancelar">
     </div>
 </div>
 </form>
@@ -397,9 +397,25 @@ Lenguaje:
     {
         this.location='<%=add%>';
     }
-    function validate()
+    function validateFields()
     {
         <%=validation%>
+        return true;
+    }
+    function validate()
+    {
+        var add=document.getElementById("add");
+        if(add)
+        {
+            add.disabled=true;
+        }
+        if(!validateFields())
+        {
+            if(add)
+            {
+                add.disabled=false;
+            }
+        }
     }
     function changeRadio(radioname)
     {
