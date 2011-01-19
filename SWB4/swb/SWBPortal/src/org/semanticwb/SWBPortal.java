@@ -298,6 +298,7 @@ public class SWBPortal
             String dbfile = SWBUtils.getApplicationPath()+"/swbadmin/geoip/GeoIP.dat";
             try {
                 SWBPortal.geoip = new com.maxmind.geoip.LookupService(dbfile, com.maxmind.geoip.LookupService.GEOIP_MEMORY_CACHE);
+                Runtime.getRuntime().addShutdownHook(new Thread(){ public void run(){SWBPortal.geoip.close();}});
             } catch (IOException ioe) {
                 log.warn("can't find GeoIP.dat file", ioe);
                 SWBPortal.geoip = null;
