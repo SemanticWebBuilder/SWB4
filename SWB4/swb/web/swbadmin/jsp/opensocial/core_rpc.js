@@ -1271,6 +1271,7 @@ this.name_=name;
 this.callback_=callback;
 this.index_=index;
 this.contentContainer_=contentContainer;
+
 };
 
 gadgets.Tab.prototype.getCallback = function() {
@@ -1286,7 +1287,7 @@ gadgets.Tab.prototype.getIndex = function() {
 };
 
 gadgets.Tab.prototype.getNameContainer = function() {
-
+    return this.contentContainer_.id;
 };
 gadgets.Tab.prototype.getName = function() {
     return name_;
@@ -1294,16 +1295,63 @@ gadgets.Tab.prototype.getName = function() {
 
 
 gadgets.TabSet = function(opt_moduleId,opt_defaultTab,opt_container) {
-this.tabs={};
+    var root='layout-root';
+    var aleatorio = Math.round(Math.random()*99);
+    var id_tab='tabcontainer-'+aleatorio;
+    this.tabcontainer=new dijit.layout.TabContainer({'id':id_tab,style:'width:100%;height:100%'},root);
+    this.tabcontainer.startup();    
+    this.tabs=[];
 };
 
+
+
 gadgets.TabSet.prototype.addTab = function(tabName,opt_params) {
-    alert('tabName: '+tabName);
+    
+    
     var index_=opt_params.index;
+    if(!index_)
+    {
+         index_=this.tabs.length;
+    }
     var callback=opt_params.callback;
+    if(!callback)
+    {
+        callback=function(){};
+    }
+    var aleatorio = Math.round(Math.random()*100);
     var contentContainer=opt_params.contentContainer;
+    
+    if(!contentContainer)
+    {        
+        contentContainer=document.createElement('div');
+        var _idpanel='contentContainer-'+aleatorio;
+        contentContainer.setAttribute('id',_idpanel);        
+    }    
+    var id_contentContainer=contentContainer.setAttribute('id');
+    var id_panel='panel-'+aleatorio;
     var tab=new gadgets.Tab(tabName,callback,index_,contentContainer);
-    return tabName;
+    var panel=new dijit.layout.ContentPane({'id':id_panel,'content':contentContainer,'title':tabName,style:'width:100%;height:100%'});
+    var tabdef={'panel':panel,'tab':tab};
+    this.tabs[index_]=tabdef;
+    panel.selected=true;
+    this.tabcontainer.addChild(panel);
+    panel.startup();
+    dojo.connect(this.tabcontainer,"selectChild",this,function(child){
+                if(child.id)
+                {
+                    for(var i = 0; i < this.tabs.length; i++)
+                    {
+                        var tabdef=this.tabs[i];
+                        if(tabdef.panel.id==child.id)
+                        {
+                            var callback=tabdef.tab.getCallback();
+                            if(callback)callback();
+                        }
+                    }
+                }
+        });
+    this.setSelectedTab(index_);  
+    return id_contentContainer;
 };
 
 gadgets.TabSet.prototype.alignTabs = function(align,opt_offset) {
@@ -1314,24 +1362,47 @@ gadgets.TabSet.prototype.displayTabs = function(display) {
 
 };
 gadgets.TabSet.prototype.getHeaderContainer = function() {
-
+    var tablecontainer=document.getElementById('tablecontainer');
+    return tablecontainer;
 };
 gadgets.TabSet.prototype.getSelectedTab = function() {
-
+    for(var i = 0; i < this.tabs.length; i++) 
+    {
+        var tabdef=this.tabs[i];        
+        if(tabdef.panel.selected)
+        {
+            return tabdef.tab;
+        }
+    }
+    return null;
 };
 gadgets.TabSet.prototype.getTabs = function() {
-
+    var tabs_=[];
+    for(var i = 0; i < this.tabs.length; i++)
+    {
+        var tabdef=this.tabs[i];
+        tabs_[i]=tabdef.tab;
+    }
+    return tabs_;
 };
-gadgets.TabSet.prototype.addDynamicTab = function(tabName,opt_params) {
-    
-    this.addTab(tabName,opt_params);
+gadgets.TabSet.prototype.addDynamicTab = function(tabName,callback) {
+    var params={'callback':callback};
+    this.addTab(tabName,params);
 };
 
 gadgets.TabSet.prototype.removeTab = function(tabIndex) {
+    var tabdef=this.tabs[tabIndex];
+    var panel=tabdef.panel;
+    var tab=tabdef.tab;
+    this.tabs.remove(tabdef);
+    this.tabcontainer.removeChild(panel);
 
 };
 gadgets.TabSet.prototype.setSelectedTab = function(tabIndex) {
-
+     if(this.tabs[tabIndex])
+     {
+        this.tabcontainer.selectChild(this.tabs[tabIndex].panel);
+     }
 };
 gadgets.TabSet.prototype.swapTabs = function(tabIndex1,tabIndex2) {
 
