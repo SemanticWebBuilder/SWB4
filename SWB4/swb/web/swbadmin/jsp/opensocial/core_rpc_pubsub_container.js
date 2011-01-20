@@ -5992,26 +5992,11 @@ shindig.DojoPorletManager.prototype.getGadgetChrome =
     var grid=dijit.byId('grid');
     
     if(grid)
-    {
-    
-            return grid;
+    {    
+        return grid;
     }
     else
     {
-    
-        /*var layoutRoot = document.getElementById(this.layoutRootId_);
-        if (layoutRoot) {
-
-            alert('before');
-            var widget = new dojox.layout.GridContainer({id:'grid',acceptTypes:'dojox.widget.Portlet',hasResizableColumns:'false',opacity:'0.3',nbZones:'2',allowAutoScroll:'true',withHandles:'true',handleClasses:'dijitTitlePaneTitle',region:'center',minChildWidth:'200',minColWidth:'40'},layoutRoot);
-            alert('yyyy');
-            return widget;
-        }
-        else
-        {
-    
-                return null;
-        }*/
         return null;
     }
 
@@ -6081,36 +6066,27 @@ shindig.Gadget.prototype.render = function(chrome) {
     {
         try
         {
-      var title=(gadget.title ? gadget.title : 'Title');      
-      var _id='porlet_'+gadget.getIframeId();
-      var porlet=new dojox.widget.Portlet({'id':_id,'title':title});
-      var idsetting='setting_'+gadget.id;
-      var settings = new dojox.widget.PortletSettings({'id':idsetting},porlet);
-      var id_table='table_'+gadget.id;
-      var table=new dojox.layout.TableContainer({id:id_table,cols:'1'},settings);
-      var id_text='t_'+gadget.id;
-      var t1=new dijit.form.TextBox({'id':id_text,title:'settings'},table);
-      var row=Math.floor(gadget.id/3);      
-      var column=gadget.id%3;      
-      grid.addChild(porlet,column,row);
-      porlet.startup();
-      
-      
-      /*var table=new dojox.layout.TableContainer({cols:'1'});
-      var t1=new dijit.form.TextBox({title:'settings'});
-      table.addChild(t1);
-      settings.addChild(table);
-      pane.addChild(settings);
-      grid.addChild(porlet);*/
-      
-      
-      this.getContent(function(content) {
-          
-        porlet.setContent(content);
-        gadget.finishRender(chrome);
-              
+              var title=(gadget.title ? gadget.title : 'Title');
+              var _id='porlet_'+gadget.getIframeId();
+              var porlet=new dojox.widget.Portlet({'id':_id,'title':title});
+              var idsetting='setting_'+gadget.id;
+              var contenthtml='<div id="' + gadget.getUserPrefsDialogId() + '" class="' +
+              this.cssClassGadgetUserPrefsDialog + '"></div>';
+              //settings.startup();
+              var row=Math.floor(gadget.id/3);
+              var column=gadget.id%3;
+              grid.addChild(porlet,column,row);
+              porlet.startup();
 
-        });
+              this.getContent(function(content) {
+
+                porlet.setContent(content);
+                var settings = new dojox.widget.PortletSettings({'id':idsetting,'title':'Setting','content':contenthtml});
+                porlet.addChild(settings);
+                settings.startup();
+                gadget.handleOpenUserPrefsDialog();
+                gadget.finishRender(chrome);
+                });
         }
         catch(err)
         {
@@ -6313,13 +6289,32 @@ shindig.BaseIfrGadget.prototype.buildUserPrefsDialog = function(content) {
       '"><input type="button" value="Save" onclick="shindig.container.getGadget(' +
       this.id +').handleSaveUserPrefs()"> <input type="button" value="Cancel" onclick="shindig.container.getGadget(' +
       this.id +').handleCancelUserPrefs()"></div>';
+    
   userPrefsDialog.childNodes[0].style.display = '';
 };
 
 shindig.BaseIfrGadget.prototype.showUserPrefsDialog = function(opt_show) {
-  var userPrefsDialog = document.getElementById(this.getUserPrefsDialogId());
-  userPrefsDialog.style.display = (opt_show || opt_show === undefined)
-      ? '' : 'none';
+  
+  var idsetting='setting_'+this.id;
+  var setting=dijit.byId(idsetting);
+  if(opt_show === undefined)
+      {
+          opt_show=true;
+      }
+  if(setting)
+  {
+      if(!opt_show)
+      {          
+          setting.toggle();
+      }
+  } 
+  else
+      {
+          var userPrefsDialog = document.getElementById(this.getUserPrefsDialogId());
+          userPrefsDialog.style.display = (opt_show || opt_show === undefined)
+        ? '' : 'none';
+      }
+  
 };
 
 shindig.BaseIfrGadget.prototype.hideUserPrefsDialog = function() {
@@ -6348,8 +6343,10 @@ shindig.BaseIfrGadget.prototype.handleCancelUserPrefs = function() {
 };
 
 shindig.BaseIfrGadget.prototype.refresh = function() {
-  var iframeId = this.getIframeId();  
+  var iframeId = this.getIframeId();
+
   document.getElementById(iframeId).src = this.getIframeUrl();
+  alert('refresh: '+document.getElementById(iframeId).src);
 };
 
 shindig.BaseIfrGadget.prototype.queryIfrGadgetType_ = function() {
@@ -6428,10 +6425,12 @@ shindig.IfrGadget = {
     window.frames[this.getIframeId()].location = this.getIframeUrl();
   },
   
-  getIframeUrl: function() {    
+  getIframeUrl: function() {
+
+    var aleatorio = Math.round(Math.random()*99);
     return '<%=ifr%>' + '?' +
         'container=' + this.CONTAINER +
-        '&mid=' +  this.id +
+        '&mid=' +  this.id +        
         '&moduleid=' +  this.moduleId +
         '&nocache=' + shindig.container.nocache_ +
         '&country=' + shindig.container.country_ +
