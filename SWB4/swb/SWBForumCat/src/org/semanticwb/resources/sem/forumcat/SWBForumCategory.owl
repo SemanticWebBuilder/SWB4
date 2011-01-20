@@ -42,9 +42,9 @@
   <owl:Class rdf:ID="Answer">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Searchable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:ObjectProperty rdf:ID="webpage">
@@ -457,27 +457,24 @@
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Indica si la respuesta ha sido marcada como irrelevante</rdfs:label>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="hasAttachements">
+  <owl:DatatypeProperty rdf:ID="questionReferences">
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_attachements">
-        <rdfs:label xml:lang="es">Adjuntos</rdfs:label>
-        <rdfs:label xml:lang="en">Attachments</rdfs:label>
-        <swbxf:formElement>
-          <swb:DojoFileUpload rdf:ID="fc_atachments">
-            <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >WORD Files:*.doc|JPG files:*.jpg|PNG files:*.png|JPEG files:*.jpeg</swbxf:fileFilter>
-            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
-            >50000000</swbxf:fileMaxSize>
-          </swb:DojoFileUpload>
-        </swbxf:formElement>
+      <swbxf:DisplayProperty rdf:ID="dp_queReferences">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <rdfs:label xml:lang="en">References</rdfs:label>
+        <rdfs:label xml:lang="es">Referencias</rdfs:label>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >10</swb:index>
+        >70</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Answer"/>
+    <rdfs:domain rdf:resource="#Question"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="hasAttachements">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Answer"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="ansIsAppropiate">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
@@ -577,6 +574,20 @@
     <swbxf:imgThumbnail rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swbxf:imgThumbnail>
   </swb:DojoImageUpload>
+  <swbxf:DisplayProperty rdf:ID="dp_attachements">
+    <rdfs:label xml:lang="es">Adjuntos</rdfs:label>
+    <rdfs:label xml:lang="en">Attachments</rdfs:label>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >10</swb:index>
+    <swbxf:formElement>
+      <swb:DojoFileUpload rdf:ID="fc_atachments">
+        <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+        >50000000</swbxf:fileMaxSize>
+        <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >WORD Files:*.doc|JPG files:*.jpg|PNG files:*.png|JPEG files:*.jpeg</swbxf:fileFilter>
+      </swb:DojoFileUpload>
+    </swbxf:formElement>
+  </swbxf:DisplayProperty>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org/swb4/ontology#fe_DojoImageUpload">
     <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
     >5000000</swbxf:fileMaxSize>
