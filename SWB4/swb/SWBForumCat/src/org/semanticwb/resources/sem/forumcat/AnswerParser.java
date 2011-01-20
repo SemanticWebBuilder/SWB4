@@ -56,7 +56,17 @@ public class AnswerParser extends GenericParser {
 
     @Override
     public String getType(Searchable gen) {
-        return "Answer";
+        return "Respuesta";
+    }
+
+    @Override
+    public String getPath(Searchable gen, String lang) {
+        String ret = null;
+        WebPage page = getWebPage(((Answer)gen).getAnsQuestion().getForumResource().getResource());
+        if (page != null) {
+            ret = super.getPath(page, lang);
+        }
+        return ret;
     }
 
     @Override
