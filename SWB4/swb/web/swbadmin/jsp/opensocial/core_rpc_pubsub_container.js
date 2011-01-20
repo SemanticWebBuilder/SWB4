@@ -6090,7 +6090,11 @@ shindig.Gadget.prototype.render = function(chrome) {
       var table=new dojox.layout.TableContainer({id:id_table,cols:'1'},settings);
       var id_text='t_'+gadget.id;
       var t1=new dijit.form.TextBox({'id':id_text,title:'settings'},table);
-      grid.addChild(porlet);
+      var row=Math.floor(gadget.id/3);
+      alert('row: '+row);
+      var column=gadget.id%3;
+      alert('column: '+column);
+      grid.addChild(porlet,column,row);
       porlet.startup();
       
       
