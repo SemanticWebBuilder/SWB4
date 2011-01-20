@@ -1,7 +1,7 @@
 package org.semanticwb.resources.sem.forumcat.base;
 
 
-public abstract class QuestionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Searchable,org.semanticwb.model.Traceable,org.semanticwb.model.Tagable,org.semanticwb.model.Viewable
+public abstract class QuestionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Searchable,org.semanticwb.model.Viewable,org.semanticwb.model.Traceable,org.semanticwb.model.Tagable
 {
     public static final org.semanticwb.platform.SemanticClass forumCat_SWBForumCatResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#SWBForumCatResource");
     public static final org.semanticwb.platform.SemanticProperty forumCat_forumResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#forumResource");
@@ -12,6 +12,7 @@ public abstract class QuestionBase extends org.semanticwb.model.SWBClass impleme
    */
     public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
     public static final org.semanticwb.platform.SemanticProperty forumCat_webpage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#webpage");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_questionReferences=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#questionReferences");
     public static final org.semanticwb.platform.SemanticProperty forumCat_queStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#queStatus");
     public static final org.semanticwb.platform.SemanticClass forumCat_Answer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#Answer");
     public static final org.semanticwb.platform.SemanticProperty forumCat_hasAnswerInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#hasAnswerInv");
@@ -433,6 +434,24 @@ public abstract class QuestionBase extends org.semanticwb.model.SWBClass impleme
              ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the QuestionReferences property
+* @return String with the QuestionReferences
+*/
+    public String getQuestionReferences()
+    {
+        return getSemanticObject().getProperty(forumCat_questionReferences);
+    }
+
+/**
+* Sets the QuestionReferences property
+* @param value long with the QuestionReferences
+*/
+    public void setQuestionReferences(String value)
+    {
+        getSemanticObject().setProperty(forumCat_questionReferences, value);
     }
 
 /**
