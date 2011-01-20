@@ -273,21 +273,6 @@ function renderGadgets() {
 						></div>
 
 </div>
-
-
-<!-- <div dojoType="dojox.widget.Portlet" title="My Flickr">
-
-  <div dojoType="dojox.widget.PortletSettings" id="axxxxx">
-    <div dojoType="dojox.layout.TableContainer" cols="1">
-      <div dojoType="dijit.form.TextBox" title="Option 3"></div>
-      <div dojoType="dijit.form.TextBox" title="Option 4"></div>
-    </div>
-  </div>
-
-  <div>
-    The Contents of the portlet go here
-  </div>
-</div>--
 </body>
 </html>
 
