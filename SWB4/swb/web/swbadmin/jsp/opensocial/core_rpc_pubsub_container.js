@@ -6404,7 +6404,7 @@ shindig.IfrGadget = {
   getMainContent: function(continuation) {
     var iframeId = this.getIframeId();    
     gadgets.rpc.setRelayUrl(iframeId, this.serverBase_ + this.rpcRelay);
-    gadgets.rpc.setAuthToken(iframeId, this.rpcToken);
+    gadgets.rpc.setAuthToken(iframeId, this.rpcToken);    
     continuation('<div class="' + this.cssClassGadgetContent + '"><iframe id="' +
         iframeId + '" name="' + iframeId + '" class="' + this.cssClassGadget +
         '" src="about:blank' +
@@ -6466,7 +6466,7 @@ shindig.OAAIfrGadget = {
       className: this.cssClassGadget,
       frameborder: "no",
       scrolling: "no"
-    };
+    };    
     if (this.height) {
       iframeAttrs.height = this.height;
     }

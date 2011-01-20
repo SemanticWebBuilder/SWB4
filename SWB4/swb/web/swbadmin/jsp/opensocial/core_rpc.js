@@ -1307,7 +1307,7 @@ gadgets.TabSet = function(opt_moduleId,opt_defaultTab,opt_container) {
     divroot.innerHTML='<table id="'+this.id_tablecontainer_+'"><tr><td></td></tr></table>';    
     aleatorio = Math.round(Math.random()*99);    
     var id_tab='tabcontainer-'+aleatorio;    
-    this.tabcontainer=new dijit.layout.TabContainer({'id':id_tab,style:'width:500px;height:300px'},divroot);
+    this.tabcontainer=new dijit.layout.TabContainer({'id':id_tab,tabStrip:'true','style':'width:300px;height:300px'},divroot);
     this.tabcontainer.startup();    
     
 };
@@ -1339,7 +1339,7 @@ gadgets.TabSet.prototype.addTab = function(tabName,opt_params) {
     var id_contentContainer=contentContainer.setAttribute('id');
     var id_panel='panel-'+aleatorio;
     var tab=new gadgets.Tab(tabName,callback,index_,contentContainer);
-    var panel=new dijit.layout.ContentPane({'id':id_panel,'content':contentContainer,'title':tabName,style:'width:500px;height:300px'});
+    var panel=new dijit.layout.ContentPane({'id':id_panel,'content':contentContainer,'title':tabName,style:'width:300px;height:300px'});
     var tabdef={'panel':panel,'tab':tab};
     this.tabs[index_]=tabdef;
     panel.selected=true;
