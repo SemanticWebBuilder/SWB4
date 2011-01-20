@@ -28,7 +28,7 @@
 
         String defaultview="home";        
         String context=SWBPortal.getContextPath();
-        String minChildWidth="200";
+        String minChildWidth="150";
         String nbZones="3";
         String moduleid=null;
         if(request.getParameter("mid")!=null && request.getParameter("view")!=null)
@@ -285,15 +285,12 @@ function renderGadgets() {
 <p><a href="#" onclick="showDialogEmail();">add</a></p>
 <div id="layout-root" class="gadgets-layout-root">
     <div dojoType="dojox.layout.GridContainer"
-							id="grid"
-							region="center"
-							acceptTypes="dojox.widget.Portlet,dojox.widget.FeedPortlet"
-							hasResizableColumns="false"
+							id="grid"							
+							acceptTypes="dojox.widget.Portlet"
+							hasResizableColumns="true"
 							opacity="0.3"
 							nbZones="<%=nbZones%>"
-							allowAutoScroll="true"
-							withHandles="true"
-							handleClasses="dijitTitlePaneTitle"
+							allowAutoScroll="true"							
 							minChildWidth="<%=minChildWidth%>"
 							minColWidth="10"
 						>        
