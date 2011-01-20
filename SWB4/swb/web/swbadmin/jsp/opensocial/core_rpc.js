@@ -1295,20 +1295,21 @@ gadgets.Tab.prototype.getName = function() {
 };
 
 
-gadgets.TabSet = function(opt_moduleId,opt_defaultTab,opt_container) {
-    var root='layout-root';
-    var aleatorio = Math.round(Math.random()*99);
-    this.id_tablecontainer_='tablecontainer-'+aleatorio;
-    var element=document.getElementById(root);
-    if(element)
-    {
-        element.innerHTML='<table id="'+this.id_tablecontainer_+'"><tr><td></td></tr></table>';
-    }
-    aleatorio = Math.round(Math.random()*99);
-    var id_tab='tabcontainer-'+aleatorio;
-    this.tabcontainer=new dijit.layout.TabContainer({'id':id_tab,style:'width:100%;height:100%'},root);
-    this.tabcontainer.startup();    
+gadgets.TabSet = function(opt_moduleId,opt_defaultTab,opt_container) {    
     this.tabs=[];
+    var aleatorio = Math.round(Math.random()*99);    
+    var root_id='layout-root'+aleatorio;    
+    var divroot=document.createElement('div');    
+    divroot.setAttribute('id',root_id);    
+    document.body.appendChild(divroot);    
+    aleatorio = Math.round(Math.random()*99);    
+    this.id_tablecontainer_='tablecontainer-'+aleatorio;    
+    divroot.innerHTML='<table id="'+this.id_tablecontainer_+'"><tr><td></td></tr></table>';    
+    aleatorio = Math.round(Math.random()*99);    
+    var id_tab='tabcontainer-'+aleatorio;    
+    this.tabcontainer=new dijit.layout.TabContainer({'id':id_tab,style:'width:500px;height:300px'},divroot);
+    this.tabcontainer.startup();    
+    
 };
 
 
@@ -1338,7 +1339,7 @@ gadgets.TabSet.prototype.addTab = function(tabName,opt_params) {
     var id_contentContainer=contentContainer.setAttribute('id');
     var id_panel='panel-'+aleatorio;
     var tab=new gadgets.Tab(tabName,callback,index_,contentContainer);
-    var panel=new dijit.layout.ContentPane({'id':id_panel,'content':contentContainer,'title':tabName,style:'width:100%;height:100%'});
+    var panel=new dijit.layout.ContentPane({'id':id_panel,'content':contentContainer,'title':tabName,style:'width:500px;height:300px'});
     var tabdef={'panel':panel,'tab':tab};
     this.tabs[index_]=tabdef;
     panel.selected=true;
