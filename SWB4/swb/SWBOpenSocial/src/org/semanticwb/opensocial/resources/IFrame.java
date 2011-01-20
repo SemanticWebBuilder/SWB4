@@ -449,8 +449,7 @@ public class IFrame
                 HtmlResponse = HtmlResponse.replace("<%=rpc%>", rpc.toString());
                 HtmlResponse = HtmlResponse.replace("<%=proxy%>", proxy.toString());
                 HtmlResponse = HtmlResponse.replace("<%=makerequest%>", makerequest.toString());
-                HtmlResponse = HtmlResponse.replace("<%=html%>", body);                
-                System.out.println(body);
+                HtmlResponse = HtmlResponse.replace("<%=html%>", body);                                
                 PrintWriter out = response.getWriter();
                 out.write(HtmlResponse);
                 out.close();
