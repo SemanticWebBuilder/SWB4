@@ -78,11 +78,17 @@ public final class JavaScript
                 ifr.setMode(SocialContainer.Mode_IFRAME);
                 ifr.setCallMethod(SWBResourceURL.Call_DIRECT);
                 String relaypath=SWBPortal.getContextPath()+"/swbadmin/jsp/opensocial/rpc_relay.html";
-                
+
+
+                SWBResourceURL baseurl=paramRequest.getRenderUrl();
+                baseurl.setMode(SWBResourceURL.Mode_VIEW);
+                baseurl.setCallMethod(SWBResourceURL.Call_CONTENT);
+                baseurl.setWindowState(SWBResourceURL.WinState_MAXIMIZED);
 
                 SWBResourceURL javascript=paramRequest.getRenderUrl();
                 javascript.setMode(SocialContainer.Mode_METADATA);
                 javascript.setCallMethod(SWBResourceURL.Call_DIRECT);
+                js=js.replace("<%=baseurl%>", baseurl.toString());
                 js=js.replace("<%=metadata%>", javascript.toString());
                 js=js.replace("<%=ifr%>", ifr.toString());
                 js=js.replace("<%=rpc%>", rpc.toString());
