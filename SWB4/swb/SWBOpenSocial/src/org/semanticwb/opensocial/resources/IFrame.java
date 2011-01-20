@@ -11,9 +11,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -195,107 +199,6 @@ public class IFrame
             pos = cssbody.indexOf("url(");
         }        
         return sb.toString();
-
-        /*StringBuilder sb = new StringBuilder("\r\n");
-        try
-        {
-        CSSParser p = new CSSParser(cssbody);
-        for (Selector selector : p.getSelectors())
-        {
-        sb.append(selector.getName());
-        sb.append("{");
-        for (Attribute att : selector.getAttributes())
-        {
-
-        //sb.append("\r\n");
-        sb.append(att.getName());
-        sb.append(":");
-        if (att.getName().equals("background-image") || att.getName().equals("background") || att.getName().equals("list-style"))
-        {
-        for (String value : att.getValues())
-        {
-
-        if (value.startsWith("url("))
-        {
-        value = value.substring(4);
-        int pos = value.indexOf(")");
-        if (pos != -1)
-        {
-        value = value.substring(0, pos).trim();
-        if (value.startsWith("\"") && value.endsWith("\""))
-        {
-        value = value.substring(1, value.length() - 1);
-        }
-        if (value.startsWith("'") && value.endsWith("'"))
-        {
-        value = value.substring(1, value.length() - 1);
-        }
-        try
-        {
-        URI uriValue = new URI(value);
-        if (!uriValue.isAbsolute())
-        {
-        uriValue = gadget.resolve(uriValue);
-        }
-        String url = uriValue.toString();
-        int pos2 = url.indexOf("?"); // elimina parametros por seguridad
-        if (pos2 != -1)
-        {
-        url = url.substring(0, pos2);
-        }
-        value = url;
-        }
-        catch (URISyntaxException uie)
-        {
-        log.debug(uie);
-        }
-        sb.append("url('");
-        sb.append(proxy.toString());
-        sb.append("?url=");
-        sb.append(URLEncoder.encode(value));
-        sb.append("') ");
-
-        }
-        else
-        {
-        sb.append(value);
-        }
-        }
-        else
-        {
-        sb.append(value);
-        sb.append(" ");
-        }
-        }
-        if(sb.charAt(sb.length()-1)==' ')
-        {
-        sb.deleteCharAt(sb.length()-1);
-        }
-        sb.append(";");
-        }
-        else
-        {
-        for (String value : att.getValues())
-        {
-        sb.append(value);
-        sb.append(" ");
-        }
-        if(sb.charAt(sb.length()-1)==' ')
-        {
-        sb.deleteCharAt(sb.length()-1);
-        }
-        sb.append(";");
-        }
-        }
-        sb.append("}");
-        }
-        }
-        catch (Throwable e)
-        {
-        log.error(e);
-        }
-
-        return sb.toString();*/
     }
 
     private String getHTMLFromView(String view, Gadget gadget, Map<String, String> variables)
@@ -387,6 +290,50 @@ public class IFrame
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+        String port = "";
+        if (request.getServerPort() != 80)
+        {
+            port = ":" + request.getServerPort();
+        }
+
+        HashMap<String,String> userprefs=new HashMap<String, String>();
+        Enumeration names=request.getParameterNames();
+        while(names.hasMoreElements())
+        {
+            String name=names.nextElement().toString();
+            if(name.startsWith("up_"))
+            {
+                String value=request.getParameter(name);
+                name=name.substring(3);                
+                userprefs.put(name, value);
+            }            
+        }
+        boolean changeUserPrefs=false;
+        Enumeration headernames=request.getHeaderNames();
+        while(headernames.hasMoreElements())
+        {
+            String name=headernames.nextElement().toString();
+
+            if(name.equalsIgnoreCase("referer"))
+            {
+                String referer=request.getHeader(name);
+                try
+                {
+                    URL uri_referer=new URL(referer);
+                    URL urilocal=new URL(request.getScheme() + "://" + request.getServerName() + port +paramRequest.getWebPage().getUrl());                    
+
+                    if(uri_referer.getHost().equals(urilocal.getHost()) && uri_referer.getPort()==urilocal.getPort() && uri_referer.getProtocol().equals(urilocal.getProtocol()))
+                    {
+                        changeUserPrefs=true;
+                    }
+                }
+                catch(MalformedURLException e)
+                {
+                    log.debug(e);
+                }
+            }
+        }
+
         WebSite site = paramRequest.getWebPage().getWebSite();
         User user = paramRequest.getUser();
 
@@ -411,8 +358,19 @@ public class IFrame
             Gadget gadget = SocialContainer.getGadget(url, paramRequest.getWebPage().getWebSite());
             if (gadget != null)
             {
-                SocialUser socialuser = SocialContainer.getSocialUser(user, request.getSession());
+                SocialUser socialuser = SocialContainer.getSocialUser(user, request.getSession());                
+                if(changeUserPrefs)
+                {
+                    for(String key : userprefs.keySet())
+                    {
+                        String value=userprefs.get(key);
+                        socialuser.saveUserPref(gadget, moduleid, key, value, site);
+                    }
+                }
+
                 Map<String, String> variables = socialuser.getVariablesubstituion(gadget, lang, country, moduleid, site);
+
+
                 body = getHTMLFromView(sview, gadget, variables);
                 if (body == null)
                 {
@@ -491,8 +449,8 @@ public class IFrame
                 HtmlResponse = HtmlResponse.replace("<%=rpc%>", rpc.toString());
                 HtmlResponse = HtmlResponse.replace("<%=proxy%>", proxy.toString());
                 HtmlResponse = HtmlResponse.replace("<%=makerequest%>", makerequest.toString());
-                HtmlResponse = HtmlResponse.replace("<%=html%>", body);
-
+                HtmlResponse = HtmlResponse.replace("<%=html%>", body);                
+                System.out.println(body);
                 PrintWriter out = response.getWriter();
                 out.write(HtmlResponse);
                 out.close();
