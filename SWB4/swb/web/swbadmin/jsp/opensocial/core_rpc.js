@@ -1283,7 +1283,7 @@ gadgets.Tab.prototype.getContentContainer = function() {
     return this.contentContainer_;
 };
 
-gadgets.Tab.prototype.getIndex = function() {
+gadgets.Tab.prototype.getIndex = function() {    
     return this.index_;
 };
 
@@ -1354,7 +1354,7 @@ gadgets.TabSet.prototype.addTab = function(tabName,opt_params) {
                         if(tabdef.panel.id==child.id)
                         {
                             var callback=tabdef.tab.getCallback();
-                            if(callback)callback();
+                            if(callback)callback(child.id);
                         }
                     }
                 }
