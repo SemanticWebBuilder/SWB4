@@ -5849,8 +5849,10 @@ shindig.IfrGadgetService.prototype.requestSendMessage = function(recipients,
  */
 shindig.IfrGadgetService.prototype.requestNavigateTo = function(view,
     opt_params) {
-  var id = shindig.container.gadgetService.getGadgetIdFromModuleId(this.f);
-  var url = shindig.container.gadgetService.getUrlForView(view);
+        
+  var id = shindig.container.gadgetService.getGadgetIdFromModuleId(this.f);  
+  var url = shindig.container.gadgetService.getUrlForView(view,id);
+  
 
   if (opt_params) {
     var paramStr = gadgets.json.stringify(opt_params);
@@ -5870,13 +5872,15 @@ shindig.IfrGadgetService.prototype.requestNavigateTo = function(view,
  * TODO: Find a better default for this function
  *
  * @param view The view name to get the url for
+ * @param moduleid The view name to get the url for
  */
 shindig.IfrGadgetService.prototype.getUrlForView = function(
-    view) {
+    view,moduleid) {
+        var baseurl='<%=baseurl%>?';        
   if (view === 'canvas') {
-    return '/canvas';
+    return baseurl+'mid='+moduleid+'&view=canvas';
   } else if (view === 'profile') {
-    return '/profile';
+    return baseurl+'mid='+moduleid+'&view=profile';
   } else {
     return null;
   }
@@ -6595,7 +6599,9 @@ shindig.Container.prototype.createGadget = function(opt_params) {
 };
 
 shindig.Container.prototype.addGadget = function(gadget) {
-  gadget.id = this.getNextGadgetInstanceId();
+  //gadget.id = this.getNextGadgetInstanceId();
+  
+  gadget.id=gadget.moduleId;
   this.gadgets_[this.getGadgetKey_(gadget.id)] = gadget;
 };
 

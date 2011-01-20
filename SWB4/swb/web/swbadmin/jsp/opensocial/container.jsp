@@ -9,7 +9,7 @@
 
         WebSite site=paramRequest.getWebPage().getWebSite();
         User user=paramRequest.getUser();
-
+        SocialUser socialUser=SocialContainer.getSocialUser(user, session);
         SWBResourceURL add=paramRequest.getRenderUrl();
 	add.setCallMethod(SWBResourceURL.Call_DIRECT);
         add.setMode(SocialContainer.Mode_LISTGADGETS);
@@ -26,12 +26,34 @@
 	metadata.setCallMethod(SWBResourceURL.Call_DIRECT);
         metadata.setMode(SocialContainer.Mode_METADATA);
 
-        String defaultview="home";
-        if(paramRequest.getWindowState().equals(paramRequest.WinState_MAXIMIZED))
-        {
-            defaultview="canvas";
-        }
+        String defaultview="home";        
         String context=SWBPortal.getContextPath();
+        String minChildWidth="200";
+        String nbZones="3";
+        String moduleid=null;
+        if(request.getParameter("mid")!=null && request.getParameter("view")!=null)
+        {
+            String _mid=request.getParameter("mid");
+            String _view=request.getParameter("view");
+            for(UserPrefs pref : socialUser.getUserPrefs(site))
+            {
+                Gadget g=pref.getGadget();                
+                if(g!=null && _mid.equalsIgnoreCase(pref.getModuleId()))
+                {
+                    for(View oview : g.getViews())
+                    {
+                        if(_view.equalsIgnoreCase(oview.getName()))
+                        {
+                            moduleid=_mid;                            
+                            defaultview=_view;
+                            minChildWidth="500";
+                            nbZones="1";
+                        }
+                    }
+                }
+            }
+       }
+
 %>
 <html>
 <head>
@@ -86,32 +108,35 @@ var ownerId = '<%=id%>';
 
 <%
     StringBuilder _gadgets=new StringBuilder("[");
-    SocialUser socialUser=SocialContainer.getSocialUser(user, session);
     
+    System.out.println("moduleid: "+moduleid);
     //socialUser.clearUserPrefs(site);
-    if(paramRequest.getWindowState().equals(paramRequest.WinState_NORMAL))
+    if(moduleid==null)
     {
-        for(UserPrefs pref : socialUser.getUserPrefs(site))
+        if(paramRequest.getWindowState().equals(paramRequest.WinState_NORMAL))
         {
-            Gadget g=pref.getGadget();
-            if(g!=null)
+            for(UserPrefs pref : socialUser.getUserPrefs(site))
             {
-                g.reload();
-                _gadgets.append("{url:\"");
-                _gadgets.append(g.getUrl());
-                _gadgets.append("\",moduleId:\"");
-                _gadgets.append(pref.getModuleId());
-                _gadgets.append("\"},");
+                Gadget g=pref.getGadget();
+                if(g!=null)
+                {
+                    g.reload();
+                    _gadgets.append("{url:\"");
+                    _gadgets.append(g.getUrl());
+                    _gadgets.append("\",moduleId:\"");
+                    _gadgets.append(pref.getModuleId());
+                    _gadgets.append("\"},");
+                }
+            }
+            if(_gadgets.charAt(_gadgets.length()-1)==',')
+            {
+                _gadgets.deleteCharAt(_gadgets.length()-1);
             }
         }
-        if(_gadgets.charAt(_gadgets.length()-1)==',')
-        {
-            _gadgets.deleteCharAt(_gadgets.length()-1);
-        }
+        
     }
-    else if(paramRequest.getWindowState().equals(paramRequest.WinState_MAXIMIZED) && request.getParameter("moduleid")!=null)
+    else
     {
-        String moduleid=request.getParameter("moduleid");
         for(UserPrefs pref : socialUser.getUserPrefs(site))
         {
             Gadget g=pref.getGadget();
@@ -129,8 +154,9 @@ var ownerId = '<%=id%>';
         {
             _gadgets.deleteCharAt(_gadgets.length()-1);
         }
-
     }
+    
+    
     _gadgets.append("]");
 %>
 var _gadgets = <%=_gadgets%>;
@@ -204,7 +230,7 @@ function generateGadgets(metadata)
             var title=metadata.gadgets[i].title;            
             var moduleId=metadata.gadgets[i].moduleId;
             var secureToken0=generateSecureToken(url);            
-            var gadget=shindig.container.createGadget({'title':title,'moduleId':moduleId,'secureToken':secureToken0,'specUrl': url,'userPrefs': metadata.gadgets[i].userPrefs});
+            var gadget=shindig.container.createGadget({'id':moduleId,'title':title,'moduleId':moduleId,'secureToken':secureToken0,'specUrl': url,'userPrefs': metadata.gadgets[i].userPrefs});
             shindig.container.addGadget(gadget);
     }
     renderGadgets();
@@ -264,11 +290,11 @@ function renderGadgets() {
 							acceptTypes="dojox.widget.Portlet,dojox.widget.FeedPortlet"
 							hasResizableColumns="false"
 							opacity="0.3"
-							nbZones="3"
+							nbZones="<%=nbZones%>"
 							allowAutoScroll="true"
 							withHandles="true"
 							handleClasses="dijitTitlePaneTitle"
-							minChildWidth="200"
+							minChildWidth="<%=minChildWidth%>"
 							minColWidth="10"
 						>        
         

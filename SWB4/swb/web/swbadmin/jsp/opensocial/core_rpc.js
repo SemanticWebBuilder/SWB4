@@ -1200,6 +1200,7 @@ gadgets.views = function() {
     'requestNavigateTo':
         function(view) {
         
+        gadgets.rpc.call(null,'requestNavigateTo',null,view.getName());
     },
     'getParams':
         function()
@@ -1230,7 +1231,7 @@ gadgets.views.View.prototype.getUrlTemplate = function() {
 
 };
 gadgets.views.View.prototype.isOnlyVisibleGadget = function() {
-
+    return false;
 };;
 
 gadgets.MiniMessage = function(opt_moduleId,opt_container) {
