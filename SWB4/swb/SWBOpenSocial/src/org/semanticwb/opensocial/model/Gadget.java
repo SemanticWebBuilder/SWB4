@@ -169,52 +169,55 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         {
             lang_toseach += lang_toseach + "-" + country;
         }
-        NodeList locales = this.doc.getElementsByTagName("Locale");
-        for (int i = 0; i < locales.getLength(); i++)
+        if(this.doc!=null)
         {
-            if (locales.item(i) instanceof Element)
+            NodeList locales = this.doc.getElementsByTagName("Locale");
+            for (int i = 0; i < locales.getLength(); i++)
             {
-                Element locale = (Element) locales.item(i);
-                String lang_test = locale.getAttribute("lang");
-                if (lang_test == null)
+                if (locales.item(i) instanceof Element)
                 {
-                    lang_test = "";
-                }
-                if (lang_test.equals(lang_toseach))
-                {
-                    String messages = locale.getAttribute("messages");
-                    if (messages != null && !messages.equals(""))
+                    Element locale = (Element) locales.item(i);
+                    String lang_test = locale.getAttribute("lang");
+                    if (lang_test == null)
                     {
-                        try
+                        lang_test = "";
+                    }
+                    if (lang_test.equals(lang_toseach))
+                    {
+                        String messages = locale.getAttribute("messages");
+                        if (messages != null && !messages.equals(""))
                         {
-                            URI uriGadget = new URI(this.getUrl());
-                            URI uri = new URI(messages);
-                            if (!uri.isAbsolute())
+                            try
                             {
-                                uri = uriGadget.resolve(uri);
+                                URI uriGadget = new URI(this.getUrl());
+                                URI uri = new URI(messages);
+                                if (!uri.isAbsolute())
+                                {
+                                    uri = uriGadget.resolve(uri);
+                                }
+                                Document docMessages = SocialContainer.getXML(uri.toURL());
+                                return getMesssages(docMessages, formated);
                             }
-                            Document docMessages = SocialContainer.getXML(uri.toURL());
-                            return getMesssages(docMessages, formated);
-                        }
-                        catch (URISyntaxException use)
-                        {
-                            log.debug(use);
-                        }
-                        catch (MalformedURLException use)
-                        {
-                            log.debug(use);
-                        }
-                        catch (IOException use)
-                        {
-                            log.debug(use);
-                        }
-                        catch (JDOMException use)
-                        {
-                            log.debug(use);
+                            catch (URISyntaxException use)
+                            {
+                                log.debug(use);
+                            }
+                            catch (MalformedURLException use)
+                            {
+                                log.debug(use);
+                            }
+                            catch (IOException use)
+                            {
+                                log.debug(use);
+                            }
+                            catch (JDOMException use)
+                            {
+                                log.debug(use);
+                            }
                         }
                     }
-                }
 
+                }
             }
         }
         return getMessagesFromGadget;
