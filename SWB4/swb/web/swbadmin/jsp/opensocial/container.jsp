@@ -270,9 +270,12 @@ function renderGadgets() {
 							handleClasses="dijitTitlePaneTitle"
 							minChildWidth="200"
 							minColWidth="10"
-						></div>
+						>        
+        
+    </div>
 
 </div>
+
 </body>
 </html>
 
