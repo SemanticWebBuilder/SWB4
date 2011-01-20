@@ -14,7 +14,8 @@
 	add.setCallMethod(SWBResourceURL.Call_DIRECT);
         add.setMode(SocialContainer.Mode_LISTGADGETS);
 
-
+        String lang=user.getLanguage();
+        System.out.println("lang: "+lang);
         SWBResourceURL script=paramRequest.getRenderUrl();
         script.setCallMethod(SWBResourceURL.Call_DIRECT);
         script.setMode(SocialContainer.Mode_JAVASCRIPT);
@@ -219,6 +220,8 @@ function init() {
   shindig.container.layoutManager.setGadgetChromeIds(['gadget-chrome']);
   shindig.container.layoutManager =new shindig.DojoPorletManager('layout-root');
   shindig.container.setView('<%=defaultview%>');
+  shindig.container.setLanguage('<%=lang%>');
+
   requestGadgetMetaData(generateGadgets);
   
 };
