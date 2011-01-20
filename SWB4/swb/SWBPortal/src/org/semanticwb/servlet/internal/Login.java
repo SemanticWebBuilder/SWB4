@@ -298,7 +298,7 @@ public class Login implements InternalServlet
             url =
                     SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor") + "/" + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
         } 
-        url = url+"?"+request.getQueryString();
+        if (null!=request.getQueryString()) url = url+"?"+request.getQueryString();
         sendRedirect(response, url);
     }
 
