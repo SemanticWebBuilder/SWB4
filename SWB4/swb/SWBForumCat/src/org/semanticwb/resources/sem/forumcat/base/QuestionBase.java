@@ -1,7 +1,7 @@
 package org.semanticwb.resources.sem.forumcat.base;
 
 
-public abstract class QuestionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Viewable,org.semanticwb.model.Traceable,org.semanticwb.model.Tagable,org.semanticwb.model.Searchable
+public abstract class QuestionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Tagable,org.semanticwb.model.Traceable,org.semanticwb.model.Searchable,org.semanticwb.model.Viewable
 {
     public static final org.semanticwb.platform.SemanticClass forumCat_SWBForumCatResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#SWBForumCatResource");
     public static final org.semanticwb.platform.SemanticProperty forumCat_forumResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#forumResource");
