@@ -57,13 +57,12 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             reload();
         }
     }
-
-    public Document getDocument(SocialUser socialuser, WebSite site)
+    public Document getDocument(String languaje, String country)
     {
         Document _doc = null;
         if (original != null)
         {
-            Map<String, String> messages = this.getMessagesFromGadget(socialuser.getLanguage(), socialuser.getCountry());
+            Map<String, String> messages = this.getMessagesFromGadget(languaje, country);
             if (messages.isEmpty())
             {
                 _doc = original;
@@ -85,7 +84,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             _doc = doc;
         }
         return _doc;
-    }
+    }   
 
     @Override
     public void setUrl(String value)
@@ -738,11 +737,10 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
     {
         return getDirectoryTitle(socialuser, site, null);
     }
-
-    public String getDirectoryTitle(SocialUser socialuser, WebSite site, String moduleid)
+    public String getDirectoryTitle(SocialUser socialuser, WebSite site,String language,String country,String moduleid)
     {
-        Document _doc = getDocument(socialuser, site);
-        String _directory_title = null;        
+        Document _doc = getDocument(language, country);
+        String _directory_title = null;
         if (_doc != null)
         {
             if (_doc.getElementsByTagName("ModulePrefs").getLength() > 0)
@@ -770,6 +768,10 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
         return _directory_title;
     }
+    public String getDirectoryTitle(SocialUser socialuser, WebSite site, String moduleid)
+    {
+        return getDirectoryTitle(socialuser, site, socialuser.getLanguage(), socialuser.getCountry(), moduleid);
+    }
 
     public String getTitle(SocialUser socialuser, WebSite site)
     {
@@ -778,7 +780,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
     public String getTitle(SocialUser socialuser, WebSite site, String language, String country, String moduleid)
     {
-        Document _doc = getDocument(socialuser, site);
+        Document _doc = getDocument(language, country);
         String _title = null;        
         if (_doc != null)
         {
@@ -831,7 +833,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
     public String getDescription(SocialUser socialuser, WebSite site, String language, String country, String moduleid)
     {
-        Document _doc = getDocument(socialuser, site);
+        Document _doc = getDocument(language, country);
         String _description = null;        
         if (_doc != null)
         {
