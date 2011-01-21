@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.opensocial.model.Gadget;
 import org.semanticwb.opensocial.model.data.Person;
@@ -36,7 +38,7 @@ import org.semanticwb.portal.api.SWBResourceException;
  */
 public class RPC
 {
-
+    private static final Logger log = SWBUtils.getLogger(RPC.class);
     private static final Map<String, Service> services = Collections.synchronizedMap(new HashMap<String, Service>());
 
     static
@@ -93,7 +95,7 @@ public class RPC
                 }
                 catch (RPCException e)
                 {
-                    e.printStackTrace();
+                    log.debug(e);                    
                 }
             }
         }
@@ -190,7 +192,7 @@ public class RPC
                 }
                 catch (Exception e)
                 {
-                    e.printStackTrace();
+                    log.debug(e);
                 }
             }
             else

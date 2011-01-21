@@ -143,28 +143,25 @@ public class SocialContainer extends GenericResource
             socialUser = new SocialUser(user);
             session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
         }
-        String _userid = user == null ? null : user.getId();
-
-
-        if (!(_userid == null && socialUser.getUserId() == null))
+        String user1 = user == null ? null : user.getId();
+        String user2 = socialUser.getUserId();
+        if (!(user1 == null && user2 != null))
         {
-            String user1 = user == null ? null : user.getId();
-            if (user1 == null)
-            {
-                user1 = UUID.randomUUID().toString();
-            }
-            String user2 = socialUser.getUserId();
-            if (user2 == null)
-            {
-                user2 = UUID.randomUUID().toString();
-            }
-            if (!user1.equals(user2))
+            if ((user1 == null && user2 != null) || (user1 != null && user2 == null))
             {
                 socialUser = new SocialUser(user);
                 session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
             }
+            else
+            {
+                if (!user1.equals(user2))
+                {
+                    socialUser = new SocialUser(user);
+                    session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
+                }
+            }
         }
-
+        socialUser.refresh(user);
         return socialUser;
     }
 
@@ -174,9 +171,17 @@ public class SocialContainer extends GenericResource
         String url = request.getParameter("__url__");
         WebSite site = response.getWebPage().getWebSite();
         User user = response.getUser();
+
+
+
+
         if (url != null)
         {
             Gadget gadget = getGadget(url, site);
+
+
+
+
             if (gadget != null)
             {
                 SocialUser socialUser = getSocialUser(user, request.getSession());
@@ -184,23 +189,40 @@ public class SocialContainer extends GenericResource
                 NodeList userPrefs = doc.getElementsByTagName("UserPref");
                 String moduleid = null;
 
+
+
+
+
                 if (user != null && user.getId() != null)
                 {
                     PersonalizedGadged pgadget = PersonalizedGadged.ClassMgr.createPersonalizedGadged(site);
                     pgadget.setGadget(gadget);
                     pgadget.setUser(user);
                     moduleid = pgadget.getId();
+
+
+
+
                 }
                 else
                 {
                     moduleid = String.valueOf(socialUser.getNumberOfGadgets() + 1);
+
+
+
+
                     if (userPrefs.getLength() == 0)
                     {
                         socialUser.saveUserPref(gadget, moduleid, null, null, site);
+
+
+
+
                     }
                 }
 
-                for (int i = 0; i < userPrefs.getLength(); i++)
+                for (int i = 0; i
+                        < userPrefs.getLength(); i++)
                 {
                     if (userPrefs.item(i) instanceof Element)
                     {
@@ -208,29 +230,57 @@ public class SocialContainer extends GenericResource
                         String key = userPref.getAttribute("name");
                         String value = request.getParameter(key);
                         String type = "String";
+
+
+
+
                         if (userPref.getAttribute("type") != null && !userPref.getAttribute("type").equals(""))
                         {
                             type = userPref.getAttribute("type");
+
+
+
+
                         }
                         if ("list".equals(type))
                         {
                             StringTokenizer st = new StringTokenizer(value, "\r\n");
+
+
+
+
                             while (st.hasMoreTokens())
                             {
                                 String temp = st.nextToken();
                                 value += temp + "|";
+
+
+
+
                             }
                             if (value.endsWith("|"))
                             {
                                 value = value.substring(0, value.length() - 2);
+
+
+
+
                             }
                         }
                         socialUser.saveUserPref(gadget, moduleid, key, value, site);
+
+
+
+
                     }
                 }
             }
         }
         response.setMode(SocialContainer.Mode_LISTGADGETS);
+
+
+
+
     }
 
     @Override
@@ -239,46 +289,90 @@ public class SocialContainer extends GenericResource
             IOException
     {
         Iterator<Gadget> gadgets = Gadget.ClassMgr.listGadgets();
+
+
+
+
         while (gadgets.hasNext())
         {
             Gadget g = gadgets.next();
             g.getDocument();
+
+
+
+
         }
         if (paramRequest.getMode().equals(Mode_METADATA))
         {
             doMetadata(request, response, paramRequest);
+
+
+
+
         }
         else if (paramRequest.getMode().equals(Mode_IFRAME))
         {
             doIframe(request, response, paramRequest);
+
+
+
+
         }
         else if (paramRequest.getMode().equals(Mode_JAVASCRIPT))
         {
             doJavaScript(request, response, paramRequest);
+
+
+
+
         }
         else if (paramRequest.getMode().equals(Mode_PROXY))
         {
             doProxy(request, response, paramRequest);
+
+
+
+
         }
         else if (paramRequest.getMode().equals(Mode_CONFIGGADGET))
         {
             docConfigGadgetForUser(request, response, paramRequest);
+
+
+
+
         }
         else if (paramRequest.getMode().equals(Mode_LISTGADGETS))
         {
             doList(request, response, paramRequest);
+
+
+
+
         }
         else if (paramRequest.getMode().equals(Mode_MAKE_REQUEST))
         {
             doMakeRequest(request, response, paramRequest);
+
+
+
+
         }
         else if (paramRequest.getMode().equals(Mode_RPC))
         {
             doRPC(request, response, paramRequest);
+
+
+
+
         }
         else
         {
             super.processRequest(request, response, paramRequest);
+
+
+
+
         }
     }
 
@@ -300,6 +394,16 @@ public class SocialContainer extends GenericResource
         {
             log.error(e);
         }
+
+
+
+
+
+
+
+
+
+
         return sb.toString();
     }
 
@@ -321,6 +425,16 @@ public class SocialContainer extends GenericResource
         {
             log.error(e);
         }
+
+
+
+
+
+
+
+
+
+
         return sb.toString();
     }
 
@@ -328,34 +442,74 @@ public class SocialContainer extends GenericResource
     {
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         StringReader reader = new StringReader(gadgetschema);
+
+
+
+
         try
         {
             Document doc = getXML(new URL(gadget.getUrl()));
             Source schemaFile = new StreamSource(reader);
+
+
+
+
             try
             {
                 Schema schema = factory.newSchema(schemaFile);
                 Validator validator = schema.newValidator();
                 DOMSource source = new DOMSource(doc);
                 validator.validate(source);
+
+
+
+
                 return true;
+
+
+
+
             }
             catch (IOException ioe)
             {
                 log.debug(ioe);
+
+
+
+
                 return false;
+
+
+
+
             }
             catch (SAXException saxe)
             {
                 log.debug(saxe);
+
+
+
+
                 return false;
+
+
+
+
 
             }
         }
         catch (Exception e)
         {
             log.debug(e);
+
+
+
+
             return false;
+
+
+
+
         }
     }
 
@@ -377,6 +531,16 @@ public class SocialContainer extends GenericResource
         {
             log.error(e);
         }
+
+
+
+
+
+
+
+
+
+
         return sb.toString();
     }
 
@@ -384,64 +548,116 @@ public class SocialContainer extends GenericResource
     {
         RPC rpc = new RPC();
         rpc.doProcess(request, response, paramRequest);
+
+
+
+
     }
 
     public void doMakeRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         MakeRequest makeRequest = new MakeRequest();
         makeRequest.doProcess(request, response, paramRequest);
+
+
+
+
     }
 
     public void doProxy(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         Proxy proxy = new Proxy();
         proxy.doProcess(request, response, paramRequest);
+
+
+
+
     }
 
     public void doJavaScript(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         JavaScript javascript = new JavaScript();
         javascript.doProcess(request, response, paramRequest);
+
+
+
+
     }
 
     public void doMetadata(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         Metadata metadata = new Metadata();
         metadata.doProcess(request, response, paramRequest);
+
+
+
+
     }
 
     public void doIframe(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         IFrame iframe = new IFrame();
         iframe.doProcess(request, response, paramRequest);
+
+
+
+
     }
 
-    public static Document getXML(URL url) throws IOException, JDOMException,RequestException
+    public static Document getXML(URL url) throws IOException, JDOMException, RequestException
     {
         Charset charset = Charset.forName("utf-8");
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
-        if(con.getResponseCode()==200)
+
+
+
+
+        if (con.getResponseCode() == 200)
         {
             String contentType = con.getContentType();
+
+
+
+
             if (contentType != null)
             {
                 int pos = contentType.indexOf("charset=");
+
+
+
+
                 if (pos != -1)
                 {
                     String scharset = contentType.substring(pos + 8).trim();
                     charset = Charset.forName(scharset);
+
+
+
+
                 }
             }
             InputStream in = con.getInputStream();
-            InputStreamReader reader=new InputStreamReader(in, charset);
+            InputStreamReader reader = new InputStreamReader(in, charset);
             DOMOutputter out = new DOMOutputter();
             SAXBuilder builder = new SAXBuilder();
+
+
+
+
             return out.output(builder.build(reader));
+
+
+
+
         }
         else
         {
-            throw new RequestException("",con.getResponseCode());
+            throw new RequestException("", con.getResponseCode());
+
+
+
+
         }
     }
 
@@ -451,16 +667,28 @@ public class SocialContainer extends GenericResource
         WebSite site = paramRequest.getWebPage().getWebSite();
         User user = paramRequest.getUser();
         SocialUser socialuser = new SocialUser(user);
+
+
+
+
         for (UserPrefs pref : socialuser.getUserPrefs(site))
         {
             if (pref.getGadget() != null)
             {
                 Gadget g = pref.getGadget();
                 socialuser.checkOsapiFeature(g, site, true);
+
+
+
+
             }
         }
         String path = "/swbadmin/jsp/opensocial/container.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
+
+
+
+
         try
         {
             request.setAttribute("paramRequest", paramRequest);
@@ -468,8 +696,12 @@ public class SocialContainer extends GenericResource
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+
             log.error(e);
+
+
+
+
         }
         //doList(request, response, paramRequest);
     }
@@ -477,25 +709,53 @@ public class SocialContainer extends GenericResource
     public static boolean isValidGadGet(URL url)
     {
         return true;
+
+
+
+
     }
 
     public static Gadget getGadget(String url, WebSite site)
     {
         Gadget gadget = null;
+
+
+
+
         if (url != null && site != null)
         {
             Iterator<Gadget> gadgets = Gadget.ClassMgr.listGadgets(site);
+
+
+
+
             while (gadgets.hasNext())
             {
                 Gadget temp = gadgets.next();
+
+
+
+
                 if (temp.getUrl().equals(url))
                 {
                     gadget = temp;
+
+
+
+
                     break;
+
+
+
+
                 }
             }
         }
         return gadget;
+
+
+
+
     }
 
     @Override
@@ -507,14 +767,26 @@ public class SocialContainer extends GenericResource
     {
         String path = "/swbadmin/jsp/opensocial/list.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
+
+
+
+
         try
         {
             request.setAttribute("paramRequest", paramRequest);
             dis.include(request, response);
+
+
+
+
         }
         catch (Exception e)
         {
             log.error(e);
+
+
+
+
         }
     }
 
@@ -522,22 +794,40 @@ public class SocialContainer extends GenericResource
     {
         WebSite site = paramRequest.getWebPage().getWebSite();
         String url = request.getParameter("url");
+
+
+
+
         if (url != null)
         {
             Gadget g = getGadget(url, site);
+
+
+
+
             if (g != null)
             {
                 String path = "/swbadmin/jsp/opensocial/config.jsp";
                 RequestDispatcher dis = request.getRequestDispatcher(path);
+
+
+
+
                 try
                 {
                     request.setAttribute("paramRequest", paramRequest);
                     request.setAttribute("gadget", g);
                     dis.include(request, response);
+
+
+
+
                 }
                 catch (Exception e)
                 {
                     log.error(e);
+
+
                 }
             }
         }

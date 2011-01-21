@@ -457,8 +457,7 @@ public class IFrame
         }
         catch (Exception e)
         {
-            log.debug(e);
-            e.printStackTrace();
+            log.debug(e);            
             response.setStatus(500, e.getMessage());
         }
     }
