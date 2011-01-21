@@ -12,6 +12,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
@@ -21,8 +23,11 @@ import org.semanticwb.portal.api.SWBResourceException;
  */
 public class Proxy {
 
+    private static final Logger log = SWBUtils.getLogger(Proxy.class);
     private void writeContent(URL url, HttpServletResponse response) throws IOException
     {
+        try
+        {
         OutputStream out=response.getOutputStream();
         HttpURLConnection con=(HttpURLConnection) url.openConnection();
         String content_type=con.getContentType();
@@ -40,6 +45,16 @@ public class Proxy {
         }
         response.setStatus(con.getResponseCode());
         in.close();
+        }
+        catch(IOException e)
+        {
+            log.debug(e);
+            throw e;            
+        }
+        catch(Exception e)
+        {
+            log.debug(e);;
+        }
     }
     public void doProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
