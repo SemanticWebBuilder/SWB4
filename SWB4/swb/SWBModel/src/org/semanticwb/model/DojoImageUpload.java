@@ -40,7 +40,7 @@ public class DojoImageUpload extends org.semanticwb.model.base.DojoImageUploadBa
     {
         String pname=getPropertyName(prop, obj, propName);
         //System.out.println("********************** FlashImageUploader.process **********************");
-        System.out.println("Prop:"+prop.getURI()+" - "+pname);
+//        System.out.println("Prop:"+prop.getURI()+" - "+pname);
         //System.out.println(request.getParameter(pname + "_delFile"));
         if (request.getParameter(pname + "_delFile") != null)
         {
@@ -70,15 +70,18 @@ public class DojoImageUpload extends org.semanticwb.model.base.DojoImageUploadBa
         {
             throw new SWBRuntimeException("Can't create work directory " + dir);
         }
-        String cad = request.getParameter(pname);
+//        System.out.println("pname: "+pname);
+        String cad = request.getParameter(propName+"_new");
+        if (cad==null) cad = request.getParameter(pname); 
+//        System.out.println("Cad: "+cad);
         List<UploadedFile> lista = UploaderFileCacheUtils.get(cad);
-        System.out.println("Lista:"+lista.size());
+//        System.out.println("Lista:"+lista.size());
         for (UploadedFile arch : lista)
         {
             File orig = new File(arch.getTmpuploadedCanonicalFileName());
             String webpath = obj.getWorkPath() + arch.getOriginalName();
             File dest = new File(dir, pname+"_"+arch.getOriginalName());
-            System.out.println("Dest:"+dest);
+//            System.out.println("Dest:"+dest);
             if (!orig.renameTo(dest))
             {
                 try

@@ -179,8 +179,8 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
     @Override
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) {
         String pname = getPropertyName(prop, obj, propName);
-        //System.out.println("********************** FlashFileUploader.process **********************");
-        //System.out.println(request.getParameter(pname + "_delFile"));
+//        System.out.println("********************** FlashFileUploader.process **********************");
+//        System.out.println(request.getParameter(pname + "_delFile"));
         if (request.getParameter(pname + "_delFile") != null) {
             if (prop.getCardinality() != 1) {
                 Iterator<SemanticLiteral> list = obj.listLiteralProperties(prop);
@@ -201,7 +201,9 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
         if (!dir.exists() && !dir.mkdirs()) {
             throw new SWBRuntimeException("Can't create work directory " + dir);
         }
-        String cad = request.getParameter(pname);
+        String cad = request.getParameter(propName+"_new");
+        if (cad==null) cad = request.getParameter(pname);
+//        System.out.println("Cadena:"+cad);
         List<UploadedFile> lista = UploaderFileCacheUtils.get(cad);
         for (UploadedFile arch : lista) {
             File orig = new File(arch.getTmpuploadedCanonicalFileName());
@@ -230,10 +232,10 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
      * @return the upload file request
      */
     protected UploadFileRequest configFileRequest(SemanticProperty prop, String pname) {
-        //System.out.println("********************** FlashFileUploader.configFileRequest **********************");
-        //System.out.println("Tengo filtro "+getFileFilter()+"|--");
-        //System.out.println("*Prop:"+pname);
-        //System.out.println("*FileMaxSize:"+getFileMaxSize());
+//        System.out.println("********************** FlashFileUploader.configFileRequest **********************");
+//        System.out.println("Tengo filtro "+getFileFilter()+"|--");
+//        System.out.println("*Prop:"+pname);
+//        System.out.println("*FileMaxSize:"+getFileMaxSize());
 
         boolean multiple = prop.getCardinality() != 1;
         //System.out.println("filter:"+getFileFilter());
@@ -243,7 +245,7 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
         } else {
             String[] cads = getFileFilter().split("\\|");
             for (String line : cads) {
-                //System.out.println("cadena:"+line);
+//                System.out.println("cadena:"+line);
                 String[] parts = line.split(":");
                 filtros.put(parts[0], parts[1]);
             }
@@ -265,6 +267,7 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
     }
 
     protected String getPropertyName(SemanticProperty prop, SemanticObject obj, String propName) {
-        return propName + "_" + obj.getId();
+
+        return propName + "_" + (obj.getId()==null?"new":obj.getId());
     }
 }
