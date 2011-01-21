@@ -75,7 +75,7 @@ public class IFrame
                         {
                             String paramName = tag.getParamName(iparam);
                             String value = tag.getParamValue(iparam);
-                            if ("src".equals(paramName) && value!=null && value.toLowerCase().startsWith("http"))
+                            if ("src".equals(paramName) && value != null && value.toLowerCase().startsWith("http"))
                             {
                                 try
                                 {
@@ -164,15 +164,15 @@ public class IFrame
             if (pos != -1)
             {
                 String value = cssbody.substring(0, pos);
-                if(value.startsWith("'"))
+                if (value.startsWith("'"))
                 {
-                    value=value.substring(1);
+                    value = value.substring(1);
                 }
-                if(value.endsWith("'"))
+                if (value.endsWith("'"))
                 {
-                    value=value.substring(0,value.length()-1);
+                    value = value.substring(0, value.length() - 1);
                 }
-                if(value!=null && value.startsWith("http"))
+                if (value != null && value.startsWith("http"))
                 {
                     try
                     {
@@ -187,7 +187,7 @@ public class IFrame
                         {
                             url = url.substring(0, pos2);
                         }
-                        value = proxy.toString()+"?url="+URLEncoder.encode(url);
+                        value = proxy.toString() + "?url=" + URLEncoder.encode(url);
                     }
                     catch (URISyntaxException e)
                     {
@@ -200,7 +200,7 @@ public class IFrame
                 cssbody = cssbody.substring(pos);
             }
             pos = cssbody.indexOf("url(");
-        }        
+        }
         return sb.toString();
     }
 
@@ -299,38 +299,47 @@ public class IFrame
             port = ":" + request.getServerPort();
         }
 
-        HashMap<String,String> userprefs=new HashMap<String, String>();
-        Enumeration names=request.getParameterNames();
-        while(names.hasMoreElements())
+        HashMap<String, String> userprefs = new HashMap<String, String>();
+        Enumeration names = request.getParameterNames();
+        while (names.hasMoreElements())
         {
-            String name=names.nextElement().toString();
-            if(name.startsWith("up_"))
+            String name = names.nextElement().toString();
+            if (name.startsWith("up_"))
             {
-                String value=request.getParameter(name);
-                name=name.substring(3);                
+                String value = request.getParameter(name);
+                name = name.substring(3);
                 userprefs.put(name, value);
-            }            
+            }
         }
-        boolean changeUserPrefs=false;
-        Enumeration headernames=request.getHeaderNames();
-        while(headernames.hasMoreElements())
+        boolean changeUserPrefs = false;
+        Enumeration headernames = request.getHeaderNames();
+        while (headernames.hasMoreElements())
         {
-            String name=headernames.nextElement().toString();
+            String name = headernames.nextElement().toString();
 
-            if(name.equalsIgnoreCase("referer"))
+            if (name.equalsIgnoreCase("referer"))
             {
-                String referer=request.getHeader(name);
+                String referer = request.getHeader(name);
                 try
                 {
-                    URL uri_referer=new URL(referer);
-                    URL urilocal=new URL(request.getScheme() + "://" + request.getServerName() + port +paramRequest.getWebPage().getUrl());                    
-
-                    if(uri_referer.getHost().equals(urilocal.getHost()) && uri_referer.getPort()==urilocal.getPort() && uri_referer.getProtocol().equals(urilocal.getProtocol()))
+                    URL uri_referer = new URL(referer);
+                    URL urilocal = new URL(request.getScheme() + "://" + request.getServerName() + port + paramRequest.getWebPage().getUrl());
+                    String host1 = uri_referer.getHost();
+                    if ("localhost".equals(host1))
                     {
-                        changeUserPrefs=true;
+                        host1 = "127.0.0.1";
+                    }
+                    String host2 = urilocal.getHost();
+                    if ("localhost".equals(host2))
+                    {
+                        host2 = "127.0.0.1";
+                    }
+                    if (host1.equals(host2) && uri_referer.getPort() == urilocal.getPort() && uri_referer.getProtocol().equals(urilocal.getProtocol()))
+                    {
+                        changeUserPrefs = true;
                     }
                 }
-                catch(MalformedURLException e)
+                catch (MalformedURLException e)
                 {
                     log.debug(e);
                 }
@@ -361,18 +370,18 @@ public class IFrame
             Gadget gadget = SocialContainer.getGadget(url, paramRequest.getWebPage().getWebSite());
             if (gadget != null)
             {
-                SocialUser socialuser = SocialContainer.getSocialUser(user, request.getSession(),site);
-                if(changeUserPrefs)
+                SocialUser socialuser = SocialContainer.getSocialUser(user, request.getSession(), site);
+                if (changeUserPrefs)
                 {
-                    for(String key : userprefs.keySet())
+                    for (String key : userprefs.keySet())
                     {
-                        String value=userprefs.get(key);
+                        String value = userprefs.get(key);
                         socialuser.saveUserPref(gadget, moduleid, key, value);
                     }
                 }
 
                 Map<String, String> variables = socialuser.getVariablesubstituion(gadget, lang, country, moduleid);
-                log.debug("variables: "+variables);
+                log.debug("variables: " + variables);
 
                 body = getHTMLFromView(sview, gadget, variables);
                 if (body == null)
@@ -452,7 +461,7 @@ public class IFrame
                 HtmlResponse = HtmlResponse.replace("<%=rpc%>", rpc.toString());
                 HtmlResponse = HtmlResponse.replace("<%=proxy%>", proxy.toString());
                 HtmlResponse = HtmlResponse.replace("<%=makerequest%>", makerequest.toString());
-                HtmlResponse = HtmlResponse.replace("<%=html%>", body);                                
+                HtmlResponse = HtmlResponse.replace("<%=html%>", body);
                 PrintWriter out = response.getWriter();
                 out.write(HtmlResponse);
                 out.close();
@@ -460,7 +469,7 @@ public class IFrame
         }
         catch (Exception e)
         {
-            log.debug(e);            
+            log.debug(e);
             response.setStatus(500, e.getMessage());
         }
     }
