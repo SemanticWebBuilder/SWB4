@@ -75,7 +75,7 @@ public class IFrame
                         {
                             String paramName = tag.getParamName(iparam);
                             String value = tag.getParamValue(iparam);
-                            if ("src".equals(paramName))
+                            if ("src".equals(paramName) && value!=null && value.toLowerCase().startsWith("http"))
                             {
                                 try
                                 {
