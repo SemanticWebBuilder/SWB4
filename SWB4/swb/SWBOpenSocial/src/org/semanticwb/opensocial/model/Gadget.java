@@ -1,6 +1,4 @@
-
 package org.semanticwb.opensocial.model;
-
 
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -57,6 +55,29 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         {
             reload();
         }
+    }
+
+    public Document getDocument(SocialUser user, WebSite site)
+    {
+        Document _doc = null;
+
+        Map<String, String> messages = this.getMessagesFromGadget(user.getLanguage(), user.getCountry());
+        if (!messages.isEmpty() && original != null)
+        {
+            Charset charset=Charset.defaultCharset();
+            String xml = SWBUtils.XML.domToXml(original,charset.name(),false);
+            for (String key : messages.keySet())
+            {
+                String value = messages.get(key);
+                xml = xml.replace(key, value);
+            }
+            _doc = SWBUtils.XML.xmlToDom(xml);
+        }
+        if (_doc == null)
+        {
+            _doc = doc;
+        }
+        return _doc;
     }
 
     @Override
@@ -122,17 +143,15 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             {
                 Element msg = (Element) messages.item(i);
                 String name = msg.getAttribute("name");
-                String value = msg.getTextContent();
+                String value = msg.getTextContent();                
                 if (name != null && !name.equals("") && value != null && !value.equals(""))
                 {
                     if (formated)
                     {
-                        getMesssages.put("__MSG_" + name + "__", value);
-                    }
-                    else
-                    {
-                        getMesssages.put(name, value);
-                    }
+                        name="__MSG_" + name + "__";
+                    }                    
+                    getMesssages.put(name, value);
+                    
                 }
             }
         }
@@ -149,29 +168,83 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         return getMessagesFromGadget(language, country, true);
     }
 
+    public boolean existLocale(String lang_toseach, boolean exact)
+    {
+        NodeList locales = this.original.getElementsByTagName("Locale");
+        for (int i = 0; i < locales.getLength(); i++)
+        {
+            if (locales.item(i) instanceof Element)
+            {
+                Element locale = (Element) locales.item(i);
+                String lang_test = locale.getAttribute("lang");
+                if (lang_test == null)
+                {
+                    lang_test = "";
+                }
+                if (exact)
+                {
+                    if (lang_test.equals(lang_toseach))
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (lang_test.startsWith(lang_toseach))
+                    {
+                        return true;
+                    }
+                }
+
+
+            }
+        }
+        return false;
+    }
+
     public Map<String, String> getMessagesFromGadget(String language, String country, boolean formated)
     {
+
         Map<String, String> getMessagesFromGadget = new HashMap<String, String>();
-        if (language != null && language.equals("ALL"))
+        if (this.original != null)
         {
-            language = null;
-        }
-        if (country != null && country.equals("ALL"))
-        {
-            country = null;
-        }
-        String lang_toseach = "";
-        if (language != null)
-        {
-            lang_toseach = language;
-        }
-        if (country != null)
-        {
-            lang_toseach += lang_toseach + "-" + country;
-        }
-        if(this.doc!=null)
-        {
-            NodeList locales = this.doc.getElementsByTagName("Locale");
+
+            if (language != null && language.equals("ALL"))
+            {
+                language = null;
+            }
+            if (country != null && country.equals("ALL"))
+            {
+                country = null;
+            }
+            String lang_toseach = "";
+            if (language != null)
+            {
+                lang_toseach = language;
+            }
+            if (country != null)
+            {
+                lang_toseach += lang_toseach + "_" + country;
+            }
+            boolean exact = true;
+            
+            boolean existLocale = existLocale(lang_toseach, exact);
+            
+            if (!existLocale)
+            {
+                exact = false;
+                if (!"".equals(lang_toseach) && lang_toseach.indexOf("-") == -1)
+                {
+                    lang_toseach = lang_toseach + "_";
+                }
+                existLocale = existLocale(lang_toseach, exact);
+                if (!existLocale)
+                {
+                    exact = true;
+                    lang_toseach = "";
+                }
+            }
+            NodeList locales = this.original.getElementsByTagName("Locale");
             for (int i = 0; i < locales.getLength(); i++)
             {
                 if (locales.item(i) instanceof Element)
@@ -182,37 +255,81 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                     {
                         lang_test = "";
                     }
-                    if (lang_test.equals(lang_toseach))
+                    if (exact)
                     {
-                        String messages = locale.getAttribute("messages");
-                        if (messages != null && !messages.equals(""))
+                        if (lang_test.equals(lang_toseach))
                         {
-                            try
+                            String messages = locale.getAttribute("messages");
+                            if (messages != null && !messages.equals(""))
                             {
-                                URI uriGadget = new URI(this.getUrl());
-                                URI uri = new URI(messages);
-                                if (!uri.isAbsolute())
+                                try
                                 {
-                                    uri = uriGadget.resolve(uri);
+                                    URI uriGadget = new URI(this.getUrl());
+                                    URI uri = new URI(messages);
+                                    if (!uri.isAbsolute())
+                                    {
+                                        uri = uriGadget.resolve(uri);
+                                    }                                    
+                                    Document docMessages = SocialContainer.getXML(uri.toURL());
+                                    return getMesssages(docMessages, formated);
                                 }
-                                Document docMessages = SocialContainer.getXML(uri.toURL());
-                                return getMesssages(docMessages, formated);
+                                catch (URISyntaxException use)
+                                {
+                                    use.printStackTrace();
+                                    log.debug(use);
+                                }
+                                catch (MalformedURLException use)
+                                {
+                                    use.printStackTrace();
+                                    log.debug(use);
+                                }
+                                catch (IOException use)
+                                {
+                                    use.printStackTrace();
+                                    log.debug(use);
+                                }
+                                catch (JDOMException use)
+                                {
+                                    use.printStackTrace();
+                                    log.debug(use);
+                                }
                             }
-                            catch (URISyntaxException use)
+                        }
+                    }
+                    else
+                    {
+                        if (lang_test.startsWith(lang_toseach))
+                        {
+                            String messages = locale.getAttribute("messages");
+                            if (messages != null && !messages.equals(""))
                             {
-                                log.debug(use);
-                            }
-                            catch (MalformedURLException use)
-                            {
-                                log.debug(use);
-                            }
-                            catch (IOException use)
-                            {
-                                log.debug(use);
-                            }
-                            catch (JDOMException use)
-                            {
-                                log.debug(use);
+                                try
+                                {
+                                    URI uriGadget = new URI(this.getUrl());
+                                    URI uri = new URI(messages);
+                                    if (!uri.isAbsolute())
+                                    {
+                                        uri = uriGadget.resolve(uri);
+                                    }
+                                    Document docMessages = SocialContainer.getXML(uri.toURL());
+                                    return getMesssages(docMessages, formated);
+                                }
+                                catch (URISyntaxException use)
+                                {
+                                    log.debug(use);
+                                }
+                                catch (MalformedURLException use)
+                                {
+                                    log.debug(use);
+                                }
+                                catch (IOException use)
+                                {
+                                    log.debug(use);
+                                }
+                                catch (JDOMException use)
+                                {
+                                    log.debug(use);
+                                }
                             }
                         }
                     }
@@ -222,9 +339,10 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         }
         return getMessagesFromGadget;
     }
+
     private String getKey(Element module, String key)
     {
-        String value = module.getAttribute(key)==null || "".equals(module.getAttribute(key).trim())?null:module.getAttribute(key);//(module.getAttribute(key) != null || "".equals(module.getAttribute(key))) ? module.getAttribute(key) : null;
+        String value = module.getAttribute(key) == null || "".equals(module.getAttribute(key).trim()) ? null : module.getAttribute(key);//(module.getAttribute(key) != null || "".equals(module.getAttribute(key))) ? module.getAttribute(key) : null;
         return value;
     }
 
@@ -234,7 +352,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         try
         {
             original = SocialContainer.getXML(new URL(this.getUrl()));
-            doc=original;
+            doc = original;
         }
         catch (IOException e)
         {
@@ -249,7 +367,9 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         {
             try
             {
-                String xml = SWBUtils.XML.domToXml(SocialContainer.getXML(new URL(this.getUrl())));
+                Charset charset=Charset.defaultCharset();
+                String xml = SWBUtils.XML.domToXml(SocialContainer.getXML(new URL(this.getUrl())),charset.name(),false);
+
                 for (String key : variables.keySet())
                 {
                     String value = variables.get(key);
@@ -297,14 +417,14 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             String _height = getKey(module, "height");
             description = getKey(module, "description");
             String _scrolling = getKey(module, "scrolling");
-            String _category = getKey(module, "category");            
+            String _category = getKey(module, "category");
             NodeList contents = original.getElementsByTagName("Content");
             for (int i = 0; i < contents.getLength(); i++)
             {
                 if (contents.item(i) instanceof Element)
                 {
                     Element content = (Element) contents.item(i);
-                    String _view = getKey(content, "view");                    
+                    String _view = getKey(content, "view");
                     if (_view != null)
                     {
                         StringTokenizer st = new StringTokenizer(_view, ",");
@@ -312,13 +432,13 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                         {
                             String view = st.nextToken().trim();
                             if (!"".equals(view))
-                            {                                
+                            {
                                 views.add(createView(content, view));
                             }
                         }
                     }
                     else
-                    {                        
+                    {
                         views.add(createView(content, "default"));
                     }
                 }
@@ -546,7 +666,8 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                 Map<String, String> variables = this.getMessagesFromGadget("ALL", "ALL");
                 if (!variables.isEmpty() && doc != null)
                 {
-                    String xml = SWBUtils.XML.domToXml(SocialContainer.getXML(new URL(this.getUrl())));
+                    Charset charset=Charset.defaultCharset();
+                    String xml = SWBUtils.XML.domToXml(SocialContainer.getXML(new URL(this.getUrl())),charset.name(),false);
                     for (String key : variables.keySet())
                     {
                         String value = variables.get(key);
@@ -596,39 +717,103 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         return directoryTitle;
     }
 
+    public String getTitle(SocialUser user, WebSite site)
+    {
+        return getTitle(user, site, null);
+    }
+
     public String getTitle(SocialUser user, WebSite site, String moduleid)
     {
-        String _title = getGadgetTitle();
-        if (_title != null)
+        Document _doc = null;
+        String _title = null;
+        Map<String, String> messages = this.getMessagesFromGadget(user.getLanguage(), user.getCountry());        
+        if (!messages.isEmpty() && original != null)
         {
-            Map<String, String> variables = user.getVariablesubstituion(this, "ALL", "ALL", moduleid, site);
-            if (!variables.isEmpty())
+            Charset charset=Charset.defaultCharset();
+            String xml = SWBUtils.XML.domToXml(original,charset.name(),false);
+            for (String key : messages.keySet())
             {
-                for (String key : variables.keySet())
-                {
-                    _title = _title.replace(key, variables.get(key));
-                }
+                String value = messages.get(key);
+                xml = xml.replace(key, value);
             }
+            _doc = SWBUtils.XML.xmlToDom(xml);
 
         }
+        if (_doc != null)
+        {
+            if (_doc.getElementsByTagName("ModulePrefs").getLength() > 0)
+            {
+                Element module = (Element) _doc.getElementsByTagName("ModulePrefs").item(0);
+                _title = getKey(module, "title");
+            }
+            if (_title != null && moduleid != null)
+            {
+                Map<String, String> variables = user.getVariablesubstituion(this, user.getLanguage(), user.getCountry(), moduleid, site);
+                if (!variables.isEmpty())
+                {
+                    for (String key : variables.keySet())
+                    {
+                        _title = _title.replace(key, variables.get(key));
+                    }
+                }
+
+            }
+        }
+        if (_title == null)
+        {
+            _title = getTitle();
+        }
+
         return _title;
+    }
+
+    public String getDescription(SocialUser user, WebSite site)
+    {
+        return getDescription(user, site, null);
     }
 
     public String getDescription(SocialUser user, WebSite site, String moduleid)
     {
-        String _description = getGadgetDescription();
-        if (_description != null)
+        Document _doc = null;
+        String _description = null;
+        Map<String, String> messages = this.getMessagesFromGadget(user.getLanguage(), user.getCountry());
+        if (!messages.isEmpty() && original != null)
         {
-            Map<String, String> variables = user.getVariablesubstituion(this, "ALL", "ALL", moduleid, site);
-            if (!variables.isEmpty())
+            Charset charset=Charset.defaultCharset();
+            String xml = SWBUtils.XML.domToXml(original,charset.name(),false);
+            for (String key : messages.keySet())
             {
-                for (String key : variables.keySet())
-                {
-                    _description = _description.replace(key, variables.get(key));
-                }
+                String value = messages.get(key);
+                xml = xml.replace(key, value);
             }
+            _doc = SWBUtils.XML.xmlToDom(xml);
 
         }
+        if (_doc != null)
+        {
+            if (_doc.getElementsByTagName("ModulePrefs").getLength() > 0)
+            {
+                Element module = (Element) _doc.getElementsByTagName("ModulePrefs").item(0);
+                _description = getKey(module, "title");
+            }
+            if (_description != null && moduleid != null)
+            {
+                Map<String, String> variables = user.getVariablesubstituion(this, user.getLanguage(), user.getCountry(), moduleid, site);
+                if (!variables.isEmpty())
+                {
+                    for (String key : variables.keySet())
+                    {
+                        _description = _description.replace(key, variables.get(key));
+                    }
+                }
+
+            }
+        }
+        if (_description == null)
+        {
+            _description = getDescription();
+        }
+
         return _description;
     }
 
@@ -704,6 +889,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
     {
         return categories.toArray(new String[categories.size()]);
     }
+
     private String getHTML(URL url)
     {
         StringBuilder sb = new StringBuilder();
@@ -750,7 +936,6 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         return sb.toString();
     }
 
-    
     private View createView(Element content, String viewName)
     {
 
@@ -822,7 +1007,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                     log.debug(e);
                     e.printStackTrace();
                 }
-            }            
+            }
         }
         else
         {
@@ -834,9 +1019,9 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                     URI urigadget = new URI(this.getUrl());
                     if (!urihref.isAbsolute())
                     {
-                        urihref=urigadget.resolve(urihref);
+                        urihref = urigadget.resolve(urihref);
                     }
-                    String html=getHTML(urihref.toURL());
+                    String html = getHTML(urihref.toURL());
                     view.setContent(html);
                 }
                 catch (Exception e)
@@ -848,7 +1033,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             else
             {
                 StringBuilder html = new StringBuilder();
-                NodeList childs = content.getChildNodes();                
+                NodeList childs = content.getChildNodes();
                 for (int j = 0; j < childs.getLength(); j++)
                 {
                     if (childs.item(j) instanceof CDATASection)
@@ -857,9 +1042,9 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                         if (section.getNodeValue() != null)
                         {
                             html.append(section.getNodeValue());
-                        }                        
+                        }
                     }
-                }                
+                }
                 view.setContent(html.toString());
             }
         }
