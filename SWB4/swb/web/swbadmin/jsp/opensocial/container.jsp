@@ -14,8 +14,8 @@
 	add.setCallMethod(SWBResourceURL.Call_DIRECT);
         add.setMode(SocialContainer.Mode_LISTGADGETS);
 
-        String lang=user.getLanguage();
-        System.out.println("lang: "+lang);
+        String lang=socialUser.getLanguage();
+        String _country=socialUser.getCountry();        
         SWBResourceURL script=paramRequest.getRenderUrl();
         script.setCallMethod(SWBResourceURL.Call_DIRECT);
         script.setMode(SocialContainer.Mode_JAVASCRIPT);
@@ -110,7 +110,7 @@ var ownerId = '<%=id%>';
 <%
     StringBuilder _gadgets=new StringBuilder("[");
     
-    System.out.println("moduleid: "+moduleid);
+
     //socialUser.clearUserPrefs(site);
     if(moduleid==null)
     {
@@ -221,6 +221,8 @@ function init() {
   shindig.container.layoutManager =new shindig.DojoPorletManager('layout-root');
   shindig.container.setView('<%=defaultview%>');
   shindig.container.setLanguage('<%=lang%>');
+  shindig.container.setCountry('<%=_country%>');
+
 
   requestGadgetMetaData(generateGadgets);
   

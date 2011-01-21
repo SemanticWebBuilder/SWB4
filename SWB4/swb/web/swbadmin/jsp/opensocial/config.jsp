@@ -3,9 +3,12 @@
 
 <%
     StringBuilder validation=new StringBuilder();
-    SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");    
+    SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+    User user=paramRequest.getUser();
+    WebSite site=paramRequest.getWebPage().getWebSite();
+    SocialUser socialuser=SocialContainer.getSocialUser(user, session);
     Gadget gadget=(Gadget) request.getAttribute("gadget");
-    String title=gadget.getGadgetTitle();
+    String title=gadget.getTitle(socialuser,site);
     if(title==null)
     {
         title=gadget.getDirectoryTitle();
@@ -18,7 +21,7 @@
         }
     }
     String url=gadget.getUrl();
-    String description=gadget.getGadgetDescription();
+    String description=gadget.getDescription(socialuser, site);
     SWBResourceURL processAction=paramRequest.getActionUrl();
 
 
@@ -64,7 +67,7 @@ visibility:hidden;}
     <%=description%>
 </p>
 <%
-Document doc=gadget.getDocument();
+Document doc=gadget.getDocument(socialuser,site);
 %>
 
 

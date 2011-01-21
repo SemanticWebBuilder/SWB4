@@ -58,7 +58,7 @@
             if(g1!=null)
             {
 
-                String title=g1.getGadgetTitle();
+                String title=g1.getTitle(socialuser, site);
                 if(title==null)
                 {
                     title=g1.getDirectoryTitle();
@@ -104,7 +104,7 @@
             
             if(g2!=null)
             {
-                String title=g2.getGadgetTitle();
+                String title=g2.getTitle(socialuser, site);
                 if(title==null)
                 {
                     title=g2.getDirectoryTitle();
@@ -152,7 +152,7 @@
             }
             if(g3!=null)
             {
-                String title=g3.getGadgetTitle();
+                String title=g3.getTitle(socialuser, site);
                 if(title==null)
                 {
                     title=g3.getDirectoryTitle();
