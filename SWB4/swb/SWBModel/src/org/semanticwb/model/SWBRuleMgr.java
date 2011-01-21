@@ -35,10 +35,6 @@ import java.util.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Role;
-import org.semanticwb.model.Rule;
-import org.semanticwb.model.User;
-import org.semanticwb.model.UserGroup;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.w3c.dom.*;
@@ -75,12 +71,16 @@ public class SWBRuleMgr
     
     /** The Constant TAG_INT_DEVICE. */
     public static final String TAG_INT_DEVICE ="SWBDevice";
+
+    /** The Constant TAG_SESSION_ATT. */
+    public static final String TAG_INT_USERIP="SWBUserIP";
     
     /** The Constant TAG_REQUEST_PARAM. */
     public static final String TAG_REQUEST_PARAM="SWBReqParam";
     
     /** The Constant TAG_SESSION_ATT. */
     public static final String TAG_SESSION_ATT="SWBSessAtt";
+
     
     /** The doms. */
     private HashMap<String,Document> doms;
@@ -360,14 +360,41 @@ public class SWBRuleMgr
                 }
             }else if(name.equals(TAG_INT_ISREGISTERED)) //validacion de roles
             {
-                return user.isRegistered()==Boolean.parseBoolean(value);
+                if(cond.equals("="))
+                {
+                    return user.isRegistered()==Boolean.parseBoolean(value);
+                }else
+                {
+                    return user.isRegistered()!=Boolean.parseBoolean(value);
+                }
             }else if(name.equals(TAG_INT_ISSIGNED)) //validacion de roles
             {
-                return user.isSigned()==Boolean.parseBoolean(value);
+                if(cond.equals("="))
+                {
+                    return user.isSigned()==Boolean.parseBoolean(value);
+                }else
+                {
+                    return user.isSigned()!=Boolean.parseBoolean(value);
+                }
             }else if(name.equals(TAG_INT_DEVICE)) //validacion de roles
             {
                 Device dev=(Device)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(value);
-                return user.hasDevice(dev);
+                if(cond.equals("="))
+                {
+                    return user.hasDevice(dev);
+                }else
+                {
+                    return !user.hasDevice(dev);
+                }
+            }else if(name.equals(TAG_INT_USERIP)) //validacion de roles
+            {
+                if(cond.equals("="))
+                {
+                    return user.getIp().startsWith(value);
+                }else
+                {
+                    return !user.getIp().startsWith(value);
+                }
             }else //se busca en el xml del usuario
             {
                 SemanticProperty prop=user.getSemanticObject().getSemanticClass().getProperty(name);

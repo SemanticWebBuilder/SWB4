@@ -485,30 +485,25 @@ public class SWBARule extends GenericResource {
 
             // Se agrega la parte de paises
 
-            int numpais = 0;
-            Iterator<Country> numcountry = SWBContext.getWebSite(tmid).listCountries();
-            while (numcountry.hasNext()) {
-                Country country = numcountry.next();
-                numreglas++;
-            }
-            log.debug("numPais:" + numpais);
-            if (numreglas > 0) {
+            List<Country> countries = SWBUtils.Collections.copyIterator(SWBContext.getWebSite(tmid).listCountries());
+            log.debug("numPais:" + countries.size());
+            if (!countries.isEmpty()) {
                 hmAttr = new HashMap();
                 hmOper = new HashMap();
                 hmValues = new HashMap();
                 hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgCountries"));   ///////////////////////////
                 hmAttr.put("Tipo", "select");
-                hmOper.put("=", paramRequest.getLocaleString("msgCumpla"));
-                hmOper.put("!=", paramRequest.getLocaleString("msgNoCumpla"));
+                hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
                 hmAttr.put("Operador", hmOper);
-                Iterator<Country> enumCountry = SWBContext.getWebSite(tmid).listCountries();
+                Iterator<Country> enumCountry = countries.iterator();
                 while (enumCountry.hasNext()) {
                     Country country = enumCountry.next();
-                    hmValues.put(country.getURI(), country.getDisplayTitle(user.getLanguage()));
+                    hmValues.put(country.getId(), country.getDisplayTitle(user.getLanguage()));
                 }
                 hmAttr.put("Valor", hmValues);
-                comboAtt.put(SWBRuleMgr.TAG_INT_RULE, hmAttr); //falta tag del pais
-                vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_RULE); //falta tag del pais
+                comboAtt.put(User.swb_usrCountry.getName(), hmAttr); //falta tag del pais
+                vecOrderAtt.add(numero++, User.swb_usrCountry.getName()); //falta tag del pais
             }
 
             //Se agrega la parte de IP del usuario
@@ -520,8 +515,8 @@ public class SWBARule extends GenericResource {
             hmOper.put("=", paramRequest.getLocaleString("msgIs"));
             hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
             hmAttr.put("Operador", hmOper);
-            comboAtt.put(SWBRuleMgr.TAG_INT_RULE, hmAttr); //falta tag de IP
-            vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_RULE); //falta tag de IP
+            comboAtt.put(SWBRuleMgr.TAG_INT_USERIP, hmAttr); //falta tag de IP
+            vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_USERIP); //falta tag de IP
 
             //Tipo de usuario
             Iterator<String> usrTypes = usrRepo.getUserTypes();
