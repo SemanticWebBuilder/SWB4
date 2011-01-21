@@ -47,19 +47,8 @@ public class SocialUser
     }
     public final void refresh(User user)
     {
-        lang=user.getLanguage();
-        if(user.getCountry()!=null)
-        {
-            country=user.getCountry().getId();
-            if(country==null)
-            {
-                country="ALL";
-            }
-        }
-        if(lang==null)
-        {
-            lang="ALL";
-        }
+        lang=user==null || user.getLanguage()==null?"ALL":user.getLanguage();
+        country=user==null || user.getCountry()==null?"ALL":user.getCountry().getId();
     }
     public String getCountry()
     {
