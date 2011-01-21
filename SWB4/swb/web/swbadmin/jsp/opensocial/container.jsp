@@ -59,6 +59,7 @@
 <html>
 <head>
     <style type="text/css">
+        iframe{width:400px}
         .dndDropIndicator
     { border: 2px dashed #99BBE8; cursor:default; margin-bottom:5px; }
     </style>
