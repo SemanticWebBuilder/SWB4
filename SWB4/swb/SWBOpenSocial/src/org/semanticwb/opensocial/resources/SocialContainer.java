@@ -416,26 +416,33 @@ public class SocialContainer extends GenericResource
         iframe.doProcess(request, response, paramRequest);
     }
 
-    public static Document getXML(URL url) throws IOException, JDOMException
+    public static Document getXML(URL url) throws IOException, JDOMException,RequestException
     {
         Charset charset = Charset.forName("utf-8");
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
-        String contentType = con.getContentType();
-        if (contentType != null)
+        if(con.getResponseCode()==200)
         {
-            int pos = contentType.indexOf("charset=");
-            if (pos != -1)
+            String contentType = con.getContentType();
+            if (contentType != null)
             {
-                String scharset = contentType.substring(pos + 8).trim();
-                charset = Charset.forName(scharset);
+                int pos = contentType.indexOf("charset=");
+                if (pos != -1)
+                {
+                    String scharset = contentType.substring(pos + 8).trim();
+                    charset = Charset.forName(scharset);
+                }
             }
-        }        
-        InputStream in = con.getInputStream();
-        InputStreamReader reader=new InputStreamReader(in, charset);
-        DOMOutputter out = new DOMOutputter();
-        SAXBuilder builder = new SAXBuilder();
-        return out.output(builder.build(reader));
+            InputStream in = con.getInputStream();
+            InputStreamReader reader=new InputStreamReader(in, charset);
+            DOMOutputter out = new DOMOutputter();
+            SAXBuilder builder = new SAXBuilder();
+            return out.output(builder.build(reader));
+        }
+        else
+        {
+            throw new RequestException("",con.getResponseCode());
+        }
     }
 
     @Override

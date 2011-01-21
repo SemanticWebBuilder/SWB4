@@ -48,15 +48,16 @@ public class MakeRequest
     {        
         try
         {
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            /*HttpURLConnection con = (HttpURLConnection) url.openConnection();
             if (headers != null && !headers.equals(""))
             {
                 StringTokenizer st = new StringTokenizer(headers, ":");
                 if (st.countTokens() % 2 == 0)
                 {
                 }
-            }
-            String header = con.getHeaderField("Content-Type");
+            }*/
+
+            /*String header = con.getHeaderField("Content-Type");
             Charset charset = Charset.defaultCharset();            
             if (header != null)
             {
@@ -67,9 +68,23 @@ public class MakeRequest
                     charset = Charset.forName(scharset);
                 }
             }
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();*/
+            int code=500;
+            String xml="";
+            try
+            {
+                Document doc=SocialContainer.getXML(url);
+                Charset charset=Charset.forName("utf-8");
+                xml =SWBUtils.XML.domToXml(doc, charset.name(), true);
+                code=200;
+            }
+            catch(RequestException e)
+            {
+                code=e.getCode();
+            }
+
             JSONObject responseJSONObject = new JSONObject();
-            if (con.getResponseCode() == 200)
+            /*if (con.getResponseCode() == 200)
             {
                 InputStream in = con.getInputStream();
                 java.io.InputStreamReader reader = new InputStreamReader(in, charset);
@@ -85,13 +100,13 @@ public class MakeRequest
             else
             {
                 System.out.println("Make request "+con.getURL()+" code: "+con.getResponseCode()+" msg: "+con.getResponseMessage());
-            }
-            String xml = sb.toString();            
+            }*/
+            
             response.setContentType("application/json");
             JSONObject body = new JSONObject();
             body.put("body", xml);
             responseJSONObject.put(url.toString(), body);
-            responseJSONObject.put("rc", con.getResponseCode());            
+            responseJSONObject.put("rc", code);
             sendResponse(responseJSONObject.toString(4), response);
         }
         catch (IOException e)

@@ -18,6 +18,7 @@ import org.jdom.JDOMException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.opensocial.resources.RequestException;
 import org.semanticwb.opensocial.resources.SocialContainer;
 import org.semanticwb.opensocial.resources.SocialUser;
 import org.w3c.dom.CDATASection;
@@ -62,16 +63,16 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         Document _doc = null;
 
         Map<String, String> messages = this.getMessagesFromGadget(user.getLanguage(), user.getCountry());
-        System.out.println("messages: "+messages.size());
+        System.out.println("messages: " + messages.size());
         if (!messages.isEmpty() && original != null)
         {
-            Charset charset=Charset.defaultCharset();
-            String xml = SWBUtils.XML.domToXml(original,charset.name(),false);
+            Charset charset = Charset.defaultCharset();
+            String xml = SWBUtils.XML.domToXml(original, charset.name(), false);
             for (String key : messages.keySet())
             {
                 String value = messages.get(key);
                 xml = xml.replace(key, value);
-            }            
+            }
             _doc = SWBUtils.XML.xmlToDom(xml);
         }
         if (_doc == null)
@@ -144,15 +145,15 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             {
                 Element msg = (Element) messages.item(i);
                 String name = msg.getAttribute("name");
-                String value = msg.getTextContent();                
+                String value = msg.getTextContent();
                 if (name != null && !name.equals("") && value != null && !value.equals(""))
                 {
                     if (formated)
                     {
-                        name="__MSG_" + name + "__";
-                    }                    
+                        name = "__MSG_" + name + "__";
+                    }
                     getMesssages.put(name, value);
-                    
+
                 }
             }
         }
@@ -228,9 +229,9 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                 lang_toseach += lang_toseach + "_" + country;
             }
             boolean exact = true;
-            
+
             boolean existLocale = existLocale(lang_toseach, exact);
-            
+
             if (!existLocale)
             {
                 exact = false;
@@ -270,9 +271,13 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                                     if (!uri.isAbsolute())
                                     {
                                         uri = uriGadget.resolve(uri);
-                                    }                                    
+                                    }
                                     Document docMessages = SocialContainer.getXML(uri.toURL());
                                     return getMesssages(docMessages, formated);
+                                }
+                                catch (RequestException e)
+                                {
+                                    log.debug(e);
                                 }
                                 catch (URISyntaxException use)
                                 {
@@ -314,6 +319,10 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                                     }
                                     Document docMessages = SocialContainer.getXML(uri.toURL());
                                     return getMesssages(docMessages, formated);
+                                }
+                                catch (RequestException e)
+                                {
+                                    log.debug(e);
                                 }
                                 catch (URISyntaxException use)
                                 {
@@ -363,13 +372,17 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         {
             log.debug(e);
         }
+        catch (RequestException e)
+        {
+            log.debug(e);
+        }
         Map<String, String> variables = this.getMessagesFromGadget("ALL", "ALL");
         if (!variables.isEmpty() && doc != null)
         {
             try
             {
-                Charset charset=Charset.defaultCharset();
-                String xml = SWBUtils.XML.domToXml(SocialContainer.getXML(new URL(this.getUrl())),charset.name(),false);
+                Charset charset = Charset.defaultCharset();
+                String xml = SWBUtils.XML.domToXml(SocialContainer.getXML(new URL(this.getUrl())), charset.name(), false);
 
                 for (String key : variables.keySet())
                 {
@@ -377,6 +390,10 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                     xml = xml.replace(key, value);
                 }
                 doc = SWBUtils.XML.xmlToDom(xml);
+            }
+            catch (RequestException e)
+            {
+                log.debug(e);
             }
             catch (IOException e)
             {
@@ -667,8 +684,8 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                 Map<String, String> variables = this.getMessagesFromGadget("ALL", "ALL");
                 if (!variables.isEmpty() && doc != null)
                 {
-                    Charset charset=Charset.defaultCharset();
-                    String xml = SWBUtils.XML.domToXml(SocialContainer.getXML(new URL(this.getUrl())),charset.name(),false);
+                    Charset charset = Charset.defaultCharset();
+                    String xml = SWBUtils.XML.domToXml(SocialContainer.getXML(new URL(this.getUrl())), charset.name(), false);
                     for (String key : variables.keySet())
                     {
                         String value = variables.get(key);
@@ -718,6 +735,56 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         return directoryTitle;
     }
 
+    public String getDirectoryTitle(SocialUser user, WebSite site)
+    {
+        return getDirectoryTitle(user, site, null);
+    }
+
+    public String getDirectoryTitle(SocialUser user, WebSite site, String moduleid)
+    {
+        Document _doc = null;
+        String _directory_title = null;
+        Map<String, String> messages = this.getMessagesFromGadget(user.getLanguage(), user.getCountry());
+        if (!messages.isEmpty() && original != null)
+        {
+            Charset charset = Charset.defaultCharset();
+            String xml = SWBUtils.XML.domToXml(original, charset.name(), false);
+            for (String key : messages.keySet())
+            {
+                String value = messages.get(key);
+                xml = xml.replace(key, value);
+            }
+            _doc = SWBUtils.XML.xmlToDom(xml);
+
+        }
+        if (_doc != null)
+        {
+            if (_doc.getElementsByTagName("ModulePrefs").getLength() > 0)
+            {
+                Element module = (Element) _doc.getElementsByTagName("ModulePrefs").item(0);
+                _directory_title = getKey(module, "directory_title");
+            }
+            if (_directory_title != null && moduleid != null)
+            {
+                Map<String, String> variables = user.getVariablesubstituion(this, user.getLanguage(), user.getCountry(), moduleid, site);
+                if (!variables.isEmpty())
+                {
+                    for (String key : variables.keySet())
+                    {
+                        _directory_title = _directory_title.replace(key, variables.get(key));
+                    }
+                }
+
+            }
+        }
+        if (_directory_title == null)
+        {
+            _directory_title = getTitle();
+        }
+
+        return _directory_title;
+    }
+
     public String getTitle(SocialUser user, WebSite site)
     {
         return getTitle(user, site, null);
@@ -727,11 +794,11 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
     {
         Document _doc = null;
         String _title = null;
-        Map<String, String> messages = this.getMessagesFromGadget(user.getLanguage(), user.getCountry());        
+        Map<String, String> messages = this.getMessagesFromGadget(user.getLanguage(), user.getCountry());
         if (!messages.isEmpty() && original != null)
         {
-            Charset charset=Charset.defaultCharset();
-            String xml = SWBUtils.XML.domToXml(original,charset.name(),false);
+            Charset charset = Charset.defaultCharset();
+            String xml = SWBUtils.XML.domToXml(original, charset.name(), false);
             for (String key : messages.keySet())
             {
                 String value = messages.get(key);
@@ -780,8 +847,8 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         Map<String, String> messages = this.getMessagesFromGadget(user.getLanguage(), user.getCountry());
         if (!messages.isEmpty() && original != null)
         {
-            Charset charset=Charset.defaultCharset();
-            String xml = SWBUtils.XML.domToXml(original,charset.name(),false);
+            Charset charset = Charset.defaultCharset();
+            String xml = SWBUtils.XML.domToXml(original, charset.name(), false);
             for (String key : messages.keySet())
             {
                 String value = messages.get(key);
@@ -795,7 +862,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             if (_doc.getElementsByTagName("ModulePrefs").getLength() > 0)
             {
                 Element module = (Element) _doc.getElementsByTagName("ModulePrefs").item(0);
-                _description = getKey(module, "title");
+                _description = getKey(module, "description");
             }
             if (_description != null && moduleid != null)
             {
