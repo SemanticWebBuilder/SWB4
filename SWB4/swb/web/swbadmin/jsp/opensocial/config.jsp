@@ -64,7 +64,7 @@ visibility:hidden;}
     <%=description%>
 </p>
 <%
-Document doc=gadget.getDocument(socialuser,site);
+Document doc=gadget.getDocument(socialuser.getLanguage(),socialuser.getCountry());
 %>
 
 
