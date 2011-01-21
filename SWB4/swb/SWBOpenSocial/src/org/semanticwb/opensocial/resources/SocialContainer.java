@@ -134,12 +134,12 @@ public class SocialContainer extends GenericResource
         return true;
     }
 
-    public static SocialUser getSocialUser(User user, HttpSession session)
+    public static SocialUser getSocialUser(User user, HttpSession session,WebSite site)
     {
         SocialUser socialUser = (SocialUser) session.getAttribute(SOCIAL_USER_ATTRIBUTE);
         if (socialUser == null)
         {
-            socialUser = new SocialUser(user);
+            socialUser = new SocialUser(user,site);
             session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
         }
         String user1 = user == null ? null : user.getId();
@@ -148,19 +148,19 @@ public class SocialContainer extends GenericResource
         {
             if ((user1 == null && user2 != null) || (user1 != null && user2 == null))
             {
-                socialUser = new SocialUser(user);
+                socialUser = new SocialUser(user,site);
                 session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
             }
             else
             {
                 if (!user1.equals(user2))
                 {
-                    socialUser = new SocialUser(user);
+                    socialUser = new SocialUser(user,site);
                     session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
                 }
             }
         }
-        socialUser.refresh(user);
+        socialUser.refresh(user,site);
         return socialUser;
     }
 
@@ -170,20 +170,12 @@ public class SocialContainer extends GenericResource
         String url = request.getParameter("__url__");
         WebSite site = response.getWebPage().getWebSite();
         User user = response.getUser();
-
-
-
-
         if (url != null)
         {
             Gadget gadget = getGadget(url, site);
-
-
-
-
             if (gadget != null)
             {
-                SocialUser socialUser = getSocialUser(user, request.getSession());
+                SocialUser socialUser = getSocialUser(user, request.getSession(),site);
                 Document doc = gadget.getDocument();
                 NodeList userPrefs = doc.getElementsByTagName("UserPref");
                 String moduleid = null;
@@ -637,7 +629,7 @@ public class SocialContainer extends GenericResource
     {
         WebSite site = paramRequest.getWebPage().getWebSite();
         User user = paramRequest.getUser();
-        SocialUser socialuser = new SocialUser(user);
+        SocialUser socialuser = new SocialUser(user,site);
         for (UserPrefs pref : socialuser.getUserPrefs(site))
         {
             if (pref.getGadget() != null)

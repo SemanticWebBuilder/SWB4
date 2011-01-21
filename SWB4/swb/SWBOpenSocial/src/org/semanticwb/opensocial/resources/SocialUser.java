@@ -13,9 +13,11 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.opensocial.model.Gadget;
@@ -40,15 +42,30 @@ public class SocialUser
     private final UserPrefManager userprefsManager = new UserPrefManager();
     private String lang="ALL";
     private String country="ALL";
-    public SocialUser(User user)
+    private String site;
+    public SocialUser(User user,WebSite site)
     {
         this.user = user == null ? null : user.getId();
-        refresh(user);
+        refresh(user,site);
     }
-    public final void refresh(User user)
+    public final void refresh(User user,WebSite site)
     {
         lang=user==null || user.getLanguage()==null?"ALL":user.getLanguage();
         country=user==null || user.getCountry()==null?"ALL":user.getCountry().getId();
+        this.site=site.getId();
+
+    }
+    public WebSite getWebSite()
+    {
+        return SWBContext.getWebSite(site);
+    }
+    public User getUser()
+    {
+        if(user!=null)
+        {
+            return getWebSite().getUserRepository().getUser(user);
+        }
+        return null;
     }
     public String getCountry()
     {

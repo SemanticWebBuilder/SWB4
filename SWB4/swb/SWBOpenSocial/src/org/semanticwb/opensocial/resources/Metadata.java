@@ -189,7 +189,7 @@ public class Metadata
                         }
                     }
 
-                    socialuser = SocialContainer.getSocialUser(user, request.getSession());
+                    socialuser = SocialContainer.getSocialUser(user, request.getSession(),site);
                     if (socialuser != null)
                     {
                         for (int i = 0; i < gadgets.length(); i++)
