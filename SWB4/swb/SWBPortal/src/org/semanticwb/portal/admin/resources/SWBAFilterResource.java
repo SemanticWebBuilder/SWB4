@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /** SWBAFilterResource.java
  *
  * User: Alberto Reyes
@@ -56,10 +55,8 @@ public class SWBAFilterResource extends SWBATree {
 
     /** The log. */
     private Logger log = SWBUtils.getLogger(SWBAFilterResource.class);
-    
     /** The Constant pathValids. */
     static final String[] pathValids = {"getServer", "getTopic", "getTopicMap"};
-    
     /** The Constant namevalids. */
     static final String[] namevalids = {"node", "config", "icons", "icon", "res", "events", "willExpand"};
 
@@ -175,18 +172,20 @@ public class SWBAFilterResource extends SWBATree {
             SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
             GenericObject gobj = ont.getGenericObject(id);
 
-            if(gobj instanceof Resource)
-            {
-                recres = (Resource)gobj;
+            if (gobj instanceof Resource) {
+                recres = (Resource) gobj;
                 map = recres.getWebSite();
+            } else {
+                return null;
             }
-            else return null;
-            
-            
-            log.debug("updateFilter...id:"+id+", tm:"+tm);
+
+
+            log.debug("updateFilter...id:" + id + ", tm:" + tm);
             String xml = "<resource><filter/></resource>";
             ResourceFilter pfil = recres.getResourceFilter();
-            if(pfil!=null) xml=pfil.getXml();
+            if (pfil != null) {
+                xml = pfil.getXml();
+            }
 
             try {
                 Document docxmlConf = null;
@@ -196,16 +195,26 @@ public class SWBAFilterResource extends SWBATree {
                     eResource = docxmlConf.createElement("resource");
                     docxmlConf.appendChild(eResource);
                 } else {
+
+                    //System.out.println("XML antes de actualizar:\n"+xml);
+
+                    if(xml.indexOf("<resource>")==-1)
+                    {
+                        int intIniIdx = xml.indexOf("<filter>");
+                        int intEndIdx = xml.lastIndexOf("</filter>");
+                        if (intIniIdx != -1 && intEndIdx != -1) {
+                            xml = xml.substring(intIniIdx,intEndIdx+9);
+                            xml = "<resource>"+xml+"</resource>";
+                            //System.out.println("XML:"+xml);
+                        }
+                    }
+
                     docxmlConf = SWBUtils.XML.xmlToDom(xml);
                     if (docxmlConf.getElementsByTagName("resource").getLength() > 0) {
                         eResource = (Element) docxmlConf.getElementsByTagName("resource").item(0);
                     } else {
-                        if (docxmlConf.getElementsByTagName("resource").getLength() > 0) {
-                            eResource = (Element) docxmlConf.getElementsByTagName("resource").item(0);
-                        } else {
-                            eResource = docxmlConf.createElement("resource");
-                            docxmlConf.appendChild(eResource);
-                        }
+                        eResource = docxmlConf.createElement("resource");
+                        docxmlConf.appendChild(eResource);
                     }
                 }
                 NodeList filters = eResource.getElementsByTagName("filter");
@@ -223,8 +232,7 @@ public class SWBAFilterResource extends SWBATree {
                 log.debug(SWBUtils.XML.domToXml(docxmlConf));
 
                 pfil = recres.getResourceFilter();
-                if(null!=recres&&null!=pfil)
-                {
+                if (null != recres && null != pfil) {
                     pfil.setXml(SWBUtils.XML.domToXml(docxmlConf));
                 }
                 Document docresp = SWBUtils.XML.getNewDocument();
@@ -343,21 +351,23 @@ public class SWBAFilterResource extends SWBATree {
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         GenericObject gobj = ont.getGenericObject(id);
 
-        WebSite map=null;
+        WebSite map = null;
 
         Resource recres = null;
 
-        if(gobj instanceof Resource)
-        {
-            recres = (Resource)gobj;
+        if (gobj instanceof Resource) {
+            recres = (Resource) gobj;
             map = recres.getWebSite();
+        } else {
+            return null;
         }
-        else return null;
 
         String xml = null;
         ResourceFilter pfil = recres.getResourceFilter();
-        if(null!=pfil) xml=pfil.getXml();
-        
+        if (null != pfil) {
+            xml = pfil.getXml();
+        }
+
         Document docres = null;
         if (xml != null) {
 
@@ -427,7 +437,9 @@ public class SWBAFilterResource extends SWBATree {
         Resource recRes = SWBContext.getWebSite(tm).getResource(id);
         ResourceFilter pfil = recRes.getResourceFilter();
         String strXml = null;
-        if(null!=pfil) strXml = pfil.getXml();
+        if (null != pfil) {
+            strXml = pfil.getXml();
+        }
         // Se genera el XML
         if (strXml == null || strXml != null && strXml.equals("")) {
             try {
@@ -459,7 +471,7 @@ public class SWBAFilterResource extends SWBATree {
                 int intIniIdx = strXml.indexOf("<filter>");
                 int intEndIdx = strXml.lastIndexOf("</filter>");
                 if (intIniIdx != -1 && intEndIdx != -1) {
-                    strXml = strXml.substring(0, intIniIdx) + strXml.substring(intEndIdx + 9, strXml.length());
+                    strXml = strXml.substring(intIniIdx,intEndIdx + 9);
                 }
                 dom = SWBUtils.XML.xmlToDom(strXml);
                 elmRes = (Element) dom.getFirstChild();
@@ -486,7 +498,7 @@ public class SWBAFilterResource extends SWBATree {
         response.setRenderParameter("id", id);
         response.setRenderParameter("suri", id);
         response.setRenderParameter("tm", tm);
-    //System.out.println("Lo guardo");
+        //System.out.println("Lo guardo");
     }
 
     /**
@@ -502,12 +514,12 @@ public class SWBAFilterResource extends SWBATree {
     private void getIniForm(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, User user) throws IOException {
         PrintWriter out = response.getWriter();
         //String tp=paramRequest.getWebPage().getId();
-        String tm=request.getParameter("tm");
+        String tm = request.getParameter("tm");
         String id = request.getParameter("suri");
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         GenericObject gobj = ont.getGenericObject(id);
 
-        WebSite map=null;
+        WebSite map = null;
 
 //        if (request.getParameter("suri")!=null && !request.getParameter("suri").equals("id"))
 //            id=request.getParameter("suri");
@@ -515,7 +527,7 @@ public class SWBAFilterResource extends SWBATree {
         if (gobj instanceof Resource) {
             recRes = (Resource) gobj;
             map = recRes.getWebSite();
-            tm=map.getId();
+            tm = map.getId();
             String strConfirm = request.getParameter("confirm");
             if (strConfirm != null && strConfirm.equals("added")) {
                 out.println("<script type=\"text/javascript\">");
@@ -526,12 +538,13 @@ public class SWBAFilterResource extends SWBATree {
                 //recRes = map.getResource(id);
                 ResourceFilter pfil = recRes.getResourceFilter();
                 String strXml = null;
-                if(null!=pfil) strXml = pfil.getXml();
-                
-                if(null==strXml || (strXml!=null&&strXml.trim().length()==0))
-                {
-                    if(null==pfil){
-                        pfil=recRes.getWebSite().createResourceFilter();
+                if (null != pfil) {
+                    strXml = pfil.getXml();
+                }
+
+                if (null == strXml || (strXml != null && strXml.trim().length() == 0)) {
+                    if (null == pfil) {
+                        pfil = recRes.getWebSite().createResourceFilter();
                         recRes.setResourceFilter(pfil);
                     }
                     pfil.setXml("<resource><filter/></resource>");
@@ -541,7 +554,7 @@ public class SWBAFilterResource extends SWBATree {
                 SWBResourceURL url = paramRequest.getRenderUrl();
                 url.setMode("gateway");
                 url.setCallMethod(url.Call_DIRECT);
-                out.println("<param name=\"jsess\" value=\""+request.getSession().getId()+"\">");
+                out.println("<param name=\"jsess\" value=\"" + request.getSession().getId() + "\">");
                 out.println("<param name =\"idfilter\" value=\"" + id + "\">");
                 out.println("<param name =\"cgipath\" value=\"" + url + "\">");
                 out.println("<param name =\"locale\" value=\"" + user.getLanguage() + "\">");
