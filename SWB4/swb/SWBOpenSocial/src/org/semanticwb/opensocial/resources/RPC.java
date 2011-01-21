@@ -149,8 +149,7 @@ public class RPC
                     if (values.length == 9)
                     {
                         urlgadget = values[4] + ":" + values[5] + ":" + values[6];
-                    }
-                    System.out.println("urlgadget: " + urlgadget);
+                    }                    
                     URI gadgetURL = new URI(urlgadget);
                     URI here = new URI(request.getScheme() + "://" + request.getServerName() + port + request.getRequestURI());
                     if (!gadgetURL.isAbsolute())

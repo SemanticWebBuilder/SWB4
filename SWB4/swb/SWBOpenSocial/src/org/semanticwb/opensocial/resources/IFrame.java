@@ -172,24 +172,27 @@ public class IFrame
                 {
                     value=value.substring(0,value.length()-1);
                 }
-                try
+                if(value!=null && value.startsWith("http"))
                 {
-                    URI uriValue = new URI(value);
-                    if (!uriValue.isAbsolute())
+                    try
                     {
-                        uriValue = gadget.resolve(uriValue);
+                        URI uriValue = new URI(value);
+                        if (!uriValue.isAbsolute())
+                        {
+                            uriValue = gadget.resolve(uriValue);
+                        }
+                        String url = uriValue.toString();
+                        int pos2 = url.indexOf("?"); // elimina parametros por seguridad
+                        if (pos2 != -1)
+                        {
+                            url = url.substring(0, pos2);
+                        }
+                        value = proxy.toString()+"?url="+URLEncoder.encode(url);
                     }
-                    String url = uriValue.toString();
-                    int pos2 = url.indexOf("?"); // elimina parametros por seguridad
-                    if (pos2 != -1)
+                    catch (URISyntaxException e)
                     {
-                        url = url.substring(0, pos2);
+                        log.debug(e);
                     }
-                    value = proxy.toString()+"?url="+URLEncoder.encode(url);
-                }
-                catch (URISyntaxException e)
-                {
-                    log.debug(e);
                 }
                 sb.append("'");
                 sb.append(value);
