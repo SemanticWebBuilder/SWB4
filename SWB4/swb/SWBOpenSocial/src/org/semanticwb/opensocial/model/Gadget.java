@@ -797,8 +797,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
             }
             if (_title != null && moduleid != null && socialuser != null)
-            {
-                WebSite site=socialuser.getWebSite();
+            {                
                 Map<String, String> variables = socialuser.getVariablesubstituion(this, language, country, moduleid);
                 if (!variables.isEmpty())
                 {
