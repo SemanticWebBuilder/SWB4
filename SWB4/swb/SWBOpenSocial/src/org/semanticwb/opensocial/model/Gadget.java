@@ -62,6 +62,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         Document _doc = null;
 
         Map<String, String> messages = this.getMessagesFromGadget(user.getLanguage(), user.getCountry());
+        System.out.println("messages: "+messages.size());
         if (!messages.isEmpty() && original != null)
         {
             Charset charset=Charset.defaultCharset();
@@ -70,7 +71,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             {
                 String value = messages.get(key);
                 xml = xml.replace(key, value);
-            }
+            }            
             _doc = SWBUtils.XML.xmlToDom(xml);
         }
         if (_doc == null)
