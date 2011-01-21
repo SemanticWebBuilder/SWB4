@@ -36,7 +36,7 @@
         {
             String _mid=request.getParameter("mid");
             String _view=request.getParameter("view");
-            for(UserPrefs pref : socialUser.getUserPrefs(site))
+            for(UserPrefs pref : socialUser.getUserPrefs())
             {
                 Gadget g=pref.getGadget();                
                 if(g!=null && _mid.equalsIgnoreCase(pref.getModuleId()))
@@ -114,7 +114,7 @@ var ownerId = '<%=id%>';
     //socialUser.clearUserPrefs(site);    
     if(moduleid==null)
     {        
-        for(UserPrefs pref : socialUser.getUserPrefs(site))
+        for(UserPrefs pref : socialUser.getUserPrefs())
         {
             Gadget g=pref.getGadget();
             if(g!=null)
@@ -136,7 +136,7 @@ var ownerId = '<%=id%>';
     }
     else
     {
-        for(UserPrefs pref : socialUser.getUserPrefs(site))
+        for(UserPrefs pref : socialUser.getUserPrefs())
         {
             Gadget g=pref.getGadget();
             if(g!=null && moduleid.equalsIgnoreCase(pref.getModuleId()))
