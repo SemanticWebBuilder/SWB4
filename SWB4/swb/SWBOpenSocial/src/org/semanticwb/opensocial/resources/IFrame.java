@@ -372,7 +372,7 @@ public class IFrame
                 }
 
                 Map<String, String> variables = socialuser.getVariablesubstituion(gadget, lang, country, moduleid);
-
+                log.debug("variables: "+variables);
 
                 body = getHTMLFromView(sview, gadget, variables);
                 if (body == null)

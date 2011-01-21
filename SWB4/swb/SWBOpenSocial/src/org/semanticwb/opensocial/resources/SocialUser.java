@@ -269,42 +269,48 @@ public class SocialUser
     {
 
         Map<String, String> getVariablesubstituion = new HashMap<String, String>();
-        getVariablesubstituion.putAll(gadget.getMessagesFromGadget(language, country));
-
-        getVariablesubstituion.put("__MODULE_ID__", moduleID);
-        getVariablesubstituion.put("__MSG_LANG__", language);
-        getVariablesubstituion.put("__MSG_COUNTRY__", country);
-        if (user != null && moduleID != null && site != null)
+        if (gadget != null)
         {
-            WebSite _site = getWebSite();
-            User _user = getUser();
-            if (_site != null && _user != null)
+            getVariablesubstituion.putAll(gadget.getMessagesFromGadget(language, country));
+
+            getVariablesubstituion.put("__MODULE_ID__", moduleID);
+            getVariablesubstituion.put("__MSG_LANG__", language);
+            getVariablesubstituion.put("__MSG_COUNTRY__", country);
+            if (user != null)
             {
-                Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(_user, _site);
-                while (preferences.hasNext())
+                WebSite _site = getWebSite();
+                User _user = getUser();
+                if (_site != null && _user != null && moduleID != null)
                 {
-                    PersonalizedGadged personalizedGadged = preferences.next();
-                    if (personalizedGadged.getGadget().getURI().equals(gadget.getURI()) && personalizedGadged.getId().equals(moduleID))
+                    Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(_user, _site);
+                    while (preferences.hasNext())
                     {
-                        GenericIterator<UserPref> list = personalizedGadged.listUserPrefses();
-                        while (list.hasNext())
+                        PersonalizedGadged personalizedGadged = preferences.next();
+                        if (personalizedGadged.getGadget().getURI().equals(gadget.getURI()) && personalizedGadged.getId().equals(moduleID))
                         {
-                            UserPref pref = list.next();
-                            getVariablesubstituion.put("__UP_" + pref.getKey() + "__", pref.getValue());
+                            GenericIterator<UserPref> list = personalizedGadged.listUserPrefses();
+                            while (list.hasNext())
+                            {
+                                UserPref pref = list.next();
+                                getVariablesubstituion.put("__UP_" + pref.getKey() + "__", pref.getValue());
+                            }
                         }
                     }
                 }
             }
-        }
-        else
-        {
-            UserPrefs prefs = userprefsManager.get(gadget, moduleID);
-            if (prefs != null)
+            else
             {
-                for (String key : prefs.keySet())
+                if (moduleID != null)
                 {
-                    String value = prefs.get(key);
-                    getVariablesubstituion.put("__UP_" + key + "__", value);
+                    UserPrefs prefs = userprefsManager.get(gadget, moduleID);
+                    if (prefs != null)
+                    {
+                        for (String key : prefs.keySet())
+                        {
+                            String value = prefs.get(key);
+                            getVariablesubstituion.put("__UP_" + key + "__", value);
+                        }
+                    }
                 }
             }
         }
@@ -404,7 +410,7 @@ public class SocialUser
         {
             WebSite _site = getWebSite();
             User _user = getUser();
-            if (_site != null && _user!=null)
+            if (_site != null && _user != null)
             {
 
                 Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(_user, _site);
