@@ -61,7 +61,7 @@ public class Metadata
             {
                 if (user != null)
                 {
-                    metadata.put("userPrefs", user.getJSONUserPrefs(gadget, moduleId, site));
+                    metadata.put("userPrefs", user.getJSONUserPrefs(gadget, moduleId));
                 }
                 String title=gadget.getTitle(language,country, moduleId);
                 String description=gadget.getDescription(language, country, moduleId);
