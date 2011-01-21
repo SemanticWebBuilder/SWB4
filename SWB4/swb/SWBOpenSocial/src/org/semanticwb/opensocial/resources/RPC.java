@@ -120,7 +120,7 @@ public class RPC
             port = ":" + request.getServerPort();
         }
         String st = request.getParameter("st");
-        System.out.println("request.getQueryString(): " + request.getQueryString());
+        log.debug("request.getQueryString(): " + request.getQueryString());
 
         if (st != null && "application/json".equals(request.getContentType()))
         {
@@ -134,7 +134,7 @@ public class RPC
                 read = in.read(buffer);
             }
             in.close();
-            System.out.println("request RPC : " + sb.toString());
+            log.debug("request RPC : " + sb.toString());
             String[] values = st.split(":");
 
             if (values.length >= 7)
@@ -161,8 +161,8 @@ public class RPC
                     {
                         String viewer = values[1];
                         String owner = values[0];
-                        System.out.println("viewer: " + viewer);
-                        System.out.println("owner: " + owner);
+                        log.debug("viewer: " + viewer);
+                        log.debug("owner: " + owner);
                         if (sb.toString().startsWith("["))
                         {
                             JSONArray responseJSONObject = new JSONArray();
@@ -185,7 +185,7 @@ public class RPC
                         }
                         else
                         {
-                            System.out.println("warning: " + sb.toString());
+                            log.warn("warning: " + sb.toString());
                         }
                     }
                 }
@@ -196,12 +196,12 @@ public class RPC
             }
             else
             {
-                System.out.println("warning values: " + values.length);
+                log.warn("warning values: " + values.length);
             }
         }
         else
         {
-            System.out.println("warning request.getContentType(): " + request.getContentType());
+            log.warn("warning request.getContentType(): " + request.getContentType());
         }
 
 

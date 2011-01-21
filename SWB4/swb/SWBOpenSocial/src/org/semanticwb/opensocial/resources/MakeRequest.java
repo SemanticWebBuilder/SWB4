@@ -97,38 +97,38 @@ public class MakeRequest
     public void doProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         WebSite site = paramRequest.getWebPage().getWebSite();        
-        System.out.println("MakeRequest request.getQueryString(): " + request.getQueryString());
-        System.out.println("MakeRequest request.getContentType(): " + request.getContentType());
+        log.debug("MakeRequest request.getQueryString(): " + request.getQueryString());
+        log.debug("MakeRequest request.getContentType(): " + request.getContentType());
         String refresh = request.getParameter("refresh");
-        System.out.println("refresh: " + refresh);
+        log.debug("refresh: " + refresh);
         String url = request.getParameter("url");
-        System.out.println("url: " + url);
+        log.debug("url: " + url);
         String httpMethod = request.getParameter("httpMethod");
-        System.out.println("httpMethod: " + httpMethod);
+        log.debug("httpMethod: " + httpMethod);
         String headers = request.getParameter("headers");
-        System.out.println("headers: " + headers);
+        log.debug("headers: " + headers);
         String postData = request.getParameter("postData");
-        System.out.println("postData: " + postData);
+        log.debug("postData: " + postData);
         String st = request.getParameter("st");
-        System.out.println("MakeRequest st: " + st);
+        log.debug("MakeRequest st: " + st);
         String authz = request.getParameter("authz");
-        System.out.println("authz: " + authz);
+        log.debug("authz: " + authz);
         String contentType = request.getParameter("contentType");
-        System.out.println("contentType: " + contentType);
+        log.debug("contentType: " + contentType);
         String numEntries = request.getParameter("numEntries");
-        System.out.println("numEntries: " + numEntries);
+        log.debug("numEntries: " + numEntries);
         String getSummaries = request.getParameter("getSummaries");
-        System.out.println("getSummaries: " + getSummaries);
+        log.debug("getSummaries: " + getSummaries);
         String signOwner = request.getParameter("signOwner");
-        System.out.println("signOwner: " + signOwner);
+        log.debug("signOwner: " + signOwner);
         String container = request.getParameter("container");
-        System.out.println("container: " + container);
+        log.debug("container: " + container);
         String bypassSpecCache = request.getParameter("bypassSpecCache");
-        System.out.println("bypassSpecCache: " + bypassSpecCache);
+        log.debug("bypassSpecCache: " + bypassSpecCache);
         String getFullHeaders = request.getParameter("getFullHeaders");
-        System.out.println("getFullHeaders: " + getFullHeaders);
+        log.debug("getFullHeaders: " + getFullHeaders);
         String gadget = request.getParameter("gadget");
-        System.out.println(gadget);
+        log.debug(gadget);
         Gadget g = SocialContainer.getGadget(gadget, site);
         if (g != null)
         {

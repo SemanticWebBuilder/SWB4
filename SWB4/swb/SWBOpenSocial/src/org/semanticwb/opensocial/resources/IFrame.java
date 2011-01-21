@@ -340,7 +340,7 @@ public class IFrame
         WebSite site = paramRequest.getWebPage().getWebSite();
         User user = paramRequest.getUser();
 
-        System.out.println("Iframe request.getQueryString(): " + request.getQueryString());
+        log.debug("Iframe request.getQueryString(): " + request.getQueryString());
         String url = request.getParameter("url");
         String country = request.getParameter("country");
         String lang = request.getParameter("lang");

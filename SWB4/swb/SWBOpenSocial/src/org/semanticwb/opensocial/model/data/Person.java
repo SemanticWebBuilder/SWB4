@@ -39,8 +39,7 @@ public class Person extends org.semanticwb.opensocial.model.data.base.PersonBase
                     return scape.scape(value);
                 }
                 else if(prop.isObjectProperty())
-                {
-                    System.out.println("name: "+field);
+                {                    
                     SemanticObject value=this.getSemanticObject().getObjectProperty(prop);
                     if(value==null)
                     {
