@@ -6403,15 +6403,14 @@ shindig.IfrGadget = {
     var iframeId = this.getIframeId();    
     gadgets.rpc.setRelayUrl(iframeId, this.serverBase_ + this.rpcRelay);
     gadgets.rpc.setAuthToken(iframeId, this.rpcToken);
-    //this.width=400;
+    
     var iframecontent='<div class="' + this.cssClassGadgetContent + '"><iframe id="' +
         iframeId + '" name="' + iframeId + '" class="' + this.cssClassGadget +
         '" src="about:blank' +
         '" frameborder="no" scrolling="no"' +
         (this.height ? ' height="' + this.height + '"' : '') +
         (this.width ? ' width="' + this.width + '"' : '') +
-        '></iframe></div>';
-    alert('iframecontent: '+iframecontent);
+        '></iframe></div>';    
     continuation(iframecontent);
       
       /*continuation('<div dojoType="dijit.TitlePane" title="Title"><iframe id="' +
