@@ -276,14 +276,17 @@ function renderGadgets() {
 </script>
 <body class="soria" onLoad="init();renderGadgets();">
     <%
-if(moduleid==null)
+    if(moduleid==null)
     {
-    %>
-    <div dojoType="dijit.Dialog" title="Agregar un gadget" id="dialog" style="width: 600px;height: 500px">
-    <iframe src="<%=add%>" frameborder="0" width="800" height="600"></iframe>
-</div>
-<p><a href="#" onclick="showDialogEmail();">add</a></p>
-    <%
+        String width="800";
+        String height="600";
+        
+        %>
+        <div dojoType="dijit.Dialog" title="Agregar un gadget" id="dialog" style="width: <%=width%>px;height:<%=height%>px">
+            <iframe id="iframeadd" src="<%=add%>" frameborder="0" style="width: <%=width%>px;height:<%=height%>px" scrolling="auto" width="100%" height="100%"></iframe>
+        </div>
+        <p><a href="#" onclick="showDialogEmail();">add</a></p>
+        <%
     }
 %>
 
