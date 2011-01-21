@@ -8,20 +8,17 @@
     WebSite site=paramRequest.getWebPage().getWebSite();
     SocialUser socialuser=SocialContainer.getSocialUser(user, session);
     Gadget gadget=(Gadget) request.getAttribute("gadget");
-    String title=gadget.getTitle(socialuser,site);
+    String title=gadget.getDirectoryTitle(socialuser,site);
     if(title==null)
     {
-        title=gadget.getDirectoryTitle();
-    }
-    else
-    {
-        if(title.startsWith("__UP_") && gadget.getDirectoryTitle()!=null)
-        {
-            title=gadget.getDirectoryTitle();
-        }
-    }
+        title=gadget.getTitle(socialuser, site);
+    }    
     String url=gadget.getUrl();
     String description=gadget.getDescription(socialuser, site);
+    if(description==null)
+    {
+        description="";
+    }
     SWBResourceURL processAction=paramRequest.getActionUrl();
 
 
