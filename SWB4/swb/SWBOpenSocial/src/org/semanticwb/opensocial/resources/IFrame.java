@@ -358,7 +358,7 @@ public class IFrame
             Gadget gadget = SocialContainer.getGadget(url, paramRequest.getWebPage().getWebSite());
             if (gadget != null)
             {
-                SocialUser socialuser = SocialContainer.getSocialUser(user, request.getSession());                
+                SocialUser socialuser = SocialContainer.getSocialUser(user, request.getSession(),site);
                 if(changeUserPrefs)
                 {
                     for(String key : userprefs.keySet())

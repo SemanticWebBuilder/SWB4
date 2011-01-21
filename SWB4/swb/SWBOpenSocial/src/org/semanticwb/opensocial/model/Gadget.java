@@ -57,6 +57,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             reload();
         }
     }
+
     public Document getDocument(String languaje, String country)
     {
         Document _doc = null;
@@ -70,13 +71,16 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             else
             {
                 Charset charset = Charset.defaultCharset();
-                String xml = SWBUtils.XML.domToXml(original, charset.name(), false);
-                for (String key : messages.keySet())
+                if (original != null)
                 {
-                    String value = messages.get(key);
-                    xml = xml.replace(key, value);
+                    String xml = SWBUtils.XML.domToXml(original, charset.name(), false);
+                    for (String key : messages.keySet())
+                    {
+                        String value = messages.get(key);
+                        xml = xml.replace(key, value);
+                    }
+                    _doc = SWBUtils.XML.xmlToDom(xml);
                 }
-                _doc = SWBUtils.XML.xmlToDom(xml);
             }
         }
         if (_doc == null)
@@ -84,7 +88,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             _doc = doc;
         }
         return _doc;
-    }   
+    }
 
     @Override
     public void setUrl(String value)
@@ -733,11 +737,12 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         return directoryTitle;
     }
 
-    public String getDirectoryTitle(SocialUser socialuser, WebSite site)
+    public String getDirectoryTitle(SocialUser socialuser)
     {
-        return getDirectoryTitle(socialuser, site, null);
+        return getDirectoryTitle(socialuser, null);
     }
-    public String getDirectoryTitle(SocialUser socialuser, WebSite site,String language,String country,String moduleid)
+
+    public String getDirectoryTitle(SocialUser socialuser, String language, String country, String moduleid)
     {
         Document _doc = getDocument(language, country);
         String _directory_title = null;
@@ -748,9 +753,10 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                 Element module = (Element) _doc.getElementsByTagName("ModulePrefs").item(0);
                 _directory_title = getKey(module, "directory_title");
             }
-            if (_directory_title != null && moduleid != null)
+            if (_directory_title != null && moduleid != null && socialuser!=null)
             {
-                Map<String, String> variables = socialuser.getVariablesubstituion(this, socialuser.getLanguage(), socialuser.getCountry(), moduleid, site);
+                WebSite site=socialuser.getWebSite();
+                Map<String, String> variables = socialuser.getVariablesubstituion(this, language, country, moduleid, site);
                 if (!variables.isEmpty())
                 {
                     for (String key : variables.keySet())
@@ -768,20 +774,21 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
         return _directory_title;
     }
-    public String getDirectoryTitle(SocialUser socialuser, WebSite site, String moduleid)
+
+    public String getDirectoryTitle(SocialUser socialuser, String moduleid)
     {
-        return getDirectoryTitle(socialuser, site, socialuser.getLanguage(), socialuser.getCountry(), moduleid);
+        return getDirectoryTitle(socialuser, socialuser.getLanguage(), socialuser.getCountry(), moduleid);
     }
 
-    public String getTitle(SocialUser socialuser, WebSite site)
+    public String getTitle(SocialUser socialuser)
     {
-        return getTitle(socialuser, site, null);
+        return getTitle(socialuser, null);
     }
 
-    public String getTitle(SocialUser socialuser, WebSite site, String language, String country, String moduleid)
+    public String getTitle(SocialUser socialuser,String language, String country, String moduleid)
     {
         Document _doc = getDocument(language, country);
-        String _title = null;        
+        String _title = null;
         if (_doc != null)
         {
             if (_doc.getElementsByTagName("ModulePrefs").getLength() > 0)
@@ -792,6 +799,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             }
             if (_title != null && moduleid != null && socialuser != null)
             {
+                WebSite site=socialuser.getWebSite();
                 Map<String, String> variables = socialuser.getVariablesubstituion(this, language, country, moduleid, site);
                 if (!variables.isEmpty())
                 {
@@ -813,28 +821,28 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
     public String getTitle(String language, String country, String moduleid)
     {
-        return this.getTitle(null, null, language, country, moduleid);
+        return this.getTitle(null, language, country, moduleid);
     }
 
-    public String getTitle(SocialUser socialuser, WebSite site, String moduleid)
+    public String getTitle(SocialUser socialuser, String moduleid)
     {
-        return this.getTitle(socialuser, site, socialuser.getLanguage(), socialuser.getCountry(), moduleid);
+        return this.getTitle(socialuser,socialuser.getLanguage(), socialuser.getCountry(), moduleid);
     }
 
-    public String getDescription(SocialUser socialuser, WebSite site)
+    public String getDescription(SocialUser socialuser)
     {
-        return getDescription(socialuser, site, null);
+        return getDescription(socialuser, null);
     }
 
     public String getDescription(String language, String country, String moduleid)
     {
-        return this.getDescription(null, null, language, country, moduleid);
+        return this.getDescription(null, language, country, moduleid);
     }
 
-    public String getDescription(SocialUser socialuser, WebSite site, String language, String country, String moduleid)
+    public String getDescription(SocialUser socialuser, String language, String country, String moduleid)
     {
         Document _doc = getDocument(language, country);
-        String _description = null;        
+        String _description = null;
         if (_doc != null)
         {
             if (_doc.getElementsByTagName("ModulePrefs").getLength() > 0)
@@ -844,6 +852,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             }
             if (_description != null && moduleid != null && socialuser != null)
             {
+                WebSite site=socialuser.getWebSite();
                 Map<String, String> variables = socialuser.getVariablesubstituion(this, language, country, moduleid, site);
                 if (!variables.isEmpty())
                 {
@@ -863,9 +872,9 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         return _description;
     }
 
-    public String getDescription(SocialUser socialuser, WebSite site, String moduleid)
+    public String getDescription(SocialUser socialuser, String moduleid)
     {
-        return getDescription(socialuser, site, socialuser.getLanguage(), socialuser.getCountry(), moduleid);
+        return getDescription(socialuser, socialuser.getLanguage(), socialuser.getCountry(), moduleid);
     }
 
     public String getGadgetTitle()
