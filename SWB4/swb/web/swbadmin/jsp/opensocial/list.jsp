@@ -58,18 +58,11 @@
             if(g1!=null)
             {
 
-                String title=g1.getTitle(socialuser, site);
+                String title=g1.getDirectoryTitle(socialuser, site);
                 if(title==null)
                 {
-                    title=g1.getDirectoryTitle();
-                }
-                else
-                {
-                    if(title.indexOf("__UP_")!=-1 && g1.getDirectoryTitle()!=null)
-                    {
-                        title=g1.getDirectoryTitle();
-                    }
-                }
+                    title=g1.getTitle(socialuser,site);
+                }                
                 String img = SWBPortal.getContextPath() + "/swbadmin/jsp/opensocial/sinfoto.png";
                 if(g1.getThumbnail()!=null)
                 {
@@ -104,18 +97,11 @@
             
             if(g2!=null)
             {
-                String title=g2.getTitle(socialuser, site);
+                String title=g2.getDirectoryTitle(socialuser, site);
                 if(title==null)
                 {
-                    title=g2.getDirectoryTitle();
-                }
-                else
-                {
-                    if(title.indexOf("__UP_")!=-1 && g2.getDirectoryTitle()!=null)
-                    {
-                        title=g2.getDirectoryTitle();
-                    }
-                }
+                    title=g2.getTitle(socialuser, site);
+                }               
                 String img = SWBPortal.getContextPath() + "/swbadmin/jsp/opensocial/sinfoto.png";
                 if(g2.getThumbnail()!=null)
                 {
@@ -152,18 +138,11 @@
             }
             if(g3!=null)
             {
-                String title=g3.getTitle(socialuser, site);
+                String title=g3.getDirectoryTitle(socialuser, site);
                 if(title==null)
                 {
-                    title=g3.getDirectoryTitle();
-                }
-                else
-                {
-                    if(title.indexOf("__UP_")!=-1 && g3.getDirectoryTitle()!=null)
-                    {
-                        title=g3.getDirectoryTitle();
-                    }
-                }
+                    title=g3.getTitle(socialuser, site);
+                }                
                 String img = SWBPortal.getContextPath() + "/swbadmin/jsp/opensocial/sinfoto.png";
                 if(g3.getThumbnail()!=null)
                 {
