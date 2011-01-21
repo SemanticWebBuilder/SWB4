@@ -47,7 +47,7 @@ public class Metadata
      * @return
      * @throws Exception
      */
-    private JSONObject getMetadata(HttpServletRequest request, String moduleId, SocialUser user, Gadget gadget, SWBResourceURL renderURL, WebSite site) throws Exception
+    private JSONObject getMetadata(HttpServletRequest request, String moduleId, SocialUser user, Gadget gadget, SWBResourceURL renderURL, WebSite site,String language,String country) throws Exception
     {
         String port = "";
         if (request.getServerPort() != 80)
@@ -57,21 +57,18 @@ public class Metadata
         URI here = new URI(request.getScheme() + "://" + request.getServerName() + port + request.getRequestURI());
         JSONObject metadata = new JSONObject();
         try
-        {
-
-
-
-            if (gadget != null)
+        {   if (gadget != null)
             {
                 if (user != null)
                 {
                     metadata.put("userPrefs", user.getJSONUserPrefs(gadget, moduleId, site));
                 }
-                //String data = "{\"gadgets\":[{\"userPrefs\":{},\"moduleId\":1,\"screenshot\":\"\",\"singleton\":false,\"width\":0,\"authorLink\":\"\",\"links\":{},\"iframeUrl\":\"//http://localhost:8080/swb/gadgets/ifr?url=http%3A%2F%2Flocalhost%3A8080%2Fswb%2Fsamplecontainer%2Fexamples%2FSocialHelloWorld.xml&container=default&view=%25view%25&lang=%25lang%25&country=%25country%25&debug=%25debug%25&nocache=%25nocache%25&v=b4ea67fd7aa33422aa257ee3f534daf0&st=%25st%25\",\"url\":\"http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml\",\"scaling\":false,\"title\":\"Social Hello World\",\"height\":0,\"titleUrl\":\"\",\"thumbnail\":\"http://localhost:8080/\",\"scrolling\":false,\"views\":{\"default\":{\"preferredHeight\":0,\"quirks\":true,\"type\":\"html\",\"preferredWidth\":0}},\"featureDetails\":{\"dynamic-height\":{\"parameters\":{},\"required\":true},\"osapi\":{\"parameters\":{},\"required\":true},\"core\":{\"parameters\":{},\"required\":true},\"settitle\":{\"parameters\":{},\"required\":true}},\"features\":[\"dynamic-height\",\"osapi\",\"core\",\"settitle\"],\"showStats\":false,\"categories\":[\"\",\"\"],\"showInDirectory\":false,\"authorPhoto\":\"\"}]}";
-                metadata.put("title", gadget.getTitle(user, site, moduleId));
+                String title=gadget.getTitle(language,country, moduleId);
+                String description=gadget.getDescription(language, country, moduleId);
+                metadata.put("title", title==null?"":title);
                 metadata.put("moduleId", moduleId);
                 metadata.put("titleUrl", gadget.getTitleUrl() == null ? "" : gadget.getTitleUrl().toString());
-                metadata.put("description", gadget.getDescription() == null ? "" : gadget.getDescription());
+                metadata.put("description", description== null ? "" : description);
                 metadata.put("author", gadget.getAuthor() == null ? "" : gadget.getAuthor());
                 metadata.put("screenshot", gadget.getScreenshot() != null ? gadget.getScreenshot().toString() : "");
                 metadata.put("author_email", gadget.getAuthorEmail() != null ? gadget.getAuthorEmail() : "");
@@ -109,7 +106,7 @@ public class Metadata
                 {
                     metadata.accumulate("featureDetails", detail.toJSONObject());
                 }
-                SWBResourceURL iframeurl = renderURL;
+                /*SWBResourceURL iframeurl = renderURL;
                 iframeurl.setMode(SocialContainer.Mode_IFRAME);
                 iframeurl.setCallMethod(SWBResourceURL.Call_DIRECT);
                 ///&container=default&view=%25view%25&lang=%25lang%25&country=%25country%25&debug=%25debug%25&nocache=%25nocache%25&v=b4ea67fd7aa33422aa257ee3f534daf0&st=%25st%25
@@ -120,7 +117,7 @@ public class Metadata
                 iframeurl.setParameter("nocache", "");
                 iframeurl.setParameter("v", "b4ea67fd7aa33422aa257ee3f534daf0");
                 iframeurl.setParameter("st", ""); // Token                
-                metadata.put("iframeUrl", iframeurl.toString());
+                metadata.put("iframeUrl", iframeurl.toString());*/
             }
             else
             {
@@ -208,7 +205,7 @@ public class Metadata
                             String moduleId = gadget.getString("moduleId");
                             if (ogadget != null)
                             {
-                                JSONObject metadata = getMetadata(request, moduleId, socialuser, ogadget, paramRequest.getRenderUrl(), site);                                
+                                JSONObject metadata = getMetadata(request, moduleId, socialuser, ogadget, paramRequest.getRenderUrl(), site,language, country);
                                 array.put(metadata);
                             }
                             else
@@ -226,19 +223,16 @@ public class Metadata
                 }
                 catch (JSONException jsone)
                 {
-                    log.error(jsone);
-                    jsone.printStackTrace();
+                    log.error(jsone);                    
                 }
                 catch (Exception jsone)
                 {
-                    log.error(jsone);
-                    jsone.printStackTrace();
+                    log.error(jsone);                    
                 }
             }
             catch (Exception e)
             {
-                log.error(e);
-                e.printStackTrace();
+                log.error(e);                
             }
         }
     }

@@ -43,6 +43,10 @@ public class SocialUser
     public SocialUser(User user)
     {
         this.user = user == null ? null : user.getId();
+        refresh(user);
+    }
+    public final void refresh(User user)
+    {
         lang=user.getLanguage();
         if(user.getCountry()!=null)
         {
@@ -235,7 +239,7 @@ public class SocialUser
         getVariablesubstituion.put("__MODULE_ID__", moduleID);
         getVariablesubstituion.put("__MSG_LANG__", language);
         getVariablesubstituion.put("__MSG_COUNTRY__", country);
-        if(user!=null && moduleID!=null)
+        if(user!=null && moduleID!=null && site!=null)
         {
             User _user=site.getUserRepository().getUser(user);
             Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(_user,site);
