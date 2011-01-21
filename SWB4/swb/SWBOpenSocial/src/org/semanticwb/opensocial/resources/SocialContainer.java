@@ -71,10 +71,8 @@ public class SocialContainer extends GenericResource
         supportedFeatures.add("rpc");
         supportedFeatures.add("setprefs");
         supportedFeatures.add("dynamic-height");
-        //String[] urls={"http://www.delsearegional.us/academic/classes/highschool/science/physics/age/age.xml","http://midots.com/gadgets/xmldocs/midotsImgViewBeautifulPhotosOfIslands_11.xml","http://hosting.gmodules.com/ig/gadgets/file/112581010116074801021/spider.xml","http://www.donalobrien.net/apps/google/currency.xml","http://opensocial-resources.googlecode.com/svn/tests/trunk/suites/0.8/compliance/reference.xml","http://localhost:8080/swb/samplecontainer/examples/horoscope.xml","http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml","http://www.google.com/ig/modules/horoscope/horoscope.xml","http://www.google.com/ig/modules/test_setprefs_multiple_ifpc.xml"};
-        String[] urls =
-        {
-        };
+        String[] urls={"http://hosting.gmodules.com/ig/gadgets/file/111782983456439885554/Google-Gadget-RSS.xml","http://www.tc.df.gov.br/MpjTcdf/AlcCalc.xml"};//,http://www.delsearegional.us/academic/classes/highschool/science/physics/age/age.xml","http://midots.com/gadgets/xmldocs/midotsImgViewBeautifulPhotosOfIslands_11.xml","http://hosting.gmodules.com/ig/gadgets/file/112581010116074801021/spider.xml","http://www.donalobrien.net/apps/google/currency.xml","http://opensocial-resources.googlecode.com/svn/tests/trunk/suites/0.8/compliance/reference.xml","http://localhost:8080/swb/samplecontainer/examples/horoscope.xml","http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml","http://www.google.com/ig/modules/horoscope/horoscope.xml","http://www.google.com/ig/modules/test_setprefs_multiple_ifpc.xml"};
+        
         WebSite site = WebSite.ClassMgr.getWebSite("reg_digital_demo");
         for (String url : urls)
         {

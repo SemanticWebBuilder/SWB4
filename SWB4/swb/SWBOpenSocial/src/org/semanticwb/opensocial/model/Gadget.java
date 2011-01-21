@@ -562,7 +562,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             }
 
 
-            if (_category != null && !"".equals(_category.trim()))
+            if (_category != null)
             {
                 StringTokenizer st = new StringTokenizer(_category, ",");
                 while (st.hasMoreTokens())
