@@ -756,7 +756,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             if (_directory_title != null && moduleid != null && socialuser!=null)
             {
                 WebSite site=socialuser.getWebSite();
-                Map<String, String> variables = socialuser.getVariablesubstituion(this, language, country, moduleid, site);
+                Map<String, String> variables = socialuser.getVariablesubstituion(this, language, country, moduleid);
                 if (!variables.isEmpty())
                 {
                     for (String key : variables.keySet())
@@ -800,7 +800,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             if (_title != null && moduleid != null && socialuser != null)
             {
                 WebSite site=socialuser.getWebSite();
-                Map<String, String> variables = socialuser.getVariablesubstituion(this, language, country, moduleid, site);
+                Map<String, String> variables = socialuser.getVariablesubstituion(this, language, country, moduleid);
                 if (!variables.isEmpty())
                 {
                     for (String key : variables.keySet())
@@ -853,7 +853,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             if (_description != null && moduleid != null && socialuser != null)
             {
                 WebSite site=socialuser.getWebSite();
-                Map<String, String> variables = socialuser.getVariablesubstituion(this, language, country, moduleid, site);
+                Map<String, String> variables = socialuser.getVariablesubstituion(this, language, country, moduleid);
                 if (!variables.isEmpty())
                 {
                     for (String key : variables.keySet())

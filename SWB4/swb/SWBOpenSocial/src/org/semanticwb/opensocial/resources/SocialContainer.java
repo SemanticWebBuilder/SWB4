@@ -204,7 +204,7 @@ public class SocialContainer extends GenericResource
 
                     if (userPrefs.getLength() == 0)
                     {
-                        socialUser.saveUserPref(gadget, moduleid, null, null, site);
+                        socialUser.saveUserPref(gadget, moduleid, null, null);
 
 
 
@@ -258,7 +258,7 @@ public class SocialContainer extends GenericResource
 
                             }
                         }
-                        socialUser.saveUserPref(gadget, moduleid, key, value, site);
+                        socialUser.saveUserPref(gadget, moduleid, key, value);
 
 
 
@@ -630,12 +630,12 @@ public class SocialContainer extends GenericResource
         WebSite site = paramRequest.getWebPage().getWebSite();
         User user = paramRequest.getUser();
         SocialUser socialuser = new SocialUser(user,site);
-        for (UserPrefs pref : socialuser.getUserPrefs(site))
+        for (UserPrefs pref : socialuser.getUserPrefs())
         {
             if (pref.getGadget() != null)
             {
                 Gadget g = pref.getGadget();
-                socialuser.checkOsapiFeature(g, site, true);
+                socialuser.checkOsapiFeature(g, true);
             }
         }
         String path = "/swbadmin/jsp/opensocial/container.jsp";

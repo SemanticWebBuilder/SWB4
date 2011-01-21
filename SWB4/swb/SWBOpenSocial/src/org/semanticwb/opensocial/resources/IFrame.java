@@ -367,11 +367,11 @@ public class IFrame
                     for(String key : userprefs.keySet())
                     {
                         String value=userprefs.get(key);
-                        socialuser.saveUserPref(gadget, moduleid, key, value, site);
+                        socialuser.saveUserPref(gadget, moduleid, key, value);
                     }
                 }
 
-                Map<String, String> variables = socialuser.getVariablesubstituion(gadget, lang, country, moduleid, site);
+                Map<String, String> variables = socialuser.getVariablesubstituion(gadget, lang, country, moduleid);
 
 
                 body = getHTMLFromView(sview, gadget, variables);
