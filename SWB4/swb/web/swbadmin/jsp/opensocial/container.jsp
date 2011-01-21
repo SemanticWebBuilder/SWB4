@@ -279,7 +279,7 @@ if(moduleid==null)
     {
     %>
     <div dojoType="dijit.Dialog" title="Agregar un gadget" id="dialog" style="width: 600px;height: 500px">
-    <iframe src="<%=add%>" frameborder="0" width="580" height="500"></iframe>
+    <iframe src="<%=add%>" frameborder="0" width="800" height="600"></iframe>
 </div>
 <p><a href="#" onclick="showDialogEmail();">add</a></p>
     <%
