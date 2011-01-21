@@ -483,6 +483,46 @@ public class SWBARule extends GenericResource {
                 vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_RULE); //RuleMgr.TAG_INT_RULE
             }
 
+            // Se agrega la parte de paises
+
+            int numpais = 0;
+            Iterator<Country> numcountry = SWBContext.getWebSite(tmid).listCountries();
+            while (numcountry.hasNext()) {
+                Country country = numcountry.next();
+                numreglas++;
+            }
+            log.debug("numPais:" + numpais);
+            if (numreglas > 0) {
+                hmAttr = new HashMap();
+                hmOper = new HashMap();
+                hmValues = new HashMap();
+                hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgCountries"));   ///////////////////////////
+                hmAttr.put("Tipo", "select");
+                hmOper.put("=", paramRequest.getLocaleString("msgCumpla"));
+                hmOper.put("!=", paramRequest.getLocaleString("msgNoCumpla"));
+                hmAttr.put("Operador", hmOper);
+                Iterator<Country> enumCountry = SWBContext.getWebSite(tmid).listCountries();
+                while (enumCountry.hasNext()) {
+                    Country country = enumCountry.next();
+                    hmValues.put(country.getURI(), country.getDisplayTitle(user.getLanguage()));
+                }
+                hmAttr.put("Valor", hmValues);
+                comboAtt.put(SWBRuleMgr.TAG_INT_RULE, hmAttr); //falta tag del pais
+                vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_RULE); //falta tag del pais
+            }
+
+            //Se agrega la parte de IP del usuario
+            hmAttr = new HashMap();
+            hmOper = new HashMap();
+            hmValues = new HashMap();
+            hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgIPUser"));
+            hmAttr.put("Tipo", "TEXT");
+            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+            hmAttr.put("Operador", hmOper);
+            comboAtt.put(SWBRuleMgr.TAG_INT_RULE, hmAttr); //falta tag de IP
+            vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_RULE); //falta tag de IP
+
             //Tipo de usuario
             Iterator<String> usrTypes = usrRepo.getUserTypes();
             log.debug("usrTypes:" + usrTypes.hasNext());
