@@ -6404,14 +6404,17 @@ shindig.IfrGadget = {
   getMainContent: function(continuation) {
     var iframeId = this.getIframeId();    
     gadgets.rpc.setRelayUrl(iframeId, this.serverBase_ + this.rpcRelay);
-    gadgets.rpc.setAuthToken(iframeId, this.rpcToken);    
-    continuation('<div class="' + this.cssClassGadgetContent + '"><iframe id="' +
+    gadgets.rpc.setAuthToken(iframeId, this.rpcToken);
+    //this.width=400;
+    var iframecontent='<div class="' + this.cssClassGadgetContent + '"><iframe id="' +
         iframeId + '" name="' + iframeId + '" class="' + this.cssClassGadget +
         '" src="about:blank' +
         '" frameborder="no" scrolling="no"' +
         (this.height ? ' height="' + this.height + '"' : '') +
         (this.width ? ' width="' + this.width + '"' : '') +
-        '></iframe></div>');
+        '></iframe></div>';
+    alert('iframecontent: '+iframecontent);
+    continuation(iframecontent);
       
       /*continuation('<div dojoType="dijit.TitlePane" title="Title"><iframe id="' +
         iframeId + '" name="' + iframeId + '" class="' + this.cssClassGadget +
@@ -6426,11 +6429,12 @@ shindig.IfrGadget = {
   finishRender: function(chrome) {
     
     window.frames[this.getIframeId()].location = this.getIframeUrl();
+    /*var width=window.frames[this.getIframeId()].style.width;
+    alert('width: '+width);*/
   },
   
   getIframeUrl: function() {
 
-    var aleatorio = Math.round(Math.random()*99);
     return '<%=ifr%>' + '?' +
         'container=' + this.CONTAINER +
         '&mid=' +  this.id +        
@@ -6501,7 +6505,7 @@ shindig.OAAIfrGadget = {
   },
   
   getIframeUrl: function() {
-    return this.serverBase_ + 'ifr?' +
+    return '<%=ifr%>' +
         'container=' + this.CONTAINER +
         '&mid=' +  this.id +
         '&nocache=' + shindig.container.nocache_ +
