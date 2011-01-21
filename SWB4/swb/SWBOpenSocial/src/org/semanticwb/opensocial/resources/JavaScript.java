@@ -48,7 +48,7 @@ public final class JavaScript
 
             FileInputStream in=new FileInputStream(file);
             StringBuilder sb=new StringBuilder();
-            byte[] buffer=new byte[1028];
+            byte[] buffer=new byte[1024*500];
             int read=in.read(buffer);
             while(read!=-1)
             {
