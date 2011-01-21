@@ -111,8 +111,7 @@ var ownerId = '<%=id%>';
     StringBuilder _gadgets=new StringBuilder("[");
     
 
-    //socialUser.clearUserPrefs(site);
-    System.out.println("moduleid: "+moduleid);
+    //socialUser.clearUserPrefs(site);    
     if(moduleid==null)
     {        
         for(UserPrefs pref : socialUser.getUserPrefs(site))
