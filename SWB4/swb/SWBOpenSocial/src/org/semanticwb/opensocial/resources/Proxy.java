@@ -36,7 +36,7 @@ public class Proxy {
             response.setContentType(content_type);
         }
         InputStream in=con.getInputStream();
-        byte[] buffer=new byte[1024*500];
+        byte[] buffer=new byte[1024*8];
         int read=in.read(buffer);
         while(read!=-1)
         {
