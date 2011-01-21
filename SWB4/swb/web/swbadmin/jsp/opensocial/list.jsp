@@ -15,7 +15,7 @@
         while(gadgets.hasNext())
         {
             Gadget gadget=gadgets.next();
-            if(socialuser.canAdd(gadget,site))
+            if(socialuser.canAdd(gadget))
             {
                 _gadgets.add(gadget);
             }
