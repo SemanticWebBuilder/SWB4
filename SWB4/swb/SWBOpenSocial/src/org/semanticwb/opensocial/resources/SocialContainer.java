@@ -6,9 +6,11 @@ package org.semanticwb.opensocial.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -61,7 +63,8 @@ public class SocialContainer extends GenericResource
     public static final String Mode_CONFIGGADGET = "CONFIGGADGET";
     public static final String Mode_LISTGADGETS = "LISTGADGETS";
     public static final String Mode_RPC = "RPC";
-    private static final Set<String> supportedFeatures=new HashSet<String>();
+    private static final Set<String> supportedFeatures = new HashSet<String>();
+
     static
     {
         supportedFeatures.add("settile");
@@ -70,22 +73,24 @@ public class SocialContainer extends GenericResource
         supportedFeatures.add("setprefs");
         supportedFeatures.add("dynamic-height");
         //String[] urls={"http://www.delsearegional.us/academic/classes/highschool/science/physics/age/age.xml","http://midots.com/gadgets/xmldocs/midotsImgViewBeautifulPhotosOfIslands_11.xml","http://hosting.gmodules.com/ig/gadgets/file/112581010116074801021/spider.xml","http://www.donalobrien.net/apps/google/currency.xml","http://opensocial-resources.googlecode.com/svn/tests/trunk/suites/0.8/compliance/reference.xml","http://localhost:8080/swb/samplecontainer/examples/horoscope.xml","http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml","http://www.google.com/ig/modules/horoscope/horoscope.xml","http://www.google.com/ig/modules/test_setprefs_multiple_ifpc.xml"};
-        String[] urls={};
-        WebSite site = WebSite.ClassMgr.getWebSite("reg_digital_demo");
-        for(String url : urls )
+        String[] urls =
         {
-            boolean exists=false;
+        };
+        WebSite site = WebSite.ClassMgr.getWebSite("reg_digital_demo");
+        for (String url : urls)
+        {
+            boolean exists = false;
             Iterator<Gadget> gadgets = Gadget.ClassMgr.listGadgets();
             while (gadgets.hasNext())
             {
-                Gadget gadget=gadgets.next();
-                if(gadget.getUrl().equals(url))
+                Gadget gadget = gadgets.next();
+                if (gadget.getUrl().equals(url))
                 {
-                    exists=true;
+                    exists = true;
                     break;
                 }
             }
-            if(!exists)
+            if (!exists)
             {
                 Gadget g = Gadget.ClassMgr.createGadget(site);
                 g.setUrl(url);
@@ -93,46 +98,48 @@ public class SocialContainer extends GenericResource
         }
 
     }
+
     public static boolean supportAllFeatures(Gadget gadget)
     {
-        for(String feature : gadget.getAllFeatures())
+        for (String feature : gadget.getAllFeatures())
         {
-            if(!supportedFeatures.contains(feature))
+            if (!supportedFeatures.contains(feature))
             {
                 return false;
             }
         }
         return true;
     }
+
     public static boolean supportRequiredFeatures(Gadget gadget)
     {
-        for(String feature : gadget.getRequiredFeatures())
+        for (String feature : gadget.getRequiredFeatures())
         {
-            if(!supportedFeatures.contains(feature))
+            if (!supportedFeatures.contains(feature))
             {
                 return false;
             }
         }
         return true;
     }
+
     public static boolean supportOptionalFeatures(Gadget gadget)
     {
-        for(String feature : gadget.getOptionalFeatures())
+        for (String feature : gadget.getOptionalFeatures())
         {
-            if(!supportedFeatures.contains(feature))
+            if (!supportedFeatures.contains(feature))
             {
                 return false;
             }
         }
         return true;
     }
-    
 
     public static SocialUser getSocialUser(User user, HttpSession session)
     {
         SocialUser socialUser = (SocialUser) session.getAttribute(SOCIAL_USER_ATTRIBUTE);
         if (socialUser == null)
-        {            
+        {
             socialUser = new SocialUser(user);
             session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
         }
@@ -164,7 +171,7 @@ public class SocialContainer extends GenericResource
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
-        String url = request.getParameter("__url__");        
+        String url = request.getParameter("__url__");
         WebSite site = response.getWebPage().getWebSite();
         User user = response.getUser();
         if (url != null)
@@ -172,11 +179,11 @@ public class SocialContainer extends GenericResource
             Gadget gadget = getGadget(url, site);
             if (gadget != null)
             {
-                SocialUser socialUser = getSocialUser(user, request.getSession());                
+                SocialUser socialUser = getSocialUser(user, request.getSession());
                 Document doc = gadget.getDocument();
                 NodeList userPrefs = doc.getElementsByTagName("UserPref");
                 String moduleid = null;
-                
+
                 if (user != null && user.getId() != null)
                 {
                     PersonalizedGadged pgadget = PersonalizedGadged.ClassMgr.createPersonalizedGadged(site);
@@ -186,7 +193,7 @@ public class SocialContainer extends GenericResource
                 }
                 else
                 {
-                    moduleid=String.valueOf(socialUser.getNumberOfGadgets()+1);
+                    moduleid = String.valueOf(socialUser.getNumberOfGadgets() + 1);
                     if (userPrefs.getLength() == 0)
                     {
                         socialUser.saveUserPref(gadget, moduleid, null, null, site);
@@ -200,22 +207,22 @@ public class SocialContainer extends GenericResource
                         Element userPref = (Element) userPrefs.item(i);
                         String key = userPref.getAttribute("name");
                         String value = request.getParameter(key);
-                        String type="String";
-                        if(userPref.getAttribute("type")!=null && !userPref.getAttribute("type").equals(""))
+                        String type = "String";
+                        if (userPref.getAttribute("type") != null && !userPref.getAttribute("type").equals(""))
                         {
-                            type=userPref.getAttribute("type");
+                            type = userPref.getAttribute("type");
                         }
-                        if("list".equals(type))
+                        if ("list".equals(type))
                         {
-                            StringTokenizer st=new StringTokenizer(value,"\r\n");
-                            while(st.hasMoreTokens())
+                            StringTokenizer st = new StringTokenizer(value, "\r\n");
+                            while (st.hasMoreTokens())
                             {
-                                String temp=st.nextToken();
-                                value+=temp+"|";
+                                String temp = st.nextToken();
+                                value += temp + "|";
                             }
-                            if(value.endsWith("|"))
+                            if (value.endsWith("|"))
                             {
-                                value=value.substring(0,value.length()-2);
+                                value = value.substring(0, value.length() - 2);
                             }
                         }
                         socialUser.saveUserPref(gadget, moduleid, key, value, site);
@@ -411,28 +418,38 @@ public class SocialContainer extends GenericResource
 
     public static Document getXML(URL url) throws IOException, JDOMException
     {
+        Charset charset = Charset.forName("utf-8");
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
+        String contentType = con.getContentType();
+        if (contentType != null)
+        {
+            int pos = contentType.indexOf("charset=");
+            if (pos != -1)
+            {
+                String scharset = contentType.substring(pos + 8).trim();
+                charset = Charset.forName(scharset);
+            }
+        }        
         InputStream in = con.getInputStream();
+        InputStreamReader reader=new InputStreamReader(in, charset);
         DOMOutputter out = new DOMOutputter();
         SAXBuilder builder = new SAXBuilder();
-        return out.output(builder.build(in));
+        return out.output(builder.build(reader));
     }
-
-    
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        WebSite site=paramRequest.getWebPage().getWebSite();
-        User user=paramRequest.getUser();
-        SocialUser socialuser=new SocialUser(user);
-        for(UserPrefs pref : socialuser.getUserPrefs(site))
+        WebSite site = paramRequest.getWebPage().getWebSite();
+        User user = paramRequest.getUser();
+        SocialUser socialuser = new SocialUser(user);
+        for (UserPrefs pref : socialuser.getUserPrefs(site))
         {
-            if(pref.getGadget()!=null)
+            if (pref.getGadget() != null)
             {
-                Gadget g=pref.getGadget();
-                socialuser.checkOsapiFeature(g, site,true);
+                Gadget g = pref.getGadget();
+                socialuser.checkOsapiFeature(g, site, true);
             }
         }
         String path = "/swbadmin/jsp/opensocial/container.jsp";

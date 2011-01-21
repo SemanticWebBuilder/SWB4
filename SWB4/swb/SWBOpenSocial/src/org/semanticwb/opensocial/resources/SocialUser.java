@@ -38,12 +38,33 @@ public class SocialUser
     private static final Logger log = SWBUtils.getLogger(SocialUser.class);
     private final String user;
     private final UserPrefManager userprefsManager = new UserPrefManager();
-
+    private String lang="ALL";
+    private String country="ALL";
     public SocialUser(User user)
     {
         this.user = user == null ? null : user.getId();
+        lang=user.getLanguage();
+        if(user.getCountry()!=null)
+        {
+            country=user.getCountry().getId();
+            if(country==null)
+            {
+                country="ALL";
+            }
+        }
+        if(lang==null)
+        {
+            lang="ALL";
+        }
     }
-
+    public String getCountry()
+    {
+        return country;
+    }
+    public String getLanguage()
+    {
+        return lang;
+    }
     public String getUserId()
     {
         return user;
@@ -214,7 +235,7 @@ public class SocialUser
         getVariablesubstituion.put("__MODULE_ID__", moduleID);
         getVariablesubstituion.put("__MSG_LANG__", language);
         getVariablesubstituion.put("__MSG_COUNTRY__", country);
-        if(user!=null)
+        if(user!=null && moduleID!=null)
         {
             User _user=site.getUserRepository().getUser(user);
             Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(_user,site);
