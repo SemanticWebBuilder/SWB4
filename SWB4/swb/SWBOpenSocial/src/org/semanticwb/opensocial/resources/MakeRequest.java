@@ -47,35 +47,16 @@ public class MakeRequest
     private void getDocument(URL url, String headers, HttpServletResponse response) throws IOException, JDOMException, JSONException
     {        
         try
-        {
-            /*HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            if (headers != null && !headers.equals(""))
-            {
-                StringTokenizer st = new StringTokenizer(headers, ":");
-                if (st.countTokens() % 2 == 0)
-                {
-                }
-            }*/
-
-            /*String header = con.getHeaderField("Content-Type");
-            Charset charset = Charset.defaultCharset();            
-            if (header != null)
-            {
-                int pos = header.indexOf("charset=");
-                if (pos != -1)
-                {
-                    String scharset = header.substring(pos + 8).trim();                    
-                    charset = Charset.forName(scharset);
-                }
-            }
-            StringBuilder sb = new StringBuilder();*/
+        {            
             int code=500;
             String xml="";
             try
             {
                 Document doc=SocialContainer.getXML(url);
-                Charset charset=Charset.forName("utf-8");
+                Charset charset=Charset.defaultCharset();
                 xml =SWBUtils.XML.domToXml(doc, charset.name(), true);
+                System.out.println("xml:");
+                System.out.println(xml);
                 code=200;
             }
             catch(RequestException e)
@@ -84,24 +65,6 @@ public class MakeRequest
             }
 
             JSONObject responseJSONObject = new JSONObject();
-            /*if (con.getResponseCode() == 200)
-            {
-                InputStream in = con.getInputStream();
-                java.io.InputStreamReader reader = new InputStreamReader(in, charset);
-                char[] buffer = new char[1028];
-                int read = reader.read(buffer);
-                while (read != -1)
-                {
-                    sb.append(buffer, 0, read);
-                    read = reader.read(buffer);
-                }
-                reader.close();
-            }
-            else
-            {
-                System.out.println("Make request "+con.getURL()+" code: "+con.getResponseCode()+" msg: "+con.getResponseMessage());
-            }*/
-            
             response.setContentType("application/json");
             JSONObject body = new JSONObject();
             body.put("body", xml);
