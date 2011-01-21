@@ -6173,9 +6173,7 @@ shindig.BaseIfrGadget = function(opt_params) {
 shindig.BaseIfrGadget.inherits(shindig.Gadget);
 
 shindig.BaseIfrGadget.prototype.GADGET_IFRAME_PREFIX_ = 'remote_iframe_';
-
 shindig.BaseIfrGadget.prototype.CONTAINER = 'default';
-
 shindig.BaseIfrGadget.prototype.cssClassGadget = 'gadgets-gadget';
 shindig.BaseIfrGadget.prototype.cssClassTitleBar = 'gadgets-gadget-title-bar';
 shindig.BaseIfrGadget.prototype.cssClassTitle = 'gadgets-gadget-title';
