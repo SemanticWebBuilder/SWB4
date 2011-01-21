@@ -144,7 +144,7 @@ public class SocialContainer extends GenericResource
         }
         String user1 = user == null ? null : user.getId();
         String user2 = socialUser.getUserId();
-        if (!(user1 == null && user2 != null))
+        if (!(user1 == null && user2 == null))
         {
             if ((user1 == null && user2 != null) || (user1 != null && user2 == null))
             {
