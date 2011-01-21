@@ -112,28 +112,27 @@ var ownerId = '<%=id%>';
     
 
     //socialUser.clearUserPrefs(site);
+    System.out.println("moduleid: "+moduleid);
     if(moduleid==null)
-    {
-        if(paramRequest.getWindowState().equals(paramRequest.WinState_NORMAL))
+    {        
+        for(UserPrefs pref : socialUser.getUserPrefs(site))
         {
-            for(UserPrefs pref : socialUser.getUserPrefs(site))
+            Gadget g=pref.getGadget();
+            if(g!=null)
             {
-                Gadget g=pref.getGadget();
-                if(g!=null)
-                {
-                    g.reload();
-                    _gadgets.append("{url:\"");
-                    _gadgets.append(g.getUrl());
-                    _gadgets.append("\",moduleId:\"");
-                    _gadgets.append(pref.getModuleId());
-                    _gadgets.append("\"},");
-                }
-            }
-            if(_gadgets.charAt(_gadgets.length()-1)==',')
-            {
-                _gadgets.deleteCharAt(_gadgets.length()-1);
+                g.reload();
+                _gadgets.append("{url:\"");
+                _gadgets.append(g.getUrl());
+                _gadgets.append("\",moduleId:\"");
+                _gadgets.append(pref.getModuleId());
+                _gadgets.append("\"},");
             }
         }
+        if(_gadgets.charAt(_gadgets.length()-1)==',')
+        {
+            _gadgets.deleteCharAt(_gadgets.length()-1);
+        }
+        
         
     }
     else
@@ -272,20 +271,12 @@ function renderGadgets() {
         edialog.show();
     }
   }
-  function initContainer()
-  {
-      var edialog=dijit.byId('dialog');
-      /*if(edialog)
-      {          
-          edialog.startup();
-      }*/
-    
-  }
+  
 
 </script>
-<body class="soria" onLoad="initContainer();init();renderGadgets();">
+<body class="soria" onLoad="init();renderGadgets();">
     <%
-if(paramRequest.getWindowState().equals(paramRequest.WinState_NORMAL))
+if(moduleid==null)
     {
     %>
     <div dojoType="dijit.Dialog" title="Agregar un gadget" id="dialog" style="width: 600px;height: 500px">
