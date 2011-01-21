@@ -608,55 +608,27 @@ public class SocialContainer extends GenericResource
         Charset charset = Charset.forName("utf-8");
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
-
-
-
-
         if (con.getResponseCode() == 200)
         {
             String contentType = con.getContentType();
-
-
-
-
             if (contentType != null)
             {
                 int pos = contentType.indexOf("charset=");
-
-
-
-
                 if (pos != -1)
                 {
                     String scharset = contentType.substring(pos + 8).trim();
                     charset = Charset.forName(scharset);
-
-
-
-
                 }
             }
             InputStream in = con.getInputStream();
             InputStreamReader reader = new InputStreamReader(in, charset);
             DOMOutputter out = new DOMOutputter();
             SAXBuilder builder = new SAXBuilder();
-
-
-
-
             return out.output(builder.build(reader));
-
-
-
-
         }
         else
         {
             throw new RequestException("", con.getResponseCode());
-
-
-
-
         }
     }
 
@@ -666,28 +638,16 @@ public class SocialContainer extends GenericResource
         WebSite site = paramRequest.getWebPage().getWebSite();
         User user = paramRequest.getUser();
         SocialUser socialuser = new SocialUser(user);
-
-
-
-
         for (UserPrefs pref : socialuser.getUserPrefs(site))
         {
             if (pref.getGadget() != null)
             {
                 Gadget g = pref.getGadget();
                 socialuser.checkOsapiFeature(g, site, true);
-
-
-
-
             }
         }
         String path = "/swbadmin/jsp/opensocial/container.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
-
-
-
-
         try
         {
             request.setAttribute("paramRequest", paramRequest);
@@ -695,66 +655,32 @@ public class SocialContainer extends GenericResource
         }
         catch (Exception e)
         {
-
             log.error(e);
-
-
-
-
-        }
-        //doList(request, response, paramRequest);
+        }        
     }
 
     public static boolean isValidGadGet(URL url)
     {
         return true;
-
-
-
-
     }
 
     public static Gadget getGadget(String url, WebSite site)
     {
         Gadget gadget = null;
-
-
-
-
         if (url != null && site != null)
         {
             Iterator<Gadget> gadgets = Gadget.ClassMgr.listGadgets(site);
-
-
-
-
             while (gadgets.hasNext())
             {
                 Gadget temp = gadgets.next();
-
-
-
-
                 if (temp.getUrl().equals(url))
                 {
                     gadget = temp;
-
-
-
-
                     break;
-
-
-
-
                 }
             }
         }
         return gadget;
-
-
-
-
     }
 
     @Override
@@ -766,26 +692,14 @@ public class SocialContainer extends GenericResource
     {
         String path = "/swbadmin/jsp/opensocial/list.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
-
-
-
-
         try
         {
             request.setAttribute("paramRequest", paramRequest);
             dis.include(request, response);
-
-
-
-
         }
         catch (Exception e)
         {
             log.error(e);
-
-
-
-
         }
     }
 
@@ -793,39 +707,22 @@ public class SocialContainer extends GenericResource
     {
         WebSite site = paramRequest.getWebPage().getWebSite();
         String url = request.getParameter("url");
-
-
-
-
         if (url != null)
         {
             Gadget g = getGadget(url, site);
-
-
-
-
             if (g != null)
             {
                 String path = "/swbadmin/jsp/opensocial/config.jsp";
                 RequestDispatcher dis = request.getRequestDispatcher(path);
-
-
-
-
                 try
                 {
                     request.setAttribute("paramRequest", paramRequest);
                     request.setAttribute("gadget", g);
                     dis.include(request, response);
-
-
-
-
                 }
                 catch (Exception e)
                 {
                     log.error(e);
-
 
                 }
             }

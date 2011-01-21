@@ -63,7 +63,6 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         Document _doc = null;
 
         Map<String, String> messages = this.getMessagesFromGadget(user.getLanguage(), user.getCountry());
-        System.out.println("messages: " + messages.size());
         if (!messages.isEmpty() && original != null)
         {
             Charset charset = Charset.defaultCharset();
@@ -280,19 +279,19 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                                     log.debug(e);
                                 }
                                 catch (URISyntaxException use)
-                                {                                    
+                                {
                                     log.debug(use);
                                 }
                                 catch (MalformedURLException use)
-                                {                                    
+                                {
                                     log.debug(use);
                                 }
                                 catch (IOException use)
-                                {                                    
+                                {
                                     log.debug(use);
                                 }
                                 catch (JDOMException use)
-                                {                                    
+                                {
                                     log.debug(use);
                                 }
                             }
@@ -714,7 +713,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
         }
         catch (Exception e)
         {
-            log.debug(e);            
+            log.debug(e);
         }
         return false;
     }
@@ -808,7 +807,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                 Element module = (Element) _doc.getElementsByTagName("ModulePrefs").item(0);
                 _title = getKey(module, "title");
             }
-            if (_title != null && moduleid != null && user!=null)
+            if (_title != null && moduleid != null && user != null)
             {
                 Map<String, String> variables = user.getVariablesubstituion(this, language, country, moduleid, site);
                 if (!variables.isEmpty())
@@ -831,23 +830,25 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
     public String getTitle(String language, String country, String moduleid)
     {
-        return this.getTitle(null,null, language, country, moduleid);
+        return this.getTitle(null, null, language, country, moduleid);
     }
 
     public String getTitle(SocialUser user, WebSite site, String moduleid)
     {
-        return this.getTitle(user,site,user.getLanguage(), user.getCountry(), moduleid);
+        return this.getTitle(user, site, user.getLanguage(), user.getCountry(), moduleid);
     }
 
     public String getDescription(SocialUser user, WebSite site)
     {
         return getDescription(user, site, null);
     }
-    public String getDescription(String language,String country,String moduleid)
+
+    public String getDescription(String language, String country, String moduleid)
     {
         return this.getDescription(null, null, language, country, moduleid);
     }
-    public String getDescription(SocialUser user, WebSite site, String language,String country,String moduleid)
+
+    public String getDescription(SocialUser user, WebSite site, String language, String country, String moduleid)
     {
         Document _doc = null;
         String _description = null;
@@ -871,7 +872,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                 Element module = (Element) _doc.getElementsByTagName("ModulePrefs").item(0);
                 _description = getKey(module, "description");
             }
-            if (_description != null && moduleid != null && user!=null)
+            if (_description != null && moduleid != null && user != null)
             {
                 Map<String, String> variables = user.getVariablesubstituion(this, language, country, moduleid, site);
                 if (!variables.isEmpty())
@@ -891,6 +892,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 
         return _description;
     }
+
     public String getDescription(SocialUser user, WebSite site, String moduleid)
     {
         return getDescription(user, site, user.getLanguage(), user.getCountry(), moduleid);
@@ -1083,7 +1085,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                 }
                 catch (Exception e)
                 {
-                    log.debug(e);                    
+                    log.debug(e);
                 }
             }
         }
@@ -1104,7 +1106,7 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                 }
                 catch (Exception e)
                 {
-                    log.debug(e);                    
+                    log.debug(e);
                 }
             }
             else

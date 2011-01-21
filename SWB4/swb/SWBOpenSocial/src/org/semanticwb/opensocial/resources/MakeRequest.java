@@ -50,9 +50,7 @@ public class MakeRequest
             {
                 Document doc=SocialContainer.getXML(url);
                 Charset charset=Charset.defaultCharset();
-                xml =SWBUtils.XML.domToXml(doc, charset.name(), true);
-                System.out.println("xml:");
-                System.out.println(xml);
+                xml =SWBUtils.XML.domToXml(doc, charset.name(), true);                
                 code=200;
             }
             catch(RequestException e)
