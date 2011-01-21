@@ -158,7 +158,7 @@ Document doc=gadget.getDocument(socialuser.getLanguage(),socialuser.getCountry()
         {
 
         %>
-        <div class="wrapper">
+        <%-- <div class="wrapper">
 <div class="left_column">
 Lenguaje:
 </div>
@@ -194,7 +194,7 @@ Lenguaje:
 </div>
 
 
-
+--%>
     
    
 <%
