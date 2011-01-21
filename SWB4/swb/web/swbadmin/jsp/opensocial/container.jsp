@@ -9,7 +9,7 @@
 
         WebSite site=paramRequest.getWebPage().getWebSite();
         User user=paramRequest.getUser();
-        SocialUser socialUser=SocialContainer.getSocialUser(user, session);
+        SocialUser socialUser=SocialContainer.getSocialUser(user, session,site);
         SWBResourceURL add=paramRequest.getRenderUrl();
 	add.setCallMethod(SWBResourceURL.Call_DIRECT);
         add.setMode(SocialContainer.Mode_LISTGADGETS);

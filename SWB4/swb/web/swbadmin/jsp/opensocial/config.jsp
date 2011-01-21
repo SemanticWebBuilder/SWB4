@@ -6,15 +6,15 @@
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
     User user=paramRequest.getUser();
     WebSite site=paramRequest.getWebPage().getWebSite();
-    SocialUser socialuser=SocialContainer.getSocialUser(user, session);
+    SocialUser socialuser=SocialContainer.getSocialUser(user, session,site);
     Gadget gadget=(Gadget) request.getAttribute("gadget");
-    String title=gadget.getDirectoryTitle(socialuser,site);
+    String title=gadget.getDirectoryTitle(socialuser);
     if(title==null)
     {
-        title=gadget.getTitle(socialuser, site);
+        title=gadget.getTitle(socialuser);
     }    
     String url=gadget.getUrl();
-    String description=gadget.getDescription(socialuser, site);
+    String description=gadget.getDescription(socialuser);
     if(description==null)
     {
         description="";
