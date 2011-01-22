@@ -307,8 +307,9 @@ public class IFrame
             if (name.startsWith("up_"))
             {
                 String value = request.getParameter(name);
-                name = name.substring(3);
+                name = name.substring(3);                
                 userprefs.put(name, value);
+
             }
         }
         boolean changeUserPrefs = false;
@@ -370,7 +371,7 @@ public class IFrame
             Gadget gadget = SocialContainer.getGadget(url, paramRequest.getWebPage().getWebSite());
             if (gadget != null)
             {
-                SocialUser socialuser = SocialContainer.getSocialUser(user, request.getSession(), site);
+                SocialUser socialuser = SocialContainer.getSocialUser(user, request.getSession(), site);                
                 if (changeUserPrefs)
                 {
                     for (String key : userprefs.keySet())
@@ -381,8 +382,6 @@ public class IFrame
                 }
 
                 Map<String, String> variables = socialuser.getVariablesubstituion(gadget, lang, country, moduleid);
-                log.debug("variables: " + variables);
-
                 body = getHTMLFromView(sview, gadget, variables);
                 if (body == null)
                 {
@@ -451,8 +450,7 @@ public class IFrame
                     String data = new String(buffer, 0, read);
                     read = in.read(buffer);
                     sb.append(data);
-                }
-
+                }                
                 String _frame = sb.toString();
                 String HtmlResponse = _frame.replace("<%=msg%>", msg.toString());
                 HtmlResponse = HtmlResponse.replace("<%=context%>", SWBPortal.getContextPath());
