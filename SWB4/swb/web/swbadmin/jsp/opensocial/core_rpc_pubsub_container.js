@@ -3205,6 +3205,8 @@ gadgets.rpc = function() {
    * @return {boolean}
    */
   function callSameDomain(target, rpc) {
+
+    
     
     if (typeof sameDomain[target] === 'undefined') {
       // Seed with a negative, typed value to avoid
@@ -3215,7 +3217,7 @@ gadgets.rpc = function() {
         // Not worth trying -- avoid the error and just return.
         return false;
       }
-
+      
       var targetEl = getTargetWin(target);
       try {
         // If this succeeds, then same-domain policy applied
@@ -3229,8 +3231,11 @@ gadgets.rpc = function() {
 
     if (typeof sameDomain[target] === 'function') {
       // Call target's receive method
-      //alert('sameDomain[target]: '+sameDomain[target]+" rpc: "+rpc);
+      
+      try{
       sameDomain[target](rpc);
+        }catch(e){return false;}
+      
       return true;
     }
 
@@ -3530,6 +3535,7 @@ gadgets.rpc = function() {
      */
     call: function(targetId, serviceName, callback, var_args) {
       targetId = targetId || '..';
+      
       // Default to the container calling.
       var from = '..';
 
@@ -3561,7 +3567,7 @@ gadgets.rpc = function() {
       if (callSameDomain(targetId, rpc)) {
         return;
       }
-
+      
       // Attempt to make call via a cross-domain transport.
       // Retrieve the transport for the given target - if one
       // target is misconfigured, it won't affect the others.
@@ -6346,8 +6352,8 @@ shindig.BaseIfrGadget.prototype.handleCancelUserPrefs = function() {
 
 shindig.BaseIfrGadget.prototype.refresh = function() {
   var iframeId = this.getIframeId();
-
-  document.getElementById(iframeId).src = this.getIframeUrl();  
+  
+  document.getElementById(iframeId).src = this.getIframeUrl();
 };
 
 shindig.BaseIfrGadget.prototype.queryIfrGadgetType_ = function() {
@@ -6425,9 +6431,7 @@ shindig.IfrGadget = {
   
   finishRender: function(chrome) {
     
-    window.frames[this.getIframeId()].location = this.getIframeUrl();
-    /*var width=window.frames[this.getIframeId()].style.width;
-    alert('width: '+width);*/
+    window.frames[this.getIframeId()].location = this.getIframeUrl();    
   },
   
   getIframeUrl: function() {

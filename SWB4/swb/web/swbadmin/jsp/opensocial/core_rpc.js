@@ -1260,12 +1260,7 @@ var _IG_MiniMessage=function(){
     else{return A;}
 };;
 
-/*var _IG_AdjustIFrameHeight=function(){
-    alert('_IG_AdjustIFrameHeight');
-    var A=null;
-    if(!A){A=new gadgets.MiniMessage();return A;}
-    else{return A;}
-};;*/
+
 
 
 gadgets.Tab = function(name,callback,index,contentContainer) {
