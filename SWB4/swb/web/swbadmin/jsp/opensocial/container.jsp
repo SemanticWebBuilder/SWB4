@@ -107,6 +107,9 @@ var viewMatches = /[?&]view=((?:[^#&]+|&amp;)+)/.exec(parentUrl);
       
 var viewerId = '<%=id%>';
 var ownerId = '<%=id%>';
+var baseUrl = parentUrl;//.substring(0, parentUrl.indexOf('samplecontainer.html'));
+var iframeBaseUrl = baseUrl.replace("localhost", "127.0.0.1");
+
 
 <%
     StringBuilder _gadgets=new StringBuilder("[");
@@ -235,6 +238,7 @@ function generateGadgets(metadata)
             var moduleId=metadata.gadgets[i].moduleId;
             var secureToken0=generateSecureToken(url);            
             var gadget=shindig.container.createGadget({'id':moduleId,'title':title,'moduleId':moduleId,'secureToken':secureToken0,'specUrl': url,'userPrefs': metadata.gadgets[i].userPrefs});
+            gadget.setServerBase(iframeBaseUrl);
             shindig.container.addGadget(gadget);
     }
     renderGadgets();
