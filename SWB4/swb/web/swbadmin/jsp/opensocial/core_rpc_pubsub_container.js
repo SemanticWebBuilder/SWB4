@@ -6088,7 +6088,8 @@ shindig.Gadget.prototype.render = function(chrome) {
               var title=(gadget.title ? gadget.title : 'Title');
               var _id='porlet_'+gadget.getIframeId();
               var porlet=new dojox.widget.Portlet({'id':_id,'title':title});
-              dojo.connect(porlet,"onClose",gadget.onClose);              
+              if(gadget.onClose)
+                dojo.connect(porlet,"onClose",gadget.onClose);
               var idsetting='setting_'+gadget.id;
               var contenthtml='<div id="' + gadget.getUserPrefsDialogId() + '" class="' +
               this.cssClassGadgetUserPrefsDialog + '"></div>';
