@@ -35,6 +35,11 @@
 	metadata.setCallMethod(SWBResourceURL.Call_DIRECT);
         metadata.setMode(SocialContainer.Mode_METADATA);
 
+        SWBResourceURL remove=paramRequest.getRenderUrl();
+	remove.setCallMethod(SWBResourceURL.Call_DIRECT);
+        remove.setMode(SocialContainer.Mode_SERVICECONTAINER);
+
+
         String defaultview="home";        
         String context=SWBPortal.getContextPath();
         
@@ -216,6 +221,12 @@ function sendRequestToServer(url, method, opt_postParams, opt_callback, opt_excl
     );
   };
 
+
+function removeGadget(gadget) {
+    var request = {'url':gadget.specUrl,'moduleid':gadget.moduleId,'service':'remove'};    
+    sendRequestToServer("<%=remove%>", "POST",gadgets.json.stringify(request), null, true);
+  };
+
 function requestGadgetMetaData(opt_callback) {
 
     
@@ -235,12 +246,10 @@ function requestGadgetMetaData(opt_callback) {
 
 function init() {
   shindig.container.layoutManager.setGadgetChromeIds(['gadget-chrome']);
-  shindig.container.layoutManager =new shindig.DojoPorletManager('layout-root');
+  shindig.container.layoutManager =new shindig.DojoPorletManager('layout-root');  
   shindig.container.setView('<%=defaultview%>');
   shindig.container.setLanguage('<%=lang%>');
   shindig.container.setCountry('<%=_country%>');
-
-
   requestGadgetMetaData(generateGadgets);
   
 };
@@ -253,19 +262,17 @@ function generateGadgets(metadata)
             var moduleId=metadata.gadgets[i].moduleId;
             var secureToken0=generateSecureToken(url);            
             var gadget=shindig.container.createGadget({'id':moduleId,'title':title,'moduleId':moduleId,'secureToken':secureToken0,'specUrl': url,'userPrefs': metadata.gadgets[i].userPrefs});
+            gadget.onClose=function()
+            {
+                    removeGadget(gadget);
+            };
             gadget.setServerBase(iframeBaseUrl);
             shindig.container.addGadget(gadget);
     }
     renderGadgets();
 };
 function renderGadgets() {    
-  shindig.container.renderGadgets();
-  //alert('ab');
-  /*var grid=dijit.byId('grid');
-  if(grid)
-      {
-          grid.startup();
-      }*/
+  shindig.container.renderGadgets();  
 };
 
 </script>
