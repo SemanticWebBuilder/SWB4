@@ -267,11 +267,9 @@ function generateGadgets(metadata)
             {
                 var resp=confirm('¿Desea eliminar el gadget '  + gadget.title +' permanentemente?');
                 if(resp)
-                {
-                    alert('a');
+                {                    
                     removeGadget(gadget);
-                }
-                alert('b');
+                }                
             };
             gadget.setServerBase(iframeBaseUrl);
             shindig.container.addGadget(gadget);
