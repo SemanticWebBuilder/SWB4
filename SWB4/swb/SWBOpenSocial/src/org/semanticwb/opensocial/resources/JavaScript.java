@@ -87,25 +87,25 @@ public final class JavaScript
                 SWBResourceURL javascript = paramRequest.getRenderUrl();
                 javascript.setMode(SocialContainer.Mode_METADATA);
                 javascript.setCallMethod(SWBResourceURL.Call_DIRECT);
-                /*String port = "";
+                String port = "";
                 if (request.getServerPort() != 80)
                 {
                     port = ":" + request.getServerPort();
                 }
                 String host=request.getServerName();
-                if("localhost".equals(host))
+                /*if("localhost".equals(host))
                 {
                     host="127.0.0.1";
-                }
-                String baserequest=request.getScheme() + "://" + host + port;*/
+                }*/
+                String baserequest=request.getScheme() + "://" + host + port;
 
-                js = js.replace("<%=baseurl%>", baseurl.toString());
-                js = js.replace("<%=metadata%>", javascript.toString());
-                js = js.replace("<%=ifr%>", ifr.toString());
-                js = js.replace("<%=rpc%>", rpc.toString());
-                js = js.replace("<%=proxy%>", proxy.toString());
-                js = js.replace("<%=makerequest%>", makeRequest.toString());
-                js = js.replace("<%=rpc_relay%>", relaypath);
+                js = js.replace("<%=baseurl%>", baserequest+baseurl.toString());
+                js = js.replace("<%=metadata%>", baserequest+javascript.toString());
+                js = js.replace("<%=ifr%>", baserequest+ifr.toString());
+                js = js.replace("<%=rpc%>", baserequest+rpc.toString());
+                js = js.replace("<%=proxy%>", baserequest+proxy.toString());
+                js = js.replace("<%=makerequest%>", baserequest+makeRequest.toString());
+                js = js.replace("<%=rpc_relay%>", baserequest+relaypath);
 
                 PrintWriter out = response.getWriter();
                 out.write(js);
