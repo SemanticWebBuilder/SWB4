@@ -1,5 +1,15 @@
 <%@page contentType="text/html"%>
 <%@page import="java.net.*,org.semanticwb.opensocial.model.*,org.semanticwb.opensocial.resources.*,java.util.Date, java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<script>
+    function loadImage(imagen)
+    {
+        <%
+            String path=SWBPortal.getContextPath() + "/swbadmin/jsp/opensocial/sinfoto.png";
+        %>
+        imagen.src='<%=path%>';
+        
+    }
+</script>
 <%!    private static final int ELEMENETS_BY_PAGE = 9;
 %>
 <%
@@ -242,10 +252,8 @@
                     try
                     {
                         URL url=new URL(img);
-                        if(!Gadget.existImage(url))
-                        {
-                            img = SWBPortal.getContextPath() + "/swbadmin/jsp/opensocial/sinfoto.png";
-                        }
+                        img=proxy.toString()+"?url="+URLEncoder.encode(img);                        
+                     
                     }
                     catch(Exception e)
                     {
@@ -257,7 +265,7 @@
                 edit.setCallMethod(SWBResourceURL.Call_DIRECT);
                 edit.setParameter("url", g1.getUrl());
                 %>
-                <td><img border="0" alt="<%=title%>"  width="120" height="60" src="<%=img%>"><a href="<%=edit%>"><br><%=title%></a></td>
+                <td><img onError="loadImage(this);" border="0" alt="<%=title%>"  width="120" height="60" src="<%=img%>"><a href="<%=edit%>"><br><%=title%></a></td>
                 <%
             }
             else
@@ -281,10 +289,7 @@
                     try
                     {
                         URL url=new URL(img);
-                        if(!Gadget.existImage(url))
-                        {
-                            img = SWBPortal.getContextPath() + "/swbadmin/jsp/opensocial/sinfoto.png";
-                        }
+                        img=proxy.toString()+"?url="+URLEncoder.encode(img);                        
                     }
                     catch(Exception e)
                     {
@@ -299,7 +304,7 @@
 
                 edit.setParameter("url", g2.getUrl());
                 %>
-                <td><img border="0" alt="<%=title%>"  width="120" height="60" src="<%=img%>"><a href="<%=edit%>"><br><%=title%></a></td>
+                <td><img  onError="loadImage(this);" border="0" alt="<%=title%>"  width="120" height="60" src="<%=img%>"><a href="<%=edit%>"><br><%=title%></a></td>
                 <%
             }
             else
@@ -322,14 +327,7 @@
                     try
                     {
                         URL url=new URL(img);
-                        if(Gadget.existImage(url))
-                        {
-                            img=proxy.toString()+"?url="+URLEncoder.encode(img);
-                        }
-                        else
-                        {
-                            img = SWBPortal.getContextPath() + "/swbadmin/jsp/opensocial/sinfoto.png";
-                        }
+                        img=proxy.toString()+"?url="+URLEncoder.encode(img);
                     }
                     catch(Exception e)
                     {
@@ -341,7 +339,7 @@
                 edit.setCallMethod(SWBResourceURL.Call_CONTENT);
                 edit.setParameter("url", g3.getUrl());
                 %>
-                <td><img alt="<%=title%>"  width="120" height="60" src="<%=img%>"><a href="<%=edit%>"><br><%=title%></a></td>
+                <td><img onError="loadImage(this);" alt="<%=title%>"  width="120" height="60" src="<%=img%>"><a href="<%=edit%>"><br><%=title%></a></td>
                 <%
              }
             else
