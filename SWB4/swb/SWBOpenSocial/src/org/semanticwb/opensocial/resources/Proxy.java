@@ -56,8 +56,7 @@ public class Proxy
         catch (Exception e)
         {
             response.sendError(500);
-            log.debug(e);
-            ;
+            log.debug(e);            
         }
     }
 
