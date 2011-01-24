@@ -54,12 +54,19 @@
                 }
             }
        }
+        String iframewidth="400";
+        String iframeheight="300";
+        if(moduleid!=null)
+        {
+            iframewidth="800";
+            iframeheight="600";
+        }
 
 %>
 <html>
 <head>
     <style type="text/css">
-        iframe{width:400px;height: 300px}
+        iframe{width:<%=iframewidth%>px;height: <%=iframeheight%>px}
         .dndDropIndicator
     { border: 2px dashed #99BBE8; cursor:default; margin-bottom:5px; }
     </style>
@@ -282,12 +289,12 @@ function renderGadgets() {
     <%
     if(moduleid==null)
     {
-        String width="800";
-        String height="600";
+        String addwidth="800";
+        String addheight="600";
         
         %>
-        <div dojoType="dijit.Dialog" title="Agregar un gadget" id="dialog" style="width: <%=width%>px;height:<%=height%>px">
-            <iframe id="iframeadd" src="<%=add%>" frameborder="0" style="width: <%=width%>px;height:<%=height%>px" scrolling="auto" width="100%" height="100%"></iframe>
+        <div dojoType="dijit.Dialog" title="Agregar un gadget" id="dialog" style="width: <%=addwidth%>px;height:<%=addheight%>px">
+            <iframe id="iframeadd" src="<%=add%>" frameborder="0" style="width: <%=addwidth%>px;height:<%=addheight%>px" scrolling="auto" width="100%" height="100%"></iframe>
         </div>
         <p><a href="#" onclick="showDialogEmail();">add</a></p>
         <%
