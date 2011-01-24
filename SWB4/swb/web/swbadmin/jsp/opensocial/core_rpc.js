@@ -1308,7 +1308,35 @@ gadgets.TabSet = function(opt_moduleId,opt_defaultTab,opt_container) {
     divroot.innerHTML='<table id="'+this.id_tablecontainer_+'"><tr><td></td></tr></table>';    
     aleatorio = Math.round(Math.random()*99);    
     var id_tab='tabcontainer-'+aleatorio;    
-    this.tabcontainer=new dijit.layout.TabContainer({'id':id_tab,tabStrip:'true','style':'width:300px;height:300px'},divroot);
+    this.tabcontainer=new dijit.layout.TabContainer({'id':id_tab,'tabStrip':'true','style':'width:400px;height:300px'},divroot);
+    dojo.connect(this.tabcontainer,"selectChild",this,function(child){
+                if(child.id)
+                {
+                    for(var i = 0; i < this.tabs.length; i++)
+                    {
+                        var tabdef=this.tabs[i];
+                        if(tabdef.panel.id==child.id)
+                        {
+                            var callback=tabdef.tab.getCallback();
+                            if(callback)callback(child.id);
+                        }
+                    }
+                }
+        });
+
+    dojo.connect(this.tabcontainer,"removeChild",this,function(child){
+                if(child.id)
+                {
+                    for(var i = 0; i < this.tabs.length; i++)
+                    {
+                        var tabdef=this.tabs[i];
+                        if(tabdef.panel.id==child.id)
+                        {
+                            this.removeTab(i);
+                        }
+                    }                    
+                }
+        });
     this.tabcontainer.startup();    
     
 };
@@ -1340,26 +1368,12 @@ gadgets.TabSet.prototype.addTab = function(tabName,opt_params) {
     var id_contentContainer=contentContainer.setAttribute('id');
     var id_panel='panel-'+aleatorio;
     var tab=new gadgets.Tab(tabName,callback,index_,contentContainer);
-    var panel=new dijit.layout.ContentPane({'id':id_panel,'content':contentContainer,'title':tabName,style:'width:300px;height:300px'});
+    var panel=new dijit.layout.ContentPane({'closable':'true','id':id_panel,'content':contentContainer,'title':tabName});
     var tabdef={'panel':panel,'tab':tab};
     this.tabs[index_]=tabdef;
     panel.selected=true;
     this.tabcontainer.addChild(panel);
-    panel.startup();
-    dojo.connect(this.tabcontainer,"selectChild",this,function(child){
-                if(child.id)
-                {
-                    for(var i = 0; i < this.tabs.length; i++)
-                    {
-                        var tabdef=this.tabs[i];
-                        if(tabdef.panel.id==child.id)
-                        {
-                            var callback=tabdef.tab.getCallback();
-                            if(callback)callback(child.id);
-                        }
-                    }
-                }
-        });
+    panel.startup();    
     this.setSelectedTab(index_);  
     return id_contentContainer;
 };
@@ -1402,10 +1416,18 @@ gadgets.TabSet.prototype.addDynamicTab = function(tabName,callback) {
 
 gadgets.TabSet.prototype.removeTab = function(tabIndex) {
     var tabdef=this.tabs[tabIndex];
-    var panel=tabdef.panel;
-    var tab=tabdef.tab;
-    this.tabs.remove(tabdef);
-    this.tabcontainer.removeChild(panel);
+    if(tabdef)
+    {
+        var panel=tabdef.panel;
+        //var tab=tabdef.tab;
+        this.tabs.remove(tabdef);
+        this.tabcontainer.removeChild(panel);
+    }
+    if(this.tabs.length>0)
+    {
+        var index=this.tabs.length-1;
+        this.setSelectedTab(index);
+    }
 
 };
 gadgets.TabSet.prototype.setSelectedTab = function(tabIndex) {
