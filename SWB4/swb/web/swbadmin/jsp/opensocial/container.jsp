@@ -73,6 +73,7 @@
 <html>
 <head>
     <style type="text/css">
+        
         iframe{width:<%=iframewidth%>px;height: <%=iframeheight%>px}
         .dndDropIndicator
     { border: 2px dashed #99BBE8; cursor:default; margin-bottom:5px; }
@@ -298,7 +299,7 @@ function renderGadgets() {
     {        
         
         %>
-        <div dojoType="dijit.Dialog" title="Agregar un gadget" id="dialog" style="width: <%=dialogaddWidth%>px;height:<%=dialogaddHeight%>px">
+        <div dojoType="dijit.Dialog" title="Agregar un gadget" id="dialog" style="width:<%=dialogaddWidth%>px;height:<%=dialogaddHeight%>px">
             <iframe id="iframeadd" src="<%=add%>" frameborder="0" style="width: <%=dialogaddWidth%>px;height:<%=dialogaddHeight%>px" scrolling="auto" width="100%" height="100%"></iframe>
         </div>
         <p><a href="#" onclick="showDialogEmail();">add</a></p>
