@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -48,8 +49,8 @@ public final class JavaScript
             fileName = SWBUtils.getApplicationPath() + "swbadmin/jsp/opensocial/" + fileName;
             File file = new File(fileName);            
             FileInputStream in = new FileInputStream(file);
-            Charset charset=Charset.forName("utf-8");
-            InputStreamReader  reader=new InputStreamReader(in, charset);
+            //Charset charset=Charset.forName("utf-8");
+            InputStreamReader  reader=new FileReader(file);
             log.debug(" reader.getEncoding(): "+ reader.getEncoding());
             StringBuilder sb = new StringBuilder();
             char[] buffer = new char[1024 * 8];
@@ -61,6 +62,7 @@ public final class JavaScript
                 sb.append(data);
             }
             String js = sb.toString();
+            log.debug(js);
             //String js=scripts.get(fileName);
             if (js != null)
             {
@@ -112,9 +114,16 @@ public final class JavaScript
                 js = js.replace("<%=makerequest%>", baserequest+makeRequest.toString());
                 js = js.replace("<%=rpc_relay%>", baserequest+relaypath);
 
-                PrintWriter out = response.getWriter();
+                /*PrintWriter out = response.getWriter();
                 out.write(js);
+                out.close();*/
+                Charset charset=Charset.defaultCharset();
+                response.setContentType("text/javascript;charset="+charset.name());
+                OutputStream out=response.getOutputStream();
+                out.write(js.getBytes(charset));
                 out.close();
+
+
             }
         }
         else
