@@ -264,7 +264,11 @@ function generateGadgets(metadata)
             var gadget=shindig.container.createGadget({'id':moduleId,'title':title,'moduleId':moduleId,'secureToken':secureToken0,'specUrl': url,'userPrefs': metadata.gadgets[i].userPrefs});
             gadget.onClose=function()
             {
+                var resp=confirm('¿Desea eliminar el gadget '  + gadget.title +' permanentemente?');
+                if(resp)
+                {
                     removeGadget(gadget);
+                }
             };
             gadget.setServerBase(iframeBaseUrl);
             shindig.container.addGadget(gadget);
@@ -321,6 +325,7 @@ function renderGadgets() {
          region="center"
          mode="left"
 							id="grid"
+                                                        dragRestriction="false"
                                                         isAutoOrganized="false"
                                                         autoRefresh="false"
 							acceptTypes="dojox.widget.Portlet"
