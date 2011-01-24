@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.HashSet;
@@ -550,11 +551,44 @@ public class SocialContainer extends GenericResource
 
     public void doServiceContainer(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-
+        String port = "";
+        if (request.getServerPort() != 80)
+        {
+            port = ":" + request.getServerPort();
+        }
+        boolean doService = false;
         String contentType = request.getContentType();
         if ("application/javascript".equals(contentType))
         {
-            log.debug("referer:  "+request.getHeader("referer"));
+            log.debug("referer:  " + request.getHeader("referer"));
+            String referer = request.getHeader("referer");
+
+            if (referer != null)
+            {
+                try
+                {
+                    URL uri_referer = new URL(referer);
+                    URL urilocal = new URL(request.getScheme() + "://" + request.getServerName() + port + paramRequest.getWebPage().getUrl());
+                    String host1 = uri_referer.getHost();
+                    if ("localhost".equals(host1))
+                    {
+                        host1 = "127.0.0.1";
+                    }
+                    String host2 = urilocal.getHost();
+                    if ("localhost".equals(host2))
+                    {
+                        host2 = "127.0.0.1";
+                    }
+                    if (host1.equals(host2) && uri_referer.getPort() == urilocal.getPort() && uri_referer.getProtocol().equals(urilocal.getProtocol()))
+                    {
+                        doService = true;
+                    }
+                }
+                catch (MalformedURLException e)
+                {
+                    log.debug(e);
+                }
+            }
             WebSite site = paramRequest.getWebPage().getWebSite();
             SocialUser socialUser = SocialContainer.getSocialUser(paramRequest.getUser(), request.getSession(), site);
             InputStream in = request.getInputStream();
@@ -570,19 +604,21 @@ public class SocialContainer extends GenericResource
 
             try
             {
-
-                JSONObject json = new JSONObject(sb.toString());
-                String service = json.getString("service");
-                if ("remove".equals(service))
+                if (doService)
                 {
-                    String moduleid = json.getString("moduleid");
-                    String url = json.getString("url");
-                    if ("".equals(url))
+                    JSONObject json = new JSONObject(sb.toString());
+                    String service = json.getString("service");
+                    if ("remove".equals(service))
                     {
-                        Gadget gadget = SocialContainer.getGadget(url, site);
-                        if (gadget != null && moduleid != null && !"".equals(moduleid))
+                        String moduleid = json.getString("moduleid");
+                        String url = json.getString("url");
+                        if ("".equals(url))
                         {
-                            socialUser.removeGadget(gadget, moduleid);
+                            Gadget gadget = SocialContainer.getGadget(url, site);
+                            if (gadget != null && moduleid != null && !"".equals(moduleid))
+                            {
+                                socialUser.removeGadget(gadget, moduleid);
+                            }
                         }
                     }
                 }
