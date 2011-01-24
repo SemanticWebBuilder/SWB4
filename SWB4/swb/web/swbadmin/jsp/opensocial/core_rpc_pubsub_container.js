@@ -6088,19 +6088,19 @@ shindig.Gadget.prototype.render = function(chrome) {
               var title=(gadget.title ? gadget.title : 'Title');
               var _id='porlet_'+gadget.getIframeId();
               var porlet=new dojox.widget.Portlet({'id':_id,'title':title});
-              porlet.onClose=function()
-              {
-                  var resp=confirm('¿Desea eliminar el gadget permanentemente?');
+              dojo.connect(porlet,"onClose",this,function(){
+              var resp=confirm('¿Desea eliminar el gadget permanentemente?');
                   if(resp)
-                  {                        
+                  {
                         if(gadget.onClose)
                         {
                             gadget.onClose();
                         }
-                        
+
                   }
                   return false;
-              };
+            });
+              
               var idsetting='setting_'+gadget.id;
               var contenthtml='<div id="' + gadget.getUserPrefsDialogId() + '" class="' +
               this.cssClassGadgetUserPrefsDialog + '"></div>';
