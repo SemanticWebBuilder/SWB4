@@ -1308,7 +1308,7 @@ gadgets.TabSet = function(opt_moduleId,opt_defaultTab,opt_container) {
     divroot.innerHTML='<table id="'+this.id_tablecontainer_+'"><tr><td></td></tr></table>';    
     aleatorio = Math.round(Math.random()*99);    
     var id_tab='tabcontainer-'+aleatorio;    
-    this.tabcontainer=new dijit.layout.TabContainer({'style':'width:100%;height:100%','id':id_tab,'tabStrip':'true'},divroot);    
+    this.tabcontainer=new dijit.layout.TabContainer({'style':'width:100%;height:100%','id':id_tab,'tabStrip':'true'},divroot);
     dojo.connect(this.tabcontainer,"selectChild",this,function(child){
                 if(child.id)
                 {

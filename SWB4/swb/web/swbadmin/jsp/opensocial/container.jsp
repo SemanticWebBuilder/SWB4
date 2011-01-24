@@ -77,8 +77,7 @@
 %>
 <html>
 <head>
-    <style type="text/css">
-        
+    <style type="text/css">        
         iframe{width:<%=iframewidth%>px;height: <%=iframeheight%>px}
         .dndDropIndicator
     { border: 2px dashed #99BBE8; cursor:default; margin-bottom:5px; }
