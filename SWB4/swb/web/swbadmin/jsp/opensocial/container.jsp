@@ -2,11 +2,19 @@
 <%@page import="org.semanticwb.opensocial.resources.*,org.semanticwb.opensocial.model.*,org.semanticwb.opensocial.resources.*,java.util.Date, java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 
 <%
-    SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-%>
-<%
 
-
+        String minChildWidth="150";
+        String minChildWidthforCanvas="500";
+        String nbZonesforCanvas="1";
+        String nbZones="3";
+        String iframewidth="400";
+        String iframeheight="300";
+        String dialogaddWidth="800";
+        String dialogaddHeight="600";
+        String iframewidthforCanvas="800";
+        String iframeheightforCanvas="600";
+        
+        SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
         WebSite site=paramRequest.getWebPage().getWebSite();
         User user=paramRequest.getUser();
         SocialUser socialUser=SocialContainer.getSocialUser(user, session,site);
@@ -29,8 +37,8 @@
 
         String defaultview="home";        
         String context=SWBPortal.getContextPath();
-        String minChildWidth="150";
-        String nbZones="3";
+        
+        
         String moduleid=null;
         if(request.getParameter("mid")!=null && request.getParameter("view")!=null)
         {
@@ -47,19 +55,18 @@
                         {
                             moduleid=_mid;                            
                             defaultview=_view;
-                            minChildWidth="500";
-                            nbZones="1";
+                            minChildWidth=minChildWidthforCanvas;
+                            nbZones=nbZonesforCanvas;
                         }
                     }
                 }
             }
        }
-        String iframewidth="400";
-        String iframeheight="300";
+        
         if(moduleid!=null)
         {
-            iframewidth="800";
-            iframeheight="600";
+            iframewidth=iframewidthforCanvas;
+            iframeheight=iframeheightforCanvas;
         }
 
 %>
@@ -288,13 +295,11 @@ function renderGadgets() {
 <body class="soria" onLoad="init();renderGadgets();">
     <%
     if(moduleid==null)
-    {
-        String addwidth="800";
-        String addheight="600";
+    {        
         
         %>
-        <div dojoType="dijit.Dialog" title="Agregar un gadget" id="dialog" style="width: <%=addwidth%>px;height:<%=addheight%>px">
-            <iframe id="iframeadd" src="<%=add%>" frameborder="0" style="width: <%=addwidth%>px;height:<%=addheight%>px" scrolling="auto" width="100%" height="100%"></iframe>
+        <div dojoType="dijit.Dialog" title="Agregar un gadget" id="dialog" style="width: <%=dialogaddWidth%>px;height:<%=dialogaddHeight%>px">
+            <iframe id="iframeadd" src="<%=add%>" frameborder="0" style="width: <%=dialogaddWidth%>px;height:<%=dialogaddHeight%>px" scrolling="auto" width="100%" height="100%"></iframe>
         </div>
         <p><a href="#" onclick="showDialogEmail();">add</a></p>
         <%
@@ -327,7 +332,7 @@ function renderGadgets() {
     {
         String urclose=paramRequest.getWebPage().getUrl();
         %>
-        <div style="align:center"><p><a href="<%=urclose%>">Cerrar</a></p></div>
+        <div><p><a href="<%=urclose%>">Cerrar</a></p></div>
         <%
     }
 %>
