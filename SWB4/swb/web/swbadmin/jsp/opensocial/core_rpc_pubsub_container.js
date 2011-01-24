@@ -6089,14 +6089,13 @@ shindig.Gadget.prototype.render = function(chrome) {
               var _id='porlet_'+gadget.getIframeId();
               var porlet=new dojox.widget.Portlet({'id':_id,'title':title});
               dojo.connect(porlet,"onClose",this,function(){
-              var resp=confirm('¿Desea eliminar el gadget permanentemente?');
+              var resp=confirm('¿Desea eliminar el gadget '  + gadget.title +' permanentemente?');
                   if(resp)
                   {
                         if(gadget.onClose)
                         {
                             gadget.onClose();
                         }
-
                   }
                   return false;
             });
