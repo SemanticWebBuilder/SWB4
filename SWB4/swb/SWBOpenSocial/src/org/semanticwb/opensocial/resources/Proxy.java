@@ -48,11 +48,13 @@ public class Proxy {
         }
         catch(IOException e)
         {
+            response.setStatus(500);
             log.debug(e);
             throw e;            
         }
         catch(Exception e)
         {
+            response.setStatus(500);
             log.debug(e);;
         }
     }
