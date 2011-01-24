@@ -5919,6 +5919,10 @@ shindig.LayoutManager.prototype.getGadgetChrome = function(gadget) {
   throw Error(shindig.errors.SUBCLASS_RESPONSIBILITY);
 };
 
+
+shindig.LayoutManager.prototype.onCloseGadget = function(gadget) {
+  throw Error(shindig.errors.SUBCLASS_RESPONSIBILITY);
+};
 // -------------------
 // StaticLayoutManager
 
@@ -5994,6 +5998,11 @@ shindig.DojoPorletManager = function(layoutRootId) {
 };
 
 shindig.DojoPorletManager.inherits(shindig.LayoutManager);
+
+shindig.DojoPorletManager.prototype.onCloseGadget =function(gadget)
+{
+    
+};
 
 shindig.DojoPorletManager.prototype.getGadgetChrome =
     function(gadget) {  
@@ -6079,6 +6088,19 @@ shindig.Gadget.prototype.render = function(chrome) {
               var title=(gadget.title ? gadget.title : 'Title');
               var _id='porlet_'+gadget.getIframeId();
               var porlet=new dojox.widget.Portlet({'id':_id,'title':title});
+              porlet.onClose=function()
+              {
+                  var resp=confirm('¿Desea eliminar el gadget permanentemente?');
+                  if(resp)
+                  {                        
+                        if(gadget.onClose)
+                        {
+                            gadget.onClose();
+                        }
+                        
+                  }
+                  return false;
+              };
               var idsetting='setting_'+gadget.id;
               var contenthtml='<div id="' + gadget.getUserPrefsDialogId() + '" class="' +
               this.cssClassGadgetUserPrefsDialog + '"></div>';
@@ -6400,6 +6422,9 @@ shindig.BaseIfrGadget.prototype.queryIfrGadgetType_ = function() {
     }
   }
 };
+
+
+
 
 // ---------
 // IfrGadget
