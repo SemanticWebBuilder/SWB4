@@ -9,6 +9,7 @@ import com.arthurdo.parser.HtmlTag;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
@@ -440,10 +441,9 @@ public class IFrame
 
                 String fileName = SWBUtils.getApplicationPath() + "swbadmin/jsp/opensocial/frame.html";
                 File file = new File(fileName);
-
-                FileInputStream in = new FileInputStream(file);
+                FileReader in = new FileReader(file);
                 StringBuilder sb = new StringBuilder();
-                byte[] buffer = new byte[1028];
+                char[] buffer = new char[1028];
                 int read = in.read(buffer);
                 while (read != -1)
                 {

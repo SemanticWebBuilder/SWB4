@@ -6,8 +6,11 @@ package org.semanticwb.opensocial.resources;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -43,16 +46,18 @@ public final class JavaScript
             int pos = script.lastIndexOf("/");
             String fileName = script.substring(pos + 1);
             fileName = SWBUtils.getApplicationPath() + "swbadmin/jsp/opensocial/" + fileName;
-            File file = new File(fileName);
-
+            File file = new File(fileName);            
             FileInputStream in = new FileInputStream(file);
+            Charset charset=Charset.forName("utf-8");
+            InputStreamReader  reader=new InputStreamReader(in, charset);
+            log.debug(" reader.getEncoding(): "+ reader.getEncoding());
             StringBuilder sb = new StringBuilder();
-            byte[] buffer = new byte[1024 * 8];
-            int read = in.read(buffer);
+            char[] buffer = new char[1024 * 8];
+            int read = reader.read(buffer);
             while (read != -1)
             {
                 String data = new String(buffer, 0, read);
-                read = in.read(buffer);
+                read = reader.read(buffer);
                 sb.append(data);
             }
             String js = sb.toString();
