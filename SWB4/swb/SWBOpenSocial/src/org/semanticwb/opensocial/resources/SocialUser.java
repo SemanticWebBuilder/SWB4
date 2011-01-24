@@ -48,7 +48,36 @@ public class SocialUser
         this.user = user == null ? null : user.getId();
         refresh(user, site);
     }
+    public void removeGadget(Gadget gadget,String moduleid)
+    {
+        if(user==null)
+        {
+            if(userprefsManager.contains(gadget, moduleid))
+            {
+                UserPrefs prefs=userprefsManager.get(gadget, moduleid);
+                userprefsManager.remove(prefs);
+            }
+        }
+        else
+        {
+            User _user = getUser();
+            WebSite _site = getWebSite();
+            if (_user != null && _site != null)
+            {
 
+                Iterator<PersonalizedGadged> personalizedGadgeds = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(_user, _site);
+                ArrayList<PersonalizedGadged> toDelete = new ArrayList<PersonalizedGadged>();
+                while (personalizedGadgeds.hasNext())
+                {
+                    PersonalizedGadged pgadget = personalizedGadgeds.next();
+                    if(pgadget.getGadget()!=null && pgadget.getGadget().getUrl().equals(gadget.getUrl()) && pgadget.getId().equals(moduleid))
+                    {
+                        pgadget.remove();
+                    }
+                }
+            }
+        }
+    }
     public final void refresh(User user, WebSite site)
     {
         lang = user == null || user.getLanguage() == null ? "ALL" : user.getLanguage();

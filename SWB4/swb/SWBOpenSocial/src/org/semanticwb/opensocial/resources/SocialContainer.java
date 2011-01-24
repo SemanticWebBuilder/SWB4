@@ -29,6 +29,8 @@ import javax.xml.validation.Validator;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.DOMOutputter;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
@@ -61,6 +63,7 @@ public class SocialContainer extends GenericResource
     public static final String Mode_MAKE_REQUEST = "MAKEREQUEST";
     public static final String Mode_CONFIGGADGET = "CONFIGGADGET";
     public static final String Mode_LISTGADGETS = "LISTGADGETS";
+    public static final String Mode_SERVICECONTAINER = "servicecontainer";
     public static final String Mode_RPC = "RPC";
     private static final Set<String> supportedFeatures = new HashSet<String>();
 
@@ -71,8 +74,11 @@ public class SocialContainer extends GenericResource
         supportedFeatures.add("rpc");
         supportedFeatures.add("setprefs");
         supportedFeatures.add("dynamic-height");
-        String[] urls={"http://hosting.gmodules.com/ig/gadgets/file/111782983456439885554/Google-Gadget-RSS.xml","http://www.tc.df.gov.br/MpjTcdf/AlcCalc.xml"};//,http://www.delsearegional.us/academic/classes/highschool/science/physics/age/age.xml","http://midots.com/gadgets/xmldocs/midotsImgViewBeautifulPhotosOfIslands_11.xml","http://hosting.gmodules.com/ig/gadgets/file/112581010116074801021/spider.xml","http://www.donalobrien.net/apps/google/currency.xml","http://opensocial-resources.googlecode.com/svn/tests/trunk/suites/0.8/compliance/reference.xml","http://localhost:8080/swb/samplecontainer/examples/horoscope.xml","http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml","http://www.google.com/ig/modules/horoscope/horoscope.xml","http://www.google.com/ig/modules/test_setprefs_multiple_ifpc.xml"};
-        
+        String[] urls =
+        {
+            "http://hosting.gmodules.com/ig/gadgets/file/111782983456439885554/Google-Gadget-RSS.xml", "http://www.tc.df.gov.br/MpjTcdf/AlcCalc.xml"
+        };//,http://www.delsearegional.us/academic/classes/highschool/science/physics/age/age.xml","http://midots.com/gadgets/xmldocs/midotsImgViewBeautifulPhotosOfIslands_11.xml","http://hosting.gmodules.com/ig/gadgets/file/112581010116074801021/spider.xml","http://www.donalobrien.net/apps/google/currency.xml","http://opensocial-resources.googlecode.com/svn/tests/trunk/suites/0.8/compliance/reference.xml","http://localhost:8080/swb/samplecontainer/examples/horoscope.xml","http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml","http://www.google.com/ig/modules/horoscope/horoscope.xml","http://www.google.com/ig/modules/test_setprefs_multiple_ifpc.xml"};
+
         WebSite site = WebSite.ClassMgr.getWebSite("reg_digital_demo");
         for (String url : urls)
         {
@@ -132,13 +138,13 @@ public class SocialContainer extends GenericResource
         return true;
     }
 
-    public static SocialUser getSocialUser(User user, HttpSession session,WebSite site)
+    public static SocialUser getSocialUser(User user, HttpSession session, WebSite site)
     {
         SocialUser socialUser = (SocialUser) session.getAttribute(SOCIAL_USER_ATTRIBUTE);
         if (socialUser == null)
         {
-            log.debug("Creando nuevo usuario para session: "+session.getId());
-            socialUser = new SocialUser(user,site);
+            log.debug("Creando nuevo usuario para session: " + session.getId());
+            socialUser = new SocialUser(user, site);
             session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
         }
         String user1 = user == null ? null : user.getId();
@@ -147,21 +153,21 @@ public class SocialContainer extends GenericResource
         {
             if ((user1 == null && user2 != null) || (user1 != null && user2 == null))
             {
-                log.debug("cambio de usuario old: "+user2+" new: "+user2);
-                socialUser = new SocialUser(user,site);
+                log.debug("cambio de usuario old: " + user2 + " new: " + user2);
+                socialUser = new SocialUser(user, site);
                 session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
             }
             else
             {
                 if (!user1.equals(user2))
                 {
-                    log.debug("cambio de usuario old: "+user2+" new: "+user2);
-                    socialUser = new SocialUser(user,site);
+                    log.debug("cambio de usuario old: " + user2 + " new: " + user2);
+                    socialUser = new SocialUser(user, site);
                     session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
                 }
             }
         }
-        socialUser.refresh(user,site);
+        socialUser.refresh(user, site);
         return socialUser;
     }
 
@@ -176,7 +182,7 @@ public class SocialContainer extends GenericResource
             Gadget gadget = getGadget(url, site);
             if (gadget != null)
             {
-                SocialUser socialUser = getSocialUser(user, request.getSession(),site);
+                SocialUser socialUser = getSocialUser(user, request.getSession(), site);
                 Document doc = gadget.getDocument();
                 NodeList userPrefs = doc.getElementsByTagName("UserPref");
                 String moduleid = null;
@@ -329,18 +335,14 @@ public class SocialContainer extends GenericResource
         else if (paramRequest.getMode().equals(Mode_CONFIGGADGET))
         {
             docConfigGadgetForUser(request, response, paramRequest);
-
-
-
-
+        }
+        else if (paramRequest.getMode().equals(Mode_SERVICECONTAINER))
+        {
+            doServiceContainer(request, response, paramRequest);
         }
         else if (paramRequest.getMode().equals(Mode_LISTGADGETS))
         {
             doList(request, response, paramRequest);
-
-
-
-
         }
         else if (paramRequest.getMode().equals(Mode_MAKE_REQUEST))
         {
@@ -546,14 +548,57 @@ public class SocialContainer extends GenericResource
 
     }
 
+    public void doServiceContainer(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+
+        String contentType = request.getContentType();
+        if ("application/javascript".equals(contentType))
+        {
+            log.debug("referer:  "+request.getHeader("referer"));
+            WebSite site = paramRequest.getWebPage().getWebSite();
+            SocialUser socialUser = SocialContainer.getSocialUser(paramRequest.getUser(), request.getSession(), site);
+            InputStream in = request.getInputStream();
+            StringBuilder sb = new StringBuilder();
+            byte[] buffer = new byte[1028];
+            int read = in.read(buffer);
+            while (read != -1)
+            {
+                sb.append(new String(buffer, 0, read));
+                read = in.read(buffer);
+            }
+            in.close();
+
+            try
+            {
+
+                JSONObject json = new JSONObject(sb.toString());
+                String service = json.getString("service");
+                if ("remove".equals(service))
+                {
+                    String moduleid = json.getString("moduleid");
+                    String url = json.getString("url");
+                    if ("".equals(url))
+                    {
+                        Gadget gadget = SocialContainer.getGadget(url, site);
+                        if (gadget != null && moduleid != null && !"".equals(moduleid))
+                        {
+                            socialUser.removeGadget(gadget, moduleid);
+                        }
+                    }
+                }
+            }
+            catch (JSONException jsone)
+            {
+                response.sendError(500);
+                log.debug(jsone);
+            }
+        }
+    }
+
     public void doMakeRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         MakeRequest makeRequest = new MakeRequest();
         makeRequest.doProcess(request, response, paramRequest);
-
-
-
-
     }
 
     public void doProxy(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -630,7 +675,7 @@ public class SocialContainer extends GenericResource
     {
         WebSite site = paramRequest.getWebPage().getWebSite();
         User user = paramRequest.getUser();
-        SocialUser socialuser = new SocialUser(user,site);
+        SocialUser socialuser = new SocialUser(user, site);
         for (UserPrefs pref : socialuser.getUserPrefs())
         {
             if (pref.getGadget() != null)
@@ -649,7 +694,7 @@ public class SocialContainer extends GenericResource
         catch (Exception e)
         {
             log.error(e);
-        }        
+        }
     }
 
     public static boolean isValidGadGet(URL url)
