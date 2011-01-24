@@ -405,15 +405,18 @@ Lenguaje:
     function validate()
     {
         var add=document.getElementById("add");
+        var cancel=document.getElementById("cancel");
         if(add)
         {
             add.disabled=true;
+            cancel.disabled=true;
         }
         if(!validateFields())
         {
             if(add)
             {
                 add.disabled=false;
+                cancel.disabled=false;
             }
         }
     }
