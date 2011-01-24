@@ -6084,7 +6084,7 @@ shindig.Gadget.prototype.render = function(chrome) {
               this.cssClassGadgetUserPrefsDialog + '"></div>';
               //settings.startup();
               var row=Math.floor(gadget.id/3);
-              var column=gadget.id%3;
+              var column=2-(gadget.id%3);
               grid.addChild(porlet,column,row);
               porlet.startup();
 
