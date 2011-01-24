@@ -47,9 +47,7 @@ public final class JavaScript
             int pos = script.lastIndexOf("/");
             String fileName = script.substring(pos + 1);
             fileName = SWBUtils.getApplicationPath() + "swbadmin/jsp/opensocial/" + fileName;
-            File file = new File(fileName);            
-            FileInputStream in = new FileInputStream(file);
-            //Charset charset=Charset.forName("utf-8");
+            File file = new File(fileName);                                    
             InputStreamReader  reader=new FileReader(file);
             log.debug(" reader.getEncoding(): "+ reader.getEncoding());
             StringBuilder sb = new StringBuilder();
@@ -61,10 +59,9 @@ public final class JavaScript
                 read = reader.read(buffer);
                 sb.append(data);
             }
-            String js = sb.toString();
-            log.debug(js);
+            String js = sb.toString();            
             //String js=scripts.get(fileName);
-            if (js != null)
+            if (js != null && !"".equals("js"))
             {
 
                 SWBResourceURL makeRequest = paramRequest.getRenderUrl();
