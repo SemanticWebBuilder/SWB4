@@ -1419,10 +1419,26 @@ gadgets.TabSet.prototype.removeTab = function(tabIndex) {
     if(tabdef)
     {
         var panel=tabdef.panel;
-        //var tab=tabdef.tab;
-        this.tabs.remove(tabdef);
-        this.tabcontainer.removeChild(panel);
-    }
+        this.tabs.splice(tabIndex,1);
+        if(panel)
+        {
+            var childrens=this.tabcontainer.getChildren();
+            var exists=false;
+            if(childrens)
+            {
+                for(var paneltoDelete in childrens)
+                {
+                    if(paneltoDelete==panel)
+                    {
+                        exists=true;
+                    }
+                }
+            }
+            if(exists)
+                this.tabcontainer.removeChild(panel);
+        }
+        
+    }    
     if(this.tabs.length>0)
     {
         var index=this.tabs.length-1;
