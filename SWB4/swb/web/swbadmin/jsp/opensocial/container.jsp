@@ -223,7 +223,8 @@ function sendRequestToServer(url, method, opt_postParams, opt_callback, opt_excl
 
 
 function removeGadget(gadget) {
-    var request = {'url':gadget.specUrl,'moduleid':gadget.moduleId,'service':'remove'};    
+    var request = {'url':gadget.specUrl,'moduleid':gadget.moduleId,'service':'remove'};
+    alert('a');
     sendRequestToServer("<%=remove%>", "POST",gadgets.json.stringify(request), null, true);
   };
 
@@ -267,8 +268,10 @@ function generateGadgets(metadata)
                 var resp=confirm('¿Desea eliminar el gadget '  + gadget.title +' permanentemente?');
                 if(resp)
                 {
+                    alert('a');
                     removeGadget(gadget);
                 }
+                alert('b');
             };
             gadget.setServerBase(iframeBaseUrl);
             shindig.container.addGadget(gadget);
