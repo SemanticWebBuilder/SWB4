@@ -50,8 +50,7 @@ public final class JavaScript
             File file = new File(fileName);
             if (file.exists())
             {
-                InputStreamReader reader = new FileReader(file);
-                log.debug(" reader.getEncoding(): " + reader.getEncoding());
+                InputStreamReader reader = new FileReader(file);                
                 StringBuilder sb = new StringBuilder();
                 char[] buffer = new char[1024 * 8];
                 int read = reader.read(buffer);
