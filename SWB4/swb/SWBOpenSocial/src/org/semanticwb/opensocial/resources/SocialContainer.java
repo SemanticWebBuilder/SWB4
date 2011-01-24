@@ -612,7 +612,7 @@ public class SocialContainer extends GenericResource
                     {
                         String moduleid = json.getString("moduleid");
                         String url = json.getString("url");
-                        if ("".equals(url))
+                        if (url!=null && !"".equals(url))
                         {
                             Gadget gadget = SocialContainer.getGadget(url, site);
                             if (gadget != null && moduleid != null && !"".equals(moduleid))
