@@ -322,7 +322,7 @@ function renderGadgets() {
 
 <div id="layout-root" class="gadgets-layout-root">
     <div dojoType="dojox.layout.GridContainer"
-         region="center"
+         
          mode="left"
 							id="grid"
                                                         dragRestriction="false"
