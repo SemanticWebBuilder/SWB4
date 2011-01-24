@@ -305,7 +305,11 @@ function renderGadgets() {
 
 <div id="layout-root" class="gadgets-layout-root">
     <div dojoType="dojox.layout.GridContainer"
-							id="grid"							
+         region="center"
+         mode="left"
+							id="grid"
+                                                        isAutoOrganized="false"
+                                                        autoRefresh="false"
 							acceptTypes="dojox.widget.Portlet"
 							hasResizableColumns="true"
 							opacity="0.3"
@@ -318,7 +322,15 @@ function renderGadgets() {
     </div>
 
 </div>
-
+<%
+    if(moduleid!=null)
+    {
+        String urclose=paramRequest.getWebPage().getUrl();
+        %>
+        <div style="align:center"><p><a href="<%=urclose%>">Cerrar</a></p></div>
+        <%
+    }
+%>
 </body>
 </html>
 
