@@ -7,11 +7,7 @@ package org.semanticwb.opensocial.resources;
 import com.arthurdo.parser.HtmlStreamTokenizer;
 import com.arthurdo.parser.HtmlTag;
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -20,14 +16,11 @@ import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-
-
-
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
@@ -44,7 +37,6 @@ import org.semanticwb.portal.api.SWBResourceURL;
 public class IFrame
 {
 
-    private static final String frame = SocialContainer.loadFrame("frame.html");
     private static final Logger log = SWBUtils.getLogger(IFrame.class);
 
     public static String parseHTML(String datos, URI gadget, URI proxy)
@@ -308,7 +300,7 @@ public class IFrame
             if (name.startsWith("up_"))
             {
                 String value = request.getParameter(name);
-                name = name.substring(3);                
+                name = name.substring(3);
                 userprefs.put(name, value);
 
             }
@@ -366,13 +358,19 @@ public class IFrame
         {
             moduleid = "0";
         }
+        boolean debug = false;
+        String _debug = request.getParameter("debug");
+        if ("1".equals(_debug))
+        {
+            debug = true;
+        }
 
         try
         {
             Gadget gadget = SocialContainer.getGadget(url, paramRequest.getWebPage().getWebSite());
             if (gadget != null)
             {
-                SocialUser socialuser = SocialContainer.getSocialUser(user, request.getSession(), site);                
+                SocialUser socialuser = SocialContainer.getSocialUser(user, request.getSession(), site);
                 if (changeUserPrefs)
                 {
                     for (String key : userprefs.keySet())
@@ -394,35 +392,20 @@ public class IFrame
                 {
                     body = "";
                 }
-                SWBResourceURL makerequest = paramRequest.getRenderUrl();
-                makerequest.setCallMethod(SWBResourceURL.Call_DIRECT);
-                makerequest.setMode(SocialContainer.Mode_MAKE_REQUEST);
+                
 
-                SWBResourceURL rpc = paramRequest.getRenderUrl();
-                rpc.setCallMethod(SWBResourceURL.Call_DIRECT);
-                rpc.setMode(SocialContainer.Mode_RPC);
-
-
-
+               
 
                 SWBResourceURL proxy = paramRequest.getRenderUrl();
                 proxy.setCallMethod(SWBResourceURL.Call_DIRECT);
                 proxy.setMode(SocialContainer.Mode_PROXY);
 
 
-
                 body = prepare(body);
-
-
-
-
                 body = parseHTML(body, new URI(gadget.getUrl()), new URI(proxy.toString()));
 
 
-                SWBResourceURL javascript = paramRequest.getRenderUrl();
-                javascript.setMode(SocialContainer.Mode_JAVASCRIPT);
-                javascript.setCallMethod(SWBResourceURL.Call_DIRECT);
-                javascript.setParameter("script", "core_rpc.js");
+
 
                 JSONObject j_default_values = new JSONObject();
                 Map<String, String> default_values = gadget.getDefaultUserPref(lang, country, false);
@@ -438,21 +421,23 @@ public class IFrame
                     msg.put(key, messages.get(key));
                 }
 
-
-                String fileName = SWBUtils.getApplicationPath() + "swbadmin/jsp/opensocial/frame.html";
-                File file = new File(fileName);
-                FileReader in = new FileReader(file);
-                StringBuilder sb = new StringBuilder();
-                char[] buffer = new char[1028];
-                int read = in.read(buffer);
-                while (read != -1)
+                
+                String path = "/work/" + paramRequest.getResourceBase().getWorkPath() + "/frame.jsp";
+                RequestDispatcher dis = request.getRequestDispatcher(path);
+                try
                 {
-                    String data = new String(buffer, 0, read);
-                    read = in.read(buffer);
-                    sb.append(data);
-                }                
-                String _frame = sb.toString();
-                String HtmlResponse = _frame.replace("<%=msg%>", msg.toString());
+                    request.setAttribute("paramRequest", paramRequest);
+                    request.setAttribute("msg", msg.toString());
+                    request.setAttribute("default_values", j_default_values.toString());                    
+                    request.setAttribute("html", body);
+                    dis.include(request, response);
+                }
+                catch (Exception e)
+                {
+                    log.error(e);
+                }
+
+                /*String HtmlResponse = iframeContent.replace("<%=msg%>", msg.toString());
                 HtmlResponse = HtmlResponse.replace("<%=context%>", SWBPortal.getContextPath());
                 HtmlResponse = HtmlResponse.replace("<%=default_values%>", j_default_values.toString());
                 HtmlResponse = HtmlResponse.replace("<%=js%>", javascript.toString());
@@ -462,8 +447,9 @@ public class IFrame
                 HtmlResponse = HtmlResponse.replace("<%=html%>", body);
                 PrintWriter out = response.getWriter();
                 out.write(HtmlResponse);
-                out.close();
+                out.close();*/
             }
+
         }
         catch (Exception e)
         {
