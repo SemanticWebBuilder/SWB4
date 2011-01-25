@@ -60,6 +60,7 @@ public final class JavaScript
                             read = reader.read(buffer);
                             sb.append(data);
                         }
+                        log.debug("file: "+file.getAbsolutePath()+" is loaded");
                         scripts.put(file.getName(), sb.toString());
                     }
                     catch(Exception e)
