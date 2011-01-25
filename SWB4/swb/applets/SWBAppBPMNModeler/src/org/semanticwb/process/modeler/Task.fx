@@ -27,7 +27,6 @@ public def TYPE_SCRIPT="script";
 public def TYPE_MANUAL="manual";
 public def TYPE_SEND="send";
 public def TYPE_RECEIVE="receive";
-
 public class Task extends Activity
 {
     var icons: ImageView[];
@@ -185,6 +184,11 @@ public class Task extends Activity
             is = 0.8;
         } else if(type.equals(TYPE_RECEIVE)) {
             message.styleClass = "modifierMessageCatch";
+            ix = -w / 2 + 5;
+            iy = -h / 2 + 3;
+            is = 0.8;
+        } else if(type.equals(TYPE_RULE)) {
+            message.styleClass = "modifierRule";
             ix = -w / 2 + 5;
             iy = -h / 2 + 3;
             is = 0.8;
