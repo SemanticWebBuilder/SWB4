@@ -108,9 +108,7 @@ public class MakeRequest
         String headers = request.getParameter("headers");
         log.debug("headers: " + headers);
         String postData = request.getParameter("postData");
-        log.debug("postData: " + postData);
-        String st = request.getParameter("st");
-        log.debug("MakeRequest st: " + st);
+        log.debug("postData: " + postData);        
         String authz = request.getParameter("authz");
         log.debug("authz: " + authz);
         String contentType = request.getParameter("contentType");

@@ -105,19 +105,7 @@ public class Metadata
                 for (FeatureDetail detail : gadget.getFeatureDetails())
                 {
                     metadata.accumulate("featureDetails", detail.toJSONObject());
-                }
-                /*SWBResourceURL iframeurl = renderURL;
-                iframeurl.setMode(SocialContainer.Mode_IFRAME);
-                iframeurl.setCallMethod(SWBResourceURL.Call_DIRECT);
-                ///&container=default&view=%25view%25&lang=%25lang%25&country=%25country%25&debug=%25debug%25&nocache=%25nocache%25&v=b4ea67fd7aa33422aa257ee3f534daf0&st=%25st%25
-
-                iframeurl.setParameter("url", gadget.getUrl());
-                iframeurl.setParameter("container", "default");
-                iframeurl.setParameter("view", "");
-                iframeurl.setParameter("nocache", "");
-                iframeurl.setParameter("v", "b4ea67fd7aa33422aa257ee3f534daf0");
-                iframeurl.setParameter("st", ""); // Token                
-                metadata.put("iframeUrl", iframeurl.toString());*/
+                }                
             }
             else
             {
@@ -148,7 +136,7 @@ public class Metadata
                 URI here = new URI(request.getScheme() + "://" + request.getServerName() + port + request.getRequestURI());
 
 
-                String st = request.getParameter("st");
+                
                 InputStream in = request.getInputStream();
                 StringBuilder sb = new StringBuilder();
                 byte[] buffer = new byte[1028];
@@ -175,19 +163,7 @@ public class Metadata
 
                     objresponse.put("gadgets", array);
                     SocialUser socialuser = null;
-                    User user = paramRequest.getUser();
-                    if (st != null)
-                    {
-                        String[] values = st.split(":");
-                        if (values.length > 2)
-                        {
-                            String viewerId = values[1];
-                            if (!(user != null && user.getId() != null && user.getId().equals(viewerId)))
-                            {
-                                user = null;
-                            }
-                        }
-                    }
+                    User user = paramRequest.getUser();                    
 
                     socialuser = SocialContainer.getSocialUser(user, request.getSession(),site);
                     if (socialuser != null)
