@@ -4,6 +4,7 @@
  */
 package org.semanticwb.opensocial.resources;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -46,6 +47,12 @@ public class Proxy
             }
             response.setStatus(con.getResponseCode());
             in.close();
+        }
+        catch (FileNotFoundException e)
+        {
+            response.sendError(500);
+            log.debug(e);
+            throw e;
         }
         catch (IOException e)
         {
