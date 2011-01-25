@@ -16,7 +16,7 @@
     -gateway-second-color: #FFFAA6;
     -sequence-normal-stroke: -normal-stroke;
     -tooltip-stroke: gray;
-    -tooltip-first-color: lightyellow;
+    -tooltip-first-color: #fafad2;
     -tooltip-second-color: #E5B949;
     -tooltip-third-color: #daa520;
     -tooltip-light-second-color: #FFFFFF00;
@@ -25,20 +25,20 @@
     -task-second-color: #BFD2E0;
     -containerbutton-color:#F2F2F2;
     -containerbutton-stroke:#666666;
-    -pool-normal-stroke:#ADADAE;
-    -pool-color:#E8E8FF;
+    -pool-normal-stroke:black;
+    -pool-color:#FFFFFF;
 }
 .modifierGateway {
     -fx-stroke: -gateway-normal-stroke;
-    -fx-stroke-width: 4;
+    -fx-stroke-width: 3;
     -fx-stroke-line-cap: round;
-    -fx-fill:white;
+    -fx-fill:-gateway-first-color
 }
 
 .modifierGateway2 {
     -fx-stroke: -gateway-normal-stroke;
-    -fx-stroke-width: 2;
-    -fx-fill:white;
+    -fx-stroke-width: 1;
+    -fx-fill:-gateway-first-color;
 }
 
 .modifierLoop {
@@ -51,6 +51,11 @@
 
 .modifierCollapsed {
     -fx-image:url("images/n_collapsed.png");
+}
+
+.modifierCollapsed#rect {
+    -fx-stroke: -normal-stroke;
+    -fx-fill:-task-first-color;
 }
 
 .modifierComp {
@@ -158,93 +163,112 @@
 }
 
 .startEvent {
-	-fx-cursor: hand;
+    -fx-cursor: hand;
     -fx-stroke: -startevent-normal-stroke;
-    -fx-stroke-width:2;
-    -fx-fill:white;
+    -fx-stroke-width:1;
+    -fx-fill:-startevent-first-color;
 }
 
 .startEvent:hover {
     -fx-stroke:-hover-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .startEvent:focused {
     -fx-stroke:-focus-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .interEvent {
     -fx-stroke:-interevent-normal-stroke;
-    -fx-stroke-width: 2;
-    -fx-fill:white;
+    -fx-stroke-width: 1;
+    -fx-fill:-interevent-first-color;
 }
 
 .interEvent#marker {
     -fx-stroke:-interevent-normal-stroke;
     -fx-stroke-width: 1;
-    -fx-fill:white;
+    -fx-fill:-interevent-first-color;
 }
 
 .interEvent:hover {
     -fx-stroke:-hover-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .interEvent:focused {
     -fx-stroke:-focus-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .endEvent {
     -fx-stroke:-endevent-normal-stroke;
-    -fx-stroke-width: 4;
+    -fx-stroke-width: 2;
     -fx-cursor: hand;
-    -fx-fill:white;
+    -fx-fill:-endevent-first-color;
 }
 
 .endEvent:hover {
     -fx-stroke:-hover-stroke;
-    -fx-stroke-width: 5;
+    -fx-stroke-width: 3;
 }
 
 .endEvent:focused {
     -fx-stroke:-focus-stroke;
-    -fx-stroke-width: 5;
+    -fx-stroke-width: 3;
 }
 
 .gateway {
     -fx-stroke:-gateway-normal-stroke;
-    -fx-stroke-width: 2;
-    -fx-fill:white;
+    -fx-stroke-width: 1;
+    -fx-fill:-gateway-first-color;
     -fx-cursor: hand;
 }
 
 .gateway:hover {
     -fx-stroke:-hover-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .gateway:focused {
     -fx-stroke:-focus-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .task {
     -fx-arc-width: 15;
     -fx-arc-height: 15;
     -fx-stroke: -normal-stroke;
-    -fx-stroke-width: 2;
+    -fx-stroke-width: 1;
     -fx-cursor: hand;
-    -fx-fill:white;
+    -fx-fill:-task-first-color;
 }
 
 .task:hover {
     -fx-stroke: -hover-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .task:focused {
+    -fx-stroke: -focus-stroke;
+    -fx-stroke-width: 2;
+}
+
+.globalTask {
+    -fx-arc-width: 15;
+    -fx-arc-height: 15;
+    -fx-stroke: -normal-stroke;
+    -fx-stroke-width: 2;
+    -fx-cursor: hand;
+    -fx-fill:-task-first-color;
+}
+
+.globalTtask:hover {
+    -fx-stroke: -hover-stroke;
+    -fx-stroke-width: 3;
+}
+
+.globalTask:focused {
     -fx-stroke: -focus-stroke;
     -fx-stroke-width: 3;
 }
@@ -253,7 +277,7 @@
     -fx-stroke: -normal-stroke;
     -fx-stroke-width: 1;
     -fx-cursor: hand;
-    -fx-fill:white;
+    -fx-fill:-task-first-color;
 }
 
 .dataObject:hover {
@@ -268,18 +292,18 @@
 
 .artifact {
     -fx-stroke: -normal-stroke;
-    -fx-stroke-width: 2;
+    -fx-stroke-width: 1;
     -fx-cursor: hand
 }
 
 .artifact:hover {
     -fx-stroke: -hover-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .artifact:focused {
     -fx-stroke: -focus-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .artifact#textbox {
@@ -289,7 +313,7 @@
 
 .connObject {
     -fx-stroke:-normal-stroke;
-    -fx-stroke-width: 2;
+    -fx-stroke-width: 1.5;
     -fx-cursor: hand;
 }
 
@@ -303,12 +327,12 @@
 
 .connObject:hover {
     -fx-stroke:-hover-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .connObject:focused {
     -fx-stroke:-focus-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .containerButton {
@@ -342,11 +366,11 @@
 }
 
 .arrowMessage:hover {
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .arrowMessage:focused {
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 2;
 }
 
 .editableTextBox {
@@ -439,7 +463,8 @@
 }
 
 .scrollView {
-    -fx-background-color: #EDEDED;
+    -fx-background-color: white;
+    -fx-cursor: crosshair;
 }
 
 .splash {
@@ -497,7 +522,7 @@
 }
 
 .resizepoint {
-	-fx-fill: #f5f5ff;
-	-fx-stroke: #03689a;
-	-fx-stroke-width: 1;
+    -fx-fill: #f5f5ff;
+    -fx-stroke: #03689a;
+    -fx-stroke-width: 1;
 }
