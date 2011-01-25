@@ -175,7 +175,7 @@ public class SocialContainer extends GenericResource
         {
             if ((user1 == null && user2 != null) || (user1 != null && user2 == null))
             {
-                log.debug("cambio de usuario old: " + user2 + " new: " + user2);
+                log.debug("cambio de usuario old: " + user2 + " new: " + user1);
                 socialUser = new SocialUser(user, site);
                 session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
             }
@@ -183,7 +183,7 @@ public class SocialContainer extends GenericResource
             {
                 if (!user1.equals(user2))
                 {
-                    log.debug("cambio de usuario old: " + user2 + " new: " + user2);
+                    log.debug("cambio de usuario old: " + user2 + " new: " + user1);
                     socialUser = new SocialUser(user, site);
                     session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
                 }
