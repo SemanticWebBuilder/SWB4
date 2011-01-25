@@ -246,6 +246,7 @@ function generateGadgets(metadata)
             var moduleId=metadata.gadgets[i].moduleId;
             var secureToken0=generateSecureToken(url);
             var gadget=shindig.container.createGadget({'id':moduleId,'title':title,'moduleId':moduleId,'secureToken':secureToken0,'specUrl': url,'userPrefs': metadata.gadgets[i].userPrefs});
+            gadget.setStyle('width:<%=iframewidth%>px;height: <%=iframeheight%>px');
             gadget.onClose=function()
             {
                 var resp=confirm('¿Desea eliminar el gadget '  + gadget.title +' permanentemente?');
@@ -298,23 +299,14 @@ function renderGadgets() {
 
 <div id="layout-root" class="gadgets-layout-root">
     <div dojoType="dojox.layout.GridContainer"
-
-         mode="left"
-							id="grid"
-                                                        dragRestriction="false"
-                                                        isAutoOrganized="false"
-                                                        autoRefresh="false"
-							acceptTypes="dojox.widget.Portlet"
-							hasResizableColumns="true"
-							opacity="0.3"
-							nbZones="<%=nbZones%>"
-							allowAutoScroll="true"
-							minChildWidth="<%=minChildWidth%>"
-							minColWidth="10"
-						>
-
-    </div>
-
+			id="grid"
+			isAutoOrganized="false"
+			hasResizableColumns="false"
+			nbZones="3"
+			dragHandleClass="dijitTitlePaneTitle"
+			style="width:100%;"
+			doLayout="false"
+	></div>
 </div>
 <%
     if(moduleid!=null)
