@@ -41,4 +41,16 @@ public class Question extends org.semanticwb.resources.sem.forumcat.base.Questio
 
         return ret;
     }
+
+    public boolean userHasAnswered(User user) {
+        boolean ret = false;
+        Iterator<Answer> answers = listAnswerInvs();
+        while (!ret && answers.hasNext()) {
+            Answer a = answers.next();
+            if (a.getCreator().getURI().equals(user.getURI())) {
+                ret = true;
+            }
+        }
+        return ret;
+    }
 }
