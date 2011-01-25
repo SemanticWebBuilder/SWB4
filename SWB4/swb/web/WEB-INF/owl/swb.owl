@@ -83,6 +83,13 @@
     </rdfs:subClassOf>
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
+  <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement">
+    <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
+    <rdfs:comment>Elemento que sirve para crear instancias de objetos y relacionarlos al actual</rdfs:comment>
+    <rdfs:label xml:lang="en">Object Related</rdfs:label>
+    <rdfs:label xml:lang="es">Objetos Relacionados</rdfs:label>
+    <rdf:type rdf:resource="#FormElement"/>
+  </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormViewRef">
     <rdfs:subClassOf>
       <owl:Class rdf:ID="Reference"/>
@@ -1782,12 +1789,12 @@
         <swb:hasHerarquicalNode>
           <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_ResourceCollections">
             <swb:title xml:lang="es">Colección de Recursos</swb:title>
-            <swb:title xml:lang="en">Rresource Collections</swb:title>
+            <swbxf:heClass rdf:resource="#ResourceCollection"/>
             <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
             >68</swb:index>
             <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >swbIconTemplateGroup</swb:iconClass>
-            <swbxf:heClass rdf:resource="#ResourceCollection"/>
+            <swb:title xml:lang="en">Resource Collections</swb:title>
           </swbxf:HerarquicalNode>
         </swb:hasHerarquicalNode>
         <rdfs:subClassOf rdf:resource="#Localeable"/>
