@@ -6094,9 +6094,10 @@ shindig.Gadget.prototype.render = function(chrome) {
               var contenthtml='<div id="' + gadget.getUserPrefsDialogId() + '" class="' +
               this.cssClassGadgetUserPrefsDialog + '"></div>';
               //settings.startup();
-              var row=Math.floor(gadget.id/3);
+              //var column=Math.floor(gadget.id/3);
               var column=2-(gadget.id%3);
-              grid.addChild(porlet,column,row);
+              var zone=Math.floor(gadget.id/3);              
+              grid.addChild(porlet,column,zone);
               porlet.startup();
 
               this.getContent(function(content) {

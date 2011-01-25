@@ -1,7 +1,4 @@
-<%@page contentType="text/html"%>
-<%@page import="org.semanticwb.opensocial.resources.*,org.semanticwb.opensocial.model.*,org.semanticwb.opensocial.resources.*,java.util.Date, java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
-
-<%
+<%@page contentType="text/html"%><%@page import="org.semanticwb.opensocial.resources.*,org.semanticwb.opensocial.model.*,org.semanticwb.opensocial.resources.*,java.util.Date, java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%><%
 
         String minChildWidth="150";
         String minChildWidthforCanvas="500";
@@ -222,8 +219,7 @@ function sendRequestToServer(url, method, opt_postParams, opt_callback, opt_excl
 
 
 function removeGadget(gadget) {
-    var request = {'url':gadget.specUrl,'moduleid':gadget.moduleId,'service':'remove'};
-    alert('a');
+    var request = {'url':gadget.specUrl,'moduleid':gadget.moduleId,'service':'remove'};    
     sendRequestToServer("<%=remove%>", "POST",gadgets.json.stringify(request), null, true);
   };
 
