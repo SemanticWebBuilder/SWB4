@@ -4,6 +4,8 @@
  */
 package org.semanticwb.opensocial.resources;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -33,6 +35,7 @@ import org.jdom.output.DOMOutputter;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
@@ -67,9 +70,26 @@ public class SocialContainer extends GenericResource
     public static final String Mode_SERVICECONTAINER = "servicecontainer";
     public static final String Mode_RPC = "RPC";
     private static final Set<String> supportedFeatures = new HashSet<String>();
+    private static final String _package = "/org/semanticwb/opensocial/web/";
+    private static final String[] files =
+    {
+        "config.jsp",
+        "container.jsp",        
+        "frame.jsp",
+        "gadgets.css",
+        "list.jsp",
+        "rpc_relay.html",
+        "sinfoto.png"
+    };
 
     static
     {
+
+
+
+
+
+
         supportedFeatures.add("settile");
         supportedFeatures.add("flash");
         supportedFeatures.add("rpc");
@@ -77,7 +97,8 @@ public class SocialContainer extends GenericResource
         supportedFeatures.add("dynamic-height");
         String[] urls =
         {
-            "http://hosting.gmodules.com/ig/gadgets/file/111782983456439885554/Google-Gadget-RSS.xml", "http://www.tc.df.gov.br/MpjTcdf/AlcCalc.xml"
+            "http://hosting.gmodules.com/ig/gadgets/file/111782983456439885554/Google-Gadget-RSS.xml", "http://www.tc.df.gov.br/MpjTcdf/AlcCalc.xml",
+            "http://www.italiagadget.net/news/newsussci.xml"
         };//,http://www.delsearegional.us/academic/classes/highschool/science/physics/age/age.xml","http://midots.com/gadgets/xmldocs/midotsImgViewBeautifulPhotosOfIslands_11.xml","http://hosting.gmodules.com/ig/gadgets/file/112581010116074801021/spider.xml","http://www.donalobrien.net/apps/google/currency.xml","http://opensocial-resources.googlecode.com/svn/tests/trunk/suites/0.8/compliance/reference.xml","http://localhost:8080/swb/samplecontainer/examples/horoscope.xml","http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml","http://www.google.com/ig/modules/horoscope/horoscope.xml","http://www.google.com/ig/modules/test_setprefs_multiple_ifpc.xml"};
 
         WebSite site = WebSite.ClassMgr.getWebSite("reg_digital_demo");
@@ -287,51 +308,34 @@ public class SocialContainer extends GenericResource
             SWBParamRequest paramRequest) throws SWBResourceException,
             IOException
     {
+
+        String pathdir = SWBPortal.getWorkPath()+ this.getResourceBase().getWorkPath();
+        File dir = new File(pathdir);
+        for (String file : files)
+        {
+            checkfiles(file, dir);
+        }
         Iterator<Gadget> gadgets = Gadget.ClassMgr.listGadgets();
-
-
-
-
         while (gadgets.hasNext())
         {
             Gadget g = gadgets.next();
             g.getDocument();
-
-
-
-
         }
         if (paramRequest.getMode().equals(Mode_METADATA))
         {
             doMetadata(request, response, paramRequest);
-
-
-
-
         }
         else if (paramRequest.getMode().equals(Mode_IFRAME))
         {
             doIframe(request, response, paramRequest);
-
-
-
-
         }
         else if (paramRequest.getMode().equals(Mode_JAVASCRIPT))
         {
             doJavaScript(request, response, paramRequest);
-
-
-
-
         }
         else if (paramRequest.getMode().equals(Mode_PROXY))
         {
             doProxy(request, response, paramRequest);
-
-
-
-
         }
         else if (paramRequest.getMode().equals(Mode_CONFIGGADGET))
         {
@@ -348,30 +352,18 @@ public class SocialContainer extends GenericResource
         else if (paramRequest.getMode().equals(Mode_MAKE_REQUEST))
         {
             doMakeRequest(request, response, paramRequest);
-
-
-
-
         }
         else if (paramRequest.getMode().equals(Mode_RPC))
         {
             doRPC(request, response, paramRequest);
-
-
-
-
         }
         else
         {
             super.processRequest(request, response, paramRequest);
-
-
-
-
         }
     }
 
-    public static String loadScript(String name)
+    /*public static String loadScript(String name)
     {
         StringBuilder sb = new StringBuilder();
         InputStream in = JavaScript.class.getResourceAsStream("/org/semanticwb/opensocial/javascript/" + name);
@@ -400,7 +392,7 @@ public class SocialContainer extends GenericResource
 
 
         return sb.toString();
-    }
+    }*/
 
     public static String loadFrame(String name)
     {
@@ -612,7 +604,7 @@ public class SocialContainer extends GenericResource
                     {
                         String moduleid = json.getString("moduleid");
                         String url = json.getString("url");
-                        if (url!=null && !"".equals(url))
+                        if (url != null && !"".equals(url))
                         {
                             Gadget gadget = SocialContainer.getGadget(url, site);
                             if (gadget != null && moduleid != null && !"".equals(moduleid))
@@ -706,9 +698,39 @@ public class SocialContainer extends GenericResource
         }
     }
 
+    private void checkfiles(String file, File dir)
+    {
+        if(!dir.exists())
+        {
+            dir.mkdirs();
+        }
+        File filecheck = new File(dir.getAbsolutePath() + "/" + file);
+        if (!filecheck.exists())
+        {
+            try
+            {
+                log.debug("Writing file "+filecheck.getAbsolutePath());
+                FileOutputStream out = new FileOutputStream(filecheck);                
+                InputStream in = SocialContainer.class.getResourceAsStream(_package + file);
+                byte[] buffer = new byte[2048];
+                int read = in.read(buffer);
+                while (read != -1)
+                {
+                    out.write(buffer, 0, read);
+                    read = in.read(buffer);
+                }
+                log.debug("file "+filecheck.getAbsolutePath()+" was created");
+            }
+            catch (Exception e)
+            {
+                log.error(e);
+            }
+        }
+    }
+
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+    {        
         WebSite site = paramRequest.getWebPage().getWebSite();
         User user = paramRequest.getUser();
         SocialUser socialuser = new SocialUser(user, site);
@@ -720,7 +742,7 @@ public class SocialContainer extends GenericResource
                 socialuser.checkOsapiFeature(g, true);
             }
         }
-        String path = "/swbadmin/jsp/opensocial/container.jsp";
+        String path =  "/work/"+ paramRequest.getResourceBase().getWorkPath()+"/container.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
         {
@@ -764,7 +786,7 @@ public class SocialContainer extends GenericResource
 
     public void doList(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        String path = "/swbadmin/jsp/opensocial/list.jsp";
+        String path = "/work/"+paramRequest.getResourceBase().getWorkPath()+"/list.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
         {
@@ -786,7 +808,7 @@ public class SocialContainer extends GenericResource
             Gadget g = getGadget(url, site);
             if (g != null)
             {
-                String path = "/swbadmin/jsp/opensocial/config.jsp";
+                String path = "/work/"+ paramRequest.getResourceBase().getWorkPath()+"/config.jsp";
                 RequestDispatcher dis = request.getRequestDispatcher(path);
                 try
                 {
