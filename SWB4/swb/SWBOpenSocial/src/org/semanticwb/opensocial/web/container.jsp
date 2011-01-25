@@ -99,10 +99,8 @@
  dojo.require("dijit.dijit");
  dojo.require("dojo.parser");
  dojo.require("dijit.Dialog");
-  dojo.require("dojox.layout.GridContainer");
-  dojo.require("dojox.widget.Portlet");
-  dojo.require("dojox.layout.TableContainer");
-  dojo.require("dijit.form.TextBox");
+ dojo.require("dojox.layout.GridContainer");
+ dojo.require("dojox.widget.Portlet"); 
  dojo.addOnLoad(function(){
       dojo.parser.parse(); // or set djConfig.parseOnLoad = true
 });
@@ -112,21 +110,11 @@
 </script>
 <script type="text/javascript" src="<%=script%>"></script>
 <script type="text/javascript">
-
-
-var parentUrl = document.location.href;
-var viewMatches = /[?&]view=((?:[^#&]+|&amp;)+)/.exec(parentUrl);
-  var current_view = (viewMatches)
-      ? viewMatches[1]
-      : "default";
-
-
+var baseUrl = document.location.href;
+//var parentUrl=baseUrl;
 var viewerId = '<%=id%>';
 var ownerId = '<%=id%>';
-var baseUrl = parentUrl;//.substring(0, parentUrl.indexOf('samplecontainer.html'));
 var iframeBaseUrl = baseUrl.replace("localhost", "127.0.0.1");
-
-
 <%
     StringBuilder _gadgets=new StringBuilder("[");
 
@@ -281,21 +269,13 @@ function renderGadgets() {
 </head>
 
 <script type="text/javascript">
-
-
-  //dojo.require("dojox.layout.TableContainer");
-  //dojo.require("dijit.form.TextBox");
-
-
   function showDialogEmail()
-  {
-      //dojo.require("dijit.dijit");
-      var edialog=dijit.byId('dialog');
-
-    if(edialog)
-    {
-        edialog.show();
-    }
+  {      
+        var edialog=dijit.byId('dialog');
+        if(edialog)
+        {
+            edialog.show();
+        }
   }
 
 
