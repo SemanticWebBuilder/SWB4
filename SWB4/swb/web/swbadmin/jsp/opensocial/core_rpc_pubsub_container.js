@@ -6390,8 +6390,7 @@ shindig.BaseIfrGadget.prototype.queryIfrGadgetType_ = function() {
     "METHOD" : "POST",
     "POST_DATA" : gadgets.json.stringify(request)
   };  
-  var url = "<%=metadata%>?st=" + this.secureToken;
-  //var url = this.serverBase_+"metadata?st=" + this.secureToken;
+  var url = "<%=metadata%>?st=" + this.secureToken;  
   
 
   gadgets.io.makeNonProxiedRequest(url,handleJSONResponse,makeRequestParams,"application/javascript");
@@ -6421,8 +6420,7 @@ shindig.BaseIfrGadget.prototype.queryIfrGadgetType_ = function() {
 
 shindig.IfrGadget = {
   getMainContent: function(continuation) {
-    var iframeId = this.getIframeId();    
-    //gadgets.rpc.setRelayUrl(iframeId, this.serverBase_ + this.rpcRelay);
+    var iframeId = this.getIframeId();        
     gadgets.rpc.setRelayUrl(iframeId, this.rpcRelay);
     gadgets.rpc.setAuthToken(iframeId, this.rpcToken);
     
