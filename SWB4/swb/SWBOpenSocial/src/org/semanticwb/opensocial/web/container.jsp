@@ -216,9 +216,9 @@ function requestGadgetMetaData(opt_callback) {
 
     var request = {
       context: {
-        country: "default",
-        language: "default",
-        view: current_view,
+        country: '<%=_country%>',
+        language: '<%=lang%>',
+        view: '<%=defaultview%>',
         container: "default"
       },
       gadgets: _gadgets
