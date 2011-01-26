@@ -14,7 +14,6 @@ import org.semanticwb.opensocial.model.Gadget;
  */
 public class UserPrefManager extends HashSet<UserPrefs> {
 
-
     public boolean contains(Gadget gadget,String moduleId)
     {
         if(gadget!=null && moduleId!=null)
