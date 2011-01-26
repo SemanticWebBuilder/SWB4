@@ -6063,8 +6063,7 @@ shindig.DojoPorletManager.prototype.getGadgetChrome =
  *        javascript
  */
 shindig.Gadget = function(params) {
-  this.userPrefs = {};
-
+  this.userPrefs = {};  
   if (params) {
     for (var name in params)  if (params.hasOwnProperty(name)) {
       this[name] = params[name];
@@ -6132,8 +6131,8 @@ shindig.Gadget.prototype.render = function(chrome) {
               var idsetting='setting_'+gadget.id;
               var contenthtml='<div id="' + gadget.getUserPrefsDialogId() + '" class="' +
               this.cssClassGadgetUserPrefsDialog + '"></div>';
-              var nbzones=grid.nbZones;
-              var zone=(gadget.id%nbzones);
+              var nbzones=grid.nbZones;              
+              var zone=(gadget.index%nbzones);
               var column=1;
               grid.addChild(porlet,zone,column);
               porlet.startup();
@@ -6657,8 +6656,7 @@ shindig.Container.prototype.createGadget = function(opt_params) {
 };
 
 shindig.Container.prototype.addGadget = function(gadget) {
-  //gadget.id = this.getNextGadgetInstanceId();
-  
+  gadget.index = this.getNextGadgetInstanceId();  
   gadget.id=gadget.moduleId;
   this.gadgets_[this.getGadgetKey_(gadget.id)] = gadget;
 };
