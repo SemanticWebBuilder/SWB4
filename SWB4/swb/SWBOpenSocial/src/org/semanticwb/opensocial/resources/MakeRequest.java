@@ -84,8 +84,8 @@ public class MakeRequest
 
     private static boolean isValidAtom(Document doc)
     {
-        return true;
-        /*SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.RELAXNG_NS_URI);
+        
+        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.RELAXNG_NS_URI);
         StringReader reader = new StringReader(atomchema);
         try
         {
@@ -113,7 +113,7 @@ public class MakeRequest
         {
             log.debug(e);
             return false;
-        }*/
+        }
     }
 
     private void sendResponse(String objresponse, HttpServletResponse response) throws IOException
@@ -274,6 +274,7 @@ public class MakeRequest
         }
         if (hasChilds)
         {
+            
             childs = e.getChildNodes();
             for (int i = 0; i < childs.getLength(); i++)
             {
@@ -330,11 +331,11 @@ public class MakeRequest
                 {
                     rootname = "channel";
                 }
-                if (contentType!=null && contentType.startsWith("application/atom+xml"))
+                else if(contentType != null && contentType.startsWith("application/atom+xml"))
                 {
                     rootname = "feed";
                 }
-                if (contentType!=null && contentType.startsWith("application/xml"))
+                else if(contentType != null && contentType.equals("application/xml"))
                 {
                     rootname = "check";
                 }
@@ -360,7 +361,7 @@ public class MakeRequest
                         {
                             rootname="feed";
                         }
-                        if(doc.getElementsByTagName("channel").getLength()>0)
+                        else if(doc.getElementsByTagName("channel").getLength() > 0)
                         {
                             rootname="channel";
                         }
@@ -430,12 +431,13 @@ public class MakeRequest
         sendResponse(responseJSONObject.toString(4), response);
 
     }
+    
 
     public static void main(String[] args)
     {
         try
         {
-            JSONObject resp = MakeRequest.getFeed(new URL("http://www.eluniversal.com.mx/rss/notashome.xml"),"");
+            JSONObject resp = MakeRequest.getFeed(new URL("http://www.tea-tron.com/rubenramos/blog/feed/"),"");
             System.out.println("resp");
             System.out.println(resp.toString(6));
         }
