@@ -518,6 +518,24 @@ public class SWBARule extends GenericResource {
             comboAtt.put(SWBRuleMgr.TAG_INT_USERIP, hmAttr); //falta tag de IP
             vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_USERIP); //falta tag de IP
 
+            /*  Descomentar cuando se tenga definido el tag para Pagina Web Visitada
+
+             //Se agrega la parte de WebPage visitada por el usuario
+            hmAttr = new HashMap();
+            hmOper = new HashMap();
+            hmValues = new HashMap();
+            hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgWebPageUser"));
+            hmAttr.put("Tipo", "TEXT");
+            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+            hmAttr.put("Operador", hmOper);
+            comboAtt.put(SWBRuleMgr.TAG_INT_USERIP, hmAttr); //falta tag de WebPageUser
+            vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_USERIP); //falta tag de WebPageUser
+
+
+             *
+             */
+            
             //Tipo de usuario
             Iterator<String> usrTypes = usrRepo.getUserTypes();
             log.debug("usrTypes:" + usrTypes.hasNext());
