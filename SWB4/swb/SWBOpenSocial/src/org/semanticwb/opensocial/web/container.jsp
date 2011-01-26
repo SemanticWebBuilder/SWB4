@@ -250,7 +250,7 @@ function generateGadgets(metadata)
             gadget.setHeight('<%=iframeheight%>');
             gadget.onClose=function()
             {
-                var resp=confirm('¿Desea eliminar el gadget '  + gadget.title +' permanentemente?');
+                var resp=confirm('¿Desea eliminar el gadget '  + this.title +' permanentemente?');
                 if(resp)
                 {
                     removeGadget(gadget);
