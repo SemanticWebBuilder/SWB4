@@ -246,7 +246,8 @@ function generateGadgets(metadata)
             var moduleId=metadata.gadgets[i].moduleId;
             var secureToken0=generateSecureToken(url);
             var gadget=shindig.container.createGadget({'id':moduleId,'title':title,'moduleId':moduleId,'secureToken':secureToken0,'specUrl': url,'userPrefs': metadata.gadgets[i].userPrefs});
-            gadget.setStyle('width:<%=iframewidth%>px;height: <%=iframeheight%>px');
+            gadget.setWidth('<%=iframewidth%>');
+            gadget.setHeight('<%=iframeheight%>');
             gadget.onClose=function()
             {
                 var resp=confirm('¿Desea eliminar el gadget '  + gadget.title +' permanentemente?');
