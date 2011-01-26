@@ -48,13 +48,14 @@ public class SocialUser
         this.user = user == null ? null : user.getId();
         refresh(user, site);
     }
-    public void removeGadget(Gadget gadget,String moduleid)
+
+    public void removeGadget(Gadget gadget, String moduleid)
     {
-        if(user==null)
+        if (user == null)
         {
-            if(userprefsManager.contains(gadget, moduleid))
+            if (userprefsManager.contains(gadget, moduleid))
             {
-                UserPrefs prefs=userprefsManager.get(gadget, moduleid);
+                UserPrefs prefs = userprefsManager.get(gadget, moduleid);
                 userprefsManager.remove(prefs);
             }
         }
@@ -70,7 +71,7 @@ public class SocialUser
                 while (personalizedGadgeds.hasNext())
                 {
                     PersonalizedGadged pgadget = personalizedGadgeds.next();
-                    if(pgadget.getGadget()!=null && pgadget.getGadget().getUrl().equals(gadget.getUrl()) && pgadget.getId().equals(moduleid))
+                    if (pgadget.getGadget() != null && pgadget.getGadget().getUrl().equals(gadget.getUrl()) && pgadget.getId().equals(moduleid))
                     {
                         pgadget.remove();
                     }
@@ -78,6 +79,7 @@ public class SocialUser
             }
         }
     }
+
     public final void refresh(User user, WebSite site)
     {
         lang = user == null || user.getLanguage() == null ? "ALL" : user.getLanguage();
@@ -301,7 +303,7 @@ public class SocialUser
         if (gadget != null)
         {
             getVariablesubstituion.putAll(gadget.getMessagesFromGadget(language, country));
-            if(formated)
+            if (formated)
             {
                 getVariablesubstituion.put("__MODULE_ID__", moduleID);
                 getVariablesubstituion.put("__MSG_LANG__", language);
@@ -329,11 +331,11 @@ public class SocialUser
                             while (list.hasNext())
                             {
                                 UserPref pref = list.next();
-                                String key=pref.getKey();
-                                String value=pref.getValue();
-                                if(formated)
+                                String key = pref.getKey();
+                                String value = pref.getValue();
+                                if (formated)
                                 {
-                                    key="__UP_" + key + "__";
+                                    key = "__UP_" + key + "__";
                                 }
                                 getVariablesubstituion.put(key, value);
                             }
@@ -351,9 +353,9 @@ public class SocialUser
                         for (String key : prefs.keySet())
                         {
                             String value = prefs.get(key);
-                            if(formated)
+                            if (formated)
                             {
-                                    key="__UP_" + key + "__";
+                                key = "__UP_" + key + "__";
                             }
                             getVariablesubstituion.put(key, value);
                         }
@@ -366,62 +368,70 @@ public class SocialUser
 
     public void saveUserPref(Gadget gadget, String moduleId, String key, String value)
     {
-        if (user == null)
+        if (gadget != null && moduleId != null)
         {
-            if (!userprefsManager.contains(gadget, moduleId))
+            if (user == null)
             {
-                userprefsManager.add(new UserPrefs(gadget, moduleId));
-            }
-            UserPrefs prefs = userprefsManager.get(gadget, moduleId);
-            if (key != null && value != null)
-            {
-                prefs.put(key, value);
-            }
-        }
-        else
-        {
-            WebSite _site = getWebSite();
-            User _user = getUser();
-            if (_site != null && _user != null)
-            {
-                PersonalizedGadged pgadget = null;
-
-                Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(_user, _site);
-                while (preferences.hasNext())
+                if (!userprefsManager.contains(gadget, moduleId))
                 {
-                    PersonalizedGadged personalizedGadged = preferences.next();
-                    if (personalizedGadged.getGadget() != null)
+                    userprefsManager.add(new UserPrefs(gadget, moduleId));
+                }
+                UserPrefs prefs = userprefsManager.get(gadget, moduleId);
+                if (prefs == null)
+                {
+                    prefs = new UserPrefs(gadget, moduleId);
+                    userprefsManager.add(prefs);
+                }
+                if (key != null && value != null)
+                {
+                    prefs.put(key, value);
+                }
+            }
+            else
+            {
+                WebSite _site = getWebSite();
+                User _user = getUser();
+                if (_site != null && _user != null)
+                {
+                    PersonalizedGadged pgadget = null;
+
+                    Iterator<PersonalizedGadged> preferences = PersonalizedGadged.ClassMgr.listPersonalizedGadgedByUser(_user, _site);
+                    while (preferences.hasNext())
                     {
-                        String urltest = personalizedGadged.getGadget().getUrl();
-                        if (urltest.equals(gadget.getUrl()) && personalizedGadged.getId().equals(moduleId))
+                        PersonalizedGadged personalizedGadged = preferences.next();
+                        if (personalizedGadged.getGadget() != null)
                         {
-                            pgadget = personalizedGadged;
-                            break;
+                            String urltest = personalizedGadged.getGadget().getUrl();
+                            if (urltest.equals(gadget.getUrl()) && personalizedGadged.getId().equals(moduleId))
+                            {
+                                pgadget = personalizedGadged;
+                                break;
+                            }
                         }
                     }
-                }
-                if (pgadget != null && value != null)
-                {
-                    boolean exists = false;
-                    Iterator<UserPref> userprefs = pgadget.listUserPrefses();
-                    while (userprefs.hasNext())
+                    if (pgadget != null && value != null)
                     {
-                        UserPref pref = userprefs.next();
-                        if (pref.getKey().equals(key))
+                        boolean exists = false;
+                        Iterator<UserPref> userprefs = pgadget.listUserPrefses();
+                        while (userprefs.hasNext())
                         {
+                            UserPref pref = userprefs.next();
+                            if (pref.getKey().equals(key))
+                            {
+                                pref.setValue(value);
+                                exists = true;
+                            }
+                        }
+                        if (!exists)
+                        {
+                            UserPref pref = UserPref.ClassMgr.createUserPref(_site);
+                            pref.setKey(key);
                             pref.setValue(value);
-                            exists = true;
+                            pgadget.addUserPrefs(pref);
                         }
                     }
-                    if (!exists)
-                    {
-                        UserPref pref = UserPref.ClassMgr.createUserPref(_site);
-                        pref.setKey(key);
-                        pref.setValue(value);
-                        pgadget.addUserPrefs(pref);
-                    }
-                }
 
+                }
             }
         }
     }
