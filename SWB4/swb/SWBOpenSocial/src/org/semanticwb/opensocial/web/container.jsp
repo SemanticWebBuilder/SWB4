@@ -207,8 +207,10 @@ function sendRequestToServer(url, method, opt_postParams, opt_callback, opt_excl
 
 
 function removeGadget(gadget) {
+    var aleatorio = Math.round(Math.random()*99);
     var request = {'url':gadget.specUrl,'moduleid':gadget.moduleId,'service':'remove'};
-    sendRequestToServer("<%=remove%>", "POST",gadgets.json.stringify(request), null, true);
+    var remove='<%=remove%>?st='+aleatorio;
+    sendRequestToServer(remove, "POST",gadgets.json.stringify(request), null,true);
   };
 
 function requestGadgetMetaData(opt_callback) {
@@ -253,7 +255,11 @@ function generateGadgets(metadata)
                 var resp=confirm('¿Desea eliminar el gadget '  + this.title +' permanentemente?');
                 if(resp)
                 {
-                    removeGadget(this);
+                    var id_gadget=this.id;
+                    id_gadget=id_gadget.substring(21);
+                    var gadget_ = shindig.container.getGadget(id_gadget);
+                    if(gadget_)
+                    	removeGadget(gadget_);
                 }
             };
             gadget.setServerBase(iframeBaseUrl);
