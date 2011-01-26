@@ -84,6 +84,9 @@ public class MakeRequest
 
     }
 
+
+
+
     private void sendResponse(Document objresponse, HttpServletResponse response) throws IOException
     {
         Charset defaultCharset = Charset.defaultCharset();
@@ -128,6 +131,48 @@ public class MakeRequest
         String gadget = request.getParameter("gadget");
         log.debug(gadget);
         Gadget g = SocialContainer.getGadget(gadget, site);
+
+
+        /* para cumplir con el siguiente código
+         * switch (params.CONTENT_TYPE) {
+        case "JSON":
+        case "FEED":
+          resp.data = gadgets.json.parse(resp.text);
+          if (!resp.data) {
+            resp.errors.push("500 Failed to parse JSON");
+            resp.rc = 500;
+            resp.data = null;
+          }
+          break;
+        case "DOM":
+          var dom;
+          if (typeof ActiveXObject != 'undefined') {
+            dom = new ActiveXObject("Microsoft.XMLDOM");
+            dom.async = false;
+            dom.validateOnParse = false;
+            dom.resolveExternals = false;
+            if (!dom.loadXML(resp.text)) {
+              resp.errors.push("500 Failed to parse XML");
+              resp.rc = 500;
+            } else {
+              resp.data = dom;
+            }
+          } else {
+            var parser = new DOMParser();
+            dom = parser.parseFromString(resp.text, "text/xml");
+            if ("parsererror" === dom.documentElement.nodeName) {
+              resp.errors.push("500 Failed to parse XML");
+              resp.rc = 500;
+            } else {
+              resp.data = dom;
+            }
+          }
+          break;
+        default:
+          resp.data = resp.text;
+          break;
+      }
+         */
         if (g != null)
         {
             if (httpMethod.trim().equalsIgnoreCase("GET"))
@@ -149,9 +194,21 @@ public class MakeRequest
                 }
                 else if ("FEED".equals(contentType.trim()))
                 {
+                    try
+                    {
+                        getDocument(new URL(url), headers, response);
+                        return;
+                    }
+                    catch (Exception e)
+                    {
+                        log.debug(e);
+                        response.sendError(505, e.getLocalizedMessage());
+                        return;
+                    }
                 }
-                else if ("FEED".equals(contentType.trim()))
+                else if ("JSON".equals(contentType.trim()))
                 {
+
                 }
 
             }
