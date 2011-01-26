@@ -404,7 +404,7 @@ gadgets.Prefs.prototype.getModuleId=function(){return A
 })();;
 var tamings___=tamings___||[];
 tamings___.push(function(A){caja___.whitelistCtors([[gadgets,"Prefs",Object]]);
-caja___.whitelistMeths([[gadgets.Prefs,"getArray"],[gadgets.Prefs,"getBool"],[gadgets.Prefs,"getCountry"],[gadgets.Prefs,"getFloat"],[gadgets.Prefs,"getInt"],[gadgets.Prefs,"getLang"],[gadgets.Prefs,"getMsg"],[gadgets.Prefs,"getString"],[gadgets.Prefs,"set"],[gadgets.Prefs,"setArray"]])
+caja___isOnlyVisibleGadget.whitelistMeths([[gadgets.Prefs,"getArray"],[gadgets.Prefs,"getBool"],[gadgets.Prefs,"getCountry"],[gadgets.Prefs,"getFloat"],[gadgets.Prefs,"getInt"],[gadgets.Prefs,"getLang"],[gadgets.Prefs,"getMsg"],[gadgets.Prefs,"getString"],[gadgets.Prefs,"set"],[gadgets.Prefs,"setArray"]])
 });;
 var gadgets;
 var JSON=window.JSON||gadgets.json;
@@ -1177,10 +1177,39 @@ gadgets.flash = function() {
   };
 }();;
 
+/*gadgets.views=function() {
+   this.currentview=new gadgets.views.View('home');
+};
 
+gadgets.views.prototype.bind = function() {
+  
+};
+
+gadgets.views.prototype.getCurrentView = function() {
+  var currentview=new gadgets.views.View(this.currentview);
+        return currentview;
+};
+
+gadgets.views.prototype.setCurrentView = function(currentview) {
+  this.currentview=currentview;
+};
+
+gadgets.views.prototype.getSupportedViews = function() {
+
+};
+gadgets.views.prototype.requestNavigateTo = function(view) {
+    gadgets.rpc.call(null,'requestNavigateTo',null,view.getName());
+};
+
+gadgets.views.prototype.getParams = function() {
+    return this.params_;
+};
+gadgets.views.prototype.setParams = function(params) {
+    this.params_=params;
+};*/
 
 gadgets.views = function() {
-    
+  
 
   return {
       
@@ -1190,22 +1219,29 @@ gadgets.views = function() {
     },
     'getCurrentView':
         function() {
-        var currentview=new gadgets.views.View('home');
-        return currentview;
+        return this.currentview_;
     },
     'getSupportedViews':
         function() {
-
+        
     },
     'requestNavigateTo':
-        function(view) {
-        
+        function(view) {        
         gadgets.rpc.call(null,'requestNavigateTo',null,view.getName());
+    },
+    'setCurrentView':
+        function(currentview) {        
+        this.currentview_=currentview;
+    },
+
+    'setParams':
+        function(params) {        
+        this.params_=params;        
     },
     'getParams':
         function()
         {
-
+            return this.params_;
 
         }
 
@@ -1231,8 +1267,14 @@ gadgets.views.View.prototype.getUrlTemplate = function() {
 
 };
 gadgets.views.View.prototype.isOnlyVisibleGadget = function() {
+    var currentview=gadgets.views.getCurrentView().getName();
+    if(currentview=='canvas')
+    {
+        return true;
+    }
     return false;
-};;
+};
+
 
 gadgets.MiniMessage = function(opt_moduleId,opt_container) {
 
