@@ -74,7 +74,7 @@ public class SocialContainer extends GenericResource
     private static final String[] files =
     {
         "config.jsp",
-        "container.jsp",        
+        "container.jsp",
         "frame.jsp",
         "gadgets.css",
         "list.jsp",
@@ -100,26 +100,32 @@ public class SocialContainer extends GenericResource
             "http://hosting.gmodules.com/ig/gadgets/file/111782983456439885554/Google-Gadget-RSS.xml", "http://www.tc.df.gov.br/MpjTcdf/AlcCalc.xml",
             "http://www.italiagadget.net/news/newsussci.xml"
         };//,http://www.delsearegional.us/academic/classes/highschool/science/physics/age/age.xml","http://midots.com/gadgets/xmldocs/midotsImgViewBeautifulPhotosOfIslands_11.xml","http://hosting.gmodules.com/ig/gadgets/file/112581010116074801021/spider.xml","http://www.donalobrien.net/apps/google/currency.xml","http://opensocial-resources.googlecode.com/svn/tests/trunk/suites/0.8/compliance/reference.xml","http://localhost:8080/swb/samplecontainer/examples/horoscope.xml","http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml","http://www.google.com/ig/modules/horoscope/horoscope.xml","http://www.google.com/ig/modules/test_setprefs_multiple_ifpc.xml"};
-
-        WebSite site = WebSite.ClassMgr.getWebSite("reg_digital_demo");
-        for (String url : urls)
+        try
         {
-            boolean exists = false;
-            Iterator<Gadget> gadgets = Gadget.ClassMgr.listGadgets();
-            while (gadgets.hasNext())
+            WebSite site = WebSite.ClassMgr.getWebSite("reg_digital_demo");
+            for (String url : urls)
             {
-                Gadget gadget = gadgets.next();
-                if (gadget.getUrl().equals(url))
+                boolean exists = false;
+                Iterator<Gadget> gadgets = Gadget.ClassMgr.listGadgets();
+                while (gadgets.hasNext())
                 {
-                    exists = true;
-                    break;
+                    Gadget gadget = gadgets.next();
+                    if (gadget.getUrl().equals(url))
+                    {
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists)
+                {
+                    Gadget g = Gadget.ClassMgr.createGadget(site);
+                    g.setUrl(url);
                 }
             }
-            if (!exists)
-            {
-                Gadget g = Gadget.ClassMgr.createGadget(site);
-                g.setUrl(url);
-            }
+        }
+        catch (Exception e)
+        {
+            log.debug(e);
         }
 
     }
@@ -309,7 +315,7 @@ public class SocialContainer extends GenericResource
             IOException
     {
 
-        String pathdir = SWBPortal.getWorkPath()+ this.getResourceBase().getWorkPath();
+        String pathdir = SWBPortal.getWorkPath() + this.getResourceBase().getWorkPath();
         File dir = new File(pathdir);
         for (String file : files)
         {
@@ -365,22 +371,22 @@ public class SocialContainer extends GenericResource
 
     /*public static String loadScript(String name)
     {
-        StringBuilder sb = new StringBuilder();
-        InputStream in = JavaScript.class.getResourceAsStream("/org/semanticwb/opensocial/javascript/" + name);
-        byte[] buffer = new byte[2048];
-        try
-        {
-            int read = in.read(buffer);
-            while (read != -1)
-            {
-                sb.append(new String(buffer, 0, read));
-                read = in.read(buffer);
-            }
-        }
-        catch (Exception e)
-        {
-            log.error(e);
-        }
+    StringBuilder sb = new StringBuilder();
+    InputStream in = JavaScript.class.getResourceAsStream("/org/semanticwb/opensocial/javascript/" + name);
+    byte[] buffer = new byte[2048];
+    try
+    {
+    int read = in.read(buffer);
+    while (read != -1)
+    {
+    sb.append(new String(buffer, 0, read));
+    read = in.read(buffer);
+    }
+    }
+    catch (Exception e)
+    {
+    log.error(e);
+    }
 
 
 
@@ -391,9 +397,8 @@ public class SocialContainer extends GenericResource
 
 
 
-        return sb.toString();
+    return sb.toString();
     }*/
-
     public static String loadFrame(String name)
     {
         StringBuilder sb = new StringBuilder();
@@ -430,73 +435,33 @@ public class SocialContainer extends GenericResource
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         StringReader reader = new StringReader(gadgetschema);
 
-
-
-
         try
         {
             Document doc = getXML(new URL(gadget.getUrl()));
             Source schemaFile = new StreamSource(reader);
-
-
-
-
             try
             {
                 Schema schema = factory.newSchema(schemaFile);
                 Validator validator = schema.newValidator();
                 DOMSource source = new DOMSource(doc);
                 validator.validate(source);
-
-
-
-
                 return true;
-
-
-
-
             }
             catch (IOException ioe)
             {
                 log.debug(ioe);
-
-
-
-
                 return false;
-
-
-
-
             }
             catch (SAXException saxe)
             {
                 log.debug(saxe);
-
-
-
-
                 return false;
-
-
-
-
-
             }
         }
         catch (Exception e)
         {
             log.debug(e);
-
-
-
-
             return false;
-
-
-
-
         }
     }
 
@@ -700,7 +665,7 @@ public class SocialContainer extends GenericResource
 
     private void checkfiles(String file, File dir)
     {
-        if(!dir.exists())
+        if (!dir.exists())
         {
             dir.mkdirs();
         }
@@ -709,8 +674,8 @@ public class SocialContainer extends GenericResource
         {
             try
             {
-                log.debug("Writing file "+filecheck.getAbsolutePath());
-                FileOutputStream out = new FileOutputStream(filecheck);                
+                log.debug("Writing file " + filecheck.getAbsolutePath());
+                FileOutputStream out = new FileOutputStream(filecheck);
                 InputStream in = SocialContainer.class.getResourceAsStream(_package + file);
                 byte[] buffer = new byte[2048];
                 int read = in.read(buffer);
@@ -719,7 +684,7 @@ public class SocialContainer extends GenericResource
                     out.write(buffer, 0, read);
                     read = in.read(buffer);
                 }
-                log.debug("file "+filecheck.getAbsolutePath()+" was created");
+                log.debug("file " + filecheck.getAbsolutePath() + " was created");
             }
             catch (Exception e)
             {
@@ -730,7 +695,7 @@ public class SocialContainer extends GenericResource
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {        
+    {
         WebSite site = paramRequest.getWebPage().getWebSite();
         User user = paramRequest.getUser();
         SocialUser socialuser = new SocialUser(user, site);
@@ -742,7 +707,7 @@ public class SocialContainer extends GenericResource
                 socialuser.checkOsapiFeature(g, true);
             }
         }
-        String path =  "/work/"+ paramRequest.getResourceBase().getWorkPath()+"/container.jsp";
+        String path = "/work/" + paramRequest.getResourceBase().getWorkPath() + "/container.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
         {
@@ -786,7 +751,7 @@ public class SocialContainer extends GenericResource
 
     public void doList(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        String path = "/work/"+paramRequest.getResourceBase().getWorkPath()+"/list.jsp";
+        String path = "/work/" + paramRequest.getResourceBase().getWorkPath() + "/list.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
         {
@@ -808,7 +773,7 @@ public class SocialContainer extends GenericResource
             Gadget g = getGadget(url, site);
             if (g != null)
             {
-                String path = "/work/"+ paramRequest.getResourceBase().getWorkPath()+"/config.jsp";
+                String path = "/work/" + paramRequest.getResourceBase().getWorkPath() + "/config.jsp";
                 RequestDispatcher dis = request.getRequestDispatcher(path);
                 try
                 {
