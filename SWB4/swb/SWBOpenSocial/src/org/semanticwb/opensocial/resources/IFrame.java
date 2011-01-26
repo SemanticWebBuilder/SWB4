@@ -197,7 +197,7 @@ public class IFrame
         return sb.toString();
     }
 
-    private String getHTMLFromView(String view, Gadget gadget, Map<String, String> variables)
+    private String getHTMLFromView(String view, Gadget gadget,SocialUser socialuser,String lang,String country,String moduleid)
     {
         String html = null;
         for (View oview : gadget.getViews())
@@ -206,6 +206,7 @@ public class IFrame
             {
                 if (oview.getContent() != null)
                 {
+                    Map<String, String> variables = socialuser.getVariablesubstituion(gadget, lang, country, moduleid);
                     html = oview.getContent();
                     for (String key : variables.keySet())
                     {
@@ -215,6 +216,7 @@ public class IFrame
                 }
                 else if (oview.getUrlcontent() != null)
                 {
+                    Map<String, String> variables = socialuser.getVariablesubstituion(gadget, lang, country, moduleid,false);
                     String _url = oview.getUrlcontent().toString() + "?";
                     for (String key : variables.keySet())
                     {
@@ -380,12 +382,12 @@ public class IFrame
                     }
                 }
 
-                Map<String, String> variables = socialuser.getVariablesubstituion(gadget, lang, country, moduleid);
-                body = getHTMLFromView(sview, gadget, variables);
+                
+                body = getHTMLFromView(sview, gadget,socialuser,lang,country,moduleid);
                 if (body == null)
                 {
                     sview = "default";
-                    body = getHTMLFromView(sview, gadget, variables);
+                    body = getHTMLFromView(sview, gadget,socialuser,lang,country,moduleid);
                 }
 
                 if (body == null)

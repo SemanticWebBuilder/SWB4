@@ -301,10 +301,18 @@ public class SocialUser
         if (gadget != null)
         {
             getVariablesubstituion.putAll(gadget.getMessagesFromGadget(language, country));
-
-            getVariablesubstituion.put("__MODULE_ID__", moduleID);
-            getVariablesubstituion.put("__MSG_LANG__", language);
-            getVariablesubstituion.put("__MSG_COUNTRY__", country);
+            if(formated)
+            {
+                getVariablesubstituion.put("__MODULE_ID__", moduleID);
+                getVariablesubstituion.put("__MSG_LANG__", language);
+                getVariablesubstituion.put("__MSG_COUNTRY__", country);
+            }
+            else
+            {
+                getVariablesubstituion.put("mid", moduleID);
+                getVariablesubstituion.put("lang", language);
+                getVariablesubstituion.put("country", country);
+            }
             if (user != null)
             {
                 WebSite _site = getWebSite();
@@ -321,7 +329,13 @@ public class SocialUser
                             while (list.hasNext())
                             {
                                 UserPref pref = list.next();
-                                getVariablesubstituion.put("__UP_" + pref.getKey() + "__", pref.getValue());
+                                String key=pref.getKey();
+                                String value=pref.getValue();
+                                if(formated)
+                                {
+                                    key="__UP_" + key + "__";
+                                }
+                                getVariablesubstituion.put(key, value);
                             }
                         }
                     }
@@ -337,7 +351,11 @@ public class SocialUser
                         for (String key : prefs.keySet())
                         {
                             String value = prefs.get(key);
-                            getVariablesubstituion.put("__UP_" + key + "__", value);
+                            if(formated)
+                            {
+                                    key="__UP_" + key + "__";
+                            }
+                            getVariablesubstituion.put(key, value);
                         }
                     }
                 }
