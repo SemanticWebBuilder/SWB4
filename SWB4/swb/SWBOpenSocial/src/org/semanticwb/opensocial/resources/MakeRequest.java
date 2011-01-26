@@ -326,13 +326,17 @@ public class MakeRequest
             {
                 String contentType = con.getContentType();
                 String rootname = null;
-                if (contentType!=null && (contentType.startsWith("application/rss+xml") || contentType.startsWith("application/xml")))
+                if (contentType!=null && (contentType.startsWith("application/rss+xml")))
                 {
                     rootname = "channel";
                 }
                 if (contentType!=null && contentType.startsWith("application/atom+xml"))
                 {
                     rootname = "feed";
+                }
+                if (contentType!=null && contentType.startsWith("application/xml"))
+                {
+                    rootname = "check";
                 }
                 if (rootname != null)
                 {
@@ -350,6 +354,17 @@ public class MakeRequest
                     DOMOutputter out = new DOMOutputter();
                     SAXBuilder builder = new SAXBuilder();
                     Document doc = out.output(builder.build(reader));
+                    if ("check".equals(rootname))
+                    {
+                        if(doc.getElementsByTagName("feed").getLength()>0)
+                        {
+                            rootname="feed";
+                        }
+                        if(doc.getElementsByTagName("channel").getLength()>0)
+                        {
+                            rootname="channel";
+                        }
+                    }
                     if ("channel".equals(rootname))
                     {
                         if (isValidRss(doc))
@@ -362,7 +377,7 @@ public class MakeRequest
                             code = 500;
                         }
                     }
-                    if ("feed".equals(rootname))
+                    else if("feed".equals(rootname))
                     {
                         if (isValidAtom(doc))
                         {
