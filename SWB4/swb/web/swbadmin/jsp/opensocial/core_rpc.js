@@ -1200,6 +1200,7 @@ gadgets.views.requestNavigateTo = function(view) {
         alert('view: '+type_view);
         if(type_view=== 'string')
         {
+            view=view.toLowerCase();
             var viewSuported=this.getSupportedViews()[view];
             if(viewSuported)
                 gadgets.rpc.call(null,'requestNavigateTo',null,viewSuported.getName());
@@ -1208,10 +1209,13 @@ gadgets.views.requestNavigateTo = function(view) {
         {
             if(view.getName())
             {
-                var viewSuported_=this.getSupportedViews()[view.getName()];
-                alert('viewSuported_: '+viewSuported_);
+                var name_=view.getName().toLowerCase();
+                var viewSuported_=this.getSupportedViews()[name_];
                 if(viewSuported_)
-                    gadgets.rpc.call(null,'requestNavigateTo',null,viewSuported_.getName());
+                {
+                    name_=viewSuported_.getName().toLowerCase();
+                    gadgets.rpc.call(null,'requestNavigateTo',null,name_);
+                }
             }
         }
     }
