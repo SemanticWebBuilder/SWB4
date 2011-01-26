@@ -223,6 +223,7 @@ public class IFrame
                         String value = variables.get(key);
                         _url += "&" + URLEncoder.encode(key) + "=" + URLEncoder.encode(value);
                     }
+                    //_url+="&parent=&libs=ebbdPN3h-1s/lib/libcore.js";
                     html = "<iframe style=\"width:100%;height:100%\" frameborder=\"0\" src=\"" + _url + "\"></iframe>";
                 }
             }
