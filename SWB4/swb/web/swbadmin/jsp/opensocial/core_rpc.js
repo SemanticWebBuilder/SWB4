@@ -1196,8 +1196,7 @@ gadgets.views.getSupportedViews = function() {
 gadgets.views.requestNavigateTo = function(view) {
     if(view)
     {
-        var type_view=typeof view;
-        alert('view: '+type_view);
+        var type_view=typeof view;        
         if(type_view=== 'string')
         {
             view=view.toLowerCase();
