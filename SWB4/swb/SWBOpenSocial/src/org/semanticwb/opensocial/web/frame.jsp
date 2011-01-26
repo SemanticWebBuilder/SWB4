@@ -271,6 +271,29 @@
         gadgets.window=gadgets.window||{};
         gadgets.window.setTitle=function(A){gadgets.rpc.call(null,"set_title",null,A)
         };
+        <%
+        String view=null;
+        Object sview = request.getAttribute("view");
+        if (sview == null)
+        {
+            view = "home";
+        }
+        else
+        {
+            view=sview.toString();
+        }
+        if(request.getAttribute("appParams")!=null)
+        {
+            String appParams = request.getAttribute("appParams").toString();
+            %>
+                var views=gadgets.views;
+                var currentView=new gadgets.views.View('<%=view%>');
+                currentView.setParams(<%=appParams%>);
+                views.setCurrentView(currentView);
+            <%
+        }
+        %>
+
         var _IG_SetTitle=gadgets.window.setTitle;;
         gadgets.config.init({"shindig.auth":{},"osapi":{"endPoints":["http://%host%<%=rpc%>"]},"osapi.services":{"gadgets.rpc":["container.listMethods"],"http://%host%<%=rpc%>":["samplecontainer.update","albums.update","albums.supportedFields","activities.delete","activities.supportedFields","gadgets.metadata","activities.update","mediaItems.create","albums.get","activities.get","http.put","activitystreams.create","messages.modify","appdata.get","messages.get","system.listMethods","samplecontainer.get","cache.invalidate","people.supportedFields","http.head","http.delete","messages.create","people.get","activitystreams.get","mediaItems.supportedFields","mediaItems.delete","albums.delete","activitystreams.update","mediaItems.update","messages.delete","appdata.update","gadgets.tokenSupportedFields","http.post","activities.create","samplecontainer.create","http.get","albums.create","appdata.delete","gadgets.token","appdata.create","activitystreams.delete","gadgets.supportedFields","mediaItems.get","activitystreams.supportedFields"]},"rpc":{"parentRelayUrl":"/container/rpc_relay.html","useLegacyProtocol":false},"core.util":{"dynamic-height":{},"osapi":{},"core":{},"settitle":{}},"core.io":{"proxyUrl":"//%host%<%=proxy%>?container=default&refresh=%refresh%&url=%url%%rewriteMime%","jsonProxyUrl":"//%host%<%=makerequest%>"}});
         </script><script type="text/javascript">gadgets.Prefs.setMessages_(<%=msg%>);gadgets.Prefs.setDefaultPrefs_(<%=default_values%>);gadgets.io.preloaded_=[];</script>
