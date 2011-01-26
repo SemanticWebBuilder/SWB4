@@ -271,24 +271,24 @@
         gadgets.window=gadgets.window||{};
         gadgets.window.setTitle=function(A){gadgets.rpc.call(null,"set_title",null,A)
         };
-        <%
-        String view=null;
-        Object sview = request.getAttribute("view");
-        if (sview == null)
-        {
-            view = "home";
-        }
-        else
-        {
-            view=sview.toString();
-        }
+        <%        
         if(request.getAttribute("appParams")!=null)
         {
+            String view=null;
+            Object sview = request.getAttribute("view");
+            if (sview == null)
+            {
+                view = "home";
+            }
+            else
+            {
+                view=sview.toString();
+            }
             String appParams = request.getAttribute("appParams").toString();
             %>
                 var views=gadgets.views;
                 var currentView=new gadgets.views.View('<%=view%>');
-                currentView.setParams(<%=appParams%>);
+                views.setParams(<%=appParams%>);
                 views.setCurrentView(currentView);
             <%
         }
