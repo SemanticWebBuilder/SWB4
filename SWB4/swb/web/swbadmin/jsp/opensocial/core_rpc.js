@@ -1177,57 +1177,94 @@ gadgets.flash = function() {
   };
 }();;
 
-/*gadgets.views=function() {
-   this.currentview=new gadgets.views.View('home');
-};
 
-gadgets.views.prototype.bind = function() {
-  
-};
-
-gadgets.views.prototype.getCurrentView = function() {
-  var currentview=new gadgets.views.View(this.currentview);
-        return currentview;
-};
-
-gadgets.views.prototype.setCurrentView = function(currentview) {
-  this.currentview=currentview;
-};
-
-gadgets.views.prototype.getSupportedViews = function() {
-
-};
-gadgets.views.prototype.requestNavigateTo = function(view) {
-    gadgets.rpc.call(null,'requestNavigateTo',null,view.getName());
-};
-
-gadgets.views.prototype.getParams = function() {
-    return this.params_;
-};
-gadgets.views.prototype.setParams = function(params) {
-    this.params_=params;
-};*/
 
 gadgets.views = function() {
+};
+
+gadgets.views.bind = function(urlTemplate,environment) {
+};
+
+gadgets.views.getCurrentView = function() {
+    return this.currentview_;
+};
+
+gadgets.views.getSupportedViews = function() {
+    return {'canvas':new gadgets.views.View('canvas'),'home':new gadgets.views.View('home'),'profile':new gadgets.views.View('profile')};
+};
+
+gadgets.views.requestNavigateTo = function(view) {
+    if(view)
+    {
+        var type_view=typeof view;
+        alert('view: '+type_view);
+        if(type_view=== 'string')
+        {
+            var viewSuported=this.getSupportedViews()[view];
+            if(viewSuported)
+                gadgets.rpc.call(null,'requestNavigateTo',null,viewSuported.getName());
+        }
+        else
+        {
+            if(view.getName())
+            {
+                var viewSuported_=this.getSupportedViews()[view.getName()];
+                alert('viewSuported_: '+viewSuported_);
+                if(viewSuported_)
+                    gadgets.rpc.call(null,'requestNavigateTo',null,viewSuported_.getName());
+            }
+        }
+    }
+    
+};
+
+gadgets.views.setCurrentView = function(currentview) {
+    this.currentview_=currentview;
+};
+gadgets.views.setParams = function(params) {
+    this.params_=params;        
+};
+
+gadgets.views.ViewType=gadgets.util.makeEnum(["CANVAS","HOME","PREVIEW","PROFILE","FULL_PAGE","DASHBOARD","POPUP"]);;
+
+//gadgets.views.ViewType={CANVAS:new gadgets.views.View('canvas'),HOME:new gadgets.views.View('home')};
+/*gadgets.views.ViewType.CANVAS= new gadgets.views.View('canvas');
+
+
+gadgets.views.ViewType.HOME= new gadgets.views.View('home');
+gadgets.views.ViewType.PROFILE= new gadgets.views.View('profile');*/
+
+
+/*gadgets.views = function() {
   
 
   return {
-      
+
+
     'bind':
     function(urlTemplate,environment) {
 
     },
+    'ViewType':
+        {
+        CANVAS : new gadgets.views.View('canvas'),
+        HOME: new gadgets.views.View('home'),
+        PROFILE:new gadgets.views.View('profile')}
+    ,
     'getCurrentView':
         function() {
         return this.currentview_;
     },
     'getSupportedViews':
         function() {
-        
+        return {'canvas':gadgets.views.ViewType.CANVAS,'home':gadgets.views.ViewType.HOME,'profile':gadgets.views.ViewType.PROFILE}
     },
     'requestNavigateTo':
-        function(view) {        
-        gadgets.rpc.call(null,'requestNavigateTo',null,view.getName());
+        function(view) {
+
+        var viewSuported=this.getSupportedViews()[view];
+        if(viewSuported)
+            gadgets.rpc.call(null,'requestNavigateTo',null,viewSuported.getName());
     },
     'setCurrentView':
         function(currentview) {        
@@ -1246,7 +1283,7 @@ gadgets.views = function() {
         }
 
   };
-}();;
+}();;*/
 
 
 
