@@ -5768,6 +5768,7 @@ shindig.GadgetService.prototype.setUserPref = function(id) {
  */
 shindig.IfrGadgetService = function() {
   shindig.GadgetService.call(this);
+  
   gadgets.rpc.register('resize_iframe', this.setHeight);
   gadgets.rpc.register('set_pref', this.setUserPref);
   gadgets.rpc.register('set_title', this.setTitle);
@@ -5781,7 +5782,24 @@ shindig.IfrGadgetService.prototype.setHeight = function(height) {
   if (height > shindig.container.maxheight_) {
     height = shindig.container.maxheight_;
   }
-
+    var _id='porlet_'+this.f;
+    var id = shindig.container.gadgetService.getGadgetIdFromModuleId(this.f);
+    var porlet=dijit.byId(_id);
+    var gadget = shindig.container.getGadget(id);
+    if(porlet && gadget)
+    {
+        try
+        {
+           var width_=gadget.getWidth();
+           var height_=height;
+           if(width_ && height_)
+           {
+              var style_='width:'+width_ +'px;height:'+height_+'px';
+              porlet.set('style',style_);              
+           }
+           
+        }catch(e){}
+    }
   var element = document.getElementById(this.f);
   if (element) {
     element.style.height = height + 'px';
@@ -5848,6 +5866,7 @@ shindig.IfrGadgetService.prototype.requestSendMessage = function(recipients,
       }, 0);
     }
 };
+
 
 /**
  * Navigates the page to a new url based on a gadgets requested view and
@@ -5999,10 +6018,7 @@ shindig.DojoPorletManager = function(layoutRootId) {
 
 shindig.DojoPorletManager.inherits(shindig.LayoutManager);
 
-shindig.DojoPorletManager.prototype.onCloseGadget =function(gadget)
-{
-    
-};
+
 
 shindig.DojoPorletManager.prototype.getGadgetChrome =
     function(gadget) {  
@@ -6075,7 +6091,21 @@ shindig.Gadget.prototype.getUserPrefValue = function(name) {
   return typeof(pref.value) != 'undefined' && pref.value != null ?
       pref.value : pref['default'];
 };
-
+shindig.Gadget.prototype.setWidth = function(width) {
+    this.width_=width;
+}
+shindig.Gadget.prototype.setHeight = function(height) {
+    this.height_=height;
+}
+shindig.Gadget.prototype.getWidth = function() {
+    return this.width_;
+}
+shindig.Gadget.prototype.getHeight = function() {
+    return this.height_;
+}
+shindig.Gadget.prototype.getStyle = function() {    
+    return this.style_;
+}
 shindig.Gadget.prototype.render = function(chrome) {
   if (chrome) {
     
@@ -6087,17 +6117,25 @@ shindig.Gadget.prototype.render = function(chrome) {
         {
               var title=(gadget.title ? gadget.title : 'Title');
               var _id='porlet_'+gadget.getIframeId();
-              var porlet=new dojox.widget.Portlet({'id':_id,'title':title});
+              var porlet;
+              if(this.width_ && this.height_)
+              {
+                  var style_='width:'+this.width_ +'px;height:'+this.height_+'px';
+                  porlet=new dojox.widget.Portlet({'style':style_,'id':_id,'title':title});
+              }
+              else
+              {
+                    porlet=new dojox.widget.Portlet({'id':_id,'title':title});
+              }              
               if(gadget.onClose)
                 dojo.connect(porlet,"onClose",gadget.onClose);
               var idsetting='setting_'+gadget.id;
               var contenthtml='<div id="' + gadget.getUserPrefsDialogId() + '" class="' +
               this.cssClassGadgetUserPrefsDialog + '"></div>';
-              //settings.startup();
-              //var column=Math.floor(gadget.id/3);
-              var column=2-(gadget.id%3);
-              var zone=Math.floor(gadget.id/3);              
-              grid.addChild(porlet,column,zone);
+              var nbzones=grid.nbZones;
+              var zone=(gadget.id%nbzones);
+              var column=1;
+              grid.addChild(porlet,zone,column);
               porlet.startup();
 
               this.getContent(function(content) {
