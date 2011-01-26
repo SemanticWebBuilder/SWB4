@@ -4,7 +4,8 @@
 %>
 <%
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-    String sinfoto=paramRequest.getResourceBase().getWorkPath()+"/sinfoto.png";
+    String context=SWBPortal.getContextPath();
+    String sinfoto=  context+"/work"+paramRequest.getResourceBase().getWorkPath()+"/sinfoto.png";
 %>
 <script>
     function loadImage(imagen)
