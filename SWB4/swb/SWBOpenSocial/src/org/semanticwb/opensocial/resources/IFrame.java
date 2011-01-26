@@ -12,10 +12,12 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -197,7 +199,7 @@ public class IFrame
         return sb.toString();
     }
 
-    private String getHTMLFromView(String view, Gadget gadget,SocialUser socialuser,String lang,String country,String moduleid)
+    private String getHTMLFromView(String view, Gadget gadget, SocialUser socialuser, String lang, String country, String moduleid)
     {
         String html = null;
         for (View oview : gadget.getViews())
@@ -216,7 +218,7 @@ public class IFrame
                 }
                 else if (oview.getUrlcontent() != null)
                 {
-                    Map<String, String> variables = socialuser.getVariablesubstituion(gadget, lang, country, moduleid,false);
+                    Map<String, String> variables = socialuser.getVariablesubstituion(gadget, lang, country, moduleid, false);
                     String _url = oview.getUrlcontent().toString() + "?";
                     for (String key : variables.keySet())
                     {
@@ -361,12 +363,7 @@ public class IFrame
         {
             moduleid = "0";
         }
-        boolean debug = false;
-        String _debug = request.getParameter("debug");
-        if ("1".equals(_debug))
-        {
-            debug = true;
-        }
+
 
         try
         {
@@ -383,21 +380,21 @@ public class IFrame
                     }
                 }
 
-                
-                body = getHTMLFromView(sview, gadget,socialuser,lang,country,moduleid);
+
+                body = getHTMLFromView(sview, gadget, socialuser, lang, country, moduleid);
                 if (body == null)
                 {
                     sview = "default";
-                    body = getHTMLFromView(sview, gadget,socialuser,lang,country,moduleid);
+                    body = getHTMLFromView(sview, gadget, socialuser, lang, country, moduleid);
                 }
 
                 if (body == null)
                 {
                     body = "";
                 }
-                
 
-               
+
+
 
                 SWBResourceURL proxy = paramRequest.getRenderUrl();
                 proxy.setCallMethod(SWBResourceURL.Call_DIRECT);
@@ -424,15 +421,42 @@ public class IFrame
                     msg.put(key, messages.get(key));
                 }
 
-                
                 String path = "/work/" + paramRequest.getResourceBase().getWorkPath() + "/frame.jsp";
                 RequestDispatcher dis = request.getRequestDispatcher(path);
+
+                for (String feature : gadget.getAllFeatures())
+                {
+                    if ("views".equals(feature))
+                    {
+                        JSONObject appParams = new JSONObject();
+                        String _appParams = request.getParameter("appParams");
+                        if (_appParams != null)
+                        {
+                            _appParams = URLDecoder.decode(_appParams);
+                            StringTokenizer st = new StringTokenizer(_appParams, "&");
+                            while (st.hasMoreTokens())
+                            {
+                                String token = st.nextToken();
+                                StringTokenizer st2 = new StringTokenizer(token, "=");
+                                if (st2.countTokens() == 2)
+                                {
+                                    String key = st2.nextToken();
+                                    String value = st2.nextToken();
+                                    appParams.accumulate(key, value);
+                                }
+                            }
+                        }
+                        request.setAttribute("appParams", appParams.toString());
+                    }
+                }
+
                 try
                 {
                     request.setAttribute("paramRequest", paramRequest);
                     request.setAttribute("msg", msg.toString());
-                    request.setAttribute("default_values", j_default_values.toString());                    
+                    request.setAttribute("default_values", j_default_values.toString());
                     request.setAttribute("html", body);
+                    request.setAttribute("view", sview);
                     dis.include(request, response);
                 }
                 catch (Exception e)
