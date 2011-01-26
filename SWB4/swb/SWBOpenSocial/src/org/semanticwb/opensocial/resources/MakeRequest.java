@@ -5,12 +5,25 @@
 package org.semanticwb.opensocial.resources;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.StringReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.XMLConstants;
+import javax.xml.transform.Source;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.DOMOutputter;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
@@ -20,6 +33,9 @@ import org.semanticwb.opensocial.model.Gadget;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -29,6 +45,76 @@ public class MakeRequest
 {
 
     private static final Logger log = SWBUtils.getLogger(MakeRequest.class);
+    private static final String rsschema = SocialContainer.loadSchema("rss.xml");
+    private static final String atomchema = SocialContainer.loadSchema("atom.txt");
+
+    private static boolean isValidRss(Document doc)
+    {
+        return true;
+        /*SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        StringReader reader = new StringReader(rsschema);
+        try
+        {
+            Source schemaFile = new StreamSource(reader);
+            try
+            {
+                Schema schema = factory.newSchema(schemaFile);
+                Validator validator = schema.newValidator();
+                DOMSource source = new DOMSource(doc);
+                validator.validate(source);
+                return true;
+            }
+            catch (IOException ioe)
+            {
+                log.debug(ioe);
+                return false;
+            }
+            catch (SAXException saxe)
+            {
+                log.debug(saxe);
+                return false;
+            }
+        }
+        catch (Exception e)
+        {
+            log.debug(e);
+            return false;
+        }*/
+    }
+
+    private static boolean isValidAtom(Document doc)
+    {
+        return true;
+        /*SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.RELAXNG_NS_URI);
+        StringReader reader = new StringReader(atomchema);
+        try
+        {
+            Source schemaFile = new StreamSource(reader);
+            try
+            {
+                Schema schema = factory.newSchema(schemaFile);
+                Validator validator = schema.newValidator();
+                DOMSource source = new DOMSource(doc);
+                validator.validate(source);
+                return true;
+            }
+            catch (IOException ioe)
+            {
+                log.debug(ioe);
+                return false;
+            }
+            catch (SAXException saxe)
+            {
+                log.debug(saxe);
+                return false;
+            }
+        }
+        catch (Exception e)
+        {
+            log.debug(e);
+            return false;
+        }*/
+    }
 
     private void sendResponse(String objresponse, HttpServletResponse response) throws IOException
     {
@@ -40,22 +126,326 @@ public class MakeRequest
         out.close();
     }
 
-    private void getDocument(URL url, String headers, HttpServletResponse response) throws IOException, JDOMException, JSONException
-    {        
+    private void getJSON(URL url, String headers, HttpServletResponse response) throws JSONException, IOException
+    {
+
+        Charset charset = Charset.forName("utf-8");
+        int code = 500;
+        String xml = "";
         try
-        {            
-            int code=500;
-            String xml="";
+        {
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            if (con.getResponseCode() == 200)
+            {
+                String contentType = con.getContentType();
+                if (contentType != null)
+                {
+                    int pos = contentType.indexOf("charset=");
+                    if (pos != -1)
+                    {
+                        String scharset = contentType.substring(pos + 8).trim();
+                        charset = Charset.forName(scharset);
+                    }
+                }
+                StringBuilder sb = new StringBuilder();
+                InputStream in = con.getInputStream();
+                InputStreamReader reader = new InputStreamReader(in, charset);
+                char[] buffer = new char[1024 * 8];
+                int read = reader.read(buffer);
+                while (read != -1)
+                {
+                    sb.append(new String(buffer, 0, read));
+                    read = reader.read(buffer);
+                }
+                try
+                {
+                    JSONObject obj = new JSONObject(sb.toString());
+                    xml = obj.toString();
+                }
+                catch (JSONException e)
+                {
+                    code = 500;
+                }
+            }
+        }
+        catch (IOException ioe)
+        {
+            code = 500;
+        }
+        JSONObject responseJSONObject = new JSONObject();
+        response.setContentType("application/json");
+        JSONObject body = new JSONObject();
+        try
+        {
+            body.put("body", xml);
+            responseJSONObject.put(url.toString(), body);
+            responseJSONObject.put("rc", code);
+            sendResponse(responseJSONObject.toString(4), response);
+        }
+        catch (JSONException e)
+        {
+            log.debug(e);
+            throw e;
+        }
+        catch (IOException e)
+        {
+            log.debug(e);
+            throw e;
+        }
+
+
+
+    }
+
+    private void getText(URL url, String headers, HttpServletResponse response) throws JSONException, IOException
+    {
+
+        Charset charset = Charset.forName("utf-8");
+        int code = 500;
+        String xml = "";
+        try
+        {
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            if (con.getResponseCode() == 200)
+            {
+                String contentType = con.getContentType();
+                if (contentType != null)
+                {
+                    int pos = contentType.indexOf("charset=");
+                    if (pos != -1)
+                    {
+                        String scharset = contentType.substring(pos + 8).trim();
+                        charset = Charset.forName(scharset);
+                    }
+                }
+                StringBuilder sb = new StringBuilder();
+                InputStream in = con.getInputStream();
+                InputStreamReader reader = new InputStreamReader(in, charset);
+                char[] buffer = new char[1024 * 8];
+                int read = reader.read(buffer);
+                while (read != -1)
+                {
+                    sb.append(new String(buffer, 0, read));
+                    read = reader.read(buffer);
+                }
+                xml = sb.toString();
+
+            }
+        }
+        catch (IOException ioe)
+        {
+            code = 500;
+        }
+        JSONObject responseJSONObject = new JSONObject();
+        response.setContentType("application/json");
+        JSONObject body = new JSONObject();
+        try
+        {
+            body.put("body", xml);
+            responseJSONObject.put(url.toString(), body);
+            responseJSONObject.put("rc", code);
+            sendResponse(responseJSONObject.toString(4), response);
+        }
+        catch (JSONException e)
+        {
+            log.debug(e);
+            throw e;
+        }
+        catch (IOException e)
+        {
+            log.debug(e);
+            throw e;
+        }
+    }
+
+    private static void addElement(Element e, JSONObject response) throws JSONException
+    {
+        String name = e.getTagName();
+        NodeList childs = e.getChildNodes();
+        boolean hasChilds = false;
+        for (int i = 0; i < childs.getLength(); i++)
+        {
+            if (childs.item(i) instanceof Element)
+            {
+                hasChilds = true;
+            }
+        }
+        if (hasChilds)
+        {
+            childs = e.getChildNodes();
+            for (int i = 0; i < childs.getLength(); i++)
+            {
+                if (childs.item(i) instanceof Element)
+                {
+                    Element child = (Element) childs.item(i);
+                    JSONObject jchild = new JSONObject();
+                    addElement(child, jchild);
+                    response.accumulate(name, jchild);
+                }
+            }
+        }
+        else
+        {
+            String content = e.getTextContent();
+            if (content != null)
+            {
+                response.accumulate(name, content);
+            }
+        }
+    }
+
+    private static JSONObject transformFeedToJSon(Document doc, String name) throws JSONException
+    {
+        JSONObject response = new JSONObject();
+        NodeList channels = doc.getElementsByTagName(name);
+        for (int i = 0; i < channels.getLength(); i++)
+        {
+            if (channels.item(i) instanceof Element)
+            {
+                Element channel = (Element) channels.item(i);
+                addElement(channel, response);
+            }
+        }
+
+        return response;
+    }
+
+    private static JSONObject getFeed(URL url, String headers) throws IOException, JDOMException, JSONException
+    {
+
+        int code = 500;
+        String xml = "";
+        try
+        {
+            Charset charset = Charset.forName("utf-8");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            if (con.getResponseCode() == 200)
+            {
+                String contentType = con.getContentType();
+                String rootname = null;
+                if (contentType!=null && (contentType.startsWith("application/rss+xml") || contentType.startsWith("application/xml")))
+                {
+                    rootname = "channel";
+                }
+                if (contentType!=null && contentType.startsWith("application/atom+xml"))
+                {
+                    rootname = "feed";
+                }
+                if (rootname != null)
+                {
+                    if (contentType != null)
+                    {
+                        int pos = contentType.indexOf("charset=");
+                        if (pos != -1)
+                        {
+                            String scharset = contentType.substring(pos + 8).trim();
+                            charset = Charset.forName(scharset);
+                        }
+                    }
+                    InputStream in = con.getInputStream();
+                    InputStreamReader reader = new InputStreamReader(in, charset);
+                    DOMOutputter out = new DOMOutputter();
+                    SAXBuilder builder = new SAXBuilder();
+                    Document doc = out.output(builder.build(reader));
+                    if ("channel".equals(rootname))
+                    {
+                        if (isValidRss(doc))
+                        {
+                            xml = transformFeedToJSon(doc, rootname).toString();
+                            code = 200;
+                        }
+                        else
+                        {
+                            code = 500;
+                        }
+                    }
+                    if ("feed".equals(rootname))
+                    {
+                        if (isValidAtom(doc))
+                        {
+                            xml = transformFeedToJSon(doc, rootname).toString();
+                            code = 200;
+                        }
+                        else
+                        {
+                            code = 500;
+                        }
+                    }
+
+                }
+                else
+                {
+                    code = 500;
+                }
+
+            }
+            else
+            {
+                code = con.getResponseCode();
+            }
+
+
+
+            JSONObject responseJSONObject = new JSONObject();
+            JSONObject body = new JSONObject();
+            body.put("body", xml);
+            responseJSONObject.put(url.toString(), body);
+            responseJSONObject.put("rc", code);
+            return responseJSONObject;
+        }
+        catch (IOException e)
+        {
+            log.debug(e);
+            throw e;
+        }
+        catch (JSONException e)
+        {
+            log.debug(e);
+            throw e;
+        }
+    }
+
+    private void getFeed(URL url, String headers, HttpServletResponse response) throws IOException, JDOMException, JSONException
+    {
+        JSONObject responseJSONObject = getFeed(url, headers);
+        response.setContentType("application/json");
+        sendResponse(responseJSONObject.toString(4), response);
+
+    }
+
+    public static void main(String[] args)
+    {
+        try
+        {
+            JSONObject resp = MakeRequest.getFeed(new URL("http://www.eluniversal.com.mx/rss/notashome.xml"),"");
+            System.out.println("resp");
+            System.out.println(resp.toString(6));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void getDocument(URL url, String headers, HttpServletResponse response) throws IOException, JDOMException, JSONException
+    {
+        try
+        {
+            int code = 500;
+            String xml = "";
             try
             {
-                Document doc=SocialContainer.getXML(url);
-                Charset charset=Charset.defaultCharset();
-                xml =SWBUtils.XML.domToXml(doc, charset.name(), true);                
-                code=200;
+                Document doc = SocialContainer.getXML(url);
+                Charset charset = Charset.defaultCharset();
+                xml = SWBUtils.XML.domToXml(doc, charset.name(), true);
+                code = 200;
             }
-            catch(RequestException e)
+            catch (RequestException e)
             {
-                code=e.getCode();
+                code = e.getCode();
             }
 
             JSONObject responseJSONObject = new JSONObject();
@@ -67,7 +457,7 @@ public class MakeRequest
             sendResponse(responseJSONObject.toString(4), response);
         }
         catch (IOException e)
-        {            
+        {
             log.debug(e);
             throw e;
         }
@@ -84,22 +474,19 @@ public class MakeRequest
 
     }
 
-
-
-
     private void sendResponse(Document objresponse, HttpServletResponse response) throws IOException
     {
         Charset defaultCharset = Charset.defaultCharset();
         response.setContentType("text/xml;charset=" + defaultCharset.name());
         OutputStream out = response.getOutputStream();
-        String xml = SWBUtils.XML.domToXml(objresponse, defaultCharset.name(), false);        
+        String xml = SWBUtils.XML.domToXml(objresponse, defaultCharset.name(), false);
         out.write(xml.getBytes());
         out.close();
     }
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        WebSite site = paramRequest.getWebPage().getWebSite();        
+        WebSite site = paramRequest.getWebPage().getWebSite();
         log.debug("MakeRequest request.getQueryString(): " + request.getQueryString());
         log.debug("MakeRequest request.getContentType(): " + request.getContentType());
         String refresh = request.getParameter("refresh");
@@ -111,7 +498,7 @@ public class MakeRequest
         String headers = request.getParameter("headers");
         log.debug("headers: " + headers);
         String postData = request.getParameter("postData");
-        log.debug("postData: " + postData);        
+        log.debug("postData: " + postData);
         String authz = request.getParameter("authz");
         log.debug("authz: " + authz);
         String contentType = request.getParameter("contentType");
@@ -137,41 +524,41 @@ public class MakeRequest
          * switch (params.CONTENT_TYPE) {
         case "JSON":
         case "FEED":
-          resp.data = gadgets.json.parse(resp.text);
-          if (!resp.data) {
-            resp.errors.push("500 Failed to parse JSON");
-            resp.rc = 500;
-            resp.data = null;
-          }
-          break;
+        resp.data = gadgets.json.parse(resp.text);
+        if (!resp.data) {
+        resp.errors.push("500 Failed to parse JSON");
+        resp.rc = 500;
+        resp.data = null;
+        }
+        break;
         case "DOM":
-          var dom;
-          if (typeof ActiveXObject != 'undefined') {
-            dom = new ActiveXObject("Microsoft.XMLDOM");
-            dom.async = false;
-            dom.validateOnParse = false;
-            dom.resolveExternals = false;
-            if (!dom.loadXML(resp.text)) {
-              resp.errors.push("500 Failed to parse XML");
-              resp.rc = 500;
-            } else {
-              resp.data = dom;
-            }
-          } else {
-            var parser = new DOMParser();
-            dom = parser.parseFromString(resp.text, "text/xml");
-            if ("parsererror" === dom.documentElement.nodeName) {
-              resp.errors.push("500 Failed to parse XML");
-              resp.rc = 500;
-            } else {
-              resp.data = dom;
-            }
-          }
-          break;
+        var dom;
+        if (typeof ActiveXObject != 'undefined') {
+        dom = new ActiveXObject("Microsoft.XMLDOM");
+        dom.async = false;
+        dom.validateOnParse = false;
+        dom.resolveExternals = false;
+        if (!dom.loadXML(resp.text)) {
+        resp.errors.push("500 Failed to parse XML");
+        resp.rc = 500;
+        } else {
+        resp.data = dom;
+        }
+        } else {
+        var parser = new DOMParser();
+        dom = parser.parseFromString(resp.text, "text/xml");
+        if ("parsererror" === dom.documentElement.nodeName) {
+        resp.errors.push("500 Failed to parse XML");
+        resp.rc = 500;
+        } else {
+        resp.data = dom;
+        }
+        }
+        break;
         default:
-          resp.data = resp.text;
-          break;
-      }
+        resp.data = resp.text;
+        break;
+        }
          */
         if (g != null)
         {
@@ -196,7 +583,7 @@ public class MakeRequest
                 {
                     try
                     {
-                        getDocument(new URL(url), headers, response);
+                        getFeed(new URL(url), headers, response);
                         return;
                     }
                     catch (Exception e)
@@ -208,7 +595,31 @@ public class MakeRequest
                 }
                 else if ("JSON".equals(contentType.trim()))
                 {
-
+                    try
+                    {
+                        getJSON(new URL(url), headers, response);
+                        return;
+                    }
+                    catch (Exception e)
+                    {
+                        log.debug(e);
+                        response.sendError(505, e.getLocalizedMessage());
+                        return;
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        getText(new URL(url), headers, response);
+                        return;
+                    }
+                    catch (Exception e)
+                    {
+                        log.debug(e);
+                        response.sendError(505, e.getLocalizedMessage());
+                        return;
+                    }
                 }
 
             }
