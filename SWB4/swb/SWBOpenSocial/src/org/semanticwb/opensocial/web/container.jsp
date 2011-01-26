@@ -253,7 +253,7 @@ function generateGadgets(metadata)
                 var resp=confirm('¿Desea eliminar el gadget '  + this.title +' permanentemente?');
                 if(resp)
                 {
-                    removeGadget(gadget);
+                    removeGadget(this);
                 }
             };
             gadget.setServerBase(iframeBaseUrl);
