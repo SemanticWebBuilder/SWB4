@@ -70,27 +70,38 @@ public class IFrame
                         {
                             String paramName = tag.getParamName(iparam);
                             String value = tag.getParamValue(iparam);
-                            if ("src".equals(paramName) && value != null && value.toLowerCase().startsWith("http"))
+                            if ("src".equals(paramName) && value != null)
                             {
-                                try
+                                if (value.toLowerCase().startsWith("http") || value.toLowerCase().startsWith("/") || value.toLowerCase().startsWith("../") || value.toLowerCase().startsWith("./"))
                                 {
-                                    URI uriSRC = new URI(value);
-                                    if (!uriSRC.isAbsolute())
+                                    try
                                     {
-                                        uriSRC = gadget.resolve(uriSRC);
+                                        URI uriSRC = new URI(value);
+                                        if (!uriSRC.isAbsolute())
+                                        {
+                                            uriSRC = gadget.resolve(uriSRC);
+                                        }
+                                        String url = uriSRC.toString();
+                                        int pos = url.indexOf("?"); // elimina parametros por seguridad
+                                        if (pos != -1)
+                                        {
+                                            url = url.substring(0, pos);
+                                        }
+                                        value = proxy + "?url=" + URLEncoder.encode(url);
                                     }
-                                    String url = uriSRC.toString();
-                                    int pos = url.indexOf("?"); // elimina parametros por seguridad
-                                    if (pos != -1)
+                                    catch (URISyntaxException use)
                                     {
-                                        url = url.substring(0, pos);
+                                        log.debug(use);
                                     }
-                                    value = proxy + "?url=" + URLEncoder.encode(url);
                                 }
-                                catch (URISyntaxException use)
+                                else
                                 {
-                                    log.debug(use);
+                                    ret.append(paramName);
+                                    ret.append("=\"");
+                                    ret.append(value);
+                                    ret.append("\" ");
                                 }
+
                             }
                             ret.append(paramName);
                             ret.append("=\"");
