@@ -1392,7 +1392,7 @@ gadgets.TabSet = function(opt_moduleId,opt_defaultTab,opt_container) {
     var id_tab='tabcontainer-'+aleatorio;
     
         
-    this.tabcontainer=new dijit.layout.TabContainer({'style':'width:90%;height:100%','id':id_tab,'tabStrip':'true'},divroot);
+    this.tabcontainer=new dijit.layout.TabContainer({'style':'width:96%;height:96%','id':id_tab,'tabStrip':'true'},divroot);
     dojo.connect(this.tabcontainer,"selectChild",this,function(child){
                 if(child.id)
                 {
