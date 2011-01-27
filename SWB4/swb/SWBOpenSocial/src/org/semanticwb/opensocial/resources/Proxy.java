@@ -69,7 +69,7 @@ public class Proxy
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        log.debug("Proxy request.getQueryString(): " + request.getQueryString());
+        //log.debug("Proxy request.getQueryString(): " + request.getQueryString());
         String url = request.getParameter("url");
         if (url != null && !"".equals(url))
         {
