@@ -81,6 +81,11 @@ public class SWBRuleMgr
     /** The Constant TAG_SESSION_ATT. */
     public static final String TAG_SESSION_ATT="SWBSessAtt";
 
+    /** The Constant TAG_SESSION_ATT. */
+    public static final String TAG_WEBPAGEVISITED_ATT="SWBWebPageVisited";
+
+    /** The Constant TAG_WebPageHistory_ATT. */
+    public static final String TAG_WEBPAGEHISTORY_ATT="SWBWebPageHistory";
     
     /** The doms. */
     private HashMap<String,Document> doms;
@@ -394,6 +399,24 @@ public class SWBRuleMgr
                 }else
                 {
                     return !user.getIp().startsWith(value);
+                }
+            }else if(name.equals(TAG_WEBPAGEHISTORY_ATT)) //validacion de roles
+            {
+                if(cond.equals("="))
+                {
+                    return user.getHistory().contains(value);
+                }else
+                {
+                    return !user.getHistory().contains(value);
+                }
+            }else if(name.equals(TAG_WEBPAGEVISITED_ATT)) //validacion de roles
+            {
+                if(cond.equals("="))
+                {
+                    return user.getVisited().contains(value);
+                }else
+                {
+                    return !user.getVisited().contains(value);
                 }
             }else //se busca en el xml del usuario
             {
