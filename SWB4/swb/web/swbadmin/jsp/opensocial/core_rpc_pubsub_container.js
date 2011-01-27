@@ -5782,7 +5782,7 @@ shindig.IfrGadgetService.prototype.setHeight = function(height) {
   if (height > shindig.container.maxheight_) {
     height = shindig.container.maxheight_;
   }
-    var _id='porlet_'+this.f;
+    /*var _id='porlet_'+this.f;
     var id = shindig.container.gadgetService.getGadgetIdFromModuleId(this.f);
     var porlet=dijit.byId(_id);
     var gadget = shindig.container.getGadget(id);
@@ -5796,10 +5796,12 @@ shindig.IfrGadgetService.prototype.setHeight = function(height) {
            {
               var style_='width:'+width_ +'px;height:'+height_+'px';
               porlet.set('style',style_);              
+              alert('porlet.style: '+porlet.style);
+              //porlet.refresh();
            }
            
         }catch(e){}
-    }
+    }*/
   var element = document.getElementById(this.f);
   if (element) {
     element.style.height = height + 'px';
