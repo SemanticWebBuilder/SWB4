@@ -4,12 +4,12 @@
         String minChildWidthforCanvas="500";
         String nbZonesforCanvas="1";
         String nbZones="3";
-        String iframewidth="400";
-        String iframeheight="300";
+        int iframewidth=400;
+        int iframeheight=300;
         String dialogaddWidth="800";
         String dialogaddHeight="600";
-        String iframewidthforCanvas="800";
-        String iframeheightforCanvas="600";
+        int iframewidthforCanvas=800;
+        int iframeheightforCanvas=600;
 
         SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
         WebSite site=paramRequest.getWebPage().getWebSite();
@@ -76,7 +76,7 @@
 <html>
 <head>
     <style type="text/css">
-        iframe{width:<%=iframewidth%>px;height: <%=iframeheight%>px}
+        iframe{width:<%=iframewidth-20%>px;height: <%=iframeheight%>px}
         .dndDropIndicator
     { border: 2px dashed #99BBE8; cursor:default; margin-bottom:5px; }
     </style>
