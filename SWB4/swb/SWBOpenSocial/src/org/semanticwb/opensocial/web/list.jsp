@@ -304,7 +304,7 @@
                 }
                 SWBResourceURL edit=paramRequest.getRenderUrl();
                 edit.setMode(SocialContainer.Mode_CONFIGGADGET);
-                edit.setCallMethod(SWBResourceURL.Call_CONTENT);
+                edit.setCallMethod(SWBResourceURL.Call_DIRECT);
 
 
 
@@ -342,7 +342,7 @@
                 }
                 SWBResourceURL edit=paramRequest.getRenderUrl();
                 edit.setMode(SocialContainer.Mode_CONFIGGADGET);
-                edit.setCallMethod(SWBResourceURL.Call_CONTENT);
+                edit.setCallMethod(SWBResourceURL.Call_DIRECT);
                 edit.setParameter("url", g3.getUrl());
                 %>
                 <td><img onError="loadImage(this);" alt="<%=title%>"  width="120" height="60" src="<%=img%>"><a href="<%=edit%>"><br><%=title%></a></td>
