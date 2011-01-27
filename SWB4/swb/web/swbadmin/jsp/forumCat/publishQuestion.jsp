@@ -66,9 +66,7 @@ if (resource != null && resource.getResource().isValid()) {
                     }
                     %>
                 </select>
-                <%
-            %>
-            <input name="publicar" type="image" class="btn_publicar" src="/work/models/COMEX/css/images/btn_compartir.png" onclick="return validateFields(this.form);"/>
+            <input name="publicar" type="image" class="btn_publicar" src="<%=SWBPortal.getWebWorkPath()+"/models/"+paramRequest.getWebPage().getWebSiteId()+"/css/images/"%>/btn_compartir.png" onclick="return validateFields(this.form);"/>
         </form>
     </div>
 <%
