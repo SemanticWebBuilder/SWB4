@@ -1378,50 +1378,71 @@ gadgets.Tab.prototype.getName = function() {
 };
 
 
-gadgets.TabSet = function(opt_moduleId,opt_defaultTab,opt_container) {    
-    this.tabs=[];
-    var aleatorio = Math.round(Math.random()*99);    
-    var root_id='layout-root'+aleatorio;    
-    var divroot=document.createElement('div');    
-    divroot.setAttribute('id',root_id);    
-    document.body.appendChild(divroot);    
-    aleatorio = Math.round(Math.random()*99);    
-    this.id_tablecontainer_='tablecontainer-'+aleatorio;    
-    divroot.innerHTML='<table id="'+this.id_tablecontainer_+'"><tr><td></td></tr></table>';    
-    aleatorio = Math.round(Math.random()*99);    
-    var id_tab='tabcontainer-'+aleatorio;
+gadgets.TabSet = function(opt_moduleId,opt_defaultTab,opt_container) {
     
-        
-    this.tabcontainer=new dijit.layout.TabContainer({'style':'width:96%;height:96%','id':id_tab,'tabStrip':'true'},divroot);
-    dojo.connect(this.tabcontainer,"selectChild",this,function(child){
-                if(child.id)
-                {
-                    for(var i = 0; i < this.tabs.length; i++)
-                    {
-                        var tabdef=this.tabs[i];
-                        if(tabdef.panel.id==child.id)
-                        {
-                            var callback=tabdef.tab.getCallback();
-                            if(callback)callback(child.id);
-                        }
-                    }
-                }
-        });
+    this.tabs=[];
+    
+    var aleatorio = Math.round(Math.random()*99);
+      var root_id='layout-root'+aleatorio;
+      var divroot=document.createElement('div');
+      divroot.setAttribute('id',root_id);
+      document.body.appendChild(divroot);
+      aleatorio = Math.round(Math.random()*99);
+      this.id_tablecontainer_='tablecontainer-'+aleatorio;
+      
 
-    dojo.connect(this.tabcontainer,"removeChild",this,function(child){
-                if(child.id)
-                {
-                    for(var i = 0; i < this.tabs.length; i++)
-                    {
-                        var tabdef=this.tabs[i];
-                        if(tabdef.panel.id==child.id)
-                        {
-                            this.removeTab(i);
-                        }
-                    }                    
-                }
-        });
-    this.tabcontainer.startup();    
+        this.id_tablecontainer_='tablecontainer-'+aleatorio;
+        var tableheader=document.createElement("table");
+        tableheader.id=this.id_tablecontainer_;
+        tableheader.cellSpacing="0";
+        tableheader.cellPadding="0";
+        tableheader.style.width="100%";
+        document.body.appendChild(tableheader);
+        var tbodyheader=document.createElement("tbody");
+        var trheader=document.createElement("tr");
+        tbodyheader.appendChild(trheader);
+        tableheader.appendChild(tbodyheader);
+        var tdheader=document.createElement("td");
+        trheader.appendChild(tdheader);
+        tdheader=document.createElement("td");
+        trheader.appendChild(tdheader);
+
+      //divroot.innerHTML='<table cellSpacing="0" cellPadding="0" id="'+this.id_tablecontainer_+'"><tr><td></td></tr></table>';
+      aleatorio = Math.round(Math.random()*99);
+      var id_tab='tabcontainer-'+aleatorio;
+
+
+      this.tabcontainer=new dijit.layout.TabContainer({'style':'width:90%;height:100%','id':id_tab,'tabStrip':'true'},divroot);
+      this.tabcontainer.domNode.appendChild(tableheader);
+      dojo.connect(this.tabcontainer,"selectChild",this,function(child){
+                  if(child.id)
+                  {
+                      for(var i = 0; i < this.tabs.length; i++)
+                      {
+                          var tabdef=this.tabs[i];
+                          if(tabdef.panel.id==child.id)
+                          {
+                              var callback=tabdef.tab.getCallback();
+                              if(callback)callback(child.id);
+                          }
+                      }
+                  }
+          });
+
+      dojo.connect(this.tabcontainer,"removeChild",this,function(child){
+                  if(child.id)
+                  {
+                      for(var i = 0; i < this.tabs.length; i++)
+                      {
+                          var tabdef=this.tabs[i];
+                          if(tabdef.panel.id==child.id)
+                          {
+                              this.removeTab(i);
+                          }
+                      }
+                  }
+          });
+    this.tabcontainer.startup();
     
 };
 
