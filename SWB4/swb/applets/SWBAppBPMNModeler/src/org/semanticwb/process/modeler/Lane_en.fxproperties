@@ -1,2 +1,3 @@
 "actDelete" = "Delete"
 "confirmDelete" = "Are you sure you want to delete %s?"
+"confirmDelContents" = "Are you sure you want to delete contents from %s?"
