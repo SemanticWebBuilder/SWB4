@@ -65,10 +65,10 @@ public class User extends UserBase implements Principal
     private boolean login = false;
 
     /** The History webpages of the user. */
-    private ArrayList history = new ArrayList();
+    private ArrayList<String> history = new ArrayList();
 
     /** The visited webpages of the user. */
-    private TreeSet visited = new TreeSet();
+    private TreeSet<String> visited = new TreeSet();
 
     /**
      * Instantiates a new user.
@@ -813,6 +813,22 @@ public class User extends UserBase implements Principal
     public TreeSet getVisited()
     {
         return visited;
+    }
+    
+    public boolean isInHistory(WebPage page)
+    {
+        return history.contains(page.getId());
+    }
+    
+    public boolean isVisited(WebPage page)
+    {
+        return visited.contains(page.getId());
+    }
+
+    public void addVisitedWebPage(WebPage page)
+    {
+        visited.add(page.getId());
+        history.add(page.getId());
     }
 
 }
