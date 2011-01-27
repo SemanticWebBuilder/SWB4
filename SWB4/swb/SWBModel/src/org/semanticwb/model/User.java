@@ -31,6 +31,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.TreeSet;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
@@ -62,6 +63,12 @@ public class User extends UserBase implements Principal
     
     /** The login. */
     private boolean login = false;
+
+    /** The History webpages of the user. */
+    private ArrayList history = new ArrayList();
+
+    /** The visited webpages of the user. */
+    private TreeSet visited = new TreeSet();
 
     /**
      * Instantiates a new user.
@@ -796,6 +803,16 @@ public class User extends UserBase implements Principal
         {
             setCountry(user.getCountry());
         }
+    }
+
+    public ArrayList getHistory()
+    {
+        return history;
+    }
+
+    public TreeSet getVisited()
+    {
+        return visited;
     }
 
 }
