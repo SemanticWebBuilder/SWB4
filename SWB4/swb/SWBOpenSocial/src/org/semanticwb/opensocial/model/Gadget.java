@@ -25,6 +25,7 @@ import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXParseException;
 
 public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
 {
@@ -79,7 +80,18 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                         String value = messages.get(key);
                         xml = xml.replace(key, value);
                     }
-                    _doc = SWBUtils.XML.xmlToDom(xml);
+                    try
+                    {
+                        _doc = SWBUtils.XML.xmlToDom(xml);
+                    }
+                    catch(RuntimeException e)
+                    {
+
+                        log.debug("gadget "+this.getUrl(),e);
+                        log.debug("xml");
+                        log.debug(xml);
+
+                    }
                 }
             }
         }
