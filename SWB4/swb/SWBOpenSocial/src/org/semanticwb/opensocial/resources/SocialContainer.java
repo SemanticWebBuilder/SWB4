@@ -81,52 +81,19 @@ public class SocialContainer extends GenericResource
         "rpc_relay.html",
         "sinfoto.png"
     };
-
+        static final String[] urls =
+        {
+            "http://hosting.gmodules.com/ig/gadgets/file/111782983456439885554/Google-Gadget-RSS.xml", "http://www.tc.df.gov.br/MpjTcdf/AlcCalc.xml",
+            "http://www.italiagadget.net/news/newsussci.xml","http://www.delsearegional.us/academic/classes/highschool/science/physics/age/age.xml","http://midots.com/gadgets/xmldocs/midotsImgViewBeautifulPhotosOfIslands_11.xml","http://hosting.gmodules.com/ig/gadgets/file/112581010116074801021/spider.xml","http://www.donalobrien.net/apps/google/currency.xml","http://opensocial-resources.googlecode.com/svn/tests/trunk/suites/0.8/compliance/reference.xml","http://localhost:8080/swb/samplecontainer/examples/horoscope.xml","http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml","http://www.google.com/ig/modules/horoscope/horoscope.xml","http://www.google.com/ig/modules/test_setprefs_multiple_ifpc.xml"
+        };//,http://www.delsearegional.us/academic/classes/highschool/science/physics/age/age.xml","http://midots.com/gadgets/xmldocs/midotsImgViewBeautifulPhotosOfIslands_11.xml","http://hosting.gmodules.com/ig/gadgets/file/112581010116074801021/spider.xml","http://www.donalobrien.net/apps/google/currency.xml","http://opensocial-resources.googlecode.com/svn/tests/trunk/suites/0.8/compliance/reference.xml","http://localhost:8080/swb/samplecontainer/examples/horoscope.xml","http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml","http://www.google.com/ig/modules/horoscope/horoscope.xml","http://www.google.com/ig/modules/test_setprefs_multiple_ifpc.xml"};
     static
     {
-
-
-
-
-
-
+        supportedFeatures.add("views");
         supportedFeatures.add("settile");
         supportedFeatures.add("flash");
         supportedFeatures.add("rpc");
         supportedFeatures.add("setprefs");
         supportedFeatures.add("dynamic-height");
-        String[] urls =
-        {
-            "http://hosting.gmodules.com/ig/gadgets/file/111782983456439885554/Google-Gadget-RSS.xml", "http://www.tc.df.gov.br/MpjTcdf/AlcCalc.xml",
-            "http://www.italiagadget.net/news/newsussci.xml"
-        };//,http://www.delsearegional.us/academic/classes/highschool/science/physics/age/age.xml","http://midots.com/gadgets/xmldocs/midotsImgViewBeautifulPhotosOfIslands_11.xml","http://hosting.gmodules.com/ig/gadgets/file/112581010116074801021/spider.xml","http://www.donalobrien.net/apps/google/currency.xml","http://opensocial-resources.googlecode.com/svn/tests/trunk/suites/0.8/compliance/reference.xml","http://localhost:8080/swb/samplecontainer/examples/horoscope.xml","http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml","http://www.google.com/ig/modules/horoscope/horoscope.xml","http://www.google.com/ig/modules/test_setprefs_multiple_ifpc.xml"};
-        try
-        {
-            WebSite site = WebSite.ClassMgr.getWebSite("reg_digital_demo");
-            for (String url : urls)
-            {
-                boolean exists = false;
-                Iterator<Gadget> gadgets = Gadget.ClassMgr.listGadgets();
-                while (gadgets.hasNext())
-                {
-                    Gadget gadget = gadgets.next();
-                    if (gadget.getUrl().equals(url))
-                    {
-                        exists = true;
-                        break;
-                    }
-                }
-                if (!exists)
-                {
-                    Gadget g = Gadget.ClassMgr.createGadget(site);
-                    g.setUrl(url);
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            log.debug(e);
-        }
 
     }
 
@@ -315,6 +282,35 @@ public class SocialContainer extends GenericResource
             IOException
     {
 
+        try
+        {
+            WebSite site = paramRequest.getWebPage().getWebSite();
+            for (String url : urls)
+            {
+                boolean exists = false;
+                Iterator<Gadget> itgadgets = Gadget.ClassMgr.listGadgets(site);
+                while (itgadgets.hasNext())
+                {
+                    Gadget gadget = itgadgets.next();
+                    if (gadget.getUrl().equals(url))
+                    {
+                        exists = true;
+                        break;
+                    }
+                }
+                log.debug("exists :"+exists+" url: "+url);
+                if (!exists)
+                {
+                    Gadget g = Gadget.ClassMgr.createGadget(site);
+                    g.setUrl(url);
+                    log.debug("added: "+site.getId());
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            log.debug(e);
+        }
         String pathdir = SWBPortal.getWorkPath() + this.getResourceBase().getWorkPath();
         File dir = new File(pathdir);
         for (String file : files)
@@ -327,6 +323,7 @@ public class SocialContainer extends GenericResource
             Gadget g = gadgets.next();
             g.getDocument();
         }
+        
         if (paramRequest.getMode().equals(Mode_METADATA))
         {
             doMetadata(request, response, paramRequest);
