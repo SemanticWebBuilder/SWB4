@@ -1386,6 +1386,7 @@ gadgets.TabSet = function(opt_moduleId,opt_defaultTab,opt_container) {
       var root_id='layout-root'+aleatorio;
       var divroot=document.createElement('div');
       divroot.setAttribute('id',root_id);
+      
       document.body.appendChild(divroot);
       aleatorio = Math.round(Math.random()*99);
       this.id_tablecontainer_='tablecontainer-'+aleatorio;
