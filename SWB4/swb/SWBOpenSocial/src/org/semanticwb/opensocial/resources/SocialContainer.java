@@ -93,6 +93,7 @@ public class SocialContainer extends GenericResource
         supportedFeatures.add("flash");
         supportedFeatures.add("rpc");
         supportedFeatures.add("setprefs");
+        supportedFeatures.add("tabs");
         supportedFeatures.add("dynamic-height");
 
     }
@@ -181,41 +182,23 @@ public class SocialContainer extends GenericResource
                 Document doc = gadget.getDocument();
                 NodeList userPrefs = doc.getElementsByTagName("UserPref");
                 String moduleid = null;
-
-
-
-
-
                 if (user != null && user.getId() != null)
                 {
                     PersonalizedGadged pgadget = PersonalizedGadged.ClassMgr.createPersonalizedGadged(site);
                     pgadget.setGadget(gadget);
                     pgadget.setUser(user);
                     moduleid = pgadget.getId();
-
-
-
-
                 }
                 else
                 {
                     moduleid = String.valueOf(socialUser.getNumberOfGadgets() + 1);
-
-
-
-
                     if (userPrefs.getLength() == 0)
                     {
                         socialUser.saveUserPref(gadget, moduleid, null, null);
-
-
-
-
                     }
                 }
 
-                for (int i = 0; i
-                        < userPrefs.getLength(); i++)
+                for (int i = 0; i< userPrefs.getLength(); i++)
                 {
                     if (userPrefs.item(i) instanceof Element)
                     {
@@ -223,57 +206,29 @@ public class SocialContainer extends GenericResource
                         String key = userPref.getAttribute("name");
                         String value = request.getParameter(key);
                         String type = "String";
-
-
-
-
                         if (userPref.getAttribute("type") != null && !userPref.getAttribute("type").equals(""))
                         {
                             type = userPref.getAttribute("type");
-
-
-
-
                         }
                         if ("list".equals(type))
                         {
                             StringTokenizer st = new StringTokenizer(value, "\r\n");
-
-
-
-
                             while (st.hasMoreTokens())
                             {
                                 String temp = st.nextToken();
                                 value += temp + "|";
-
-
-
-
                             }
                             if (value.endsWith("|"))
                             {
                                 value = value.substring(0, value.length() - 2);
-
-
-
-
                             }
                         }
                         socialUser.saveUserPref(gadget, moduleid, key, value);
-
-
-
-
                     }
                 }
             }
         }
         response.setMode(SocialContainer.Mode_LISTGADGETS);
-
-
-
-
     }
 
     @Override
@@ -297,13 +252,11 @@ public class SocialContainer extends GenericResource
                         exists = true;
                         break;
                     }
-                }
-                log.debug("exists :"+exists+" url: "+url);
+                }                
                 if (!exists)
                 {
                     Gadget g = Gadget.ClassMgr.createGadget(site);
-                    g.setUrl(url);
-                    log.debug("added: "+site.getId());
+                    g.setUrl(url);                 
                 }
             }
         }
