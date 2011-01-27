@@ -88,12 +88,14 @@ public class GraphicalElement extends CustomNode
 
     public function onParentXChange()
     {
-        if(graphParent!=null)x=px+dpx;
+       if(graphParent!=null and not graphParent.resizing)x=px+dpx;
+       //println("Cambiando X");
     }
 
     public function onParentYChange()
     {
-        if(graphParent!=null)y=py+dpy;
+        if(graphParent!=null and not graphParent.resizing)y=py+dpy;
+        //println("Cambiando Y");
     }
 
     protected function initializeCustomNode():Void
@@ -220,7 +222,6 @@ public class GraphicalElement extends CustomNode
         }
     }
 
-
     override var onMouseReleased = function( e: MouseEvent ):Void
     {
         if(ModelerUtils.clickedNode==this)
@@ -273,7 +274,7 @@ public class GraphicalElement extends CustomNode
 
     public function setGraphParent(parent:GraphicalElement):Void
     {
-        if(parent!=null)
+        if(parent!=null and not (parent.resizing))
         {
             dpx=x-parent.x;
             dpy=y-parent.y;
@@ -311,6 +312,11 @@ public class GraphicalElement extends CustomNode
     public function getContainerChilds():GraphicalElement[]
     {
         return containerChilds;
+    }
+
+    public function getgraphChilds():GraphicalElement[]
+    {
+        return graphChilds;
     }
 
     public function snapToGrid()
