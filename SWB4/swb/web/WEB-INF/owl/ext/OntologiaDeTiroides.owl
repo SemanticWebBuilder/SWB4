@@ -1,0 +1,692 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns="http://www.owl-ontologies.com/unnamed.owl#"
+  xml:base="http://www.owl-ontologies.com/unnamed.owl">
+  <owl:Ontology rdf:about=""/>
+  <owl:Class rdf:ID="Citoplasma">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="CALIFICADOR_DEL_TIPO_CELULAR"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Células_escamosas">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="CARACTERISTICAS_DEL_TIPO_CELULAR"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Células_ciliadas">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#CARACTERISTICAS_DEL_TIPO_CELULAR"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Multinucleación">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Características_del_NÚCLEO_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Mitosis_atípica">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Características_del_NÚCLEO_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Gigante">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Características_del_TAMAÑO_del_Tipo_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Aspecto_Celular_Polimorfo">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="CARACTERISTICAS_DEL_ASPECTO_CELULAR"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#CARACTERISTICAS_DEL_TIPO_CELULAR">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="CaracteristicasDeCelularidad"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Células_de_aspecto_fusiforme">
+    <rdfs:subClassOf rdf:resource="#CARACTERISTICAS_DEL_TIPO_CELULAR"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Viscoso_en_goma_de_mascar">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="CaracteristicasDeColoide"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Láminas_">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Características_de_la_AGRUPACIÓN_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Grande">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Características_del_TAMAÑO_del_Tipo_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Abundante">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Características_de_la_CANTIDAD_del_Tipo_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Fondo_Inflamatorio">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="CalificadorDeFondo"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Células_de_aspecto_plasmacitoide">
+    <rdfs:subClassOf rdf:resource="#CARACTERISTICAS_DEL_TIPO_CELULAR"/>
+  </owl:Class>
+  <owl:Class rdf:ID="CalificadorDeCelularidad">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Calificador"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Binucleación">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Características_del_NÚCLEO_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Agregados_linfohistiocitarios">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Características_del_CITOPLASMA_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Fondo_Diatésico_o_Necrótico">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#CalificadorDeFondo"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Monocapa">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Características_de_la_AGRUPACIÓN_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Anisocitosis_Pleomorfismo">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Características_del_CITOPLASMA_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#CaracteristicasDeColoide">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Caracteristicas"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Células_epitelioides">
+    <rdfs:subClassOf rdf:resource="#CARACTERISTICAS_DEL_TIPO_CELULAR"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Celularidad_Escasa">
+    <rdfs:subClassOf rdf:resource="#CalificadorDeCelularidad"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Mitosis">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Características_del_NÚCLEO_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Disposición_microfolicular_con_coloide_en_su_interior">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Características_de_la_AGRUPACIÓN_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Cuerpos_de_psamoma_presentes">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#CalificadorDeFondo"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Ausente">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Características_de_la_CANTIDAD_del_Tipo_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Citoplasma_en_llama">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Características_del_CITOPLASMA_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Papiliformes">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Características_de_la_AGRUPACIÓN_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Células_foliculares">
+    <rdfs:subClassOf rdf:resource="#CARACTERISTICAS_DEL_TIPO_CELULAR"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Cristales">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#CalificadorDeFondo"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Fondo_Hemorrágico">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#CalificadorDeFondo"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Celularidad">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Componentes"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Núcleo">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#CALIFICADOR_DEL_TIPO_CELULAR"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Coloide_Escaso">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="CalificadorDeColoide"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Sin_especificar">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Características_del_TAMAÑO_del_Tipo_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Nucleolo_prominente">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Características_del_NÚCLEO_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Células_de_aspecto_poligonal">
+    <rdfs:subClassOf rdf:resource="#CARACTERISTICAS_DEL_TIPO_CELULAR"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Coloide_Ausente">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#CalificadorDeColoide"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Ausencia_de_c._malignas">
+    <rdfs:subClassOf rdf:resource="#CARACTERISTICAS_DEL_TIPO_CELULAR"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Disposición_macrofolicular">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Características_de_la_AGRUPACIÓN_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Características_del_TAMAÑO_del_Tipo_Celular">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#CaracteristicasDeCelularidad"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Características_de_la_AGRUPACIÓN_Celular">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#CaracteristicasDeCelularidad"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Pseudoinclusiones_nucleares">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Características_del_NÚCLEO_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Acúmulos_pequeños">
+    <rdfs:subClassOf rdf:resource="#CaracteristicasDeColoide"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Monomorfismo">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Características_del_CITOPLASMA_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Células_linfoides">
+    <rdfs:subClassOf rdf:resource="#CARACTERISTICAS_DEL_TIPO_CELULAR"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Células_sin_identificar">
+    <rdfs:subClassOf rdf:resource="#CARACTERISTICAS_DEL_TIPO_CELULAR"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Grupos_pequeños">
+    <rdfs:subClassOf rdf:resource="#Características_de_la_AGRUPACIÓN_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Hipertrofia_nuclear">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Características_del_NÚCLEO_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Hendiduras_nucleares">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Características_del_NÚCLEO_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Células_malignas">
+    <rdfs:subClassOf rdf:resource="#CARACTERISTICAS_DEL_TIPO_CELULAR"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Características_del_NÚCLEO_Celular">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#CaracteristicasDeCelularidad"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Células_aisladas">
+    <rdfs:subClassOf rdf:resource="#Características_de_la_AGRUPACIÓN_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Cuerpos_linfoglandulares">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Características_del_CITOPLASMA_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Células_sanguíneas">
+    <rdfs:subClassOf rdf:resource="#CARACTERISTICAS_DEL_TIPO_CELULAR"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Disposición_macrofolicular_con_coloide_en_su_interior">
+    <rdfs:subClassOf rdf:resource="#Características_de_la_AGRUPACIÓN_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ASPECTO_DEL_COLOIDE_">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#CalificadorDeColoide"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Celularidad_Ausente">
+    <rdfs:subClassOf rdf:resource="#CalificadorDeCelularidad"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Cromatina_fina">
+    <rdfs:subClassOf rdf:resource="#Características_del_NÚCLEO_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ASPECTO_CELULAR_">
+    <rdfs:subClassOf rdf:resource="#CalificadorDeCelularidad"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Grandes_acúmulos_de_coloide">
+    <rdfs:subClassOf rdf:resource="#CaracteristicasDeColoide"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Cromatina_en_sal_y_pimienta">
+    <rdfs:subClassOf rdf:resource="#Características_del_NÚCLEO_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Cromatina_grosera">
+    <rdfs:subClassOf rdf:resource="#Características_del_NÚCLEO_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:about="#CalificadorDeFondo">
+    <rdfs:subClassOf rdf:resource="#Calificador"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Fondo">
+    <rdfs:subClassOf rdf:resource="#Componentes"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Nucleolo_inconspicuo">
+    <rdfs:subClassOf rdf:resource="#Características_del_NÚCLEO_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:about="#CARACTERISTICAS_DEL_ASPECTO_CELULAR">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#CaracteristicasDeCelularidad"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Atipia_nuclear">
+    <rdfs:subClassOf rdf:resource="#Características_del_NÚCLEO_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Cantidad">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#CALIFICADOR_DEL_TIPO_CELULAR"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Histiocitos">
+    <rdfs:subClassOf rdf:resource="#CARACTERISTICAS_DEL_TIPO_CELULAR"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Hipercromatismo_nuclear">
+    <rdfs:subClassOf rdf:resource="#Características_del_NÚCLEO_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Núcleo_irregular">
+    <rdfs:subClassOf rdf:resource="#Características_del_NÚCLEO_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:about="#CalificadorDeColoide">
+    <rdfs:subClassOf rdf:resource="#Calificador"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Células_oncocíticas">
+    <rdfs:subClassOf rdf:resource="#CARACTERISTICAS_DEL_TIPO_CELULAR"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Características_del_CITOPLASMA_Celular">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#CaracteristicasDeCelularidad"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Coloide">
+    <rdfs:subClassOf rdf:resource="#Componentes"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Coloide_Abundante">
+    <rdfs:subClassOf rdf:resource="#CalificadorDeColoide"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Celularidad_Variable">
+    <rdfs:subClassOf rdf:resource="#CalificadorDeCelularidad"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Células_mucinosas">
+    <rdfs:subClassOf rdf:resource="#CARACTERISTICAS_DEL_TIPO_CELULAR"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Aspecto_Celular_Homogéneo">
+    <rdfs:subClassOf rdf:resource="#CARACTERISTICAS_DEL_ASPECTO_CELULAR"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Pequeño">
+    <rdfs:subClassOf rdf:resource="#Características_del_TAMAÑO_del_Tipo_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Amiloide">
+    <rdfs:subClassOf rdf:resource="#CalificadorDeFondo"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Sin_especificar_">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Características_de_la_CANTIDAD_del_Tipo_Celular"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Tamaño">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#CALIFICADOR_DEL_TIPO_CELULAR"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Coloide_Sin_especificar_">
+    <rdfs:subClassOf rdf:resource="#CalificadorDeColoide"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Normal">
+    <rdfs:subClassOf rdf:resource="#Características_del_NÚCLEO_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:about="#CALIFICADOR_DEL_TIPO_CELULAR">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="TIPO_CELULAR_"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Citoplasma_aumentado_">
+    <rdfs:subClassOf rdf:resource="#Características_del_CITOPLASMA_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Celularidad_Abundante">
+    <rdfs:subClassOf rdf:resource="#CalificadorDeCelularidad"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Tridimensionales">
+    <rdfs:subClassOf rdf:resource="#Características_de_la_AGRUPACIÓN_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Class_96">
+    <rdfs:subClassOf rdf:resource="#Características_de_la_AGRUPACIÓN_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Gránulos_citoplasmáticos">
+    <rdfs:subClassOf rdf:resource="#Características_del_CITOPLASMA_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:about="#TIPO_CELULAR_">
+    <rdfs:subClassOf rdf:resource="#CalificadorDeCelularidad"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Polinucleares">
+    <rdfs:subClassOf rdf:resource="#CARACTERISTICAS_DEL_TIPO_CELULAR"/>
+  </owl:Class>
+  <owl:Class rdf:about="#CaracteristicasDeCelularidad">
+    <rdfs:subClassOf rdf:resource="#Caracteristicas"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Celularidad_Sin_especificar_">
+    <rdfs:subClassOf rdf:resource="#CalificadorDeCelularidad"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Células_gigantes">
+    <rdfs:subClassOf rdf:resource="#CARACTERISTICAS_DEL_TIPO_CELULAR"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Grupos_intermedios_">
+    <rdfs:subClassOf rdf:resource="#Características_de_la_AGRUPACIÓN_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Agrupación">
+    <rdfs:subClassOf rdf:resource="#CALIFICADOR_DEL_TIPO_CELULAR"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Cuerpos_de_psamoma_ausentes">
+    <rdfs:subClassOf rdf:resource="#CalificadorDeFondo"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Disposición_microfolicular">
+    <rdfs:subClassOf rdf:resource="#Características_de_la_AGRUPACIÓN_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Núcleo_oval">
+    <rdfs:subClassOf rdf:resource="#Características_del_NÚCLEO_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Diagnostico"/>
+  <owl:Class rdf:ID="Carcinoma_papilar">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="#Núcleo_oval"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="TiieneCaracteristicaDeCelularidad"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="TieneCalificadorDeColoide"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="#Coloide_Escaso"/>
+              <owl:Class rdf:about="#Coloide_Ausente"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#TiieneCaracteristicaDeCelularidad"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="#Hendiduras_nucleares"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#TiieneCaracteristicaDeCelularidad"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="Anisocariosis"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#TiieneCaracteristicaDeCelularidad"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="#Tridimensionales"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="TieneCalificadordeCelularidad"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="#Celularidad_Abundante"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Diagnostico"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="#Cuerpos_de_psamoma_presentes"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="TieneCalificadorDeFondo"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#TiieneCaracteristicaDeCelularidad"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="#Monocapa"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="#Pseudoinclusiones_nucleares"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#TiieneCaracteristicaDeCelularidad"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#TiieneCaracteristicaDeCelularidad"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="#Nucleolo_inconspicuo"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#TiieneCaracteristicaDeCelularidad"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="#Histiocitos"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#TiieneCaracteristicaDeCelularidad"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="#Cromatina_fina"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Nodulo_adenomatoideo">
+    <rdfs:subClassOf rdf:resource="#Diagnostico"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#TiieneCaracteristicaDeCelularidad"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Class rdf:about="#Disposición_macrofolicular"/>
+              <owl:Class rdf:about="#Disposición_microfolicular"/>
+              <owl:Class rdf:about="#Disposición_microfolicular_con_coloide_en_su_interior"/>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="#Normal"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#TiieneCaracteristicaDeCelularidad"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="#Coloide_Escaso"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#TieneCalificadorDeColoide"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="#Celularidad_Variable"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#TieneCalificadordeCelularidad"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#TiieneCaracteristicaDeCelularidad"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="#Monocapa"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class>
+            <owl:complementOf>
+              <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                  <owl:Class rdf:about="#Pseudoinclusiones_nucleares"/>
+                  <owl:Class rdf:about="#Hendiduras_nucleares"/>
+                </owl:unionOf>
+              </owl:Class>
+            </owl:complementOf>
+          </owl:Class>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#TiieneCaracteristicaDeCelularidad"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Núcleo_redondeado">
+    <rdfs:subClassOf rdf:resource="#Características_del_NÚCLEO_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Vacuolas_citoplasmáticas_">
+    <rdfs:subClassOf rdf:resource="#Características_del_CITOPLASMA_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Características_de_la_CANTIDAD_del_Tipo_Celular">
+    <rdfs:subClassOf rdf:resource="#CaracteristicasDeCelularidad"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Anisocariosis">
+    <rdfs:subClassOf rdf:resource="#Características_del_NÚCLEO_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Escasa">
+    <rdfs:subClassOf rdf:resource="#Características_de_la_CANTIDAD_del_Tipo_Celular"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Nodulo_coloideo">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#TiieneCaracteristicaDeCelularidad"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="#Aspecto_Celular_Homogéneo"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="#Cuerpos_de_psamoma_ausentes"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#TieneCalificadorDeFondo"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Diagnostico"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="#Coloide_Abundante"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#TieneCalificadorDeColoide"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#TieneCalificadorDeFondo"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="#Fondo_Hemorrágico"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="#Celularidad_Escasa"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#TieneCalificadordeCelularidad"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="#Pequeño"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="#TiieneCaracteristicaDeCelularidad"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Fondo_Limpio">
+    <rdfs:subClassOf rdf:resource="#CalificadorDeFondo"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="#TieneCalificadorDeFondo">
+    <rdfs:range rdf:resource="#CalificadorDeFondo"/>
+    <rdfs:domain rdf:resource="#Diagnostico"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#TiieneCaracteristicaDeCelularidad">
+    <rdfs:domain rdf:resource="#Diagnostico"/>
+    <rdfs:range rdf:resource="#CaracteristicasDeCelularidad"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#TieneCalificadordeCelularidad">
+    <rdfs:range rdf:resource="#CalificadorDeCelularidad"/>
+    <rdfs:domain rdf:resource="#Diagnostico"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="TieneCaracteristicaDeColoide">
+    <rdfs:domain rdf:resource="#Diagnostico"/>
+    <rdfs:range rdf:resource="#CaracteristicasDeColoide"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#TieneCalificadorDeColoide">
+    <rdfs:domain rdf:resource="#Diagnostico"/>
+    <rdfs:range rdf:resource="#CalificadorDeColoide"/>
+  </owl:ObjectProperty>
+</rdf:RDF>
+
+<!-- Created with Protege (with OWL Plugin 2.0 beta, Build 250)  http://protege.stanford.edu -->
