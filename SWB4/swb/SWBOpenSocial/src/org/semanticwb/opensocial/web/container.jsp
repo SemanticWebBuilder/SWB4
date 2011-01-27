@@ -25,6 +25,7 @@
         script.setCallMethod(SWBResourceURL.Call_DIRECT);
         script.setMode(SocialContainer.Mode_JAVASCRIPT);
         script.setParameter("script", "core_rpc_pubsub_container.js");
+        script.setParameter("debug", "0");
         String id=paramRequest.getUser().getId();
 
 
