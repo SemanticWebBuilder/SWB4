@@ -450,6 +450,7 @@ public class Distributor implements InternalServlet
                 {
                     out.print(SWBUtils.TEXT.encode(resp, rescharset));
                 }
+                user.addVisitedWebPage(webpage);
                 long tfin = System.currentTimeMillis() - tini;
                 out.println("\n<!--Time: " + tfin + "ms - SemanticWebBuilder: " + webpage + "--> ");  //TODO: encontrar una forma de configurar esto...
 
