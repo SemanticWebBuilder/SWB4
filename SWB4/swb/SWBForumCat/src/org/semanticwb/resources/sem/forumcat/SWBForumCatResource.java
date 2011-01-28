@@ -10,7 +10,6 @@ import javax.mail.internet.InternetAddress;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SWBMail;
@@ -26,23 +25,19 @@ import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 
 public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.base.SWBForumCatResourceBase {
+    private static Logger log = SWBUtils.getLogger(SWBForumCatResource.class);
     public static final int STATUS_REGISTERED=1;
     public static final int STATUS_ACEPTED=2;
     public static final int STATUS_REMOVED=3;
-    private static Logger log = SWBUtils.getLogger(SWBForumCatResource.class);
 
-    public SWBForumCatResource()
-    {
-    }
+    public SWBForumCatResource() {}
 
-    public SWBForumCatResource(org.semanticwb.platform.SemanticObject base)
-    {
+    public SWBForumCatResource(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
 
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String jsp = getViewJSP();
         if (jsp == null || jsp.trim().equals("")) {
             jsp = "/swbadmin/jsp/forumCat/swbForumCat.jsp";
@@ -54,13 +49,12 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
             RequestDispatcher rd = request.getRequestDispatcher(jsp);
             rd.include(request, response);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
-    {
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         User user = response.getUser();
         WebSite website = response.getWebPage().getWebSite();
         HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
@@ -85,7 +79,8 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         question.setCreator(user);
                     }
                     question.setForumResource(this);
-
+                    question.setQuestion(placeAnchors(question.getQuestion()));
+                    question.setQuestionReferences(request.getParameter("questionReferences"));
                     if (request.getParameter("tags") != null) {
                         question.setTags(request.getParameter("tags"));
                     }
@@ -102,11 +97,14 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 } catch (FormValidateException e) {
                     log.error(e);
                 }
-                Integer val = Integer.valueOf(user.getExtendedAttribute(mapa.get("userPoints")).toString());
-                try {
-                    user.setExtendedAttribute(mapa.get("userPoints"), val + 5);
-                } catch (SWBException ex) {
-                    log.error(ex);
+                if (isUseScoreSystem()) {
+                    UserPoints points = getUserPointsObject(user, website);
+                    if (points == null) {
+                        points = UserPoints.ClassMgr.createUserPoints(website);
+                        points.setPointsForum(this);
+                        points.setPointsUser(user);
+                    }
+                    points.setPoints(points.getPoints() + getPointsPublishQuestion());
                 }
             } else if (action.equals("editQuestion")) {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
@@ -118,6 +116,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         SemanticObject semObjectChild = SemanticObject.createSemanticObject((request.getParameter("categoryuri")));
                         WebPage webPage = (WebPage) semObjectChild.createGenericInstance();
                         question.setWebpage(webPage);
+                        question.setQuestion(placeAnchors(question.getQuestion()));
                         if (request.getParameter("tags") != null) {
                             question.setTags(request.getParameter("tags"));
                         }
@@ -161,6 +160,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     Answer answer = (Answer) semObjectChild.createGenericInstance();
                     answer.setAnsQuestion(question);
                     answer.setAnswer(placeAnchors(answer.getAnswer()));
+                    answer.setReferences(request.getParameter("references"));
                     if (isIsModerate()) {
                         answer.setAnsStatus(STATUS_REGISTERED);
                     } else {
@@ -177,11 +177,14 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 if (request.getParameter("page") != null) {
                     response.setRenderParameter("page", request.getParameter("page"));
                 }
-                Integer val = Integer.valueOf(user.getExtendedAttribute(mapa.get("userPoints")).toString());
-                try {
-                    user.setExtendedAttribute(mapa.get("userPoints"), val + 2);
-                } catch (SWBException ex) {
-                    log.error(ex);
+                if (isUseScoreSystem()) {
+                    UserPoints points = getUserPointsObject(user, website);
+                    if (points == null) {
+                        points = UserPoints.ClassMgr.createUserPoints(website);
+                        points.setPointsForum(this);
+                        points.setPointsUser(user);
+                    }
+                    points.setPoints(points.getPoints() + getPointsAnswer());
                 }
                 response.setRenderParameter("uri", request.getParameter("uri"));
             } else if (action.equals("editAnswer")) {
@@ -198,6 +201,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     response.setAction("showDetail");
                 }
                 Answer answer = (Answer) semObject.createGenericInstance();
+                answer.setAnswer(placeAnchors(answer.getAnswer()));
                 response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
                 if (request.getParameter("page") != null) {
                     response.setRenderParameter("page", request.getParameter("page"));
@@ -268,51 +272,22 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     response.setAction("showDetail");
                 }
 
-                Integer val = Integer.valueOf(user.getExtendedAttribute(mapa.get("userPoints")).toString());
-                try {
-                    user.setExtendedAttribute(mapa.get("userPoints"), val + 1);
-                } catch (SWBException ex) {
-                    log.error(ex);
-                }
-                Integer val2 = Integer.valueOf(answer.getCreator().getExtendedAttribute(mapa.get("userPoints")).toString());
-                try {
-                    answer.getCreator().setExtendedAttribute(mapa.get("userPoints"), val2 + 3);
-                } catch (SWBException ex) {
-                    log.error(ex);
-                }
-                response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
-                if (request.getParameter("page") != null) {
-                    response.setRenderParameter("page", request.getParameter("page"));
-                }
-            } else if (action.equals("markAnswerAsInnapropiate")) {
-                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
-                Answer answer = (Answer) semObject.createGenericInstance();
-                try {
-                    if (!answer.isAnsIsAppropiate()) {
-                        int innapropiateCount = answer.getAnsInappropriate() + 1;
-                        answer.setAnsInappropriate(innapropiateCount);
-                        if (innapropiateCount >= getMaxInnapropiateCount()) {//Enviar correo a administradores del foro
-                            Role role = website.getUserRepository().getRole("adminForum");
-                            Iterator<GenericObject> itGo = role.listRelatedObjects();
-                            while (itGo.hasNext()) {
-                                GenericObject GenericObject = itGo.next();
-                                if (GenericObject instanceof User) {
-                                    User userAdminForum = (User) GenericObject;
-                                    if (userAdminForum.getEmail() != null) {
-                                        //Enviar correo a este usuario para avisarleque esta Respuesta ya sobrepaso el umbral de lo considerado como inapropiado
-                                        //TODO
-                                    }
-                                }
-                            }
-                        }
+                if (isUseScoreSystem()) {
+                    UserPoints points = getUserPointsObject(user, website);
+                    if (points == null) {
+                        points = UserPoints.ClassMgr.createUserPoints(website);
+                        points.setPointsForum(this);
+                        points.setPointsUser(user);
                     }
-                } catch (Exception e) {
-                    log.error(e);
-                }
-                if (request.getParameter("org") != null) {
-                    response.setAction(request.getParameter("org"));
-                } else {
-                    response.setAction("showDetail");
+                    points.setPoints(points.getPoints() + getPointsMarkBestAnswer());
+
+                    points = getUserPointsObject(answer.getCreator(), website);
+                    if (points == null) {
+                        points = UserPoints.ClassMgr.createUserPoints(website);
+                        points.setPointsForum(this);
+                        points.setPointsUser(answer.getCreator());
+                    }
+                    points.setPoints(points.getPoints() + getPointsBestAnswer());
                 }
                 response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
                 if (request.getParameter("page") != null) {
@@ -413,31 +388,30 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     if (request.getParameter("likeVote") != null) {
                         boolean likeVote = Boolean.parseBoolean(request.getParameter("likeVote"));
                         answerVote.setLikeAnswer(likeVote);
+                        if (isUseScoreSystem()) {
+                            UserPoints points = getUserPointsObject(user, website);
+                            if (points == null) {
+                                points = UserPoints.ClassMgr.createUserPoints(website);
+                                points.setPointsForum(this);
+                                points.setPointsUser(user);
+                            }
+                            points.setPoints(points.getPoints() + getPointsVoteAnswer());
 
-                        if (likeVote) {
-                            Integer val = Integer.valueOf(user.getExtendedAttribute(mapa.get("userPoints")).toString());
-                            try {
-                                user.setExtendedAttribute(mapa.get("userPoints"), val + 1);
-                            } catch (SWBException ex) {
-                                log.error(ex);
+                            points = getUserPointsObject(answer.getCreator(), website);
+                            if (points == null) {
+                                points = UserPoints.ClassMgr.createUserPoints(website);
+                                points.setPointsForum(this);
+                                points.setPointsUser(answer.getCreator());
                             }
-                            Integer val2 = Integer.valueOf(answer.getCreator().getExtendedAttribute(mapa.get("userPoints")).toString());
-                            try {
-                                answer.getCreator().setExtendedAttribute(mapa.get("userPoints"), val2 + 2);
-                            } catch (SWBException ex) {
-                                log.error(ex);
-                            }
-                        } else {
-                            Integer val = Integer.valueOf(answer.getCreator().getExtendedAttribute(mapa.get("userPoints")).toString());
-                            try {
-                                if (val - 1 < 0) {
-                                    val = 0;
-                                } else {
-                                    val -= 1;
+
+                            if (likeVote) {
+                                points.setPoints(points.getPoints() + getPointsLikeAnswer());
+                            } else {
+                                int p = points.getPoints() - getPointsDontLikeAnswer();
+                                if (p < 0) {
+                                    p = 0;
                                 }
-                                answer.getCreator().setExtendedAttribute(mapa.get("userPoints"), val);
-                            } catch (SWBException ex) {
-                                log.error(ex);
+                                points.setPoints(p);
                             }
                         }
                     } else if (request.getParameter("irrelevant") != null) {
@@ -446,16 +420,18 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
 
                         int irrelevantCount = answer.getAnsIrrelevant() + 1;
                         answer.setAnsIrrelevant(irrelevantCount);
-                        Integer val = Integer.valueOf(answer.getCreator().getExtendedAttribute(mapa.get("userPoints")).toString());
-                        try {
-                            if (val - 1 < 0) {
-                                val = 0;
-                            } else {
-                                val -= 1;
+                        if (isUseScoreSystem()) {
+                            UserPoints points = getUserPointsObject(answer.getCreator(), website);
+                            if (points == null) {
+                                points = UserPoints.ClassMgr.createUserPoints(website);
+                                points.setPointsForum(this);
+                                points.setPointsUser(answer.getCreator());
                             }
-                            answer.getCreator().setExtendedAttribute(mapa.get("userPoints"), val);
-                        } catch (SWBException ex) {
-                            log.error(ex);
+                            int p = points.getPoints() - getPointsIrrelevantAnswer();
+                            if (p < 0) {
+                                p = 0;
+                            }
+                            points.setPoints(p);
                         }
                     }
                     if (request.getParameter("org") != null) {
@@ -555,18 +531,31 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
         response.setMode(response.Mode_VIEW);
     }
 
-    public String placeAnchors (String text) {
+    public String placeAnchors(String text) {
         String ret = text;
-        String regex = "((https?|ftp|gopher|telnet|file|notes|ms-help):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\.&]*)";
-        Matcher m = Pattern.compile(regex).matcher(text);
+        String regex = "https?://[\\+\\w+\\d+%#@:=/\\.\\?&_~-]+";
+        Matcher m = Pattern.compile(regex, 0).matcher(text);
 
         while (m.find()) {
             String urlt = m.group();
-
             if (urlt.endsWith(".") || urlt.endsWith(",") || urlt.endsWith(";") || urlt.endsWith(":")) {
                 urlt = urlt.substring(0, urlt.length() - 1);
             }
-            ret = ret.replaceAll(urlt, "<a href=\"" + urlt +"\">" + urlt + "</a>");
+            ret = ret.replaceAll(Pattern.quote(urlt), "<a href=\"" + urlt + "\">" + urlt + "</a>");
+        }
+        return ret;
+    }
+
+    private UserPoints getUserPointsObject(User user, WebSite model) {
+        UserPoints ret = null;
+        boolean found = false;
+        Iterator<UserPoints> itpoints = UserPoints.ClassMgr.listUserPointsByPointsUser(user, model);
+        while (itpoints.hasNext() && !found) {
+            UserPoints points = itpoints.next();
+            if (points.getPointsForum().getURI().equals(getURI())) {
+                ret = points;
+                found = true;
+            }
         }
         return ret;
     }
