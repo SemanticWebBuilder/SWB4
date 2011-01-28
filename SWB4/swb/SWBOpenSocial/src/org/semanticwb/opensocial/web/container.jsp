@@ -8,7 +8,7 @@
         int iframeheight=300;
         String dialogaddWidth="800";
         String dialogaddHeight="600";
-        int iframewidthforCanvas=800;
+        int iframewidthforCanvas=600;
         int iframeheightforCanvas=600;
 
         SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
@@ -298,7 +298,7 @@ function renderGadgets() {
         <div dojoType="dijit.Dialog" title="Agregar un gadget" id="dialog" style="width:<%=dialogaddWidth%>px;height:<%=dialogaddHeight%>px">
             <iframe id="iframeadd" src="<%=add%>" frameborder="0" style="width: <%=dialogaddWidth%>px;height:<%=dialogaddHeight%>px" scrolling="auto" width="100%" height="100%"></iframe>
         </div>
-        <p><a href="#" onclick="showDialogEmail();">add</a></p>
+        <p><a href="#" onclick="showDialogEmail();">Agregar</a></p>
         <%
     }
 %>
