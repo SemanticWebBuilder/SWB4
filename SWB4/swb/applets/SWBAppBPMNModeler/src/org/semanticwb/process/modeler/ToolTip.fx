@@ -34,6 +34,7 @@ public class ToolTip extends CustomNode {
     public var y:Number;
     public var text:String;
     public var error:Boolean;
+    public var wrapWidth:Number = 200;
     var _root: Group;
     var t:Text;
     var r:Rectangle;
@@ -49,6 +50,14 @@ public class ToolTip extends CustomNode {
                 opacity => 1.0 tween Interpolator.EASEBOTH;
             }
         ]
+    }
+
+    var _text = Text {
+        content: bind text
+        font: Font {
+            size:10
+            name:"Verdana"
+        }
     }
 
     def lightGrad = LinearGradient {
@@ -117,6 +126,7 @@ public class ToolTip extends CustomNode {
                     x:bind r.x+4;
                     y:bind r.y+12;
                     content:bind text
+                    wrappingWidth:bind if(_text.boundsInLocal.width > wrapWidth) wrapWidth else _text.boundsInLocal.width
                     font: Font {
                         size:10
                         name:"Verdana"
