@@ -612,6 +612,10 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                 Element userpref = (Element) userprefs.item(i);
                 String name = userpref.getAttribute("name");
                 String default_value = userpref.getAttribute("default_value");
+                if(default_value==null)
+                {
+                    default_value="";
+                }
                 String type = userpref.getAttribute("type");
                 if (type == null || "".equals(type))
                 {
