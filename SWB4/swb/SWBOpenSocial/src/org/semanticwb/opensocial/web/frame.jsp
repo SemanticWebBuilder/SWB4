@@ -1,5 +1,11 @@
 <%@page contentType="text/html"%><%@page import="org.semanticwb.opensocial.resources.*,org.semanticwb.opensocial.model.*,org.semanticwb.opensocial.resources.*,java.util.Date, java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%><%
 
+
+    String port = "";
+    if (request.getServerPort() != 80)
+    {
+        port = ":" + request.getServerPort();
+    }
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
 
     String html=request.getAttribute("html").toString();
@@ -29,12 +35,14 @@
     proxy.setMode(SocialContainer.Mode_PROXY);
 
 
-    SWBResourceURL template = paramRequest.getRenderUrl();
-    template.setCallMethod(SWBResourceURL.Call_CONTENT);
-    template.setMode(SWBResourceURL.Mode_VIEW);
-    template.setParameter("view", "__view__");
-    template.setParameter("mid", "__mid__");
+    SWBResourceURL template_ = paramRequest.getRenderUrl();
+    template_.setCallMethod(SWBResourceURL.Call_CONTENT);
+    template_.setMode(SWBResourceURL.Mode_VIEW);
+    template_.setParameter("view", "__view__");
+    template_.setParameter("mid", "__mid__");
 
+
+    String template=request.getScheme() + "://" + request.getServerName() + port + template_;
     SWBResourceURL makerequest = paramRequest.getRenderUrl();
     makerequest.setCallMethod(SWBResourceURL.Call_DIRECT);
     makerequest.setMode(SocialContainer.Mode_MAKE_REQUEST);
