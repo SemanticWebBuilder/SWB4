@@ -49,7 +49,7 @@
     
 %>
 <html><head>
-        
+        <link href="<%=context%>/swbadmin/dojo1_5/dojox/layout/resources/ScrollPane.css"  type="text/css" rel="stylesheet">
         <link rel="stylesheet" href="<%=context%>/swbadmin/dojo1_5/dijit/themes/claro/layout/ContentPane.css">        
         <link rel="stylesheet" href="<%=context%>/swbadmin/dojo1_5/dijit/themes/soria/soria.css">
         <script type="text/javascript" src="<%=context%>/swbadmin/dojo1_5/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
@@ -320,8 +320,7 @@
 	        {
 
 	            %>
-	            <script type="text/javascript">
-
+	            <script type="text/javascript">                        
 			                dojo.require("dijit.layout.ContentPane");
 			                dojo.require("dijit.layout.TabContainer");
         	    </script>
@@ -332,5 +331,9 @@
     </head>
     <body class="soria">
 
+    <div id="content-root">
         <%=html%>
+    </div>
+
+        
     </body></html>
