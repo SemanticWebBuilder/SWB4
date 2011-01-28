@@ -136,12 +136,13 @@ public class SocialContainer extends GenericResource
 
     public static SocialUser getSocialUser(User user, HttpSession session, WebSite site)
     {
-        SocialUser socialUser = (SocialUser) session.getAttribute(SOCIAL_USER_ATTRIBUTE);
+        String siteid=site.getId();
+        SocialUser socialUser = (SocialUser) session.getAttribute(SOCIAL_USER_ATTRIBUTE+siteid);
         if (socialUser == null)
         {
             log.debug("Creando nuevo usuario para session: " + session.getId());
             socialUser = new SocialUser(user, site);
-            session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
+            session.setAttribute(SOCIAL_USER_ATTRIBUTE+siteid, socialUser);
         }
         String user1 = user == null ? null : user.getId();
         String user2 = socialUser.getUserId();
@@ -151,7 +152,7 @@ public class SocialContainer extends GenericResource
             {
                 log.debug("cambio de usuario old: " + user2 + " new: " + user1);
                 socialUser = new SocialUser(user, site);
-                session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
+                session.setAttribute(SOCIAL_USER_ATTRIBUTE+siteid, socialUser);
             }
             else
             {
@@ -159,7 +160,7 @@ public class SocialContainer extends GenericResource
                 {
                     log.debug("cambio de usuario old: " + user2 + " new: " + user1);
                     socialUser = new SocialUser(user, site);
-                    session.setAttribute(SOCIAL_USER_ATTRIBUTE, socialUser);
+                    session.setAttribute(SOCIAL_USER_ATTRIBUTE+siteid, socialUser);
                 }
             }
         }
