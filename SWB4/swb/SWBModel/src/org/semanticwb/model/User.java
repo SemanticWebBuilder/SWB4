@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.TreeSet;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
@@ -806,7 +807,7 @@ public class User extends UserBase implements Principal
         }
     }
 
-    public ArrayList getHistory()
+    public List getHistory()
     {
         return history;
     }
