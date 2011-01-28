@@ -2,6 +2,7 @@
 "file" = "File"
 "open" = "Open"
 "save" = "Save"
+"send" = "Send model"
 "export" = "Export"
 "exportxpdl" = "Export XPDL"
 "print" = "Print"
