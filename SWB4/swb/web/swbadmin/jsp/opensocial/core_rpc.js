@@ -1427,16 +1427,15 @@ gadgets.TabSet.prototype.addTab = function(tabName,opt_params) {
     {
         contentContainer=opt_params.contentContainer;
     }
-    var tooltip='';
+    var tooltip=tabName;
     if(typeof opt_params!='undefined' && opt_params.contentContainer)
     {
          tooltip=opt_params.tooltip;
     }
     var id_contentContainer=contentContainer.setAttribute('id');
     var id_panel='panel-'+aleatorio;
-    var tab=new gadgets.Tab(tabName,callback,index_,contentContainer);
-    //var panel=new dijit.layout.ContentPane({'closable':'true','id':id_panel,'content':contentContainer,'title':tabName});
-    var panel=new dijit.layout.ContentPane({'id':id_panel,'tooltip':tooltip,'content':contentContainer,'title':tabName});
+    var tab=new gadgets.Tab(tabName,callback,index_,contentContainer);    
+    var panel=new dijit.layout.ContentPane({'style':'width:99%;height:100%','id':id_panel,'tooltip':tooltip,'content':contentContainer,'title':tabName});
     var tabdef={'panel':panel,'tab':tab};
     this.tabs[index_]=tabdef;
     panel.selected=true;
