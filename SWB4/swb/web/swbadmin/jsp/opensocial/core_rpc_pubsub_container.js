@@ -6127,7 +6127,7 @@ shindig.Gadget.prototype.render = function(chrome) {
               else
               {
                     porlet=new dojox.widget.Portlet({'id':_id,'title':title});
-              }              
+              }                            
               if(gadget.onClose)
                 dojo.connect(porlet,"onClose",gadget.onClose);
               var idsetting='setting_'+gadget.id;
@@ -6135,6 +6135,7 @@ shindig.Gadget.prototype.render = function(chrome) {
               this.cssClassGadgetUserPrefsDialog + '"></div>';
               var nbzones=grid.nbZones;              
               var zone=(gadget.index%nbzones);
+              //alert('gadget.index: '+gadget.index+' zone: '+zone+' nbzones: '+nbzones);
               var column=1;
               grid.addChild(porlet,zone,column);
               porlet.startup();
