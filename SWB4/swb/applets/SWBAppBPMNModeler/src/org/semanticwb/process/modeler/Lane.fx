@@ -8,9 +8,10 @@ package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Alert;
+import javafx.util.Sequences;
 
 /**
  * @author javier.solis
@@ -54,6 +55,21 @@ public class Lane extends GraphicalElement
             onKeyReleased: onKeyReleased
         };
 
+        var actions: Action[] = [
+            Action {
+                label:##"actDelContents"
+                status: bind if (this.graphChilds.size() > 0) MenuItem.STATUS_ENABLED else MenuItem.STATUS_DISABLED
+                action: function (e: MouseEvent) {
+                    var tit = ##"actDelete";
+                    var msg = ##[confirmDelContents]"\"{this.title}\"";
+                    if(Alert.confirm(tit, msg)) {
+                        removeChilds();
+                    }
+                }
+            }
+        ];
+        insert actions after menuOptions[0];
+        
         return Group
         {
             content: [
@@ -122,11 +138,10 @@ public class Lane extends GraphicalElement
 
     override public function remove(validate:Boolean)
     {
-        ModelerUtils.popup.hide();
-        var tit = ##"actDelete";
-        var msg = ##[confirmDelete]"\"{this.title}\"";
-       if(not validate or sizeof graphChilds == 0 or Alert.confirm(tit, msg))
-       {
+       ModelerUtils.popup.hide();
+       var tit = ##"actDelete";
+       var msg = ##[confirmDelete]"\"{this.title}\"";
+       if(not validate or sizeof graphChilds == 0 or Alert.confirm(tit, msg)) {
            //println("remove lane {getGraphParent()}");
            if(getGraphParent() instanceof Pool)
            {
@@ -165,5 +180,14 @@ public class Lane extends GraphicalElement
     public override function onParentYChange()
     {
         //The parent change in function of childs
+    }
+
+    public function removeChilds() {
+        if(this.graphChilds.size() > 0) {
+            var ch = Sequences.shuffle(graphChilds);
+            for(child in ch) {
+                (child as GraphicalElement).remove(false);
+            }
+        }
     }
 }
