@@ -1344,36 +1344,38 @@ gadgets.TabSet = function(opt_moduleId,opt_defaultTab,opt_container) {
     this.tabs=[];
     this.display_=true;
     var aleatorio = Math.round(Math.random()*99);
-      var root_id='layout-root'+aleatorio;
-      this.divroot=document.createElement('div');
-      this.divroot.setAttribute('id',root_id);
-      this.divroot.style.display='block';
-      this.divroot.style.visibility = "visible";
-      document.body.appendChild(this.divroot);
-      aleatorio = Math.round(Math.random()*99);      
-        this.id_tablecontainer_='tablecontainer-'+aleatorio;
-        var tableheader=document.createElement("table");
-        tableheader.id=this.id_tablecontainer_;
-        tableheader.cellSpacing="0";
-        tableheader.cellPadding="0";
-        tableheader.style.width="100%";
-        document.body.appendChild(tableheader);
-        var tbodyheader=document.createElement("tbody");
-        var trheader=document.createElement("tr");
-        tbodyheader.appendChild(trheader);
-        tableheader.appendChild(tbodyheader);
-        var tdheader=document.createElement("td");
-        trheader.appendChild(tdheader);
-        tdheader=document.createElement("td");
-        trheader.appendChild(tdheader);
-
-      //divroot.innerHTML='<table cellSpacing="0" cellPadding="0" id="'+this.id_tablecontainer_+'"><tr><td></td></tr></table>';
-      aleatorio = Math.round(Math.random()*99);
-      var id_tab='tabcontainer-'+aleatorio;
-
-
-      this.tabcontainer=new dijit.layout.TabContainer({'style':'width:99%;height:100%','id':id_tab,'tabStrip':'true'},this.divroot);
-      this.tabcontainer.domNode.appendChild(tableheader);
+    var root_id='layout-root'+aleatorio;
+    this.divroot=document.createElement('div');
+    this.divroot.id=root_id;
+    var contet_root='content-root';
+    var divcontent=document.getElementById(contet_root);
+    if(!divcontent)
+    {
+      divcontent=document.createElement('div');
+      divcontent.id=contet_root;
+      document.body..appendChild(divcontent);
+    }
+    divcontent.appendChild(this.divroot);
+    aleatorio = Math.round(Math.random()*99);
+    this.id_tablecontainer_='tablecontainer-'+aleatorio;
+    var tableheader=document.createElement("table");
+    tableheader.id=this.id_tablecontainer_;
+    tableheader.cellSpacing="0";
+    tableheader.cellPadding="0";
+    tableheader.style.width="100%";
+    document.body.appendChild(tableheader);
+    var tbodyheader=document.createElement("tbody");
+    var trheader=document.createElement("tr");
+    tbodyheader.appendChild(trheader);
+    tableheader.appendChild(tbodyheader);
+    var tdheader=document.createElement("td");
+    trheader.appendChild(tdheader);
+    tdheader=document.createElement("td");
+    trheader.appendChild(tdheader);
+    aleatorio = Math.round(Math.random()*99);
+    var id_tab='tabcontainer-'+aleatorio;
+    this.tabcontainer=new dijit.layout.TabContainer({'style':'width:99%;height:100%','id':id_tab,'tabStrip':'true'},this.divroot);
+    this.tabcontainer.domNode.appendChild(tableheader);
       dojo.connect(this.tabcontainer,"selectChild",this,function(child){
                   if(child.id)
                   {
@@ -1383,7 +1385,7 @@ gadgets.TabSet = function(opt_moduleId,opt_defaultTab,opt_container) {
                           if(tabdef.panel.id==child.id)
                           {
                               var callback=tabdef.tab.getCallback();
-                              if(callback)callback(child.id);
+                              if(callback)callback(child.id);                              
                           }
                       }
                   }
