@@ -1450,29 +1450,30 @@ gadgets.TabSet = function(opt_moduleId,opt_defaultTab,opt_container) {
 gadgets.TabSet.prototype.addTab = function(tabName,opt_params) {
     
     
-    var index_=opt_params.index;
-    if(!index_)
+    var index_=this.tabs.length;
+    if(typeof opt_params!='undefined' && opt_params.index)
     {
-         index_=this.tabs.length;
+        index_=opt_params.index;
     }
-    var callback=opt_params.callback;
-    if(!callback)
+    var callback=function(){};
+    if(typeof opt_params!='undefined' && opt_params.callback)
     {
-        callback=function(){};
+            callback=opt_params.callback;
     }
     var aleatorio = Math.round(Math.random()*100);
-    var contentContainer=opt_params.contentContainer;
-    var tooltip=opt_params.tooltip;
-    if(!tooltip)
+    var contentContainer=document.createElement('div');
+    var _idpanel='contentContainer-'+aleatorio;
+    contentContainer.setAttribute('id',_idpanel);
+
+    if(typeof opt_params!='undefined' && opt_params.contentContainer)
     {
-        tooltip='';
+        contentContainer=opt_params.contentContainer;
     }
-    if(!contentContainer)
-    {        
-        contentContainer=document.createElement('div');
-        var _idpanel='contentContainer-'+aleatorio;
-        contentContainer.setAttribute('id',_idpanel);        
-    }    
+    var tooltip='';
+    if(typeof opt_params!='undefined' && opt_params.contentContainer)
+    {
+         tooltip=opt_params.tooltip;
+    }
     var id_contentContainer=contentContainer.setAttribute('id');
     var id_panel='panel-'+aleatorio;
     var tab=new gadgets.Tab(tabName,callback,index_,contentContainer);
@@ -1562,34 +1563,45 @@ gadgets.TabSet.prototype.addDynamicTab = function(tabName,callback) {
 };
 
 gadgets.TabSet.prototype.removeTab = function(tabIndex) {
-    var tabdef=this.tabs[tabIndex];
+    
+    var tabdef=this.tabs[tabIndex];    
     if(tabdef)
     {
         var panel=tabdef.panel;
         this.tabs.splice(tabIndex,1);
         if(panel)
-        {
+        {            
             var childrens=this.tabcontainer.getChildren();
             var exists=false;
             if(childrens)
             {
-                for(var paneltoDelete in childrens)
+                for(var j=0;j<childrens.length;j++)
                 {
-                    if(paneltoDelete==panel)
+                    var paneltoDelete=childrens[j];
+                    if(paneltoDelete.id==panel.id)
                     {
                         exists=true;
                     }
                 }
-            }
+            }            
             if(exists)
-                this.tabcontainer.removeChild(panel);
+            {
+                try
+                {
+                    this.tabcontainer.removeChild(panel);
+                }catch(e){}
+            }
+                
         }
         
     }    
     if(this.tabs.length>0)
     {
         var index=this.tabs.length-1;
-        this.setSelectedTab(index);
+        if(index>=0)
+        {
+            this.setSelectedTab(index);
+        }
     }
 
 };
@@ -1600,16 +1612,31 @@ gadgets.TabSet.prototype.setSelectedTab = function(tabIndex) {
      }
 };
 gadgets.TabSet.prototype.swapTabs = function(tabIndex1,tabIndex2) {
+    
     var def1=this.tabs[tabIndex1];
     var def2=this.tabs[tabIndex2];
-    if(def1 && def2)
+    if(typeof def1!='undefined' && typeof def2!='undefined')
     {
-        this.tabs[tabIndex1]=def2;
-        this.tabs[tabIndex2]=def1;
-        var panel1=def1.panel;
-        var panel2=def2.panel;
-        this.tabcontainer.placeAt(panel1,tabIndex2);
-        this.tabcontainer.placeAt(panel2,tabIndex1);
+        var temp_=[];
+        for(var i=0;i<this.tabs.length;i++)
+        {
+            var def=this.tabs[i];
+            temp_[i]=def;
+        }       
+        temp_[tabIndex1]=def2;
+        temp_[tabIndex2]=def1;        
+        var count=this.tabs.length;
+        for(var k=0;k<count;k++)
+        {
+            this.removeTab(0);
+            
+        }
+        for(var j=0;j<temp_.length;j++)
+        {
+            var deftemp=temp_[j];            
+            this.tabcontainer.addChild(deftemp.panel);
+        }
+        this.tabs=temp_;
     }
 };
 
