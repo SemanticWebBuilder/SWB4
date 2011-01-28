@@ -524,8 +524,8 @@ public class SWBARule extends GenericResource {
             hmValues = new HashMap();
             hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgWebPageUser"));
             hmAttr.put("Tipo", "TEXT");
-            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+            hmOper.put("=", paramRequest.getLocaleString("msgContains"));
+            hmOper.put("!=", paramRequest.getLocaleString("msgNotContains"));
             hmAttr.put("Operador", hmOper);
             comboAtt.put(SWBRuleMgr.TAG_WEBPAGEVISITED_ATT, hmAttr);
             vecOrderAtt.add(numero++, SWBRuleMgr.TAG_WEBPAGEVISITED_ATT);
@@ -537,10 +537,11 @@ public class SWBARule extends GenericResource {
             hmValues = new HashMap();
             hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgHistoryWebPageUser"));
             hmAttr.put("Tipo", "TEXT");
-            hmOper.put("=", paramRequest.getLocaleString("msgIs"));
-            hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+            hmOper.put("=", paramRequest.getLocaleString("msgContains"));
+            hmOper.put("!=", paramRequest.getLocaleString("msgNotContains"));
             for(int i=1; i<26; i++)
             {
+                //System.out.println("i "+i);
                 hmOper.put("-"+i, "-"+i);
             }
             hmAttr.put("Operador", hmOper);
@@ -849,6 +850,9 @@ public class SWBARule extends GenericResource {
                 while (itOper.hasNext()) {
                     String thisValue = (String) itOper.next();
                     String thisLabel = (String) hmOper.get(thisValue);
+
+                    //System.out.println("Operadores cargados: "+thisLabel+", "+thisValue);
+
                     Element operator = dom.createElement("operator");
                     operator.setAttribute("value", thisValue);
                     operator.setAttribute("title", thisLabel);
