@@ -31,6 +31,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.TreeSet;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
@@ -65,10 +66,10 @@ public class User extends UserBase implements Principal
     private boolean login = false;
 
     /** The History webpages of the user. */
-    private ArrayList<String> history = new ArrayList();
+    private final LinkedList<String> history = new LinkedList();
 
     /** The visited webpages of the user. */
-    private TreeSet<String> visited = new TreeSet();
+    private final TreeSet<String> visited = new TreeSet();
 
     /**
      * Instantiates a new user.
@@ -828,7 +829,11 @@ public class User extends UserBase implements Principal
     public void addVisitedWebPage(WebPage page)
     {
         visited.add(page.getId());
-        history.add(page.getId());
+        synchronized(history)
+        {
+            history.add(page.getId());
+            if(history.size()>25)history.removeLast();
+        }
     }
 
 }
