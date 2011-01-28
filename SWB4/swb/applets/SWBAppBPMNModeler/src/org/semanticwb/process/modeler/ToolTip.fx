@@ -19,6 +19,7 @@ import javafx.scene.paint.Stop;
 import javafx.scene.paint.Color;
 import javafx.animation.Interpolator;
 import javafx.animation.Timeline;
+import javafx.scene.text.FontWeight;
 
 /**
  * @author victor.lorenzana
@@ -33,10 +34,13 @@ public class ToolTip extends CustomNode {
     public var x:Number;
     public var y:Number;
     public var text:String;
+    public var title:String;
     public var error:Boolean;
+    public var wrap:Boolean;
     public var wrapWidth:Number = 200;
     var _root: Group;
     var t:Text;
+    var tt:Text;
     var r:Rectangle;
     var p: Polygon;
     
@@ -58,6 +62,11 @@ public class ToolTip extends CustomNode {
             size:10
             name:"Verdana"
         }
+    }
+
+    var _title = Text{
+        content: bind title
+        font: Font.font("Verdana", FontWeight.BOLD, 10)
     }
 
     def lightGrad = LinearGradient {
@@ -87,9 +96,9 @@ public class ToolTip extends CustomNode {
                     y: bind y
                     arcWidth: 10
                     arcHeight: 10
-                //Bind the rectangle width with the Text width.
+                    //Bind the rectangle width with the Text width.
                     width: bind t.boundsInParent.width+5
-                    height: bind t.boundsInParent.height+5
+                    height: bind if (title != "") t.boundsInParent.height+tt.boundsInParent.height+5 else t.boundsInParent.height+5
                     styleClass: bind if (error) "ToolTipError" else "ToolTip"
                     id: "border"
                 },
@@ -124,17 +133,22 @@ public class ToolTip extends CustomNode {
                 },
                 t = Text {
                     x:bind r.x+4;
-                    y:bind r.y+12;
+                    y:bind if (title != "")r.y+12+_title.boundsInLocal.height else r.y+12;
                     content:bind text
-                    wrappingWidth:bind if(_text.boundsInLocal.width > wrapWidth) wrapWidth else _text.boundsInLocal.width
+                    wrappingWidth:bind if(wrap and _text.boundsInLocal.width > wrapWidth) wrapWidth else _text.boundsInLocal.width
                     font: Font {
                         size:10
                         name:"Verdana"
                     }
+                },
+                tt = Text {
+                    x:bind r.x+4;
+                    y:bind r.y+12
+                    content:bind title
+                    font: Font.font("Verdana", FontWeight.BOLD, 10)
                 }
             ]
         }
-
     }
     protected override function create() : Node {
         if (_root == null) {
