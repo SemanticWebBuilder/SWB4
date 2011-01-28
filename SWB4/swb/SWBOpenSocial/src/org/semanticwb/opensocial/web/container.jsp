@@ -4,7 +4,7 @@
         String minChildWidthforCanvas="500";
         String nbZonesforCanvas="1";
         String nbZones="3";
-        int iframewidth=400;
+        int iframewidth=300;
         int iframeheight=300;
         String dialogaddWidth="800";
         String dialogaddHeight="600";
