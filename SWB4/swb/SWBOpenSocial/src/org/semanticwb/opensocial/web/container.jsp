@@ -3,7 +3,7 @@
         String minChildWidth="150";
         String minChildWidthforCanvas="500";
         String nbZonesforCanvas="1";
-        String nbZones="3";
+        String nbZones="2";
         int iframewidth=300;
         int iframeheight=300;
         String dialogaddWidth="800";
@@ -311,6 +311,7 @@ function renderGadgets() {
 			isAutoOrganized="false"
 			hasResizableColumns="false"
 			nbZones="3"
+                        autoRefresh="false"
 			dragHandleClass="dijitTitlePaneTitle"
 			style="width:100%;"
 			doLayout="false"
