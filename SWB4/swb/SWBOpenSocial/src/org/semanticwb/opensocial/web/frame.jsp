@@ -49,11 +49,9 @@
     
 %>
 <html><head>
-        <link rel="stylesheet" href="<%=context%>/swbadmin/dojo1_5/dijit/themes/claro/claro.css">
-        <link rel="stylesheet" href="<%=context%>/swbadmin/dojo1_5/dijit/themes/claro/layout/ContentPane.css">
-        <link rel="stylesheet" href="<%=context%>/swbadmin/dojo1_5/dijit/themes/tundra/tundra.css">
+        
+        <link rel="stylesheet" href="<%=context%>/swbadmin/dojo1_5/dijit/themes/claro/layout/ContentPane.css">        
         <link rel="stylesheet" href="<%=context%>/swbadmin/dojo1_5/dijit/themes/soria/soria.css">
-
         <script type="text/javascript" src="<%=context%>/swbadmin/dojo1_5/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
         <link rel="stylesheet" href="<%=context%>/swbadmin/dojo1_5/dojo/resources/dojo.css">
         <style type="text/css">body,td,div,span,p{font-family:arial,sans-serif;}a {color:#0000cc;}a:visited {color:#551a8b;}a:active {color:#ff0000;}body{margin: 0px;padding: 0px;background-color:white;}</style>
@@ -317,7 +315,7 @@
         var _IG_SetTitle=gadgets.window.setTitle;;
         gadgets.config.init({"shindig.auth":{},"osapi":{"endPoints":["http://%host%<%=rpc%>"]},"osapi.services":{"gadgets.rpc":["container.listMethods"],"http://%host%<%=rpc%>":["samplecontainer.update","albums.update","albums.supportedFields","activities.delete","activities.supportedFields","gadgets.metadata","activities.update","mediaItems.create","albums.get","activities.get","http.put","activitystreams.create","messages.modify","appdata.get","messages.get","system.listMethods","samplecontainer.get","cache.invalidate","people.supportedFields","http.head","http.delete","messages.create","people.get","activitystreams.get","mediaItems.supportedFields","mediaItems.delete","albums.delete","activitystreams.update","mediaItems.update","messages.delete","appdata.update","gadgets.tokenSupportedFields","http.post","activities.create","samplecontainer.create","http.get","albums.create","appdata.delete","gadgets.token","appdata.create","activitystreams.delete","gadgets.supportedFields","mediaItems.get","activitystreams.supportedFields"]},"rpc":{"parentRelayUrl":"/container/rpc_relay.html","useLegacyProtocol":false},"core.util":{"dynamic-height":{},"osapi":{},"core":{},"settitle":{}},"core.io":{"proxyUrl":"//%host%<%=proxy%>?container=default&refresh=%refresh%&url=%url%%rewriteMime%","jsonProxyUrl":"//%host%<%=makerequest%>"}});
         </script><script type="text/javascript">gadgets.Prefs.setMessages_(<%=msg%>);gadgets.Prefs.setDefaultPrefs_(<%=default_values%>);gadgets.io.preloaded_=[];</script>
-        <script type="text/javascript">
+        <script type="text/javascript">                
                 dojo.require("dijit.layout.ContentPane");
                 dojo.require("dijit.layout.TabContainer");
         </script>
