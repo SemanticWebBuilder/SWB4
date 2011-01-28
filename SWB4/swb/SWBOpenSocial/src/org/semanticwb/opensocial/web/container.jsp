@@ -310,7 +310,7 @@ function renderGadgets() {
 			id="grid"
 			isAutoOrganized="false"
 			hasResizableColumns="false"
-			nbZones="3"
+			nbZones="<%=nbZones%>"
                         autoRefresh="false"
 			dragHandleClass="dijitTitlePaneTitle"
 			style="width:100%;"
