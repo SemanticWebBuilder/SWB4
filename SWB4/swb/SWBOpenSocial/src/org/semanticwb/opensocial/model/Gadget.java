@@ -198,10 +198,15 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
             if (locales.item(i) instanceof Element)
             {
                 Element locale = (Element) locales.item(i);
-                String lang_test = locale.getAttribute("lang");
+                String lang_test = getKey(locale, "lang");
                 if (lang_test == null)
                 {
                     lang_test = "";
+                }
+                String country=getKey(locale, "country");
+                if(country!=null)
+                {
+                    lang_test="_"+country;
                 }
                 if (exact)
                 {
@@ -276,6 +281,11 @@ public class Gadget extends org.semanticwb.opensocial.model.base.GadgetBase
                     if (lang_test == null)
                     {
                         lang_test = "";
+                    }
+                    String _country=getKey(locale, "country");
+                    if(_country!=null)
+                    {
+                        lang_test="_"+_country;
                     }
                     if (exact)
                     {

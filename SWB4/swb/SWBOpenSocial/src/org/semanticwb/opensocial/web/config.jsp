@@ -151,54 +151,7 @@ Document doc=gadget.getDocument(socialuser.getLanguage(),socialuser.getCountry()
                     </div><hr/></div>
                 <%
             }
-        }
-
-        NodeList locales=doc.getElementsByTagName("Locale");
-        if(locales.getLength()>0)
-        {
-
-        %>
-        <%-- <div class="wrapper">
-<div class="left_column">
-Lenguaje:
-</div>
-<div class="content">
-<select name="__lang__">
-    <%
-    
-    for(int i=0;i<locales.getLength();i++)
-    {
-        if(locales.item(i) instanceof Element)
-        {
-            Element elocale=(Element)locales.item(i);
-            String lang=elocale.getAttribute("lang");
-            if(lang!=null && !lang.equals(""))
-            {
-                int pos=lang.indexOf("-");
-                if(pos!=-1)
-                {
-                    lang=lang.substring(0,pos);
-                }
-                Locale locale=new Locale(lang);
-                String title_lang=locale.getDisplayLanguage().toUpperCase();
-                %>
-                <option value="<%=lang%>"><%=title_lang%></option>
-                <%
-            }
-        }
-    }
-    %>
-    </select>
-</div>
-    <hr/>
-</div>
-
-
---%>
-    
-   
-<%
-    }
+        }       
     
     userPrefs=doc.getElementsByTagName("UserPref");
     for(int i=0;i<userPrefs.getLength();i++)
