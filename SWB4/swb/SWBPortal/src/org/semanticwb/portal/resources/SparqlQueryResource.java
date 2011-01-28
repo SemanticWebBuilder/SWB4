@@ -177,9 +177,13 @@ public class SparqlQueryResource extends GenericAdmResource {
                 addElem(doc, equery, "description", base.getDescription());
 
                 try {
-
                     //Model model = SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
-                    SemanticModel model = SWBPlatform.getSemanticMgr().getModel("DBPedia");
+                    SemanticModel model = null;
+                    if(base.getAttribute("dbPedia","0").endsWith("1"))
+                    {
+                        model=SWBPlatform.getSemanticMgr().getModel("DBPedia");
+                    }
+                    if(model==null)model=paramsRequest.getWebPage().getWebSite().getSemanticModel();
 
                     String queryString = _query;
 
@@ -388,7 +392,7 @@ public class SparqlQueryResource extends GenericAdmResource {
      * @param response the action response
      * @param paramsRequest request arguments
      * @throws SWBResourceException if an exception occurs when displaying the
-     *         view page.
+     *         view page.-
      * @throws IOException if streaming causes an I/O problem.
      */
     @Override

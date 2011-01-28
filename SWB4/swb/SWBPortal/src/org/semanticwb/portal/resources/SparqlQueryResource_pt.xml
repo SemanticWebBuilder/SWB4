@@ -8,6 +8,7 @@
             <input type="TEXT" name="rows" label="Linhas por página:" size="5" jsrequired="true" value="20"/>
             <input type="TEXT" name="pages" label="Número de páginas para mostrar:" size="5" jsrequired="true" value="5"/>
             <input type="CHECKBOX" name="showPages" label="Mostrar o número de páginas:"  value="1" checked="true"/>
+            <input type="CHECKBOX" name="dbPedia" label="Usar DBPedia:"  value="1" checked="true"/>
             <input type="FILE" name="template" label="Modelo (xsl, xslt):" showfile="true" msg="Modelo atual " bydefault="{@webpath}/swbadmin/xsl/SparqlQueryResource/SparqlQueryResource.xslt" msgbydefault="Modelo do defeito " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
         </fieldset>
         <fieldset>
