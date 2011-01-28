@@ -1347,13 +1347,13 @@ gadgets.TabSet = function(opt_moduleId,opt_defaultTab,opt_container) {
     var root_id='layout-root'+aleatorio;
     this.divroot=document.createElement('div');
     this.divroot.id=root_id;
-    var contet_root='content-root';
-    var divcontent=document.getElementById(contet_root);
+    var content_root='content-root';
+    var divcontent=document.getElementById(content_root);
     if(!divcontent)
     {
       divcontent=document.createElement('div');
-      divcontent.id=contet_root;
-      document.body..appendChild(divcontent);
+      divcontent.id=content_root;
+      document.body.appendChild(divcontent);
     }
     divcontent.appendChild(this.divroot);
     aleatorio = Math.round(Math.random()*99);
