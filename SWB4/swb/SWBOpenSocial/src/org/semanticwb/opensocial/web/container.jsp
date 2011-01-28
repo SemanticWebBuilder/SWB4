@@ -90,11 +90,12 @@
 
     </script>
 
-<script type="text/javascript" src="<%=context%>/swbadmin/dojo1_5/dojo/dojo.js" ></script>
+
+<link rel="stylesheet" type="text/css" media="all" href="<%=context%>/swbadmin/js/dojo/dijit/themes/soria/soria.css" >
 <link rel="stylesheet" href="<%=context%>/swbadmin/dojo1_5/dojox/widget/Portlet/Portlet.css">
 <link rel="stylesheet" href="<%=context%>/swbadmin/dojo1_5/dojox/layout/resources/GridContainer.css">
 <link rel="stylesheet" href="<%=context%>/swbadmin/jsp/opensocial/gadgets.css">
-
+<link rel="stylesheet" type="text/css" media="all" href="/swb/swbadmin/js/dojo/dijit/themes/soria/soria.css" >
 
 <script type="text/javascript" >
  dojo.require("dijit.dijit");
@@ -273,8 +274,8 @@ function renderGadgets() {
 };
 
 </script>
-<link rel="stylesheet" type="text/css" media="all" href="/swb/swbadmin/js/dojo/dijit/themes/soria/soria.css" >
-<link rel="stylesheet" type="text/css" media="all" href="/swb/swbadmin/js/dojo/dijit/themes/soria/soria.css" >
+
+
 </head>
 
 <script type="text/javascript">
@@ -313,7 +314,7 @@ function renderGadgets() {
 			nbZones="<%=nbZones%>"
                         autoRefresh="false"
 			dragHandleClass="dijitTitlePaneTitle"
-			style="width:100%;"
+			style="width:100%"
 			doLayout="false"
 	></div>
 </div>
