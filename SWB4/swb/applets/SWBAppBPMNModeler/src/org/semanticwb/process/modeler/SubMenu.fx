@@ -38,6 +38,7 @@ public class SubMenu extends CustomNode
     public var offx:Number;
     public var offy:Number;
     public var text:String;
+    public var description:String;
     public var image:String;
     public var imageOver:String;
     public var imageClicked:String;
@@ -93,10 +94,18 @@ public class SubMenu extends CustomNode
 
                  if(toolBar!=null)
                  {
-                     ModelerUtils.startToolTip(text, toolBar.x+layoutX, toolBar.y+layoutY+layoutBounds.height);
+                     if (description == "") {
+                         ModelerUtils.startToolTip(text, toolBar.x+layoutX, toolBar.y+layoutY+layoutBounds.height);
+                     } else {
+                        ModelerUtils.startToolTip(text, description, toolBar.x+layoutX, toolBar.y+layoutY+layoutBounds.height);
+                     }
                  }else
                  {
-                     ModelerUtils.startToolTip(text, layoutX, layoutY+layoutBounds.height);
+                     if (description == "") {
+                         ModelerUtils.startToolTip(text, layoutX, layoutY+layoutBounds.height);
+                     } else {
+                        ModelerUtils.startToolTip(text, description, layoutX, layoutY+layoutBounds.height);
+                     }
                  }
             }
             onMouseExited: function( e: MouseEvent ):Void
