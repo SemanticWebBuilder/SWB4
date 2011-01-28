@@ -323,7 +323,7 @@ function renderGadgets() {
 							id="grid"
                                                         dragRestriction="false"
                                                         isAutoOrganized="false"
-                                                        autoRefresh="false"
+                                                        autoRefresh="true"
 							acceptTypes="dojox.widget.Portlet"
 							hasResizableColumns="true"
 							opacity="0.3"
