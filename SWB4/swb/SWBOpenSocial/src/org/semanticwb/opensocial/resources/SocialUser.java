@@ -511,6 +511,10 @@ public class SocialUser
                 if (!keys.contains(name))
                 {
                     String default_value = userPref.getAttribute("default_value");
+                    if(default_value==null)
+                    {
+                        default_value="";
+                    }
                     String displayName = userPref.getAttribute("display_name");
                     String dataType = "string";
                     if (userPref.getAttribute("datatype") != null && !userPref.getAttribute("datatype").equals(""))
@@ -554,15 +558,7 @@ public class SocialUser
                     {
                         log.error(e);
                     }
-                }
-                /*String dataType = "string";
-                if (userPref.getAttribute("datatype") != null && !userPref.getAttribute("datatype").equals(""))
-                {
-                dataType = userPref.getAttribute("datatype");
-                }
-
-                String default_value = userPref.getAttribute("default_value");
-                String displayName = userPref.getAttribute("display_name");*/
+                }                
             }
         }
         return getJSONUserPrefs;

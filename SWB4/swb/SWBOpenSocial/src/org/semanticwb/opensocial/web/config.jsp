@@ -78,7 +78,11 @@ Document doc=gadget.getDocument(socialuser.getLanguage(),socialuser.getCountry()
             if(userPrefs.item(i) instanceof Element)
             {
                 Element userPref=(Element)userPrefs.item(i);
-                String default_value=userPref.getAttribute("default_value");                
+                String default_value=userPref.getAttribute("default_value");
+                if(default_value==null)
+                {
+                    default_value="";
+                }
                 String name=userPref.getAttribute("name");
                 String dataType="string";
                 if(userPref.getAttribute("datatype")!=null && !userPref.getAttribute("datatype").equals(""))
