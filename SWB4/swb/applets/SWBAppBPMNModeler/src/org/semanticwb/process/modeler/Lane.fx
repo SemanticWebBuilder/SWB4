@@ -66,6 +66,16 @@ public class Lane extends GraphicalElement
                         removeChilds();
                     }
                 }
+            },
+            Action {isSeparator:true},
+            Action {
+                label: ##"actEditTitle"
+                status: MenuItem.STATUS_ENABLED
+                action: function (e: MouseEvent) {
+                    if(text != null) {
+                        text.startEditing();
+                    }
+                }
             }
         ];
         insert actions after menuOptions[0];
