@@ -466,7 +466,7 @@ public class ToolBar extends CustomNode
         {
             modeler: modeler
             toolBar:this
-            text: ##"file"//ModelerUtils.getLocalizedString("file")
+            text: ##"file"
             image: "images/file1.png"
             imageOver: "images/file2.png"
             imageClicked: "images/file3.png"
@@ -495,11 +495,15 @@ public class ToolBar extends CustomNode
                     imageOver: "images/file_abrir2.png"
                     action: function():Void
                     {
-                        ModelerUtils.clickedNode=null;
-                        ModelerUtils.setResizeNode(null);
-                        modeler.containerElement=null;
-                        modeler.disablePannable=false;
-                        openProcess();
+                        var tit = ##"alertMsg";
+                        var msg = ##"msgSaveAlert";
+                        if(Alert.confirm(tit, msg)) {
+                            ModelerUtils.clickedNode=null;
+                            ModelerUtils.setResizeNode(null);
+                            modeler.containerElement=null;
+                            modeler.disablePannable=false;
+                            openProcess();
+                        }
                     }
                 },
                 ImgButton {
@@ -510,14 +514,19 @@ public class ToolBar extends CustomNode
                     {
                         ModelerUtils.clickedNode=null;
                         modeler.disablePannable=false;
-                        if(isApplet)
-                        {
-                            storeProcess();
-                        }else
-                        {
-                            saveProcess();
-                        }
+                        saveProcess();
                     }
+                },
+                ImgButton {
+                    text: ##"send"//ModelerUtils.getLocalizedString("new")
+                    image: bind if (isApplet) "images/file_enviar1.png" else "images/v_separator.png"
+                    imageOver: bind if (isApplet) "images/file_enviar2.png" else "images/v_separator.png"
+                    action: bind if (isApplet) function():Void {
+                            ModelerUtils.clickedNode=null;
+                            modeler.disablePannable=false;
+                            storeProcess();
+                        }
+                        else function ():Void {}
                 },
                 ImgButton {
                     text: ##"export"//ModelerUtils.getLocalizedString("export")
@@ -530,18 +539,18 @@ public class ToolBar extends CustomNode
                         saveAsImage();
                     }
                 },
-//                ImgButton {
-//                    text: ##"exportxpdl"//ModelerUtils.getLocalizedString("export")
-//                    image: "images/file_saveasxpdl1.png"
-//                    imageOver: "images/file_saveasxpdl2.png"
-//                    action: function():Void
-//                    {
-//                        ModelerUtils.clickedNode=null;
-//                        modeler.disablePannable=false;
-//                        //getXPDL();
-//                    }
-//                },
                 ImgButton {
+                    text: ##"exportxpdl"//ModelerUtils.getLocalizedString("export")
+                    image: "images/file_saveasxpdl1.png"
+                    imageOver: "images/file_saveasxpdl2.png"
+                    action: function():Void
+                    {
+                        ModelerUtils.clickedNode=null;
+                        modeler.disablePannable=false;
+                        //getXPDL();
+                    }
+                },
+                /*ImgButton {
                     text: ##"print"//ModelerUtils.getLocalizedString("print")
                     image: "images/file_print1.png"
                     imageOver: "images/file_print2.png"
@@ -567,7 +576,7 @@ public class ToolBar extends CustomNode
                         //print.print(arr);
                         //TODO:
                     }
-                },
+                },*/
                 ImgButton {
                     text: ##"about"//ModelerUtils.getLocalizedString("about")
                     image: "images/file_about1.png"
@@ -586,7 +595,7 @@ public class ToolBar extends CustomNode
         {
             modeler: modeler
             toolBar:this
-            text: ##"task"//ModelerUtils.getLocalizedString("task")
+            text: "{##"task"}\n{##"taskDescription"}"
             image: "images/task_1.png"
             imageOver: "images/task_2.png"
             imageClicked: "images/task_3.png"
@@ -1932,184 +1941,6 @@ public class ToolBar extends CustomNode
     function validateProcess() {
 
     }
-
-//    function getXPDL () : Void {
-//        var dbf:DocumentBuilderFactory = DocumentBuilderFactory.newInstance();
-//        var docBuilder: DocumentBuilder = dbf.newDocumentBuilder();
-//        var doc:Document = docBuilder.newDocument();
-//        doc.setXmlStandalone(true);
-//
-//        var root:Element = doc.createElement("Package");
-//        root.setAttribute("xmlns", "http://www.wfmc.org/2008/XPDL2.1");
-//        root.setAttribute("xmlns:xpdl", "http://www.wfmc.org/2008/XPDL2.1");
-//        root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-//        root.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
-//        root.setAttribute("Id", "1");
-//        root.setAttribute("Name", "Process1");
-//        doc.appendChild(root);
-//
-//        var pkgHeader:Element = doc.createElement("PackageHeader");
-//        root.appendChild(pkgHeader);
-//
-//        var eNode:Element = doc.createElement("XPDLVersion");
-//        eNode.setTextContent("2.1");
-//        pkgHeader.appendChild(eNode);
-//
-//        eNode = doc.createElement("Vendor");
-//        eNode.setTextContent("SemanticWebBuilder Process Modeler");
-//        pkgHeader.appendChild(eNode);
-//
-//        eNode = doc.createElement("Created");
-//        eNode.setTextContent(new Date(System.currentTimeMillis()).toString());
-//        pkgHeader.appendChild(eNode);
-//
-//        var poolsNode = doc.createElement("Pools");
-//        root.appendChild(poolsNode);
-//
-//        var wfNodes = doc.createElement("WorkflowProcesses");
-//        root.appendChild(wfNodes);
-//
-//        for (ele in modeler.contents) {
-//            if (ele instanceof Pool) {
-//                var p = ele as Pool;
-//                poolsNode.appendChild(getPoolBlock(doc, p));
-//
-//            } else if (ele instanceof Event) {
-//                var e = ele as Event;
-//            }
-//
-//        }
-//        ////////////////////////
-//        var transfac:TransformerFactory = TransformerFactory.newInstance();
-//        var trans:Transformer = transfac.newTransformer();
-//        //trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-//        trans.setOutputProperty(OutputKeys.INDENT, "yes");
-//
-//        var sw:StringWriter = new StringWriter();
-//        var result:StreamResult = new StreamResult(sw);
-//        var source:DOMSource = new DOMSource(doc);
-//        trans.transform(source, result);
-//        var xmlString = sw.toString();
-//
-//        println("-----");
-//        println(xmlString);
-////        println(ret);
-//    }
-
-//    function getPoolBlock(doc:Document, p:Pool) : Element {
-//        var pNode:Element = doc.createElement("Pool");
-//        var lNode:Element = doc.createElement("Lanes");
-//        pNode.setAttribute("Process", "pid");
-//        pNode.setAttribute("Id", p.uri);
-//        pNode.setAttribute("BoundaryVisible", "true");
-//        pNode.setAttribute("Name", p.title);
-//        for(lane in p.lanes) {
-//            lNode.appendChild(getLaneBlock(doc, lane, p));
-//        }
-//        pNode.appendChild(lNode);
-//        pNode.appendChild(getGraphicsInfos(doc, p as GraphicalElement));
-//        return pNode;
-//    }
-//
-//    function getLaneBlock(doc:Document, l:Lane, p:Pool) : Element {
-//        var lnNode = doc.createElement("Lane");
-//        lnNode.setAttribute("Id", l.uri);
-//        lnNode.setAttribute("ParentLane", p.uri);
-//        lnNode.appendChild(getGraphicsInfos(doc, l as GraphicalElement));
-//        return lnNode;
-//    }
-//
-//    function getGraphicsInfos(doc: Document, ge: GraphicalElement) : Element {
-//        var lgis = doc.createElement("NodeGraphicsInfos");
-//        var lgi = doc.createElement("NodeGraphicsInfo");
-//        lgi.setAttribute("Width", "{ge.w}");
-//        lgi.setAttribute("Height", "{ge.h}");
-//        var coord:Element = doc.createElement("Coordinates");
-//        coord.setAttribute("XCoordinate", "{ge.x}");
-//        coord.setAttribute("YCoordinate", "{ge.y}");
-//        lgi.appendChild(coord);
-//        lgis.appendChild(lgi);
-//        return lgis;
-//    }
-//
-//    function getEventBlock(e: Event) : String {
-//        var trigger = "None";
-//        var attachedTo = "";
-//        var catchThrow = "";
-//        var ret = "<Activity Id=\"{e.uri}\" Name=\"{e.title}\">\n";
-//        ret += "  <Event>\n";
-//        if (e instanceof StartEvent) {
-//            if (e instanceof MessageStartEvent) {
-//                trigger = "Message";
-//            } else if (e instanceof TimerStartEvent) {
-//                trigger = "Timer";
-//            } else if (e instanceof RuleStartEvent) {
-//                trigger = "Conditional";
-//            } else if (e instanceof SignalStartEvent) {
-//                trigger = "Signal";
-//            } else if (e instanceof MultipleStartEvent) {
-//                trigger = "Multiple";
-//            }
-//            ret += "    <StartEvent Trigger=\"{trigger}\" Implementation=\"Unspecified\">";
-//            ret += "    </StartEvent>";
-//        } else if (e instanceof IntermediateCatchEvent or e instanceof IntermediateThrowEvent) {
-//            if (e.parent instanceof Activity) {
-//                var ge = e.parent as GraphicalElement;
-//                attachedTo = "Target=\"{ge.uri}\"";
-//            }
-//
-//            if (e instanceof IntermediateCatchEvent) {
-//                catchThrow = "CatchThrow=\"CATCH\"";
-//            } else if (e instanceof IntermediateThrowEvent) {
-//                catchThrow = "CatchThrow=\"THROW\"";
-//            }
-//
-//            if (e instanceof MessageIntermediateCatchEvent or e instanceof MessageIntermediateThrowEvent) {
-//                trigger = "Message";
-//            } else if (e instanceof TimerIntermediateCatchEvent) {
-//                trigger = "Timer";
-//            } else if (e instanceof ErrorIntermediateCatchEvent) {
-//                trigger = "Error";
-//            } else if (e instanceof CancelationIntermediateCatchEvent) {
-//                trigger = "Cancel";
-//            } else if (e instanceof RuleIntermediateCatchEvent) {
-//                trigger = "Conditional";
-//            } else if (e instanceof LinkIntermediateCatchEvent or e instanceof LinkIntermediateThrowEvent) {
-//                trigger = "Link";
-//            } else if (e instanceof SignalIntermediateCatchEvent or e instanceof SignalIntermediateThrowEvent) {
-//                trigger = "Signal";
-//            } else if (e instanceof CompensationIntermediateCatchEvent or e instanceof CompensationIntermediateThrowEvent) {
-//                trigger = "Compensation";
-//            } else if (e instanceof MultipleIntermediateCatchEvent or e instanceof MultipleIntermediateThrowEvent) {
-//                trigger = "Multiple";
-//            }
-//
-//            ret += "    <IntermediateEvent Trigger=\"{trigger}\" Implementation=\"Unspecified\" {attachedTo}>";
-//            ret += "    </IntermediateEvent>";
-//        } else if (e instanceof EndEvent) {
-//            if (e instanceof MessageEndEvent) {
-//                trigger = "Message";
-//            } else if (e instanceof ErrorEndEvent) {
-//                trigger = "Error";
-//            } else if (e instanceof CancelationEndEvent) {
-//                trigger = "Cancel";
-//            } else if (e instanceof SignalEndEvent) {
-//                trigger = "Signal";
-//            } else if (e instanceof CompensationEndEvent) {
-//                trigger = "Compensation";
-//            } else if (e instanceof MultipleEndEvent) {
-//                trigger = "Multiple";
-//            } else if (e instanceof TerminationEndEvent) {
-//                trigger = "Terminate";
-//            }
-//
-//            ret += "    <EndEvent Result=\"{trigger}\" Implementation=\"Unspecified\" {attachedTo}>";
-//            ret += "    </EndEvent>";
-//        }
-//        ret += "  </Event>\n";
-//        ret += "</Activity>\n";
-//        return ret;
-//    }
 }
 
 class FileFilter extends javax.swing.filechooser.FileFilter {
