@@ -1183,16 +1183,37 @@ gadgets.views = function() {
 };
 
 gadgets.views.bind = function(urlTemplate,environment) {
+    if(typeof environment!='undefined' && typeof urlTemplate!='undefined')
+    {
+        if(environment.name)
+        {
+            return urlTemplate.replace('{name}',environment.name);
+        }
+    }
+    return '';
 };
 
 gadgets.views.getCurrentView = function() {
     return this.currentview_;
 };
 
+gadgets.views.setModuleId = function(mid) {
+    this.mid_=mid;
+};
+
 gadgets.views.getSupportedViews = function() {
     return {'canvas':new gadgets.views.View('canvas'),'home':new gadgets.views.View('home'),'profile':new gadgets.views.View('profile')};
 };
+gadgets.views.setUrlTemplate = function(template) {
+    this.template_=template;
+}
+gadgets.views.getUrlTemplate = function(name) {
+    var template=this.template_;
+    template=template.replace('__view__',name);
+    template=template.replace('__mid__',"{name}");
+    return template;
 
+};
 gadgets.views.requestNavigateTo = function(view) {
     if(view)
     {
@@ -1230,73 +1251,13 @@ gadgets.views.setParams = function(params) {
 
 gadgets.views.ViewType=gadgets.util.makeEnum(["CANVAS","HOME","PREVIEW","PROFILE","FULL_PAGE","DASHBOARD","POPUP"]);;
 
-//gadgets.views.ViewType={CANVAS:new gadgets.views.View('canvas'),HOME:new gadgets.views.View('home')};
-/*gadgets.views.ViewType.CANVAS= new gadgets.views.View('canvas');
-
-
-gadgets.views.ViewType.HOME= new gadgets.views.View('home');
-gadgets.views.ViewType.PROFILE= new gadgets.views.View('profile');*/
-
-
-/*gadgets.views = function() {
-  
-
-  return {
-
-
-    'bind':
-    function(urlTemplate,environment) {
-
-    },
-    'ViewType':
-        {
-        CANVAS : new gadgets.views.View('canvas'),
-        HOME: new gadgets.views.View('home'),
-        PROFILE:new gadgets.views.View('profile')}
-    ,
-    'getCurrentView':
-        function() {
-        return this.currentview_;
-    },
-    'getSupportedViews':
-        function() {
-        return {'canvas':gadgets.views.ViewType.CANVAS,'home':gadgets.views.ViewType.HOME,'profile':gadgets.views.ViewType.PROFILE}
-    },
-    'requestNavigateTo':
-        function(view) {
-
-        var viewSuported=this.getSupportedViews()[view];
-        if(viewSuported)
-            gadgets.rpc.call(null,'requestNavigateTo',null,viewSuported.getName());
-    },
-    'setCurrentView':
-        function(currentview) {        
-        this.currentview_=currentview;
-    },
-
-    'setParams':
-        function(params) {        
-        this.params_=params;        
-    },
-    'getParams':
-        function()
-        {
-            return this.params_;
-
-        }
-
-  };
-}();;*/
-
-
-
 
 gadgets.views.View = function(name) {
     this.name_=name;
 };
 
-gadgets.views.View.prototype.bind = function() {
-
+gadgets.views.View.prototype.bind = function(environment) {
+    return gadgets.views.bind(this.getUrlTemplate(),environment);
 };
 
 gadgets.views.View.prototype.getName = function() {
@@ -1304,7 +1265,7 @@ gadgets.views.View.prototype.getName = function() {
 };
 
 gadgets.views.View.prototype.getUrlTemplate = function() {
-
+return gadgets.views.getUrlTemplate(this.name);
 };
 gadgets.views.View.prototype.isOnlyVisibleGadget = function() {
     var currentview=gadgets.views.getCurrentView().getName();
