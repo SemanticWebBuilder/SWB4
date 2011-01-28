@@ -31,7 +31,8 @@ var toolTip=ToolTip
 public function setErrorMessage(message:String)
 {
     errorMessage=message;
-    showToolTip(ToolTip.TOOLTIP_ERROR, message, 0, getToolTip().scene.height-20);
+    toolTip.wrap = false;
+    showToolTip(ToolTip.TOOLTIP_ERROR, "ERROR", message, 0, getToolTip().scene.height-getToolTip().boundsInParent.height);
 }
 
 public function getLocalizedString(key: String): String {
@@ -71,12 +72,20 @@ public function getResizeNode():ResizeNode
     return resize;
 }
 
-public function startToolTip(text: String, x: Number, y: Number)
+public function startToolTip(title:String, text: String, x: Number, y: Number)
 {
-    showToolTip(ToolTip.TOOLTIP_NORMAL, text, x, y);
+    toolTip.wrap = true;
+    showToolTip(ToolTip.TOOLTIP_NORMAL, title, text, x, y);
 }
 
-public function showToolTip(type: String, text: String, x: Number, y: Number) {
+public function startToolTip(text: String, x: Number, y: Number)
+{
+    toolTip.wrap = true;
+    showToolTip(ToolTip.TOOLTIP_NORMAL, "", text, x, y);
+}
+
+public function showToolTip(type: String, title:String, text: String, x: Number, y: Number) {
+    toolTip.title = title;
     toolTip.setType(type);
     toolTip.text=text;
     toolTip.x=x;
