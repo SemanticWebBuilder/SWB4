@@ -2,3 +2,4 @@
 "actDelContents" = "Eliminar contenido"
 "confirmDelete" = "¿Seguro que desea eliminar %s?"
 "confirmDelContents" = "¿Seguro que desea eliminar los elementos en %s?"
+"actEditTitle" = "Editar título"
