@@ -28,8 +28,11 @@
 
 package com.infotec.wb.lib;
 
+import com.infotec.topicmaps.Topic;
+import com.infotec.wb.core.Resource;
 import java.util.Map;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.portal.api.SWBResourceURLImp;
 
 /**
  *
@@ -37,11 +40,11 @@ import org.semanticwb.portal.api.SWBResourceURL;
  */
 public class WBResourceURLImp implements WBResourceURL
 {
-    private SWBResourceURL url=null;
+    private SWBResourceURLImp url=null;
 
     public WBResourceURLImp(SWBResourceURL url)
     {
-        this.url=url;
+        this.url=(SWBResourceURLImp)url;
     }
 
     public WBResourceURL setWindowState(String state) {
@@ -116,6 +119,41 @@ public class WBResourceURLImp implements WBResourceURL
     public void setOnlyContent(boolean onlyContent)
     {
         url.setOnlyContent(onlyContent);
+    }
+
+    public Topic getAdmintopic()
+    {
+        return new Topic(url.getAdminTopic());
+    }
+
+    public void setAdminTopic(Topic adminTopic)
+    {
+        url.setAdminTopic(adminTopic.getNative());
+    }
+    
+    public boolean haveVirtualTopic()
+    {
+        return url.haveVirtualTopic();
+    }
+
+    public Resource getVirtualResource()
+    {
+        return new Resource(url.getVirtualResource());
+    }
+
+    public void setVirtualResource(Resource virtResource)
+    {
+        url.setVirtualResource(virtResource.getNative());
+    }
+    
+    public String getExtURIParams()
+    {
+        return url.getExtURIParams();
+    }
+    
+    public void setExtURIParams(String extParams)
+    {
+        url.setExtURIParams(extParams);
     }
 
 }
