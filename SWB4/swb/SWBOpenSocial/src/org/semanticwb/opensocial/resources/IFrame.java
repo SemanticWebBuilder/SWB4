@@ -463,6 +463,7 @@ public class IFrame
 
                 try
                 {
+                    request.setAttribute("moduleid", moduleid);
                     request.setAttribute("paramRequest", paramRequest);
                     request.setAttribute("msg", msg.toString());
                     request.setAttribute("default_values", j_default_values.toString());

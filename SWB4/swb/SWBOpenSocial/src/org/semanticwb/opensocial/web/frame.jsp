@@ -13,8 +13,12 @@
     javascript.setCallMethod(SWBResourceURL.Call_DIRECT);
     javascript.setParameter("script", "core_rpc.js");
     javascript.setParameter("debug","0");
-    
-    
+
+    String mid="";
+    if(request.getAttribute("moduleid")!=null)
+    {
+        mid=request.getAttribute("moduleid").toString();
+    }
 
     SWBResourceURL rpc = paramRequest.getRenderUrl();
     rpc.setCallMethod(SWBResourceURL.Call_DIRECT);
@@ -25,7 +29,11 @@
     proxy.setMode(SocialContainer.Mode_PROXY);
 
 
-    
+    SWBResourceURL template = paramRequest.getRenderUrl();
+    template.setCallMethod(SWBResourceURL.Call_CONTENT);
+    template.setMode(SWBResourceURL.Mode_VIEW);
+    template.setParameter("view", "__view__");
+    template.setParameter("mid", "__mid__");
 
     SWBResourceURL makerequest = paramRequest.getRenderUrl();
     makerequest.setCallMethod(SWBResourceURL.Call_DIRECT);
@@ -285,11 +293,15 @@
                 view=sview.toString();
             }
             String appParams = request.getAttribute("appParams").toString();
+                        
             %>
                 var views=gadgets.views;
                 var currentView=new gadgets.views.View('<%=view%>');
+                views.setModuleId('<%=mid%>');
                 views.setParams(<%=appParams%>);
                 views.setCurrentView(currentView);
+                views.setUrlTemplate(<%=template%>);
+
             <%
         }
         %>
