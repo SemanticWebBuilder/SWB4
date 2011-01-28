@@ -2,6 +2,7 @@
 "file" = "Archivo"
 "open" = "Abrir"
 "save" = "Guardar"
+"send" = "Enviar modelo"
 "export" = "Exportar"
 "exportxpdl" = "Exportar XPDL"
 "print" = "Imprimir"
@@ -94,3 +95,4 @@
 "msgSent" = "Los datos fueron enviados correctamente"
 "msgSaveAlert" = "Se perderán los cambios que no haya guardado, ¿Desea continuar?"
 "alertMsg" = "Atención"
+"taskDescription" = "Actividades atómicas, sin subpartes internas definidas"
