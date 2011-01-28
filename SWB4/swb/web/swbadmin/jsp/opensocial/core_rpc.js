@@ -1374,7 +1374,7 @@ gadgets.Tab.prototype.getNameContainer = function() {
     return this.contentContainer_.id;
 };
 gadgets.Tab.prototype.getName = function() {
-    return name_;
+    return this.name_;
 };
 
 
@@ -1444,9 +1444,6 @@ gadgets.TabSet = function(opt_moduleId,opt_defaultTab,opt_container) {
     this.tabcontainer.startup();
     
 };
-
-
-
 gadgets.TabSet.prototype.addTab = function(tabName,opt_params) {
     
     
@@ -1487,7 +1484,6 @@ gadgets.TabSet.prototype.addTab = function(tabName,opt_params) {
     this.setSelectedTab(index_);  
     return id_contentContainer;
 };
-
 gadgets.TabSet.prototype.alignTabs = function(align,opt_offset) {
 
     
@@ -1505,8 +1501,6 @@ gadgets.TabSet.prototype.alignTabs = function(align,opt_offset) {
     }
     //, 'center', or 'right'
 };
-
-
 gadgets.TabSet.prototype.displayTabs = function(display) {
     var _display=display;    
     if(typeof _display==='boolean')
@@ -1561,7 +1555,6 @@ gadgets.TabSet.prototype.addDynamicTab = function(tabName,callback) {
     var params={'callback':callback};
     this.addTab(tabName,params);
 };
-
 gadgets.TabSet.prototype.removeTab = function(tabIndex) {
     
     var tabdef=this.tabs[tabIndex];    
@@ -1639,7 +1632,6 @@ gadgets.TabSet.prototype.swapTabs = function(tabIndex1,tabIndex2) {
         this.tabs=temp_;
     }
 };
-
 var _IG_Tabs=function(){
     
     var A=null;
