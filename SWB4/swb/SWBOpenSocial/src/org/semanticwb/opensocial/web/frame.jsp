@@ -300,7 +300,7 @@
                 views.setModuleId('<%=mid%>');
                 views.setParams(<%=appParams%>);
                 views.setCurrentView(currentView);
-                views.setUrlTemplate(<%=template%>);
+                views.setUrlTemplate('<%=template%>');
 
             <%
         }
