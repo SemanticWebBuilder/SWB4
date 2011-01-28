@@ -405,9 +405,20 @@ public class SWBRuleMgr
                 if(cond.equals("="))
                 {
                     return user.getHistory().contains(value);
-                }else
+                }else if(cond.equals("!="))
                 {
                     return !user.getHistory().contains(value);
+                }else if(cond.startsWith("-"))
+                {
+                    try
+                    {
+                        int p=Integer.parseInt(cond)*-1;
+                        if(user.getHistory().size()>p)
+                        {
+                            return user.getHistory().get(p).equals(value);
+                        }
+                    }catch(Exception e){log.error(e);}
+                    return false;
                 }
             }else if(name.equals(TAG_WEBPAGEVISITED_ATT)) //validacion de roles
             {
