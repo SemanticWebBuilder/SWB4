@@ -610,7 +610,7 @@ public class SocialContainer extends GenericResource
         }
         else
         {
-            throw new RequestException("", con.getResponseCode());
+            throw new RequestException("Error getting XML from "+url.toString()+" ResponseCode: "+con.getResponseCode(), con.getResponseCode());
         }
     }
 
