@@ -1,4 +1,7 @@
 "actDelete" = "Eliminar"
+"actDelContents" = "Eliminar contenido"
+"actEditTitle" = "Editar título"
+"confirmDelContents" = "¿Seguro que desea eliminar los elementos en %s?"
 "confirmDelete" = "¿Seguro que desea eliminar %s?"
 "msgError16" = "Un Flujo de Mensage debe cruzar los límites del Pool"
 "msgError37" = "Un Pool no puede conectarse usando Flujos de Secuencia"
