@@ -1381,17 +1381,15 @@ gadgets.Tab.prototype.getName = function() {
 gadgets.TabSet = function(opt_moduleId,opt_defaultTab,opt_container) {
     
     this.tabs=[];
-    
+    this.display_=true;
     var aleatorio = Math.round(Math.random()*99);
       var root_id='layout-root'+aleatorio;
-      var divroot=document.createElement('div');
-      divroot.setAttribute('id',root_id);
-      
-      document.body.appendChild(divroot);
-      aleatorio = Math.round(Math.random()*99);
-      this.id_tablecontainer_='tablecontainer-'+aleatorio;
-      
-
+      this.divroot=document.createElement('div');
+      this.divroot.setAttribute('id',root_id);
+      this.divroot.style.display='block';
+      this.divroot.style.visibility = "visible";
+      document.body.appendChild(this.divroot);
+      aleatorio = Math.round(Math.random()*99);      
         this.id_tablecontainer_='tablecontainer-'+aleatorio;
         var tableheader=document.createElement("table");
         tableheader.id=this.id_tablecontainer_;
@@ -1413,7 +1411,7 @@ gadgets.TabSet = function(opt_moduleId,opt_defaultTab,opt_container) {
       var id_tab='tabcontainer-'+aleatorio;
 
 
-      this.tabcontainer=new dijit.layout.TabContainer({'style':'width:90%;height:100%','id':id_tab,'tabStrip':'true'},divroot);
+      this.tabcontainer=new dijit.layout.TabContainer({'style':'width:99%;height:100%','id':id_tab,'tabStrip':'true'},this.divroot);
       this.tabcontainer.domNode.appendChild(tableheader);
       dojo.connect(this.tabcontainer,"selectChild",this,function(child){
                   if(child.id)
@@ -1464,7 +1462,11 @@ gadgets.TabSet.prototype.addTab = function(tabName,opt_params) {
     }
     var aleatorio = Math.round(Math.random()*100);
     var contentContainer=opt_params.contentContainer;
-    
+    var tooltip=opt_params.tooltip;
+    if(!tooltip)
+    {
+        tooltip='';
+    }
     if(!contentContainer)
     {        
         contentContainer=document.createElement('div');
@@ -1475,7 +1477,7 @@ gadgets.TabSet.prototype.addTab = function(tabName,opt_params) {
     var id_panel='panel-'+aleatorio;
     var tab=new gadgets.Tab(tabName,callback,index_,contentContainer);
     //var panel=new dijit.layout.ContentPane({'closable':'true','id':id_panel,'content':contentContainer,'title':tabName});
-    var panel=new dijit.layout.ContentPane({'id':id_panel,'content':contentContainer,'title':tabName});
+    var panel=new dijit.layout.ContentPane({'id':id_panel,'tooltip':tooltip,'content':contentContainer,'title':tabName});
     var tabdef={'panel':panel,'tab':tab};
     this.tabs[index_]=tabdef;
     panel.selected=true;
@@ -1487,10 +1489,48 @@ gadgets.TabSet.prototype.addTab = function(tabName,opt_params) {
 
 gadgets.TabSet.prototype.alignTabs = function(align,opt_offset) {
 
+    
+    if(align=='left')
+    {
+        //this.tabcontainer.tabPosition='left';
+    }
+    if(align=='center')
+    {
+
+    }
+    if(align=='right')
+    {
+        //this.tabcontainer.tabPosition='right-h';
+    }
+    //, 'center', or 'right'
 };
 
-gadgets.TabSet.prototype.displayTabs = function(display) {
 
+gadgets.TabSet.prototype.displayTabs = function(display) {
+    var _display=display;    
+    if(typeof _display==='boolean')
+    {
+        var temp_=[];
+        for(var i=0;i<this.tabs.length;i++)
+        {
+            var def=this.tabs[i];
+            temp_[i]=def;
+            var panel=def.panel;            
+            if(_display)
+            {
+                if(!this.display_)
+                    this.tabcontainer.addChild(panel);
+
+            }
+            else
+            {
+                if(this.display_)
+                    this.tabcontainer.removeChild(panel);
+            }            
+        }
+        this.display_=_display;
+        this.tabs=temp_;
+    }
 };
 gadgets.TabSet.prototype.getHeaderContainer = function() {
     var tablecontainer=document.getElementById(this.id_tablecontainer_);
@@ -1560,7 +1600,17 @@ gadgets.TabSet.prototype.setSelectedTab = function(tabIndex) {
      }
 };
 gadgets.TabSet.prototype.swapTabs = function(tabIndex1,tabIndex2) {
-
+    var def1=this.tabs[tabIndex1];
+    var def2=this.tabs[tabIndex2];
+    if(def1 && def2)
+    {
+        this.tabs[tabIndex1]=def2;
+        this.tabs[tabIndex2]=def1;
+        var panel1=def1.panel;
+        var panel2=def2.panel;
+        this.tabcontainer.placeAt(panel1,tabIndex2);
+        this.tabcontainer.placeAt(panel2,tabIndex1);
+    }
 };
 
 var _IG_Tabs=function(){
