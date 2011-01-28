@@ -768,9 +768,8 @@ public class SemanticProperty
     }
 
     /**
-     * Gets the cardinality.
-     * 
-     * @return the cardinality
+     * Gets the cardinality of the property
+     * @return the cardinality, 0 for multiple and 1 for single
      */
     public int getCardinality()
     {
