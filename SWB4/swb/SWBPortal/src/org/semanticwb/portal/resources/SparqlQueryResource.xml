@@ -8,7 +8,8 @@
             <input type="TEXT" name="rows" label="Renglones por página:" size="5" jsrequired="true" value="20"/>
             <input type="TEXT" name="pages" label="Número de páginas a mostrar:" size="5" jsrequired="true" value="5"/>
             <input type="CHECKBOX" name="showPages" label="Mostrar número de páginas:"  value="1" checked="true"/>
-            <input type="FILE" name="template" label="Plantilla (xsl, xslt):" showfile="true" msg="Plantilla actual " bydefault="{@webpath}/swbadmin/xsl/SparqlQueryResource/SparqlQueryResource.xslt" msgbydefault="Plantilla por defecto " filetype="xsl|xslt" isshowfiletype="true" size="40"/>
+            <input type="CHECKBOX" name="dbPedia" label="Usar DBPedia:"  value="1" checked="true"/>
+            <input type="FILE" name="template" label="Plantilla (xsl, xslt):" showfile="true" msg="Plantilla actual " bydefault="{@webpath}/swbadmin/xsl/SparqlQueryResource/SparqlQueryResource.xslt" msgbydefault="Plantilla por defecto" filetype="xsl|xslt" isshowfiletype="true" size="40"/>
         </fieldset>
         <fieldset>
             <statictext name="b">
