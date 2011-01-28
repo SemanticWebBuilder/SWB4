@@ -13,6 +13,8 @@ import javafx.scene.shape.Line;
 import org.semanticwb.process.modeler.ModelerUtils;
 import javafx.stage.Alert;
 import org.semanticwb.process.modeler.MessageFlow;
+import javafx.scene.input.MouseEvent;
+import javafx.util.Sequences;
 
 /**
  * @author javier.solis
@@ -57,6 +59,31 @@ public class Pool extends GraphicalElement
             onKeyPressed: onKeyPressed
             onKeyReleased: onKeyReleased
         };
+
+        var actions: Action[] = [
+            Action {
+                label:##"actDelContents"
+                status: bind if (this.graphChilds.size() > 0) MenuItem.STATUS_ENABLED else MenuItem.STATUS_DISABLED
+                action: function (e: MouseEvent) {
+                    var tit = ##"actDelete";
+                    var msg = ##[confirmDelContents]"\"{this.title}\"";
+                    if(Alert.confirm(tit, msg)) {
+                        removeChilds();
+                    }
+                }
+            },
+            Action {isSeparator:true},
+            Action {
+                label: ##"actEditTitle"
+                status: MenuItem.STATUS_ENABLED
+                action: function (e: MouseEvent) {
+                    if(text != null) {
+                        text.startEditing();
+                    }
+                }
+            }
+        ];
+        insert actions after menuOptions[0];
 
         return Group
         {
@@ -182,5 +209,13 @@ public class Pool extends GraphicalElement
             ModelerUtils.setErrorMessage(##"msgError45");
         }
         return ret;
+    }
+
+    public function removeChilds() {
+        var ch = Sequences.shuffle(getgraphChilds());
+        for (ele in ch) {
+            (ele as Lane).removeChilds();
+            removeLane(ele as Lane);
+        }
     }
 }
