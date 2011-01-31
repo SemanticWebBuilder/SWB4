@@ -72,6 +72,7 @@ public class Banner extends GenericAdmResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Resource base = getResourceBase();
         PrintWriter out = response.getWriter();
+        String lang=paramRequest.getUser().getLanguage();
 
         try {
 //            String local = base.getAttribute("local", "0");
@@ -157,7 +158,11 @@ public class Banner extends GenericAdmResource {
                 if( longdesc!=null )
                     out.println("<a class=\"swb-banner-hlp\" href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_HELP).toString()+"\">"+paramRequest.getLocaleString("longDesc")+"</a>");
             }else {
+                String img = base.getAttribute("img","");
                 //publicidad externa
+                code=SWBUtils.TEXT.replaceAll(code, "{title}", getResourceBase().getDisplayTitle(lang));
+                code=SWBUtils.TEXT.replaceAll(code, "{description}", getResourceBase().getDisplayDescription(lang));
+                code=SWBUtils.TEXT.replaceAll(code, "{image}", SWBPortal.getWebWorkPath()+base.getWorkPath()+"/"+img);
                 out.println(code);
             }
         }catch (Exception e) {
