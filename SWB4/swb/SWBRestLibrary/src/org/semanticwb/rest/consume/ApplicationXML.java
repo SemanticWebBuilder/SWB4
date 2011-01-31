@@ -7,6 +7,7 @@ package org.semanticwb.rest.consume;
 import org.semanticwb.rest.util.HTTPMethod;
 import bsh.Interpreter;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.net.HttpURLConnection;
@@ -20,6 +21,8 @@ import java.util.Set;
 
 import org.jdom.Namespace;
 import org.jdom.input.DOMBuilder;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.DOMOutputter;
 import org.jdom.xpath.XPath;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -37,42 +40,45 @@ import org.w3c.dom.Text;
  *
  * @author victor.lorenzana
  */
-public class ApplicationXML extends RepresentationBase implements RepresentationRequest,XmlResponse
+public class ApplicationXML extends RepresentationBase implements RepresentationRequest, XmlResponse
 {
-    public static final String APPLICATION_XML="application/xml";
+
+    public static final String APPLICATION_XML = "application/xml";
     private static final Logger log = SWBUtils.getLogger(ApplicationXML.class);
     private static final String NL = "\r\n";
     private Document document;
     private int status;
     private URL url;
-    private String APPLICATION_NS="http://www.demo.org.mx";
+    private String APPLICATION_NS = "http://www.demo.org.mx";
+
     public ApplicationXML()
     {
-        
     }
-    
+
     public void setMethod(Method method)
     {
-        if(this.method==null)
+        if (this.method == null)
         {
-            this.method=method;
+            this.method = method;
         }
     }
 
     public void setURL(URL url)
     {
-        if(this.url==null)
+        if (this.url == null)
         {
-            this.url=url;
+            this.url = url;
         }
     }
+
     public void setStatus(int status)
     {
-        if(this.status==0)
+        if (this.status == 0)
         {
-            this.status=status;
+            this.status = status;
         }
     }
+
     public Object getResponse()
     {
         return document;
@@ -106,7 +112,7 @@ public class ApplicationXML extends RepresentationBase implements Representation
             classes.put(name, code);
         }
     }
-    
+
     public static String toUpperCase(String data)
     {
         String letter = data.substring(0, 1);
@@ -411,27 +417,44 @@ public class ApplicationXML extends RepresentationBase implements Representation
         }
         return values.toArray(new URL[values.size()]);
     }
+
     public Object getNativeResponse() throws RestException
     {
         return this.document;
     }
+
     public void process(HttpURLConnection con) throws ExecutionRestException
     {
         try
         {
-            InputStream in=con.getInputStream();
-            document=SWBUtils.XML.xmlToDom(in);
-            if(document==null)
+            Charset charset = Charset.forName("utf-8");
+            String contentType = con.getContentType();
+            if (contentType != null)
+            {
+                int pos = contentType.indexOf("charset=");
+                if (pos != -1)
+                {
+                    String scharset = contentType.substring(pos + 8).trim();
+                    charset = Charset.forName(scharset);
+                }
+            }
+            InputStream in = con.getInputStream();
+            InputStreamReader reader = new InputStreamReader(in, charset);
+            DOMOutputter out = new DOMOutputter();
+            SAXBuilder builder = new SAXBuilder();
+            document = out.output(builder.build(reader));
+            if (document == null)
             {
                 throw new ExecutionRestException(HTTPMethod.POST, con.getURL(), "The document is invalid");
             }
             in.close();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new ExecutionRestException(this.method.getHTTPMethod(), url, e);
-        }        
+        }
     }
+
     protected Document constructParameters(List<ParameterValue> values) throws RestException
     {
         Document doc = SWBUtils.XML.getNewDocument();
@@ -516,6 +539,7 @@ public class ApplicationXML extends RepresentationBase implements Representation
         }
         return doc;
     }
+
     public RepresentationResponse request(List<ParameterValue> values) throws RestException
     {
         checkParameters(values);
@@ -525,7 +549,7 @@ public class ApplicationXML extends RepresentationBase implements Representation
             HttpURLConnection con = (HttpURLConnection) _url.openConnection();
             con.setRequestMethod(this.getMethod().getHTTPMethod().toString());
             String charset = Charset.defaultCharset().name();
-            con.setRequestProperty(CONTENT_TYPE, APPLICATION_XML+"; charset=" + charset);
+            con.setRequestProperty(CONTENT_TYPE, APPLICATION_XML + "; charset=" + charset);
             con.setDoOutput(true);
             con.setDoInput(true);
             OutputStream out = con.getOutputStream();
