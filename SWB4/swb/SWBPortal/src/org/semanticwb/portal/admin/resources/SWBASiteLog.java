@@ -84,6 +84,7 @@ public class SWBASiteLog extends GenericResource {
         if (con != null) {
             try {
                 Statement st = con.createStatement();
+                st.setFetchSize(10);
                 ResultSet rs = st.executeQuery(sql);
                 while (rs.next()) {
                     SemanticObject swbobj=SemanticObject.createSemanticObject(rs.getString("log_objuri"));
