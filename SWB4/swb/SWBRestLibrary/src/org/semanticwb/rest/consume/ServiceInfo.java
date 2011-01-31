@@ -332,10 +332,23 @@ public class ServiceInfo
             con.setRequestMethod("GET");
             if (con.getResponseCode() == 200)
             {
+                Charset charset = Charset.forName("utf-8");
+                String contentType = con.getContentType();
+                if (contentType != null)
+                {
+                    int pos = contentType.indexOf("charset=");
+                    if (pos != -1)
+                    {
+                        String scharset = contentType.substring(pos + 8).trim();
+                        charset = Charset.forName(scharset);
+                    }
+                }
                 if (con.getHeaderField(CONTENT_TYPE) != null && (con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(APPLICATION_XML) || con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(TEXT_XML)))
                 {
-                    InputStream in = con.getInputStream();
-                    Document response = SWBUtils.XML.xmlToDom(in);
+                    InputStreamReader reader = new InputStreamReader(con.getInputStream(), charset);
+                    DOMOutputter out = new DOMOutputter();
+                    SAXBuilder builder = new SAXBuilder();
+                    Document response = out.output(builder.build(reader));
                     if (response == null)
                     {
                         throw new RestException("The content of the url is invalid");
