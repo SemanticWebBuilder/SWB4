@@ -2,40 +2,61 @@
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
-    <admdbconnmgr defconn="true"/>
+        <admdbconnmgr defconn="true"/>
 
-    <fieldset legend="Basic configuration">
-        <input type="text" id="url" name="url" label="Web address" promptMessage="Web address" />
-        <statictext name="txtTarget">In a new Window</statictext>
-	<input type="radio" name="target" id="target0" label="Yes" value="true"/>
-	<input type="radio" name="target" id="target1" label="No" value="false" checked="true"/>
+        <fieldset legend="Basic configuration">
+            <input type="text" id="url" name="url" label="Web address" promptMessage="Web address" />
+            <statictext name="txtTarget">In a new Window</statictext>
+            <input type="radio" name="target" id="target0" label="Yes" value="true"/>
+            <input type="radio" name="target" id="target1" label="No" value="false" checked="true"/>
 
-        <input type="text" id="axn" name="axn" label="Action" promptMessage="Javascript action, considered in the onclick event" />
+            <input type="text" id="axn" name="axn" label="Action" promptMessage="Javascript action, considered in the onclick event" />
 
-        <input type="file" name="img" label="Image (jpg, jpeg, gif, png, swf)" showfile="true" filetype="jpg|jpeg|gif|png|swf" isshowfiletype="true" isremovefile="true" removemsg="Remove image" size="40" />
-        <input type="text" id="alt" name="alt" label="Alternate text" promptMessage="Indicative description of the banner. Accessibility Guidelines" />
+            <input type="file" name="img" label="Image (jpg, jpeg, gif, png, swf)" showfile="true" filetype="jpg|jpeg|gif|png|swf" isshowfiletype="true" isremovefile="true" removemsg="Remove image" size="40" />
+            <input type="text" id="alt" name="alt" label="Alternate text" promptMessage="Indicative description of the banner. Accessibility Guidelines" />
 
-        <textarea id="longdesc" name="longdesc" label="Long description" rows="5" cols="50" wrap="virtual" promptMessage="Description banner indicative of Help mode of action. Accessibility Guidelines" />
-    </fieldset>
+            <textarea id="longdesc" name="longdesc" label="Long description" rows="5" cols="50" wrap="virtual" promptMessage="Description banner indicative of Help mode of action. Accessibility Guidelines" />
+        </fieldset>
 
-    <div title="Style" open="false">
-    <fieldset legend="Configuring dimensions">
-        <input type="text" id="width"  name="width" label="Image width" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Invalid wide" promptMessage="Image width. Examples: 90%, 350px, 854" />
-        <input type="text" id="height" name="height" label="Image height" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Height invalid" promptMessage="Image height. Examples: 90%, 350px, 854" />
-    </fieldset>
-    </div>
+        <div title="Style" open="false">
+            <fieldset legend="Configuring dimensions">
+                <input type="text" id="width"  name="width" label="Image width" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Invalid wide" promptMessage="Image width. Examples: 90%, 350px, 854" />
+                <input type="text" id="height" name="height" label="Image height" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Height invalid" promptMessage="Image height. Examples: 90%, 350px, 854" />
+            </fieldset>
+        </div>
 
-    <div title="Advanced" open="false">
-    <fieldset legend="External banner">
-        <textarea id="code" name="code" label="* Code" rows="5" cols="50" wrap="virtual"/>
-        <input type="text" id="index" name="index" label="Index order" maxlength="7" regExp="\d{1,7}" invalidMessage="Invalid index" promptMessage="Numerical index of the image" />
-    </fieldset>
-    </div>
+        <div title="Advanced" open="false">
+            <fieldset legend="External banner">
+                <textarea id="code" name="code" label="* Code" rows="5" cols="50" wrap="virtual"/>
+                <input type="text" id="index" name="index" label="Index order" maxlength="7" regExp="\d{1,7}" invalidMessage="Invalid index" promptMessage="Numerical index of the image" />
+            </fieldset>
+        </div>
 
-    <fieldset>
-        <input type="submit" name="btnSave" id="btnSave" value="Save" onclick="return jsValida(this.form)" />
-        <input type="reset"  name="btnReset" id="btnReset" value="Reset" />
-    </fieldset>
+        <fieldset>
+            <statictext name="txtNotaTitle">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {title} Resource title
+			</font>
+		]]>
+            </statictext>
+            <statictext name="txtNotaDescription">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {description} Resource description
+			</font>
+		]]>
+            </statictext>
+            <statictext name="txtNotaImage">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {image} Resource image
+			</font>
+		]]>
+            </statictext>
+            <input type="submit" name="btnSave" id="btnSave" value="Save" onclick="return jsValida(this.form)" />
+            <input type="reset"  name="btnReset" id="btnReset" value="Reset" />
+        </fieldset>
     </form>
 
     <script type="text/javascript">
