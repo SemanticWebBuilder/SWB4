@@ -5,6 +5,7 @@
 package org.semanticwb.rest.consume;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -77,16 +78,16 @@ public class JSON extends RepresentationBase implements RepresentationRequest, J
                     }
                 }
             }
-            InputStream in = con.getInputStream();
-            StringBuilder sb = new StringBuilder();
-            byte[] buffer = new byte[1028];
-            int read = in.read(buffer);
+            InputStreamReader reader=new InputStreamReader(con.getInputStream(), charset);
+            char[] buffer=new char[1024*8];
+            StringBuilder sb = new StringBuilder();            
+            int read = reader.read(buffer);
             while (read != -1)
             {
-                sb.append(new String(buffer, 0, read, charset));
-                read = in.read(buffer);
+                sb.append(new String(buffer, 0, read));
+                read = reader.read(buffer);
             }
-            in.close();
+            reader.close();
             response = new JSONObject(sb.toString());
         }
         catch (Exception e)
