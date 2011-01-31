@@ -58,7 +58,7 @@ public class TestRestSource
         {
             RestSource source = new RestSource(new URL("http://localhost:8080/swb/rest/so"));
             ServiceInfo info = source.getServiceInfo();
-            Method[] methods = info.getAllMethods();
+            Method[] methods = info.getMethods();
             for (Method m : methods)
             {
                 System.out.println("method " + m.getId());
