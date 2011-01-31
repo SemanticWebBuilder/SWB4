@@ -20,8 +20,7 @@ public class RestSource
     public static final Map<String,Class<RepresentationRequest>> representationsRequest=Collections.synchronizedMap(new HashMap<String,Class<RepresentationRequest>>());
     public static final Map<String,Class<RepresentationResponse>> representationsResponse=Collections.synchronizedMap(new HashMap<String, Class<RepresentationResponse>>());
     
-    private final URL wadlurl;
-    private ServiceInfo serviceInfo;
+    private final URL wadlurl;    
     static
     {
         addRepresentationRequest(AtomXML.APPLICATION_ATOM_XML, (Class<RepresentationRequest>)AtomXML.class.asSubclass(RepresentationRequest.class));
@@ -66,17 +65,16 @@ public class RestSource
         {
             throw new IllegalArgumentException("The protocol " + url.getProtocol() + " is not suported (only http or https is supported)");
         }
-        serviceInfo = new ServiceInfo(url);
-
     }
 
     public ServiceInfo getServiceInfo() throws RestException
     {
+        ServiceInfo serviceInfo = new ServiceInfo(this.wadlurl);
         serviceInfo.loadService();
         return serviceInfo;
     }
 
-    public URL getWadlUrl()
+    public URL getUrl()
     {
         return wadlurl;
     }
