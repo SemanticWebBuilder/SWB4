@@ -80,7 +80,7 @@ public class ServiceInfo
         return null;
     }
 
-    public Method[] getAllMethods()
+    public Method[] getMethods()
     {
         ArrayList<Method> allMethods = new ArrayList<Method>();
         for (Resource resource : resources.values())
