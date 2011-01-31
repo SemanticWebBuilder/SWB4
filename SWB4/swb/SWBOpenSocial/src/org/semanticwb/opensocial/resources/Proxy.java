@@ -57,11 +57,13 @@ public class Proxy
         catch (IOException e)
         {
             response.sendError(500);
+            log.debug("url :"+url);
             log.debug(e);
             throw e;
         }
         catch (Exception e)
         {
+            log.debug("url :"+url);
             response.sendError(500);
             log.debug(e);            
         }
