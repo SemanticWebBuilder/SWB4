@@ -10,6 +10,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 
 /**
  *
@@ -17,7 +19,7 @@ import java.util.List;
  */
 public final class XWWWFormUrlEncoded extends RepresentationBase implements RepresentationRequest
 {
-
+    private static final Logger log = SWBUtils.getLogger(ApplicationXML.class);
     public static final String APPLICATION_XWWW_FORM_URL_ENCODED = "application/x-www-form-urlencoded";
 
     public XWWWFormUrlEncoded()
@@ -111,7 +113,7 @@ public final class XWWWFormUrlEncoded extends RepresentationBase implements Repr
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            log.debug(e);
             throw new RestException(e);
         }
         return sb.toString();
