@@ -4,7 +4,6 @@
  */
 package org.semanticwb.rest.consume;
 
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
