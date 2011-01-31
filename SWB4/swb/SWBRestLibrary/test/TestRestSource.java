@@ -11,6 +11,8 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.rest.consume.*;
 /**
  *
@@ -18,7 +20,7 @@ import org.semanticwb.rest.consume.*;
  */
 public class TestRestSource
 {
-
+    private static final Logger log = SWBUtils.getLogger(TestRestSource.class);
     public TestRestSource()
     {
     }
@@ -49,35 +51,7 @@ public class TestRestSource
     //
     @Test
     public void hello()
-    {
-        /*String data="{\"context\":{\"country\":\"default\",\"language\":\"default\",\"view\":\"default\",\"container\":\"default\"},\"gadgets\":[{\"url\":\"http://localhost:8080/swb/samplecontainer/examples/SocialHelloWorld.xml\",\"moduleId\":1}]}";
-        try
-        {
-            URL url=new URL("http://localhost:8080/gadgets/metadata?st=john.doe:john.doe:appid:cont:url:0:default");
-            java.net.HttpURLConnection con= (java.net.HttpURLConnection)url.openConnection();
-            con.setRequestMethod("POST");
-            con.setRequestProperty("Content-Type", "JSON");
-            con.setDoOutput(true);
-            con.setDoInput(true);
-            OutputStream out=con.getOutputStream();
-            out.write(data.getBytes());
-            out.close();
-            InputStream in=con.getInputStream();
-            StringBuilder sb = new StringBuilder();
-            byte[] buffer = new byte[1028];
-            int read = in.read(buffer);
-            while (read != -1)
-            {
-                sb.append(new String(buffer, 0, read));
-                read = in.read(buffer);
-            }
-            in.close();
-            System.out.println(sb.toString());
-        }
-        catch(Exception e)
-        {
-            
-        }*/
+    {        
         try
         {
             RestSource source = new RestSource(new URL("http://localhost:8080/swb/rest/so"));
@@ -96,7 +70,6 @@ public class TestRestSource
                 if(resp instanceof XmlResponse)
                 {
                     XmlResponse xmlResponse=(XmlResponse)resp;
-
                     URL[] objs = xmlResponse.getLinks(parameter);
                     for (URL obj : objs)
                     {
@@ -108,11 +81,7 @@ public class TestRestSource
         }
         catch (Exception e)
         {
-            e.printStackTrace();
-            if (e.getCause() != null)
-            {
-                e.getCause().printStackTrace();
-            }
+            log.debug(e);
         }
     }
 }
