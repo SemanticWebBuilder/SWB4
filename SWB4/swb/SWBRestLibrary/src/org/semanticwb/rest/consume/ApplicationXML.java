@@ -437,9 +437,8 @@ public class ApplicationXML extends RepresentationBase implements Representation
                     String scharset = contentType.substring(pos + 8).trim();
                     charset = Charset.forName(scharset);
                 }
-            }
-            InputStream in = con.getInputStream();
-            InputStreamReader reader = new InputStreamReader(in, charset);
+            }            
+            InputStreamReader reader = new InputStreamReader(con.getInputStream(), charset);
             DOMOutputter out = new DOMOutputter();
             SAXBuilder builder = new SAXBuilder();
             document = out.output(builder.build(reader));
@@ -447,7 +446,7 @@ public class ApplicationXML extends RepresentationBase implements Representation
             {
                 throw new ExecutionRestException(HTTPMethod.POST, con.getURL(), "The document is invalid");
             }
-            in.close();
+            reader.close();
         }
         catch (Exception e)
         {
