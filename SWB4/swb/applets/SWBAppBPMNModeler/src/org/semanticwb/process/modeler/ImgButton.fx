@@ -23,6 +23,7 @@ import org.semanticwb.process.modeler.ModelerUtils;
 public class ImgButton extends CustomNode
 {
     public var text:String;
+    public var toolTipText:String;
     public var image:String;
     public var imageOver:String;
     public var over:Boolean;
@@ -75,10 +76,19 @@ public class ImgButton extends CustomNode
                  {
                      if(toolBar!=null)
                      {
-                         ModelerUtils.startToolTip(text, toolBar.x+layoutX, toolBar.y+subMenu.layoutY+layoutBounds.height);
+                         if (toolTipText == "") {
+                            ModelerUtils.startToolTip(text, toolBar.x+layoutX, toolBar.y+subMenu.layoutY+layoutBounds.height);
+                         } else {
+                            ModelerUtils.startToolTip(text, toolTipText, toolBar.x+layoutX, toolBar.y+subMenu.layoutY+layoutBounds.height);
+                         }
+
                      }else
                      {
-                         ModelerUtils.startToolTip(text, layoutX, subMenu.layoutY+layoutBounds.height);
+                         if (toolTipText == "") {
+                            ModelerUtils.startToolTip(text, layoutX, subMenu.layoutY+layoutBounds.height);
+                         } else {
+                             ModelerUtils.startToolTip(text, toolTipText, layoutX, subMenu.layoutY+layoutBounds.height);
+                         }
                      }
                  }else
                  {
