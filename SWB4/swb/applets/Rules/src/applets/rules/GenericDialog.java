@@ -192,6 +192,7 @@ implements ActionListener
             while(ite.hasNext())
             {
                 String campo = (String) ite.next();
+
                 if("caracteristica".equals(campo))
                 {
                     javax.swing.JComboBox combo = (javax.swing.JComboBox) fieldHash.get(campo);
@@ -578,8 +579,12 @@ implements ActionListener
         comItem = (ComboItem) comboOper.getSelectedItem();
         
         toolTipText += " " + comItem.gettitle();
-        
-        
+
+        comboOper = (javax.swing.JComboBox) fieldHash.get("operador");
+        comboOper.removeAllItems();
+        comboOper.setVisible(true);
+        loadComboOper(comboOper, attSelActual,"operator",operator);
+
         javax.swing.JLabel tempLabelcombo, tempLabeltxt ;
         javax.swing.JTextField txtField;
         javax.swing.JComboBox comboVals;
@@ -621,8 +626,13 @@ implements ActionListener
             tempLabeltxt = ( javax.swing.JLabel) fieldHash.get("_labelvalortxt");
             tempLabeltxt.setVisible(true);
         }
+
+
+            //comboOper = (javax.swing.JComboBox) fieldHash.get("operator");
+            
         
         txtField.updateUI();
+        comboOper.updateUI();
         comboVals.updateUI();
         tempLabelcombo.updateUI();
 
