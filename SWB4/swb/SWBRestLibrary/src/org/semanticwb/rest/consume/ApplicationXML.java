@@ -6,7 +6,6 @@ package org.semanticwb.rest.consume;
 
 import org.semanticwb.rest.util.HTTPMethod;
 import bsh.Interpreter;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
