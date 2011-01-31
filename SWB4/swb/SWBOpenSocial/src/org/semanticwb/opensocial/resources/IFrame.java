@@ -322,39 +322,36 @@ public class IFrame
             }
         }
         boolean changeUserPrefs = false;
-        Enumeration headernames = request.getHeaderNames();
-        while (headernames.hasMoreElements())
-        {
-            String name = headernames.nextElement().toString();
 
-            if (name.equalsIgnoreCase("referer"))
+
+        changeUserPrefs = true;
+        /*String referer = request.getHeader("referer");
+        if (referer != null)
+        {
+            try
             {
-                String referer = request.getHeader(name);
-                try
+                URL uri_referer = new URL(referer);
+                URL urilocal = new URL(request.getScheme() + "://" + request.getServerName() + port + paramRequest.getWebPage().getUrl());
+                String host1 = uri_referer.getHost();
+                if ("localhost".equals(host1))
                 {
-                    URL uri_referer = new URL(referer);
-                    URL urilocal = new URL(request.getScheme() + "://" + request.getServerName() + port + paramRequest.getWebPage().getUrl());
-                    String host1 = uri_referer.getHost();
-                    if ("localhost".equals(host1))
-                    {
-                        host1 = "127.0.0.1";
-                    }
-                    String host2 = urilocal.getHost();
-                    if ("localhost".equals(host2))
-                    {
-                        host2 = "127.0.0.1";
-                    }
-                    if (host1.equals(host2) && uri_referer.getPort() == urilocal.getPort() && uri_referer.getProtocol().equals(urilocal.getProtocol()))
-                    {
-                        changeUserPrefs = true;
-                    }
+                    host1 = "127.0.0.1";
                 }
-                catch (MalformedURLException e)
+                String host2 = urilocal.getHost();
+                if ("localhost".equals(host2))
                 {
-                    log.debug(e);
+                    host2 = "127.0.0.1";
+                }
+                if (host1.equals(host2) && uri_referer.getPort() == urilocal.getPort() && uri_referer.getProtocol().equals(urilocal.getProtocol()))
+                {
+                    changeUserPrefs = true;
                 }
             }
-        }
+            catch (MalformedURLException e)
+            {
+                log.debug(e);
+            }
+        }*/
 
         WebSite site = paramRequest.getWebPage().getWebSite();
         User user = paramRequest.getUser();
