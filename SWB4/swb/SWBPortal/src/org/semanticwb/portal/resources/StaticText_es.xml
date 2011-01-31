@@ -5,6 +5,83 @@
 		<admdbconnmgr defconn="true"/>
             <fieldset legend="Datos">
                 <textarea name="text" label="Texto:" rows="20" cols="80" wrap="virtual" jsrequired="true"/>
+                <statictext name="txtNotaUserLogin">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {user.login} Login de usuario
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaUserMail">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {user.email} Correo del usuario
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaUserLanguage">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {user.language} Lenguaje del Usuario
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaWebPath">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {webpath} Ruta web
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaDispath">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {dispath} Ruta del distribuidor de instancia SWB
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaWebWorkPath">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {webworkpath} Ruta web para este portal
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaWorkPath">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {workpath} Directorio de trabajo para este portal
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaWebSiteId">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {websiteid} Identificador del sitio web
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaTopicUrl">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {topicurl} Url de la página
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaTopicId">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {topicid} Identificador de la página
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaTopicTitle">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {topictitle} Título de la página
+			</font>
+		]]>
+                </statictext>
             </fieldset>
             <fieldset>
                 <statictext name="b">
