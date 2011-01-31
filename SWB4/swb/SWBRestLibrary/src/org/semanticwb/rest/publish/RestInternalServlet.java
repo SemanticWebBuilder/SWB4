@@ -6,13 +6,13 @@
 package org.semanticwb.rest.publish;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URI;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.servlet.internal.DistributorParams;
 import org.semanticwb.servlet.internal.InternalServlet;
 
@@ -22,10 +22,11 @@ import org.semanticwb.servlet.internal.InternalServlet;
  */
 public class RestInternalServlet implements InternalServlet{
 
+    private static final Logger log = SWBUtils.getLogger(RestInternalServlet.class);
     RestManager manager=new RestManager("rest");
     public void init(ServletContext config) throws ServletException
     {
-        SemanticClassPublisher module=new SemanticClassPublisher();
+        /*SemanticClassPublisher module=new SemanticClassPublisher();
         
         try
         {
@@ -34,9 +35,9 @@ public class RestInternalServlet implements InternalServlet{
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            log.debug(e);
         }
-        RestManager.addModule("so",module);
+        RestManager.addModule("so",module);*/
     }
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
