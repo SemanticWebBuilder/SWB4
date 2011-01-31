@@ -6,12 +6,14 @@ package org.semanticwb.rest.consume;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -24,6 +26,9 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.DOMOutputter;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.w3c.dom.Document;
@@ -52,7 +57,8 @@ public class ServiceInfo
 
     public Document getDocument()
     {
-        String xml = SWBUtils.XML.domToXml(doc);
+        Charset charset = Charset.defaultCharset();
+        String xml = SWBUtils.XML.domToXml(doc, charset.name(), false);
         return SWBUtils.XML.xmlToDom(xml);
     }
 
@@ -227,8 +233,7 @@ public class ServiceInfo
                             }
                         }
                         catch (Exception e)
-                        {
-                            e.printStackTrace();
+                        {                            
                             log.debug(e);
                         }
                         try
@@ -264,21 +269,42 @@ public class ServiceInfo
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             if (con.getResponseCode() == 200)
             {
+                Charset charset = Charset.forName("utf-8");
+                String contentType = con.getContentType();
+                if (contentType != null)
+                {
+                    int pos = contentType.indexOf("charset=");
+                    if (pos != -1)
+                    {
+                        String scharset = contentType.substring(pos + 8).trim();
+                        charset = Charset.forName(scharset);
+                    }
+                }
                 if (con.getHeaderField(CONTENT_TYPE) != null && con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(APPLICATION_XML))
                 {
-                    InputStream in = con.getInputStream();
-                    doc = SWBUtils.XML.xmlToDom(in);
-                    if (doc == null)
+
+                    InputStreamReader reader = new InputStreamReader(con.getInputStream(), charset);
+                    DOMOutputter out = new DOMOutputter();
+                    SAXBuilder builder = new SAXBuilder();
+                    try
                     {
-                        throw new RestException("The content of the url is invalid");
+                        doc = out.output(builder.build(reader));
+                        if (doc == null)
+                        {
+                            throw new RestException("The content of the url is invalid");
+                        }
+                        if (isWADL())
+                        {
+                            extractIncludes();
+                            fill();
+                        }
+                        else
+                        {
+                        }
                     }
-                    if (isWADL())
+                    catch (JDOMException jdone)
                     {
-                        extractIncludes();
-                        fill();
-                    }
-                    else
-                    {
+                        throw new RestException("Error trying to get XML", jdone);
                     }
                 }
                 else
@@ -491,7 +517,7 @@ public class ServiceInfo
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            log.debug(e);
         }
         return false;
     }
