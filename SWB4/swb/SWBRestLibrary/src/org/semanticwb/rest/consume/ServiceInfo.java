@@ -300,6 +300,7 @@ public class ServiceInfo
                         }
                         else
                         {
+                            throw new RestException("The document is not a WADL valid");
                         }
                     }
                     catch (JDOMException jdone)
