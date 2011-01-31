@@ -3,7 +3,6 @@
  * and open the template in the editor.
  */
 
-
 import java.net.URL;
 import java.util.ArrayList;
 import org.junit.After;
@@ -14,13 +13,16 @@ import org.junit.Test;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.rest.consume.*;
+
 /**
  *
  * @author victor.lorenzana
  */
 public class TestRestSource
 {
+
     private static final Logger log = SWBUtils.getLogger(TestRestSource.class);
+
     public TestRestSource()
     {
     }
@@ -51,25 +53,25 @@ public class TestRestSource
     //
     @Test
     public void hello()
-    {        
+    {
         try
         {
             RestSource source = new RestSource(new URL("http://localhost:8080/swb/rest/so"));
             ServiceInfo info = source.getServiceInfo();
-            Method[] methods=info.getAllMethods();
-            for(Method m : methods)
+            Method[] methods = info.getAllMethods();
+            for (Method m : methods)
             {
-                System.out.println("method "+m.getId());
+                System.out.println("method " + m.getId());
             }
             Method minfo = info.getMethod("swbcomm_EventElementlistEventElements");
             ArrayList<ParameterValue> values = new ArrayList<ParameterValue>();
             RepresentationResponse resp = minfo.request(values);
             ParameterDefinition[] parameters = resp.getParameterDefinitions();
-            for (ParameterDefinition parameter : parameters)
+            if (resp instanceof XmlResponse)
             {
-                if(resp instanceof XmlResponse)
+                for (ParameterDefinition parameter : parameters)
                 {
-                    XmlResponse xmlResponse=(XmlResponse)resp;
+                    XmlResponse xmlResponse = (XmlResponse) resp;
                     URL[] objs = xmlResponse.getLinks(parameter);
                     for (URL obj : objs)
                     {
@@ -77,6 +79,7 @@ public class TestRestSource
                     }
                 }
             }
+
 
         }
         catch (Exception e)
