@@ -534,9 +534,4 @@ public class ServiceInfo
         }
         return false;
     }
-
-    public URL getURLForGET()
-    {
-        return null;
-    }
 }
