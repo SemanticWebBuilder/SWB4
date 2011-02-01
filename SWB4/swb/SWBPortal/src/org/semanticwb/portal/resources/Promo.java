@@ -741,16 +741,6 @@ public class Promo extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         Resource base=getResourceBase();
         String action = response.getAction();
-        /*if(response.Action_REMOVE.equals(action)) {
-            base.removeAttribute("textcolor");
-            base.removeAttribute("imgPos");
-            try {
-                base.updateAttributesToDB();
-            }catch(SWBException swbe) {
-                swbe.printStackTrace(System.out);
-            }
-            response.setCallMethod(response.Call_CONTENT);
-        }else */
         if(response.Action_EDIT.equals(action)) {
             try {
                 edit(request, response);
@@ -778,20 +768,6 @@ public class Promo extends GenericResource {
 
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-//        Resource base = getResourceBase();
-//        if(base.getAttribute("textcolor")==null || base.getAttribute("imgPos")==null || base.getAttribute("template")!=null) {
-//            super.doAdmin(request, response, paramRequest);
-//        }else {
-//            PrintWriter out = response.getWriter();
-//            out.println("<script type=\"text/javascript\" language=\"JavaScript\">");
-//            out.println("<!--");
-//            out.println("if(confirm('Se detectó una versión anterior de la administración. Le recomendamos actualizarla ¿Desea actualizarla?'))");
-//            out.println("  window.location.href='"+paramRequest.getActionUrl().setCallMethod(paramRequest.Call_DIRECT).setAction(paramRequest.Action_REMOVE)+"';");
-//            out.println("else");
-//            out.println("  window.location.href='"+paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMHLP).setAction(paramRequest.Action_EDIT)+"';");
-//            out.println("-->");
-//            out.println("</script>");
-//        }
         Resource base=getResourceBase();
         PrintWriter out = response.getWriter();
 
