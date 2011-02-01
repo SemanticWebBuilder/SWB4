@@ -1,41 +1,46 @@
-/**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
+/**
+* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+*
+* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (\u2018open source\u2019),
+* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+* del SemanticWebBuilder 4.0.
+*
+* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+* de la misma.
+*
+* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+* dirección electrónica:
 *  http://www.semanticwebbuilder.org
-**/ 
- 
+**/
+
 package org.semanticwb.portal.resources;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.Templates;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import org.semanticwb.Logger;
+import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
-import org.semanticwb.portal.api.GenericAdmResource;
+import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -43,14 +48,12 @@ import org.semanticwb.portal.api.SWBResourceURL;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
 
 // TODO: Auto-generated Javadoc
 /**
  * Promo se encarga de desplegar y administrar un texto promocional con una
- * imagen opcional bajo ciertos criterios(configuraci�n de recurso). Es un recurso
- * que viene de la versi�n 2 de WebBuilder y puede ser instalado como recurso de
+ * imagen opcional bajo ciertos criterios(configuraci?n de recurso). Es un recurso
+ * que viene de la versi?n 2 de WebBuilder y puede ser instalado como recurso de
  * estrategia o recurso de contenido.
  *
  * Promo displays and administrate a promocional text with an optional image
@@ -60,13 +63,13 @@ import org.w3c.dom.Node;
  * @Autor:Jorge Jiménez
  */
 
-public class Promo extends GenericAdmResource {    
+public class Promo extends GenericResource {
     /** The log. */
     private static Logger log = SWBUtils.getLogger(Promo.class);
 
     /** The tpl. */
     private Templates tpl;
-    
+
     /** The work path. */
     private String workPath;
 
@@ -78,12 +81,14 @@ public class Promo extends GenericAdmResource {
 
     /** The restype. */
     private static String restype;
-    
+
+    private static final String Action_UPDATE = "update";
+
     /**
      * Sets the resource base.
-     * 
+     *
      * @param base the new resource base
-     */    
+     */
     @Override
     public void setResourceBase(Resource base) {
         try {
@@ -102,7 +107,7 @@ public class Promo extends GenericAdmResource {
                 log.error("Error while loading resource template: "+base.getId(), e);
             }
         }
-        if( tpl==null ) {
+        if( tpl==null || Boolean.parseBoolean(base.getAttribute("deftmp"))) {
             try {
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/Promo/PromoRightAligned.xsl"));
             }catch(Exception e) {
@@ -113,7 +118,7 @@ public class Promo extends GenericAdmResource {
 
     /**
      * Gets the dom.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramRequest the param request
@@ -183,29 +188,41 @@ public class Promo extends GenericAdmResource {
             out.println("Error in doXML method while rendering the XML script");
         }
     }
-    
+
     /* (non-Javadoc)
      * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
-        
         Resource base = paramRequest.getResourceBase();
-        PrintWriter out = response.getWriter();
-         try {
-            Document dom = getDom(request, response, paramRequest);
-            String html = SWBUtils.XML.transformDom(tpl, dom);
-            out.println(html);
+
+        if(base.getAttribute("template")!=null || Boolean.parseBoolean(base.getAttribute("deftmp"))) {
+            PrintWriter out = response.getWriter();
+             try {
+                Document dom = getDom(request, response, paramRequest);
+                String html = SWBUtils.XML.transformDom(tpl, dom);
+                out.println(html);
+            }
+            catch(Exception e) {
+                log.error("Error in doView method while rendering the resource base: "+base.getId() +"-"+ base.getTitle(), e);
+                e.printStackTrace(System.out);
+            }
+        }else {
+            String out;
+            String cssClass = base.getAttribute("cssClass");
+            if(cssClass == null)
+                out = renderWithStyle();
+            else
+                out = render();
+            response.getWriter().println(out);
         }
-        catch(Exception e) {
-            log.error("Error in doView method while rendering the resource base: "+base.getId() +"-"+ base.getTitle(), e);
-        }
+
     }
 
     /**
      * Render with style.
-     * 
+     *
      * @return the string
      */
     private String renderWithStyle() {
@@ -241,12 +258,12 @@ public class Promo extends GenericAdmResource {
         if(base.getAttribute("imgWidth")!=null){
             imgWidth = "width=\"" + base.getAttribute("imgWidth")+"\"";
         }
-        
+
         String imgHeight="";
         if(base.getAttribute("imgHeight")!=null){
             imgHeight = "height=\"" + base.getAttribute("imgHeight")+"\"";
         }
-        
+
         String text = base.getAttribute("text");
         String textStyle = base.getAttribute("textStyle","");
 
@@ -401,13 +418,13 @@ public class Promo extends GenericAdmResource {
 
     /**
      * Render.
-     * 
+     *
      * @return the string
      */
     private String render() {
         StringBuilder out = new StringBuilder();
         Resource base=getResourceBase();
-        
+
         String cssClass = base.getAttribute("cssClass","");
         String title = base.getAttribute("title");
         String subtitle = base.getAttribute("subtitle");
@@ -515,18 +532,18 @@ public class Promo extends GenericAdmResource {
         }
         return out.toString();
     }
-     
+
     /**
      * Obtiene las ligas de redireccionamiento del promocional.
-     * 
+     *
      * @param paramRequest the param request
      * @param base the base
      * @return the url html
-     */    
+     */
     private String getUrlHtml(SWBParamRequest paramRequest, Resource base) {
         StringBuffer ret = new StringBuffer("");
         SWBResourceURL wburl = paramRequest.getActionUrl();
-        
+
         ret.append("<a href=\"" + wburl.toString() + "\"");
         if("0".equals(base.getAttribute("uline", "0").trim())) {
             ret.append(" style=\"text-decoration:none;\"");
@@ -537,21 +554,21 @@ public class Promo extends GenericAdmResource {
         ret.append("> \n");
         return ret.toString();
     }
-    
+
     /**
      * Obtiene la imagen del promocional asi como su posicionamiento (en caso de
      * existir).
-     * 
+     *
      * @param reqParams the req params
      * @param base the base
      * @return the img promo
-     */    
+     */
     private String getImgPromo(SWBParamRequest reqParams, Resource base) {
-        StringBuffer ret = new StringBuffer("");
+        StringBuilder ret = new StringBuilder("");
         String position = base.getAttribute("pos", "3").trim();
         String img=base.getAttribute("img", "").trim();
         String url=base.getAttribute("url", "").trim();
-        
+
         if("1".equals(position)) {
             ret.append(getImgHtml(reqParams, base));
             if(!img.endsWith(".swf")) {
@@ -644,13 +661,13 @@ public class Promo extends GenericAdmResource {
 
     /**
      * Obtiene el html de la imagen.
-     * 
+     *
      * @param paramRequest the param request
      * @param base the base
      * @return the img html
-     */    
+     */
     private String getImgHtml(SWBParamRequest paramRequest, Resource base) {
-        StringBuffer ret = new StringBuffer("");
+        StringBuilder ret = new StringBuilder("");
         String width=base.getAttribute("width", "");
         String height=base.getAttribute("height", "");
 
@@ -693,13 +710,13 @@ public class Promo extends GenericAdmResource {
 
     /**
      * Obtiene el texto del promocional ya armado.
-     * 
+     *
      * @param base the base
      * @return the text html
-     */    
+     */
     private String getTextHtml(Resource base) {
-        StringBuffer ret = new StringBuffer("");
-        if(!"".equals(base.getAttribute("text", ""))) {            
+        StringBuilder ret = new StringBuilder("");
+        if(!"".equals(base.getAttribute("text", ""))) {
             if(!"".equals(base.getAttribute("textcolor", ""))) {
                 ret.append("<font color=\""+base.getAttribute("textcolor")+"\"> \n");
             }
@@ -714,18 +731,353 @@ public class Promo extends GenericAdmResource {
 
     /**
      * Process action.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @throws SWBResourceException the sWB resource exception
      * @throws IOException Signals that an I/O exception has occurred.
-     */    
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         Resource base=getResourceBase();
-        //base. addHit(request, response.getUser(), response.getTopic());
-        String url = base.getAttribute("url", "").trim();
-        if (!url.equals(""))
-            response.sendRedirect(url);
-    }    
+        String action = response.getAction();
+        /*if(response.Action_REMOVE.equals(action)) {
+            base.removeAttribute("textcolor");
+            base.removeAttribute("imgPos");
+            try {
+                base.updateAttributesToDB();
+            }catch(SWBException swbe) {
+                swbe.printStackTrace(System.out);
+            }
+            response.setCallMethod(response.Call_CONTENT);
+        }else */
+        if(response.Action_EDIT.equals(action)) {
+            try {
+                edit(request, response);
+                if( Boolean.parseBoolean(base.getAttribute("wbNoFile_imgfile")) ) {
+                    File file = new File(SWBPortal.getWorkPath()+base.getWorkPath()+"/"+base.getAttribute("imgfile"));
+                    if(file.exists() && file.delete()) {
+                        base.removeAttribute("imgfile");
+                        base.removeAttribute("wbNoFile_imgfile");
+                    }
+                }
+                if( Boolean.parseBoolean(base.getAttribute("wbNoTmp_template")) ) {
+                    File file = new File(SWBPortal.getWorkPath()+base.getWorkPath()+"/"+base.getAttribute("template"));
+                    if(file.exists() && file.delete()) {
+                        base.removeAttribute("template");
+                        base.removeAttribute("wbNoFile_template");
+                    }
+                }
+                base.updateAttributesToDB();
+                response.setAction(Action_UPDATE);
+            }catch(Exception e) {
+                e.printStackTrace(System.out);
+            }
+        }
+    }
+
+    @Override
+    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+//        Resource base = getResourceBase();
+//        if(base.getAttribute("textcolor")==null || base.getAttribute("imgPos")==null || base.getAttribute("template")!=null) {
+//            super.doAdmin(request, response, paramRequest);
+//        }else {
+//            PrintWriter out = response.getWriter();
+//            out.println("<script type=\"text/javascript\" language=\"JavaScript\">");
+//            out.println("<!--");
+//            out.println("if(confirm('Se detectó una versión anterior de la administración. Le recomendamos actualizarla ¿Desea actualizarla?'))");
+//            out.println("  window.location.href='"+paramRequest.getActionUrl().setCallMethod(paramRequest.Call_DIRECT).setAction(paramRequest.Action_REMOVE)+"';");
+//            out.println("else");
+//            out.println("  window.location.href='"+paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMHLP).setAction(paramRequest.Action_EDIT)+"';");
+//            out.println("-->");
+//            out.println("</script>");
+//        }
+        Resource base=getResourceBase();
+        PrintWriter out = response.getWriter();
+
+        String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
+        if(paramRequest.Action_ADD.equals(action) || paramRequest.Action_EDIT.equals(action)) {
+            out.println(getForm(request, paramRequest));
+        }else if(Action_UPDATE.equals(action)) {
+            out.println("<script type=\"text/javascript\" language=\"JavaScript\">");
+            out.println("   alert('Se actualizó exitosamente el recurso con identificador "+base.getId()+"');");
+            out.println("   window.location.href='"+paramRequest.getRenderUrl().setAction("edit")+"';");
+            out.println("</script>");
+        }
+    }
+
+    @Override
+    public void doAdminHlp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        Resource base=getResourceBase();
+        PrintWriter out = response.getWriter();
+        
+        String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
+        if(paramRequest.Action_ADD.equals(action) || paramRequest.Action_EDIT.equals(action)) {
+            out.println(getForm(request, paramRequest));
+        }else if(Action_UPDATE.equals(action)) {
+            out.println("<script type=\"text/javascript\" language=\"JavaScript\">");
+            out.println("   alert('Se actualizó exitosamente el recurso con identificador "+base.getId()+"');");
+            out.println("   window.location.href='"+paramRequest.getRenderUrl().setAction("edit")+"';");
+            out.println("</script>");
+        }
+    }
+
+    private String getForm(javax.servlet.http.HttpServletRequest request, SWBParamRequest paramRequest) {
+        Resource base=getResourceBase();
+        StringBuilder htm = new StringBuilder();
+        final String path = SWBPortal.getWebWorkPath()+base.getWorkPath()+"/";
+
+        SWBResourceURL url = paramRequest.getActionUrl().setAction(paramRequest.Action_EDIT);
+        htm.append("<script type=\"text/javascript\">\n");
+        htm.append("<!--\n");
+        htm.append("  dojo.require(\"dijit.layout.ContentPane\");\n");
+        htm.append("  dojo.require(\"dijit.form.Form\");\n");
+        htm.append("  dojo.require(\"dijit.form.ValidationTextBox\");\n");
+        htm.append("  dojo.require(\"dijit.form.RadioButton\");\n");
+        htm.append("  dojo.require(\"dijit.form.SimpleTextarea\");\n");
+        htm.append("  dojo.require(\"dijit.form.Button\");\n");
+        htm.append("-->\n");
+        htm.append("</script>\n");
+        htm.append("<div class=\"swbform\">\n");
+        htm.append("<form id=\"frmPromo\" dojoType=\"dijit.form.Form\" method=\"post\" enctype=\"multipart/form-data\" action=\""+url+"\">\n");
+        htm.append("<fieldset>\n");
+        htm.append("    <legend>Datos</legend>\n");
+//        htm.append("    <input type=\"hidden\" id=\"conname\" name=\"conname\" value=\"true\"/>\n");
+//        htm.append("    <input type=\"hidden\" id=\"conname\" name=\"conname\" value=\"true\"/>\n");
+        htm.append("    <ul class=\"swbform-ul\">\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("          <label for=\"title\" class=\"swbform-label\">Título</label>\n");
+        htm.append("          <input type=\"text\" id=\"title\" name=\"title\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("title","")+"\" maxlength =\"50\"/>\n");
+        htm.append("        </li>\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("          <label for=\"subtitle\" class=\"swbform-label\">Subtítulo</label>\n");
+        htm.append("          <input type=\"text\" id=\"subtitle\" name=\"subtitle\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("subtitle","")+"\" maxlength=\"60\"/>\n");
+        htm.append("        </li>\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("          <label for=\"text\" class=\"swbform-label\">* Texto</label>\n");
+        htm.append("          <textarea id=\"text\" name=\"text\" dojoType=\"dijit.form.SimpleTextarea\" cols=\"50\" rows=\"5\">"+base.getAttribute("text","")+"</textarea>\n");
+        htm.append("        </li>\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("          <label for=\"imgfile\" class=\"swbform-label\">Imagen (gif, jpg, jpeg, png)</label>\n");
+        htm.append("          <input type=\"file\" id=\"imgfile\" name=\"imgfile\" />\n");
+        htm.append("        </li>\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("          <label class=\"swbform-label\"></label>\n");
+        if(base.getAttribute("imgfile")!=null)
+          htm.append("        <img src=\""+path+base.getAttribute("imgfile")+"\" alt=\"\" hspace=\"5\" />\n");
+        //htm.append("          <input type=\"hidden\" id=\"wbfile_imgfile\" name=\"wbfile_imgfile\" value=\""+base.getAttribute("","")+"\"/>\n");
+        htm.append("        </li>\n");
+        if(base.getAttribute("imgfile")!=null) {
+            htm.append("    <li class=\"swbform-li\">\n");
+            htm.append("      <label for=\"wbNoFile_imgfile\" class=\"swbform-label\">Quitar imagen</label>\n");
+            htm.append("      <input type=\"checkbox\" id=\"wbNoFile_imgfile\" name=\"wbNoFile_imgfile\" value=\"true\"/>\n");
+            htm.append("    </li>\n");
+        }
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("          <label for=\"caption\" class=\"swbform-label\">Pie de imagen</label>\n");
+        htm.append("          <input type=\"text\" id=\"caption\" name=\"caption\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("caption","")+"\" maxlength=\"60\"/>\n");
+        htm.append("        </li>\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("            <label for=\"caption\" class=\"swbform-label\">Texto para liga</label>\n");
+        htm.append("            <input type=\"text\" id=\"more\" name=\"more\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("more","")+"\" maxlength=\"60\"/>\n");
+        htm.append("        </li>\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("            <label for=\"url\" class=\"swbform-label\">Liga</label>\n");
+        htm.append("            <input type=\"text\" id=\"url\" name=\"url\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("url","")+"\" maxlength=\"60\"/>\n");
+        htm.append("        </li>\n");
+        htm.append("        <li>Mostrar en una nueva ventana</li>\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("          <label for=\"target_si\" class=\"swbform-label\">Sí</label>\n");
+        htm.append("          <input type=\"radio\" id=\"target_si\" name=\"target\" dojoType=\"dijit.form.RadioButton\" value=\"true\" checked=\"checked\" />\n");
+        htm.append("        </li>\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("          <label for=\"target_no\" class=\"swbform-label\">No</label>\n");
+        htm.append("          <input type=\"radio\" id=\"target_no\" name=\"target\" dojoType=\"dijit.form.RadioButton\" value=\"false\"/>\n");
+        htm.append("        </li>\n");
+        htm.append("    </ul>\n");
+        htm.append("</fieldset>\n");
+
+        htm.append("<div title=\"Configuración del estilo\" open=\"true\" dojoType=\"dijit.TitlePane\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">\n");
+        htm.append("<fieldset>\n");
+        htm.append("    <legend>Estilo</legend>\n");
+        htm.append("    <ul class=\"swbform-ul\">\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("          <label for=\"cssClass\" class=\"swbform-label\">Clase CSS</label>\n");
+        htm.append("          <input type=\"text\" id=\"cssClass\" name=\"cssClass\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("cssClass","")+"\" maxlength=\"56\"/>\n");
+        htm.append("        </li>\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("          <label for=\"width\" class=\"swbform-label\">Ancho de la viñeta</label>\n");
+        htm.append("          <input type=\"text\" id=\"width\" name=\"width\" regExp=\"\\d+\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("width","")+"\" maxlength=\"4\" />\n");
+        htm.append("        </li>\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("          <label for=\"height\" class=\"swbform-label\">Alto de la viñeta</label>\n");
+        htm.append("          <input type=\"text\" id=\"height\" name=\"height\" regExp=\"\\d+\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("height","")+"\" maxlength=\"4\" />\n");
+        htm.append("        </li>\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("          <label for=\"titleStyle\" class=\"swbform-label\">Estilo del título</label>\n");
+        htm.append("          <input type=\"text\" id=\"titleStyle\" name=\"titleStyle\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("titleStyle","")+"\" maxlength=\"80\"/>\n");
+        htm.append("        </li>\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("          <label for=\"subtitleStyle\" class=\"swbform-label\">Estilo del subtítulo</label>\n");
+        htm.append("          <input type=\"text\" id=\"subtitleStyle\" name=\"subtitleStyle\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("subtitleStyle","")+"\" maxlength=\"80\"/>\n");
+        htm.append("        </li>\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("          <label for=\"textStyle\" class=\"swbform-label\">Estilo del texto</label>\n");
+        htm.append("          <input type=\"text\" id=\"textStyle\" name=\"textStyle\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("textStyle","")+"\" maxlength=\"80\"/>\n");
+        htm.append("        </li>\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("          <label for=\"captionStyle\" class=\"swbform-label\">Estilo del pie</label>\n");
+        htm.append("          <input type=\"text\" id=\"captionStyle\" name=\"captionStyle\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("captionStyle","")+"\" maxlength=\"80\"/>\n");
+        htm.append("        </li>\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("          <label for=\"moreStyle\" class=\"swbform-label\">Estilo de la liga</label>\n");
+        htm.append("          <input type=\"text\" id=\"moreStyle\" name=\"moreStyle\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("moreStyle","")+"\" maxlength=\"80\"/>\n");
+        htm.append("        </li>\n");
+        htm.append("        <li>Subrayar el texto de la liga</li>\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("          <label for=\"uline_si\" class=\"swbform-label\">Sí</label>\n");
+        htm.append("          <input type=\"radio\" id=\"uline_si\" name=\"uline\" dojoType=\"dijit.form.RadioButton\" value=\"true\"/>\n");
+        htm.append("        </li>\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("          <label for=\"uline_no\" class=\"swbform-label\">No</label>\n");
+        htm.append("          <input type=\"radio\" id=\"uline_no\" name=\"uline\" dojoType=\"dijit.form.RadioButton\" value=\"false\" checked=\"checked\" />\n");
+        htm.append("        </li>\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("          <label for=\"imgWidth\" class=\"swbform-label\">Ancho de la imagen (pixeles)</label>\n");
+        htm.append("          <input type=\"text\" id=\"imgWidth\" name=\"imgWidth\" regExp=\"\\d+\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("imgWidth","")+"\" maxlength=\"4\" />\n");
+        htm.append("        </li>\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("          <label for=\"imgHeight\" class=\"swbform-label\">Alto de la imagen (pixeles)</label>\n");
+        htm.append("          <input type=\"text\" id=\"imgHeight\" name=\"imgHeight\" regExp=\"\\d+\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("imgHeight","")+"\" maxlength=\"4\" />\n");
+        htm.append("        </li>\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("          <label for=\"imgPos\" class=\"swbform-label\">Posición de la imagen con respecto al texto</label>\n");
+        htm.append("          <input type=\"text\" id=\"imgPos\" name=\"imgPos\" regExp=\"\\d+\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("imgPos","2")+"\" maxlength=\"1\" />\n");
+        htm.append("        </li>\n");
+        htm.append("        <li class=\"swbform-li\">\n");
+        htm.append("          <label class=\"swbform-label\">Cambiar la posición de la imagen</label>\n");
+        htm.append("          <img src=\"/swbadmin/images/posicion.gif\" alt=\"\" usemap=\"#positionmap\" />\n");
+        htm.append("          <map id=\"positionmap\" name=\"positionmap\">\n");
+        htm.append("              <area title=\"1\" shape=\"rect\" coords=\"1,1,20,17\" alt=\"1.- Superior izquierda\" onclick=\"dojo.byId('imgPos').value='1'\"/>\n");
+        htm.append("              <area title=\"3\" shape=\"rect\" coords=\"24,3,44,18\" alt=\"3.- Derecha\" onclick=\"dojo.byId('imgPos').value='3'\"/>\n");
+        htm.append("              <area title=\"5\" shape=\"rect\" coords=\"48,1,68,18\" alt=\"5.- Arriba\" onclick=\"dojo.byId('imgPos').value='5'\"/>\n");
+        htm.append("              <area title=\"2\" shape=\"rect\" coords=\"0,22,20,40\" alt=\"2.- Superior derecha\" onclick=\"dojo.byId('imgPos').value='2'\"/>\n");
+        htm.append("              <area title=\"4\" shape=\"rect\" coords=\"24,22,44,40\" alt=\"4.- Izquierda\" onclick=\"dojo.byId('imgPos').value='4'\"/>\n");
+        htm.append("              <area title=\"6\" shape=\"rect\" coords=\"48,21,68,40\" alt=\"6.- Abajo\" onclick=\"dojo.byId('imgPos').value='6'\"/>\n");
+        htm.append("          </map>\n");
+        htm.append("        </li>\n");
+        htm.append("        <li>\n");
+        htm.append("          <table border=\"0\" width=\"100%\">\n");
+        htm.append("          <tr>\n");
+        htm.append("             <td class=\"datos\" width=\"200px\" align=\"right\">\n");
+        htm.append("                Color del texto(hexadecimal)\n");
+        htm.append("             </td>\n");
+        htm.append("             <td class=\"valores\">\n");
+        htm.append("                <input type=\"text\" id=\"textcolor\" name=\"textcolor\" value=\""+base.getAttribute("textcolor","#000000")+"\" maxlength=\"7\" />\n");
+        htm.append("                <span style=\"background-color:"+base.getAttribute("textcolor","#000000")+";\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>\n");
+        htm.append("             </td>\n");
+        htm.append("          </tr>\n");
+        htm.append("          </table>\n");
+        htm.append("        </li>\n");
+        htm.append("        <li>\n");
+        htm.append("          <script type=\"text/javascript\">\n");
+        htm.append("          <!--\n");
+        htm.append("          dojo.require(\"dijit.ColorPalette\");\n");
+        htm.append("          dojo.addOnLoad(function(){\n");
+        htm.append("            var myPalette = new dijit.ColorPalette( {palette:\"7x10\", onChange: function(val){ dojo.byId('textcolor').value=val; dojo.byId('pselcolor').style.color=val;\n");
+        htm.append("            dojo.byId('pselcolor').innerHTML=val;}}, \"cptextcolor\" );\n");
+        htm.append("          });\n");
+        htm.append("          -->\n");
+        htm.append("          </script>\n");
+        htm.append("          <table border=\"0\" width=\"100%\">\n");
+        htm.append("            <tr>\n");
+        htm.append("                <td class=\"datos\" width=\"200\" align=\"right\">\n");
+        htm.append("                    Otro color de texto\n");
+        htm.append("                    <span id=\"pselcolor\"></span>\n");
+        htm.append("                </td>\n");
+        htm.append("                <td class=\"valores\">\n");
+        htm.append("                    <div id=\"cptextcolor\"></div>\n");
+        htm.append("                </td>\n");
+        htm.append("             </tr>\n");
+        htm.append("          </table>\n");
+        htm.append("        </li>\n");
+        htm.append("   </ul>\n");
+        htm.append("</fieldset>\n");
+        htm.append("</div>\n");
+
+        htm.append("<div title=\"Configuración Avanzada\" open=\"false\" dojoType=\"dijit.TitlePane\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">\n");
+        htm.append("  <fieldset>\n");
+        htm.append("    <legend>Plantilla</legend>\n");
+        htm.append("    <ul class=\"swbform-ul\">\n");
+        htm.append("      <li class=\"swbform-li\">\n");
+        htm.append("        <label for=\"deftmp\" class=\"swbform-label\">Usar plantilla por defecto: <a href=\"#\">PromoRightAligned.xsl</a></label>\n");
+        htm.append("        <input type=\"checkbox\" id=\"deftmp\" name=\"deftmp\" value=\"true\" ");
+        if(Boolean.parseBoolean(base.getAttribute("deftmp")))
+            htm.append(" checked=\"checked\" ");
+        htm.append("/>\n");
+        htm.append("      </li>\n");
+        htm.append("      <li class=\"swbform-li\">\n");
+        htm.append("        <label for=\"template\" class=\"swbform-label\">Usar otra plantilla (xsl, xslt)</label>\n");
+        htm.append("        <input type=\"file\" id=\"template\" name=\"template\" />\n");
+        htm.append("      </li>\n");
+        htm.append("      <li class=\"swbform-li\">\n");
+        htm.append("        <label class=\"swbform-label\"></label>\n");
+        if(base.getAttribute("template")!=null)
+          htm.append("      <a href=\"#\">"+base.getAttribute("template")+"</a>\n");
+        htm.append("      </li>\n");
+        if(base.getAttribute("template")!=null) {
+            htm.append("  <li class=\"swbform-li\">\n");
+            htm.append("    <label for=\"wbNoTmp_template\" class=\"swbform-label\">Quitar plantilla</label>\n");
+            htm.append("    <input type=\"checkbox\" id=\"wbNoTmp_template\" name=\"wbNoTmp_template\" value=\"true\"/>\n");
+            htm.append("  </li>\n");
+        }
+        htm.append("    </ul>\n");
+        htm.append("  </fieldset>\n");
+        htm.append("</div>\n");
+
+        htm.append("<fieldset>\n");
+        htm.append("   <legend></legend>\n");
+        htm.append("   <ul class=\"swbform-ul\">\n");
+        htm.append("      <li>\n");
+        htm.append("         <button type=\"submit\" dojoType=\"dijit.form.Button\">Guardar</button>\n");
+        htm.append("         <button type=\"reset\" dojoType=\"dijit.form.Button\">Reestablecer</button>\n");
+        htm.append("      </li>\n");
+        htm.append("   </ul>\n");
+        htm.append("</fieldset>\n");
+        htm.append("</form>\n");
+        htm.append("</div>\n");
+        
+        return htm.toString();
+    }
+
+    private void edit(HttpServletRequest request, SWBActionResponse response) throws Exception {
+        Resource base = getResourceBase();
+
+        boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+        if (isMultipart) {
+            File file = new File(SWBPortal.getWorkPath()+base.getWorkPath()+"/");
+            if(!file.exists()) {
+                file.mkdirs();
+            }
+            Iterator<FileItem> iter = SWBUtils.IO.fileUpload(request, null);
+            while(iter.hasNext()) {
+                FileItem item = iter.next();
+                if(item.isFormField()) {
+                    String name = item.getFieldName();
+                    String value = item.getString().trim();
+                    base.setAttribute(name, value);
+                }else {
+                    String filename = item.getName().replaceAll(" ", "_").trim();
+                    if(item.getFieldName().equals("imgfile") && filename.isEmpty() && base.getAttribute("imgfile")==null)
+                        throw new Exception(item.getFieldName()+" es requerido");
+                    else if(!filename.isEmpty()) {
+                        file = new File(SWBPortal.getWorkPath()+base.getWorkPath()+"/"+filename);
+                        item.write(file);
+                        //params.put(item.getFieldName(), filename);
+                        base.setAttribute(item.getFieldName(), filename);
+                    }
+                }
+            }
+        }
+    }
 }

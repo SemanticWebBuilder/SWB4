@@ -7,22 +7,17 @@
  *
  * @author  Javier Solis
  -->
-	<xslfile>admresource.xslt</xslfile>
-	<form name="frmAdmin" action="true" method="POST" enctype="multipart/form-data">
-		<admdbconnmgr defconn="true"/>   
-                <fieldset>
-<!--                         
-		<input type="FILE" name="html" label="* Archivo de contenido local:" size="40" showfile="false"/>
-		<statictext name="labelPag">* Desea páginar contenido:</statictext>
-		<input type="RADIO" name="pcont" label="Si" value="1"/>
-		<input type="RADIO" name="pcont" label="No" value="0"/>
--->                
-		<input type="TEXT" name="tmid" label="Identificador do site:" size="50" maxlength="50"/>                
-		<input type="TEXT" name="resid" label="Identificador do recurso:" size="10" maxlength="10" jsvaltype="js_numbers"/>                
-                </fieldset>
-                <fieldset>
-		<input type="SUBMIT" name="btnSave"  moreattr="class=&#34;botones&#34;" value="Salvar"/>
-		<input type="RESET"  name="btnReset" moreattr="class=&#34;botones&#34;" value="Cancelar"/>  
-                </fieldset>
-        </form>
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmAdmRes" action="true" method="post" jsframework="dojo" >
+        <admdbconnmgr defconn="true"/>
+        <fieldset legend="Configuración">
+            <input type="text" id="tmid" name="tmid" label="Identificador do site" maxlength="60" promptMessage="Identificador do site" jsrequired="true" />
+            <input type="text" id="resid" name="resid" label="Identificador do recurso" maxlength="9" regExp="\d{1,9}" invalidMessage="Identificador incorrecto" promptMessage="Identificador do recurso" jsrequired="true" />
+        </fieldset>
+
+        <fieldset>
+            <input type="submit" name="btnSave" id="btnSave" value="Salvar" onclick="return jsValida(this.form)" />
+            <input type="reset"  name="btnReset" id="btnReset" value="Restablecer" />
+        </fieldset>
+    </form>
 </admresource>
