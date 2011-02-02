@@ -580,7 +580,10 @@ public class Topic
      */
     public Topic getType()
     {
-        return new Topic(getNative().getParent());
+        if(getNative().getParent()!=null)
+        {
+            return new Topic(getNative().getParent());
+        }else return null;
     }
 
     /** Regresa padres ordenados alfabeticamente, valida los padres activos y borrados
