@@ -2,7 +2,6 @@ package org.semanticwb.resources.sem.forumcat;
 
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
