@@ -808,6 +808,116 @@ public class ToolBar extends CustomNode
             ]
         };
 
+        var callactivity=SubMenu
+        {
+            modeler: modeler
+            toolBar:this
+            text: ##"callActivity"//ModelerUtils.getLocalizedString("subTask")
+            toolTipText: bind if (showHelp) ##"callActivityDescription" else ""
+            image: "images/task_call_1.png"
+            imageOver: "images/task_call_2.png"
+            imageClicked: "images/task_call_3.png"
+            visible: bind not hidden
+            buttons: [
+                ImgButton {
+                    text: ##"callTask"//ModelerUtils.getLocalizedString("abstractTask")
+                    toolTipText: bind if(showHelp) ##"callTaskDescription" else ""
+                    image: "images/task_llamada1.png"
+                    imageOver: "images/task_llamada2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=CallTask
+                        {
+                            modeler:modeler
+                            title: ##"callTask"//ModelerUtils.getLocalizedString("abstractTask")
+                            uri:"new:calltask:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text: ##"callManualTask"//ModelerUtils.getLocalizedString("abstractTask")
+                    toolTipText: bind if(showHelp) ##"callManualTaskDescription" else ""
+                    image: "images/task_call_manual1.png"
+                    imageOver: "images/task_call_manual2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=CallManualTask
+                        {
+                            modeler:modeler
+                            title: ##"callManualTask"//ModelerUtils.getLocalizedString("abstractTask")
+                            uri:"new:callmanualtask:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text: ##"callRulelTask"//ModelerUtils.getLocalizedString("abstractTask")
+                    toolTipText: bind if(showHelp) ##"callRulelTaskDescription" else ""
+                    image: "images/task_call_rule1.png"
+                    imageOver: "images/task_call_rule2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=CallBusinessRuleTask
+                        {
+                            modeler:modeler
+                            title: ##"callRulelTask"//ModelerUtils.getLocalizedString("abstractTask")
+                            uri:"new:callbusinessruletask:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text: ##"callScriptTask"//ModelerUtils.getLocalizedString("abstractTask")
+                    toolTipText: bind if(showHelp) ##"callScriptTaskDescription" else ""
+                    image: "images/task_call_script1.png"
+                    imageOver: "images/task_call_script2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=CallScriptTask
+                        {
+                            modeler:modeler
+                            title: ##"callScriptTask"//ModelerUtils.getLocalizedString("abstractTask")
+                            uri:"new:callscripttask:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text: ##"callUserTask"//ModelerUtils.getLocalizedString("abstractTask")
+                    toolTipText: bind if(showHelp) ##"callUserTaskDescription" else ""
+                    image: "images/task_call_usr1.png"
+                    imageOver: "images/task_call_usr2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=CallUserTask
+                        {
+                            modeler:modeler
+                            title: ##"callUserTask"//ModelerUtils.getLocalizedString("abstractTask")
+                            uri:"new:callusertask:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text: ##"callProcess"//ModelerUtils.getLocalizedString("abstractTask")
+                    toolTipText: bind if(showHelp) ##"callProcessDescription" else ""
+                    image: "images/subtask_llamada1.png"
+                    imageOver: "images/subtask_llamada2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=CallProcess
+                        {
+                            modeler:modeler
+                            title: ##"callProcess"//ModelerUtils.getLocalizedString("abstractTask")
+                            uri:"new:callprocess:{counter++}"
+                        }
+                    }
+                },
+            ]
+        };
+
         var startEvent=SubMenu
         {
             modeler: modeler
@@ -1943,6 +2053,12 @@ public class ToolBar extends CustomNode
                             smooth: false
                             visible: bind not hidden
                         },
+                        callactivity,
+                        ImageView {
+                            image: imgSpace
+                            smooth: false
+                            visible: bind not hidden
+                        },
                         startEvent,
                         ImageView {
                             image: imgSpace
@@ -1996,6 +2112,7 @@ public class ToolBar extends CustomNode
                 file.subBar,
                 task.subBar,
                 subtask.subBar,
+                callactivity.subBar,
                 startEvent.subBar,
                 interEvent.subBar,
                 endEvent.subBar,
