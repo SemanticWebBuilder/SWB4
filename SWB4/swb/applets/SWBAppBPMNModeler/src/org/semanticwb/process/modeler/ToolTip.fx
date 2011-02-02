@@ -43,7 +43,7 @@ public class ToolTip extends CustomNode {
     var tt:Text;
     var r:Rectangle;
     var p: Polygon;
-    
+
     override var opacity = 0.0;
     def timeLine: Timeline = Timeline {
         keyFrames: [
@@ -64,7 +64,7 @@ public class ToolTip extends CustomNode {
         }
     }
 
-    var _title = Text{
+    var _title = Text {
         content: bind title
         font: Font.font("Verdana", FontWeight.BOLD, 10)
     }
