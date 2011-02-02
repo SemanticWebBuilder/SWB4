@@ -1044,9 +1044,9 @@ public class Promo extends GenericResource {
                     base.setAttribute(name, value);
                 }else {
                     String filename = item.getName().replaceAll(" ", "_").trim();
-                    if(item.getFieldName().equals("imgfile") && filename.isEmpty() && base.getAttribute("imgfile")==null)
+                    if(item.getFieldName().equals("imgfile") && filename.equals("") && base.getAttribute("imgfile")==null)
                         throw new Exception(item.getFieldName()+" es requerido");
-                    else if(!filename.isEmpty()) {
+                    else if(!filename.equals("")) {
                         file = new File(SWBPortal.getWorkPath()+base.getWorkPath()+"/"+filename);
                         item.write(file);
                         //params.put(item.getFieldName(), filename);
