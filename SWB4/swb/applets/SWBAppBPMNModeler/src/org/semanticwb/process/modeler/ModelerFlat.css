@@ -258,19 +258,19 @@
     -fx-arc-width: 15;
     -fx-arc-height: 15;
     -fx-stroke: -normal-stroke;
-    -fx-stroke-width: 2;
+    -fx-stroke-width: 3;
     -fx-cursor: hand;
     -fx-fill:-task-first-color;
 }
 
-.globalTtask:hover {
+.globalTask:hover {
     -fx-stroke: -hover-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 4;
 }
 
 .globalTask:focused {
     -fx-stroke: -focus-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 4;
 }
 
 .dataObject {
