@@ -156,4 +156,14 @@ public class WBResourceURLImp implements WBResourceURL
         url.setExtURIParams(extParams);
     }
 
+    public void setTopic(Topic topic)
+    {
+        url.setTopic(topic.getNative());
+    }
+
+    public Topic getTopic()
+    {
+        return new Topic(url.getTopic());
+    }
+
 }
