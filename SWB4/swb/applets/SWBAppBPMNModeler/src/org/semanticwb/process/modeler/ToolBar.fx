@@ -73,6 +73,7 @@ public var conn:WBConnection = new WBConnection(FX.getArgument(WBConnection.PRM_
 public class ToolBar extends CustomNode
 {
     public var modeler:Modeler;
+    public var showHelp:Boolean;
     public var stage:Stage;
     public var x:Number;
     public var y:Number;
@@ -595,7 +596,8 @@ public class ToolBar extends CustomNode
         {
             modeler: modeler
             toolBar:this
-            text: "{##"task"}\n{##"taskDescription"}"
+            text: ##"task"
+            toolTipText: bind if(showHelp) ##"taskDescription" else ""
             image: "images/task_1.png"
             imageOver: "images/task_2.png"
             imageClicked: "images/task_3.png"
@@ -603,6 +605,7 @@ public class ToolBar extends CustomNode
             buttons: [
                 ImgButton {
                     text: ##"abstractTask"//ModelerUtils.getLocalizedString("abstractTask")
+                    toolTipText: bind if(showHelp) ##"abstractTaskDescription" else ""
                     image: "images/task_normal1.png"
                     imageOver: "images/task_normal2.png"
                     action: function():Void
@@ -618,6 +621,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"userTask"//ModelerUtils.getLocalizedString("userTask")
+                    toolTipText: bind if(showHelp) ##"userTaskDescription" else ""
                     image: "images/task_usr1.png"
                     imageOver: "images/task_usr2.png"
                     action: function():Void
@@ -633,6 +637,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"serviceTask"//ModelerUtils.getLocalizedString("serviceTask")
+                    toolTipText: bind if(showHelp) ##"serviceTaskDescription" else ""
                     image: "images/task_servicio1.png"
                     imageOver: "images/task_servicio2.png"
                     action: function():Void
@@ -648,6 +653,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"scriptTask"//ModelerUtils.getLocalizedString("scriptTask")
+                    toolTipText: bind if(showHelp) ##"scriptTaskDescription" else ""
                     image: "images/task_script1.png"
                     imageOver: "images/task_script2.png"
                     action: function():Void
@@ -662,7 +668,24 @@ public class ToolBar extends CustomNode
                     }
                 },
                 ImgButton {
+                    text: ##"ruleTask"//ModelerUtils.getLocalizedString("scriptTask")
+                    toolTipText: bind if(showHelp) ##"ruleTaskDescription" else ""
+                    image: "images/task_rule1.png"
+                    imageOver: "images/task_rule2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=BusinessRuleTask
+                        {
+                            modeler:modeler
+                            title: ##"ruleTask"//ModelerUtils.getLocalizedString("scriptTask")
+                            uri:"new:ruletask:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
                     text: ##"manualTask"//ModelerUtils.getLocalizedString("manualTask")
+                    toolTipText: bind if(showHelp) ##"manualTaskDescription" else ""
                     image: "images/task_manual1.png"
                     imageOver: "images/task_manual2.png"
                     action: function():Void
@@ -678,6 +701,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"sendTask"//ModelerUtils.getLocalizedString("sendTask")
+                    toolTipText: bind if(showHelp) ##"sendTaskDescription" else ""
                     image: "images/task_envio1.png"
                     imageOver: "images/task_envio2.png"
                     action: function():Void
@@ -693,6 +717,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"receiveTask"//ModelerUtils.getLocalizedString("receiveTask")
+                    toolTipText: bind if(showHelp) ##"receiveTaskDescription" else ""
                     image: "images/task_recive1.png"
                     imageOver: "images/task_recive2.png"
                     action: function():Void
@@ -713,6 +738,7 @@ public class ToolBar extends CustomNode
         {
             modeler: modeler
             toolBar:this
+            toolTipText: bind if (showHelp) ##"subTaskDescription" else ""
             text: ##"subTask"//ModelerUtils.getLocalizedString("subTask")
             image: "images/subtask_1.png"
             imageOver: "images/subtask_2.png"
@@ -721,6 +747,7 @@ public class ToolBar extends CustomNode
             buttons: [
                 ImgButton {
                     text: ##"subProcess"//ModelerUtils.getLocalizedString("subProcess")
+                    toolTipText: bind if(showHelp) ##"subProcessDescription" else ""
                     image: "images/subtask_colapsado1.png"
                     imageOver: "images/subtask_colapsado2.png"
                     action: function():Void {
@@ -735,6 +762,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"adhocSubProcess"//ModelerUtils.getLocalizedString("adhocSubProcess")
+                    toolTipText: bind if(showHelp) ##"adhocSubProcessDescription" else ""
                     image: "images/subtask_adhoc+1.png"
                     imageOver: "images/subtask_adhoc+2.png"
                     action: function():Void {
@@ -749,6 +777,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"eventSubProcess"//ModelerUtils.getLocalizedString("eventSubProcess")
+                    toolTipText: bind if(showHelp) ##"eventSubProcessDescription" else ""
                     image: "images/subtask_evento1.png"
                     imageOver: "images/subtask_evento2.png"
                     action: function():Void {
@@ -763,6 +792,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"transaction"//ModelerUtils.getLocalizedString("transaction")
+                    toolTipText: bind if(showHelp) ##"transactionDescription" else ""
                     image: "images/subtask_transaccion1.png"
                     imageOver: "images/subtask_transaccion2.png"
                     action: function():Void {
@@ -783,6 +813,7 @@ public class ToolBar extends CustomNode
             modeler: modeler
             toolBar:this
             text: ##"startEvents"//ModelerUtils.getLocalizedString("startEvents")
+            toolTipText: bind if (showHelp) ##"startEventDescription" else ""
             image: "images/start_1.png"
             imageOver: "images/start_2.png"
             imageClicked: "images/start_3.png"
@@ -790,6 +821,7 @@ public class ToolBar extends CustomNode
             buttons: [
                 ImgButton {
                     text: ##"normalStart"//ModelerUtils.getLocalizedString("normalStart")
+                    toolTipText: bind if (showHelp) ##"normalStartDescription" else ""
                     image: "images/start_normal1.png"
                     imageOver: "images/start_normal2.png"
                     action: function():Void {
@@ -804,6 +836,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"messageStart"//ModelerUtils.getLocalizedString("messageStart")
+                    toolTipText: bind if (showHelp) ##"messageStartDescription" else ""
                     image: "images/start_msj1.png"
                     imageOver: "images/start_msj2.png"
                     action: function():Void {
@@ -818,6 +851,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"timerStart"//ModelerUtils.getLocalizedString("timerStart")
+                    toolTipText: bind if (showHelp) ##"timerStartDescription" else ""
                     image: "images/start_tmp1.png"
                     imageOver: "images/start_tmp2.png"
                     action: function():Void
@@ -833,6 +867,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"ruleStart"//ModelerUtils.getLocalizedString("ruleStart")
+                    toolTipText: bind if (showHelp) ##"ruleStartDescription" else ""
                     image: "images/start_cond1.png"
                     imageOver: "images/start_cond2.png"
                     action: function():Void {
@@ -847,6 +882,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"signalStart"//ModelerUtils.getLocalizedString("signalStart")
+                    toolTipText: bind if (showHelp) ##"signalStartDescription" else ""
                     image: "images/start_senal1.png"
                     imageOver: "images/start_senal2.png"
                     action: function():Void
@@ -862,6 +898,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"multipleStart"//ModelerUtils.getLocalizedString("multipleStart")
+                    toolTipText: bind if (showHelp) ##"multipleStartDescription" else ""
                     image: "images/start_multi1.png"
                     imageOver: "images/start_multi2.png"
                     action: function():Void
@@ -877,6 +914,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"parallelStart"//ModelerUtils.getLocalizedString("parallelStart")
+                    toolTipText: bind if (showHelp) ##"parallelStartDescription" else ""
                     image: "images/start_paralelo1.png"
                     imageOver: "images/start_paralelo2.png"
                     action: function():Void
@@ -892,6 +930,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"scalationStart"//ModelerUtils.getLocalizedString("scalationStart")
+                    toolTipText: bind if (showHelp) ##"scalationStartDescription" else ""
                     image: "images/start_escala1.png"
                     imageOver: "images/start_escala2.png"
                     action: function():Void
@@ -907,6 +946,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"errorStart"//ModelerUtils.getLocalizedString("errorStart")
+                    toolTipText: bind if (showHelp) ##"errorStartDescription" else ""
                     image: "images/start_error1.png"
                     imageOver: "images/start_error2.png"
                     action: function():Void
@@ -922,6 +962,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"compensationStart"//ModelerUtils.getLocalizedString("compensationStart")
+                    toolTipText: bind if (showHelp) ##"compensationStartDescription" else ""
                     image: "images/start_compensa1.png"
                     imageOver: "images/start_compensa2.png"
                     action: function():Void
@@ -943,6 +984,7 @@ public class ToolBar extends CustomNode
             modeler: modeler
             toolBar:this
             text: ##"interEvents"//ModelerUtils.getLocalizedString("interEvents")
+            toolTipText: bind if (showHelp) ##"interEventsDescription" else ""
             image:"images/inter_1.png"
             imageOver:"images/inter_2.png"
             imageClicked: "images/inter_3.png"
@@ -965,6 +1007,7 @@ public class ToolBar extends CustomNode
 //                },
                 ImgButton {
                     text: ##"messageInterCatch"//ModelerUtils.getLocalizedString("messageInterCatch")
+                    toolTipText: bind if (showHelp) ##"messageInterCatchDescription" else ""
                     image: "images/inter_msj_b_1.png"
                     imageOver: "images/inter_msj_b_2.png"
                     action: function():Void {
@@ -979,6 +1022,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"messageInterThrow"//ModelerUtils.getLocalizedString("messageInterThrow")
+                    toolTipText: bind if (showHelp) ##"messageInterThrowDescription" else ""
                     image: "images/inter_msj_n_1.png"
                     imageOver: "images/inter_msj_n_2.png"
                     action: function():Void {
@@ -993,6 +1037,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"timerInter"//ModelerUtils.getLocalizedString("timerInter")
+                    toolTipText: bind if (showHelp) ##"timerInterDescription" else ""
                     image: "images/inter_tmp1.png"
                     imageOver: "images/inter_tmp2.png"
                     action: function():Void
@@ -1008,6 +1053,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"errorInter"//ModelerUtils.getLocalizedString("errorInter")
+                    toolTipText: bind if (showHelp) ##"errorInterDescription" else ""
                     image: "images/inter_error1.png"
                     imageOver: "images/inter_error2.png"
                     action: function():Void
@@ -1023,6 +1069,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"cancelInter"//ModelerUtils.getLocalizedString("cancelInter")
+                    toolTipText: bind if (showHelp) ##"cancelInterDescription" else ""
                     image: "images/inter_cancel_1.png"
                     imageOver: "images/inter_cancel_2.png"
                     action: function():Void
@@ -1037,6 +1084,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"compensationInterCatch"//ModelerUtils.getLocalizedString("compensationInterCatch")
+                    toolTipText: bind if (showHelp) ##"compensationInterCatchDescription" else ""
                     image: "images/inter_compensa_b_1.png"
                     imageOver: "images/inter_compensa_b_2.png"
                     action: function():Void {
@@ -1051,6 +1099,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"compensationInterThrow"//ModelerUtils.getLocalizedString("compensationInterThrow")
+                    toolTipText: bind if (showHelp) ##"compensationInterThrowDescription" else ""
                     image: "images/inter_compensa_n_1.png"
                     imageOver: "images/inter_compensa_n_2.png"
                     action: function():Void {
@@ -1065,6 +1114,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"ruleInter"//ModelerUtils.getLocalizedString("ruleInter")
+                    toolTipText: bind if (showHelp) ##"ruleInterDescription" else ""
                     image: "images/inter_cond1.png"
                     imageOver: "images/inter_cond2.png"
                     action: function():Void {
@@ -1079,6 +1129,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"linkInterCatch"//ModelerUtils.getLocalizedString("linkInterCatch")
+                    toolTipText: bind if (showHelp) ##"linkInterCatchDescription" else ""
                     image: "images/inter_enlace_b_1.png"
                     imageOver: "images/inter_enlace_b_2.png"
                     action: function():Void {
@@ -1093,6 +1144,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"linkInterThrow"//ModelerUtils.getLocalizedString("linkInterThrow")
+                    toolTipText: bind if (showHelp) ##"linkInterThrowDescription" else ""
                     image: "images/inter_enlace_n_1.png"
                     imageOver: "images/inter_enlace_n_2.png"
                     action: function():Void {
@@ -1107,6 +1159,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"signalInterCatch"//ModelerUtils.getLocalizedString("signalInterCatch")
+                    toolTipText: bind if (showHelp) ##"signalInterCatchDescription" else ""
                     image: "images/inter_senal_b_1.png"
                     imageOver: "images/inter_senal_b_2.png"
                     action: function():Void {
@@ -1121,6 +1174,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"signalInterThrow"//ModelerUtils.getLocalizedString("signalInterThrow")
+                    toolTipText: bind if (showHelp) ##"signalInterThrowDescription" else ""
                     image: "images/inter_senal_n_1.png"
                     imageOver: "images/inter_senal_n_2.png"
                     action: function():Void {
@@ -1135,6 +1189,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"multInterCatch"//ModelerUtils.getLocalizedString("multInterCatch")
+                    toolTipText: bind if (showHelp) ##"multInterCatchDescription" else ""
                     image: "images/inter_multi_b_1.png"
                     imageOver: "images/inter_multi_b_2.png"
                     action: function():Void {
@@ -1149,6 +1204,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"multInterThrow"//ModelerUtils.getLocalizedString("multInterThrow")
+                    toolTipText: bind if (showHelp) ##"multInterThrowDescription" else ""
                     image: "images/inter_multi_n_1.png"
                     imageOver: "images/inter_multi_n_2.png"
                     action: function():Void {
@@ -1163,6 +1219,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"scalInterCatch"//ModelerUtils.getLocalizedString("scalInterCatch")
+                    toolTipText: bind if (showHelp) ##"scalInterCatchDescription" else ""
                     image: "images/inter_escala_b_1.png"
                     imageOver: "images/inter_escala_b_2.png"
                     action: function():Void {
@@ -1177,6 +1234,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"scalInterThrow"//ModelerUtils.getLocalizedString("scalInterThrow")
+                    toolTipText: bind if (showHelp) ##"scalInterThrowDescription" else ""
                     image: "images/inter_escala_n_1.png"
                     imageOver: "images/inter_escala_n_2.png"
                     action: function():Void {
@@ -1191,6 +1249,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"parallelInter"//ModelerUtils.getLocalizedString("parallelInter")
+                    toolTipText: bind if (showHelp) ##"parallelInterDescription" else ""
                     image: "images/inter_paralelo1.png"
                     imageOver: "images/inter_paralelo2.png"
                     action: function():Void {
@@ -1211,6 +1270,7 @@ public class ToolBar extends CustomNode
             modeler: modeler
             toolBar:this
             text: ##"endEvents"//ModelerUtils.getLocalizedString("endEvents")
+            toolTipText:bind if (showHelp) ##"endEventsDescription" else ""
             image: "images/end_1.png"
             imageOver: "images/end_2.png"
             imageClicked: "images/end_3.png"
@@ -1218,6 +1278,7 @@ public class ToolBar extends CustomNode
             buttons: [
                 ImgButton {
                     text: ##"normalEnd"//ModelerUtils.getLocalizedString("normalEnd")
+                    toolTipText: bind if (showHelp) ##"normalEndDescription" else ""
                     image: "images/end_normal1.png"
                     imageOver: "images/end_normal2.png"
                     action: function():Void {
@@ -1232,6 +1293,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"messageEnd"//ModelerUtils.getLocalizedString("messageEnd")
+                    toolTipText: bind if (showHelp) ##"messageEndDescription" else ""
                     image: "images/end_msj1.png"
                     imageOver: "images/end_msj2.png"
                     action: function():Void {
@@ -1246,6 +1308,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"errorEnd"//ModelerUtils.getLocalizedString("errorEnd")
+                    toolTipText: bind if (showHelp) ##"errorEndDescription" else ""
                     image: "images/end_error1.png"
                     imageOver: "images/end_error2.png"
                     action: function():Void
@@ -1261,6 +1324,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"cancelEnd"//ModelerUtils.getLocalizedString("cancelEnd")
+                    toolTipText: bind if (showHelp) ##"cancelEndDescription" else ""
                     image: "images/end_cancel1.png"
                     imageOver: "images/end_cancel2.png"
                     action: function():Void
@@ -1276,6 +1340,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"compensationEnd"//ModelerUtils.getLocalizedString("compensationEnd")
+                    toolTipText: bind if (showHelp) ##"compensationEndDescription" else ""
                     image: "images/end_compensa1.png"
                     imageOver: "images/end_compensa2.png"
                     action: function():Void
@@ -1291,6 +1356,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"signalEnd"//ModelerUtils.getLocalizedString("signalEnd")
+                    toolTipText: bind if (showHelp) ##"signalEndDescription" else ""
                     image: "images/end_senal1.png"
                     imageOver: "images/end_senal2.png"
                     action: function():Void
@@ -1306,6 +1372,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"multipleEnd"//ModelerUtils.getLocalizedString("multipleEnd")
+                    toolTipText: bind if (showHelp) ##"multipleEndDescription" else ""
                     image: "images/end_multi1.png"
                     imageOver: "images/end_multi2.png"
                     action: function():Void
@@ -1321,6 +1388,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"scalationEnd"//ModelerUtils.getLocalizedString("scalationEnd")
+                    toolTipText: bind if (showHelp) ##"scalationEndDescription" else ""
                     image: "images/end_escala1.png"
                     imageOver: "images/end_escala2.png"
                     action: function():Void
@@ -1336,6 +1404,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"terminateEnd"//ModelerUtils.getLocalizedString("terminateEnd")
+                    toolTipText: bind if (showHelp) ##"terminateEndDescription" else ""
                     image: "images/end_termina1.png"
                     imageOver: "images/end_termina2.png"
                     action: function():Void
@@ -1357,6 +1426,7 @@ public class ToolBar extends CustomNode
             modeler: modeler
             toolBar:this
             text: ##"gateways"//ModelerUtils.getLocalizedString("gateways")
+            toolTipText:bind if (showHelp) ##"gatewaysDescription" else ""
             image: "images/if_1.png"
             imageOver: "images/if_2.png"
             imageClicked: "images/if_3.png"
@@ -1379,6 +1449,7 @@ public class ToolBar extends CustomNode
 //                },
                 ImgButton {
                     text: ##"xorGateway"//ModelerUtils.getLocalizedString("xorGateway")
+                    toolTipText:bind if (showHelp) ##"xorGatewayDescription" else ""
                     image: "images/gate_datos1.png"
                     imageOver: "images/gate_datos2.png"
                     action: function():Void
@@ -1394,6 +1465,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"orGateway"//ModelerUtils.getLocalizedString("orGateway")
+                    toolTipText: bind if (showHelp) ##"orGatewayDescription" else ""
                     image: "images/gate_inclusiva_1.png"
                     imageOver: "images/gate_inclusiva_2.png"
                     action: function():Void
@@ -1409,6 +1481,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"xorGatewayStart"//ModelerUtils.getLocalizedString("xorGatewayStart")
+                    toolTipText: bind if (showHelp) ##"xorGatewayStartDescription" else ""
                     image: "images/gate_eventos_str_1.png"
                     imageOver: "images/gate_eventos_str_2.png"
                     action: function():Void
@@ -1424,6 +1497,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"evtXorGateway"//ModelerUtils.getLocalizedString("evtXorGateway");
+                    toolTipText: bind if (showHelp) ##"evtXorGatewayDescription" else ""
                     image: "images/gate_eventos_int_1.png"
                     imageOver: "images/gate_eventos_int_2.png"
                     action: function():Void
@@ -1439,6 +1513,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"parallelGateway"//ModelerUtils.getLocalizedString("parallelGateway")
+                    toolTipText: bind if (showHelp) ##"parallelGatewayDescription" else ""
                     image: "images/gate_paralela_n_1.png"
                     imageOver: "images/gate_paralela_n_2.png"
                     action: function():Void
@@ -1454,6 +1529,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"parallelGatewayStart"//ModelerUtils.getLocalizedString("parallelGatewayStart")
+                    toolTipText: bind if (showHelp) ##"parallelGatewayStartDescription" else ""
                     image: "images/gate_paralela_b_1.png"
                     imageOver: "images/gate_paralela_b_2.png"
                     action: function():Void
@@ -1469,6 +1545,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"complexGateway"//ModelerUtils.getLocalizedString("complexGateway")
+                    toolTipText: bind if (showHelp) ##"complexGatewayDescription" else ""
                     image: "images/gate_compleja_1.png"
                     imageOver: "images/gate_compleja_2.png"
                     action: function():Void
@@ -1490,6 +1567,7 @@ public class ToolBar extends CustomNode
             modeler: modeler
             toolBar:this
             text: ##"connObjects"//ModelerUtils.getLocalizedString("connObjects")
+            toolTipText:bind if (showHelp) ##"connObjectsDescription" else ""
             image:"images/flow_1.png"
             imageOver:"images/flow_2.png"
             imageClicked: "images/flow_3.png"
@@ -1497,6 +1575,7 @@ public class ToolBar extends CustomNode
             buttons: [
                 ImgButton {
                     text: ##"sequenceFlow"//ModelerUtils.getLocalizedString("sequenceFlow")
+                    toolTipText:bind if (showHelp) ##"sequenceFlowDescription" else ""
                     image: "images/flow_normal1.png"
                     imageOver: "images/flow_normal2.png"
                     action: function():Void {
@@ -1510,6 +1589,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"condFlow"//ModelerUtils.getLocalizedString("condFlow")
+                    toolTipText:bind if (showHelp) ##"condFlowDescription" else ""
                     image: "images/flow_condicion1.png"
                     imageOver: "images/flow_condicion2.png"
                     action: function():Void {
@@ -1523,6 +1603,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"defFlow"//ModelerUtils.getLocalizedString("defFlow")
+                    toolTipText:bind if (showHelp) ##"defFlowDescription" else ""
                     image: "images/flow_defecto1.png"
                     imageOver: "images/flow_defecto2.png"
                     action: function():Void {
@@ -1536,6 +1617,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"msgFlow"//ModelerUtils.getLocalizedString("msgFlow")
+                    toolTipText:bind if (showHelp) ##"msgFlowDescription" else ""
                     image: "images/flow_msj1.png"
                     imageOver: "images/flow_msj2.png"
                     action: function():Void {
@@ -1549,6 +1631,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"assocFlow"//ModelerUtils.getLocalizedString("assocFlow")
+                    toolTipText:bind if (showHelp) ##"assocFlowDescription" else ""
                     image: "images/doc_dir_asocia1.png"
                     imageOver: "images/doc_dir_asocia2.png"
                     action: function():Void {
@@ -1562,6 +1645,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"dirAssocFlow"//ModelerUtils.getLocalizedString("dirAssocFlow")
+                    toolTipText:bind if (showHelp) ##"dirAssocFlowDescription" else ""
                     image: "images/doc_asocia1.png"
                     imageOver: "images/doc_asocia2.png"
                     action: function():Void {
@@ -1581,6 +1665,7 @@ public class ToolBar extends CustomNode
             modeler: modeler
             toolBar:this
             text: ##"artifacts"//ModelerUtils.getLocalizedString("artifacts")
+            toolTipText: bind if (showHelp) ##"artifactsDescription" else ""
             image: "images/anota_1.png"
             imageOver: "images/anota_2.png"
             imageClicked: "images/anota_3.png"
@@ -1588,6 +1673,7 @@ public class ToolBar extends CustomNode
             buttons: [
                 ImgButton {
                     text: ##"textAnnotation"//ModelerUtils.getLocalizedString("textAnnotation")
+                    toolTipText: bind if (showHelp) ##"textAnnotationDescription" else ""
                     image: "images/doc_anota1.png"
                     imageOver: "images/doc_anota2.png"
                     action: function():Void
@@ -1603,6 +1689,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"group"//ModelerUtils.getLocalizedString("group")
+                    toolTipText: bind if (showHelp) ##"groupDescription" else ""
                     image: "images/doc_grupo1.png"
                     imageOver: "images/doc_grupo2.png"
                     action: function():Void
@@ -1624,6 +1711,7 @@ public class ToolBar extends CustomNode
             modeler: modeler
             toolBar:this
             text: ##"dataObjs"//ModelerUtils.getLocalizedString("dataObjs")
+            toolTipText:bind if (showHelp) ##"dataObjsDescription" else ""
             image:"images/doc_1.png"
             imageOver:"images/doc_2.png"
             imageClicked: "images/doc_3.png"
@@ -1631,6 +1719,7 @@ public class ToolBar extends CustomNode
             buttons: [
                 ImgButton {
                     text: ##"dataObj"//ModelerUtils.getLocalizedString("dataObj")
+                    toolTipText: bind if (showHelp) ##"dataObjDescription" else ""
                     image: "images/doc_normal1.png"
                     imageOver: "images/doc_normal2.png"
                     action: function():Void
@@ -1646,6 +1735,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"collection"//ModelerUtils.getLocalizedString("collection")
+                    toolTipText: bind if (showHelp) ##"collectionDescription" else ""
                     image: "images/doc_objeto1.png"
                     imageOver: "images/doc_objeto2.png"
                     action: function():Void
@@ -1661,6 +1751,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"dataInput"//ModelerUtils.getLocalizedString("dataInput")
+                    toolTipText: bind if (showHelp) ##"dataInputDescription" else ""
                     image: "images/doc_entrada1.png"
                     imageOver: "images/doc_entrada2.png"
                     action: function():Void
@@ -1676,6 +1767,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"dataOutput"//ModelerUtils.getLocalizedString("dataOutput")
+                    toolTipText: bind if (showHelp) ##"dataOutputDescription" else ""
                     image: "images/doc_salida1.png"
                     imageOver: "images/doc_salida2.png"
                     action: function():Void
@@ -1691,6 +1783,7 @@ public class ToolBar extends CustomNode
                 },
                 ImgButton {
                     text: ##"dataStore"//ModelerUtils.getLocalizedString("dataStore")
+                    toolTipText: bind if (showHelp) ##"dataStoreDescription" else ""
                     image: "images/doc_base1.png"
                     imageOver: "images/doc_base2.png"
                     action: function():Void
@@ -1712,6 +1805,7 @@ public class ToolBar extends CustomNode
             modeler: modeler
             toolBar:this
             text: ##"swimLanes"//ModelerUtils.getLocalizedString("swimLanes")
+            toolTipText: bind if (showHelp) ##"swimLanesDescription" else ""
             image: "images/pool_1.png"
             imageOver: "images/pool_2.png"
             imageClicked: "images/pool_3.png"
@@ -1720,6 +1814,7 @@ public class ToolBar extends CustomNode
                 ImgButton
                 {
                     text: ##"pool"//ModelerUtils.getLocalizedString("pool")
+                    toolTipText: bind if (showHelp) ##"poolDescription" else ""
                     image: "images/pool_pool1.png"
                     imageOver: "images/pool_pool2.png"
                     action: function():Void {
@@ -1735,6 +1830,7 @@ public class ToolBar extends CustomNode
                 ImgButton
                 {
                     text: ##"lane"//ModelerUtils.getLocalizedString("lane")
+                    toolTipText: bind if (showHelp) ##"laneDescription" else ""
                     image: "images/pool_lane1.png"
                     imageOver: "images/pool_lane2.png"
                     action: function():Void {
