@@ -15,7 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.shape.Rectangle;
 
 /**
- * @author hasdai
+ * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 
 public def TYPE_USER="user";
