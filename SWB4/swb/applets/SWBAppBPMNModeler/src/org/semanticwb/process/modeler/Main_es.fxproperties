@@ -101,6 +101,8 @@
 "actEdit" = "Propiedades..."
 "actInterrupting" = "Interruptor"
 "actNonInterrupting" = "No Interruptor"
+"interruptor" = "Interruptor"
+"nonInterruptor" = "No-Interruptor"
 "actMultiInstance" = "Multi-Instancia"
 "actLoop" = "Ciclo"
 "actCompensa" = "Compensación"
