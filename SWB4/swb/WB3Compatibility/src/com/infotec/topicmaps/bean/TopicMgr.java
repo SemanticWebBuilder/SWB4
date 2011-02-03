@@ -79,46 +79,46 @@ public class TopicMgr implements AFObserver
 
     public void init()
     {
-        InputStream is = getClass().getResourceAsStream("/topicmaps.properties");
-        Properties Props = new Properties();
-        try
-        {
-            Props.load(is);
-        } catch (Exception e)
-        {
-            log(e, "Can't read the properties file. " +
-                   "Make sure topicmaps.properties is in the CLASSPATH", true);
-            return;
-        }
-        //System.setProperty("com.techquila.topicmap.baseURL",Props.getProperty("URLDefault"));
-        log(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "log_TopicMgr_init_init"), true);
-
-        try
-        {
-            TopicMap tm = null;
-            if (Props.getProperty("useDataBase").equals("true"))
-            {
-
-                Enumeration en = DBTopicMap.getInstance().getTopicMaps();
-                while (en.hasMoreElements())
-                {
-                    RecTopicMap rectm = (RecTopicMap) en.nextElement();
-                    //System.out.println(rectm.getId());
-                    tm = readTopicMapFromDB(rectm.getId());
-                    if (tm != null) addTopicMap(tm);
-                }
-
-            } else
-            {
-                tm = readTopicMap("/../topicmaps/" + Props.getProperty("TMDefault"));
-                if (tm != null) addTopicMap(tm);
-            }
-            //tm.setId(Props.getProperty("TopicMapID"));
-            setEncode(Props.getProperty("TMEncode", "UTF-8"));
-        } catch (Exception e)
-        {
-            log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_TopicMgr_init_maintminiterror"), true);
-        }
+//        InputStream is = getClass().getResourceAsStream("/topicmaps.properties");
+//        Properties Props = new Properties();
+//        try
+//        {
+//            Props.load(is);
+//        } catch (Exception e)
+//        {
+//            log(e, "Can't read the properties file. " +
+//                   "Make sure topicmaps.properties is in the CLASSPATH", true);
+//            return;
+//        }
+//        //System.setProperty("com.techquila.topicmap.baseURL",Props.getProperty("URLDefault"));
+//        log(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "log_TopicMgr_init_init"), true);
+//
+//        try
+//        {
+//            TopicMap tm = null;
+//            if (Props.getProperty("useDataBase").equals("true"))
+//            {
+//
+//                Enumeration en = DBTopicMap.getInstance().getTopicMaps();
+//                while (en.hasMoreElements())
+//                {
+//                    RecTopicMap rectm = (RecTopicMap) en.nextElement();
+//                    //System.out.println(rectm.getId());
+//                    tm = readTopicMapFromDB(rectm.getId());
+//                    if (tm != null) addTopicMap(tm);
+//                }
+//
+//            } else
+//            {
+//                tm = readTopicMap("/../topicmaps/" + Props.getProperty("TMDefault"));
+//                if (tm != null) addTopicMap(tm);
+//            }
+//            //tm.setId(Props.getProperty("TopicMapID"));
+//            setEncode(Props.getProperty("TMEncode", "UTF-8"));
+//        } catch (Exception e)
+//        {
+//            log(e, com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "error_TopicMgr_init_maintminiterror"), true);
+//        }
     }
 
     static public TopicMgr getInstance()
