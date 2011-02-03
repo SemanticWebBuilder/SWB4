@@ -111,6 +111,7 @@ public class SWBVirtualHostFilter implements Filter
 
         boolean processThread = false;
         String lang=null;
+        String country=null;
 
         if (fistCall)
         {
@@ -168,10 +169,17 @@ public class SWBVirtualHostFilter implements Filter
         }
         
         //verifica lenguaje en URI
-        if(iserv!=null && iserv.length()==2)
+        if(iserv!=null && (iserv.length()==2 || (iserv.length()==5 && iserv.charAt(2)=='_')))
         {
             serv=dist;
-            if(!iserv.equals("wb"))lang=iserv;
+            if(iserv.length()==2 && !iserv.equals("wb"))
+            {
+                lang = iserv;
+            }else
+            {
+                lang=iserv.substring(0,2);
+                country=iserv.substring(3);
+            }
         }
 
 //        String real=WBVirtualHostMgr.getInstance().getVirtualHost(path,host);
@@ -191,7 +199,7 @@ public class SWBVirtualHostFilter implements Filter
             if (serv != null)
             {
                 processThread=true;
-                processInternalServlet(serv, _request, _response, path, lang, iserv);
+                processInternalServlet(serv, _request, _response, path, lang, country, iserv);
             }
             else
             {
@@ -236,7 +244,7 @@ public class SWBVirtualHostFilter implements Filter
     }
 
 
-    public void processInternalServlet(InternalServlet serv, HttpServletRequest _request, HttpServletResponse _response, String path, String lang, String iserv) throws Throwable
+    public void processInternalServlet(InternalServlet serv, HttpServletRequest _request, HttpServletResponse _response, String path, String lang, String country, String iserv) throws Throwable
     {
         boolean catchErrors = true;
 
@@ -248,7 +256,7 @@ public class SWBVirtualHostFilter implements Filter
             {
                 try
                 {
-                    dparams = new DistributorParams(_request, auri,lang);
+                    dparams = new DistributorParams(_request, auri, lang, country);
                 }catch(SWBIPValidationExeption e)
                 {
                     log.warn(e);
