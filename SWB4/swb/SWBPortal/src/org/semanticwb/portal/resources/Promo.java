@@ -211,6 +211,7 @@ public class Promo extends GenericResource {
         }else {
             String out;
             String cssClass = base.getAttribute("cssClass");
+            System.out.println("\n\n\n cssClass="+cssClass);
             if(cssClass == null)
                 out = renderWithStyle();
             else
@@ -226,6 +227,7 @@ public class Promo extends GenericResource {
      * @return the string
      */
     private String renderWithStyle() {
+        System.out.println(" renderWithStyle..............");
         StringBuilder out = new StringBuilder();
         Resource base=getResourceBase();
 
@@ -245,14 +247,14 @@ public class Promo extends GenericResource {
         String textcolor = base.getAttribute("textcolor");
 
         String title = base.getAttribute("title");
-        String titleStyle = base.getAttribute("titleStyle","");
+        String titleStyle = base.getAttribute("titleStyle");
 
         String subtitle = base.getAttribute("subtitle");
-        String subtitleStyle = base.getAttribute("subtitleStyle","");
+        String subtitleStyle = base.getAttribute("subtitleStyle");
 
         String imgfile = base.getAttribute("imgfile");
         String caption = base.getAttribute("caption");
-        String captionStyle = base.getAttribute("captionStyle","");
+        String captionStyle = base.getAttribute("captionStyle");
 
         String imgWidth="";
         if(base.getAttribute("imgWidth")!=null){
@@ -265,11 +267,12 @@ public class Promo extends GenericResource {
         }
 
         String text = base.getAttribute("text");
-        String textStyle = base.getAttribute("textStyle","");
+        String textStyle = base.getAttribute("textStyle");
 
         String more = base.getAttribute("more");
-        String moreStyle = base.getAttribute("moreStyle","");
+        String moreStyle = base.getAttribute("moreStyle");
         String url = base.getAttribute("url");
+        String uline = base.getAttribute("uline", "0");
 
         int imgPos;
         try {
@@ -280,21 +283,15 @@ public class Promo extends GenericResource {
 
         try {
             //marco
-            out.append("<div class=\"swb-promo\" style=\"");
-            if(textcolor != null) {
-                out.append("color:"+textcolor+";");
+            out.append("<div class=\"swb-promo\"");
+            if(textcolor!=null || width>0 || height>0) {
+                out.append(" style=\""+(textcolor==null?"":"color:"+textcolor+";")+(width>0?"width:"+width+"px;":"")+(height>0?"height:"+height+"px;":"")+"\"");
             }
-            if(width>0)  {
-                out.append("width:"+width+"px;");
-            }
-            if(height>0) {
-                out.append("height:"+height+"px;");
-            }
-            out.append("\">");
+            out.append(">");
 
             //title
             if(title != null) {
-                out.append("<h2 style=\""+titleStyle+"\"><span> \n");
+                out.append("<h2"+(titleStyle==null?"":" style=\""+titleStyle+"\"")+"><span> \n");
                 out.append(title);
                 out.append("</span></h2> \n");
             }
@@ -307,7 +304,7 @@ public class Promo extends GenericResource {
                     img.append("<div style=\"text-align:center; float:right; margin:10px\"> \n");
                     img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +" /></span> \n");
                     if(caption != null) {
-                        img.append("<h6 style=\""+captionStyle+"\"><span>"+caption+"</span></h6> \n");
+                        img.append("<h6"+(captionStyle==null?"":" style=\""+captionStyle+"\"")+"><span>"+caption+"</span></h6> \n");
                     }
                     img.append("</div> \n");
                     margin = "margin-right:"+(imgWidth+20)+"px;";
@@ -316,7 +313,7 @@ public class Promo extends GenericResource {
                     img.append("<div style=\"text-align:center; float:left; margin:10px\"> \n");
                     img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +" /></span> \n");
                     if(caption != null) {
-                        img.append("<h6 style=\""+captionStyle+"\"><span>"+caption+"</span></h6> \n");
+                        img.append("<h6"+(captionStyle==null?"":" style=\""+captionStyle+"\"")+"><span>"+caption+"</span></h6> \n");
                     }
                     img.append("</div> \n");
                     margin = "margin-left:"+(imgWidth+20)+"px;";
@@ -325,7 +322,7 @@ public class Promo extends GenericResource {
                     img.append("<div style=\"text-align:center; float:right; margin:10px;\"> \n");
                     img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +" /></span> \n");
                     if(caption != null) {
-                        img.append("<h6 style=\""+captionStyle+"\"><span>"+caption+"</span></h6> \n");
+                        img.append("<h6"+(captionStyle==null?"":" style=\""+captionStyle+"\"")+"><span>"+caption+"</span></h6> \n");
                     }
                     img.append("</div> \n");
                     out.append(img);
@@ -333,7 +330,7 @@ public class Promo extends GenericResource {
                     img.append("<div style=\"text-align:center; float:left; margin:10px;\"> \n");
                     img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +" /></span> \n");
                     if(caption != null) {
-                        img.append("<h6 style=\""+captionStyle+"\"><span>"+caption+"</span></h6> \n");
+                        img.append("<h6"+(captionStyle==null?"":" style=\""+captionStyle+"\"")+"><span>"+caption+"</span></h6> \n");
                     }
                     img.append("</div> \n");
                     out.append(img);
@@ -341,7 +338,7 @@ public class Promo extends GenericResource {
                     img.append("<div style=\"text-align:center\"> \n");
                     img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +" /></span> \n");
                     if(caption != null) {
-                        img.append("<h6 style=\""+captionStyle+"\"><span>"+caption+"</span></h6> \n");
+                        img.append("<h6"+(captionStyle==null?"":" style=\""+captionStyle+"\"")+"><span>"+caption+"</span></h6> \n");
                     }
                     img.append("</div> \n");
                     out.append(img);
@@ -350,7 +347,7 @@ public class Promo extends GenericResource {
                     img.append("<div style=\"text-align:center\"> \n");
                     img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +" /></span> \n");
                     if(caption != null) {
-                        img.append("<h6 style=\""+captionStyle+"\"><span>"+caption+"</span></h6> \n");
+                        img.append("<h6"+(captionStyle==null?"":" style=\""+captionStyle+"\"")+"><span>"+caption+"</span></h6> \n");
                     }
                     img.append("</div> \n");
                 }
@@ -358,41 +355,41 @@ public class Promo extends GenericResource {
 
             //subtitle
             if(subtitle != null) {
-                out.append("<h2 style=\""+subtitleStyle+"\"><span>"+subtitle+"</span></h2> \n");
+                out.append("<h2"+(subtitleStyle==null?"":" style=\""+subtitleStyle+"\"")+"><span>"+subtitle+"</span></h2> \n");
             }
 
             if( base.getAttribute("more")==null ) {
                 //texto
                 out.append("<p style=\"text-align:justify;"+margin+"\"> \n");
                 if(url != null) {
-                    out.append("<a href=\""+url+"\" style=\""+textStyle);
-                    if("0".equalsIgnoreCase(base.getAttribute("uline", "0"))) {
-                        out.append(" ;text-decoration:none;");
+                    out.append("<a href=\""+url+"\"");
+                    if(textStyle!=null || "0".equals(uline)) {
+                        out.append(" style=\""+(textStyle==null?"":textStyle+";")+("0".equals(uline)?"text-decoration:none;":"")+"\"");
                     }
                     if ("1".equalsIgnoreCase(base.getAttribute("target", "0").trim())) {
                         out.append(" target=\"_blank\"");
                     }
-                    out.append("\"> \n");
+                    out.append("> \n");
                     out.append(text);
                     out.append("\n</a> \n");
                 }else {
-                    out.append("<span style=\""+textStyle+"\"> \n");
+                    out.append("<span "+(textStyle==null?"":"style=\""+textStyle+"\"")+"> \n");
                     out.append(text);
                     out.append("</span> \n");
                 }
                 out.append("</p> \n");
             }else {
                 out.append("<p style=\"text-align:justify;"+margin+"\"> \n");
-                out.append("<span style=\""+textStyle+"\"> \n");
+                out.append("<span "+(textStyle==null?"":"style=\""+textStyle+"\"")+"> \n");
                 out.append(text);
                 out.append("</span> \n");
                 out.append("</p> \n");
                 //más...
                 if( url!=null) {
                     out.append("<ul style=\"list-style:none; margin:7px; padding:0px\"><li> \n");
-                    out.append("<a href=\""+url+"\" style=\""+moreStyle);
-                    if("0".equalsIgnoreCase(base.getAttribute("uline", "0"))) {
-                        out.append(" ;text-decoration:none;\"");
+                    out.append("<a href=\""+url+"\"");
+                    if(moreStyle!=null || "0".equals(uline)) {
+                        out.append(" style=\""+(moreStyle==null?"":moreStyle+";")+("0".equals(uline)?"text-decoration:none;":"")+"\"");
                     }
                     if ("1".equalsIgnoreCase(base.getAttribute("target", "0").trim())) {
                         out.append(" target=\"_blank\"");
@@ -422,6 +419,7 @@ public class Promo extends GenericResource {
      * @return the string
      */
     private String render() {
+        System.out.println("render..............");
         StringBuilder out = new StringBuilder();
         Resource base=getResourceBase();
 
