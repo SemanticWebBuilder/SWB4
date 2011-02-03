@@ -37,6 +37,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SFBase64;
+import org.semanticwb.model.Country;
 import org.semanticwb.model.Dns;
 import org.semanticwb.model.IPFilter;
 import org.semanticwb.model.Language;
@@ -173,6 +174,7 @@ public class DistributorParams
     
     /** The lang. */
     private String lang=null;
+    private String country=null;
     
     /** The device. */
     private String device=null;
@@ -184,9 +186,10 @@ public class DistributorParams
      * @param uri the uri
      * @param lang the lang
      */
-    public DistributorParams(HttpServletRequest request, String uri, String lang)
+    public DistributorParams(HttpServletRequest request, String uri, String lang, String country)
     {
         this.lang=lang;
+        this.country=country;
         init(request,uri);
     }
     
@@ -495,6 +498,26 @@ public class DistributorParams
                 }
             }
         }
+        if(country!=null)
+        {
+            if(user.getCountry()==null || !user.getCountry().equals(country))
+            {
+                if(site.hasCountry(country))
+                {
+                    user.setCountry(country);
+                }else
+                {
+                    Country l=site.getCountry();
+                    if(l==null)
+                    {
+                        Iterator<Country> i=SWBUtils.Collections.copyIterator(site.listCountries()).iterator();
+                        if(i.hasNext())l=i.next();
+                    }
+                    if(l!=null)user.setCountry(l.getId());
+                    //log.warn("Language not found:"+site.getId()+":"+lang);
+                }
+            }
+        }        
         if (device!=null) 
         {
             user.setDevice(site.getDevice(device));
