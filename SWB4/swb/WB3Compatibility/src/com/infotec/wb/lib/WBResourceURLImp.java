@@ -169,7 +169,7 @@ public class WBResourceURLImp implements WBResourceURL
     @Override
     public String toString()
     {
-        url.toString();
+        return url.toString();
     }
 
 }
