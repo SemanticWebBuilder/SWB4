@@ -166,4 +166,10 @@ public class WBResourceURLImp implements WBResourceURL
         return new Topic(url.getTopic());
     }
 
+    @Override
+    public String toString()
+    {
+        url.toString();
+    }
+
 }
