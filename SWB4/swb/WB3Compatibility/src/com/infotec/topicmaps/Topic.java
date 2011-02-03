@@ -1308,6 +1308,7 @@ public class Topic
      */
     public boolean isChildof(Topic topic)
     {
+        if(topic==null)return false;
         return wp.isChildof(topic.getNative());
     }
 
@@ -1317,6 +1318,7 @@ public class Topic
      */
     public boolean isParentof(Topic topic)
     {
+        if(topic==null)return false;
         return wp.isParentof(topic.getNative());
     }
 

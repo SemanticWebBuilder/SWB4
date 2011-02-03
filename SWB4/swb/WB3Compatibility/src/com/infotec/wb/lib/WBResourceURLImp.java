@@ -31,6 +31,7 @@ package com.infotec.wb.lib;
 import com.infotec.topicmaps.Topic;
 import com.infotec.wb.core.Resource;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.api.SWBResourceURLImp;
 
@@ -41,6 +42,11 @@ import org.semanticwb.portal.api.SWBResourceURLImp;
 public class WBResourceURLImp implements WBResourceURL
 {
     private SWBResourceURLImp url=null;
+    
+    public WBResourceURLImp(HttpServletRequest request, Resource resource, Topic topic, int urlType)
+    {
+        this.url=new SWBResourceURLImp(request, resource.getNative(), topic.getNative(), urlType);
+    }
 
     public WBResourceURLImp(SWBResourceURL url)
     {
