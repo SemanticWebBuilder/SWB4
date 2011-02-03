@@ -16,4 +16,5 @@ public class Action {
     public var offsety: Number;
     public var isSeparator: Boolean = false;
     public var status: String = MenuItem.STATUS_ENABLED;
+    public var actions: Action[];
 }
