@@ -130,12 +130,29 @@ public class WebPage extends WebPageBase
      */
     public String getRealUrl(String lang)
     {
+        return getRealUrl(lang, null);
+    }
+
+    /**
+     * Regresa el Url de la pagina
+     * Ejemplo: /wb2/jei/home.
+     *
+     * @param lang the lang
+     * @return String
+     */
+    public String getRealUrl(String lang, String country)
+    {
+        String code=lang;
         if(realurl==null)
         {
             realurl="/" + getWebSiteId() + "/" + getId();
         }
-        return SWBPlatform.getContextPath() + "/" + (lang==null?SWBPlatform.getEnv("swb/distributor","swb"):lang) + realurl;
-    }    
+        if(lang!=null && country!=null)
+        {
+            code=lang+"_"+country;
+        }
+        return SWBPlatform.getContextPath() + "/" + (code==null?SWBPlatform.getEnv("swb/distributor","swb"):code) + realurl;
+    }
 
     /**
      * Regresa el Url de la pagina
