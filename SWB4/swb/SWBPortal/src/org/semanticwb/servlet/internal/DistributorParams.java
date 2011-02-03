@@ -181,6 +181,18 @@ public class DistributorParams
 
     /**
      * Creates a new instance of DistributorParams.
+     *
+     * @param request the request
+     * @param uri the uri
+     * @param lang the lang
+     */
+    public DistributorParams(HttpServletRequest request, String uri, String lang)
+    {
+        this(request, uri, lang, null);
+    }
+
+    /**
+     * Creates a new instance of DistributorParams.
      * 
      * @param request the request
      * @param uri the uri
