@@ -3,7 +3,6 @@ package org.semanticwb.process.modeler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextOrigin;
@@ -22,6 +21,8 @@ public class MenuItem extends CustomNode {
     public var caption: String;
     public var action: function(e: MouseEvent);
     public var status = STATUS_ENABLED;
+    public var owner: MenuPopup;
+    public var mchild: MenuPopup;
     public var x: Number;
     public var y: Number;
     public var w: Number;
@@ -57,21 +58,33 @@ public class MenuItem extends CustomNode {
                 styleClass: "menuItem"
             }
             t2 = Text {
+                styleClass: bind 
+                    if (status.equals(STATUS_DISABLED)) {
+                        "menuItemCaptionDisabled"
+                    } else if (r.hover) {
+                        "menuItemCaptionOver"
+                    } else {
+                        "menuItemCaptionNormal"
+                    }
                 textOrigin: TextOrigin.TOP
                 x: bind if (sizeToText) r.boundsInParent.minX + (r.width - t.boundsInLocal.width) / 2 else textOffsetX
                 y: bind r.boundsInParent.minY + (r.height - t.boundsInLocal.height) / 2
                 content: bind caption
                 font: bind if (status.equals(STATUS_SELECTED)) Font.font("Verdana", FontWeight.BOLD, 11) else Font.font("Verdana", 11)
-                fill: bind if (hover) Color.WHITE else if (status.equals(STATUS_ENABLED) or status.equals(STATUS_SELECTED)) Color.BLACK else Color.GRAY
+                //fill: bind if (hover) Color.WHITE else if (status.equals(STATUS_ENABLED) or status.equals(STATUS_SELECTED)) Color.BLACK else Color.GRAY
             }
         }
 
         return Group {
-            content: [
-                r,
-                t2
+            content: bind [
+                r, t2, mchild
             ]
-            onMouseClicked: bind if (not status.equals(STATUS_DISABLED)) action else function(e: MouseEvent){}
+            onMouseClicked: bind
+                if (not status.equals(STATUS_DISABLED) and action != null) {
+                    action
+                } else {
+                    function(e: MouseEvent){closeAll()}
+                }
         }
     }
 
@@ -82,4 +95,32 @@ public class MenuItem extends CustomNode {
     public function getHeight(): Number {
         return r.height;
     }
-};
+
+    public function hide () : Void {
+        this.visible = false;
+        this.mchild.hide();
+    }
+
+    public function show () : Void  {
+        this.visible = true;
+        this.mchild.hide();
+    }
+
+    public function showChild(cx: Float, cy: Float) : Void {
+        this.mchild.show(cx, cy);
+        this.visible = true;
+    }
+
+    public function hideChild() : Void {
+        this.visible = false;
+        this.mchild.hide();
+    }
+
+    public function closeAll() {
+        var p = owner;
+        while (p != null) {
+            p.hide();
+            p = p.miParent.owner;
+        }
+    }
+}
