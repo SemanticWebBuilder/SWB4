@@ -4,6 +4,9 @@
  */
 package org.semanticwb.rest.publish;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Set;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -30,11 +33,10 @@ import org.w3c.dom.Text;
 import org.semanticwb.platform.SemanticObject;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -46,12 +48,11 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticVocabulary;
 import org.semanticwb.rest.util.HTTPMethod;
-import org.semanticwb.rest.consume.MethodModuleBase;
 import org.semanticwb.rest.consume.RestException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import static javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI;
-import static org.semanticwb.rest.util.XMLConstants.XLINK_NS;
+
 
 /**
  *
@@ -60,6 +61,7 @@ import static org.semanticwb.rest.util.XMLConstants.XLINK_NS;
 public final class SemanticClassPublisher extends RestModule
 {
 
+    private static final String VALUE = "value";
     private static final String ELEMENT = "element";
     private static final String XSD_PREFIX = "xsd";
     private static final String XSD_ANYURI = "xsd:anyURI";
@@ -82,7 +84,7 @@ public final class SemanticClassPublisher extends RestModule
     public static final String XSD_STRING = "xsd:string";
     private static final String REST_ID = "rest:id";
     private static final Logger log = SWBUtils.getLogger(SemanticClassPublisher.class);
-    private final Set<SemanticClass> classes = Collections.synchronizedSet(new HashSet<SemanticClass>());
+    private final Set<PublishDefinition> definitions = Collections.synchronizedSet(new HashSet<PublishDefinition>());
 
     @Override
     public void showData(HttpServletRequest request, HttpServletResponse response, String basepath) throws IOException
@@ -139,11 +141,11 @@ public final class SemanticClassPublisher extends RestModule
     class DeleteModule extends MethodModuleBase
     {
 
-        private final SemanticClass clazz;
+        private final PublishDefinition definition;
 
-        public DeleteModule(SemanticClass clazz)
+        public DeleteModule(PublishDefinition definition)
         {
-            this.clazz = clazz;
+            this.definition = definition;
         }
 
         public HTTPMethod getHTTPMethod()
@@ -153,7 +155,7 @@ public final class SemanticClassPublisher extends RestModule
 
         public String getId()
         {
-            return "delete_" + clazz.getPrefix() + "_" + clazz.getName();
+            return "delete_" + definition.getSemanticClass().getPrefix() + "_" + definition.getSemanticClass().getName();
         }
 
         public void addParameters(Element method)
@@ -163,13 +165,25 @@ public final class SemanticClassPublisher extends RestModule
             Element request = doc.createElementNS(WADL_NS, "request");
             method.appendChild(request);
 
+
             Element param = doc.createElementNS(WADL_NS, "param");
             param.setAttribute(NAME, "uri");
             param.setAttribute(STYLE, QUERY);
             param.setAttribute(TYPE, XSD_STRING);
             param.setAttribute(REQUIRED, "true");
             request.appendChild(param);
-            MethodModuleBase.configureCommonsElements(method, request, WADL_NS, REST_RESOURCE_PREFIX + ":Deleted");
+
+            param = doc.createElementNS(WADL_NS, "param");
+            param.setAttribute(NAME, "format");
+            param.setAttribute(STYLE, QUERY);
+            request.appendChild(param);
+
+            for (Representation rep : definition.getRepresentations())
+            {
+                rep.addWADL(param, request, method, getHTTPMethod(), REST_RESOURCE_PREFIX + ":Deleted");
+            }
+
+            //MethodModuleBase.configureCommonsElements(definition, method, request, WADL_NS, REST_RESOURCE_PREFIX + ":Deleted");
         }
 
         public void execute(HttpServletRequest request, HttpServletResponse response, String basepath) throws IOException
@@ -182,7 +196,7 @@ public final class SemanticClassPublisher extends RestModule
                 if (obj != null)
                 {
                     SemanticClass clazzObject = obj.getSemanticClass();
-                    if (!clazzObject.equals(clazz))
+                    if (!clazzObject.equals(definition.getSemanticClass()))
                     {
                         response.setStatus(400);
                         showError(request, response, "The object was not found");
@@ -210,11 +224,11 @@ public final class SemanticClassPublisher extends RestModule
     class PutModule extends MethodModuleBase
     {
 
-        private final SemanticClass clazz;
+        private final PublishDefinition definition;
 
-        public PutModule(SemanticClass clazz)
+        public PutModule(PublishDefinition definition)
         {
-            this.clazz = clazz;
+            this.definition = definition;
         }
 
         public HTTPMethod getHTTPMethod()
@@ -224,7 +238,7 @@ public final class SemanticClassPublisher extends RestModule
 
         public String getId()
         {
-            return "update_" + clazz.getPrefix() + "_" + clazz.getName();
+            return "update_" + definition.getSemanticClass().getPrefix() + "_" + definition.getSemanticClass().getName();
         }
 
         public void addParameters(Element method)
@@ -233,6 +247,9 @@ public final class SemanticClassPublisher extends RestModule
             String WADL_NS = method.getNamespaceURI();
             Element request = doc.createElementNS(WADL_NS, "request");
             method.appendChild(request);
+
+
+
             Element param = doc.createElementNS(WADL_NS, "param");
             param.setAttribute(NAME, REST_URI);
             param.setAttribute(STYLE, QUERY);
@@ -240,7 +257,7 @@ public final class SemanticClassPublisher extends RestModule
 
             request.appendChild(param);
 
-            Iterator<SemanticProperty> props = clazz.listProperties();
+            Iterator<SemanticProperty> props = definition.getSemanticClass().listProperties();
             while (props.hasNext())
             {
                 SemanticProperty prop = props.next();
@@ -315,7 +332,15 @@ public final class SemanticClassPublisher extends RestModule
                 }
 
             }
-            configureCommonsElements(method, request, WADL_NS, REST_RESOURCE_PREFIX + ":Updated");
+            param = doc.createElementNS(WADL_NS, "param");
+            param.setAttribute(NAME, "format");
+            param.setAttribute(STYLE, QUERY);
+            request.appendChild(param);
+            for (Representation rep : definition.getRepresentations())
+            {
+                rep.addWADL(param, request, method, getHTTPMethod(), REST_RESOURCE_PREFIX + ":Updated");
+            }
+            //configureCommonsElements(definition, method, request, WADL_NS, REST_RESOURCE_PREFIX + ":Updated");
         }
 
         public void execute(HttpServletRequest request, HttpServletResponse response, String basepath) throws IOException
@@ -331,7 +356,7 @@ public final class SemanticClassPublisher extends RestModule
                 SemanticObject obj = SemanticObject.createSemanticObject(uri);
                 if (obj != null)
                 {
-                    if (!obj.getSemanticClass().equals(clazz))
+                    if (!obj.getSemanticClass().equals(definition.getSemanticClass()))
                     {
                         response.setStatus(400);
                         showError(request, response, "The object was not found");
@@ -360,11 +385,11 @@ public final class SemanticClassPublisher extends RestModule
     class PostModule extends MethodModuleBase
     {
 
-        private final SemanticClass clazz;
+        private final PublishDefinition definition;
 
-        public PostModule(SemanticClass clazz)
+        public PostModule(PublishDefinition definition)
         {
-            this.clazz = clazz;
+            this.definition = definition;
         }
 
         public void addParameters(Element method)
@@ -377,7 +402,8 @@ public final class SemanticClassPublisher extends RestModule
 
 
 
-            Iterator<SemanticProperty> props = clazz.listProperties();
+
+            Iterator<SemanticProperty> props = definition.getSemanticClass().listProperties();
             while (props.hasNext())
             {
                 SemanticProperty prop = props.next();
@@ -479,7 +505,7 @@ public final class SemanticClassPublisher extends RestModule
                 }
             }
 
-            if (!clazz.isAutogenId())
+            if (!definition.getSemanticClass().isAutogenId())
             {
                 param = doc.createElementNS(WADL_NS, "param");
                 param.setAttribute(NAME, REST_ID);
@@ -488,8 +514,15 @@ public final class SemanticClassPublisher extends RestModule
                 param.setAttribute(REQUIRED, "true");
                 request.appendChild(param);
             }
-
-            configureCommonsElements(method, request, WADL_NS, REST_RESOURCE_PREFIX + ":Created");
+            param = doc.createElementNS(WADL_NS, "param");
+            param.setAttribute(NAME, "format");
+            param.setAttribute(STYLE, QUERY);
+            request.appendChild(param);
+            for (Representation rep : definition.getRepresentations())
+            {
+                rep.addWADL(param, request, method, getHTTPMethod(), REST_RESOURCE_PREFIX + ":Created");
+            }
+            //configureCommonsElements(definition, method, request, WADL_NS, REST_RESOURCE_PREFIX + ":Created");
         }
 
         public HTTPMethod getHTTPMethod()
@@ -499,7 +532,7 @@ public final class SemanticClassPublisher extends RestModule
 
         public String getId()
         {
-            return "add_" + clazz.getPrefix() + "_" + clazz.getName();
+            return "add_" + definition.getSemanticClass().getPrefix() + "_" + definition.getSemanticClass().getName();
         }
 
         public void execute(HttpServletRequest request, HttpServletResponse response, String basepath) throws IOException
@@ -511,7 +544,7 @@ public final class SemanticClassPublisher extends RestModule
                 showError(request, response, "The parameter modeluri is required");
                 return;
             }
-            if (!clazz.isAutogenId())
+            if (!definition.getSemanticClass().isAutogenId())
             {
                 if (request.getParameter("id") == null)
                 {
@@ -550,9 +583,9 @@ public final class SemanticClassPublisher extends RestModule
                 return;
             }
             String id = null;
-            if (clazz.isAutogenId())
+            if (definition.getSemanticClass().isAutogenId())
             {
-                id = String.valueOf(site.getSemanticObject().getModel().getCounter(clazz));
+                id = String.valueOf(site.getSemanticObject().getModel().getCounter(definition.getSemanticClass()));
             }
             else
             {
@@ -563,7 +596,7 @@ public final class SemanticClassPublisher extends RestModule
                     showError(request, response, "The object parameter rest:id was not found");
                     return;
                 }
-                SemanticObject objtest = site.getSemanticObject().getModel().createSemanticObjectById(id, clazz);
+                SemanticObject objtest = site.getSemanticObject().getModel().createSemanticObjectById(id, definition.getSemanticClass());
                 if (objtest != null)
                 {
                     response.setStatus(400);
@@ -571,7 +604,7 @@ public final class SemanticClassPublisher extends RestModule
                     return;
                 }
             }
-            GenericObject newobj = site.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, clazz), clazz);
+            GenericObject newobj = site.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, definition.getSemanticClass()), definition.getSemanticClass());
             // update properties
             try
             {
@@ -591,11 +624,11 @@ public final class SemanticClassPublisher extends RestModule
     class GetMethodModule extends MethodModuleBase
     {
 
-        private final SemanticClass clazz;
+        private final PublishDefinition definition;
 
-        public GetMethodModule(SemanticClass clazz)
+        public GetMethodModule(PublishDefinition definition)
         {
-            this.clazz = clazz;
+            this.definition = definition;
         }
 
         public void addParameters(Element method)
@@ -605,13 +638,25 @@ public final class SemanticClassPublisher extends RestModule
             Element request = doc.createElementNS(WADL_NS, "request");
             method.appendChild(request);
 
+
+
             Element param = doc.createElementNS(WADL_NS, "param");
             param.setAttribute(NAME, "uri");
             param.setAttribute(STYLE, QUERY);
             param.setAttribute(TYPE, XSD_STRING);
             param.setAttribute(REQUIRED, "true");
             request.appendChild(param);
-            configureCommonsElements(method, request, WADL_NS, clazz.getPrefix() + ":" + clazz.getName());
+
+            param = doc.createElementNS(WADL_NS, "param");
+            param.setAttribute(NAME, "format");
+            param.setAttribute(STYLE, QUERY);
+            request.appendChild(param);
+
+            for (Representation rep : definition.getRepresentations())
+            {
+                rep.addWADL(param, request, method, getHTTPMethod(), definition.getSemanticClass().getPrefix() + ":" + definition.getSemanticClass().getName());
+            }
+            //configureCommonsElements(definition, method, request, WADL_NS, definition.getSemanticClass().getPrefix() + ":" + definition.getSemanticClass().getName());
         }
 
         public HTTPMethod getHTTPMethod()
@@ -621,7 +666,7 @@ public final class SemanticClassPublisher extends RestModule
 
         public String getId()
         {
-            return "get_" + clazz.getPrefix() + "_" + clazz.getName();
+            return "get_" + definition.getSemanticClass().getPrefix() + "_" + definition.getSemanticClass().getName();
         }
 
         public void execute(HttpServletRequest request, HttpServletResponse response, String basepath) throws IOException
@@ -637,7 +682,7 @@ public final class SemanticClassPublisher extends RestModule
             if (obj != null)
             {
                 SemanticClass clazzObject = obj.getSemanticClass();
-                if (!clazzObject.equals(clazz))
+                if (!clazzObject.equals(definition.getSemanticClass()))
                 {
                     response.setStatus(400);
                     showError(request, response, "The object was not found");
@@ -673,15 +718,15 @@ public final class SemanticClassPublisher extends RestModule
     class ModelMethodModule extends MethodModule
     {
 
-        public ModelMethodModule(Method m, SemanticClass clazz)
+        public ModelMethodModule(Method m, PublishDefinition definition)
         {
-            super(m, clazz);
+            super(m, definition);
         }
 
         @Override
         public String getId()
         {
-            return "_" + m.getName() + clazz.getPrefix() + "_" + clazz.getName();
+            return "_" + m.getName() + definition.getSemanticClass().getPrefix() + "_" + definition.getSemanticClass().getName();
         }
     }
 
@@ -689,17 +734,17 @@ public final class SemanticClassPublisher extends RestModule
     {
 
         protected final Method m;
-        protected final SemanticClass clazz;
+        protected final PublishDefinition definition;
 
-        public MethodModule(Method m, SemanticClass clazz)
+        public MethodModule(Method m, PublishDefinition definition)
         {
             this.m = m;
-            this.clazz = clazz;
+            this.definition = definition;
         }
 
         public String getId()
         {
-            return clazz.getPrefix() + "_" + clazz.getName()+m.getName();
+            return definition.getSemanticClass().getPrefix() + "_" + definition.getSemanticClass().getName() + m.getName();
         }
 
         public HTTPMethod getHTTPMethod()
@@ -713,6 +758,8 @@ public final class SemanticClassPublisher extends RestModule
             String WADL_NS = method.getNamespaceURI();
             Element request = doc.createElementNS(WADL_NS, "request");
             method.appendChild(request);
+
+
 
             Element param = doc.createElementNS(WADL_NS, "param");
             param.setAttribute(NAME, "method");
@@ -744,7 +791,15 @@ public final class SemanticClassPublisher extends RestModule
                     request.appendChild(param);
                 }
             }
-            configureCommonsElements(method, request, WADL_NS, REST_RESOURCE_PREFIX + ":" + m.getName());
+            param = doc.createElementNS(WADL_NS, "param");
+            param.setAttribute(NAME, "format");
+            param.setAttribute(STYLE, QUERY);
+            request.appendChild(param);
+            for (Representation rep : definition.getRepresentations())
+            {
+                rep.addWADL(param, request, method, getHTTPMethod(), REST_RESOURCE_PREFIX + ":" + m.getName());
+            }
+            //configureCommonsElements(definition, method, request, WADL_NS, REST_RESOURCE_PREFIX + ":" + m.getName());
         }
 
         private Object convert(String value, Class clazz) throws Exception
@@ -816,34 +871,49 @@ public final class SemanticClassPublisher extends RestModule
             checkParameters(m, request);
             Object[] args = getParameters(m, request);
             Object resinvoke = m.invoke(null, args);
+            log.debug("resinvoke: " + resinvoke);
             if (resinvoke != null)
             {
                 if (resinvoke instanceof SemanticObject)
                 {
+                    log.debug("resinvoke is SemanticObject: ");
                     SemanticObject so = (SemanticObject) resinvoke;
                     return serializeAsXML(so, basePath);
                 }
                 else if (resinvoke instanceof GenericIterator)
                 {
+                    log.debug("resinvoke is GenericIterator: ");
                     Document doc = SWBUtils.XML.getNewDocument();
+                    String prefix="demo";
+
                     Element res = doc.createElementNS(REST_RESOURCES_2010, m.getName());
+                    res.setPrefix(prefix);
                     doc.appendChild(res);
 
                     Attr xmlns = doc.createAttribute("xmlns");
                     xmlns.setValue(REST_RESOURCES_2010);
                     res.setAttributeNode(xmlns);
-
-
-
-                    res.setAttribute("xmlns:xlink", XLINK_NS);
+                    
+                    
+                    
                     GenericIterator gi = (GenericIterator) resinvoke;
                     if (gi.hasNext())
                     {
                         GenericObject go = gi.next();
                         SemanticObject obj = go.getSemanticObject();
                         Element name = doc.createElementNS(REST_RESOURCES_2010, obj.getSemanticClass().getName());
-                        name.setAttributeNS(XLINK_NS, "xlink:href", getPathForObject(obj, basePath));
-                        name.setAttribute("shortURI", obj.getShortURI());
+                        name.setPrefix(prefix);
+
+                        Attr shortURI = doc.createAttributeNS(REST_RESOURCES_2010, "shortURI");
+                        shortURI.setValue(obj.getShortURI());
+                        shortURI.setPrefix(prefix);
+                        name.setAttributeNodeNS(shortURI);
+
+                        Attr href = doc.createAttributeNS(REST_RESOURCES_2010, "href");
+                        href.setValue(getPathForObject(obj, basePath));
+                        href.setPrefix(prefix);
+                        name.setAttributeNodeNS(href);
+                        
 
                         Text data = doc.createTextNode(obj.getURI());
                         name.appendChild(data);
@@ -854,8 +924,19 @@ public final class SemanticClassPublisher extends RestModule
                         GenericObject go = gi.next();
                         SemanticObject obj = go.getSemanticObject();
                         Element name = doc.createElementNS(REST_RESOURCES_2010, obj.getSemanticClass().getName());
-                        name.setAttributeNS(XLINK_NS, "xlink:href", getPathForObject(obj, basePath));
-                        name.setAttribute("shortURI", obj.getShortURI());
+                        name.setPrefix(prefix);
+
+                        Attr shortURI = doc.createAttributeNS(REST_RESOURCES_2010, "shortURI");
+                        shortURI.setValue(obj.getURI());
+                        shortURI.setPrefix(prefix);
+                        name.setAttributeNodeNS(shortURI);
+
+                        Attr href = doc.createAttributeNS(REST_RESOURCES_2010, "href");
+                        href.setValue(getPathForObject(obj, basePath));
+                        href.setPrefix(prefix);
+                        name.setAttributeNodeNS(href);
+
+                        
 
                         Text data = doc.createTextNode(obj.getURI());
                         name.appendChild(data);
@@ -881,9 +962,12 @@ public final class SemanticClassPublisher extends RestModule
             String methodName = request.getParameter("method");
             if (m.getName().equals(methodName))
             {
+                log.debug("executing method : " + m.getName() + " ...");
                 try
                 {
-                    executeMethod(request, basePath);
+                    Document doc = executeMethod(request, basePath);
+                    showDocument(response, doc);
+                    log.debug("method : " + m.getName() + " executed");
                 }
                 catch (Exception e)
                 {
@@ -897,14 +981,14 @@ public final class SemanticClassPublisher extends RestModule
     class SemanticFunctionsResourceModule extends ResourceModule
     {
 
-        private final SemanticClass clazz;
+        private final PublishDefinition definition;
 
-        public SemanticFunctionsResourceModule(SemanticClass clazz)
+        public SemanticFunctionsResourceModule(PublishDefinition definition)
         {
-            this.clazz = clazz;
+            this.definition = definition;
             try
             {
-                Class clazzjava = Class.forName(clazz.getClassName());
+                Class clazzjava = Class.forName(definition.getSemanticClass().getClassName());
                 Class superclazz = clazzjava.getSuperclass();
                 if (superclazz.getName().endsWith("Base"))
                 {
@@ -917,10 +1001,10 @@ public final class SemanticClassPublisher extends RestModule
                             for (Method m : mgr.getDeclaredMethods())
                             {
                                 if (Modifier.isPublic(m.getModifiers()) && Modifier.isStatic(m.getModifiers()) && (m.getName().startsWith("has") || m.getName().startsWith("list")))
-                                {                                    
+                                {
                                     if (!hasModel(m))
                                     {
-                                        MethodModule method = new MethodModule(m, clazz);
+                                        MethodModule method = new MethodModule(m, definition);
                                         this.methods.put(method.getId(), method);
                                     }
                                 }
@@ -940,7 +1024,7 @@ public final class SemanticClassPublisher extends RestModule
         {
             try
             {
-                Class clazzjava = Class.forName(clazz.getClassName());
+                Class clazzjava = Class.forName(definition.getSemanticClass().getClassName());
                 Class superclazz = clazzjava.getSuperclass();
                 if (superclazz.getName().endsWith("Base"))
                 {
@@ -991,14 +1075,14 @@ public final class SemanticClassPublisher extends RestModule
         @Override
         public String getId()
         {
-            return "functionsOf_" + clazz.getPrefix() + "_" + clazz.getName();
+            return "functionsOf_" + definition.getSemanticClass().getPrefix() + "_" + definition.getSemanticClass().getName();
         }
     }
 
     class SemanticModelResourceModule extends ResourceModule
     {
 
-        private final SemanticClass clazz;
+        private final PublishDefinition definition;
 
         @Override
         public void service(HttpServletRequest request, HttpServletResponse response, String servet, List<String> path, String basepath) throws IOException
@@ -1024,7 +1108,7 @@ public final class SemanticClassPublisher extends RestModule
         {
             try
             {
-                Class clazzjava = Class.forName(clazz.getClassName());
+                Class clazzjava = Class.forName(definition.getSemanticClass().getClassName());
                 Class superclazz = clazzjava.getSuperclass();
                 if (superclazz.getName().endsWith("Base"))
                 {
@@ -1052,13 +1136,13 @@ public final class SemanticClassPublisher extends RestModule
             return false;
         }
 
-        public SemanticModelResourceModule(SemanticClass clazz)
+        public SemanticModelResourceModule(PublishDefinition definition)
         {
             // adds methods
-            this.clazz = clazz;
+            this.definition = definition;
             try
             {
-                Class clazzjava = Class.forName(clazz.getClassName());
+                Class clazzjava = Class.forName(definition.getSemanticClass().getClassName());
                 Class superclazz = clazzjava.getSuperclass();
                 if (superclazz.getName().endsWith("Base"))
                 {
@@ -1074,7 +1158,7 @@ public final class SemanticClassPublisher extends RestModule
                                 {
                                     if (hasModel(m))
                                     {
-                                        ModelMethodModule method = new ModelMethodModule(m, clazz);
+                                        ModelMethodModule method = new ModelMethodModule(m, definition);
                                         this.methods.put(method.getId(), method);
                                     }
                                 }
@@ -1093,52 +1177,89 @@ public final class SemanticClassPublisher extends RestModule
         @Override
         public String getId()
         {
-            return "ModelFunctionsOf_" + clazz.getPrefix() + "_" + clazz.getName();
+            return "ModelFunctionsOf_" + definition.getSemanticClass().getPrefix() + "_" + definition.getSemanticClass().getName();
         }
     }
 
     public SemanticClassPublisher()
     {
-        for (SemanticClass clazz : classes)
+        for (PublishDefinition definition : definitions)
         {
-            addSemanticClass(clazz);
+            addSemanticClass(definition.getSemanticClass());
         }
     }
 
-    public void addSemanticClass(SemanticClass clazz)
+    public void addSemanticClass(PublishDefinition definition)
     {
-        classes.add(clazz);
+        definitions.add(definition);
+        SemanticClass clazz = definition.getSemanticClass();
         SemanticResourceModule resourceModule = new SemanticResourceModule(clazz);
 
-        GetMethodModule get = new GetMethodModule(clazz);
+        GetMethodModule get = new GetMethodModule(definition);
         resourceModule.methods.put(get.getId(), get);
 
-        PostModule post = new PostModule(clazz);
+        PostModule post = new PostModule(definition);
         resourceModule.methods.put(post.getId(), post);
 
-        PutModule put = new PutModule(clazz);
+        PutModule put = new PutModule(definition);
         resourceModule.methods.put(put.getId(), put);
 
-        DeleteModule delete = new DeleteModule(clazz);
+        DeleteModule delete = new DeleteModule(definition);
         resourceModule.methods.put(delete.getId(), delete);
 
         // add subResourcemodules
 
-        SemanticFunctionsResourceModule functions = new SemanticFunctionsResourceModule(clazz);
+        SemanticFunctionsResourceModule functions = new SemanticFunctionsResourceModule(definition);
 
         resourceModule.subResources.put(functions.getId(), functions);
 
-        SemanticModelResourceModule model = new SemanticModelResourceModule(clazz);
+        SemanticModelResourceModule model = new SemanticModelResourceModule(definition);
         functions.subResources.put(model.getId(), model);
 
         resourceModules.put(resourceModule.getId(), resourceModule);
+    }
+
+    public void addSemanticClass(SemanticClass clazz, RepresentationMediaType... publishType)
+    {
+        Collection<RepresentationMediaType> types = new ArrayList<RepresentationMediaType>();
+        types.addAll(Arrays.asList(publishType));
+        EnumSet<RepresentationMediaType> enumset = EnumSet.copyOf(types);
+        addSemanticClass(clazz, enumset);
+    }
+
+    public void addSemanticClass(SemanticClass clazz, Set<RepresentationMediaType> publishType)
+    {
+        PublishDefinition definition = new PublishDefinition(clazz, publishType);
+        addSemanticClass(definition);
+    }
+
+    public void addSemanticClass(SemanticClass clazz)
+    {
+        PublishDefinition definition = new PublishDefinition(clazz);
+        addSemanticClass(definition);
     }
 
     public void removeSemanticClass(SemanticClass clazz)
     {
         SemanticResourceModule resourceModule = new SemanticResourceModule(clazz);
         resourceModules.remove(resourceModule.getId());
-        classes.remove(clazz);
+        for (PublishDefinition def : definitions)
+        {
+            if (def.getSemanticClass().getURI().equals(clazz.getURI()))
+            {
+                definitions.remove(def);
+                break;
+            }
+        }
+    }
+
+    public void addSemanticClass(URI clazz, RepresentationMediaType... publishType)
+    {
+        SemanticClass clazzToAdd = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(clazz.toString());
+        if (clazzToAdd != null)
+        {
+            addSemanticClass(clazzToAdd, publishType);
+        }
     }
 
     public void addSemanticClass(URI clazz)
@@ -1156,8 +1277,9 @@ public final class SemanticClassPublisher extends RestModule
         application.setAttribute("xmlns:swbrest", REST_RESOURCES_2010);
         Set<String> prefixes = new HashSet<String>();
 
-        for (SemanticClass clazz : classes)
+        for (PublishDefinition definition : definitions)
         {
+            SemanticClass clazz = definition.getSemanticClass();
             if (!prefixes.contains(clazz.getPrefix()))
             {
                 String uri = clazz.getURI();
@@ -1193,27 +1315,12 @@ public final class SemanticClassPublisher extends RestModule
         grammars.appendChild(include);
         include.setAttribute("href", servletRequest.getRequestURI() + "?deleted=xsd");
 
-
-
-
-        for (SemanticClass clazz : classes)
+        for (PublishDefinition definition : definitions)
         {
-            try
+            for (Representation representation : definition.getRepresentations())
             {
-                include = doc.createElementNS(WADL_NS, "include");
-                grammars.appendChild(include);
-                include.setAttribute("href", servletRequest.getRequestURI() + "?clsmgr=xsd&classuri=" + URLEncoder.encode(clazz.getURI(), "utf-8"));
+                representation.addIncludes(grammars, servletRequest);
             }
-            catch (Exception e)
-            {
-                log.error(e);
-            }
-
-
-            String xsd = URLEncoder.encode(clazz.getURI());
-            include = doc.createElementNS(WADL_NS, "include");
-            grammars.appendChild(include);
-            include.setAttribute("href", servletRequest.getRequestURI() + "?xsd=" + xsd);
         }
     }
 
@@ -1281,7 +1388,7 @@ public final class SemanticClassPublisher extends RestModule
 
     private void showObject(HttpServletRequest request, HttpServletResponse response, SemanticObject obj, String basepath) throws IOException
     {
-        if ("json".equals(request.getParameter("format")))
+        if ("json".equalsIgnoreCase(request.getParameter("format")))
         {
 
             try
@@ -1390,8 +1497,7 @@ public final class SemanticClassPublisher extends RestModule
     private Document serializeAsXML(SemanticObject obj, String basdepath)
     {
         Document doc = SWBUtils.XML.getNewDocument();
-        Element name = doc.createElementNS(obj.getSemanticClass().getURI(), obj.getSemanticClass().getName());
-        name.setAttribute("xmlns:xlink", XLINK_NS);
+        Element name = doc.createElementNS(obj.getSemanticClass().getURI(), obj.getSemanticClass().getName());        
         name.setAttribute("xmlns", obj.getSemanticClass().getURI());
         doc.appendChild(name);
         serialize(obj, name, basdepath);
@@ -1449,9 +1555,10 @@ public final class SemanticClassPublisher extends RestModule
                                 SemanticObject value = values.next();
                                 if (value != null)
                                 {
-                                    Element eprop = doc.createElementNS(obj.getSemanticClass().getURI(), prop.getName());
+                                    Element eprop = doc.createElementNS(obj.getSemanticClass().getURI(), prop.getName());                                    
                                     name.appendChild(eprop);
-                                    eprop.setAttributeNS(XLINK_NS, "xlink:href", getPathForObject(value, basepath));
+                                    eprop.setAttributeNS(REST_RESOURCES_2010, "href", getPathForObject(value, basepath));
+
                                     Text data = doc.createTextNode(value.getURI());
                                     eprop.appendChild(data);
                                 }
@@ -1464,7 +1571,7 @@ public final class SemanticClassPublisher extends RestModule
                             SemanticObject value = obj.getObjectProperty(prop);
                             if (value != null)
                             {
-                                eprop.setAttributeNS(XLINK_NS, "xlink:href", getPathForObject(value, basepath));
+                                eprop.setAttributeNS(REST_RESOURCES_2010, "href", getPathForObject(value, basepath));
                                 Text data = doc.createTextNode(value.getURI());
                                 eprop.appendChild(data);
                             }
@@ -1634,7 +1741,7 @@ public final class SemanticClassPublisher extends RestModule
 
     private void showCreted(HttpServletRequest request, HttpServletResponse response, String uri) throws IOException
     {
-        if ("json".equals(request.getParameter("format")))
+        if ("json".equalsIgnoreCase(request.getParameter("format")))
         {
             try
             {
@@ -1779,7 +1886,7 @@ public final class SemanticClassPublisher extends RestModule
 
     private void showUpdated(HttpServletRequest request, HttpServletResponse response, boolean isUpdated) throws IOException
     {
-        if ("json".equals(request.getParameter("format")))
+        if ("json".equalsIgnoreCase(request.getParameter("format")))
         {
             try
             {
@@ -1827,7 +1934,7 @@ public final class SemanticClassPublisher extends RestModule
 
     private void showDeleted(HttpServletRequest request, HttpServletResponse response, boolean isdeleted) throws IOException
     {
-        if ("json".equals(request.getParameter("format")))
+        if ("json".equalsIgnoreCase(request.getParameter("format")))
         {
             try
             {
@@ -2004,7 +2111,7 @@ public final class SemanticClassPublisher extends RestModule
         schema.setAttributeNode(attr);
 
         schema.setAttribute("xmlns:" + clazz.getPrefix(), clazz.getURI());
-        schema.setAttribute("xmlns:xlink", XLINK_NS);
+        
         schema.setAttribute("xmlns:swbrest", REST_RESOURCES_2010);
         doc.appendChild(schema);
         schema.setPrefix(XSD_PREFIX);
@@ -2142,7 +2249,7 @@ public final class SemanticClassPublisher extends RestModule
         Document doc = SWBUtils.XML.getNewDocument();
         Element schema = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "schema");
         schema.setAttribute("targetNamespace", REST_RESOURCES_2010);
-        schema.setAttribute("xmlns:xlink", XLINK_NS);
+        
         Attr attr = doc.createAttribute("xmlns");
         attr.setValue(REST_RESOURCES_2010);
         schema.setAttributeNode(attr);
@@ -2245,7 +2352,7 @@ public final class SemanticClassPublisher extends RestModule
                         Element attribute = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
                         attribute.setPrefix(XSD_PREFIX);
                         property.appendChild(attribute);
-                        attribute.setAttribute(NAME, "xlink:href");
+                        attribute.setAttribute(NAME, "href");
                         attribute.setAttribute(TYPE, XSD_STRING);
                     }
                 }
@@ -2260,75 +2367,105 @@ public final class SemanticClassPublisher extends RestModule
         {
             Class main = Class.forName(clazz.getClassName());
             Class msgr = getClassManager(main);
+            HashSet<String> names = new HashSet<String>();
             for (Method m : msgr.getDeclaredMethods())
             {
                 if (Modifier.isPublic(m.getModifiers()) && Modifier.isStatic(m.getModifiers()) && (m.getName().startsWith("has") || m.getName().startsWith("list")))
                 {
-                    Class returnType = m.getReturnType();
-                    Element methodElement = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, ELEMENT);
-                    methodElement.setPrefix(XSD_PREFIX);
-                    methodElement.setAttribute(NAME, m.getName());
-                    schema.appendChild(methodElement);
-                    if (returnType instanceof Class && isGenericObject(returnType)) // is GenericObject
+                    String name = m.getName();
+                    if (!names.contains(name))
                     {
-                        // gets SemanticClass;
-                        Field sclass = ((Class) returnType).getField("sclass");
-                        Object objClass = sclass.get(null);
-                        if (objClass instanceof SemanticClass)
+                        names.add(name);
+                        Class returnType = m.getReturnType();
+                        Element methodElement = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, ELEMENT);
+                        methodElement.setPrefix(XSD_PREFIX);
+                        methodElement.setAttribute(NAME, name);
+                        schema.appendChild(methodElement);
+                        if (returnType instanceof Class && isGenericObject(returnType)) // is GenericObject
                         {
-                            SemanticClass returnSemanticClazz = (SemanticClass) objClass;
-                            addProperties(returnSemanticClazz, methodElement, ranges);
-                        }
-                    }
-                    else if (returnType.equals(Iterator.class)) // GenericIterator
-                    {
-                        if (m.getGenericReturnType() instanceof ParameterizedType)
-                        {
-                            if (((ParameterizedType) m.getGenericReturnType()).getActualTypeArguments() != null && ((ParameterizedType) m.getGenericReturnType()).getActualTypeArguments().length > 0)
+                            // gets SemanticClass;
+                            Field sclass = ((Class) returnType).getField("sclass");
+                            Object objClass = sclass.get(null);
+                            if (objClass instanceof SemanticClass)
                             {
-                                Type actual = ((ParameterizedType) m.getGenericReturnType()).getActualTypeArguments()[0];
-                                if (actual instanceof Class)
+                                SemanticClass returnSemanticClazz = (SemanticClass) objClass;
+                                addProperties(returnSemanticClazz, methodElement, ranges);
+                            }
+                        }
+                        else if (returnType.equals(Iterator.class)) // GenericIterator
+                        {
+                            if (m.getGenericReturnType() instanceof ParameterizedType)
+                            {
+                                if (((ParameterizedType) m.getGenericReturnType()).getActualTypeArguments() != null && ((ParameterizedType) m.getGenericReturnType()).getActualTypeArguments().length > 0)
                                 {
-                                    Class _returnType = (Class) actual;
-                                    Field sclass = ((Class) _returnType).getField("sclass");
-                                    Object objClass = sclass.get(null);
-                                    if (objClass instanceof SemanticClass)
+                                    Type actual = ((ParameterizedType) m.getGenericReturnType()).getActualTypeArguments()[0];
+                                    if (actual instanceof Class)
                                     {
-                                        SemanticClass returnSemanticClazz = (SemanticClass) objClass;
-                                        Element complex = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "complexType");
-                                        complex.setPrefix(XSD_PREFIX);
-                                        methodElement.appendChild(complex);
-                                        Element sequence = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "sequence");
-                                        sequence.setPrefix(XSD_PREFIX);
-                                        complex.appendChild(sequence);
-                                        Element child = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, ELEMENT);
-                                        child.setPrefix(XSD_PREFIX);
-                                        child.setAttribute(NAME, returnSemanticClazz.getName());
-                                        child.setAttribute(TYPE, XSD_ANYURI);
-                                        Element shortURI = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
-                                        shortURI.setPrefix(XSD_PREFIX);
-                                        shortURI.setAttribute(NAME, "shortURI");
-                                        shortURI.setAttribute(TYPE, XSD_STRING);
-                                        child.appendChild(shortURI);
+                                        Class _returnType = (Class) actual;
+                                        Field sclass = ((Class) _returnType).getField("sclass");
+                                        Object objClass = sclass.get(null);
+                                        if (objClass instanceof SemanticClass)
+                                        {
+                                            SemanticClass returnSemanticClazz = (SemanticClass) objClass;
+                                            Element complex = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "complexType");
+                                            complex.setPrefix(XSD_PREFIX);
+                                            methodElement.appendChild(complex);
 
-                                        Element href = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
-                                        href.setPrefix(XSD_PREFIX);
-                                        href.setAttribute(NAME, "xlink:href");
-                                        href.setAttribute(TYPE, XSD_STRING);
-                                        child.appendChild(href);
-                                        sequence.appendChild(child);
+                                            Element sequence = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "sequence");
+                                            sequence.setPrefix(XSD_PREFIX);
+                                            complex.appendChild(sequence);
+
+
+
+
+                                            Element child = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, ELEMENT);
+                                            child.setPrefix(XSD_PREFIX);
+                                            child.setAttribute(NAME, returnSemanticClazz.getName());
+                                            child.setAttribute("form", "qualified");
+                                            child.setAttribute("maxOccurs", "unbounded");
+                                            child.setAttribute("minOccurs", "0");
+                                            //child.setAttribute(TYPE, XSD_ANYURI);
+                                            Element complexType = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "complexType");                                            
+                                            child.appendChild(complexType);
+
+                                            Element simpleContent = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "simpleContent");
+                                            simpleContent.setPrefix(XSD_PREFIX);
+                                            complexType.appendChild(simpleContent);
+
+                                            Element extension = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "extension");
+                                            extension.setAttribute("base", XSD_ANYURI);
+                                            extension.setPrefix(XSD_PREFIX);
+                                            simpleContent.appendChild(extension);
+
+
+                                            Element shortURI = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
+                                            shortURI.setPrefix(XSD_PREFIX);
+                                            shortURI.setAttribute("form", "qualified");
+                                            shortURI.setAttribute("use", "required");
+                                            shortURI.setAttribute(NAME, "shortURI");
+                                            shortURI.setAttribute(TYPE, XSD_STRING);
+                                            extension.appendChild(shortURI);
+
+                                            Element href = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
+                                            href.setPrefix(XSD_PREFIX);
+                                            href.setAttribute("form", "qualified");
+                                            href.setAttribute("use", "required");
+                                            href.setAttribute(NAME, "href");
+                                            href.setAttribute(TYPE, XSD_STRING);
+                                            extension.appendChild(href);
+                                            sequence.appendChild(child);
+                                        }
                                     }
                                 }
+
                             }
-
                         }
-
-                    }
-                    else
-                    {
-                        if (returnType instanceof Class)
+                        else
                         {
-                            methodElement.setAttribute(TYPE, classToxsd((Class) returnType));
+                            if (returnType instanceof Class)
+                            {
+                                methodElement.setAttribute(TYPE, classToxsd((Class) returnType));
+                            }
                         }
                     }
                 }

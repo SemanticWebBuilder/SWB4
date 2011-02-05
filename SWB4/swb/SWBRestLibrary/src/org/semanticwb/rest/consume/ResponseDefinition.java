@@ -6,6 +6,8 @@ package org.semanticwb.rest.consume;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.StringReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
@@ -51,7 +53,9 @@ public final class ResponseDefinition
             if(elementDefinition!=null && docschema!=null)
             {
                 SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-                StringReader reader = new StringReader(SWBUtils.XML.domToXml(docschema));
+                Charset charset=Charset.defaultCharset();
+                String schemafile=SWBUtils.XML.domToXml(docschema,charset.name(),true);
+                StringReader reader = new StringReader(schemafile);
                 Source schemaFile = new StreamSource(reader);
                 try
                 {

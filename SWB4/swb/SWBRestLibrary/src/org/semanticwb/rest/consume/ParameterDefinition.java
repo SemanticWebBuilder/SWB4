@@ -67,7 +67,19 @@ public class ParameterDefinition {
             if(atts.item(i) instanceof Attr)
             {
                 Attr attr=(Attr)atts.item(i);
-                if(attr.getPrefix()!=null && attr.getPrefix().equals("xmlns"))
+                String name=attr.getName();
+                int pos=name.indexOf(":");
+                if(pos!=-1)
+                {
+                    String ns=attr.getValue();
+                    String prefix=name.substring(0,pos);
+                    name=name.substring(pos+1);
+                    if(prefix.equals("xmlns") && targetNamespace.equals(ns))
+                    {
+                        return name;
+                    }
+                }
+                /*if(attr.getPrefix()!=null && attr.getPrefix().equals("xmlns"))
                 {
                     String prefix=attr.getLocalName();
                     String ns=attr.getValue();
@@ -75,7 +87,7 @@ public class ParameterDefinition {
                     {
                         return prefix;
                     }
-                }
+                }*/
             }
 
         }
