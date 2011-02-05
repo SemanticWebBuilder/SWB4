@@ -89,7 +89,27 @@ public class RecUser implements WBDBRecord, java.io.Serializable {
 
     public RecUser(org.semanticwb.model.User user)
     {
+        this(user.getUserRepository().getId());
         usr = user;
+        this.id = Long.parseLong(user.getId());
+        this.login = user.getLogin();
+        this.password = user.getPassword();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.middleName = user.getSecondLastName();
+        this.language = user.getLanguage();
+        this.email = user.getEmail();
+        this.active = user.isActive()?1:0;
+        this.lastLogin = user.getLastLogin()!=null?new Timestamp(user.getLastLogin().getTime()):null;
+        this.passwordChanged = user.getPasswordChanged()!=null?new Timestamp(user.getPasswordChanged().getTime()):null;
+        //this.confirmValue = confirmValue;
+        this.created = user.getCreated()!=null?new Timestamp(user.getCreated().getTime()):null;
+        //this.home = home;
+        //this.xml = xml;
+        this.lastupdate = user.getUpdated()!=null?new Timestamp(user.getUpdated().getTime()):null;
+
+        rolesLoaded = false;
+        admFiltersLoaded = false;
     }
 
     public org.semanticwb.model.User getNative()
