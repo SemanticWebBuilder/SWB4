@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.rest.consume;
 
 import java.io.IOException;
@@ -19,43 +18,45 @@ import org.w3c.dom.NodeList;
  *
  * @author victor.lorenzana
  */
-public abstract class RepresentationBase implements RepresentationRequest {
+public abstract class RepresentationBase implements RepresentationRequest
+{
+
     public static final String ORG_SEMANTICWB_REST_REPRESENTATIONBASE = "org.semanticwb.rest.RepresentationBase/";
     protected static final String CONTENT_TYPE = "Content-Type";
-    protected final Set<Parameter> parameters=new HashSet<Parameter>();
+    protected final Set<Parameter> parameters = new HashSet<Parameter>();
     //protected String mediaType;
     protected Method method;
     protected ResponseDefinition responseDefinition;
-   
+
     protected RepresentationBase()
     {
-        
     }
-    static RepresentationRequest createRepresenatationRequest(Element representation,Method method) throws RestException
+
+    static RepresentationRequest createRepresenatationRequest(Element representation, Method method) throws RestException
     {
-        String mediaType=representation.getAttribute("mediaType");
-        if(mediaType==null)
+        String mediaType = representation.getAttribute("mediaType");
+        if (mediaType == null)
         {
             throw new RestException("The mediaType atributo was not found");
         }
-        
+
         try
         {
 
-            Class<RepresentationRequest> repclass=RestSource.getRepresentationRequest(mediaType);
-            if(repclass!=null)
+            Class<RepresentationRequest> repclass = RestSource.getRepresentationRequest(mediaType);
+            if (repclass != null)
             {
-                Object objrep=repclass.newInstance();
-                if(objrep instanceof RepresentationRequest)
+                Object objrep = repclass.newInstance();
+                if (objrep instanceof RepresentationRequest)
                 {
-                    RepresentationRequest representationInfo=(RepresentationRequest)objrep;
+                    RepresentationRequest representationInfo = (RepresentationRequest) objrep;
                     representationInfo.setMethod(method);
-                    NodeList params=representation.getChildNodes();
-                    for(int i=0;i<params.getLength();i++)
+                    NodeList params = representation.getChildNodes();
+                    for (int i = 0; i < params.getLength(); i++)
                     {
-                        if(params.item(i) instanceof Element && ((Element)params.item(i)).getTagName().equals("param"))
+                        if (params.item(i) instanceof Element && ((Element) params.item(i)).getTagName().equals("param"))
                         {
-                            Parameter param=Parameter.createParamterInfo((Element)params.item(i));
+                            Parameter param = Parameter.createParamterInfo((Element) params.item(i));
                             representationInfo.addParameter(param);
                         }
                     }
@@ -63,98 +64,104 @@ public abstract class RepresentationBase implements RepresentationRequest {
                 }
                 else
                 {
-                    throw new RestException("The representatin "+ mediaType +" is not supported");
+                    throw new RestException("The representatin " + mediaType + " is not supported");
                 }
             }
             else
             {
-                throw new RestException("The representatin "+ mediaType +" is not supported");
+                throw new RestException("The representatin " + mediaType + " is not supported");
             }
         }
-        catch(IllegalAccessException cnfe)
+        catch (IllegalAccessException cnfe)
         {
-            throw new RestException("The representatin "+ mediaType +" is not supported", cnfe);
+            throw new RestException("The representatin " + mediaType + " is not supported", cnfe);
         }
-        catch(InstantiationException cnfe)
+        catch (InstantiationException cnfe)
         {
-            throw new RestException("The representatin "+ mediaType +" is not supported", cnfe);
-        }         
-    }    
+            throw new RestException("The representatin " + mediaType + " is not supported", cnfe);
+        }
+    }
+
     public Method getMethod()
     {
         return method;
     }
-    private boolean exists(String parameterName,List<ParameterValue> values) throws RestException
+
+    private boolean exists(String parameterName, List<ParameterValue> values) throws RestException
     {
-        for(ParameterValue value : values)
+        for (ParameterValue value : values)
         {
-            if(parameterName.equals(value.getName()) && value.getValue()!=null)
+            if (parameterName.equals(value.getName()) && value.getValue() != null)
             {
                 return true;
             }
         }
         return false;
     }
-    private void valid(Parameter parameter,ParameterValue value) throws RestException
+
+    private void valid(Parameter parameter, ParameterValue value) throws RestException
     {
-        if(value.getValue()==null)
+        if (value.getValue() == null)
         {
             throw new RestException("The value is null");
         }
-        if(!value.getValue().getClass().equals(parameter.getType()))
+        if (!value.getValue().getClass().equals(parameter.getType()))
         {
-            throw new RestException("Value invalid required :"+ parameter.getType().getName() +" value type: "+value.getValue().getClass().getName());
-        }        
-        
+            throw new RestException("Value invalid required :" + parameter.getType().getName() + " value type: " + value.getValue().getClass().getName());
+        }
+
     }
-    private void valid(Parameter parameter,List<ParameterValue> values) throws RestException
+
+    private void valid(Parameter parameter, List<ParameterValue> values) throws RestException
     {
-        for(ParameterValue value : values)
+        for (ParameterValue value : values)
         {
-            if(value==null)
+            if (value == null)
             {
                 throw new RestException("The value is null");
             }
-            if(parameter.getName().equals(value.getName()))
+            if (parameter.getName().equals(value.getName()))
             {
                 valid(parameter, value);
             }
-        }        
+        }
     }
+
     public void checkParameters(List<ParameterValue> values) throws RestException
     {
-        for(Parameter parameter : this.getRequiredParameters())
+        for (Parameter parameter : this.getRequiredParameters())
         {
-            if(!exists(parameter.getName(), values))
+            if (!exists(parameter.getName(), values))
             {
-                throw new RestException("The parameter "+parameter.getName()+" was not found");
+                throw new RestException("The parameter " + parameter.getName() + " was not found");
             }
             valid(parameter, values);
         }
-        for(Parameter parameter : this.getOptionalParameters())
+        for (Parameter parameter : this.getOptionalParameters())
         {
             valid(parameter, values);
         }
 
-        for(Parameter parameter : this.method.getRequiredParameters())
+        for (Parameter parameter : this.method.getRequiredParameters())
         {
-            if(!exists(parameter.getName(), values))
+            if (!exists(parameter.getName(), values))
             {
-                throw new RestException("The parameter "+parameter.getName()+" was not found");
+                throw new RestException("The parameter " + parameter.getName() + " was not found");
             }
             valid(parameter, values);
         }
-        for(Parameter parameter : this.method.getOptionalParameters())
+        for (Parameter parameter : this.method.getOptionalParameters())
         {
             valid(parameter, values);
         }
     }
+
     public Parameter[] getRequiredParameters()
     {
-        ArrayList<Parameter> getRequiredParameters=new ArrayList<Parameter>();
-        for(Parameter p : parameters)
+        ArrayList<Parameter> getRequiredParameters = new ArrayList<Parameter>();
+        for (Parameter p : parameters)
         {
-            if(p.isRequired() && !p.isFixed())
+            if (p.isRequired() && !p.isFixed())
             {
                 getRequiredParameters.add(p);
             }
@@ -162,12 +169,13 @@ public abstract class RepresentationBase implements RepresentationRequest {
         getRequiredParameters.addAll(Arrays.asList(method.getRequiredParameters()));
         return getRequiredParameters.toArray(new Parameter[getRequiredParameters.size()]);
     }
+
     public Parameter[] getOptionalParameters()
     {
-        ArrayList<Parameter> getOptionalParameters=new ArrayList<Parameter>();
-        for(Parameter p : parameters)
+        ArrayList<Parameter> getOptionalParameters = new ArrayList<Parameter>();
+        for (Parameter p : parameters)
         {
-            if(!p.isRequired() && !p.isFixed())
+            if (!p.isRequired() && !p.isFixed())
             {
                 getOptionalParameters.add(p);
             }
@@ -178,48 +186,48 @@ public abstract class RepresentationBase implements RepresentationRequest {
 
     public Parameter[] getAllParameters()
     {
-        ArrayList<Parameter> getAllParameters=new ArrayList<Parameter>();
+        ArrayList<Parameter> getAllParameters = new ArrayList<Parameter>();
         getAllParameters.addAll(parameters);
         getAllParameters.addAll(Arrays.asList(method.getOptionalParameters()));
         return getAllParameters.toArray(new Parameter[getAllParameters.size()]);
     }
-    protected RepresentationResponse processResponse(HttpURLConnection con) throws IOException,InstantiationException,IllegalAccessException,RestException,ExecutionRestException
+
+    protected RepresentationResponse processResponse(HttpURLConnection con) throws IOException, InstantiationException, IllegalAccessException, RestException, ExecutionRestException
     {
         int responseCode = con.getResponseCode();
-            if (con.getHeaderField(CONTENT_TYPE) != null)
+        if (con.getHeaderField(CONTENT_TYPE) != null)
+        {
+            String mediaType = con.getHeaderField(CONTENT_TYPE);
+            for (ResponseDefinition definition : method.getResponseDefinitions())
             {
-                String mediaType = con.getHeaderField(CONTENT_TYPE);
-                for (ResponseDefinition definition : method.getResponseDefinitions())
+                if (definition.getMediaType().equals(mediaType) && definition.getStatus() == responseCode)
                 {
-                    if (definition.getMediaType().equals(mediaType) && definition.getStatus() == responseCode)
+                    Class clazz = RestSource.getRepresentationResponse(mediaType);
+                    Object obj = clazz.newInstance();
+                    if (obj instanceof RepresentationResponse)
                     {
-                        Class clazz = RestSource.getRepresentationResponse(mediaType);
-                        Object obj = clazz.newInstance();
-                        if (obj instanceof RepresentationResponse)
+                        RepresentationResponse repResponse = (RepresentationResponse) obj;
+                        repResponse.setMethod(method);
+                        repResponse.setStatus(responseCode);
+                        repResponse.setURL(con.getURL());
+                        repResponse.process(con);
+                        for (ResponseDefinition def : this.method.definitionResponses)
                         {
-                            RepresentationResponse repResponse = (RepresentationResponse) obj;
-                            repResponse.setMethod(method);
-                            repResponse.setStatus(responseCode);
-                            repResponse.setURL(con.getURL());
-                            repResponse.process(con);
-                            for (ResponseDefinition def : this.method.definitionResponses)
+                            if (def.getMediaType().equals(con.getHeaderField(CONTENT_TYPE)))
                             {
-                                if (def.getMediaType().equals(con.getHeaderField(CONTENT_TYPE)))
-                                {
-                                    def.validateResponse(repResponse.getResponse());
-                                }
+                                def.validateResponse(repResponse.getResponse());
+                                return repResponse;
                             }
-                            return repResponse;
                         }
+                        
                     }
                 }
-                throw new ExecutionRestException(this.getMethod().getHTTPMethod(), con.getURL(), "The response "+mediaType+" is not supported");
             }
-            else
-            {
-                throw new ExecutionRestException(this.getMethod().getHTTPMethod(), con.getURL(), "The content-type was not found");
-            }
+            throw new ExecutionRestException(this.getMethod().getHTTPMethod(), con.getURL(), "The response " + mediaType + " is not supported");
+        }
+        else
+        {
+            throw new ExecutionRestException(this.getMethod().getHTTPMethod(), con.getURL(), "The content-type was not found");
+        }
     }
-    
-
 }

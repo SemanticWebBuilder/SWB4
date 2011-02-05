@@ -82,20 +82,14 @@ public final class Method
                     {
                         Element representation = (Element) childs.item(i);
                         RepresentationRequest rep = RepresentationBase.createRepresenatationRequest(representation, m);
-                        if (m.defaultRequestRepresentation == null)
-                        {
-                            m.defaultRequestRepresentation = rep;
-                        }
+                        m.requests.add(rep);
                     }
                 }
             }
         }
-        if (m.defaultRequestRepresentation == null)
-        {
-            XWWWFormUrlEncoded _default = new XWWWFormUrlEncoded();
-            _default.setMethod(m);
-            m.defaultRequestRepresentation = _default;
-        }
+        
+
+
         NodeList listResponse = method.getElementsByTagNameNS(method.getNamespaceURI(), "response");
         for (int i = 0; i < listResponse.getLength(); i++)
         {
@@ -105,6 +99,40 @@ public final class Method
                 ResponseDefinition[] definitions = ResponseDefinition.createResponseDefinition(response, m);
                 m.definitionResponses.addAll(Arrays.asList(definitions));
             }
+        }
+
+        if (m.getRequestRepresentations().length > 0)
+        {
+            if (m.getRequestRepresentations().length == 1)
+            {
+                m.defaultRequestRepresentation = m.getRequestRepresentations()[0];
+            }
+            else
+            {
+                for (RepresentationRequest repRequest : m.getRequestRepresentations())
+                {
+                    if (repRequest.getMediaType().equals("application/xml"))
+                    {
+                        m.defaultRequestRepresentation = repRequest;
+                    }
+                }
+                if (m == null)
+                {
+                    for (RepresentationRequest repRequest : m.getRequestRepresentations())
+                    {
+                        if (repRequest.getMediaType().equals("application/json"))
+                        {
+                            m.defaultRequestRepresentation = repRequest;
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            XWWWFormUrlEncoded _default = new XWWWFormUrlEncoded();
+            _default.setMethod(m);
+            m.defaultRequestRepresentation = _default;
         }
         return m;
     }

@@ -394,9 +394,10 @@ public class ApplicationXML extends RepresentationBase implements Representation
                 if (node instanceof org.jdom.Element)
                 {
                     String prefixXlink = "xlink";
-
+                    Charset charset=Charset.defaultCharset();                    
+                    String ns=document.getDocumentElement().getNamespaceURI();
                     org.jdom.Element e = (org.jdom.Element) node;
-                    Namespace nslink = Namespace.getNamespace(prefixXlink, RestPublish.XLINK_NS);
+                    Namespace nslink = Namespace.getNamespace(prefixXlink, ns);
                     org.jdom.Attribute attjdom = e.getAttribute("href", nslink);
                     if (attjdom != null)
                     {

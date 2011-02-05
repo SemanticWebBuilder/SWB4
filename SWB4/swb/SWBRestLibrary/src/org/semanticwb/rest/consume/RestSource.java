@@ -23,10 +23,13 @@ public class RestSource
     private final URL wadlurl;    
     static
     {
+        addRepresentationRequest(JSON.APPLICATION_JSON, (Class<RepresentationRequest>)JSON.class.asSubclass(RepresentationRequest.class));
+        addRepresentationRequest(ApplicationXML.APPLICATION_XML, (Class<RepresentationRequest>)ApplicationXML.class.asSubclass(RepresentationRequest.class));
         addRepresentationRequest(AtomXML.APPLICATION_ATOM_XML, (Class<RepresentationRequest>)AtomXML.class.asSubclass(RepresentationRequest.class));
         addRepresentationRequest(MultipartFormData.MULTIPART_FORM_DATA, (Class<RepresentationRequest>)MultipartFormData.class.asSubclass(RepresentationRequest.class));
         addRepresentationRequest(XWWWFormUrlEncoded.APPLICATION_XWWW_FORM_URL_ENCODED, (Class<RepresentationRequest>)XWWWFormUrlEncoded.class.asSubclass(RepresentationRequest.class));
 
+        addRepresentationResponse(JSON.APPLICATION_JSON, (Class<RepresentationResponse>)JSON.class.asSubclass(RepresentationResponse.class));
         addRepresentationResponse(ApplicationXML.APPLICATION_XML, (Class<RepresentationResponse>)ApplicationXML.class.asSubclass(RepresentationResponse.class));
         addRepresentationResponse(AtomXML.APPLICATION_ATOM_XML, (Class<RepresentationResponse>)AtomXML.class.asSubclass(RepresentationResponse.class));
 

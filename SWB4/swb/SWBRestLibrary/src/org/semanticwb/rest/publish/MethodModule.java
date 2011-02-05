@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package org.semanticwb.rest.consume;
+package org.semanticwb.rest.publish;
 
 import org.semanticwb.rest.util.HTTPMethod;
 import java.io.IOException;

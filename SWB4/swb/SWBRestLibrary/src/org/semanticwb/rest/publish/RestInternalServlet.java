@@ -26,18 +26,18 @@ public class RestInternalServlet implements InternalServlet{
     RestManager manager=new RestManager("rest");
     public void init(ServletContext config) throws ServletException
     {
-        /*SemanticClassPublisher module=new SemanticClassPublisher();
+        SemanticClassPublisher module=new SemanticClassPublisher();
         
         try
         {
-            module.addSemanticClass(new URI("http://www.semanticwebbuilder.org/swb4/community#Clasified"));
-            module.addSemanticClass(new URI("http://www.semanticwebbuilder.org/swb4/community#EventElement"));
+            module.addSemanticClass(new URI("http://www.semanticwebbuilder.org/swb4/community#Clasified"),RepresentationMediaType.JSON,RepresentationMediaType.XML);
+            module.addSemanticClass(new URI("http://www.semanticwebbuilder.org/swb4/community#EventElement"),RepresentationMediaType.JSON,RepresentationMediaType.XML);
         }
         catch(Exception e)
         {
             log.debug(e);
         }
-        RestManager.addModule("so",module);*/
+        RestManager.addModule("so",module);
     }
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
