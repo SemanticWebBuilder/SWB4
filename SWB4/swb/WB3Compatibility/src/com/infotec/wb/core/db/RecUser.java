@@ -91,7 +91,7 @@ public class RecUser implements WBDBRecord, java.io.Serializable {
     {
         this(user.getUserRepository().getId());
         usr = user;
-        this.id = Long.parseLong(user.getId());
+        this.id = user.getId()!=null?Long.parseLong(user.getId()):0;
         this.login = user.getLogin();
         this.password = user.getPassword();
         this.firstName = user.getFirstName();
