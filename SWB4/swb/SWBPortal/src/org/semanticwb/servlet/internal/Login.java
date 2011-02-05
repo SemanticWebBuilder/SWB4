@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.net.SocketException;
 import java.util.Iterator;
 import java.security.Principal;
 import javax.security.auth.Subject;
@@ -136,6 +137,33 @@ public class Login implements InternalServlet
             logbuf.append("|");
             logbuf.append("" + request.getSession(true).hashCode());
             SWBPortal.getMessageCenter().sendMessage(logbuf.toString());
+        }
+    }
+
+    public static void sendMailLog(HttpServletRequest request, User usr)
+    {
+        StringBuffer logbuf =  new StringBuffer();
+        if ("es".equals(usr.getLanguage())){
+            logbuf.append(usr.getFullName());
+            logbuf.append("\nLe informamos que se ha firmado el ");
+            logbuf.append(new java.util.Date());
+            logbuf.append(" desde la IP:");
+            logbuf.append(request.getRemoteAddr());
+            logbuf.append(" al sitio:");
+            logbuf.append(request.getServerName());
+        }else{
+            logbuf.append(usr.getFullName());
+            logbuf.append("\nWe inform you that you have logged in the ");
+            logbuf.append(new java.util.Date());
+            logbuf.append(" from IP:");
+            logbuf.append(request.getRemoteAddr());
+            logbuf.append(" to site:");
+            logbuf.append(request.getServerName());
+        }
+        try {
+            SWBUtils.EMAIL.sendBGEmail(usr.getEmail(), request.getServerName(), logbuf.toString());
+        } catch (java.net.SocketException sex) {
+            log.error(sex);
         }
     }
 
@@ -718,6 +746,10 @@ public class Login implements InternalServlet
         }
         if(null==user.getLanguage()) user.setLanguage("es"); //forzar lenguage si no se dio de alta.
         cleanBlockedEntry(matchKey);
+        if (SWBPlatform.getSecValues().isSendMail())
+        {
+            sendMailLog(request, user);
+        }
         sendLoginLog(request, user);
     }
 
