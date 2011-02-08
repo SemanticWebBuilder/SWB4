@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -394,8 +395,8 @@ public class ApplicationXML extends RepresentationBase implements Representation
                 if (node instanceof org.jdom.Element)
                 {
                     String prefixXlink = "xlink";
-                    Charset charset=Charset.defaultCharset();                    
-                    String ns=document.getDocumentElement().getNamespaceURI();
+                    Charset charset = Charset.defaultCharset();
+                    String ns = document.getDocumentElement().getNamespaceURI();
                     org.jdom.Element e = (org.jdom.Element) node;
                     Namespace nslink = Namespace.getNamespace(prefixXlink, ns);
                     org.jdom.Attribute attjdom = e.getAttribute("href", nslink);
@@ -437,7 +438,7 @@ public class ApplicationXML extends RepresentationBase implements Representation
                     String scharset = contentType.substring(pos + 8).trim();
                     charset = Charset.forName(scharset);
                 }
-            }            
+            }
             InputStreamReader reader = new InputStreamReader(con.getInputStream(), charset);
             DOMOutputter out = new DOMOutputter();
             SAXBuilder builder = new SAXBuilder();
@@ -457,94 +458,243 @@ public class ApplicationXML extends RepresentationBase implements Representation
     protected Document constructParameters(List<ParameterValue> values) throws RestException
     {
         Document doc = SWBUtils.XML.getNewDocument();
-        Element feed = doc.createElementNS(APPLICATION_NS, "feed");
+        /*Element feed = doc.createElementNS(APPLICATION_NS, "feed");
         doc.appendChild(feed);
         try
         {
-            for (Parameter parameter : this.getRequiredParameters())
-            {
-                for (ParameterValue pvalue : values)
-                {
-                    if (pvalue.getName().equals(parameter.getName()))
-                    {
-                        Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
-                        Text data = doc.createTextNode(pvalue.getValue().toString());
-                        eparam.appendChild(data);
-                    }
-                }
-            }
-            for (Parameter parameter : this.getOptionalParameters())
-            {
-                for (ParameterValue pvalue : values)
-                {
-                    if (pvalue.getName().equals(parameter.getName()))
-                    {
-                        Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
-                        Text data = doc.createTextNode(pvalue.getValue().toString());
-                        eparam.appendChild(data);
-                    }
-                }
-            }
-            for (Parameter parameter : this.parameters)
-            {
-                if (parameter.isFixed())
-                {
-                    Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
-                    Text data = doc.createTextNode(parameter.getFixedValue());
-                    eparam.appendChild(data);
-                }
-            }
+        for (Parameter parameter : this.getRequiredParameters())
+        {
+        for (ParameterValue pvalue : values)
+        {
+        if (pvalue.getName().equals(parameter.getName()))
+        {
+        Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
+        Text data = doc.createTextNode(pvalue.getValue().toString());
+        eparam.appendChild(data);
+        }
+        }
+        }
+        for (Parameter parameter : this.getOptionalParameters())
+        {
+        for (ParameterValue pvalue : values)
+        {
+        if (pvalue.getName().equals(parameter.getName()))
+        {
+        Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
+        Text data = doc.createTextNode(pvalue.getValue().toString());
+        eparam.appendChild(data);
+        }
+        }
+        }
+        for (Parameter parameter : this.parameters)
+        {
+        if (parameter.isFixed())
+        {
+        Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
+        Text data = doc.createTextNode(parameter.getFixedValue());
+        eparam.appendChild(data);
+        }
+        }
 
 
-            for (Parameter parameter : this.method.getRequiredParameters())
-            {
-                for (ParameterValue pvalue : values)
-                {
-                    if (pvalue.getName().equals(parameter.getName()))
-                    {
-                        Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
-                        Text data = doc.createTextNode(pvalue.getValue().toString());
-                        eparam.appendChild(data);
-                    }
-                }
-            }
-            for (Parameter parameter : this.method.getOptionalParameters())
-            {
-                for (ParameterValue pvalue : values)
-                {
-                    if (pvalue.getName().equals(parameter.getName()))
-                    {
-                        Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
-                        Text data = doc.createTextNode(pvalue.getValue().toString());
-                        eparam.appendChild(data);
-                    }
-                }
-            }
-            for (Parameter parameter : this.method.getAllParameters())
-            {
-                if (parameter.isFixed())
-                {
-                    Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
-                    Text data = doc.createTextNode(parameter.getFixedValue());
-                    eparam.appendChild(data);
-                }
-            }
+        for (Parameter parameter : this.method.getRequiredParameters())
+        {
+        for (ParameterValue pvalue : values)
+        {
+        if (pvalue.getName().equals(parameter.getName()))
+        {
+        Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
+        Text data = doc.createTextNode(pvalue.getValue().toString());
+        eparam.appendChild(data);
+        }
+        }
+        }
+        for (Parameter parameter : this.method.getOptionalParameters())
+        {
+        for (ParameterValue pvalue : values)
+        {
+        if (pvalue.getName().equals(parameter.getName()))
+        {
+        Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
+        Text data = doc.createTextNode(pvalue.getValue().toString());
+        eparam.appendChild(data);
+        }
+        }
+        }
+        for (Parameter parameter : this.method.getAllParameters())
+        {
+        if (parameter.isFixed())
+        {
+        Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
+        Text data = doc.createTextNode(parameter.getFixedValue());
+        eparam.appendChild(data);
+        }
+        }
 
         }
         catch (Exception e)
         {
-            log.debug(e);
-            throw new RestException(e);
-        }
+        log.debug(e);
+        throw new RestException(e);
+        }*/
         return doc;
+    }
+
+    private String constructParametersToURL(List<ParameterValue> values) throws RestException
+    {
+        StringBuilder sb = new StringBuilder();
+        for (ParameterValue pvalue : values)
+        {
+
+            try
+            {
+                sb.append(pvalue.getName());
+                sb.append("=");
+                sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
+                sb.append("&");
+            }
+            catch (Exception e)
+            {
+                log.debug(e);
+                throw new RestException(e);
+            }
+
+        }
+
+        for (Parameter parameter : this.parameters)
+        {
+            if (parameter.isFixed())
+            {
+                try
+                {
+                    sb.append(parameter.getName());
+                    sb.append("=");
+                    sb.append(URLEncoder.encode(parameter.getFixedValue(), "utf-8"));
+                    sb.append("&");
+                }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                    throw new RestException(e);
+                }
+            }
+        }
+
+        for (Parameter parameter : this.method.getAllParameters())
+        {
+            if (parameter.isFixed())
+            {
+                try
+                {
+                    sb.append(parameter.getName());
+                    sb.append("=");
+                    sb.append(URLEncoder.encode(parameter.getFixedValue(), "utf-8"));
+                    sb.append("&");
+                }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                    throw new RestException(e);
+                }
+            }
+        }
+
+
+        /*try
+        {
+        for (Parameter parameter : this.getRequiredParameters())
+        {
+        for (ParameterValue pvalue : values)
+        {
+        if (pvalue.getName().equals(parameter.getName()))
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
+        sb.append("&");
+        }
+        }
+        }
+        for (Parameter parameter : this.getOptionalParameters())
+        {
+        for (ParameterValue pvalue : values)
+        {
+        if (pvalue.getName().equals(parameter.getName()))
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
+        sb.append("&");
+        }
+        }
+        }
+        for (Parameter parameter : this.parameters)
+        {
+        if (parameter.isFixed())
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(parameter.getFixedValue(), "utf-8"));
+        sb.append("&");
+        }
+        }
+
+
+        for (Parameter parameter : this.method.getRequiredParameters())
+        {
+        for (ParameterValue pvalue : values)
+        {
+        if (pvalue.getName().equals(parameter.getName()))
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
+        sb.append("&");
+        }
+        }
+        }
+        for (Parameter parameter : this.method.getOptionalParameters())
+        {
+        for (ParameterValue pvalue : values)
+        {
+        if (pvalue.getName().equals(parameter.getName()))
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
+        sb.append("&");
+        }
+        }
+        }
+        for (Parameter parameter : this.method.getAllParameters())
+        {
+        if (parameter.isFixed())
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(parameter.getFixedValue(), "utf-8"));
+        sb.append("&");
+        }
+        }
+
+        }
+        catch (Exception e)
+        {
+        log.debug(e);
+        throw new RestException(e);
+        }*/
+        return sb.toString();
     }
 
     public RepresentationResponse request(List<ParameterValue> values) throws RestException
     {
         checkParameters(values);
         URL _url = this.getMethod().getResource().getPath();
+        String _parameters = constructParametersToURL(values);
+
         try
         {
+            _url = new URL(_url.toString() + "?" + _parameters);
             HttpURLConnection con = (HttpURLConnection) _url.openConnection();
             con.setRequestMethod(this.getMethod().getHTTPMethod().toString());
             String charset = Charset.defaultCharset().name();
