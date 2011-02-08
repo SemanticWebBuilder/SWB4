@@ -1,730 +1,644 @@
-/**  
- * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
- * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
- * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
- * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
- * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
- * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
- *
- * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
- * del SemanticWebBuilder 4.0.
- *
- * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
- *  http://www.semanticwebbuilder.org
- **/
 package org.semanticwb.portal.resources.sem.forum.base;
 
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class ThreadBase.
- */
-public abstract class ThreadBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Expirable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Viewable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.Indexable,org.semanticwb.model.Undeleteable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Hiddenable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.model.Searchable,org.semanticwb.model.Rankable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.model.Tagable,org.semanticwb.model.Traceable
+public abstract class ThreadBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Localeable,org.semanticwb.model.Activeable,org.semanticwb.model.Rankable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Indexable,org.semanticwb.model.Resourceable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Traceable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Expirable,org.semanticwb.model.Tagable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Viewable,org.semanticwb.model.Searchable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Undeleteable,org.semanticwb.model.RoleRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Filterable
 {
-    
-    /** The Constant swb_User. */
+   /**
+   * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
+   */
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
-    
-    /** The Constant frm_thLastPostMember. */
     public static final org.semanticwb.platform.SemanticProperty frm_thLastPostMember=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#thLastPostMember");
-    
-    /** The Constant frm_SWBForum. */
     public static final org.semanticwb.platform.SemanticClass frm_SWBForum=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#SWBForum");
-    
-    /** The Constant frm_thForum. */
     public static final org.semanticwb.platform.SemanticProperty frm_thForum=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#thForum");
-    
-    /** The Constant frm_thViewCount. */
     public static final org.semanticwb.platform.SemanticProperty frm_thViewCount=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#thViewCount");
-    
-    /** The Constant frm_thReplyCount. */
     public static final org.semanticwb.platform.SemanticProperty frm_thReplyCount=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#thReplyCount");
-    
-    /** The Constant frm_UserFavThread. */
     public static final org.semanticwb.platform.SemanticClass frm_UserFavThread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#UserFavThread");
-    
-    /** The Constant frm_hasUserFavThread. */
     public static final org.semanticwb.platform.SemanticProperty frm_hasUserFavThread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#hasUserFavThread");
-    
-    /** The Constant frm_thLastPostDate. */
     public static final org.semanticwb.platform.SemanticProperty frm_thLastPostDate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#thLastPostDate");
-    
-    /** The Constant frm_thBody. */
     public static final org.semanticwb.platform.SemanticProperty frm_thBody=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#thBody");
-    
-    /** The Constant frm_Attachment. */
     public static final org.semanticwb.platform.SemanticClass frm_Attachment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#Attachment");
-    
-    /** The Constant frm_hasThAttachments. */
     public static final org.semanticwb.platform.SemanticProperty frm_hasThAttachments=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#hasThAttachments");
-    
-    /** The Constant frm_Post. */
     public static final org.semanticwb.platform.SemanticClass frm_Post=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#Post");
-    
-    /** The Constant frm_hasPost. */
     public static final org.semanticwb.platform.SemanticProperty frm_hasPost=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#hasPost");
-    
-    /** The Constant frm_Thread. */
     public static final org.semanticwb.platform.SemanticClass frm_Thread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#Thread");
-    
-    /** The Constant sclass. */
+   /**
+   * The semantic class that represents the currentObject
+   */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#Thread");
 
-    /**
-     * The Class ClassMgr.
-     */
     public static class ClassMgr
     {
+       /**
+       * Returns a list of Thread for a model
+       * @param model Model to find
+       * @return Iterator of org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List threads.
-         * 
-         * @param model the model
-         * @return the java.util. iterator
-         */
         public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreads(org.semanticwb.model.SWBModel model)
         {
             java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
             return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread>(it, true);
         }
+       /**
+       * Returns a list of org.semanticwb.portal.resources.sem.forum.Thread for all models
+       * @return Iterator of org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List threads.
-         * 
-         * @return the java.util. iterator
-         */
         public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreads()
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread>(it, true);
         }
 
-        /**
-         * Creates the thread.
-         * 
-         * @param model the model
-         * @return the org.semanticwb.portal.resources.sem.forum. thread
-         */
         public static org.semanticwb.portal.resources.sem.forum.Thread createThread(org.semanticwb.model.SWBModel model)
         {
             long id=model.getSemanticObject().getModel().getCounter(sclass);
             return org.semanticwb.portal.resources.sem.forum.Thread.ClassMgr.createThread(String.valueOf(id), model);
         }
-
-        /**
-         * Gets the thread.
-         * 
-         * @param id the id
-         * @param model the model
-         * @return the thread
-         */
+       /**
+       * Gets a org.semanticwb.portal.resources.sem.forum.Thread
+       * @param id Identifier for org.semanticwb.portal.resources.sem.forum.Thread
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return A org.semanticwb.portal.resources.sem.forum.Thread
+       */
         public static org.semanticwb.portal.resources.sem.forum.Thread getThread(String id, org.semanticwb.model.SWBModel model)
         {
             return (org.semanticwb.portal.resources.sem.forum.Thread)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
-
-        /**
-         * Creates the thread.
-         * 
-         * @param id the id
-         * @param model the model
-         * @return the org.semanticwb.portal.resources.sem.forum. thread
-         */
+       /**
+       * Create a org.semanticwb.portal.resources.sem.forum.Thread
+       * @param id Identifier for org.semanticwb.portal.resources.sem.forum.Thread
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return A org.semanticwb.portal.resources.sem.forum.Thread
+       */
         public static org.semanticwb.portal.resources.sem.forum.Thread createThread(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.portal.resources.sem.forum.Thread)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.portal.resources.sem.forum.Thread)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
-
-        /**
-         * Removes the thread.
-         * 
-         * @param id the id
-         * @param model the model
-         */
+       /**
+       * Remove a org.semanticwb.portal.resources.sem.forum.Thread
+       * @param id Identifier for org.semanticwb.portal.resources.sem.forum.Thread
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       */
         public static void removeThread(String id, org.semanticwb.model.SWBModel model)
         {
             model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
         }
+       /**
+       * Returns true if exists a org.semanticwb.portal.resources.sem.forum.Thread
+       * @param id Identifier for org.semanticwb.portal.resources.sem.forum.Thread
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return true if the org.semanticwb.portal.resources.sem.forum.Thread exists, false otherwise
+       */
 
-        /**
-         * Checks for thread.
-         * 
-         * @param id the id
-         * @param model the model
-         * @return true, if successful
-         */
         public static boolean hasThread(String id, org.semanticwb.model.SWBModel model)
         {
             return (getThread(id, model)!=null);
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined UserGroupRef
+       * @param value UserGroupRef of the type org.semanticwb.model.UserGroupRef
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by user group ref.
-         * 
-         * @param hasusergroupref the hasusergroupref
-         * @param model the model
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByUserGroupRef(org.semanticwb.model.UserGroupRef hasusergroupref,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByUserGroupRef(org.semanticwb.model.UserGroupRef value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef, hasusergroupref.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined UserGroupRef
+       * @param value UserGroupRef of the type org.semanticwb.model.UserGroupRef
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by user group ref.
-         * 
-         * @param hasusergroupref the hasusergroupref
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByUserGroupRef(org.semanticwb.model.UserGroupRef hasusergroupref)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByUserGroupRef(org.semanticwb.model.UserGroupRef value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(hasusergroupref.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef,hasusergroupref.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined AssMember
+       * @param value AssMember of the type org.semanticwb.model.AssMember
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by ass member.
-         * 
-         * @param hasassmemberinv the hasassmemberinv
-         * @param model the model
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByAssMember(org.semanticwb.model.AssMember hasassmemberinv,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByAssMember(org.semanticwb.model.AssMember value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasAssMemberInv, hasassmemberinv.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasAssMemberInv, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined AssMember
+       * @param value AssMember of the type org.semanticwb.model.AssMember
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by ass member.
-         * 
-         * @param hasassmemberinv the hasassmemberinv
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByAssMember(org.semanticwb.model.AssMember hasassmemberinv)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByAssMember(org.semanticwb.model.AssMember value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(hasassmemberinv.getSemanticObject().getModel().listSubjectsByClass(swb_hasAssMemberInv,hasassmemberinv.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasAssMemberInv,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined LastPostMember
+       * @param value LastPostMember of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by last post member.
-         * 
-         * @param thlastpostmember the thlastpostmember
-         * @param model the model
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByLastPostMember(org.semanticwb.model.User thlastpostmember,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByLastPostMember(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(frm_thLastPostMember, thlastpostmember.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(frm_thLastPostMember, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined LastPostMember
+       * @param value LastPostMember of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by last post member.
-         * 
-         * @param thlastpostmember the thlastpostmember
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByLastPostMember(org.semanticwb.model.User thlastpostmember)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByLastPostMember(org.semanticwb.model.User value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(thlastpostmember.getSemanticObject().getModel().listSubjectsByClass(frm_thLastPostMember,thlastpostmember.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(frm_thLastPostMember,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined VirtualParent
+       * @param value VirtualParent of the type org.semanticwb.model.WebPage
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by virtual parent.
-         * 
-         * @param haswebpagevirtualparent the haswebpagevirtualparent
-         * @param model the model
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByVirtualParent(org.semanticwb.model.WebPage haswebpagevirtualparent,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByVirtualParent(org.semanticwb.model.WebPage value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasWebPageVirtualParent, haswebpagevirtualparent.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasWebPageVirtualParent, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined VirtualParent
+       * @param value VirtualParent of the type org.semanticwb.model.WebPage
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by virtual parent.
-         * 
-         * @param haswebpagevirtualparent the haswebpagevirtualparent
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByVirtualParent(org.semanticwb.model.WebPage haswebpagevirtualparent)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByVirtualParent(org.semanticwb.model.WebPage value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(haswebpagevirtualparent.getSemanticObject().getModel().listSubjectsByClass(swb_hasWebPageVirtualParent,haswebpagevirtualparent.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasWebPageVirtualParent,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined WebPageVirtualChild
+       * @param value WebPageVirtualChild of the type org.semanticwb.model.WebPage
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by web page virtual child.
-         * 
-         * @param haswebpagevirtualchild the haswebpagevirtualchild
-         * @param model the model
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByWebPageVirtualChild(org.semanticwb.model.WebPage haswebpagevirtualchild,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByWebPageVirtualChild(org.semanticwb.model.WebPage value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasWebPageVirtualChild, haswebpagevirtualchild.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasWebPageVirtualChild, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined WebPageVirtualChild
+       * @param value WebPageVirtualChild of the type org.semanticwb.model.WebPage
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by web page virtual child.
-         * 
-         * @param haswebpagevirtualchild the haswebpagevirtualchild
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByWebPageVirtualChild(org.semanticwb.model.WebPage haswebpagevirtualchild)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByWebPageVirtualChild(org.semanticwb.model.WebPage value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(haswebpagevirtualchild.getSemanticObject().getModel().listSubjectsByClass(swb_hasWebPageVirtualChild,haswebpagevirtualchild.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasWebPageVirtualChild,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined Language
+       * @param value Language of the type org.semanticwb.model.Language
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by p flow ref.
-         * 
-         * @param haspflowref the haspflowref
-         * @param model the model
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByPFlowRef(org.semanticwb.model.PFlowRef haspflowref,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByLanguage(org.semanticwb.model.Language value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasPFlowRef, haspflowref.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_language, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined Language
+       * @param value Language of the type org.semanticwb.model.Language
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by p flow ref.
-         * 
-         * @param haspflowref the haspflowref
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByPFlowRef(org.semanticwb.model.PFlowRef haspflowref)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByLanguage(org.semanticwb.model.Language value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(haspflowref.getSemanticObject().getModel().listSubjectsByClass(swb_hasPFlowRef,haspflowref.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_language,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined PFlowRef
+       * @param value PFlowRef of the type org.semanticwb.model.PFlowRef
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by template ref.
-         * 
-         * @param hastemplateref the hastemplateref
-         * @param model the model
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByTemplateRef(org.semanticwb.model.TemplateRef hastemplateref,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByPFlowRef(org.semanticwb.model.PFlowRef value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasTemplateRef, hastemplateref.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasPFlowRef, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined PFlowRef
+       * @param value PFlowRef of the type org.semanticwb.model.PFlowRef
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by template ref.
-         * 
-         * @param hastemplateref the hastemplateref
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByTemplateRef(org.semanticwb.model.TemplateRef hastemplateref)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByPFlowRef(org.semanticwb.model.PFlowRef value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(hastemplateref.getSemanticObject().getModel().listSubjectsByClass(swb_hasTemplateRef,hastemplateref.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasPFlowRef,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined TemplateRef
+       * @param value TemplateRef of the type org.semanticwb.model.TemplateRef
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by child.
-         * 
-         * @param haswebpagechild the haswebpagechild
-         * @param model the model
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByChild(org.semanticwb.model.WebPage haswebpagechild,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByTemplateRef(org.semanticwb.model.TemplateRef value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasWebPageChild, haswebpagechild.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasTemplateRef, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined TemplateRef
+       * @param value TemplateRef of the type org.semanticwb.model.TemplateRef
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by child.
-         * 
-         * @param haswebpagechild the haswebpagechild
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByChild(org.semanticwb.model.WebPage haswebpagechild)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByTemplateRef(org.semanticwb.model.TemplateRef value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(haswebpagechild.getSemanticObject().getModel().listSubjectsByClass(swb_hasWebPageChild,haswebpagechild.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasTemplateRef,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined Child
+       * @param value Child of the type org.semanticwb.model.WebPage
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by calendar ref.
-         * 
-         * @param hascalendarref the hascalendarref
-         * @param model the model
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByCalendarRef(org.semanticwb.model.CalendarRef hascalendarref,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByChild(org.semanticwb.model.WebPage value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef, hascalendarref.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasWebPageChild, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined Child
+       * @param value Child of the type org.semanticwb.model.WebPage
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by calendar ref.
-         * 
-         * @param hascalendarref the hascalendarref
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByCalendarRef(org.semanticwb.model.CalendarRef hascalendarref)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByChild(org.semanticwb.model.WebPage value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(hascalendarref.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef,hascalendarref.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasWebPageChild,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined CalendarRef
+       * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by parent.
-         * 
-         * @param webpageparent the webpageparent
-         * @param model the model
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByParent(org.semanticwb.model.WebPage webpageparent,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByCalendarRef(org.semanticwb.model.CalendarRef value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_webPageParent, webpageparent.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined CalendarRef
+       * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by parent.
-         * 
-         * @param webpageparent the webpageparent
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByParent(org.semanticwb.model.WebPage webpageparent)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByCalendarRef(org.semanticwb.model.CalendarRef value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(webpageparent.getSemanticObject().getModel().listSubjectsByClass(swb_webPageParent,webpageparent.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined Parent
+       * @param value Parent of the type org.semanticwb.model.WebPage
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by modified by.
-         * 
-         * @param modifiedby the modifiedby
-         * @param model the model
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByModifiedBy(org.semanticwb.model.User modifiedby,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByParent(org.semanticwb.model.WebPage value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, modifiedby.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_webPageParent, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined Parent
+       * @param value Parent of the type org.semanticwb.model.WebPage
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by modified by.
-         * 
-         * @param modifiedby the modifiedby
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByModifiedBy(org.semanticwb.model.User modifiedby)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByParent(org.semanticwb.model.WebPage value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(modifiedby.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,modifiedby.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_webPageParent,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by resource.
-         * 
-         * @param hasresource the hasresource
-         * @param model the model
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByResource(org.semanticwb.model.Resource hasresource,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasResource, hasresource.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by resource.
-         * 
-         * @param hasresource the hasresource
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByResource(org.semanticwb.model.Resource hasresource)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByModifiedBy(org.semanticwb.model.User value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(hasresource.getSemanticObject().getModel().listSubjectsByClass(swb_hasResource,hasresource.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined Resource
+       * @param value Resource of the type org.semanticwb.model.Resource
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by forum.
-         * 
-         * @param thforum the thforum
-         * @param model the model
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByForum(org.semanticwb.portal.resources.sem.forum.SWBForum thforum,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByResource(org.semanticwb.model.Resource value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(frm_thForum, thforum.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasResource, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined Resource
+       * @param value Resource of the type org.semanticwb.model.Resource
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by forum.
-         * 
-         * @param thforum the thforum
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByForum(org.semanticwb.portal.resources.sem.forum.SWBForum thforum)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByResource(org.semanticwb.model.Resource value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(thforum.getSemanticObject().getModel().listSubjectsByClass(frm_thForum,thforum.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasResource,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined Forum
+       * @param value Forum of the type org.semanticwb.portal.resources.sem.forum.SWBForum
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by user fav thread.
-         * 
-         * @param hasuserfavthread the hasuserfavthread
-         * @param model the model
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByUserFavThread(org.semanticwb.portal.resources.sem.forum.UserFavThread hasuserfavthread,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByForum(org.semanticwb.portal.resources.sem.forum.SWBForum value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(frm_hasUserFavThread, hasuserfavthread.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(frm_thForum, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined Forum
+       * @param value Forum of the type org.semanticwb.portal.resources.sem.forum.SWBForum
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by user fav thread.
-         * 
-         * @param hasuserfavthread the hasuserfavthread
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByUserFavThread(org.semanticwb.portal.resources.sem.forum.UserFavThread hasuserfavthread)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByForum(org.semanticwb.portal.resources.sem.forum.SWBForum value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(hasuserfavthread.getSemanticObject().getModel().listSubjectsByClass(frm_hasUserFavThread,hasuserfavthread.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(frm_thForum,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined UserFavThread
+       * @param value UserFavThread of the type org.semanticwb.portal.resources.sem.forum.UserFavThread
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by role ref.
-         * 
-         * @param hasroleref the hasroleref
-         * @param model the model
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByRoleRef(org.semanticwb.model.RoleRef hasroleref,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByUserFavThread(org.semanticwb.portal.resources.sem.forum.UserFavThread value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef, hasroleref.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(frm_hasUserFavThread, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined UserFavThread
+       * @param value UserFavThread of the type org.semanticwb.portal.resources.sem.forum.UserFavThread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by role ref.
-         * 
-         * @param hasroleref the hasroleref
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByRoleRef(org.semanticwb.model.RoleRef hasroleref)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByUserFavThread(org.semanticwb.portal.resources.sem.forum.UserFavThread value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(hasroleref.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef,hasroleref.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(frm_hasUserFavThread,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined RoleRef
+       * @param value RoleRef of the type org.semanticwb.model.RoleRef
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by this role ass member.
-         * 
-         * @param hasthisroleassmemberinv the hasthisroleassmemberinv
-         * @param model the model
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByThisRoleAssMember(org.semanticwb.model.AssMember hasthisroleassmemberinv,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByRoleRef(org.semanticwb.model.RoleRef value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasThisRoleAssMemberInv, hasthisroleassmemberinv.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined RoleRef
+       * @param value RoleRef of the type org.semanticwb.model.RoleRef
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by this role ass member.
-         * 
-         * @param hasthisroleassmemberinv the hasthisroleassmemberinv
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByThisRoleAssMember(org.semanticwb.model.AssMember hasthisroleassmemberinv)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByRoleRef(org.semanticwb.model.RoleRef value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(hasthisroleassmemberinv.getSemanticObject().getModel().listSubjectsByClass(swb_hasThisRoleAssMemberInv,hasthisroleassmemberinv.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined ThisRoleAssMember
+       * @param value ThisRoleAssMember of the type org.semanticwb.model.AssMember
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by attachment.
-         * 
-         * @param hasthattachments the hasthattachments
-         * @param model the model
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByAttachment(org.semanticwb.portal.resources.sem.forum.Attachment hasthattachments,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByThisRoleAssMember(org.semanticwb.model.AssMember value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(frm_hasThAttachments, hasthattachments.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasThisRoleAssMemberInv, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined ThisRoleAssMember
+       * @param value ThisRoleAssMember of the type org.semanticwb.model.AssMember
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by attachment.
-         * 
-         * @param hasthattachments the hasthattachments
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByAttachment(org.semanticwb.portal.resources.sem.forum.Attachment hasthattachments)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByThisRoleAssMember(org.semanticwb.model.AssMember value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(hasthattachments.getSemanticObject().getModel().listSubjectsByClass(frm_hasThAttachments,hasthattachments.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasThisRoleAssMemberInv,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined Attachment
+       * @param value Attachment of the type org.semanticwb.portal.resources.sem.forum.Attachment
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by creator.
-         * 
-         * @param creator the creator
-         * @param model the model
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByCreator(org.semanticwb.model.User creator,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByAttachment(org.semanticwb.portal.resources.sem.forum.Attachment value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, creator.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(frm_hasThAttachments, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined Attachment
+       * @param value Attachment of the type org.semanticwb.portal.resources.sem.forum.Attachment
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by creator.
-         * 
-         * @param creator the creator
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByCreator(org.semanticwb.model.User creator)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByAttachment(org.semanticwb.portal.resources.sem.forum.Attachment value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(creator.getSemanticObject().getModel().listSubjectsByClass(swb_creator,creator.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(frm_hasThAttachments,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined RuleRef
+       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by rule ref.
-         * 
-         * @param hasruleref the hasruleref
-         * @param model the model
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByRuleRef(org.semanticwb.model.RuleRef hasruleref,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByRuleRef(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, hasruleref.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined RuleRef
+       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by rule ref.
-         * 
-         * @param hasruleref the hasruleref
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByRuleRef(org.semanticwb.model.RuleRef hasruleref)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByRuleRef(org.semanticwb.model.RuleRef value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(hasruleref.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,hasruleref.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined Post
+       * @param value Post of the type org.semanticwb.portal.resources.sem.forum.Post
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by post.
-         * 
-         * @param haspost the haspost
-         * @param model the model
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByPost(org.semanticwb.portal.resources.sem.forum.Post haspost,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByPost(org.semanticwb.portal.resources.sem.forum.Post value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(frm_hasPost, haspost.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(frm_hasPost, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined Post
+       * @param value Post of the type org.semanticwb.portal.resources.sem.forum.Post
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by post.
-         * 
-         * @param haspost the haspost
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByPost(org.semanticwb.portal.resources.sem.forum.Post haspost)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByPost(org.semanticwb.portal.resources.sem.forum.Post value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(haspost.getSemanticObject().getModel().listSubjectsByClass(frm_hasPost,haspost.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(frm_hasPost,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by this type association.
-         * 
-         * @param hasthistypeassociationinv the hasthistypeassociationinv
-         * @param model the model
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByThisTypeAssociation(org.semanticwb.model.Association hasthistypeassociationinv,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasThisTypeAssociationInv, hasthistypeassociationinv.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
 
-        /**
-         * List thread by this type association.
-         * 
-         * @param hasthistypeassociationinv the hasthistypeassociationinv
-         * @return the java.util. iterator
-         */
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByThisTypeAssociation(org.semanticwb.model.Association hasthistypeassociationinv)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByCreator(org.semanticwb.model.User value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(hasthistypeassociationinv.getSemanticObject().getModel().listSubjectsByClass(swb_hasThisTypeAssociationInv,hasthistypeassociationinv.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined ThisTypeAssociation
+       * @param value ThisTypeAssociation of the type org.semanticwb.model.Association
+       * @param model Model of the org.semanticwb.portal.resources.sem.forum.Thread
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
+
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByThisTypeAssociation(org.semanticwb.model.Association value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasThisTypeAssociationInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.forum.Thread with a determined ThisTypeAssociation
+       * @param value ThisTypeAssociation of the type org.semanticwb.model.Association
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.forum.Thread
+       */
+
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Thread> listThreadByThisTypeAssociation(org.semanticwb.model.Association value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Thread> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasThisTypeAssociationInv,value.getSemanticObject(),sclass));
             return it;
         }
     }
 
-    /**
-     * Instantiates a new thread base.
-     * 
-     * @param base the base
-     */
+   /**
+   * Constructs a ThreadBase with a SemanticObject
+   * @param base The SemanticObject with the properties for the Thread
+   */
     public ThreadBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
+   /**
+   * Sets the value for the property LastPostMember
+   * @param value LastPostMember to set
+   */
 
-    /**
-     * Sets the last post member.
-     * 
-     * @param value the new last post member
-     */
     public void setLastPostMember(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(frm_thLastPostMember, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(frm_thLastPostMember, value.getSemanticObject());
+        }else
+        {
+            removeLastPostMember();
+        }
     }
+   /**
+   * Remove the value for LastPostMember property
+   */
 
-    /**
-     * Removes the last post member.
-     */
     public void removeLastPostMember()
     {
         getSemanticObject().removeProperty(frm_thLastPostMember);
     }
 
-    /**
-     * Gets the last post member.
-     * 
-     * @return the last post member
-     */
+   /**
+   * Gets the LastPostMember
+   * @return a org.semanticwb.model.User
+   */
     public org.semanticwb.model.User getLastPostMember()
     {
          org.semanticwb.model.User ret=null;
@@ -735,30 +649,34 @@ public abstract class ThreadBase extends org.semanticwb.model.WebPage implements
          }
          return ret;
     }
+   /**
+   * Sets the value for the property Forum
+   * @param value Forum to set
+   */
 
-    /**
-     * Sets the forum.
-     * 
-     * @param value the new forum
-     */
     public void setForum(org.semanticwb.portal.resources.sem.forum.SWBForum value)
     {
-        getSemanticObject().setObjectProperty(frm_thForum, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(frm_thForum, value.getSemanticObject());
+        }else
+        {
+            removeForum();
+        }
     }
+   /**
+   * Remove the value for Forum property
+   */
 
-    /**
-     * Removes the forum.
-     */
     public void removeForum()
     {
         getSemanticObject().removeProperty(frm_thForum);
     }
 
-    /**
-     * Gets the forum.
-     * 
-     * @return the forum
-     */
+   /**
+   * Gets the Forum
+   * @return a org.semanticwb.portal.resources.sem.forum.SWBForum
+   */
     public org.semanticwb.portal.resources.sem.forum.SWBForum getForum()
     {
          org.semanticwb.portal.resources.sem.forum.SWBForum ret=null;
@@ -770,77 +688,70 @@ public abstract class ThreadBase extends org.semanticwb.model.WebPage implements
          return ret;
     }
 
-    /**
-     * Gets the view count.
-     * 
-     * @return the view count
-     */
+/**
+* Gets the ViewCount property
+* @return int with the ViewCount
+*/
     public int getViewCount()
     {
         return getSemanticObject().getIntProperty(frm_thViewCount);
     }
 
-    /**
-     * Sets the view count.
-     * 
-     * @param value the new view count
-     */
+/**
+* Sets the ViewCount property
+* @param value long with the ViewCount
+*/
     public void setViewCount(int value)
     {
         getSemanticObject().setIntProperty(frm_thViewCount, value);
     }
 
-    /**
-     * Gets the reply count.
-     * 
-     * @return the reply count
-     */
+/**
+* Gets the ReplyCount property
+* @return int with the ReplyCount
+*/
     public int getReplyCount()
     {
         return getSemanticObject().getIntProperty(frm_thReplyCount);
     }
 
-    /**
-     * Sets the reply count.
-     * 
-     * @param value the new reply count
-     */
+/**
+* Sets the ReplyCount property
+* @param value long with the ReplyCount
+*/
     public void setReplyCount(int value)
     {
         getSemanticObject().setIntProperty(frm_thReplyCount, value);
     }
+   /**
+   * Gets all the org.semanticwb.portal.resources.sem.forum.UserFavThread
+   * @return A GenericIterator with all the org.semanticwb.portal.resources.sem.forum.UserFavThread
+   */
 
-    /**
-     * List user fav threads.
-     * 
-     * @return the org.semanticwb.model. generic iterator
-     */
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.UserFavThread> listUserFavThreads()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.UserFavThread>(getSemanticObject().listObjectProperties(frm_hasUserFavThread));
     }
 
-    /**
-     * Checks for user fav thread.
-     * 
-     * @param userfavthread the userfavthread
-     * @return true, if successful
-     */
-    public boolean hasUserFavThread(org.semanticwb.portal.resources.sem.forum.UserFavThread userfavthread)
+   /**
+   * Gets true if has a UserFavThread
+   * @param value org.semanticwb.portal.resources.sem.forum.UserFavThread to verify
+   * @return true if the org.semanticwb.portal.resources.sem.forum.UserFavThread exists, false otherwise
+   */
+    public boolean hasUserFavThread(org.semanticwb.portal.resources.sem.forum.UserFavThread value)
     {
         boolean ret=false;
-        if(userfavthread!=null)
+        if(value!=null)
         {
-           ret=getSemanticObject().hasObjectProperty(frm_hasUserFavThread,userfavthread.getSemanticObject());
+           ret=getSemanticObject().hasObjectProperty(frm_hasUserFavThread,value.getSemanticObject());
         }
         return ret;
     }
 
-    /**
-     * Gets the user fav thread.
-     * 
-     * @return the user fav thread
-     */
+   /**
+   * Gets the UserFavThread
+   * @return a org.semanticwb.portal.resources.sem.forum.UserFavThread
+   */
     public org.semanticwb.portal.resources.sem.forum.UserFavThread getUserFavThread()
     {
          org.semanticwb.portal.resources.sem.forum.UserFavThread ret=null;
@@ -852,77 +763,70 @@ public abstract class ThreadBase extends org.semanticwb.model.WebPage implements
          return ret;
     }
 
-    /**
-     * Gets the last post date.
-     * 
-     * @return the last post date
-     */
+/**
+* Gets the LastPostDate property
+* @return java.util.Date with the LastPostDate
+*/
     public java.util.Date getLastPostDate()
     {
         return getSemanticObject().getDateProperty(frm_thLastPostDate);
     }
 
-    /**
-     * Sets the last post date.
-     * 
-     * @param value the new last post date
-     */
+/**
+* Sets the LastPostDate property
+* @param value long with the LastPostDate
+*/
     public void setLastPostDate(java.util.Date value)
     {
         getSemanticObject().setDateProperty(frm_thLastPostDate, value);
     }
 
-    /**
-     * Gets the body.
-     * 
-     * @return the body
-     */
+/**
+* Gets the Body property
+* @return String with the Body
+*/
     public String getBody()
     {
         return getSemanticObject().getProperty(frm_thBody);
     }
 
-    /**
-     * Sets the body.
-     * 
-     * @param value the new body
-     */
+/**
+* Sets the Body property
+* @param value long with the Body
+*/
     public void setBody(String value)
     {
         getSemanticObject().setProperty(frm_thBody, value);
     }
+   /**
+   * Gets all the org.semanticwb.portal.resources.sem.forum.Attachment
+   * @return A GenericIterator with all the org.semanticwb.portal.resources.sem.forum.Attachment
+   */
 
-    /**
-     * List attachments.
-     * 
-     * @return the org.semanticwb.model. generic iterator
-     */
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Attachment> listAttachments()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Attachment>(getSemanticObject().listObjectProperties(frm_hasThAttachments));
     }
 
-    /**
-     * Checks for attachment.
-     * 
-     * @param attachment the attachment
-     * @return true, if successful
-     */
-    public boolean hasAttachment(org.semanticwb.portal.resources.sem.forum.Attachment attachment)
+   /**
+   * Gets true if has a Attachment
+   * @param value org.semanticwb.portal.resources.sem.forum.Attachment to verify
+   * @return true if the org.semanticwb.portal.resources.sem.forum.Attachment exists, false otherwise
+   */
+    public boolean hasAttachment(org.semanticwb.portal.resources.sem.forum.Attachment value)
     {
         boolean ret=false;
-        if(attachment!=null)
+        if(value!=null)
         {
-           ret=getSemanticObject().hasObjectProperty(frm_hasThAttachments,attachment.getSemanticObject());
+           ret=getSemanticObject().hasObjectProperty(frm_hasThAttachments,value.getSemanticObject());
         }
         return ret;
     }
 
-    /**
-     * Gets the attachment.
-     * 
-     * @return the attachment
-     */
+   /**
+   * Gets the Attachment
+   * @return a org.semanticwb.portal.resources.sem.forum.Attachment
+   */
     public org.semanticwb.portal.resources.sem.forum.Attachment getAttachment()
     {
          org.semanticwb.portal.resources.sem.forum.Attachment ret=null;
@@ -933,38 +837,35 @@ public abstract class ThreadBase extends org.semanticwb.model.WebPage implements
          }
          return ret;
     }
+   /**
+   * Gets all the org.semanticwb.portal.resources.sem.forum.Post
+   * @return A GenericIterator with all the org.semanticwb.portal.resources.sem.forum.Post
+   */
 
-    /**
-     * List posts.
-     * 
-     * @return the org.semanticwb.model. generic iterator
-     */
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> listPosts()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post>(getSemanticObject().listObjectProperties(frm_hasPost));
     }
 
-    /**
-     * Checks for post.
-     * 
-     * @param post the post
-     * @return true, if successful
-     */
-    public boolean hasPost(org.semanticwb.portal.resources.sem.forum.Post post)
+   /**
+   * Gets true if has a Post
+   * @param value org.semanticwb.portal.resources.sem.forum.Post to verify
+   * @return true if the org.semanticwb.portal.resources.sem.forum.Post exists, false otherwise
+   */
+    public boolean hasPost(org.semanticwb.portal.resources.sem.forum.Post value)
     {
         boolean ret=false;
-        if(post!=null)
+        if(value!=null)
         {
-           ret=getSemanticObject().hasObjectProperty(frm_hasPost,post.getSemanticObject());
+           ret=getSemanticObject().hasObjectProperty(frm_hasPost,value.getSemanticObject());
         }
         return ret;
     }
 
-    /**
-     * Gets the post.
-     * 
-     * @return the post
-     */
+   /**
+   * Gets the Post
+   * @return a org.semanticwb.portal.resources.sem.forum.Post
+   */
     public org.semanticwb.portal.resources.sem.forum.Post getPost()
     {
          org.semanticwb.portal.resources.sem.forum.Post ret=null;
