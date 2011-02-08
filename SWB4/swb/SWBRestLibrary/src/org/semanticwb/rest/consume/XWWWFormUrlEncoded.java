@@ -25,28 +25,45 @@ public final class XWWWFormUrlEncoded extends RepresentationBase implements Repr
     public XWWWFormUrlEncoded()
     {
     }
-    /*public XWWWFormUrlEncoded(Method method)
+    
+    private Parameter getDefinition(String name)
     {
-    super("application/x-www-form-urlencoded",method);
-    }*/
-
-    private String constructParameters(List<ParameterValue> values) throws RestException
+        for (Parameter parameter : this.getAllParameters())
+        {
+            if (parameter.getName().equals(name))
+            {
+                return parameter;
+            }
+        }
+        for (Parameter parameter : this.method.getAllParameters())
+        {
+            if (parameter.getName().equals(name))
+            {
+                return parameter;
+            }
+        }
+        return null;
+    }
+    private String constructParametersToURL(List<ParameterValue> values) throws RestException
     {
         StringBuilder sb = new StringBuilder();
         for (ParameterValue pvalue : values)
         {
-
-            try
+            Parameter definition = getDefinition(pvalue.getName());
+            if (definition != null && "query".equals(definition.getStyle()))
             {
-                sb.append(pvalue.getName());
-                sb.append("=");
-                sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
-                sb.append("&");
-            }
-            catch (Exception e)
-            {
-                log.debug(e);
-                throw new RestException(e);
+                try
+                {
+                    sb.append(pvalue.getName());
+                    sb.append("=");
+                    sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
+                    sb.append("&");
+                }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                    throw new RestException(e);
+                }
             }
 
         }
@@ -180,7 +197,7 @@ public final class XWWWFormUrlEncoded extends RepresentationBase implements Repr
     {
         checkParameters(values);
         URL url = this.getMethod().getResource().getPath();
-        String _parameters = constructParameters(values);
+        String _parameters = constructParametersToURL(values);
         try
         {
             if (this.getMethod().getHTTPMethod() == HTTPMethod.GET || this.getMethod().getHTTPMethod() == HTTPMethod.DELETE)

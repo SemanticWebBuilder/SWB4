@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.List;
 import javax.xml.XMLConstants;
@@ -22,8 +23,6 @@ import javax.xml.validation.Validator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
 /**
@@ -91,89 +90,177 @@ public class AtomXML extends ApplicationXML
             return false;
         }
     }
-    @Override
-    protected Document constructParameters(List<ParameterValue> values) throws RestException
+
+    private Parameter getDefinition(String name)
     {
-        Document doc = SWBUtils.XML.getNewDocument();
-        Element feed = doc.createElementNS(ATOM_NS, "feed");
-        doc.appendChild(feed);
-        try
+        for (Parameter parameter : this.getAllParameters())
         {
-            for (Parameter parameter : this.getRequiredParameters())
+            if (parameter.getName().equals(name))
             {
-                for (ParameterValue pvalue : values)
-                {
-                    if (pvalue.getName().equals(parameter.getName()))
-                    {
-                        Element eparam = doc.createElementNS(ATOM_NS, parameter.getName());
-                        Text data = doc.createTextNode(pvalue.getValue().toString());
-                        eparam.appendChild(data);
-                    }
-                }
+                return parameter;
             }
-            for (Parameter parameter : this.getOptionalParameters())
+        }
+        for (Parameter parameter : this.method.getAllParameters())
+        {
+            if (parameter.getName().equals(name))
             {
-                for (ParameterValue pvalue : values)
-                {
-                    if (pvalue.getName().equals(parameter.getName()))
-                    {
-                        Element eparam = doc.createElementNS(ATOM_NS, parameter.getName());
-                        Text data = doc.createTextNode(pvalue.getValue().toString());
-                        eparam.appendChild(data);
-                    }
-                }
+                return parameter;
             }
-            for (Parameter parameter : this.parameters)
+        }
+        return null;
+    }
+    private String constructParametersToURL(List<ParameterValue> values) throws RestException
+    {
+        StringBuilder sb = new StringBuilder();
+        for (ParameterValue pvalue : values)
+        {
+            Parameter definition = getDefinition(pvalue.getName());
+            if (definition != null && "query".equals(definition.getStyle()))
             {
-                if (parameter.isFixed())
+                try
                 {
-                    Element eparam = doc.createElementNS(ATOM_NS, parameter.getName());
-                    Text data = doc.createTextNode(parameter.getFixedValue());
-                    eparam.appendChild(data);
+                    sb.append(pvalue.getName());
+                    sb.append("=");
+                    sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
+                    sb.append("&");
+                }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                    throw new RestException(e);
                 }
             }
 
+        }
 
-            for (Parameter parameter : this.method.getRequiredParameters())
+        for (Parameter parameter : this.parameters)
+        {
+            if (parameter.isFixed())
             {
-                for (ParameterValue pvalue : values)
+                try
                 {
-                    if (pvalue.getName().equals(parameter.getName()))
-                    {
-                        Element eparam = doc.createElementNS(ATOM_NS, parameter.getName());
-                        Text data = doc.createTextNode(pvalue.getValue().toString());
-                        eparam.appendChild(data);
-                    }
+                    sb.append(parameter.getName());
+                    sb.append("=");
+                    sb.append(URLEncoder.encode(parameter.getFixedValue(), "utf-8"));
+                    sb.append("&");
+                }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                    throw new RestException(e);
                 }
             }
-            for (Parameter parameter : this.method.getOptionalParameters())
+        }
+
+        for (Parameter parameter : this.method.getAllParameters())
+        {
+            if (parameter.isFixed())
             {
-                for (ParameterValue pvalue : values)
+                try
                 {
-                    if (pvalue.getName().equals(parameter.getName()))
-                    {
-                        Element eparam = doc.createElementNS(ATOM_NS, parameter.getName());
-                        Text data = doc.createTextNode(pvalue.getValue().toString());
-                        eparam.appendChild(data);
-                    }
+                    sb.append(parameter.getName());
+                    sb.append("=");
+                    sb.append(URLEncoder.encode(parameter.getFixedValue(), "utf-8"));
+                    sb.append("&");
+                }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                    throw new RestException(e);
                 }
             }
-            for (Parameter parameter : this.method.getAllParameters())
-            {
-                if (parameter.isFixed())
-                {
-                    Element eparam = doc.createElementNS(ATOM_NS, parameter.getName());
-                    Text data = doc.createTextNode(parameter.getFixedValue());
-                    eparam.appendChild(data);
-                }
-            }
+        }
+
+
+        /*try
+        {
+        for (Parameter parameter : this.getRequiredParameters())
+        {
+        for (ParameterValue pvalue : values)
+        {
+        if (pvalue.getName().equals(parameter.getName()))
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
+        sb.append("&");
+        }
+        }
+        }
+        for (Parameter parameter : this.getOptionalParameters())
+        {
+        for (ParameterValue pvalue : values)
+        {
+        if (pvalue.getName().equals(parameter.getName()))
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
+        sb.append("&");
+        }
+        }
+        }
+        for (Parameter parameter : this.parameters)
+        {
+        if (parameter.isFixed())
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(parameter.getFixedValue(), "utf-8"));
+        sb.append("&");
+        }
+        }
+
+
+        for (Parameter parameter : this.method.getRequiredParameters())
+        {
+        for (ParameterValue pvalue : values)
+        {
+        if (pvalue.getName().equals(parameter.getName()))
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
+        sb.append("&");
+        }
+        }
+        }
+        for (Parameter parameter : this.method.getOptionalParameters())
+        {
+        for (ParameterValue pvalue : values)
+        {
+        if (pvalue.getName().equals(parameter.getName()))
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
+        sb.append("&");
+        }
+        }
+        }
+        for (Parameter parameter : this.method.getAllParameters())
+        {
+        if (parameter.isFixed())
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(parameter.getFixedValue(), "utf-8"));
+        sb.append("&");
+        }
+        }
 
         }
         catch (Exception e)
         {
-            log.debug(e);
-            throw new RestException(e);
-        }
+        log.debug(e);
+        throw new RestException(e);
+        }*/
+        return sb.toString();
+    }
+    @Override
+    protected Document constructParameters(List<ParameterValue> values) throws RestException
+    {
+        Document doc = SWBUtils.XML.getNewDocument();        
         return doc;
     }
     @Override
@@ -181,8 +268,10 @@ public class AtomXML extends ApplicationXML
     {
         checkParameters(values);
         URL _url = this.getMethod().getResource().getPath();
+        String _parameters = constructParametersToURL(values);
         try
         {
+            _url = new URL(_url.toString() + "?" + _parameters);
             HttpURLConnection con = (HttpURLConnection) _url.openConnection();
             con.setRequestMethod(this.getMethod().getHTTPMethod().toString());
             String charset = Charset.defaultCharset().name();

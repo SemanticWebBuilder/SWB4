@@ -18,7 +18,8 @@ public class Parameter {
     private final String fixedvalue;
     private final String name;
     private final boolean repeating;
-    private Parameter(String name,Class type,boolean required,boolean fixed,String fixedvalue,boolean repeating)
+    private final String style;
+    private Parameter(String name,String style,Class type,boolean required,boolean fixed,String fixedvalue,boolean repeating)
     {
         this.name=name;
         this.type=type;
@@ -26,20 +27,21 @@ public class Parameter {
         this.fixed=fixed;
         this.fixedvalue=fixedvalue;
         this.repeating=repeating;
+        this.style=style;
 
     }
-    private Parameter(String name,Class type,boolean required)
+    private Parameter(String name,String style,Class type,boolean required)
     {
-        this(name,type,required,false,null,false);
+        this(name,style,type,required,false,null,false);
     }
-    private Parameter(String name,Class type)
+    private Parameter(String name,String style,Class type)
     {
-       this(name,type,false,false,null,false);
+       this(name,style,type,false,false,null,false);
 
     }
-    private Parameter(String name)
+    private Parameter(String name,String style)
     {
-        this(name,String.class,false,false,null,false);
+        this(name,style,String.class,false,false,null,false);
 
     }
     public String getFixedValue()
@@ -53,7 +55,12 @@ public class Parameter {
         final String sfixed=element.getAttribute("fixed");
         final String srequired=element.getAttribute("required");
         final String srepeating=element.getAttribute("required");
+        String style=element.getAttribute("style");
 
+        if(style==null || "".equals(style))
+        {
+            style="query";
+        }
         if(name==null)
         {
             throw new RestException("The name of paarameter is missing");
@@ -85,7 +92,7 @@ public class Parameter {
                 repeating=true;
             }
         }
-        Parameter p=new Parameter(name,RestPublish.xsdToClass(type),required, fixed, fixedvalue, repeating);
+        Parameter p=new Parameter(name,style,RestPublish.xsdToClass(type),required, fixed, fixedvalue, repeating);
         return p;
     }
     
@@ -104,5 +111,9 @@ public class Parameter {
     public Class getType()
     {
         return type;
+    }
+    public String getStyle()
+    {
+        return style;
     }
 }
