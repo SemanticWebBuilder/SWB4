@@ -33,6 +33,7 @@ import org.w3c.dom.Text;
 import org.semanticwb.platform.SemanticObject;
 import java.io.IOException;
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -49,6 +50,7 @@ import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticVocabulary;
 import org.semanticwb.rest.util.HTTPMethod;
 import org.semanticwb.rest.consume.RestException;
+import org.semanticwb.rest.util.DateToXsdDatetimeFormatter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import static javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI;
@@ -1484,6 +1486,7 @@ public final class SemanticClassPublisher extends RestModule
 
     private String getPathForObject(SemanticObject obj, String basepath)
     {
+        ///swb/rest/so/swbcomm_EventElement?uri=http%3A%2F%2Fwww.reg_digital_demo.swb%23swbcomm_EventElement%3A35&uri=http%3A%2F%2Fwww.reg_digital_demo.swb%23swbcomm_EventElement%3A35&
         //String path = request.getRequestURI() + "?uri=" + obj.getShortURI();
 
         String path = basepath + "/" + obj.getSemanticClass().getPrefix() + "_" + obj.getSemanticClass().getName() + "/" + obj.getShortURI();
@@ -1504,11 +1507,11 @@ public final class SemanticClassPublisher extends RestModule
     private Document serializeAsXML(SemanticObject obj, String basdepath)
     {
         Document doc = SWBUtils.XML.getNewDocument();
-        String namespace=obj.getSemanticClass().getURI();
-        int pos=namespace.indexOf("#");
-        if(pos!=-1)
+        String namespace = obj.getSemanticClass().getURI();
+        int pos = namespace.indexOf("#");
+        if (pos != -1)
         {
-            namespace=namespace.substring(0,pos);
+            namespace = namespace.substring(0, pos);
         }
         Element name = doc.createElementNS(namespace, obj.getSemanticClass().getName());
 
@@ -1530,14 +1533,16 @@ public final class SemanticClassPublisher extends RestModule
     private void serialize(SemanticObject obj, Element name, String basepath)
     {
         String prefix = obj.getSemanticClass().getPrefix();
-        String namespace=obj.getSemanticClass().getURI();
-        int pos=namespace.indexOf("#");
-        if(pos!=-1)
+        String namespace = obj.getSemanticClass().getURI();
+        int pos = namespace.indexOf("#");
+        if (pos != -1)
         {
-            namespace=namespace.substring(0,pos);
+            namespace = namespace.substring(0, pos);
         }
         Document doc = name.getOwnerDocument();
-        Iterator<SemanticProperty> props = obj.listProperties();
+        DateToXsdDatetimeFormatter f = new DateToXsdDatetimeFormatter();
+        //Iterator<SemanticProperty> props = obj.listProperties();
+        Iterator<SemanticProperty> props = obj.getSemanticClass().listProperties(); // list in the same order that xsd
         while (props.hasNext())
         {
             SemanticProperty prop = props.next();
@@ -1551,20 +1556,50 @@ public final class SemanticClassPublisher extends RestModule
                         while (values.hasNext())
                         {
                             SemanticLiteral value = values.next();
-                            Element eprop = doc.createElementNS(namespace, prop.getName());
-                            eprop.setPrefix(prefix);
-                            name.appendChild(eprop);
-                            Text tvalue = doc.createTextNode(value.getString());
-                            eprop.appendChild(tvalue);
+                            if (value.getString() != null && !"".equals(value.getString()))
+                            {
+                                Element eprop = doc.createElementNS(namespace, prop.getName());
+                                eprop.setPrefix(prefix);
+                                name.appendChild(eprop);
+                                String _value = value.getString();
+                                if (prop.isDate())
+                                {
+                                    Date date_value = value.getDate();
+                                    _value = f.formatDate(date_value);
+
+                                }
+                                if (prop.isDateTime())
+                                {
+                                    Timestamp date_value = value.getDateTime();
+                                    _value = f.format(new Date(date_value.getTime()));
+                                }
+                                Text tvalue = doc.createTextNode(_value);
+                                eprop.appendChild(tvalue);
+                            }
                         }
                     }
                     else
                     {
-                        Element eprop = doc.createElementNS(namespace, prop.getName());
-                        eprop.setPrefix(prefix);
-                        name.appendChild(eprop);
-                        Text value = doc.createTextNode(obj.getProperty(prop));
-                        eprop.appendChild(value);
+                        String _value = obj.getProperty(prop);
+                        if (_value != null && !"".equals(_value))
+                        {
+                            if (prop.isDate())
+                            {
+                                Date date_value = obj.getDateProperty(prop);
+                                _value = f.formatDate(date_value);
+
+                            }
+                            if (prop.isDateTime())
+                            {
+                                Timestamp date_value = obj.getDateTimeProperty(prop);
+                                _value = f.format(new Date(date_value.getTime()));
+                            }
+                            Element eprop = doc.createElementNS(namespace, prop.getName());
+                            eprop.setPrefix(prefix);
+                            name.appendChild(eprop);
+                            Text tvalue = doc.createTextNode(_value);
+                            eprop.appendChild(tvalue);
+                        }
                     }
                 }
                 else
@@ -1584,10 +1619,10 @@ public final class SemanticClassPublisher extends RestModule
                                     eprop.setPrefix(prefix);
                                     name.appendChild(eprop);
 
-                                    Attr href = doc.createAttributeNS(namespace, "href");
+                                    /*Attr href = doc.createAttributeNS(namespace, "href");
                                     href.setPrefix(prefix);
                                     href.setValue(getPathForObject(value, basepath));
-                                    eprop.setAttributeNode(href);
+                                    eprop.setAttributeNode(href);*/
                                     //eprop.setAttributeNS(REST_RESOURCES_2010, "href", getPathForObject(value, basepath));
 
                                     Text data = doc.createTextNode(value.getURI());
@@ -1603,7 +1638,7 @@ public final class SemanticClassPublisher extends RestModule
                             SemanticObject value = obj.getObjectProperty(prop);
                             if (value != null)
                             {
-                                eprop.setAttributeNS(namespace, "href", getPathForObject(value, basepath));
+                                //eprop.setAttributeNS(namespace, "href", getPathForObject(value, basepath));
                                 Text data = doc.createTextNode(value.getURI());
                                 eprop.appendChild(data);
                             }
@@ -2233,7 +2268,7 @@ public final class SemanticClassPublisher extends RestModule
             schema.appendChild(element);
             element.setAttribute(NAME, clazz.getName());
             element.setPrefix(XSD_PREFIX);
-            addProperties(clazz, element, ranges);
+            addPropertiesToXSD(clazz, element, ranges);
         }
     }
 
@@ -2291,7 +2326,7 @@ public final class SemanticClassPublisher extends RestModule
         return doc;
     }
 
-    private void addProperties(SemanticClass clazz, Element element, HashSet<SemanticClass> ranges)
+    private void addPropertiesToXSD(SemanticClass clazz, Element element, HashSet<SemanticClass> ranges)
     {
         Document doc = element.getOwnerDocument();
         Element complexType = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "complexType");
@@ -2299,6 +2334,8 @@ public final class SemanticClassPublisher extends RestModule
         element.appendChild(complexType);
 
         Element sequence = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "sequence");
+
+
         sequence.setPrefix(XSD_PREFIX);
         complexType.appendChild(sequence);
 
@@ -2364,6 +2401,11 @@ public final class SemanticClassPublisher extends RestModule
                         property.setAttribute("minOccurs", "0");
                         property.setAttribute("maxOccurs", "unbounded");
                     }
+                    else
+                    {
+                        property.setAttribute("minOccurs", "0");
+                        property.setAttribute("maxOccurs", "1");
+                    }
 
                 }
                 else
@@ -2376,26 +2418,39 @@ public final class SemanticClassPublisher extends RestModule
                         sequence.appendChild(property);
                         property.setAttribute(NAME, prop.getName());
                         property.setAttribute("form", "qualified");
-                        //property.setAttribute("use", "required");
+                        property.setAttribute("type", XSD_ANYURI);
                         if (prop.getName().startsWith("has"))
                         {
                             property.setAttribute("minOccurs", "0");
                             property.setAttribute("maxOccurs", "unbounded");
                         }
+                        else
+                        {
+                            property.setAttribute("minOccurs", "0");
+                            property.setAttribute("maxOccurs", "1");
+                        }
                         property.setPrefix(XSD_PREFIX);
 
-                        complexType = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "complexType");
+                        /*complexType = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "complexType");
                         complexType.setPrefix(XSD_PREFIX);
                         property.appendChild(complexType);
 
+                        Element simpleContent = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "simpleContent");
+                        simpleContent.setPrefix(XSD_PREFIX);
+                        complexType.appendChild(simpleContent);
+
+                        Element extension = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "extension");
+                        extension.setPrefix(XSD_PREFIX);
+                        extension.setAttribute("base", XSD_ANYURI);
+                        simpleContent.appendChild(extension);
 
                         Element attribute = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
                         attribute.setPrefix(XSD_PREFIX);
-                        complexType.appendChild(attribute);
+                        extension.appendChild(attribute);
                         attribute.setAttribute(NAME, "href");
                         attribute.setAttribute("use", "required");
                         attribute.setAttribute("form", "qualified");
-                        attribute.setAttribute(TYPE, XSD_ANYURI);
+                        attribute.setAttribute(TYPE, XSD_ANYURI);*/
                     }
                 }
             }
@@ -2431,7 +2486,7 @@ public final class SemanticClassPublisher extends RestModule
                             if (objClass instanceof SemanticClass)
                             {
                                 SemanticClass returnSemanticClazz = (SemanticClass) objClass;
-                                addProperties(returnSemanticClazz, methodElement, ranges);
+                                addPropertiesToXSD(returnSemanticClazz, methodElement, ranges);
                             }
                         }
                         else if (returnType.equals(Iterator.class)) // GenericIterator
