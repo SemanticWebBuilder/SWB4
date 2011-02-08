@@ -409,10 +409,6 @@ public final class SemanticClassPublisher extends RestModule
             Element request = doc.createElementNS(WADL_NS, "request");
             method.appendChild(request);
 
-
-
-
-
             Iterator<SemanticProperty> props = definition.getSemanticClass().listProperties();
             while (props.hasNext())
             {
@@ -548,6 +544,7 @@ public final class SemanticClassPublisher extends RestModule
         public void execute(HttpServletRequest request, HttpServletResponse response, String basepath) throws IOException
         {
             String modeluri = request.getParameter(REST_MODELURI);
+            log.debug("trying to create a object in model: "+modeluri);
             if (modeluri == null)
             {
                 response.setStatus(400);
@@ -565,8 +562,10 @@ public final class SemanticClassPublisher extends RestModule
             }
             modeluri = fixURI(modeluri);
             SemanticObject objmodel = SemanticObject.createSemanticObject(modeluri);
+            log.debug("trying to create a object in model: "+modeluri);
             if (objmodel == null)
             {
+                log.debug("The model with uri "+modeluri+" was not found");
                 response.setStatus(400);
                 showError(request, response, "The model " + request.getParameter(REST_MODELURI) + " was not found");
                 return;
@@ -581,6 +580,7 @@ public final class SemanticClassPublisher extends RestModule
             GenericObject model = (GenericObjectBase) objmodel.createGenericInstance();
             if (!(model instanceof WebSite))
             {
+                log.debug("The model with uri "+modeluri+" is not a WebSite");
                 response.setStatus(400);
                 showError(request, response, "The model " + request.getParameter(REST_MODELURI) + " was not found");
                 return;
@@ -598,7 +598,7 @@ public final class SemanticClassPublisher extends RestModule
                 id = String.valueOf(site.getSemanticObject().getModel().getCounter(definition.getSemanticClass()));
             }
             else
-            {
+            {                
                 id = request.getParameter(REST_ID);
                 if (id == null)
                 {
@@ -606,6 +606,7 @@ public final class SemanticClassPublisher extends RestModule
                     showError(request, response, "The object parameter rest:id was not found");
                     return;
                 }
+                log.debug("id to create "+id);
                 SemanticObject objtest = site.getSemanticObject().getModel().createSemanticObjectById(id, definition.getSemanticClass());
                 if (objtest != null)
                 {
@@ -615,10 +616,13 @@ public final class SemanticClassPublisher extends RestModule
                 }
             }
             GenericObject newobj = site.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, definition.getSemanticClass()), definition.getSemanticClass());
+            log.debug("object created "+newobj.getURI());
             // update properties
             try
             {
+                log.debug("updating properties "+newobj.getURI());
                 updateProperties(request, newobj.getSemanticObject());
+                log.debug("properties for object "+newobj.getURI()+" was done");
                 showCreted(request, response, newobj.getURI());
             }
             catch (Exception e)
