@@ -53,7 +53,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import static javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI;
 
-
 /**
  *
  * @author victor.lorenzana
@@ -192,6 +191,7 @@ public final class SemanticClassPublisher extends RestModule
             {
                 String uri = request.getParameter("uri");
                 uri = fixURI(uri);
+                log.debug("getting object with uri " + uri);
                 SemanticObject obj = SemanticObject.createSemanticObject(uri);
                 if (obj != null)
                 {
@@ -353,6 +353,7 @@ public final class SemanticClassPublisher extends RestModule
             else
             {
                 uri = fixURI(uri);
+                log.debug("getting object with uri " + uri);
                 SemanticObject obj = SemanticObject.createSemanticObject(uri);
                 if (obj != null)
                 {
@@ -678,12 +679,14 @@ public final class SemanticClassPublisher extends RestModule
                 showError(request, response, "The parameter uri was not found");
             }
             uri = fixURI(uri);
+            log.debug("getting object with uri " + uri);
             SemanticObject obj = SemanticObject.createSemanticObject(uri);
             if (obj != null)
             {
                 SemanticClass clazzObject = obj.getSemanticClass();
                 if (!clazzObject.equals(definition.getSemanticClass()))
                 {
+                    log.debug("The object " + obj.getURI() + " has the semanticclass " + clazzObject.getURI() + "  and the definition has semanticclass " + definition.getSemanticClass().getURI());
                     response.setStatus(400);
                     showError(request, response, "The object was not found");
                     return;
@@ -884,23 +887,27 @@ public final class SemanticClassPublisher extends RestModule
                 {
                     log.debug("resinvoke is GenericIterator: ");
                     Document doc = SWBUtils.XML.getNewDocument();
-                    String prefix="demo";
 
-                    Element res = doc.createElementNS(REST_RESOURCES_2010, m.getName());
-                    res.setPrefix(prefix);
-                    doc.appendChild(res);
 
-                    Attr xmlns = doc.createAttribute("xmlns");
-                    xmlns.setValue(REST_RESOURCES_2010);
-                    res.setAttributeNode(xmlns);
-                    
-                    
-                    
+                    String prefix = "";
+                    Element res = null;
+
                     GenericIterator gi = (GenericIterator) resinvoke;
                     if (gi.hasNext())
                     {
                         GenericObject go = gi.next();
                         SemanticObject obj = go.getSemanticObject();
+
+                        prefix = obj.getSemanticClass().getPrefix();
+
+                        res = doc.createElementNS(REST_RESOURCES_2010, m.getName());
+                        res.setPrefix(prefix);
+                        doc.appendChild(res);
+
+                        Attr xmlns = doc.createAttribute("xmlns");
+                        xmlns.setValue(REST_RESOURCES_2010);
+                        res.setAttributeNode(xmlns);
+
                         Element name = doc.createElementNS(REST_RESOURCES_2010, obj.getSemanticClass().getName());
                         name.setPrefix(prefix);
 
@@ -913,7 +920,7 @@ public final class SemanticClassPublisher extends RestModule
                         href.setValue(getPathForObject(obj, basePath));
                         href.setPrefix(prefix);
                         name.setAttributeNodeNS(href);
-                        
+
 
                         Text data = doc.createTextNode(obj.getURI());
                         name.appendChild(data);
@@ -936,7 +943,7 @@ public final class SemanticClassPublisher extends RestModule
                         href.setPrefix(prefix);
                         name.setAttributeNodeNS(href);
 
-                        
+
 
                         Text data = doc.createTextNode(obj.getURI());
                         name.appendChild(data);
@@ -1497,8 +1504,17 @@ public final class SemanticClassPublisher extends RestModule
     private Document serializeAsXML(SemanticObject obj, String basdepath)
     {
         Document doc = SWBUtils.XML.getNewDocument();
-        Element name = doc.createElementNS(obj.getSemanticClass().getURI(), obj.getSemanticClass().getName());        
-        name.setAttribute("xmlns", obj.getSemanticClass().getURI());
+        String namespace=obj.getSemanticClass().getURI();
+        int pos=namespace.indexOf("#");
+        if(pos!=-1)
+        {
+            namespace=namespace.substring(0,pos);
+        }
+        Element name = doc.createElementNS(namespace, obj.getSemanticClass().getName());
+
+        name.setPrefix(obj.getSemanticClass().getPrefix());
+        name.setAttribute("xmlns", namespace);
+        name.setAttribute("xmlns:" + obj.getSemanticClass().getPrefix(), namespace);
         doc.appendChild(name);
         serialize(obj, name, basdepath);
         return doc;
@@ -1513,6 +1529,13 @@ public final class SemanticClassPublisher extends RestModule
 
     private void serialize(SemanticObject obj, Element name, String basepath)
     {
+        String prefix = obj.getSemanticClass().getPrefix();
+        String namespace=obj.getSemanticClass().getURI();
+        int pos=namespace.indexOf("#");
+        if(pos!=-1)
+        {
+            namespace=namespace.substring(0,pos);
+        }
         Document doc = name.getOwnerDocument();
         Iterator<SemanticProperty> props = obj.listProperties();
         while (props.hasNext())
@@ -1528,7 +1551,8 @@ public final class SemanticClassPublisher extends RestModule
                         while (values.hasNext())
                         {
                             SemanticLiteral value = values.next();
-                            Element eprop = doc.createElementNS(obj.getSemanticClass().getURI(), prop.getName());
+                            Element eprop = doc.createElementNS(namespace, prop.getName());
+                            eprop.setPrefix(prefix);
                             name.appendChild(eprop);
                             Text tvalue = doc.createTextNode(value.getString());
                             eprop.appendChild(tvalue);
@@ -1536,7 +1560,8 @@ public final class SemanticClassPublisher extends RestModule
                     }
                     else
                     {
-                        Element eprop = doc.createElementNS(obj.getSemanticClass().getURI(), prop.getName());
+                        Element eprop = doc.createElementNS(namespace, prop.getName());
+                        eprop.setPrefix(prefix);
                         name.appendChild(eprop);
                         Text value = doc.createTextNode(obj.getProperty(prop));
                         eprop.appendChild(value);
@@ -1555,9 +1580,15 @@ public final class SemanticClassPublisher extends RestModule
                                 SemanticObject value = values.next();
                                 if (value != null)
                                 {
-                                    Element eprop = doc.createElementNS(obj.getSemanticClass().getURI(), prop.getName());                                    
+                                    Element eprop = doc.createElementNS(namespace, prop.getName());
+                                    eprop.setPrefix(prefix);
                                     name.appendChild(eprop);
-                                    eprop.setAttributeNS(REST_RESOURCES_2010, "href", getPathForObject(value, basepath));
+
+                                    Attr href = doc.createAttributeNS(namespace, "href");
+                                    href.setPrefix(prefix);
+                                    href.setValue(getPathForObject(value, basepath));
+                                    eprop.setAttributeNode(href);
+                                    //eprop.setAttributeNS(REST_RESOURCES_2010, "href", getPathForObject(value, basepath));
 
                                     Text data = doc.createTextNode(value.getURI());
                                     eprop.appendChild(data);
@@ -1566,12 +1597,13 @@ public final class SemanticClassPublisher extends RestModule
                         }
                         else
                         {
-                            Element eprop = doc.createElementNS(obj.getSemanticClass().getURI(), prop.getName());
+                            Element eprop = doc.createElementNS(namespace, prop.getName());
+                            eprop.setPrefix(prefix);
                             name.appendChild(eprop);
                             SemanticObject value = obj.getObjectProperty(prop);
                             if (value != null)
                             {
-                                eprop.setAttributeNS(REST_RESOURCES_2010, "href", getPathForObject(value, basepath));
+                                eprop.setAttributeNS(namespace, "href", getPathForObject(value, basepath));
                                 Text data = doc.createTextNode(value.getURI());
                                 eprop.appendChild(data);
                             }
@@ -2111,7 +2143,7 @@ public final class SemanticClassPublisher extends RestModule
         schema.setAttributeNode(attr);
 
         schema.setAttribute("xmlns:" + clazz.getPrefix(), clazz.getURI());
-        
+
         schema.setAttribute("xmlns:swbrest", REST_RESOURCES_2010);
         doc.appendChild(schema);
         schema.setPrefix(XSD_PREFIX);
@@ -2249,7 +2281,7 @@ public final class SemanticClassPublisher extends RestModule
         Document doc = SWBUtils.XML.getNewDocument();
         Element schema = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "schema");
         schema.setAttribute("targetNamespace", REST_RESOURCES_2010);
-        
+
         Attr attr = doc.createAttribute("xmlns");
         attr.setValue(REST_RESOURCES_2010);
         schema.setAttributeNode(attr);
@@ -2280,6 +2312,8 @@ public final class SemanticClassPublisher extends RestModule
                 {
                     Element property = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, ELEMENT);
                     property.setPrefix(XSD_PREFIX);
+                    property.setAttribute("form", "qualified");
+                    //property.setAttribute("use", "required");
                     property.setAttribute(NAME, prop.getName());
                     sequence.appendChild(property);
                     String type = XSD_STRING;
@@ -2341,19 +2375,27 @@ public final class SemanticClassPublisher extends RestModule
                         Element property = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, ELEMENT);
                         sequence.appendChild(property);
                         property.setAttribute(NAME, prop.getName());
-                        property.setAttribute(TYPE, XSD_ANYURI);
+                        property.setAttribute("form", "qualified");
+                        //property.setAttribute("use", "required");
                         if (prop.getName().startsWith("has"))
                         {
                             property.setAttribute("minOccurs", "0");
                             property.setAttribute("maxOccurs", "unbounded");
                         }
                         property.setPrefix(XSD_PREFIX);
-                        //property.setAttribute("type", range.getName());
+
+                        complexType = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "complexType");
+                        complexType.setPrefix(XSD_PREFIX);
+                        property.appendChild(complexType);
+
+
                         Element attribute = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "attribute");
                         attribute.setPrefix(XSD_PREFIX);
-                        property.appendChild(attribute);
+                        complexType.appendChild(attribute);
                         attribute.setAttribute(NAME, "href");
-                        attribute.setAttribute(TYPE, XSD_STRING);
+                        attribute.setAttribute("use", "required");
+                        attribute.setAttribute("form", "qualified");
+                        attribute.setAttribute(TYPE, XSD_ANYURI);
                     }
                 }
             }
@@ -2425,7 +2467,7 @@ public final class SemanticClassPublisher extends RestModule
                                             child.setAttribute("maxOccurs", "unbounded");
                                             child.setAttribute("minOccurs", "0");
                                             //child.setAttribute(TYPE, XSD_ANYURI);
-                                            Element complexType = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "complexType");                                            
+                                            Element complexType = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "complexType");
                                             child.appendChild(complexType);
 
                                             Element simpleContent = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "simpleContent");
@@ -2451,7 +2493,7 @@ public final class SemanticClassPublisher extends RestModule
                                             href.setAttribute("form", "qualified");
                                             href.setAttribute("use", "required");
                                             href.setAttribute(NAME, "href");
-                                            href.setAttribute(TYPE, XSD_STRING);
+                                            href.setAttribute(TYPE, XSD_ANYURI);
                                             extension.appendChild(href);
                                             sequence.appendChild(child);
                                         }
