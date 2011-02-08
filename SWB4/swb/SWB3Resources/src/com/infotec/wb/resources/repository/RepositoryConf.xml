@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <resource>
+        <resource-name>Repository</resource-name>
+        <display-name xml:lang="es">Repositorio de documentos</display-name>
+        <display-name xml:lang="en">Repository</display-name>
+        <description xml:lang="es">Recurso que genera un repositorio de documentos compartidos con administración y control de cambios</description>
+        <description xml:lang="en">Resource that generates repositorio of documents shared with administration and control of changes</description>
+        <resource-class>com.infotec.wb.resources.repository.Repository</resource-class>
+        <expiration-cache>0</expiration-cache>
+        <resource-bundle>com.infotec.wb.resources.repository.Repository</resource-bundle>
+        <resource-type>3</resource-type>
+        <extended-attributes>
+        </extended-attributes>
+    </resource>
