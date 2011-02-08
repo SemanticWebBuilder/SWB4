@@ -140,7 +140,9 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         try {
             request.setAttribute("acceptguesscomments", isAcceptGuessUsers());
             request.setAttribute("paramRequest", paramRequest);
-            RequestDispatcher rd = request.getRequestDispatcher("/swbadmin/jsp/forum/swbForum.jsp");
+            String path=getJspView();
+            if(path==null)path="/swbadmin/jsp/forum/swbForum.jsp";
+            RequestDispatcher rd = request.getRequestDispatcher(path);
             rd.include(request, response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -371,10 +373,11 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
             WebPage page = response.getWebPage();
             WebSite website = page.getWebSite();
             User user = response.getUser();
+            boolean isAdmin=user.hasRole(getAdminRole());
             Resource base = response.getResourceBase();
             Date date = new Date();
             String action = response.getAction();
-            if (action.equals("addThread")) {
+            if ((isAdmin||!isOnlyAdminCreateThreads()) && action.equals("addThread")) {
                 SWBFormMgr mgr = new SWBFormMgr(Thread.frm_Thread, website.getSemanticObject(), null);
                 mgr.setCaptchaStatus(true);
                 try
@@ -471,7 +474,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
                     log.error(e);
                 }
                 response.setAction("viewPost");
-            } else if (action.equals("removeThread")) {
+            } else if ((isAdmin||!isOnlyAdminCreateThreads()) && action.equals("removeThread")) {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
                 Thread thread = Thread.ClassMgr.getThread(semObject.getId(), website);
                 //int threadReplyCount = thread.getReplyCount();
@@ -486,7 +489,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
                 semObject.remove();
                 //Redirecciona
                 response.setMode(response.Mode_VIEW);
-            } else if (action.equals("removePost")) {
+            } else if ((isAdmin||!isOnlyAdminCreateThreads()) && action.equals("removePost")) {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
 
                 Post Post2remove = Post.ClassMgr.getPost(semObject.getId(), website);
@@ -520,7 +523,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
                 }
                 response.setMode(response.Mode_VIEW);
                 response.setAction("viewThreads");
-            } else if (action.equals("editThread")) {
+            } else if ((isAdmin||!isOnlyAdminCreateThreads()) && action.equals("editThread")) {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
                 SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
 
