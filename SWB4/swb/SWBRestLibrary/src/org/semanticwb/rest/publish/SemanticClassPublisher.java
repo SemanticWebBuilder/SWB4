@@ -1943,7 +1943,7 @@ public final class SemanticClassPublisher extends RestModule
 
     public Document getCreatedAsXML(String uri)
     {
-        Document doc = SWBUtils.XML.getNewDocument();
+        /*Document doc = SWBUtils.XML.getNewDocument();
         Element created = doc.createElement("Created");
         doc.appendChild(created);
         Attr xmlns = doc.createAttribute("xmlns");
@@ -1951,6 +1951,23 @@ public final class SemanticClassPublisher extends RestModule
         created.appendChild(xmlns);
         Text data = doc.createTextNode(uri);
         created.appendChild(data);
+        return doc;*/
+
+        Document doc = SWBUtils.XML.getNewDocument();
+        String prefix="created";
+        Element updated = doc.createElementNS(REST_RESOURCES_2010,"Created");
+        updated.setPrefix(prefix);
+
+        Attr xmlns = doc.createAttribute("xmlns");
+        xmlns.setValue(REST_RESOURCES_2010);
+        updated.setAttributeNode(xmlns);
+
+        updated.setAttribute("xmlns:"+prefix, REST_RESOURCES_2010);
+
+
+        doc.appendChild(updated);
+        Text data = doc.createTextNode(uri);
+        updated.appendChild(data);
         return doc;
     }
 
@@ -2045,15 +2062,22 @@ public final class SemanticClassPublisher extends RestModule
     }
 
     public Document getDeletedAsXML(boolean isdeleted)
-    {
+    {        
         Document doc = SWBUtils.XML.getNewDocument();
-        Element deleted = doc.createElement("Deleted");
+        String prefix="deleted";
+        Element updated = doc.createElementNS(REST_RESOURCES_2010,"Deleted");
+        updated.setPrefix(prefix);
+
         Attr xmlns = doc.createAttribute("xmlns");
         xmlns.setValue(REST_RESOURCES_2010);
-        deleted.appendChild(xmlns);
-        doc.appendChild(deleted);
+        updated.setAttributeNode(xmlns);
+
+        updated.setAttribute("xmlns:"+prefix, REST_RESOURCES_2010);
+
+
+        doc.appendChild(updated);
         Text data = doc.createTextNode(Boolean.toString(isdeleted));
-        deleted.appendChild(data);
+        updated.appendChild(data);
         return doc;
     }
 
