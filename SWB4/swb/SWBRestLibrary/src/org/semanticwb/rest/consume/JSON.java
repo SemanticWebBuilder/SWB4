@@ -123,7 +123,172 @@ public class JSON extends RepresentationBase implements RepresentationRequest, J
     {
         return APPLICATION_JSON;
     }
-   
+   private Parameter getDefinition(String name)
+    {
+        for (Parameter parameter : this.getAllParameters())
+        {
+            if (parameter.getName().equals(name))
+            {
+                return parameter;
+            }
+        }
+        for (Parameter parameter : this.method.getAllParameters())
+        {
+            if (parameter.getName().equals(name))
+            {
+                return parameter;
+            }
+        }
+        return null;
+    }
+    private String constructParametersToURL(List<ParameterValue> values) throws RestException
+    {
+        StringBuilder sb = new StringBuilder();
+        for (ParameterValue pvalue : values)
+        {
+            Parameter definition = getDefinition(pvalue.getName());
+            if (definition != null && "query".equals(definition.getStyle()))
+            {
+                try
+                {
+                    sb.append(pvalue.getName());
+                    sb.append("=");
+                    sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
+                    sb.append("&");
+                }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                    throw new RestException(e);
+                }
+            }
+
+        }
+
+        for (Parameter parameter : this.parameters)
+        {
+            if (parameter.isFixed())
+            {
+                try
+                {
+                    sb.append(parameter.getName());
+                    sb.append("=");
+                    sb.append(URLEncoder.encode(parameter.getFixedValue(), "utf-8"));
+                    sb.append("&");
+                }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                    throw new RestException(e);
+                }
+            }
+        }
+
+        for (Parameter parameter : this.method.getAllParameters())
+        {
+            if (parameter.isFixed())
+            {
+                try
+                {
+                    sb.append(parameter.getName());
+                    sb.append("=");
+                    sb.append(URLEncoder.encode(parameter.getFixedValue(), "utf-8"));
+                    sb.append("&");
+                }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                    throw new RestException(e);
+                }
+            }
+        }
+
+
+        /*try
+        {
+        for (Parameter parameter : this.getRequiredParameters())
+        {
+        for (ParameterValue pvalue : values)
+        {
+        if (pvalue.getName().equals(parameter.getName()))
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
+        sb.append("&");
+        }
+        }
+        }
+        for (Parameter parameter : this.getOptionalParameters())
+        {
+        for (ParameterValue pvalue : values)
+        {
+        if (pvalue.getName().equals(parameter.getName()))
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
+        sb.append("&");
+        }
+        }
+        }
+        for (Parameter parameter : this.parameters)
+        {
+        if (parameter.isFixed())
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(parameter.getFixedValue(), "utf-8"));
+        sb.append("&");
+        }
+        }
+
+
+        for (Parameter parameter : this.method.getRequiredParameters())
+        {
+        for (ParameterValue pvalue : values)
+        {
+        if (pvalue.getName().equals(parameter.getName()))
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
+        sb.append("&");
+        }
+        }
+        }
+        for (Parameter parameter : this.method.getOptionalParameters())
+        {
+        for (ParameterValue pvalue : values)
+        {
+        if (pvalue.getName().equals(parameter.getName()))
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
+        sb.append("&");
+        }
+        }
+        }
+        for (Parameter parameter : this.method.getAllParameters())
+        {
+        if (parameter.isFixed())
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(parameter.getFixedValue(), "utf-8"));
+        sb.append("&");
+        }
+        }
+
+        }
+        catch (Exception e)
+        {
+        log.debug(e);
+        throw new RestException(e);
+        }*/
+        return sb.toString();
+    }
 
     private String constructParameters(List<ParameterValue> values) throws RestException
     {
@@ -216,9 +381,11 @@ public class JSON extends RepresentationBase implements RepresentationRequest, J
         checkParameters(values);
         URL _url = this.getMethod().getResource().getPath();
         HttpURLConnection con=null;
-        String requestAtomDocument = constructParameters(values);            
+        String requestAtomDocument = constructParameters(values);
+        String _parameters = constructParametersToURL(values);
         try
         {
+            _url = new URL(_url.toString() + "?" + _parameters);
             if(this.getMethod().getHTTPMethod()==HTTPMethod.POST || this.getMethod().getHTTPMethod()==HTTPMethod.PUT)
             {
                 con = (HttpURLConnection) _url.openConnection();

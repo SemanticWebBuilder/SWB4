@@ -455,108 +455,52 @@ public class ApplicationXML extends RepresentationBase implements Representation
         }
     }
 
+    
+
     protected Document constructParameters(List<ParameterValue> values) throws RestException
     {
         Document doc = SWBUtils.XML.getNewDocument();
-        /*Element feed = doc.createElementNS(APPLICATION_NS, "feed");
-        doc.appendChild(feed);
-        try
-        {
-        for (Parameter parameter : this.getRequiredParameters())
-        {
-        for (ParameterValue pvalue : values)
-        {
-        if (pvalue.getName().equals(parameter.getName()))
-        {
-        Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
-        Text data = doc.createTextNode(pvalue.getValue().toString());
-        eparam.appendChild(data);
-        }
-        }
-        }
-        for (Parameter parameter : this.getOptionalParameters())
-        {
-        for (ParameterValue pvalue : values)
-        {
-        if (pvalue.getName().equals(parameter.getName()))
-        {
-        Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
-        Text data = doc.createTextNode(pvalue.getValue().toString());
-        eparam.appendChild(data);
-        }
-        }
-        }
-        for (Parameter parameter : this.parameters)
-        {
-        if (parameter.isFixed())
-        {
-        Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
-        Text data = doc.createTextNode(parameter.getFixedValue());
-        eparam.appendChild(data);
-        }
-        }
-
-
-        for (Parameter parameter : this.method.getRequiredParameters())
-        {
-        for (ParameterValue pvalue : values)
-        {
-        if (pvalue.getName().equals(parameter.getName()))
-        {
-        Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
-        Text data = doc.createTextNode(pvalue.getValue().toString());
-        eparam.appendChild(data);
-        }
-        }
-        }
-        for (Parameter parameter : this.method.getOptionalParameters())
-        {
-        for (ParameterValue pvalue : values)
-        {
-        if (pvalue.getName().equals(parameter.getName()))
-        {
-        Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
-        Text data = doc.createTextNode(pvalue.getValue().toString());
-        eparam.appendChild(data);
-        }
-        }
-        }
-        for (Parameter parameter : this.method.getAllParameters())
-        {
-        if (parameter.isFixed())
-        {
-        Element eparam = doc.createElementNS(APPLICATION_NS, parameter.getName());
-        Text data = doc.createTextNode(parameter.getFixedValue());
-        eparam.appendChild(data);
-        }
-        }
-
-        }
-        catch (Exception e)
-        {
-        log.debug(e);
-        throw new RestException(e);
-        }*/
         return doc;
     }
 
+    private Parameter getDefinition(String name)
+    {
+        for (Parameter parameter : this.getAllParameters())
+        {
+            if (parameter.getName().equals(name))
+            {
+                return parameter;
+            }
+        }
+        for (Parameter parameter : this.method.getAllParameters())
+        {
+            if (parameter.getName().equals(name))
+            {
+                return parameter;
+            }
+        }
+        return null;
+    }
     private String constructParametersToURL(List<ParameterValue> values) throws RestException
     {
         StringBuilder sb = new StringBuilder();
         for (ParameterValue pvalue : values)
         {
-
-            try
+            Parameter definition = getDefinition(pvalue.getName());
+            if (definition != null && "query".equals(definition.getStyle()))
             {
-                sb.append(pvalue.getName());
-                sb.append("=");
-                sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
-                sb.append("&");
-            }
-            catch (Exception e)
-            {
-                log.debug(e);
-                throw new RestException(e);
+                try
+                {
+                    sb.append(pvalue.getName());
+                    sb.append("=");
+                    sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
+                    sb.append("&");
+                }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                    throw new RestException(e);
+                }
             }
 
         }
