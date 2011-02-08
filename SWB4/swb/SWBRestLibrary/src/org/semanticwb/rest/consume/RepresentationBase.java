@@ -6,11 +6,14 @@ package org.semanticwb.rest.consume;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -20,7 +23,7 @@ import org.w3c.dom.NodeList;
  */
 public abstract class RepresentationBase implements RepresentationRequest
 {
-
+    private static final Logger log = SWBUtils.getLogger(RepresentationBase.class);
     public static final String ORG_SEMANTICWB_REST_REPRESENTATIONBASE = "org.semanticwb.rest.RepresentationBase/";
     protected static final String CONTENT_TYPE = "Content-Type";
     protected final Set<Parameter> parameters = new HashSet<Parameter>();
@@ -98,7 +101,70 @@ public abstract class RepresentationBase implements RepresentationRequest
         }
         return false;
     }
-
+    private Object convert(Object value,Class clazz)
+    {
+        Object convert=null;
+        if(clazz.getName().equals("java.lang.String"))
+        {
+            convert=value.toString();
+        }
+        if(clazz.getName().equals("java.net.URI"))
+        {
+            try
+            {
+                convert=new URI(value.toString());
+            }
+            catch(Exception e)
+            {
+                log.debug(e);
+            }
+        }
+        if(clazz.getName().equals("java.lang.Double"))
+        {
+            try
+            {
+                convert=Double.parseDouble(value.toString());
+            }
+            catch(Exception e)
+            {
+                log.debug(e);
+            }
+        }
+        if(clazz.getName().equals("java.lang.Long"))
+        {
+            try
+            {
+                convert=Long.parseLong(value.toString());
+            }
+            catch(Exception e)
+            {
+                log.debug(e);
+            }
+        }
+        if(clazz.getName().equals("java.lang.Float"))
+        {
+            try
+            {
+                convert=Float.parseFloat(value.toString());
+            }
+            catch(Exception e)
+            {
+                log.debug(e);
+            }
+        }
+        if(clazz.getName().equals("java.lang.Integer"))
+        {
+            try
+            {
+                convert=Integer.parseInt(value.toString());
+            }
+            catch(Exception e)
+            {
+                log.debug(e);
+            }
+        }
+        return convert;
+    }
     private void valid(Parameter parameter, ParameterValue value) throws RestException
     {
         if (value.getValue() == null)
@@ -107,7 +173,15 @@ public abstract class RepresentationBase implements RepresentationRequest
         }
         if (!value.getValue().getClass().equals(parameter.getType()))
         {
-            throw new RestException("Value invalid required :" + parameter.getType().getName() + " value type: " + value.getValue().getClass().getName());
+            Object newvalue=convert(value.getValue(),parameter.getType());
+            if(newvalue==null)
+            {
+                throw new RestException("Value invalid required :" + parameter.getType().getName() + " value type: " + value.getValue().getClass().getName());
+            }
+            else
+            {
+                value.setValue(newvalue);
+            }
         }
 
     }

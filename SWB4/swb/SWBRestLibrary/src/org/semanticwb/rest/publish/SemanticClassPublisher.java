@@ -33,7 +33,6 @@ import org.w3c.dom.Text;
 import org.semanticwb.platform.SemanticObject;
 import java.io.IOException;
 import java.net.URI;
-import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -168,7 +167,7 @@ public final class SemanticClassPublisher extends RestModule
 
 
             Element param = doc.createElementNS(WADL_NS, "param");
-            param.setAttribute(NAME, "uri");
+            param.setAttribute(NAME, REST_URI);
             param.setAttribute(STYLE, QUERY);
             param.setAttribute(TYPE, XSD_STRING);
             param.setAttribute(REQUIRED, "true");
@@ -189,11 +188,11 @@ public final class SemanticClassPublisher extends RestModule
 
         public void execute(HttpServletRequest request, HttpServletResponse response, String basepath) throws IOException
         {
-            if (request.getParameter("uri") != null)
+            if (request.getParameter(REST_URI) != null)
             {
-                String uri = request.getParameter("uri");
+                String uri = request.getParameter(REST_URI);
                 uri = fixURI(uri);
-                log.debug("getting object with uri " + uri);
+                log.debug("getting object with uri " + uri+" method "+getHTTPMethod());
                 SemanticObject obj = SemanticObject.createSemanticObject(uri);
                 if (obj != null)
                 {
@@ -256,6 +255,7 @@ public final class SemanticClassPublisher extends RestModule
             param.setAttribute(NAME, REST_URI);
             param.setAttribute(STYLE, QUERY);
             param.setAttribute(TYPE, XSD_ANYURI);
+            param.setAttribute("required", "true");
 
             request.appendChild(param);
 
@@ -355,23 +355,29 @@ public final class SemanticClassPublisher extends RestModule
             else
             {
                 uri = fixURI(uri);
-                log.debug("getting object with uri " + uri);
+                log.debug("getting object with uri " + uri+ " method: "+getHTTPMethod());
                 SemanticObject obj = SemanticObject.createSemanticObject(uri);
                 if (obj != null)
                 {
+                    log.debug("The object with uri :"+obj.getURI()+" was found");
                     if (!obj.getSemanticClass().equals(definition.getSemanticClass()))
                     {
+                        log.debug("The object is no the corrcet type, uri :"+obj.getURI());
                         response.setStatus(400);
                         showError(request, response, "The object was not found");
                         return;
                     }
                     try
                     {
+                        log.debug("updating properties for the object uri :"+obj.getURI());
                         updateProperties(request, obj);
+                        log.debug("properties updated for the object uri :"+obj.getURI());
                         showUpdated(request, response, true);
                     }
                     catch (Exception e)
                     {
+                        log.debug("Error, uri :"+obj.getURI());
+                        log.debug(e);
                         response.setStatus(400);
                         showError(request, response, e.getMessage());
                         return;
@@ -379,6 +385,7 @@ public final class SemanticClassPublisher extends RestModule
                 }
                 else
                 {
+                    log.debug("The object with uri :"+obj.getURI()+" was not found");
                     showUpdated(request, response, false);
                 }
             }
@@ -644,7 +651,7 @@ public final class SemanticClassPublisher extends RestModule
 
 
             Element param = doc.createElementNS(WADL_NS, "param");
-            param.setAttribute(NAME, "uri");
+            param.setAttribute(NAME, REST_URI);
             param.setAttribute(STYLE, QUERY);
             param.setAttribute(TYPE, XSD_STRING);
             param.setAttribute(REQUIRED, "true");
@@ -674,17 +681,19 @@ public final class SemanticClassPublisher extends RestModule
 
         public void execute(HttpServletRequest request, HttpServletResponse response, String basepath) throws IOException
         {
-            String uri = request.getParameter("uri");
+            String uri = request.getParameter(REST_URI);
+            log.debug("triyng to update uri "+uri);
             if (uri == null || uri.trim().equals(""))
             {
                 response.setStatus(400);
                 showError(request, response, "The parameter uri was not found");
             }
             uri = fixURI(uri);
-            log.debug("getting object with uri " + uri);
+            log.debug("getting object with uri " + uri+" to update method: "+getHTTPMethod());
             SemanticObject obj = SemanticObject.createSemanticObject(uri);
             if (obj != null)
             {
+                log.debug("The object with uri "+obj.getURI()+" exists");
                 SemanticClass clazzObject = obj.getSemanticClass();
                 if (!clazzObject.equals(definition.getSemanticClass()))
                 {
@@ -697,8 +706,9 @@ public final class SemanticClassPublisher extends RestModule
             }
             else
             {
+                log.debug("The object with uri "+uri+" was not found");
                 response.setStatus(400);
-                showError(request, response, "The objct with uri " + request.getParameter("uri") + " was not found");
+                showError(request, response, "The objct with uri " + request.getParameter(REST_URI) + " was not found");
             }
         }
     }
@@ -1460,7 +1470,7 @@ public final class SemanticClassPublisher extends RestModule
                                 {
                                     String name = prop.getName();
                                     JSONObject data = new JSONObject();
-                                    data.put("uri", value.getURI());
+                                    data.put("shorturi", value.getShortURI());
                                     data.put("href", getPathForObject(value, basepath));
                                     jSONObject.accumulate(name, data);
                                 }
@@ -1473,7 +1483,7 @@ public final class SemanticClassPublisher extends RestModule
                             {
                                 String name = prop.getName();
                                 JSONObject data = new JSONObject();
-                                data.put("uri", value.getURI());
+                                data.put("shorturi", value.getShortURI());
                                 data.put("href", getPathForObject(value, basepath));
                                 jSONObject.accumulate(name, data);
                             }
@@ -1651,7 +1661,7 @@ public final class SemanticClassPublisher extends RestModule
 
     private void updateProperties(HttpServletRequest request, SemanticObject obj) throws Exception
     {
-        Iterator<SemanticProperty> props = obj.listProperties();
+        Iterator<SemanticProperty> props = obj.getSemanticClass().listProperties();
         while (props.hasNext())
         {
             SemanticProperty prop = props.next();
@@ -1715,6 +1725,7 @@ public final class SemanticClassPublisher extends RestModule
                             for (String value : values)
                             {
                                 SemanticLiteral literal = SemanticLiteral.valueOf(prop, value);
+                                log.debug("new value for property "+prop.getName()+" value: "+value.toString());
                                 obj.addLiteralProperty(prop, literal);
                             }
 
@@ -1725,8 +1736,9 @@ public final class SemanticClassPublisher extends RestModule
                     {
                         if (values != null)
                         {
-                            if (values.length != 1)
+                            if (values.length > 1)
                             {
+                                log.debug("values.length: "+values.length);
                                 throw new Exception("The property " + prop.getName() + " has single value");
                             }
                             if (values[0] != null)
@@ -1734,18 +1746,22 @@ public final class SemanticClassPublisher extends RestModule
                                 Object value = get(values[0], type);
                                 if (value instanceof Date)
                                 {
+                                    log.debug("new value for property "+prop.getName()+" value: "+value.toString());
                                     obj.setDateProperty(prop, (Date) value);
                                 }
                                 if (value instanceof Timestamp)
                                 {
+                                    log.debug("new value for property "+prop.getName()+" value: "+value.toString());
                                     obj.setDateTimeProperty(prop, (Timestamp) value);
                                 }
                                 if (value instanceof Boolean)
                                 {
+                                    log.debug("new value for property "+prop.getName()+" value: "+value.toString());
                                     obj.setBooleanProperty(prop, ((Boolean) value).booleanValue());
                                 }
                                 else
                                 {
+                                    log.debug("new value for property "+prop.getName()+" value: "+value.toString());
                                     obj.setProperty(prop, value.toString());
                                 }
                             }
@@ -1769,7 +1785,8 @@ public final class SemanticClassPublisher extends RestModule
                                 SemanticObject testobj = SemanticObject.createSemanticObject(uri);
                                 if (testobj == null)
                                 {
-                                    throw new Exception("The object with uri " + value + " was not found");
+                                    log.debug("The object with uri " + uri + " was not found");
+                                    throw new Exception("The object with uri " + uri + " was not found");
                                 }
                                 obj.addObjectProperty(prop, testobj);
 
@@ -1989,10 +2006,17 @@ public final class SemanticClassPublisher extends RestModule
     private Document getUpdatedAsXml(boolean isUpdated)
     {
         Document doc = SWBUtils.XML.getNewDocument();
-        Element updated = doc.createElement("Updated");
+        String prefix="updated";
+        Element updated = doc.createElementNS(REST_RESOURCES_2010,"Updated");
+        updated.setPrefix(prefix);
+
         Attr xmlns = doc.createAttribute("xmlns");
         xmlns.setValue(REST_RESOURCES_2010);
-        updated.appendChild(xmlns);
+        updated.setAttributeNode(xmlns);
+
+        updated.setAttribute("xmlns:"+prefix, REST_RESOURCES_2010);
+        
+
         doc.appendChild(updated);
         Text data = doc.createTextNode(Boolean.toString(isUpdated));
         updated.appendChild(data);

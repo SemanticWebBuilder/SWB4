@@ -33,89 +33,146 @@ public final class XWWWFormUrlEncoded extends RepresentationBase implements Repr
     private String constructParameters(List<ParameterValue> values) throws RestException
     {
         StringBuilder sb = new StringBuilder();
-        try
+        for (ParameterValue pvalue : values)
         {
-            for (Parameter parameter : this.getRequiredParameters())
+
+            try
             {
-                for (ParameterValue pvalue : values)
-                {
-                    if (pvalue.getName().equals(parameter.getName()))
-                    {
-                        sb.append(parameter.getName());
-                        sb.append("=");
-                        sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
-                        sb.append("&");
-                    }
-                }
+                sb.append(pvalue.getName());
+                sb.append("=");
+                sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
+                sb.append("&");
             }
-            for (Parameter parameter : this.getOptionalParameters())
+            catch (Exception e)
             {
-                for (ParameterValue pvalue : values)
-                {
-                    if (pvalue.getName().equals(parameter.getName()))
-                    {
-                        sb.append(parameter.getName());
-                        sb.append("=");
-                        sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
-                        sb.append("&");
-                    }
-                }
+                log.debug(e);
+                throw new RestException(e);
             }
-            for (Parameter parameter : this.parameters)
+
+        }
+
+        for (Parameter parameter : this.parameters)
+        {
+            if (parameter.isFixed())
             {
-                if (parameter.isFixed())
+                try
                 {
                     sb.append(parameter.getName());
                     sb.append("=");
                     sb.append(URLEncoder.encode(parameter.getFixedValue(), "utf-8"));
                     sb.append("&");
                 }
-            }
-
-
-            for (Parameter parameter : this.method.getRequiredParameters())
-            {
-                for (ParameterValue pvalue : values)
+                catch (Exception e)
                 {
-                    if (pvalue.getName().equals(parameter.getName()))
-                    {
-                        sb.append(parameter.getName());
-                        sb.append("=");
-                        sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
-                        sb.append("&");
-                    }
+                    log.debug(e);
+                    throw new RestException(e);
                 }
             }
-            for (Parameter parameter : this.method.getOptionalParameters())
+        }
+
+        for (Parameter parameter : this.method.getAllParameters())
+        {
+            if (parameter.isFixed())
             {
-                for (ParameterValue pvalue : values)
-                {
-                    if (pvalue.getName().equals(parameter.getName()))
-                    {
-                        sb.append(parameter.getName());
-                        sb.append("=");
-                        sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
-                        sb.append("&");
-                    }
-                }
-            }
-            for (Parameter parameter : this.method.getAllParameters())
-            {
-                if (parameter.isFixed())
+                try
                 {
                     sb.append(parameter.getName());
                     sb.append("=");
                     sb.append(URLEncoder.encode(parameter.getFixedValue(), "utf-8"));
                     sb.append("&");
                 }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                    throw new RestException(e);
+                }
             }
+        }
+
+
+        /*try
+        {
+        for (Parameter parameter : this.getRequiredParameters())
+        {
+        for (ParameterValue pvalue : values)
+        {
+        if (pvalue.getName().equals(parameter.getName()))
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
+        sb.append("&");
+        }
+        }
+        }
+        for (Parameter parameter : this.getOptionalParameters())
+        {
+        for (ParameterValue pvalue : values)
+        {
+        if (pvalue.getName().equals(parameter.getName()))
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
+        sb.append("&");
+        }
+        }
+        }
+        for (Parameter parameter : this.parameters)
+        {
+        if (parameter.isFixed())
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(parameter.getFixedValue(), "utf-8"));
+        sb.append("&");
+        }
+        }
+
+
+        for (Parameter parameter : this.method.getRequiredParameters())
+        {
+        for (ParameterValue pvalue : values)
+        {
+        if (pvalue.getName().equals(parameter.getName()))
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
+        sb.append("&");
+        }
+        }
+        }
+        for (Parameter parameter : this.method.getOptionalParameters())
+        {
+        for (ParameterValue pvalue : values)
+        {
+        if (pvalue.getName().equals(parameter.getName()))
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(pvalue.getValue().toString(), "utf-8"));
+        sb.append("&");
+        }
+        }
+        }
+        for (Parameter parameter : this.method.getAllParameters())
+        {
+        if (parameter.isFixed())
+        {
+        sb.append(parameter.getName());
+        sb.append("=");
+        sb.append(URLEncoder.encode(parameter.getFixedValue(), "utf-8"));
+        sb.append("&");
+        }
+        }
 
         }
         catch (Exception e)
         {
-            log.debug(e);
-            throw new RestException(e);
-        }
+        log.debug(e);
+        throw new RestException(e);
+        }*/
         return sb.toString();
     }
 

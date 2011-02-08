@@ -12,7 +12,7 @@ package org.semanticwb.rest.consume;
 public class ParameterValue {
 
     private final String name;
-    private final Object value;
+    private Object value;
     public ParameterValue(String name,Object value)
     {
         this.name=name;
@@ -26,6 +26,10 @@ public class ParameterValue {
     public String getName()
     {
         return name;
+    }
+    public void setValue(Object value)
+    {
+        this.value=value;
     }
     public Object getValue()
     {
