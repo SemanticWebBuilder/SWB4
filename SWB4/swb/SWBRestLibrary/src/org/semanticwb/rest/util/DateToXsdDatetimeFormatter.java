@@ -33,7 +33,7 @@ public class DateToXsdDatetimeFormatter {
     *  This method cannot parse all valid xml date string formats -
     *  so don't try to use it as part of a general xml parser
     */
-    public synchronized Date parse(String xmlDateTime) throws ParseException  {
+    public synchronized Date parseDateTime(String xmlDateTime) throws ParseException  {
         if ( xmlDateTime.length() != 25 )  {
             throw new ParseException("Date not in expected xml datetime format", 0);
         }
@@ -49,11 +49,11 @@ public class DateToXsdDatetimeFormatter {
         }
 
         StringBuilder sb = new StringBuilder(xmlDateTime);
-        sb.deleteCharAt(22);
+        sb.deleteCharAt(13);
         return date_time.parse(sb.toString());
     }
 
-    public synchronized String format(Date xmlDateTime) throws IllegalFormatException  {
+    public synchronized String formatDateTime(Date xmlDateTime) throws IllegalFormatException  {
         String s =  date_time.format(xmlDateTime);
         StringBuilder sb = new StringBuilder(s);
         sb.insert(22, ':');

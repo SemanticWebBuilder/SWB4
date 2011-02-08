@@ -1571,7 +1571,7 @@ public final class SemanticClassPublisher extends RestModule
                                 if (prop.isDateTime())
                                 {
                                     Timestamp date_value = value.getDateTime();
-                                    _value = f.format(new Date(date_value.getTime()));
+                                    _value = f.formatDateTime(new Date(date_value.getTime()));
                                 }
                                 Text tvalue = doc.createTextNode(_value);
                                 eprop.appendChild(tvalue);
@@ -1592,7 +1592,7 @@ public final class SemanticClassPublisher extends RestModule
                             if (prop.isDateTime())
                             {
                                 Timestamp date_value = obj.getDateTimeProperty(prop);
-                                _value = f.format(new Date(date_value.getTime()));
+                                _value = f.formatDateTime(new Date(date_value.getTime()));
                             }
                             Element eprop = doc.createElementNS(namespace, prop.getName());
                             eprop.setPrefix(prefix);
