@@ -213,7 +213,7 @@ public abstract class RepresentationBase implements RepresentationRequest
                         repResponse.process(con);
                         for (ResponseDefinition def : this.method.definitionResponses)
                         {
-                            if (def.getMediaType().equals(con.getHeaderField(CONTENT_TYPE)))
+                            if (def.getMediaType().equals(con.getHeaderField(CONTENT_TYPE)) && def.getStatus()==responseCode)
                             {
                                 def.validateResponse(repResponse.getResponse());
                                 return repResponse;
