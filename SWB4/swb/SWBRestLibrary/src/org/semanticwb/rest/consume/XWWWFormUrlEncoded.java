@@ -12,6 +12,7 @@ import java.net.URLEncoder;
 import java.util.List;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.w3c.dom.Document;
 
 /**
  *
@@ -192,7 +193,62 @@ public final class XWWWFormUrlEncoded extends RepresentationBase implements Repr
         }*/
         return sb.toString();
     }
+private void addHeaders(List<ParameterValue> values,HttpURLConnection con) throws RestException
+    {
+        for (ParameterValue pvalue : values)
+        {
+            Parameter definition = getDefinition(pvalue.getName());
+            if (definition != null && "header".equals(definition.getStyle()))
+            {
+                try
+                {
+                    String key=pvalue.getName();
+                    String value=pvalue.getValue().toString();
+                    con.setRequestProperty(key, value);
+                }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                    throw new RestException(e);
+                }
+            }
+        }
+        for (Parameter parameter : this.parameters)
+        {
+            if (parameter.isFixed())
+            {
+                try
+                {
+                    String key=parameter.getName();
+                    String value=parameter.getFixedValue();
+                    con.setRequestProperty(key, value);
+                }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                    throw new RestException(e);
+                }
+            }
+        }
 
+        for (Parameter parameter : this.method.getAllParameters())
+        {
+            if (parameter.isFixed())
+            {
+                try
+                {
+                   String key=parameter.getName();
+                   String value=parameter.getFixedValue();
+                   con.setRequestProperty(key, value);
+                }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                    throw new RestException(e);
+                }
+            }
+        }
+    }
     public RepresentationResponse request(List<ParameterValue> values) throws RestException
     {
         checkParameters(values);
@@ -206,6 +262,7 @@ public final class XWWWFormUrlEncoded extends RepresentationBase implements Repr
             }
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod(this.method.getHTTPMethod().toString());
+            addHeaders(values, con);
             if (this.getMethod().getHTTPMethod() == HTTPMethod.PUT || this.getMethod().getHTTPMethod() == HTTPMethod.POST)
             {
                 con.setRequestProperty(CONTENT_TYPE, APPLICATION_XWWW_FORM_URL_ENCODED);
@@ -238,5 +295,10 @@ public final class XWWWFormUrlEncoded extends RepresentationBase implements Repr
     public void addParameter(Parameter parameter)
     {
         this.parameters.add(parameter);
+    }
+
+    public RepresentationResponse request(List<ParameterValue> values, Document request) throws ExecutionRestException, RestException
+    {
+        return this.request(values);
     }
 }

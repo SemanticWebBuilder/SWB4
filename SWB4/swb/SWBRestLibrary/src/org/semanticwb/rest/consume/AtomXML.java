@@ -257,11 +257,62 @@ public class AtomXML extends ApplicationXML
         }*/
         return sb.toString();
     }
-    @Override
-    protected Document constructParameters(List<ParameterValue> values) throws RestException
+
+    private void addHeaders(List<ParameterValue> values,HttpURLConnection con) throws RestException
     {
-        Document doc = SWBUtils.XML.getNewDocument();        
-        return doc;
+        for (ParameterValue pvalue : values)
+        {
+            Parameter definition = getDefinition(pvalue.getName());
+            if (definition != null && "header".equals(definition.getStyle()))
+            {
+                try
+                {
+                    String key=pvalue.getName();
+                    String value=pvalue.getValue().toString();
+                    con.setRequestProperty(key, value);
+                }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                    throw new RestException(e);
+                }
+            }
+        }
+        for (Parameter parameter : this.parameters)
+        {
+            if (parameter.isFixed())
+            {
+                try
+                {
+                    String key=parameter.getName();
+                    String value=parameter.getFixedValue();
+                    con.setRequestProperty(key, value);
+                }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                    throw new RestException(e);
+                }
+            }
+        }
+
+        for (Parameter parameter : this.method.getAllParameters())
+        {
+            if (parameter.isFixed())
+            {
+                try
+                {
+                   String key=parameter.getName();
+                   String value=parameter.getFixedValue();
+                   con.setRequestProperty(key, value);
+                }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                    throw new RestException(e);
+                }
+            }
+        }
     }
     @Override
     public RepresentationResponse request(List<ParameterValue> values) throws RestException
@@ -274,17 +325,13 @@ public class AtomXML extends ApplicationXML
             _url = new URL(_url.toString() + "?" + _parameters);
             HttpURLConnection con = (HttpURLConnection) _url.openConnection();
             con.setRequestMethod(this.getMethod().getHTTPMethod().toString());
+            addHeaders(values, con);            
             String charset = Charset.defaultCharset().name();
             con.setRequestProperty(CONTENT_TYPE,APPLICATION_ATOM_XML+ "; charset=" + charset);
             con.setDoOutput(true);
             con.setDoInput(true);
-            OutputStream out = con.getOutputStream();
-            Document requestAtomDocument = constructParameters(values);
-            if(!isValidAtom(requestAtomDocument))
-            {
-                throw new RestException("The document is not a valid atom document");
-            }
-            String xml = SWBUtils.XML.domToXml(requestAtomDocument, charset, true);
+            OutputStream out = con.getOutputStream();            
+            String xml = "";
             out.write(xml.getBytes());
             out.close();
 
