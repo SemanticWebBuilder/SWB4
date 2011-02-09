@@ -472,6 +472,62 @@ public class ApplicationXML extends RepresentationBase implements Representation
         }
         return null;
     }
+    private void addHeaders(List<ParameterValue> values,HttpURLConnection con) throws RestException
+    {
+        for (ParameterValue pvalue : values)
+        {
+            Parameter definition = getDefinition(pvalue.getName());
+            if (definition != null && "header".equals(definition.getStyle()))
+            {
+                try
+                {
+                    String key=pvalue.getName();
+                    String value=pvalue.getValue().toString();
+                    con.setRequestProperty(key, value);
+                }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                    throw new RestException(e);
+                }
+            }
+        }
+        for (Parameter parameter : this.parameters)
+        {
+            if (parameter.isFixed())
+            {
+                try
+                {
+                    String key=parameter.getName();
+                    String value=parameter.getFixedValue();
+                    con.setRequestProperty(key, value);
+                }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                    throw new RestException(e);
+                }
+            }
+        }
+
+        for (Parameter parameter : this.method.getAllParameters())
+        {
+            if (parameter.isFixed())
+            {
+                try
+                {
+                   String key=parameter.getName();
+                   String value=parameter.getFixedValue();
+                   con.setRequestProperty(key, value);
+                }
+                catch (Exception e)
+                {
+                    log.debug(e);
+                    throw new RestException(e);
+                }
+            }
+        }
+    }
     private String constructParametersToURL(List<ParameterValue> values) throws RestException
     {
         StringBuilder sb = new StringBuilder();
@@ -632,6 +688,7 @@ public class ApplicationXML extends RepresentationBase implements Representation
             _url = new URL(_url.toString() + "?" + _parameters);
             HttpURLConnection con = (HttpURLConnection) _url.openConnection();
             con.setRequestMethod(this.getMethod().getHTTPMethod().toString());
+            addHeaders(values, con);
             String charset = Charset.defaultCharset().name();
             con.setRequestProperty(CONTENT_TYPE, APPLICATION_XML + "; charset=" + charset);
             con.setDoOutput(true);
@@ -664,6 +721,7 @@ public class ApplicationXML extends RepresentationBase implements Representation
             _url = new URL(_url.toString() + "?" + _parameters);
             HttpURLConnection con = (HttpURLConnection) _url.openConnection();
             con.setRequestMethod(this.getMethod().getHTTPMethod().toString());
+            addHeaders(values, con);
             String charset = Charset.defaultCharset().name();
             con.setRequestProperty(CONTENT_TYPE, APPLICATION_XML + "; charset=" + charset);
             con.setDoOutput(true);
