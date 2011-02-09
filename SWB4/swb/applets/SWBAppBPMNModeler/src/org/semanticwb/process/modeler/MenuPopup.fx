@@ -15,12 +15,13 @@ public var x: Number = 0;
     public var optionsMargin: Number = 2;
     public var optionsPadding: Number = 1;
     public var miParent: MenuItem;
+    public var modeler: Modeler;
     var maxH: Number = 0;
     var maxW: Number = 0;
     var os: MenuItem[];
 
-    public var content:Action[] = null on replace {
-        buildOptions(content);
+    public var items:MenuItem[] = null on replace {
+        buildOptions(items);
     }
 
     override public function create(): Node {
@@ -41,7 +42,7 @@ public var x: Number = 0;
         }
     }
 
-    function buildOptions(options: Action[]) {
+    function buildOptions(options: MenuItem[]) {
         delete os;
         maxH = optionsMargin;
         maxW = 0;
@@ -53,15 +54,15 @@ public var x: Number = 0;
                 owner:this
                 x: bind x + optionsMargin
                 y: bind y + option.offsety
-                caption: bind if (option.actions != null and option.actions.size() > 0) "{option.label} >" else option.label
+                caption: bind if (option.items != null and option.items.size() > 0) "{option.caption} >" else option.caption
                 textOffsetX: bind x + optionsMargin * 3
                 isSeparator: bind option.isSeparator
                 status: bind option.status
             }
 
-            if (option.actions != null and option.actions.size() > 0) {
+            if (option.items != null and option.items.size() > 0) {
                 o.mchild = MenuPopup {
-                    content: option.actions
+                    items: option.items
                     miParent:o;
                 }
                 o.action = function (e: MouseEvent) {
@@ -120,9 +121,9 @@ public var x: Number = 0;
         }
     }
 
-    public function setOptions(acts: Action[]) {
+    public function setOptions(acts: MenuItem[]) {
         if (acts != null and acts.size() > 0) {
-            this.content = acts;
+            this.items = acts;
             buildOptions(acts);
         }
     }
