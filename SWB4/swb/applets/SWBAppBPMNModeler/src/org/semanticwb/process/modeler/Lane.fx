@@ -55,9 +55,9 @@ public class Lane extends GraphicalElement
             onKeyReleased: onKeyReleased
         };
 
-        var actions: Action[] = [
-            Action {
-                label:##"actDelContents"
+        var actions: MenuItem[] = [
+            MenuItem {
+                caption:##"actDelContents"
                 status: bind if (this.graphChilds.size() > 0) MenuItem.STATUS_ENABLED else MenuItem.STATUS_DISABLED
                 action: function (e: MouseEvent) {
                     var tit = ##"actDelete";
@@ -67,9 +67,9 @@ public class Lane extends GraphicalElement
                     }
                 }
             },
-            Action {isSeparator:true},
-            Action {
-                label: ##"actEditTitle"
+            MenuItem {isSeparator:true},
+            MenuItem {
+                caption: ##"actEditTitle"
                 status: MenuItem.STATUS_ENABLED
                 action: function (e: MouseEvent) {
                     if(text != null) {
