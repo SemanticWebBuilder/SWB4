@@ -224,8 +224,10 @@ implements ActionListener
         WBTreeNode catalogsNode, catalogNode, tempNode, catalogOperNode, catalogValNode;
         catalogsNode    = this.attrNode.getNodebyName("attributes");
         catalogIterator = catalogsNode.getNodesbyName("attribute");
+
         if("operator".equals(loadCat))
         {
+            HashMap<String, String> hmoper = new HashMap();
             while(catalogIterator.hasNext())
             {
                 catalogNode = (WBTreeNode) catalogIterator.next();
@@ -238,17 +240,31 @@ implements ActionListener
                     while(operIterator.hasNext())
                     {
                         catalogOperNode = (WBTreeNode) operIterator.next();
-                        tempItem    = new ComboItem(catalogOperNode.getAttribute("title"), catalogOperNode.getAttribute("value"));
+//                        tempItem    = new ComboItem(catalogOperNode.getAttribute("title"), catalogOperNode.getAttribute("value"));
+                        hmoper.put(catalogOperNode.getAttribute("title"), catalogOperNode.getAttribute("value"));
+//                        comboBox.addItem(tempItem);
+//                        if(catalogOperNode.getAttribute("value").equals(selectValue))
+//                            comboBox.setSelectedItem(tempItem);
+                    }
+
+                    ArrayList list = new ArrayList(hmoper.keySet());
+                    Collections.sort(list);
+                    Iterator<String> itstr = list.iterator();
+                    while (itstr.hasNext()) {
+                        String string = itstr.next();
+                        tempItem    = new ComboItem(string, hmoper.get(string));
                         comboBox.addItem(tempItem);
-                        if(catalogOperNode.getAttribute("value").equals(selectValue))
+                        if(hmoper.get(string).equals(selectValue))
                             comboBox.setSelectedItem(tempItem);
                     }
+
                     break;
                 }
             }
         }
         else if("attValues".equals(loadCat))
         {
+            HashMap<String, String> hmvals = new HashMap();
             catalogsNode    = this.attrNode.getNodebyName("attributes");
             catalogIterator = catalogsNode.getNodesbyName("attribute");
             while(catalogIterator.hasNext())
@@ -261,9 +277,20 @@ implements ActionListener
                     while(operIterator.hasNext())
                     {
                         catalogOperNode = (WBTreeNode) operIterator.next();
-                        tempItem    = new ComboItem(catalogOperNode.getAttribute("title"), catalogOperNode.getAttribute("value"));
+//                        tempItem    = new ComboItem(catalogOperNode.getAttribute("title"), catalogOperNode.getAttribute("value"));
+                        hmvals.put(catalogOperNode.getAttribute("title"), catalogOperNode.getAttribute("value"));
+//                        comboBox.addItem(tempItem);
+//                        if(catalogOperNode.getAttribute("value").equals(selectValue))
+//                            comboBox.setSelectedItem(tempItem);
+                    }
+                    ArrayList list = new ArrayList(hmvals.keySet());
+                    Collections.sort(list);
+                    Iterator<String> itstr = list.iterator();
+                    while (itstr.hasNext()) {
+                        String string = itstr.next();
+                        tempItem    = new ComboItem(string, hmvals.get(string));
                         comboBox.addItem(tempItem);
-                        if(catalogOperNode.getAttribute("value").equals(selectValue))
+                        if(hmvals.get(string).equals(selectValue))
                             comboBox.setSelectedItem(tempItem);
                     }
                     break;
@@ -578,7 +605,7 @@ implements ActionListener
         javax.swing.JComboBox comboOper = (javax.swing.JComboBox) fieldHash.get("operador");
         comItem = (ComboItem) comboOper.getSelectedItem();
         
-        toolTipText += " " + comItem.gettitle();
+        if(null!=comItem) toolTipText += " " + comItem.gettitle();
 
         comboOper = (javax.swing.JComboBox) fieldHash.get("operador");
         comboOper.removeAllItems();
@@ -692,7 +719,7 @@ implements ActionListener
         {
             loadCat = "attribute";
             catalogIterator = catalogsNode.getNodesbyName(loadCat);
-            
+            HashMap<String,String> hmlist = new HashMap();
             while(catalogIterator.hasNext())
             {
                 catalogNode = (WBTreeNode) catalogIterator.next();
@@ -702,9 +729,21 @@ implements ActionListener
                     attSelActual=attribute;
                     actualAttr = attribute;
                 }
-                tempItem    = new ComboItem(catalogNode.getAttribute("title"), catalogNode.getAttribute("name"));
+                hmlist.put(catalogNode.getAttribute("title"),catalogNode.getAttribute("name"));
+//                tempItem    = new ComboItem(catalogNode.getAttribute("title"), catalogNode.getAttribute("name"));
+//                comboBox.addItem(tempItem);
+            }
+
+            ArrayList list = new ArrayList(hmlist.keySet());
+            Collections.sort(list);
+            Iterator<String> itstr = list.iterator();
+            while (itstr.hasNext()) {
+                String string = itstr.next();
+                tempItem    = new ComboItem(string, hmlist.get(string));
                 comboBox.addItem(tempItem);
             }
+
+
         }
         else if("operators".equals(catalogName))
         {
@@ -712,7 +751,9 @@ implements ActionListener
             loadCat = "operator";
             catalogsNode    = this.attrNode.getNodebyName("attributes");
             catalogIterator = catalogsNode.getNodesbyName("attribute");
-            
+
+            HashMap<String, String> hmoper = new HashMap();
+
             while(catalogIterator.hasNext())
             {
                 catalogNode = (WBTreeNode) catalogIterator.next();
@@ -724,7 +765,17 @@ implements ActionListener
                     while(operIterator.hasNext())
                     {
                         catalogOperNode = (WBTreeNode) operIterator.next();
-                        tempItem    = new ComboItem(catalogOperNode.getAttribute("title"), catalogOperNode.getAttribute("value"));
+//                        tempItem    = new ComboItem(catalogOperNode.getAttribute("title"), catalogOperNode.getAttribute("value"));
+//                        comboBox.addItem(tempItem);
+                        hmoper.put(catalogOperNode.getAttribute("title"), catalogOperNode.getAttribute("value"));
+                    }
+
+                    ArrayList list = new ArrayList(hmoper.keySet());
+                    Collections.sort(list);
+                    Iterator<String> itstr = list.iterator();
+                    while (itstr.hasNext()) {
+                        String string = itstr.next();
+                        tempItem    = new ComboItem(string, hmoper.get(string));
                         comboBox.addItem(tempItem);
                     }
                     break;
@@ -733,6 +784,7 @@ implements ActionListener
         }
         else if("attValues".equals(catalogName))
         {
+            HashMap<String, String> hmvals = new HashMap();
             loadCat = "operator";
             catalogsNode    = this.attrNode.getNodebyName("attributes");
             catalogIterator = catalogsNode.getNodesbyName("attribute");
@@ -746,7 +798,16 @@ implements ActionListener
                     while(operIterator.hasNext())
                     {
                         catalogOperNode = (WBTreeNode) operIterator.next();
-                        tempItem    = new ComboItem(catalogOperNode.getAttribute("title"), catalogOperNode.getAttribute("value"));
+//                        tempItem    = new ComboItem(catalogOperNode.getAttribute("title"), catalogOperNode.getAttribute("value"));
+//                        comboBox.addItem(tempItem);
+                        hmvals.put(catalogOperNode.getAttribute("title"), catalogOperNode.getAttribute("value"));
+                    }
+                    ArrayList list = new ArrayList(hmvals.keySet());
+                    Collections.sort(list);
+                    Iterator<String> itstr = list.iterator();
+                    while (itstr.hasNext()) {
+                        String string = itstr.next();
+                        tempItem    = new ComboItem(string, hmvals.get(string));
                         comboBox.addItem(tempItem);
                     }
                     break;
