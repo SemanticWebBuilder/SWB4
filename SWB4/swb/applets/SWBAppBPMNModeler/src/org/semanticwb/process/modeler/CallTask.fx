@@ -4,14 +4,10 @@
  */
 
 package org.semanticwb.process.modeler;
-import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.effect.ColorAdjust;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.shape.Rectangle;
 
 /**
@@ -23,7 +19,6 @@ public def TYPE_MANUAL="manual";
 public def TYPE_SCRIPT="script";
 public def TYPE_RULE="rule";
 public class CallTask extends CallActivity {
-    var icons: ImageView[];
     var ix:Number;                          //offset imagen x
     var iy:Number;                          //offset imagen x
     var is:Number=1;                        //image scale
@@ -35,35 +30,6 @@ public class CallTask extends CallActivity {
         saturation: 1
     }
 
-    def imgLoop = ImageView {
-        image: Image {
-            url: "{__DIR__}images/n_ciclo.png"
-        }
-        effect: adjust
-    }
-
-    def imgMulti = ImageView {
-        image: Image {
-            url: "{__DIR__}images/n_objeto.png"
-        }
-        effect: adjust
-    }
-
-    def imgComp = ImageView {
-        image: Image {
-            url: "{__DIR__}images/n_compensa_b.png"
-        }
-        effect: adjust
-    }
-
-    var modifiers: HBox = HBox {
-        nodeVPos: VPos.CENTER
-        translateX: bind shape.boundsInLocal.minX + (shape.boundsInLocal.width - modifiers.boundsInLocal.width) / 2
-        translateY: bind shape.boundsInLocal.minY + shape.boundsInLocal.height - (modifiers.boundsInLocal.height + 6)
-        spacing: 5
-        content: bind icons
-    }
-
     protected var message=ImageView
     {
         x: bind shape.boundsInLocal.minX+3;
@@ -71,21 +37,6 @@ public class CallTask extends CallActivity {
         scaleX: bind is;
         scaleY: bind is;
         effect: adjust
-    }
-
-    var loop=bind isLoop on replace
-    {
-        setModifier(TYPE_LOOP, isLoop);
-    }
-
-    var compensation=bind isForCompensation on replace
-    {
-        setModifier(TYPE_COMPENSATION, isForCompensation);
-    }
-
-    var multiple=bind isMultiInstance on replace
-    {
-        setModifier(TYPE_MULTIPLE, isMultiInstance);
     }
 
     public override function create(): Node
@@ -108,38 +59,10 @@ public class CallTask extends CallActivity {
             onKeyReleased: onKeyReleased
         }
 
-        var actions: Action[] = [
-            Action {
-                label: ##"actMultiInstance";
-                status: bind if (isMultiInstance) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
-                action: function (e: MouseEvent) {
-                    this.setModifier(TYPE_MULTIPLE, not isMultiInstance);
-                }
-            },
-            Action {
-                label: ##"actLoop";
-                status: bind if (isLoop) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
-                action: function (e: MouseEvent) {
-                    this.setModifier(TYPE_LOOP, not isLoop);
-                }
-            },
-            Action {
-                label: ##"actCompensa";
-                status: bind if (isForCompensation) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
-                action: function (e: MouseEvent) {
-                    this.setModifier(TYPE_COMPENSATION, not isForCompensation);
-                }
-            },
-            Action {isSeparator: true},
-        ];
-        insert actions before menuOptions[0];
-
-        getMarkers();
-
         return Group
         {
             content:[
-                shape,text,message, modifiers
+                shape,text,message
             ]
             scaleX: bind s
             scaleY: bind s
@@ -195,21 +118,6 @@ public class CallTask extends CallActivity {
                     isLoop = false;
                 }
             }
-        }
-        getMarkers();
-    }
-
-    function getMarkers() : Void {
-        delete icons;
-
-        if (isLoop) {
-            insert imgLoop into icons;
-        } else if (isMultiInstance) {
-            insert imgMulti into icons;
-        }
-
-        if (isForCompensation) {
-            insert imgComp into icons;
         }
     }
 }
