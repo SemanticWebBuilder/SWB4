@@ -1,7 +1,7 @@
 <!--
 Creator: Jorge Jiménez
 Modified by: Hasdai Pacheco {haxdai@gmail.com}
-!>
+-->
 
 <%@page import="org.semanticwb.model.*"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -370,6 +370,8 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                     }
                                                     if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markIrrelevantAnswers)) {
                                                         if (!favAnswer.getCreator().getURI().equals(user.getURI()) && !favAnswer.userHasVoted(user)) {
+                                                             actionURL = paramRequest.getActionUrl();
+                                                             actionURL.setParameter("uri", favAnswer.getURI());
                                                              actionURL.setAction("voteAnswer");
                                                              actionURL.setParameter("irrelevant", "true");
                                                              actionURL.setParameter("org", "edit");
@@ -505,6 +507,8 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                     }
                                                     if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markIrrelevantAnswers)) {
                                                         if (!comAnswer.getCreator().getURI().equals(user.getURI()) && !comAnswer.userHasVoted(user)) {
+                                                             actionURL = paramRequest.getActionUrl();
+                                                             actionURL.setParameter("uri", comAnswer.getURI());
                                                              actionURL.setAction("voteAnswer");
                                                              actionURL.setParameter("irrelevant", "true");
                                                              actionURL.setParameter("org", "edit");
@@ -644,6 +648,8 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                     }
                                                     if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markIrrelevantAnswers)) {
                                                         if (!answer.getCreator().getURI().equals(user.getURI()) && !answer.userHasVoted(user)) {
+                                                             actionURL = paramRequest.getActionUrl();
+                                                             actionURL.setParameter("uri", answer.getURI());
                                                              actionURL.setAction("voteAnswer");
                                                              actionURL.setParameter("irrelevant", "true");
                                                              actionURL.setParameter("org", "edit");
@@ -908,6 +914,8 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                 }
                                                 if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markIrrelevantAnswers)) {
                                                     if (!favAnswer.getCreator().getURI().equals(user.getURI()) && !favAnswer.userHasVoted(user)) {
+                                                         actionURL = paramRequest.getActionUrl();
+                                                         actionURL.setParameter("uri", favAnswer.getURI());
                                                          actionURL.setAction("voteAnswer");
                                                          actionURL.setParameter("irrelevant", "true");
                                                          actionURL.setParameter("org", "edit");
@@ -1049,7 +1057,9 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
 
                                                 if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markIrrelevantAnswers)) {
                                                     if (!comAnswer.getCreator().getURI().equals(user.getURI()) && !comAnswer.userHasVoted(user)) {
-                                                         actionURL.setAction("voteAnswer");
+                                                        actionURL = paramRequest.getActionUrl();
+                                                         actionURL.setParameter("uri", comAnswer.getURI());
+                                                        actionURL.setAction("voteAnswer");
                                                          actionURL.setParameter("irrelevant", "true");
                                                          actionURL.setParameter("org", "edit");
                                                          %>
@@ -1207,7 +1217,9 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
 
                                                     if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markIrrelevantAnswers)) {
                                                         if (!answer.getCreator().getURI().equals(user.getURI()) && !answer.userHasVoted(user)) {
-                                                             actionURL.setAction("voteAnswer");
+                                                            actionURL = paramRequest.getActionUrl();
+                                                             actionURL.setParameter("uri", answer.getURI());
+                                                            actionURL.setAction("voteAnswer");
                                                              actionURL.setParameter("irrelevant", "true");
                                                              actionURL.setParameter("org", "edit");
                                                              %>
