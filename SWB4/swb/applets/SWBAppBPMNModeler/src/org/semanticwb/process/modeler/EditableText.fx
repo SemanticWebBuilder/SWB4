@@ -8,15 +8,15 @@ package org.semanticwb.process.modeler;
 
 import javafx.scene.CustomNode;
 import javafx.scene.Node;
-import javafx.scene.Group;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextOrigin;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.control.TextBox;
-import javafx.scene.shape.Rectangle;
-import org.semanticwb.process.modeler.Styles;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextBoundsType;
+import javafx.scene.Group;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextOrigin;
 
 /**
  * @author javier.solis
@@ -28,10 +28,8 @@ public class EditableText extends CustomNode
     public var y : Number;
     public var width : Number;
     public var height : Number;
-
     public var text : String;
     public var fill : Boolean;
-
     var textb : TextBox;
     var textl : Text;
 
@@ -80,7 +78,12 @@ public class EditableText extends CustomNode
         textl= Text
         {
              content: bind "{text}\r"
-             style: Styles.style_task_text
+             //style: Styles.style_task_text
+             font: Font {
+                name: "Verdana"
+                embolden: true
+                size: 10
+             }
              textOrigin: TextOrigin.TOP
              textAlignment: TextAlignment.CENTER
              wrappingWidth: bind width
@@ -107,7 +110,8 @@ public class EditableText extends CustomNode
         textb= TextBox
         {
              text: text
-             style: Styles.style_task_textbox
+             font: bind textl.font
+             //style: Styles.style_task_textbox
              translateX:bind x - width/2
              translateY:bind y -10
              width:bind width
@@ -133,5 +137,13 @@ public class EditableText extends CustomNode
                back,textl,textb
             ]
         };
+    }
+
+    public function setSize(size: Number) {
+        this.textl.font = Font {
+            name:"Verdana"
+            embolden:true
+            size:size
+        }
     }
 }
