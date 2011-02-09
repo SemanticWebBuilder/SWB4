@@ -47,8 +47,7 @@ public class ApplicationXML extends RepresentationBase implements Representation
     private static final String NL = "\r\n";
     private Document document;
     private int status;
-    private URL url;
-    private String APPLICATION_NS = "http://www.demo.org.mx";
+    private URL url;    
 
     public ApplicationXML()
     {
