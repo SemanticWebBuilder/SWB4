@@ -1468,18 +1468,26 @@ public final class SemanticClassPublisher extends RestModule
 
     private void showObjectRef(HttpServletRequest request, HttpServletResponse response, SemanticObject obj, String basepath, String methodName) throws IOException
     {
-        String namespace = obj.getSemanticClass().getURI();
-        int pos = namespace.indexOf("#");
-        if (pos != -1)
+        if ("json".equalsIgnoreCase(request.getParameter("format")))
         {
-            namespace = namespace.substring(0, pos);
+
         }
-        String prefix = obj.getSemanticClass().getPrefix();
-        Document doc = SWBUtils.XML.getNewDocument();
-        Element parent=doc.createElementNS(namespace, methodName);
-        parent.setPrefix(prefix);
-        addRef(parent, obj, basepath);
-        showDocument(response, doc);
+        else
+        {
+            String namespace = obj.getSemanticClass().getURI();
+            int pos = namespace.indexOf("#");
+            if (pos != -1)
+            {
+                namespace = namespace.substring(0, pos);
+            }
+            String prefix = obj.getSemanticClass().getPrefix();
+            Document doc = SWBUtils.XML.getNewDocument();
+            Element parent=doc.createElementNS(namespace, methodName);
+            doc.appendChild(parent);
+            parent.setPrefix(prefix);
+            addRef(parent, obj, basepath);
+            showDocument(response, doc);
+        }
     }
 
     private void showObject(HttpServletRequest request, HttpServletResponse response, SemanticObject obj, String basepath) throws IOException
