@@ -38,6 +38,7 @@ public class Modeler extends CustomNode
     public var content:Group;
     public var containerElement: GraphicalElement;
     public var toolBar:ToolBar;
+    public var zoomFactor:Number = 1;
 
     var focusedNode: Node;                       //Nodo con el foco
     var scrollOffset:ScrollOffset;
@@ -46,7 +47,7 @@ public class Modeler extends CustomNode
     {
         var resize=ModelerUtils.getResizeNode();
         resize.modeler=this;
-
+        
          //var ret=ScrollPane
          content=Group
          {
@@ -58,14 +59,14 @@ public class Modeler extends CustomNode
                     content: bind contents
                 },
                 resize,
-                ModelerUtils.popup
+                ModelerUtils.popup,
              ]
          }
 
          scrollView=ScrollView
          {
              node:content
-             layoutInfo: LayoutInfo{ width:bind width, height: bind height }
+             layoutInfo: LayoutInfo{width:bind width, height: bind height}
              pannable: bind pannable and not disablePannable
              cursor:bind if(pannable)Cursor.MOVE else Cursor.DEFAULT
              styleClass: "scrollView"
@@ -206,12 +207,17 @@ public class Modeler extends CustomNode
                          var con=tempNode as ConnectionObject;
                          if(con.end==null)
                          {
-                             remove(tempNode);
+                            remove(tempNode);                            
                          }
                          tempNode=null;
                          disablePannable=true;
                          ModelerUtils.clickedNode=null;
+                     } else {
+                         onMousePressed(e);
                      }
+                 }
+                 if (e.button == e.button.PRIMARY) {
+                     ModelerUtils.popup.hide();
                  }
              }
 
@@ -308,7 +314,6 @@ public class Modeler extends CustomNode
     public function remove(obj:Node)
     {
         delete obj from contents;
-
     }
 
     public function getGraphElementByURI(uri:String):GraphicalElement
@@ -401,7 +406,9 @@ public class Modeler extends CustomNode
         {
             toolBar.redo();
         }
-
+        if (e.code == e.code.VK_ESCAPE) {
+            ModelerUtils.popup.hide();
+        }
     }
 
     public function keyReleased( e: KeyEvent ) : Void
