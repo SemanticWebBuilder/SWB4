@@ -19,13 +19,13 @@ public class CatchEvent extends Event
         var ret = super.create();
 
         if (isInterrupting) {
-            var actions: Action[] = [
-                Action {
-                    label: bind if (this.cancelActivity) ##"actInterrupting" else ##"actNonInterrupting"
+            var actions: MenuItem[] = [
+                MenuItem {
+                    caption: bind if (this.cancelActivity) ##"actInterrupting" else ##"actNonInterrupting"
                     action: function (e: MouseEvent) {
                         this.cancelActivity = not this.cancelActivity;
                     }
-                }, Action {isSeparator: true}
+                }, MenuItem {isSeparator: true}
             ];
             insert actions before menuOptions[0];
         }
