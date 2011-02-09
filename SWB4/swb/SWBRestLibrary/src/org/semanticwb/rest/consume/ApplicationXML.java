@@ -370,7 +370,8 @@ public class ApplicationXML extends RepresentationBase implements Representation
         {
             DOMBuilder builder = new DOMBuilder();
             XPath xpath = XPath.newInstance(definition.getPath());
-            Element root = definition.getMethod().getResource().getServiceInfo().getDocument().getDocumentElement();
+            Document doc=definition.getMethod().getResource().getServiceInfo().getDocument();
+            Element root = doc.getDocumentElement();
             for (int i = 0; i < root.getAttributes().getLength(); i++)
             {
                 Node attnode = root.getAttributes().item(i);

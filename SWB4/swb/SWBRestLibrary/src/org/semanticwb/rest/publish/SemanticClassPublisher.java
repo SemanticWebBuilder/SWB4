@@ -169,7 +169,7 @@ public final class SemanticClassPublisher extends RestModule
 
             for (Representation rep : definition.getRepresentations())
             {
-                rep.addWADL(param, request, method, getHTTPMethod(), definition.getSemanticClass().getPrefix() + ":Deleted");
+                rep.addWADL(param, request, method, getHTTPMethod(), definition.getSemanticClass().getPrefix() + ":"+definition.getSemanticClass().getName());
             }
 
             //MethodModuleBase.configureCommonsElements(definition, method, request, WADL_NS, REST_RESOURCE_PREFIX + ":Deleted");
@@ -194,11 +194,11 @@ public final class SemanticClassPublisher extends RestModule
                     }
                     uri = obj.getShortURI();
                     obj.remove();
-                    showDeleted(request, response, obj);
+                    showObject(request, response, obj,basepath);
                 }
                 else
                 {
-                    showDeleted(request, response, obj);
+                    showObject(request, response, obj,basepath);
                     return;
                 }
             }
@@ -329,7 +329,7 @@ public final class SemanticClassPublisher extends RestModule
             request.appendChild(param);
             for (Representation rep : definition.getRepresentations())
             {
-                rep.addWADL(param, request, method, getHTTPMethod(), definition.getSemanticClass().getPrefix() + ":Updated");
+                rep.addWADL(param, request, method, getHTTPMethod(), definition.getSemanticClass().getPrefix() + ":"+definition.getSemanticClass().getName());
             }
             //configureCommonsElements(definition, method, request, WADL_NS, REST_RESOURCE_PREFIX + ":Updated");
         }
@@ -361,7 +361,7 @@ public final class SemanticClassPublisher extends RestModule
                         log.debug("updating properties for the object uri :" + obj.getURI());
                         updateProperties(request, obj);
                         log.debug("properties updated for the object uri :" + obj.getURI());
-                        showUpdated(request, response, obj);
+                        showObject(request, response, obj,basepath);
                     }
                     catch (Exception e)
                     {
@@ -375,7 +375,7 @@ public final class SemanticClassPublisher extends RestModule
                 else
                 {
                     log.debug("The object with uri :" + obj.getURI() + " was not found");
-                    showUpdated(request, response, obj);
+                    showObject(request, response, obj,basepath);
                 }
             }
         }
@@ -515,7 +515,7 @@ public final class SemanticClassPublisher extends RestModule
             request.appendChild(param);
             for (Representation rep : definition.getRepresentations())
             {
-                rep.addWADL(param, request, method, getHTTPMethod(), definition.getSemanticClass().getPrefix() + ":Created");
+                rep.addWADL(param, request, method, getHTTPMethod(), definition.getSemanticClass().getPrefix() + ":"+definition.getSemanticClass().getName());
             }
             //configureCommonsElements(definition, method, request, WADL_NS, REST_RESOURCE_PREFIX + ":Created");
         }
@@ -612,7 +612,7 @@ public final class SemanticClassPublisher extends RestModule
                 log.debug("updating properties " + newobj.getURI());
                 updateProperties(request, newobj.getSemanticObject());
                 log.debug("properties for object " + newobj.getURI() + " was done");
-                showCreated(request, response, newobj.getSemanticObject(), basepath);
+                showObject(request, response, newobj.getSemanticObject(), basepath);
             }
             catch (Exception e)
             {
@@ -1825,26 +1825,7 @@ public final class SemanticClassPublisher extends RestModule
         }
     }
 
-    private void showCreated(HttpServletRequest request, HttpServletResponse response, SemanticObject obj, String basePath) throws IOException
-    {
-        if ("json".equalsIgnoreCase(request.getParameter("format")))
-        {
-            try
-            {
-                showJSON(response, getCreatedAsJSON(obj.getURI()));
-            }
-            catch (Exception e)
-            {
-                showError(request, response, e.getMessage());
-            }
-        }
-        else
-        {
-            Document doc = getCreatedAsXML(obj, basePath);
-            showDocument(response, doc);
-        }
-
-    }
+   
 
     private void validate(String value, String dataType) throws Exception
     {
@@ -2000,26 +1981,7 @@ public final class SemanticClassPublisher extends RestModule
         return jSONObject;
     }
 
-    private void showUpdated(HttpServletRequest request, HttpServletResponse response, SemanticObject obj) throws IOException
-    {
-        if ("json".equalsIgnoreCase(request.getParameter("format")))
-        {
-            try
-            {
-                showJSON(response, getUpdatedAsJSON(true));
-            }
-            catch (Exception e)
-            {
-                showError(request, response, e.getMessage());
-            }
-        }
-        else
-        {
-            Document doc = getUpdatedAsXml(obj);
-            showDocument(response, doc);
-        }
-
-    }
+    
 
     private JSONObject getUpdatedAsJSON(boolean isUpdated) throws RestException
     {
@@ -2035,92 +1997,13 @@ public final class SemanticClassPublisher extends RestModule
         return jSONObject;
     }
 
-    private Document getUpdatedAsXml(SemanticObject obj)
-    {
-        String namespace = obj.getURI();
-        int pos = namespace.indexOf("#");
-        if (pos != -1)
-        {
-            namespace = namespace.substring(0, pos);
-        }
-        Document doc = SWBUtils.XML.getNewDocument();
-        String prefix = "updated";
-        Element updated = doc.createElementNS(namespace, "Updated");
-        updated.setPrefix(prefix);
+   
 
-        Attr xmlns = doc.createAttribute("xmlns");
-        xmlns.setValue(namespace);
-        updated.setAttributeNode(xmlns);
+    
 
-        updated.setAttribute("xmlns:" + prefix, namespace);
+    
 
-
-        doc.appendChild(updated);
-        Text data = doc.createTextNode(Boolean.toString(true));
-        updated.appendChild(data);
-        return doc;
-    }
-
-    private void showDeleted(HttpServletRequest request, HttpServletResponse response, SemanticObject obj) throws IOException
-    {
-        if ("json".equalsIgnoreCase(request.getParameter("format")))
-        {
-            try
-            {
-                showJSON(response, getDeletedAsJSON(true));
-            }
-            catch (Exception e)
-            {
-                showError(request, response, e.getMessage());
-            }
-        }
-        else
-        {
-            Document doc = getDeletedAsXML(obj);
-            showDocument(response, doc);
-        }
-
-    }
-
-    public Document getDeletedAsXML(SemanticObject obj)
-    {
-        String namespace = obj.getSemanticClass().getURI();
-        int pos = namespace.indexOf("#");
-        if (pos != -1)
-        {
-            namespace = namespace.substring(0, pos);
-        }
-        Document doc = SWBUtils.XML.getNewDocument();
-        String prefix = "deleted";
-        Element updated = doc.createElementNS(namespace, "Deleted");
-        updated.setPrefix(prefix);
-
-        Attr xmlns = doc.createAttribute("xmlns");
-        xmlns.setValue(namespace);
-        updated.setAttributeNode(xmlns);
-
-        updated.setAttribute("xmlns:" + prefix, namespace);
-
-
-        doc.appendChild(updated);
-        Text data = doc.createTextNode(Boolean.toString(true));
-        updated.appendChild(data);
-        return doc;
-    }
-
-    public JSONObject getDeletedAsJSON(boolean isdeleted) throws RestException
-    {
-        JSONObject jSONObject = new JSONObject();
-        try
-        {
-            jSONObject.put("Deleted", isdeleted);
-        }
-        catch (Exception e)
-        {
-            throw new RestException(e);
-        }
-        return jSONObject;
-    }
+    
 
     private static boolean isGenericObject(Class clazz)
     {
