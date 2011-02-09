@@ -501,6 +501,18 @@
     -fx-fill: #3370CE;
 }
 
+.menuItemCaptionNormal {
+    -fx-fill: black;
+}
+
+.menuItemCaptionOver {
+    -fx-fill: white;
+}
+
+.menuItemCaptionDisabled {
+    -fx-fill: gray;
+}
+
 .menuItem#caption {
     -fx-fill: black;
     -fx-text-origin: top;
