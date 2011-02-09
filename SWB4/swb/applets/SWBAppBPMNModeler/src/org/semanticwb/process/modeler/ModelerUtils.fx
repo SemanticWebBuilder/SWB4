@@ -46,15 +46,15 @@ public function setLocalizer (loc: StringLocalizer) : Void {
 
 // Primer menu flotante
 public var popup=MenuPopup {
-    content: [
-        Action {
-           label: "Item1"
+    items: [
+        MenuItem {
+           caption: "Item1"
            action: function(e: MouseEvent) {
                println("Item1 clicked");
            }
         },
-        Action {
-           label: "Item2"
+        MenuItem {
+           caption: "Item2"
            action: function(e: MouseEvent) {
                println("Item2 clicked");
            }
