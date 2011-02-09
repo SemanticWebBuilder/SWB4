@@ -6,6 +6,7 @@
 package org.semanticwb.rest.consume;
 
 import java.net.URL;
+import org.w3c.dom.Document;
 
 /**
  *
@@ -17,4 +18,5 @@ public interface XmlResponse extends RepresentationResponse {
     public URL[] getLinks(ParameterDefinition definition) throws RestException;
     public Object[] getValues(ParameterDefinition definition) throws RestException;
     public Object getValue(ParameterDefinition definition) throws RestException;
+    public Document getDocument();
 }

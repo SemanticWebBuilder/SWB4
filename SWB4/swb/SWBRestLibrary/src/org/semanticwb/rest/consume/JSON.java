@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.rest.util.HTTPMethod;
+import org.w3c.dom.Document;
 
 /**
  *
@@ -290,98 +291,13 @@ public class JSON extends RepresentationBase implements RepresentationRequest, J
         return sb.toString();
     }
 
-    private String constructParameters(List<ParameterValue> values) throws RestException
-    {
-        JSONObject jSONObject=new JSONObject();
-
-        
-        try
-        {
-            for (Parameter parameter : this.getRequiredParameters())
-            {
-                for (ParameterValue pvalue : values)
-                {
-                    if (pvalue.getName().equals(parameter.getName()))
-                    {
-                        String name = parameter.getName();
-                        String value = pvalue.getValue().toString();
-                        jSONObject.accumulate(name, value);
-                    }
-                }
-            }
-            for (Parameter parameter : this.getOptionalParameters())
-            {
-                for (ParameterValue pvalue : values)
-                {
-                    if (pvalue.getName().equals(parameter.getName()))
-                    {
-                        String name = parameter.getName();
-                        String value = pvalue.getValue().toString();
-                        jSONObject.accumulate(name, value);
-                    }
-                }
-            }
-            for (Parameter parameter : this.parameters)
-            {
-                if (parameter.isFixed())
-                {
-                    String name = parameter.getName();
-                    String value = parameter.getFixedValue();
-                    jSONObject.accumulate(name, value);
-
-                }
-            }
-
-
-            for (Parameter parameter : this.method.getRequiredParameters())
-            {
-                for (ParameterValue pvalue : values)
-                {
-                    if (pvalue.getName().equals(parameter.getName()))
-                    {
-                        String name = parameter.getName();
-                        String value = pvalue.getValue().toString();
-                        jSONObject.accumulate(name, value);
-                    }
-                }
-            }
-            for (Parameter parameter : this.method.getOptionalParameters())
-            {
-                for (ParameterValue pvalue : values)
-                {
-                    if (pvalue.getName().equals(parameter.getName()))
-                    {
-                        String name = parameter.getName();
-                        String value = pvalue.getValue().toString();
-                        jSONObject.accumulate(name, value);
-                    }
-                }
-            }
-            for (Parameter parameter : this.method.getAllParameters())
-            {
-                if (parameter.isFixed())
-                {
-                    String name = parameter.getName();
-                    String value = parameter.getFixedValue();
-                    jSONObject.accumulate(name, value);
-                }
-            }
-
-        }
-        catch (Exception e)
-        {
-            log.debug(e);
-            throw new RestException(e);
-        }        
-        return jSONObject.toString();
-    }
+    
 
     public RepresentationResponse request(List<ParameterValue> values) throws ExecutionRestException, RestException
     {
         checkParameters(values);
         URL _url = this.getMethod().getResource().getPath();
-        HttpURLConnection con=null;
-        String requestAtomDocument = constructParameters(values);
+        HttpURLConnection con=null;        
         String _parameters = constructParametersToURL(values);
         try
         {
@@ -395,12 +311,12 @@ public class JSON extends RepresentationBase implements RepresentationRequest, J
                 con.setDoOutput(true);
                 con.setDoInput(true);
                 OutputStream out = con.getOutputStream();
-                out.write(requestAtomDocument.getBytes());
+                out.write("".getBytes());
                 out.close();
             }
             else
             {
-                URL newurl=new URL(_url.toString()+"?st="+URLEncoder.encode(requestAtomDocument));
+                URL newurl=new URL(_url.toString()+"?st="+URLEncoder.encode(""));
                 con = (HttpURLConnection)newurl.openConnection();
                 con.setRequestMethod(this.getMethod().getHTTPMethod().toString());
                 String charset = Charset.defaultCharset().name();
@@ -422,5 +338,44 @@ public class JSON extends RepresentationBase implements RepresentationRequest, J
     public JSONObject getJSONResponse()
     {
         return response;
+    }
+
+    public RepresentationResponse request(List<ParameterValue> values, Document request) throws ExecutionRestException, RestException
+    {
+        checkParameters(values);
+        URL _url = this.getMethod().getResource().getPath();
+        HttpURLConnection con=null;        
+        String _parameters = constructParametersToURL(values);
+        String charset = Charset.defaultCharset().name();
+        String xml=SWBUtils.XML.domToXml(request, charset, true);
+        try
+        {
+            _url = new URL(_url.toString() + "?" + _parameters);
+            if(this.getMethod().getHTTPMethod()==HTTPMethod.POST || this.getMethod().getHTTPMethod()==HTTPMethod.PUT)
+            {
+                con = (HttpURLConnection) _url.openConnection();
+                con.setRequestMethod(this.getMethod().getHTTPMethod().toString());
+                
+                con.setRequestProperty(CONTENT_TYPE, APPLICATION_JSON+ "; charset=" + charset);
+                con.setDoOutput(true);
+                con.setDoInput(true);
+                OutputStream out = con.getOutputStream();
+                
+                out.write(xml.getBytes());
+                out.close();
+            }
+            else
+            {
+                URL newurl=new URL(_url.toString()+"?st="+URLEncoder.encode(xml));
+                con = (HttpURLConnection)newurl.openConnection();
+                con.setRequestMethod(this.getMethod().getHTTPMethod().toString());                
+                con.setRequestProperty(CONTENT_TYPE, APPLICATION_JSON+ "; charset=" + charset);
+            }
+            return super.processResponse(con);
+        }
+        catch (Exception ioe)
+        {
+            throw new ExecutionRestException(this.getMethod().getHTTPMethod(), _url, ioe);
+        }
     }
 }
