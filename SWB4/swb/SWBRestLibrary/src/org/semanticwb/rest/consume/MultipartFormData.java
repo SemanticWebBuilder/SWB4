@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+import org.w3c.dom.Document;
 
 /**
  *
@@ -82,5 +83,10 @@ public final class MultipartFormData extends RepresentationBase implements Repre
     public void addParameter(Parameter parameter)
     {
         this.parameters.add(parameter);
+    }
+
+    public RepresentationResponse request(List<ParameterValue> values, Document request) throws ExecutionRestException, RestException
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

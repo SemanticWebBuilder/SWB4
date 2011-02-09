@@ -6,6 +6,7 @@
 package org.semanticwb.rest.consume;
 
 import java.util.List;
+import org.w3c.dom.Document;
 
 /**
  *
@@ -14,6 +15,7 @@ import java.util.List;
 public interface RepresentationRequest extends Representation {
 
     public RepresentationResponse request(List<ParameterValue> values) throws ExecutionRestException,RestException;
+    public RepresentationResponse request(List<ParameterValue> values,Document request) throws ExecutionRestException,RestException;
     public void checkParameters(List<ParameterValue> values) throws RestException;
     public Parameter[] getRequiredParameters();
     public Parameter[] getOptionalParameters();

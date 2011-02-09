@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -189,6 +190,11 @@ public final class Method
     }
 
     public RepresentationResponse request(List<ParameterValue> values) throws ExecutionRestException, RestException
+    {
+        return getDefaultRequestRepresentation().request(values);
+    }
+
+    public RepresentationResponse request(List<ParameterValue> values,Document request) throws ExecutionRestException, RestException
     {
         return getDefaultRequestRepresentation().request(values);
     }

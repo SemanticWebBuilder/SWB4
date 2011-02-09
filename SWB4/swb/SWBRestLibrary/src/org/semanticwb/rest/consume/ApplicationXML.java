@@ -34,7 +34,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 
 /**
  *
@@ -455,14 +454,6 @@ public class ApplicationXML extends RepresentationBase implements Representation
         }
     }
 
-    
-
-    protected Document constructParameters(List<ParameterValue> values) throws RestException
-    {
-        Document doc = SWBUtils.XML.getNewDocument();
-        return doc;
-    }
-
     private Parameter getDefinition(String name)
     {
         for (Parameter parameter : this.getAllParameters())
@@ -645,9 +636,8 @@ public class ApplicationXML extends RepresentationBase implements Representation
             con.setRequestProperty(CONTENT_TYPE, APPLICATION_XML + "; charset=" + charset);
             con.setDoOutput(true);
             con.setDoInput(true);
-            OutputStream out = con.getOutputStream();
-            Document requestAtomDocument = constructParameters(values);
-            String xml = SWBUtils.XML.domToXml(requestAtomDocument, charset, true);
+            OutputStream out = con.getOutputStream();            
+            String xml = "";
             out.write(xml.getBytes());
             out.close();
             return super.processResponse(con);
@@ -661,5 +651,33 @@ public class ApplicationXML extends RepresentationBase implements Representation
     public void addParameter(Parameter parameter)
     {
         this.parameters.add(parameter);
+    }
+
+    public RepresentationResponse request(List<ParameterValue> values, Document request) throws ExecutionRestException, RestException
+    {
+        checkParameters(values);
+        URL _url = this.getMethod().getResource().getPath();
+        String _parameters = constructParametersToURL(values);
+
+        try
+        {
+            _url = new URL(_url.toString() + "?" + _parameters);
+            HttpURLConnection con = (HttpURLConnection) _url.openConnection();
+            con.setRequestMethod(this.getMethod().getHTTPMethod().toString());
+            String charset = Charset.defaultCharset().name();
+            con.setRequestProperty(CONTENT_TYPE, APPLICATION_XML + "; charset=" + charset);
+            con.setDoOutput(true);
+            con.setDoInput(true);
+            OutputStream out = con.getOutputStream();
+            Document requestAtomDocument = request;
+            String xml = SWBUtils.XML.domToXml(requestAtomDocument, charset, true);
+            out.write(xml.getBytes());
+            out.close();
+            return super.processResponse(con);
+        }
+        catch (Exception ioe)
+        {
+            throw new ExecutionRestException(this.getMethod().getHTTPMethod(), _url, ioe);
+        }
     }
 }
