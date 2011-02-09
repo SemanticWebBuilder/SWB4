@@ -225,7 +225,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                 Iterator<AnswerVote> itAnswerVote = AnswerVote.ClassMgr.listAnswerVoteByAnswerVote(answer);
                                 while (itAnswerVote.hasNext()) {
                                     AnswerVote answerVote = itAnswerVote.next();
-                                    if (answerVote.isLikeAnswer()) {
+                                    if (answerVote.isLikeAnswer() && !answerVote.isIrrelevantVote()) {
                                         ansVotes++;
                                     }
                                 }
@@ -317,7 +317,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                             AnswerVote answerVote = itAnswerVote.next();
                                             if (answerVote.isLikeAnswer()) {
                                                 nLike++;
-                                            } else {
+                                            } else if (!answerVote.isIrrelevantVote()) {
                                                 nUnlike++;
                                             }
                                         }
@@ -375,6 +375,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                              actionURL.setAction("voteAnswer");
                                                              actionURL.setParameter("irrelevant", "true");
                                                              actionURL.setParameter("org", "edit");
+                                                             actionURL.setParameter("page", request.getParameter("page"));
                                                              %>
                                                              <li>
                                                                  ¿Esto qu&eacute;?<a href="<%=actionURL%>"><img width="18" height="18" alt="¿Eso qué?" src="<%=baseimg%>icon_eso_que.png" ></a>(<%=favAnswer.getAnsIrrelevant()%>)
@@ -441,7 +442,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                             AnswerVote answerVote = itAnswerVote.next();
                                             if (answerVote.isLikeAnswer()) {
                                                 nLike++;
-                                            } else {
+                                            } else if (!answerVote.isIrrelevantVote()) {
                                                 nUnlike++;
                                             }
                                         }
@@ -512,6 +513,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                              actionURL.setAction("voteAnswer");
                                                              actionURL.setParameter("irrelevant", "true");
                                                              actionURL.setParameter("org", "edit");
+                                                             actionURL.setParameter("page", request.getParameter("page"));
                                                              %>
                                                              <li>
                                                                  ¿Esto qu&eacute;?<a href="<%=actionURL%>"><img width="18" height="18" alt="¿Eso qué?" src="<%=baseimg%>icon_eso_que.png"></a>(<%=comAnswer.getAnsIrrelevant()%>)
@@ -577,7 +579,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                     AnswerVote answerVote = itAnswerVote.next();
                                                     if (answerVote.isLikeAnswer()) {
                                                         nLike++;
-                                                    } else {
+                                                    } else if (!answerVote.isIrrelevantVote()) {
                                                         nUnlike++;
                                                     }
                                                 }
@@ -653,6 +655,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                              actionURL.setAction("voteAnswer");
                                                              actionURL.setParameter("irrelevant", "true");
                                                              actionURL.setParameter("org", "edit");
+                                                             actionURL.setParameter("page", request.getParameter("page"));
                                                              %>
                                                              <li>
                                                                  ¿Esto qu&eacute;?<a href="<%=actionURL%>"><img width="18" height="18" alt="¿Eso qué?" src="<%=baseimg%>icon_eso_que.png"></a>(<%=answer.getAnsIrrelevant()%>)
@@ -728,7 +731,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                     Iterator<AnswerVote> itAnswerVote = AnswerVote.ClassMgr.listAnswerVoteByAnswerVote(answer);
                     while (itAnswerVote.hasNext()) {
                         AnswerVote answerVote = itAnswerVote.next();
-                        if (answerVote.isLikeAnswer()) {
+                        if (!answerVote.isIrrelevantVote() && answerVote.isLikeAnswer()) {
                             ansVotes++;
                         }
                     }
@@ -849,7 +852,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                         AnswerVote answerVote = itAnswerVote.next();
                                         if (answerVote.isLikeAnswer()) {
                                             nLike++;
-                                        } else {
+                                        } else if (!answerVote.isIrrelevantVote()) {
                                             nUnlike++;
                                         }
                                     }
@@ -919,6 +922,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                          actionURL.setAction("voteAnswer");
                                                          actionURL.setParameter("irrelevant", "true");
                                                          actionURL.setParameter("org", "edit");
+                                                         actionURL.setParameter("page", request.getParameter("page"));
                                                          %>
                                                          <li>
                                                                  ¿Esto qu&eacute;?<a href="<%=actionURL%>"><img width="18" height="18" alt="¿Eso qué?" src="<%=baseimg%>icon_eso_que.png"></a>(<%=favAnswer.getAnsIrrelevant()%>)
@@ -991,7 +995,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                         AnswerVote answerVote = itAnswerVote.next();
                                         if (answerVote.isLikeAnswer()) {
                                             nLike++;
-                                        } else {
+                                        } else if (!answerVote.isIrrelevantVote()) {
                                             nUnlike++;
                                         }
                                     }
@@ -1062,6 +1066,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                         actionURL.setAction("voteAnswer");
                                                          actionURL.setParameter("irrelevant", "true");
                                                          actionURL.setParameter("org", "edit");
+                                                         actionURL.setParameter("page", request.getParameter("page"));
                                                          %>
                                                          <li>
                                                                  ¿Esto qu&eacute;?<a href="<%=actionURL%>"><img width="18" height="18" alt="¿Eso qué?" src="<%=baseimg%>icon_eso_que.png"></a>(<%=comAnswer.getAnsIrrelevant()%>)
@@ -1152,7 +1157,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                 AnswerVote answerVote = itAnswerVote.next();
                                                 if (answerVote.isLikeAnswer()) {
                                                     nLike++;
-                                                } else {
+                                                } else if (!answerVote.isIrrelevantVote()) {
                                                     nUnlike++;
                                                 }
                                             }
@@ -1222,6 +1227,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                             actionURL.setAction("voteAnswer");
                                                              actionURL.setParameter("irrelevant", "true");
                                                              actionURL.setParameter("org", "edit");
+                                                             actionURL.setParameter("page", request.getParameter("page"));
                                                              %>
                                                              <li>
                                                                  ¿Esto qu&eacute;?<a href="<%=actionURL%>"><img width="18" height="18" alt="¿Eso qué?" src="<%=baseimg%>icon_eso_que.png"></a>(<%=answer.getAnsIrrelevant()%>)
