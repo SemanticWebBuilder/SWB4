@@ -15,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.geometry.VPos;
 import javafx.scene.layout.HBox;
 import javafx.scene.input.MouseEvent;
+import org.semanticwb.process.modeler.ModelerUtils;
 
 /**
  * @author javier.solis
@@ -114,29 +115,73 @@ public class Task extends Activity
             onKeyReleased: onKeyReleased
         }
 
-        var actions: Action[] = [
-            Action {
-                label: ##"actMultiInstance";
+        var actions: MenuItem[] = [
+            MenuItem {
+                caption: ##"actMultiInstance";
                 status: bind if (isMultiInstance) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                 action: function (e: MouseEvent) {
                     this.setModifier(TYPE_MULTIPLE, not isMultiInstance);
+                    ModelerUtils.popup.hide();
                 }
             },
-            Action {
-                label: ##"actLoop";
+            MenuItem {
+                caption: ##"actLoop";
                 status: bind if (isLoop) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                 action: function (e: MouseEvent) {
                     this.setModifier(TYPE_LOOP, not isLoop);
+                    ModelerUtils.popup.hide();
                 }
             },
-            Action {
-                label: ##"actCompensa";
+            MenuItem {
+                caption: ##"actCompensa";
                 status: bind if (isForCompensation) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                 action: function (e: MouseEvent) {
                     this.setModifier(TYPE_COMPENSATION, not isForCompensation);
+                    ModelerUtils.popup.hide();
                 }
             },
-            Action {isSeparator: true}
+//            Action {isSeparator: true},
+//            Action {
+//                label: "Convertir en subproceso"
+//                status: MenuItem.STATUS_ENABLED
+//                action: function (e: MouseEvent) {
+//                    var _title = title;
+//                    //crear nuevo elemento
+//                    var sp = SubProcess {
+//                        modeler: modeler
+//                        title: _title
+//                        uri:"new:subprocess:{this.modeler.toolBar.counter++}"
+//                    }
+//                    //pasar las entradas al nuevo elemento
+//                    for(ele in getInputConnectionObjects()) {
+//                        ele.end = sp;
+//                    }
+//
+//                    for (ele in getOutputConnectionObjects()) {
+//                        ele.ini = sp;
+//                    }
+//
+//                    sp.x = x;
+//                    sp.dpx = dpx;
+//                    sp.dpy = dpy;
+//                    sp.dx = dx;
+//                    sp.dy = dy;
+//                    sp.layoutX = layoutX;
+//                    sp.layoutY = layoutY;
+//                    sp.scaleX = scaleX;
+//                    sp.scaleY = scaleY;
+//                    sp.scaleZ = scaleZ;
+//                    sp.layoutInfo = layoutInfo;
+//                    sp.y = y;
+//                    sp.container = container;
+//                    sp.w = w;
+//                    sp.h = h;
+//                    sp.graphParent = graphParent;
+//                    modeler.add(sp);
+//                    remove(true);
+//                }
+//            },
+            MenuItem {isSeparator: true}
         ];
         insert actions before menuOptions[0];
 
