@@ -2380,6 +2380,7 @@ public final class SemanticClassPublisher extends RestModule
                                             child.setAttribute("minOccurs", "0");
                                             //child.setAttribute(TYPE, XSD_ANYURI);
                                             Element complexType = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "complexType");
+                                            complexType.setPrefix(XSD_PREFIX);
                                             child.appendChild(complexType);
 
                                             Element simpleContent = doc.createElementNS(W3C_XML_SCHEMA_NS_URI, "simpleContent");
