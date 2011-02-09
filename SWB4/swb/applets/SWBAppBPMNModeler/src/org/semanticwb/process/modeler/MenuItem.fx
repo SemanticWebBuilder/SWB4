@@ -9,6 +9,7 @@ import javafx.scene.text.TextOrigin;
 import javafx.scene.CustomNode;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.CacheHint;
 
 /**
  * @author Hasdai Pacheco {haxdai@gmail.com}
@@ -21,8 +22,10 @@ public class MenuItem extends CustomNode {
     public var caption: String;
     public var action: function(e: MouseEvent);
     public var status = STATUS_ENABLED;
+    public var items: MenuItem[];
     public var owner: MenuPopup;
     public var mchild: MenuPopup;
+    public var offsety: Number;
     public var x: Number;
     public var y: Number;
     public var w: Number;
@@ -58,7 +61,7 @@ public class MenuItem extends CustomNode {
                 styleClass: "menuItem"
             }
             t2 = Text {
-                styleClass: bind 
+                styleClass: bind
                     if (status.equals(STATUS_DISABLED)) {
                         "menuItemCaptionDisabled"
                     } else if (r.hover) {
@@ -76,6 +79,8 @@ public class MenuItem extends CustomNode {
         }
 
         return Group {
+            cache: true;
+            cacheHint:CacheHint.SPEED;
             content: bind [
                 r, t2, mchild
             ]
