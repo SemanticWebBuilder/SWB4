@@ -414,7 +414,8 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                                 points.setPoints(p);
                             }
                         }
-                    } else if (request.getParameter("irrelevant") != null) {
+                    }
+                    if (request.getParameter("irrelevant") != null) {
                         boolean likeVote = Boolean.parseBoolean(request.getParameter("irrelevant"));
                         answerVote.setIrrelevantVote(likeVote);
 
