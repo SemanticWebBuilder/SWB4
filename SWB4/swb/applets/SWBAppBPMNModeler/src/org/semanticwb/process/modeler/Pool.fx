@@ -15,6 +15,7 @@ import javafx.stage.Alert;
 import org.semanticwb.process.modeler.MessageFlow;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Sequences;
+import java.util.Comparator;
 import org.semanticwb.process.modeler.GraphicalElement;
 
 /**
@@ -142,6 +143,34 @@ public class Pool extends GraphicalElement
         updateSize();
     }
 
+    public function swapLanes(l1: Integer, l2: Integer) {
+        var c = Comparator {
+           override public function compare (arg0 : Object, arg1 : Object) : Integer {
+               var l1 = arg0 as Lane;
+               var l2 = arg1 as Lane;
+               var ret = 0;
+
+               if (l1.idx == l2.idx) ret = 0;
+               if (l1.idx < l2.idx) ret = -1;
+               if (l1.idx > l2.idx) ret = 1;
+
+               return ret;
+           }
+        }
+
+        var t = lanes[l1].idx;
+        lanes[l1].idx = lanes[l2].idx;
+        lanes[l2].idx = t;
+        var ls = Sequences.sort(lanes, c);
+        delete lanes;
+        for (ele in ls) {
+            var l = ele as Lane;
+            insert l into lanes;
+        }
+
+        updateSize();
+    }
+
     public function addLane():Lane
     {
         var lane=Lane
@@ -150,6 +179,7 @@ public class Pool extends GraphicalElement
             modeler:modeler;
             uri:"new:Lane:{ToolBar.counter++}"
             w:bind w
+            idx: lanes.size();
         };
         lane.setGraphParent(this);
         lane.setContainer(getContainer());
@@ -185,7 +215,7 @@ public class Pool extends GraphicalElement
     {
         for(lane in lanes)
         {
-            println("{lane.uri}={uri}");
+            //println("{lane.uri}={uri}");
             if(lane.uri.equals(uri))return lane;
         }
         return null;
