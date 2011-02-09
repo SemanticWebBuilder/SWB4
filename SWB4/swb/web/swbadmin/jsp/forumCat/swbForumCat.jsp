@@ -1630,8 +1630,8 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
 <%!
     public String getVideoThumbnail(String videoUrl, WebPage wpage) {
         String ret = SWBPortal.getWebWorkPath()+"/models/"+wpage.getWebSiteId()+"/css/images/profilePlaceholder.jpg";
-        if (videoUrl.length() > 2) {
-            ret = "http://i.ytimg.com/vi/" + videoUrl.substring(31, videoUrl.length()) + "/default.jpg";
+        if (videoUrl.length() > 22) {
+            ret = "http://i.ytimg.com/vi/" + videoUrl.replaceAll("(&\\w+=.+)+", "").substring(31, videoUrl.replaceAll("(&\\w+=.+)+", "").length()) + "/default.jpg";
         }
         return ret;
     }
