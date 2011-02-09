@@ -19,6 +19,7 @@ import javafx.util.Sequences;
 
 public class Lane extends GraphicalElement
 {
+    public var idx: Number;
     var xh=bind h on replace
     {
         //y=getGraphParent().y-getGraphParent().h/2+boundsInParent.minY+h/2;
@@ -65,6 +66,20 @@ public class Lane extends GraphicalElement
                     if(Alert.confirm(tit, msg)) {
                         removeChilds();
                     }
+                }
+            },
+            MenuItem {
+                caption: ##"actLowerLane"
+                status: bind if (idx <= getPool().lanes.size() - 2) MenuItem.STATUS_ENABLED else MenuItem.STATUS_DISABLED
+                action: function (e: MouseEvent) {
+                    getPool().swapLanes(this.idx, this.idx + 1);
+                }
+            },
+            MenuItem {
+                caption: ##"actRaiseLane"
+                status: bind if (idx > 0) MenuItem.STATUS_ENABLED else MenuItem.STATUS_DISABLED
+                action: function (e: MouseEvent) {
+                    getPool().swapLanes(this.idx, this.idx - 1);
                 }
             },
             MenuItem {isSeparator:true},
