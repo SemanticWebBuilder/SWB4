@@ -269,14 +269,14 @@ public abstract class RepresentationBase implements RepresentationRequest
     protected RepresentationResponse processResponse(HttpURLConnection con) throws IOException, InstantiationException, IllegalAccessException, RestException, ExecutionRestException
     {
         int responseCode = con.getResponseCode();
-        if (con.getHeaderField(CONTENT_TYPE) != null)
-        {
-            String mediaType = con.getHeaderField(CONTENT_TYPE);
+        String contentType=con.getHeaderField(CONTENT_TYPE);
+        if (contentType != null)
+        {            
             for (ResponseDefinition definition : method.getResponseDefinitions())
             {
-                if (definition.getMediaType().equals(mediaType) && definition.getStatus() == responseCode)
+                if (definition.getMediaType().equals(contentType) && definition.getStatus() == responseCode)
                 {
-                    Class clazz = RestSource.getRepresentationResponse(mediaType);
+                    Class clazz = RestSource.getRepresentationResponse(contentType);
                     Object obj = clazz.newInstance();
                     if (obj instanceof RepresentationResponse)
                     {
@@ -287,7 +287,7 @@ public abstract class RepresentationBase implements RepresentationRequest
                         repResponse.process(con);
                         for (ResponseDefinition def : this.method.definitionResponses)
                         {
-                            if (def.getMediaType().equals(con.getHeaderField(CONTENT_TYPE)) && def.getStatus()==responseCode)
+                            if (def.getMediaType().equals(contentType) && def.getStatus()==responseCode)
                             {
                                 def.validateResponse(repResponse.getResponse());
                                 return repResponse;
@@ -297,7 +297,7 @@ public abstract class RepresentationBase implements RepresentationRequest
                     }
                 }
             }
-            throw new ExecutionRestException(this.getMethod().getHTTPMethod(), con.getURL(), "The response " + mediaType + " is not supported");
+            throw new ExecutionRestException(this.getMethod().getHTTPMethod(), con.getURL(), "The response " + contentType + " is not supported");
         }
         else
         {
