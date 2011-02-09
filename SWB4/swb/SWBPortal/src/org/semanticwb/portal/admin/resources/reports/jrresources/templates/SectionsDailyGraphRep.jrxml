@@ -36,7 +36,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font fontName="DejaVu Sans" size="165" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<font fontName="SansSerif" size="159" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[SWB]]></text>
 			</staticText>
