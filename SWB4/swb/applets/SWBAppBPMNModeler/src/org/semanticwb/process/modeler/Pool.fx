@@ -15,6 +15,7 @@ import javafx.stage.Alert;
 import org.semanticwb.process.modeler.MessageFlow;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Sequences;
+import org.semanticwb.process.modeler.GraphicalElement;
 
 /**
  * @author javier.solis
@@ -60,9 +61,9 @@ public class Pool extends GraphicalElement
             onKeyReleased: onKeyReleased
         };
 
-        var actions: Action[] = [
-            Action {
-                label:##"actDelContents"
+        var actions: MenuItem[] = [
+            MenuItem {
+                caption:##"actDelContents"
                 status: bind if (this.graphChilds.size() > 0) MenuItem.STATUS_ENABLED else MenuItem.STATUS_DISABLED
                 action: function (e: MouseEvent) {
                     var tit = ##"actDelete";
@@ -72,9 +73,9 @@ public class Pool extends GraphicalElement
                     }
                 }
             },
-            Action {isSeparator:true},
-            Action {
-                label: ##"actEditTitle"
+            MenuItem {isSeparator:true},
+            MenuItem {
+                caption: ##"actEditTitle"
                 status: MenuItem.STATUS_ENABLED
                 action: function (e: MouseEvent) {
                     if(text != null) {
@@ -106,7 +107,21 @@ public class Pool extends GraphicalElement
             scaleX: bind s;
             scaleY: bind s;
             visible: bind canView()
-        };
+            onMouseReleased: function(e: MouseEvent) {
+                for (ele in modeler.contents) {
+                    if (ele instanceof GraphicalElement and not (ele instanceof Lane or ele instanceof Pool)) {
+                        var no = ele as GraphicalElement;
+                        if (no.graphParent == null) {
+                            if (no.boundsInLocal.minX > boundsInLocal.minX and no.boundsInLocal.minY > boundsInLocal.minY) {
+                                if (no.boundsInLocal.maxX < boundsInLocal.minX + boundsInLocal.width and no.boundsInParent.maxY < boundsInLocal.minY + boundsInLocal.height) {
+                                    no.setGraphParent(this);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override public function remove(validate:Boolean)
@@ -214,8 +229,12 @@ public class Pool extends GraphicalElement
     public function removeChilds() {
         var ch = Sequences.shuffle(getgraphChilds());
         for (ele in ch) {
-            (ele as Lane).removeChilds();
-            removeLane(ele as Lane);
+            if (ele instanceof Lane) {
+                (ele as Lane).removeChilds();
+                removeLane(ele as Lane);
+            } else {
+                (ele as GraphicalElement).remove(true);
+            }
         }
     }
 }
