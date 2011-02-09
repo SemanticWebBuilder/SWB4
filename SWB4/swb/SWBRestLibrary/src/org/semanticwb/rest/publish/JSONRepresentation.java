@@ -76,7 +76,7 @@ public class JSONRepresentation implements Representation
             response.appendChild(representation);
             representation.setAttribute(MEDIA_TYPE, APPLICATION_JSON);
             response.setAttribute(STATUS, "400");
-            //representation.setAttribute(ELEMENT, SemanticClassPublisher.REST_RESOURCE_PREFIX + ":Error");
+            representation.setAttribute(ELEMENT, SemanticClassPublisher.ERROR_PREFIX + ":Error");
         }
         Element response=doc.createElementNS(WADL_NS,"response");
         method.appendChild(response);

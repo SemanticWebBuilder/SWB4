@@ -78,7 +78,7 @@ public class XMLRepresentation implements Representation
             response.appendChild(representation);
             representation.setAttribute(MEDIA_TYPE, APPLICATION_XML);
             response.setAttribute(STATUS, "400");
-            representation.setAttribute(ELEMENT, SemanticClassPublisher.REST_RESOURCE_PREFIX + ":Error");
+            representation.setAttribute(ELEMENT, SemanticClassPublisher.ERROR_PREFIX + ":Error");
         }
         Element response = doc.createElementNS(WADL_NS, "response");
         method.appendChild(response);
@@ -108,9 +108,9 @@ public class XMLRepresentation implements Representation
         }
 
 
-        String xsd = URLEncoder.encode(clazz.getURI());
+        /*String xsd = URLEncoder.encode(clazz.getURI());
         Element include = doc.createElementNS(WADL_NS, "include");
         grammars.appendChild(include);
-        include.setAttributeNS(WADL_NS, "href", servletRequest.getRequestURI() + "?xsd=" + xsd);
+        include.setAttributeNS(WADL_NS, "href", servletRequest.getRequestURI() + "?xsd=" + xsd);*/
     }
 }
