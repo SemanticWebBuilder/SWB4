@@ -19,5 +19,6 @@ public interface MethodModule {
     public String getId();
     public HTTPMethod getHTTPMethod();
     public void addParameters(Element method);
+    public void addXSD(Element schema);
     public void execute(HttpServletRequest request, HttpServletResponse response,String basePath) throws IOException;
 }
