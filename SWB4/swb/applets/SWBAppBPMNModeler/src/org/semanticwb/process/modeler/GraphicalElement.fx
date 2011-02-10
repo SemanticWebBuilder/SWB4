@@ -69,7 +69,7 @@ public class GraphicalElement extends CustomNode
     protected var dpy : Number;                     //diference of parent
     protected var container:GraphicalElement;                 //Container Element
     protected var containerChilds:GraphicalElement[];         //Container Childs
-    protected var menuOptions: Action[];
+    protected var menuOptions: MenuItem[];
 
     var mx : Number;                               //temporal movimiento x
     var my : Number;                               //temporal movimiento y
@@ -118,20 +118,68 @@ public class GraphicalElement extends CustomNode
     }
 
     public function setCommonMenuOptions () {
-        var props:Action[] = [
-            Action {
-            label: ##"actDelete";
+        var props:MenuItem[] = [
+            MenuItem {
+            caption: ##"actDelete";
             action: function (e: MouseEvent) {
                     remove(true);
+                    ModelerUtils.popup.hide();
                 }
-            }//,
-//            Action{isSeparator: true},
-//            Action {
-//            label: ModelerUtils.getLocalizedString("actEdit");
-//            action: function (e: MouseEvent) {
-//                    println("Editando propiedades de {this.title}");
-//                }
-//            }
+            },
+            MenuItem {isSeparator:true},
+            MenuItem {
+                caption:"Tamaño de letra"
+                items: [
+                    MenuItem {
+                        caption:"Chica"
+                        action: function (e: MouseEvent) {
+                            this.text.setSize(8);
+                            if (this.text.boundsInLocal.width + 5 < minW) {
+                                w = minW;
+                            } else {
+                                w = this.text.boundsInLocal.width + 5;
+                            }
+                            if (this.text.boundsInLocal.height + 5 < minH) {
+                                h = minH;
+                            } else {
+                                h = this.text.boundsInLocal.height + 5;
+                            }
+                            ModelerUtils.popup.hide();
+                            for (ele in scene.stylesheets) {
+                                println("::{ele}");
+                            }
+                            ModelerUtils.popup.hide();
+                        }
+                    },
+                    MenuItem {
+                        caption:"Normal"
+                        action: function (e: MouseEvent) {
+                            this.text.setSize(10);
+                            //w = this.text.boundsInLocal.width + 5;
+                            //h = this.text.boundsInLocal.height + 5;
+                            ModelerUtils.popup.hide();
+                        }
+                    },
+                    MenuItem {
+                        caption:"Mediana"
+                        action: function (e: MouseEvent) {
+                            this.text.setSize(12);
+                            //w = this.text.boundsInLocal.width + 5;
+                            //h = this.text.boundsInLocal.height + 5;
+                            ModelerUtils.popup.hide();
+                        }
+                    },
+                    MenuItem {
+                        caption:"Grande"
+                        action: function (e: MouseEvent) {
+                            this.text.setSize(14);
+                            //w = this.text.boundsInLocal.width + 5;
+                            //h = this.text.boundsInLocal.height + 5;
+                            ModelerUtils.popup.hide();
+                        }
+                    }
+                ]
+            }
         ];
 
         insert props into menuOptions;
