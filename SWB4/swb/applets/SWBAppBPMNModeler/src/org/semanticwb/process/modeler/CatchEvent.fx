@@ -24,6 +24,7 @@ public class CatchEvent extends Event
                     caption: bind if (this.cancelActivity) ##"actInterrupting" else ##"actNonInterrupting"
                     action: function (e: MouseEvent) {
                         this.cancelActivity = not this.cancelActivity;
+                        ModelerUtils.popup.hide();
                     }
                 }, MenuItem {isSeparator: true}
             ];
