@@ -56,6 +56,7 @@ public class IntermediateCatchEvent extends CatchEvent
                     caption: bind if (this.cancelActivity) ##"interrupting" else ##"nonInterrupting"
                     action: function (e: MouseEvent) {
                         this.cancelActivity = not this.cancelActivity;
+                        ModelerUtils.popup.hide();
                     }
                 }, MenuItem {isSeparator: true}
             ];
