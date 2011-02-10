@@ -144,29 +144,32 @@ public class SubProcess extends Activity
         }
 
         if (not isTransaction) {
-            var actions: Action[] = [
-                Action {
-                    label: ##"actMultiInstance";
+            var actions: MenuItem[] = [
+                MenuItem {
+                    caption: ##"actMultiInstance";
                     status: bind if (isMultiInstance) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                     action: function (e: MouseEvent) {
                         this.setModifier(TYPE_MULTIPLE, not isMultiInstance);
+                        ModelerUtils.popup.hide();
                     }
                 },
-                Action {
-                    label: ##"actLoop";
+                MenuItem {
+                    caption: ##"actLoop";
                     status: bind if (isLoop) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                     action: function (e: MouseEvent) {
                         this.setModifier(TYPE_LOOP, not isLoop);
+                        ModelerUtils.popup.hide();
                     }
                 },
-                Action {
-                    label: ##"actCompensa";
+                MenuItem {
+                    caption: ##"actCompensa";
                     status: bind if (isForCompensation) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                     action: function (e: MouseEvent) {
                         this.setModifier(TYPE_COMPENSATION, not isForCompensation);
+                        ModelerUtils.popup.hide();
                     }
                 },
-                Action {isSeparator: true}
+                MenuItem {isSeparator: true}
             ];
             insert actions before menuOptions[0];
         }
