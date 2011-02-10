@@ -140,47 +140,38 @@ public class Task extends Activity
                     ModelerUtils.popup.hide();
                 }
             },
-//            Action {isSeparator: true},
-//            Action {
-//                label: "Convertir en subproceso"
-//                status: MenuItem.STATUS_ENABLED
-//                action: function (e: MouseEvent) {
-//                    var _title = title;
-//                    //crear nuevo elemento
-//                    var sp = SubProcess {
-//                        modeler: modeler
-//                        title: _title
-//                        uri:"new:subprocess:{this.modeler.toolBar.counter++}"
-//                    }
-//                    //pasar las entradas al nuevo elemento
-//                    for(ele in getInputConnectionObjects()) {
-//                        ele.end = sp;
-//                    }
-//
-//                    for (ele in getOutputConnectionObjects()) {
-//                        ele.ini = sp;
-//                    }
-//
-//                    sp.x = x;
-//                    sp.dpx = dpx;
-//                    sp.dpy = dpy;
-//                    sp.dx = dx;
-//                    sp.dy = dy;
-//                    sp.layoutX = layoutX;
-//                    sp.layoutY = layoutY;
-//                    sp.scaleX = scaleX;
-//                    sp.scaleY = scaleY;
-//                    sp.scaleZ = scaleZ;
-//                    sp.layoutInfo = layoutInfo;
-//                    sp.y = y;
-//                    sp.container = container;
-//                    sp.w = w;
-//                    sp.h = h;
-//                    sp.graphParent = graphParent;
-//                    modeler.add(sp);
-//                    remove(true);
-//                }
-//            },
+            MenuItem {isSeparator: true},
+            MenuItem {
+                caption: "Convertir en subproceso"
+                status: MenuItem.STATUS_ENABLED
+                action: function (e: MouseEvent) {
+                    var _title = title;
+                    //crear nuevo elemento
+                    var sp = SubProcess {
+                        modeler: modeler
+                        title: _title
+                        uri:"new:subprocess:{this.modeler.toolBar.counter++}"
+                    }
+                    //pasar las entradas al nuevo elemento
+                    for(ele in getInputConnectionObjects()) {
+                        ele.end = sp;
+                    }
+
+                    for (ele in getOutputConnectionObjects()) {
+                        ele.ini = sp;
+                    }
+
+                    sp.x = x;
+                    sp.y = y;
+                    sp.container = container;
+                    sp.w = w;
+                    sp.h = h;
+                    sp.setGraphParent(getGraphParent());
+                    modeler.add(sp);
+                    ModelerUtils.popup.hide();
+                    remove(true);
+                }
+            },
             MenuItem {isSeparator: true}
         ];
         insert actions before menuOptions[0];
