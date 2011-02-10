@@ -72,6 +72,7 @@ public class Pool extends GraphicalElement
                     if(Alert.confirm(tit, msg)) {
                         removeChilds();
                     }
+                    ModelerUtils.popup.hide();
                 }
             },
             MenuItem {isSeparator:true},
@@ -82,6 +83,7 @@ public class Pool extends GraphicalElement
                     if(text != null) {
                         text.startEditing();
                     }
+                    ModelerUtils.popup.hide();
                 }
             }
         ];
@@ -109,15 +111,19 @@ public class Pool extends GraphicalElement
             scaleY: bind s;
             visible: bind canView()
             onMouseReleased: function(e: MouseEvent) {
-                for (ele in modeler.contents) {
-                    if (ele instanceof GraphicalElement and not (ele instanceof Lane or ele instanceof Pool)) {
-                        var no = ele as GraphicalElement;
-                        if (no.graphParent == null) {
-                            if (no.boundsInLocal.minX > boundsInLocal.minX and no.boundsInLocal.minY > boundsInLocal.minY) {
-                                if (no.boundsInLocal.maxX < boundsInLocal.minX + boundsInLocal.width and no.boundsInParent.maxY < boundsInLocal.minY + boundsInLocal.height) {
-                                    no.setGraphParent(this);
-                                }
-                            }
+                captureChilds();
+            }
+        };
+    }
+
+    public function captureChilds() {
+        for (ele in modeler.contents) {
+            if (ele instanceof GraphicalElement and not (ele instanceof Lane or ele instanceof Pool or ele instanceof Artifact)) {
+                var no = ele as GraphicalElement;
+                if (no.graphParent == null) {
+                    if (no.boundsInLocal.minX > boundsInLocal.minX and no.boundsInLocal.minY > boundsInLocal.minY) {
+                        if (no.boundsInLocal.maxX < boundsInLocal.minX + boundsInLocal.width and no.boundsInParent.maxY < boundsInLocal.minY + boundsInLocal.height) {
+                            no.setGraphParent(this);
                         }
                     }
                 }
