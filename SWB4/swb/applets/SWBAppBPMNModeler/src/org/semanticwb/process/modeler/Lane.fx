@@ -66,6 +66,7 @@ public class Lane extends GraphicalElement
                     if(Alert.confirm(tit, msg)) {
                         removeChilds();
                     }
+                    ModelerUtils.popup.hide();
                 }
             },
             MenuItem {
@@ -73,6 +74,7 @@ public class Lane extends GraphicalElement
                 status: bind if (idx <= getPool().lanes.size() - 2) MenuItem.STATUS_ENABLED else MenuItem.STATUS_DISABLED
                 action: function (e: MouseEvent) {
                     getPool().swapLanes(this.idx, this.idx + 1);
+                    ModelerUtils.popup.hide();
                 }
             },
             MenuItem {
@@ -80,6 +82,7 @@ public class Lane extends GraphicalElement
                 status: bind if (idx > 0) MenuItem.STATUS_ENABLED else MenuItem.STATUS_DISABLED
                 action: function (e: MouseEvent) {
                     getPool().swapLanes(this.idx, this.idx - 1);
+                    ModelerUtils.popup.hide();
                 }
             },
             MenuItem {isSeparator:true},
@@ -90,6 +93,7 @@ public class Lane extends GraphicalElement
                     if(text != null) {
                         text.startEditing();
                     }
+                    ModelerUtils.popup.hide();
                 }
             }
         ];
