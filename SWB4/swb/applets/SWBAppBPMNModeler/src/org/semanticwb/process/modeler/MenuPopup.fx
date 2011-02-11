@@ -54,7 +54,7 @@ public var x: Number = 0;
                 owner:this
                 x: bind x + optionsMargin
                 y: bind y + option.offsety
-                caption: bind if (option.items != null and option.items.size() > 0) "{option.caption} >" else option.caption
+                caption: bind option.caption
                 textOffsetX: bind x + optionsMargin * 3
                 isSeparator: bind option.isSeparator
                 status: bind option.status
