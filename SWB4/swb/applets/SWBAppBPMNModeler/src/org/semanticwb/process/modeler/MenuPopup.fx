@@ -67,7 +67,7 @@ public var x: Number = 0;
                 }
                 o.action = function (e: MouseEvent) {
                     if (e.button == e.button.PRIMARY) {
-                        o.owner.closeMenus();
+                        o.owner.closeMenus(o);
                         o.showChild(o.x + o.w + 4, o.y + o.h - 2);
                     }
                 }
@@ -113,9 +113,9 @@ public var x: Number = 0;
         }
     }
 
-    public function closeMenus() {
+    public function closeMenus(m: MenuItem) {
         for (o in os) {
-            if (o.mchild != null and o.mchild.visible) {
+            if (o.mchild != null and o.mchild.visible and o != m) {
                 o.mchild.hide();
             }
         }
