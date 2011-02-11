@@ -117,6 +117,7 @@ public class SubMenu extends CustomNode
             {
                  if(modeler.tempNode==null)modeler.disablePannable=true;
                  ModelerUtils.clickedNode=this;
+                 ModelerUtils.popup.hide();
                  clicked=true;
             }
             onMouseReleased: function( e: MouseEvent ):Void
