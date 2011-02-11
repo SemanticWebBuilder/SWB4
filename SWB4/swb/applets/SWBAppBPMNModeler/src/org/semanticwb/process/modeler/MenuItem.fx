@@ -10,6 +10,10 @@ import javafx.scene.CustomNode;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.CacheHint;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 
 /**
  * @author Hasdai Pacheco {haxdai@gmail.com}
@@ -24,7 +28,7 @@ public class MenuItem extends CustomNode {
     public var status = STATUS_ENABLED;
     public var items: MenuItem[];
     public var owner: MenuPopup;
-    public var mchild: MenuPopup;
+    public var mchild: MenuPopup = null on replace {drawTriangle();};
     public var offsety: Number;
     public var x: Number;
     public var y: Number;
@@ -34,6 +38,9 @@ public class MenuItem extends CustomNode {
     public var sizeToText: Boolean = true;
     public var isSeparator: Boolean = false;
     var r: Rectangle;
+    var p: Path;
+    var t2: Text;
+    var tsize = 8;
 
     override public function create(): Node {
         var t:Text = Text {
@@ -43,7 +50,6 @@ public class MenuItem extends CustomNode {
             id: "caption"
         }
 
-        var t2: Text;
         if (isSeparator) {
             r = Rectangle {
                 x: bind x
@@ -70,8 +76,8 @@ public class MenuItem extends CustomNode {
                         "menuItemCaptionNormal"
                     }
                 textOrigin: TextOrigin.TOP
-                x: bind if (sizeToText) r.boundsInParent.minX + (r.width - t.boundsInLocal.width) / 2 else textOffsetX
-                y: bind r.boundsInParent.minY + (r.height - t.boundsInLocal.height) / 2
+                x: bind if (sizeToText) r.x + (r.width - t.boundsInLocal.width) / 2 else textOffsetX
+                y: bind r.y + (r.height - t.boundsInLocal.height) / 2
                 content: bind caption
                 font: bind if (status.equals(STATUS_SELECTED)) Font.font("Verdana", FontWeight.BOLD, 11) else Font.font("Verdana", 11)
                 //fill: bind if (hover) Color.WHITE else if (status.equals(STATUS_ENABLED) or status.equals(STATUS_SELECTED)) Color.BLACK else Color.GRAY
@@ -82,7 +88,7 @@ public class MenuItem extends CustomNode {
             cache: true;
             cacheHint:CacheHint.SPEED;
             content: bind [
-                r, t2, mchild
+                r, t2, p, mchild
             ]
             onMouseClicked: bind
                 if (not status.equals(STATUS_DISABLED) and action != null) {
@@ -94,7 +100,7 @@ public class MenuItem extends CustomNode {
     }
 
     public function getWidth(): Number {
-        return r.width;
+        return r.width + tsize;
     }
 
     public function getHeight(): Number {
@@ -126,6 +132,30 @@ public class MenuItem extends CustomNode {
         while (p != null) {
             p.hide();
             p = p.miParent.owner;
+        }
+    }
+
+    function drawTriangle() {
+        if (mchild != null and mchild.items.size() > 0) {
+            p = Path {
+                styleClass: bind t2.styleClass
+                stroke: bind t2.fill
+                elements: [
+                    MoveTo {
+                        x: bind x + r.width - 6
+                        y: bind y + (r.height/2)
+                    },
+                    LineTo {
+                        x: bind x + r.width - 6 - tsize / 2
+                        y: bind y + (r.height - tsize) / 2
+                    },
+                    LineTo {
+                        x: bind x + r.width - 6 - tsize / 2
+                        y: bind y + (r.height - tsize) / 2 + tsize
+                    }
+                    ClosePath{}
+                ]
+            }
         }
     }
 }
