@@ -96,6 +96,12 @@ public class MenuItem extends CustomNode {
                 } else {
                     function(e: MouseEvent){closeAll()}
                 }
+                onMouseEntered: function (e: MouseEvent) {
+                    if (mchild != null) {
+                        showChild(x + w + 4, y + h - 2);
+                    }
+                    owner.closeMenus(this);
+                }
         }
     }
 
