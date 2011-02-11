@@ -198,19 +198,19 @@
 
 .endEvent {
     -fx-stroke:-endevent-normal-stroke;
-    -fx-stroke-width: 2;
+    -fx-stroke-width: 3;
     -fx-cursor: hand;
     -fx-fill:-endevent-first-color;
 }
 
 .endEvent:hover {
     -fx-stroke:-hover-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 4;
 }
 
 .endEvent:focused {
     -fx-stroke:-focus-stroke;
-    -fx-stroke-width: 3;
+    -fx-stroke-width: 4;
 }
 
 .gateway {
