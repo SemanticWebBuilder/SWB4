@@ -374,7 +374,7 @@ public class FilterSection extends javax.swing.JApplet {
                 {
                     String _negative=efilter.getAttribute("negative");
                     boolean negative=false;
-                    if(_negative!=null && "".equals(_negative))
+                    if(_negative!=null && !"".equals(_negative))
                     {
                         try
                         {
