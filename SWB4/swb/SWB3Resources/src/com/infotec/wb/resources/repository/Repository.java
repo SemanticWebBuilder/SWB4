@@ -50,6 +50,7 @@ import java.util.*;
 import java.io.*;
 import java.sql.*;
 import org.semanticwb.model.Role;
+import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -101,10 +102,14 @@ public class Repository extends GenericResource
     {
         int level=0;
         String adm=base.getAttribute("admin");
+        User usr = user.getNative();
+        UserRepository usrRep = usr.getUserRepository();
+        Role rol = null;
         if(adm!=null)
         {
-            int r=Integer.parseInt(adm);
-            if(user.haveRole(r))level=3;
+            rol = usrRep.getRole(adm);
+            //int r=Integer.parseInt(adm);
+            if(user.getNative().hasRole(rol)) level=3;
         }
         else level=3;
         
@@ -113,8 +118,9 @@ public class Repository extends GenericResource
             String mdy=base.getAttribute("modify");
             if(mdy!=null)
             {
-                int r=Integer.parseInt(mdy);
-                if(user.haveRole(r))level=2;
+                rol = usrRep.getRole(mdy);
+                //int r=Integer.parseInt(mdy);
+                if(user.getNative().hasRole(rol)) level=2;
             }
             else level=2;
         }
@@ -124,8 +130,9 @@ public class Repository extends GenericResource
             String viw=base.getAttribute("view");
             if(viw!=null)
             {
-                int r=Integer.parseInt(viw);
-                if(user.haveRole(r))level=1;
+                rol = usrRep.getRole(viw);
+                //int r=Integer.parseInt(viw);
+                 if(user.getNative().hasRole(rol)) level=1;
             }
             else level=1;
         }
