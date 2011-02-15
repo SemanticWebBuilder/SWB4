@@ -21,7 +21,7 @@
         </statictext>
         
         <fieldset>
-            <input type="submit" name="btnSave" id="btnSave" value="Save" onclick="return jsValida(this.form)" />
+            <input type="submit" name="btnSave" id="btnSave" value="Save" />
             <input type="reset"  name="btnReset" id="btnReset" value="Reset" />
         </fieldset>
         
