@@ -211,7 +211,6 @@ public class Promo extends GenericResource {
         }else {
             String out;
             String cssClass = base.getAttribute("cssClass");
-            System.out.println("\n\n\n cssClass="+cssClass);
             if(cssClass == null)
                 out = renderWithStyle();
             else
@@ -227,7 +226,6 @@ public class Promo extends GenericResource {
      * @return the string
      */
     private String renderWithStyle() {
-        System.out.println(" renderWithStyle..............");
         StringBuilder out = new StringBuilder();
         Resource base=getResourceBase();
 
@@ -419,7 +417,6 @@ public class Promo extends GenericResource {
      * @return the string
      */
     private String render() {
-        System.out.println("render..............");
         StringBuilder out = new StringBuilder();
         Resource base=getResourceBase();
 
