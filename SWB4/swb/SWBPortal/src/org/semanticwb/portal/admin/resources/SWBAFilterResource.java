@@ -389,6 +389,7 @@ public class SWBAFilterResource extends SWBATree {
                 log.error(e);
             }
         }
+        //System.out.println("loaded xml:"+SWBUtils.XML.domToXml(docres));
         return docres;
     }
 
