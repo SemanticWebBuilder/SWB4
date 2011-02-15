@@ -1049,39 +1049,41 @@ public class Notification {
      * @return The number of the user level
      */
     public int getLevelUser(WBUser user) {
-        int level = 0;
-        String adm = base.getAttribute("admin");
-        if (adm != null) {
-            int r = Integer.parseInt(adm);
-            if (user.haveRole(r)) {
-                level = 3;
+        int level=0;
+        String adm=base.getAttribute("admin");
+        User usr = user.getNative();
+        UserRepository usrRep = usr.getUserRepository();
+        Role rol = null;
+        if(adm!=null)
+        {
+            rol = usrRep.getRole(adm);
+            //int r=Integer.parseInt(adm);
+            if(user.getNative().hasRole(rol)) level=3;
+        }
+        else level=3;
+
+        if(level==0)
+        {
+            String mdy=base.getAttribute("modify");
+            if(mdy!=null)
+            {
+                rol = usrRep.getRole(mdy);
+                //int r=Integer.parseInt(mdy);
+                if(user.getNative().hasRole(rol)) level=2;
             }
-        } else {
-            level = 3;
+            else level=2;
         }
 
-        if (level == 0) {
-            String mdy = base.getAttribute("modify");
-            if (mdy != null) {
-                int r = Integer.parseInt(mdy);
-                if (user.haveRole(r)) {
-                    level = 2;
-                }
-            } else {
-                level = 2;
+        if(level==0)
+        {
+            String viw=base.getAttribute("view");
+            if(viw!=null)
+            {
+                rol = usrRep.getRole(viw);
+                //int r=Integer.parseInt(viw);
+                 if(user.getNative().hasRole(rol)) level=1;
             }
-        }
-
-        if (level == 0) {
-            String viw = base.getAttribute("view");
-            if (viw != null) {
-                int r = Integer.parseInt(viw);
-                if (user.haveRole(r)) {
-                    level = 1;
-                }
-            } else {
-                level = 1;
-            }
+            else level=1;
         }
         return level;
     }

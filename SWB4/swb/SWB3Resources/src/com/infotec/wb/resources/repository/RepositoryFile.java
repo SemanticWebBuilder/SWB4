@@ -44,6 +44,9 @@ import com.infotec.wb.core.db.*;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.model.Role;
+import org.semanticwb.model.User;
+import org.semanticwb.model.UserRepository;
 
 /** Muestra la lista de los documentos existentes dentro del repositorio. Se pueden
  * agregar documentos, mostrar su informaci�n detallada, el historial de cada
@@ -91,41 +94,46 @@ public class RepositoryFile {
      * @return An integer value of the user level
      */
     public int getLevelUser(WBUser user, String tmid) {
-        int level = 0;
-        String adm = resource.getAttribute("admin");
-        if (adm != null) {
-            int r = Integer.parseInt(adm);
-            if (user.haveRole(r)) {
-                level = 3;
-            }
-        } else {
-            level = 3;
+
+
+        int level=0;
+        String adm=resource.getAttribute("admin");
+        User usr = user.getNative();
+        UserRepository usrRep = usr.getUserRepository();
+        Role rol = null;
+        if(adm!=null)
+        {
+            rol = usrRep.getRole(adm);
+            //int r=Integer.parseInt(adm);
+            if(user.getNative().hasRole(rol)) level=3;
         }
-        if (level == 0) {
-            String mdy = resource.getAttribute("modify");
-            if (mdy != null) {
-                int r = Integer.parseInt(mdy);
-                if (user.haveRole(r)) {
-                    level = 2;
-                }
-            } else {
-                level = 2;
+        else level=3;
+
+        if(level==0)
+        {
+            String mdy=resource.getAttribute("modify");
+            if(mdy!=null)
+            {
+                rol = usrRep.getRole(mdy);
+                //int r=Integer.parseInt(mdy);
+                if(user.getNative().hasRole(rol)) level=2;
             }
+            else level=2;
         }
 
-        if (level == 0) {
-            String viw = resource.getAttribute("view");
-            if (viw != null) {
-                int r = Integer.parseInt(viw);
-                if (user.haveRole(r)) {
-                    level = 1;
-                }
-            } else {
-                level = 1;
+        if(level==0)
+        {
+            String viw=resource.getAttribute("view");
+            if(viw!=null)
+            {
+                rol = usrRep.getRole(viw);
+                //int r=Integer.parseInt(viw);
+                 if(user.getNative().hasRole(rol)) level=1;
             }
+            else level=1;
         }
-
         return level;
+
     }
 
     /**

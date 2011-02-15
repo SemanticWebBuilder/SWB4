@@ -42,6 +42,8 @@ import com.infotec.wb.lib.*;
 import com.infotec.topicmaps.bean.*;
 import com.infotec.wb.core.*;
 import java.util.*;
+import org.semanticwb.model.WebPage;
+import org.semanticwb.model.WebSite;
 /** Administraci�n de las carpetas del repositorio, agrega sub carpetas,
  * actualiza su nombre y nombre de ordenamiento, as� como, elimina la sub
  * carpeta seleccionada.
@@ -189,32 +191,41 @@ public class AdmTopics {
         String name = null;
         String s_id = null;
         String msg = "";
-        Topic rd = null;
+        WebPage rd = null;
 
-        rd = dir;
+        WebSite ws = paramsRequest.getTopic().getMap().getNative();
+
+        rd = dir.getNative();
         name = request.getParameter("name");
         s_id = request.getParameter("orderid");
         if(name!=null){
             try{
 
-                Topic aux=new Topic(dir.getMap());
-                aux.setId(TopicMgr.getInstance().getIdGenerator().getID(name, dir.getMap().getId()));
+                long lid = ws.getSemanticModel().getCounter(WebPage.swb_WebPage);
+                String str_lid = name + lid;
 
-                aux.setSubjectIdentity(new SubjectIdentity(paramsRequest.getTopic().getUrl(aux)));
+                WebPage aux= ws.createWebPage(str_lid);
+                aux.setTitle(name);
+                aux.setLanguage(ws.getLanguage());
+                aux.setParent(dir.getNative());
+                //aux.setId(TopicMgr.getInstance().getIdGenerator().getID(name, dir.getMap().getId()));
 
-                BaseName bn=new BaseName(name);
-                aux.addBaseName(bn);
-                bn.setScope(new Scope(dir.getMap().getlang()));
-                aux.addType(dir);
+                //aux.setSubjectIdentity(new SubjectIdentity(paramsRequest.getTopic().getUrl(aux)));
+
+//                BaseName bn=new BaseName(name);
+//                aux.addBaseName(bn);
+//                bn.setScope(new Scope(dir.getMap().getlang()));
+//                aux.addType(dir);
                 if(s_id != null){
-                    BaseName sn=new BaseName(s_id);
-                    sn.setScope(new Scope(aux.getMap().getTopic("CNF_WBSortName")));
-                    aux.addBaseName(sn);
+//                    BaseName sn=new BaseName(s_id);
+//                    sn.setScope(new Scope(aux.getMap().getTopic("CNF_WBSortName")));
+//                    aux.addBaseName(sn);
+                    aux.setSortName(s_id);
                 }
-                aux.setActive(1);
-                aux.setIndexable(0);
-                dir.getMap().addTopic(aux);
-                dir.getMap().update2DB();
+                aux.setActive(true);
+                aux.setIndexable(false);
+//                dir.getMap().addTopic(aux);
+//                dir.getMap().update2DB();
                 rd=aux;
                 saveLog("create",user,0,dir,"Create a directory",0);
                 msg=paramsRequest.getLocaleString("msgDirectoryCreatedSuccessfully")+"...";
