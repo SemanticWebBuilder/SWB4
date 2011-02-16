@@ -67,6 +67,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -167,7 +168,7 @@ public class SemanticMgr implements SWBInstanceObject
     /** The vocabulary. */
     private SemanticVocabulary vocabulary;
     /** The m_observers. */
-    private ArrayList<SemanticObserver> m_observers = null;
+    private List<SemanticObserver> m_observers = null;
     /** The codepkg. */
     private CodePackage codepkg = null;
     /** The timer. */
@@ -239,7 +240,7 @@ public class SemanticMgr implements SWBInstanceObject
         m_imodels = new HashMap();                    //Arreglo de RDFModel
         m_bmodels = new HashMap();                    //Arreglo de RDFModel
         //m_schemas=new HashMap();
-        m_observers = new ArrayList();
+        m_observers = Collections.synchronizedList(new ArrayList());
 
         OntModelSpec modelSpec = getModelSpec();
 
@@ -1036,6 +1037,15 @@ public class SemanticMgr implements SWBInstanceObject
                 SemanticObserver obs = (SemanticObserver) it.next();
                 try {
                     obs.notify(obj, prop, lang, action);
+                } catch (Exception e) {
+                    log.error(e);
+                }
+            }
+            SemanticClass cls=obj.getSemanticClass();
+            if(cls!=null)
+            {
+                try {
+                    cls.notifyChange(obj, prop, lang, action);
                 } catch (Exception e) {
                     log.error(e);
                 }
