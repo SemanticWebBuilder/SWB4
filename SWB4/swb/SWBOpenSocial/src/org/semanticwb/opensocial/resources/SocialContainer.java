@@ -80,6 +80,7 @@ public class SocialContainer extends GenericResource
         "list.jsp",
         "rpc_relay.html",
         "sinfoto.png"
+        "estilo.css"
     };
         static final String[] urls =
         {
