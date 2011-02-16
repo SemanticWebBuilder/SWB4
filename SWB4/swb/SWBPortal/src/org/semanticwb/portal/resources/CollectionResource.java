@@ -77,8 +77,8 @@ public class CollectionResource extends GenericResource {
         SWBResourceURL urlact = paramRequest.getActionUrl();
         urlact.setAction("updcfg");
         out.println("<div class=\"swbform\">");
-        out.println("<form id=\"" + id + "/collectionAdmin\" action=\"" + urlact + "\" method=\"post\" onsubmit=\"submitForm('" + id + "/collectionAdmin'); return false;\">");
-        out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
+        out.println("<form id=\"" + id + "/collectionAdmin\" action=\""+urlact+"\" method=\"post\" onsubmit=\"submitForm('" + id + "/collectionAdmin'); return false;\">");
+        out.println("<input type=\"hidden\" name=\"suri\" value=\""+id+"\">");
         out.println("<fieldset>");
         out.println("<legend>");
         out.println(paramRequest.getLocaleString("msgResourceConfig"));
@@ -89,7 +89,7 @@ public class CollectionResource extends GenericResource {
         while (itcol.hasNext()) {
             Collection collection = itcol.next();
             out.println("<li>");
-            out.println("<input type=\"radio\" id=\"" + collection.getURI() + "/colluri\" name=\"" + COLL_ID + "\" value=\"" + collection.getURI() + "\" " + (collection.getURI().equals(coluri) ? "checked" : "") + "><label for=\"" + collection.getURI() + "/colluri\">" + collection.getTitle() + "</label>");
+            out.println("<input dojoType=\"dijit.form.RadioButton\"  id=\"" + collection.getId() + "/colluri\" name=\"" + COLL_ID + "\" value=\"" + collection.getURI() + "\" " + (collection.getURI().equals(coluri) ? "checked=\"checked\"" : "") + "><label for=\"" + collection.getId() + "/colluri\">" + collection.getTitle() + "</label>");
             out.println("</li>");
         }
 
@@ -97,7 +97,7 @@ public class CollectionResource extends GenericResource {
         out.println("</fieldset>");
 
         out.println("<fieldset>");
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" >" + paramRequest.getLocaleString("btnSave") + "</button>"); //
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"btn_send\">" + paramRequest.getLocaleString("btnSave") + "</button>"); //
         out.println("</fieldset>");
         out.println("</form>");
         out.println("</div>");
@@ -107,7 +107,7 @@ public class CollectionResource extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String id = request.getParameter("suri");
         String sval = request.getParameter("sval");
-        String ract = request.getParameter("ract");
+        //String ract = request.getParameter("ract");
         String action = response.getAction();
         if (action == null) {
             action = "";
@@ -135,6 +135,7 @@ public class CollectionResource extends GenericResource {
             } catch (Exception e) {
                 log.error(e);
             }
+            response.setMode(SWBActionResponse.Mode_ADMIN);
         }
         else if ("new".equals(action)) {
 
@@ -161,7 +162,7 @@ public class CollectionResource extends GenericResource {
                 throw new SWBResourceException("Error to process form...", e);
             }
             //response.setRenderParameter("statmsg", response.getLocaleString("statmsg1"));
-            response.setMode(response.Mode_VIEW);
+            response.setMode(SWBActionResponse.Mode_VIEW);
         }
         else if ("updateform".equals(action)) {
 
@@ -189,8 +190,11 @@ public class CollectionResource extends GenericResource {
                 throw new SWBResourceException("Error to process form...", e);
             }
             //response.setRenderParameter("statmsg", response.getLocaleString("statmsg1"));
-            response.setMode(response.Mode_VIEW);
+            response.setMode(SWBActionResponse.Mode_VIEW);
         }
+
+        if(id!=null) response.setRenderParameter("suri", id);
+        if(sval!=null) response.setRenderParameter("sval", sval);
     }
 
     /* (non-Javadoc)
@@ -210,7 +214,7 @@ public class CollectionResource extends GenericResource {
         id = base.getAttribute(COLL_ID);
 
 
-        System.out.println("Collection ID:"+id);
+        //System.out.println("Collection ID:"+id);
 
         String page = request.getParameter("page");
         String collectiontype = "display"; 
@@ -238,7 +242,7 @@ public class CollectionResource extends GenericResource {
         Collection col = null;
         if (collectiontype.equals("display")) { //("stpBusqueda".equals(action) || "".equals(action)) {
 
-            System.out.println("ID: "+id);
+            //System.out.println("ID: "+id);
             String busqueda = request.getParameter("search");
             if (null == busqueda) {
                 busqueda = "";
@@ -256,7 +260,7 @@ public class CollectionResource extends GenericResource {
 
                 SemanticClass sccol = col.getCollectionClass().transformToSemanticClass();
 
-                System.out.println("Coleccion: "+col.getTitle());
+                //System.out.println("Coleccion: "+col.getTitle());
 
                 SWBModel colmodel = col.getCollectionModel();
                 if (colmodel == null) {
@@ -814,7 +818,7 @@ public class CollectionResource extends GenericResource {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
-        System.out.println("doForm...");
+        //System.out.println("doForm...");
 
         PrintWriter out = response.getWriter();
         User user = paramRequest.getUser();
@@ -850,7 +854,7 @@ public class CollectionResource extends GenericResource {
             urlPA.setAction("updateform");
         }
 
-        System.out.println("Modo: "+modeform);
+        //System.out.println("Modo: "+modeform);
 
         SWBFormMgr fmgr = new SWBFormMgr(obj,null,modeform);
 
