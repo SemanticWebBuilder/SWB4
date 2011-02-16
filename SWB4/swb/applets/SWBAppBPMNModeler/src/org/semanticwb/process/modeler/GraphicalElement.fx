@@ -128,10 +128,10 @@ public class GraphicalElement extends CustomNode
             },
             MenuItem {isSeparator:true},
             MenuItem {
-                caption:"Tamaño de letra"
+                caption: ##"actChangeSize"
                 items: [
                     MenuItem {
-                        caption:"Chica"
+                        caption: ##"sizeSmall"
                         action: function (e: MouseEvent) {
                             this.text.setSize(8);
                             if (this.text.boundsInLocal.width + 5 < minW) {
@@ -152,7 +152,7 @@ public class GraphicalElement extends CustomNode
                         }
                     },
                     MenuItem {
-                        caption:"Normal"
+                        caption: ##"SizeNormal"
                         action: function (e: MouseEvent) {
                             this.text.setSize(10);
                             //w = this.text.boundsInLocal.width + 5;
@@ -161,7 +161,7 @@ public class GraphicalElement extends CustomNode
                         }
                     },
                     MenuItem {
-                        caption:"Mediana"
+                        caption: ##"SizeMedium"
                         action: function (e: MouseEvent) {
                             this.text.setSize(12);
                             //w = this.text.boundsInLocal.width + 5;
@@ -170,7 +170,7 @@ public class GraphicalElement extends CustomNode
                         }
                     },
                     MenuItem {
-                        caption:"Grande"
+                        caption: ##"SizeLarge"
                         action: function (e: MouseEvent) {
                             this.text.setSize(14);
                             //w = this.text.boundsInLocal.width + 5;
