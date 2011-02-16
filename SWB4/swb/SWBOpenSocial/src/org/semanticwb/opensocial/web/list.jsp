@@ -1,12 +1,19 @@
-<%@page contentType="text/html"%>
-<%@page import="java.net.*,org.semanticwb.opensocial.model.*,org.semanticwb.opensocial.resources.*,java.util.Date, java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+</head>
+<%@page contentType="text/html"%><%@page import="java.net.*,org.semanticwb.opensocial.model.*,org.semanticwb.opensocial.resources.*,java.util.Date, java.util.Calendar, java.util.GregorianCalendar, java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%!    private static final int ELEMENETS_BY_PAGE = 9;
 %>
 <%
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
     String context=SWBPortal.getContextPath();
     String sinfoto=  context+"/work"+paramRequest.getResourceBase().getWorkPath()+"/sinfoto.png";
+    String style=  context+"/work"+paramRequest.getResourceBase().getWorkPath()+"/estilo.css";
 %>
+
+<link href="<%=style%>" rel="stylesheet" type="text/css">
 <script>
     function loadImage(imagen)
     {
@@ -14,12 +21,13 @@
             String path=  sinfoto;
         %>
         imagen.src='<%=path%>';
-        
+
     }
 </script>
-
+</head>
+<body>
 <%
-    
+
     WebSite site=paramRequest.getWebPage().getWebSite();
     User user=paramRequest.getUser();
     SocialUser socialuser=SocialContainer.getSocialUser(user, session,site);
@@ -49,7 +57,7 @@
             }
         }
     }
-    
+
     String cssPath = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
     int elementos = _allgadgets.size();
     int paginas = elementos / ELEMENETS_BY_PAGE;
@@ -105,7 +113,7 @@
         %>
         <div class="paginacion">
             <%
-                
+
                 String nextURL = "#";
                 String previusURL = "#";
                 if (ipage < paginas)
@@ -154,7 +162,7 @@
                 }
             %>
     </div><br>
-    
+
         <%
     }
     ArrayList<Gadget> _gadgets=new ArrayList<Gadget>();
@@ -191,7 +199,7 @@
                     </td>
                 </tr>
             </table>
-            
+
         </td>
     </tr>
     <tr>
@@ -212,7 +220,7 @@
     if(!_gadgets.isEmpty())
     {
         %>
-        <table width="100%" cellpadding="2" cellspacing="2">
+        <table width="100%" border=0 cellpadding="0" cellspacing="0">
         <%
         int rows=_gadgets.size()/3;
         if(_gadgets.size()%3!=0)
@@ -258,8 +266,8 @@
                     try
                     {
                         URL url=new URL(img);
-                        img=proxy.toString()+"?url="+URLEncoder.encode(img);                        
-                     
+                        img=proxy.toString()+"?url="+URLEncoder.encode(img);
+
                     }
                     catch(Exception e)
                     {
@@ -271,7 +279,21 @@
                 edit.setCallMethod(SWBResourceURL.Call_DIRECT);
                 edit.setParameter("url", g1.getUrl());
                 %>
-                <td><img onError="loadImage(this);" border="0" alt="<%=title%>"  width="120" height="60" src="<%=img%>"><a href="<%=edit%>"><br><%=title%></a></td>
+                <td>
+                <div class="swb-gadget">
+
+			    	<div class="swb-gadget-tit"><a href="<%=edit%>"><%=title%></a></div>
+
+			        <div class="swb-gadget-img"><a href="<%=edit%>"><img onError="loadImage(this);" border="0" src="<%=img%>" alt="<%=title%>"></a></div>
+
+			        <div class="swb-gadget-add">
+
+			          <input name="boton" type="button" value="Agregar" onClick="window.location='<%=edit%>';">
+
+			        </div>
+
+	    </div></td>
+
                 <%
             }
             else
@@ -295,7 +317,7 @@
                     try
                     {
                         URL url=new URL(img);
-                        img=proxy.toString()+"?url="+URLEncoder.encode(img);                        
+                        img=proxy.toString()+"?url="+URLEncoder.encode(img);
                     }
                     catch(Exception e)
                     {
@@ -304,13 +326,26 @@
                 }
                 SWBResourceURL edit=paramRequest.getRenderUrl();
                 edit.setMode(SocialContainer.Mode_CONFIGGADGET);
-                edit.setCallMethod(SWBResourceURL.Call_DIRECT);
+                edit.setCallMethod(SWBResourceURL.Call_CONTENT);
 
 
 
                 edit.setParameter("url", g2.getUrl());
                 %>
-                <td><img  onError="loadImage(this);" border="0" alt="<%=title%>"  width="120" height="60" src="<%=img%>"><a href="<%=edit%>"><br><%=title%></a></td>
+               <td>
+	                       <div class="swb-gadget">
+
+	       			    	<div class="swb-gadget-tit"><a href="<%=edit%>"><%=title%></a></div>
+
+	       			        <div class="swb-gadget-img"><a href="<%=edit%>"><img onError="loadImage(this);" border="0" src="<%=img%>" alt="<%=title%>"></a></div>
+
+	       			        <div class="swb-gadget-add">
+
+	       			          <input name="boton" type="button" value="Agregar" onClick="window.location='<%=edit%>';">
+
+	       			        </div>
+
+	    </div></td>
                 <%
             }
             else
@@ -342,10 +377,23 @@
                 }
                 SWBResourceURL edit=paramRequest.getRenderUrl();
                 edit.setMode(SocialContainer.Mode_CONFIGGADGET);
-                edit.setCallMethod(SWBResourceURL.Call_DIRECT);
+                edit.setCallMethod(SWBResourceURL.Call_CONTENT);
                 edit.setParameter("url", g3.getUrl());
                 %>
-                <td><img onError="loadImage(this);" alt="<%=title%>"  width="120" height="60" src="<%=img%>"><a href="<%=edit%>"><br><%=title%></a></td>
+                <td>
+		                <div class="swb-gadget">
+
+					    	<div class="swb-gadget-tit"><a href="<%=edit%>"><%=title%></a></div>
+
+					        <div class="swb-gadget-img"><a href="<%=edit%>"><img onError="loadImage(this);" border="0" src="<%=img%>" alt="<%=title%>"></a></div>
+
+					        <div class="swb-gadget-add">
+
+					          <input name="boton" type="button" value="Agregar" onClick="window.location='<%=edit%>';">
+
+					        </div>
+
+	    </div></td>
                 <%
              }
             else
@@ -357,9 +405,7 @@
 
             %>
                 </tr>
-                <tr>
-                    <td colspan="3">&nbsp;</td>
-                </tr>
+
                 <%
         }
         %>
@@ -370,7 +416,6 @@
         </td>
     </tr>
 </table>
-
-
-
+</body>
+</html>
             
