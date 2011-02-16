@@ -838,6 +838,28 @@ public class CodeGenerator
         javaClassContent.append("        super(base);" + ENTER);
         javaClassContent.append("    }" + ENTER);
 
+        javaClassContent.append(ENTER);
+
+        javaClassContent.append("    /*" + ENTER);
+        javaClassContent.append("     * @see java.lang.Object#hashCode()" + ENTER);
+        javaClassContent.append("     */" + ENTER);
+        javaClassContent.append("    @Override" + ENTER);
+        javaClassContent.append("    public int hashCode() " + ENTER);
+        javaClassContent.append("    {" + ENTER);
+        javaClassContent.append("        return getSemanticObject().hashCode();" + ENTER);
+        javaClassContent.append("    }" + ENTER);
+
+        javaClassContent.append(ENTER);
+
+        javaClassContent.append("    /*" + ENTER);
+        javaClassContent.append("     * @see java.lang.Object#equals(java.lang.Object)" + ENTER);
+        javaClassContent.append("     */" + ENTER);
+        javaClassContent.append("    @Override" + ENTER);
+        javaClassContent.append("    public boolean equals(Object obj) " + ENTER);
+        javaClassContent.append("    {" + ENTER);
+        javaClassContent.append("        if(obj==null)return false;" + ENTER);
+        javaClassContent.append("        return hashCode()==obj.hashCode();" + ENTER);
+        javaClassContent.append("    }" + ENTER);
 
         insertPropertiesToClass(tpc, javaClassContent, null, "SemanticObject");
 
