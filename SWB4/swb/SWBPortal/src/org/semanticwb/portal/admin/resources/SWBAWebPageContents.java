@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.portal.admin.resources;
 
 import java.io.IOException;
@@ -48,13 +47,10 @@ public class SWBAWebPageContents extends GenericResource {
 
     /** The log. */
     private Logger log = SWBUtils.getLogger(SWBAWebPageContents.class);
-    
     /** The webpath. */
     String webpath = SWBPlatform.getContextPath();
-    
     /** The distributor. */
     String distributor = SWBPlatform.getEnv("wb/distributor");
-    
     /** The Mode_ action. */
     String Mode_Action = "paction";
 
@@ -63,7 +59,6 @@ public class SWBAWebPageContents extends GenericResource {
      */
     public SWBAWebPageContents() {
     }
-
     /** The MOD e_ id request. */
     static String MODE_IdREQUEST = "FORMID";
 
@@ -137,17 +132,13 @@ public class SWBAWebPageContents extends GenericResource {
         ResourceCollection rescol = null;
         ResourceCollectionCategory rescolcat = null;
         String resTypeURI = null;
-        if(go instanceof ResourceCollection || go instanceof ResourceCollectionCategory)
-        {
+        if (go instanceof ResourceCollection || go instanceof ResourceCollectionCategory) {
             isCollection = true;
-            if(go instanceof ResourceCollection)
-            {
-                rescol = (ResourceCollection)go;
+            if (go instanceof ResourceCollection) {
+                rescol = (ResourceCollection) go;
                 resTypeURI = rescol.getResourceCollectionType().getSemanticObject().getURI();
-            }
-            else if(go instanceof ResourceCollectionCategory)
-            {
-                rescolcat = (ResourceCollectionCategory)go;
+            } else if (go instanceof ResourceCollectionCategory) {
+                rescolcat = (ResourceCollectionCategory) go;
                 resTypeURI = rescolcat.getResourceCollection().getResourceCollectionType().getSemanticObject().getURI();
             }
         }
@@ -314,7 +305,7 @@ public class SWBAWebPageContents extends GenericResource {
             out.println("</tr>");
             out.println("</thead>");
             out.println("<tbody >");
-            out.println("<div dojoType=\"dojo.dnd.Source\" class=\"container\" copyOnly=\"true\">");
+            //out.println("<div dojoType=\"dojo.dnd.Source\" class=\"container\" copyOnly=\"true\">");
 
 
             PFlowManager pfmgr = SWBPortal.getPFlowManager();
@@ -340,13 +331,11 @@ public class SWBAWebPageContents extends GenericResource {
             if (!busqueda.equals("")) {
                 while (itso.hasNext()) {
                     semO = itso.next();
-                    boolean del=false;
-                    if(semO.instanceOf(Trashable.swb_Trashable))
-                    {
-                        del=semO.getBooleanProperty(Trashable.swb_deleted,false);
+                    boolean del = false;
+                    if (semO.instanceOf(Trashable.swb_Trashable)) {
+                        del = semO.getBooleanProperty(Trashable.swb_deleted, false);
                     }
-                    if(del)
-                    {
+                    if (del) {
                         continue;
                     }
 
@@ -362,18 +351,14 @@ public class SWBAWebPageContents extends GenericResource {
                         hmfiltro.put(semO.getURI(), semO);
                     }
                 }
-            }
-            else
-            {
+            } else {
                 while (itso.hasNext()) {
                     semO = itso.next();
-                    boolean del=false;
-                    if(semO.instanceOf(Trashable.swb_Trashable))
-                    {
-                        del=semO.getBooleanProperty(Trashable.swb_deleted,false);
+                    boolean del = false;
+                    if (semO.instanceOf(Trashable.swb_Trashable)) {
+                        del = semO.getBooleanProperty(Trashable.swb_deleted, false);
                     }
-                    if(del)
-                    {
+                    if (del) {
                         continue;
                     }
 
@@ -381,42 +366,44 @@ public class SWBAWebPageContents extends GenericResource {
                 }
             }
 
-            if(hmfiltro.isEmpty())
-                itso =  hmbus.values().iterator(); //obj.listObjectProperties(prop);
-            else
+            if (hmfiltro.isEmpty()) {
+                itso = hmbus.values().iterator(); //obj.listObjectProperties(prop);
+            } else {
                 itso = hmfiltro.values().iterator();
+            }
 
-            Set<SemanticObject> setso = SWBComparator.sortByCreatedSet(itso,false);
-            itso=null;
-            int ps=20;
-            int l=setso.size();
+            Set<SemanticObject> setso = SWBComparator.sortByCreatedSet(itso, false);
+            itso = null;
+            int ps = 20;
+            int l = setso.size();
 
             //System.out.println("num cont: "+l);
 
-            int p=0;
-            if(page!=null)p=Integer.parseInt(page);
-            int x=0;
-            itso=setso.iterator();
+            int p = 0;
+            if (page != null) {
+                p = Integer.parseInt(page);
+            }
+            int x = 0;
+            itso = setso.iterator();
             while (itso.hasNext()) {
 
                 SemanticObject sobj = itso.next();
 
-                boolean del=false;
-                if(sobj.instanceOf(Trashable.swb_Trashable))
-                {
-                    del=sobj.getBooleanProperty(Trashable.swb_deleted,false);
+                boolean del = false;
+                if (sobj.instanceOf(Trashable.swb_Trashable)) {
+                    del = sobj.getBooleanProperty(Trashable.swb_deleted, false);
                 }
-                if(del)
-                {
+                if (del) {
                     continue;
                 }
 
-                if(x<p*ps)
-                {
+                if (x < p * ps) {
                     x++;
                     continue;
                 }
-                if(x==(p*ps+ps) || x==l)break;
+                if (x == (p * ps + ps) || x == l) {
+                    break;
+                }
                 x++;
 
                 hasAsoc = true;
@@ -439,7 +426,7 @@ public class SWBAWebPageContents extends GenericResource {
                 //System.out.println("Recurso esta en flujo: "+isInFlow);
 
                 needAuthorization = pfmgr.needAnAuthorization(res);
-                
+
                 //System.out.println("Necesita autorización: "+needAuthorization);
 
                 if (!isInFlow && !needAuthorization) {
@@ -462,7 +449,7 @@ public class SWBAWebPageContents extends GenericResource {
 
                 // fin validación de botones en relacion a flujos
 
-                String stitle = SWBUtils.TEXT.cropText(getDisplaySemObj(sobj, user.getLanguage()),50);
+                String stitle = SWBUtils.TEXT.cropText(getDisplaySemObj(sobj, user.getLanguage()), 50);
                 out.println("<tr>");
 
                 out.println("<td>");
@@ -470,26 +457,26 @@ public class SWBAWebPageContents extends GenericResource {
                 urlr.setParameter("suri", id);
                 urlr.setParameter("sprop", idp);
                 urlr.setParameter("sval", sobj.getURI());
-                urlr.setParameter("page", ""+p);
-                urlr.setParameter("search", (busqueda.trim().length()>0?busqueda:""));
+                urlr.setParameter("page", "" + p);
+                urlr.setParameter("search", (busqueda.trim().length() > 0 ? busqueda : ""));
                 urlr.setParameter(prop.getName(), prop.getURI());
                 urlr.setAction("remove");
-                out.println("<a href=\"#\" title=\""+ paramRequest.getLocaleString("remove")+"\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + SWBUtils.TEXT.scape4Script(sobj.getDisplayName(user.getLanguage())) + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\""+ paramRequest.getLocaleString("remove")+"\"></a>");
+                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + SWBUtils.TEXT.scape4Script(sobj.getDisplayName(user.getLanguage())) + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("remove") + "\"></a>");
 
                 SWBResourceURL urlpre = paramRequest.getRenderUrl();
                 urlpre.setParameter("suri", id);
                 urlpre.setParameter("sprop", idp);
                 urlpre.setParameter("act", "");
-                urlpre.setParameter("page", ""+p);
-                urlpre.setParameter("search", (busqueda.trim().length()>0?busqueda:""));
+                urlpre.setParameter("page", "" + p);
+                urlpre.setParameter("search", (busqueda.trim().length() > 0 ? busqueda : ""));
                 urlpre.setParameter("sval", sobj.getURI());
                 if (idptype != null) {
                     urlpre.setParameter("sproptype", idptype);
                 }
                 urlpre.setParameter("preview", "true");
-                out.println("<a href=\"#\" title=\""+ paramRequest.getLocaleString("previewdocument")+"\" onclick=\"submitUrl('" + urlpre + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\""+ paramRequest.getLocaleString("previewdocument")+"\"></a>");
+                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" onclick=\"submitUrl('" + urlpre + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("previewdocument") + "\"></a>");
 
-                out.println("<a href=\"#\"  title=\""+ paramRequest.getLocaleString("documentAdmin")+"\" onclick=\"selectTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.scape4Script(sobj.getDisplayName()) + "','bh_AdminPorltet');return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\""+"documentAdmin"+"\"></a>");
+                out.println("<a href=\"#\"  title=\"" + paramRequest.getLocaleString("documentAdmin") + "\" onclick=\"selectTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.scape4Script(sobj.getDisplayName()) + "','bh_AdminPorltet');return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\"></a>");
 
 
                 if (send2Flow) {
@@ -501,38 +488,33 @@ public class SWBAWebPageContents extends GenericResource {
                     }
 
                     GenericObject gores = sobj.createGenericInstance();
-                    if(gores!=null && gores instanceof Versionable )
-                    {
+                    if (gores != null && gores instanceof Versionable) {
                         Versionable vgo = (Versionable) gores;
-                        if(vgo.getActualVersion()==null || vgo.getLastVersion()==null)
-                        {
+                        if (vgo.getActualVersion() == null || vgo.getLastVersion() == null) {
                             canSend2Flow = Boolean.FALSE;
                         }
                     }
 
-                    if(canSend2Flow)
-                    {
+                    if (canSend2Flow) {
                         SWBResourceURL url2flow = paramRequest.getRenderUrl();
                         url2flow.setParameter("suri", id);
                         url2flow.setParameter("sprop", idp);
                         url2flow.setMode("doPflowMsg");
                         url2flow.setParameter("sval", sobj.getURI());
-                        url2flow.setParameter("page", ""+p);
+                        url2flow.setParameter("page", "" + p);
                         url2flow.setParameter("pfid", pfid);
-                        url2flow.setParameter("search", (busqueda.trim().length()>0?busqueda:""));
+                        url2flow.setParameter("search", (busqueda.trim().length() > 0 ? busqueda : ""));
                         if (idptype != null) {
                             url2flow.setParameter("sproptype", idptype);
                         }
-                        out.println("<a href=\"#\" title=\""+ paramRequest.getLocaleString("senddocument2flow")+"\" onclick=\"showDialog('" + url2flow + "','"+ paramRequest.getLocaleString("comentary")+"'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\""+ paramRequest.getLocaleString("senddocument2flow")+"\"></a>");
-                    }
-                    else
-                    {
-                        out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\""+ paramRequest.getLocaleString("senddocument2flow")+"\" title=\""+ paramRequest.getLocaleString("canNOTsenddocument2flow")+"\">");
+                        out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("senddocument2flow") + "\" onclick=\"showDialog('" + url2flow + "','" + paramRequest.getLocaleString("comentary") + "'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("senddocument2flow") + "\"></a>");
+                    } else {
+                        out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("senddocument2flow") + "\" title=\"" + paramRequest.getLocaleString("canNOTsenddocument2flow") + "\">");
                     }
                 } else if (isInFlow && !isAuthorized) {
-                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/espera_autorizacion.gif\" border=\"0\" alt=\""+ paramRequest.getLocaleString("documentwaiting")+"\">");
+                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/espera_autorizacion.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("documentwaiting") + "\">");
                 } else if (isInFlow && isAuthorized) {
-                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enlinea.gif\" border=\"0\" alt=\""+ paramRequest.getLocaleString("Caccepted")+"\">");
+                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enlinea.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("Caccepted") + "\">");
                 }
                 out.println("</td>");
                 out.println("<td>");
@@ -541,7 +523,8 @@ public class SWBAWebPageContents extends GenericResource {
                 urlchoose.setParameter("sprop", idp);
                 urlchoose.setParameter("sobj", sobj.getURI());
                 urlchoose.setParameter("act", "edit");
-                out.println("<div class=\"dojoDndItem\"><a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(sobj.getDisplayName()),25) + "');return false;\">" + stitle + "</a></div>");
+                //out.println("<div class=\"dojoDndItem\"><a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(sobj.getDisplayName()), 25) + "');return false;\">" + stitle + "</a></div>");
+                out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(sobj.getDisplayName()), 25) + "');return false;\">" + stitle + "</a>");
                 out.println("</td>");
                 if (hmprop.get(Resource.swb_resourceType) != null) {
                     semprop = (SemanticProperty) hmprop.get(Resource.swb_resourceType);
@@ -570,7 +553,7 @@ public class SWBAWebPageContents extends GenericResource {
                     urlu.setParameter("sprop", idp);
                     urlu.setParameter("sval", sobj.getURI());
                     urlu.setParameter("act", "update");
-                    urlu.setParameter("search", (busqueda.trim().length()>0?busqueda:""));
+                    urlu.setParameter("search", (busqueda.trim().length() > 0 ? busqueda : ""));
 
                     out.println("<div dojoType=\"dijit.form.NumberSpinner\" id=\"" + id + "/" + base.getId() + "/" + sobj.getId() + "/NS\" jsId=\"" + id + "/" + base.getId() + "/" + sobj.getId() + "/NS\" intermediateChanges=\"true\" smallDelta=\"1\" constraints=\"{min:0,max:999,places:0}\" style=\"width:50px\"  name=\"" + semprop.getName() + "\" maxlength=\"3\"  value=\"" + getValueSemProp(sobj, semprop) + "\" >");
                     out.println("<script type=\"dojo/connect\" event=\"onBlur\">");
@@ -602,34 +585,33 @@ public class SWBAWebPageContents extends GenericResource {
                 }
                 out.println("</tr>");
             }
-            out.println("</div>");
+//            out.println("</div>");
             out.println("</tbody>");
             out.println("</table>");
             out.println("</fieldset>");
 
-            if(p>0 || x<l) //Requiere paginacion
+            if (p > 0 || x < l) //Requiere paginacion
             {
                 out.println("<fieldset>");
                 out.println("<center>");
 
                 //int pages=(int)(l+ps/2)/ps;
 
-                int pages=(int)(l/ps);
-                if((l%ps)>0) pages++;
+                int pages = (int) (l / ps);
+                if ((l % ps) > 0) {
+                    pages++;
+                }
 
-                for(int z=0;z<pages;z++)
-                {
+                for (int z = 0; z < pages; z++) {
                     SWBResourceURL urlNew = paramRequest.getRenderUrl();
                     urlNew.setParameter("suri", id);
                     urlNew.setParameter("sprop", idp);
                     urlNew.setParameter("sproptype", idptype);
-                    urlNew.setParameter("page", ""+z);
-                    if(z!=p)
-                    {
-                        out.println("<a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">"+(z+1)+"</a> ");
-                    }else
-                    {
-                        out.println((z+1)+" ");
+                    urlNew.setParameter("page", "" + z);
+                    if (z != p) {
+                        out.println("<a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">" + (z + 1) + "</a> ");
+                    } else {
+                        out.println((z + 1) + " ");
                     }
                 }
                 out.println("</center>");
@@ -640,12 +622,13 @@ public class SWBAWebPageContents extends GenericResource {
             urlNew.setParameter("suri", id);
             urlNew.setParameter("sprop", idp);
             urlNew.setParameter("sproptype", idptype);
-            if(isCollection){
+            if (isCollection) {
                 urlNew.setParameter("act", "edit");
 
                 urlNew.setParameter("sobj", resTypeURI);
+            } else {
+                urlNew.setParameter("act", "choose");
             }
-            else urlNew.setParameter("act", "choose");
 
             out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlNew + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btn_addnew") + "</button>");
             if (hasAsoc) {
@@ -657,7 +640,7 @@ public class SWBAWebPageContents extends GenericResource {
                         urlAAll.setParameter("sproptype", idptype);
                     }
                     urlAAll.setParameter("sval", "true");
-                    urlAAll.setParameter("act","activeall");
+                    urlAAll.setParameter("act", "activeall");
                     urlAAll.setMode(Mode_Action);
                     out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlAAll + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btn_aallnew") + "</button>");
                     SWBResourceURL urlUAll = paramRequest.getRenderUrl();
@@ -667,7 +650,7 @@ public class SWBAWebPageContents extends GenericResource {
                         urlUAll.setParameter("sproptype", idptype);
                     }
                     urlUAll.setParameter("sval", "false");
-                    urlUAll.setParameter("act","activeall");
+                    urlUAll.setParameter("act", "activeall");
                     urlUAll.setMode(Mode_Action);
                     out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlUAll + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btn_uallnew") + "</button>");
                 }
@@ -679,7 +662,7 @@ public class SWBAWebPageContents extends GenericResource {
                 }
                 urlDAll.setParameter("sval", "remove");
                 urlDAll.setAction("deleteall");
-                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"if(confirm('"+paramRequest.getLocaleString("qshure2delete")+"?')){submitUrl('" + urlDAll + "',this.domNode);} return false;\">" + paramRequest.getLocaleString("btn_dallnew") + "</button>");
+                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"if(confirm('" + paramRequest.getLocaleString("qshure2delete") + "?')){submitUrl('" + urlDAll + "',this.domNode);} return false;\">" + paramRequest.getLocaleString("btn_dallnew") + "</button>");
             }
             out.println("</fieldset>");
 
@@ -822,10 +805,10 @@ public class SWBAWebPageContents extends GenericResource {
                     SWBResourceURL urladdglobal = paramRequest.getRenderUrl();
                     urladdglobal.setMode(SWBResourceURL.Mode_EDIT);
                     urladdglobal.setParameter("act", "edit");
-                    urladdglobal.setParameter("suri",id);
-                    urladdglobal.setParameter("sprop",idp);
-                    urladdglobal.setParameter("sproptype",idptype);
-                    urladdglobal.setParameter("sobj","global|" + sobj.getURI());
+                    urladdglobal.setParameter("suri", id);
+                    urladdglobal.setParameter("sprop", idp);
+                    urladdglobal.setParameter("sproptype", idptype);
+                    urladdglobal.setParameter("sobj", "global|" + sobj.getURI());
 
                     out.println("<a href=\"#\" onclick=\"submitUrl('" + urladdglobal + "',this); return false;\">");
                     out.println(stitle);
@@ -876,10 +859,10 @@ public class SWBAWebPageContents extends GenericResource {
                     SWBResourceURL urladdglobal = paramRequest.getRenderUrl();
                     urladdglobal.setMode(SWBResourceURL.Mode_EDIT);
                     urladdglobal.setParameter("act", "edit");
-                    urladdglobal.setParameter("suri",id);
-                    urladdglobal.setParameter("sprop",idp);
-                    urladdglobal.setParameter("sproptype",idptype);
-                    urladdglobal.setParameter("sobj","global|" + sobj.getURI());
+                    urladdglobal.setParameter("suri", id);
+                    urladdglobal.setParameter("sprop", idp);
+                    urladdglobal.setParameter("sproptype", idptype);
+                    urladdglobal.setParameter("sobj", "global|" + sobj.getURI());
 
                     out.println("<a href=\"#\" onclick=\"submitUrl('" + urladdglobal + "',this); return false;\">");
                     out.println(stitle);
@@ -963,9 +946,9 @@ public class SWBAWebPageContents extends GenericResource {
                     SWBResourceURL urladds = paramRequest.getRenderUrl();
                     urladds.setMode(SWBResourceURL.Mode_EDIT);
                     urladds.setParameter("act", "edit");
-                    urladds.setParameter("suri",id);
-                    urladds.setParameter("sprop",idp);
-                    urladds.setParameter("sproptype",idptype);
+                    urladds.setParameter("suri", id);
+                    urladds.setParameter("sprop", idp);
+                    urladds.setParameter("sproptype", idptype);
                     urladds.setParameter("sobj", sobj.getURI());
 
                     out.println("<a href=\"#\" onclick=\"submitUrl('" + urladds + "',this); return false;\">");
@@ -1020,11 +1003,11 @@ public class SWBAWebPageContents extends GenericResource {
                     SWBResourceURL urladds = paramRequest.getRenderUrl();
                     urladds.setMode(SWBResourceURL.Mode_EDIT);
                     urladds.setParameter("act", "edit");
-                    urladds.setParameter("suri",id);
-                    urladds.setParameter("sprop",idp);
-                    urladds.setParameter("sproptype",idptype);
+                    urladds.setParameter("suri", id);
+                    urladds.setParameter("sprop", idp);
+                    urladds.setParameter("sproptype", idptype);
                     urladds.setParameter("sobj", sobj.getURI());
-                            
+
                     out.println("<a href=\"#\" onclick=\"submitUrl('" + urladds + "',this); return false;\">");
                     out.println(stitle);
                     out.println("</a");
@@ -1198,7 +1181,7 @@ public class SWBAWebPageContents extends GenericResource {
         out.println("</td>");
         out.println("<td>");
         out.println("<input type=\"text\" name=\"usrmsg\" value=\"\" dojoType=\"dijit.form.TextBox\" required=\"true\"	");
-        out.println(" promptMessage=\""+paramRequest.getLocaleString("commentsend2flow")+"\"  />");
+        out.println(" promptMessage=\"" + paramRequest.getLocaleString("commentsend2flow") + "\"  />");
         out.println("</td>");
         out.println("</tr>");
         out.println("<tr>");
@@ -1218,9 +1201,9 @@ public class SWBAWebPageContents extends GenericResource {
         out.println("</filedset>");
         out.println("<filedset>");
 
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" >"+paramRequest.getLocaleString("btnSend2flow")+"</button>"); //_onclick=\"submitForm('"+id+"/"+idvi+"/"+base.getId()+"/FVIComment');return false;\"
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" >" + paramRequest.getLocaleString("btnSend2flow") + "</button>"); //_onclick=\"submitForm('"+id+"/"+idvi+"/"+base.getId()+"/FVIComment');return false;\"
 
-        out.println("<button dojoType=\"dijit.form.Button\" onclick=\"hideDialog(); return false;\">"+paramRequest.getLocaleString("btnCancel")+"</button>"); //submitUrl('" + urlb + "',this.domNode); hideDialog();
+        out.println("<button dojoType=\"dijit.form.Button\" onclick=\"hideDialog(); return false;\">" + paramRequest.getLocaleString("btnCancel") + "</button>"); //submitUrl('" + urlb + "',this.domNode); hideDialog();
         out.println("</filedset>");
         out.println("</form>");
         out.println("</div>");
@@ -1313,17 +1296,16 @@ public class SWBAWebPageContents extends GenericResource {
                             obj.setObjectProperty(prop, ont.getSemanticObject("urswb"));
                         }
 
-                        boolean trash=false;
-                        if(so.instanceOf(Trashable.swb_Trashable))
-                        {
-                            boolean del=so.getBooleanProperty(Trashable.swb_deleted);
-                            if(!del)trash=true;
+                        boolean trash = false;
+                        if (so.instanceOf(Trashable.swb_Trashable)) {
+                            boolean del = so.getBooleanProperty(Trashable.swb_deleted);
+                            if (!del) {
+                                trash = true;
+                            }
                         }
-                        if(!trash)
-                        {
+                        if (!trash) {
                             so.remove();
-                        }else
-                        {
+                        } else {
                             so.setBooleanProperty(Trashable.swb_deleted, true);
                         }
 //                        if(so.getSemanticClass().isSubClass(Trashable.swb_Trashable))
@@ -1378,17 +1360,16 @@ public class SWBAWebPageContents extends GenericResource {
                             obj.setObjectProperty(prop, ont.getSemanticObject("urswb"));
                         }
 
-                        boolean trash=false;
-                        if(soc.instanceOf(Trashable.swb_Trashable))
-                        {
-                            boolean del=soc.getBooleanProperty(Trashable.swb_deleted);
-                            if(!del)trash=true;
+                        boolean trash = false;
+                        if (soc.instanceOf(Trashable.swb_Trashable)) {
+                            boolean del = soc.getBooleanProperty(Trashable.swb_deleted);
+                            if (!del) {
+                                trash = true;
+                            }
                         }
-                        if(!trash)
-                        {
+                        if (!trash) {
                             soc.remove();
-                        }else
-                        {
+                        } else {
                             soc.setBooleanProperty(Trashable.swb_deleted, true);
                         }
 
@@ -1419,8 +1400,9 @@ public class SWBAWebPageContents extends GenericResource {
         if (sprop != null) {
             response.setRenderParameter("sprop", sprop);
         }
-        if(request.getParameter("search")!=null && request.getParameter("search").trim().length()>0)
-            response.setRenderParameter("search",request.getParameter("search"));
+        if (request.getParameter("search") != null && request.getParameter("search").trim().length() > 0) {
+            response.setRenderParameter("search", request.getParameter("search"));
+        }
     }
 
     /**
@@ -1560,7 +1542,7 @@ public class SWBAWebPageContents extends GenericResource {
                 }
                 if (!isInFlow && needAuthorization) {
                     activeButton = false;
-                //send2Flow = true;
+                    //send2Flow = true;
                 }
 
                 if (isInFlow) {
@@ -1574,8 +1556,7 @@ public class SWBAWebPageContents extends GenericResource {
                 }
 
                 try {
-                    if (activeButton)
-                    {
+                    if (activeButton) {
                         if (bstat) {
                             soc.setBooleanProperty(Activeable.swb_active, true);
                         } else {
@@ -1585,7 +1566,7 @@ public class SWBAWebPageContents extends GenericResource {
                         sbreload.append("\n setTabTitle('" + soc.getURI() + "','" + SWBUtils.TEXT.scape4Script(soc.getDisplayName(user.getLanguage())) + "','" + SWBContext.UTILS.getIconClass(soc) + "');");
 
                     }
-              } catch (Exception e) {
+                } catch (Exception e) {
                     log.error(e);
                     errormsg = (value.equals("true") ? paramRequest.getLocaleString("statERRORmsg2") : paramRequest.getLocaleString("statERRORmsg3"));
                 }
@@ -1679,18 +1660,17 @@ public class SWBAWebPageContents extends GenericResource {
         return ret;
     }
 
-     /**
-      * Process the mode request by the session user.
-      * 
-      * @param request , this holds the parameters
-      * @param response , an answer to the user request
-      * @param paramRequest , a list of objects like user, webpage, Resource, ...
-      * @throws SWBResourceException, a Resource Exception
-      * @throws IOException, an In Out Exception
-      * @throws SWBResourceException the sWB resource exception
-      * @throws IOException Signals that an I/O exception has occurred.
-      */
-
+    /**
+     * Process the mode request by the session user.
+     *
+     * @param request , this holds the parameters
+     * @param response , an answer to the user request
+     * @param paramRequest , a list of objects like user, webpage, Resource, ...
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
 
@@ -1702,7 +1682,6 @@ public class SWBAWebPageContents extends GenericResource {
             super.processRequest(request, response, paramRequest);
         }
     }
-
 
     /**
      * Review sem prop.
@@ -1753,5 +1732,4 @@ public class SWBAWebPageContents extends GenericResource {
         }
         return ret;
     }
-
 }
