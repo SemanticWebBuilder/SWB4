@@ -37,11 +37,14 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.shared.PropertyNotFoundException;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 import org.semanticwb.*;
 import org.semanticwb.base.util.URLEncoder;
 import org.semanticwb.model.GenericIterator;
@@ -127,6 +130,11 @@ public class SemanticClass
     /** The m_class name. */
     private String m_className=null;
 
+    /** The m_observers. */
+    private List<SemanticObserver> m_observers = null;
+
+    /** The m_propobservers. */
+    private Map<SemanticProperty,List<SemanticObserver>> m_propobservers = null;
 
     /**
      * Instantiates a new semantic class.
@@ -176,6 +184,9 @@ public class SemanticClass
         m_props=new HashMap();
         herarquicalProps=new ArrayList();
         inverseHerarquicalProps=new ArrayList();
+        m_observers=Collections.synchronizedList(new ArrayList());
+        m_propobservers=new ConcurrentHashMap();
+        
         // super-classes
         //System.out.println("m_class1:"+m_class);
         //Thread.currentThread().dumpStack();
@@ -1367,6 +1378,90 @@ public class SemanticClass
         }
         //System.out.println("end:"+l+" r:"+r+" root:"+this+" cls:"+cls);
         return r;
+    }
+
+    /**
+     * Register observer.
+     *
+     * @param obs the obs
+     */
+    public void registerObserver(SemanticObserver obs) {
+        m_observers.add(obs);
+    }
+
+    /**
+     * Removes the observer.
+     *
+     * @param obs the obs
+     */
+    public void removeObserver(SemanticObserver obs) {
+        m_observers.remove(obs);
+    }
+
+    /**
+     * Register observer.
+     *
+     * @param obs the obs
+     */
+    public void registerObserver(SemanticObserver obs, SemanticProperty prop)
+    {
+        List list=m_propobservers.get(prop);
+        if(list==null)
+        {
+            list=Collections.synchronizedList(new ArrayList());
+            m_propobservers.put(prop, list);
+        }
+        list.add(obs);
+    }
+
+    /**
+     * Removes the observer.
+     *
+     * @param obs the obs
+     */
+    public void removeObserver(SemanticObserver obs, SemanticProperty prop)
+    {
+        List list=m_propobservers.get(prop);
+        if(list!=null)list.remove(obs);
+    }
+
+    /**
+     * Notify change.
+     *
+     * @param obj the obj
+     * @param prop the prop
+     * @param lang the lang
+     * @param action the action
+     */
+    public void notifyChange(SemanticObject obj, Object prop, String lang, String action)
+    {
+        //log.trace("notifyChange: obj:" + obj + " prop:" + prop + " " + action);
+        Iterator it = m_observers.iterator();
+        while (it.hasNext()) {
+            SemanticObserver obs = (SemanticObserver) it.next();
+            try {
+                obs.notify(obj, prop, lang, action);
+            } catch (Exception e) {
+                log.error(e);
+            }
+        }
+        if(prop!=null)
+        {
+            List observers=m_propobservers.get(prop);
+            if(observers!=null)
+            {
+                Iterator it2 = m_observers.iterator();
+                while (it2.hasNext()) {
+                    SemanticObserver obs = (SemanticObserver) it2.next();
+                    try {
+                        obs.notify(obj, prop, lang, action);
+                    } catch (Exception e) {
+                        log.error(e);
+                    }
+                }
+            }
+        }
+
     }
 
 }
