@@ -323,6 +323,11 @@ public class SemanticProperty
                 m_defaultValue = st.getString();
             }
         }
+        if(m_defaultValue!=null && m_defaultValue.charAt(0)=='{')
+        {
+            if(m_defaultValue.equals("{invtime}"))return ""+(Long.MAX_VALUE-System.currentTimeMillis());
+            if(m_defaultValue.equals("{time}"))return ""+(System.currentTimeMillis());
+        }
         return m_defaultValue;
     }
 
