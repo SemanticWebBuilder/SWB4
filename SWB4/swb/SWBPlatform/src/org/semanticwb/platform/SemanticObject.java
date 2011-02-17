@@ -3134,7 +3134,10 @@ public Document getDomProperty(SemanticProperty prop)
             else if (prop.isObjectProperty())
             {
                 SemanticObject obj = getObjectProperty(prop);
-                ret = obj.getDisplayName(lang);
+                if(obj!=null)
+                {
+                    ret = obj.getDisplayName(lang);
+                }
             }
         }
         if(ret==null)
