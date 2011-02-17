@@ -463,11 +463,13 @@ public class Resource extends org.semanticwb.model.base.ResourceBase {
      * @return
      */
     public boolean evalFilterMap(WebPage topic) {
+        boolean notnegative=true;
         boolean ret = false;
         NodeList fi = getFilterNode();
         if (fi != null) {
             for (int x = 0; x < fi.getLength(); x++) {
                 Element el = (Element) fi.item(x);
+                notnegative=!(el.getAttribute("negative")!=null?el.getAttribute("negative").equals("true"):false);
                 //System.out.println("evalFilterMap:"+topic.getWebSiteId()+"="+el.getAttribute("id"));
                 if (topic.getWebSiteId().equals(el.getAttribute("id"))) {
                     NodeList ti = el.getElementsByTagName("topic");
@@ -488,7 +490,7 @@ public class Resource extends org.semanticwb.model.base.ResourceBase {
         } else {
             ret = true;
         }
-        return ret;
+        return ret&&notnegative;
     }
 
     /* (non-Javadoc)
