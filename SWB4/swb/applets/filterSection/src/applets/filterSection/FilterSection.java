@@ -371,25 +371,27 @@ public class FilterSection extends javax.swing.JApplet {
             {                
                 WBTreeNode efilter=eresp.getNodebyName("filter");
                 if(efilter!=null)
-                {
-                    String _negative=efilter.getAttribute("negative");
-                    boolean negative=false;
-                    if(_negative!=null && !"".equals(_negative))
-                    {
-                        try
-                        {
-                            negative=Boolean.parseBoolean(_negative);
-                        }
-                        catch(Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }
-                    jCheckBoxNegative.setSelected(negative);
+                {                    
                     Iterator it=efilter.getNodesbyName("topicmap");
                     while(it.hasNext())
                     {
-                       WBTreeNode etopicmap=(WBTreeNode)it.next();                      
+                       WBTreeNode etopicmap=(WBTreeNode)it.next();
+
+                       String _negative=etopicmap.getAttribute("negative");
+                        boolean negative=false;
+                        if(_negative!=null && !"".equals(_negative))
+                        {
+                            try
+                            {
+                                negative=Boolean.parseBoolean(_negative);
+                            }
+                            catch(Exception e)
+                            {
+                                e.printStackTrace();
+                            }
+                        }
+                        jCheckBoxNegative.setSelected(negative);
+
                        String topicmapid=etopicmap.getAttribute("id");                                                                      
                        Object objroot=this.jTree1.getModel().getRoot();                           
                        int childs=this.jTree1.getModel().getChildCount(objroot);
@@ -771,14 +773,7 @@ public class FilterSection extends javax.swing.JApplet {
         cmd.setText("update");
         WBTreeNode efilter=ereq.addNode();
         efilter.setName("filter");        
-        if(this.jCheckBoxNegative.isSelected())
-        {
-            efilter.addAttribute("negative", "true");
-        }
-        else
-        {
-            efilter.addAttribute("negative", "false");
-        }
+        
 
         Object root=this.jTree1.getModel().getRoot();
         int ichilds=this.jTree1.getModel().getChildCount(root);
@@ -790,6 +785,14 @@ public class FilterSection extends javax.swing.JApplet {
                 
                 WBTreeNode etopicmap=new WBTreeNode();
                 etopicmap.setName("topicmap");
+                if(this.jCheckBoxNegative.isSelected())
+                {
+                    etopicmap.addAttribute("negative", "true");
+                }
+                else
+                {
+                    etopicmap.addAttribute("negative", "false");
+                }
                 TopicMap map=(TopicMap)child;
                 etopicmap.addAttribute("id", map.getID());
                 saveFilters(etopicmap, child);                
