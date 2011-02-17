@@ -27,6 +27,9 @@ public class EditableText extends CustomNode
     public var x : Number;
     public var y : Number;
     public var width : Number;
+    public var owner: Node;
+    public var autoSizeParent:Boolean=false;
+    public var size:Number = 10;
     public var height : Number;
     public var text : String;
     public var fill : Boolean;
@@ -61,8 +64,12 @@ public class EditableText extends CustomNode
     {
         textb.visible=false;        
         textl.visible=true;
+        if (autoSizeParent and owner instanceof GraphicalElement) {
+            var t = owner as GraphicalElement;
+            t.setWidth(textl.boundsInLocal.width + 5);
+            t.setHeight(textl.boundsInLocal.height + 5);
+        }
     }
-
 
     public function startEditing() :Void
     {
@@ -82,7 +89,7 @@ public class EditableText extends CustomNode
              font: Font {
                 name: "Verdana"
                 embolden: true
-                size: 10
+                size: size
              }
              textOrigin: TextOrigin.TOP
              textAlignment: TextAlignment.CENTER
@@ -90,7 +97,6 @@ public class EditableText extends CustomNode
              translateX:bind x-(textl.boundsInLocal.width)/2+2
              translateY:bind y-(textl.boundsInLocal.height)/2
              boundsType:TextBoundsType.VISUAL
-             //smooth:true;
              visible: true
         };
 
@@ -139,11 +145,16 @@ public class EditableText extends CustomNode
         };
     }
 
-    public function setSize(size: Number) {
+    public function setSize(txtsize: Number) {
+        this.size = txtsize;
         this.textl.font = Font {
             name:"Verdana"
             embolden:true
             size:size
         }
+    }
+
+    public function getSize(): Number {
+        return this.size;
     }
 }
