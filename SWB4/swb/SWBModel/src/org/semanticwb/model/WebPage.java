@@ -113,7 +113,7 @@ public class WebPage extends WebPageBase
         User user=SWBContext.getSessionUser(getWebSite().getUserRepository().getId());
         if(user!=null)
         {
-            ret=getRealUrl(user.getLanguage());
+            ret=getRealUrl(user.getLanguage(), user.getCountry());
         }else
         {
             ret=getRealUrl(null);
