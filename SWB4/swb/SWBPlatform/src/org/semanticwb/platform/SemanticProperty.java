@@ -34,9 +34,13 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.URLEncoder;
 
 // TODO: Auto-generated Javadoc
@@ -47,6 +51,9 @@ import org.semanticwb.base.util.URLEncoder;
  */
 public class SemanticProperty
 {
+
+    /** The log. */
+    private static Logger log=SWBUtils.getLogger(SemanticClass.class);
 
     /** The m_prop. */
     private Property m_prop;
@@ -126,6 +133,8 @@ public class SemanticProperty
     /** The allvalues. */
     private HashMap<String, SemanticRestriction> frestrictions = null;
 
+    /** The m_observers. */
+    private List<SemanticObserver> m_observers = null;
 
     /**
      * Instantiates a new semantic property.
@@ -146,6 +155,8 @@ public class SemanticProperty
             }
 
         }
+
+        m_observers=Collections.synchronizedList(new ArrayList());
     }
 
     /**
@@ -1143,6 +1154,46 @@ public class SemanticProperty
             frestrictions.put(cls.getURI(), rcls);
         }
         return rcls;
+    }
+
+    /**
+     * Register observer.
+     *
+     * @param obs the obs
+     */
+    public void registerObserver(SemanticObserver obs) {
+        m_observers.add(obs);
+    }
+
+    /**
+     * Removes the observer.
+     *
+     * @param obs the obs
+     */
+    public void removeObserver(SemanticObserver obs) {
+        m_observers.remove(obs);
+    }
+
+    /**
+     * Notify change.
+     *
+     * @param obj the obj
+     * @param prop the prop
+     * @param lang the lang
+     * @param action the action
+     */
+    public void notifyChange(SemanticObject obj, Object prop, String lang, String action)
+    {
+        //log.trace("notifyChange: obj:" + obj + " prop:" + prop + " " + action);
+        Iterator it = m_observers.iterator();
+        while (it.hasNext()) {
+            SemanticObserver obs = (SemanticObserver) it.next();
+            try {
+                obs.notify(obj, prop, lang, action);
+            } catch (Exception e) {
+                log.error(e);
+            }
+        }
     }
 
 
