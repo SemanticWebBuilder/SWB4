@@ -8,15 +8,17 @@ package org.semanticwb.process.modeler;
 
 import javafx.scene.CustomNode;
 import javafx.scene.Node;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Shape;
 import java.lang.Math;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.Group;
 import javafx.scene.CacheHint;
-import org.semanticwb.process.modeler.ModelerUtils;
 import org.semanticwb.process.modeler.ConnectionObject;
 import javafx.util.Sequences;
+import org.semanticwb.process.modeler.MenuItem;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import java.lang.Void;
+import org.semanticwb.process.modeler.ModelerUtils;
 
 
 /**
@@ -108,6 +110,8 @@ public class GraphicalElement extends CustomNode
             text: bind title with inverse
             x:bind x
             y:bind y
+            autoSizeParent:true;
+            owner:this
             width: bind w
             height: bind h
         }
@@ -132,49 +136,90 @@ public class GraphicalElement extends CustomNode
                 items: [
                     MenuItem {
                         caption: ##"sizeSmall"
+                        status: bind if(this.text.size == 8) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                         action: function (e: MouseEvent) {
                             this.text.setSize(8);
                             if (this.text.boundsInLocal.width + 5 < minW) {
+                                minW = 100;
                                 w = minW;
                             } else {
                                 w = this.text.boundsInLocal.width + 5;
                             }
                             if (this.text.boundsInLocal.height + 5 < minH) {
+                                minH = 60;
                                 h = minH;
                             } else {
                                 h = this.text.boundsInLocal.height + 5;
                             }
                             ModelerUtils.popup.hide();
-                            for (ele in scene.stylesheets) {
-                                println("::{ele}");
+                        }
+                    },
+                    MenuItem {
+                        caption: ##"sizeNormal"
+                        status: bind if(this.text.size == 10) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            this.text.setSize(10);
+                            if (this.text.boundsInLocal.width + 5 < minW) {
+                                minW = 100;
+                                w = minW;
+                            } else {
+                                w = this.text.boundsInLocal.width + 5;
+                                minW = w;
+                            }
+
+                            if (this.text.boundsInLocal.height + 5 < minH) {
+                                minH = 60;
+                                h = minH;
+                            } else {
+                                h = this.text.boundsInLocal.height + 5;
+                                minH = h;
                             }
                             ModelerUtils.popup.hide();
                         }
                     },
                     MenuItem {
-                        caption: ##"SizeNormal"
-                        action: function (e: MouseEvent) {
-                            this.text.setSize(10);
-                            //w = this.text.boundsInLocal.width + 5;
-                            //h = this.text.boundsInLocal.height + 5;
-                            ModelerUtils.popup.hide();
-                        }
-                    },
-                    MenuItem {
-                        caption: ##"SizeMedium"
+                        caption: ##"sizeMedium"
+                        status: bind if(this.text.size == 12) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                         action: function (e: MouseEvent) {
                             this.text.setSize(12);
-                            //w = this.text.boundsInLocal.width + 5;
-                            //h = this.text.boundsInLocal.height + 5;
+                            if (this.text.boundsInLocal.width + 5 < minW) {
+                                minW = 100;
+                                w = minW;
+                            } else {
+                                w = this.text.boundsInLocal.width + 5;
+                                minW = w;
+                            }
+
+                            if (this.text.boundsInLocal.height + 5 < minH) {
+                                minH = 60;
+                                h = minH;
+                            } else {
+                                h = this.text.boundsInLocal.height + 5;
+                                minH = h;
+                            }
                             ModelerUtils.popup.hide();
                         }
                     },
                     MenuItem {
-                        caption: ##"SizeLarge"
+                        caption: ##"sizeLarge"
+                        status: bind if(this.text.size == 14) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                         action: function (e: MouseEvent) {
                             this.text.setSize(14);
-                            //w = this.text.boundsInLocal.width + 5;
-                            //h = this.text.boundsInLocal.height + 5;
+                            if (this.text.boundsInLocal.width + 5 < minW) {
+                                minW = 100;
+                                w = minW;
+                            } else {
+                                w = this.text.boundsInLocal.width + 5;
+                                minW = w;
+                            }
+
+                            if (this.text.boundsInLocal.height + 5 < minH) {
+                                minH = 60;
+                                h = minH;
+                            } else {
+                                h = this.text.boundsInLocal.height + 5;
+                                minH = h;
+                            }
                             ModelerUtils.popup.hide();
                         }
                     }
@@ -599,6 +644,26 @@ public class GraphicalElement extends CustomNode
             return ele as Pool;
         } else {
             return null;
+        }
+    }
+
+    public function setWidth(width: Number) : Void {
+        if (width < minW) {
+            minW = 100;
+            w = minW;
+        } else {
+            w = width;
+            minW = w;
+        }
+    }
+
+    public function setHeight(height: Number) : Void {
+        if (height < minH) {
+            minH = 60;
+            h = minH;
+        } else {
+            h = height;
+            minH = h;
         }
     }
 }
