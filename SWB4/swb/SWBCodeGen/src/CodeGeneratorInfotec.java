@@ -55,7 +55,10 @@ public class CodeGeneratorInfotec
         {
             String path = getClass().getResource("/").getPath().replaceAll("%20", " ");
             File dir = new File(path+"../../../../../swbproys/Infotec/src");
-            //System.out.println(dir);
+            try{
+                System.out.println(dir.getCanonicalPath());
+            }catch(Exception e){}
+            
             CodeGenerator codeGeneration = new CodeGenerator();
             codeGeneration.generateCode("info", false, dir);
             System.out.println("Generación de clases completa");
