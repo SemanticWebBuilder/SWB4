@@ -133,9 +133,6 @@ public class SemanticClass
     /** The m_observers. */
     private List<SemanticObserver> m_observers = null;
 
-    /** The m_propobservers. */
-    private Map<SemanticProperty,List<SemanticObserver>> m_propobservers = null;
-
     /**
      * Instantiates a new semantic class.
      * 
@@ -185,7 +182,6 @@ public class SemanticClass
         herarquicalProps=new ArrayList();
         inverseHerarquicalProps=new ArrayList();
         m_observers=Collections.synchronizedList(new ArrayList());
-        m_propobservers=new ConcurrentHashMap();
         
         // super-classes
         //System.out.println("m_class1:"+m_class);
@@ -1399,33 +1395,6 @@ public class SemanticClass
     }
 
     /**
-     * Register observer.
-     *
-     * @param obs the obs
-     */
-    public void registerObserver(SemanticObserver obs, SemanticProperty prop)
-    {
-        List list=m_propobservers.get(prop);
-        if(list==null)
-        {
-            list=Collections.synchronizedList(new ArrayList());
-            m_propobservers.put(prop, list);
-        }
-        list.add(obs);
-    }
-
-    /**
-     * Removes the observer.
-     *
-     * @param obs the obs
-     */
-    public void removeObserver(SemanticObserver obs, SemanticProperty prop)
-    {
-        List list=m_propobservers.get(prop);
-        if(list!=null)list.remove(obs);
-    }
-
-    /**
      * Notify change.
      *
      * @param obj the obj
@@ -1445,23 +1414,6 @@ public class SemanticClass
                 log.error(e);
             }
         }
-        if(prop!=null)
-        {
-            List observers=m_propobservers.get(prop);
-            if(observers!=null)
-            {
-                Iterator it2 = m_observers.iterator();
-                while (it2.hasNext()) {
-                    SemanticObserver obs = (SemanticObserver) it2.next();
-                    try {
-                        obs.notify(obj, prop, lang, action);
-                    } catch (Exception e) {
-                        log.error(e);
-                    }
-                }
-            }
-        }
-
     }
 
 }

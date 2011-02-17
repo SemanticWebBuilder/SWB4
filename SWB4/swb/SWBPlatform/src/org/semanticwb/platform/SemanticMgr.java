@@ -1050,6 +1050,15 @@ public class SemanticMgr implements SWBInstanceObject
                     log.error(e);
                 }
             }
+            if(prop!=null && prop instanceof SemanticProperty)
+            {
+                try {
+                    ((SemanticProperty) prop).notifyChange(obj, prop, lang, action);
+                } catch (Exception e) {
+                    log.error(e);
+                }
+            }
+
         }
     }
 
