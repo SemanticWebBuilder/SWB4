@@ -710,6 +710,7 @@ Action:caret-previous-word
             files=new WBDocumentFiles(new javax.swing.JFrame(), true,locale);
             java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor",locale);
             files.setTitle(bundle.getString("image"));
+            files.setJSession(jsess);
             files.setGateway(gateway);
             files.setUpload(upurl);
             files.setTopicMap(tmValue);
