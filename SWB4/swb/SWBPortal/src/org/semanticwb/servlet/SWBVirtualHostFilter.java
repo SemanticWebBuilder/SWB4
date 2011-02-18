@@ -175,7 +175,7 @@ public class SWBVirtualHostFilter implements Filter
             if(iserv.length()==2 && !iserv.equals("wb"))
             {
                 lang = iserv;
-            }else
+            }else if(!iserv.equals("wb"))
             {
                 lang=iserv.substring(0,2);
                 country=iserv.substring(3);
