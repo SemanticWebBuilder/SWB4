@@ -1,4 +1,5 @@
 
+import java.util.Date;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SFBase64;
 
@@ -15,6 +16,9 @@ public class TestEncript {
 
     public static void main(String arr[])
     {
+//        System.out.println(System.currentTimeMillis());
+//        System.out.println(Long.MAX_VALUE);
+//        System.out.println(new Date(Long.MAX_VALUE));
         String KEY="12345sdfsdf";
         String password=null;
         System.out.println("password:"+password);
