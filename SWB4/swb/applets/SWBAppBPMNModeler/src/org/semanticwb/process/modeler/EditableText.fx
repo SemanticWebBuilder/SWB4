@@ -69,6 +69,7 @@ public class EditableText extends CustomNode
             t.setWidth(textl.boundsInLocal.width + 5);
             t.setHeight(textl.boundsInLocal.height + 5);
         }
+        owner.requestFocus();
     }
 
     public function startEditing() :Void
