@@ -666,4 +666,16 @@ public class GraphicalElement extends CustomNode
             minH = h;
         }
     }
+    
+    public function copy() : GraphicalElement {
+        return GraphicalElement {
+            title: this.title
+            type: this.type
+            modeler: this.modeler
+            isLoop: this.isLoop
+            isForCompensation: this.isForCompensation
+            isMultiInstance: this.isMultiInstance
+            container: this.container
+        }
+    }
 }
