@@ -417,6 +417,8 @@
 
                             home = copyValues(tp, ws);
 
+
+
                             home.setUndeleteable(true);
                             home.setSortName("z");
 
@@ -1235,6 +1237,32 @@
                                     if(rres.getResourceBase()!=null)
                                     {
                                         rresb = rres.getResourceBase().getRecResource();
+
+
+                                        if(rresb.getResourceType()!=null)
+                                        {
+                                            String classtype = rresb.getResourceType().getObjclass();
+                                            if(null!=classtype&&"com.infotec.wb.resources.repository.Repository".equals(classtype))
+                                            {
+                                                com.infotec.topicmaps.Topic tp = tm.getTopic("CNFWB_Rep"+rresb.getId()); //CNFWB_Rep152
+                                                WebPage wprep = ws.getWebPage("CNFWB_Rep"+rresb.getId());
+                                                if(null!=tp&&wprep==null)
+                                                {
+                                                    System.out.println("Copiando nodo raiz del repositorio de documentos de wb 3.2 : CNFWB_Rep"+rresb.getId());
+                                                    // Copiando nodo raíz del repositorio de documentos versión wb 3.2
+                                                    wprep = copyValues(tp, ws);
+                                                    if(null!=wprep) System.out.println("Se copió nodo raíz del Repository: "+wprep.getId());
+                                                    System.out.println("Copiando estructura del repositorio de documentos...");
+                                                    //importando estructura del repositorio de documentos version wb 3.2
+                                                    tp2wp(tp, wprep, ws);
+                                                    System.out.println("Termino de copiar estructura del Rep. Documentos.");
+ 
+                                                }
+                                            }
+                                            
+                                        }
+
+
                                         org.semanticwb.model.Resource res = null;
                                         String user = (String) session.getAttribute("user");
                                         String password = (String) session.getAttribute("password");
@@ -1329,6 +1357,8 @@
                                                         String xmlTemp = rresb.getXml();
                                                         //Document domdoc = SWBUtils.XML.xmlToDom(xmlTemp);
                                                         String fileName = null;
+                                                        xmlTemp = xmlTemp.replaceAll("/work/sites/"+site+"/resources/" + rresb.getResourceType().getName() + "/" + rresb.getId() + "/"+actVersion, "/work/models/"+site+"/Resource/"+ rresb.getId() + "/"+initVersion);
+                                                        xmlTemp = xmlTemp.replaceAll("/work/sites/"+site+"/templates/", "/work/models/"+site+"/Template/");
                                                         xmlTemp = xmlTemp.replaceAll("/work/sites/"+site+"/", "/work/models/"+site+"/");
                                                         // validando tipo de contenido para obtener el nombre del archivo
 
@@ -1384,7 +1414,8 @@
                                                         }
                                                     }
                                                 }
-                                                 if(res!=null) res.setActive(rresb.getActive() == 1 ? true : false);
+                                                if(res!=null) res.setActive(rresb.getActive() == 1 ? true : false);
+                                                if(res!=null) res.setPriority(rresb.getPriority());
 
                                                 //System.out.println("Reviando roles...." + rresb.getId());
                                                 Iterator itroles = rres.getResourceBase().getRoles();
@@ -1432,8 +1463,20 @@
                                                     //System.out.println("Revisando Filtro... ");
                                                     String xmlconfig = rresb.getXmlConf();
                                                     if (xmlconfig != null) {
-                                                        if (xmlconfig.indexOf("<filter>") > 0) {
-                                                            String filtro = xmlconfig.substring(xmlconfig.indexOf("<filter>"), xmlconfig.lastIndexOf("</filter>") + 9);
+                                                        int indexfilter = xmlconfig.indexOf("<filter>");
+                                                        int indextmap = xmlconfig.indexOf("<topicmap ");
+
+                                                        if (indexfilter > 0 || indextmap > 0) {
+                                                            String filtro = "";
+                                                            if(indexfilter>0)
+                                                            {
+                                                                filtro = xmlconfig.substring(xmlconfig.indexOf("<filter>"), xmlconfig.lastIndexOf("</filter>") + 9);
+                                                            } else if(indextmap>0)
+                                                            {
+                                                                filtro = xmlconfig.substring(xmlconfig.indexOf("<topicmap "), xmlconfig.lastIndexOf("</topicmap>") + 11);
+                                                                filtro = "<filter>" + filtro + "</filter>";
+                                                            }
+                                                            filtro = "<resource>" + filtro + "</resource>"; 
                                                             Document dom = SWBUtils.XML.xmlToDom(filtro);
                                                             ResourceFilter resfilter = ws.createResourceFilter();
                                                             resfilter.getSemanticObject().setProperty(ResourceFilter.swb_xml, SWBUtils.XML.domToXml(dom));
@@ -2058,6 +2101,7 @@
                         rolRef.setActive(occ.isActive());
                         rolRef.setRole(role);
                         wp.addRoleRef(rolRef);
+
                     }
                 } else if(occType.equals(TopicMap.CNF_WBRule))
                 {
@@ -2101,7 +2145,7 @@
 
                             org.semanticwb.model.Resource resource = ws.getResource(idElement);
 
-                            //resource.setPriority(occ.getPriority());
+                            resource.setPriority(occ.getPriority());
                             if(resource!=null)
                             {
                                 //Agregado para verificar paginacion /////////////////////////////////////////
@@ -2271,6 +2315,9 @@
             String jadesc=topic.getDescription(topic.getMap().getTopicLang("ja"));
 
             wp = ws.createWebPage(id);
+
+            System.out.println("Se agregó wp "+wp.getId()+" en el sitio "+ws.getId());
+
             wp.setTitle(topic.getDisplayName());
             wp.setDescription(topic.getDescription());
 
@@ -2296,6 +2343,7 @@
             wp.setActive(topic.getDbdata().getActive()==1);
             wp.setDeleted(topic.getDbdata().getDeleted()==1);
             wp.setHidden(topic.getDbdata().getHidden()==1);
+
             java.util.Date dt=topic.getDbdata().getCreated();
             if(dt!=null)wp.setCreated(dt);
             wp.setUpdated(new java.util.Date());
@@ -2370,6 +2418,45 @@
         }
         return wp;
     }
+
+    // COPIANDO de views de las secciones
+    WebPage copyTopicViews( com.infotec.topicmaps.Topic topic, WebSite ws)
+    {
+        WebPage wp = null;
+        if(topic!=null&&!topic.isDeleted())
+        {
+            String id=topic.getId();
+            wp = ws.getWebPage(id);
+            if(wp!=null)
+            {
+                wp.setViews(topic.getViews()+wp.getViews());
+            }
+        }
+        return wp;
+    }
+
+    boolean viewstp2wp(com.infotec.topicmaps.Topic tp, WebPage wpp, WebSite ws)
+    {
+        if(tp!=null)
+        {
+            Iterator it = tp.getSortChild(false);
+            while(it.hasNext())
+            {
+                com.infotec.topicmaps.Topic tpc = (com.infotec.topicmaps.Topic) it.next();
+                if(tpc.isChildof(tp))
+                {
+                    WebPage wpage = copyTopicViews(tpc, ws);
+                    if(wpage!=null)
+                    {
+                        viewstp2wp(tpc,wpage,ws);
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+
 
     //REVISANDO SI YA SE MIGRÓ ALGUN CATALOGO
     HashMap  getNumCatElements(WebSite ws)
