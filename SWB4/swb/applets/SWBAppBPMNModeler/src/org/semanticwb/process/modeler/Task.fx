@@ -172,7 +172,15 @@ public class Task extends Activity
                     remove(true);
                 }
             },
-            MenuItem {isSeparator: true}
+            MenuItem {isSeparator: true},
+            MenuItem {
+                caption: ##"actCopy"
+                action: function(e: MouseEvent) {
+                    var t = copy();
+                    modeler.copyNode = t;
+                    ModelerUtils.popup.hide();
+                }
+            }
         ];
         insert actions before menuOptions[0];
 
@@ -268,5 +276,19 @@ public class Task extends Activity
         if (isForCompensation) {
             insert imgComp into icons;
         }
+    }
+
+    override public function copy() : GraphicalElement {
+        var t = Task {
+            title: this.title
+            type: this.type
+            modeler: this.modeler
+            isLoop: this.isLoop
+            isForCompensation: this.isForCompensation
+            isMultiInstance: this.isMultiInstance
+            container: this.container
+        }
+        t.uri = "new:{type}task:{modeler.toolBar.counter++}";
+        return t;
     }
 }
