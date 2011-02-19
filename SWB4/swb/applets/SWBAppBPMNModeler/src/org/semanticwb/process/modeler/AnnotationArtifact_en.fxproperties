@@ -1,2 +1,3 @@
 "msgError2" = "Text Annotation must be linked by using non-directional Association"
 "msgError5" = "Artifact cannot be linked to Artifact"
+"actCopy" = "Copy"
