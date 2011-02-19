@@ -1,2 +1,3 @@
 "msgError3" = "Artifact must be linked by using Association Flow"
 "msgError5" = "Artifact cannot be linked to Artifact"
+"actCopy" = "Copy"
