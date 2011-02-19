@@ -12,6 +12,7 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.input.MouseEvent;
 
 /**
  * @author javier.solis
@@ -53,7 +54,19 @@ public class AnnotationArtifact extends Artifact
             onKeyReleased: onKeyReleased
         }
 
-        setType(type);
+        var actions: MenuItem[] = [
+            MenuItem {
+                caption: ##"actCopy"
+                action: function(e: MouseEvent) {
+                    var t = copy();
+                    modeler.copyNode = t;
+                    ModelerUtils.popup.hide();
+                }
+            }
+        ];
+        insert actions before menuOptions[0];
+
+        setType(TYPE_ANNOTATION);
 
         return Group
         {
@@ -95,5 +108,19 @@ public class AnnotationArtifact extends Artifact
             ModelerUtils.setErrorMessage(##"msgError2");
         }
         return ret;
+    }
+
+    override public function copy() : GraphicalElement {
+        var t = AnnotationArtifact {
+            title: this.title
+            type: this.type
+            modeler: this.modeler
+            isLoop: this.isLoop
+            isForCompensation: this.isForCompensation
+            isMultiInstance: this.isMultiInstance
+            container: this.container
+        }
+        t.uri = "new:{type}:{modeler.toolBar.counter++}";
+        return t;
     }
 }
