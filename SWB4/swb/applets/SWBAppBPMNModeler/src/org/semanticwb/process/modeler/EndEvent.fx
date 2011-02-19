@@ -51,4 +51,15 @@ public class EndEvent extends ThrowEvent
         }
         return ret;
     }
+
+    override public function copy() : GraphicalElement {
+        var t = EndEvent {
+            title: this.title
+            type: this.type
+            modeler: this.modeler
+            container: this.container
+        }
+        t.uri = "new:event:{modeler.toolBar.counter++}";
+        return t;
+    }
 }
