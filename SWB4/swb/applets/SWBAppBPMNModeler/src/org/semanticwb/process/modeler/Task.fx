@@ -142,7 +142,7 @@ public class Task extends Activity
             },
             MenuItem {isSeparator: true},
             MenuItem {
-                caption: "Convertir en subproceso"
+                caption: ##"actChange"
                 status: MenuItem.STATUS_ENABLED
                 action: function (e: MouseEvent) {
                     var _title = title;
