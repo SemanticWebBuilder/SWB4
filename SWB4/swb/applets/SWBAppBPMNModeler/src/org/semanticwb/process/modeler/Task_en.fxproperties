@@ -2,3 +2,4 @@
 "actLoop" = "Loop"
 "actCompensa" = "Compensation"
 "actCopy" = "Copy"
+"actChange" = "Convert to sub-process"
