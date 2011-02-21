@@ -30,16 +30,14 @@
 
 package com.infotec.appfw.lib;
 
+import org.semanticwb.base.SWBAppObject;
+
 /** Interfaz: se utiliza para los objetos de aplicacion que se almacenan en WBBroker
  * @author Javier Solis Gonzalez
  * @version 1.1
  */
-public interface AFAppObject
+public interface AFAppObject extends SWBAppObject
 {
-    void init();
-
-    public void destroy();
-
-    public void refresh();
+    
 }
 
