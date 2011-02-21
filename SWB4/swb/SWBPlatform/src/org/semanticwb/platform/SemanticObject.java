@@ -1420,7 +1420,6 @@ public Document getDomProperty(SemanticProperty prop)
      */
     public SemanticObject addObjectProperty(SemanticProperty prop, SemanticObject object)
     {
-        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "list", ACT_ADD);
         if (m_virtual)
         {
             ArrayList list = (ArrayList) m_virtprops.get(prop.getURI());
@@ -1435,6 +1434,7 @@ public Document getDomProperty(SemanticProperty prop)
         Property iprop = prop.getRDFProperty();
         m_res.addProperty(iprop, object.getRDFResource());
         addPropertyValueCache(prop, "list",object);
+        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "list", ACT_ADD);
         return this;
     }
 
