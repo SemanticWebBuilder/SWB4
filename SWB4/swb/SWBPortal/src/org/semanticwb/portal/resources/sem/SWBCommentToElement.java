@@ -19,10 +19,9 @@
 * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
 * dirección electrónica: 
 *  http://www.semanticwebbuilder.org
-**/ 
- 
-package org.semanticwb.portal.resources.sem;
+**/
 
+package org.semanticwb.portal.resources.sem;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -33,8 +32,8 @@ import javax.servlet.http.*;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.SWBComparator;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
-
 
 // TODO: Auto-generated Javadoc
 /**
@@ -78,7 +77,8 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
             if( securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent)) {
                 String uri = request.getParameter("uri");
                 System.out.println("uri="+uri);
-                SWBClass element = SWBClass.ClassMgr.createSWBClass(uri, response.getWebPage().getWebSite());
+                SWBClass element = (SWBClass)SemanticObject.createSemanticObject(uri).createGenericInstance();
+
                 if( element!=null) {
                     CommentToElement comment = CommentToElement.ClassMgr.createCommentToElement(response.getWebPage().getWebSite());
                     comment.setCommentToElement(request.getParameter("cmnt_comment"));
@@ -208,7 +208,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         StringBuilder html = new StringBuilder();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy | HH:mm");
 
-        SWBClass element = SWBClass.ClassMgr.createSWBClass(uri, paramRequest.getWebPage().getWebSite());
+        SWBClass element = (SWBClass)SemanticObject.createSemanticObject(uri).createGenericInstance();
         Iterator<CommentToElement> itComments = CommentToElement.ClassMgr.listCommentToElementByElement(element, paramRequest.getWebPage().getWebSite());
         itComments = SWBComparator.sortByCreated(itComments, false);
 
