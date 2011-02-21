@@ -597,21 +597,24 @@ public class User extends UserBase implements Principal
         boolean ret = true;
         if (obj instanceof RoleRefable)
         {
+            boolean temp=false;
             Iterator<RoleRef> it = ((RoleRefable) obj).listInheritRoleRefs();
             while (it.hasNext())
             {
                 RoleRef ref = it.next();
                 //System.out.println("ref:"+ref+" role:"+ref.getRole());
-                if (!hasRole(ref.getRole()))
+                if (hasRole(ref.getRole()))
                 {
-                    ret = false;
+                    temp = true;
                     //System.out.println("hasRole:false");
                     break;
                 }
             }
+            ret=temp;
         }
         if (ret && obj instanceof RuleRefable)
         {
+            boolean temp=false;
             Iterator<RuleRef> it = ((RuleRefable) obj).listInheritRuleRefs();
             while (it.hasNext())
             {
@@ -620,57 +623,64 @@ public class User extends UserBase implements Principal
                 Rule rule = ref.getRule();
                 if (rule != null)
                 {
-                    ret = Rule.getRuleMgr().eval(this, rule.getURI());
-                    if (!ret)
+                    temp = Rule.getRuleMgr().eval(this, rule.getURI());
+                    if (ret)
                     {
                         break;
                     }
                 }
             }
+            ret=temp;
         }
         if (ret && obj instanceof UserGroupRefable)
         {
+            boolean temp=false;
             Iterator<UserGroupRef> it = ((UserGroupRefable) obj).listInheritUserGroupRefs();
             while (it.hasNext())
             {
                 UserGroupRef ref = it.next();
                 //System.out.println("ref:"+ref+" role:"+ref.getRole());
                 UserGroup usrgrp = ref.getUserGroup();
-                if (!hasUserGroup(usrgrp))
+                if (hasUserGroup(usrgrp))
                 {
-                    ret = false;
+                    temp = true;
                     break;
                 }
             }
+            ret=temp;
         }
         if (ret && obj instanceof Roleable)
         {
+            boolean temp=false;
             Iterator<Role> it = ((Roleable) obj).listRoles();
             while (it.hasNext())
             {
                 Role ref = it.next();
                 //System.out.println("role:"+ref);
-                if (!hasRole(ref))
+                if (hasRole(ref))
                 {
-                    ret = false;
+                    temp = true;
                     //System.out.println("hasRole:false");
                     break;
                 }
             }
+            ret=temp;
         }
         if (ret && obj instanceof UserGroupable)
         {
+            boolean temp=false;
             Iterator<UserGroup> it = ((UserGroupable) obj).listUserGroups();
             while (it.hasNext())
             {
                 UserGroup usrgrp = it.next();
                 //System.out.println("role:"+usrgrp);
-                if (!hasUserGroup(usrgrp))
+                if (hasUserGroup(usrgrp))
                 {
-                    ret = false;
+                    temp = true;
                     break;
                 }
             }
+            ret=temp;
         }
         //System.out.println("User:"+this+" haveAccess:"+obj+" "+ret);
         return ret;
