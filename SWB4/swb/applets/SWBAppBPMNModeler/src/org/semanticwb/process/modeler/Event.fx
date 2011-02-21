@@ -44,9 +44,14 @@ public class Event extends FlowNode
     var iy:Number;                          //offset imagen x
     var is:Number=1;                        //image scale
     protected var scaleOff:Number=0;                  //scale offset
-    protected var isInterrupting: Boolean = false;
-    protected var cancelActivity: Boolean = false;
     protected var strokeDash : Float[];
+    protected var cancelActivity: Boolean = false;
+    override var graphParent on replace {
+        if (not (graphParent instanceof Activity) and not isInterrupting) {
+            isInterrupting = true;
+        }
+        cancelActivity = graphParent instanceof Activity;
+    }
 
     protected var colorAdjust=ColorAdjust
     {
@@ -84,7 +89,7 @@ public class Event extends FlowNode
             centerX: bind x
             centerY: bind y
             radius: bind w/2
-            strokeDashArray: bind if (isInterrupting and cancelActivity) [2, 5] else null
+            strokeDashArray: bind if (isInterrupting) null else [2, 5]
             onKeyPressed: onKeyPressed
             onKeyReleased: onKeyReleased
         }
@@ -110,7 +115,6 @@ public class Event extends FlowNode
         message.visible=true;
         if(type.equals(CATCH_TIMER))
         {
-            isInterrupting = true;
             message.styleClass = "modifierTimer";
             ix=11;
             iy=10.7;
@@ -123,28 +127,24 @@ public class Event extends FlowNode
             is=0.9;
         }else if(type.equals(CATCH_MESSAGE))
         {
-            isInterrupting = true;
             message.styleClass = "modifierMessageCatch";
             ix=9;
             iy=8;
             is=1;
         }else if(type.equals(CATCH_RULE))
         {
-            isInterrupting = true;
             message.styleClass = "modifierRule";
             ix = 9.5;
             iy = 9.5;
             is = 1;
         }else if(type.equals(CATCH_SIGNAL))
         {
-            isInterrupting = true;
             message.styleClass = "modifierSignalCatch";
             ix=10;
             iy=11;
             is=1.1;
         }else if(type.equals(CATCH_MULTIPLE))
         {
-            isInterrupting = true;
             message.styleClass = "modifierMultipleCatch";
             ix=11;
             iy=12;
@@ -157,7 +157,6 @@ public class Event extends FlowNode
             is=1.1;
         }else if(type.equals(CATCH_SCALATION))
         {
-            isInterrupting = true;
             message.styleClass = "modifierScalationCatch";
             ix=9;
             iy=12;
@@ -248,5 +247,5 @@ public class Event extends FlowNode
         }
         return ret;
     }
-
+    
 }
