@@ -177,5 +177,24 @@ public class WBResourceURLImp implements WBResourceURL
     {
         return url.toString();
     }
+    
+    /** Getter for property resource.
+     * @return Value of property resource.
+     *
+     */
+    public Resource getResourceBase()
+    {
+        return new Resource(url.getResourceBase());
+    }
+
+    /** Setter for property resource.
+     * @param resource New value of property resource.
+     *
+     */
+    public void setResourceBase(Resource resource)
+    {
+        url.setResourceBase(resource.getNative());
+    }
+
 
 }
