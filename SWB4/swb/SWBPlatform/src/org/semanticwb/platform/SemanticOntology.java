@@ -213,12 +213,12 @@ public class SemanticOntology
         {
             log.trace("getResource in Ontology(4):");
             //new Exception().printStackTrace();
-            Model model=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
-            Resource res=model.getResource(uri);
-            if(model.contains(res, type))
-            {
-                ret=res;
-            }
+//            Model model=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
+//            Resource res=model.getResource(uri);
+//            if(model.contains(res, type))
+//            {
+//                ret=res;
+//            }
         }
         //System.out.println("ret:"+ret);
         //if(ret==null)log.warn("Uri not Found:"+uri,new AssertionError());

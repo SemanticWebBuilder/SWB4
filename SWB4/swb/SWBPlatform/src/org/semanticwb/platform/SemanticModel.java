@@ -504,7 +504,9 @@ public SemanticObject getSemanticObject(String uri)
         Property rdf=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty();
 
         StmtIterator stit=getRDFModel().listStatements(null, rdf, cls.getOntClass());
-        Iterator<SemanticObject> ret=new SemanticIterator(stit, true);
+        Iterator<SemanticObject> ret=null;
+        if(cls.isSWBClass())ret=new SemanticIterator(stit, true, this, cls); //Crea instancias de este tiplo de clase en el modelo sin verificar clase
+        else ret=new SemanticIterator(stit, true, this, null); //Crea instancias de este tiplo de clase en el modelo verificando clase
 
         if(subclasses)
         {

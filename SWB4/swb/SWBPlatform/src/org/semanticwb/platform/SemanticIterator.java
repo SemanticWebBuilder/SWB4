@@ -51,6 +51,9 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
     /** The invert. */
     private boolean invert=false;
             
+    private SemanticModel model=null;
+    private SemanticClass cls=null;
+
     /**
      * Instantiates a new semantic iterator.
      * 
@@ -71,6 +74,15 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
     {
         this.iterator=iterator;
         this.invert=invert;
+        //System.out.println("  Create Iterator");
+    }
+
+    public SemanticIterator(Iterator iterator, boolean invert, SemanticModel model, SemanticClass cls)
+    {
+        this.iterator=iterator;
+        this.invert=invert;
+        this.model=model;
+        this.cls=cls;
         //System.out.println("  Create Iterator");
     }
     
@@ -111,9 +123,9 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
                 {
                     if(invert)
                     {
-                        return (T)SemanticObject.createSemanticObject(((Statement)obj).getSubject());
+                        return (T)SemanticObject.createSemanticObject(((Statement)obj).getSubject(), model, cls);
                     }
-                    return (T)SemanticObject.createSemanticObject(((Statement)obj).getResource());
+                    return (T)SemanticObject.createSemanticObject(((Statement)obj).getResource(), model, cls);
                 }catch(SWBRuntimeException re)
                 {
                     log.error(re);
