@@ -137,10 +137,20 @@ public class SemanticObject
 
     /**
      * Instantiates a new semantic object.
-     * 
+     *
      * @param res the res
      */
     private SemanticObject(Resource res)
+    {
+        this(res, null, null);
+    }
+
+    /**
+     * Instantiates a new semantic object.
+     * 
+     * @param res the res
+     */
+    private SemanticObject(Resource res, SemanticModel model, SemanticClass cls)
     {
         if(res==null)
         {
@@ -149,7 +159,9 @@ public class SemanticObject
         m_cacheprops=new ConcurrentHashMap(); //MAPS74 //Collections.synchronizedMap(new HashMap());
         m_cachepropsrel=new ConcurrentHashMap(); //MAPS74 //Collections.synchronizedMap(new HashMap());
         this.m_res = res;
-        validateModel();
+        this.m_model=model;
+        this.m_cls=cls;
+        if(model==null)validateModel();
         //System.out.println("SemanticObject:"+res);
     }
 
@@ -159,7 +171,7 @@ public class SemanticObject
      */
     public SemanticObject()
     {
-        this(null, null);
+        this((SemanticModel)null, (SemanticClass)null);
     }
 
     /**
@@ -271,7 +283,7 @@ public class SemanticObject
 /**
  * Regrea una instancia del SemanticObject en base al URI dado.
  * Si el recurso no existe regresa null
- * 
+ *
  * @param uri the uri
  * @return the semantic object
  * @return
@@ -300,11 +312,22 @@ public class SemanticObject
 
     /**
      * Creates the semantic object.
-     * 
+     *
      * @param res the res
      * @return the semantic object
      */
     public static SemanticObject createSemanticObject(Resource res)
+    {
+        return createSemanticObject(res, null, null);
+    }
+
+    /**
+     * Creates the semantic object.
+     * 
+     * @param res the res
+     * @return the semantic object
+     */
+    public static SemanticObject createSemanticObject(Resource res, SemanticModel model, SemanticClass cls)
     {
         String id=res.getURI();
         if(id==null)id=res.getId().toString();
@@ -325,7 +348,7 @@ public class SemanticObject
         //                }
         //            }
         //            //System.out.println("res2:"+res+" "+id);
-                    ret=new SemanticObject(res);
+                    ret=new SemanticObject(res,model,cls);
                     m_objs.put(id, ret);
                 }
             }
@@ -791,6 +814,7 @@ public class SemanticObject
         //System.out.print("getSemanticClass:"+getURI());
         if (m_cls == null)
         {
+            //TODO: Cuando se crea indtancia con modelo y clase no entra a este statement
             //Validar si se requiere carga inicial de propiedades
             if(hasPropertyCacheOnInit)
             {
