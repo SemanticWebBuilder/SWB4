@@ -39,6 +39,7 @@ public class Modeler extends CustomNode
     public var containerElement: GraphicalElement;
     public var toolBar:ToolBar;
     public var zoomFactor:Number = 1;
+    public var copyNode: Node = null;
 
     var focusedNode: Node;                       //Nodo con el foco
     var scrollOffset:ScrollOffset;
@@ -62,6 +63,23 @@ public class Modeler extends CustomNode
                 ModelerUtils.popup,
              ]
          }
+
+         var actions: MenuItem[] = [
+            MenuItem {
+                caption: ##"actPaste";
+                status: bind if (copyNode == null) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
+                action: function (e: MouseEvent) {
+                    ModelerUtils.popup.hide();
+                    var t = (copyNode as GraphicalElement);
+                    if (t.canAddToDiagram()) {
+                        t.x = mousex;
+                        t.y = mousey;
+                        insert t into contents;
+                    }
+                    copyNode = null;
+                }
+            },
+        ];
 
          scrollView=ScrollView
          {
@@ -219,6 +237,13 @@ public class Modeler extends CustomNode
                  if (e.button == e.button.PRIMARY) {
                      ModelerUtils.popup.hide();
                  }
+             }
+
+             onMouseClicked: function (e: MouseEvent) : Void {
+                if (e.button == e.button.SECONDARY and overNode == null) {
+                    ModelerUtils.popup.setOptions(actions);
+                    ModelerUtils.popup.show(e);
+                }
              }
 
              onKeyPressed: function (e: KeyEvent): Void
@@ -408,6 +433,12 @@ public class Modeler extends CustomNode
         }
         if (e.code == e.code.VK_ESCAPE) {
             ModelerUtils.popup.hide();
+        }
+        if (e.code == e.code.VK_DELETE) {
+            if (focusedNode != null and focusedNode instanceof GraphicalElement) {
+                (focusedNode as GraphicalElement).remove(true);
+                focusedNode = null;
+            }
         }
     }
 
