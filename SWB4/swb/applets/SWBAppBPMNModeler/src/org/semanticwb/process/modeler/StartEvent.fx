@@ -9,6 +9,7 @@ package org.semanticwb.process.modeler;
 import javafx.scene.Node;
 import org.semanticwb.process.modeler.AdhocSubProcess;
 import org.semanticwb.process.modeler.MultipleStartEvent;
+import javafx.scene.input.MouseEvent;
 
 /**
  * @author javier.solis
@@ -24,7 +25,22 @@ public class StartEvent extends CatchEvent
          colorAdjust.contrast=0.25;
          colorAdjust.saturation=1;
          shape.styleClass = "startEvent";
-         return ret;
+
+        var actions : MenuItem[] = [
+            MenuItem {isSeparator: true},
+            MenuItem {
+                caption: ##"actCopy"
+                action: function(e: MouseEvent) {
+                    var t = copy();
+                    modeler.copyNode = t;
+                    ModelerUtils.popup.hide();
+                }
+            }
+        ];
+
+        insert actions before menuOptions[0];
+
+        return ret;
     }
 
     override public function canEndLink(link:ConnectionObject) : Boolean
@@ -81,5 +97,16 @@ public class StartEvent extends CatchEvent
             }
         }
         return ret;
+    }
+
+    override public function copy() : GraphicalElement {
+        var t = StartEvent {
+            title: this.title
+            type: this.type
+            modeler: this.modeler
+            container: this.container
+        }
+        t.uri = "new:event:{modeler.toolBar.counter++}";
+        return t;
     }
 }
