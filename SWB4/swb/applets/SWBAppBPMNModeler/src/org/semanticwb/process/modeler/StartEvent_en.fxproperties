@@ -4,3 +4,4 @@
 "msgError41" = "Event Sub-Process cannot start with a Normal Start Event"
 "msgError44" = "Sub-Process cannot have more than one Start Event"
 "msgError48" = "Start Event cannot be used in Ad-Hoc Sub-Process"
+"actCopy" = "Copy"
