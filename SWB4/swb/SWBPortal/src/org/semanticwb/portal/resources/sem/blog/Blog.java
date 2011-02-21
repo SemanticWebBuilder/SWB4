@@ -72,22 +72,24 @@ public class Blog extends org.semanticwb.portal.resources.sem.blog.base.BlogBase
         GenericIterator<Permision> permissions=listPermissions();
         while(permissions.hasNext())
         {
-            Permision permission=permissions.next();
+            Permision permission=permissions.next();            
             if(permission.isIsRol() && !permission.getSecurityId().equals("*"))
             {
                 GenericIterator<Role> roles=user.listRoles();
                 while(roles.hasNext())
                 {
-                    Role role=roles.next();
-                    if(role.getId().equals(permission.getSecurityId()) && user.isRegistered())
-                    {
+                    Role role=roles.next();                    
+                    String name=role.getId()+"_" + role.getUserRepository().getId();
+                    if(name.equals(permission.getSecurityId()) && user.isRegistered())
+                    {                        
                         return permission.getLevel();
                     }
                 }
             }
             else
             {
-                if(permission.getSecurityId().equals(user.getId()) && !permission.getSecurityId().equals("*") && user.isRegistered())
+                String name=user.getId() + "_" + user.getUserRepository().getId();
+                if(permission.getSecurityId().equals(name) && !permission.getSecurityId().equals("*") && user.isRegistered())
                 {
                     return permission.getLevel();
                 }
@@ -143,7 +145,7 @@ public class Blog extends org.semanticwb.portal.resources.sem.blog.base.BlogBase
     {
         iso8601dateFormat = new SimpleDateFormat(format);
         Document doc = new Document();
-        Element blog = new Element("blog");
+        Element blog = new Element("blog");        
         blog.setAttribute("level", String.valueOf(getLevelUser(user)));
         blog.setAttribute("name", this.getTitle());
         blog.setAttribute("id", String.valueOf(this.getId()));
