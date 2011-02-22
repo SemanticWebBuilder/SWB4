@@ -27,6 +27,14 @@ public class StartEvent extends CatchEvent
          shape.styleClass = "startEvent";
 
         var actions : MenuItem[] = [
+            MenuItem {
+                status: bind if (getContainer() != null and getContainer() instanceof EventSubProcess) MenuItem.STATUS_ENABLED else MenuItem.STATUS_DISABLED
+                caption: bind if (isInterrupting) ##"nonInterrupting" else ##"interrupting"
+                action: function (e: MouseEvent) {
+                    isInterrupting = not isInterrupting;
+                    ModelerUtils.popup.hide();
+                }
+            },
             MenuItem {isSeparator: true},
             MenuItem {
                 caption: ##"actCopy"
