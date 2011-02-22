@@ -22,4 +22,17 @@ public class DirectionalAssociation extends AssociationFlow
         var ret=super.create();
         return ret;
     }
+
+    public override function copy() : ConnectionObject {
+        var t = DirectionalAssociation {
+            ini: this.ini
+            arrowType: this.arrowType
+            end: this.end
+            modeler: this.modeler
+            strokeDash: this.strokeDash
+            cubicCurve: this.cubicCurve
+            uri:"new:dirassociationflow:{modeler.toolBar.counter++}"
+        }
+        return t;
+    }
 }
