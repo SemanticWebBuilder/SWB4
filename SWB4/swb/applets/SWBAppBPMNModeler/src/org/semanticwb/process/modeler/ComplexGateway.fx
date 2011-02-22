@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Group;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
+import javafx.scene.input.MouseEvent;
 /**
  * @author javier.solis
  */
@@ -36,7 +37,18 @@ public class ComplexGateway extends Gateway
             onKeyPressed: onKeyPressed
             onKeyReleased: onKeyReleased
         };
-        println("x:{x}, y:{y}");
+
+        var actions: MenuItem[] = [
+             MenuItem {
+                caption: ##"actCopy"
+                action: function (e: MouseEvent) {
+                    var t = copy();
+                    modeler.copyNode = t;
+                    ModelerUtils.popup.hide();
+                }
+             },
+         ];
+         insert actions before menuOptions[0];
 
         return Group
         {
@@ -44,30 +56,34 @@ public class ComplexGateway extends Gateway
                 Group {
                     content: [
                         shape,
-                        Line{
-                            startX: w/2-w/4
-                            startY: h/2
-                            endX: w/2+w/4
-                            endY: h/2
-                            styleClass: "modifierGateway"
-                        }, Line{
-                            startX: w/2
-                            startY: h/2-h/4
-                            endX: w/2
-                            endY: h/2+h/4
-                            styleClass: "modifierGateway"
-                        }, Line{
-                            startX: w/2-w/6
-                            startY: h/2-h/6
-                            endX: w/2+w/6
-                            endY: h/2+h/6
-                            styleClass: "modifierGateway"
-                        }, Line{
-                            startX: w/2+w/6
-                            startY: h/2-h/6
-                            endX: w/2-w/6
-                            endY: h/2+h/6
-                            styleClass: "modifierGateway"
+                        Group {
+                            content: [
+                                Line{
+                                    startX: w/2-w/4
+                                    startY: h/2
+                                    endX: w/2+w/4
+                                    endY: h/2
+                                    styleClass: "modifierGateway"
+                                }, Line{
+                                    startX: w/2
+                                    startY: h/2-h/4
+                                    endX: w/2
+                                    endY: h/2+h/4
+                                    styleClass: "modifierGateway"
+                                }, Line{
+                                    startX: w/2-w/6
+                                    startY: h/2-h/6
+                                    endX: w/2+w/6
+                                    endY: h/2+h/6
+                                    styleClass: "modifierGateway"
+                                }, Line{
+                                    startX: w/2+w/6
+                                    startY: h/2-h/6
+                                    endX: w/2-w/6
+                                    endY: h/2+h/6
+                                    styleClass: "modifierGateway"
+                                }
+                            ]
                         }
                     ]
                     translateX: bind x - w/2
@@ -78,5 +94,16 @@ public class ComplexGateway extends Gateway
             ]
             visible: bind canView()
         };
+    }
+
+    override public function copy() : GraphicalElement {
+        var t = ComplexGateway {
+            title: this.title
+            type: this.type
+            modeler: this.modeler
+            container: this.container
+        }
+        t.uri = "new:complexgateway:{modeler.toolBar.counter++}";
+        return t;
     }
 }
