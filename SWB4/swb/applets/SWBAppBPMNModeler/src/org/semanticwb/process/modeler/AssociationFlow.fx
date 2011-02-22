@@ -21,4 +21,16 @@ public class AssociationFlow extends ConnectionObject
         var ret=super.create();
         return ret;
     }
+
+    public override function copy() : ConnectionObject {
+        var t = AssociationFlow {
+            ini: this.ini
+            end: this.end
+            modeler: this.modeler
+            strokeDash: this.strokeDash
+            cubicCurve: this.cubicCurve
+            uri:"new:associationflow:{modeler.toolBar.counter++}"
+        }
+        return t;
+    }
 }
