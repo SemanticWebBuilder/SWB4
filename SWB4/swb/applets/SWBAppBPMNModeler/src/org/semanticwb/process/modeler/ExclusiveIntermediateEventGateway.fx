@@ -12,6 +12,8 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Circle;
 import javafx.scene.image.ImageView;
 import javafx.scene.effect.ColorAdjust;
+import org.semanticwb.process.modeler.ExclusiveIntermediateEventGateway;
+import javafx.scene.input.MouseEvent;
 /**
  * @author javier.solis
  */
@@ -49,6 +51,18 @@ public class ExclusiveIntermediateEventGateway extends EventBasedGateway
             effect: colorAdjust
         };
 
+        var actions: MenuItem[] = [
+             MenuItem {
+                caption: ##"actCopy"
+                action: function (e: MouseEvent) {
+                    var t = copy();
+                    modeler.copyNode = t;
+                    ModelerUtils.popup.hide();
+                }
+             },
+         ];
+         insert actions before menuOptions[0];
+
         return Group
         {
             content: [
@@ -73,5 +87,16 @@ public class ExclusiveIntermediateEventGateway extends EventBasedGateway
             scaleY: bind s;
             visible: bind canView()
         };
+    }
+
+    override public function copy() : GraphicalElement {
+        var t = ExclusiveIntermediateEventGateway {
+            title: this.title
+            type: this.type
+            modeler: this.modeler
+            container: this.container
+        }
+        t.uri = "new:exclusiveintermediateeventgateway:{modeler.toolBar.counter++}";
+        return t;
     }
 }
