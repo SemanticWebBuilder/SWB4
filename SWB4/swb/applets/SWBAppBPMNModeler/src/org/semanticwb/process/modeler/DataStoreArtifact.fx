@@ -12,6 +12,7 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.Path;
+import javafx.scene.input.MouseEvent;
 
 /**
  * @author javier.solis
@@ -52,7 +53,19 @@ public class DataStoreArtifact extends Artifact
             onKeyReleased: onKeyReleased
         }
 
-        setType(type);
+        var actions: MenuItem[] = [
+            MenuItem {
+                caption: ##"actCopy"
+                action: function(e: MouseEvent) {
+                    var t = copy();
+                    modeler.copyNode = t;
+                    ModelerUtils.popup.hide();
+                }
+            }
+        ];
+        insert actions before menuOptions[0];
+
+        setType(TYPE_STORE);
 
         return Group
         {
@@ -72,5 +85,16 @@ public class DataStoreArtifact extends Artifact
             scaleY: bind s;
             visible: bind canView()
         };
+    }
+
+    override public function copy() : GraphicalElement {
+        var t = DataStoreArtifact {
+            title: this.title
+            type: this.type
+            modeler: this.modeler
+            container: this.container
+        }
+        t.uri = "new:{type}:{modeler.toolBar.counter++}";
+        return t;
     }
 }
