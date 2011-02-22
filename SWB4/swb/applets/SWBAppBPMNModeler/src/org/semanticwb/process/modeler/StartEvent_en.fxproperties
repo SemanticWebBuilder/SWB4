@@ -5,3 +5,4 @@
 "msgError44" = "Sub-Process cannot have more than one Start Event"
 "msgError48" = "Start Event cannot be used in Ad-Hoc Sub-Process"
 "actCopy" = "Copy"
+"nonInterrupting" = "No-interruptor"
