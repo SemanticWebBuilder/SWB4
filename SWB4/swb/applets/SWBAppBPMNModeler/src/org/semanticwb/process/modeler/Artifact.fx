@@ -10,16 +10,21 @@ import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.Group;
 import javafx.scene.shape.Polyline;
+import javafx.scene.input.MouseEvent;
 
-public def TYPE_COLLECTION="collection";
-public def TYPE_INPUT="input";
-public def TYPE_OUTPUT="output";
+public def TYPE_COLLECTION="datacollection";
+public def TYPE_INPUT="datainput";
+public def TYPE_OUTPUT="dataoutput";
+public def TYPE_OBJECT="dataobject";
+public def TYPE_STORE="datastore";
+public def TYPE_ANNOTATION="annotationartifact";
+public def TYPE_GROUP="groupartifact";
 public class Artifact extends GraphicalElement
 {
     protected var ix:Number;                          //offset imagen x
     protected var iy:Number;                          //offset imagen x
     protected var is:Number=1;                        //image scale
-
+    
     protected var message=ImageView
     {
         x: bind x+ix;
@@ -63,6 +68,18 @@ public class Artifact extends GraphicalElement
             onKeyPressed: onKeyPressed
             onKeyReleased: onKeyReleased
         };
+
+        var actions: MenuItem[] = [
+            MenuItem {
+                caption: ##"actCopy"
+                action: function(e: MouseEvent) {
+                    var t = copy();
+                    modeler.copyNode = t;
+                    ModelerUtils.popup.hide();
+                }
+            }
+        ];
+        insert actions before menuOptions[0];
 
         return Group
         {
@@ -145,5 +162,19 @@ public class Artifact extends GraphicalElement
             ModelerUtils.setErrorMessage(##"msgError5");
         }
         return ret;
+    }
+
+    override public function copy() : GraphicalElement {
+        var t = Artifact {
+            title: this.title
+            type: this.type
+            modeler: this.modeler
+            isLoop: this.isLoop
+            isForCompensation: this.isForCompensation
+            isMultiInstance: this.isMultiInstance
+            container: this.container
+        }
+        t.uri = "new:{type}:{modeler.toolBar.counter++}";
+        return t;
     }
 }
