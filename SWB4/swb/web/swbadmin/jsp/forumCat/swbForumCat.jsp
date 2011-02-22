@@ -15,6 +15,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.Locale"%>
+<%@page import="java.util.HashMap"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.semanticwb.platform.SemanticClass"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
@@ -108,35 +109,23 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
         actionURL.setAction("addQuestion");
         SemanticClass semClass = Question.sclass;
         %>
-        <div class="foro_gral">
+        <div class="formularios">
             <form id="formaCaptura" name="datosRegistro" action="<%=actionURL%>" method="post">
                 <input type="hidden" name="<%=Question.forumCat_questionReferences.getName()%>">
                 <fieldset>
                     <%= mgr.getFormHiddens()%>
-                    <div class="sfcLinea">
-                        <div class="sfcEtiqueta">
-                            <%=mgr.renderLabel(request, semClass.getProperty(Question.forumCat_question.getName()), mgr.MODE_CREATE)%>:
-                        </div>
-                        <div class="sfcCampo">
-                            <%=mgr.renderElement(request, semClass.getProperty(Question.forumCat_question.getName()), mgr.MODE_CREATE)%>
-                        </div>
-                    </div>
-                    <div class="sfcLinea">
-                        <div class="sfcEtiqueta">
-                            <%=mgr.renderLabel(request, semClass.getProperty(Tagable.swb_tags.getName()), mgr.MODE_CREATE)%>:
-                        </div>
-                        <div class="sfcCampo">
-                            <%=mgr.renderElement(request, semClass.getProperty(Tagable.swb_tags.getName()), mgr.MODE_CREATE)%>
-                        </div>
-                    </div>
-                    <div class="sfcLinea">
+                    <label for="<%=Question.forumCat_question.getName()%>">Pregunta:</label>
+                    <!--%=mgr.renderLabel(request, semClass.getProperty(Question.forumCat_question.getName()), mgr.MODE_CREATE)%-->
+                    <textarea name="<%=Question.forumCat_question.getName()%>"></textarea>
+                    <!--%=mgr.renderElement(request, semClass.getProperty(Question.forumCat_question.getName()), mgr.MODE_CREATE)%-->
+                    <label for="<%=Tagable.swb_tags.getName()%>">Palabras clave:</label>
+                    <!--%=mgr.renderLabel(request, semClass.getProperty(Tagable.swb_tags.getName()), mgr.MODE_CREATE)%-->
+                    <input type="text" name="<%=Tagable.swb_tags.getName()%>">
+                    <!--%=mgr.renderElement(request, semClass.getProperty(Tagable.swb_tags.getName()), mgr.MODE_CREATE)%-->
                     <% if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_selectCategory)) {%>
-                        <div class="sfcEtiqueta">
-                            <%=mgr.renderLabel(request, semClass.getProperty(Question.forumCat_webpage.getName()), mgr.MODE_CREATE)%>:
-                        </div>
-                    </div>
-                    <div class="sfcLinea">
-                        <select name="categoryuri">
+                        <label for="<%=Question.forumCat_webpage.getName()%>">Categor&iacute;a:</label>
+                        <!--%=mgr.renderLabel(request, semClass.getProperty(Question.forumCat_webpage.getName()), mgr.MODE_CREATE)%-->
+                        <select class="categoria" name="categoryuri">
                             <%
                             String pid = semanticBase.getProperty(SWBForumCatResource.forumCat_idCatPage, paramRequest.getWebPage().getId());
                             WebPage wpp = paramRequest.getWebPage().getWebSite().getWebPage(pid);
@@ -149,34 +138,33 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                             }
                             %>
                         </select>
-                    </div>
-                </fieldset>
                     <%}%>
-                <fieldset>
-                    <div class="sfcLinea">
-                        <div class="sfcEtiqueta">
-                            <label>Referencias a Youtube</label>:<br>
-                        </div>
-                        <div class="sfcCampo">
-                            <input type="text" name="inputBox">
-                            <input type="button" value="Agregar" onclick="addToList(this.form.referenceList, this.form.inputBox);"><br>
-                            <select multiple name="referenceList"></select>
-                            <input type="button" value="Limpiar" onclick="clearList(this.form.referenceList);">
-                            <input type="button" value="Limpiar seleccionados" onclick="clearSelected(this.form.referenceList);"><br>
-                        </div>
-                    </div>
-                </fieldset>
-                <fieldset>
-                    <div class="sfcLinea">
-                        <input type="button" class="boton" value="Guardar" onclick="setReferences(this.form.referenceList, this.form.<%=Question.forumCat_questionReferences.getName()%>);">
-                        <!--input type="submit" class="boton" value="Guardar"-->
-                        <input type="button" class="boton" value="Regresar" onclick="javascript:history.go(-1);">
-                    </div>
+                    <label>Referencias a Youtube:</label>
+                    <input type="text" name="inputBox">
+                    <ul>
+                        <li><input type="button" class="btn_form" value="Agregar" onclick="addToList(this.form.referenceList, this.form.inputBox);"></li>
+                    </ul>
+                    <select multiple name="referenceList" class="selectmultiple"></select>
+                    <ul>
+                        <li><input type="button" class="btn_form" value="Limpiar" onclick="clearList(this.form.referenceList);"></li>
+                        <li><input type="button" class="btn_form" value="Limpiar seleccionados" onclick="clearSelected(this.form.referenceList);"></li>
+                    </ul>
+                    <hr/>
+                    <ul class="btns_final">
+                        <li>
+                            <input type="button" class="btn_form" value="Guardar" onclick="setReferences(this.form.referenceList, this.form.<%=Question.forumCat_questionReferences.getName()%>);">
+                        </li>
+                        <li>
+                            <!--input type="submit" class="boton" value="Guardar"-->
+                            <input type="button" class="btn_form" value="Regresar" onclick="javascript:history.go(-1);">
+                        </li>
+                    </ul>
                 </fieldset>
             </form>
         </div>
         <%
     } else if (action != null && action.equals("edit")) {
+        %><div class="foro_gral"><%
         int recPerPage = 5; //TODO: poner el numero de registros por paginas en la administracion
         int nRec = 0;
         int nPage;
@@ -292,16 +280,16 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                     String starimg = baseimg;
                                     String alt = "";
                                     int points = getUserPoints(favAnswer.getCreator(), wpage.getWebSite());
-                                    if (points == 0) {
+                                    if (points >= 0 && points <= 30) {
                                         starimg += "star_vacia.png";
                                         alt = "Vacía";
-                                    } else if (points > 0 && points <= 150) {
+                                    } else if (points >= 31 && points <= 80) {
                                         starimg += "star_plata.png";
                                         alt = "Plata";
-                                    } else if (points >= 151 && points <= 600) {
+                                    } else if (points >= 81 && points <= 130) {
                                         starimg += "star_oro.png";
                                         alt = "Oro";
-                                    } else if (points >= 601) {
+                                    } else if (points >= 131) {
                                         starimg += "star_diamante.png";
                                         alt = "Diamante";
                                     }
@@ -358,7 +346,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                             <li>
                                                                 <a href="<%=actionURL%>"><img width="18" height="18" alt="No me gusta" src="<%=baseimg%>icon_no_gusta.png"></a>(<%=nUnlike%>)
                                                             </li>
-                                                        } else {
+                                                        <%} else {%>
                                                            <li>
                                                                 <img width="18" height="18" alt="Me gusta" src="<%=baseimg%>icon_me_gusta.png">(<%=nLike%>)
                                                             </li>
@@ -418,16 +406,16 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                     String starimg = baseimg;
                                     String alt = "";
                                     int points = getUserPoints(comAnswer.getCreator(), wpage.getWebSite());
-                                    if (points == 0) {
+                                    if (points >= 0 && points <= 30) {
                                         starimg += "star_vacia.png";
                                         alt = "Vacía";
-                                    } else if (points > 0 && points <= 150) {
+                                    } else if (points >= 31 && points <= 80) {
                                         starimg += "star_plata.png";
                                         alt = "Plata";
-                                    } else if (points >= 151 && points <= 600) {
+                                    } else if (points >= 81 && points <= 130) {
                                         starimg += "star_oro.png";
                                         alt = "Oro";
-                                    } else if (points >= 601) {
+                                    } else if (points >= 131) {
                                         starimg += "star_diamante.png";
                                         alt = "Diamante";
                                     }
@@ -553,16 +541,16 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                             String starimg = baseimg;
                                             String alt="";
                                             int points = getUserPoints(answer.getCreator(), wpage.getWebSite());
-                                            if (points == 0) {
+                                            if (points >= 0 && points <= 30) {
                                                 starimg += "star_vacia.png";
                                                 alt = "Vacía";
-                                            } else if (points > 0 && points <= 150) {
+                                            } else if (points >= 31 && points <= 80) {
                                                 starimg += "star_plata.png";
                                                 alt = "Plata";
-                                            } else if (points >= 151 && points <= 600) {
+                                            } else if (points >= 81 && points <= 130) {
                                                 starimg += "star_oro.png";
                                                 alt = "Oro";
-                                            } else if (points >= 601) {
+                                            } else if (points >= 131) {
                                                 starimg += "star_diamante.png";
                                                 alt = "Diamante";
                                             }
@@ -701,7 +689,9 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                         }
                     }
                 }
+        %></div><%
     } else if (action != null && action.equals("showDetail")) {
+               %><div class="foro_gral"><%
         SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
         Question question = (Question) semObject.createGenericInstance();
         long views = question.getViews();
@@ -810,7 +800,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                             for (int idx = 0; idx < references.length; idx++) {
                                                 if (references[idx].length() > 10 && references[idx].contains(prefix)) {
                                                     String ref = getVideoThumbnail(references[idx], wpage);
-                                                    %><li><a href="<%=references[idx]%>"><img src="<%=ref%>"></a></li><%
+                                                    %><li><a href="<%=references[idx]%>" target="_blank"><img src="<%=ref%>"></a></li><%
                                                 }
                                             }
                                             %>
@@ -828,16 +818,16 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                 String starimg = baseimg;
                                 String alt="";
                                 int points = getUserPoints(favAnswer.getCreator(), wpage.getWebSite());
-                                if (points == 0) {
+                                if (points >= 0 && points <= 30) {
                                     starimg += "star_vacia.png";
                                     alt = "Vacía";
-                                } else if (points > 0 && points <= 150) {
+                                } else if (points >= 31 && points <= 80) {
                                     starimg += "star_plata.png";
                                     alt = "Plata";
-                                } else if (points >= 151 && points <= 600) {
+                                } else if (points >= 81 && points <= 130) {
                                     starimg += "star_oro.png";
                                     alt = "Oro";
-                                } else if (points >= 601) {
+                                } else if (points >= 131) {
                                     starimg += "star_diamante.png";
                                     alt = "Diamante";
                                 }
@@ -955,7 +945,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                 for (int idx = 0; idx < references.length; idx++) {
                                                     if (references[idx].length() > 10 && references[idx].contains(prefix)) {
                                                         String ref = getVideoThumbnail(references[idx], wpage);
-                                                        %><li><a href="<%=references[idx]%>"><img src="<%=ref%>"></a></li><%
+                                                        %><li><a href="<%=references[idx]%>" target="_blank"><img src="<%=ref%>"></a></li><%
                                                     }
                                                 }
                                                 %>
@@ -970,16 +960,16 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                 String starimg = baseimg;
                                 String alt="";
                                 int points = getUserPoints(comAnswer.getCreator(), wpage.getWebSite());
-                                if (points == 0) {
+                                if (points >= 0 && points <= 30) {
                                     starimg += "star_vacia.png";
                                     alt = "Vacía";
-                                } else if (points > 0 && points <= 150) {
+                                } else if (points >= 31 && points <= 80) {
                                     starimg += "star_plata.png";
                                     alt = "Plata";
-                                } else if (points >= 151 && points <= 600) {
+                                } else if (points >= 81 && points <= 130) {
                                     starimg += "star_oro.png";
                                     alt = "Oro";
-                                } else if (points >= 601) {
+                                } else if (points >= 131) {
                                     starimg += "star_diamante.png";
                                     alt = "Diamante";
                                 }
@@ -1099,7 +1089,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                 for (int idx = 0; idx < references.length; idx++) {
                                                     if (references[idx].length() > 10 && references[idx].contains(prefix)) {
                                                         String ref = getVideoThumbnail(references[idx], wpage);
-                                                        %><li><a href="<%=references[idx]%>"><img src="<%=ref%>"></a></li><%
+                                                        %><li><a href="<%=references[idx]%>" target="_blank"><img src="<%=ref%>"></a></li><%
                                                     }
                                                 }
                                                 %>
@@ -1130,16 +1120,16 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                         String starimg = baseimg;
                                         String alt="";
                                         int points = getUserPoints(answer.getCreator(), wpage.getWebSite());
-                                        if (points == 0) {
+                                        if (points >= 0 && points <= 30) {
                                             starimg += "star_vacia.png";
                                             alt = "Vacía";
-                                        } else if (points > 0 && points <= 150) {
+                                        } else if (points >= 31 && points <= 80) {
                                             starimg += "star_plata.png";
                                             alt = "Plata";
-                                        } else if (points >= 151 && points <= 600) {
+                                        } else if (points >= 81 && points <= 130) {
                                             starimg += "star_oro.png";
                                             alt = "Oro";
-                                        } else if (points >= 601) {
+                                        } else if (points >= 131) {
                                             starimg += "star_diamante.png";
                                             alt = "Diamante";
                                         }
@@ -1266,7 +1256,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                             for (int idx = 0; idx < references.length; idx++) {
                                                 if (references[idx].length() > 10 && references[idx].contains(prefix)) {
                                                     String ref = getVideoThumbnail(references[idx], wpage);
-                                                    %><li><a href="<%=references[idx]%>"><img src="<%=ref%>"></a></li><%
+                                                    %><li><a href="<%=references[idx]%>" target="_blank"><img src="<%=ref%>"></a></li><%
                                                 }
                                             }
                                             %>
@@ -1289,6 +1279,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                     <%
                 }
         }
+        %></div><%
     } else if (action != null && action.equals("editQuestion")) {
         SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
         Question q = (Question) semObject.createGenericInstance();
@@ -1398,51 +1389,40 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
         mgr.addButton(SWBFormButton.newCancelButton());
         SemanticClass semClass = Answer.sclass;
         %>
-        <div class="foro_gral">
-            <h1>Responder a la pregunta <b><%=q.getQuestion()%></b></h1>
+        <div class="formularios">
+            <h1>Comentar la herramienta<b><%=q.getQuestion()%></b></h1>
             <form id="<%=mgr.getFormName()%>" name="datosRegistro" class="swbform" action="<%=actionURL%>" method="post" >
                 <input type="hidden" name="<%=Answer.forumCat_references.getName()%>">
                 <fieldset>
                     <%= mgr.getFormHiddens()%>
-                    <div class="sfcLinea">
-                        <div class="sfcEtiqueta">
-                            <%=mgr.renderLabel(request, semClass.getProperty(Answer.forumCat_answer.getName()), mgr.MODE_CREATE)%>:
-                        </div>
-                        <div class="sfcCampo">
-                            <textarea cols="42" rows="6" name="<%=Answer.forumCat_answer.getName()%>"></textarea>
-                            <!--%=mgr.renderElement(request, semClass.getProperty(Answer.forumCat_answer.getName()), mgr.MODE_CREATE)%-->
-                        </div>
-                    </div>
-                </fieldset>
+                    <label for="<%=semClass.getProperty(Answer.forumCat_answer.getName())%>">Respuesta:</label>
+                    <textarea cols="42" rows="6" name="<%=Answer.forumCat_answer.getName()%>"></textarea>
+                    <!--%=mgr.renderElement(request, semClass.getProperty(Answer.forumCat_answer.getName()), mgr.MODE_CREATE)%-->
                     <%if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptAttachements)) {%>
-                        <div class="sfcLinea">
-                            <div class="sfcEtiqueta">
-                                <%=mgr.renderLabel(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), mgr.MODE_CREATE)%>:
-                            </div>
-                            <div class="sfcCampo">
-                                <%=mgr.renderElement(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), mgr.MODE_CREATE)%>
-                            </div>
-                        </div>
+                        <%=mgr.renderLabel(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), mgr.MODE_CREATE)%>:
+                        <%=mgr.renderElement(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), mgr.MODE_CREATE)%>
                     <%}%>
-                <fieldset>
-                    <div class="sfcLinea">
-                        <div class="sfcEtiqueta">
-                            <label>Referencias a Youtube</label>:<br>
-                        </div>
-                        <div class="sfcCampo">
-                            <input type="text" name="inputBox">
-                            <input type="button" value="Agregar" onclick="addToList(this.form.referenceList, this.form.inputBox);"><br>
-                            <select multiple name="referenceList" disabled="disabled"></select>
-                            <input type="button" value="Limpiar" onclick="clearList(this.form.referenceList);"><br>
-                        </div>
-                    </div>
-                </fieldset>
-                <fieldset>
-                    <div class="sfcLinea">
-                        <input type="button" class="boton" value="Guardar" onclick="setReferences(this.form.referenceList, this.form.<%=Answer.forumCat_references.getName()%>);">
-                        <!--input type="submit" class="boton" value="Guardar"-->
-                        <input type="button" class="boton" value="Regresar" onclick="javascript:history.go(-1);">
-                    </div>
+                    <label>Referencias a Youtube:</label>
+                    <input type="text" name="inputBox">
+                    <ul>
+                        <li><input type="button" class="btn_form" value="Agregar" onclick="addToList(this.form.referenceList, this.form.inputBox);"></li>
+                    </ul>
+                    <select multiple name="referenceList" class="selectmultiple"></select>
+                    <ul>
+                        <li><input type="button" class="btn_form" value="Limpiar" onclick="clearList(this.form.referenceList);"></li>
+                        <li><input type="button" class="btn_form" value="Limpiar seleccionados" onclick="clearSelected(this.form.referenceList);"></li>
+                    </ul>
+                    <hr/>
+                    <ul class="btns_final">
+                        <li>
+                            <input type="button" class="btn_form" value="Guardar" onclick="setReferences(this.form.referenceList, this.form.<%=Answer.forumCat_references.getName()%>);">
+                        </li>
+                        <li>
+                            <!--input type="submit" class="boton" value="Guardar"-->
+                            <input type="button" class="btn_form" value="Regresar" onclick="javascript:history.go(-1);">
+                        </li>
+                    </ul>
+                    <!--input type="submit" class="boton" value="Guardar"-->
                 </fieldset>
             </form>
         </div>
