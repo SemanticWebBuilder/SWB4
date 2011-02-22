@@ -208,7 +208,7 @@ public class Calendar extends CalendarBase {
                         StringTokenizer st   = new StringTokenizer(time, ":");
                         int             h    = 0,
                                         m    = 0,
-                                        s    = 0;
+                                        s    = 60;
 
                         try {
                             h = Integer.parseInt(st.nextToken());
