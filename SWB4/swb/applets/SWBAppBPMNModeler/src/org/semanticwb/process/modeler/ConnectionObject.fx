@@ -463,4 +463,18 @@ public class ConnectionObject  extends CustomNode
     {
         return modeler.containerElement==ini.container or modeler.containerElement==end.container;
     }
+
+    public function copy() : ConnectionObject {
+        var t = ConnectionObject {
+            ini: this.ini
+            end: this.end
+            arrowType: this.arrowType
+            cubicCurve: this.cubicCurve
+            notGroup: this.notGroup
+            modeler: this.modeler
+            title:this.title
+            uri:"new:sequenceflow:{modeler.toolBar.counter++}"
+        }
+        return t;
+    }
 }
