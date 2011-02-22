@@ -75,10 +75,16 @@ public class Modeler extends CustomNode
                         t.x = mousex;
                         t.y = mousey;
                         insert t into contents;
+                        if (t instanceof SubProcess) {
+                            var ff = t as SubProcess;
+                            for (ele in ff.containerChilds) {
+                                insert ele into contents;
+                            }
+                        }
                     }
                     copyNode = null;
                 }
-            },
+            }
         ];
 
          scrollView=ScrollView
