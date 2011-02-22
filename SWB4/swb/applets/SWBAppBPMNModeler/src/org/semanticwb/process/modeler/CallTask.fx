@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.input.MouseEvent;
 
 /**
  * @author Hasdai Pacheco {haxdai@gmail.com}
@@ -58,6 +59,18 @@ public class CallTask extends CallActivity {
             onKeyPressed: onKeyPressed
             onKeyReleased: onKeyReleased
         }
+
+        var actions: MenuItem[] = [
+            MenuItem {
+                caption: ##"actCopy"
+                action: function(e: MouseEvent) {
+                    var t = copy();
+                    modeler.copyNode = t;
+                    ModelerUtils.popup.hide();
+                }
+            }
+        ];
+        insert actions before menuOptions[0];
 
         return Group
         {
@@ -119,5 +132,19 @@ public class CallTask extends CallActivity {
                 }
             }
         }
+    }
+
+    override public function copy() : GraphicalElement {
+        var t = CallTask {
+            title: this.title
+            type: this.type
+            modeler: this.modeler
+            isLoop: this.isLoop
+            isForCompensation: this.isForCompensation
+            isMultiInstance: this.isMultiInstance
+            container: this.container
+        }
+        t.uri = "new:call{type}task:{modeler.toolBar.counter++}";
+        return t;
     }
 }
