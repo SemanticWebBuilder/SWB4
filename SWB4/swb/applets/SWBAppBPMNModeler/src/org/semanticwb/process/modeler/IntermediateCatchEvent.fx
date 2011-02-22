@@ -146,9 +146,8 @@ public class IntermediateCatchEvent extends CatchEvent
             type: this.type
             modeler: this.modeler
             container: this.container
-            isInterrupting:this.isInterrupting
         }
-        t.uri = "new:{type}task:{modeler.toolBar.counter++}";
+        t.uri = "new:interevent:{modeler.toolBar.counter++}";
         return t;
     }
 }
