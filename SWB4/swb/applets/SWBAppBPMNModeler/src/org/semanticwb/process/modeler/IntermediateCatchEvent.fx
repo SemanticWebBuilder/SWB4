@@ -11,6 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.shape.Circle;
 import org.semanticwb.process.modeler.SequenceFlow;
 import javafx.scene.input.MouseEvent;
+import org.semanticwb.process.modeler.CallActivity;
 
 /**
  * @author javier.solis
@@ -98,6 +99,10 @@ public class IntermediateCatchEvent extends CatchEvent
         if(ret or parent instanceof Activity) {
             ret = true;
         }
+        if (parent instanceof CallActivity) {
+            ret = false;
+        }
+        
         return ret;
     }
 
