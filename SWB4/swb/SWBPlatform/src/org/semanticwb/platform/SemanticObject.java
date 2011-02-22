@@ -1411,7 +1411,8 @@ public Document getDomProperty(SemanticProperty prop)
         return this;
     }
 
-    /**
+    
+     /**
      * Adds the object property.
      * 
      * @param prop the prop
@@ -1419,6 +1420,20 @@ public Document getDomProperty(SemanticProperty prop)
      * @return the semantic object
      */
     public SemanticObject addObjectProperty(SemanticProperty prop, SemanticObject object)
+    {
+        return addObjectProperty(prop, object, true);
+    }
+
+
+
+    /**
+     * Adds the object property.
+     * 
+     * @param prop the prop
+     * @param object the object
+     * @return the semantic object
+     */
+    public SemanticObject addObjectProperty(SemanticProperty prop, SemanticObject object, boolean notify)
     {
         if (m_virtual)
         {
@@ -1434,9 +1449,11 @@ public Document getDomProperty(SemanticProperty prop)
         Property iprop = prop.getRDFProperty();
         m_res.addProperty(iprop, object.getRDFResource());
         addPropertyValueCache(prop, "list",object);
-        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "list", ACT_ADD);
+        if(notify)SWBPlatform.getSemanticMgr().notifyChange(this, prop, "list", ACT_ADD);
         return this;
     }
+
+
 
     /**
      * Removes the object property.
@@ -1447,7 +1464,19 @@ public Document getDomProperty(SemanticProperty prop)
      */
     public SemanticObject removeObjectProperty(SemanticProperty prop, SemanticObject object)
     {
-        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "list", ACT_REMOVE);
+        return removeObjectProperty(prop, object, true);
+    }
+
+     /**
+     * Removes the object property.
+     *
+     * @param prop the prop
+     * @param object the object
+     * @return the semantic object
+     */
+    public SemanticObject removeObjectProperty(SemanticProperty prop, SemanticObject object, boolean notify)
+    {
+        if(notify) SWBPlatform.getSemanticMgr().notifyChange(this, prop, "list", ACT_REMOVE);
         if (m_virtual)
         {
             ArrayList list = (ArrayList) m_virtprops.get(prop.getURI());
@@ -1494,6 +1523,12 @@ public Document getDomProperty(SemanticProperty prop)
         removePropertyValueCache(prop, "list");
         return this;
     }
+
+
+
+
+
+
 
     /**
      * List literal properties.
