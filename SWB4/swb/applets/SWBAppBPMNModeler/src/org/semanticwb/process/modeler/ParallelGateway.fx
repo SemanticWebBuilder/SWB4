@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Group;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
+import javafx.scene.input.MouseEvent;
 /**
  * @author javier.solis
  */
@@ -29,22 +30,38 @@ public class ParallelGateway extends Gateway
             onKeyReleased: onKeyReleased
         };
 
+        var actions: MenuItem[] = [
+             MenuItem {
+                caption: ##"actCopy"
+                action: function (e: MouseEvent) {
+                    var t = copy();
+                    modeler.copyNode = t;
+                    ModelerUtils.popup.hide();
+                }
+             },
+         ];
+         insert actions before menuOptions[0];
+
         return Group
         {
             content: [
                 shape,
-                Line{
-                    startX: w/2-w/4
-                    startY: h/2
-                    endX: w/2+w/4
-                    endY: h/2
-                    styleClass: "modifierGateway"
-                }, Line{
-                    startX: w/2
-                    startY: h/2-h/4
-                    endX: w/2
-                    endY: h/2+h/4
-                    styleClass: "modifierGateway"
+                Group {
+                    content: [
+                        Line{
+                            startX: w/2-w/4
+                            startY: h/2
+                            endX: w/2+w/4
+                            endY: h/2
+                            styleClass: "modifierGateway"
+                        }, Line{
+                            startX: w/2
+                            startY: h/2-h/4
+                            endX: w/2
+                            endY: h/2+h/4
+                            styleClass: "modifierGateway"
+                        }
+                    ]
                 }
             ]
             translateX: bind x - w/2
@@ -63,5 +80,16 @@ public class ParallelGateway extends Gateway
             ret = false;
         }
         return ret;
+    }
+
+    override public function copy() : GraphicalElement {
+        var t = ParallelGateway {
+            title: this.title
+            type: this.type
+            modeler: this.modeler
+            container: this.container
+        }
+        t.uri = "new:parallelgateway:{modeler.toolBar.counter++}";
+        return t;
     }
 }
