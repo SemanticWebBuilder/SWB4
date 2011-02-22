@@ -124,10 +124,10 @@ public class GraphicalElement extends CustomNode
     public function setCommonMenuOptions () {
         var props:MenuItem[] = [
             MenuItem {
-            caption: ##"actDelete";
-            action: function (e: MouseEvent) {
-                    remove(true);
+                caption: ##"actDelete";
+                action: function (e: MouseEvent) {
                     ModelerUtils.popup.hide();
+                    remove(true);
                 }
             },
             MenuItem {isSeparator:true},
@@ -138,32 +138,32 @@ public class GraphicalElement extends CustomNode
                         caption: ##"sizeSmall"
                         status: bind if(this.text.size == 8) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                         action: function (e: MouseEvent) {
-                            this.text.setSize(8);
                             ModelerUtils.popup.hide();
+                            this.text.setSize(8);
                         }
                     },
                     MenuItem {
                         caption: ##"sizeNormal"
                         status: bind if(this.text.size == 10) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                         action: function (e: MouseEvent) {
-                            this.text.setSize(10);
                             ModelerUtils.popup.hide();
+                            this.text.setSize(10);
                         }
                     },
                     MenuItem {
                         caption: ##"sizeMedium"
                         status: bind if(this.text.size == 12) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                         action: function (e: MouseEvent) {
-                            this.text.setSize(12);
                             ModelerUtils.popup.hide();
+                            this.text.setSize(12);
                         }
                     },
                     MenuItem {
                         caption: ##"sizeLarge"
                         status: bind if(this.text.size == 14) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                         action: function (e: MouseEvent) {
-                            this.text.setSize(14);
                             ModelerUtils.popup.hide();
+                            this.text.setSize(14);
                         }
                     }
                 ]
