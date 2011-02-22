@@ -8,7 +8,6 @@ package org.semanticwb.process.modeler;
 import javafx.scene.Node;
 import javafx.scene.Group;
 import javafx.scene.shape.Line;
-import javafx.scene.input.MouseEvent;
 
 /**
  * @author javier.solis
@@ -65,4 +64,14 @@ public class DefaultFlow extends SequenceFlow
 //            }
 //        }
 //    }
+
+    public override function copy() : ConnectionObject {
+        var t = DefaultFlow {
+            ini: this.ini
+            end: this.end
+            modeler: this.modeler
+            uri:"new:defaultflow:{modeler.toolBar.counter++}"
+        }
+        return t;
+    }
 }
