@@ -269,6 +269,7 @@ public class ToolBar extends CustomNode
            ele.put("isMultiInstance",ge.isMultiInstance);
            ele.put("isLoop", ge.isLoop);
            ele.put("isForCompensation", ge.isForCompensation);
+           ele.put("isInterrupting", ge.isInterrupting);
         }
 
         if(node instanceof ConnectionObject)
@@ -336,6 +337,7 @@ public class ToolBar extends CustomNode
                 var isLoop=js.optBoolean("isLoop", false);
                 var isMultiInstance=js.optBoolean("isMultiInstance", false);
                 var isForCompensation=js.optBoolean("isForCompensation", false);
+                var isInterrupting=js.optBoolean("isInterrupting", false);
                 //var type=js.getString("type");
                 var x=js.getInt("x");
                 var y=js.getInt("y");
@@ -347,6 +349,7 @@ public class ToolBar extends CustomNode
                 ge.isLoop = isLoop;
                 ge.isMultiInstance = isMultiInstance;
                 ge.isForCompensation = isForCompensation;
+                ge.isInterrupting = isInterrupting;
                 //println("uri:{ge.uri}");
                 ge.title=title;
                 //ge.setType(type);
@@ -398,7 +401,6 @@ public class ToolBar extends CustomNode
             }
             i++;
         }
-
 
         //ConnectionObjects
         i=0;
@@ -1188,6 +1190,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=CancelationIntermediateCatchEvent
                         {
                             modeler:modeler
+                            title: ##"cancelInter"
                             uri:"new:interevent:{counter++}"
                         }
                     }
@@ -1839,7 +1842,7 @@ public class ToolBar extends CustomNode
                         {
                             modeler:modeler
                             title: ##"dataObj"//ModelerUtils.getLocalizedString("dataObj")
-                            uri:"new:artifact:{counter++}"
+                            uri:"new:dataobject:{counter++}"
                         }
                     }
                 },
@@ -1855,7 +1858,7 @@ public class ToolBar extends CustomNode
                         {
                             modeler:modeler
                             title: ##"collection"//ModelerUtils.getLocalizedString("collection")
-                            uri:"new:multipleartifact:{counter++}"
+                            uri:"new:datacollection:{counter++}"
                         }
                     }
                 },
@@ -1871,7 +1874,7 @@ public class ToolBar extends CustomNode
                         {
                             modeler:modeler
                             title: ##"dataInput"//ModelerUtils.getLocalizedString("dataInput")
-                            uri:"new:inputartifact:{counter++}"
+                            uri:"new:datainput:{counter++}"
                         }
                     }
                 },
@@ -1887,7 +1890,7 @@ public class ToolBar extends CustomNode
                         {
                             modeler:modeler
                             title: ##"dataOutput"//ModelerUtils.getLocalizedString("dataOutput")
-                            uri:"new:outputartifact:{counter++}"
+                            uri:"new:dataoutput:{counter++}"
                         }
                     }
                 },
@@ -1903,7 +1906,7 @@ public class ToolBar extends CustomNode
                         {
                             modeler:modeler
                             title: ##"dataStore"//ModelerUtils.getLocalizedString("dataStore")
-                            uri:"new:datastoreartifact:{counter++}"
+                            uri:"new:datastore:{counter++}"
                         }
                     }
                 }
