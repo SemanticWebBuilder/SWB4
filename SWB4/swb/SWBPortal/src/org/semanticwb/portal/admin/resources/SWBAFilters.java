@@ -291,11 +291,11 @@ public class SWBAFilters extends SWBATree {
         }
         else
         {
-            Iterator<WebPage> childs = root.listChilds(); //getSortChild();
+            Iterator<WebPage> childs = root.listChilds(user.getLanguage(),true,false,false,null); //getSortChild();
 
             while (childs.hasNext()) {
                 WebPage topic = childs.next();                
-                if (user.haveAccess(topic)) {
+                if (user.haveAccess(topic)&&topic.isActive()) {
                     Element etp = addNode("topic", topic.getId(), topic.getDisplayName(user.getLanguage()), etopic);
                     etp.setAttribute("topicmap", map.getId());
 
@@ -332,7 +332,7 @@ public class SWBAFilters extends SWBATree {
             Element res = docres.createElement("res");
             docres.appendChild(res);
             WebPage topic = map.getWebPage("WBAd_Menus");
-            if (user.haveAccess(topic)) {
+            if (user.haveAccess(topic)&&topic.isActive()) {
                 Element etopic = addNode("topic", topic.getId(), topic.getDisplayName(user.getLanguage()), res);
                 etopic.setAttribute("topicmap", map.getId());
 
@@ -396,7 +396,7 @@ public class SWBAFilters extends SWBATree {
             Element res = docres.createElement("res");
             docres.appendChild(res);
             WebPage topic = map.getWebPage("ObjectBehavior");
-            if (user.haveAccess(topic)) {
+            if (user.haveAccess(topic)&&topic.isActive()) {
                 Element etopic = this.addNode("topic", topic.getId(), topic.getDisplayName(user.getLanguage()), res);
                 etopic.setAttribute("topicmap", map.getId());
                 etopic.setAttribute("reload", "getTopicMap." + map.getId());
