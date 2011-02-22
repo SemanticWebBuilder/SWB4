@@ -43,25 +43,33 @@ public class IntermediateCatchEvent extends CatchEvent
             centerY: bind y
             radius: bind w/2
             styleClass: "interEvent"
-            strokeDashArray: bind if (isInterrupting and cancelActivity) [2, 5] else null
+            strokeDashArray: bind if (isInterrupting) null else [2, 5]
             onKeyPressed: onKeyPressed
             onKeyReleased: onKeyReleased
         };
 
         setType(type);
 
-        if (isInterrupting) {
-            var actions: MenuItem[] = [
-                MenuItem {
-                    caption: bind if (this.cancelActivity) ##"interrupting" else ##"nonInterrupting"
-                    action: function (e: MouseEvent) {
-                        this.cancelActivity = not this.cancelActivity;
-                        ModelerUtils.popup.hide();
-                    }
-                }, MenuItem {isSeparator: true}
-            ];
-            insert actions before menuOptions[0];
-        }
+        var actions: MenuItem[] = [
+            MenuItem {
+                status: bind if (cancelActivity) MenuItem.STATUS_ENABLED else MenuItem.STATUS_DISABLED
+                caption: bind if (isInterrupting) ##"nonInterrupting" else ##"interrupting"
+                action: function (e: MouseEvent) {
+                    isInterrupting = not isInterrupting;
+                    ModelerUtils.popup.hide();
+                }
+            },
+            MenuItem {isSeparator: true},
+            MenuItem {
+                caption: ##"actCopy"
+                action: function(e: MouseEvent) {
+                    var t = copy();
+                    modeler.copyNode = t;
+                    ModelerUtils.popup.hide();
+                }
+            }
+        ];
+        insert actions before menuOptions[0];
 
         return Group
         {
@@ -72,7 +80,7 @@ public class IntermediateCatchEvent extends CatchEvent
                     centerX: bind x
                     centerY: bind y
                     radius: bind w/2-3
-                    strokeDashArray: bind if (isInterrupting and cancelActivity) [2, 5] else null
+                    strokeDashArray: bind if (isInterrupting) null else [2, 5]
                     styleClass: "interEvent"
                     id: "marker"
                 },
@@ -130,5 +138,17 @@ public class IntermediateCatchEvent extends CatchEvent
             ModelerUtils.setErrorMessage(##"msgError22");
         }
         return ret;
+    }
+
+    override public function copy() : GraphicalElement {
+        var t = IntermediateCatchEvent {
+            title: this.title
+            type: this.type
+            modeler: this.modeler
+            container: this.container
+            isInterrupting:this.isInterrupting
+        }
+        t.uri = "new:{type}task:{modeler.toolBar.counter++}";
+        return t;
     }
 }
