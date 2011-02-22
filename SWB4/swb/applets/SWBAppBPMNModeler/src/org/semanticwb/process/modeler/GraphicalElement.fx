@@ -53,6 +53,7 @@ public class GraphicalElement extends CustomNode
     public var isForCompensation: Boolean = false;
     public var isAdHoc: Boolean = false;
     public var isTransaction: Boolean = false;
+    public var isInterrupting: Boolean = true;
     public var x : Number;
     public var y : Number;
     public var w : Number;
@@ -110,7 +111,6 @@ public class GraphicalElement extends CustomNode
             text: bind title with inverse
             x:bind x
             y:bind y
-            autoSizeParent:true;
             owner:this
             width: bind w
             height: bind h
@@ -139,18 +139,6 @@ public class GraphicalElement extends CustomNode
                         status: bind if(this.text.size == 8) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                         action: function (e: MouseEvent) {
                             this.text.setSize(8);
-                            if (this.text.boundsInLocal.width + 5 < minW) {
-                                minW = 100;
-                                w = minW;
-                            } else {
-                                w = this.text.boundsInLocal.width + 5;
-                            }
-                            if (this.text.boundsInLocal.height + 5 < minH) {
-                                minH = 60;
-                                h = minH;
-                            } else {
-                                h = this.text.boundsInLocal.height + 5;
-                            }
                             ModelerUtils.popup.hide();
                         }
                     },
@@ -159,21 +147,6 @@ public class GraphicalElement extends CustomNode
                         status: bind if(this.text.size == 10) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                         action: function (e: MouseEvent) {
                             this.text.setSize(10);
-                            if (this.text.boundsInLocal.width + 5 < minW) {
-                                minW = 100;
-                                w = minW;
-                            } else {
-                                w = this.text.boundsInLocal.width + 5;
-                                minW = w;
-                            }
-
-                            if (this.text.boundsInLocal.height + 5 < minH) {
-                                minH = 60;
-                                h = minH;
-                            } else {
-                                h = this.text.boundsInLocal.height + 5;
-                                minH = h;
-                            }
                             ModelerUtils.popup.hide();
                         }
                     },
@@ -182,21 +155,6 @@ public class GraphicalElement extends CustomNode
                         status: bind if(this.text.size == 12) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                         action: function (e: MouseEvent) {
                             this.text.setSize(12);
-                            if (this.text.boundsInLocal.width + 5 < minW) {
-                                minW = 100;
-                                w = minW;
-                            } else {
-                                w = this.text.boundsInLocal.width + 5;
-                                minW = w;
-                            }
-
-                            if (this.text.boundsInLocal.height + 5 < minH) {
-                                minH = 60;
-                                h = minH;
-                            } else {
-                                h = this.text.boundsInLocal.height + 5;
-                                minH = h;
-                            }
                             ModelerUtils.popup.hide();
                         }
                     },
@@ -205,21 +163,6 @@ public class GraphicalElement extends CustomNode
                         status: bind if(this.text.size == 14) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                         action: function (e: MouseEvent) {
                             this.text.setSize(14);
-                            if (this.text.boundsInLocal.width + 5 < minW) {
-                                minW = 100;
-                                w = minW;
-                            } else {
-                                w = this.text.boundsInLocal.width + 5;
-                                minW = w;
-                            }
-
-                            if (this.text.boundsInLocal.height + 5 < minH) {
-                                minH = 60;
-                                h = minH;
-                            } else {
-                                h = this.text.boundsInLocal.height + 5;
-                                minH = h;
-                            }
                             ModelerUtils.popup.hide();
                         }
                     }
