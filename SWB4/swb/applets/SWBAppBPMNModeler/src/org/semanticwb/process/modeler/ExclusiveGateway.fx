@@ -13,6 +13,7 @@ import javafx.scene.shape.Polygon;
 import org.semanticwb.process.modeler.ModelerUtils;
 import org.semanticwb.process.modeler.DefaultFlow;
 import org.semanticwb.process.modeler.EventBasedGateway;
+import javafx.scene.input.MouseEvent;
 /**
  * @author javier.solis
  */
@@ -40,24 +41,40 @@ public class ExclusiveGateway extends Gateway
             onKeyReleased: onKeyReleased
         };
 
+        var actions: MenuItem[] = [
+             MenuItem {
+                caption: ##"actCopy"
+                action: function (e: MouseEvent) {
+                    var t = copy();
+                    modeler.copyNode = t;
+                    ModelerUtils.popup.hide();
+                }
+             },
+         ];
+         insert actions before menuOptions[0];
+
         return Group
         {
             content: [
                 Group {
                     content: [
                         shape,
-                        Line {
-                            startX: w / 2 - w / 6
-                            startY: h / 2 - h / 6
-                            endX: w / 2 + w / 6
-                            endY: h / 2 + h / 6
-                            styleClass: "modifierGateway"
-                        }, Line {
-                            startX: w / 2 + w / 6
-                            startY: h / 2 - h / 6
-                            endX: w / 2 - w / 6
-                            endY: h / 2 + h / 6
-                            styleClass: "modifierGateway"
+                        Group {
+                            content: [
+                                Line {
+                                    startX: w / 2 - w / 6
+                                    startY: h / 2 - h / 6
+                                    endX: w / 2 + w / 6
+                                    endY: h / 2 + h / 6
+                                    styleClass: "modifierGateway"
+                                }, Line {
+                                    startX: w / 2 + w / 6
+                                    startY: h / 2 - h / 6
+                                    endX: w / 2 - w / 6
+                                    endY: h / 2 + h / 6
+                                    styleClass: "modifierGateway"
+                                }
+                            ]
                         }
                     ]
                     translateX: bind x - w / 2
@@ -101,5 +118,16 @@ public class ExclusiveGateway extends Gateway
         }
 
         return ret;
+    }
+
+    override public function copy() : GraphicalElement {
+        var t = ExclusiveGateway {
+            title: this.title
+            type: this.type
+            modeler: this.modeler
+            container: this.container
+        }
+        t.uri = "new:exclusivegateway:{modeler.toolBar.counter++}";
+        return t;
     }
 }
