@@ -597,7 +597,7 @@ public class User extends UserBase implements Principal
         boolean ret = true;
         if (obj instanceof RoleRefable)
         {
-            boolean temp=false;
+            Boolean temp=null;
             Iterator<RoleRef> it = ((RoleRefable) obj).listInheritRoleRefs();
             while (it.hasNext())
             {
@@ -608,13 +608,16 @@ public class User extends UserBase implements Principal
                     temp = true;
                     //System.out.println("hasRole:false");
                     break;
+                }else
+                {
+                    temp = false;
                 }
             }
-            ret=temp;
+            if(temp!=null)ret=temp;
         }
         if (ret && obj instanceof RuleRefable)
         {
-            boolean temp=false;
+            Boolean temp=null;
             Iterator<RuleRef> it = ((RuleRefable) obj).listInheritRuleRefs();
             while (it.hasNext())
             {
@@ -630,11 +633,11 @@ public class User extends UserBase implements Principal
                     }
                 }
             }
-            ret=temp;
+            if(temp!=null)ret=temp;
         }
         if (ret && obj instanceof UserGroupRefable)
         {
-            boolean temp=false;
+            Boolean temp=null;
             Iterator<UserGroupRef> it = ((UserGroupRefable) obj).listInheritUserGroupRefs();
             while (it.hasNext())
             {
@@ -645,13 +648,16 @@ public class User extends UserBase implements Principal
                 {
                     temp = true;
                     break;
+                }else
+                {
+                    temp = false;
                 }
             }
-            ret=temp;
+            if(temp!=null)ret=temp;
         }
         if (ret && obj instanceof Roleable)
         {
-            boolean temp=false;
+            Boolean temp=null;
             Iterator<Role> it = ((Roleable) obj).listRoles();
             while (it.hasNext())
             {
@@ -662,13 +668,16 @@ public class User extends UserBase implements Principal
                     temp = true;
                     //System.out.println("hasRole:false");
                     break;
+                }else
+                {
+                    temp = false;
                 }
             }
-            ret=temp;
+            if(temp!=null)ret=temp;
         }
         if (ret && obj instanceof UserGroupable)
         {
-            boolean temp=false;
+            Boolean temp=null;
             Iterator<UserGroup> it = ((UserGroupable) obj).listUserGroups();
             while (it.hasNext())
             {
@@ -678,9 +687,12 @@ public class User extends UserBase implements Principal
                 {
                     temp = true;
                     break;
+                }else
+                {
+                    temp = false;
                 }
             }
-            ret=temp;
+            if(temp!=null)ret=temp;
         }
         //System.out.println("User:"+this+" haveAccess:"+obj+" "+ret);
         return ret;

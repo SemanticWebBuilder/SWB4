@@ -90,7 +90,7 @@ public class SWBClass extends org.semanticwb.model.base.SWBClassBase {
 
         if (ret && (this instanceof CalendarRefable))
         {
-            boolean temp=false;
+            Boolean temp=null;
             Iterator<CalendarRef> it = ((CalendarRefable) this).listCalendarRefs();
             while (it.hasNext())
             {
@@ -98,14 +98,20 @@ public class SWBClass extends org.semanticwb.model.base.SWBClassBase {
                 if (calref.isActive())
                 {
                     Calendar cal = calref.getCalendar();
-                    if ((cal != null) && cal.isActive() && cal.isOnSchedule())
+                    if ((cal != null) && cal.isActive())
                     {
-                        temp = true;
-                        break;
+                        if(cal.isOnSchedule())
+                        {
+                            temp = true;
+                            break;
+                        }else
+                        {
+                            temp = false;
+                        }
                     }
                 }
             }
-            ret=temp;
+            if(temp!=null)ret=temp;
         }
 
 /*
