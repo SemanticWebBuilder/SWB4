@@ -6,6 +6,7 @@
 
 package org.semanticwb.process.modeler;
 import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 
 /**
  * @author javier.solis
@@ -21,6 +22,19 @@ public class EndEvent extends ThrowEvent
          colorAdjust.contrast=0.25;
          colorAdjust.saturation=1;
          shape.styleClass = "endEvent";
+
+         var actions: MenuItem[] = [
+             MenuItem {
+                caption: ##"actCopy"
+                action: function (e: MouseEvent) {
+                    var t = copy();
+                    modeler.copyNode = t;
+                    ModelerUtils.popup.hide();
+                }
+             },
+         ];
+         insert actions before menuOptions[0];
+
          return ret;
     }
 
