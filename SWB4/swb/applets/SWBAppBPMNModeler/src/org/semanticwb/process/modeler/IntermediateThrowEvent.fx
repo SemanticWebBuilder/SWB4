@@ -9,6 +9,7 @@ package org.semanticwb.process.modeler;
 import javafx.scene.Node;
 import javafx.scene.Group;
 import javafx.scene.shape.Circle;
+import javafx.scene.input.MouseEvent;
 
 /**
  * @author javier.solis
@@ -46,6 +47,19 @@ public class IntermediateThrowEvent extends ThrowEvent
             onKeyPressed: onKeyPressed
             onKeyReleased: onKeyReleased
         };
+
+        var actions: MenuItem[] = [
+            MenuItem {
+                caption: ##"actCopy"
+                action: function (e: MouseEvent) {
+                    var t = copy();
+                    modeler.copyNode = t;
+                    ModelerUtils.popup.hide();
+                }
+            }
+        ];
+
+        insert actions before menuOptions[0];
 
         setType(type);
 
@@ -112,5 +126,16 @@ public class IntermediateThrowEvent extends ThrowEvent
             ModelerUtils.setErrorMessage(##"msgError22");
         }
         return ret;
+    }
+
+    override public function copy() : GraphicalElement {
+        var t = IntermediateThrowEvent {
+            title: this.title
+            type: this.type
+            modeler: this.modeler
+            container: this.container
+        }
+        t.uri = "new:interevent:{modeler.toolBar.counter++}";
+        return t;
     }
 }
