@@ -16,6 +16,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.image.Image;
 import javafx.geometry.VPos;
 import javafx.scene.layout.HBox;
+import javafx.util.Sequences;
+import java.util.HashMap;
 
 /**
  * @author javier.solis
@@ -143,8 +145,9 @@ public class SubProcess extends Activity
             }
         }
 
+        var actions : MenuItem[] = null;
         if (not isTransaction) {
-            var actions: MenuItem[] = [
+            actions = [
                 MenuItem {
                     caption: ##"actMultiInstance";
                     status: bind if (isMultiInstance) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
@@ -169,8 +172,29 @@ public class SubProcess extends Activity
                         ModelerUtils.popup.hide();
                     }
                 },
-                MenuItem {isSeparator: true}
+                MenuItem {isSeparator: true},
+                MenuItem {
+                    caption: ##"actCopy"
+                    action: function(e: MouseEvent) {
+                        var t = copy();
+                        modeler.copyNode = t;
+                        ModelerUtils.popup.hide();
+                    }
+                }
             ];
+        } else {
+            actions = [
+                MenuItem {
+                    caption: ##"actCopy"
+                    action: function(e: MouseEvent) {
+                        var t = copy();
+                        modeler.copyNode = t;
+                        ModelerUtils.popup.hide();
+                    }
+                }
+            ];
+        }
+        if (actions != null) {
             insert actions before menuOptions[0];
         }
 
@@ -268,5 +292,53 @@ public class SubProcess extends Activity
         if (type.equals(TYPE_EVENT)) {
             strokeDash = [1, 6];
         }
+    }
+
+    public override function copy() : GraphicalElement {
+        var t = SubProcess {
+            title: this.title
+            type: this.type
+            modeler: this.modeler
+            isLoop: this.isLoop
+            isForCompensation: this.isForCompensation
+            isMultiInstance: this.isMultiInstance
+            container: this.container
+            uri:"new:subprocess:{modeler.toolBar.counter++}"
+        }
+
+        var conObjects: ConnectionObject[];
+        var objMap = HashMap {};
+
+        for (ele in containerChilds where ele instanceof GraphicalElement) {
+            var tc = ele.copy();
+            tc.x = ele.x;
+            tc.y = ele.y;
+            tc.w = ele.w;
+            tc.h = ele.h;
+            tc.setContainer(t);
+            objMap.put(ele, tc);
+            for (co in ele.getInputConnectionObjects()) {
+                if (Sequences.indexOf(conObjects, co) == -1) {
+                    insert co into conObjects;
+                }
+            }
+
+            for (co in ele.getOutputConnectionObjects()) {
+                if (Sequences.indexOf(conObjects, co) == -1) {
+                    insert co into conObjects;
+                }
+            }
+        }
+
+        for(co in conObjects) {
+            var cini = objMap.get(co.ini) as GraphicalElement;
+            var cend = objMap.get(co.end) as GraphicalElement;
+            var cop = co.copy();
+            cop.ini = cini;
+            cop.end = cend;
+            insert cop into modeler.contents;
+        }
+
+        return t;
     }
 }
