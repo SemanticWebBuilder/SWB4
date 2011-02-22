@@ -66,4 +66,15 @@ public class ConditionalFlow extends SequenceFlow
             }
         }
     }
+
+    public override function copy() : ConnectionObject {
+        var t = ConditionalFlow {
+            ini: this.ini
+            end: this.end
+            modeler: this.modeler
+            title:this.title
+            uri:"new:associationflow:{modeler.toolBar.counter++}"
+        }
+        return t;
+    }
 }
