@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Group;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Circle;
+import javafx.scene.input.MouseEvent;
 /**
  * @author javier.solis
  */
@@ -29,6 +30,19 @@ public class InclusiveGateway extends Gateway
             width: bind w + 60
             height: bind h
         }
+
+        var actions: MenuItem[] = [
+             MenuItem {
+                caption: ##"actCopy"
+                action: function (e: MouseEvent) {
+                    var t = copy();
+                    modeler.copyNode = t;
+                    ModelerUtils.popup.hide();
+                }
+             },
+         ];
+         insert actions before menuOptions[0];
+
         shape= Polygon
         {
             points: [w/2,0,w,h/2,w/2,h,0,h/2]
@@ -58,5 +72,16 @@ public class InclusiveGateway extends Gateway
             ]
             visible: bind canView()
         };
+    }
+
+    override public function copy() : GraphicalElement {
+        var t = InclusiveGateway {
+            title: this.title
+            type: this.type
+            modeler: this.modeler
+            container: this.container
+        }
+        t.uri = "new:inclusivegateway:{modeler.toolBar.counter++}";
+        return t;
     }
 }
