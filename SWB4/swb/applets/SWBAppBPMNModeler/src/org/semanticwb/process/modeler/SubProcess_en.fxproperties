@@ -3,3 +3,4 @@
 "actLoop" = "Loop"
 "actCompensa" = "Compensation"
 "confirmDelete" = "Are you sure you want to delete %s?"
+"actCopy" = "Copy"
