@@ -303,7 +303,7 @@ public class SubProcess extends Activity
             isForCompensation: this.isForCompensation
             isMultiInstance: this.isMultiInstance
             container: this.container
-            uri:"new:subprocess:{modeler.toolBar.counter++}"
+            uri:"new:{type}subprocess:{modeler.toolBar.counter++}"
         }
 
         var conObjects: ConnectionObject[];
