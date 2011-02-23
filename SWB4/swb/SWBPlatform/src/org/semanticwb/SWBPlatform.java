@@ -111,7 +111,7 @@ public class SWBPlatform
     private static SemanticMgr semanticMgr=null;
 
     /** The Constant version. */
-    protected static final String version = "4.0.2.3";
+    protected static final String version = "4.0.2.4";
 
     /** The m_observers. */
     private ArrayList<ThreadObserver> m_observers = null;
