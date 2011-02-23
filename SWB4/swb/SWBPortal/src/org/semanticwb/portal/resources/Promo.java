@@ -746,7 +746,7 @@ public class Promo extends GenericResource {
                         base.removeAttribute("wbNoFile_imgfile");
                     }
                 }
-                if( Boolean.parseBoolean(base.getAttribute("wbNoTmp_template")) ) {
+                if( Boolean.parseBoolean(base.getAttribute("wbNoFile_template")) ) {
                     File file = new File(SWBPortal.getWorkPath()+base.getWorkPath()+"/"+base.getAttribute("template"));
                     if(file.exists() && file.delete()) {
                         base.removeAttribute("template");
@@ -998,8 +998,8 @@ public class Promo extends GenericResource {
         htm.append("      </li>\n");
         if(base.getAttribute("template")!=null) {
             htm.append("  <li class=\"swbform-li\">\n");
-            htm.append("    <label for=\"wbNoTmp_template\" class=\"swbform-label\">Quitar plantilla</label>\n");
-            htm.append("    <input type=\"checkbox\" id=\"wbNoTmp_template\" name=\"wbNoTmp_template\" value=\"true\"/>\n");
+            htm.append("    <label for=\"wbNoFile_template\" class=\"swbform-label\">Quitar plantilla</label>\n");
+            htm.append("    <input type=\"checkbox\" id=\"wbNoFile_template\" name=\"wbNoFile_template\" value=\"true\"/>\n");
             htm.append("  </li>\n");
         }
         htm.append("    </ul>\n");
@@ -1045,8 +1045,8 @@ public class Promo extends GenericResource {
                     else if(!filename.equals("")) {
                         file = new File(SWBPortal.getWorkPath()+base.getWorkPath()+"/"+filename);
                         item.write(file);
-                        //params.put(item.getFieldName(), filename);
                         base.setAttribute(item.getFieldName(), filename);
+                        base.setAttribute("wbNoFile_"+item.getFieldName(), "false");
                     }
                 }
             }
