@@ -625,7 +625,7 @@ public class RemoteWebApp extends GenericAdmResource
                 if(ini>=0)
                 {
                     content=a2+content.substring(ini+a1.length());
-                    break;
+                    //break;
                 }
             }    
         }
@@ -652,7 +652,7 @@ public class RemoteWebApp extends GenericAdmResource
                 if(end>=0)
                 {
                     content=content.substring(0,end)+a2;
-                    break;
+                    //break;
                 }
             }    
         }        
