@@ -3,3 +3,4 @@
 "actLoop" = "Ciclo"
 "actCompensa" = "Compensación"
 "confirmDelete" = "¿Seguro que desea eliminar %s?"
+"actCopy" = "Copiar"
