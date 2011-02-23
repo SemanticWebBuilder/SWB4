@@ -1,3 +1,10 @@
+  4.0.2.4
+    - Se cambio forma de evaluar reglas, roles, grupos, calendarios de and a or (Jei)
+    - Se agrego posibilidad de tener filtros inversos de recursos (Jei)
+    - Se agrego patrones de inicio y termino multiples del RemoteWebApplication (Jei)
+    - Mejoras generales del paquete de compatibilidad con version WB3.
+    - Se agrego posibilidad de notificar por correo electrónico el firmado del usuario (Jei)
+
   4.0.2.2
     - Se corrigio depliegue de contenidos por defecto con Orden = 0
     - Se corrigio despliegue de elementos enviados a papelera (Jei)
