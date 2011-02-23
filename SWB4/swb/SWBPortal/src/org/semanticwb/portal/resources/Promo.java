@@ -1030,6 +1030,7 @@ public class Promo extends GenericResource {
             if(!file.exists()) {
                 file.mkdirs();
             }
+            base.setAttribute("deftmp", "false");
             Iterator<FileItem> iter = SWBUtils.IO.fileUpload(request, null);
             while(iter.hasNext()) {
                 FileItem item = iter.next();
