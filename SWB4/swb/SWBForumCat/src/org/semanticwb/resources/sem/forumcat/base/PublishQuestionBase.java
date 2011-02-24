@@ -22,6 +22,25 @@ public abstract class PublishQuestionBase extends org.semanticwb.portal.api.Gene
         super(base);
     }
 
+    /*
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() 
+    {
+        return getSemanticObject().hashCode();
+    }
+
+    /*
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) 
+    {
+        if(obj==null)return false;
+        return hashCode()==obj.hashCode();
+    }
+
 /**
 * Gets the ForumCatID property
 * @return String with the ForumCatID
