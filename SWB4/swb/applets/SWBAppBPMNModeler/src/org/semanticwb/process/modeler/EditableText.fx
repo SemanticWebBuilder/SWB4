@@ -153,6 +153,22 @@ public class EditableText extends CustomNode
             embolden:true
             size:size
         }
+
+        if (autoSizeParent and owner instanceof GraphicalElement) {
+            var o = owner as GraphicalElement;
+            if (textl.boundsInLocal.width + 5 < o.minW) {
+                o.minW = 100;
+                o.w = o.minW;
+            } else {
+                o.w = textl.boundsInLocal.width + 5;
+            }
+            if (textl.boundsInLocal.height + 5 < o.minH) {
+                o.minH = 60;
+                o.h = o.minH;
+            } else {
+                o.h = textl.boundsInLocal.height + 5;
+            }
+        }
     }
 
     public function getSize(): Number {
