@@ -24,7 +24,7 @@
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.portal.SWBFormButton"%>
 <%@page import="org.semanticwb.portal.SWBFormMgr"%>
-
+<!--
 <style type="text/css">
 * {
 	margin: 0px;
@@ -41,7 +41,7 @@ p {margin-bottom: 10px; color: #626262;	font-size: 0.7em;}
 a {text-decoration: none;}
 a:hover {text-decoration: underline;}
 </style>
-
+-->
       <%
         WebPage webpage = paramRequest.getWebPage();
         Resource base = paramRequest.getResourceBase();
@@ -75,10 +75,12 @@ a:hover {text-decoration: underline;}
         <div id="contenido">
         <div class="innerContent">
            <div id="WBForo">
+<%if(!oforum.isOnlyAdminCreateThreads() || isforumAdmin){%>
                <p class="agregarContenido">
                    <%if(user!=null && user.isRegistered()){%><a href="<%=urlthread%>"><%=paramRequest.getLocaleString("publicThread")%></a><%}else
                    {%><%=paramRequest.getLocaleString("signintopost")%><%}%>
                </p>
+<%}%>
             <!-- INICIA ENTRADA -->
             <div class="entradaForo">
               <div class="readNotread_foro">
@@ -86,7 +88,7 @@ a:hover {text-decoration: underline;}
               </div>
               <p class="tituloNota"><%=thread.getTitle()%></p>
               <p class="tituloNoticia"><a href="#"><%=autor%></a></p>
-              <p><%=thread.getBody()%></p>
+              <p><%=SWBUtils.TEXT.replaceAll(thread.getBody(),"\n","<br>")%></p>
               <div class="vistasForo">
                 <p> (<%=thread.getReplyCount()%>) <%=paramRequest.getLocaleString("responses")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/commentsForo.png" alt="<%=paramRequest.getLocaleString("responses")%>" width="14" height="12" /> |  (<%=thread.getViewCount()%>) <%=paramRequest.getLocaleString("visites")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/viewsForo.png" alt="<%=paramRequest.getLocaleString("visites")%>" width="10" height="9" />
                  <%if(isTheAuthor || isforumAdmin){%> |  <%urlthread.setMode("editThread");%>
@@ -422,10 +424,12 @@ a:hover {text-decoration: underline;}
             <div id="contenido">
              <div class="innerContent">
                 <div id="WBForo">
+<%if(!oforum.isOnlyAdminCreateThreads() || isforumAdmin){%>
                     <p class="agregarContenido">
                         <%if(user!=null && user.isRegistered()){%><a href="<%=url%>"><%=paramRequest.getLocaleString("publicThread")%></a><%}else
                         {%><%=paramRequest.getLocaleString("signintopost")%><%}%>
                     </p>
+<%}%>
                     <%
                     autor = "";
                     url.setMode(url.Mode_VIEW);
@@ -475,7 +479,10 @@ a:hover {text-decoration: underline;}
                           </div>
                             <p class="tituloNota"><a href="<%=url%>"><%=thread.getTitle()%></a></p>
                             <p class="tituloNoticia"><a href="#"><%=autor%></a></p>
-
+                            <p class="fechaInterna"><%=SWBUtils.TEXT.getStrDate(thread.getCreated(),user.getLanguage())%></p>
+<%if(oforum.isShowThreadBody()){%>
+                            <p><%=SWBUtils.TEXT.replaceAll(thread.getBody(),"\n","<br>")%></p>
+<%}%>
                             <div class="lastView_foro">
                                 <%
                                 String date=null;
