@@ -1,7 +1,7 @@
 package org.semanticwb.resources.sem.forumcat.base;
 
 
-public abstract class QuestionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Viewable,org.semanticwb.model.Tagable,org.semanticwb.model.Searchable,org.semanticwb.model.Traceable
+public abstract class QuestionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Searchable,org.semanticwb.model.Viewable,org.semanticwb.model.Traceable,org.semanticwb.model.Tagable
 {
     public static final org.semanticwb.platform.SemanticClass forumCat_SWBForumCatResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#SWBForumCatResource");
     public static final org.semanticwb.platform.SemanticProperty forumCat_forumResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#forumResource");
@@ -13,6 +13,10 @@ public abstract class QuestionBase extends org.semanticwb.model.SWBClass impleme
     public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
     public static final org.semanticwb.platform.SemanticProperty forumCat_webpage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#webpage");
     public static final org.semanticwb.platform.SemanticProperty forumCat_questionReferences=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#questionReferences");
+   /**
+   * Almacena las rutas de los archivos adjuntos a la pregunta
+   */
+    public static final org.semanticwb.platform.SemanticProperty forumCat_hasQuestionAttachments=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#hasQuestionAttachments");
     public static final org.semanticwb.platform.SemanticProperty forumCat_queStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#queStatus");
     public static final org.semanticwb.platform.SemanticClass forumCat_Answer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#Answer");
     public static final org.semanticwb.platform.SemanticProperty forumCat_hasAnswerInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#hasAnswerInv");
@@ -452,6 +456,33 @@ public abstract class QuestionBase extends org.semanticwb.model.SWBClass impleme
     public void setQuestionReferences(String value)
     {
         getSemanticObject().setProperty(forumCat_questionReferences, value);
+    }
+
+    public java.util.Iterator<String> listQuestionAttachmentses()
+    {
+        java.util.ArrayList<String> values=new java.util.ArrayList<String>();
+        java.util.Iterator<org.semanticwb.platform.SemanticLiteral> it=getSemanticObject().listLiteralProperties(forumCat_hasQuestionAttachments);
+        while(it.hasNext())
+        {
+                org.semanticwb.platform.SemanticLiteral literal=it.next();
+                values.add(literal.getString());
+        }
+        return values.iterator();
+    }
+
+    public void addQuestionAttachments(String value)
+    {
+        getSemanticObject().addLiteralProperty(forumCat_hasQuestionAttachments, new org.semanticwb.platform.SemanticLiteral(value));
+    }
+
+    public void removeAllQuestionAttachments()
+    {
+        getSemanticObject().removeProperty(forumCat_hasQuestionAttachments);
+    }
+
+    public void removeQuestionAttachments(String value)
+    {
+        getSemanticObject().removeLiteralProperty(forumCat_hasQuestionAttachments,new org.semanticwb.platform.SemanticLiteral(value));
     }
 
 /**
