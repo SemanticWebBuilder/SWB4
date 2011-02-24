@@ -102,7 +102,7 @@ public class Contact extends GenericAdmResource {
      */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        if(paramsRequest.getMode().equalsIgnoreCase("sendEmail")) {
+        if(paramsRequest.getMode().equalsIgnoreCase("send")) {
             doSendEmail(request,response,paramsRequest);
         }else {
             super.processRequest(request, response, paramsRequest);
@@ -423,7 +423,7 @@ public class Contact extends GenericAdmResource {
             out.println("s = s.concat('<div class=\"swb-contact-cmd\" >');");
             SWBResourceURL url = paramRequest.getRenderUrl().setCallMethod(paramRequest.Call_DIRECT).setMode("send");
             //out.println("s = s.concat('<label for=\"contactoEnviar\">"+paramRequest.getLocaleString("send")+"</label>');");
-            out.println("s = s.concat('<input name=\"submit\" id=\"contactoEnviar\" type=\"button\" onclick=\"if(!validateContactFrm(this.form))return false; sendEmail(\\'"+url+"\\'+\\'&name=\\'+dojo.byId(\\'name\\').value+\\'&email=\\'+dojo.byId(\\'email\\').value+\\'&subject=\\'+dojo.byId(\\'subject\\').value+\\'&message=\\'+dojo.byId(\\'message\\').value); removeCoverDiv(\\''+divId+'\\')\" value=\""+paramRequest.getLocaleString("send")+"\" class=\"swb-contact-button\" />');");
+            out.println("s = s.concat('<input name=\"submit\" id=\"contactoEnviar\" type=\"button\" onclick=\"if(!validateContactFrm(this.form))return false; sendEmail(\\'"+url+"\\'+\\'?name=\\'+dojo.byId(\\'name\\').value+\\'&email=\\'+dojo.byId(\\'email\\').value+\\'&subject=\\'+dojo.byId(\\'subject\\').value+\\'&message=\\'+dojo.byId(\\'message\\').value); removeCoverDiv(\\''+divId+'\\')\" value=\""+paramRequest.getLocaleString("send")+"\" class=\"swb-contact-button\" />');");
             //out.println("s = s.concat('<label for=\"contactoRestablecer\">"+paramRequest.getLocaleString("reset")+"</label>');");
             out.println("s = s.concat('<input name=\"reset\" id=\"contactoRestablecer\" type=\"reset\" value=\""+paramRequest.getLocaleString("reset")+"\" class=\"swb-contact-button\" />');");
             //out.println("s = s.concat('<label for=\"contactoCancelar\">"+paramRequest.getLocaleString("cancel")+"</label>');");
