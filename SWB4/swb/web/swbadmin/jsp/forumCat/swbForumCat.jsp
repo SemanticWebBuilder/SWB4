@@ -163,6 +163,11 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                 <%=sbf.toString()%>
                                 <!--%=mgr.renderLabel(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), null)%-->
                                 <!--%=mgr.renderElement(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), mgr.MODE_CREATE)%-->
+                                <li>
+                                    <br>
+                                    <label class="etiqueta"></label>
+                                    <input type="button" class="btn_form" value="Subir archivo">
+                                </li>
                             </li>
                         <%
                         }
@@ -1553,6 +1558,11 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                 <%=sbf.toString()%>
                                 <!--%=mgr.renderLabel(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), null)%-->
                                 <!--%=mgr.renderElement(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), mgr.MODE_CREATE)%-->
+                                <li>
+                                    <br>
+                                    <label class="etiqueta"></label>
+                                    <input type="button" class="btn_form" value="Subir archivo">
+                                </li>
                             </li>
                         <%
                         }%>
