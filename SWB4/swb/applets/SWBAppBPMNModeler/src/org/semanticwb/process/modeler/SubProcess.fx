@@ -149,28 +149,33 @@ public class SubProcess extends Activity
         if (not isTransaction) {
             actions = [
                 MenuItem {
-                    caption: ##"actMultiInstance";
-                    status: bind if (isMultiInstance) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
-                    action: function (e: MouseEvent) {
-                        this.setModifier(TYPE_MULTIPLE, not isMultiInstance);
-                        ModelerUtils.popup.hide();
-                    }
-                },
-                MenuItem {
-                    caption: ##"actLoop";
-                    status: bind if (isLoop) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
-                    action: function (e: MouseEvent) {
-                        this.setModifier(TYPE_LOOP, not isLoop);
-                        ModelerUtils.popup.hide();
-                    }
-                },
-                MenuItem {
-                    caption: ##"actCompensa";
-                    status: bind if (isForCompensation) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
-                    action: function (e: MouseEvent) {
-                        this.setModifier(TYPE_COMPENSATION, not isForCompensation);
-                        ModelerUtils.popup.hide();
-                    }
+                    caption: ##"actBehavior"
+                    items: [
+                        MenuItem {
+                            caption: ##"actMultiInstance";
+                            status: bind if (isMultiInstance) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
+                            action: function (e: MouseEvent) {
+                                this.setModifier(TYPE_MULTIPLE, not isMultiInstance);
+                                ModelerUtils.popup.hide();
+                            }
+                        },
+                        MenuItem {
+                            caption: ##"actLoop";
+                            status: bind if (isLoop) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
+                            action: function (e: MouseEvent) {
+                                this.setModifier(TYPE_LOOP, not isLoop);
+                                ModelerUtils.popup.hide();
+                            }
+                        },
+                        MenuItem {
+                            caption: ##"actCompensa";
+                            status: bind if (isForCompensation) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
+                            action: function (e: MouseEvent) {
+                                this.setModifier(TYPE_COMPENSATION, not isForCompensation);
+                                ModelerUtils.popup.hide();
+                            }
+                        }
+                    ]
                 },
                 MenuItem {isSeparator: true},
                 MenuItem {
