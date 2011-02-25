@@ -753,7 +753,7 @@ public class SWBAFTP extends GenericResource{
      * @return true, if successful
      */
     public static boolean hasPermission(User user, File directory)
-    {
+    {        
         UserGroup su=UserGroup.ClassMgr.getUserGroup("su", SWBContext.getAdminRepository());
         boolean permision=false;
         if(user.getAdminFilter()!=null || (su!=null && user.hasUserGroup(su)))
@@ -778,9 +778,14 @@ public class SWBAFTP extends GenericResource{
                                 {
                                     Element edir=(Element)ldirs.item(i);
                                     String pathPermission=edir.getAttribute("path");
-                                    pathPermission=SWBUtils.getApplicationPath()+pathPermission;
-                                    File filePermission=new File(pathPermission);
-                                    pathPermission=filePermission.getCanonicalPath();
+                                    int pos=pathPermission.indexOf("/");
+                                    if(pos!=-1)
+                                    {
+                                        pathPermission=pathPermission.substring(pos);
+                                    }
+                                    pathPermission=SWBUtils.getApplicationPath()+pathPermission;                                    
+                                    File filePermission=new File(pathPermission);                                    
+                                    pathPermission=filePermission.getCanonicalPath();                                    
                                     String testPath=directory.getCanonicalPath();
                                     if((pathPermission.equals(testPath) || testPath.startsWith(pathPermission)))
                                     {
@@ -809,7 +814,7 @@ public class SWBAFTP extends GenericResource{
      * @return true, if successful
      */
     public static boolean showDirectory(User user, File directory)
-    {
+    {        
         UserGroup su=UserGroup.ClassMgr.getUserGroup("su", SWBContext.getAdminRepository());
         boolean permision=false;
         if(user.getAdminFilter()!=null || (su!=null && user.hasUserGroup(su)))
@@ -834,10 +839,15 @@ public class SWBAFTP extends GenericResource{
                                 {
                                     Element edir=(Element)ldirs.item(i);
                                     String pathPermission=edir.getAttribute("path");
-                                    pathPermission=SWBUtils.getApplicationPath()+pathPermission;
+                                    int pos=pathPermission.indexOf("/");
+                                    if(pos!=-1)
+                                    {
+                                        pathPermission=pathPermission.substring(pos);
+                                    }                                    
+                                    pathPermission=SWBUtils.getApplicationPath()+pathPermission;                                    
                                     File filePermission=new File(pathPermission);
-                                    pathPermission=filePermission.getCanonicalPath().replace('\\', '/')+"/";
-                                    String testPath=directory.getCanonicalPath().replace('\\', '/')+"/";
+                                    pathPermission=filePermission.getCanonicalPath().replace('\\', '/')+"/";                                    
+                                    String testPath=directory.getCanonicalPath().replace('\\', '/')+"/";                                    
                                     if(filePermission.isDirectory() && (pathPermission.startsWith(testPath) || testPath.startsWith(pathPermission)))
                                     {
                                         permision=true;
