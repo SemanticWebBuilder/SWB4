@@ -102,59 +102,94 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
     String baseimg = SWBPortal.getWebWorkPath()+"/models/"+wpage.getWebSiteId()+"/css/images/";
 
     if (action != null && action.equals("add")) {
-        SWBFormMgr mgr = new SWBFormMgr(Question.forumCat_Question, base.getSemanticObject(), SWBFormMgr.MODE_CREATE);
+        SWBFormMgr mgr = new SWBFormMgr(Question.sclass, wpage.getWebSite().getSemanticObject(), null);
         mgr.setLang(user.getLanguage());
-        mgr.setFilterRequired(false);
-        mgr.setType(mgr.TYPE_XHTML);
+        mgr.setSubmitByAjax(false);
+        mgr.setType(mgr.TYPE_DOJO);
+
+        //SWBFormMgr mgr = new SWBFormMgr(Question.forumCat_Question, base.getSemanticObject(), SWBFormMgr.MODE_CREATE);
+        //mgr.setLang(user.getLanguage());
+        //mgr.setFilterRequired(false);
+        //mgr.setType(mgr.TYPE_XHTML);
         actionURL.setAction("addQuestion");
+        mgr.setAction(actionURL.toString());
         SemanticClass semClass = Question.sclass;
         %>
         <div class="formularios">
             <form id="formaCaptura" name="datosRegistro" action="<%=actionURL%>" method="post">
                 <input type="hidden" name="<%=Question.forumCat_questionReferences.getName()%>">
                 <fieldset>
+                    <legend>Compartir pregunta</legend>
                     <%= mgr.getFormHiddens()%>
-                    <label for="<%=Question.forumCat_question.getName()%>">Pregunta:</label>
-                    <!--%=mgr.renderLabel(request, semClass.getProperty(Question.forumCat_question.getName()), mgr.MODE_CREATE)%-->
-                    <textarea name="<%=Question.forumCat_question.getName()%>"></textarea>
-                    <!--%=mgr.renderElement(request, semClass.getProperty(Question.forumCat_question.getName()), mgr.MODE_CREATE)%-->
-                    <label for="<%=Tagable.swb_tags.getName()%>">Palabras clave:</label>
-                    <!--%=mgr.renderLabel(request, semClass.getProperty(Tagable.swb_tags.getName()), mgr.MODE_CREATE)%-->
-                    <input type="text" name="<%=Tagable.swb_tags.getName()%>">
-                    <!--%=mgr.renderElement(request, semClass.getProperty(Tagable.swb_tags.getName()), mgr.MODE_CREATE)%-->
-                    <% if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_selectCategory)) {%>
-                        <label for="<%=Question.forumCat_webpage.getName()%>">Categor&iacute;a:</label>
-                        <!--%=mgr.renderLabel(request, semClass.getProperty(Question.forumCat_webpage.getName()), mgr.MODE_CREATE)%-->
-                        <select class="categoria" name="categoryuri">
-                            <%
-                            String pid = semanticBase.getProperty(SWBForumCatResource.forumCat_idCatPage, paramRequest.getWebPage().getId());
-                            WebPage wpp = paramRequest.getWebPage().getWebSite().getWebPage(pid);
-                            if (wpp != null) {
-                                Iterator<WebPage> childs = SWBComparator.sortByDisplayName(wpp.listChilds(), user.getLanguage());
-                                while (childs.hasNext()) {
-                                    WebPage child = childs.next();
-                                    %><option value="<%=child.getURI()%>"><%=child.getTitle()%></option><%
+                    <ul>
+                        <li>
+                            <label class="etiqueta" for="<%=Question.forumCat_question.getName()%>">Pregunta:</label>
+                            <!--%=mgr.renderLabel(request, semClass.getProperty(Question.forumCat_question.getName()), mgr.MODE_CREATE)%-->
+                            <textarea name="<%=Question.forumCat_question.getName()%>"></textarea>
+                            <!--%=mgr.renderElement(request, semClass.getProperty(Question.forumCat_question.getName()), mgr.MODE_CREATE)%-->
+                        </li>
+                        <li>
+                            <label class="etiqueta" for="<%=Tagable.swb_tags.getName()%>">Palabras clave:</label>
+                            <!--%=mgr.renderLabel(request, semClass.getProperty(Tagable.swb_tags.getName()), mgr.MODE_CREATE)%-->
+                            <input type="text" name="<%=Tagable.swb_tags.getName()%>">
+                            <!--%=mgr.renderElement(request, semClass.getProperty(Tagable.swb_tags.getName()), mgr.MODE_CREATE)%-->
+                        </li>
+                        <% if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_selectCategory)) {%>
+                        <li>
+                            <label class="etiqueta" for="<%=Question.forumCat_webpage.getName()%>">Categor&iacute;a:</label>
+                            <!--%=mgr.renderLabel(request, semClass.getProperty(Question.forumCat_webpage.getName()), mgr.MODE_CREATE)%-->
+                            <select class="categoria" name="categoryuri">
+                                <%
+                                String pid = semanticBase.getProperty(SWBForumCatResource.forumCat_idCatPage, paramRequest.getWebPage().getId());
+                                WebPage wpp = paramRequest.getWebPage().getWebSite().getWebPage(pid);
+                                if (wpp != null) {
+                                    Iterator<WebPage> childs = SWBComparator.sortByDisplayName(wpp.listChilds(), user.getLanguage());
+                                    while (childs.hasNext()) {
+                                        WebPage child = childs.next();
+                                        %><option value="<%=child.getURI()%>"><%=child.getTitle()%></option><%
+                                    }
                                 }
-                            }
-                            %>
-                        </select>
-                    <%}%>
-                    <label>Referencias a Youtube:</label>
-                    <input type="text" name="inputBox">
-                    <ul>
-                        <li><input type="button" class="btn_form" value="Agregar" onclick="addToList(this.form.referenceList, this.form.inputBox);"></li>
-                    </ul>
-                    <select multiple name="referenceList" class="selectmultiple"></select>
-                    <ul>
-                        <li><input type="button" class="btn_form" value="Limpiar" onclick="clearList(this.form.referenceList);"></li>
-                        <li><input type="button" class="btn_form" value="Limpiar seleccionados" onclick="clearSelected(this.form.referenceList);"></li>
+                                %>
+                            </select>
+                        </li>
+                        <%}%>
+                        <%if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptAttachements)) {%>
+                            <li>
+                                <label class="etiqueta">Archivos adjuntos:</label>
+                                <%
+                                StringBuffer sbf = new StringBuffer();
+                                mgr.renderProp(request, sbf, Question.forumCat_hasQuestionAttachments,mgr.getFormElement(Question.forumCat_hasQuestionAttachments));
+                                %>
+                                <%=sbf.toString()%>
+                                <!--%=mgr.renderLabel(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), null)%-->
+                                <!--%=mgr.renderElement(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), mgr.MODE_CREATE)%-->
+                            </li>
+                        <%
+                        }
+                        %>
+                        <li>
+                            <label class="etiqueta">Referencias a Youtube:</label>
+                            <input type="text" name="inputBox">
+                            <li>
+                                <label class="etiqueta"></label>
+                                <input type="button" class="btn_form" value="Agregar" onclick="addToList(this.form.referenceList, this.form.inputBox);">
+                            </li>
+                            <li>
+                                <label class="etiqueta"></label>
+                                <select multiple name="referenceList" class="selectmultiple"></select>
+                            </li>
+                            <li>
+                                <label class="etiqueta"></label>
+                                <input type="button" class="btn_form" value="Limpiar" onclick="clearList(this.form.referenceList);">
+                                <input type="button" class="btn_form" value="Limpiar seleccionados" onclick="clearSelected(this.form.referenceList);">
+                            </li>
+                        </li>
                     </ul>
                     <hr/>
                     <ul class="btns_final">
                         <li>
+                            <label class="etiqueta"></label>
                             <input type="button" class="btn_form" value="Guardar" onclick="setReferences(this.form.referenceList, this.form.<%=Question.forumCat_questionReferences.getName()%>);">
-                        </li>
-                        <li>
                             <!--input type="submit" class="boton" value="Guardar"-->
                             <input type="button" class="btn_form" value="Regresar" onclick="javascript:history.go(-1);">
                         </li>
@@ -694,9 +729,9 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                %><div class="foro_gral"><%
         SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
         Question question = (Question) semObject.createGenericInstance();
-        long views = question.getViews();
-        question.setViews(views + 1);
         if (question.getQueStatus() == SWBForumCatResource.STATUS_ACEPTED) {
+            long views = question.getViews();
+            question.setViews(views + 1);
             int ansVotes = 0;
             int nLike = 0;
             int nUnlike = 0;
@@ -745,15 +780,14 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                     }
                 }
             }
-                if (user.isSigned() || semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptGuessComments)) {
-                    renderURL.setAction("add");
-                    %>
-                    <img width="100%" height="11" alt="separacion" src="<%=baseimg%>separa_foro.png">
-                    <a href="<%=renderURL%>">Publicar un problema</a>
-                    <img width="100%" height="11" alt="separacion" src="<%=baseimg%>separa_foro.png">
-                    <%
-                }
-                if (question.getQueStatus() == SWBForumCatResource.STATUS_ACEPTED) {
+            if (user.isSigned() || semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptGuessComments)) {
+                renderURL.setAction("add");
+                %>
+                <img width="100%" height="11" alt="separacion" src="<%=baseimg%>separa_foro.png">
+                <a href="<%=renderURL%>">Publicar un problema</a>
+                <img width="100%" height="11" alt="separacion" src="<%=baseimg%>separa_foro.png">
+                <%
+            }
                 %>
                     <ul>
                         <li>
@@ -788,7 +822,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                     %><a href="<%=renderURL%>">Editar pregunta</a>&nbsp;<%
                                 }
                             }
-                            if (question.getQuestionReferences() != null) {
+                            if (question.getQuestionReferences() != null && !question.getQuestionReferences().trim().equals("")) {
                                 String prefix = "http://www.youtube.com/watch?v=";
                                 String references[] = question.getQuestionReferences().split(",");
                                 if (references.length > 0) {
@@ -808,6 +842,30 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                     </ul>
                                     <%
                                 }
+                            }
+                            String qfilePath = SWBPortal.getWebWorkPath() + question.getWorkPath() + "/";
+                            String qprefix = Question.forumCat_hasQuestionAttachments.getName()+"_"+question.getId()+"_";
+                            Iterator<String> qfit = question.listQuestionAttachmentses();
+                            if (qfit != null && qfit.hasNext()) {
+                                ArrayList<String> references = new ArrayList<String>();
+                                while (qfit.hasNext()) {
+                                    String ref = qfit.next();
+                                    references.add(ref);
+                                }
+
+                                %>
+                                <ul>
+                                    <li>Adjuntos</li>
+                                    <ul>
+                                        <%
+                                        for (int idx = 0; idx < references.size(); idx++) {
+                                            String fileName = references.get(idx).replaceAll(qprefix, "");
+                                            %><li><a href="<%=qfilePath + references.get(idx)%>" target="_blank"><%=fileName%></a></li><%
+                                        }
+                                        %>
+                                    </ul>
+                                </ul>
+                                <%
                             }
                             %>
                         </li>
@@ -933,7 +991,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                     </div>
                                 </li>
                                 <%
-                                if (favAnswer.getReferences() != null) {
+                                if (favAnswer.getReferences() != null && !favAnswer.getReferences().trim().equals("")) {
                                     String prefix = "http://www.youtube.com/watch?v=";
                                     String references[] = favAnswer.getReferences().split(",");
                                     if (references.length > 0) {
@@ -953,6 +1011,30 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                         </ul>
                                         <%
                                     }
+                                }
+                                String filePath = SWBPortal.getWebWorkPath() + favAnswer.getWorkPath() + "/";
+                                String prefix = favAnswer.forumCat_hasAttachements.getName()+"_"+favAnswer.getId()+"_";
+                                Iterator<String> fit = favAnswer.listAttachementses();
+                                if (fit != null && fit.hasNext()) {
+                                    ArrayList<String> references = new ArrayList<String>();
+                                    while (fit.hasNext()) {
+                                        String ref = fit.next();
+                                        references.add(ref);
+                                    }
+
+                                    %>
+                                    <ul>
+                                        <li>Adjuntos</li>
+                                        <ul>
+                                            <%
+                                            for (int idx = 0; idx < references.size(); idx++) {
+                                                String fileName = references.get(idx).replaceAll(prefix, "");
+                                                %><li><a href="<%=filePath + references.get(idx)%>" target="_blank"><%=fileName%></a></li><%
+                                            }
+                                            %>
+                                        </ul>
+                                    </ul>
+                                    <%
                                 }
                             }
                             if (comAnswer != null) {
@@ -1077,7 +1159,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                 </li>
                                 <div>
                                 <%
-                                if (comAnswer.getReferences() != null) {
+                                if (comAnswer.getReferences() != null && !comAnswer.getReferences().trim().equals("")) {
                                     String prefix = "http://www.youtube.com/watch?v=";
                                     String references[] = comAnswer.getReferences().split(",");
                                     if (references.length > 0) {
@@ -1098,6 +1180,30 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                         <%
                                     }
                                 }
+                                String filePath = SWBPortal.getWebWorkPath() + comAnswer.getWorkPath() + "/";
+                                String prefix = comAnswer.forumCat_hasAttachements.getName()+"_"+comAnswer.getId()+"_";
+                                Iterator<String> fit = comAnswer.listAttachementses();
+                                if (fit != null && fit.hasNext()) {
+                                    ArrayList<String> references = new ArrayList<String>();
+                                    while (fit.hasNext()) {
+                                        String ref = fit.next();
+                                        references.add(ref);
+                                    }
+
+                                    %>
+                                    <ul>
+                                        <li>Adjuntos</li>
+                                        <ul>
+                                            <%
+                                            for (int idx = 0; idx < references.size(); idx++) {
+                                                String fileName = references.get(idx).replaceAll(prefix, "");
+                                                %><li><a href="<%=filePath + references.get(idx)%>" target="_blank"><%=fileName%></a></li><%
+                                            }
+                                            %>
+                                        </ul>
+                                    </ul>
+                                    <%
+                                }
                                 %></div><%
                             }
 
@@ -1116,6 +1222,11 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                 while (answers.hasNext()) {
                                     Answer answer = answers.next();
                                     if (answer.getAnsStatus() == SWBForumCatResource.STATUS_ACEPTED) {
+                                        String atach = "";
+                                        Iterator<String> itt = answer.listAttachementses();
+                                        while (itt.hasNext()) {
+                                            atach += itt.next();
+                                        }
                                         photo = baseimg + "profilePlaceholder.jpg";
                                         String starimg = baseimg;
                                         String alt="";
@@ -1244,31 +1355,55 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                         </div>
                                     </li>
                                 <%
-                                if (answer.getReferences() != null) {
+                                if (answer.getReferences() != null && !answer.getReferences().trim().equals("")) {
                                     String prefix = "http://www.youtube.com/watch?v=";
-                                String references[] = answer.getReferences().split(",");
-                                if (references.length > 0) {
+                                    String references[] = answer.getReferences().split(",");
+                                    if (references.length > 0) {
+                                        %>
+                                        <ul>
+                                            <li>Referencias</li>
+                                            <ul>
+                                                <%
+                                                for (int idx = 0; idx < references.length; idx++) {
+                                                    if (references[idx].length() > 10 && references[idx].contains(prefix)) {
+                                                        String ref = getVideoThumbnail(references[idx], wpage);
+                                                        %><li><a href="<%=references[idx]%>" target="_blank"><img src="<%=ref%>"></a></li><%
+                                                    }
+                                                }
+                                                %>
+                                            </ul>
+                                        </ul>
+                                        <%
+                                    }
+                                }
+                                String filePath = SWBPortal.getWebWorkPath() + answer.getWorkPath() + "/";
+                                String prefix = answer.forumCat_hasAttachements.getName()+"_"+answer.getId()+"_";
+                                Iterator<String> fit = answer.listAttachementses();
+                                if (fit != null && fit.hasNext()) {
+                                    ArrayList<String> references = new ArrayList<String>();
+                                    while (fit.hasNext()) {
+                                        String ref = fit.next();
+                                        references.add(ref);
+                                    }
+
                                     %>
                                     <ul>
-                                        <li>Referencias</li>
+                                        <li>Adjuntos</li>
                                         <ul>
                                             <%
-                                            for (int idx = 0; idx < references.length; idx++) {
-                                                if (references[idx].length() > 10 && references[idx].contains(prefix)) {
-                                                    String ref = getVideoThumbnail(references[idx], wpage);
-                                                    %><li><a href="<%=references[idx]%>" target="_blank"><img src="<%=ref%>"></a></li><%
-                                                }
+                                            for (int idx = 0; idx < references.size(); idx++) {
+                                                String fileName = references.get(idx).replaceAll(prefix, "");
+                                                %><li><a href="<%=filePath + references.get(idx)%>" target="_blank"><%=fileName%></a></li><%
                                             }
                                             %>
                                         </ul>
                                     </ul>
                                     <%
                                 }
-                                }
-                                    }
-                                }
                             }
-                            renderURL = paramRequest.getRenderUrl().setParameter("page", request.getParameter("page"));
+                        }
+                    }
+                    renderURL = paramRequest.getRenderUrl().setParameter("page", request.getParameter("page"));
                             %>
                         </ul>
                         <li>
@@ -1277,7 +1412,6 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                         <a href="<%=renderURL%>">Regresar</a>
                     </ul>
                     <%
-                }
         }
         %></div><%
     } else if (action != null && action.equals("editQuestion")) {
@@ -1292,95 +1426,99 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
         mgr.addHiddenParameter("uri", semObject.getURI());
         SemanticClass semClass = Question.sclass;
         %>
-        <div class="foro_gral">
-            <h1>Editar pregunta</h1>
+        <div class="formularios">
             <form id="<%=mgr.getFormName()%>" name="datosRegistro" action="<%=actionURL%>" method="post">
                 <input type="hidden" name="<%=Question.forumCat_questionReferences.getName()%>">
                 <fieldset>
-                <%= mgr.getFormHiddens()%>
-                <div class="sfcLinea">
-                    <div class="sfcEtiqueta">
-                        <%=mgr.renderLabel(request, semClass.getProperty(Question.forumCat_question.getName()), mgr.MODE_EDIT)%>:
-                    </div>
-                    <div class="sfcCampo">
-                        <%=mgr.renderElement(request, semClass.getProperty(Question.forumCat_question.getName()), mgr.MODE_EDIT)%>
-                    </div>
-                </div>
-                <div class="sfcLinea">
-                    <div class="sfcEtiqueta">
-                        <%=mgr.renderLabel(request, semClass.getProperty(Tagable.swb_tags.getName()), mgr.MODE_EDIT)%>:
-                    </div>
-                    <div class="sfcCampo">
-                        <%=mgr.renderElement(request, semClass.getProperty(Tagable.swb_tags.getName()), mgr.MODE_EDIT)%>
-                    </div>
-                </div>
-                <% if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_selectCategory)) {%>
-                    <div class="sfcEtiqueta">
-                        <%=mgr.renderLabel(request, semClass.getProperty(Question.forumCat_webpage.getName()), mgr.MODE_EDIT)%>:
-                    </div>
-                    <div class="sfcLinea">
-                        <select name="categoryuri">
-                            <%
-                            String pid = semanticBase.getProperty(SWBForumCatResource.forumCat_idCatPage, paramRequest.getWebPage().getId());
-                            WebPage wpp = paramRequest.getWebPage().getWebSite().getWebPage(pid);
-                            if (wpp != null) {
-                                Iterator<WebPage> childs = SWBComparator.sortByDisplayName(wpp.listChilds(), user.getLanguage());
-                                while (childs.hasNext()) {
-                                    WebPage child = childs.next();
-                                    String selected = "";
-                                    if(child.getURI().equals(q.getWebpage().getURI())) {
-                                        selected = "selected";
-                                    }
-                                    %><option <%=selected%> value="<%=child.getURI()%>"><%=child.getTitle()%></option><%
-                                }
-                            }
-                            %>
-                        </select>
-                    </div>
-                    <%}%>
-                <fieldset>
-                    <div class="sfcLinea">
-                        <div class="sfcEtiqueta">
-                            <label>Referencias a Youtube</label>:<br>
-                        </div>
-                        <div class="sfcCampo">
-                            <input type="text" name="inputBox">
-                            <input type="button" value="Agregar" onclick="addToList(this.form.referenceList, this.form.inputBox);"><br>
-                            <select multiple name="referenceList">
-                                <%
-                                String refs = "";
-                                if (q.getQuestionReferences() != null) {
-                                    refs = q.getQuestionReferences().trim();
-                                    if (!refs.equals("")) {
-                                        String arefs[] = refs.split(",");
-                                        for (int idx = 0; idx < arefs.length; idx++) {
-                                            %><option value="<%=arefs[idx]%>"><%=arefs[idx]%></option><%
+                    <legend>Editar pregunta</legend>
+                    <%= mgr.getFormHiddens()%>
+                    <ul>
+                        <li>
+                            <label class="etiqueta" for="<%=Question.forumCat_question.getName()%>">Pregunta:</label>
+                            <!--%=mgr.renderLabel(request, semClass.getProperty(Question.forumCat_question.getName()), mgr.MODE_EDIT)%-->
+                            <textarea name="<%=Question.forumCat_question.getName()%>"><%=q.getQuestion()%></textarea>
+                            <!--%=mgr.renderElement(request, semClass.getProperty(Question.forumCat_question.getName()), mgr.MODE_EDIT)%-->
+                        </li>
+                        <li>
+                            <label class="etiqueta" for="<%=Tagable.swb_tags.getName()%>">Palabras clave:</label>
+                            <!--%=mgr.renderLabel(request, semClass.getProperty(Tagable.swb_tags.getName()), mgr.MODE_EDIT)%-->
+                            <input type="text" name="<%=Tagable.swb_tags.getName()%>" value="<%=q.getTags()%>">
+                            <!--%=mgr.renderElement(request, semClass.getProperty(Tagable.swb_tags.getName()), mgr.MODE_EDIT)%-->
+                        </li>
+                        <% if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_selectCategory)) {%>
+                            <li>
+                                <label class="etiqueta" for="<%=Question.forumCat_webpage.getName()%>">Categor&iacute;a:</label>
+                                <!--%=mgr.renderLabel(request, semClass.getProperty(Question.forumCat_webpage.getName()), mgr.MODE_EDIT)%-->
+                                <select class="categoria" name="categoryuri">
+                                    <%
+                                    String pid = semanticBase.getProperty(SWBForumCatResource.forumCat_idCatPage, paramRequest.getWebPage().getId());
+                                    WebPage wpp = paramRequest.getWebPage().getWebSite().getWebPage(pid);
+                                    if (wpp != null) {
+                                        Iterator<WebPage> childs = SWBComparator.sortByDisplayName(wpp.listChilds(), user.getLanguage());
+                                        while (childs.hasNext()) {
+                                            WebPage child = childs.next();
+                                            String selected = "";
+                                            if(child.getURI().equals(q.getWebpage().getURI())) {
+                                                selected = "selected";
+                                            }
+                                            %><option <%=selected%> value="<%=child.getURI()%>"><%=child.getTitle()%></option><%
                                         }
                                     }
-                                }
-                                %>
-                            </select>
-                            <input type="button" value="Limpiar" onclick="clearList(this.form.referenceList);">
-                            <input type="button" value="Limpiar seleccionados" onclick="clearSelected(this.form.referenceList);"><br>
-                        </div>
-                    </div>
-                </fieldset>
-                <div class="sfcLinea">
-                    <input type="button" class="boton" value="Guardar" onclick="setReferences(this.form.referenceList, this.form.<%=Question.forumCat_questionReferences.getName()%>);">
-                    <!--input type="submit" class="boton" value="Guardar"-->
-                    <input type="button" class="boton" value="Regresar" onclick="javascript:history.go(-1);">
-                </div>
+                                    %>
+                                </select>
+                            </li>
+                        <%}%>
+                        <li>
+                            <label class="etiqueta">Referencias a Youtube:</label>
+                            <input type="text" name="inputBox">
+                            <li>
+                                <label class="etiqueta"></label>
+                                <input class="btn_form" type="button" value="Agregar" onclick="addToList(this.form.referenceList, this.form.inputBox);">
+                            </li>
+                            <li>
+                                <label class="etiqueta"></label>
+                                <select multiple class="selectmultiple" name="referenceList">
+                                    <%
+                                    String refs = "";
+                                    if (q.getQuestionReferences() != null) {
+                                        refs = q.getQuestionReferences().trim();
+                                        if (!refs.equals("")) {
+                                            String arefs[] = refs.split(",");
+                                            for (int idx = 0; idx < arefs.length; idx++) {
+                                                %><option value="<%=arefs[idx]%>"><%=arefs[idx]%></option><%
+                                            }
+                                        }
+                                    }
+                                    %>
+                                </select>
+                            </li>
+                            <li>
+                                <label class="etiqueta"></label>
+                                <input class="btn_form" type="button" value="Limpiar" onclick="clearList(this.form.referenceList);">
+                                <input class="btn_form" type="button" value="Limpiar seleccionados" onclick="clearSelected(this.form.referenceList);">
+                            </li>
+                        </li>
+                    <ul>
+                    <hr>
+                    <ul class="btns_final">
+                        <li>
+                            <label class="etiqueta"></label>
+                            <input class="btn_form" type="button" value="Guardar" onclick="setReferences(this.form.referenceList, this.form.<%=Question.forumCat_questionReferences.getName()%>);">
+                            <!--input type="submit" class="boton" value="Guardar"-->
+                            <input type="button" class="btn_form" value="Regresar" onclick="javascript:history.go(-1);">
+                        </li>
+                    </ul>
                 </fieldset>
             </form>
         </div>
         <%
     } else if (action != null && action.equals("answerQuestion")) {
         SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
-        SWBFormMgr mgr = new SWBFormMgr(Answer.sclass, semObject, SWBFormMgr.MODE_CREATE);
+        SWBFormMgr mgr = new SWBFormMgr(Answer.sclass, wpage.getWebSite().getSemanticObject(), null);
         mgr.setLang(user.getLanguage());
-        mgr.setFilterRequired(false);
+        mgr.setSubmitByAjax(false);
         Question q = (Question) semObject.createGenericInstance();
-        //mgr.setType(mgr.TYPE_DOJO);
+        mgr.setType(mgr.TYPE_DOJO);
         actionURL.setAction("answerQuestion");
         actionURL.setParameter("uri", semObject.getURI());
         actionURL.setParameter("org", request.getParameter("org"));
@@ -1390,39 +1528,62 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
         SemanticClass semClass = Answer.sclass;
         %>
         <div class="formularios">
-            <h1>Comentar la herramienta<b><%=q.getQuestion()%></b></h1>
             <form id="<%=mgr.getFormName()%>" name="datosRegistro" class="swbform" action="<%=actionURL%>" method="post" >
                 <input type="hidden" name="<%=Answer.forumCat_references.getName()%>">
                 <fieldset>
+                    <legend>Responder pregunta</legend>
                     <%= mgr.getFormHiddens()%>
-                    <label for="<%=semClass.getProperty(Answer.forumCat_answer.getName())%>">Respuesta:</label>
-                    <textarea cols="42" rows="6" name="<%=Answer.forumCat_answer.getName()%>"></textarea>
-                    <!--%=mgr.renderElement(request, semClass.getProperty(Answer.forumCat_answer.getName()), mgr.MODE_CREATE)%-->
-                    <%if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptAttachements)) {%>
-                        <%=mgr.renderLabel(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), mgr.MODE_CREATE)%>:
-                        <%=mgr.renderElement(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), mgr.MODE_CREATE)%>
-                    <%}%>
-                    <label>Referencias a Youtube:</label>
-                    <input type="text" name="inputBox">
                     <ul>
-                        <li><input type="button" class="btn_form" value="Agregar" onclick="addToList(this.form.referenceList, this.form.inputBox);"></li>
-                    </ul>
-                    <select multiple name="referenceList" class="selectmultiple"></select>
-                    <ul>
-                        <li><input type="button" class="btn_form" value="Limpiar" onclick="clearList(this.form.referenceList);"></li>
-                        <li><input type="button" class="btn_form" value="Limpiar seleccionados" onclick="clearSelected(this.form.referenceList);"></li>
+                        <li>
+                            <label class="etiqueta" for="<%=Question.forumCat_question.getName()%>">Pregunta:</label>
+                            <textarea disabled="disabled"><%=q.getQuestion()%></textarea>
+                            <!--%=mgr.renderElement(request, semClass.getProperty(Answer.forumCat_answer.getName()), mgr.MODE_CREATE)%-->
+                        </li>
+                        <li>
+                            <label class="etiqueta" for="<%=semClass.getProperty(Answer.forumCat_answer.getName())%>">Respuesta:</label>
+                            <textarea cols="42" rows="6" name="<%=Answer.forumCat_answer.getName()%>"></textarea>
+                            <!--%=mgr.renderElement(request, semClass.getProperty(Answer.forumCat_answer.getName()), mgr.MODE_CREATE)%-->
+                        </li>
+                        <%if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptAttachements)) {%>
+                            <li>
+                                <label class="etiqueta">Archivos adjuntos:</label>
+                            <%
+                                StringBuffer sbf = new StringBuffer();
+                                mgr.renderProp(request, sbf, Answer.forumCat_hasAttachements,mgr.getFormElement(Answer.forumCat_hasAttachements));%>
+                                <%=sbf.toString()%>
+                                <!--%=mgr.renderLabel(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), null)%-->
+                                <!--%=mgr.renderElement(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), mgr.MODE_CREATE)%-->
+                            </li>
+                        <%
+                        }%>
+                        <li>
+                            <label class="etiqueta">Referencias a Youtube:</label>
+                            <input type="text" name="inputBox">
+                            <li>
+                                <label class="etiqueta"></label>
+                                <input type="button" class="btn_form" value="Agregar" onclick="addToList(this.form.referenceList, this.form.inputBox);">
+                            </li>
+                            <li>
+                                <label class="etiqueta"></label>
+                                <select multiple name="referenceList" class="selectmultiple"></select>
+                            </li>
+                            <li>
+                                <label class="etiqueta"></label>
+                                <input type="button" class="btn_form" value="Limpiar" onclick="clearList(this.form.referenceList);">
+                                <input type="button" class="btn_form" value="Limpiar seleccionados" onclick="clearSelected(this.form.referenceList);">
+                            </li>
+                        </li>
                     </ul>
                     <hr/>
                     <ul class="btns_final">
                         <li>
+                            <label class="etiqueta"></label>
                             <input type="button" class="btn_form" value="Guardar" onclick="setReferences(this.form.referenceList, this.form.<%=Answer.forumCat_references.getName()%>);">
-                        </li>
-                        <li>
                             <!--input type="submit" class="boton" value="Guardar"-->
                             <input type="button" class="btn_form" value="Regresar" onclick="javascript:history.go(-1);">
+                            <!--input type="submit" class="boton" value="Guardar"-->
                         </li>
                     </ul>
-                    <!--input type="submit" class="boton" value="Guardar"-->
                 </fieldset>
             </form>
         </div>
