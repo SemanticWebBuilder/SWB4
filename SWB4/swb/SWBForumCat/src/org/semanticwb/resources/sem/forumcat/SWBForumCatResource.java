@@ -71,7 +71,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 response.setRenderParameter("page", request.getParameter("page"));
             }
             if (action.equals("addQuestion")) {
-                SWBFormMgr mgr = new SWBFormMgr(Question.forumCat_Question, getResourceBase().getSemanticObject(), SWBFormMgr.MODE_CREATE);
+                SWBFormMgr mgr = new SWBFormMgr(Question.forumCat_Question, getResourceBase().getSemanticObject(), SWBFormMgr.MODE_EDIT);
                 try {
                     SemanticObject semObject = mgr.processForm(request);
                     Question question = (Question) semObject.createGenericInstance();
