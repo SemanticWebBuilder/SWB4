@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import org.semanticwb.process.modeler.AdhocSubProcess;
 import org.semanticwb.process.modeler.MultipleStartEvent;
 import javafx.scene.input.MouseEvent;
+import org.semanticwb.process.modeler.MessageStartEvent;
 
 /**
  * @author javier.solis
@@ -34,6 +35,198 @@ public class StartEvent extends CatchEvent
                     isInterrupting = not isInterrupting;
                     ModelerUtils.popup.hide();
                 }
+            },
+            MenuItem {
+                caption: ##"actType"
+                items: [
+                    MenuItem {
+                        caption: ##"actMessage"
+                        //Redefinir condición para evitar cambios en subprocesos
+                        status: bind if (this.container != null or this instanceof MessageStartEvent) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
+                            var _title = title;
+                            //crear nuevo elemento
+                            var sp = MessageStartEvent {
+                                modeler: modeler
+                                title: _title
+                                uri:"new:startevent:{this.modeler.toolBar.counter++}"
+                            }
+                            //pasar las entradas al nuevo elemento
+                            for(ele in getInputConnectionObjects()) {
+                                ele.end = sp;
+                            }
+
+                            for (ele in getOutputConnectionObjects()) {
+                                ele.ini = sp;
+                            }
+
+                            sp.x = x;
+                            sp.y = y;
+                            sp.container = container;
+                            sp.w = w;
+                            sp.h = h;
+                            sp.setGraphParent(getGraphParent());
+                            modeler.add(sp);
+                            remove(true);
+                        }
+                    },
+                    MenuItem {
+                        caption: ##"actTimer"
+                        status: bind if (this.container != null or this instanceof MessageStartEvent) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
+                            var _title = title;
+                            //crear nuevo elemento
+                            var sp = TimerStartEvent {
+                                modeler: modeler
+                                title: _title
+                                uri:"new:startevent:{this.modeler.toolBar.counter++}"
+                            }
+                            //pasar las entradas al nuevo elemento
+                            for(ele in getInputConnectionObjects()) {
+                                ele.end = sp;
+                            }
+
+                            for (ele in getOutputConnectionObjects()) {
+                                ele.ini = sp;
+                            }
+
+                            sp.x = x;
+                            sp.y = y;
+                            sp.container = container;
+                            sp.w = w;
+                            sp.h = h;
+                            sp.setGraphParent(getGraphParent());
+                            modeler.add(sp);
+                            remove(true);
+                        }
+                    },
+                    MenuItem {
+                        caption: ##"actRule"
+                        status: bind if (this.container != null or this instanceof MessageStartEvent) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
+                            var _title = title;
+                            //crear nuevo elemento
+                            var sp = RuleStartEvent {
+                                modeler: modeler
+                                title: _title
+                                uri:"new:startevent:{this.modeler.toolBar.counter++}"
+                            }
+                            //pasar las entradas al nuevo elemento
+                            for(ele in getInputConnectionObjects()) {
+                                ele.end = sp;
+                            }
+
+                            for (ele in getOutputConnectionObjects()) {
+                                ele.ini = sp;
+                            }
+
+                            sp.x = x;
+                            sp.y = y;
+                            sp.container = container;
+                            sp.w = w;
+                            sp.h = h;
+                            sp.setGraphParent(getGraphParent());
+                            modeler.add(sp);
+                            remove(true);
+                        }
+                    },
+                    MenuItem {
+                        caption: ##"actSignal"
+                        status: bind if (this.container != null or this instanceof MessageStartEvent) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
+                            var _title = title;
+                            //crear nuevo elemento
+                            var sp = SignalStartEvent {
+                                modeler: modeler
+                                title: _title
+                                uri:"new:startevent:{this.modeler.toolBar.counter++}"
+                            }
+                            //pasar las entradas al nuevo elemento
+                            for(ele in getInputConnectionObjects()) {
+                                ele.end = sp;
+                            }
+
+                            for (ele in getOutputConnectionObjects()) {
+                                ele.ini = sp;
+                            }
+
+                            sp.x = x;
+                            sp.y = y;
+                            sp.container = container;
+                            sp.w = w;
+                            sp.h = h;
+                            sp.setGraphParent(getGraphParent());
+                            modeler.add(sp);
+                            remove(true);
+                        }
+                    },
+                    MenuItem {
+                        caption: ##"actMultiple"
+                        status: bind if (this.container != null or this instanceof MessageStartEvent) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
+                            var _title = title;
+                            //crear nuevo elemento
+                            var sp = MultipleStartEvent {
+                                modeler: modeler
+                                title: _title
+                                uri:"new:startevent:{this.modeler.toolBar.counter++}"
+                            }
+                            //pasar las entradas al nuevo elemento
+                            for(ele in getInputConnectionObjects()) {
+                                ele.end = sp;
+                            }
+
+                            for (ele in getOutputConnectionObjects()) {
+                                ele.ini = sp;
+                            }
+
+                            sp.x = x;
+                            sp.y = y;
+                            sp.container = container;
+                            sp.w = w;
+                            sp.h = h;
+                            sp.setGraphParent(getGraphParent());
+                            modeler.add(sp);
+                            remove(true);
+                        }
+                    },
+                    MenuItem {
+                        caption: ##"actParallel"
+                        status: bind if (this.container != null or this instanceof MessageStartEvent) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
+                            var _title = title;
+                            //crear nuevo elemento
+                            var sp = ParallelStartEvent {
+                                modeler: modeler
+                                title: _title
+                                uri:"new:startevent:{this.modeler.toolBar.counter++}"
+                            }
+                            //pasar las entradas al nuevo elemento
+                            for(ele in getInputConnectionObjects()) {
+                                ele.end = sp;
+                            }
+
+                            for (ele in getOutputConnectionObjects()) {
+                                ele.ini = sp;
+                            }
+
+                            sp.x = x;
+                            sp.y = y;
+                            sp.container = container;
+                            sp.w = w;
+                            sp.h = h;
+                            sp.setGraphParent(getGraphParent());
+                            modeler.add(sp);
+                            remove(true);
+                        }
+                    },
+                ]
             },
             MenuItem {isSeparator: true},
             MenuItem {
