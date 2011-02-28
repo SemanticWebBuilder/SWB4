@@ -1,1 +1,6 @@
 "actCopy" = "Copiar"
+"actType" = "Tipo"
+"actManual" = "Manual"
+"actRule" = "Regla"
+"actScript" = "Script"
+"actUser" = "Usuario"
