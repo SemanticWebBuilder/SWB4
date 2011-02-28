@@ -10,6 +10,10 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.input.MouseEvent;
+import org.semanticwb.process.modeler.CallManualTask;
+import org.semanticwb.process.modeler.CallBusinessRuleTask;
+import org.semanticwb.process.modeler.CallScriptTask;
+import org.semanticwb.process.modeler.CallUserTask;
 
 /**
  * @author Hasdai Pacheco {haxdai@gmail.com}
@@ -61,6 +65,136 @@ public class CallTask extends CallActivity {
         }
 
         var actions: MenuItem[] = [
+            MenuItem {
+                caption: ##"actType"
+                items: [
+                    MenuItem {
+                        caption: ##"actManual"
+                        status: bind if (this instanceof CallManualTask) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
+                            var _title = title;
+                            //crear nuevo elemento
+                            var sp = CallManualTask {
+                                modeler: modeler
+                                title: _title
+                                uri:"new:callmanualtask:{this.modeler.toolBar.counter++}"
+                            }
+                            //pasar las entradas al nuevo elemento
+                            for(ele in getInputConnectionObjects()) {
+                                ele.end = sp;
+                            }
+
+                            for (ele in getOutputConnectionObjects()) {
+                                ele.ini = sp;
+                            }
+
+                            sp.x = x;
+                            sp.y = y;
+                            sp.container = container;
+                            sp.w = w;
+                            sp.h = h;
+                            sp.setGraphParent(getGraphParent());
+                            modeler.add(sp);
+                            remove(true);
+                        }
+                    },
+                    MenuItem {
+                        caption: ##"actRule"
+                        status: bind if (this instanceof CallBusinessRuleTask) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
+                            var _title = title;
+                            //crear nuevo elemento
+                            var sp = CallBusinessRuleTask {
+                                modeler: modeler
+                                title: _title
+                                uri:"new:callbusinessruletask:{this.modeler.toolBar.counter++}"
+                            }
+                            //pasar las entradas al nuevo elemento
+                            for(ele in getInputConnectionObjects()) {
+                                ele.end = sp;
+                            }
+
+                            for (ele in getOutputConnectionObjects()) {
+                                ele.ini = sp;
+                            }
+
+                            sp.x = x;
+                            sp.y = y;
+                            sp.container = container;
+                            sp.w = w;
+                            sp.h = h;
+                            sp.setGraphParent(getGraphParent());
+                            modeler.add(sp);
+                            remove(true);
+                        }
+                    },
+                    MenuItem {
+                        caption: ##"actScript"
+                        status: bind if (this instanceof CallScriptTask) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
+                            var _title = title;
+                            //crear nuevo elemento
+                            var sp = CallScriptTask {
+                                modeler: modeler
+                                title: _title
+                                uri:"new:callscripttask:{this.modeler.toolBar.counter++}"
+                            }
+                            //pasar las entradas al nuevo elemento
+                            for(ele in getInputConnectionObjects()) {
+                                ele.end = sp;
+                            }
+
+                            for (ele in getOutputConnectionObjects()) {
+                                ele.ini = sp;
+                            }
+
+                            sp.x = x;
+                            sp.y = y;
+                            sp.container = container;
+                            sp.w = w;
+                            sp.h = h;
+                            sp.setGraphParent(getGraphParent());
+                            modeler.add(sp);
+                            remove(true);
+                        }
+                    },
+                    MenuItem {
+                        caption: ##"actUser"
+                        status: bind if (this instanceof CallUserTask) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
+                            var _title = title;
+                            //crear nuevo elemento
+                            var sp = CallUserTask {
+                                modeler: modeler
+                                title: _title
+                                uri:"new:callusertask:{this.modeler.toolBar.counter++}"
+                            }
+                            //pasar las entradas al nuevo elemento
+                            for(ele in getInputConnectionObjects()) {
+                                ele.end = sp;
+                            }
+
+                            for (ele in getOutputConnectionObjects()) {
+                                ele.ini = sp;
+                            }
+
+                            sp.x = x;
+                            sp.y = y;
+                            sp.container = container;
+                            sp.w = w;
+                            sp.h = h;
+                            sp.setGraphParent(getGraphParent());
+                            modeler.add(sp);
+                            remove(true);
+                        }
+                    },
+                ]
+            },
+            MenuItem {isSeparator: true},
             MenuItem {
                 caption: ##"actCopy"
                 action: function(e: MouseEvent) {
