@@ -14,12 +14,14 @@
     <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
   </owl:Ontology>
   <owl:Class rdf:ID="QuestionVote">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="AnswerVote">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
@@ -862,6 +864,14 @@
     <swbxf:imgThumbnail rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swbxf:imgThumbnail>
   </swb:DojoImageUpload>
+  <swbxf:DisplayProperty rdf:ID="dp_showAnswerAlerts">
+    <rdfs:label xml:lang="es">Mostrar votos a respuestas</rdfs:label>
+    <rdfs:label xml:lang="en">Show answer votes</rdfs:label>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_showNewQuestions">
+    <rdfs:label xml:lang="es">Mostrar nuevas preguntas</rdfs:label>
+    <rdfs:label xml:lang="en">Show new questions</rdfs:label>
+  </swbxf:DisplayProperty>
   <swbxf:DisplayProperty rdf:ID="dp_attachements">
     <rdfs:label xml:lang="es">Adjuntos</rdfs:label>
     <rdfs:label xml:lang="en">Attachments</rdfs:label>
@@ -876,10 +886,18 @@
       </swb:DojoFileUpload>
     </swbxf:formElement>
   </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_showNewAnswers">
+    <rdfs:label xml:lang="es">Mostrar respuestas nuevas</rdfs:label>
+    <rdfs:label xml:lang="en">Show new answers</rdfs:label>
+  </swbxf:DisplayProperty>
   <rdf:Description rdf:about="http://www.semanticwebbuilder.org/swb4/ontology#fe_DojoImageUpload">
     <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
     >5000000</swbxf:fileMaxSize>
   </rdf:Description>
+  <swbxf:DisplayProperty rdf:ID="dp_showQuestionVotes">
+    <rdfs:label xml:lang="es">Mostrar votos a preguntas</rdfs:label>
+    <rdfs:label xml:lang="en">Show question votes</rdfs:label>
+  </swbxf:DisplayProperty>
   <swb:FlashImageUpload rdf:ID="answerAttach">
     <swbxf:imgMaxWidth rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >500</swbxf:imgMaxWidth>
@@ -890,6 +908,10 @@
     <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >jpg file:*.jpg|jpeg file:*.jpeg|png file:*.png</swbxf:fileFilter>
   </swb:FlashImageUpload>
+  <swbxf:DisplayProperty rdf:ID="dp_maxAlerts">
+    <rdfs:label xml:lang="es">Número de alertas</rdfs:label>
+    <rdfs:label xml:lang="en">Number of alerts</rdfs:label>
+  </swbxf:DisplayProperty>
   <swbxf:DisplayProperty rdf:ID="dp_pointsbestcomment">
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >40</swb:index>
