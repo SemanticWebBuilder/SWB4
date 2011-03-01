@@ -11,6 +11,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.Group;
 import javafx.scene.shape.Polyline;
 import javafx.scene.input.MouseEvent;
+import org.semanticwb.process.modeler.CollectionArtifact;
+import org.semanticwb.process.modeler.InputArtifact;
+import org.semanticwb.process.modeler.OutputArtifact;
+import org.semanticwb.process.modeler.DataStoreArtifact;
 
 public def TYPE_COLLECTION="datacollection";
 public def TYPE_INPUT="datainput";
@@ -70,6 +74,129 @@ public class Artifact extends GraphicalElement
         };
 
         var actions: MenuItem[] = [
+            MenuItem {
+                caption: ##"actType"
+                items: [
+                    MenuItem {
+                        caption: ##"actCollection"
+                        status: bind if (this instanceof CollectionArtifact) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
+                            var _title = title;
+                            //crear nuevo elemento
+                            var sp = CollectionArtifact {
+                                modeler: modeler
+                                title: _title
+                                uri:"new:datacollection:{this.modeler.toolBar.counter++}"
+                            }
+                            //pasar las entradas al nuevo elemento
+                            for(ele in getInputConnectionObjects()) {
+                                ele.end = sp;
+                            }
+
+                            for (ele in getOutputConnectionObjects()) {
+                                ele.ini = sp;
+                            }
+
+                            sp.x = x;
+                            sp.y = y;
+                            sp.container = container;
+                            sp.setGraphParent(getGraphParent());
+                            modeler.add(sp);
+                            remove(true);
+                        }
+                    },
+                    MenuItem {
+                        caption: ##"actInput"
+                        status: bind if (this instanceof InputArtifact) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
+                            var _title = title;
+                            //crear nuevo elemento
+                            var sp = InputArtifact {
+                                modeler: modeler
+                                title: _title
+                                uri:"new:datainput:{this.modeler.toolBar.counter++}"
+                            }
+                            //pasar las entradas al nuevo elemento
+                            for(ele in getInputConnectionObjects()) {
+                                ele.end = sp;
+                            }
+
+                            for (ele in getOutputConnectionObjects()) {
+                                ele.ini = sp;
+                            }
+
+                            sp.x = x;
+                            sp.y = y;
+                            sp.container = container;
+                            sp.setGraphParent(getGraphParent());
+                            modeler.add(sp);
+                            remove(true);
+                        }
+                    },
+                    MenuItem {
+                        caption: ##"actOutput"
+                        status: bind if (this instanceof OutputArtifact) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
+                            var _title = title;
+                            //crear nuevo elemento
+                            var sp = OutputArtifact {
+                                modeler: modeler
+                                title: _title
+                                uri:"new:dataoutput:{this.modeler.toolBar.counter++}"
+                            }
+                            //pasar las entradas al nuevo elemento
+                            for(ele in getInputConnectionObjects()) {
+                                ele.end = sp;
+                            }
+
+                            for (ele in getOutputConnectionObjects()) {
+                                ele.ini = sp;
+                            }
+
+                            sp.x = x;
+                            sp.y = y;
+                            sp.container = container;
+                            sp.setGraphParent(getGraphParent());
+                            modeler.add(sp);
+                            remove(true);
+                        }
+                    },
+                    MenuItem {
+                        caption: ##"actDataStore"
+                        status: bind if (this instanceof DataStoreArtifact) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
+                            var _title = title;
+                            //crear nuevo elemento
+                            var sp = DataStoreArtifact {
+                                modeler: modeler
+                                title: _title
+                                uri:"new:datastore:{this.modeler.toolBar.counter++}"
+                            }
+                            //pasar las entradas al nuevo elemento
+                            for(ele in getInputConnectionObjects()) {
+                                ele.end = sp;
+                            }
+
+                            for (ele in getOutputConnectionObjects()) {
+                                ele.ini = sp;
+                            }
+
+                            sp.x = x;
+                            sp.y = y;
+                            sp.container = container;
+                            sp.setGraphParent(getGraphParent());
+                            modeler.add(sp);
+                            remove(true);
+                        }
+                        
+                    },
+                ]
+            },
+            MenuItem {isSeparator: true},
             MenuItem {
                 caption: ##"actCopy"
                 action: function(e: MouseEvent) {
