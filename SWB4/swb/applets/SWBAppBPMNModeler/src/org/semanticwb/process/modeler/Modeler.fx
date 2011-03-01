@@ -81,10 +81,24 @@ public class Modeler extends CustomNode
                                 insert ele into contents;
                             }
                         }
+                        if (t instanceof Pool) {
+                            println("*Se va a pegar un pool");
+                            var ff = t as Pool;
+                            for (ele in ff.graphChilds where not (ele instanceof Lane)) {
+                                insert ele into contents;
+                            }
+                        }
                     }
                     copyNode = null;
                 }
+            },
+            MenuItem {
+                caption: "Dialogo"
+                action: function (e: MouseEvent) {
+                    ModelerUtils.dialog.show();
+                }
             }
+
         ];
 
          scrollView=ScrollView
@@ -250,6 +264,11 @@ public class Modeler extends CustomNode
                     ModelerUtils.popup.setOptions(actions);
                     ModelerUtils.popup.show(e);
                 }
+             }
+
+             onMouseMoved: function (e: MouseEvent) {
+                mousex=e.x+getXScroll();
+                mousey=e.y+getYScroll();
              }
 
              onKeyPressed: function (e: KeyEvent): Void
@@ -444,6 +463,36 @@ public class Modeler extends CustomNode
             if (focusedNode != null and focusedNode instanceof GraphicalElement) {
                 (focusedNode as GraphicalElement).remove(true);
                 focusedNode = null;
+            }
+        }
+        if (e.code == e.code.VK_C and e.controlDown) {
+            if (focusedNode != null and focusedNode instanceof GraphicalElement) {
+                copyNode = (focusedNode as GraphicalElement).copy();
+            }
+        }
+        if (e.code == e.code.VK_V and e.controlDown) {
+            if (copyNode != null) {
+                ModelerUtils.popup.hide();
+                var t = (copyNode as GraphicalElement);
+                if (t.canAddToDiagram()) {
+                    t.x = mousex;
+                    t.y = mousey;
+                    insert t into contents;
+                    if (t instanceof SubProcess) {
+                        var ff = t as SubProcess;
+                        for (ele in ff.containerChilds) {
+                            insert ele into contents;
+                        }
+                    }
+                    if (t instanceof Pool) {
+                        println("*Se va a pegar un pool");
+                        var ff = t as Pool;
+                        for (ele in ff.graphChilds where not (ele instanceof Lane)) {
+                            insert ele into contents;
+                        }
+                    }
+                }
+                copyNode = null;
             }
         }
     }
