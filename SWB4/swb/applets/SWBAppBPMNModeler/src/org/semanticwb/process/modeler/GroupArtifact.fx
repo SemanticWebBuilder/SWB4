@@ -11,6 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.LineTo;
+import javafx.scene.input.MouseEvent;
 
 /**
  * @author javier.solis
@@ -54,6 +55,20 @@ public class GroupArtifact extends Artifact
 
         };
 
+        var actions: MenuItem[] = [
+            MenuItem {
+                caption: ##"actCopy"
+                action: function(e: MouseEvent) {
+                    var t = copy();
+                    modeler.copyNode = t;
+                    ModelerUtils.popup.hide();
+                }
+            }
+        ];
+        insert actions before menuOptions[0];
+
+        setType(TYPE_GROUP);
+
         return Group
         {
             content: [
@@ -73,5 +88,19 @@ public class GroupArtifact extends Artifact
     public override function canEndLink(link:ConnectionObject) : Boolean {
         ModelerUtils.setErrorMessage(##"msgError46");
         return false;
+    }
+
+    override public function copy() : GraphicalElement {
+        var t = GroupArtifact {
+            title: this.title
+            type: this.type
+            modeler: this.modeler
+            isLoop: this.isLoop
+            isForCompensation: this.isForCompensation
+            isMultiInstance: this.isMultiInstance
+            container: this.container
+        }
+        t.uri = "new:{type}:{modeler.toolBar.counter++}";
+        return t;
     }
 }
