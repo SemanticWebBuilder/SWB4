@@ -14,6 +14,7 @@ import org.semanticwb.process.modeler.ModelerUtils;
 import org.semanticwb.process.modeler.DefaultFlow;
 import org.semanticwb.process.modeler.EventBasedGateway;
 import javafx.scene.input.MouseEvent;
+import org.semanticwb.process.modeler.InclusiveGateway;
 /**
  * @author javier.solis
  */
@@ -42,6 +43,68 @@ public class ExclusiveGateway extends Gateway
         };
 
         var actions: MenuItem[] = [
+            MenuItem {
+                caption: ##"actType"
+                items: [
+                    MenuItem {
+                        caption: ##"actInclusive"
+                        action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
+                            var _title = title;
+                            //crear nuevo elemento
+                            var sp = InclusiveGateway {
+                                modeler: modeler
+                                title: _title
+                                uri:"new:inclusivegateway:{this.modeler.toolBar.counter++}"
+                            }
+                            //pasar las entradas al nuevo elemento
+                            for(ele in getInputConnectionObjects()) {
+                                ele.end = sp;
+                            }
+
+                            for (ele in getOutputConnectionObjects()) {
+                                ele.ini = sp;
+                            }
+
+                            sp.x = x;
+                            sp.y = y;
+                            sp.container = container;
+                            sp.setGraphParent(getGraphParent());
+                            modeler.add(sp);
+                            remove(true);
+                        }
+                    },
+                    MenuItem {
+                        caption: ##"actComplex"
+                        action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
+                            var _title = title;
+                            //crear nuevo elemento
+                            var sp = ComplexGateway {
+                                modeler: modeler
+                                title: _title
+                                uri:"new:complexgateway:{this.modeler.toolBar.counter++}"
+                            }
+                            //pasar las entradas al nuevo elemento
+                            for(ele in getInputConnectionObjects()) {
+                                ele.end = sp;
+                            }
+
+                            for (ele in getOutputConnectionObjects()) {
+                                ele.ini = sp;
+                            }
+
+                            sp.x = x;
+                            sp.y = y;
+                            sp.container = container;
+                            sp.setGraphParent(getGraphParent());
+                            modeler.add(sp);
+                            remove(true);
+                        }
+                    }
+                ]
+            },
+            MenuItem {isSeparator: true},
              MenuItem {
                 caption: ##"actCopy"
                 action: function (e: MouseEvent) {
