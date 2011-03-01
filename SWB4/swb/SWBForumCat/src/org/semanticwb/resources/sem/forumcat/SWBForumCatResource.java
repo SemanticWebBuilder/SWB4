@@ -57,13 +57,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         User user = response.getUser();
         WebSite website = response.getWebPage().getWebSite();
-        HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
-        Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/comex#comexExtendedAttributes").listProperties();
-        while (list.hasNext()) {
-            SemanticProperty sp = list.next();
-            mapa.put(sp.getName(),sp);
-        }
-
+        
         if (isAcceptGuessComments() || user.isSigned()) {
             String action = response.getAction();
             response.setAction(response.Action_EDIT);
