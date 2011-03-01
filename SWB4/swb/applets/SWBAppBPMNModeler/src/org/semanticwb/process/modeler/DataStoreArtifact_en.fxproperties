@@ -1,1 +1,6 @@
 "actCopy" = "Copy"
+"actType" = "Type"
+"actCollection" = "Collection"
+"actInput" = "Input"
+"actOutput" = "Output"
+"actDataStore" = "Data Store"
