@@ -220,7 +220,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                 renderURL.setAction("add");
                 %>
                 <img width="100%" height="11" alt="separacion" src="<%=baseimg%>separa_foro.png">
-                <a href="<%=renderURL%>">Publicar un problema</a>
+                <span><img src="<%=baseimg%>icon_publicar_problema.png" alt="publicar un problema"></span><a class="liga_icon" href="<%=renderURL%>">Publicar un problema</a>
                 <img width="100%" height="11" alt="separacion" src="<%=baseimg%>separa_foro.png">
                 <%
             }
@@ -357,6 +357,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                             <div class="puntos">
                                                 <ul>
                                                     <li><img width="70" height="30" alt="<%=alt%>" title="<%=alt%> - <%=points%> puntos" src="<%=starimg%>"></li>
+                                                    <li>(<%=points%> puntos)</li>
                                                     <li><%=countUserQuestions(favAnswer.getCreator(), wpage.getWebSite())%> preguntas</li>
                                                     <li><%=countUserAnswers(favAnswer.getCreator(), wpage.getWebSite())%> respuestas</li>
                                                 </ul>
@@ -482,6 +483,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                             <div class="puntos">
                                                 <ul>
                                                     <li><img width="70" height="30" alt="<%=alt%>" title="<%=alt%> - <%=points%> puntos" src="<%=starimg%>"></li>
+                                                    <li>(<%=points%> puntos)</li>
                                                     <li><%=countUserQuestions(comAnswer.getCreator(), wpage.getWebSite())%> preguntas</li>
                                                     <li><%=countUserAnswers(comAnswer.getCreator(), wpage.getWebSite())%> respuestas</li>
                                                 </ul>
@@ -551,7 +553,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                            %>
                                                            <li>
                                                                  ¿Esto qu&eacute;?<img width="18" height="18" alt="¿Eso qué?" src="<%=baseimg%>icon_eso_que.png">(<%=comAnswer.getAnsIrrelevant()%>)
-                                                            </li>
+                                                           </li>
                                                             <%
                                                         }
                                                     }
@@ -618,6 +620,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                 <div class="puntos">
                                                     <ul>
                                                         <li><img width="70" height="30" alt="<%=alt%>" title="<%=alt%> - <%=points%> puntos" src="<%=starimg%>"></li>
+                                                        <li>(<%=points%> puntos)</li>
                                                         <li><%=countUserQuestions(answer.getCreator(), wpage.getWebSite())%> preguntas</li>
                                                         <li><%=countUserAnswers(answer.getCreator(), wpage.getWebSite())%> respuestas</li>
                                                     </ul>
@@ -718,16 +721,21 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                 }
                 if (paginate) {
                     %>
-                    P&aacute;ginas:
-                    <%
-                    for (int countPage = 1; countPage < (Math.ceil((double) nRec / (double) recPerPage) + 1); countPage++) {
-                        pageURL.setParameter("page", "" + (countPage));
-                        if (countPage == nPage) {
-                            %><%=countPage%>&nbsp;<%
-                        } else {
-                            %><b><a href="<%=pageURL%>"><%=countPage%></a></b><%
-                        }
-                    }
+                    <div id="paginacion">
+                        <span>P&aacute;ginas:</span>
+                        <ul>
+                            <%
+                            for (int countPage = 1; countPage < (Math.ceil((double) nRec / (double) recPerPage) + 1); countPage++) {
+                                pageURL.setParameter("page", "" + (countPage));
+                                if (countPage == nPage) {
+                                    %><li><a class="selected" href="<%=pageURL%>"><%=countPage%></a></li><%
+                                } else {
+                                    %><li><a href="<%=pageURL%>"><%=countPage%></a></li><%
+                                }
+                            }%>
+                        </ul>
+                    </div>
+                   <%
                 }
         %></div><%
     } else if (action != null && action.equals("showDetail")) {
@@ -789,7 +797,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                 renderURL.setAction("add");
                 %>
                 <img width="100%" height="11" alt="separacion" src="<%=baseimg%>separa_foro.png">
-                <a href="<%=renderURL%>">Publicar un problema</a>
+                <span><img src="<%=baseimg%>icon_publicar_problema.png" alt="publicar un problema"></span><a class="liga_icon" href="<%=renderURL%>">Publicar un problema</a>
                 <img width="100%" height="11" alt="separacion" src="<%=baseimg%>separa_foro.png">
                 <%
             }
@@ -865,7 +873,11 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                         <%
                                         for (int idx = 0; idx < references.size(); idx++) {
                                             String fileName = references.get(idx).replaceAll(qprefix, "");
-                                            %><li><a href="<%=qfilePath + references.get(idx)%>" target="_blank"><%=fileName%></a></li><%
+                                            if (fileName.endsWith(".mp3")) {
+                                                %><li><object type="application/x-shockwave-flash" data="<%=baseimg%>dewplayer.swf?mp3=<%=qfilePath + references.get(idx)%>" width="200" height="20" id="dewplayer"><param name="wmode" value="transparent" /><param name="movie" value="<%=baseimg%>dewplayer.swf?mp3=<%=qfilePath + references.get(idx)%>" /></object></li><%
+                                            } else {
+                                                %><li><a href="<%=qfilePath + references.get(idx)%>" target="_blank"><%=fileName%></a></li><%
+                                            }
                                         }
                                         %>
                                     </ul>
@@ -917,6 +929,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                         <div class="puntos">
                                             <ul>
                                                 <li><img width="70" height="30" alt="<%=alt%>" title="<%=alt%> - <%=points%> puntos" src="<%=starimg%>"></li>
+                                                <li>(<%=points%> puntos)</li>
                                                 <li><%=countUserQuestions(favAnswer.getCreator(), wpage.getWebSite())%> preguntas</li>
                                                 <li><%=countUserAnswers(favAnswer.getCreator(), wpage.getWebSite())%> respuestas</li>
                                             </ul>
@@ -1034,7 +1047,11 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                             <%
                                             for (int idx = 0; idx < references.size(); idx++) {
                                                 String fileName = references.get(idx).replaceAll(prefix, "");
-                                                %><li><a href="<%=filePath + references.get(idx)%>" target="_blank"><%=fileName%></a></li><%
+                                                if (fileName.endsWith(".mp3")) {
+                                                    %><li><object type="application/x-shockwave-flash" data="<%=baseimg%>dewplayer.swf?mp3=<%=qfilePath + references.get(idx)%>" width="200" height="20" id="dewplayer"><param name="wmode" value="transparent" /><param name="movie" value="<%=baseimg%>dewplayer.swf?mp3=<%=qfilePath + references.get(idx)%>" /></object></li><%
+                                                } else {
+                                                    %><li><a href="<%=qfilePath + references.get(idx)%>" target="_blank"><%=fileName%></a></li><%
+                                                }
                                             }
                                             %>
                                         </ul>
@@ -1084,6 +1101,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                         <div class="puntos">
                                             <ul>
                                                 <li><img width="70" height="30" alt="<%=alt%>" title="<%=alt%> - <%=points%> puntos" src="<%=starimg%>"></li>
+                                                <li>(<%=points%> puntos)</li>
                                                 <li><%=countUserQuestions(comAnswer.getCreator(), wpage.getWebSite())%> preguntas</li>
                                                 <li><%=countUserAnswers(comAnswer.getCreator(), wpage.getWebSite())%> respuestas</li>
                                             </ul>
@@ -1201,8 +1219,11 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                         <ul>
                                             <%
                                             for (int idx = 0; idx < references.size(); idx++) {
-                                                String fileName = references.get(idx).replaceAll(prefix, "");
-                                                %><li><a href="<%=filePath + references.get(idx)%>" target="_blank"><%=fileName%></a></li><%
+                                                String fileName = references.get(idx).replaceAll(prefix, "");if (fileName.endsWith(".mp3")) {
+                                                    %><li><object type="application/x-shockwave-flash" data="<%=baseimg%>dewplayer.swf?mp3=<%=qfilePath + references.get(idx)%>" width="200" height="20" id="dewplayer"><param name="wmode" value="transparent" /><param name="movie" value="<%=baseimg%>dewplayer.swf?mp3=<%=qfilePath + references.get(idx)%>" /></object></li><%
+                                                } else {
+                                                    %><li><a href="<%=qfilePath + references.get(idx)%>" target="_blank"><%=fileName%></a></li><%
+                                                }
                                             }
                                             %>
                                         </ul>
@@ -1274,6 +1295,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                             <div class="puntos">
                                                 <ul>
                                                     <li><img width="70" height="30" alt="<%=alt%>" title="<%=alt%> - <%=points%> puntos" src="<%=starimg%>"></li>
+                                                    <li>(<%=points%> puntos)</li>
                                                     <li><%=countUserQuestions(answer.getCreator(), wpage.getWebSite())%> preguntas</li>
                                                     <li><%=countUserAnswers(answer.getCreator(), wpage.getWebSite())%> respuestas</li>
                                                 </ul>
@@ -1397,8 +1419,11 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                         <ul>
                                             <%
                                             for (int idx = 0; idx < references.size(); idx++) {
-                                                String fileName = references.get(idx).replaceAll(prefix, "");
-                                                %><li><a href="<%=filePath + references.get(idx)%>" target="_blank"><%=fileName%></a></li><%
+                                                String fileName = references.get(idx).replaceAll(prefix, "");if (fileName.endsWith(".mp3")) {
+                                                    %><li><object type="application/x-shockwave-flash" data="<%=baseimg%>dewplayer.swf?mp3=<%=qfilePath + references.get(idx)%>" width="200" height="20" id="dewplayer"><param name="wmode" value="transparent" /><param name="movie" value="<%=baseimg%>dewplayer.swf?mp3=<%=qfilePath + references.get(idx)%>" /></object></li><%
+                                                } else {
+                                                    %><li><a href="<%=qfilePath + references.get(idx)%>" target="_blank"><%=fileName%></a></li><%
+                                                }
                                             }
                                             %>
                                         </ul>
@@ -1414,7 +1439,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                         <li>
                             <img width="100%" height="11" alt="separacion" src="<%=baseimg%>separa_foro.png">
                         </li>
-                        <a href="<%=renderURL%>">Regresar</a>
+                        <a class="liga_icon" href="<%=renderURL%>">Regresar</a>
                     </ul>
                     <%
         }
@@ -1441,7 +1466,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                         <li>
                             <label class="etiqueta" for="<%=Question.forumCat_question.getName()%>">Pregunta:</label>
                             <!--%=mgr.renderLabel(request, semClass.getProperty(Question.forumCat_question.getName()), mgr.MODE_EDIT)%-->
-                            <textarea name="<%=Question.forumCat_question.getName()%>"><%=q.getQuestion()%></textarea>
+                            <textarea name="<%=Question.forumCat_question.getName()%>"><%=q.getQuestion().replaceAll("(<a[^>]*?href\\s*=\\s*((\'|\")(.*?)(\'|\"))[^>]*?(?!/)>)|</a>", "")%></textarea>
                             <!--%=mgr.renderElement(request, semClass.getProperty(Question.forumCat_question.getName()), mgr.MODE_EDIT)%-->
                         </li>
                         <li>
@@ -1541,7 +1566,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                     <ul>
                         <li>
                             <label class="etiqueta" for="<%=Question.forumCat_question.getName()%>">Pregunta:</label>
-                            <textarea disabled="disabled"><%=q.getQuestion()%></textarea>
+                            <textarea disabled="disabled"><%=q.getQuestion().replaceAll("(<a[^>]*?href\\s*=\\s*((\'|\")(.*?)(\'|\"))[^>]*?(?!/)>)|</a>", "")%></textarea>
                             <!--%=mgr.renderElement(request, semClass.getProperty(Answer.forumCat_answer.getName()), mgr.MODE_CREATE)%-->
                         </li>
                         <li>
@@ -1765,7 +1790,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
     <a href="javascript:history.go(-1);">Regresar</a>
     <% } else {
     %>
-    <a href="<%=paramRequest.getRenderUrl()%>">Regresar</a>
+    <a class="liga_icon" href="<%=paramRequest.getRenderUrl()%>">Regresar</a>
     <%
          }
      }
