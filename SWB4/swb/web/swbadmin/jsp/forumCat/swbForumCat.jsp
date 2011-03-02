@@ -65,6 +65,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
         field.form.submit();
     }
 </script>
+
 <%
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
     SimpleDateFormat dateFormat;
@@ -83,6 +84,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
     iso8601dateFormat = new SimpleDateFormat(defaultFormat, locale);
 
     User user = paramRequest.getUser();
+    System.out.println("--User: "+ user.getURI() + ", " + user.getFullName() + ", lang:" + user.getLanguage() + ", signed:"+ user.isSigned());
     boolean isAdmin = false;
     Role role = user.getUserRepository().getRole("adminForum");
     UserGroup group = user.getUserRepository().getUserGroup("admin");
@@ -100,6 +102,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
         action = "showDetail";
     }
     String baseimg = SWBPortal.getWebWorkPath()+"/models/"+wpage.getWebSiteId()+"/css/images/";
+    boolean isGuest = (user == null);
 
     if (action != null && action.equals("add")) {
         SWBFormMgr mgr = new SWBFormMgr(Question.sclass, wpage.getWebSite().getSemanticObject(), null);
@@ -238,9 +241,14 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                     nRec++;
                     if ((nRec > (nPage - 1) * recPerPage) && (nRec <= (nPage) * recPerPage)) {
                         String photo = baseimg + "profilePlaceholder.jpg";
-                        if (question.getCreator().getPhoto() != null) {
-                            photo = SWBPortal.getWebWorkPath() + question.getCreator().getPhoto();
+                        String creator = "Anónimo";
+                        if (!question.isAnonymous()) {
+                            creator = question.getCreator().getFullName();
+                            if (question.getCreator().getPhoto() != null) {
+                                photo = SWBPortal.getWebWorkPath() + question.getCreator().getPhoto();
+                            }
                         }
+
                         Iterator<Answer> answers = question.listAnswerInvs();
                         int ansVotes = 0;
                         while (answers.hasNext()) {
@@ -282,7 +290,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                         <ul>
                             <li>
                                 <div class="foto_foro_pregunta"><img width="40" height="40" src="<%=photo%>"></div>
-                                <span class="usuario"><%=question.getCreator().getFullName()%>.</span>
+                                <span class="usuario"><%=creator%>.</span>
                                 (<%=SWBUtils.TEXT.getTimeAgo(question.getCreated(), user.getLanguage())%>). <a href="<%=renderURL%>" class="ligapregunta"><%=question.getQuestion()%></a>
                                 Vista <%=question.getViews()%> veces.
                                 <%
@@ -317,26 +325,35 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                             <ul>
                                 <%
                                 if (favAnswer != null) {
-                                    String starimg = baseimg;
+                                    String starimg = "";
                                     String alt = "";
-                                    int points = getUserPoints(favAnswer.getCreator(), wpage.getWebSite());
-                                    if (points >= 0 && points <= 30) {
-                                        starimg += "star_vacia.png";
-                                        alt = "Vacía";
-                                    } else if (points >= 31 && points <= 80) {
-                                        starimg += "star_plata.png";
-                                        alt = "Plata";
-                                    } else if (points >= 81 && points <= 130) {
-                                        starimg += "star_oro.png";
-                                        alt = "Oro";
-                                    } else if (points >= 131) {
-                                        starimg += "star_diamante.png";
-                                        alt = "Diamante";
+                                    int points = -1;
+                                    creator = "Anónimo";
+
+                                    if (!favAnswer.isAnonymous() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_useScoreSystem)) {
+                                        starimg = baseimg;
+                                        points = getUserPoints(favAnswer.getCreator(), wpage.getWebSite());
+                                        if (points >= 0 && points <= 30) {
+                                            starimg += "star_vacia.png";
+                                            alt = "Vacía";
+                                        } else if (points >= 31 && points <= 80) {
+                                            starimg += "star_plata.png";
+                                            alt = "Plata";
+                                        } else if (points >= 81 && points <= 130) {
+                                            starimg += "star_oro.png";
+                                            alt = "Oro";
+                                        } else if (points >= 131) {
+                                            starimg += "star_diamante.png";
+                                            alt = "Diamante";
+                                        }
                                     }
 
                                     photo = baseimg + "profilePlaceholder.jpg";
-                                    if (favAnswer.getCreator().getPhoto() != null) {
-                                        photo = SWBPortal.getWebWorkPath() + favAnswer.getCreator().getPhoto();
+                                    if (!favAnswer.isAnonymous()) {
+                                        creator = favAnswer.getCreator().getFullName();
+                                        if (favAnswer.getCreator().getPhoto() != null) {
+                                            photo = SWBPortal.getWebWorkPath() + favAnswer.getCreator().getPhoto();
+                                        }
                                     }
                                     
                                     if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_isAnswerVotable)) {
@@ -357,23 +374,25 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                             <div class="puntos">
                                                 <ul>
                                                     <li><img width="70" height="30" alt="<%=alt%>" title="<%=alt%> - <%=points%> puntos" src="<%=starimg%>"></li>
-                                                    <li>(<%=points%> puntos)</li>
-                                                    <li><%=countUserQuestions(favAnswer.getCreator(), wpage.getWebSite())%> preguntas</li>
-                                                    <li><%=countUserAnswers(favAnswer.getCreator(), wpage.getWebSite())%> respuestas</li>
+                                                    <%if (!favAnswer.isAnonymous() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_useScoreSystem)) {%>
+                                                        <li>(<%=points%> puntos)</li>
+                                                        <li><%=countUserQuestions(favAnswer.getCreator(), wpage.getWebSite())%> preguntas</li>
+                                                        <li><%=countUserAnswers(favAnswer.getCreator(), wpage.getWebSite())%> respuestas</li>
+                                                    <%}%>
                                                 </ul>
                                             </div>
                                             <div class="foto">
                                                 <img width="40" height="40" src="<%=photo%>">
                                             </div>
                                             <div class="respuesta_gral">
-                                                <span class="usuario"><%=favAnswer.getCreator().getFullName()%></span>
+                                                <span class="usuario"><%=creator%></span>
                                                 (<%=SWBUtils.TEXT.getTimeAgo(favAnswer.getCreated(), user.getLanguage())%>). <%=favAnswer.getAnswer()%>
                                             </div>
                                             <div class="herramientas_foro_gral">
                                                 <ul>
                                                     <%
                                                     if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_isAnswerVotable)) {
-                                                        if (!user.getURI().equals(favAnswer.getCreator().getURI()) && !favAnswer.userHasVoted(user)) {
+                                                        if (!favAnswer.isAnonymous() && !user.getURI().equals(favAnswer.getCreator().getURI()) && !favAnswer.userHasVoted(user)) {
                                                             actionURL.setParameter("uri", favAnswer.getURI());
                                                             actionURL.setAction("voteAnswer");
                                                             actionURL.setParameter("likeVote", "true");
@@ -398,7 +417,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                         }
                                                     }
                                                     if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markIrrelevantAnswers)) {
-                                                        if (!favAnswer.getCreator().getURI().equals(user.getURI()) && !favAnswer.userHasVoted(user)) {
+                                                        if (!favAnswer.isAnonymous() && !favAnswer.getCreator().getURI().equals(user.getURI()) && !favAnswer.userHasVoted(user)) {
                                                              actionURL = paramRequest.getActionUrl();
                                                              actionURL.setParameter("uri", favAnswer.getURI());
                                                              actionURL.setAction("voteAnswer");
@@ -419,7 +438,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                         }
                                                     }
                                                     if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateAnswers)) {
-                                                        if (!favAnswer.isAnsIsAppropiate() && !favAnswer.getCreator().getURI().equals(user.getURI())) {
+                                                        if (!favAnswer.isAnonymous() && !favAnswer.isAnsIsAppropiate() && !favAnswer.getCreator().getURI().equals(user.getURI())) {
                                                              actionURL.setAction("markAnswerAsInnapropiate");
                                                              actionURL.setParameter("org", "edit");
                                                              %>
@@ -443,26 +462,35 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                     <%
                                 }
                                 if (comAnswer != null) {
-                                    photo = baseimg + "profilePlaceholder.jpg";
-                                    String starimg = baseimg;
+                                    String starimg = "";
                                     String alt = "";
-                                    int points = getUserPoints(comAnswer.getCreator(), wpage.getWebSite());
-                                    if (points >= 0 && points <= 30) {
-                                        starimg += "star_vacia.png";
-                                        alt = "Vacía";
-                                    } else if (points >= 31 && points <= 80) {
-                                        starimg += "star_plata.png";
-                                        alt = "Plata";
-                                    } else if (points >= 81 && points <= 130) {
-                                        starimg += "star_oro.png";
-                                        alt = "Oro";
-                                    } else if (points >= 131) {
-                                        starimg += "star_diamante.png";
-                                        alt = "Diamante";
+                                    int points = -1;
+                                    creator = "Anónimo";
+
+                                    if (!comAnswer.isAnonymous() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_useScoreSystem)) {
+                                        starimg = baseimg;
+                                        points = getUserPoints(comAnswer.getCreator(), wpage.getWebSite());
+                                        if (points >= 0 && points <= 30) {
+                                            starimg += "star_vacia.png";
+                                            alt = "Vacía";
+                                        } else if (points >= 31 && points <= 80) {
+                                            starimg += "star_plata.png";
+                                            alt = "Plata";
+                                        } else if (points >= 81 && points <= 130) {
+                                            starimg += "star_oro.png";
+                                            alt = "Oro";
+                                        } else if (points >= 131) {
+                                            starimg += "star_diamante.png";
+                                            alt = "Diamante";
+                                        }
                                     }
 
-                                    if (comAnswer.getCreator().getPhoto() != null) {
-                                        photo = SWBPortal.getWebWorkPath() + comAnswer.getCreator().getPhoto();
+                                    photo = baseimg + "profilePlaceholder.jpg";
+                                    if (!comAnswer.isAnonymous()) {
+                                        creator = comAnswer.getCreator().getFullName();
+                                        if (comAnswer.getCreator().getPhoto() != null) {
+                                            photo = SWBPortal.getWebWorkPath() + comAnswer.getCreator().getPhoto();
+                                        }
                                     }
                                     
                                     if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_isAnswerVotable)) {
@@ -483,20 +511,22 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                             <div class="puntos">
                                                 <ul>
                                                     <li><img width="70" height="30" alt="<%=alt%>" title="<%=alt%> - <%=points%> puntos" src="<%=starimg%>"></li>
-                                                    <li>(<%=points%> puntos)</li>
-                                                    <li><%=countUserQuestions(comAnswer.getCreator(), wpage.getWebSite())%> preguntas</li>
-                                                    <li><%=countUserAnswers(comAnswer.getCreator(), wpage.getWebSite())%> respuestas</li>
+                                                    <%if (!comAnswer.isAnonymous() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_useScoreSystem)) {%>
+                                                        <li>(<%=points%> puntos)</li>
+                                                        <li><%=countUserQuestions(comAnswer.getCreator(), wpage.getWebSite())%> preguntas</li>
+                                                        <li><%=countUserAnswers(comAnswer.getCreator(), wpage.getWebSite())%> respuestas</li>
+                                                    <%}%>
                                                 </ul>
                                             </div>
                                             <div class="foto">
                                                 <img width="40" height="40" src="<%=photo%>">
                                             </div>
                                             <div class="respuesta_gral">
-                                                <span class="usuario"><%=comAnswer.getCreator().getFullName()%></span>
+                                                <span class="usuario"><%=creator%></span>
                                                 (<%=SWBUtils.TEXT.getTimeAgo(comAnswer.getCreated(), user.getLanguage())%>). <%=comAnswer.getAnswer()%>
                                                 <%
                                                 if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateAnswers)) {
-                                                    if (!comAnswer.isAnsIsAppropiate() && !comAnswer.getCreator().getURI().equals(user.getURI())) {
+                                                    if (!isGuest && !comAnswer.isAnonymous() && !comAnswer.isAnsIsAppropiate() && !comAnswer.getCreator().getURI().equals(user.getURI())) {
                                                          actionURL.setAction("markAnswerAsInnapropiate");
                                                          actionURL.setParameter("org", "edit");
                                                          %>  <a href="<%=actionURL%>">Marcar como inapropiado</a>&nbsp;<%
@@ -510,7 +540,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                 <ul>
                                                     <%
                                                     if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_isAnswerVotable)) {
-                                                        if (!user.getURI().equals(comAnswer.getCreator().getURI()) && !comAnswer.userHasVoted(user)) {
+                                                        if (!isGuest && !comAnswer.isAnonymous() && !user.getURI().equals(comAnswer.getCreator().getURI()) && !comAnswer.userHasVoted(user)) {
                                                             actionURL.setParameter("uri", comAnswer.getURI());
                                                             actionURL.setAction("voteAnswer");
                                                             actionURL.setParameter("likeVote", "true");
@@ -537,7 +567,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                         }
                                                     }
                                                     if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markIrrelevantAnswers)) {
-                                                        if (!comAnswer.getCreator().getURI().equals(user.getURI()) && !comAnswer.userHasVoted(user)) {
+                                                        if (!isGuest && !comAnswer.isAnonymous() && !comAnswer.getCreator().getURI().equals(user.getURI()) && !comAnswer.userHasVoted(user)) {
                                                              actionURL = paramRequest.getActionUrl();
                                                              actionURL.setParameter("uri", comAnswer.getURI());
                                                              actionURL.setAction("voteAnswer");
@@ -579,25 +609,35 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                     while (answers.hasNext()) {
                                         Answer answer = answers.next();                                        
                                         if (answer != null && answer.getAnsStatus() == SWBForumCatResource.STATUS_ACEPTED) {
-                                            photo = baseimg + "profilePlaceholder.jpg";
-                                            String starimg = baseimg;
-                                            String alt="";
-                                            int points = getUserPoints(answer.getCreator(), wpage.getWebSite());
-                                            if (points >= 0 && points <= 30) {
-                                                starimg += "star_vacia.png";
-                                                alt = "Vacía";
-                                            } else if (points >= 31 && points <= 80) {
-                                                starimg += "star_plata.png";
-                                                alt = "Plata";
-                                            } else if (points >= 81 && points <= 130) {
-                                                starimg += "star_oro.png";
-                                                alt = "Oro";
-                                            } else if (points >= 131) {
-                                                starimg += "star_diamante.png";
-                                                alt = "Diamante";
+                                            String starimg = "";
+                                            String alt = "";
+                                            int points = -1;
+                                            creator = "Anónimo";
+
+                                            if (!answer.isAnonymous() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_useScoreSystem)) {
+                                                starimg = baseimg;
+                                                points = getUserPoints(answer.getCreator(), wpage.getWebSite());
+                                                if (points >= 0 && points <= 30) {
+                                                    starimg += "star_vacia.png";
+                                                    alt = "Vacía";
+                                                } else if (points >= 31 && points <= 80) {
+                                                    starimg += "star_plata.png";
+                                                    alt = "Plata";
+                                                } else if (points >= 81 && points <= 130) {
+                                                    starimg += "star_oro.png";
+                                                    alt = "Oro";
+                                                } else if (points >= 131) {
+                                                    starimg += "star_diamante.png";
+                                                    alt = "Diamante";
+                                                }
                                             }
-                                            if (answer.getCreator().getPhoto() != null) {
-                                                photo = SWBPortal.getWebWorkPath() + answer.getCreator().getPhoto();
+
+                                            photo = baseimg + "profilePlaceholder.jpg";
+                                            if (!answer.isAnonymous()) {
+                                                creator = answer.getCreator().getFullName();
+                                                if (answer.getCreator().getPhoto() != null) {
+                                                    photo = SWBPortal.getWebWorkPath() + answer.getCreator().getPhoto();
+                                                }
                                             }
                                             renderURL.setParameter("uri", answer.getURI());
                                             actionURL.setParameter("uri", answer.getURI());
@@ -620,20 +660,22 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                 <div class="puntos">
                                                     <ul>
                                                         <li><img width="70" height="30" alt="<%=alt%>" title="<%=alt%> - <%=points%> puntos" src="<%=starimg%>"></li>
-                                                        <li>(<%=points%> puntos)</li>
-                                                        <li><%=countUserQuestions(answer.getCreator(), wpage.getWebSite())%> preguntas</li>
-                                                        <li><%=countUserAnswers(answer.getCreator(), wpage.getWebSite())%> respuestas</li>
+                                                        <%if (!answer.isAnonymous() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_useScoreSystem)) {%>
+                                                            <li>(<%=points%> puntos)</li>
+                                                            <li><%=countUserQuestions(answer.getCreator(), wpage.getWebSite())%> preguntas</li>
+                                                            <li><%=countUserAnswers(answer.getCreator(), wpage.getWebSite())%> respuestas</li>
+                                                        <%}%>
                                                     </ul>
                                                 </div>
                                                 <div class="foto">
                                                     <img width="40" height="40" src="<%=photo%>">
                                                 </div>
                                                 <div class="respuesta_gral">
-                                                    <span><%=answer.getCreator().getFullName()%></span>
+                                                    <span><%=creator%></span>
                                                     (<%=SWBUtils.TEXT.getTimeAgo(answer.getCreated(), user.getLanguage())%>). <%=answer.getAnswer()%><br>
                                                     <%
                                                     if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateAnswers)) {
-                                                        if (!answer.isAnsIsAppropiate() && !answer.getCreator().getURI().equals(user.getURI())) {
+                                                        if (!isGuest && !answer.isAnonymous() && !isGuest && !answer.isAnsIsAppropiate() && !answer.getCreator().getURI().equals(user.getURI())) {
                                                              actionURL.setAction("markAnswerAsInnapropiate");
                                                              actionURL.setParameter("org", "edit");
                                                              %>  <a href="<%=actionURL%>">Marcar como inapropiado</a>&nbsp;<%
@@ -641,8 +683,8 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                            %>- Inapropiado: <%=answer.getAnsInappropriate()%><%
                                                         }
                                                     }
-                                                    if (user.isSigned() && question.getCreator().getURI().equals(user.getURI())) {
-                                                        if (!answer.getCreator().getURI().equals(user.getURI()) &&  semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markBestAnswer)) {
+                                                    if (user.isSigned() && question.getCreator() != null && question.getCreator().getURI().equals(user.getURI())) {
+                                                        if (!isGuest && !answer.isAnonymous() && !answer.getCreator().getURI().equals(user.getURI()) &&  semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markBestAnswer)) {
                                                             actionURL.setAction("bestAnswer");
                                                             actionURL.setParameter("org", "edit");
                                                             %><a href="<%=actionURL%>">Mejor respuesta</a>&nbsp;<%
@@ -654,7 +696,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                     <ul>
                                                     <%
                                                     if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_isAnswerVotable)) {
-                                                        if (!user.getURI().equals(answer.getCreator().getURI()) && !answer.userHasVoted(user)) {
+                                                        if (!isGuest && !answer.isAnonymous() && !user.getURI().equals(answer.getCreator().getURI()) && !answer.userHasVoted(user)) {
                                                             actionURL.setParameter("uri", answer.getURI());
                                                             actionURL.setAction("voteAnswer");
                                                             actionURL.setParameter("likeVote", "true");
@@ -680,7 +722,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                         }
                                                     }
                                                     if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markIrrelevantAnswers)) {
-                                                        if (!answer.getCreator().getURI().equals(user.getURI()) && !answer.userHasVoted(user)) {
+                                                        if (!isGuest && !answer.isAnonymous() && !answer.getCreator().getURI().equals(user.getURI()) && !answer.userHasVoted(user)) {
                                                              actionURL = paramRequest.getActionUrl();
                                                              actionURL.setParameter("uri", answer.getURI());
                                                              actionURL.setAction("voteAnswer");
@@ -751,8 +793,12 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
             Answer favAnswer = null;
             Answer comAnswer = null;
             String photo = baseimg + "profilePlaceholder.jpg";
-            if (question.getCreator().getPhoto() != null) {
-                photo = SWBPortal.getWebWorkPath() + question.getCreator().getPhoto();
+            String creator = "Anónimo";
+            if (!question.isAnonymous()) {
+                creator = question.getCreator().getFullName();
+                if (question.getCreator().getPhoto() != null) {
+                    photo = SWBPortal.getWebWorkPath() + question.getCreator().getPhoto();
+                }
             }
             
             renderURL.setParameter("uri", question.getURI());
@@ -805,7 +851,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                     <ul>
                         <li>
                             <div class="foto_foro_pregunta"><img width="40" height="40" src="<%=photo%>"></div>
-                            <span class="usuario"><%=question.getCreator().getFullName()%>.</span>
+                            <span class="usuario"><%=creator%>.</span>
                             (<%=SWBUtils.TEXT.getTimeAgo(question.getCreated(), user.getLanguage())%>). <%=question.getQuestion()%>
                             Vista <%=question.getViews()%> veces.
                             <%
@@ -829,7 +875,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                          %><a href="<%=actionURL%>">Marcar como inapropiado</a>&nbsp;<%
                                     }
                                 }
-                                if (user.isSigned() && user.getURI().equals(question.getCreator().getURI())) {
+                                if (!question.isAnonymous() && user.isSigned() && user.getURI().equals(question.getCreator().getURI())) {
                                     renderURL.setAction("editQuestion");
                                     renderURL.setParameter("org", "edit");
                                     %><a href="<%=renderURL%>">Editar pregunta</a>&nbsp;<%
@@ -889,25 +935,35 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                         <ul>
                             <%
                             if (favAnswer != null) {
-                                photo = baseimg + "profilePlaceholder.jpg";
-                                String starimg = baseimg;
-                                String alt="";
-                                int points = getUserPoints(favAnswer.getCreator(), wpage.getWebSite());
-                                if (points >= 0 && points <= 30) {
-                                    starimg += "star_vacia.png";
-                                    alt = "Vacía";
-                                } else if (points >= 31 && points <= 80) {
-                                    starimg += "star_plata.png";
-                                    alt = "Plata";
-                                } else if (points >= 81 && points <= 130) {
-                                    starimg += "star_oro.png";
-                                    alt = "Oro";
-                                } else if (points >= 131) {
-                                    starimg += "star_diamante.png";
-                                    alt = "Diamante";
+                                String starimg = "";
+                                String alt = "";
+                                int points = -1;
+                                creator = "Anónimo";
+
+                                if (!favAnswer.isAnonymous() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_useScoreSystem)) {
+                                    starimg = baseimg;
+                                    points = getUserPoints(favAnswer.getCreator(), wpage.getWebSite());
+                                    if (points >= 0 && points <= 30) {
+                                        starimg += "star_vacia.png";
+                                        alt = "Vacía";
+                                    } else if (points >= 31 && points <= 80) {
+                                        starimg += "star_plata.png";
+                                        alt = "Plata";
+                                    } else if (points >= 81 && points <= 130) {
+                                        starimg += "star_oro.png";
+                                        alt = "Oro";
+                                    } else if (points >= 131) {
+                                        starimg += "star_diamante.png";
+                                        alt = "Diamante";
+                                    }
                                 }
-                                if (favAnswer.getCreator().getPhoto() != null) {
-                                    photo = SWBPortal.getWebWorkPath() + favAnswer.getCreator().getPhoto();
+
+                                photo = baseimg + "profilePlaceholder.jpg";
+                                if (!favAnswer.isAnonymous()) {
+                                    creator = favAnswer.getCreator().getFullName();
+                                    if (favAnswer.getCreator().getPhoto() != null) {
+                                        photo = SWBPortal.getWebWorkPath() + favAnswer.getCreator().getPhoto();
+                                    }
                                 }
                                 nLike=0;
                                 nUnlike=0;
@@ -929,20 +985,22 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                         <div class="puntos">
                                             <ul>
                                                 <li><img width="70" height="30" alt="<%=alt%>" title="<%=alt%> - <%=points%> puntos" src="<%=starimg%>"></li>
-                                                <li>(<%=points%> puntos)</li>
-                                                <li><%=countUserQuestions(favAnswer.getCreator(), wpage.getWebSite())%> preguntas</li>
-                                                <li><%=countUserAnswers(favAnswer.getCreator(), wpage.getWebSite())%> respuestas</li>
+                                                <%if (!favAnswer.isAnonymous() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_useScoreSystem)) {%>
+                                                    <li>(<%=points%> puntos)</li>
+                                                    <li><%=countUserQuestions(favAnswer.getCreator(), wpage.getWebSite())%> preguntas</li>
+                                                    <li><%=countUserAnswers(favAnswer.getCreator(), wpage.getWebSite())%> respuestas</li>
+                                                <%}%>
                                             </ul>
                                         </div>
                                         <div class="foto">
                                             <img width="40" height="40" src="<%=photo%>">
                                         </div>
                                         <div class="respuesta_gral">
-                                            <span class="usuario"><%=favAnswer.getCreator().getFullName()%></span>
+                                            <span class="usuario"><%=creator%></span>
                                             (<%=SWBUtils.TEXT.getTimeAgo(favAnswer.getCreated(), user.getLanguage())%>). <%=favAnswer.getAnswer()%>
                                             <%
                                             if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateAnswers)) {
-                                                if (!favAnswer.isAnsIsAppropiate() && !favAnswer.getCreator().getURI().equals(user.getURI())) {
+                                                if (!isGuest && !favAnswer.isAnonymous() && !favAnswer.isAnsIsAppropiate() && !favAnswer.getCreator().getURI().equals(user.getURI())) {
                                                      actionURL.setAction("markAnswerAsInnapropiate");
                                                      actionURL.setParameter("org", "showDetail");
                                                      %> <a href="<%=actionURL%>">Marcar como inapropiado</a>&nbsp;<%
@@ -956,7 +1014,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                             <ul>
                                                 <%
                                                 if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_isAnswerVotable)) {
-                                                    if (!user.getURI().equals(favAnswer.getCreator().getURI()) && !favAnswer.userHasVoted(user)) {
+                                                    if (!isGuest && !favAnswer.isAnonymous() && !user.getURI().equals(favAnswer.getCreator().getURI()) && !favAnswer.userHasVoted(user)) {
                                                         actionURL.setParameter("uri", favAnswer.getURI());
                                                         actionURL.setAction("voteAnswer");
                                                         actionURL.setParameter("likeVote", "true");
@@ -982,7 +1040,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                     }
                                                 }
                                                 if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markIrrelevantAnswers)) {
-                                                    if (!favAnswer.getCreator().getURI().equals(user.getURI()) && !favAnswer.userHasVoted(user)) {
+                                                    if (!isGuest && !favAnswer.isAnonymous() && !favAnswer.getCreator().getURI().equals(user.getURI()) && !favAnswer.userHasVoted(user)) {
                                                          actionURL = paramRequest.getActionUrl();
                                                          actionURL.setParameter("uri", favAnswer.getURI());
                                                          actionURL.setAction("voteAnswer");
@@ -1060,25 +1118,35 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                 }
                             }
                             if (comAnswer != null) {
-                                photo = baseimg + "profilePlaceholder.jpg";
-                                String starimg = baseimg;
-                                String alt="";
-                                int points = getUserPoints(comAnswer.getCreator(), wpage.getWebSite());
-                                if (points >= 0 && points <= 30) {
-                                    starimg += "star_vacia.png";
-                                    alt = "Vacía";
-                                } else if (points >= 31 && points <= 80) {
-                                    starimg += "star_plata.png";
-                                    alt = "Plata";
-                                } else if (points >= 81 && points <= 130) {
-                                    starimg += "star_oro.png";
-                                    alt = "Oro";
-                                } else if (points >= 131) {
-                                    starimg += "star_diamante.png";
-                                    alt = "Diamante";
+                                String starimg = "";
+                                String alt = "";
+                                int points = -1;
+                                creator = "Anónimo";
+
+                                if (!comAnswer.isAnonymous() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_useScoreSystem)) {
+                                    starimg = baseimg;
+                                    points = getUserPoints(comAnswer.getCreator(), wpage.getWebSite());
+                                    if (points >= 0 && points <= 30) {
+                                        starimg += "star_vacia.png";
+                                        alt = "Vacía";
+                                    } else if (points >= 31 && points <= 80) {
+                                        starimg += "star_plata.png";
+                                        alt = "Plata";
+                                    } else if (points >= 81 && points <= 130) {
+                                        starimg += "star_oro.png";
+                                        alt = "Oro";
+                                    } else if (points >= 131) {
+                                        starimg += "star_diamante.png";
+                                        alt = "Diamante";
+                                    }
                                 }
-                                if (comAnswer.getCreator().getPhoto() != null) {
-                                    photo = SWBPortal.getWebWorkPath() + comAnswer.getCreator().getPhoto();
+
+                                photo = baseimg + "profilePlaceholder.jpg";
+                                if (!comAnswer.isAnonymous()) {
+                                    creator = comAnswer.getCreator().getFullName();
+                                    if (comAnswer.getCreator().getPhoto() != null) {
+                                        photo = SWBPortal.getWebWorkPath() + comAnswer.getCreator().getPhoto();
+                                    }
                                 }
 
                                 nLike=0;
@@ -1101,20 +1169,22 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                         <div class="puntos">
                                             <ul>
                                                 <li><img width="70" height="30" alt="<%=alt%>" title="<%=alt%> - <%=points%> puntos" src="<%=starimg%>"></li>
-                                                <li>(<%=points%> puntos)</li>
-                                                <li><%=countUserQuestions(comAnswer.getCreator(), wpage.getWebSite())%> preguntas</li>
-                                                <li><%=countUserAnswers(comAnswer.getCreator(), wpage.getWebSite())%> respuestas</li>
+                                                <%if (!comAnswer.isAnonymous() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_useScoreSystem)) {%>
+                                                    <li>(<%=points%> puntos)</li>
+                                                    <li><%=countUserQuestions(comAnswer.getCreator(), wpage.getWebSite())%> preguntas</li>
+                                                    <li><%=countUserAnswers(comAnswer.getCreator(), wpage.getWebSite())%> respuestas</li>
+                                                <%}%>
                                             </ul>
                                         </div>
                                         <div class="foto">
                                             <img width="40" height="40" src="<%=photo%>">
                                         </div>
                                         <div class="respuesta_gral">
-                                            <span><%=comAnswer.getCreator().getFullName()%></span>
+                                            <span><%=creator%></span>
                                             (<%=SWBUtils.TEXT.getTimeAgo(comAnswer.getCreated(), user.getLanguage())%>). <%=comAnswer.getAnswer()%>
                                             <%
                                                 if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateAnswers)) {
-                                                    if (!comAnswer.isAnsIsAppropiate() && !comAnswer.getCreator().getURI().equals(user.getURI())) {
+                                                    if (!isGuest && !comAnswer.isAnonymous() && !comAnswer.isAnsIsAppropiate() && !comAnswer.getCreator().getURI().equals(user.getURI())) {
                                                          actionURL.setAction("markAnswerAsInnapropiate");
                                                          actionURL.setParameter("org", "showDetail");
                                                          %>  <a href="<%=actionURL%>">Marcar como inapropiado</a>&nbsp;<%
@@ -1128,7 +1198,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                             <ul>
                                                 <%
                                                 if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_isAnswerVotable)) {
-                                                    if (!user.getURI().equals(comAnswer.getCreator().getURI()) && !comAnswer.userHasVoted(user)) {
+                                                    if (!isGuest && !comAnswer.isAnonymous() && !user.getURI().equals(comAnswer.getCreator().getURI()) && !comAnswer.userHasVoted(user)) {
                                                         actionURL.setParameter("uri", comAnswer.getURI());
                                                         actionURL.setAction("voteAnswer");
                                                         actionURL.setParameter("likeVote", "true");
@@ -1155,7 +1225,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                 }
 
                                                 if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markIrrelevantAnswers)) {
-                                                    if (!comAnswer.getCreator().getURI().equals(user.getURI()) && !comAnswer.userHasVoted(user)) {
+                                                    if (!isGuest && !comAnswer.isAnonymous() && !comAnswer.getCreator().getURI().equals(user.getURI()) && !comAnswer.userHasVoted(user)) {
                                                         actionURL = paramRequest.getActionUrl();
                                                          actionURL.setParameter("uri", comAnswer.getURI());
                                                         actionURL.setAction("voteAnswer");
@@ -1253,26 +1323,35 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                         while (itt.hasNext()) {
                                             atach += itt.next();
                                         }
-                                        photo = baseimg + "profilePlaceholder.jpg";
-                                        String starimg = baseimg;
-                                        String alt="";
-                                        int points = getUserPoints(answer.getCreator(), wpage.getWebSite());
-                                        if (points >= 0 && points <= 30) {
-                                            starimg += "star_vacia.png";
-                                            alt = "Vacía";
-                                        } else if (points >= 31 && points <= 80) {
-                                            starimg += "star_plata.png";
-                                            alt = "Plata";
-                                        } else if (points >= 81 && points <= 130) {
-                                            starimg += "star_oro.png";
-                                            alt = "Oro";
-                                        } else if (points >= 131) {
-                                            starimg += "star_diamante.png";
-                                            alt = "Diamante";
+                                        String starimg = "";
+                                        String alt = "";
+                                        int points = -1;
+                                        creator = "Anónimo";
+
+                                        if (!answer.isAnonymous() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_useScoreSystem)) {
+                                            starimg = baseimg;
+                                            points = getUserPoints(answer.getCreator(), wpage.getWebSite());
+                                            if (points >= 0 && points <= 30) {
+                                                starimg += "star_vacia.png";
+                                                alt = "Vacía";
+                                            } else if (points >= 31 && points <= 80) {
+                                                starimg += "star_plata.png";
+                                                alt = "Plata";
+                                            } else if (points >= 81 && points <= 130) {
+                                                starimg += "star_oro.png";
+                                                alt = "Oro";
+                                            } else if (points >= 131) {
+                                                starimg += "star_diamante.png";
+                                                alt = "Diamante";
+                                            }
                                         }
-                                        
-                                        if (answer.getCreator().getPhoto() != null) {
-                                            photo = SWBPortal.getWebWorkPath() + answer.getCreator().getPhoto();
+
+                                        photo = baseimg + "profilePlaceholder.jpg";
+                                        if (!answer.isAnonymous()) {
+                                            creator = answer.getCreator().getFullName();
+                                            if (answer.getCreator().getPhoto() != null) {
+                                                photo = SWBPortal.getWebWorkPath() + answer.getCreator().getPhoto();
+                                            }
                                         }
                                         renderURL.setParameter("uri", answer.getURI());
                                         actionURL.setParameter("uri", answer.getURI());
@@ -1295,20 +1374,22 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                             <div class="puntos">
                                                 <ul>
                                                     <li><img width="70" height="30" alt="<%=alt%>" title="<%=alt%> - <%=points%> puntos" src="<%=starimg%>"></li>
-                                                    <li>(<%=points%> puntos)</li>
-                                                    <li><%=countUserQuestions(answer.getCreator(), wpage.getWebSite())%> preguntas</li>
-                                                    <li><%=countUserAnswers(answer.getCreator(), wpage.getWebSite())%> respuestas</li>
+                                                    <%if (!answer.isAnonymous() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_useScoreSystem)) {%>
+                                                        <li>(<%=points%> puntos)</li>
+                                                        <li><%=countUserQuestions(answer.getCreator(), wpage.getWebSite())%> preguntas</li>
+                                                        <li><%=countUserAnswers(answer.getCreator(), wpage.getWebSite())%> respuestas</li>
+                                                    <%}%>
                                                 </ul>
                                             </div>
                                             <div class="foto">
                                                 <img width="40" height="40" src="<%=photo%>">
                                             </div>
                                             <div class="respuesta_gral">
-                                                <span class="usuario"><%=answer.getCreator().getFullName()%></span>
+                                                <span class="usuario"><%=creator%></span>
                                                 (<%=SWBUtils.TEXT.getTimeAgo(answer.getCreated(), user.getLanguage())%>). <%=answer.getAnswer()%><br>
                                                 <%
                                                 if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateAnswers)) {
-                                                    if (!answer.isAnsIsAppropiate() && !answer.getCreator().getURI().equals(user.getURI())) {
+                                                    if (!isGuest && !answer.isAnonymous() && !answer.isAnsIsAppropiate() && !answer.getCreator().getURI().equals(user.getURI())) {
                                                          actionURL.setAction("markAnswerAsInnapropiate");
                                                          actionURL.setParameter("org", "showDetail");
                                                          %>  <a href="<%=actionURL%>">Marcar como inapropiado</a>&nbsp;<%
@@ -1322,7 +1403,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                 <ul>
                                                     <%
                                                     if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_isAnswerVotable)) {
-                                                        if (!user.getURI().equals(answer.getCreator().getURI()) && !answer.userHasVoted(user)) {
+                                                        if (!isGuest && !answer.isAnonymous() && !user.getURI().equals(answer.getCreator().getURI()) && !answer.userHasVoted(user)) {
                                                             actionURL.setParameter("uri", answer.getURI());
                                                             actionURL.setAction("voteAnswer");
                                                             actionURL.setParameter("likeVote", "true");
@@ -1349,7 +1430,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                     }
 
                                                     if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markIrrelevantAnswers)) {
-                                                        if (!answer.getCreator().getURI().equals(user.getURI()) && !answer.userHasVoted(user)) {
+                                                        if (!isGuest && !answer.isAnonymous() && !answer.getCreator().getURI().equals(user.getURI()) && !answer.userHasVoted(user)) {
                                                             actionURL = paramRequest.getActionUrl();
                                                              actionURL.setParameter("uri", answer.getURI());
                                                             actionURL.setAction("voteAnswer");
@@ -1370,7 +1451,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                         }
                                                     }
                                                     if (user.isSigned() && question.getCreator().getURI().equals(user.getURI())) {
-                                                        if (!answer.getCreator().getURI().equals(user.getURI()) &&  semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markBestAnswer)) {
+                                                        if (!isGuest && !answer.isAnonymous() && !answer.getCreator().getURI().equals(user.getURI()) &&  semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markBestAnswer)) {
                                                             actionURL.setAction("bestAnswer");
                                                             actionURL.setParameter("org", "showDetail");
                                                             %><a href="<%=actionURL%>">Mejor respuesta</a>&nbsp;<%
@@ -1419,7 +1500,8 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                         <ul>
                                             <%
                                             for (int idx = 0; idx < references.size(); idx++) {
-                                                String fileName = references.get(idx).replaceAll(prefix, "");if (fileName.endsWith(".mp3")) {
+                                                String fileName = references.get(idx).replaceAll(prefix, "");
+                                                if (fileName.endsWith(".mp3")) {
                                                     %><li><object type="application/x-shockwave-flash" data="<%=baseimg%>dewplayer.swf?mp3=<%=qfilePath + references.get(idx)%>" width="200" height="20" id="dewplayer"><param name="wmode" value="transparent" /><param name="movie" value="<%=baseimg%>dewplayer.swf?mp3=<%=qfilePath + references.get(idx)%>" /></object></li><%
                                                 } else {
                                                     %><li><a href="<%=qfilePath + references.get(idx)%>" target="_blank"><%=fileName%></a></li><%
