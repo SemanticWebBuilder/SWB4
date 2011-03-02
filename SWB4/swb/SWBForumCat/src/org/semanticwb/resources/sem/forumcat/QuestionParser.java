@@ -59,7 +59,11 @@ public class QuestionParser extends GenericParser {
     }
 
     public String getIndexCreator(Searchable gen) {
-        return ((Question)gen).getCreator().getURI();
+        String ret = "";
+        if (((Question)gen).getCreator() != null) {
+            return ((Question)gen).getCreator().getURI();
+        }
+        return ret;
     }
 
     @Override
