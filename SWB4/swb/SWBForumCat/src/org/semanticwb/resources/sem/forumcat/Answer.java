@@ -29,9 +29,9 @@ public class Answer extends org.semanticwb.resources.sem.forumcat.base.AnswerBas
     }
 
     public boolean isAnonymous() {
-        boolean ret = false;
+        boolean ret = true;
         if (getCreator() != null) {
-            ret = true;
+            ret = false;
         }
         return ret;
     }
