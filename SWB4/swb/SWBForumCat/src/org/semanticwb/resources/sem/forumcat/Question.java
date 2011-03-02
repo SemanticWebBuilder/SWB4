@@ -53,4 +53,12 @@ public class Question extends org.semanticwb.resources.sem.forumcat.base.Questio
         }
         return ret;
     }
+
+    public boolean isAnonymous() {
+        boolean ret = false;
+        if (getCreator() != null) {
+            ret = true;
+        }
+        return ret;
+    }
 }
