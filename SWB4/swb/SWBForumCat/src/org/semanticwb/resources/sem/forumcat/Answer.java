@@ -27,4 +27,12 @@ public class Answer extends org.semanticwb.resources.sem.forumcat.base.AnswerBas
         }
         return ret;
     }
+
+    public boolean isAnonymous() {
+        boolean ret = false;
+        if (getCreator() != null) {
+            ret = true;
+        }
+        return ret;
+    }
 }
