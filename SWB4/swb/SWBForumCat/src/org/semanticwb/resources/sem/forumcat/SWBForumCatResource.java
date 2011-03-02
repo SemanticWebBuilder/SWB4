@@ -89,7 +89,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 } catch (FormValidateException e) {
                     log.error(e);
                 }
-                if (isUseScoreSystem()) {
+                if (isUseScoreSystem() && user != null) {
                     UserPoints points = getUserPointsObject(user, website);
                     if (points == null) {
                         points = UserPoints.ClassMgr.createUserPoints(website);
@@ -169,7 +169,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 if (request.getParameter("page") != null) {
                     response.setRenderParameter("page", request.getParameter("page"));
                 }
-                if (isUseScoreSystem()) {
+                if (isUseScoreSystem() && user != null) {
                     UserPoints points = getUserPointsObject(user, website);
                     if (points == null) {
                         points = UserPoints.ClassMgr.createUserPoints(website);
@@ -264,7 +264,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     response.setAction("showDetail");
                 }
 
-                if (isUseScoreSystem()) {
+                if (isUseScoreSystem() && user != null) {
                     UserPoints points = getUserPointsObject(user, website);
                     if (points == null) {
                         points = UserPoints.ClassMgr.createUserPoints(website);
@@ -328,19 +328,17 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 Question question = (Question) semObject.createGenericInstance();
 
                 boolean hasVoted = false;
-                Iterator<QuestionVote> itQuestionVote = QuestionVote.ClassMgr.listQuestionVoteByQuestionVote(question);
-                while (itQuestionVote.hasNext() && !hasVoted) {
-                    QuestionVote av = itQuestionVote.next();
-                    if (av.getUserVote().getURI().equals(user.getURI())) {
-                        hasVoted = true;
-                    }
+                if (user != null && question.userHasVoted(user)) {
+                    hasVoted = true;
                 }
 
                 QuestionVote questionVote = null;
                 if (!hasVoted) {
                     questionVote = QuestionVote.ClassMgr.createQuestionVote(website);
                     questionVote.setQuestionVote(question);
-                    questionVote.setUserVote(user);
+                    if (user != null) {
+                        questionVote.setUserVote(user);
+                    }
                 }
 
                 if (questionVote != null) {
@@ -370,7 +368,9 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 if (!hasVoted) {
                     answerVote = AnswerVote.ClassMgr.createAnswerVote(website);
                     answerVote.setAnswerVote(answer);
-                    answerVote.setAnsUserVote(user);
+                    if (user != null) {
+                        answerVote.setAnsUserVote(user);
+                    }
                 }
 
                 if (answerVote != null) {
@@ -380,7 +380,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     if (request.getParameter("likeVote") != null) {
                         boolean likeVote = Boolean.parseBoolean(request.getParameter("likeVote"));
                         answerVote.setLikeAnswer(likeVote);
-                        if (isUseScoreSystem()) {
+                        if (isUseScoreSystem() && user != null) {
                             UserPoints points = getUserPointsObject(user, website);
                             if (points == null) {
                                 points = UserPoints.ClassMgr.createUserPoints(website);
@@ -413,7 +413,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
 
                         int irrelevantCount = answer.getAnsIrrelevant() + 1;
                         answer.setAnsIrrelevant(irrelevantCount);
-                        if (isUseScoreSystem()) {
+                        if (isUseScoreSystem() && user != null) {
                             UserPoints points = getUserPointsObject(answer.getCreator(), website);
                             if (points == null) {
                                 points = UserPoints.ClassMgr.createUserPoints(website);
@@ -463,7 +463,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 Iterator<QuestionSubscription> it_subs = QuestionSubscription.ClassMgr.listQuestionSubscriptionByQuestionObj(question);
                 while (it_subs.hasNext() && !isSuscribed) {
                     QuestionSubscription qs = it_subs.next();
-                    if (qs.getUserObj().getURI().equals(user.getURI())) {
+                    if (user != null && qs.getUserObj() != null && qs.getUserObj().getURI().equals(user.getURI())) {
                         isSuscribed = true;
                     }
                 }
@@ -472,7 +472,9 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     try {
                         QuestionSubscription questionSubs = QuestionSubscription.ClassMgr.createQuestionSubscription(website);
                         questionSubs.setQuestionObj(question);
-                        questionSubs.setUserObj(user);
+                        if (user != null) {
+                            questionSubs.setUserObj(user);
+                        }
                         //TODO: Enviar correo
                     } catch (Exception e) {
                         log.error(e);
@@ -495,7 +497,9 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     WebPage category = (WebPage) semObject.createGenericInstance();
                     CategorySubscription catSubs = CategorySubscription.ClassMgr.createCategorySubscription(website);
                     catSubs.setCategoryWebpage(category);
-                    catSubs.setCategoryUser(user);
+                    if (user != null) {
+                        catSubs.setCategoryUser(user);
+                    }
                 } catch (Exception e) {
                     log.error(e);
                 }
@@ -542,12 +546,15 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
     private UserPoints getUserPointsObject(User user, WebSite model) {
         UserPoints ret = null;
         boolean found = false;
-        Iterator<UserPoints> itpoints = UserPoints.ClassMgr.listUserPointsByPointsUser(user, model);
-        while (itpoints.hasNext() && !found) {
-            UserPoints points = itpoints.next();
-            if (points.getPointsForum().getURI().equals(getURI())) {
-                ret = points;
-                found = true;
+
+        if (user != null) {
+            Iterator<UserPoints> itpoints = UserPoints.ClassMgr.listUserPointsByPointsUser(user, model);
+            while (itpoints.hasNext() && !found) {
+                UserPoints points = itpoints.next();
+                if (points.getPointsForum().getURI().equals(getURI())) {
+                    ret = points;
+                    found = true;
+                }
             }
         }
         return ret;
