@@ -56,7 +56,7 @@ public class Question extends org.semanticwb.resources.sem.forumcat.base.Questio
 
     public boolean isAnonymous() {
         boolean ret = true;
-        if (getCreator() == null) {
+        if (getCreator() != null) {
             ret = false;
         }
         return ret;
