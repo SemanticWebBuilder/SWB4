@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
@@ -179,50 +178,56 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
     @Override
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) {
         String pname = getPropertyName(prop, obj, propName);
-//        System.out.println("********************** FlashFileUploader.process **********************");
-//        System.out.println(request.getParameter(pname + "_delFile"));
-        if (request.getParameter(pname + "_delFile") != null) {
-            if (prop.getCardinality() != 1) {
-                Iterator<SemanticLiteral> list = obj.listLiteralProperties(prop);
+        //MAPS74 - 01032011 Parche en caso de que en la forma no se haya rendereado la propiedad
+        if (request.getParameter(pname + "_delFile") != null ||
+                request.getParameter(propName+"_new") != null ||
+                request.getParameter(pname ) != null)
+            {
+    //        System.out.println("********************** FlashFileUploader.process **********************");
+    //        System.out.println(request.getParameter(pname + "_delFile"));
+            if (request.getParameter(pname + "_delFile") != null) {
+                if (prop.getCardinality() != 1) {
+                    Iterator<SemanticLiteral> list = obj.listLiteralProperties(prop);
 
-                String[] params = request.getParameterValues(pname + "_delFile");
-                for (String valor : params) {
-                    //System.out.println("Del:"+valor);
-                    delfile(obj, pname + "_" + valor);
-                    obj.removeLiteralProperty(prop, new SemanticLiteral(pname+"_"+valor));
-                }
-            } else {
-                delfile(obj, pname + "_" + request.getParameter(pname + "_delFile"));
-                obj.removeProperty(prop);
-            }
-        }
-        String destpath = UploaderFileCacheUtils.getHomepath() + "/" + obj.getWorkPath();
-        File dir = new File(destpath);
-        if (!dir.exists() && !dir.mkdirs()) {
-            throw new SWBRuntimeException("Can't create work directory " + dir);
-        }
-        String cad = request.getParameter(propName+"_new");
-        if (cad==null) cad = request.getParameter(pname);
-//        System.out.println("Cadena:"+cad);
-        List<UploadedFile> lista = UploaderFileCacheUtils.get(cad);
-        for (UploadedFile arch : lista) {
-            File orig = new File(arch.getTmpuploadedCanonicalFileName());
-            String webpath = obj.getWorkPath() + arch.getOriginalName();
-            File dest = new File(dir, pname + "_" + arch.getOriginalName());
-            if (!orig.renameTo(dest)) {
-                try {
-                    SWBUtils.IO.copy(orig.getCanonicalPath(), dest.getCanonicalPath(), false, null, null);
-                } catch (IOException ex) {
-                    throw new SWBRuntimeException("Can't copy files", ex);
+                    String[] params = request.getParameterValues(pname + "_delFile");
+                    for (String valor : params) {
+                        //System.out.println("Del:"+valor);
+                        delfile(obj, pname + "_" + valor);
+                        obj.removeLiteralProperty(prop, new SemanticLiteral(pname+"_"+valor));
+                    }
+                } else {
+                    delfile(obj, pname + "_" + request.getParameter(pname + "_delFile"));
+                    obj.removeProperty(prop);
                 }
             }
-            if (prop.getCardinality() != 1) {
-                obj.addLiteralProperty(prop, new SemanticLiteral(pname + "_" + arch.getOriginalName()));
-            } else {
-                obj.setProperty(prop, pname + "_" + arch.getOriginalName());
+            String destpath = UploaderFileCacheUtils.getHomepath() + "/" + obj.getWorkPath();
+            File dir = new File(destpath);
+            if (!dir.exists() && !dir.mkdirs()) {
+                throw new SWBRuntimeException("Can't create work directory " + dir);
             }
+            String cad = request.getParameter(propName+"_new");
+            if (cad==null) cad = request.getParameter(pname);
+    //        System.out.println("Cadena:"+cad);
+            List<UploadedFile> lista = UploaderFileCacheUtils.get(cad);
+            for (UploadedFile arch : lista) {
+                File orig = new File(arch.getTmpuploadedCanonicalFileName());
+                String webpath = obj.getWorkPath() + arch.getOriginalName();
+                File dest = new File(dir, pname + "_" + arch.getOriginalName());
+                if (!orig.renameTo(dest)) {
+                    try {
+                        SWBUtils.IO.copy(orig.getCanonicalPath(), dest.getCanonicalPath(), false, null, null);
+                    } catch (IOException ex) {
+                        throw new SWBRuntimeException("Can't copy files", ex);
+                    }
+                }
+                if (prop.getCardinality() != 1) {
+                    obj.addLiteralProperty(prop, new SemanticLiteral(pname + "_" + arch.getOriginalName()));
+                } else {
+                    obj.setProperty(prop, pname + "_" + arch.getOriginalName());
+                }
+            }
+            UploaderFileCacheUtils.clean(cad);
         }
-        UploaderFileCacheUtils.clean(cad);
     }
 
     /**
