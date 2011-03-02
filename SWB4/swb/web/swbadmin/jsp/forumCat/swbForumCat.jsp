@@ -102,8 +102,6 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
         action = "showDetail";
     }
     String baseimg = SWBPortal.getWebWorkPath()+"/models/"+wpage.getWebSiteId()+"/css/images/";
-    boolean isGuest = (user == null);
-
     if (action != null && action.equals("add")) {
         SWBFormMgr mgr = new SWBFormMgr(Question.sclass, wpage.getWebSite().getSemanticObject(), null);
         mgr.setLang(user.getLanguage());
@@ -526,7 +524,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                 (<%=SWBUtils.TEXT.getTimeAgo(comAnswer.getCreated(), user.getLanguage())%>). <%=comAnswer.getAnswer()%>
                                                 <%
                                                 if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateAnswers)) {
-                                                    if (!isGuest && !comAnswer.isAnonymous() && !comAnswer.isAnsIsAppropiate() && !comAnswer.getCreator().getURI().equals(user.getURI())) {
+                                                    if (!comAnswer.isAnonymous() && !comAnswer.isAnsIsAppropiate() && !comAnswer.getCreator().getURI().equals(user.getURI())) {
                                                          actionURL.setAction("markAnswerAsInnapropiate");
                                                          actionURL.setParameter("org", "edit");
                                                          %>  <a href="<%=actionURL%>">Marcar como inapropiado</a>&nbsp;<%
@@ -540,7 +538,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                 <ul>
                                                     <%
                                                     if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_isAnswerVotable)) {
-                                                        if (!isGuest && !comAnswer.isAnonymous() && !user.getURI().equals(comAnswer.getCreator().getURI()) && !comAnswer.userHasVoted(user)) {
+                                                        if (!comAnswer.isAnonymous() && !user.getURI().equals(comAnswer.getCreator().getURI()) && !comAnswer.userHasVoted(user)) {
                                                             actionURL.setParameter("uri", comAnswer.getURI());
                                                             actionURL.setAction("voteAnswer");
                                                             actionURL.setParameter("likeVote", "true");
@@ -567,7 +565,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                         }
                                                     }
                                                     if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markIrrelevantAnswers)) {
-                                                        if (!isGuest && !comAnswer.isAnonymous() && !comAnswer.getCreator().getURI().equals(user.getURI()) && !comAnswer.userHasVoted(user)) {
+                                                        if (!comAnswer.isAnonymous() && !comAnswer.getCreator().getURI().equals(user.getURI()) && !comAnswer.userHasVoted(user)) {
                                                              actionURL = paramRequest.getActionUrl();
                                                              actionURL.setParameter("uri", comAnswer.getURI());
                                                              actionURL.setAction("voteAnswer");
@@ -675,7 +673,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                     (<%=SWBUtils.TEXT.getTimeAgo(answer.getCreated(), user.getLanguage())%>). <%=answer.getAnswer()%><br>
                                                     <%
                                                     if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateAnswers)) {
-                                                        if (!isGuest && !answer.isAnonymous() && !isGuest && !answer.isAnsIsAppropiate() && !answer.getCreator().getURI().equals(user.getURI())) {
+                                                        if (!answer.isAnonymous() && !answer.isAnsIsAppropiate() && !answer.getCreator().getURI().equals(user.getURI())) {
                                                              actionURL.setAction("markAnswerAsInnapropiate");
                                                              actionURL.setParameter("org", "edit");
                                                              %>  <a href="<%=actionURL%>">Marcar como inapropiado</a>&nbsp;<%
@@ -684,7 +682,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                         }
                                                     }
                                                     if (user.isSigned() && question.getCreator() != null && question.getCreator().getURI().equals(user.getURI())) {
-                                                        if (!isGuest && !answer.isAnonymous() && !answer.getCreator().getURI().equals(user.getURI()) &&  semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markBestAnswer)) {
+                                                        if (!answer.isAnonymous() && !answer.getCreator().getURI().equals(user.getURI()) &&  semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markBestAnswer)) {
                                                             actionURL.setAction("bestAnswer");
                                                             actionURL.setParameter("org", "edit");
                                                             %><a href="<%=actionURL%>">Mejor respuesta</a>&nbsp;<%
@@ -696,7 +694,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                     <ul>
                                                     <%
                                                     if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_isAnswerVotable)) {
-                                                        if (!isGuest && !answer.isAnonymous() && !user.getURI().equals(answer.getCreator().getURI()) && !answer.userHasVoted(user)) {
+                                                        if (!answer.isAnonymous() && !user.getURI().equals(answer.getCreator().getURI()) && !answer.userHasVoted(user)) {
                                                             actionURL.setParameter("uri", answer.getURI());
                                                             actionURL.setAction("voteAnswer");
                                                             actionURL.setParameter("likeVote", "true");
@@ -722,7 +720,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                         }
                                                     }
                                                     if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markIrrelevantAnswers)) {
-                                                        if (!isGuest && !answer.isAnonymous() && !answer.getCreator().getURI().equals(user.getURI()) && !answer.userHasVoted(user)) {
+                                                        if (!answer.isAnonymous() && !answer.getCreator().getURI().equals(user.getURI()) && !answer.userHasVoted(user)) {
                                                              actionURL = paramRequest.getActionUrl();
                                                              actionURL.setParameter("uri", answer.getURI());
                                                              actionURL.setAction("voteAnswer");
@@ -1000,7 +998,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                             (<%=SWBUtils.TEXT.getTimeAgo(favAnswer.getCreated(), user.getLanguage())%>). <%=favAnswer.getAnswer()%>
                                             <%
                                             if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateAnswers)) {
-                                                if (!isGuest && !favAnswer.isAnonymous() && !favAnswer.isAnsIsAppropiate() && !favAnswer.getCreator().getURI().equals(user.getURI())) {
+                                                if (!favAnswer.isAnonymous() && !favAnswer.isAnsIsAppropiate() && !favAnswer.getCreator().getURI().equals(user.getURI())) {
                                                      actionURL.setAction("markAnswerAsInnapropiate");
                                                      actionURL.setParameter("org", "showDetail");
                                                      %> <a href="<%=actionURL%>">Marcar como inapropiado</a>&nbsp;<%
@@ -1014,7 +1012,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                             <ul>
                                                 <%
                                                 if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_isAnswerVotable)) {
-                                                    if (!isGuest && !favAnswer.isAnonymous() && !user.getURI().equals(favAnswer.getCreator().getURI()) && !favAnswer.userHasVoted(user)) {
+                                                    if (!favAnswer.isAnonymous() && !user.getURI().equals(favAnswer.getCreator().getURI()) && !favAnswer.userHasVoted(user)) {
                                                         actionURL.setParameter("uri", favAnswer.getURI());
                                                         actionURL.setAction("voteAnswer");
                                                         actionURL.setParameter("likeVote", "true");
@@ -1040,7 +1038,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                     }
                                                 }
                                                 if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markIrrelevantAnswers)) {
-                                                    if (!isGuest && !favAnswer.isAnonymous() && !favAnswer.getCreator().getURI().equals(user.getURI()) && !favAnswer.userHasVoted(user)) {
+                                                    if (!favAnswer.isAnonymous() && !favAnswer.getCreator().getURI().equals(user.getURI()) && !favAnswer.userHasVoted(user)) {
                                                          actionURL = paramRequest.getActionUrl();
                                                          actionURL.setParameter("uri", favAnswer.getURI());
                                                          actionURL.setAction("voteAnswer");
@@ -1184,7 +1182,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                             (<%=SWBUtils.TEXT.getTimeAgo(comAnswer.getCreated(), user.getLanguage())%>). <%=comAnswer.getAnswer()%>
                                             <%
                                                 if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateAnswers)) {
-                                                    if (!isGuest && !comAnswer.isAnonymous() && !comAnswer.isAnsIsAppropiate() && !comAnswer.getCreator().getURI().equals(user.getURI())) {
+                                                    if (!comAnswer.isAnonymous() && !comAnswer.isAnsIsAppropiate() && !comAnswer.getCreator().getURI().equals(user.getURI())) {
                                                          actionURL.setAction("markAnswerAsInnapropiate");
                                                          actionURL.setParameter("org", "showDetail");
                                                          %>  <a href="<%=actionURL%>">Marcar como inapropiado</a>&nbsp;<%
@@ -1198,7 +1196,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                             <ul>
                                                 <%
                                                 if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_isAnswerVotable)) {
-                                                    if (!isGuest && !comAnswer.isAnonymous() && !user.getURI().equals(comAnswer.getCreator().getURI()) && !comAnswer.userHasVoted(user)) {
+                                                    if (!comAnswer.isAnonymous() && !user.getURI().equals(comAnswer.getCreator().getURI()) && !comAnswer.userHasVoted(user)) {
                                                         actionURL.setParameter("uri", comAnswer.getURI());
                                                         actionURL.setAction("voteAnswer");
                                                         actionURL.setParameter("likeVote", "true");
@@ -1225,7 +1223,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                 }
 
                                                 if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markIrrelevantAnswers)) {
-                                                    if (!isGuest && !comAnswer.isAnonymous() && !comAnswer.getCreator().getURI().equals(user.getURI()) && !comAnswer.userHasVoted(user)) {
+                                                    if (!comAnswer.isAnonymous() && !comAnswer.getCreator().getURI().equals(user.getURI()) && !comAnswer.userHasVoted(user)) {
                                                         actionURL = paramRequest.getActionUrl();
                                                          actionURL.setParameter("uri", comAnswer.getURI());
                                                         actionURL.setAction("voteAnswer");
@@ -1389,7 +1387,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                 (<%=SWBUtils.TEXT.getTimeAgo(answer.getCreated(), user.getLanguage())%>). <%=answer.getAnswer()%><br>
                                                 <%
                                                 if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateAnswers)) {
-                                                    if (!isGuest && !answer.isAnonymous() && !answer.isAnsIsAppropiate() && !answer.getCreator().getURI().equals(user.getURI())) {
+                                                    if (!answer.isAnonymous() && !answer.isAnsIsAppropiate() && !answer.getCreator().getURI().equals(user.getURI())) {
                                                          actionURL.setAction("markAnswerAsInnapropiate");
                                                          actionURL.setParameter("org", "showDetail");
                                                          %>  <a href="<%=actionURL%>">Marcar como inapropiado</a>&nbsp;<%
@@ -1403,7 +1401,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                 <ul>
                                                     <%
                                                     if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_isAnswerVotable)) {
-                                                        if (!isGuest && !answer.isAnonymous() && !user.getURI().equals(answer.getCreator().getURI()) && !answer.userHasVoted(user)) {
+                                                        if (!answer.isAnonymous() && !user.getURI().equals(answer.getCreator().getURI()) && !answer.userHasVoted(user)) {
                                                             actionURL.setParameter("uri", answer.getURI());
                                                             actionURL.setAction("voteAnswer");
                                                             actionURL.setParameter("likeVote", "true");
@@ -1430,7 +1428,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                     }
 
                                                     if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markIrrelevantAnswers)) {
-                                                        if (!isGuest && !answer.isAnonymous() && !answer.getCreator().getURI().equals(user.getURI()) && !answer.userHasVoted(user)) {
+                                                        if (!answer.isAnonymous() && !answer.getCreator().getURI().equals(user.getURI()) && !answer.userHasVoted(user)) {
                                                             actionURL = paramRequest.getActionUrl();
                                                              actionURL.setParameter("uri", answer.getURI());
                                                             actionURL.setAction("voteAnswer");
@@ -1451,7 +1449,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                         }
                                                     }
                                                     if (user.isSigned() && question.getCreator().getURI().equals(user.getURI())) {
-                                                        if (!isGuest && !answer.isAnonymous() && !answer.getCreator().getURI().equals(user.getURI()) &&  semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markBestAnswer)) {
+                                                        if (!answer.isAnonymous() && !answer.getCreator().getURI().equals(user.getURI()) &&  semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markBestAnswer)) {
                                                             actionURL.setAction("bestAnswer");
                                                             actionURL.setParameter("org", "showDetail");
                                                             %><a href="<%=actionURL%>">Mejor respuesta</a>&nbsp;<%
