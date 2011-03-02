@@ -23,6 +23,7 @@ public abstract class SWBForumCatResourceBase extends org.semanticwb.portal.api.
     public static final org.semanticwb.platform.SemanticClass forumCat_Question=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#Question");
     public static final org.semanticwb.platform.SemanticProperty forumCat_hasQuestionInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#hasQuestionInv");
     public static final org.semanticwb.platform.SemanticProperty forumCat_maxInnapropiateCount=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#maxInnapropiateCount");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_maxQuestions=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#maxQuestions");
     public static final org.semanticwb.platform.SemanticProperty forumCat_pointsAnswer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#pointsAnswer");
     public static final org.semanticwb.platform.SemanticProperty forumCat_attachFilesTypes=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#attachFilesTypes");
     public static final org.semanticwb.platform.SemanticProperty forumCat_isAnswerVotable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#isAnswerVotable");
@@ -432,6 +433,24 @@ public abstract class SWBForumCatResourceBase extends org.semanticwb.portal.api.
     public void setMaxInnapropiateCount(int value)
     {
         getSemanticObject().setIntProperty(forumCat_maxInnapropiateCount, value);
+    }
+
+/**
+* Gets the MaxQuestions property
+* @return int with the MaxQuestions
+*/
+    public int getMaxQuestions()
+    {
+        return getSemanticObject().getIntProperty(forumCat_maxQuestions);
+    }
+
+/**
+* Sets the MaxQuestions property
+* @param value long with the MaxQuestions
+*/
+    public void setMaxQuestions(int value)
+    {
+        getSemanticObject().setIntProperty(forumCat_maxQuestions, value);
     }
 
 /**
