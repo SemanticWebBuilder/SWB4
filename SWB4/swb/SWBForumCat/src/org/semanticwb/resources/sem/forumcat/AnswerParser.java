@@ -51,7 +51,11 @@ public class AnswerParser extends GenericParser {
     }
 
     public String getIndexCreator(Searchable gen) {
-        return ((Answer)gen).getAnsQuestion().getCreator().getURI();
+        String ret = "";
+        if (((Answer)gen).getAnsQuestion().getCreator() != null) {
+            ret = ((Answer)gen).getAnsQuestion().getCreator().getURI();
+        }
+        return ret;
     }
 
     @Override
