@@ -206,7 +206,10 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
         <%
     } else if (action != null && action.equals("edit")) {
         %><div class="foro_gral"><%
-        int recPerPage = 5; //TODO: poner el numero de registros por paginas en la administracion
+        int recPerPage = 5;
+        if (semanticBase.getIntProperty(SWBForumCatResource.forumCat_maxQuestions) != 0) {
+            recPerPage = semanticBase.getIntProperty(SWBForumCatResource.forumCat_maxQuestions);
+        }
         int nRec = 0;
         int nPage;
         try {
