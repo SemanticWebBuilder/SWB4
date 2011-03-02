@@ -483,7 +483,7 @@ public class ToolBar extends CustomNode
                     {
                         var tit = ##"alertMsg";
                         var msg = ##"msgSaveAlert";
-                        if(Alert.confirm(tit, msg)) {
+                        if(modeler.contents != null and modeler.contents.isEmpty() and Alert.confirm(tit, msg)) {
                             ModelerUtils.clickedNode=null;
                             ModelerUtils.setResizeNode(null);
                             modeler.containerElement=null;
@@ -500,7 +500,7 @@ public class ToolBar extends CustomNode
                     {
                         var tit = ##"alertMsg";
                         var msg = ##"msgSaveAlert";
-                        if(Alert.confirm(tit, msg)) {
+                        if(modeler.contents != null and modeler.contents.isEmpty() and Alert.confirm(tit, msg)) {
                             ModelerUtils.clickedNode=null;
                             ModelerUtils.setResizeNode(null);
                             modeler.containerElement=null;
