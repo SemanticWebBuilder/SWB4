@@ -42,7 +42,11 @@ public class QuestionParser extends GenericParser {
     }
 
     public String getIndexForumCat(Searchable gen) {
-        return ((Question)gen).getWebpage().getTitle();
+        String ret = "";
+        if (((Question)gen).getWebpage() != null) {
+            ret = ((Question)gen).getWebpage().getTitle();
+        }
+        return ret;
     }
 
     public String getIndexForum(Searchable gen) {
