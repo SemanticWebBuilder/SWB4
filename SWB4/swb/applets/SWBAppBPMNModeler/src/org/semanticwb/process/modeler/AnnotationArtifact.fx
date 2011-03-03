@@ -13,6 +13,7 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.input.MouseEvent;
+import org.semanticwb.process.modeler.ModelerUtils;
 
 /**
  * @author javier.solis
@@ -75,9 +76,18 @@ public class AnnotationArtifact extends Artifact
             MenuItem {
                 caption: ##"actCopy"
                 action: function(e: MouseEvent) {
+                    ModelerUtils.popup.hide();
                     var t = copy();
                     modeler.setCopyNode(t);
+                }
+            },
+            MenuItem {
+                caption: ##"actCut"
+                action: function(e: MouseEvent) {
                     ModelerUtils.popup.hide();
+                    var t = cut();
+                    modeler.setCopyNode(t);
+                    ModelerUtils.setResizeNode(null);
                 }
             }
         ];
