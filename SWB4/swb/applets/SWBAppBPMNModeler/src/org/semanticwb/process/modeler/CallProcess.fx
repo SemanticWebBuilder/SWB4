@@ -47,6 +47,7 @@ public class CallProcess extends CallActivity {
     {
         resizeable=true;
         containerable=true;
+        blocksMouse = true;
         w=100;
         h=60;
         initializeCustomNode();
