@@ -169,14 +169,18 @@
     -fx-fill:linear (0%,0%) to (100%,0%) stops (0%,-startevent-first-color) (100%,-startevent-second-color);
 }
 
-.startEvent:hover {
+.startEventHover {
+    -fx-cursor: hand;
     -fx-stroke:-hover-stroke;
     -fx-stroke-width: 2;
+    -fx-fill:linear (0%,0%) to (100%,0%) stops (0%,-startevent-first-color) (100%,-startevent-second-color);
 }
 
-.startEvent:focused {
+.startEventFocused {
+    -fx-cursor: hand;
     -fx-stroke:-focus-stroke;
     -fx-stroke-width: 2;
+    -fx-fill:linear (0%,0%) to (100%,0%) stops (0%,-startevent-first-color) (100%,-startevent-second-color);
 }
 
 .interEvent {
@@ -191,14 +195,16 @@
     -fx-fill:linear (0%,0%) to (100%,0%) stops (0%,-interevent-first-color) (100%,-interevent-second-color);
 }
 
-.interEvent:hover {
+.interEventHover {
     -fx-stroke:-hover-stroke;
     -fx-stroke-width: 2;
+    -fx-fill:linear (0%,0%) to (100%,0%) stops (0%,-interevent-first-color) (100%,-interevent-second-color);
 }
 
-.interEvent:focused {
+.interEventFocused {
     -fx-stroke:-focus-stroke;
     -fx-stroke-width: 2;
+    -fx-fill:linear (0%,0%) to (100%,0%) stops (0%,-interevent-first-color) (100%,-interevent-second-color);
 }
 
 .endEvent {
@@ -208,14 +214,18 @@
     -fx-fill:linear (0%,0%) to (100%,0%) stops (0%,-endevent-first-color) (100%,-endevent-second-color);
 }
 
-.endEvent:hover {
+.endEventHover {
     -fx-stroke:-hover-stroke;
     -fx-stroke-width: 3;
+    -fx-cursor: hand;
+    -fx-fill:linear (0%,0%) to (100%,0%) stops (0%,-endevent-first-color) (100%,-endevent-second-color);
 }
 
-.endEvent:focused {
+.endEventFocused {
     -fx-stroke:-focus-stroke;
     -fx-stroke-width: 3;
+    -fx-cursor: hand;
+    -fx-fill:linear (0%,0%) to (100%,0%) stops (0%,-endevent-first-color) (100%,-endevent-second-color);
 }
 
 .gateway {
@@ -225,14 +235,18 @@
     -fx-cursor: hand;
 }
 
-.gateway:hover {
+.gatewayHover {
     -fx-stroke:-hover-stroke;
     -fx-stroke-width: 2;
+    -fx-cursor: hand;
+    -fx-fill:linear (0%,0%) to (0%,100%) stops (0%,-gateway-first-color) (100%,-gateway-second-color);
 }
 
-.gateway:focused {
+.gatewayFocused {
     -fx-stroke:-focus-stroke;
     -fx-stroke-width: 2;
+    -fx-cursor: hand;
+    -fx-fill:linear (0%,0%) to (0%,100%) stops (0%,-gateway-first-color) (100%,-gateway-second-color);
 }
 
 .task {
@@ -244,14 +258,22 @@
     -fx-fill:linear (0%,0%) to (0%,100%) stops (0%,-task-first-color) (100%,-task-second-color);
 }
 
-.task:hover {
+.taskHover {
     -fx-stroke: -hover-stroke;
     -fx-stroke-width: 2;
+    -fx-arc-width: 15;
+    -fx-arc-height: 15;
+    -fx-cursor: hand;
+    -fx-fill:linear (0%,0%) to (0%,100%) stops (0%,-task-first-color) (100%,-task-second-color);
 }
 
-.task:focused {
+.taskFocused {
     -fx-stroke: -focus-stroke;
     -fx-stroke-width: 2;
+    -fx-arc-width: 15;
+    -fx-arc-height: 15;
+    -fx-cursor: hand;
+    -fx-fill:linear (0%,0%) to (0%,100%) stops (0%,-task-first-color) (100%,-task-second-color);
 }
 
 .globalTask {
@@ -263,14 +285,22 @@
     -fx-fill:linear (0%,0%) to (0%,100%) stops (0%,-task-first-color) (100%,-task-second-color);
 }
 
-.globalTask:hover {
+.globalTaskHover {
     -fx-stroke: -hover-stroke;
     -fx-stroke-width: 4;
+    -fx-arc-width: 15;
+    -fx-arc-height: 15;
+    -fx-cursor: hand;
+    -fx-fill:linear (0%,0%) to (0%,100%) stops (0%,-task-first-color) (100%,-task-second-color);
 }
 
-.globalTask:focused {
+.globalTaskFocused {
     -fx-stroke: -focus-stroke;
     -fx-stroke-width: 4;
+    -fx-arc-width: 15;
+    -fx-arc-height: 15;
+    -fx-cursor: hand;
+    -fx-fill:linear (0%,0%) to (0%,100%) stops (0%,-task-first-color) (100%,-task-second-color);
 }
 
 .dataObject {
@@ -280,14 +310,18 @@
     -fx-fill:linear (0%,0%) to (0%,100%) stops (0%,-task-first-color) (100%,-task-second-color);
 }
 
-.dataObject:hover {
+.dataObjectHover {
     -fx-stroke: -hover-stroke;
-    -fx-stroke-width: 2
+    -fx-stroke-width: 2;
+    -fx-cursor: hand;
+    -fx-fill:linear (0%,0%) to (0%,100%) stops (0%,-task-first-color) (100%,-task-second-color);
 }
 
-.dataObject:focused {
+.dataObjectFocused {
     -fx-stroke: -focus-stroke;
-    -fx-stroke-width: 2
+    -fx-stroke-width: 2;
+    -fx-cursor: hand;
+    -fx-fill:linear (0%,0%) to (0%,100%) stops (0%,-task-first-color) (100%,-task-second-color);
 }
 
 .artifact {
@@ -296,14 +330,16 @@
     -fx-cursor: hand
 }
 
-.artifact:hover {
+.artifactHover {
     -fx-stroke: -hover-stroke;
     -fx-stroke-width: 2;
+    -fx-cursor: hand;
 }
 
-.artifact:focused {
+.artifactFocused {
     -fx-stroke: -focus-stroke;
     -fx-stroke-width: 2;
+    -fx-cursor: hand;
 }
 
 .artifact#textbox {
@@ -325,14 +361,16 @@
     -fx-fill: white;
 }
 
-.connObject:hover {
+.connObjectHover {
     -fx-stroke:-hover-stroke;
     -fx-stroke-width: 2;
+    -fx-cursor: hand;
 }
 
-.connObject:focused {
+.connObjectFocused {
     -fx-stroke:-focus-stroke;
     -fx-stroke-width: 2;
+    -fx-cursor: hand;
 }
 
 .containerButton {
@@ -361,7 +399,7 @@
     -fx-smooth: false;
 }
 
-.arrowMessage {    
+.arrowMessage {
     -fx-fill: white;
 }
 
@@ -452,19 +490,23 @@
     -fx-cursor:hand;
 }
 
-.pool:hover {
+.poolHover {
     -fx-stroke: -hover-stroke;
     -fx-stroke-width: 2;
+    -fx-fill: -pool-color;
+    -fx-cursor:hand;
 }
 
-.pool:focused {
+.poolFocused {
     -fx-stroke: -focus-stroke;
     -fx-stroke-width: 2;
+    -fx-fill: -pool-color;
+    -fx-cursor:hand;
 }
 
 .scrollView {
-    -fx-background-color: linear (0%,0%) to (0%,100%) stops (0%,#B9D6D6) (100%,#DDECEB);/*#EDEDED;*/
     -fx-cursor: crosshair;
+    -fx-background-color: linear (0%,0%) to (0%,100%) stops (0%,#B9D6D6) (100%,#DDECEB);/*#EDEDED;*/
 }
 
 .splash {
