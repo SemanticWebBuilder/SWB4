@@ -308,68 +308,6 @@ public class Task extends Activity
                             remove(true);
                         }
                     },
-                    MenuItem {
-                        status: bind if (this instanceof SendTask) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
-                        caption: ##"actSend"
-                        action: function (e: MouseEvent) {
-                            ModelerUtils.popup.hide();
-                            var _title = title;
-                            //crear nuevo elemento
-                            var sp = SendTask {
-                                modeler: modeler
-                                title: _title
-                                uri:"new:sendtask:{this.modeler.toolBar.counter++}"
-                            }
-                            //pasar las entradas al nuevo elemento
-                            for(ele in getInputConnectionObjects()) {
-                                ele.end = sp;
-                            }
-
-                            for (ele in getOutputConnectionObjects()) {
-                                ele.ini = sp;
-                            }
-
-                            sp.x = x;
-                            sp.y = y;
-                            sp.container = container;
-                            sp.w = w;
-                            sp.h = h;
-                            sp.setGraphParent(getGraphParent());
-                            modeler.add(sp);
-                            remove(true);
-                        }
-                    },
-                    MenuItem {
-                        status: bind if (this instanceof ReceiveTask) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
-                        caption: ##"actReceive"
-                        action: function (e: MouseEvent) {
-                            ModelerUtils.popup.hide();
-                            var _title = title;
-                            //crear nuevo elemento
-                            var sp = ReceiveTask {
-                                modeler: modeler
-                                title: _title
-                                uri:"new:receivetask:{this.modeler.toolBar.counter++}"
-                            }
-                            //pasar las entradas al nuevo elemento
-                            for(ele in getInputConnectionObjects()) {
-                                ele.end = sp;
-                            }
-
-                            for (ele in getOutputConnectionObjects()) {
-                                ele.ini = sp;
-                            }
-
-                            sp.x = x;
-                            sp.y = y;
-                            sp.container = container;
-                            sp.w = w;
-                            sp.h = h;
-                            sp.setGraphParent(getGraphParent());
-                            modeler.add(sp);
-                            remove(true);
-                        }
-                    },
                 ]
             },
             MenuItem {isSeparator: true},
@@ -408,9 +346,18 @@ public class Task extends Activity
             MenuItem {
                 caption: ##"actCopy"
                 action: function(e: MouseEvent) {
+                    ModelerUtils.popup.hide();
                     var t = copy();
                     modeler.setCopyNode(t);
+                }
+            },
+            MenuItem {
+                caption: ##"actCut"
+                action: function(e: MouseEvent) {
                     ModelerUtils.popup.hide();
+                    var t = cut();
+                    modeler.setCopyNode(t);
+                    ModelerUtils.setResizeNode(null);
                 }
             }
         ];
