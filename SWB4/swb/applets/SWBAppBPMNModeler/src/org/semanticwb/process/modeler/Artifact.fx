@@ -38,8 +38,25 @@ public class Artifact extends GraphicalElement
         visible:false;
     };
 
+    public override var over on replace {
+        if (over and not selected) {
+            shape.styleClass = "dataObjectHover";
+        } else if (not selected) {
+            shape.styleClass = "dataObject";
+        }
+    }
+
+    public override var selected on replace {
+        if (selected) {
+            shape.styleClass = "dataObjectFocused";
+        } else {
+            shape.styleClass = "dataObject";
+        }
+    }
+
     override public function create(): Node
     {
+        blocksMouse = true;
         setCommonMenuOptions();
         w=55;
         h=60;
@@ -201,7 +218,7 @@ public class Artifact extends GraphicalElement
                 caption: ##"actCopy"
                 action: function(e: MouseEvent) {
                     var t = copy();
-                    modeler.copyNode = t;
+                    modeler.setCopyNode(t);
                     ModelerUtils.popup.hide();
                 }
             }
