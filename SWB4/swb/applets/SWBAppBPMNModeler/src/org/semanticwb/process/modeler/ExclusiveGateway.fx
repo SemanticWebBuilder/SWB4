@@ -190,8 +190,10 @@ public class ExclusiveGateway extends Gateway
             type: this.type
             modeler: this.modeler
             container: this.container
+            x: this.x + 10
+            y: this.y + 10
+            uri: "new:exclusivegateway:{modeler.toolBar.counter++}"
         }
-        t.uri = "new:exclusivegateway:{modeler.toolBar.counter++}";
         return t;
     }
 }
