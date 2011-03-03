@@ -184,9 +184,18 @@ public class SubProcess extends Activity
                 MenuItem {
                     caption: ##"actCopy"
                     action: function(e: MouseEvent) {
+                        ModelerUtils.popup.hide();
                         var t = copy();
                         modeler.setCopyNode(t);
+                    }
+                },
+                MenuItem {
+                    caption: ##"actCut"
+                    action: function(e: MouseEvent) {
                         ModelerUtils.popup.hide();
+                        var t = cut();
+                        modeler.setCopyNode(t);
+                        ModelerUtils.setResizeNode(null);
                     }
                 }
             ];
@@ -198,6 +207,15 @@ public class SubProcess extends Activity
                         var t = copy();
                         modeler.setCopyNode(t);
                         ModelerUtils.popup.hide();
+                    }
+                },
+                MenuItem {
+                    caption: ##"actCut"
+                    action: function(e: MouseEvent) {
+                        ModelerUtils.popup.hide();
+                        var t = cut();
+                        modeler.setCopyNode(t);
+                        ModelerUtils.setResizeNode(null);
                     }
                 }
             ];
