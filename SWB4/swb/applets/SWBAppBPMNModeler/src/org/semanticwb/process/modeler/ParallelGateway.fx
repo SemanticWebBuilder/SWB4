@@ -35,11 +35,20 @@ public class ParallelGateway extends Gateway
              MenuItem {
                 caption: ##"actCopy"
                 action: function (e: MouseEvent) {
+                    ModelerUtils.popup.hide();
                     var t = copy();
                     modeler.setCopyNode(t);
-                    ModelerUtils.popup.hide();
                 }
              },
+             MenuItem {
+                caption: ##"actCut"
+                action: function (e: MouseEvent) {
+                    ModelerUtils.popup.hide();
+                    var t = cut();
+                    modeler.setCopyNode(t);
+                    ModelerUtils.setResizeNode(null);
+                }
+             }
          ];
          insert actions before menuOptions[0];
 
