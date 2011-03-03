@@ -2,6 +2,7 @@
 "msgError9" = "Event-based Gateway cannot be linked to End Event"
 "msgError49" = "End Event cannot be used in Ad-Hoc Sub-Process"
 "actCopy" = "Copy"
+"actCut" = "Cut"
 "actType" = "Type"
 "actMessage" = "Message"
 "actSignal" = "Signal"
