@@ -89,8 +89,10 @@ public class ParallelStartEventGateway extends EventBasedGateway
             type: this.type
             modeler: this.modeler
             container: this.container
+            x: this.x + 10
+            y: this.y + 10
+            uri: "new:parallelstarteventgateway:{modeler.toolBar.counter++}"
         }
-        t.uri = "new:parallelstarteventgateway:{modeler.toolBar.counter++}";
         return t;
     }
 }
