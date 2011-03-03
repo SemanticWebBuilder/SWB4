@@ -1,3 +1,4 @@
 "msgError2" = "Una Anotación de Texto debe conectarse usando Asociaciones no Direccionales"
 "msgError5" = "Dos Artefactos no pueden conectarse entre sí"
 "actCopy" = "Copiar"
+"actCut" = "Cortar"
