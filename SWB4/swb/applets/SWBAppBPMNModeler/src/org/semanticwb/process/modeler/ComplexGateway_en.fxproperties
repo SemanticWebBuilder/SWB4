@@ -1,4 +1,5 @@
 "actCopy" = "Copy"
+"actCut" = "Cut"
 "actType" = "Type"
 "actInclusive" = "Inclusive"
 "actExclusive" = "Exclusive"
