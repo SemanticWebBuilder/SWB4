@@ -2,38 +2,27 @@
     -focus-stroke: #98FF00;
     -normal-stroke: black;
     -hover-stroke: #FF6060;
-    -startevent-normal-stroke: black;
-    -startevent-first-color: white;
-    -interevent-normal-stroke: black;
-    -interevent-first-color: white;
-    -endevent-normal-stroke: black;
-    -endevent-first-color: white;
-    -gateway-normal-stroke: black;
-    -gateway-first-color: white;
-    -sequence-normal-stroke: -normal-stroke;
     -tooltip-stroke: gray;
     -tooltip-first-color: #fafad2;
     -tooltip-second-color: #E5B949;
     -tooltip-third-color: #daa520;
     -tooltip-light-second-color: #FFFFFF00;
     -tooltip-light-first-color: #FFFFFF;
-    -task-first-color: #FFFFFF;
     -containerbutton-color:#F2F2F2;
     -containerbutton-stroke:#666666;
-    -pool-normal-stroke:black;
-    -pool-color:#FFFFFF;
+    -shape-color: white;
 }
 .modifierGateway {
-    -fx-stroke: -gateway-normal-stroke;
+    -fx-stroke: -normal-stroke;
     -fx-stroke-width: 3;
     -fx-stroke-line-cap: round;
-    -fx-fill:-gateway-first-color
+    -fx-fill: -shape-color;
 }
 
 .modifierGateway2 {
-    -fx-stroke: -gateway-normal-stroke;
+    -fx-stroke: -normal-stroke;
     -fx-stroke-width: 1;
-    -fx-fill:-gateway-first-color;
+    -fx-fill: -shape-color;
 }
 
 .modifierLoop {
@@ -50,7 +39,7 @@
 
 .modifierCollapsed#rect {
     -fx-stroke: -normal-stroke;
-    -fx-fill:-task-first-color;
+    -fx-fill: -shape-color;
 }
 
 .modifierComp {
@@ -159,75 +148,89 @@
 
 .startEvent {
     -fx-cursor: hand;
-    -fx-stroke: -startevent-normal-stroke;
+    -fx-stroke: -normal-stroke;
     -fx-stroke-width:1;
-    -fx-fill:-startevent-first-color;
+    -fx-fill: -shape-color;
 }
 
-.startEvent:hover {
+.startEventHover {
+    -fx-cursor: hand;
     -fx-stroke:-hover-stroke;
     -fx-stroke-width: 2;
+    -fx-fill: -shape-color;
 }
 
-.startEvent:focused {
+.startEventFocused {
+    -fx-cursor: hand;
     -fx-stroke:-focus-stroke;
     -fx-stroke-width: 2;
+    -fx-fill: -shape-color;
 }
 
 .interEvent {
-    -fx-stroke:-interevent-normal-stroke;
+    -fx-stroke:-normal-stroke;
     -fx-stroke-width: 1;
-    -fx-fill:-interevent-first-color;
+    -fx-fill: -shape-color;
 }
 
 .interEvent#marker {
-    -fx-stroke:-interevent-normal-stroke;
+    -fx-stroke: -normal-stroke;
     -fx-stroke-width: 1;
-    -fx-fill:-interevent-first-color;
+    -fx-fill: -shape-color;
 }
 
-.interEvent:hover {
+.interEventHover {
     -fx-stroke:-hover-stroke;
     -fx-stroke-width: 2;
+    -fx-fill: -shape-color;
 }
 
-.interEvent:focused {
+.interEventFocused {
     -fx-stroke:-focus-stroke;
     -fx-stroke-width: 2;
+    -fx-fill: -shape-color;
 }
 
 .endEvent {
-    -fx-stroke:-endevent-normal-stroke;
+    -fx-stroke:-normal-stroke;
+    -fx-stroke-width: 2;
+    -fx-cursor: hand;
+    -fx-fill: -shape-color;
+}
+
+.endEventHover {
+    -fx-stroke:-hover-stroke;
     -fx-stroke-width: 3;
     -fx-cursor: hand;
-    -fx-fill:-endevent-first-color;
+    -fx-fill: -shape-color;
 }
 
-.endEvent:hover {
-    -fx-stroke:-hover-stroke;
-    -fx-stroke-width: 4;
-}
-
-.endEvent:focused {
+.endEventFocused {
     -fx-stroke:-focus-stroke;
-    -fx-stroke-width: 4;
+    -fx-stroke-width: 3;
+    -fx-cursor: hand;
+    -fx-fill: -shape-color;
 }
 
 .gateway {
-    -fx-stroke:-gateway-normal-stroke;
+    -fx-stroke:-normal-stroke;
     -fx-stroke-width: 1;
-    -fx-fill:-gateway-first-color;
     -fx-cursor: hand;
+    -fx-fill: -shape-color;
 }
 
-.gateway:hover {
+.gatewayHover {
     -fx-stroke:-hover-stroke;
     -fx-stroke-width: 2;
+    -fx-cursor: hand;
+    -fx-fill: -shape-color;
 }
 
-.gateway:focused {
+.gatewayFocused {
     -fx-stroke:-focus-stroke;
     -fx-stroke-width: 2;
+    -fx-cursor: hand;
+    -fx-fill: -shape-color;
 }
 
 .task {
@@ -236,17 +239,25 @@
     -fx-stroke: -normal-stroke;
     -fx-stroke-width: 1;
     -fx-cursor: hand;
-    -fx-fill:-task-first-color;
+    -fx-fill: -shape-color;
 }
 
-.task:hover {
+.taskHover {
     -fx-stroke: -hover-stroke;
     -fx-stroke-width: 2;
+    -fx-arc-width: 15;
+    -fx-arc-height: 15;
+    -fx-cursor: hand;
+    -fx-fill: -shape-color;
 }
 
-.task:focused {
+.taskFocused {
     -fx-stroke: -focus-stroke;
     -fx-stroke-width: 2;
+    -fx-arc-width: 15;
+    -fx-arc-height: 15;
+    -fx-cursor: hand;
+    -fx-fill: -shape-color;
 }
 
 .globalTask {
@@ -255,34 +266,46 @@
     -fx-stroke: -normal-stroke;
     -fx-stroke-width: 3;
     -fx-cursor: hand;
-    -fx-fill:-task-first-color;
+    -fx-fill: -shape-color;
 }
 
-.globalTask:hover {
+.globalTaskHover {
     -fx-stroke: -hover-stroke;
     -fx-stroke-width: 4;
+    -fx-arc-width: 15;
+    -fx-arc-height: 15;
+    -fx-cursor: hand;
+    -fx-fill: -shape-color;
 }
 
-.globalTask:focused {
+.globalTaskFocused {
     -fx-stroke: -focus-stroke;
     -fx-stroke-width: 4;
+    -fx-arc-width: 15;
+    -fx-arc-height: 15;
+    -fx-cursor: hand;
+    -fx-fill: -shape-color;
 }
 
 .dataObject {
     -fx-stroke: -normal-stroke;
     -fx-stroke-width: 1;
     -fx-cursor: hand;
-    -fx-fill:-task-first-color;
+    -fx-fill: -shape-color;
 }
 
-.dataObject:hover {
+.dataObjectHover {
     -fx-stroke: -hover-stroke;
-    -fx-stroke-width: 2
+    -fx-stroke-width: 2;
+    -fx-cursor: hand;
+    -fx-fill: -shape-color;
 }
 
-.dataObject:focused {
+.dataObjectFocused {
     -fx-stroke: -focus-stroke;
-    -fx-stroke-width: 2
+    -fx-stroke-width: 2;
+    -fx-cursor: hand;
+    -fx-fill: -shape-color;
 }
 
 .artifact {
@@ -291,14 +314,16 @@
     -fx-cursor: hand
 }
 
-.artifact:hover {
+.artifactHover {
     -fx-stroke: -hover-stroke;
     -fx-stroke-width: 2;
+    -fx-cursor: hand;
 }
 
-.artifact:focused {
+.artifactFocused {
     -fx-stroke: -focus-stroke;
     -fx-stroke-width: 2;
+    -fx-cursor: hand;
 }
 
 .artifact#textbox {
@@ -313,21 +338,23 @@
 }
 
 .connObject#tail {
-    -fx-fill: white;
+    -fx-fill: -shape-color;
 }
 
 .connObject#diamond {
-    -fx-fill: white;
+    -fx-fill: -shape-color;
 }
 
-.connObject:hover {
+.connObjectHover {
     -fx-stroke:-hover-stroke;
     -fx-stroke-width: 2;
+    -fx-cursor: hand;
 }
 
-.connObject:focused {
+.connObjectFocused {
     -fx-stroke:-focus-stroke;
     -fx-stroke-width: 2;
+    -fx-cursor: hand;
 }
 
 .containerButton {
@@ -401,7 +428,7 @@
 .ToolTip#rect {
     -fx-arc-width: 10;
     -fx-arc-height: 10;
-    -fx-fill: -tooltip-first-color;
+    -fx-fill: linear (0%,0%) to (0%,100%) stops (0%,-tooltip-first-color) (20%,-tooltip-second-color) (80%,-tooltip-second-color) (100%,-tooltip-third-color);
 }
 
 .ToolTip#triangle {
@@ -429,7 +456,7 @@
 .ToolTipError#rect {
     -fx-arc-width: 10;
     -fx-arc-height: 10;
-    -fx-fill: indianred;
+    -fx-fill: linear (0%,0%) to (0%,100%) stops (0%,antiquewhite) (100%,indianred);
 }
 
 .ToolTipError#triangle {
@@ -441,24 +468,27 @@
 }
 
 .pool {
-    -fx-stroke: -pool-normal-stroke;
-    -fx-fill: -pool-color;
+    -fx-stroke: -normal-stroke;
+    -fx-fill:  -shape-color;
     -fx-stroke-width: 1;
     -fx-cursor:hand;
 }
 
-.pool:hover {
+.poolHover {
     -fx-stroke: -hover-stroke;
     -fx-stroke-width: 2;
+    -fx-fill:  -shape-color;
+    -fx-cursor:hand;
 }
 
-.pool:focused {
+.poolFocused {
     -fx-stroke: -focus-stroke;
     -fx-stroke-width: 2;
+    -fx-fill: -shape-color;
+    -fx-cursor:hand;
 }
 
 .scrollView {
-    -fx-background-color: white;
     -fx-cursor: crosshair;
 }
 
