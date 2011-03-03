@@ -166,7 +166,7 @@ public class SubMenu extends CustomNode
              ]
              onMouseExited: function( e: MouseEvent ):Void
              {
-                 content.requestFocus();
+                 //content.requestFocus();
                  clicked=false;
              }
              cursor:Cursor.HAND;
