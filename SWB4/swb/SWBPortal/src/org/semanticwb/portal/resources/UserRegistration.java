@@ -41,7 +41,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.DisplayProperty;
@@ -49,7 +48,6 @@ import org.semanticwb.model.FormElement;
 import org.semanticwb.model.GenericFormElement;
 import org.semanticwb.model.PropertyGroup;
 import org.semanticwb.model.SWBComparator;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.platform.SemanticObject;
@@ -129,7 +127,7 @@ public class UserRegistration extends GenericAdmResource
             boolean createGroup = false;
 //            boolean addProp=false;
             SemanticProperty sp = itProps.next();
-            if (!sp.getName().startsWith("usr") || null == sp.getDisplayProperty())
+            if (!sp.getName().startsWith("usr") || null == sp.getDisplayProperty() || sp.getName().equals("usrRequestChangePassword"))
             {
                 continue;
             }
