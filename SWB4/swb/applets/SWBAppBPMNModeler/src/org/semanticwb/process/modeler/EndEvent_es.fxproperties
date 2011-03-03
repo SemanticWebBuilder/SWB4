@@ -2,6 +2,7 @@
 "msgError9" = "Un Evento Final no puede conectarse con una Compuerta Exclusiva Basada en Eventos"
 "msgError49" = "Un Sub-Proceso AdHoc no debe tener Eventos Finales"
 "actCopy" = "Copiar"
+"actCut" = "Cortar"
 "actType" = "Tipo"
 "actMessage" = "Mensaje"
 "actSignal" = "Señal"
