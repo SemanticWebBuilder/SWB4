@@ -11,6 +11,22 @@ import javafx.scene.Node;
  */
 
 public class CallActivity extends Activity {
+    public override var over on replace {
+        if (over and not selected) {
+            shape.styleClass = "globalTaskHover";
+        } else if (not selected) {
+            shape.styleClass = "globalTask";
+        }
+    }
+
+    public override var selected on replace {
+        if (selected) {
+            shape.styleClass = "globalTaskFocused";
+        } else {
+            shape.styleClass = "globalTask";
+        }
+    }
+
     public override function create(): Node
     {
         var ret=super.create();
