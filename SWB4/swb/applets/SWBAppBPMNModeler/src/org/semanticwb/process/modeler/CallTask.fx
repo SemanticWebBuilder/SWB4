@@ -46,6 +46,7 @@ public class CallTask extends CallActivity {
 
     public override function create(): Node
     {
+        blocksMouse = true;
         resizeable=true;
         w=100;
         h=60;
@@ -199,7 +200,7 @@ public class CallTask extends CallActivity {
                 caption: ##"actCopy"
                 action: function(e: MouseEvent) {
                     var t = copy();
-                    modeler.copyNode = t;
+                    modeler.setCopyNode(t);
                     ModelerUtils.popup.hide();
                 }
             }
