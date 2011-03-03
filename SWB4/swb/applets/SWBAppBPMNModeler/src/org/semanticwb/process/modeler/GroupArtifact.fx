@@ -76,9 +76,18 @@ public class GroupArtifact extends Artifact
             MenuItem {
                 caption: ##"actCopy"
                 action: function(e: MouseEvent) {
+                    ModelerUtils.popup.hide();
                     var t = copy();
                     modeler.setCopyNode(t);
+                }
+            },
+            MenuItem {
+                caption: ##"actCut"
+                action: function(e: MouseEvent) {
                     ModelerUtils.popup.hide();
+                    var t = cut();
+                    modeler.setCopyNode(t);
+                    ModelerUtils.setResizeNode(null);
                 }
             }
         ];
