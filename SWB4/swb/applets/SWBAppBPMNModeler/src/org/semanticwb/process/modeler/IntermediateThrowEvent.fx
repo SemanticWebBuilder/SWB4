@@ -151,8 +151,10 @@ public class IntermediateThrowEvent extends ThrowEvent
             type: this.type
             modeler: this.modeler
             container: this.container
+            x: this.x + 10
+            y: this.y + 10
+            uri: "new:interevent:{modeler.toolBar.counter++}"
         }
-        t.uri = "new:interevent:{modeler.toolBar.counter++}";
         return t;
     }
 }
