@@ -143,8 +143,10 @@ public class InclusiveGateway extends Gateway
             type: this.type
             modeler: this.modeler
             container: this.container
+            x: this.x + 10
+            y: this.y + 10
+            uri: "new:inclusivegateway:{modeler.toolBar.counter++}"
         }
-        t.uri = "new:inclusivegateway:{modeler.toolBar.counter++}";
         return t;
     }
 }
