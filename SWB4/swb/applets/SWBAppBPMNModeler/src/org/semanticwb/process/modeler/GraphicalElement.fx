@@ -27,7 +27,8 @@ import org.semanticwb.process.modeler.ModelerUtils;
 
 public class GraphicalElement extends CustomNode
 {
-    public-read var over:Boolean;                       //el mause se encuentra sobre el elemento
+    public var over:Boolean;                       //el mause se encuentra sobre el elemento
+    public var selected: Boolean;
     public-read var sceneX:Number;
     public-read var sceneY:Number;
 //    var sx= bind x on replace
@@ -139,7 +140,7 @@ public class GraphicalElement extends CustomNode
                         status: bind if(this.text.size == 8) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
-                            this.text.setSize(8);
+                            this.setLabelSize(8);
                         }
                     },
                     MenuItem {
@@ -147,7 +148,7 @@ public class GraphicalElement extends CustomNode
                         status: bind if(this.text.size == 10) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
-                            this.text.setSize(10);
+                            this.setLabelSize(10);
                         }
                     },
                     MenuItem {
@@ -155,7 +156,7 @@ public class GraphicalElement extends CustomNode
                         status: bind if(this.text.size == 12) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
-                            this.text.setSize(12);
+                            this.setLabelSize(12);
                         }
                     },
                     MenuItem {
@@ -163,18 +164,18 @@ public class GraphicalElement extends CustomNode
                         status: bind if(this.text.size == 14) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
-                            this.text.setSize(14);
+                            this.setLabelSize(14);
                         }
                     }
                 ]
             }
         ];
-
         insert props into menuOptions;
     }
 
     public override function create(): Node
     {
+        blocksMouse = true;
         initializeCustomNode();
         return Group
         {
@@ -191,6 +192,7 @@ public class GraphicalElement extends CustomNode
         {
             mouseClicked(e);
         }
+        modeler.mouseClicked(e);
     }
 
     public function mouseClicked( e: MouseEvent )
@@ -219,6 +221,7 @@ public class GraphicalElement extends CustomNode
             ModelerUtils.stopToolTip();
             mouseDragged(e);
         }
+        modeler.mouseDragged(e);
     }
 
     public function mouseDragged( e: MouseEvent )
@@ -236,15 +239,28 @@ public class GraphicalElement extends CustomNode
             ModelerUtils.clickedNode=this;
             mousePressed(e);
         }
+        modeler.mousePressed(e);
     }
 
     public function mousePressed( e: MouseEvent )
     {
-        modeler.setFocusedNode(this);
+        if (e.controlDown) {
+            if (selected) {
+                modeler.removeSelectedNode(this);
+            } else {
+                modeler.addSelectedNode(this);
+                modeler.setFocusedNode(this);
+                ModelerUtils.setResizeNode(null);
+            }
+        } else {
+            modeler.unselectAll();
+            modeler.addSelectedNode(this);
+            modeler.setFocusedNode(this);
+        }        
         modeler.disablePannable=true;
         dx=x-e.sceneX;
         dy=y-e.sceneY;
-        requestFocus();
+        //requestFocus();
 
         if(e.secondaryButtonDown)
         {
@@ -265,6 +281,7 @@ public class GraphicalElement extends CustomNode
             ModelerUtils.clickedNode=null;
             mouseReleased(e);
         }
+        modeler.mouseReleased(e);
     }
 
     public function mouseReleased( e: MouseEvent )
@@ -407,33 +424,34 @@ public class GraphicalElement extends CustomNode
 
     public function keyPressed( e: KeyEvent )
     {
-        if(e.code==e.code.VK_DELETE)
-        {
-            remove(true);
-        }
-        if (e.code == e.code.VK_RIGHT and not (this instanceof Lane)) {
-            ModelerUtils.setResizeNode(null);
-            this.x += 10;
-            ModelerUtils.setResizeNode(this);
-        } else if (e.code == e.code.VK_LEFT and not (this instanceof Lane)) {
-            var sp = this.x - this.w / 2;
-            if (sp - 10 > this.sceneX) {
-                ModelerUtils.setResizeNode(null);
-                this.x -= 10;
-                ModelerUtils.setResizeNode(this);
-            }
-        } else if (e.code == e.code.VK_UP and not (this instanceof Lane)) {
-            var sp = this.y - this.h / 2;
-            if (sp - 10 > this.sceneY) {
-                ModelerUtils.setResizeNode(null);
-                this.y -= 10;
-                ModelerUtils.setResizeNode(this);
-            }
-        } else if (e.code == e.code.VK_DOWN and not (this instanceof Lane)) {
-            ModelerUtils.setResizeNode(null);
-            this.y += 10;
-            ModelerUtils.setResizeNode(this);
-        }
+//        if(e.code==e.code.VK_DELETE)
+//        {
+//            remove(true);
+//        }
+//        if (e.code == e.code.VK_RIGHT and not (this instanceof Lane)) {
+//            ModelerUtils.setResizeNode(null);
+//            this.x += 10;
+//            ModelerUtils.setResizeNode(this);
+//        } else if (e.code == e.code.VK_LEFT and not (this instanceof Lane)) {
+//            var sp = this.x - this.w / 2;
+//            if (sp - 10 > this.sceneX) {
+//                ModelerUtils.setResizeNode(null);
+//                this.x -= 10;
+//                ModelerUtils.setResizeNode(this);
+//            }
+//        } else if (e.code == e.code.VK_UP and not (this instanceof Lane)) {
+//            var sp = this.y - this.h / 2;
+//            if (sp - 10 > this.sceneY) {
+//                ModelerUtils.setResizeNode(null);
+//                this.y -= 10;
+//                ModelerUtils.setResizeNode(this);
+//            }
+//        } else if (e.code == e.code.VK_DOWN and not (this instanceof Lane)) {
+//            ModelerUtils.setResizeNode(null);
+//            this.y += 10;
+//            ModelerUtils.setResizeNode(this);
+//        }
+        modeler.keyPressed(e);
     }
 
     override var onKeyReleased = function( e: KeyEvent )
@@ -619,6 +637,12 @@ public class GraphicalElement extends CustomNode
             isForCompensation: this.isForCompensation
             isMultiInstance: this.isMultiInstance
             container: this.container
+        }
+    }
+
+    public function setLabelSize(size: Number) : Void {
+        if (this.text != null) {
+            this.text.setSize(size);
         }
     }
 }
