@@ -2,6 +2,7 @@
 "msgError2" = "Data-based Exclusive Gateway can have only one outgoing Default Flow"
 "msgError3" = "Event-based Exclusive Gateway can only be linked to Events"
 "actCopy" = "Copy"
+"actCut" = "Cut"
 "actType" = "Type"
 "actInclusive" = "Inclusive"
 "actComplex" = "Complex"
