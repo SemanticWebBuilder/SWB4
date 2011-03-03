@@ -317,8 +317,10 @@ public class Artifact extends GraphicalElement
             isForCompensation: this.isForCompensation
             isMultiInstance: this.isMultiInstance
             container: this.container
+            x: this.x + 10
+            y: this.y + 10
+            uri: "new:{type}:{modeler.toolBar.counter++}"
         }
-        t.uri = "new:{type}:{modeler.toolBar.counter++}";
         return t;
     }
 }
