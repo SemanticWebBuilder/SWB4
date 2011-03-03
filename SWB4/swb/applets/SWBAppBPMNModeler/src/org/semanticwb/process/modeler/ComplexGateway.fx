@@ -19,6 +19,7 @@ public class ComplexGateway extends Gateway
 {
     public override function create(): Node
     {
+        blocksMouse = true;
         initializeCustomNode();
         w=50;
         h=50;        
@@ -105,7 +106,7 @@ public class ComplexGateway extends Gateway
                 caption: ##"actCopy"
                 action: function (e: MouseEvent) {
                     var t = copy();
-                    modeler.copyNode = t;
+                    modeler.setCopyNode(t);
                     ModelerUtils.popup.hide();
                 }
              },
