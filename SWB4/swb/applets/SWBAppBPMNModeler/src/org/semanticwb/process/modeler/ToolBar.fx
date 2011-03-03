@@ -483,7 +483,15 @@ public class ToolBar extends CustomNode
                     {
                         var tit = ##"alertMsg";
                         var msg = ##"msgSaveAlert";
-                        if(modeler.contents != null and modeler.contents.isEmpty() and Alert.confirm(tit, msg)) {
+                        if(modeler.contents != null and not modeler.contents.isEmpty()) {
+                            if (Alert.confirm(tit, msg)) {
+                                ModelerUtils.clickedNode=null;
+                                ModelerUtils.setResizeNode(null);
+                                modeler.containerElement=null;
+                                modeler.disablePannable=false;
+                                delete modeler.contents;
+                            }
+                        } else {
                             ModelerUtils.clickedNode=null;
                             ModelerUtils.setResizeNode(null);
                             modeler.containerElement=null;
@@ -500,7 +508,15 @@ public class ToolBar extends CustomNode
                     {
                         var tit = ##"alertMsg";
                         var msg = ##"msgSaveAlert";
-                        if(modeler.contents != null and modeler.contents.isEmpty() and Alert.confirm(tit, msg)) {
+                        if(modeler.contents != null and not modeler.contents.isEmpty()) {
+                            if (Alert.confirm(tit, msg)) {
+                                ModelerUtils.clickedNode=null;
+                                ModelerUtils.setResizeNode(null);
+                                modeler.containerElement=null;
+                                modeler.disablePannable=false;
+                                openProcess();
+                            }
+                        } else {
                             ModelerUtils.clickedNode=null;
                             ModelerUtils.setResizeNode(null);
                             modeler.containerElement=null;
