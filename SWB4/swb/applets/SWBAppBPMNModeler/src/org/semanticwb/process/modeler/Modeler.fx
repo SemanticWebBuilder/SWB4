@@ -18,6 +18,7 @@ import javafx.scene.layout.LayoutInfo;
 import javafx.scene.Cursor;
 import javafx.util.Sequences;
 import javafx.scene.input.KeyEvent;
+import org.semanticwb.process.modeler.ConnectionObject;
 
 /**
  * @author javier.solis
@@ -39,10 +40,11 @@ public class Modeler extends CustomNode
     public var containerElement: GraphicalElement;
     public var toolBar:ToolBar;
     public var zoomFactor:Number = 1;
-    public var copyNode: Node = null;
-
+    public var copyNodes: GraphicalElement[];
+    var actions: MenuItem[];
     var focusedNode: Node;                       //Nodo con el foco
     var scrollOffset:ScrollOffset;
+    var selectedNodes: GraphicalElement[];
 
     public override function create(): Node
     {
@@ -64,32 +66,33 @@ public class Modeler extends CustomNode
              ]
          }
 
-         var actions: MenuItem[] = [
+         actions = [
             MenuItem {
                 caption: ##"actPaste";
-                status: bind if (copyNode == null) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
+                status: bind if (copyNodes == null or copyNodes.isEmpty()) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
                 action: function (e: MouseEvent) {
                     ModelerUtils.popup.hide();
-                    var t = (copyNode as GraphicalElement);
-                    if (t.canAddToDiagram()) {
-                        t.x = mousex;
-                        t.y = mousey;
-                        insert t into contents;
-                        if (t instanceof SubProcess) {
-                            var ff = t as SubProcess;
-                            for (ele in ff.containerChilds) {
-                                insert ele into contents;
+                    for (ele in copyNodes) {
+                        if (ele.canAddToDiagram()) {
+                            ele.x = mousex;
+                            ele.y = mousey;
+                            insert ele into contents;
+                            if (ele instanceof SubProcess) {
+                                var ff = ele as SubProcess;
+                                for (child in ff.containerChilds) {
+                                    insert child into contents;
+                                }
                             }
-                        }
-                        if (t instanceof Pool) {
-                            println("*Se va a pegar un pool");
-                            var ff = t as Pool;
-                            for (ele in ff.graphChilds where not (ele instanceof Lane)) {
-                                insert ele into contents;
-                            }
+//                            if (ele instanceof Pool) {
+//                                println("*Se va a pegar un pool");
+//                                var ff = t as Pool;
+//                                for (ele in ff.graphChilds where not (ele instanceof Lane)) {
+//                                    insert ele into contents;
+//                                }
+//                            }
                         }
                     }
-                    copyNode = null;
+                    delete copyNodes;
                 }
             },
             MenuItem {
@@ -111,164 +114,25 @@ public class Modeler extends CustomNode
              
              onMousePressed: function( e: MouseEvent ):Void
              {
-                mousex=e.x+getXScroll();
-                mousey=e.y+getYScroll();
-
-                if (ModelerUtils.clickedNode == null) {
-                    ModelerUtils.setResizeNode(null);
-                    this.requestFocus();
-                }
-
-                if(tempNode!=null)
-                {
-                    var close: Boolean=true;
-                    if(tempNode instanceof GraphicalElement)
-                    {
-                        if(ModelerUtils.clickedNode==null) //elemento sobre modeler
-                        {
-                            if(tempNode instanceof Lane)
-                            {
-                                //no se permite crear lanes sin pool
-                            }else
-                            {                                
-                                var a=tempNode as GraphicalElement;
-                                if (a.canAddToDiagram()) {
-                                    if(tempNode instanceof Pool)addFirst(tempNode) else add(tempNode);
-                                    a.x=e.x+getXScroll();
-                                    a.y=e.y+getYScroll();
-                                    a.snapToGrid();
-                                    a.setContainer(containerElement);
-                                }
-                            }
-                        }else if(ModelerUtils.clickedNode instanceof Pool or ModelerUtils.clickedNode instanceof Lane)
-                        {
-                            if(tempNode instanceof Pool) //se esta agregando un pool dentro de otro pool o lane
-                            {
-                                //addFirst(tempNode)
-                            }else if(tempNode instanceof Lane) //se esta agregando un lane dentro de lane o pool
-                            {
-                                if(ModelerUtils.clickedNode instanceof Pool) //sobre un pool
-                                {
-                                    var p=ModelerUtils.clickedNode as Pool;
-                                    p.addLane();
-                                    //p.updateLanesCords();
-                                }else  //sobre un lane
-                                {
-                                    //TODO: Falta lanes dentro de lanes
-                                    var p=(ModelerUtils.clickedNode as Lane).getPool();
-                                    p.addLane();
-                                    //p.updateLanesCords();
-                                }
-                            }else
-                            {
-                                var a=tempNode as GraphicalElement;
-                                if (a.canAddToDiagram()) {
-                                    add(tempNode);
-                                    a.x=e.x+getXScroll();
-                                    a.y=e.y+getYScroll();
-                                    a.snapToGrid();
-                                    if(a.canAttach(ModelerUtils.clickedNode as GraphicalElement))
-                                    {
-                                        a.setGraphParent(ModelerUtils.clickedNode as GraphicalElement);
-                                    }
-                                    a.setContainer(containerElement);
-                                }
-                            }
-                        }else//se presiono algun boton del toolbar
-                        {                            
-                            close=false;
-                        }
-                    }else if(tempNode instanceof ConnectionObject)
-                    {
-                        var a=tempNode as ConnectionObject;
-                        if(ModelerUtils.clickedNode instanceof GraphicalElement)
-                        {
-                            var ge=ModelerUtils.clickedNode as GraphicalElement;
-                            if(ge.canStartLink(a))
-                            {
-                                a.ini=ge;
-                                add(tempNode);
-                            }
-                            close=false;
-                            ModelerUtils.clickedNode=null;
-                        }
-                    }
-
-                    if(close)
-                    {
-                        tempNode=null;
-                        disablePannable=false;
-                    }
-                }
+                this.mousePressed(e);
              }
              
              onMouseDragged: function( e: MouseEvent ):Void
              {
-                if(tempNode!=null)
-                {
-                    mousex=e.x+getXScroll();
-                    mousey=e.y+getYScroll();
-
-                    if(tempNode instanceof ConnectionObject)
-                    {
-                        //activa el conection object cuando se inicia el drag
-                        if(not tempNode.visible)
-                        {
-                            tempNode.visible=true;
-                        }
-
-                        var a=tempNode as ConnectionObject;
-                        if(overNode!=null)
-                        {
-                            if(overNode.canEndLink(a))a.end=overNode;
-                        }else
-                        {
-                            a.end=null;
-                        }
-                    }
-                }
-                else if(ModelerUtils.clickedNode instanceof ConnectionObject)
-                {
-                    tempNode=ModelerUtils.clickedNode;
-                    var a=tempNode as ConnectionObject;
-                    a.end=null;
-                }
+                this.mouseDragged(e);
              }
              
              onMouseReleased: function( e: MouseEvent ):Void
              {
-                 //println("onMouseReleased modeler:{e}");
-                 if(tempNode!=null)
-                 {
-                     if(tempNode instanceof ConnectionObject)
-                     {
-                         var con=tempNode as ConnectionObject;
-                         if(con.end==null)
-                         {
-                            remove(tempNode);                            
-                         }
-                         tempNode=null;
-                         disablePannable=true;
-                         ModelerUtils.clickedNode=null;
-                     } else {
-                         onMousePressed(e);
-                     }
-                 }
-                 if (e.button == e.button.PRIMARY) {
-                     ModelerUtils.popup.hide();
-                 }
+                 this.mouseReleased(e);
              }
 
              onMouseClicked: function (e: MouseEvent) : Void {
-                if (e.button == e.button.SECONDARY and overNode == null) {
-                    ModelerUtils.popup.setOptions(actions);
-                    ModelerUtils.popup.show(e);
-                }
+                this.mouseClicked(e);
              }
 
              onMouseMoved: function (e: MouseEvent) {
-                mousex=e.x+getXScroll();
-                mousey=e.y+getYScroll();
+                this.mouseMoved(e);
              }
 
              onKeyPressed: function (e: KeyEvent): Void
@@ -460,39 +324,80 @@ public class Modeler extends CustomNode
             ModelerUtils.popup.hide();
         }
         if (e.code == e.code.VK_DELETE) {
-            if (focusedNode != null and focusedNode instanceof GraphicalElement) {
-                (focusedNode as GraphicalElement).remove(true);
-                focusedNode = null;
+//            if (focusedNode != null and focusedNode instanceof GraphicalElement) {
+//                (focusedNode as GraphicalElement).remove(true);
+//                focusedNode = null;
+//            }
+            var ts = Sequences.shuffle(selectedNodes);
+            for (ele in ts) {
+                (ele as GraphicalElement).remove(true);
             }
+            delete selectedNodes;
         }
         if (e.code == e.code.VK_C and e.controlDown) {
-            if (focusedNode != null and focusedNode instanceof GraphicalElement) {
-                copyNode = (focusedNode as GraphicalElement).copy();
+            delete copyNodes;
+            for (ele in selectedNodes) {
+                var t = ele.copy();
+                insert t into copyNodes;
             }
+
+//            if (focusedNode != null and focusedNode instanceof GraphicalElement) {
+//                copyNode = (focusedNode as GraphicalElement).copy();
+//            }
         }
         if (e.code == e.code.VK_V and e.controlDown) {
-            if (copyNode != null) {
-                ModelerUtils.popup.hide();
-                var t = (copyNode as GraphicalElement);
-                if (t.canAddToDiagram()) {
-                    t.x = mousex;
-                    t.y = mousey;
-                    insert t into contents;
-                    if (t instanceof SubProcess) {
-                        var ff = t as SubProcess;
-                        for (ele in ff.containerChilds) {
-                            insert ele into contents;
+            ModelerUtils.popup.hide();
+            for (ele in copyNodes) {
+                if (ele.canAddToDiagram()) {
+                    ele.x = mousex;
+                    ele.y = mousey;
+                    insert ele into contents;
+                    if (ele instanceof SubProcess) {
+                        var ff = ele as SubProcess;
+                        for (child in ff.containerChilds) {
+                            insert child into contents;
                         }
                     }
-                    if (t instanceof Pool) {
-                        println("*Se va a pegar un pool");
-                        var ff = t as Pool;
-                        for (ele in ff.graphChilds where not (ele instanceof Lane)) {
-                            insert ele into contents;
-                        }
+//                    if (t instanceof Pool) {
+//                        println("*Se va a pegar un pool");
+//                        var ff = t as Pool;
+//                        for (ele in ff.graphChilds where not (ele instanceof Lane)) {
+//                            insert ele into contents;
+//                        }
+//                    }
+                }
+            }
+            delete copyNodes;
+        }
+        if (e.code == e.code.VK_RIGHT) {
+            for (ele in selectedNodes) {
+                if (not (ele instanceof Lane)) {
+                    ele.x += 10;
+                }
+            }
+        } else if (e.code == e.code.VK_LEFT) {
+            for (ele in selectedNodes) {
+                if (not (ele instanceof Lane)) {
+                    var sp = ele.x - ele.w / 2;
+                    if (sp - 10 > ele.sceneX) {
+                        ele.x -= 10;
                     }
                 }
-                copyNode = null;
+            }
+        } else if (e.code == e.code.VK_UP) {
+            for (ele in selectedNodes) {
+                if (not (ele instanceof Lane)) {
+                    var sp = ele.y - ele.h / 2;
+                    if (sp - 10 > ele.sceneY) {
+                        ele.y -= 10;
+                    }
+                }
+            }
+        } else if (e.code == e.code.VK_DOWN) {
+            for (ele in selectedNodes) {
+                if (not (ele instanceof Lane)) {
+                    ele.y += 10;
+                }
             }
         }
     }
@@ -502,4 +407,217 @@ public class Modeler extends CustomNode
         //println("Modeler:{e.char} {e.CHAR_UNDEFINED} {e.char} {e.code} {e.text} {e.metaDown} {e.shiftDown} {e.controlDown} {e.altDown}");
     }
 
+    public function mouseReleased (e: MouseEvent) : Void {
+         println("MouseReleased in {e.node}");
+         if(tempNode!=null)
+         {
+             if(tempNode instanceof ConnectionObject)
+             {
+                 var con=tempNode as ConnectionObject;
+                 if(con.end==null)
+                 {
+                    remove(tempNode);
+                 }
+                 tempNode=null;
+                 disablePannable=true;
+                 ModelerUtils.clickedNode=null;
+             } else {
+                 onMousePressed(e);
+             }
+         }
+         if (e.button == e.button.PRIMARY) {
+             ModelerUtils.popup.hide();
+         }
+    }
+
+    public function mouseDragged(e: MouseEvent) : Void {
+        println("MouseDragged in {e.node}");
+        if(tempNode!=null)
+        {
+            mousex=e.x+getXScroll();
+            mousey=e.y+getYScroll();
+
+            if(tempNode instanceof ConnectionObject)
+            {
+                //activa el conection object cuando se inicia el drag
+                if(not tempNode.visible)
+                {
+                    tempNode.visible=true;
+                }
+
+                var a=tempNode as ConnectionObject;
+                if(overNode!=null)
+                {
+                    if(overNode.canEndLink(a))a.end=overNode;
+                }else
+                {
+                    a.end=null;
+                }
+            }
+        }
+        else if(ModelerUtils.clickedNode instanceof ConnectionObject)
+        {
+            tempNode=ModelerUtils.clickedNode;
+            var a=tempNode as ConnectionObject;
+            a.end=null;
+        }
+    }
+
+    public function mouseMoved(e: MouseEvent) : Void {
+        //println("MouseMoved in {e.node}");
+        mousex=e.x+getXScroll();
+        mousey=e.y+getYScroll();
+    }
+
+    public function mouseClicked(e: MouseEvent) : Void {
+        println("MouseClicked in {e.node}");        
+        
+        if (e.button == e.button.SECONDARY and overNode == null) {
+            ModelerUtils.popup.setOptions(actions);
+            ModelerUtils.popup.show(e);
+        }
+    }
+
+    public function mousePressed(e: MouseEvent) : Void {
+        println("MousePressed in {e.node}");
+        mousex=e.x+getXScroll();
+        mousey=e.y+getYScroll();
+
+        if (e.node == scrollView) {
+            println("Selected Elements:");
+            for (ele in selectedNodes) {
+                println(" --{ele.title}")
+            }
+            unselectAll();
+        }
+
+        if (ModelerUtils.clickedNode == null) {
+            ModelerUtils.setResizeNode(null);
+            this.requestFocus();
+        }
+
+        if(tempNode!=null)
+        {
+            var close: Boolean=true;
+            if(tempNode instanceof GraphicalElement)
+            {
+                if(ModelerUtils.clickedNode==null) //elemento sobre modeler
+                {
+                    if(tempNode instanceof Lane)
+                    {
+                        //no se permite crear lanes sin pool
+                    }else
+                    {
+                        var a=tempNode as GraphicalElement;
+                        if (a.canAddToDiagram()) {
+                            if(tempNode instanceof Pool)addFirst(tempNode) else add(tempNode);
+                            a.x=e.x+getXScroll();
+                            a.y=e.y+getYScroll();
+                            a.snapToGrid();
+                            a.setContainer(containerElement);
+                            setFocusedNode(a);
+                            setSelectedNode(a);
+                        }
+                    }
+                }else if(ModelerUtils.clickedNode instanceof Pool or ModelerUtils.clickedNode instanceof Lane)
+                {
+                    if(tempNode instanceof Pool) //se esta agregando un pool dentro de otro pool o lane
+                    {
+                        //addFirst(tempNode)
+                    }else if(tempNode instanceof Lane) //se esta agregando un lane dentro de lane o pool
+                    {
+                        if(ModelerUtils.clickedNode instanceof Pool) //sobre un pool
+                        {
+                            var p=ModelerUtils.clickedNode as Pool;
+                            p.addLane();
+                            //p.updateLanesCords();
+                        }else  //sobre un lane
+                        {
+                            //TODO: Falta lanes dentro de lanes
+                            var p=(ModelerUtils.clickedNode as Lane).getPool();
+                            p.addLane();
+                            //p.updateLanesCords();
+                        }
+                    }else
+                    {
+                        var a=tempNode as GraphicalElement;
+                        if (a.canAddToDiagram()) {
+                            add(tempNode);
+                            a.x=e.x+getXScroll();
+                            a.y=e.y+getYScroll();
+                            a.snapToGrid();
+                            if(a.canAttach(ModelerUtils.clickedNode as GraphicalElement))
+                            {
+                                a.setGraphParent(ModelerUtils.clickedNode as GraphicalElement);
+                            }
+                            a.setContainer(containerElement);
+                            setFocusedNode(a);
+                            setSelectedNode(a);
+                        }
+                    }
+                }else//se presiono algun boton del toolbar
+                {
+                    close=false;
+                }
+            }else if(tempNode instanceof ConnectionObject)
+            {
+                var a=tempNode as ConnectionObject;
+                if(ModelerUtils.clickedNode instanceof GraphicalElement)
+                {
+                    var ge=ModelerUtils.clickedNode as GraphicalElement;
+                    if(ge.canStartLink(a))
+                    {
+                        a.ini=ge;
+                        add(tempNode);
+                    }
+                    close=false;
+                    ModelerUtils.clickedNode=null;
+                }
+            }
+
+            if(close)
+            {
+                tempNode=null;
+                disablePannable=false;
+            }
+        }
+    }
+
+    public function unselectAll() : Void {
+        for(ele in selectedNodes) {
+            ele.selected = false;
+        }
+        delete selectedNodes;
+    }
+
+    public function addSelectedNode(ge: GraphicalElement) : Void {
+        if (Sequences.indexOf(selectedNodes, ge) == -1) {
+            ge.selected = true;
+            insert ge into selectedNodes;
+        }
+    }
+
+    public function removeSelectedNode(ge: GraphicalElement) : Void {
+        if (Sequences.indexOf(selectedNodes, ge) != -1) {
+            ge.selected = false;
+            delete ge from selectedNodes;
+        }
+    }
+
+    public function setSelectedNode(ge: GraphicalElement) : Void {
+        unselectAll();
+        addSelectedNode(ge);
+        ge.selected = true;
+    }
+
+    public function addCopyNode(ge: GraphicalElement) : Void {
+        if (Sequences.indexOf(copyNodes, ge) == -1) {
+            insert ge into copyNodes;
+        }
+    }
+
+    public function setCopyNode(ge: GraphicalElement) : Void {
+        delete copyNodes;
+        insert ge into copyNodes;
+    }
 }
