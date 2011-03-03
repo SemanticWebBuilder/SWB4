@@ -93,14 +93,14 @@ public class Pool extends GraphicalElement
                     ModelerUtils.popup.hide();
                 }
             },
-            MenuItem {
-                caption: ##"actCopy"
-                action: function(e: MouseEvent) {
-                    var t = copy();
-                    modeler.setCopyNode(t);
-                    ModelerUtils.popup.hide();
-                }
-            },
+//            MenuItem {
+//                caption: ##"actCopy"
+//                action: function(e: MouseEvent) {
+//                    var t = copy();
+//                    modeler.setCopyNode(t);
+//                    ModelerUtils.popup.hide();
+//                }
+//            },
             MenuItem {isSeparator:true},
             MenuItem {
                 caption: ##"actEditTitle"
