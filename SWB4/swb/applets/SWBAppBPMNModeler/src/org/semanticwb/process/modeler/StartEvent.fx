@@ -322,8 +322,10 @@ public class StartEvent extends CatchEvent
             type: this.type
             modeler: this.modeler
             container: this.container
+            x: this.x + 10
+            y: this.y + 10
+            uri: "new:event:{modeler.toolBar.counter++}"
         }
-        t.uri = "new:event:{modeler.toolBar.counter++}";
         return t;
     }
 }
