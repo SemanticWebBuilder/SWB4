@@ -72,6 +72,7 @@ public class Event extends FlowNode
 
     public override function create(): Node
     {
+        blocksMouse = true;
         setCommonMenuOptions();
         w=30;
         h=30;
