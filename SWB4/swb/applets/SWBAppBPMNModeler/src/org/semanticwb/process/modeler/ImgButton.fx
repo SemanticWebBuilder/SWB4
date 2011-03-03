@@ -108,7 +108,7 @@ public class ImgButton extends CustomNode
             }
             onMousePressed: function( e: MouseEvent ):Void
             {
-                 content.requestFocus();
+                 //content.requestFocus();
                  subMenu.action=this.action;
                  ModelerUtils.clickedNode=this;
                  var tmpCursor=cursor;
@@ -123,7 +123,7 @@ public class ImgButton extends CustomNode
 
             onKeyTyped: function( e: KeyEvent ):Void
             {
-                 content.requestFocus();
+                 //content.requestFocus();
                  var tmpCursor=cursor;
                  cursor=Cursor.WAIT;
                  action();
