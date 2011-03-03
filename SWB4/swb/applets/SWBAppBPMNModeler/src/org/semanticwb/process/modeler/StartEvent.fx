@@ -18,6 +18,22 @@ import org.semanticwb.process.modeler.MessageStartEvent;
 
 public class StartEvent extends CatchEvent
 {
+    public override var over on replace {
+        if (over and not selected) {
+            shape.styleClass = "startEventHover";
+        } else if (not selected) {
+            shape.styleClass = "startEvent";
+        }
+    }
+
+    public override var selected on replace {
+        if (selected) {
+            shape.styleClass = "startEventFocused";
+        } else {
+            shape.styleClass = "startEvent";
+        }
+    }
+
     public override function create(): Node
     {
          var ret=super.create();
@@ -233,7 +249,7 @@ public class StartEvent extends CatchEvent
                 caption: ##"actCopy"
                 action: function(e: MouseEvent) {
                     var t = copy();
-                    modeler.copyNode = t;
+                    modeler.setCopyNode(t);
                     ModelerUtils.popup.hide();
                 }
             }
