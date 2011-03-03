@@ -22,6 +22,7 @@ public class DataStoreArtifact extends Artifact
 {
     override public function create(): Node
     {
+        blocksMouse = true;
         setCommonMenuOptions();
         w=80;
         h=60;
@@ -178,7 +179,7 @@ public class DataStoreArtifact extends Artifact
                 caption: ##"actCopy"
                 action: function(e: MouseEvent) {
                     var t = copy();
-                    modeler.copyNode = t;
+                    modeler.setCopyNode(t);
                     ModelerUtils.popup.hide();
                 }
             }
