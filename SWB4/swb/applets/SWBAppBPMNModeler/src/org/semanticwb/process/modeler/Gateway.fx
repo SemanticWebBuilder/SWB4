@@ -20,9 +20,25 @@ public class Gateway extends FlowNode
 {
     public var modifier: ImageView;
     protected var colorAdjust: ColorAdjust;
+    public override var over on replace {
+        if (over and not selected) {
+            shape.styleClass = "gatewayHover";
+        } else if (not selected) {
+            shape.styleClass = "gateway";
+        }
+    }
+
+    public override var selected on replace {
+        if (selected) {
+            shape.styleClass = "gatewayFocused";
+        } else {
+            shape.styleClass = "gateway";
+        }
+    }
     
     public override function create(): Node
     {
+        blocksMouse = true;
         initializeCustomNode();
         w=50;
         h=50;
