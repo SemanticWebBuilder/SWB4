@@ -74,8 +74,8 @@ public class Modeler extends CustomNode
                     ModelerUtils.popup.hide();
                     for (ele in copyNodes) {
                         if (ele.canAddToDiagram()) {
-                            ele.x = mousex;
-                            ele.y = mousey;
+//                            ele.x = mousex;
+//                            ele.y = mousey;
                             insert ele into contents;
                             if (ele instanceof SubProcess) {
                                 var ff = ele as SubProcess;
@@ -139,6 +139,7 @@ public class Modeler extends CustomNode
              {
                  this.keyPressed(e);
              }
+
              onKeyReleased: function (e: KeyEvent): Void
              {
                  this.keyReleased(e);
@@ -311,7 +312,8 @@ public class Modeler extends CustomNode
 
     public function keyPressed( e: KeyEvent ) : Void
     {
-        println("Modeler:{e.char} {e.CHAR_UNDEFINED} {e.code} {e.text} {e.metaDown} {e.shiftDown} {e.controlDown} {e.altDown}");
+        //println("Modeler:{e.char} {e.CHAR_UNDEFINED} {e.code} {e.text} {e.metaDown} {e.shiftDown} {e.controlDown} {e.altDown}");
+        //println("key released in {e.node}");
         if(e.text.toLowerCase().equals("z") and e.controlDown==true)
         {
             toolBar.undo();
@@ -349,8 +351,8 @@ public class Modeler extends CustomNode
             ModelerUtils.popup.hide();
             for (ele in copyNodes) {
                 if (ele.canAddToDiagram()) {
-                    ele.x = mousex;
-                    ele.y = mousey;
+//                    ele.x = mousex;
+//                    ele.y = mousey;
                     insert ele into contents;
                     if (ele instanceof SubProcess) {
                         var ff = ele as SubProcess;
@@ -404,11 +406,12 @@ public class Modeler extends CustomNode
 
     public function keyReleased( e: KeyEvent ) : Void
     {
+        //println("key released in {e.node}");
         //println("Modeler:{e.char} {e.CHAR_UNDEFINED} {e.char} {e.code} {e.text} {e.metaDown} {e.shiftDown} {e.controlDown} {e.altDown}");
     }
 
     public function mouseReleased (e: MouseEvent) : Void {
-         println("MouseReleased in {e.node}");
+         //println("MouseReleased in {e.node}");
          if(tempNode!=null)
          {
              if(tempNode instanceof ConnectionObject)
@@ -431,7 +434,7 @@ public class Modeler extends CustomNode
     }
 
     public function mouseDragged(e: MouseEvent) : Void {
-        println("MouseDragged in {e.node}");
+        //println("MouseDragged in {e.node}");
         if(tempNode!=null)
         {
             mousex=e.x+getXScroll();
@@ -470,7 +473,7 @@ public class Modeler extends CustomNode
     }
 
     public function mouseClicked(e: MouseEvent) : Void {
-        println("MouseClicked in {e.node}");        
+        //println("MouseClicked in {e.node}");
         
         if (e.button == e.button.SECONDARY and overNode == null) {
             ModelerUtils.popup.setOptions(actions);
@@ -479,21 +482,17 @@ public class Modeler extends CustomNode
     }
 
     public function mousePressed(e: MouseEvent) : Void {
-        println("MousePressed in {e.node}");
         mousex=e.x+getXScroll();
         mousey=e.y+getYScroll();
 
         if (e.node == scrollView) {
-            println("Selected Elements:");
-            for (ele in selectedNodes) {
-                println(" --{ele.title}")
-            }
+            //this.requestFocus();
             unselectAll();
         }
 
         if (ModelerUtils.clickedNode == null) {
             ModelerUtils.setResizeNode(null);
-            this.requestFocus();
+            //this.requestFocus();
         }
 
         if(tempNode!=null)
@@ -585,6 +584,7 @@ public class Modeler extends CustomNode
 
     public function unselectAll() : Void {
         for(ele in selectedNodes) {
+            ele.text.stopEditing();
             ele.selected = false;
         }
         delete selectedNodes;
