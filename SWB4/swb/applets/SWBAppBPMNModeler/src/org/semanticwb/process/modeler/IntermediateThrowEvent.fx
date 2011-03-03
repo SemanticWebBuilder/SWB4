@@ -17,8 +17,25 @@ import javafx.scene.input.MouseEvent;
 
 public class IntermediateThrowEvent extends ThrowEvent
 {
+    public override var over on replace {
+        if (over and not selected) {
+            shape.styleClass = "interEventHover";
+        } else if (not selected) {
+            shape.styleClass = "interEvent";
+        }
+    }
+
+    public override var selected on replace {
+        if (selected) {
+            shape.styleClass = "interEventFocused";
+        } else {
+            shape.styleClass = "interEvent";
+        }
+    }
+    
     public override function create(): Node
     {
+        blocksMouse = true;
         initializeCustomNode();
         w=30;
         h=30;
@@ -53,7 +70,7 @@ public class IntermediateThrowEvent extends ThrowEvent
                 caption: ##"actCopy"
                 action: function (e: MouseEvent) {
                     var t = copy();
-                    modeler.copyNode = t;
+                    modeler.setCopyNode(t);
                     ModelerUtils.popup.hide();
                 }
             }
@@ -73,7 +90,7 @@ public class IntermediateThrowEvent extends ThrowEvent
                     centerY: bind y
                     radius: bind w/2-3
                     styleClass: "interEvent"
-                    id: "marker"
+                    //id: "marker"
                 },
                 message,text
             ]
