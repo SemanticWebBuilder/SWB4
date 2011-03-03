@@ -1,2 +1,3 @@
 "msgError1" = "Parallel Gateway can have only outgoing Sequential Flow"
 "actCopy" = "Copy"
+"actCut" = "Cut"
