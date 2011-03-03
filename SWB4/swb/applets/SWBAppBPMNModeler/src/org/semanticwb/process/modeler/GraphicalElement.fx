@@ -639,6 +639,28 @@ public class GraphicalElement extends CustomNode
             container: this.container
         }
     }
+    
+    public function cut () : GraphicalElement {
+        var del:Node[];
+        if (modeler.containerElement != null) {
+            delete this from modeler.containerElement.containerChilds;
+        }
+        setGraphParent(null);
+        setContainer(null);
+        insert this into del;
+        for(connection in modeler.contents where connection instanceof ConnectionObject) {
+            var c=connection as ConnectionObject;
+            if(c.end == this)insert c into del;
+            if(c.ini == this)insert c into del;
+        }
+
+        for(node in del) {
+            modeler.remove(node);
+        }
+
+        ModelerUtils.setResizeNode(null);
+        return this;
+    }
 
     public function setLabelSize(size: Number) : Void {
         if (this.text != null) {
