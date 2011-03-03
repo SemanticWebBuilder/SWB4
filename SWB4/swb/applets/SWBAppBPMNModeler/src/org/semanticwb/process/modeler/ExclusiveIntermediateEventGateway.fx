@@ -96,8 +96,10 @@ public class ExclusiveIntermediateEventGateway extends EventBasedGateway
             type: this.type
             modeler: this.modeler
             container: this.container
+            x: this.x + 10
+            y: this.y + 10
+            uri: "new:exclusiveintermediateeventgateway:{modeler.toolBar.counter++}"
         }
-        t.uri = "new:exclusiveintermediateeventgateway:{modeler.toolBar.counter++}";
         return t;
     }
 }
