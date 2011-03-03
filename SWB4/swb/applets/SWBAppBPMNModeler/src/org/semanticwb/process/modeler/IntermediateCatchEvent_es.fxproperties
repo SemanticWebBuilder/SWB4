@@ -4,3 +4,4 @@
 "msgError21" = "Un Evento Intermedio puede tener un solo Flujo de Secuencia entrante"
 "msgError22" = "Un Evento Intermedio puede tener un solo Flujo de Secuencia saliente"
 "actCopy" = "Copiar"
+"actCut" = "Cortar"
