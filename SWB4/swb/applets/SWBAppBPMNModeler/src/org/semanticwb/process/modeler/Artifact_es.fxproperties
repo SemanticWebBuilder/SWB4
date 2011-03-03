@@ -1,6 +1,7 @@
 "msgError3" = "Un Artefacto debe conectarse usando Asociaciones"
 "msgError5" = "Dos Artefactos no pueden conectarse entre sí"
 "actCopy" = "Copiar"
+"actCut" = "Cortar"
 "actType" = "Tipo"
 "actCollection" = "Colección"
 "actInput" = "Entrada"
