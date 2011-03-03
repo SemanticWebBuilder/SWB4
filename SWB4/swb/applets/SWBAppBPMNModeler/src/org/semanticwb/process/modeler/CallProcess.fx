@@ -76,6 +76,28 @@ public class CallProcess extends CallActivity {
         setType(type);
         getMarkers();
 
+        var actions: MenuItem[] = [
+            MenuItem {isSeparator: true},
+             MenuItem {
+                caption: ##"actCopy"
+                action: function (e: MouseEvent) {
+                    ModelerUtils.popup.hide();
+                    var t = copy();
+                    modeler.setCopyNode(t);
+                }
+             },
+             MenuItem {
+                caption: ##"actCut"
+                action: function (e: MouseEvent) {
+                    ModelerUtils.popup.hide();
+                    var t = cut();
+                    modeler.setCopyNode(t);
+                    ModelerUtils.setResizeNode(null);
+                }
+             }
+         ];
+         insert actions before menuOptions[0];
+
         return Group
         {
             content: [
@@ -106,5 +128,18 @@ public class CallProcess extends CallActivity {
     function getMarkers() : Void {
         delete icons;
         insert imgCollapsed into icons;
+    }
+
+    override public function copy() : GraphicalElement {
+        var t = CallProcess {
+            title: this.title
+            type: this.type
+            modeler: this.modeler
+            container: this.container
+            x: this.x + 10
+            y: this.y + 10
+            uri: "new:callprocess:{modeler.toolBar.counter++}"
+        }
+        return t;
     }
 }
