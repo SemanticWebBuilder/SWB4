@@ -313,6 +313,8 @@ public class SubProcess extends Activity
             isForCompensation: this.isForCompensation
             isMultiInstance: this.isMultiInstance
             container: this.container
+            x: this.x + 10
+            y: this.y + 10
             uri:"new:{type}subprocess:{modeler.toolBar.counter++}"
         }
         t.setLabelSize(this.text.size);
