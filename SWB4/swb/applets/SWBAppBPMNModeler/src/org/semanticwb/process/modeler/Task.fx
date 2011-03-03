@@ -100,6 +100,7 @@ public class Task extends Activity
 
     public override function create(): Node
     {
+        blocksMouse = true;
         resizeable=true;
         w=100;
         h=60;
@@ -408,7 +409,7 @@ public class Task extends Activity
                 caption: ##"actCopy"
                 action: function(e: MouseEvent) {
                     var t = copy();
-                    modeler.copyNode = t;
+                    modeler.setCopyNode(t);
                     ModelerUtils.popup.hide();
                 }
             }
@@ -518,8 +519,11 @@ public class Task extends Activity
             isForCompensation: this.isForCompensation
             isMultiInstance: this.isMultiInstance
             container: this.container
+            uri: "new:{type}task:{modeler.toolBar.counter++}";
         }
-        t.uri = "new:{type}task:{modeler.toolBar.counter++}";
+        t.setLabelSize(this.text.size);
+        t.w = this.w;
+        t.h = this.h;
         return t;
     }
 }
