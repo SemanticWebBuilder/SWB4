@@ -4,3 +4,4 @@
 "msgError21" = "Intermediate Catch-Event can have only one incoming Sequence Flow"
 "msgError22" = "Intermediate Catch-Event can have only one outgoing Sequence Flow"
 "actCopy" = "Copy"
+"actCut" = "Cut"
