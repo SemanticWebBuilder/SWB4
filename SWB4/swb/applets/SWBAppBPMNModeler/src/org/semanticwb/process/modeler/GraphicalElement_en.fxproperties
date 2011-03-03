@@ -4,3 +4,7 @@
 "sizeNormal" = "Normal"
 "sizeMedium" = "Medium"
 "sizeLarge" = "Large"
+"actStyle" = "style"
+"actEyeCandy" = "Eyecandy"
+"actSimple" = "Simple"
+"actBlackWhite" = "Black&White"
