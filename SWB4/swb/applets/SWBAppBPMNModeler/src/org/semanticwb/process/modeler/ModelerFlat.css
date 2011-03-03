@@ -506,6 +506,7 @@
 
 .scrollView {
     -fx-cursor: crosshair;
+    -fx-background-color: white;
 }
 
 .splash {
