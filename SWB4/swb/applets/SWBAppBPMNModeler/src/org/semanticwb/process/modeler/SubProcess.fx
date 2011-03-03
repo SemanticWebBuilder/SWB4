@@ -27,7 +27,7 @@ public def TYPE_TRANSACTION="transaction";
 public def TYPE_EVENT="event";
 public def TYPE_ADHOC="adhoc";
 public class SubProcess extends Activity
-{    
+{
     protected var strokeDash : Float[];
     var icons: ImageView[];
     var adjust: ColorAdjust = ColorAdjust {
@@ -36,8 +36,9 @@ public class SubProcess extends Activity
         contrast: 0.25
         saturation: 1
     }
-
+    
     def imgCollapsed = ImageView {
+        blocksMouse: true
         image: Image {
             url: "{__DIR__}images/n_collapsed.png"
         }
@@ -45,6 +46,7 @@ public class SubProcess extends Activity
         onMouseClicked:function(e: MouseEvent): Void {
             if (e.clickCount >= 2 and containerable) {
                 modeler.containerElement=this;
+                modeler.setSelectedNode(this);
             }
         },
     }
@@ -99,9 +101,11 @@ public class SubProcess extends Activity
     {
         setModifier(TYPE_MULTIPLE, isMultiInstance);
     }
+    var trans: Rectangle;
 
     public override function create(): Node
     {
+        blocksMouse=true;
         resizeable=true;
         containerable=true;
         w=100;
@@ -131,7 +135,6 @@ public class SubProcess extends Activity
 
         setType(type);
 
-        var trans;
         if (type.equals(TYPE_TRANSACTION)) {
             isTransaction = true;
             trans = Rectangle
@@ -141,7 +144,7 @@ public class SubProcess extends Activity
                 width: bind w - 6
                 height: bind h - 6
                 stroke: bind shape.stroke
-                styleClass: "task"
+                styleClass: bind shape.styleClass
             }
         }
 
@@ -182,7 +185,7 @@ public class SubProcess extends Activity
                     caption: ##"actCopy"
                     action: function(e: MouseEvent) {
                         var t = copy();
-                        modeler.copyNode = t;
+                        modeler.setCopyNode(t);
                         ModelerUtils.popup.hide();
                     }
                 }
@@ -193,7 +196,7 @@ public class SubProcess extends Activity
                     caption: ##"actCopy"
                     action: function(e: MouseEvent) {
                         var t = copy();
-                        modeler.copyNode = t;
+                        modeler.setCopyNode(t);
                         ModelerUtils.popup.hide();
                     }
                 }
@@ -216,21 +219,23 @@ public class SubProcess extends Activity
         };
     }
 
-    override var onMouseClicked = function (e: MouseEvent): Void {
-        if (e.button == e.button.PRIMARY) {
-            if (e.clickCount >= 2) {
-                if (not (modeler.containerElement == this)) {
-                    text.startEditing()
-                }
-            }
-        } else if (e.button == e.button.SECONDARY) {
-            if (modeler.getFocusedNode() == this) {
-                ModelerUtils.stopToolTip();
-                ModelerUtils.popup.setOptions(menuOptions);
-                ModelerUtils.popup.show(e);
-            }
-        }
-    }
+//    override var onMouseClicked = function (e: MouseEvent): Void {
+//        selected = true;
+//        if (e.button == e.button.PRIMARY) {
+//            if (e.clickCount >= 2) {
+//                if (not (modeler.containerElement == this)) {
+//                    text.startEditing()
+//                }
+//            }
+//        } else if (e.button == e.button.SECONDARY) {
+//            if (modeler.getFocusedNode() == this) {
+//                ModelerUtils.stopToolTip();
+//                ModelerUtils.popup.setOptions(menuOptions);
+//                ModelerUtils.popup.show(e);
+//            }
+//        }
+//        modeler.onMouseClicked(e);
+//    }
 
     public function setModifier(modif: String, val:Boolean): Void {
         if(modif.equals(TYPE_COMPENSATION)) {
@@ -310,7 +315,9 @@ public class SubProcess extends Activity
             container: this.container
             uri:"new:{type}subprocess:{modeler.toolBar.counter++}"
         }
-
+        t.setLabelSize(this.text.size);
+        t.w = this.w;
+        t.h = this.h;
         var conObjects: ConnectionObject[];
         var objMap = HashMap {};
 
