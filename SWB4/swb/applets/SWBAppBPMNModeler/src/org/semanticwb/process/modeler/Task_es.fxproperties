@@ -2,6 +2,7 @@
 "actLoop" = "Ciclo"
 "actCompensa" = "Compensación"
 "actCopy" = "Copiar"
+"actCut" = "Cortar"
 "actChange" = "Convertir en sub-proceso"
 "actType" = "Tipo"
 "actUser" = "Usuario"
