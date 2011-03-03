@@ -278,8 +278,10 @@ public class CallTask extends CallActivity {
             isForCompensation: this.isForCompensation
             isMultiInstance: this.isMultiInstance
             container: this.container
+            uri: "new:call{type}task:{modeler.toolBar.counter++}"
+            x: this.x + 10
+            y: this.y + 10
         }
-        t.uri = "new:call{type}task:{modeler.toolBar.counter++}";
         return t;
     }
 }
