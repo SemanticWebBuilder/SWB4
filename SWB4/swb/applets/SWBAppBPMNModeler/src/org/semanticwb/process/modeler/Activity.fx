@@ -17,6 +17,22 @@ public def TYPE_COMPENSATION="compensation";
 public def TYPE_MULTIPLE="multiple";
 public class Activity extends FlowNode
 {
+    public override var over on replace {
+        if (over and not selected) {
+            shape.styleClass = "taskHover";
+        } else if (not selected) {
+            shape.styleClass = "task";
+        }
+    }
+
+    public override var selected on replace {
+        if (selected) {
+            shape.styleClass = "taskFocused";
+        } else {
+            shape.styleClass = "task";
+        }
+    }
+
     public override function create(): Node
     {
         var ret=super.create();
