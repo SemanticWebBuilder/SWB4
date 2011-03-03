@@ -19,6 +19,7 @@ import javafx.scene.Cursor;
 import javafx.util.Sequences;
 import javafx.scene.input.KeyEvent;
 import org.semanticwb.process.modeler.ConnectionObject;
+import java.util.HashMap;
 
 /**
  * @author javier.solis
@@ -45,6 +46,8 @@ public class Modeler extends CustomNode
     var focusedNode: Node;                       //Nodo con el foco
     var scrollOffset:ScrollOffset;
     var selectedNodes: GraphicalElement[];
+    //var styles: HashMap;
+    var selectedStyle: String;
 
     public override function create(): Node
     {
@@ -65,6 +68,11 @@ public class Modeler extends CustomNode
                 ModelerUtils.popup,
              ]
          }
+         selectedStyle = "EyeCandy";
+
+//         AddStyle("Vistoso", "Modeler");
+//         AddStyle("Simple", "ModelerFlat");
+//         AddStyle("Blanco y Negro", "ModelerBlackWhite");
 
          actions = [
             MenuItem {
@@ -76,11 +84,14 @@ public class Modeler extends CustomNode
                         if (ele.canAddToDiagram()) {
 //                            ele.x = mousex;
 //                            ele.y = mousey;
+                            ele.setContainer(containerElement);
                             insert ele into contents;
                             if (ele instanceof SubProcess) {
                                 var ff = ele as SubProcess;
                                 for (child in ff.containerChilds) {
-                                    insert child into contents;
+                                    if (Sequences.indexOf(contents, child) == -1) {
+                                        insert child into contents;
+                                    }
                                 }
                             }
 //                            if (ele instanceof Pool) {
@@ -96,12 +107,40 @@ public class Modeler extends CustomNode
                 }
             },
             MenuItem {
-                caption: "Dialogo"
-                action: function (e: MouseEvent) {
-                    ModelerUtils.dialog.show();
-                }
-            }
-
+                caption: ##"actStyle"
+                items: [
+                    MenuItem {
+                        caption: ##"actEyeCandy"
+                        status: bind if (selectedStyle.equals("EyeCandy")) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            scene.stylesheets = "{__DIR__}Modeler.css";
+                            selectedStyle = "EyeCandy";
+                        }
+                    },
+                    MenuItem {
+                        caption: ##"actSimple"
+                        status: bind if (selectedStyle.equals("Simple")) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            scene.stylesheets = "{__DIR__}ModelerFlat.css";
+                            selectedStyle = "Simple";
+                        }
+                    },
+                    MenuItem {
+                        caption: ##"actBlackWhite"
+                        status: bind if (selectedStyle.equals("BlackWhite")) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            scene.stylesheets = "{__DIR__}ModelerBlackWhite.css";
+                            selectedStyle = "BlackWhite";
+                        }
+                    }
+                ]
+            },
+//            MenuItem {
+//                caption: "Dialogo"
+//                action: function (e: MouseEvent) {
+//                    ModelerUtils.dialog.show();
+//                }
+//            }
         ];
 
          scrollView=ScrollView
@@ -584,7 +623,7 @@ public class Modeler extends CustomNode
 
     public function unselectAll() : Void {
         for(ele in selectedNodes) {
-            ele.text.stopEditing();
+            ele.text.cancelEditing();
             ele.selected = false;
         }
         delete selectedNodes;
@@ -619,5 +658,13 @@ public class Modeler extends CustomNode
     public function setCopyNode(ge: GraphicalElement) : Void {
         delete copyNodes;
         insert ge into copyNodes;
+    }
+
+//    public function AddStyle(name: String, path: String) : Void {
+//        styles.put(name, path);
+//    }
+
+    public function isMultiSelection() : Boolean {
+        return (selectedNodes != null and selectedNodes.size() > 1);
     }
 }
