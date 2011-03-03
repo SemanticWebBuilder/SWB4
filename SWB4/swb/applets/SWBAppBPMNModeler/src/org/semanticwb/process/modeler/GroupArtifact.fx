@@ -19,8 +19,25 @@ import javafx.scene.input.MouseEvent;
 
 public class GroupArtifact extends Artifact
 {
+    public override var over on replace {
+        if (over and not selected) {
+            shape.styleClass = "artifactHover";
+        } else if (not selected) {
+            shape.styleClass = "artifact";
+        }
+    }
+
+    public override var selected on replace {
+        if (selected) {
+            shape.styleClass = "artifactFocused";
+        } else {
+            shape.styleClass = "artifact";
+        }
+    }
+
     override public function create(): Node
     {
+        blocksMouse = true;
         setCommonMenuOptions();
         resizeable=true;
         w=150;
@@ -60,7 +77,7 @@ public class GroupArtifact extends Artifact
                 caption: ##"actCopy"
                 action: function(e: MouseEvent) {
                     var t = copy();
-                    modeler.copyNode = t;
+                    modeler.setCopyNode(t);
                     ModelerUtils.popup.hide();
                 }
             }
