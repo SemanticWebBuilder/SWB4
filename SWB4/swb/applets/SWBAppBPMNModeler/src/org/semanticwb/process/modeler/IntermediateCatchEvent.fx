@@ -12,6 +12,7 @@ import javafx.scene.shape.Circle;
 import org.semanticwb.process.modeler.SequenceFlow;
 import javafx.scene.input.MouseEvent;
 import org.semanticwb.process.modeler.CallActivity;
+import org.semanticwb.process.modeler.ModelerUtils;
 
 /**
  * @author javier.solis
@@ -81,9 +82,18 @@ public class IntermediateCatchEvent extends CatchEvent
             MenuItem {
                 caption: ##"actCopy"
                 action: function(e: MouseEvent) {
+                    ModelerUtils.popup.hide();
                     var t = copy();
                     modeler.setCopyNode(t);
+                }
+            },
+            MenuItem {
+                caption: ##"actCut"
+                action: function(e: MouseEvent) {
                     ModelerUtils.popup.hide();
+                    var t = cut();
+                    modeler.setCopyNode(t);
+                    ModelerUtils.setResizeNode(null);
                 }
             }
         ];
