@@ -201,7 +201,7 @@ public class ConnectionObject  extends CustomNode
 
     override var onMouseReleased = function( e: MouseEvent ):Void
     {
-        path.requestFocus();
+        //path.requestFocus();
         if(ModelerUtils.clickedNode==this)
         {
             ModelerUtils.clickedNode=null;
