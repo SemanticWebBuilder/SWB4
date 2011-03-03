@@ -5,6 +5,7 @@
  */
 
 package org.semanticwb.process.modeler;
+import javafx.scene.Node;
 
 /**
  * @author javier.solis
@@ -12,6 +13,10 @@ package org.semanticwb.process.modeler;
 
 public class EventBasedGateway extends Gateway
 {
+    public override function create(): Node {
+        return super.create();
+    }
+
     public override function canStartLink(link:ConnectionObject) : Boolean {
         var ret = super.canStartLink(link);
 
