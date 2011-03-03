@@ -19,7 +19,6 @@ import javafx.scene.Cursor;
 import javafx.util.Sequences;
 import javafx.scene.input.KeyEvent;
 import org.semanticwb.process.modeler.ConnectionObject;
-import java.util.HashMap;
 
 /**
  * @author javier.solis
@@ -113,6 +112,7 @@ public class Modeler extends CustomNode
                         caption: ##"actEyeCandy"
                         status: bind if (selectedStyle.equals("EyeCandy")) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
                         action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
                             scene.stylesheets = "{__DIR__}Modeler.css";
                             selectedStyle = "EyeCandy";
                         }
@@ -121,6 +121,7 @@ public class Modeler extends CustomNode
                         caption: ##"actSimple"
                         status: bind if (selectedStyle.equals("Simple")) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
                         action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
                             scene.stylesheets = "{__DIR__}ModelerFlat.css";
                             selectedStyle = "Simple";
                         }
@@ -129,6 +130,7 @@ public class Modeler extends CustomNode
                         caption: ##"actBlackWhite"
                         status: bind if (selectedStyle.equals("BlackWhite")) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
                         action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
                             scene.stylesheets = "{__DIR__}ModelerBlackWhite.css";
                             selectedStyle = "BlackWhite";
                         }
@@ -141,6 +143,7 @@ public class Modeler extends CustomNode
 //                    ModelerUtils.dialog.show();
 //                }
 //            }
+
         ];
 
          scrollView=ScrollView
