@@ -17,6 +17,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.util.Sequences;
 import java.util.Comparator;
 import org.semanticwb.process.modeler.GraphicalElement;
+import java.util.HashMap;
 
 /**
  * @author javier.solis
@@ -25,6 +26,22 @@ import org.semanticwb.process.modeler.GraphicalElement;
 public class Pool extends GraphicalElement
 {
 
+    public override var over on replace {
+        if (over and not selected) {
+            shape.styleClass = "poolHover";
+        } else if (not selected) {
+            shape.styleClass = "pool";
+        }
+    }
+
+    public override var selected on replace {
+        if (selected) {
+            shape.styleClass = "poolFocused";
+        } else {
+            shape.styleClass = "pool";
+        }
+    }
+    
     var py=bind y on replace
     {
         updateSize();
@@ -34,6 +51,7 @@ public class Pool extends GraphicalElement
 
     override public function create(): Node
     {
+        blocksMouse = true;
         setCommonMenuOptions();
         resizeable=true;
         resizeType=ResizeNode.RESIZE_A;
@@ -72,6 +90,14 @@ public class Pool extends GraphicalElement
                     if(Alert.confirm(tit, msg)) {
                         removeChilds();
                     }
+                    ModelerUtils.popup.hide();
+                }
+            },
+            MenuItem {
+                caption: ##"actCopy"
+                action: function(e: MouseEvent) {
+                    var t = copy();
+                    modeler.setCopyNode(t);
                     ModelerUtils.popup.hide();
                 }
             },
@@ -272,5 +298,75 @@ public class Pool extends GraphicalElement
                 (ele as GraphicalElement).remove(true);
             }
         }
+    }
+
+    public override function copy () : GraphicalElement {
+        println("Copiando pool {title} - {uri} - w:{w}, h:{h}");
+        var t = Pool {
+            title: this.title
+            modeler: this.modeler
+            w: this.w
+            h: this.h
+            uri:"new:pool:{modeler.toolBar.counter++}"
+        }
+
+        println("Creado pool {title} - {uri} - w:{w}, h:{h}");
+
+        for (lane in lanes) {
+            println("  Copiando lane {lane.title} - {lane.uri} - w:{lane.w}, h:{lane.h}, idx:{lane.idx}");
+            var l = Lane {
+                title: lane.title
+                modeler: this.modeler
+                w: bind t.w
+                h: lane.h
+                uri: "new:lane:{modeler.toolBar.counter++}"
+                idx: lane.idx
+            };
+
+            println("  *Creado lane {l.title} - {l.uri} - w:{l.w}, h:{l.h}, idx:{l.idx}");
+            l.setGraphParent(t);
+            println("  *GraphParent: {l.graphParent}");
+            l.setContainer(getContainer());
+            insert l into t.lanes;
+            
+        }
+        println("-Actualizando tamaño del pool - original w:{t.w}, h:{t.h}");
+        t.updateSize();
+        println("-Nuevo tamaño del pool w:{t.w}, h:{t.h}");
+
+        var conObjects: ConnectionObject[];
+        var objMap = HashMap {};
+
+        for (ele in graphChilds where not (ele instanceof Lane)) {
+            var tc = ele.copy();
+            tc.x = ele.x;
+            tc.y = ele.y;
+            tc.w = ele.w;
+            tc.h = ele.h;
+            tc.setGraphParent(t);
+            objMap.put(ele, tc);
+            for (co in ele.getInputConnectionObjects()) {
+                if (Sequences.indexOf(conObjects, co) == -1) {
+                    insert co into conObjects;
+                }
+            }
+
+            for (co in ele.getOutputConnectionObjects()) {
+                if (Sequences.indexOf(conObjects, co) == -1) {
+                    insert co into conObjects;
+                }
+            }
+        }
+
+        for(co in conObjects) {
+            var cini = objMap.get(co.ini) as GraphicalElement;
+            var cend = objMap.get(co.end) as GraphicalElement;
+            var cop = co.copy();
+            cop.ini = cini;
+            cop.end = cend;
+            insert cop into modeler.contents;
+        }
+
+        return t;
     }
 }
