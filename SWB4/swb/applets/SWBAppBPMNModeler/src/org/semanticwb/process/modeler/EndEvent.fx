@@ -14,6 +14,22 @@ import javafx.scene.input.MouseEvent;
 
 public class EndEvent extends ThrowEvent
 {
+    public override var over on replace {
+        if (over and not selected) {
+            shape.styleClass = "endEventHover";
+        } else if (not selected) {
+            shape.styleClass = "endEvent";
+        }
+    }
+
+    public override var selected on replace {
+        if (selected) {
+            shape.styleClass = "endEventFocused";
+        } else {
+            shape.styleClass = "endEvent";
+        }
+    }
+    
     public override function create(): Node
     {
          var ret=super.create();
@@ -283,7 +299,7 @@ public class EndEvent extends ThrowEvent
                 caption: ##"actCopy"
                 action: function (e: MouseEvent) {
                     var t = copy();
-                    modeler.copyNode = t;
+                    modeler.setCopyNode(t);
                     ModelerUtils.popup.hide();
                 }
              },
