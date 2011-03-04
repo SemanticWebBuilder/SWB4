@@ -89,7 +89,7 @@ public class VideoPublisher extends GenericAdmResource {
             String loop = base.getAttribute("loop","0");
 
             if(filename.endsWith(".flv")) {
-                out.println("<object type=\"application/x-shockwave-flash\" data=\""+SWBPlatform.getContextPath()+"/swbadmin/player_flv_maxi.swf\" width=\""+(width+20)+"\" height=\""+(height+40)+"\" "+align+">");
+                out.println("<object type=\"application/x-shockwave-flash\" data=\""+SWBPlatform.getContextPath()+"/swbadmin/player_flv_maxi.swf\" width=\""+(width+80)+"\" height=\""+(height+40)+"\" "+align+">");
                 out.println(" <param name=\"movie\" value=\""+SWBPlatform.getContextPath()+"/swbadmin/player_flv_maxi.swf\" />");
                 out.println(" <param name=\"allowFullScreen\" value=\"true\" />");
                 out.println(" <param name=\"FlashVars\" value=\"flv="+filename+"&width="+width+"&height="+height+"&showstop=1&showvolume=1&showtime=1");
