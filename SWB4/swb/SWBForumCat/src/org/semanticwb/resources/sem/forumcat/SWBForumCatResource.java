@@ -529,6 +529,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
     }
 
     public String placeAnchors(String text) {
+        if (text == null || text.trim().equals("")) return "";
         String ret = text;
         String regex = "https?://[\\+\\w+\\d+%#@:=/\\.\\?&_~-]+";
         Matcher m = Pattern.compile(regex, 0).matcher(text);
