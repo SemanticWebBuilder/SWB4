@@ -259,8 +259,6 @@ out.println("<param name=\"controls\" value=\"ControlPanel\">");
         final String code = request.getParameter("video_code");
         base.setAttribute("code", code);
         base.setAttribute("preview", getPreview(code));
-        System.out.println("code="+code);
-        System.out.println("preview="+getPreview(code));
         try {
             base.updateAttributesToDB();
         }catch(Exception e) {
