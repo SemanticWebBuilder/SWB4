@@ -27,11 +27,11 @@
         image=content.getImage();
         if(news.isMobile())
         {
-            pathPhoto=SWBPortal.getWebWorkPath()+content.getSemanticObject().getWorkPath()+"/thmb_image_"+image;
+            pathPhoto=SWBPortal.getWebWorkPath()+content.getSemanticObject().getWorkPath()+"/thmb_image_"+content.getId()+"_"+image;
         }
         else
         {
-            pathPhoto=SWBPortal.getWebWorkPath()+content.getSemanticObject().getWorkPath()+"/image_"+image;
+            pathPhoto=SWBPortal.getWebWorkPath()+content.getSemanticObject().getWorkPath()+"/image_"+content.getId()+"_"+image;
         }
     }
     %>

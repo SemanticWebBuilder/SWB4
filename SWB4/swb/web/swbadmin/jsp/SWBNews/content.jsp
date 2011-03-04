@@ -97,10 +97,11 @@
             if(content.getImage()!=null)
             {
                 image=content.getImage();
-                pathPhoto=SWBPortal.getWebWorkPath()+content.getSemanticObject().getWorkPath()+"/thmb_image_"+image;
+                pathPhoto=SWBPortal.getWebWorkPath()+content.getSemanticObject().getWorkPath()+"/thmb_image_"+content.getId()+"_"+image;
             }
             String titleImage=title.replace('"', '\'');
             %>
+
             <div class="entradaVideos">
         <div class="thumbVideo">
             <%
