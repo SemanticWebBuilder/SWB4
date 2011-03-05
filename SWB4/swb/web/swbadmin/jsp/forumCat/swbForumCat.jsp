@@ -107,11 +107,6 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
         mgr.setLang(user.getLanguage());
         mgr.setSubmitByAjax(false);
         mgr.setType(mgr.TYPE_DOJO);
-
-        //SWBFormMgr mgr = new SWBFormMgr(Question.forumCat_Question, base.getSemanticObject(), SWBFormMgr.MODE_CREATE);
-        //mgr.setLang(user.getLanguage());
-        //mgr.setFilterRequired(false);
-        //mgr.setType(mgr.TYPE_XHTML);
         actionURL.setAction("addQuestion");
         mgr.setAction(actionURL.toString());
         SemanticClass semClass = Question.sclass;
@@ -129,13 +124,16 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                             <textarea name="<%=Question.forumCat_question.getName()%>"></textarea>
                             <!--%=mgr.renderElement(request, semClass.getProperty(Question.forumCat_question.getName()), mgr.MODE_CREATE)%-->
                         </li>
+                        <%if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptTags)) {%>
                         <li>
                             <label class="etiqueta" for="<%=Tagable.swb_tags.getName()%>">Palabras clave:</label>
                             <!--%=mgr.renderLabel(request, semClass.getProperty(Tagable.swb_tags.getName()), mgr.MODE_CREATE)%-->
                             <input type="text" name="<%=Tagable.swb_tags.getName()%>">
                             <!--%=mgr.renderElement(request, semClass.getProperty(Tagable.swb_tags.getName()), mgr.MODE_CREATE)%-->
                         </li>
-                        <% if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_selectCategory)) {%>
+                        <%
+                        }
+                        if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_selectCategory)) {%>
                         <li>
                             <label class="etiqueta" for="<%=Question.forumCat_webpage.getName()%>">Categor&iacute;a:</label>
                             <!--%=mgr.renderLabel(request, semClass.getProperty(Question.forumCat_webpage.getName()), mgr.MODE_CREATE)%-->
@@ -158,12 +156,16 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                             <li>
                                 <label class="etiqueta">Archivos adjuntos:</label>
                                 <%
+                                if (mgr.getSemanticObject() == null) mgr.setSemanticObject(new SemanticObject(wpage.getWebSite().getSemanticObject().getModel(), Question.sclass));
+                                //if(obj==null)obj=new SemanticObject(m_ref.getModel(),m_cls);
                                 StringBuffer sbf = new StringBuffer();
                                 mgr.renderProp(request, sbf, Question.forumCat_hasQuestionAttachments,mgr.getFormElement(Question.forumCat_hasQuestionAttachments));
+                                String element = sbf.toString().replace("<label for=\"hasQuestionAttachments\">Archivos adjuntos <em>*</em></label>", "");
+                                System.out.println(sbf.toString());
                                 %>
-                                <%=sbf.toString()%>
+                                <%=element%>
                                 <!--%=mgr.renderLabel(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), null)%-->
-                                <!--%=mgr.renderElement(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), mgr.MODE_CREATE)%-->
+                                <!--%=mgr.renderElement(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), null)%-->
                                 <li>
                                     <br>
                                     <label class="etiqueta"></label>
@@ -172,6 +174,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                             </li>
                         <%
                         }
+                        if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptYoutubeReferences)) {
                         %>
                         <li>
                             <label class="etiqueta">Referencias a Youtube:</label>
@@ -190,13 +193,19 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                 <input type="button" class="btn_form" value="Limpiar seleccionados" onclick="clearSelected(this.form.referenceList);">
                             </li>
                         </li>
+                        <%}%>
                     </ul>
                     <hr/>
                     <ul class="btns_final">
                         <li>
                             <label class="etiqueta"></label>
-                            <input type="button" class="btn_form" value="Guardar" onclick="setReferences(this.form.referenceList, this.form.<%=Question.forumCat_questionReferences.getName()%>);">
-                            <!--input type="submit" class="boton" value="Guardar"-->
+                            <%
+                            if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptYoutubeReferences)) {
+                            %>
+                                <input type="button" class="btn_form" value="Guardar" onclick="setReferences(this.form.referenceList, this.form.<%=Question.forumCat_questionReferences.getName()%>);">
+                            <%} else {%>
+                                <input type="submit" class="btn_form" value="Guardar" onclick="this.form.submit();">
+                            <%}%>
                             <input type="button" class="btn_form" value="Regresar" onclick="javascript:history.go(-1);">
                         </li>
                     </ul>
@@ -313,13 +322,13 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                         renderURL.setParameter("org", "edit");
                                         %><a href="<%=renderURL%>">Editar pregunta</a>&nbsp;<%
                                     }
-                                    /*if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateQuestions)) {
-                                        if (!question.isQueIsApropiate() && !question.getCreator().getURI().equals(user.getURI())) {
-                                             actionURL.setAction("markAnswerAsIrrelevant");
-                                             actionURL.setParameter("org", "edit");
-                                             ><!--a href="<%=actionURL>">Y esto que</a-->&nbsp;
+                                    if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateQuestions)) {
+                                        if (!question.isAnonymous() && !question.isQueIsApropiate() && !question.getCreator().getURI().equals(user.getURI())) {
+                                            actionURL.setAction("markAnswerAsIrrelevant");
+                                            actionURL.setParameter("org", "edit");
+                                            %><a href="actionURL">Inapropiado</a>&nbsp;<%
                                         }
-                                    }*/
+                                    }
                                 }
                                 %>
                             </li>
@@ -440,18 +449,19 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                     }
                                                     if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateAnswers)) {
                                                         if (!favAnswer.isAnonymous() && !favAnswer.isAnsIsAppropiate() && !favAnswer.getCreator().getURI().equals(user.getURI())) {
+                                                            actionURL.setParameter("uri", favAnswer.getURI());
                                                              actionURL.setAction("markAnswerAsInnapropiate");
                                                              actionURL.setParameter("org", "edit");
                                                              %>
                                                              <li>
-                                                                 <a href="<%=actionURL%>">Marcar como inapropiado</a>(<%=favAnswer.getAnsInappropriate()%>)
+                                                                 <a href="<%=actionURL%>">Inapropiado</a>(<%=favAnswer.getAnsInappropriate()%>)
                                                              </li>
                                                              <%
                                                         } else {
                                                            %>
                                                            <li>
                                                                  Inapropiado(<%=favAnswer.getAnsInappropriate()%>)
-                                                             </li>
+                                                            </li>
                                                              <%
                                                         }
                                                     }
@@ -525,17 +535,6 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                             <div class="respuesta_gral">
                                                 <span class="usuario"><%=creator%></span>
                                                 (<%=SWBUtils.TEXT.getTimeAgo(comAnswer.getCreated(), user.getLanguage())%>). <%=comAnswer.getAnswer()%>
-                                                <%
-                                                if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateAnswers)) {
-                                                    if (!comAnswer.isAnonymous() && !comAnswer.isAnsIsAppropiate() && !comAnswer.getCreator().getURI().equals(user.getURI())) {
-                                                         actionURL.setAction("markAnswerAsInnapropiate");
-                                                         actionURL.setParameter("org", "edit");
-                                                         %>  <a href="<%=actionURL%>">Marcar como inapropiado</a>&nbsp;<%
-                                                    } else {
-                                                       %>- Inapropiado: <%=comAnswer.getAnsInappropriate()%><%
-                                                    }
-                                                }
-                                                %>
                                             </div>
                                             <div class="herramientas_foro_gral">
                                                 <ul>
@@ -586,6 +585,24 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                                  ¿Esto qu&eacute;?<img width="18" height="18" alt="¿Eso qué?" src="<%=baseimg%>icon_eso_que.png">(<%=comAnswer.getAnsIrrelevant()%>)
                                                            </li>
                                                             <%
+                                                        }
+                                                    }
+                                                    if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateAnswers)) {
+                                                        if (!comAnswer.isAnonymous() && !comAnswer.isAnsIsAppropiate() && !comAnswer.getCreator().getURI().equals(user.getURI())) {
+                                                            actionURL.setParameter("uri", comAnswer.getURI());
+                                                             actionURL.setAction("markAnswerAsInnapropiate");
+                                                             actionURL.setParameter("org", "edit");
+                                                             %>
+                                                             <li>
+                                                                 <a href="<%=actionURL%>">Inapropiado</a>(<%=comAnswer.getAnsInappropriate()%>)
+                                                             </li>
+                                                             <%
+                                                        } else {
+                                                           %>
+                                                           <li>
+                                                                 Inapropiado(<%=comAnswer.getAnsInappropriate()%>)
+                                                            </li>
+                                                             <%
                                                         }
                                                     }
                                                 %>
@@ -675,16 +692,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                     <span><%=creator%></span>
                                                     (<%=SWBUtils.TEXT.getTimeAgo(answer.getCreated(), user.getLanguage())%>). <%=answer.getAnswer()%><br>
                                                     <%
-                                                    if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateAnswers)) {
-                                                        if (!answer.isAnonymous() && !answer.isAnsIsAppropiate() && !answer.getCreator().getURI().equals(user.getURI())) {
-                                                             actionURL.setAction("markAnswerAsInnapropiate");
-                                                             actionURL.setParameter("org", "edit");
-                                                             %>  <a href="<%=actionURL%>">Marcar como inapropiado</a>&nbsp;<%
-                                                        } else {
-                                                           %>- Inapropiado: <%=answer.getAnsInappropriate()%><%
-                                                        }
-                                                    }
-                                                    if (user.isSigned() && question.getCreator() != null && question.getCreator().getURI().equals(user.getURI())) {
+                                                    if (!question.isAnonymous() && user.isSigned() && question.getCreator().getURI().equals(user.getURI())) {
                                                         if (!answer.isAnonymous() && !answer.getCreator().getURI().equals(user.getURI()) &&  semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markBestAnswer)) {
                                                             actionURL.setAction("bestAnswer");
                                                             actionURL.setParameter("org", "edit");
@@ -739,6 +747,24 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                            %>
                                                            <li>
                                                                  ¿Esto qu&eacute;?<img width="18" height="18" alt="¿Eso qué?" src="<%=baseimg%>icon_eso_que.png">(<%=answer.getAnsIrrelevant()%>)
+                                                            </li>
+                                                             <%
+                                                        }
+                                                    }
+                                                    if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateAnswers)) {
+                                                        if (!answer.isAnonymous() && !answer.isAnsIsAppropiate() && !answer.getCreator().getURI().equals(user.getURI())) {
+                                                            actionURL.setParameter("uri", answer.getURI());
+                                                             actionURL.setAction("markAnswerAsInnapropiate");
+                                                             actionURL.setParameter("org", "edit");
+                                                             %>
+                                                             <li>
+                                                                 <a href="<%=actionURL%>">Inapropiado</a>(<%=answer.getAnsInappropriate()%>)
+                                                             </li>
+                                                             <%
+                                                        } else {
+                                                           %>
+                                                           <li>
+                                                                 Inapropiado(<%=answer.getAnsInappropriate()%>)
                                                             </li>
                                                              <%
                                                         }
@@ -870,10 +896,10 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                     }
                                 }
                                 if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateQuestions)) {
-                                    if (!question.isQueIsApropiate() && !question.getCreator().getURI().equals(user.getURI())) {
+                                    if (!question.isAnonymous() && !question.isQueIsApropiate() && !question.getCreator().getURI().equals(user.getURI())) {
                                          actionURL.setAction("markQuestionAsInnapropiate");
                                          actionURL.setParameter("org", "showDetail");
-                                         %><a href="<%=actionURL%>">Marcar como inapropiado</a>&nbsp;<%
+                                         %><a href="<%=actionURL%>">Inapropiado</a>&nbsp;<%
                                     }
                                 }
                                 if (!question.isAnonymous() && user.isSigned() && user.getURI().equals(question.getCreator().getURI())) {
@@ -882,19 +908,52 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                     %><a href="<%=renderURL%>">Editar pregunta</a>&nbsp;<%
                                 }
                             }
-                            if (question.getQuestionReferences() != null && !question.getQuestionReferences().trim().equals("")) {
-                                String prefix = "http://www.youtube.com/watch?v=";
-                                String references[] = question.getQuestionReferences().split(",");
-                                if (references.length > 0) {
+                            if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptYoutubeReferences)) {
+                                if (question.getQuestionReferences() != null && !question.getQuestionReferences().trim().equals("")) {
+                                    String prefix = "http://www.youtube.com/watch?v=";
+                                    String references[] = question.getQuestionReferences().split(",");
+                                    if (references.length > 0) {
+                                        %>
+                                        <ul>
+                                            <li>Referencias</li>
+                                            <ul>
+                                                <%
+                                                for (int idx = 0; idx < references.length; idx++) {
+                                                    if (references[idx].length() > 10 && references[idx].contains(prefix)) {
+                                                        String ref = getVideoThumbnail(references[idx], wpage);
+                                                        %><li><a href="<%=references[idx]%>" target="_blank"><img src="<%=ref%>"></a></li><%
+                                                    }
+                                                }
+                                                %>
+                                            </ul>
+                                        </ul>
+                                        <%
+                                    }
+                                }
+                            }
+
+                            if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptAttachements)) {
+                                String filePath = SWBPortal.getWebWorkPath() + question.getWorkPath() + "/";
+                                String prefix = Question.forumCat_hasQuestionAttachments.getName()+"_"+question.getId()+"_";
+                                Iterator<String> qfit = question.listQuestionAttachmentses();
+                                if (qfit != null && qfit.hasNext()) {
+                                    ArrayList<String> references = new ArrayList<String>();
+                                    while (qfit.hasNext()) {
+                                        String ref = qfit.next();
+                                        references.add(ref);
+                                    }
+
                                     %>
                                     <ul>
-                                        <li>Referencias</li>
+                                        <li>Adjuntos</li>
                                         <ul>
                                             <%
-                                            for (int idx = 0; idx < references.length; idx++) {
-                                                if (references[idx].length() > 10 && references[idx].contains(prefix)) {
-                                                    String ref = getVideoThumbnail(references[idx], wpage);
-                                                    %><li><a href="<%=references[idx]%>" target="_blank"><img src="<%=ref%>"></a></li><%
+                                            for (int idx = 0; idx < references.size(); idx++) {
+                                                String fileName = references.get(idx).replaceAll(prefix, "");
+                                                if (fileName.endsWith(".mp3")) {
+                                                    %><li><object type="application/x-shockwave-flash" data="<%=baseimg%>dewplayer.swf?mp3=<%=filePath + references.get(idx)%>" width="200" height="20" id="dewplayer"><param name="wmode" value="transparent" /><param name="movie" value="<%=baseimg%>dewplayer.swf?mp3=<%=filePath + references.get(idx)%>" /></object></li><%
+                                                } else {
+                                                    %><li><a href="<%=filePath + references.get(idx)%>" target="_blank"><%=fileName%></a></li><%
                                                 }
                                             }
                                             %>
@@ -902,34 +961,6 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                     </ul>
                                     <%
                                 }
-                            }
-                            String qfilePath = SWBPortal.getWebWorkPath() + question.getWorkPath() + "/";
-                            String qprefix = Question.forumCat_hasQuestionAttachments.getName()+"_"+question.getId()+"_";
-                            Iterator<String> qfit = question.listQuestionAttachmentses();
-                            if (qfit != null && qfit.hasNext()) {
-                                ArrayList<String> references = new ArrayList<String>();
-                                while (qfit.hasNext()) {
-                                    String ref = qfit.next();
-                                    references.add(ref);
-                                }
-
-                                %>
-                                <ul>
-                                    <li>Adjuntos</li>
-                                    <ul>
-                                        <%
-                                        for (int idx = 0; idx < references.size(); idx++) {
-                                            String fileName = references.get(idx).replaceAll(qprefix, "");
-                                            if (fileName.endsWith(".mp3")) {
-                                                %><li><object type="application/x-shockwave-flash" data="<%=baseimg%>dewplayer.swf?mp3=<%=qfilePath + references.get(idx)%>" width="200" height="20" id="dewplayer"><param name="wmode" value="transparent" /><param name="movie" value="<%=baseimg%>dewplayer.swf?mp3=<%=qfilePath + references.get(idx)%>" /></object></li><%
-                                            } else {
-                                                %><li><a href="<%=qfilePath + references.get(idx)%>" target="_blank"><%=fileName%></a></li><%
-                                            }
-                                        }
-                                        %>
-                                    </ul>
-                                </ul>
-                                <%
                             }
                             %>
                         </li>
@@ -1004,7 +1035,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                 if (!favAnswer.isAnonymous() && !favAnswer.isAnsIsAppropiate() && !favAnswer.getCreator().getURI().equals(user.getURI())) {
                                                      actionURL.setAction("markAnswerAsInnapropiate");
                                                      actionURL.setParameter("org", "showDetail");
-                                                     %> <a href="<%=actionURL%>">Marcar como inapropiado</a>&nbsp;<%
+                                                     %> <a href="<%=actionURL%>">Inapropiado</a>&nbsp;<%
                                                 } else {
                                                    %>- Inapropiado: <%=favAnswer.getAnsInappropriate()%><%
                                                 }
@@ -1068,19 +1099,52 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                     </div>
                                 </li>
                                 <%
-                                if (favAnswer.getReferences() != null && !favAnswer.getReferences().trim().equals("")) {
-                                    String prefix = "http://www.youtube.com/watch?v=";
-                                    String references[] = favAnswer.getReferences().split(",");
-                                    if (references.length > 0) {
+                                if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptYoutubeReferences)) {
+                                    if (favAnswer.getReferences() != null && !favAnswer.getReferences().trim().equals("")) {
+                                        String prefix = "http://www.youtube.com/watch?v=";
+                                        String references[] = favAnswer.getReferences().split(",");
+                                        if (references.length > 0) {
+                                            %>
+                                            <ul>
+                                                <li>Referencias</li>
+                                                <ul>
+                                                    <%
+                                                    for (int idx = 0; idx < references.length; idx++) {
+                                                        if (references[idx].length() > 10 && references[idx].contains(prefix)) {
+                                                            String ref = getVideoThumbnail(references[idx], wpage);
+                                                            %><li><a href="<%=references[idx]%>" target="_blank"><img src="<%=ref%>"></a></li><%
+                                                        }
+                                                    }
+                                                    %>
+                                                </ul>
+                                            </ul>
+                                            <%
+                                        }
+                                    }
+                                }
+
+                                if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptAttachements)) {
+                                    String filePath = SWBPortal.getWebWorkPath() + favAnswer.getWorkPath() + "/";
+                                    String prefix = favAnswer.forumCat_hasAttachements.getName()+"_"+favAnswer.getId()+"_";
+                                    Iterator<String> fit = favAnswer.listAttachementses();
+                                    if (fit != null && fit.hasNext()) {
+                                        ArrayList<String> references = new ArrayList<String>();
+                                        while (fit.hasNext()) {
+                                            String ref = fit.next();
+                                            references.add(ref);
+                                        }
+
                                         %>
                                         <ul>
-                                            <li>Referencias</li>
+                                            <li>Adjuntos</li>
                                             <ul>
                                                 <%
-                                                for (int idx = 0; idx < references.length; idx++) {
-                                                    if (references[idx].length() > 10 && references[idx].contains(prefix)) {
-                                                        String ref = getVideoThumbnail(references[idx], wpage);
-                                                        %><li><a href="<%=references[idx]%>" target="_blank"><img src="<%=ref%>"></a></li><%
+                                                for (int idx = 0; idx < references.size(); idx++) {
+                                                    String fileName = references.get(idx).replaceAll(prefix, "");
+                                                    if (fileName.endsWith(".mp3")) {
+                                                        %><li><object type="application/x-shockwave-flash" data="<%=baseimg%>dewplayer.swf?mp3=<%=filePath + references.get(idx)%>" width="200" height="20" id="dewplayer"><param name="wmode" value="transparent" /><param name="movie" value="<%=baseimg%>dewplayer.swf?mp3=<%=filePath + references.get(idx)%>" /></object></li><%
+                                                    } else {
+                                                        %><li><a href="<%=filePath + references.get(idx)%>" target="_blank"><%=fileName%></a></li><%
                                                     }
                                                 }
                                                 %>
@@ -1088,34 +1152,6 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                         </ul>
                                         <%
                                     }
-                                }
-                                String filePath = SWBPortal.getWebWorkPath() + favAnswer.getWorkPath() + "/";
-                                String prefix = favAnswer.forumCat_hasAttachements.getName()+"_"+favAnswer.getId()+"_";
-                                Iterator<String> fit = favAnswer.listAttachementses();
-                                if (fit != null && fit.hasNext()) {
-                                    ArrayList<String> references = new ArrayList<String>();
-                                    while (fit.hasNext()) {
-                                        String ref = fit.next();
-                                        references.add(ref);
-                                    }
-
-                                    %>
-                                    <ul>
-                                        <li>Adjuntos</li>
-                                        <ul>
-                                            <%
-                                            for (int idx = 0; idx < references.size(); idx++) {
-                                                String fileName = references.get(idx).replaceAll(prefix, "");
-                                                if (fileName.endsWith(".mp3")) {
-                                                    %><li><object type="application/x-shockwave-flash" data="<%=baseimg%>dewplayer.swf?mp3=<%=qfilePath + references.get(idx)%>" width="200" height="20" id="dewplayer"><param name="wmode" value="transparent" /><param name="movie" value="<%=baseimg%>dewplayer.swf?mp3=<%=qfilePath + references.get(idx)%>" /></object></li><%
-                                                } else {
-                                                    %><li><a href="<%=qfilePath + references.get(idx)%>" target="_blank"><%=fileName%></a></li><%
-                                                }
-                                            }
-                                            %>
-                                        </ul>
-                                    </ul>
-                                    <%
                                 }
                             }
                             if (comAnswer != null) {
@@ -1186,11 +1222,12 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                             <%
                                                 if (user.isSigned() && semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_markInnapropiateAnswers)) {
                                                     if (!comAnswer.isAnonymous() && !comAnswer.isAnsIsAppropiate() && !comAnswer.getCreator().getURI().equals(user.getURI())) {
+                                                         actionURL.setParameter("uri", comAnswer.getURI());
                                                          actionURL.setAction("markAnswerAsInnapropiate");
                                                          actionURL.setParameter("org", "showDetail");
-                                                         %>  <a href="<%=actionURL%>">Marcar como inapropiado</a>&nbsp;<%
+                                                         %>  <a href="<%=actionURL%>">Inapropiado</a>&nbsp;<%
                                                     } else {
-                                                       %>- Inapropiado: <%=favAnswer.getAnsInappropriate()%><%
+                                                       %>- Inapropiado: <%=comAnswer.getAnsInappropriate()%><%
                                                     }
                                                 }
                                             %>
@@ -1253,19 +1290,50 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                 </li>
                                 <div>
                                 <%
-                                if (comAnswer.getReferences() != null && !comAnswer.getReferences().trim().equals("")) {
-                                    String prefix = "http://www.youtube.com/watch?v=";
-                                    String references[] = comAnswer.getReferences().split(",");
-                                    if (references.length > 0) {
+                                if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptYoutubeReferences)) {
+                                    if (comAnswer.getReferences() != null && !comAnswer.getReferences().trim().equals("")) {
+                                        String prefix = "http://www.youtube.com/watch?v=";
+                                        String references[] = comAnswer.getReferences().split(",");
+                                        if (references.length > 0) {
+                                            %>
+                                            <ul>
+                                                <li>Referencias</li>
+                                                <ul>
+                                                    <%
+                                                    for (int idx = 0; idx < references.length; idx++) {
+                                                        if (references[idx].length() > 10 && references[idx].contains(prefix)) {
+                                                            String ref = getVideoThumbnail(references[idx], wpage);
+                                                            %><li><a href="<%=references[idx]%>" target="_blank"><img src="<%=ref%>"></a></li><%
+                                                        }
+                                                    }
+                                                    %>
+                                                </ul>
+                                            </ul>
+                                            <%
+                                        }
+                                    }
+                                }
+                                if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptAttachements)) {
+                                    String filePath = SWBPortal.getWebWorkPath() + comAnswer.getWorkPath() + "/";
+                                    String prefix = comAnswer.forumCat_hasAttachements.getName()+"_"+comAnswer.getId()+"_";
+                                    Iterator<String> fit = comAnswer.listAttachementses();
+                                    if (fit != null && fit.hasNext()) {
+                                        ArrayList<String> references = new ArrayList<String>();
+                                        while (fit.hasNext()) {
+                                            String ref = fit.next();
+                                            references.add(ref);
+                                        }
+
                                         %>
                                         <ul>
-                                            <li>Referencias</li>
+                                            <li>Adjuntos</li>
                                             <ul>
                                                 <%
-                                                for (int idx = 0; idx < references.length; idx++) {
-                                                    if (references[idx].length() > 10 && references[idx].contains(prefix)) {
-                                                        String ref = getVideoThumbnail(references[idx], wpage);
-                                                        %><li><a href="<%=references[idx]%>" target="_blank"><img src="<%=ref%>"></a></li><%
+                                                for (int idx = 0; idx < references.size(); idx++) {
+                                                    String fileName = references.get(idx).replaceAll(prefix, "");if (fileName.endsWith(".mp3")) {
+                                                        %><li><object type="application/x-shockwave-flash" data="<%=baseimg%>dewplayer.swf?mp3=<%=filePath + references.get(idx)%>" width="200" height="20" id="dewplayer"><param name="wmode" value="transparent" /><param name="movie" value="<%=baseimg%>dewplayer.swf?mp3=<%=filePath + references.get(idx)%>" /></object></li><%
+                                                    } else {
+                                                        %><li><a href="<%=filePath + references.get(idx)%>" target="_blank"><%=fileName%></a></li><%
                                                     }
                                                 }
                                                 %>
@@ -1273,33 +1341,6 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                         </ul>
                                         <%
                                     }
-                                }
-                                String filePath = SWBPortal.getWebWorkPath() + comAnswer.getWorkPath() + "/";
-                                String prefix = comAnswer.forumCat_hasAttachements.getName()+"_"+comAnswer.getId()+"_";
-                                Iterator<String> fit = comAnswer.listAttachementses();
-                                if (fit != null && fit.hasNext()) {
-                                    ArrayList<String> references = new ArrayList<String>();
-                                    while (fit.hasNext()) {
-                                        String ref = fit.next();
-                                        references.add(ref);
-                                    }
-
-                                    %>
-                                    <ul>
-                                        <li>Adjuntos</li>
-                                        <ul>
-                                            <%
-                                            for (int idx = 0; idx < references.size(); idx++) {
-                                                String fileName = references.get(idx).replaceAll(prefix, "");if (fileName.endsWith(".mp3")) {
-                                                    %><li><object type="application/x-shockwave-flash" data="<%=baseimg%>dewplayer.swf?mp3=<%=qfilePath + references.get(idx)%>" width="200" height="20" id="dewplayer"><param name="wmode" value="transparent" /><param name="movie" value="<%=baseimg%>dewplayer.swf?mp3=<%=qfilePath + references.get(idx)%>" /></object></li><%
-                                                } else {
-                                                    %><li><a href="<%=qfilePath + references.get(idx)%>" target="_blank"><%=fileName%></a></li><%
-                                                }
-                                            }
-                                            %>
-                                        </ul>
-                                    </ul>
-                                    <%
                                 }
                                 %></div><%
                             }
@@ -1393,7 +1434,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                                     if (!answer.isAnonymous() && !answer.isAnsIsAppropiate() && !answer.getCreator().getURI().equals(user.getURI())) {
                                                          actionURL.setAction("markAnswerAsInnapropiate");
                                                          actionURL.setParameter("org", "showDetail");
-                                                         %>  <a href="<%=actionURL%>">Marcar como inapropiado</a>&nbsp;<%
+                                                         %>  <a href="<%=actionURL%>">Inapropiado</a>&nbsp;<%
                                                     } else {
                                                        %>- Inapropiado: <%=answer.getAnsInappropriate()%><%
                                                     }
@@ -1464,19 +1505,52 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                         </div>
                                     </li>
                                 <%
-                                if (answer.getReferences() != null && !answer.getReferences().trim().equals("")) {
-                                    String prefix = "http://www.youtube.com/watch?v=";
-                                    String references[] = answer.getReferences().split(",");
-                                    if (references.length > 0) {
+                                if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptYoutubeReferences)) {
+                                    if (answer.getReferences() != null && !answer.getReferences().trim().equals("")) {
+                                        String prefix = "http://www.youtube.com/watch?v=";
+                                        String references[] = answer.getReferences().split(",");
+                                        if (references.length > 0) {
+                                            %>
+                                            <ul>
+                                                <li>Referencias</li>
+                                                <ul>
+                                                    <%
+                                                    for (int idx = 0; idx < references.length; idx++) {
+                                                        if (references[idx].length() > 10 && references[idx].contains(prefix)) {
+                                                            String ref = getVideoThumbnail(references[idx], wpage);
+                                                            %><li><a href="<%=references[idx]%>" target="_blank"><img src="<%=ref%>"></a></li><%
+                                                        }
+                                                    }
+                                                    %>
+                                                </ul>
+                                            </ul>
+                                            <%
+                                        }
+                                    }
+                                }
+                                        
+                                if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptAttachements)) {
+                                    String filePath = SWBPortal.getWebWorkPath() + answer.getWorkPath() + "/";
+                                    String prefix = answer.forumCat_hasAttachements.getName()+"_"+answer.getId()+"_";
+                                    Iterator<String> fit = answer.listAttachementses();
+                                    if (fit != null && fit.hasNext()) {
+                                        ArrayList<String> references = new ArrayList<String>();
+                                        while (fit.hasNext()) {
+                                            String ref = fit.next();
+                                            references.add(ref);
+                                        }
+
                                         %>
                                         <ul>
-                                            <li>Referencias</li>
+                                            <li>Adjuntos</li>
                                             <ul>
                                                 <%
-                                                for (int idx = 0; idx < references.length; idx++) {
-                                                    if (references[idx].length() > 10 && references[idx].contains(prefix)) {
-                                                        String ref = getVideoThumbnail(references[idx], wpage);
-                                                        %><li><a href="<%=references[idx]%>" target="_blank"><img src="<%=ref%>"></a></li><%
+                                                for (int idx = 0; idx < references.size(); idx++) {
+                                                    String fileName = references.get(idx).replaceAll(prefix, "");
+                                                    if (fileName.endsWith(".mp3")) {
+                                                        %><li><object type="application/x-shockwave-flash" data="<%=baseimg%>dewplayer.swf?mp3=<%=filePath + references.get(idx)%>" width="200" height="20" id="dewplayer"><param name="wmode" value="transparent" /><param name="movie" value="<%=baseimg%>dewplayer.swf?mp3=<%=filePath + references.get(idx)%>" /></object></li><%
+                                                    } else {
+                                                        %><li><a href="<%=filePath + references.get(idx)%>" target="_blank"><%=fileName%></a></li><%
                                                     }
                                                 }
                                                 %>
@@ -1484,34 +1558,6 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                         </ul>
                                         <%
                                     }
-                                }
-                                String filePath = SWBPortal.getWebWorkPath() + answer.getWorkPath() + "/";
-                                String prefix = answer.forumCat_hasAttachements.getName()+"_"+answer.getId()+"_";
-                                Iterator<String> fit = answer.listAttachementses();
-                                if (fit != null && fit.hasNext()) {
-                                    ArrayList<String> references = new ArrayList<String>();
-                                    while (fit.hasNext()) {
-                                        String ref = fit.next();
-                                        references.add(ref);
-                                    }
-
-                                    %>
-                                    <ul>
-                                        <li>Adjuntos</li>
-                                        <ul>
-                                            <%
-                                            for (int idx = 0; idx < references.size(); idx++) {
-                                                String fileName = references.get(idx).replaceAll(prefix, "");
-                                                if (fileName.endsWith(".mp3")) {
-                                                    %><li><object type="application/x-shockwave-flash" data="<%=baseimg%>dewplayer.swf?mp3=<%=qfilePath + references.get(idx)%>" width="200" height="20" id="dewplayer"><param name="wmode" value="transparent" /><param name="movie" value="<%=baseimg%>dewplayer.swf?mp3=<%=qfilePath + references.get(idx)%>" /></object></li><%
-                                                } else {
-                                                    %><li><a href="<%=qfilePath + references.get(idx)%>" target="_blank"><%=fileName%></a></li><%
-                                                }
-                                            }
-                                            %>
-                                        </ul>
-                                    </ul>
-                                    <%
                                 }
                             }
                         }
@@ -1580,44 +1626,52 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                     %>
                                 </select>
                             </li>
-                        <%}%>
-                        <li>
-                            <label class="etiqueta">Referencias a Youtube:</label>
-                            <input type="text" name="inputBox">
+                        <%}
+                        if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptYoutubeReferences)) {
+                        %>
                             <li>
-                                <label class="etiqueta"></label>
-                                <input class="btn_form" type="button" value="Agregar" onclick="addToList(this.form.referenceList, this.form.inputBox);">
-                            </li>
-                            <li>
-                                <label class="etiqueta"></label>
-                                <select multiple class="selectmultiple" name="referenceList">
-                                    <%
-                                    String refs = "";
-                                    if (q.getQuestionReferences() != null) {
-                                        refs = q.getQuestionReferences().trim();
-                                        if (!refs.equals("")) {
-                                            String arefs[] = refs.split(",");
-                                            for (int idx = 0; idx < arefs.length; idx++) {
-                                                %><option value="<%=arefs[idx]%>"><%=arefs[idx]%></option><%
+                                <label class="etiqueta">Referencias a Youtube:</label>
+                                <input type="text" name="inputBox">
+                                <li>
+                                    <label class="etiqueta"></label>
+                                    <input class="btn_form" type="button" value="Agregar" onclick="addToList(this.form.referenceList, this.form.inputBox);">
+                                </li>
+                                <li>
+                                    <label class="etiqueta"></label>
+                                    <select multiple class="selectmultiple" name="referenceList">
+                                        <%
+                                        String refs = "";
+                                        if (q.getQuestionReferences() != null) {
+                                            refs = q.getQuestionReferences().trim();
+                                            if (!refs.equals("")) {
+                                                String arefs[] = refs.split(",");
+                                                for (int idx = 0; idx < arefs.length; idx++) {
+                                                    %><option value="<%=arefs[idx]%>"><%=arefs[idx]%></option><%
+                                                }
                                             }
                                         }
-                                    }
-                                    %>
-                                </select>
+                                        %>
+                                    </select>
+                                </li>
+                                <li>
+                                    <label class="etiqueta"></label>
+                                    <input class="btn_form" type="button" value="Limpiar" onclick="clearList(this.form.referenceList);">
+                                    <input class="btn_form" type="button" value="Limpiar seleccionados" onclick="clearSelected(this.form.referenceList);">
+                                </li>
                             </li>
-                            <li>
-                                <label class="etiqueta"></label>
-                                <input class="btn_form" type="button" value="Limpiar" onclick="clearList(this.form.referenceList);">
-                                <input class="btn_form" type="button" value="Limpiar seleccionados" onclick="clearSelected(this.form.referenceList);">
-                            </li>
-                        </li>
+                        <%}%>
                     <ul>
                     <hr>
                     <ul class="btns_final">
                         <li>
                             <label class="etiqueta"></label>
-                            <input class="btn_form" type="button" value="Guardar" onclick="setReferences(this.form.referenceList, this.form.<%=Question.forumCat_questionReferences.getName()%>);">
-                            <!--input type="submit" class="boton" value="Guardar"-->
+                            <%
+                            if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptYoutubeReferences)) {
+                            %>
+                                <input class="btn_form" type="button" value="Guardar" onclick="setReferences(this.form.referenceList, this.form.<%=Question.forumCat_questionReferences.getName()%>);">
+                            <%} else {%>
+                                <input type="submit" class="boton" value="Guardar">
+                            <%}%>
                             <input type="button" class="btn_form" value="Regresar" onclick="javascript:history.go(-1);">
                         </li>
                     </ul>
@@ -1672,32 +1726,37 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                     <input type="button" class="btn_form" value="Subir archivo">
                                 </li>
                             </li>
-                        <%
-                        }%>
-                        <li>
-                            <label class="etiqueta">Referencias a Youtube:</label>
-                            <input type="text" name="inputBox">
+                        <%}
+                        if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptYoutubeReferences)) {
+                        %>
                             <li>
-                                <label class="etiqueta"></label>
-                                <input type="button" class="btn_form" value="Agregar" onclick="addToList(this.form.referenceList, this.form.inputBox);">
+                                <label class="etiqueta">Referencias a Youtube:</label>
+                                <input type="text" name="inputBox">
+                                <li>
+                                    <label class="etiqueta"></label>
+                                    <input type="button" class="btn_form" value="Agregar" onclick="addToList(this.form.referenceList, this.form.inputBox);">
+                                </li>
+                                <li>
+                                    <label class="etiqueta"></label>
+                                    <select multiple name="referenceList" class="selectmultiple"></select>
+                                </li>
+                                <li>
+                                    <label class="etiqueta"></label>
+                                    <input type="button" class="btn_form" value="Limpiar" onclick="clearList(this.form.referenceList);">
+                                    <input type="button" class="btn_form" value="Limpiar seleccionados" onclick="clearSelected(this.form.referenceList);">
+                                </li>
                             </li>
-                            <li>
-                                <label class="etiqueta"></label>
-                                <select multiple name="referenceList" class="selectmultiple"></select>
-                            </li>
-                            <li>
-                                <label class="etiqueta"></label>
-                                <input type="button" class="btn_form" value="Limpiar" onclick="clearList(this.form.referenceList);">
-                                <input type="button" class="btn_form" value="Limpiar seleccionados" onclick="clearSelected(this.form.referenceList);">
-                            </li>
-                        </li>
+                        <%}%>
                     </ul>
                     <hr/>
                     <ul class="btns_final">
                         <li>
                             <label class="etiqueta"></label>
-                            <input type="button" class="btn_form" value="Guardar" onclick="setReferences(this.form.referenceList, this.form.<%=Answer.forumCat_references.getName()%>);">
-                            <!--input type="submit" class="boton" value="Guardar"-->
+                            <%if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptYoutubeReferences)) {%>
+                                <input type="button" class="btn_form" value="Guardar" onclick="setReferences(this.form.referenceList, this.form.<%=Answer.forumCat_references.getName()%>);">
+                            <%} else {%>
+                                <input type="button" class="btn_form" value="Guardar" onclick="this.form.submit();">
+                            <%}%>
                             <input type="button" class="btn_form" value="Regresar" onclick="javascript:history.go(-1);">
                             <!--input type="submit" class="boton" value="Guardar"-->
                         </li>
@@ -1709,6 +1768,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
     } else if (action != null && action.equals("editAnswer")) {
         SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
         SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
+        Answer answer = (Answer) semObject.createGenericInstance();
         mgr.setLang(user.getLanguage());
         mgr.setFilterRequired(false);
         mgr.setType(mgr.TYPE_DOJO);
@@ -1720,40 +1780,84 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
         mgr.addButton(SWBFormButton.newCancelButton());
         SemanticClass semClass = Answer.sclass;
         %>
-            <div class="foro_gral">
-            <h1>Editar respuesta</h1>
-            <%= SWBFormMgr.DOJO_REQUIRED%>
-            <form id="<%=mgr.getFormName()%>" name="datosRegistro" dojoType="dijit.form.Form" class="swbform" action="<%=actionURL%>" method="post" >
+        <div class="formularios">
+            <form id="<%=mgr.getFormName()%>" name="datosRegistro" class="swbform" action="<%=actionURL%>" method="post" >
+                <input type="hidden" name="<%=Answer.forumCat_references.getName()%>">
                 <fieldset>
-                <%= mgr.getFormHiddens()%>
-
-                <div class="sfcLinea">
-                    <div class="sfcEtiqueta">
-                        <%=mgr.renderLabel(request, semClass.getProperty(Answer.forumCat_answer.getName()), mgr.MODE_EDIT)%>:
-                    </div>
-                    <div class="sfcCampo">
-
-                        <%=mgr.renderElement(request, semClass.getProperty(Answer.forumCat_answer.getName()), mgr.MODE_EDIT)%>
-                    </div>
-                </div>
-                <%if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptAttachements)) {%>
-                    <div class="sfcLinea">
-                        <div class="sfcEtiqueta">
-                            <%=mgr.renderLabel(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), mgr.MODE_EDIT)%>:
-                        </div>
-                        <div class="sfcCampo">
-
-                            <%=mgr.renderElement(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), mgr.MODE_EDIT)%>
-                        </div>
-                    </div>
-                <%}%>
-                <div class="sfcLinea">
-                    <input type="submit" class="boton" value="Guardar">
-                    <input type="button" class="boton" value="Regresar" onclick="javascript:history.go(-1);">
-                </div>
+                    <legend>Editar pregunta</legend>
+                    <%= mgr.getFormHiddens()%>
+                    <ul>
+                        <li>
+                            <label class="etiqueta" for="<%=semClass.getProperty(Answer.forumCat_answer.getName())%>">Respuesta:</label>
+                            <textarea cols="42" rows="6" name="<%=Answer.forumCat_answer.getName()%>"><%=answer.getAnswer()%></textarea>
+                            <!--%=mgr.renderElement(request, semClass.getProperty(Answer.forumCat_answer.getName()), mgr.MODE_CREATE)%-->
+                        </li>
+                        <%if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptAttachements)) {%>
+                            <li>
+                                <label class="etiqueta">Archivos adjuntos:</label>
+                            <%
+                                StringBuffer sbf = new StringBuffer();
+                                mgr.renderProp(request, sbf, Answer.forumCat_hasAttachements,mgr.getFormElement(Answer.forumCat_hasAttachements));%>
+                                <%=sbf.toString()%>
+                                <!--%=mgr.renderLabel(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), null)%-->
+                                <!--%=mgr.renderElement(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), mgr.MODE_CREATE)%-->
+                                <li>
+                                    <br>
+                                    <label class="etiqueta"></label>
+                                    <input type="button" class="btn_form" value="Subir archivo">
+                                </li>
+                            </li>
+                        <%}
+                        if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptYoutubeReferences)) {
+                        %>
+                            <li>
+                                <label class="etiqueta">Referencias a Youtube:</label>
+                                <input type="text" name="inputBox">
+                                <li>
+                                    <label class="etiqueta"></label>
+                                    <input type="button" class="btn_form" value="Agregar" onclick="addToList(this.form.referenceList, this.form.inputBox);">
+                                </li>
+                                <li>
+                                    <label class="etiqueta"></label>
+                                    <select multiple class="selectmultiple" name="referenceList">
+                                        <%
+                                        String refs = "";
+                                        if (answer.getReferences() != null) {
+                                            refs = answer.getReferences().trim();
+                                            if (!refs.equals("")) {
+                                                String arefs[] = refs.split(",");
+                                                for (int idx = 0; idx < arefs.length; idx++) {
+                                                    %><option value="<%=arefs[idx]%>"><%=arefs[idx]%></option><%
+                                                }
+                                            }
+                                        }
+                                        %>
+                                    </select>
+                                </li>
+                                <li>
+                                    <label class="etiqueta"></label>
+                                    <input type="button" class="btn_form" value="Limpiar" onclick="clearList(this.form.referenceList);">
+                                    <input type="button" class="btn_form" value="Limpiar seleccionados" onclick="clearSelected(this.form.referenceList);">
+                                </li>
+                            </li>
+                        <%}%>
+                    </ul>
+                    <hr/>
+                    <ul class="btns_final">
+                        <li>
+                            <label class="etiqueta"></label>
+                            <%if (semanticBase.getBooleanProperty(SWBForumCatResource.forumCat_acceptYoutubeReferences)) {%>
+                                <input type="button" class="btn_form" value="Guardar" onclick="setReferences(this.form.referenceList, this.form.<%=Answer.forumCat_references.getName()%>);">
+                            <%} else {%>
+                                <input type="button" class="btn_form" value="Guardar" onclick="this.form.submit();">
+                            <%}%>
+                            <input type="button" class="btn_form" value="Regresar" onclick="javascript:history.go(-1);">
+                            <!--input type="submit" class="boton" value="Guardar"-->
+                        </li>
+                    </ul>
                 </fieldset>
             </form>
-        </div>
+        </div>            
     <%
     } else if (action != null && action.equals("moderate")) {
         boolean notEmpty = false;
