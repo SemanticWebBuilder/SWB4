@@ -5,6 +5,7 @@
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.resources.sem.forumcat.QuestionSubscription"%>
 <%@page import="org.semanticwb.model.User"%>
+<%@page import="org.semanticwb.model.Tagable"%>
 <%@page import="org.semanticwb.model.Resource"%>
 <%@page import="org.semanticwb.model.WebPage"%>
 <%@page import="org.semanticwb.model.WebSite"%>
@@ -38,21 +39,29 @@
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
 SWBForumCatResource resource = (SWBForumCatResource) request.getAttribute("forumResource");
 User user = paramRequest.getUser();
+String baseimg = SWBPortal.getWebWorkPath()+"/models/"+paramRequest.getWebPage().getWebSiteId()+"/css/images/";
 
 if (resource != null && resource.getResource().isValid()) {
     SWBResourceURL actionURL = new SWBResourceURLImp(request, resource.getResource(), paramRequest.getWebPage(), SWBResourceURL.UrlType_ACTION);
-    SWBFormMgr mgr = new SWBFormMgr(Question.forumCat_Question, resource.getSemanticObject(), SWBFormMgr.MODE_CREATE);
+    //SWBFormMgr mgr = new SWBFormMgr(Question.forumCat_Question, resource.getSemanticObject(), SWBFormMgr.MODE_CREATE);
+    //mgr.setLang(user.getLanguage());
+    //mgr.setFilterRequired(false);
+    //mgr.setType(mgr.TYPE_DOJO);
+
+    SWBFormMgr mgr = new SWBFormMgr(Question.sclass, paramRequest.getWebPage().getWebSite().getSemanticObject(), null);
     mgr.setLang(user.getLanguage());
-    mgr.setFilterRequired(false);
+    mgr.setSubmitByAjax(false);
     mgr.setType(mgr.TYPE_DOJO);
     actionURL.setAction("addQuestion");
+    mgr.setAction(actionURL.toString());
     %>
     <div id="preguntar"><h2>¿Qu&eacute; quieres preguntar?</h2>
         <form action="<%=actionURL%>" method="post">
             <%= mgr.getFormHiddens()%>
+            <input type="hidden" name="<%=Question.forumCat_hasQuestionAttachments.getName()%>">
             <textarea id="questionfield" rows ="2" cols="34" name="<%=Question.forumCat_question.getName()%>"></textarea>
             <p>Etiqueta tu pregunta</p>
-            <input id="tagsfield" type="text" name="tags" size="34" class="etiqueta"/>
+            <input id="tagsfield" type="text" name="<%=Tagable.swb_tags.getName()%>" size="34" class="etiqueta"/>
             <%
             Iterator<WebPage> childs = SWBComparator.sortByDisplayName(paramRequest.getWebPage().getWebSite().getWebPage(resource.getIdCatPage()).listChilds(), user.getLanguage());
                 %>
@@ -66,7 +75,7 @@ if (resource != null && resource.getResource().isValid()) {
                     }
                     %>
                 </select>
-            <input name="publicar" type="image" class="btn_publicar" src="<%=SWBPortal.getWebWorkPath()+"/models/"+paramRequest.getWebPage().getWebSiteId()+"/css/images/"%>/btn_compartir.png" onclick="return validateFields(this.form);"/>
+            <input name="publicar" type="image" class="btn_publicar" src="<%=baseimg%>btn_compartir.png" onclick="return validateFields(this.form);"/>
         </form>
     </div>
 <%
