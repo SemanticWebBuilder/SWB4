@@ -558,17 +558,17 @@ public class ToolBar extends CustomNode
                         saveAsImage();
                     }
                 },
-                ImgButton {
-                    text: ##"exportxpdl"//ModelerUtils.getLocalizedString("export")
-                    image: "images/file_saveasxpdl1.png"
-                    imageOver: "images/file_saveasxpdl2.png"
-                    action: function():Void
-                    {
-                        ModelerUtils.clickedNode=null;
-                        modeler.disablePannable=false;
-                        //getXPDL();
-                    }
-                },
+//                ImgButton {
+//                    text: ##"exportxpdl"//ModelerUtils.getLocalizedString("export")
+//                    image: "images/file_saveasxpdl1.png"
+//                    imageOver: "images/file_saveasxpdl2.png"
+//                    action: function():Void
+//                    {
+//                        ModelerUtils.clickedNode=null;
+//                        modeler.disablePannable=false;
+//                        //getXPDL();
+//                    }
+//                },
                 /*ImgButton {
                     text: ##"print"//ModelerUtils.getLocalizedString("print")
                     image: "images/file_print1.png"
