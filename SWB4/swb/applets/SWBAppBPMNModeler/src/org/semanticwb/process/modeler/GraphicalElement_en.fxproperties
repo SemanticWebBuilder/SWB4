@@ -1,4 +1,5 @@
 "actDelete" = "Delete"
+"actProps = "Properties"
 "actChangeSize" = "Text size"
 "sizeSmall" = "Small"
 "sizeNormal" = "Normal"
