@@ -28,6 +28,18 @@ var toolTip=ToolTip
     visible:false
 }
 
+public var dialog = ModalDialog {
+    w: 390
+    h: 180
+    borderSize: 1
+    title: "Propiedades"
+    visible: false
+}
+
+public function setDialogNode(node: GraphicalElement) {
+    dialog.setBoundNode(node);
+}
+
 public function setErrorMessage(message:String)
 {
     errorMessage=message;
