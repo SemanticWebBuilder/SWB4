@@ -47,6 +47,7 @@ public class Modeler extends CustomNode
     var selectedNodes: GraphicalElement[];
     //var styles: HashMap;
     var selectedStyle: String;
+    var selectedMode: String;
 
     public override function create(): Node
     {
@@ -68,6 +69,7 @@ public class Modeler extends CustomNode
              ]
          }
          selectedStyle = "EyeCandy";
+         selectedMode = "Begginer";
 
 //         AddStyle("Vistoso", "Modeler");
 //         AddStyle("Simple", "ModelerFlat");
@@ -137,13 +139,29 @@ public class Modeler extends CustomNode
                     }
                 ]
             },
-//            MenuItem {
-//                caption: "Dialogo"
-//                action: function (e: MouseEvent) {
-//                    ModelerUtils.dialog.show();
-//                }
-//            }
-
+            MenuItem {
+                caption: ##"actMode"
+                items: [
+                    MenuItem {
+                        caption: ##"actExpert"
+                        status: bind if (selectedMode.equals("Expert")) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
+                            selectedMode = "Expert";
+                            toolBar.showHelp = false;
+                        }
+                    },
+                    MenuItem {
+                        caption: ##"actBegginer"
+                        status: bind if (selectedMode.equals("Begginer")) MenuItem.STATUS_DISABLED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
+                            selectedMode = "Begginer";
+                            toolBar.showHelp = true;
+                        }
+                    }
+                ]
+            }
         ];
 
          scrollView=ScrollView
