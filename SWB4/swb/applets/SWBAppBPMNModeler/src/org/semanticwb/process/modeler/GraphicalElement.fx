@@ -43,6 +43,7 @@ public class GraphicalElement extends CustomNode
 
     public var type:String;                     //tipo del elemento
     public var title : String;                  //titulo del elemento
+    public var description: String;
     public var toolTipText : String;            //tooltip del elemento
     public var uri : String;                    //uri del elemento
     public var s : Number = 1;                     //size
@@ -168,6 +169,15 @@ public class GraphicalElement extends CustomNode
                         }
                     }
                 ]
+            },
+            MenuItem {isSeparator: true},
+            MenuItem {
+                caption: ##"actProps"
+                action: function(e: MouseEvent) {
+                    ModelerUtils.popup.hide();
+                    ModelerUtils.setDialogNode(this);
+                    ModelerUtils.dialog.show();
+                }
             }
         ];
         insert props into menuOptions;
