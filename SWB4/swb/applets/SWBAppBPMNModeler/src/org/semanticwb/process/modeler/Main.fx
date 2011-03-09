@@ -48,6 +48,7 @@ var toolbar:ToolBar = ToolBar
     w:49
     h:bind maxy
     modeler: modeler
+    showHelp: true
 }
 
 modeler.toolBar=toolbar;
@@ -68,6 +69,7 @@ var scene : Scene = Scene {
         path,
         toolbar,
         ModelerUtils.getToolTip(),
+        ModelerUtils.dialog,
 //            MenuBar{
 //                menus: [
 //                    Menu{
