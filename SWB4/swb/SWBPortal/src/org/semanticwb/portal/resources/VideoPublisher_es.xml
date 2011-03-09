@@ -4,50 +4,46 @@
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
     <admdbconnmgr defconn="true"/>
     <fieldset legend="Configuración de contenido">
-        <input type="file" id="video" name="video" label="Video (flv, swf, avi, wmv, mov, rm, mp1, mp2, mp4):" showfile="true" filetype="flv|swf|avi|wmv|mov|rm|mp1|mp2|mp4" isshowfiletype="true" isremovefile="true" removemsg="Quitar video" size="40" />
-        <input type="file" id="preview" name="preview" label="Imagen de previsualización:" showfile="true" filetype="gif|jpg|bmp|png" isshowfiletype="true" isremovefile="true" removemsg="Quitar Imagen" size="40" />
-        <statictext name="auto">Iniciar automáticamente:</statictext>
+        <input type="file" id="video" name="video" label="Video (flv, swf, avi, wmv, mov, rm, mp1, mp2, mp4)" showfile="true" filetype="flv|swf|avi|wmv|mov|rm|mp1|mp2|mp4" isshowfiletype="true" isremovefile="true" removemsg="Quitar video" size="40" />
+        <input type="file" id="preview" name="preview" label="Imagen de previsualización" showfile="true" filetype="gif|jpg|bmp|png" isshowfiletype="true" isremovefile="true" removemsg="Quitar Imagen" size="40" />
+        <statictext name="auto">Iniciar automáticamente</statictext>
         <input type="radio" id="automatic0" name="automatic" label="Si" value="true" checked="true" />
         <input type="radio" id="automatic1" name="automatic" label="No" value="false" />
-        <statictext name="cntrls">Mostrar controles:</statictext>
+        <statictext name="cntrls">Mostrar controles</statictext>
         <input type="radio" id="controls0" name="controls" label="Si" value="true" checked="true" />
         <input type="radio" id="controls1" name="controls" label="No" value="false" />
-        <statictext name="lp">Reproducción continua:</statictext>
+        <statictext name="lp">Reproducción continua</statictext>
         <input type="radio" id="loop0" name="loop" label="Si" value="true" checked="true" />
         <input type="radio" id="loop1" name="loop" label="No" value="false" />
     </fieldset>
 
-    <div title="Estilo" open="false">
-    <fieldset legend="You Tube">
-        <textarea id="code" name="code" label="Código youTube:" rows="5" cols="50" promptMessage="Código youTube" />
+    <div title="YouTube" open="false">
+    <fieldset legend="Código">
+        <textarea id="code" name="code" label="Código youTube" rows="5" cols="50" promptMessage="Código youTube" />
     </fieldset>
     </div>
 
+    <div title="Estilo" open="true">
     <fieldset legend="Aspecto del video local">
-        <input type="text" id="width"  name="width" label="Ancho:" maxlength="6" regExp="\d{1,6}" invalidMessage="Ancho inválido" promptMessage="Ancho de la imagen. Ejemplos: 320" />
-        <input type="text" id="height" name="height" label="Altura:" maxlength="6" regExp="\d{1,6}" invalidMessage="Altura inválida" promptMessage="Altura de la imagen. Ejemplos: 280" />
+        <input type="text" id="width"  name="width" label="Ancho" maxlength="6" regExp="\d{1,6}" invalidMessage="Ancho inválido" promptMessage="Ancho del control. Ejemplos: 320" />
+        <input type="text" id="height" name="height" label="Altura" maxlength="6" regExp="\d{1,6}" invalidMessage="Altura inválida" promptMessage="Altura del control. Ejemplos: 280" />
         <select name="align" label="Alinear">
             <option value="left"></option>
             <option value="right"></option>
             <option value="center"></option>
         </select>
-    </fieldset>
-
-    <div title="Video FLV" open="false">
-    <fieldset legend="Aspecto del video FLV">
-
-     <statictext name="bgcolor">
+        <statictext name="bgcolor">
         <![CDATA[
         <table border="0" width="99%">
             <tr>
-              <td align="right">Color del marco del reproductor (hexadecimal)</td>
+              <td align="right">Color de fondo (hexadecimal)</td>
               <td class="valores">
                 <input type="text" id="bgcolor" name="bgcolor" value="{@db_bgcolor}" size="7" maxlength="7" />
                 <span style="background-color:{@db_bgcolor};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
               </td>
             </tr>
             <tr>
-              <td class="datos" width="200px" align="right">Otro color de texto:<span id="plt_bgcolor"></span></td>
+              <td class="datos" width="200px" align="right">Otro color<span id="plt_bgcolor"></span></td>
               <td class="valores">
                 <div id="cp_bgcolor"></div>
               </td>
@@ -56,6 +52,35 @@
         <script type="text/javascript">
             dojo.addOnLoad(function(){
                 var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("bgcolor").value=val; dojo.byId("plt_bgcolor").style.color=val; dojo.byId("plt_bgcolor").innerHTML=val;}}, "cp_bgcolor" );
+            });
+        </script>
+        ]]>
+        </statictext>
+    </fieldset>
+    </div>
+
+    <div title="Video FLV" open="false">
+    <fieldset legend="Aspecto del video FLV">
+     <statictext name="viewer">
+        <![CDATA[
+        <table border="0" width="99%">
+            <tr>
+              <td align="right">Color del marco del reproductor (hexadecimal)</td>
+              <td class="valores">
+                <input type="text" id="viewer" name="viewer" value="{@db_viewer}" size="7" maxlength="7" />
+                <span style="background-color:{@db_viewer};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="datos" width="200px" align="right">Otro color<span id="plt_viewer"></span></td>
+              <td class="valores">
+                <div id="cp_viewer"></div>
+              </td>
+            </tr>
+        </table>
+        <script type="text/javascript">
+            dojo.addOnLoad(function(){
+                var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("viewer").value=val; dojo.byId("plt_viewer").style.color=val; dojo.byId("plt_viewer").innerHTML=val;}}, "cp_viewer" );
             });
         </script>
         ]]>
@@ -71,7 +96,7 @@
               </td>
             </tr>
             <tr>
-              <td class="datos" width="200px" align="right">Otro color de texto:<span id="plt_gradient"></span></td>
+              <td class="datos" width="200px" align="right">Otro color<span id="plt_gradient"></span></td>
               <td class="valores">
                 <div id="cp_gradient"></div>
               </td>
@@ -95,7 +120,7 @@
               </td>
             </tr>
             <tr>
-              <td class="datos" width="200px" align="right">Otro color de texto:<span id="plt_panel"></span></td>
+              <td class="datos" width="200px" align="right">Otro color<span id="plt_panel"></span></td>
               <td class="valores">
                 <div id="cp_panel"></div>
               </td>
@@ -119,7 +144,7 @@
               </td>
             </tr>
             <tr>
-              <td class="datos" width="200px" align="right">Otro color de texto:<span id="plt_control"></span></td>
+              <td class="datos" width="200px" align="right">Otro color<span id="plt_control"></span></td>
               <td class="valores">
                 <div id="cp_control"></div>
               </td>
@@ -136,14 +161,14 @@
         <![CDATA[
         <table border="0" width="99%">
             <tr>
-              <td align="right">Color para control seleccionado (hexadecimal)</td>
+              <td align="right">Color para indicar selección (hexadecimal)</td>
               <td class="valores">
                 <input type="text" id="over" name="over" value="{@db_over}" size="7" maxlength="7" />
                 <span style="background-color:{@db_over};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
               </td>
             </tr>
             <tr>
-              <td class="datos" width="200px" align="right">Otro color de texto:<span id="plt_over"></span></td>
+              <td class="datos" width="200px" align="right">Otro color<span id="plt_over"></span></td>
               <td class="valores">
                 <div id="cp_over"></div>
               </td>
@@ -167,7 +192,7 @@
               </td>
             </tr>
             <tr>
-              <td class="datos" width="200px" align="right">Otro color de texto:<span id="plt_slider"></span></td>
+              <td class="datos" width="200px" align="right">Otro color<span id="plt_slider"></span></td>
               <td class="valores">
                 <div id="cp_slider"></div>
               </td>
