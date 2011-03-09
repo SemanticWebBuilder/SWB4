@@ -260,6 +260,7 @@ public class ToolBar extends CustomNode
            ele.put("container",ge.getContainer().uri);
            ele.put("parent",ge.getGraphParent().uri);
            ele.put("title",ge.title);
+           ele.put("description",ge.description);
            //ele.put("type",ge.type);
            ele.put("uri",ge.uri);
            ele.put("x",ge.x);
@@ -334,6 +335,7 @@ public class ToolBar extends CustomNode
             if(ge!=null and not (ge instanceof Lane))
             {
                 var title=js.getString("title");
+                var description=js.optString("description", "");
                 var isLoop=js.optBoolean("isLoop", false);
                 var isMultiInstance=js.optBoolean("isMultiInstance", false);
                 var isForCompensation=js.optBoolean("isForCompensation", false);
@@ -352,6 +354,7 @@ public class ToolBar extends CustomNode
                 ge.isInterrupting = isInterrupting;
                 //println("uri:{ge.uri}");
                 ge.title=title;
+                ge.description=description;
                 //ge.setType(type);
                 ge.x=x;
                 ge.y=y;
