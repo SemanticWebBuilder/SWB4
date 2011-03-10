@@ -1670,7 +1670,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                             %>
                                 <input class="btn_form" type="button" value="Guardar" onclick="setReferences(this.form.referenceList, this.form.<%=Question.forumCat_questionReferences.getName()%>);">
                             <%} else {%>
-                                <input type="submit" class="boton" value="Guardar">
+                                <input type="submit" class="btn_form" value="Guardar">
                             <%}%>
                             <input type="button" class="btn_form" value="Regresar" onclick="javascript:history.go(-1);">
                         </li>
