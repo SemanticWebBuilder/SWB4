@@ -521,6 +521,19 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="acceptTags">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_acceptTags">
+        <swbxf:propGroup rdf:resource="#pg_Functions"/>
+        <rdfs:label xml:lang="en">Allow to add keywords</rdfs:label>
+        <rdfs:label xml:lang="es">Permitir agregar palabras clave</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Indica si el usuario puede agregar palabras clave a cada pregunta</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="queInappropriate">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:label xml:lang="es">Marcar como Inapropiada</rdfs:label>
@@ -784,6 +797,19 @@
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >30</swb:index>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="acceptYoutubeReferences">
+    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Indica si se permite al usuario agregar referencias a YouTube</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_acceptYoutubeReferences">
+        <rdfs:label xml:lang="es">Permitir agregar referencias a youtube</rdfs:label>
+        <rdfs:label xml:lang="en">Allow to add youtube references</rdfs:label>
+        <swbxf:propGroup rdf:resource="#pg_Functions"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
