@@ -10,6 +10,7 @@ public abstract class SWBForumCatResourceBase extends org.semanticwb.portal.api.
     public static final org.semanticwb.platform.SemanticProperty forumCat_markInnapropiateQuestions=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#markInnapropiateQuestions");
     public static final org.semanticwb.platform.SemanticProperty forumCat_pointsVoteAnswer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#pointsVoteAnswer");
     public static final org.semanticwb.platform.SemanticProperty forumCat_isCategorySubscription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#isCategorySubscription");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_acceptYoutubeReferences=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#acceptYoutubeReferences");
     public static final org.semanticwb.platform.SemanticProperty forumCat_pointsIrrelevantAnswer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#pointsIrrelevantAnswer");
     public static final org.semanticwb.platform.SemanticProperty forumCat_pointsPublishQuestion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#pointsPublishQuestion");
     public static final org.semanticwb.platform.SemanticProperty forumCat_isModerate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#isModerate");
@@ -31,6 +32,7 @@ public abstract class SWBForumCatResourceBase extends org.semanticwb.portal.api.
     public static final org.semanticwb.platform.SemanticProperty forumCat_selectCategory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#selectCategory");
     public static final org.semanticwb.platform.SemanticProperty forumCat_attachFilesSize=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#attachFilesSize");
     public static final org.semanticwb.platform.SemanticProperty forumCat_pointsLikeAnswer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#pointsLikeAnswer");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_acceptTags=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#acceptTags");
     public static final org.semanticwb.platform.SemanticProperty forumCat_pointsBestAnswer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#pointsBestAnswer");
     public static final org.semanticwb.platform.SemanticProperty forumCat_useScoreSystem=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#useScoreSystem");
     public static final org.semanticwb.platform.SemanticProperty forumCat_pointsDontLikeAnswer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#pointsDontLikeAnswer");
@@ -194,6 +196,24 @@ public abstract class SWBForumCatResourceBase extends org.semanticwb.portal.api.
     public void setIsCategorySubscription(boolean value)
     {
         getSemanticObject().setBooleanProperty(forumCat_isCategorySubscription, value);
+    }
+
+/**
+* Gets the AcceptYoutubeReferences property
+* @return boolean with the AcceptYoutubeReferences
+*/
+    public boolean isAcceptYoutubeReferences()
+    {
+        return getSemanticObject().getBooleanProperty(forumCat_acceptYoutubeReferences);
+    }
+
+/**
+* Sets the AcceptYoutubeReferences property
+* @param value long with the AcceptYoutubeReferences
+*/
+    public void setAcceptYoutubeReferences(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(forumCat_acceptYoutubeReferences, value);
     }
 
 /**
@@ -577,6 +597,24 @@ public abstract class SWBForumCatResourceBase extends org.semanticwb.portal.api.
     public void setPointsLikeAnswer(int value)
     {
         getSemanticObject().setIntProperty(forumCat_pointsLikeAnswer, value);
+    }
+
+/**
+* Gets the AcceptTags property
+* @return boolean with the AcceptTags
+*/
+    public boolean isAcceptTags()
+    {
+        return getSemanticObject().getBooleanProperty(forumCat_acceptTags);
+    }
+
+/**
+* Sets the AcceptTags property
+* @param value long with the AcceptTags
+*/
+    public void setAcceptTags(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(forumCat_acceptTags, value);
     }
 
 /**
