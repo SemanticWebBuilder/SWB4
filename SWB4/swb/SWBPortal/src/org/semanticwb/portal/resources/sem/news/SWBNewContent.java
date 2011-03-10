@@ -23,17 +23,37 @@
 package org.semanticwb.portal.resources.sem.news;
 
 // TODO: Auto-generated Javadoc
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.base.util.URLEncoder;
+import org.semanticwb.model.FormValidateException;
+import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.ResourceCollection;
+import org.semanticwb.model.ResourceType;
+import org.semanticwb.model.WebPage;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.portal.SWBFormButton;
+import org.semanticwb.portal.SWBFormMgr;
+import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.api.SWBResourceURL;
+
 /**
  * The Class SWBNewContent.
  */
-public class SWBNewContent extends org.semanticwb.portal.resources.sem.news.base.SWBNewContentBase 
-{
+public class SWBNewContent extends org.semanticwb.portal.resources.sem.news.base.SWBNewContentBase {
+
+    private static final Logger log = SWBUtils.getLogger(SWBNewContent.class);
 
     /**
      * Instantiates a new sWB new content.
      */
-    public SWBNewContent()
-    {
+    public SWBNewContent() {
     }
 
     /**
@@ -41,11 +61,151 @@ public class SWBNewContent extends org.semanticwb.portal.resources.sem.news.base
      * 
      * @param base the base
      */
-    public SWBNewContent(org.semanticwb.platform.SemanticObject base)
-    {
+    public SWBNewContent(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doAdmin(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
+    @Override
+    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+
+        //out.println("<div id=\""+getSemanticObject().getURI()+"/admform\" dojoType=\"dijit.layout.ContentPane\"  loadingMessage=\"<center><img src='"+SWBPlatform.getContextPath()+"/swbadmin/images/loading.gif'/><center>\">");
+        SWBFormMgr mgr = new SWBFormMgr(getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
+        mgr.setSubmitByAjax(true);
+        mgr.setFilterHTMLTags(false);
+        mgr.addButton(SWBFormButton.newSaveButton());
+        mgr.setType(SWBFormMgr.TYPE_DOJO);
+
+        boolean sndTwr = false;
+
+        String cntUrl = null;
+        String mymsg = "";
+        String uri = "";
+
+        if ("update".equals(paramRequest.getAction())) {
+            try {
+                mgr.processForm(request);
+            } catch (FormValidateException e) {
+                log.error(e);
+            }
+
+            SWBResourceURL url = paramRequest.getRenderUrl();
+            url.setAction(null);
+            url.setParameter("updated", "true");
+
+            response.sendRedirect(url.toString());
+
+        } else {
+
+            if (request.getParameter("updated") != null && request.getParameter("updated").equals("true")) {
+                SemanticObject so = getSemanticObject();
+                GenericObject go = so.createGenericInstance();
+                SWBNewContent ncnt = null;
+
+                if (go instanceof SWBNewContent) {
+                    ncnt = (SWBNewContent) go;
+//                    System.out.println("Si es SWBNewContent");
+                }
+
+                String valprop = so.getProperty(SWBNewContent.swbnews_sendTwitter);
 
 
+                if (null != valprop && "true".equals(valprop) && null != ncnt && ncnt.getResource().isActive()) {
+
+
+
+                    ResourceType rtype = ncnt.getResource().getResourceType();
+                    ResourceCollection rcoll=null;
+                    WebPage dwp = null;
+                    if(rtype.getResourceCollection()!=null)
+                    {
+//                        System.out.println("Obteniendo resCollection");
+                        rcoll = rtype.getResourceCollection();
+//                        System.out.println("Coleccion: "+rcoll==null?"nulo":rcoll.getTitle());
+                    }
+                    if(null!=rcoll)
+                    {
+//                        System.out.println("Obteniendo WP");
+                        dwp = rcoll.getDisplayWebPage();
+//                        System.out.println("WP: "+dwp==null?"nulo":dwp.getURI());
+                    }
+
+                    sndTwr = true;
+
+//                    System.out.println("Entro para mostrar twitter");
+
+                    String protocol = request.getProtocol();
+
+                    if(protocol!=null&&protocol.startsWith("HTTP/")) protocol = "http://";
+                    else if(protocol!=null&&protocol.startsWith("HTTPS/")) protocol = "https://";
+                    String srvrname = request.getServerName();
+
+                    if(srvrname!=null&&"localhost".equalsIgnoreCase(srvrname))
+                    {
+                        srvrname = request.getRemoteAddr();
+                        if(srvrname.equals("127.0.0.1")) srvrname="www.infotec.com.mx";
+                    }
+
+                    int srvrport = request.getServerPort();
+                    String ctxpath = SWBPlatform.getContextPath();
+                    String wpurl = "";
+                    if(dwp!=null)
+                    {
+                        wpurl = dwp.getUrl();
+                    }
+
+                    cntUrl = protocol + srvrname;
+
+                    if(srvrport!=80) cntUrl += ":"+ srvrport;
+
+                    cntUrl += ctxpath+wpurl;
+
+//                    System.out.println("URL: "+cntUrl);
+//
+//                    System.out.println("protocol: "+request.getProtocol());
+//                    System.out.println("remoteHost: "+request.getRemoteHost());
+//                    System.out.println("remoteAdrs: "+request.getRemoteAddr());
+//                    System.out.println("server: "+request.getServerName());
+//                    System.out.println("port: "+request.getServerPort());
+//                    System.out.println("context: "+SWBPlatform.getContextPath());
+//                    System.out.println("wpurl: "+dwp!=null?dwp.getUrl():" -- ");
+//                    System.out.println("new content:"+ncnt.getResourceBase().getSemanticObject().getEncodedURI());
+
+                    cntUrl = URLEncoder.encode(cntUrl);
+
+                    cntUrl += "?uri="+ ncnt.getResourceBase().getSemanticObject().getEncodedURI();
+
+//                    System.out.println("encode url: "+cntUrl);
+
+                    mymsg=URLEncoder.encode(ncnt.getOriginalTitle());
+
+
+                }
+            }
+            mgr.setAction(paramRequest.getRenderUrl().setAction("update").toString());
+
+            out.println(mgr.renderForm(request));
+
+            if (sndTwr) {
+
+                out.println("<script src=\"http://platform.twitter.com/widgets.js\" type=\"text/javascript\"></script>");
+                out.println("<fieldset>");
+                out.println("<p align=\"center\">");
+                out.println("  Si no abre la ventana pop-up da clic en el botón&nbsp;<button dojoType=\"dijit.form.Button\" onclick=\"window.open('http://twitter.com/share?url="+cntUrl+"&amp;text="+mymsg+"','Twitter','width=550,height=280,top=100,left=200');\" title=\"enviar a twitter\" > tweet </button>"); //style=\"display: block;padding: 2px 5px 2px 20px;background: url('http://a4.twimg.com/images/favicon.ico') 1px center no-repeat;border: 1px solid #ccc;\" &amp;via=jafdeza
+                out.println("</p>");
+                out.println("</fieldset>");
+
+                out.println("<script type=\"text/javascript\">");
+                out.println(" mywin = window.open('http://twitter.com/share?url="+cntUrl+"&amp;text="+mymsg+"','Twitter','width=550,height=280,top=100,left=200');");
+                out.println(" mywin.focus();");
+                out.println("</script>");
+
+            }
+
+        }
+
+    }
 }
