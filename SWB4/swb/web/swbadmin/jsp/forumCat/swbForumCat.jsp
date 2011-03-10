@@ -161,6 +161,7 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                 StringBuffer sbf = new StringBuffer();
                                 mgr.renderProp(request, sbf, Question.forumCat_hasQuestionAttachments,mgr.getFormElement(Question.forumCat_hasQuestionAttachments));
                                 String element = sbf.toString().replace("<label for=\"hasQuestionAttachments\">Archivos adjuntos <em>*</em></label>", "");
+                                element = element.replace("Agrega un nuevo archivo a cargar", "Agregar archivo a la lista");
                                 System.out.println(sbf.toString());
                                 %>
                                 <%=element%>
@@ -1716,8 +1717,10 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                 <label class="etiqueta">Archivos adjuntos:</label>
                             <%
                                 StringBuffer sbf = new StringBuffer();
-                                mgr.renderProp(request, sbf, Answer.forumCat_hasAttachements,mgr.getFormElement(Answer.forumCat_hasAttachements));%>
-                                <%=sbf.toString()%>
+                                mgr.renderProp(request, sbf, Answer.forumCat_hasAttachements,mgr.getFormElement(Answer.forumCat_hasAttachements));
+                                String element = sbf.toString().replace("<label for=\"hasAttachements\">Archivos adjuntos <em>*</em></label>", "");
+                                element = element.replace("Agrega un nuevo archivo a cargar", "Agregar archivo a la lista");%>
+                                <%=element%>
                                 <!--%=mgr.renderLabel(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), null)%-->
                                 <!--%=mgr.renderElement(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), mgr.MODE_CREATE)%-->
                                 <li>
