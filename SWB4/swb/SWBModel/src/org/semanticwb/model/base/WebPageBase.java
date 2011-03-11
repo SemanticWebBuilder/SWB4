@@ -4,10 +4,9 @@ package org.semanticwb.model.base;
    /**
    * Una Página Web es el elemento de SemanticWebBuilder a través del cual se estructura la información del portal. 
    */
-public abstract class WebPageBase extends org.semanticwb.model.Topic implements org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Resourceable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Rankable,org.semanticwb.model.Searchable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Indexable,org.semanticwb.model.RuleRefable,org.semanticwb.model.FilterableNode,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Viewable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Tagable,org.semanticwb.model.Expirable,org.semanticwb.model.Traceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Trashable,org.semanticwb.model.Localeable
+public abstract class WebPageBase extends org.semanticwb.model.Topic implements org.semanticwb.model.Searchable,org.semanticwb.model.Tagable,org.semanticwb.model.Localeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Countryable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Rankable,org.semanticwb.model.Indexable,org.semanticwb.model.Trashable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.FilterableClass,org.semanticwb.model.TemplateRefable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Expirable,org.semanticwb.model.Activeable,org.semanticwb.model.Resourceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Viewable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_webPageSortName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageSortName");
-    public static final org.semanticwb.platform.SemanticProperty swb_webPageURLType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageURLType");
    /**
    * Una Página Web es el elemento de SemanticWebBuilder a través del cual se estructura la información del portal.
    */
@@ -19,6 +18,8 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     public static final org.semanticwb.platform.SemanticProperty swb_hasWebPageChild=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild");
     public static final org.semanticwb.platform.SemanticProperty swb_webPageParent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageParent");
     public static final org.semanticwb.platform.SemanticProperty swb_webPageDiskUsage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageDiskUsage");
+    public static final org.semanticwb.platform.SemanticClass swb_FriendlyURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#FriendlyURL");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasFriendlyURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasFriendlyURL");
     public static final org.semanticwb.platform.SemanticProperty swb_webPageURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageURL");
    /**
    * The semantic class that represents the currentObject
@@ -204,29 +205,6 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
             return it;
         }
        /**
-       * Gets all org.semanticwb.model.WebPage with a determined TemplateRef
-       * @param value TemplateRef of the type org.semanticwb.model.TemplateRef
-       * @param model Model of the org.semanticwb.model.WebPage
-       * @return Iterator with all the org.semanticwb.model.WebPage
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.WebPage> listWebPageByTemplateRef(org.semanticwb.model.TemplateRef value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasTemplateRef, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.WebPage with a determined TemplateRef
-       * @param value TemplateRef of the type org.semanticwb.model.TemplateRef
-       * @return Iterator with all the org.semanticwb.model.WebPage
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.WebPage> listWebPageByTemplateRef(org.semanticwb.model.TemplateRef value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasTemplateRef,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.model.WebPage with a determined PFlowRef
        * @param value PFlowRef of the type org.semanticwb.model.PFlowRef
        * @param model Model of the org.semanticwb.model.WebPage
@@ -247,6 +225,29 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
         public static java.util.Iterator<org.semanticwb.model.WebPage> listWebPageByPFlowRef(org.semanticwb.model.PFlowRef value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasPFlowRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.WebPage with a determined TemplateRef
+       * @param value TemplateRef of the type org.semanticwb.model.TemplateRef
+       * @param model Model of the org.semanticwb.model.WebPage
+       * @return Iterator with all the org.semanticwb.model.WebPage
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.WebPage> listWebPageByTemplateRef(org.semanticwb.model.TemplateRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasTemplateRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.WebPage with a determined TemplateRef
+       * @param value TemplateRef of the type org.semanticwb.model.TemplateRef
+       * @return Iterator with all the org.semanticwb.model.WebPage
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.WebPage> listWebPageByTemplateRef(org.semanticwb.model.TemplateRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasTemplateRef,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -411,26 +412,26 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
             return it;
         }
        /**
-       * Gets all org.semanticwb.model.WebPage with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
+       * Gets all org.semanticwb.model.WebPage with a determined FriendlyURL
+       * @param value FriendlyURL of the type org.semanticwb.model.FriendlyURL
        * @param model Model of the org.semanticwb.model.WebPage
        * @return Iterator with all the org.semanticwb.model.WebPage
        */
 
-        public static java.util.Iterator<org.semanticwb.model.WebPage> listWebPageByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.WebPage> listWebPageByFriendlyURL(org.semanticwb.model.FriendlyURL value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasFriendlyURL, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.model.WebPage with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
+       * Gets all org.semanticwb.model.WebPage with a determined FriendlyURL
+       * @param value FriendlyURL of the type org.semanticwb.model.FriendlyURL
        * @return Iterator with all the org.semanticwb.model.WebPage
        */
 
-        public static java.util.Iterator<org.semanticwb.model.WebPage> listWebPageByCreator(org.semanticwb.model.User value)
+        public static java.util.Iterator<org.semanticwb.model.WebPage> listWebPageByFriendlyURL(org.semanticwb.model.FriendlyURL value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasFriendlyURL,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -454,6 +455,52 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
         public static java.util.Iterator<org.semanticwb.model.WebPage> listWebPageByRuleRef(org.semanticwb.model.RuleRef value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.WebPage with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.model.WebPage
+       * @return Iterator with all the org.semanticwb.model.WebPage
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.WebPage> listWebPageByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.WebPage with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.model.WebPage
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.WebPage> listWebPageByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.WebPage with a determined Country
+       * @param value Country of the type org.semanticwb.model.Country
+       * @param model Model of the org.semanticwb.model.WebPage
+       * @return Iterator with all the org.semanticwb.model.WebPage
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.WebPage> listWebPageByCountry(org.semanticwb.model.Country value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_country, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.WebPage with a determined Country
+       * @param value Country of the type org.semanticwb.model.Country
+       * @return Iterator with all the org.semanticwb.model.WebPage
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.WebPage> listWebPageByCountry(org.semanticwb.model.Country value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_country,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -616,24 +663,6 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     public void setSortName(String value)
     {
         getSemanticObject().setProperty(swb_webPageSortName, value);
-    }
-
-/**
-* Gets the WebPageURLType property
-* @return int with the WebPageURLType
-*/
-    public int getWebPageURLType()
-    {
-        return getSemanticObject().getIntProperty(swb_webPageURLType);
-    }
-
-/**
-* Sets the WebPageURLType property
-* @param value long with the WebPageURLType
-*/
-    public void setWebPageURLType(int value)
-    {
-        getSemanticObject().setIntProperty(swb_webPageURLType, value);
     }
 
 /**
@@ -850,80 +879,6 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
          return ret;
     }
    /**
-   * Gets all the org.semanticwb.model.TemplateRef
-   * @return A GenericIterator with all the org.semanticwb.model.TemplateRef
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef> listTemplateRefs()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef>(getSemanticObject().listObjectProperties(swb_hasTemplateRef));
-    }
-
-   /**
-   * Gets true if has a TemplateRef
-   * @param value org.semanticwb.model.TemplateRef to verify
-   * @return true if the org.semanticwb.model.TemplateRef exists, false otherwise
-   */
-    public boolean hasTemplateRef(org.semanticwb.model.TemplateRef value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(swb_hasTemplateRef,value.getSemanticObject());
-        }
-        return ret;
-    }
-
-   /**
-   * Gets all the TemplateRefs inherits
-   * @return A GenericIterator with all the org.semanticwb.model.TemplateRef
-   */
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef> listInheritTemplateRefs()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef>(getSemanticObject().listInheritProperties(swb_hasTemplateRef));
-    }
-   /**
-   * Adds a TemplateRef
-   * @param value org.semanticwb.model.TemplateRef to add
-   */
-
-    public void addTemplateRef(org.semanticwb.model.TemplateRef value)
-    {
-        getSemanticObject().addObjectProperty(swb_hasTemplateRef, value.getSemanticObject());
-    }
-   /**
-   * Removes all the TemplateRef
-   */
-
-    public void removeAllTemplateRef()
-    {
-        getSemanticObject().removeProperty(swb_hasTemplateRef);
-    }
-   /**
-   * Removes a TemplateRef
-   * @param value org.semanticwb.model.TemplateRef to remove
-   */
-
-    public void removeTemplateRef(org.semanticwb.model.TemplateRef value)
-    {
-        getSemanticObject().removeObjectProperty(swb_hasTemplateRef,value.getSemanticObject());
-    }
-
-   /**
-   * Gets the TemplateRef
-   * @return a org.semanticwb.model.TemplateRef
-   */
-    public org.semanticwb.model.TemplateRef getTemplateRef()
-    {
-         org.semanticwb.model.TemplateRef ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasTemplateRef);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.TemplateRef)obj.createGenericInstance();
-         }
-         return ret;
-    }
-   /**
    * Gets all the org.semanticwb.model.PFlowRef
    * @return A GenericIterator with all the org.semanticwb.model.PFlowRef
    */
@@ -994,6 +949,80 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
          if(obj!=null)
          {
              ret=(org.semanticwb.model.PFlowRef)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Gets all the org.semanticwb.model.TemplateRef
+   * @return A GenericIterator with all the org.semanticwb.model.TemplateRef
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef> listTemplateRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef>(getSemanticObject().listObjectProperties(swb_hasTemplateRef));
+    }
+
+   /**
+   * Gets true if has a TemplateRef
+   * @param value org.semanticwb.model.TemplateRef to verify
+   * @return true if the org.semanticwb.model.TemplateRef exists, false otherwise
+   */
+    public boolean hasTemplateRef(org.semanticwb.model.TemplateRef value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasTemplateRef,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets all the TemplateRefs inherits
+   * @return A GenericIterator with all the org.semanticwb.model.TemplateRef
+   */
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef> listInheritTemplateRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef>(getSemanticObject().listInheritProperties(swb_hasTemplateRef));
+    }
+   /**
+   * Adds a TemplateRef
+   * @param value org.semanticwb.model.TemplateRef to add
+   */
+
+    public void addTemplateRef(org.semanticwb.model.TemplateRef value)
+    {
+        getSemanticObject().addObjectProperty(swb_hasTemplateRef, value.getSemanticObject());
+    }
+   /**
+   * Removes all the TemplateRef
+   */
+
+    public void removeAllTemplateRef()
+    {
+        getSemanticObject().removeProperty(swb_hasTemplateRef);
+    }
+   /**
+   * Removes a TemplateRef
+   * @param value org.semanticwb.model.TemplateRef to remove
+   */
+
+    public void removeTemplateRef(org.semanticwb.model.TemplateRef value)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasTemplateRef,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the TemplateRef
+   * @return a org.semanticwb.model.TemplateRef
+   */
+    public org.semanticwb.model.TemplateRef getTemplateRef()
+    {
+         org.semanticwb.model.TemplateRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasTemplateRef);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.TemplateRef)obj.createGenericInstance();
          }
          return ret;
     }
@@ -1409,6 +1438,71 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
         getSemanticObject().setLongProperty(swb_views, value,false);
     }
    /**
+   * Gets all the org.semanticwb.model.FriendlyURL
+   * @return A GenericIterator with all the org.semanticwb.model.FriendlyURL
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.FriendlyURL> listFriendlyURLs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.FriendlyURL>(getSemanticObject().listObjectProperties(swb_hasFriendlyURL));
+    }
+
+   /**
+   * Gets true if has a FriendlyURL
+   * @param value org.semanticwb.model.FriendlyURL to verify
+   * @return true if the org.semanticwb.model.FriendlyURL exists, false otherwise
+   */
+    public boolean hasFriendlyURL(org.semanticwb.model.FriendlyURL value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasFriendlyURL,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a FriendlyURL
+   * @param value org.semanticwb.model.FriendlyURL to add
+   */
+
+    public void addFriendlyURL(org.semanticwb.model.FriendlyURL value)
+    {
+        getSemanticObject().addObjectProperty(swb_hasFriendlyURL, value.getSemanticObject());
+    }
+   /**
+   * Removes all the FriendlyURL
+   */
+
+    public void removeAllFriendlyURL()
+    {
+        getSemanticObject().removeProperty(swb_hasFriendlyURL);
+    }
+   /**
+   * Removes a FriendlyURL
+   * @param value org.semanticwb.model.FriendlyURL to remove
+   */
+
+    public void removeFriendlyURL(org.semanticwb.model.FriendlyURL value)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasFriendlyURL,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the FriendlyURL
+   * @return a org.semanticwb.model.FriendlyURL
+   */
+    public org.semanticwb.model.FriendlyURL getFriendlyURL()
+    {
+         org.semanticwb.model.FriendlyURL ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasFriendlyURL);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.FriendlyURL)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
    * Gets all the org.semanticwb.model.RuleRef
    * @return A GenericIterator with all the org.semanticwb.model.RuleRef
    */
@@ -1499,6 +1593,44 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     public void setWebPageURL(String value)
     {
         getSemanticObject().setProperty(swb_webPageURL, value);
+    }
+   /**
+   * Sets the value for the property Country
+   * @param value Country to set
+   */
+
+    public void setCountry(org.semanticwb.model.Country value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_country, value.getSemanticObject());
+        }else
+        {
+            removeCountry();
+        }
+    }
+   /**
+   * Remove the value for Country property
+   */
+
+    public void removeCountry()
+    {
+        getSemanticObject().removeProperty(swb_country);
+    }
+
+   /**
+   * Gets the Country
+   * @return a org.semanticwb.model.Country
+   */
+    public org.semanticwb.model.Country getCountry()
+    {
+         org.semanticwb.model.Country ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_country);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Country)obj.createGenericInstance();
+         }
+         return ret;
     }
 
    /**

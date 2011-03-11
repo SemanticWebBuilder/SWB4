@@ -177,10 +177,11 @@ public class WebPage extends WebPageBase
         String url=getWebPageURL();
         if(url!=null)
         {
-            if(getWebPageURLType()==2)  //Friendly
-            {
-                url=SWBPlatform.getContextPath()+url;
-            }else if(getWebPageURLType()==1) //Redirect
+            //TODO:
+//            if(getWebPageURLType()==2)  //Friendly
+//            {
+//                url=SWBPlatform.getContextPath()+url;
+//            }else if(getWebPageURLType()==1) //Redirect
             {
                 //TODO:Mejorar funcion
                 if(url.indexOf('&')>-1)
