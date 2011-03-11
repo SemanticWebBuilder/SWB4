@@ -168,7 +168,6 @@ Modified by: Hasdai Pacheco {haxdai@gmail.com}
                                 <!--%=mgr.renderLabel(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), null)%-->
                                 <!--%=mgr.renderElement(request, semClass.getProperty(Answer.forumCat_hasAttachements.getName()), null)%-->
                                 <li>
-                                    <br>
                                     <label class="etiqueta"></label>
                                     <input type="button" class="btn_form" value="Subir archivo">
                                 </li>
