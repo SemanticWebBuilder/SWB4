@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Un recurso es un componente en una Página Web con el cual el usuario tiene interacción 
    */
-public abstract class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.XMLable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Searchable,org.semanticwb.model.Filterable,org.semanticwb.model.Indexable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Hitable,org.semanticwb.model.Viewable,org.semanticwb.model.Campable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Tagable,org.semanticwb.model.Expirable,org.semanticwb.model.Traceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Deviceable,org.semanticwb.model.Trashable,org.semanticwb.model.Sortable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Priorityable,org.semanticwb.model.Localeable
+public abstract class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Searchable,org.semanticwb.model.Tagable,org.semanticwb.model.Localeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Campable,org.semanticwb.model.Countryable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Sortable,org.semanticwb.model.Deviceable,org.semanticwb.model.Indexable,org.semanticwb.model.Trashable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.XMLable,org.semanticwb.model.Activeable,org.semanticwb.model.Expirable,org.semanticwb.model.XMLConfable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Hitable,org.semanticwb.model.Viewable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Priorityable,org.semanticwb.model.Filterable
 {
    /**
    * Objeto por el cual se define un filtro para que un recurso o componente se pueda presentar o no dentro de la estructura del sitio
@@ -463,6 +463,29 @@ public abstract class ResourceBase extends org.semanticwb.model.SWBClass impleme
         public static java.util.Iterator<org.semanticwb.model.Resource> listResourceByRuleRef(org.semanticwb.model.RuleRef value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.Resource with a determined Country
+       * @param value Country of the type org.semanticwb.model.Country
+       * @param model Model of the org.semanticwb.model.Resource
+       * @return Iterator with all the org.semanticwb.model.Resource
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.Resource> listResourceByCountry(org.semanticwb.model.Country value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_country, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.Resource with a determined Country
+       * @param value Country of the type org.semanticwb.model.Country
+       * @return Iterator with all the org.semanticwb.model.Resource
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.Resource> listResourceByCountry(org.semanticwb.model.Country value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_country,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -1507,6 +1530,44 @@ public abstract class ResourceBase extends org.semanticwb.model.SWBClass impleme
          if(obj!=null)
          {
              ret=(org.semanticwb.model.RuleRef)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property Country
+   * @param value Country to set
+   */
+
+    public void setCountry(org.semanticwb.model.Country value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_country, value.getSemanticObject());
+        }else
+        {
+            removeCountry();
+        }
+    }
+   /**
+   * Remove the value for Country property
+   */
+
+    public void removeCountry()
+    {
+        getSemanticObject().removeProperty(swb_country);
+    }
+
+   /**
+   * Gets the Country
+   * @return a org.semanticwb.model.Country
+   */
+    public org.semanticwb.model.Country getCountry()
+    {
+         org.semanticwb.model.Country ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_country);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Country)obj.createGenericInstance();
          }
          return ret;
     }

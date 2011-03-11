@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Es una pagina web utilizada para mostrar comportamientos (tabs) dentro de la administración de SWB 
    */
-public abstract class ObjectBehaviorBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Resourceable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Rankable,org.semanticwb.model.Searchable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableNode,org.semanticwb.model.RuleRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Viewable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Tagable,org.semanticwb.model.Expirable,org.semanticwb.model.Traceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Trashable,org.semanticwb.model.Localeable
+public abstract class ObjectBehaviorBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Searchable,org.semanticwb.model.Tagable,org.semanticwb.model.Localeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Countryable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Rankable,org.semanticwb.model.Indexable,org.semanticwb.model.Trashable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.FilterableClass,org.semanticwb.model.TemplateRefable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Expirable,org.semanticwb.model.Activeable,org.semanticwb.model.Resourceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Viewable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticClass owl_Class=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.w3.org/2002/07/owl#Class");
     public static final org.semanticwb.platform.SemanticProperty swbxf_interface=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#interface");
@@ -410,6 +410,29 @@ public abstract class ObjectBehaviorBase extends org.semanticwb.model.WebPage im
             return it;
         }
        /**
+       * Gets all org.semanticwb.model.ObjectBehavior with a determined FriendlyURL
+       * @param value FriendlyURL of the type org.semanticwb.model.FriendlyURL
+       * @param model Model of the org.semanticwb.model.ObjectBehavior
+       * @return Iterator with all the org.semanticwb.model.ObjectBehavior
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.ObjectBehavior> listObjectBehaviorByFriendlyURL(org.semanticwb.model.FriendlyURL value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.ObjectBehavior> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasFriendlyURL, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.ObjectBehavior with a determined FriendlyURL
+       * @param value FriendlyURL of the type org.semanticwb.model.FriendlyURL
+       * @return Iterator with all the org.semanticwb.model.ObjectBehavior
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.ObjectBehavior> listObjectBehaviorByFriendlyURL(org.semanticwb.model.FriendlyURL value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.ObjectBehavior> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasFriendlyURL,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.model.ObjectBehavior with a determined RuleRef
        * @param value RuleRef of the type org.semanticwb.model.RuleRef
        * @param model Model of the org.semanticwb.model.ObjectBehavior
@@ -453,6 +476,29 @@ public abstract class ObjectBehaviorBase extends org.semanticwb.model.WebPage im
         public static java.util.Iterator<org.semanticwb.model.ObjectBehavior> listObjectBehaviorByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.ObjectBehavior> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.ObjectBehavior with a determined Country
+       * @param value Country of the type org.semanticwb.model.Country
+       * @param model Model of the org.semanticwb.model.ObjectBehavior
+       * @return Iterator with all the org.semanticwb.model.ObjectBehavior
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.ObjectBehavior> listObjectBehaviorByCountry(org.semanticwb.model.Country value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.ObjectBehavior> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_country, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.ObjectBehavior with a determined Country
+       * @param value Country of the type org.semanticwb.model.Country
+       * @return Iterator with all the org.semanticwb.model.ObjectBehavior
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.ObjectBehavior> listObjectBehaviorByCountry(org.semanticwb.model.Country value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.ObjectBehavior> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_country,value.getSemanticObject(),sclass));
             return it;
         }
        /**
