@@ -3247,7 +3247,7 @@ public class SWBUtils {
                 }
                 email.setSubject(subject);
 
-                if (contentType.equalsIgnoreCase("HTML"))
+                if (contentType!=null && contentType.equalsIgnoreCase("HTML"))
                 {
                     email.setHtmlMsg(data); // set the html message
 
@@ -3257,7 +3257,7 @@ public class SWBUtils {
                 }
 
                 if (login != null && password != null)
-                {
+                    {
                     email.setAuthentication(login, password);
                 }
                 if(SWBUtils.EMAIL.smtptls)email.setTLS(true);
