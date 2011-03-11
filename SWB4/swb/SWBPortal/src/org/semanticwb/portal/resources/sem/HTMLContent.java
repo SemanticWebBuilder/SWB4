@@ -420,8 +420,8 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         int versionNumber = Integer.parseInt(request.getParameter("numversion"));
         String fileName = null;
         String action = paramRequest.getAction();
-        StringBuffer pathToRead = new StringBuffer(70);
-        StringBuffer pathToWrite = new StringBuffer(70);
+        StringBuilder pathToRead = new StringBuilder(64);
+        StringBuilder pathToWrite = new StringBuilder(64);
         String content = "";
         //Para mostrar el contenido de una versión temporal
         String tmpPath = request.getParameter("tmpPath");
@@ -459,7 +459,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                 }
             } catch (Exception e) {
                 content = "Error al leer el archivo";
-                e.printStackTrace();
+                log.error("Error al leer el archivo del HTMLContent - Id: " + resource.getId(), e);
             }
         }
 
@@ -645,7 +645,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
             throws IOException {
 
         PrintWriter out = response.getWriter();
-        StringBuffer bs = new StringBuffer(700);
+        StringBuilder bs = new StringBuilder(256);
         WBFileUpload fUpload = new WBFileUpload();
         fUpload.getFiles(request);
         SWBResourceURL url = paramRequest.getRenderUrl();
