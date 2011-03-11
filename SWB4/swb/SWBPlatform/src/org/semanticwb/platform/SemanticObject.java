@@ -1329,6 +1329,7 @@ public Document getDomProperty(SemanticProperty prop)
             m_res.removeAll(iprop);
         }
         removePropertyValueCache(prop, null);
+        removePropertyValueCache(prop, "list");
         return this;
     }
 
@@ -2197,6 +2198,7 @@ public Document getDomProperty(SemanticProperty prop)
     public void removeProperties()
     {
         m_res.removeProperties();
+        removeCache(this.getURI());
     }
 
 /**
