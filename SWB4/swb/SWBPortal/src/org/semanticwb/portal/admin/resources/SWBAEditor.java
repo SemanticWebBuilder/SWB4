@@ -974,7 +974,7 @@ public class SWBAEditor extends GenericResource
             String doc = request.getHeader("DOCUMENT");
             String work = null;
             String webWork = null;
-            FileOutputStream fout = null;
+            //FileOutputStream fout = null;
 
 //            System.out.println("TM:"+tm);
 //            System.out.println("ID:"+id);
@@ -993,18 +993,17 @@ public class SWBAEditor extends GenericResource
                     work += "images/";
 
                 //System.out.println("work:"+work+" name:"+name);
-
+                String ret="";
                 if (!("FINDATTACHES".equals(doc)))
                 {
                     File fpath = new File(work);
                     fpath.mkdirs();
                     File file = new File(work + name);
                     //System.out.println("file:"+file);
-                    fout = new FileOutputStream(file);
+                    ret = writeFile(in, file);
+                    //System.out.println("ret:"+ret);
                 }
 
-                String ret = writeFile(in, fout);
-                //System.out.println("ret:"+ret);
                 if (doc != null)
                 {
                     if (doc.equals("RELOAD"))
@@ -1127,36 +1126,23 @@ public class SWBAEditor extends GenericResource
      * @throws IOException Signals that an I/O exception has occurred.
      * @return
      */
-    public String writeFile(InputStream in, FileOutputStream fout) throws IOException
+    public String writeFile(InputStream in, File file) throws IOException
     {
-        StringBuffer str = new StringBuffer();
+        String str ="";
         //System.out.println("file:"+file);
         try
         {
-            byte[] bfile = new byte[8192];
-            int x;
-            while ((x = in.read(bfile, 0, 8192)) > -1)
-            {
-                if (fout != null)
-                    fout.write(bfile, 0, x);
-                else
-                    str.append(new String(bfile, 0, x));
-            }
-            in.close();
+            str=SWBUtils.IO.readInputStream(in);
+            FileOutputStream fout=new FileOutputStream(file);
+            fout.write(str.getBytes());
+            fout.flush();
+            fout.close();
         }
         catch (Exception e)
         {
             log.error(e);
-            if (fout != null)
-                fout.close();
-            //out.println("Error sending file...");
-            return str.toString();
         }
-        if (fout != null)
-            fout.flush();
-        if (fout != null)
-            fout.close();
-        return str.toString();
+        return str;
     }
 
     /**

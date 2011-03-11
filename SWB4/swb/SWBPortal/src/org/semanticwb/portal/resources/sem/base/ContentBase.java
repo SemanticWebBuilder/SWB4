@@ -20,6 +20,25 @@ public abstract class ContentBase extends org.semanticwb.portal.api.GenericSemRe
     {
         super(base);
     }
+
+    /*
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() 
+    {
+        return getSemanticObject().hashCode();
+    }
+
+    /*
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) 
+    {
+        if(obj==null)return false;
+        return hashCode()==obj.hashCode();
+    }
    /**
    * Sets the value for the property Resource
    * @param value Resource to set

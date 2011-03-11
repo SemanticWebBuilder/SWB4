@@ -28,6 +28,25 @@ public abstract class HTMLContentBase extends org.semanticwb.portal.resources.se
     {
         super(base);
     }
+
+    /*
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() 
+    {
+        return getSemanticObject().hashCode();
+    }
+
+    /*
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) 
+    {
+        if(obj==null)return false;
+        return hashCode()==obj.hashCode();
+    }
    /**
    * Sets the value for the property ActualVersion
    * @param value ActualVersion to set
