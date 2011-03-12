@@ -426,12 +426,13 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                 //out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "');return false;\" >" + stitle + "</a>"); //onclick=\"submitUrl('"+urlchoose+"',this); return false;\"
                 out.println("<a href=\"#\"  onclick=\"addNewTab('" + semobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "');return false;\" >" + semobj.getDisplayName(user.getLanguage()) + "</a>"); //onclick=\"submitUrl('"+urlchoose+"',this); return false;\"
                 out.println("</td>");
-                if (hmprop.get(Template.swb_language) != null) {
-                    semprop = (SemanticProperty) hmprop.get(Template.swb_language);
+                if (hmprop.get(Localeable.swb_language) != null) {
+                    semprop = (SemanticProperty) hmprop.get(Localeable.swb_language);
                     semobj = sobj.getObjectProperty(spref);
                     out.println("<td>");
-                    out.println(getValueSemProp(semobj.getObjectProperty(semprop), Descriptiveable.swb_title));
-                    //out.println(sobj.getURI());
+                    if(semobj==null) semobj = sobj;
+                    SemanticObject solang = semobj.getObjectProperty(semprop);
+                    out.println(getValueSemProp(solang, Descriptiveable.swb_title));
                     out.println("</td>");
                 }
                 if (hmprop.get(Traceable.swb_modifiedBy) != null) {
