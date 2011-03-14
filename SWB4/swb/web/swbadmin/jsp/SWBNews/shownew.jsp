@@ -44,7 +44,6 @@
             (<%=country%>)
         <%
     }
-
     %>
     </h2>
     <%
@@ -94,7 +93,6 @@
     }
     if(content.getAuthor()!=null)out.println(SWBUtils.TEXT.encodeExtendedCharacters(content.getAuthor())+"<br/>");
     if(content.getPublishDate()!=null)out.println(SWBUtils.TEXT.getStrDate(content.getPublishDate(),"es","dd/mm/yyyy")+"<br/>");
-    
 
     SWBHttpServletResponseWrapper res = new SWBHttpServletResponseWrapper(response);
     ((org.semanticwb.portal.api.SWBParamRequestImp)paramRequest).setResourceBase(content.getResourceBase());

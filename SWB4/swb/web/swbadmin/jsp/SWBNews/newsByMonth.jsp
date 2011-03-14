@@ -102,7 +102,6 @@
                     continue;
                 }
                 date=sdf.format(content.getPublishDate());
-                
 
             }
             %>

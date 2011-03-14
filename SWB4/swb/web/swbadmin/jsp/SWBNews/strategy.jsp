@@ -95,7 +95,6 @@
                 contentstoshow.remove(0);
             }
 
-
             if(contentstoshow.size()>0)
             {
                 %>
@@ -123,7 +122,6 @@
             %>
                 <p class="vermas"><a href="<%=urlNews%>"><%=titleviewoldNews%></a></p>
             <%
-        
     }
 
 %>

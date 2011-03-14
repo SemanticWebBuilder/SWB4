@@ -42,7 +42,6 @@
     }
 %>
 <%
-
     // muestra lista de noticias en listado
     String usrlanguage = paramRequest.getUser().getLanguage();
     Locale locale=new Locale(usrlanguage);
