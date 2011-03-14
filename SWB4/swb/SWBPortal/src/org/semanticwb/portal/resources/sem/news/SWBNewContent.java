@@ -164,7 +164,6 @@ public class SWBNewContent extends org.semanticwb.portal.resources.sem.news.base
                     cntUrl += ctxpath+wpurl;
 
 //                    System.out.println("URL: "+cntUrl);
-//
 //                    System.out.println("protocol: "+request.getProtocol());
 //                    System.out.println("remoteHost: "+request.getRemoteHost());
 //                    System.out.println("remoteAdrs: "+request.getRemoteAddr());
