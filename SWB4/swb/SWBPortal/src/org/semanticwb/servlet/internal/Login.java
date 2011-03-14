@@ -69,6 +69,13 @@ public class Login implements InternalServlet
     private String _name = "login";
     /** The handle error. */
     private boolean handleError = false;
+
+    /** The secure. */
+    boolean secure = false;
+
+    /** The adm map. */
+    String admMap=null;
+
     //Constantes para primer implementación
 
     /** The blocked list. */
@@ -97,6 +104,8 @@ public class Login implements InternalServlet
     public void init(ServletContext config)
     {
         log.event("Initializing InternalServlet Login...");
+        secure = SWBPlatform.getEnv("swb/secureAdmin", "false").equalsIgnoreCase("true");
+        admMap=SWBContext.WEBSITE_ADMIN;
         //TODO: preparar los aspectos configurables de la autenticación
     }
 
@@ -175,7 +184,10 @@ public class Login implements InternalServlet
         if (null == dparams.getWebPage())
         {
             return;
-        } 
+        }
+        if (secure  && admMap.equalsIgnoreCase(dparams.getWebPage().getWebSiteId()) && !request.isSecure()){
+            sendRedirect(response, "https://"+request.getServerName()+request.getRequestURI());
+        }
         UserRepository ur = dparams.getWebPage().getWebSite().getUserRepository();
         String authMethod = ur.getAuthMethod();
         String context = ur.getLoginContext();
