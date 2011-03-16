@@ -70,22 +70,22 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
     private static Logger log = SWBUtils.getLogger(HTMLContent.class);
 
     /** Ruta relativa para carpeta de archivos asociados a cada version. */
-    private static final String FOLDER = "images";
+    protected  static final String FOLDER = "images";
 
     /** The snpages. */
-    int snpages = 15;
+    protected int snpages = 15;
     
     /** The stxtant. */
-    String stxtant = "Anterior";
+    protected String stxtant = "Anterior";
     
     /** The stxtsig. */
-    String stxtsig = "Siguiente";
+    protected String stxtsig = "Siguiente";
     
     /** The stfont. */
-    String stfont = "font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"2\" color=\"#000000\"";
+    protected String stfont = "font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"2\" color=\"#000000\"";
     
     /** The position. */
-    int position = 1;
+    protected int position = 1;
 
 
     /**
@@ -1060,7 +1060,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
      * @return el objeto VersionInfo que contiene la informaci&oacute;n de la
      * versi&oacute;n del objeto recibido.
      */
-    private VersionInfo findVersion(int versionNumber) {
+    protected  VersionInfo findVersion(int versionNumber) {
         VersionInfo ver = getLastVersion();
         if (null != ver) {
             while (ver.getVersionNumber() != versionNumber) { //
