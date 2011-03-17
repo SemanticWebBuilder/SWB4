@@ -3544,12 +3544,14 @@ public class MainSurvey extends GenericResource
             try
             {
                 String dbname=SWBUtils.DB.getDatabaseName();
+                //System.out.println("dbname: "+dbname);
                 if(dbname.toLowerCase().lastIndexOf("informix")>-1) dbname="informix";
                 if(dbname.toLowerCase().lastIndexOf("mysql")>-1) dbname="mysql";
                 if(dbname.toLowerCase().lastIndexOf("microsoft sql server")>-1) dbname="sqlserver";
                 if(dbname.toLowerCase().lastIndexOf("adaptive server enterprise")>-1) dbname="sybase";
                 if(dbname.toLowerCase().lastIndexOf("postgresql")>-1) dbname="postgres";
                 if(dbname.toLowerCase().lastIndexOf("oracle")>-1) dbname="oracle";
+                if(dbname.toLowerCase().lastIndexOf("hsql")>-1) dbname="hsql";
                 InputStream  is_filesql = this.getClass().getResourceAsStream("survey_script_"+dbname+".sql");
                 String file =SWBUtils.IO.readInputStream((is_filesql));
                 con=SWBUtils.DB.getDefaultConnection();
