@@ -213,20 +213,20 @@ public class PFlowManager
      * @return the contents at flow
      */
     public Resource[] getContentsAtFlow(User user, WebSite site)
-    {
+    {        
         HashSet<Resource> getContentsAtFlow = new HashSet<Resource>();
         if (site != null)
         {
             Iterator<PFlow> flows = site.listPFlows();
             while (flows.hasNext())
             {
-                PFlow flow = flows.next();
+                PFlow flow = flows.next();                
                 Iterator<PFlowInstance> instances = flow.listPFlowInstances();
                 while (instances.hasNext())
                 {
                     PFlowInstance instance = instances.next();
-                    Resource resource = instance.getPfinstResource();
-                    if (resource != null && isInFlow(resource) && resource.getCreator().equals(user) && this.isReviewer(resource, user))
+                    Resource resource = instance.getPfinstResource();                    
+                    if (resource != null && isInFlow(resource) && this.isReviewer(resource, user))
                     {
                         getContentsAtFlow.add(resource);
                     }
