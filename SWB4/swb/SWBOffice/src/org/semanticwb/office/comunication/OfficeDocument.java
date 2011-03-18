@@ -3590,7 +3590,17 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         resource.setTitle(resourceInfo.title);
         resource.setDescription(resourceInfo.description);
         resource.setActive(resourceInfo.active);
+        String oldVersion=officeResource.getVersionToShow();
         officeResource.setVersionToShow(resourceInfo.version);
+        final org.semanticwb.model.User wbuser=SWBContext.getAdminRepository().getUserByLogin(user);
+        String repositoryName=officeResource.getRepositoryName();
+        String contentId=officeResource.getContent();
+        String version=officeResource.getVersionToShow();
+        if(oldVersion.equalsIgnoreCase(resourceInfo.version))
+        {
+            InputStream in = getContent(wbuser,repositoryName, contentId, version);
+            officeResource.loadContent(in,wbuser);
+        }
     }
 
     /**
