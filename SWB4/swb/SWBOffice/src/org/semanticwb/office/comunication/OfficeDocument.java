@@ -3596,7 +3596,11 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         String repositoryName=officeResource.getRepositoryName();
         String contentId=officeResource.getContent();
         String version=officeResource.getVersionToShow();
-        if(oldVersion.equalsIgnoreCase(resourceInfo.version))
+        if(oldVersion==null)
+        {
+            oldVersion="";
+        }
+        if(!oldVersion.equalsIgnoreCase(resourceInfo.version))
         {
             InputStream in = getContent(wbuser,repositoryName, contentId, version);
             officeResource.loadContent(in,wbuser);
