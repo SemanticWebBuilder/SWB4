@@ -12,8 +12,22 @@
         <title>Check Cicle</title>
     </head>
     <body>
-        <h1>Check Cicle</h1>
+        <h1>Check Cicle2</h1>
+        <pre>
 <%
+    String rpt=request.getParameter("rpt");
+    String rps=request.getParameter("rps");
+    if(rpt!=null && rps!=null)
+    {
+        WebSite site=SWBContext.getWebSite(rps);
+        WebPage wpage=site.getWebPage(rpt);
+        if(wpage!=null)
+        {
+            out.println("Referencia Ciclica Eliminada:"+wpage.getId());
+            wpage.removeParent();
+        }
+    }
+
     Iterator<WebSite> wsit=SWBContext.listWebSites();
     while (wsit.hasNext())
     {
@@ -21,8 +35,20 @@
         out.print("Site:"+site.getId());
         out.print("<br/>");
         Iterator<WebPage> it=site.listWebPages();
-        while (it.hasNext()) {
+        while (it.hasNext())
+        {
             WebPage elem = it.next();
+            /*
+            if(elem.getParent()!=null)
+            {
+                out.println("Check:"+elem.getId()+" --> "+elem.getParent().getId());
+                if(elem.getId().equals(elem.getParent().getId()))
+                {
+                    out.println("Referencia Ciclica Eliminada:"+elem.getId());
+                    elem.setParent(null);
+                }
+            }
+            */
             HashSet set=new HashSet();
             set.add(elem);
             WebPage parent=elem.getParent();
@@ -42,5 +68,6 @@
         }
     }
 %>
+        </pre>
     </body>
 </html>
