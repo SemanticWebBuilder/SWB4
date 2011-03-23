@@ -2,6 +2,7 @@ package org.semanticwb.resources.sem.forumcat;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -70,6 +71,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     if (user != null && user.isSigned()) {
                         question.setCreator(user);
                     }
+                    question.setCreated(Calendar.getInstance().getTime());
                     question.setForumResource(this);
                     question.setQuestion(placeAnchors(question.getQuestion()));
                     question.setQuestionReferences(request.getParameter("questionReferences"));
@@ -153,6 +155,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     answer.setAnsQuestion(question);
                     answer.setAnswer(placeAnchors(answer.getAnswer()));
                     answer.setReferences(request.getParameter("references"));
+                    answer.setCreated(Calendar.getInstance().getTime());
                     if (isIsModerate()) {
                         answer.setAnsStatus(STATUS_REGISTERED);
                     } else {
