@@ -611,7 +611,7 @@ public class Reports
             java.sql.Timestamp tempIni = new java.sql.Timestamp(System.currentTimeMillis());
             java.sql.Timestamp tempFin = tempIni;
             
-            if(request.getParameter("fecha_ini").trim().length()>0)
+            if(request.getParameter("fecha_ini")!=null&&request.getParameter("fecha_ini").trim().length()>0)
             {
                 String fecha_ini = request.getParameter("fecha_ini");
                 int year_i;

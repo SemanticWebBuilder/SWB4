@@ -798,7 +798,7 @@ public class Utils {
            if(!presponseid.equalsIgnoreCase("0"))
            {
                 conn = SWBUtils.DB.getDefaultConnection();
-                st = conn.prepareStatement("select stringxml from sr_answer where questionid=? and responseid =? and idtm=? and stringxml NOT NULL");
+                st = conn.prepareStatement("select stringxml from sr_answer where questionid=? and responseid =? and idtm=? and stringxml IS NOT NULL");
                 st.setString(1,pquestionid);
                 st.setString(2,presponseid);
                 st.setString(3, idtm);
