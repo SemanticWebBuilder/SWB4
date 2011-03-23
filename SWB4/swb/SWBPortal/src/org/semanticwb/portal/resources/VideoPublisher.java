@@ -94,11 +94,12 @@ public class VideoPublisher extends GenericAdmResource {
                 out.println("<object id=\"video_"+base.getId()+"\" type=\"application/x-shockwave-flash\" data=\""+SWBPlatform.getContextPath()+"/swbadmin/player_flv_maxi.swf\" width=\""+(width+20)+"\" height=\""+(height+10)+"\" "+align + bgcolor+">");
                 out.println(" <param name=\"movie\" value=\""+SWBPlatform.getContextPath()+"/swbadmin/player_flv_maxi.swf\" />");
                 out.println(" <param name=\"allowFullScreen\" value=\"true\" />");
-                out.println(" <param name=\"FlashVars\" value=\"flv="+filename+"&width="+width+"&height="+height+"&showstop=1&showvolume=1&showtime=1");
+                out.println(" <param name=\"FlashVars\" value=\"flv="+filename+"&amp;width="+width+"&amp;height="+height+"&amp;showstop=1&amp;showvolume=1&amp;showtime=1");
                 if(img!=null)
-                    out.println("&startimage="+img);
-                out.println("&showfullscreen=1&bgcolor1="+viewer+"&bgcolor2="+gradient+"&playercolor="+panel+"&buttoncolor="+control+"&buttonovercolor="+over+"&slidercolor1="+slider+"\" />");
+                    out.println("&amp;startimage="+img);
+                out.println("&amp;showfullscreen=1&amp;bgcolor1="+viewer+"&amp;bgcolor2="+gradient+"&amp;playercolor="+panel+"&amp;buttoncolor="+control+"&amp;buttonovercolor="+over+"&amp;slidercolor1="+slider+"\" />");
                 out.println("</object>");
+
 
 //                clsid = "clsid:d27cdb6e-ae6d-11cf-96b8-444553540000";
 //                codebase = "http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0";
