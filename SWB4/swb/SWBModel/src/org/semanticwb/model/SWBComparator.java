@@ -315,7 +315,10 @@ public static Iterator sortSermanticObjects(Iterator it) {
      */
     public static Set sortByCreatedSet(Iterator it, boolean ascendente) {
         TreeSet set = null;
-
+        if(it==null)
+        {
+            return null;
+        }
         if (ascendente) {
             set = new TreeSet(new Comparator() {
                 public int compare(Object o1, Object o2) {
