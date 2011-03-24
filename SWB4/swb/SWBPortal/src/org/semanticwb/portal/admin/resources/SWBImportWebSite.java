@@ -97,606 +97,715 @@ public class SWBImportWebSite extends GenericResource {
                 }
 
                 site.getSemanticObject().getModel().setTraceable(false);
-                //site.setCreated(new java.util.Date(System.currentTimeMillis()));
-                site.setTitle(title);
-                //Crea repositorio de usuarios para el nuevo sitio
-                UserRepository newUsrRep = null;
-                if (usrRep != null) {
-                    if (usrRep.equals("0")) { //Utilizara un repositorio exclusivo
-                        newUsrRep = SWBContext.createUserRepository(id + "_usr", "http://user." + id + ".swb#");
-                        newUsrRep.getSemanticObject().getModel().setTraceable(false);
-                        newUsrRep.setTitle("Repositorio de usuarios(" + id + ")");
-                        newUsrRep.setTitle("Repositorio de usuarios(" + id + ")", "es");
-                        newUsrRep.setTitle("Users Repository(" + id + ")", "en");
-                        newUsrRep.setUndeleteable(true);
+                try
+                {
+                    //site.setCreated(new java.util.Date(System.currentTimeMillis()));
+                    site.setTitle(title);
+                    //Crea repositorio de usuarios para el nuevo sitio
+                    UserRepository newUsrRep = null;
+                    if (usrRep != null) {
+                        if (usrRep.equals("0")) { //Utilizara un repositorio exclusivo
+                            newUsrRep = SWBContext.createUserRepository(id + "_usr", "http://user." + id + ".swb#");
+                            newUsrRep.getSemanticObject().getModel().setTraceable(false);
+                            newUsrRep.setTitle("Repositorio de usuarios(" + id + ")");
+                            newUsrRep.setTitle("Repositorio de usuarios(" + id + ")", "es");
+                            newUsrRep.setTitle("Users Repository(" + id + ")", "en");
+                            newUsrRep.setUndeleteable(true);
 
-                        //MAPS74 - Cambiado a semantic prop
-                        newUsrRep.setAuthMethod("FORM");
-                        newUsrRep.setLoginContext("swb4TripleStoreModule");
-                        newUsrRep.setCallBackHandlerClassName("org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
-                        if (user != null && user.isRegistered()) {
-                            newUsrRep.setCreator(user);
+                            //MAPS74 - Cambiado a semantic prop
+                            newUsrRep.setAuthMethod("FORM");
+                            newUsrRep.setLoginContext("swb4TripleStoreModule");
+                            newUsrRep.setCallBackHandlerClassName("org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
+                            if (user != null && user.isRegistered()) {
+                                newUsrRep.setCreator(user);
+                            }
+                            site.setUserRepository(newUsrRep);
+                            site.addSubModel(newUsrRep);
+                        } else { //Utilizara un repositorio existente
+                            UserRepository exitUsrRep = SWBContext.getUserRepository(usrRep);
+                            site.setUserRepository(exitUsrRep);
                         }
-                        site.setUserRepository(newUsrRep);
-                        site.addSubModel(newUsrRep);
-                    } else { //Utilizara un repositorio existente
-                        UserRepository exitUsrRep = SWBContext.getUserRepository(usrRep);
-                        site.setUserRepository(exitUsrRep);
                     }
-                }
-                if(newUsrRep!=null)newUsrRep.getSemanticObject().getModel().setTraceable(true);
+                    if(newUsrRep!=null)newUsrRep.getSemanticObject().getModel().setTraceable(true);
 
-                //creación de repositorio de documentoss
-                Workspace workspace = SWBContext.createWorkspace(id + "_rep", "http://repository." + id + ".swb#");
-                workspace.getSemanticObject().getModel().setTraceable(false);
-                workspace.setTitle("Repositorio de documentos(" + title + ")");
-                workspace.setTitle("Repositorio de documentos(" + title + ")", "es");
-                workspace.setTitle("Documents Repository(" + title + ")", "en");
-                //TODO: undeleted repository
-                //workspace.setUn
-                site.addSubModel(workspace);
-                workspace.getSemanticObject().getModel().setTraceable(true);
+                    //creación de repositorio de documentoss
+                    Workspace workspace = SWBContext.createWorkspace(id + "_rep", "http://repository." + id + ".swb#");
+                    workspace.getSemanticObject().getModel().setTraceable(false);
+                    workspace.setTitle("Repositorio de documentos(" + title + ")");
+                    workspace.setTitle("Repositorio de documentos(" + title + ")", "es");
+                    workspace.setTitle("Documents Repository(" + title + ")", "en");
+                    //TODO: undeleted repository
+                    //workspace.setUn
+                    site.addSubModel(workspace);
+                    workspace.getSemanticObject().getModel().setTraceable(true);
 
-                WebPage home = site.createWebPage("home");
-                site.setHomePage(home);
-                home.setUndeleteable(true);
-                home.setTitle("Home");
-                home.setSortName("z");
+                    WebPage home = site.createWebPage("home");
+                    site.setHomePage(home);
+                    home.setUndeleteable(true);
+                    home.setTitle("Home");
+                    home.setSortName("z");
 
-                //Crea grupo de templates de defecto
-                TemplateGroup grp = site.createTemplateGroup();
-                grp.setTitle("Default");
+                    //Crea grupo de templates de defecto
+                    TemplateGroup grp = site.createTemplateGroup();
+                    grp.setTitle("Default");
 
-                //Crea recursos de defecto
-                if (site.getResourceType("ExcelContent") == null) {
-                    ResourceType ptype = site.createResourceType("ExcelContent");
-                    ptype.setResourceClassName("org.semanticwb.resource.office.sem.ExcelResource");
-                    ptype.setResourceBundle("org.semanticwb.resource.office.sem.ExcelResource");
-                    ptype.setResourceMode(1);
-                    ptype.setTitle("ExcelContent");
-                }
+                    //Crea recursos de defecto
+                    if (site.getResourceType("ExcelContent") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("ExcelContent");
+                        ptype.setResourceBundle("org.semanticwb.resource.office.sem.ExcelResource");
+                        ptype.setResourceMode(1);
+                        ptype.setTitle("ExcelContent");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.resource.office.sem.ExcelResource");
+                    }
 
-                if (site.getResourceType("WordContent") == null) {
-                    ResourceType ptype = site.createResourceType("WordContent");
-                    ptype.setResourceClassName("org.semanticwb.resource.office.sem.WordResource");
-                    ptype.setResourceBundle("org.semanticwb.resource.office.sem.WordResource");
-                    ptype.setResourceMode(1);
-                    ptype.setTitle("WordContent");
-                }
+                    if (site.getResourceType("WordContent") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("WordContent");
+                        ptype.setResourceBundle("org.semanticwb.resource.office.sem.WordResource");
+                        ptype.setResourceMode(1);
+                        ptype.setTitle("WordContent");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.resource.office.sem.WordResource");
+                    }
 
-                if (site.getResourceType("PPTContent") == null) {
-                    ResourceType ptype = site.createResourceType("PPTContent");
-                    ptype.setResourceClassName("org.semanticwb.resource.office.sem.PPTResource");
-                    ptype.setResourceBundle("org.semanticwb.resource.office.sem.PPTResource");
-                    ptype.setResourceMode(1);
-                    ptype.setTitle("PPTContent");
-                }
+                    if (site.getResourceType("PPTContent") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("PPTContent");
+                        ptype.setResourceBundle("org.semanticwb.resource.office.sem.PPTResource");
+                        ptype.setResourceMode(1);
+                        ptype.setTitle("PPTContent");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.resource.office.sem.PPTResource");
+                    }
 
-                if (site.getResourceType("Banner") == null) {
-                    ResourceType ptype = site.createResourceType("Banner");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.Banner");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.Banner");
-                    ptype.setResourceMode(2);
-                    ptype.setTitle("Banner");
-                }
+                    if (site.getResourceType("Banner") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("Banner");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.Banner");
+                        ptype.setResourceMode(2);
+                        ptype.setTitle("Banner");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.Banner");
+                    }
 
-                if (site.getResourceType("HTMLContent") == null) {
-                    ResourceType ptype = site.createResourceType("HTMLContent");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.sem.HTMLContent");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.sem.HTMLContent");
-                    ptype.setResourceMode(1);
-                    //ptype.setResourceCache(600);
-                    ptype.setTitle("HTMLContent");
-                }
+                    if (site.getResourceType("HTMLContent") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("HTMLContent");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.sem.HTMLContent");
+                        ptype.setResourceMode(1);
+                        //ptype.setResourceCache(600);
+                        ptype.setTitle("HTMLContent");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.sem.HTMLContent");
+                    }
 
-                if (site.getResourceType("Promo") == null) {
-                    ResourceType ptype = site.createResourceType("Promo");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.Promo");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.Promo");
-                    ptype.setResourceMode(2);
-                    ptype.setTitle("Promo");
-                }
+                    if (site.getResourceType("Promo") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("Promo");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.Promo");
+                        ptype.setResourceMode(2);
+                        ptype.setTitle("Promo");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.Promo");
+                    }
 
-                if (site.getResourceType("AdvancedSearch") == null) {
-                    ResourceType ptype = site.createResourceType("AdvancedSearch");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.AdvancedSearch");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.AdvancedSearch");
-                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
-                    ptype.setTitle("AdvancedSearch");
-                }
+                    if (site.getResourceType("AdvancedSearch") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("AdvancedSearch");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.AdvancedSearch");
+                        ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+                        ptype.setTitle("AdvancedSearch");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.AdvancedSearch");
+                    }
 
-                if (site.getResourceType("Print") == null) {
-                    ResourceType ptype = site.createResourceType("Print");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.Print");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.Print");
-                    ptype.setResourceMode(2);
-                    ptype.setTitle("Print");
-                }
+                    if (site.getResourceType("Print") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("Print");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.Print");
+                        ptype.setResourceMode(2);
+                        ptype.setTitle("Print");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.Print");
+                    }
 
-                if (site.getResourceType("Window") == null) {
-                    ResourceType ptype = site.createResourceType("Window");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.Window");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.Window");
-                    ptype.setResourceMode(2);
-                    ptype.setTitle("Window");
-                }
+                    if (site.getResourceType("Window") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("Window");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.Window");
+                        ptype.setResourceMode(2);
+                        ptype.setTitle("Window");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.Window");
+                    }
 
-                if (site.getResourceType("StaticText") == null) {
-                    ResourceType ptype = site.createResourceType("StaticText");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.StaticText");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.StaticText");
-                    ptype.setResourceMode(2);
-                    ptype.setTitle("StaticText");
-                }
+                    if (site.getResourceType("StaticText") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("StaticText");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.StaticText");
+                        ptype.setResourceMode(2);
+                        ptype.setTitle("StaticText");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.StaticText");
+                    }
 
-                if (site.getResourceType("SiteMap") == null) {
-                    ResourceType ptype = site.createResourceType("SiteMap");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.WBSiteMap");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.WBSiteMap");
-                    ptype.setResourceMode(3);
-                    ptype.setTitle("SiteMap");
-                }
+                    if (site.getResourceType("SiteMap") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("SiteMap");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.WBSiteMap");
+                        ptype.setResourceMode(3);
+                        ptype.setTitle("SiteMap");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.WBSiteMap");
+                    }
 
-                if (site.getResourceType("Recommend") == null) {
+                    if (site.getResourceType("Recommend") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("Recommend");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.Recommend");
+                        ptype.setResourceMode(3);
+                        ptype.setTitle("Recommend");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.Recommend");
+                    }
 
-                    ResourceType ptype = site.createResourceType("Recommend");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.Recommend");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.Recommend");
-                    ptype.setResourceMode(3);
-                    ptype.setTitle("Recommend");
-                }
+                    if (site.getResourceType("QueryResource") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("QueryResource");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.QueryResource");
+                        ptype.setResourceMode(3);
+                        ptype.setTitle("QueryResource");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.QueryResource");
+                    }
 
-                if (site.getResourceType("QueryResource") == null) {
+                    if (site.getResourceType("VirtualResource") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("VirtualResource");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.VirtualResource");
+                        ptype.setResourceMode(1);
+                        ptype.setTitle("VirtualResource");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.VirtualResource");
+                    }
 
-                    ResourceType ptype = site.createResourceType("QueryResource");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.QueryResource");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.QueryResource");
-                    ptype.setResourceMode(3);
-                    ptype.setTitle("QueryResource");
-                }
+                    if (site.getResourceType("RecommendSwf") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("RecommendSwf");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.RecommendSwf");
+                        ptype.setResourceMode(2);
+                        ptype.setTitle("RecommendSwf");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.RecommendSwf");
+                    }
 
-                if (site.getResourceType("VirtualResource") == null) {
+                    if (site.getResourceType("Poll") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("Poll");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.Poll");
+                        ptype.setResourceMode(2);
+                        ptype.setTitle("Poll");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.Poll");
+                    }
 
-                    ResourceType ptype = site.createResourceType("VirtualResource");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.VirtualResource");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.VirtualResource");
-                    ptype.setResourceMode(1);
-                    ptype.setTitle("VirtualResource");
-                }
+                    if (site.getResourceType("Menu") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("Menu");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.WBMenu");
+                        ptype.setResourceMode(ptype.MODE_STRATEGY);
+                        ptype.setTitle("Menu");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.WBMenu");
+                    }
 
-                if (site.getResourceType("RecommendSwf") == null) {
+                    if (site.getResourceType("MenuMap") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("MenuMap");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.WBMenuMap");
+                        ptype.setResourceMode(2);
+                        ptype.setTitle("MenuMap");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.WBMenuMap");
+                    }
 
-                    ResourceType ptype = site.createResourceType("RecommendSwf");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.RecommendSwf");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.RecommendSwf");
-                    ptype.setResourceMode(2);
-                    ptype.setTitle("RecommendSwf");
-                }
+                    if (site.getResourceType("MenuNivel") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("MenuNivel");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.WBMenuNivel");
+                        ptype.setResourceMode(2);
+                        ptype.setTitle("MenuNivel");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.WBMenuNivel");
+                    }
 
-                if (site.getResourceType("Poll") == null) {
+                    if (site.getResourceType("JSPResource") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("JSPResource");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.JSPResource");
+                        ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+                        ptype.setTitle("JSPResource");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.JSPResource");
+                    }
 
-                    ResourceType ptype = site.createResourceType("Poll");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.Poll");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.Poll");
-                    ptype.setResourceMode(2);
-                    ptype.setTitle("Poll");
-                }
+                    if (site.getResourceType("PHPResource") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("PHPResource");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.PHPResource");
+                        ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+                        ptype.setTitle("PHPResource");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.PHPResource");
+                    }
 
-                if (site.getResourceType("Menu") == null) {
-                    ResourceType ptype = site.createResourceType("Menu");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.WBMenu");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.WBMenu");
-                    ptype.setResourceMode(ptype.MODE_STRATEGY);
-                    ptype.setTitle("Menu");
-                }
+                    if (site.getResourceType("PythonResource") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("PythonResource");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.PythonResource");
+                        ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+                        ptype.setTitle("PythonResource");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.PythonResource");
+                    }
 
-                if (site.getResourceType("MenuMap") == null) {
+                    if (site.getResourceType("GroovyResource") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("GroovyResource");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.GroovyResource");
+                        ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+                        ptype.setTitle("GroovyResource");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.GroovyResource");
+                    }
 
-                    ResourceType ptype = site.createResourceType("MenuMap");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.WBMenuMap");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.WBMenuMap");
-                    ptype.setResourceMode(2);
-                    ptype.setTitle("MenuMap");
-                }
+                    if (site.getResourceType("GroovyEditor") == null)
+                    {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("GroovyEditor");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.GroovyEditor");
+                        ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+                        ptype.setTitle("GroovyEditor");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.GroovyEditor");
+                    }
 
-                if (site.getResourceType("MenuNivel") == null) {
-                    ResourceType ptype = site.createResourceType("MenuNivel");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.WBMenuNivel");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.WBMenuNivel");
-                    ptype.setResourceMode(2);
-                    ptype.setTitle("MenuNivel");
-                }
+                    if (site.getResourceType("JSPEditor") == null)
+                    {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("JSPEditor");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.JSPEditor");
+                        ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+                        ptype.setTitle("JSPEditor");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.JSPEditor");
+                    }
 
-                if (site.getResourceType("JSPResource") == null) {
+                    if (site.getResourceType("PythonEditor") == null)
+                    {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("PythonEditor");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.PythonEditor");
+                        ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+                        ptype.setTitle("PythonEditor");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.PythonEditor");
+                    }
 
-                    ResourceType ptype = site.createResourceType("JSPResource");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.JSPResource");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.JSPResource");
-                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
-                    ptype.setTitle("JSPResource");
-                }
+                    if (site.getResourceType("PHPEditor") == null)
+                    {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("PHPEditor");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.PHPEditor");
+                        ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+                        ptype.setTitle("PHPEditor");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.PHPEditor");
+                    }
 
-                if (site.getResourceType("PHPResource") == null) {
+                    if (site.getResourceType("Language") == null)
+                    {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("Language");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.Language");
+                        ptype.setResourceMode(ResourceType.MODE_STRATEGY);
+                        ptype.setTitle("Language");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.Language");
+                    }
 
-                    ResourceType ptype = site.createResourceType("PHPResource");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.PHPResource");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.PHPResource");
-                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
-                    ptype.setTitle("PHPResource");
-                }
+                    if (site.getResourceType("TematicIndexXSL") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("TematicIndexXSL");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.TematicIndexXSL");
+                        ptype.setResourceMode(1);
+                        ptype.setTitle("TematicIndexXSL");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.TematicIndexXSL");
+                    }
 
-                if (site.getResourceType("PythonResource") == null) {
 
-                    ResourceType ptype = site.createResourceType("PythonResource");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.PythonResource");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.PythonResource");
-                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
-                    ptype.setTitle("PythonResource");
-                }
+                    if (site.getResourceType("FrameContent") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("FrameContent");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.FrameContent");
+                        ptype.setResourceMode(1);
+                        ptype.setTitle("FrameContent");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.FrameContent");
+                    }
 
-                if (site.getResourceType("GroovyResource") == null) {
+                    if (site.getResourceType("IFrameContent") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("IFrameContent");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.IFrameContent");
+                        ptype.setResourceMode(1);
+                        ptype.setTitle("IFrameContent");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.IFrameContent");
+                    }
 
-                    ResourceType ptype = site.createResourceType("GroovyResource");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.GroovyResource");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.GroovyResource");
-                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
-                    ptype.setTitle("GroovyResource");
-                }
+                    if (site.getResourceType("CommentSwf") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("CommentSwf");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.CommentSwf");
+                        ptype.setResourceMode(2);
+                        ptype.setTitle("CommentSwf");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.CommentSwf");
+                    }
 
-                if (site.getResourceType("GroovyEditor") == null)
+                    if (site.getResourceType("Comment") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("Comment");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.Comment");
+                        ptype.setResourceMode(3);
+                        ptype.setTitle("Comment");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.Comment");
+                    }
+
+                    if (site.getResourceType("RemoteWebApp") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("RemoteWebApp");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.RemoteWebApp");
+                        ptype.setResourceMode(3);
+                        ptype.setTitle("RemoteWebApp");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.RemoteWebApp");
+                    }
+
+                    if (site.getResourceType("UrlContent") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("UrlContent");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.WBUrlContent");
+                        ptype.setResourceMode(3);
+                        ptype.setTitle("UrlContent");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.WBUrlContent");
+                    }
+
+                    if (site.getResourceType("Search") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("Search");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.WBSearch");
+                        ptype.setResourceMode(3);
+                        ptype.setTitle("Search");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.WBSearch");
+                    }
+
+                    if (site.getResourceType("GoogleGadget") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("GoogleGadget");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.googlegadgets.GoogleGadget");
+                        ptype.setResourceMode(3);
+                        ptype.setTitle("GoogleGadget");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.googlegadgets.GoogleGadget");
+                    }
+
+                    if (site.getResourceType("SparQLQueryResource") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("SparQLQueryResource");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.SparqlQueryResource");
+                        ptype.setResourceMode(3);
+                        ptype.setTitle("SparQLQueryResource");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.SparqlQueryResource");
+                    }
+
+                    if (site.getResourceType("Wiki") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("Wiki");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.wiki.Wiki");
+                        ptype.setResourceMode(3);
+                        ptype.setTitle("Wiki");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.wiki.Wiki");
+                    }
+
+                    if (site.getResourceType("PDFContent") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("PDFContent");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.PDFContent");
+                        ptype.setResourceMode(ResourceType.MODE_CONTENT);
+                        ptype.setTitle("PDFContent");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.PDFContent");
+                    }
+
+                    if (site.getResourceType("Login") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("Login");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.Login");
+                        ptype.setResourceMode(ResourceType.MODE_STRATEGY);
+                        ptype.setTitle("Login");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.Login");
+                    }
+
+                    if (site.getResourceType("UserRegistration") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("UserRegistration");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.UserRegistration");
+                        ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+                        ptype.setTitle("UserRegistration");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.UserRegistration");
+                    }
+
+                    if (site.getResourceType("RSSResource") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("RSSResource");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.RSSResource");
+                        ptype.setResourceMode(ResourceType.MODE_CONTENT);
+                        ptype.setTitle("RSSResource");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.RSSResource");
+                    }
+
+                    if (site.getResourceType("DataBaseResource") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("DataBaseResource");
+                        ptype.setResourceBundle("com.infotec.wb.resources.database.DataBaseResource");
+                        ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+                        ptype.setTitle("DataBaseResource");
+                        site.commit();
+                        ptype.setResourceClassName("com.infotec.wb.resources.database.DataBaseResource");
+                    }
+
+                    if (site.getResourceType("SWBBlog") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("SWBBlog");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.sem.blog.SWBBlog");
+                        ptype.setResourceMode(3);
+                        ptype.setTitle("Blog");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.sem.blog.SWBBlog");
+                        ptype.setResourceOWL("org.semanticwb.portal.resources.sem.blog.SWBBlog");
+                    }
+
+                    if (site.getResourceType("WebPageComments") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("WebPageComments");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.sem.SWBComments");
+                        ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+                        ptype.setTitle("WebPageComments");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.sem.SWBComments");
+                        ptype.setResourceOWL("org.semanticwb.portal.resources.sem.SWBComments");
+                    }
+
+                    if (site.getResourceType("Forum") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("Forum");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.sem.forum.SWBForum");
+                        ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+                        ptype.setTitle("Forum");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.sem.forum.SWBForum");
+                        ptype.setResourceOWL("org.semanticwb.portal.resources.sem.forum.SWBForum");
+                    }
+
+                    if (site.getResourceType("RankWebPage") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("RankWebPage");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.sem.SWBRankWebPage");
+                        ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+                        ptype.setTitle("RankWebPage");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.sem.SWBRankWebPage");
+                        ptype.setResourceOWL("org.semanticwb.portal.resources.sem.SWBRankWebPage");
+                    }
+
+    //                if (site.getResourceType("Directory") == null) {
+    //                    site.begin();
+    //                    ResourceType ptype = site.createResourceType("Directory");
+    //                    ptype.setResourceBundle("org.semanticwb.portal.resources.sem.directory.Directory");
+    //                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+    //                    ptype.setTitle("Directory");
+    //                    site.commit();
+    //                    ptype.setResourceClassName("org.semanticwb.portal.resources.sem.directory.Directory");
+    //                    ptype.setResourceOWL("org.semanticwb.portal.resources.sem.directory.Directory");
+    //                }
+
+    //                if (site.getResourceType("Events") == null) {
+    //                    site.begin();
+    //                    ResourceType ptype = site.createResourceType("Events");
+    //                    ptype.setResourceBundle("org.semanticwb.portal.resources.sem.events.Events");
+    //                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+    //                    ptype.setTitle("Events");
+    //                    site.commit();
+    //                    ptype.setResourceClassName("org.semanticwb.portal.resources.sem.events.Events");
+    //                    ptype.setResourceOWL("org.semanticwb.portal.resources.sem.events.Events");
+    //                }
+
+                    if (site.getResourceType("WebPageOnLineCreate") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("WebPageOnLineCreate");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.WebPageOnLineCreate");
+                        ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+                        ptype.setTitle("WebPageOnLineCreate");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.WebPageOnLineCreate");
+                    }
+
+                    if (site.getResourceType("WebPageOnLineCreate") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("WebPageOnLineCreate");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.WebPageOnLineCreate");
+                        ptype.setResourceMode(ResourceType.MODE_SYSTEM);
+                        ptype.setTitle("WebPageOnLineCreate");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.WebPageOnLineCreate");
+                    }
+
+                    if (site.getResourceType("RSSResource") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("WebPageOnLineCreate");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.RSSResource");
+                        ptype.setResourceMode(ResourceType.MODE_CONTENT);
+                        ptype.setTitle("RSSResource");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.RSSResource");
+                    }
+
+                    if (site.getResourceType("InlineEdit") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("InlineEdit");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.InlineEdit");
+                        ptype.setResourceMode(ResourceType.MODE_STRATEGY);
+                        ptype.setTitle("InlineEdit");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.InlineEdit");
+                    }
+
+                    if (site.getResourceType("ImageGallery") == null) {
+                        site.begin();
+                        ResourceType ptype = site.createResourceType("ImageGallery");
+                        ptype.setResourceBundle("org.semanticwb.portal.resources.ImageGallery");
+                        ptype.setResourceMode(ResourceType.MODE_CONTENT);
+                        ptype.setTitle("ImageGallery");
+                        site.commit();
+                        ptype.setResourceClassName("org.semanticwb.portal.resources.ImageGallery");
+                    }
+
+                    site.begin();
+
+                    //Crea dispositivos de defecto
+                    if (!site.hasDevice("pc")) {
+                        Device dev = site.createDevice("pc");
+                        dev.setTitle("PC");
+                        dev.setUserAgent("Mozilla");
+                        Device dev2 = site.createDevice("iexplorer");
+                        dev2.setTitle("Internet Explorer");
+                        dev2.setUserAgent("Mozilla MSIE");
+                        dev2.setParent(dev);
+                        dev2 = site.createDevice("firefox");
+                        dev2.setTitle("Mozilla FireFox");
+                        dev2.setUserAgent("Mozilla Firefox");
+                        dev2.setParent(dev);
+                        dev2 = site.createDevice("safari");
+                        dev2.setTitle("Safari");
+                        dev2.setUserAgent("Mozilla Safari");
+                        dev2.setParent(dev);
+
+                        dev = site.createDevice("pda");
+                        dev.setTitle("PDA");
+                        dev2 = site.createDevice("blackberry");
+                        dev2.setTitle("BlackBerry");
+                        dev2.setUserAgent("BlackBerry");
+                        dev2.setParent(dev);
+                        dev2 = site.createDevice("iphone");
+                        dev2.setTitle("iPhone");
+                        dev2.setUserAgent("Mozilla iPhone Safari");
+                        dev2.setParent(dev);
+                        dev2 = site.createDevice("wince");
+                        dev2.setTitle("Windows CE");
+                        dev2.setUserAgent("Mozilla Windows CE");
+                        dev2.setParent(dev);
+                        dev2 = site.createDevice("palmos");
+                        dev2.setTitle("PalmOS");
+                        dev2.setUserAgent("Mozilla PalmOS");
+                        dev2.setParent(dev);
+                        Device dev3 = site.createDevice("avantgo");
+                        dev3.setTitle("AvantGo");
+                        dev3.setUserAgent("Mozilla AvantGo");
+                        dev3.setParent(dev2);
+                        dev3 = site.createDevice("eudoraweb");
+                        dev3.setTitle("EudoraWeb");
+                        dev3.setUserAgent("Mozilla PalmOS EudoraWeb");
+                        dev3.setParent(dev2);
+
+                        dev = site.createDevice("phone");
+                        dev.setTitle("Phone");
+                        dev2 = site.createDevice("midp");
+                        dev2.setTitle("MIDP");
+                        dev2.setUserAgent("MIDP");
+                        dev2.setParent(dev);
+                        dev2 = site.createDevice("mmp");
+                        dev2.setTitle("MMP");
+                        dev2.setUserAgent("MMP");
+                        dev2.setParent(dev);
+                        dev2 = site.createDevice("opera");
+                        dev2.setTitle("Opera Mobi");
+                        dev2.setUserAgent("Opera Mobi");
+                        dev2.setParent(dev);
+                    }
+
+                    //Crear lenguajes por defecto
+                    Language lang = site.createLanguage("es");
+                    lang.setTitle("Español");
+                    lang.setTitle("Español", "es");
+                    lang.setTitle("Spanish", "en");
+                    lang = site.createLanguage("en");
+                    lang.setTitle("Ingles");
+                    lang.setTitle("Ingles", "es");
+                    lang.setTitle("English", "en");
+                    //Envia estatus a pantalla
+                    out.println("<script type=\"text/javascript\">");
+                    out.println("hideDialog();");
+                    out.println("addItemByURI(mtreeStore, null, '" + site.getURI() + "');");
+                    out.println("showStatus('Sitio Creado');");
+                    out.println("</script>");
+
+                    site.commit();
+                    site.getSemanticObject().getModel().setTraceable(false);
+                }catch(Exception e)
                 {
-                    ResourceType ptype = site.createResourceType("GroovyEditor");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.GroovyEditor");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.GroovyEditor");
-                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
-                    ptype.setTitle("GroovyEditor");
+                    site.abort();
+                    log.error(e);
                 }
-
-                if (site.getResourceType("JSPEditor") == null)
-                {
-                    ResourceType ptype = site.createResourceType("JSPEditor");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.JSPEditor");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.JSPEditor");
-                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
-                    ptype.setTitle("JSPEditor");
-                }
-
-                if (site.getResourceType("PythonEditor") == null)
-                {
-                    ResourceType ptype = site.createResourceType("PythonEditor");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.PythonEditor");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.PythonEditor");
-                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
-                    ptype.setTitle("PythonEditor");
-                }
-
-                if (site.getResourceType("PHPEditor") == null)
-                {
-                    ResourceType ptype = site.createResourceType("PHPEditor");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.PHPEditor");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.PHPEditor");
-                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
-                    ptype.setTitle("PHPEditor");
-                }
-
-                if (site.getResourceType("Language") == null)
-                {
-                    ResourceType ptype = site.createResourceType("Language");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.Language");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.Language");
-                    ptype.setResourceMode(ResourceType.MODE_STRATEGY);
-                    ptype.setTitle("Language");
-                }
-
-                if (site.getResourceType("TematicIndexXSL") == null) {
-                    ResourceType ptype = site.createResourceType("TematicIndexXSL");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.TematicIndexXSL");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.TematicIndexXSL");
-                    ptype.setResourceMode(1);
-                    ptype.setTitle("TematicIndexXSL");
-                }
-
-
-                if (site.getResourceType("FrameContent") == null) {
-                    ResourceType ptype = site.createResourceType("FrameContent");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.FrameContent");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.FrameContent");
-                    ptype.setResourceMode(1);
-                    ptype.setTitle("FrameContent");
-                }
-
-                if (site.getResourceType("IFrameContent") == null) {
-                    ResourceType ptype = site.createResourceType("IFrameContent");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.IFrameContent");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.IFrameContent");
-                    ptype.setResourceMode(1);
-                    ptype.setTitle("IFrameContent");
-                }
-
-                if (site.getResourceType("CommentSwf") == null) {
-                    ResourceType ptype = site.createResourceType("CommentSwf");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.CommentSwf");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.CommentSwf");
-                    ptype.setResourceMode(2);
-                    ptype.setTitle("CommentSwf");
-                }
-
-                if (site.getResourceType("Comment") == null) {
-                    ResourceType ptype = site.createResourceType("Comment");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.Comment");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.Comment");
-                    ptype.setResourceMode(3);
-                    ptype.setTitle("Comment");
-                }
-
-                if (site.getResourceType("RemoteWebApp") == null) {
-                    ResourceType ptype = site.createResourceType("RemoteWebApp");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.RemoteWebApp");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.RemoteWebApp");
-                    ptype.setResourceMode(3);
-                    ptype.setTitle("RemoteWebApp");
-                }
-
-                if (site.getResourceType("UrlContent") == null) {
-                    ResourceType ptype = site.createResourceType("UrlContent");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.WBUrlContent");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.WBUrlContent");
-                    ptype.setResourceMode(3);
-                    ptype.setTitle("UrlContent");
-                }
-
-                if (site.getResourceType("Search") == null) {
-                    ResourceType ptype = site.createResourceType("Search");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.WBSearch");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.WBSearch");
-                    ptype.setResourceMode(3);
-                    ptype.setTitle("Search");
-                }
-
-                if (site.getResourceType("GoogleGadget") == null) {
-                    ResourceType ptype = site.createResourceType("GoogleGadget");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.googlegadgets.GoogleGadget");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.googlegadgets.GoogleGadget");
-                    ptype.setResourceMode(3);
-                    ptype.setTitle("GoogleGadget");
-                }
-
-                if (site.getResourceType("SparQLQueryResource") == null) {
-                    ResourceType ptype = site.createResourceType("SparQLQueryResource");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.SparqlQueryResource");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.SparqlQueryResource");
-                    ptype.setResourceMode(3);
-                    ptype.setTitle("SparQLQueryResource");
-                }
-
-                if (site.getResourceType("Wiki") == null) {
-                    ResourceType ptype = site.createResourceType("Wiki");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.wiki.Wiki");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.wiki.Wiki");
-                    ptype.setResourceMode(3);
-                    ptype.setTitle("Wiki");
-                }
-                
-                if (site.getResourceType("PDFContent") == null) {
-                    ResourceType ptype = site.createResourceType("PDFContent");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.PDFContent");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.PDFContent");
-                    ptype.setResourceMode(ResourceType.MODE_CONTENT);
-                    ptype.setTitle("PDFContent");
-                }
-
-                if (site.getResourceType("Login") == null) {
-                    ResourceType ptype = site.createResourceType("Login");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.Login");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.Login");
-                    ptype.setResourceMode(ResourceType.MODE_STRATEGY);
-                    ptype.setTitle("Login");
-                }
-
-                if (site.getResourceType("UserRegistration") == null) {
-                    ResourceType ptype = site.createResourceType("UserRegistration");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.UserRegistration");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.UserRegistration");
-                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
-                    ptype.setTitle("UserRegistration");
-                }
-
-                if (site.getResourceType("RSSResource") == null) {
-                    ResourceType ptype = site.createResourceType("RSSResource");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.RSSResource");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.RSSResource");
-                    ptype.setResourceMode(ResourceType.MODE_CONTENT);
-                    ptype.setTitle("RSSResource");
-                }
-
-                if (site.getResourceType("DataBaseResource") == null) {
-                    ResourceType ptype = site.createResourceType("DataBaseResource");
-                    ptype.setResourceClassName("com.infotec.wb.resources.database.DataBaseResource");
-                    ptype.setResourceBundle("com.infotec.wb.resources.database.DataBaseResource");
-                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
-                    ptype.setTitle("DataBaseResource");
-                }
-
-                if (site.getResourceType("SWBBlog") == null) {
-                    ResourceType ptype = site.createResourceType("SWBBlog");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.sem.blog.SWBBlog");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.sem.blog.SWBBlog");
-                    ptype.setResourceOWL("org.semanticwb.portal.resources.sem.blog.SWBBlog");
-                    ptype.setResourceMode(3);
-                    ptype.setTitle("Blog");
-                }
-
-                if (site.getResourceType("WebPageComments") == null) {
-                    ResourceType ptype = site.createResourceType("WebPageComments");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.sem.SWBComments");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.sem.SWBComments");
-                    ptype.setResourceOWL("org.semanticwb.portal.resources.sem.SWBComments");
-                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
-                    ptype.setTitle("WebPageComments");
-                }
-
-                if (site.getResourceType("Forum") == null) {
-                    ResourceType ptype = site.createResourceType("Forum");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.sem.forum.SWBForum");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.sem.forum.SWBForum");
-                    ptype.setResourceOWL("org.semanticwb.portal.resources.sem.forum.SWBForum");
-                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
-                    ptype.setTitle("Forum");
-                }
-
-                if (site.getResourceType("RankWebPage") == null) {
-                    ResourceType ptype = site.createResourceType("RankWebPage");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.sem.SWBRankWebPage");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.sem.SWBRankWebPage");
-                    ptype.setResourceOWL("org.semanticwb.portal.resources.sem.SWBRankWebPage");
-                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
-                    ptype.setTitle("RankWebPage");
-                }
-
-//                if (site.getResourceType("Directory") == null) {
-//                    ResourceType ptype = site.createResourceType("Directory");
-//                    ptype.setResourceClassName("org.semanticwb.portal.resources.sem.directory.Directory");
-//                    ptype.setResourceBundle("org.semanticwb.portal.resources.sem.directory.Directory");
-//                    ptype.setResourceOWL("org.semanticwb.portal.resources.sem.directory.Directory");
-//                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
-//                    ptype.setTitle("Directory");
-//                }
-
-//                if (site.getResourceType("Events") == null) {
-//                    ResourceType ptype = site.createResourceType("Events");
-//                    ptype.setResourceClassName("org.semanticwb.portal.resources.sem.events.Events");
-//                    ptype.setResourceBundle("org.semanticwb.portal.resources.sem.events.Events");
-//                    ptype.setResourceOWL("org.semanticwb.portal.resources.sem.events.Events");
-//                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
-//                    ptype.setTitle("Events");
-//                }
-
-                if (site.getResourceType("WebPageOnLineCreate") == null) {
-                    ResourceType ptype = site.createResourceType("WebPageOnLineCreate");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.WebPageOnLineCreate");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.WebPageOnLineCreate");
-                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
-                    ptype.setTitle("WebPageOnLineCreate");
-                }
-
-                if (site.getResourceType("WebPageOnLineCreate") == null) {
-                    ResourceType ptype = site.createResourceType("WebPageOnLineCreate");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.WebPageOnLineCreate");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.WebPageOnLineCreate");
-                    ptype.setResourceMode(ResourceType.MODE_SYSTEM);
-                    ptype.setTitle("WebPageOnLineCreate");
-                }
-
-                if (site.getResourceType("RSSResource") == null) {
-                    ResourceType ptype = site.createResourceType("WebPageOnLineCreate");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.RSSResource");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.RSSResource");
-                    ptype.setResourceMode(ResourceType.MODE_CONTENT);
-                    ptype.setTitle("RSSResource");
-                }
-
-                if (site.getResourceType("InlineEdit") == null) {
-                    ResourceType ptype = site.createResourceType("InlineEdit");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.InlineEdit");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.InlineEdit");
-                    ptype.setResourceMode(ResourceType.MODE_STRATEGY);
-                    ptype.setTitle("InlineEdit");
-                }
-
-                if (site.getResourceType("ImageGallery") == null) {
-                    ResourceType ptype = site.createResourceType("ImageGallery");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.ImageGallery");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.ImageGallery");
-                    ptype.setResourceMode(ResourceType.MODE_CONTENT);
-                    ptype.setTitle("ImageGallery");
-                }
-
-
-                //Crea dispositivos de defecto
-                if (!site.hasDevice("pc")) {
-                    Device dev = site.createDevice("pc");
-                    dev.setTitle("PC");
-                    dev.setUserAgent("Mozilla");
-                    Device dev2 = site.createDevice("iexplorer");
-                    dev2.setTitle("Internet Explorer");
-                    dev2.setUserAgent("Mozilla MSIE");
-                    dev2.setParent(dev);
-                    dev2 = site.createDevice("firefox");
-                    dev2.setTitle("Mozilla FireFox");
-                    dev2.setUserAgent("Mozilla Firefox");
-                    dev2.setParent(dev);
-                    dev2 = site.createDevice("safari");
-                    dev2.setTitle("Safari");
-                    dev2.setUserAgent("Mozilla Safari");
-                    dev2.setParent(dev);
-
-                    dev = site.createDevice("pda");
-                    dev.setTitle("PDA");
-                    dev2 = site.createDevice("blackberry");
-                    dev2.setTitle("BlackBerry");
-                    dev2.setUserAgent("BlackBerry");
-                    dev2.setParent(dev);
-                    dev2 = site.createDevice("iphone");
-                    dev2.setTitle("iPhone");
-                    dev2.setUserAgent("Mozilla iPhone Safari");
-                    dev2.setParent(dev);
-                    dev2 = site.createDevice("wince");
-                    dev2.setTitle("Windows CE");
-                    dev2.setUserAgent("Mozilla Windows CE");
-                    dev2.setParent(dev);
-                    dev2 = site.createDevice("palmos");
-                    dev2.setTitle("PalmOS");
-                    dev2.setUserAgent("Mozilla PalmOS");
-                    dev2.setParent(dev);
-                    Device dev3 = site.createDevice("avantgo");
-                    dev3.setTitle("AvantGo");
-                    dev3.setUserAgent("Mozilla AvantGo");
-                    dev3.setParent(dev2);
-                    dev3 = site.createDevice("eudoraweb");
-                    dev3.setTitle("EudoraWeb");
-                    dev3.setUserAgent("Mozilla PalmOS EudoraWeb");
-                    dev3.setParent(dev2);
-
-                    dev = site.createDevice("phone");
-                    dev.setTitle("Phone");
-                    dev2 = site.createDevice("midp");
-                    dev2.setTitle("MIDP");
-                    dev2.setUserAgent("MIDP");
-                    dev2.setParent(dev);
-                    dev2 = site.createDevice("mmp");
-                    dev2.setTitle("MMP");
-                    dev2.setUserAgent("MMP");
-                    dev2.setParent(dev);
-                    dev2 = site.createDevice("opera");
-                    dev2.setTitle("Opera Mobi");
-                    dev2.setUserAgent("Opera Mobi");
-                    dev2.setParent(dev);
-                }
-
-                //Crear lenguajes por defecto
-                Language lang = site.createLanguage("es");
-                lang.setTitle("Español");
-                lang.setTitle("Español", "es");
-                lang.setTitle("Spanish", "en");
-                lang = site.createLanguage("en");
-                lang.setTitle("Ingles");
-                lang.setTitle("Ingles", "es");
-                lang.setTitle("English", "en");
-                //Envia estatus a pantalla
-                out.println("<script type=\"text/javascript\">");
-                out.println("hideDialog();");
-                out.println("addItemByURI(mtreeStore, null, '" + site.getURI() + "');");
-                out.println("showStatus('Sitio Creado');");
-                out.println("</script>");
-
-                site.getSemanticObject().getModel().setTraceable(false);
             } else { //Forma de entrada(Datos iniciales)
                 url.setAction("step2");
                 getStep1(out, url, paramRequest);
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            log.debug(e);
+            //e.printStackTrace();
+            log.error(e);
         }
     }
 
