@@ -644,8 +644,11 @@ public class Modeler extends CustomNode
 
     public function unselectAll() : Void {
         for(ele in selectedNodes) {
-            ele.text.cancelEditing();
+            ele.text.stopEditing();
             ele.selected = false;
+        }
+        for (ele in contents where ele instanceof ConnectionObject) {
+            (ele as ConnectionObject).text.stopEditing();
         }
         delete selectedNodes;
     }
