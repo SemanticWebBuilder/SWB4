@@ -165,7 +165,7 @@ public class SWBMethod
             //System.out.println("{"+o+"}");
         } catch (Exception e)
         {
-            log.error("Error invoking methos:"+method.getName(), e);
+            log.error("Error invoking method:"+method.getName(), e);
         }
         if (o == null) return "";
         return o;
@@ -191,7 +191,7 @@ public class SWBMethod
             o = method.invoke(obj, args);
         } catch (Exception e)
         {
-            log.error("Error invoking methos:"+method.getName(), e);
+            log.error("Error invoking method:"+method.getName(), e);
         }
         if (o == null) return "";
         return o;
@@ -223,7 +223,7 @@ public class SWBMethod
                 }
             } catch (Exception e)
             {
-                log.error("Error invoking methos:"+arguments[0], e);
+                log.error("Error invoking method:"+arguments[0], e);
             }
         } else
         {
@@ -232,7 +232,7 @@ public class SWBMethod
                 o = mgr.getResources((ResourceType)arguments[0], (ResourceSubType)arguments[2], user, topic, (HashMap) arguments[1], tpl);
             } catch (Exception e)
             {
-                log.error("Error invoking methos:"+arguments[0], e);
+                log.error("Error invoking method:"+arguments[0], e);
             }
         }
         return o;
