@@ -1,4 +1,4 @@
-/**  
+/**
  * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
  * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
  * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
@@ -40,7 +40,7 @@ import org.semanticwb.portal.api.*;
 // TODO: Auto-generated Javadoc
 /**
  * This resource add and show Contents related to a WebPage.
- * 
+ *
  * @author juan.fernandez
  */
 public class SWBAWebPageContents extends GenericResource {
@@ -64,7 +64,7 @@ public class SWBAWebPageContents extends GenericResource {
 
     /**
      * User view of the resource, this call to a doEdit() mode.
-     * 
+     *
      * @param request , this holds the parameters
      * @param response , an answer to the user request
      * @param paramRequest , a list of objects like user, webpage, Resource, ...
@@ -84,7 +84,7 @@ public class SWBAWebPageContents extends GenericResource {
 
     /**
      * User edit view of the resource, this show a list of contents related to a webpage, user can add, remove, activate, deactivate contents.
-     * 
+     *
      * @param request , this holds the parameters
      * @param response , an answer to the user request
      * @param paramRequest , a list of objects like user, webpage, Resource, ...
@@ -528,6 +528,10 @@ public class SWBAWebPageContents extends GenericResource {
                 out.println("</td>");
                 if (hmprop.get(Resource.swb_resourceType) != null) {
                     semprop = (SemanticProperty) hmprop.get(Resource.swb_resourceType);
+                    //System.out.println(semprop);
+                    //System.out.println(hmprop);
+                    //System.out.println(sobj);
+                    //System.out.println("getObjectProperty:"+sobj+" "+sobj.getObjectProperty(semprop));
                     out.println("<td>");
                     out.println(sobj.getObjectProperty(semprop).getDisplayName(user.getLanguage()));
                     out.println("</td>");
@@ -1111,7 +1115,7 @@ public class SWBAWebPageContents extends GenericResource {
 
     /**
      * Shows the preview of the content.
-     * 
+     *
      * @param request , this holds the parameters
      * @param response , an answer to the user request
      * @param paramRequest , a list of objects like user, webpage, Resource, ...
@@ -1137,7 +1141,7 @@ public class SWBAWebPageContents extends GenericResource {
 
     /**
      * Show the list of the pflows to select one and send the element to the selected publish flow.
-     * 
+     *
      * @param request , this holds the parameters, an input data
      * @param response , an answer to the user request
      * @param paramRequest , a list of objects like user, webpage, Resource, ...
@@ -1211,7 +1215,7 @@ public class SWBAWebPageContents extends GenericResource {
 
     /**
      * Do a specific action like add, remove, send to a publish flow, delete the reference between WebPage and Content.
-     * 
+     *
      * @param request , this holds the parameters
      * @param response , an answer to the user request, and a list of objects like user, webpage, Resource, ...
      * @throws SWBResourceException, a Resource Exception
@@ -1229,35 +1233,40 @@ public class SWBAWebPageContents extends GenericResource {
         //System.out.println("Action: "+action);
 
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-        SemanticObject obj = ont.getSemanticObject(id); //WebPage
+        SemanticObject obj = SemanticObject.createSemanticObject(id); //WebPage
         SemanticClass cls = obj.getSemanticClass();
 
         if ("new".equals(action)) {
             log.debug("ProcessAction(new) ");
 
-            id = request.getParameter("suri");
-            sprop = request.getParameter("sprop");
-            sproptype = request.getParameter("sproptype");
+            //id = request.getParameter("suri");
+            //sprop = request.getParameter("sprop");
+            //sproptype = request.getParameter("sproptype");
             String sobj = request.getParameter("sobj");
 
-            SemanticProperty prop = ont.getSemanticProperty(sprop);
+            SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(sprop);
             log.debug("ProcessAction(new): sobj: " + sobj);
 
             SemanticObject wpage = null;
-            wpage = ont.getSemanticObject(id);
+            wpage = obj;//ont.getSemanticObject(id);
 
             SWBFormMgr fmgr = new SWBFormMgr(Resource.swb_Resource, wpage, null);
             try {
                 SemanticObject nso = fmgr.processForm(request);
 
-                SemanticObject ptype = ont.getSemanticObject(sobj);
+                SemanticObject ptype = SemanticObject.createSemanticObject(sobj);
                 nso.setObjectProperty(Resource.swb_resourceType, ptype);
+
+                //System.out.println("nso:"+nso);
+                //System.out.println("ptype:"+ptype);
+                //System.out.println("obj:"+obj);
 
                 if (prop.getName().startsWith("has")) {
                     obj.addObjectProperty(prop, nso);
                 } else {
                     obj.setObjectProperty(prop, nso);
                 }
+
                 if (id != null) {
                     response.setRenderParameter("suri", id);
                 }
@@ -1290,7 +1299,7 @@ public class SWBAWebPageContents extends GenericResource {
                 log.debug(prop.getURI() + ":" + sprop + "----" + (prop.getURI().equals(sprop) ? "true" : "false"));
                 if (value != null && value.equals(sprop)) { //se tiene que validar el valor por si es mÃ¡s de una
                     if (sval != null) {
-                        SemanticObject so = ont.getSemanticObject(sval);
+                        SemanticObject so = SemanticObject.createSemanticObject(sval);
                         //obj.removeObjectProperty(prop, so);
                         if (prop.getName().equalsIgnoreCase("userrepository")) {
                             obj.setObjectProperty(prop, ont.getSemanticObject("urswb"));
@@ -1407,7 +1416,7 @@ public class SWBAWebPageContents extends GenericResource {
 
     /**
      * Do an update, update status, active or unactive action of a Content element requested by the user.
-     * 
+     *
      * @param request , this holds the parameters
      * @param response , an answer to the user request
      * @param paramRequest , a list of objects like user, webpage, Resource, ...
@@ -1592,7 +1601,7 @@ public class SWBAWebPageContents extends GenericResource {
 
     /**
      * Gets a date format based on the language parameter.
-     * 
+     *
      * @param dateTime the date time
      * @param lang the lang
      * @return a string of the date time in a selected language
@@ -1608,7 +1617,7 @@ public class SWBAWebPageContents extends GenericResource {
 
     /**
      * Gets the string of display name property of a semantic object.
-     * 
+     *
      * @param obj the obj
      * @param lang the lang
      * @return a string value of the DisplayName property
@@ -1625,7 +1634,7 @@ public class SWBAWebPageContents extends GenericResource {
 
     /**
      * Gets the property value, it depends on the property type.
-     * 
+     *
      * @param obj the obj
      * @param prop the prop
      * @return get the corresponding property value
@@ -1685,7 +1694,7 @@ public class SWBAWebPageContents extends GenericResource {
 
     /**
      * Review sem prop.
-     * 
+     *
      * @param prop the prop
      * @param obj the obj
      * @param paramsRequest the params request
