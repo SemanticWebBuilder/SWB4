@@ -229,8 +229,23 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             inheritHeader.append(strTitleProp);
             out.println("</th>");
             inheritHeader.append("</th>");
-            if (hmprop.get(Template.swb_language) != null) {
-                sptemp = (SemanticProperty) hmprop.get(Template.swb_language);
+            if (hmprop.get(Localeable.swb_language) != null) {
+                sptemp = (SemanticProperty) hmprop.get(Localeable.swb_language);
+                String propname = sptemp.getName();
+                try {
+                    propname = sptemp.getDisplayName(user.getLanguage());
+                } catch (Exception e) {
+                }
+                out.println("<th>");
+                inheritHeader.append("<th>");
+                numcols++;
+                out.println(propname);
+                inheritHeader.append(propname);
+                out.println("</th>");
+                inheritHeader.append("</th>");
+            }
+            if (hmprop.get(Countryable.swb_country) != null) {
+                sptemp = (SemanticProperty) hmprop.get(Countryable.swb_country);
                 String propname = sptemp.getName();
                 try {
                     propname = sptemp.getDisplayName(user.getLanguage());
@@ -428,6 +443,15 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                 out.println("</td>");
                 if (hmprop.get(Localeable.swb_language) != null) {
                     semprop = (SemanticProperty) hmprop.get(Localeable.swb_language);
+                    semobj = sobj.getObjectProperty(spref);
+                    out.println("<td>");
+                    if(semobj==null) semobj = sobj;
+                    SemanticObject solang = semobj.getObjectProperty(semprop);
+                    out.println(getValueSemProp(solang, Descriptiveable.swb_title));
+                    out.println("</td>");
+                }
+                if (hmprop.get(Countryable.swb_country) != null) {
+                    semprop = (SemanticProperty) hmprop.get(Countryable.swb_country);
                     semobj = sobj.getObjectProperty(spref);
                     out.println("<td>");
                     if(semobj==null) semobj = sobj;
