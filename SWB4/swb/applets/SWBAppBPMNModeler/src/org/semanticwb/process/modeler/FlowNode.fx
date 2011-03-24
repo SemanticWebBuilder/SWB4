@@ -35,7 +35,7 @@ public class FlowNode extends GraphicalElement
         var ret = super.canEndLink(link);
 
         if (link instanceof SequenceFlow) {
-            if (not(link.ini.getPool() == getPool())) {
+            if (link.ini.getContainer() == null and not(link.ini.getPool() == getPool())) {
                 ret = false;
                 ModelerUtils.setErrorMessage(##"msgError14");
             }
