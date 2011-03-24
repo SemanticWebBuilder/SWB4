@@ -57,7 +57,10 @@ public class EditableText extends CustomNode
     {
         textb.commit();
         text=textb.text;
-        cancelEditing();
+        textb.visible=false;
+        textl.visible=true;
+        owner.requestFocus();
+        //cancelEditing();
     }
 
     public function cancelEditing() :Void
