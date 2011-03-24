@@ -296,37 +296,71 @@ public class GraphicalElement extends CustomNode
 
     public function mouseReleased( e: MouseEvent )
     {
-        shape.requestFocus();
+        if (this instanceof Pool or this instanceof Lane) return;
+        var curNode = e.node as GraphicalElement;
+        //println("MouseReleased in element {curNode.title} at {curNode.boundsInLocal.minX}, {curNode.boundsInLocal.minY}");
+        //shape.requestFocus();
         snapToGrid();
-
-        //check drop over node
         var overNode:GraphicalElement;
-        for(node in modeler.contents)
-        {
-            if(node instanceof GraphicalElement)
-            {
-                if(node != this and (node as GraphicalElement).over)
-                {
-                    if(canAttach(node as GraphicalElement))
-                    {
-                        overNode=node as GraphicalElement;
-                        if(not(this instanceof Lane) and overNode instanceof Pool)  //check lanes in pool
-                        {
-                            var p=overNode as Pool;
-                            for(lane in p.lanes)
+        for (ele in modeler.contents where ele instanceof GraphicalElement) {
+            if (ele != this) {
+                var tnode = ele as GraphicalElement;
+                //println("Checking node {tnode.title} at {tnode.boundsInLocal.minX}, {tnode.boundsInLocal.minY}");
+                if (curNode.boundsInLocal.minX > tnode.boundsInLocal.minX) {
+                    //println(" {curNode.title} despues de {tnode.title} en x");
+                    if (curNode.boundsInLocal.minY + curNode.h < tnode.boundsInLocal.minY + tnode.h) {
+                        if (canAttach(tnode)) {
+                            overNode = tnode;
+                            if(overNode instanceof Pool)  //check lanes in pool
                             {
-                                if(lane.over)
+                                var p = overNode as Pool;
+                                for(lane in p.lanes)
                                 {
-                                    overNode=lane;
-                                    //break;
+                                    if(curNode.boundsInLocal.minX > lane.boundsInLocal.minX)
+                                        if (curNode.boundsInLocal.minY + curNode.h < lane.boundsInLocal.minY + lane.h) {
+                                        //if(lane.over)
+                                        {
+                                            overNode=lane;
+                                            //break;
+                                        }
+                                    }
                                 }
                             }
+                            //println(" {curNode.title} antes de {tnode.title} en y");
                         }
-                        //break;
                     }
                 }
             }
         }
+
+        //check drop over node
+        
+//        for(node in modeler.contents)
+//        {
+//            if(node instanceof GraphicalElement)
+//            {
+//                if(node != this and (node as GraphicalElement).over)
+//                {
+//                    if(canAttach(node as GraphicalElement))
+//                    {
+//                        overNode=node as GraphicalElement;
+//                        if(not(this instanceof Lane) and overNode instanceof Pool)  //check lanes in pool
+//                        {
+//                            var p=overNode as Pool;
+//                            for(lane in p.lanes)
+//                            {
+//                                if(lane.over)
+//                                {
+//                                    overNode=lane;
+//                                    //break;
+//                                }
+//                            }
+//                        }
+//                        //break;
+//                    }
+//                }
+//            }
+//        }
         setGraphParent(overNode);
     }
 
