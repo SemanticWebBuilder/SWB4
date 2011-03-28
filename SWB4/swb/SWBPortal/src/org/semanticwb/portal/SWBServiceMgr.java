@@ -230,13 +230,17 @@ public class SWBServiceMgr implements SemanticObserver, SWBObserver {
                     {
                         try
                         {
-                            Class cls2=SWBPortal.getResourceMgr().createSWBResourceClass(obj.getProperty(ResourceType.swb_resourceClassName));
-                            if(cls2!=null)
+                            String clsname=obj.getProperty(ResourceType.swb_resourceClassName);
+                            if(clsname!=null)
                             {
-                                SWBResource res=((SWBResource)SWBPortal.getResourceMgr().convertOldWBResource(cls2.newInstance()));
-                                if(res!=null)
+                                Class cls2=SWBPortal.getResourceMgr().createSWBResourceClass(clsname);
+                                if(cls2!=null)
                                 {
-                                    res.install((ResourceType)obj.createGenericInstance());
+                                    SWBResource res=((SWBResource)SWBPortal.getResourceMgr().convertOldWBResource(cls2.newInstance()));
+                                    if(res!=null)
+                                    {
+                                        res.install((ResourceType)obj.createGenericInstance());
+                                    }
                                 }
                             }
                         }catch(Exception e){log.error(e);}
@@ -414,7 +418,7 @@ public class SWBServiceMgr implements SemanticObserver, SWBObserver {
         String sid=st.nextToken();
         if(!sid.equals(instanceid))
         {
-            System.out.println(obj);
+            //System.out.println(obj);
             String uri=st.nextToken();
             String puri=st.nextToken();
             if(puri.equals("_"))puri=null;

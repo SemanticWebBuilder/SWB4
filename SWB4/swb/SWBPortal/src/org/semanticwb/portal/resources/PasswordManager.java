@@ -10,7 +10,6 @@ import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.logging.Level;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -49,7 +48,7 @@ public class PasswordManager extends GenericResource {
         generator.setSeed(System.currentTimeMillis());
 //        SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(SWBPlatform.getSemanticMgr().SWBAdmin + "/PrivateKey");
         priv = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
-                SWBPlatform.getSemanticMgr().SWBAdmin + "/PrivateKey"));
+                SWBPlatform.getSemanticMgr().SWBAdminURI + "/PrivateKey"));
         if (priv==null)priv="TOO MANY SECRETS";
     }
     
