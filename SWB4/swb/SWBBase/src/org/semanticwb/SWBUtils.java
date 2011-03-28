@@ -1819,61 +1819,61 @@ public class SWBUtils {
             return textExtractor.getText();
         }
 
-        /**
-         * Extracts all the text from a PDF formatted file.
-         * <p>Extrae todo el texto de un archivo con formato PDF.</p>
-         * 
-         * @param file a file pathname referencing the PDF document
-         * @return a string representing all the text in the indicated PDF document.
-         * un objeto string que representa todo el texto contenido en
-         * el documento indicado con formato PDF.
-         * @throws java.io.IOException if an I/O error occurs.
-         * <p>si ocurre cualquier error de E/S.</p>
-         * @throws IOException Signals that an I/O exception has occurred.
-         */
-        public String parserPDF(File file) throws java.io.IOException
-        {
-
-            FileInputStream is = new FileInputStream(file);
-            org.pdfbox.pdmodel.PDDocument pdfDocument = null;
-            try
-            {
-                pdfDocument = org.pdfbox.pdmodel.PDDocument.load(is);
-
-                if (pdfDocument.isEncrypted())
-                {
-                    //Just try using the default password and move on
-                    pdfDocument.decrypt("");
-                }
-
-                //create a writer where to append the text content.
-                StringWriter writer = new StringWriter();
-                org.pdfbox.util.PDFTextStripper stripper = new org.pdfbox.util.PDFTextStripper();
-                stripper.writeText(pdfDocument, writer);
-
-                // Note: the buffer to string operation is costless;
-                // the char array value of the writer buffer and the content string
-                // is shared as long as the buffer content is not modified, which will
-                // not occur here.
-                String contents = writer.getBuffer().toString();
-                return contents;
-            } catch (org.pdfbox.exceptions.CryptographyException e)
-            {
-                throw new IOException("Error decrypting document("
-                        + file.getPath() + "): " + e);
-            } catch (org.pdfbox.exceptions.InvalidPasswordException e)
-            {
-                //they didn't suppply a password and the default of "" was wrong.
-                throw new IOException("Error: The document(" + file.getPath()
-                        + ") is encrypted and will not be indexed.");
-            } finally
-            {
-                if (pdfDocument != null)
-                {
-                    pdfDocument.close();
-                }
-            }
-        }
+//        /**
+//         * Extracts all the text from a PDF formatted file.
+//         * <p>Extrae todo el texto de un archivo con formato PDF.</p>
+//         *
+//         * @param file a file pathname referencing the PDF document
+//         * @return a string representing all the text in the indicated PDF document.
+//         * un objeto string que representa todo el texto contenido en
+//         * el documento indicado con formato PDF.
+//         * @throws java.io.IOException if an I/O error occurs.
+//         * <p>si ocurre cualquier error de E/S.</p>
+//         * @throws IOException Signals that an I/O exception has occurred.
+//         */
+//        public String parserPDF(File file) throws java.io.IOException
+//        {
+//
+//            FileInputStream is = new FileInputStream(file);
+//            org.pdfbox.pdmodel.PDDocument pdfDocument = null;
+//            try
+//            {
+//                pdfDocument = org.pdfbox.pdmodel.PDDocument.load(is);
+//
+//                if (pdfDocument.isEncrypted())
+//                {
+//                    //Just try using the default password and move on
+//                    pdfDocument.decrypt("");
+//                }
+//
+//                //create a writer where to append the text content.
+//                StringWriter writer = new StringWriter();
+//                org.pdfbox.util.PDFTextStripper stripper = new org.pdfbox.util.PDFTextStripper();
+//                stripper.writeText(pdfDocument, writer);
+//
+//                // Note: the buffer to string operation is costless;
+//                // the char array value of the writer buffer and the content string
+//                // is shared as long as the buffer content is not modified, which will
+//                // not occur here.
+//                String contents = writer.getBuffer().toString();
+//                return contents;
+//            } catch (org.pdfbox.exceptions.CryptographyException e)
+//            {
+//                throw new IOException("Error decrypting document("
+//                        + file.getPath() + "): " + e);
+//            } catch (org.pdfbox.exceptions.InvalidPasswordException e)
+//            {
+//                //they didn't suppply a password and the default of "" was wrong.
+//                throw new IOException("Error: The document(" + file.getPath()
+//                        + ") is encrypted and will not be indexed.");
+//            } finally
+//            {
+//                if (pdfDocument != null)
+//                {
+//                    pdfDocument.close();
+//                }
+//            }
+//        }
 
         /**
          * Valida si txt es nulo regresa def de lo contrario regresa txt
