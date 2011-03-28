@@ -220,7 +220,7 @@ public class SWBATrash extends GenericResource {
 
             out.println(" return false; ");
             out.println("</script>");
-            out.println("</selected>");
+            out.println("</select>");
             out.println("</p>");
 //            out.println("</li>");
 //            out.println("</ul>");
