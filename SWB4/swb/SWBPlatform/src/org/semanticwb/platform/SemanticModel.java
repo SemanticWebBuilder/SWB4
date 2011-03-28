@@ -30,7 +30,6 @@ package org.semanticwb.platform;
 
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.Query;
@@ -45,14 +44,12 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.rdf.model.impl.LiteralImpl;
-import com.hp.hpl.jena.sparql.util.CollectionUtils;
-import java.io.File;
+import com.hp.hpl.jena.vocabulary.OWL;
+import com.hp.hpl.jena.vocabulary.RDF;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.StringTokenizer;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
@@ -219,6 +216,21 @@ public class SemanticModel
         return m_model;
     }
 
+    public void begin()
+    {
+        if(m_model.supportsTransactions())m_model.begin();
+    }
+
+    public void commit()
+    {
+        if(m_model.supportsTransactions())m_model.commit();
+    }
+
+    public void abort()
+    {
+        if(m_model.supportsTransactions())m_model.abort();
+    }
+
     /**
      * Gets the rDF ont model.
      * 
@@ -260,14 +272,14 @@ public class SemanticModel
 //    }
     
     /**
- * Gets the semantic object.
- * 
- * @param uri the uri
- * @return the semantic object
- */
-public SemanticObject getSemanticObject(String uri)
+     * Gets the semantic object.
+     *
+     * @param uri the uri
+     * @return the semantic object
+     */
+    public SemanticObject getSemanticObject(String uri)
     {
-        Property type=m_model.getProperty(SemanticVocabulary.RDF_TYPE);
+        Property type=RDF.type;//m_model.getProperty(SemanticVocabulary.RDF_TYPE);
         SemanticObject ret=SemanticObject.getSemanticObject(uri);
         if(ret==null)
         {
@@ -303,8 +315,10 @@ public SemanticObject getSemanticObject(String uri)
     public SemanticObject createSemanticObject(String uri, SemanticClass cls)
     {
         Resource res=m_model.createResource(uri);
-        res.addProperty(m_model.getProperty(SemanticVocabulary.RDF_TYPE), cls.getOntClass());
-        SemanticObject ret=cls.newInstance(res);
+        res.addProperty(RDF.type, cls.getOntClass());
+        //System.out.println("createSemanticObject:"+res+" "+this+" "+cls);
+        //SemanticObject ret=cls.newInstance(res);
+        SemanticObject ret=SemanticObject.createSemanticObject(res, this, cls, true);     //cls.newInstance(res);
         SWBPlatform.getSemanticMgr().notifyChange(ret, null,null, SemanticObject.ACT_CREATE);
         //Default Values
         Iterator<SemanticProperty> it=cls.listProperties();
@@ -317,7 +331,8 @@ public SemanticObject getSemanticObject(String uri)
             {
                 SemanticLiteral lit=SemanticLiteral.valueOf(prop,def);
                 //System.out.print(" lit:"+lit.getValue());
-                ret.setLiteralProperty(prop, lit);
+                //ret.setLiteralProperty(prop, lit);
+                ret.setLiteralProperty(prop, lit, false);
             }
         }
         return ret;
@@ -501,9 +516,9 @@ public SemanticObject getSemanticObject(String uri)
      */
     public Iterator<SemanticObject> listInstancesOfClass(SemanticClass cls, boolean subclasses)
     {
-        Property rdf=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty();
+        //Property rdf=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty();
 
-        StmtIterator stit=getRDFModel().listStatements(null, rdf, cls.getOntClass());
+        StmtIterator stit=getRDFModel().listStatements(null, RDF.type, cls.getOntClass());
         Iterator<SemanticObject> ret=null;
         if(cls.isSWBClass())ret=new SemanticIterator(stit, true, this, cls); //Crea instancias de este tiplo de clase en el modelo sin verificar clase
         else ret=new SemanticIterator(stit, true, this, null); //Crea instancias de este tiplo de clase en el modelo verificando clase
@@ -574,10 +589,11 @@ public SemanticObject getSemanticObject(String uri)
         Model m=getRDFModel();
         OntModel ont=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel();
         Resource res = ont.getResource(uri);
-        Statement st = m.getProperty(res, m.getProperty(SemanticVocabulary.RDF_TYPE));
+        Statement st = m.getProperty(res, RDF.type);//m.getProperty(SemanticVocabulary.RDF_TYPE));
         if (null==st)
         {
-            st = m.createStatement(res, m.getProperty(SemanticVocabulary.RDF_TYPE), m.getResource(SemanticVocabulary.OWL_CLASS));
+            //st = m.createStatement(res, m.getProperty(SemanticVocabulary.RDF_TYPE), m.getResource(SemanticVocabulary.OWL_CLASS));
+            st = m.createStatement(res, RDF.type, OWL.Class);
             m.add(st);
         }
         //TODO:notify this
