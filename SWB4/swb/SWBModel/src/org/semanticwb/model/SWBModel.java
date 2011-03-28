@@ -52,4 +52,23 @@ public class SWBModel extends org.semanticwb.model.base.SWBModelBase {
     {
         return new GenericIterator(getSemanticModel().listInstancesOfClass(cls));
     }
+
+    public void begin()
+    {
+        SemanticModel model=getSemanticModel();
+        model.begin();
+    }
+
+    public void commit()
+    {
+        SemanticModel model=getSemanticModel();
+        model.commit();
+    }
+
+    public void abort()
+    {
+        SemanticModel model=getSemanticModel();
+        model.abort();
+    }
+
 }
