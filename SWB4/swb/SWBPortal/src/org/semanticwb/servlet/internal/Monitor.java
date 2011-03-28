@@ -125,7 +125,7 @@ private Vector<SWBMonitorData> buffer;
         buffer = new Vector<SWBMonitorData>(max);
         try
         {
-            SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(SWBPlatform.getSemanticMgr().SWBAdmin + "/PrivateKey");
+            SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(SWBPlatform.getSemanticMgr().SWBAdminURI + "/PrivateKey");
             //System.out.println("sp:"+sp);
             String priv = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(sp);
             //System.out.println("priv:"+priv);
@@ -517,17 +517,17 @@ private static String INDENT = "    ";
         {
             sb.append(" (running in native)");
         }
-        System.out.println(sb.toString());
+        //System.out.println(sb.toString());
         if (ti.getLockOwnerName() != null)
         {
-            System.out.println(INDENT + " owned by " + ti.getLockOwnerName()
-                    + " Id=" + ti.getLockOwnerId());
+            //System.out.println(INDENT + " owned by " + ti.getLockOwnerName()
+            //        + " Id=" + ti.getLockOwnerId());
         }
         for (StackTraceElement ste : ti.getStackTrace())
         {
-            System.out.println(INDENT + "at " + ste.toString());
+            //System.out.println(INDENT + "at " + ste.toString());
         }
-        System.out.println();
+        //System.out.println();
     }
 
     /**
@@ -571,16 +571,16 @@ private static String INDENT = "    ";
 //            System.out.println("objCls:"+obj.getClass().getCanonicalName());
 //        }
 
-        System.out.println("Uptime: " + formatMillis(rmbean.getUptime()));
+        //System.out.println("Uptime: " + formatMillis(rmbean.getUptime()));
 
-        System.out.println(mmbean.getHeapMemoryUsage());
+        //System.out.println(mmbean.getHeapMemoryUsage());
         for (GarbageCollectorMXBean gc : gcmbeans)
         {
-            System.out.print(" [" + gc.getName() + ": ");
-            System.out.print("Count=" + gc.getCollectionCount());
-            System.out.print(" GCTime=" + formatMillis(gc.getCollectionTime()));
-            System.out.println("]");
-//            System.out.println(gc.getClass().getCanonicalName());
+            //System.out.print(" [" + gc.getName() + ": ");
+            //System.out.print("Count=" + gc.getCollectionCount());
+            //System.out.print(" GCTime=" + formatMillis(gc.getCollectionTime()));
+            //System.out.println("]");
+//            //System.out.println(gc.getClass().getCanonicalName());
             com.sun.management.GarbageCollectorMXBean gci = (com.sun.management.GarbageCollectorMXBean) gc;
             GcInfo info = gci.getLastGcInfo();
             if (null != info)
@@ -589,15 +589,15 @@ private static String INDENT = "    ";
             }
             //System.out.println(info);
         }
-        System.out.println();
+        //System.out.println();
         for (MemoryPoolMXBean p : pools)
         {
-            System.out.print("  [" + p.getName() + ":");
+            //System.out.print("  [" + p.getName() + ":");
             MemoryUsage u = p.getUsage();
 
-            System.out.print(" Used=" + formatBytes(u.getUsed()));
-            System.out.print(" Committed=" + formatBytes(u.getCommitted()));
-            System.out.println("]");
+            //System.out.print(" Used=" + formatBytes(u.getUsed()));
+            //System.out.print(" Committed=" + formatBytes(u.getCommitted()));
+            //System.out.println("]");
         }
     }
 
@@ -625,42 +625,42 @@ private static String INDENT = "    ";
             {
                 return false;   // no gc
             }
-            System.out.println("GC ID: " + id);
-            System.out.println("Start Time: " + startTime);
-            System.out.println("End Time: " + endTime);
-            System.out.println("Duration: " + duration);
+            //System.out.println("GC ID: " + id);
+            //System.out.println("Start Time: " + startTime);
+            //System.out.println("End Time: " + endTime);
+            //System.out.println("Duration: " + duration);
             Map mapBefore = gci.getMemoryUsageBeforeGc();
             Map mapAfter = gci.getMemoryUsageAfterGc();
 
 
-            System.out.println("Before GC Memory Usage Details....");
+            //System.out.println("Before GC Memory Usage Details....");
             Set memType = mapBefore.keySet();
             Iterator it = memType.iterator();
             while (it.hasNext())
             {
                 String type = (String) it.next();
-                System.out.println(type);
+                //System.out.println(type);
                 MemoryUsage mu1 = (MemoryUsage) mapBefore.get(type);
-                System.out.print("Initial Size: " + mu1.getInit());
-                System.out.print(" Used: " + mu1.getUsed());
-                System.out.print(" Max: " + mu1.getMax());
-                System.out.print(" Committed: " + mu1.getCommitted());
-                System.out.println(" ");
+                //System.out.print("Initial Size: " + mu1.getInit());
+                //System.out.print(" Used: " + mu1.getUsed());
+                //System.out.print(" Max: " + mu1.getMax());
+                //System.out.print(" Committed: " + mu1.getCommitted());
+                //System.out.println(" ");
             }
 
-            System.out.println("After GC Memory Usage Details....");
+            //System.out.println("After GC Memory Usage Details....");
             memType = mapAfter.keySet();
             it = memType.iterator();
             while (it.hasNext())
             {
                 String type = (String) it.next();
-                System.out.println(type);
+                //System.out.println(type);
                 MemoryUsage mu2 = (MemoryUsage) mapAfter.get(type);
-                System.out.print("Initial Size: " + mu2.getInit());
-                System.out.print(" Used: " + mu2.getUsed());
-                System.out.print(" Max: " + mu2.getMax());
-                System.out.print(" Committed: " + mu2.getCommitted());
-                System.out.println(" ");
+                //System.out.print("Initial Size: " + mu2.getInit());
+                //System.out.print(" Used: " + mu2.getUsed());
+                //System.out.print(" Max: " + mu2.getMax());
+                //System.out.print(" Committed: " + mu2.getCommitted());
+                //System.out.println(" ");
             }
         } catch (RuntimeException re)
         {
