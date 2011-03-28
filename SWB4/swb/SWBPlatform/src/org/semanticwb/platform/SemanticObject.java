@@ -1,26 +1,26 @@
 /**
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
+* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+*
+* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+* del SemanticWebBuilder 4.0.
+*
+* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+* de la misma.
+*
+* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+* dirección electrónica:
 *  http://www.semanticwebbuilder.org
-**/ 
- 
+**/
+
 package org.semanticwb.platform;
 
 import com.hp.hpl.jena.rdf.model.Property;
@@ -51,7 +51,7 @@ import org.w3c.dom.Document;
 // TODO: Auto-generated Javadoc
 /**
  * The Class SemanticObject.
- * 
+ *
  * @author Javier Solis Gonzalez
  */
 public class SemanticObject
@@ -61,43 +61,43 @@ public class SemanticObject
 
     /** The Constant ACT_CREATE. */
     public static final String ACT_CREATE="CREATE";
-    
+
     /** The Constant ACT_REMOVE. */
     public static final String ACT_REMOVE="REMOVE";
-    
+
     /** The Constant ACT_ADD. */
     public static final String ACT_ADD="ADD";
-    
+
     /** The Constant ACT_SET. */
     public static final String ACT_SET="SET";
-    
+
     /** The Constant ACT_CLONE. */
     public static final String ACT_CLONE="CLONE";
 
     /** The m_objs. */
     private static Map<String, SemanticObject>m_objs=new ConcurrentHashMap<String, SemanticObject>();
-    
+
     /** The m_genobj. */
     private GenericObject m_genobj=null;
 
     /** The m_res. */
     private Resource m_res = null;
-    
+
     /** The m_model. */
     private SemanticModel m_model = null;
     //Virtual properties
     /** The m_cls. */
     private SemanticClass m_cls = null;
-    
+
     /** The m_virtual. */
     private boolean m_virtual = false;
-    
+
     /** The m_virtprops. */
     private HashMap m_virtprops;
 
     /** The m_cacheprops. */
     private Map m_cacheprops;                           //Cache de propiedades
-    
+
     /** The m_cachepropsrel. */
     private Map m_cachepropsrel;                        //Cache de objetos relacionados a la propiedad
 
@@ -106,7 +106,7 @@ public class SemanticObject
 
     /** The has cache. */
     private static boolean hasCache=true;
-    
+
     /** The has property cache. */
     private static boolean hasPropertyCache=true;
 
@@ -115,12 +115,14 @@ public class SemanticObject
     //No cambian
     /** The ext get methods. */
     private static HashMap<String, Method> extGetMethods=new HashMap();
-    
+
     /** The ext set methods. */
     private static HashMap<String, Method> extSetMethods=new HashMap();
 
     /** The lastaccess. */
     private long lastaccess=System.currentTimeMillis();
+
+    private boolean isNew=false;
 
     /** The wrapper to primitive. */
     private static HashMap<Class,Class> wrapperToPrimitive = new HashMap();
@@ -145,17 +147,29 @@ public class SemanticObject
         this(res, null, null);
     }
 
-    /**
+   /**
      * Instantiates a new semantic object.
-     * 
+     *
      * @param res the res
      */
-    private SemanticObject(Resource res, SemanticModel model, SemanticClass cls)
+    protected SemanticObject(Resource res, SemanticModel model, SemanticClass cls)
     {
+        this(res, model, cls, false);
+    }
+
+    /**
+     * Instantiates a new semantic object.
+     *
+     * @param res the res
+     */
+    protected SemanticObject(Resource res, SemanticModel model, SemanticClass cls, boolean isNew)
+    {
+        //System.out.println("SemanticObject:"+res+" "+model+" "+cls+" "+isNew);
         if(res==null)
         {
             throw new NullPointerException("Resource is Null...");
         }
+        this.isNew=isNew;
         m_cacheprops=new ConcurrentHashMap(); //MAPS74 //Collections.synchronizedMap(new HashMap());
         m_cachepropsrel=new ConcurrentHashMap(); //MAPS74 //Collections.synchronizedMap(new HashMap());
         this.m_res = res;
@@ -167,7 +181,7 @@ public class SemanticObject
 
     /**
      * Contruye un SemanticObject virtual.
-     * 
+     *
      */
     public SemanticObject()
     {
@@ -177,7 +191,7 @@ public class SemanticObject
     /**
      * Regresa instancia del SemanticObject si existe en Cache, de lo contrario
      * regresa null.
-     * 
+     *
      * @param uri the uri
      * @return the semantic object
      * @return
@@ -191,7 +205,7 @@ public class SemanticObject
 
     /**
      * Regresa tiempo en milisegundos de la ultima consulta del objeto.
-     * 
+     *
      * @return the last access
      * @return
      */
@@ -203,7 +217,7 @@ public class SemanticObject
     /**
      * Regresa una instancia del GenericObject asociado
      * Si ya existe una instancia la regresa, de lo contrario la crea.
-     * 
+     *
      * @return the generic object
      * @return
      */
@@ -259,7 +273,7 @@ public class SemanticObject
     /**
      * Regresa una instancia del GenericObject asociado
      * Si ya existe una instancia la regresa, de lo contrario regresa null.
-     * 
+     *
      * @return the generic instance
      * @return
      */
@@ -271,7 +285,7 @@ public class SemanticObject
 
     /**
      * Asigna una instancia GenericObject del objeto.
-     * 
+     *
      * @param gen the new generic instance
      * @return
      */
@@ -323,11 +337,22 @@ public class SemanticObject
 
     /**
      * Creates the semantic object.
-     * 
+     *
      * @param res the res
      * @return the semantic object
      */
     public static SemanticObject createSemanticObject(Resource res, SemanticModel model, SemanticClass cls)
+    {
+        return createSemanticObject(res, model, cls, false);
+    }
+
+    /**
+     * Creates the semantic object.
+     *
+     * @param res the res
+     * @return the semantic object
+     */
+    public static SemanticObject createSemanticObject(Resource res, SemanticModel model, SemanticClass cls, boolean isNew)
     {
         String id=res.getURI();
         if(id==null)id=res.getId().toString();
@@ -339,7 +364,7 @@ public class SemanticObject
                 ret=getSemanticObject(id);
                 if(ret==null)
                 {
-        //            //System.out.println("res1:"+res+" "+id);
+                    //System.out.println("res1:"+res+" "+id);
         //            //if(hasCache)
         //            {
         //                if(res.getURI()!=null && (res.getModel()==SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel() || res.getModel()==SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel()))
@@ -348,7 +373,7 @@ public class SemanticObject
         //                }
         //            }
         //            //System.out.println("res2:"+res+" "+id);
-                    ret=new SemanticObject(res,model,cls);
+                    ret=new SemanticObject(res,model,cls,isNew);
                     m_objs.put(id, ret);
                 }
             }
@@ -372,7 +397,7 @@ public class SemanticObject
     /**
      * Elimina el SemanticObject del cache
      * param uri del SemanticObject a eliminar del cache.
-     * 
+     *
      * @param uri the uri
      */
     public static void removeCache(String uri)
@@ -392,7 +417,7 @@ public class SemanticObject
 
     /**
      * Regresa numero de elementos en cache.
-     * 
+     *
      * @return the cache size
      */
     public static int getCacheSize()
@@ -403,7 +428,7 @@ public class SemanticObject
 
     /**
      * Sets the property value cache.
-     * 
+     *
      * @param prop the prop
      * @param lang the lang
      * @param value the value
@@ -421,7 +446,7 @@ public class SemanticObject
 
     /**
      * Adds the property value cache.
-     * 
+     *
      * @param prop the prop
      * @param lang the lang
      * @param value the value
@@ -438,7 +463,7 @@ public class SemanticObject
 
     /**
      * Gets the property value cache.
-     * 
+     *
      * @param prop the prop
      * @param lang the lang
      * @return the property value cache
@@ -456,7 +481,7 @@ public class SemanticObject
 
     /**
      * Removes the property value cache.
-     * 
+     *
      * @param prop the prop
      * @param lang the lang
      */
@@ -505,7 +530,7 @@ public class SemanticObject
 
     /**
      * Gets the list object property cache.
-     * 
+     *
      * @param prop the prop
      * @return the list object property cache
      */
@@ -520,7 +545,7 @@ public class SemanticObject
 
     /**
      * Checks for object property cache.
-     * 
+     *
      * @param prop the prop
      * @param obj the obj
      * @return the boolean
@@ -546,7 +571,7 @@ public class SemanticObject
 
     /**
      * Checks for object property cache.
-     * 
+     *
      * @param prop the prop
      * @return the boolean
      */
@@ -568,11 +593,11 @@ public class SemanticObject
         return ret;
     }
 
-    
+
 
     /**
      * Sets the list object property cache.
-     * 
+     *
      * @param prop the prop
      * @param list the list
      * @return the iterator
@@ -609,7 +634,7 @@ public class SemanticObject
 
     /**
      * Checks if is virtual.
-     * 
+     *
      * @return true, if is virtual
      */
     public boolean isVirtual()
@@ -619,7 +644,7 @@ public class SemanticObject
 
     /**
      * Sets the rDF resource.
-     * 
+     *
      * @param res the new rDF resource
      */
     public void setRDFResource(Resource res)
@@ -632,7 +657,7 @@ public class SemanticObject
 
     /**
      * Contruye un SemanticObject virtual relacionado al Model y al tipo de elemento.
-     * 
+     *
      * @param model the model
      * @param cls the cls
      */
@@ -648,7 +673,7 @@ public class SemanticObject
 
     /**
      * Gets the uRI.
-     * 
+     *
      * @return the uRI
      */
     public String getURI()
@@ -681,7 +706,7 @@ public class SemanticObject
         else
         {
             throw new IllegalArgumentException("The separator ':' was not found in shorturi "+shorturi);
-        }    
+        }
     }
 
     public String getShortURI()
@@ -704,7 +729,7 @@ public class SemanticObject
     }
     /**
      * Gets the id.
-     * 
+     *
      * @return the id
      */
     public String getId()
@@ -733,7 +758,7 @@ public class SemanticObject
 
     /**
      * Gets the prefix.
-     * 
+     *
      * @return the prefix
      */
     public String getPrefix()
@@ -747,7 +772,7 @@ public class SemanticObject
 
     /**
      * Gets the res id.
-     * 
+     *
      * @return the res id
      */
     public String getResId()
@@ -782,7 +807,7 @@ public class SemanticObject
 
     /**
  * Regresa URI codificado para utilizar en ligas de html.
- * 
+ *
  * @return URI Codificado
  */
     public String getEncodedURI()
@@ -792,7 +817,7 @@ public class SemanticObject
 
     /**
      * Gets the rDF name.
-     * 
+     *
      * @return the rDF name
      */
     public String getRDFName()
@@ -806,7 +831,7 @@ public class SemanticObject
 
     /**
      * Gets the semantic class.
-     * 
+     *
      * @return the semantic class
      */
     public SemanticClass getSemanticClass()
@@ -814,7 +839,7 @@ public class SemanticObject
         //System.out.print("getSemanticClass:"+getURI());
         if (m_cls == null)
         {
-            //TODO: Cuando se crea indtancia con modelo y clase no entra a este statement
+            //TODO: Cuando se crea instancia con modelo y clase no entra a este statement
             //Validar si se requiere carga inicial de propiedades
             if(hasPropertyCacheOnInit)
             {
@@ -892,7 +917,7 @@ public class SemanticObject
 
     /**
      * List semantic classes.
-     * 
+     *
      * @return the iterator
      */
     public Iterator<SemanticClass> listSemanticClasses()
@@ -908,7 +933,7 @@ public class SemanticObject
 
     /**
      * Adds the semantic class.
-     * 
+     *
      * @param cls the cls
      */
     public void addSemanticClass(SemanticClass cls)
@@ -926,7 +951,7 @@ public class SemanticObject
 
     /**
      * Removes the semantic class.
-     * 
+     *
      * @param cls the cls
      * @return the semantic object
      */
@@ -955,7 +980,7 @@ public class SemanticObject
 
     /**
      * Regresa el Modelo de del SemanticObject.
-     * 
+     *
      * @return the model
      * @return
      */
@@ -970,7 +995,7 @@ public class SemanticObject
 
     /**
      * Gets the rDF resource.
-     * 
+     *
      * @return the rDF resource
      */
     public Resource getRDFResource()
@@ -1019,7 +1044,7 @@ public class SemanticObject
 
     /**
      * Instance of.
-     * 
+     *
      * @param cls the cls
      * @return true, if successful
      */
@@ -1039,7 +1064,7 @@ public class SemanticObject
 
     /**
  * Gets the dom property.
- * 
+ *
  * @param prop the prop
  * @return the dom property
  */
@@ -1065,7 +1090,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the literal property.
-     * 
+     *
      * @param prop the prop
      * @return the literal property
      */
@@ -1096,7 +1121,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the literal property.
-     * 
+     *
      * @param prop the prop
      * @param lang the lang
      * @return the literal property
@@ -1128,7 +1153,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Adds the literal property.
-     * 
+     *
      * @param prop the prop
      * @param literal the literal
      */
@@ -1139,23 +1164,23 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Sets the literal property.
-     * 
+     *
      * @param prop the prop
      * @param literal the literal
      */
     public void setLiteralProperty(SemanticProperty prop, SemanticLiteral literal)
     {
-        setLiteralProperty(prop, literal, true);
+        setLiteralProperty(prop, literal, !isNew);
     }
 
     /**
      * Sets the literal property.
-     * 
+     *
      * @param prop the prop
      * @param literal the literal
      * @param replace the replace
      */
-    private void setLiteralProperty(SemanticProperty prop, SemanticLiteral literal, boolean replace)
+    protected void setLiteralProperty(SemanticProperty prop, SemanticLiteral literal, boolean replace)
     {
         //System.out.println(prop+" "+literal.getValue());
         //Thread.currentThread().dumpStack();
@@ -1285,7 +1310,7 @@ public Document getDomProperty(SemanticProperty prop)
         }
         if(literal.getValue()==null)
         {
-            removePropertyValueCache(prop, literal.getLanguage());
+            if(!isNew)removePropertyValueCache(prop, literal.getLanguage());
         }else if(replace)
         {
             setPropertyValueCache(prop, literal.getLanguage(), literal);
@@ -1299,7 +1324,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Removes the property.
-     * 
+     *
      * @param prop the prop
      * @return the semantic object
      */
@@ -1335,7 +1360,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Removes the property.
-     * 
+     *
      * @param prop the prop
      * @param lang the lang
      * @return the semantic object
@@ -1363,7 +1388,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Sets the object property.
-     * 
+     *
      * @param prop the prop
      * @param object the object
      * @return the semantic object
@@ -1412,10 +1437,10 @@ public Document getDomProperty(SemanticProperty prop)
         return this;
     }
 
-    
+
      /**
      * Adds the object property.
-     * 
+     *
      * @param prop the prop
      * @param object the object
      * @return the semantic object
@@ -1429,7 +1454,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Adds the object property.
-     * 
+     *
      * @param prop the prop
      * @param object the object
      * @return the semantic object
@@ -1458,7 +1483,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Removes the object property.
-     * 
+     *
      * @param prop the prop
      * @param object the object
      * @return the semantic object
@@ -1533,7 +1558,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * List literal properties.
-     * 
+     *
      * @param prop the prop
      * @return the iterator
      */
@@ -1606,7 +1631,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * List properties.
-     * 
+     *
      * @return the iterator
      */
     public Iterator<SemanticProperty> listProperties()
@@ -1622,10 +1647,10 @@ public Document getDomProperty(SemanticProperty prop)
         props.close();
         return properties.iterator();
     }
-    
+
     /**
      * List object properties.
-     * 
+     *
      * @param prop the prop
      * @return the iterator
      */
@@ -1662,7 +1687,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Filter valid objects.
-     * 
+     *
      * @param it the it
      * @return the iterator
      */
@@ -1695,7 +1720,7 @@ public Document getDomProperty(SemanticProperty prop)
     /**
      * Regresa lista de objetos activos y no borrados relacionados por la propiedad
      * Si no encuentra en el objeto busca en los padres.
-     * 
+     *
      * @param prop the prop
      * @return the iterator
      * @return
@@ -1720,7 +1745,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Regresa lista de objetos activos y no borrados relacionados por la propiedad.
-     * 
+     *
      * @param prop the prop
      * @return the iterator
      * @return
@@ -1733,7 +1758,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Checks for object property.
-     * 
+     *
      * @param prop the prop
      * @param obj the obj
      * @return true, if successful
@@ -1773,7 +1798,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Checks for object property.
-     * 
+     *
      * @param prop the prop
      * @return true, if successful
      */
@@ -1813,7 +1838,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the object property.
-     * 
+     *
      * @param prop the prop
      * @return the object property
      */
@@ -1824,7 +1849,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the object property.
-     * 
+     *
      * @param prop the prop
      * @param defValue the def value
      * @return the object property
@@ -1890,7 +1915,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the locale statement.
-     * 
+     *
      * @param prop the prop
      * @param lang the lang
      * @return the locale statement
@@ -1919,7 +1944,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * External invoker get.
-     * 
+     *
      * @param prop the prop
      * @return the object
      */
@@ -1968,7 +1993,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * External invoker set.
-     * 
+     *
      * @param prop the prop
      * @param values the values
      * @return the object
@@ -2060,7 +2085,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Removes the dependencies.
-     * 
+     *
      * @param stack the stack
      */
     public void removeDependencies(ArrayList<SemanticObject> stack)
@@ -2140,7 +2165,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Removes the.
-     * 
+     *
      * @param stack the stack
      */
     public void remove(ArrayList<SemanticObject> stack)
@@ -2203,7 +2228,7 @@ public Document getDomProperty(SemanticProperty prop)
 
 /**
  * ***************************************************************************************************************.
- * 
+ *
  * @param prop the prop
  * @param value the value
  * @return the semantic object
@@ -2222,7 +2247,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Asigna la propiedad con el valor especificado.
-     * 
+     *
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
      * @param evalExtInvo the eval ext invo
@@ -2235,7 +2260,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Asigna la propiedad con el valor especificado.
-     * 
+     *
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
      * @param lang the lang
@@ -2249,7 +2274,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Asigna la propiedad con el valor especificado.
-     * 
+     *
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
      * @param lang the lang
@@ -2270,7 +2295,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Regresa valor de la Propiedad especificada.
-     * 
+     *
      * @param prop the prop
      * @return valor de la propiedad, si no existe la propiedad regresa null
      */
@@ -2281,7 +2306,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Regresa valor de la Propiedad especificada.
-     * 
+     *
      * @param prop the prop
      * @param evalExtInvo the eval ext invo
      * @return valor de la propiedad, si no existe la propiedad regresa null
@@ -2294,7 +2319,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the property.
-     * 
+     *
      * @param prop the prop
      * @param defValue the def value
      * @return the property
@@ -2306,7 +2331,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the property.
-     * 
+     *
      * @param prop the prop
      * @param defValue the def value
      * @param evalExtInvo the eval ext invo
@@ -2339,7 +2364,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the property.
-     * 
+     *
      * @param prop the prop
      * @param defValue the def value
      * @param lang the lang
@@ -2362,7 +2387,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the locale property.
-     * 
+     *
      * @param prop the prop
      * @param lang the lang
      * @return the locale property
@@ -2386,7 +2411,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the int property.
-     * 
+     *
      * @param prop the prop
      * @return the int property
      */
@@ -2397,7 +2422,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the int property.
-     * 
+     *
      * @param prop the prop
      * @param evalExtInvo the eval ext invo
      * @return the int property
@@ -2409,7 +2434,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the int property.
-     * 
+     *
      * @param prop the prop
      * @param defValue the def value
      * @return the int property
@@ -2421,7 +2446,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the int property.
-     * 
+     *
      * @param prop the prop
      * @param defValue the def value
      * @param evalExtInvo the eval ext invo
@@ -2446,7 +2471,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Asigna la propiedad con el valor especificado.
-     * 
+     *
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
      * @return SemanticObject para cascada
@@ -2458,7 +2483,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Asigna la propiedad con el valor especificado.
-     * 
+     *
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
      * @param evalExtInvo the eval ext invo
@@ -2478,7 +2503,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the long property.
-     * 
+     *
      * @param prop the prop
      * @return the long property
      */
@@ -2489,7 +2514,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the long property.
-     * 
+     *
      * @param prop the prop
      * @param evalExtInvo the eval ext invo
      * @return the long property
@@ -2501,7 +2526,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the long property.
-     * 
+     *
      * @param prop the prop
      * @param defValue the def value
      * @return the long property
@@ -2513,7 +2538,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the long property.
-     * 
+     *
      * @param prop the prop
      * @param defValue the def value
      * @param evalExtInvo the eval ext invo
@@ -2538,7 +2563,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Sets the input stream property.
-     * 
+     *
      * @param prop the prop
      * @param value the value
      * @param name the name
@@ -2559,7 +2584,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the input stream property.
-     * 
+     *
      * @param prop the prop
      * @return the input stream property
      * @throws SWBException the sWB exception
@@ -2577,7 +2602,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Asigna la propiedad con el valor especificado.
-     * 
+     *
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
      * @return SemanticObject para cascada
@@ -2589,7 +2614,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Asigna la propiedad con el valor especificado.
-     * 
+     *
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
      * @param evalExtInvo the eval ext invo
@@ -2609,7 +2634,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the float property.
-     * 
+     *
      * @param prop the prop
      * @return the float property
      */
@@ -2620,7 +2645,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the float property.
-     * 
+     *
      * @param prop the prop
      * @param evalExtInvo the eval ext invo
      * @return the float property
@@ -2632,7 +2657,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the float property.
-     * 
+     *
      * @param prop the prop
      * @param defValue the def value
      * @return the float property
@@ -2644,7 +2669,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the float property.
-     * 
+     *
      * @param prop the prop
      * @param defValue the def value
      * @param evalExtInvo the eval ext invo
@@ -2669,7 +2694,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Asigna la propiedad con el valor especificado.
-     * 
+     *
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
      * @return SemanticObject para cascada
@@ -2681,7 +2706,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Asigna la propiedad con el valor especificado.
-     * 
+     *
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
      * @param evalExtInvo the eval ext invo
@@ -2701,7 +2726,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the double property.
-     * 
+     *
      * @param prop the prop
      * @return the double property
      */
@@ -2712,7 +2737,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the double property.
-     * 
+     *
      * @param prop the prop
      * @param evalExtInvo the eval ext invo
      * @return the double property
@@ -2724,7 +2749,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the double property.
-     * 
+     *
      * @param prop the prop
      * @param defValue the def value
      * @return the double property
@@ -2736,7 +2761,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the double property.
-     * 
+     *
      * @param prop the prop
      * @param defValue the def value
      * @param evalExtInvo the eval ext invo
@@ -2761,7 +2786,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Asigna la propiedad con el valor especificado.
-     * 
+     *
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
      * @return SemanticObject para cascada
@@ -2773,7 +2798,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Asigna la propiedad con el valor especificado.
-     * 
+     *
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
      * @param evalExtInvo the eval ext invo
@@ -2793,7 +2818,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the boolean property.
-     * 
+     *
      * @param prop the prop
      * @return the boolean property
      */
@@ -2804,7 +2829,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the boolean property.
-     * 
+     *
      * @param prop the prop
      * @param evalExtInvo the eval ext invo
      * @return the boolean property
@@ -2816,7 +2841,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the boolean property.
-     * 
+     *
      * @param prop the prop
      * @param defValue the def value
      * @param evalExtInvo the eval ext invo
@@ -2841,7 +2866,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Asigna la propiedad con el valor especificado.
-     * 
+     *
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
      * @return SemanticObject para cascada
@@ -2853,7 +2878,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Asigna la propiedad con el valor especificado.
-     * 
+     *
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
      * @param evalExtInvo the eval ext invo
@@ -2874,7 +2899,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the date property.
-     * 
+     *
      * @param prop the prop
      * @return the date property
      */
@@ -2885,7 +2910,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the date property.
-     * 
+     *
      * @param prop the prop
      * @param evalExtInvo the eval ext invo
      * @return the date property
@@ -2897,7 +2922,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the date property.
-     * 
+     *
      * @param prop the prop
      * @param defValue the def value
      * @return the date property
@@ -2909,7 +2934,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the date property.
-     * 
+     *
      * @param prop the prop
      * @param defValue the def value
      * @param evalExtInvo the eval ext invo
@@ -2934,7 +2959,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Asigna la propiedad con el valor especificado.
-     * 
+     *
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
      * @return SemanticObject para cascada
@@ -2946,7 +2971,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Asigna la propiedad con el valor especificado.
-     * 
+     *
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
      * @param evalExtInvo the eval ext invo
@@ -2973,7 +2998,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the sQL date property.
-     * 
+     *
      * @param prop the prop
      * @return the sQL date property
      */
@@ -2984,7 +3009,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the sQL date property.
-     * 
+     *
      * @param prop the prop
      * @param evalExtInvo the eval ext invo
      * @return the sQL date property
@@ -2996,7 +3021,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the sQL date property.
-     * 
+     *
      * @param prop the prop
      * @param defValue the def value
      * @return the sQL date property
@@ -3008,7 +3033,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the sQL date property.
-     * 
+     *
      * @param prop the prop
      * @param defValue the def value
      * @param evalExtInvo the eval ext invo
@@ -3033,7 +3058,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Asigna la propiedad con el valor especificado.
-     * 
+     *
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
      * @return SemanticObject para cascada
@@ -3045,7 +3070,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Asigna la propiedad con el valor especificado.
-     * 
+     *
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
      * @param evalExtInvo the eval ext invo
@@ -3065,7 +3090,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the date time property.
-     * 
+     *
      * @param prop the prop
      * @return the date time property
      */
@@ -3076,7 +3101,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the date time property.
-     * 
+     *
      * @param prop the prop
      * @param evalExtInvo the eval ext invo
      * @return the date time property
@@ -3088,7 +3113,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the date time property.
-     * 
+     *
      * @param prop the prop
      * @param defValue the def value
      * @return the date time property
@@ -3100,7 +3125,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the date time property.
-     * 
+     *
      * @param prop the prop
      * @param defValue the def value
      * @param evalExtInvo the eval ext invo
@@ -3125,7 +3150,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Asigna la propiedad con el valor especificado.
-     * 
+     *
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
      * @return SemanticObject para cascada
@@ -3137,7 +3162,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Asigna la propiedad con el valor especificado.
-     * 
+     *
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
      * @param evalExtInvo the eval ext invo
@@ -3163,7 +3188,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the display name.
-     * 
+     *
      * @return the display name
      */
     public String getDisplayName()
@@ -3173,7 +3198,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the display name.
-     * 
+     *
      * @param lang the lang
      * @return the display name
      */
@@ -3235,7 +3260,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Transform to semantic property.
-     * 
+     *
      * @return the semantic property
      */
     public SemanticProperty transformToSemanticProperty()
@@ -3246,18 +3271,18 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Transform to semantic class.
-     * 
+     *
      * @return the semantic class
      */
     public SemanticClass transformToSemanticClass()
     {
         SemanticClass ret = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(getURI());
         return ret;
-    }    
+    }
 
     /**
      * List related objects.
-     * 
+     *
      * @return the iterator
      */
     public Iterator<SemanticObject> listRelatedObjects()
@@ -3285,7 +3310,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * List herarquical childs.
-     * 
+     *
      * @return the iterator
      */
     public Iterator<SemanticObject> listHerarquicalChilds()
@@ -3307,7 +3332,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Checks for herarquical parents.
-     * 
+     *
      * @return true, if successful
      */
     public boolean hasHerarquicalParents()
@@ -3328,7 +3353,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * List herarquical parents.
-     * 
+     *
      * @return the iterator
      */
     public Iterator<SemanticObject> listHerarquicalParents()
@@ -3351,7 +3376,7 @@ public Document getDomProperty(SemanticProperty prop)
     /**
      * Clona un objeto y sus dependencias, el objeto hash sirve para
      * almacenar las dependencias clonadas.
-     * 
+     *
      * @return the semantic object
      * @return
      */
@@ -3408,10 +3433,10 @@ public Document getDomProperty(SemanticProperty prop)
         SWBPlatform.getSemanticMgr().notifyChange(ret, null, null, ACT_CLONE);
         return ret;
     }
-    
+
     /**
      * Gets the herarquical parent.
-     * 
+     *
      * @return the herarquical parent
      */
     public SemanticObject getHerarquicalParent()
@@ -3424,7 +3449,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Gets the work path.
-     * 
+     *
      * @return the work path
      */
     public String getWorkPath()
@@ -3437,7 +3462,7 @@ public Document getDomProperty(SemanticProperty prop)
     /**
      * Regresa todos los valores de la propiedad sin importar el idioma
      * Utilizado para la indexación del objeto.
-     * 
+     *
      * @param prop the prop
      * @return the property index data
      * @return
@@ -3458,17 +3483,17 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Regresa el valor de la propiedad rdfs:label del objeto.
-     * 
+     *
      * @return the label
      */
     public String getLabel()
     {
         return getLabel(null);
     }
-    
+
     /**
      * Regresa el valor de la propiedad rdfs:label del objeto.
-     * 
+     *
      * @param lang the lang
      * @return the label
      */
@@ -3479,7 +3504,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Regresa el valor de la propiedad rdfs:comment del objeto.
-     * 
+     *
      * @return the label
      */
     public String getComment()
@@ -3489,7 +3514,7 @@ public Document getDomProperty(SemanticProperty prop)
 
     /**
      * Regresa el valor de la propiedad rdfs:comment del objeto.
-     * 
+     *
      * @param lang the lang
      * @return the label
      */
@@ -3499,4 +3524,3 @@ public Document getDomProperty(SemanticProperty prop)
     }
 
 }
-

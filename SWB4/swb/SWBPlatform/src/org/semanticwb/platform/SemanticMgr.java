@@ -26,41 +26,18 @@
  */
 package org.semanticwb.platform;
 
-import com.hp.hpl.jena.db.DBConnection;
-import com.hp.hpl.jena.db.IDBConnection;
 import com.hp.hpl.jena.db.ModelRDB;
-import com.hp.hpl.jena.db.impl.Driver_Derby_SWB;
-import com.hp.hpl.jena.db.impl.Driver_HSQLDB_SWB;
-import com.hp.hpl.jena.db.impl.Driver_MsSQL2008_SWB;
-import com.hp.hpl.jena.db.impl.Driver_MsSQL_SWB;
-import com.hp.hpl.jena.db.impl.Driver_MySQL_SWB;
-import com.hp.hpl.jena.db.impl.Driver_Oracle_SWB;
-import com.hp.hpl.jena.db.impl.Driver_PostgreSQL_SWB;
-import com.hp.hpl.jena.db.impl.IRDBDriver;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.ModelMaker;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.sdb.SDBFactory;
-import com.hp.hpl.jena.sdb.StoreDesc;
-import com.hp.hpl.jena.sdb.Store;
-import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.rdf.model.NsIterator;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.rdf.model.impl.ModelCom;
-import com.hp.hpl.jena.sdb.layout1.StoreRDB;
-import com.hp.hpl.jena.sdb.sql.SDBConnection;
-import com.hp.hpl.jena.sdb.store.DatabaseType;
-import com.hp.hpl.jena.sdb.store.LayoutType;
-import com.hp.hpl.jena.sdb.store.StoreFactory;
-import com.hp.hpl.jena.sdb.store.StoreMaker;
-import com.hp.hpl.jena.tdb.TDB;
-import com.hp.hpl.jena.tdb.TDBFactory;
 import com.hp.hpl.jena.util.FileManager;
-import com.hp.hpl.jena.vocabulary.RDFS;
+import com.hp.hpl.jena.vocabulary.RDF;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -68,20 +45,20 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.base.db.DBConnectionPool;
+import org.semanticwb.rdf.AbstractStore;
 import org.semanticwb.rdf.GraphCached;
+import org.semanticwb.rdf.RDBStore;
 import org.semanticwb.rdf.RemoteGraph;
+import org.semanticwb.rdf.SDBStore;
+import org.semanticwb.rdf.TDBStore;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -138,6 +115,7 @@ public class SemanticMgr implements SWBInstanceObject
     public final static String SWBSystem = "SWBSystem";
     /** The Constant SWBAdmin. */
     public final static String SWBAdmin = "SWBAdmin";
+    public final static String SWBAdminURI = "http://www.semanticwb.org/SWBAdmin#";
     /** The Constant SWBOntEdit. */
     public final static String SWBOntEdit = "SWBOntEdit";
     /** The m_ontology. */
@@ -157,22 +135,15 @@ public class SemanticMgr implements SWBInstanceObject
     /** The Base Models. */
     private HashMap<String, SemanticModel> m_bmodels = null;
 
-    /** The conn. */
-    private IDBConnection conn;
-    /** The maker. */
-    private ModelMaker maker;
-    /** The Dataset */
-    private Dataset set;
-    /** The store. */
-    private Store store;
     /** The vocabulary. */
     private SemanticVocabulary vocabulary;
     /** The m_observers. */
     private List<SemanticObserver> m_observers = null;
     /** The codepkg. */
     private CodePackage codepkg = null;
-    /** The timer. */
-    private Timer timer;                        //Commiter
+
+    /** The Store **/
+    private AbstractStore store=null;
 
     /* (non-Javadoc)
      * @see org.semanticwb.platform.SWBInstanceObject#init()
@@ -273,80 +244,25 @@ public class SemanticMgr implements SWBInstanceObject
         useCache=Boolean.parseBoolean(SWBPlatform.getEnv("swb/tripleFullCache","false"));
         log.event("TripleFullCache:"+useCache);
 
-        //System.out.println("initializeDB");
-        DBConnectionPool pool = SWBUtils.DB.getDefaultPool();
-//        String M_DB_URL         = pool.getURL();
-//        String M_DB_USER        = pool.getUser();
-//        String M_DB_PASSWD      = pool.getPassword();
-        String M_DB = SWBUtils.DB.getDatabaseType(pool.getName());
-
-        if (SWBPlatform.isSDB()) {
-            try
-            {
-                //StoreDesc sd = new StoreDesc(LayoutType.LayoutTripleNodesHash, DatabaseType.fetch(M_DB));
-                StoreDesc sd = new StoreDesc(LayoutType.LayoutTripleNodesHash, DatabaseType.fetch(M_DB));
-                //SDBConnection con=new SDBConnection(M_DB_URL, M_DB_USER, M_DB_PASSWD);
-                SDBConnection con = new SDBConnection(SWBUtils.DB.getDefaultPool().newAutoConnection());
-                //SDBConnection con=new SDBConnection_SWB();
-
-                store = SDBFactory.connectStore(con, sd);
-                //Revisar si las tablas existen
-                List list = store.getConnection().getTableNames();
-                //System.out.println("list:"+list);
-        
-                if (!(list.contains("nodes") || list.contains("NODES") || list.contains("Nodes"))
-                        && !(list.contains("triples") || list.contains("TRIPLES") || list.contains("Triples"))
-                        && !(list.contains("quads") || list.contains("QUADS") || list.contains("Quads"))) //MAPS74 Oracle maneja los nombres en MAYUSCULAS, MySQL usa Capitalizados
-                {
-                    log.event("Formating Database Tables...");
-                    store.getTableFormatter().create();
-                }
-            }catch(Throwable e){log.error(e);}
-        } else if (SWBPlatform.isTDB()) {
-            log.info("TDB Detected...," + SWBPlatform.createInstance().getPlatformWorkPath() + "/data");
-            timer = new Timer();
-            timer.schedule(new TimerTask() {
-
-                @Override
-                public void run() {
-                    commit();
-                }
-            }, 60000, 30000);
-        } else {
-            // create a database connection
-            //conn = new DBConnection(M_DB_URL, M_DB_USER, M_DB_PASSWD, M_DB);
-
-            // Create database connection
-            conn = new DBConnection(SWBUtils.DB.getDefaultPool().newAutoConnection(), M_DB);
-
-            //System.out.println("DB:"+M_DB);
-
-            IRDBDriver driver = null;
-            if (M_DB.equals(SWBUtils.DB.DBTYPE_MySQL)) {
-                driver = new Driver_MySQL_SWB();
-            } else if (M_DB.equals(SWBUtils.DB.DBTYPE_Derby)) {
-                driver = new Driver_Derby_SWB();
-            } else if (M_DB.equals(SWBUtils.DB.DBTYPE_HSQLDB)) {
-                driver = new Driver_HSQLDB_SWB();
-            } //else if(M_DB.equals(SWBUtils.DB.DBTYPE_HSQL)){driver=new Driver_HSQL_SWB();}
-            else if (M_DB.equals(SWBUtils.DB.DBTYPE_MsSQL)) {
-                driver = new Driver_MsSQL_SWB();
-            } else if (M_DB.equals(SWBUtils.DB.DBTYPE_MsSQL2008)) {
-                driver = new Driver_MsSQL2008_SWB();
-            } else if (M_DB.equals(SWBUtils.DB.DBTYPE_Oracle)) {
-                driver = new Driver_Oracle_SWB();
-            } else if (M_DB.equals(SWBUtils.DB.DBTYPE_PostgreSQL)) {
-                driver = new Driver_PostgreSQL_SWB();
-            }
-
-            driver.setConnection(conn);
-            conn.setDriver(driver);
-            conn.getDriver().setTableNamePrefix("swb_");
-            conn.getDriver().setDoDuplicateCheck(false);
-
-            maker = ModelFactory.createModelRDBMaker(conn);
+        String clsname="org.semanticwb.rdf.RDBStore";
+        if (SWBPlatform.isSDB()) 
+        {
+            clsname="org.semanticwb.rdf.SDBStore";
+        } else if (SWBPlatform.isTDB())
+        {
+            clsname="org.semanticwb.rdf.TDBStore";
+        } else if (SWBPlatform.isBigdata())
+        {
+            clsname="org.semanticwb.bigdata.BigdataStore";
         }
+
+        try
+        {
+            Class cls=Class.forName(clsname);
+            store=(AbstractStore)cls.newInstance();
+        }catch(Exception e){log.error("Error Initializing Store",e);}
         //System.out.println("End initializeDB");
+        store.init();
     }
 
     /**
@@ -463,14 +379,7 @@ public class SemanticMgr implements SWBInstanceObject
             m = new SemanticModel(name, model);
             m.setNameSpace(baseNS);
             //TODO:notify this
-            m_models.put(name, m);
-            m_nsmodels.put(baseNS, m);
-            log.debug("Add NS:" + baseNS + " " + m.getName());
-            m_imodels.put(m.getRDFModel(), m);
-            //System.out.println("addModel:"+name+" hash:"+m.getRDFModel().toString());
-            if (add2Ontology) {
-                m_ontology.addSubModel(m, false);
-            }
+            addModel(m, add2Ontology);
         }
         return m;
     }
@@ -546,21 +455,7 @@ public class SemanticMgr implements SWBInstanceObject
      * @return the model
      */
     private Model loadRDFDBModel(String name) {
-        Model ret = null;
-        // create or open the default model
-        if (SWBPlatform.isSDB()) {
-            ret=set.getNamedModel(name);
-            //ret = SDBFactory.connectNamedModel(store, name);
-        } else if (SWBPlatform.isTDB()) {
-            ret=set.getNamedModel(name);
-            //ret = TDBFactory.createNamedModel(name, SWBPlatform.createInstance().getPlatformWorkPath() + "/data");
-            //System.out.println("loadRDFDBModel:"+name);
-        } else {
-            ret = maker.openModel(name);
-            ((ModelRDB) (ret)).setDoFastpath(false);
-            ((ModelRDB) (ret)).setQueryOnlyAsserted(true);
-        }
-        return ret;
+        return store.loadModel(name);
     }
 
 //    public void debugClasses(OntModel model)
@@ -609,16 +504,14 @@ public class SemanticMgr implements SWBInstanceObject
      * @see java.lang.Object#finalize()
      */
     @Override
-    public void finalize() {
-        log.event("SemanticMgr stoped...");
-        if (conn != null) {
-            try {
-                //Close the database connection        
-                conn.close();
-            } catch (Exception e) {
-                log.error(e);
-            }
+    public void finalize() throws Throwable
+    {
+        super.finalize();
+        if(store!=null)
+        {
+            store.close();
         }
+        log.event("SemanticMgr stoped...");
     }
 
     /**
@@ -678,36 +571,12 @@ public class SemanticMgr implements SWBInstanceObject
     {
         log.debug("loadDBModels");
         //LoadModels
-        if (SWBPlatform.isSDB()) {
-            set = SDBFactory.connectDataset(store);
-            Iterator<String> it = set.listNames();
-            while (it.hasNext()) {
-                String name = it.next();
-                log.trace("LoadingModel:" + name);
-                SemanticModel model = loadDBModel(name);
-                model.setDataset(set);
-            }
-            //set.close();
-        } else if (SWBPlatform.isTDB()) {
-            log.debug("TDB Path:"+SWBPlatform.createInstance().getPlatformWorkPath() + "/data");
-            TDB.getContext().set(TDB.symUnionDefaultGraph,true);
-            set = TDBFactory.createDataset(SWBPlatform.createInstance().getPlatformWorkPath() + "/data");
-            Iterator<String> it = set.listNames();
-            while (it.hasNext()) {
-                String name = it.next();
-                log.trace("LoadingModel:" + name);
-                //System.out.println("LoadingModel:"+name);
-                SemanticModel model = loadDBModel(name);
-                model.setDataset(set);
-            }
-            //set.close();
-        } else {
-            Iterator tpit = maker.listModels();
-            while (tpit.hasNext()) {
-                String name = (String) tpit.next();
-                log.trace("LoadingModel:" + name);
-                loadDBModel(name);
-            }
+        Iterator<String> it = store.listModelNames();
+        while (it.hasNext()) {
+            String name = it.next();
+            log.trace("LoadingModel:" + name);
+            SemanticModel model = loadDBModel(name);
+            model.setDataset(store.getDataset());
         }
     }
 
@@ -825,7 +694,7 @@ public class SemanticMgr implements SWBInstanceObject
         //Verificar si es una ontologia
         Resource res=model.getResource(model.getNsPrefixURI(name)+name);
         //System.out.println("uri:"+model.getNsPrefixURI(name)+name);
-        StmtIterator it=res.listProperties(model.getProperty(SemanticVocabulary.RDF_TYPE));
+        StmtIterator it=res.listProperties(RDF.type);
         while(it.hasNext())
         {
             Statement stm=it.next();
@@ -847,13 +716,19 @@ public class SemanticMgr implements SWBInstanceObject
 
         //TODO:notify this
         //System.out.println("Model:"+name);
-        m_models.put(name, m);
-        m_nsmodels.put(m.getNameSpace(), m);
-        log.debug("Add NS:" + m.getNameSpace() + " " + m.getName());
-        m_imodels.put(m.getRDFModel(), m);
-        //System.out.println("addModel:"+name+" hash:"+m.getRDFModel().toString());
-        m_ontology.addSubModel(m, false);
+        addModel(m, true);
         return m;
+    }
+
+    public void addModel(SemanticModel model, boolean add2Ontology)
+    {
+        m_models.put(model.getName(), model);
+        m_nsmodels.put(model.getNameSpace(), model);
+        log.debug("Add NS:" + model.getNameSpace() + " " + model.getName());
+        m_imodels.put(model.getRDFModel(), model);
+        if (add2Ontology) {
+            m_ontology.addSubModel(model, false);
+        }
     }
 
     /**
@@ -877,11 +752,14 @@ public class SemanticMgr implements SWBInstanceObject
      */
     public SemanticModel createDBModel(String name, String nameSpace, boolean cached) {
         //System.out.println("createModel:"+name+" "+nameSpace);
+        Model model = loadRDFDBModel(name);
+        model.setNsPrefix(name, nameSpace);
+        model.close();
+
         SemanticModel ret = loadDBModel(name, cached);
-        Model model = ret.getRDFModel();
+        model = ret.getRDFModel();
 //        model.setNsPrefix(name+"_"+SemanticVocabulary.SWB_NS, nameSpace);
 //        model.setNsPrefix(name, SemanticVocabulary.URI+SemanticVocabulary.SWB_NS);
-        model.setNsPrefix(name, nameSpace);
         //model.setNsPrefixes(m_schema.getRDFOntModel().getNsPrefixMap());
         return ret;
     }
@@ -911,17 +789,16 @@ public class SemanticMgr implements SWBInstanceObject
         SemanticModel ret = createModel(name, namespace);
         Model model = ret.getRDFModel();
         try {
-            if (model instanceof ModelRDB) {
-                ModelRDB m = (ModelRDB) model;
+            if (model.supportsTransactions()) {
                 try {
                     //m.setDoDuplicateCheck( false );
-                    m.begin();
-                    m.read(in, null, lang);
+                    model.begin();
+                    model.read(in, null, lang);
                     in.close();
                 } catch (Exception e) {
                     log.error(e);
                 } finally {
-                    m.commit();
+                    model.commit();
                     //m.setDoDuplicateCheck(true);
                 }
             } else {
@@ -950,13 +827,8 @@ public class SemanticMgr implements SWBInstanceObject
         m_nsmodels.remove(model.getNameSpace());
         m_imodels.remove(model.getRDFModel());
         m_ontology.removeSubModel(model, true);
-        if (SWBPlatform.isSDB()) {
-            model.getRDFModel().removeAll();
-        } else if (SWBPlatform.isTDB()) {
-            model.getRDFModel().removeAll();
-        } else {
-            maker.removeModel(name);
-        }
+
+        store.removeModel(name);
     }
 
     /**
@@ -1072,7 +944,7 @@ public class SemanticMgr implements SWBInstanceObject
      */
     public void processExternalChange(String uri, String puri, String lang, String action)
     {
-        System.out.println("processExternalChange");
+        //System.out.println("processExternalChange");
         SemanticProperty prop=null;
         if(puri!=null)prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(puri);
 
@@ -1155,35 +1027,12 @@ public class SemanticMgr implements SWBInstanceObject
     }
 
     /**
-     * Commit all models.
-     */
-    public void commit() {
-        log.trace("ServerMgr.Commit()");
-        try {
-            Iterator<SemanticModel> it = m_models.values().iterator();
-            while (it.hasNext()) {
-                SemanticModel model = it.next();
-                model.getRDFModel().commit();
-            }
-        } catch (ConcurrentModificationException noe) {
-        } catch (Exception e) {
-            log.error(e);
-        }
-    }
-
-    /**
      * Close all models.
      */
     public void close() {
         //System.out.println("ServerMgr.Close()");
-        Iterator<SemanticModel> it = m_models.values().iterator();
-        while (it.hasNext()) {
-            SemanticModel model = it.next();
-            model.getRDFModel().commit();
-            model.getRDFModel().close();
-        }
-        timer.cancel();
-        timer=null;
+        store.close();
+        store=null;
     }
 
     /**
@@ -1200,8 +1049,8 @@ public class SemanticMgr implements SWBInstanceObject
         SemanticModel model = getModel(SWBAdmin);
         if (null!=model && null!=model.getModelObject()){
             String[] llaves = SWBUtils.CryptoWrapper.storableKP();
-            SemanticProperty priv = model.createSemanticProperty(SWBAdmin + "/PrivateKey", model.getModelObject().getSemanticClass(), SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_STRING);
-            SemanticProperty publ = model.createSemanticProperty(SWBAdmin + "/PublicKey", model.getModelObject().getSemanticClass(), SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_STRING);
+            SemanticProperty priv = model.createSemanticProperty(SWBAdminURI + "/PrivateKey", model.getModelObject().getSemanticClass(), SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_STRING);
+            SemanticProperty publ = model.createSemanticProperty(SWBAdminURI + "/PublicKey", model.getModelObject().getSemanticClass(), SemanticVocabulary.OWL_DATATYPEPROPERTY, SemanticVocabulary.XMLS_STRING);
             model.getModelObject().setProperty(priv, llaves[0]);
             model.getModelObject().setProperty(publ, llaves[1]);
         }

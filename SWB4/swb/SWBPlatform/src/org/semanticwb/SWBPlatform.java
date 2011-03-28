@@ -101,6 +101,9 @@ public class SWBPlatform
     /** The Constant PRESIST_TYPE_TDB. */
     public final static String PRESIST_TYPE_TDB="tdb";
 
+    /** The Constant PRESIST_TYPE_TDB. */
+    public final static String PRESIST_TYPE_BIGDATA="bigdata";
+
     /** The persistence type. */
     private static String persistenceType=PRESIST_TYPE_DEFAULT;
 
@@ -333,6 +336,9 @@ public class SWBPlatform
         }else if(PRESIST_TYPE_TDB.equalsIgnoreCase(persistenceType))
         {
             SWBPlatform.persistenceType = PRESIST_TYPE_TDB;
+        }else if(PRESIST_TYPE_BIGDATA.equalsIgnoreCase(persistenceType))
+        {
+            SWBPlatform.persistenceType = PRESIST_TYPE_BIGDATA;
         }else
         {
             SWBPlatform.persistenceType=persistenceType;
@@ -821,6 +827,16 @@ public class SWBPlatform
     public static boolean isTDB()
     {
         return persistenceType==PRESIST_TYPE_TDB;
+    }
+
+    /**
+     * Checks if is tDB.
+     *
+     * @return true, if is tDB
+     */
+    public static boolean isBigdata()
+    {
+        return persistenceType==PRESIST_TYPE_BIGDATA;
     }
 
     /**
