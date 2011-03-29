@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Define una campaña de recursos o componentes de SemanticWebBuilder (No usada de momento) 
    */
-public abstract class CampBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Roleable,org.semanticwb.model.Ruleable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Activeable
+public abstract class CampBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Ruleable,org.semanticwb.model.Roleable,org.semanticwb.model.Traceable
 {
    /**
    * Define una campaña de recursos o componentes de SemanticWebBuilder (No usada de momento)
@@ -85,29 +85,6 @@ public abstract class CampBase extends org.semanticwb.model.SWBClass implements 
             return (getCamp(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.model.Camp with a determined ModifiedBy
-       * @param value ModifiedBy of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.model.Camp
-       * @return Iterator with all the org.semanticwb.model.Camp
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.Camp> listCampByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Camp> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.Camp with a determined ModifiedBy
-       * @param value ModifiedBy of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.model.Camp
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.Camp> listCampByModifiedBy(org.semanticwb.model.User value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Camp> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.model.Camp with a determined Rule
        * @param value Rule of the type org.semanticwb.model.Rule
        * @param model Model of the org.semanticwb.model.Camp
@@ -131,29 +108,6 @@ public abstract class CampBase extends org.semanticwb.model.SWBClass implements 
             return it;
         }
        /**
-       * Gets all org.semanticwb.model.Camp with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.model.Camp
-       * @return Iterator with all the org.semanticwb.model.Camp
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.Camp> listCampByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Camp> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.Camp with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.model.Camp
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.Camp> listCampByCreator(org.semanticwb.model.User value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Camp> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.model.Camp with a determined CalendarRef
        * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
        * @param model Model of the org.semanticwb.model.Camp
@@ -174,6 +128,52 @@ public abstract class CampBase extends org.semanticwb.model.SWBClass implements 
         public static java.util.Iterator<org.semanticwb.model.Camp> listCampByCalendarRef(org.semanticwb.model.CalendarRef value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.Camp> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.Camp with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.model.Camp
+       * @return Iterator with all the org.semanticwb.model.Camp
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.Camp> listCampByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Camp> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.Camp with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.model.Camp
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.Camp> listCampByModifiedBy(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Camp> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.Camp with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.model.Camp
+       * @return Iterator with all the org.semanticwb.model.Camp
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.Camp> listCampByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Camp> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.Camp with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.model.Camp
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.Camp> listCampByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Camp> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -208,6 +208,154 @@ public abstract class CampBase extends org.semanticwb.model.SWBClass implements 
     public CampBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+   /**
+   * Gets all the org.semanticwb.model.Rule
+   * @return A GenericIterator with all the org.semanticwb.model.Rule
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule> listRules()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule>(getSemanticObject().listObjectProperties(swb_hasRule));
+    }
+
+   /**
+   * Gets true if has a Rule
+   * @param value org.semanticwb.model.Rule to verify
+   * @return true if the org.semanticwb.model.Rule exists, false otherwise
+   */
+    public boolean hasRule(org.semanticwb.model.Rule value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasRule,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a Rule
+   * @param value org.semanticwb.model.Rule to add
+   */
+
+    public void addRule(org.semanticwb.model.Rule value)
+    {
+        getSemanticObject().addObjectProperty(swb_hasRule, value.getSemanticObject());
+    }
+   /**
+   * Removes all the Rule
+   */
+
+    public void removeAllRule()
+    {
+        getSemanticObject().removeProperty(swb_hasRule);
+    }
+   /**
+   * Removes a Rule
+   * @param value org.semanticwb.model.Rule to remove
+   */
+
+    public void removeRule(org.semanticwb.model.Rule value)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasRule,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the Rule
+   * @return a org.semanticwb.model.Rule
+   */
+    public org.semanticwb.model.Rule getRule()
+    {
+         org.semanticwb.model.Rule ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRule);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Rule)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
+* Gets the Active property
+* @return boolean with the Active
+*/
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(swb_active);
+    }
+
+/**
+* Sets the Active property
+* @param value long with the Active
+*/
+    public void setActive(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_active, value);
+    }
+   /**
+   * Gets all the org.semanticwb.model.CalendarRef
+   * @return A GenericIterator with all the org.semanticwb.model.CalendarRef
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.CalendarRef> listCalendarRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.CalendarRef>(getSemanticObject().listObjectProperties(swb_hasCalendarRef));
+    }
+
+   /**
+   * Gets true if has a CalendarRef
+   * @param value org.semanticwb.model.CalendarRef to verify
+   * @return true if the org.semanticwb.model.CalendarRef exists, false otherwise
+   */
+    public boolean hasCalendarRef(org.semanticwb.model.CalendarRef value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasCalendarRef,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a CalendarRef
+   * @param value org.semanticwb.model.CalendarRef to add
+   */
+
+    public void addCalendarRef(org.semanticwb.model.CalendarRef value)
+    {
+        getSemanticObject().addObjectProperty(swb_hasCalendarRef, value.getSemanticObject());
+    }
+   /**
+   * Removes all the CalendarRef
+   */
+
+    public void removeAllCalendarRef()
+    {
+        getSemanticObject().removeProperty(swb_hasCalendarRef);
+    }
+   /**
+   * Removes a CalendarRef
+   * @param value org.semanticwb.model.CalendarRef to remove
+   */
+
+    public void removeCalendarRef(org.semanticwb.model.CalendarRef value)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasCalendarRef,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the CalendarRef
+   * @return a org.semanticwb.model.CalendarRef
+   */
+    public org.semanticwb.model.CalendarRef getCalendarRef()
+    {
+         org.semanticwb.model.CalendarRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasCalendarRef);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.CalendarRef)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**
@@ -317,89 +465,6 @@ public abstract class CampBase extends org.semanticwb.model.SWBClass implements 
         getSemanticObject().setDateProperty(swb_updated, value);
     }
    /**
-   * Gets all the org.semanticwb.model.Rule
-   * @return A GenericIterator with all the org.semanticwb.model.Rule
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule> listRules()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule>(getSemanticObject().listObjectProperties(swb_hasRule));
-    }
-
-   /**
-   * Gets true if has a Rule
-   * @param value org.semanticwb.model.Rule to verify
-   * @return true if the org.semanticwb.model.Rule exists, false otherwise
-   */
-    public boolean hasRule(org.semanticwb.model.Rule value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(swb_hasRule,value.getSemanticObject());
-        }
-        return ret;
-    }
-   /**
-   * Adds a Rule
-   * @param value org.semanticwb.model.Rule to add
-   */
-
-    public void addRule(org.semanticwb.model.Rule value)
-    {
-        getSemanticObject().addObjectProperty(swb_hasRule, value.getSemanticObject());
-    }
-   /**
-   * Removes all the Rule
-   */
-
-    public void removeAllRule()
-    {
-        getSemanticObject().removeProperty(swb_hasRule);
-    }
-   /**
-   * Removes a Rule
-   * @param value org.semanticwb.model.Rule to remove
-   */
-
-    public void removeRule(org.semanticwb.model.Rule value)
-    {
-        getSemanticObject().removeObjectProperty(swb_hasRule,value.getSemanticObject());
-    }
-
-   /**
-   * Gets the Rule
-   * @return a org.semanticwb.model.Rule
-   */
-    public org.semanticwb.model.Rule getRule()
-    {
-         org.semanticwb.model.Rule ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRule);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.Rule)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-/**
-* Gets the Active property
-* @return boolean with the Active
-*/
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(swb_active);
-    }
-
-/**
-* Sets the Active property
-* @param value long with the Active
-*/
-    public void setActive(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swb_active, value);
-    }
-   /**
    * Sets the value for the property Creator
    * @param value Creator to set
    */
@@ -434,71 +499,6 @@ public abstract class CampBase extends org.semanticwb.model.SWBClass implements 
          if(obj!=null)
          {
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
-    }
-   /**
-   * Gets all the org.semanticwb.model.CalendarRef
-   * @return A GenericIterator with all the org.semanticwb.model.CalendarRef
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.CalendarRef> listCalendarRefs()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.CalendarRef>(getSemanticObject().listObjectProperties(swb_hasCalendarRef));
-    }
-
-   /**
-   * Gets true if has a CalendarRef
-   * @param value org.semanticwb.model.CalendarRef to verify
-   * @return true if the org.semanticwb.model.CalendarRef exists, false otherwise
-   */
-    public boolean hasCalendarRef(org.semanticwb.model.CalendarRef value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(swb_hasCalendarRef,value.getSemanticObject());
-        }
-        return ret;
-    }
-   /**
-   * Adds a CalendarRef
-   * @param value org.semanticwb.model.CalendarRef to add
-   */
-
-    public void addCalendarRef(org.semanticwb.model.CalendarRef value)
-    {
-        getSemanticObject().addObjectProperty(swb_hasCalendarRef, value.getSemanticObject());
-    }
-   /**
-   * Removes all the CalendarRef
-   */
-
-    public void removeAllCalendarRef()
-    {
-        getSemanticObject().removeProperty(swb_hasCalendarRef);
-    }
-   /**
-   * Removes a CalendarRef
-   * @param value org.semanticwb.model.CalendarRef to remove
-   */
-
-    public void removeCalendarRef(org.semanticwb.model.CalendarRef value)
-    {
-        getSemanticObject().removeObjectProperty(swb_hasCalendarRef,value.getSemanticObject());
-    }
-
-   /**
-   * Gets the CalendarRef
-   * @return a org.semanticwb.model.CalendarRef
-   */
-    public org.semanticwb.model.CalendarRef getCalendarRef()
-    {
-         org.semanticwb.model.CalendarRef ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasCalendarRef);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.CalendarRef)obj.createGenericInstance();
          }
          return ret;
     }

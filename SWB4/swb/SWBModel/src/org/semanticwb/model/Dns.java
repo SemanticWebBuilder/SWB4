@@ -32,6 +32,8 @@ import org.semanticwb.platform.SemanticObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
+import org.semanticwb.platform.SemanticObserver;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -40,7 +42,18 @@ import java.util.Iterator;
 public class Dns extends DnsBase {
     
     /** The names. */
-    private static HashMap<String, Dns> names = null;
+    private static ConcurrentHashMap<String, Dns> names = null;
+
+    static
+    {
+        sclass.registerObserver(new SemanticObserver() {
+
+            public void notify(SemanticObject obj, Object prop, String lang, String action)
+            {
+                names=null;
+            }
+        });
+    }
 
     /**
      * Instantiates a new dns.
@@ -73,13 +86,12 @@ public class Dns extends DnsBase {
      * Refresh.
      */
     synchronized public static void refresh() {
-        names = new HashMap();
-
+        names = new ConcurrentHashMap();
         Iterator<Dns> it = ClassMgr.listDnses();
 
-        while (it.hasNext()) {
+        while (it.hasNext())
+        {
             Dns dns = it.next();
-
             names.put(dns.getDns(), dns);
         }
     }
@@ -94,7 +106,6 @@ public class Dns extends DnsBase {
         if (names == null) {
             refresh();
         }
-
         return names.get(serverName);
     }
 
@@ -106,6 +117,9 @@ public class Dns extends DnsBase {
      */
     public static void cacheDns(String serverName, Dns dns)
     {
+        if (names == null) {
+            refresh();
+        }
         names.put(serverName, dns);
     }
 
@@ -117,6 +131,9 @@ public class Dns extends DnsBase {
      */
     public static boolean containsDns(String serverName)
     {
+        if (names == null) {
+            refresh();
+        }
         return names.containsKey(serverName);
     }
 }

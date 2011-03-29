@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Un recurso es un componente en una Página Web con el cual el usuario tiene interacción 
    */
-public abstract class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Searchable,org.semanticwb.model.Tagable,org.semanticwb.model.Localeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Campable,org.semanticwb.model.Countryable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Sortable,org.semanticwb.model.Deviceable,org.semanticwb.model.Indexable,org.semanticwb.model.Trashable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.XMLable,org.semanticwb.model.Activeable,org.semanticwb.model.Expirable,org.semanticwb.model.XMLConfable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Hitable,org.semanticwb.model.Viewable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Priorityable,org.semanticwb.model.Filterable
+public abstract class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Expirable,org.semanticwb.model.Localeable,org.semanticwb.model.Tagable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Hitable,org.semanticwb.model.Indexable,org.semanticwb.model.Sortable,org.semanticwb.model.Searchable,org.semanticwb.model.Priorityable,org.semanticwb.model.Trashable,org.semanticwb.model.Campable,org.semanticwb.model.Countryable,org.semanticwb.model.Viewable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Activeable,org.semanticwb.model.XMLable,org.semanticwb.model.Deviceable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Traceable
 {
    /**
    * Objeto por el cual se define un filtro para que un recurso o componente se pueda presentar o no dentro de la estructura del sitio
@@ -683,6 +683,21 @@ public abstract class ResourceBase extends org.semanticwb.model.SWBClass impleme
     public void setTags(String value)
     {
         getSemanticObject().setProperty(swb_tags, value);
+    }
+
+    public String getTags(String lang)
+    {
+        return getSemanticObject().getProperty(swb_tags, null, lang);
+    }
+
+    public String getDisplayTags(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_tags, lang);
+    }
+
+    public void setTags(String tags, String lang)
+    {
+        getSemanticObject().setProperty(swb_tags, tags, lang);
     }
 
 /**
