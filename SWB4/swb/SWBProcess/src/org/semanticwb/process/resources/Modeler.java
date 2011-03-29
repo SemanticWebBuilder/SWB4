@@ -560,7 +560,7 @@ public class Modeler extends GenericResource {
                     try {
                         description = json.getString(PROP_DESCRIPTION);
                     } catch (Exception e) {
-                        description=null;
+                        description="";
                     }
                         
                     try {
@@ -609,7 +609,7 @@ public class Modeler extends GenericResource {
                             ge = (GraphicalElement) go;
                             if(!ge.getTitle().equals(title))
                                 ge.setTitle(title);
-                            if(null!=description&&!ge.getDescription().equals(description))
+                            if(null!=description&&ge.getDescription()!=null&&!ge.getDescription().equals(description))
                                 ge.setDescription(description);
 
                             //isMultiInstance = false, isLoop = false, isForCompensation = false,
@@ -730,7 +730,7 @@ public class Modeler extends GenericResource {
                     try {
                         description = json.getString(PROP_DESCRIPTION);
                     } catch (Exception e) {
-                        description=null;
+                        description="";
                     }
 
                     if (hmori.get(uri) != null) 
@@ -740,7 +740,7 @@ public class Modeler extends GenericResource {
                         if(!co.getTitle().equals(title))
                             co.setTitle(title);
 
-                        if(null!=description&&!co.getDescription().equals(description))
+                        if(null!=description&&co.getDescription()!=null&&!co.getDescription().equals(description))
                             co.setDescription(description);
                         
                         if(!co.getSource().getURI().equals(start))
