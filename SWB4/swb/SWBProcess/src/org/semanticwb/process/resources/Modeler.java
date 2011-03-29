@@ -263,7 +263,7 @@ public class Modeler extends GenericResource {
                 ele.put(PROP_CLASS, obj.getSemanticObject().getSemanticClass().getClassCodeName());
                 ele.put(PROP_TITLE, obj.getTitle());
 
-                if(obj.getDescription()==null) obj.setDescription("");
+                //if(obj.getDescription()==null) obj.setDescription("");
 
                 ele.put(PROP_DESCRIPTION, obj.getDescription());
                 ele.put(PROP_URI, obj.getURI());
@@ -334,7 +334,7 @@ public class Modeler extends GenericResource {
                 ele.put(PROP_CLASS, obj.getSemanticObject().getSemanticClass().getClassCodeName());
                 ele.put(PROP_TITLE, obj.getTitle());
 
-                if(obj.getDescription()==null) obj.setDescription("");
+                //if(obj.getDescription()==null) obj.setDescription("");
 
                 ele.put(PROP_DESCRIPTION, obj.getDescription());
                 ele.put(PROP_URI, obj.getURI());
@@ -615,7 +615,7 @@ public class Modeler extends GenericResource {
                             ge = (GraphicalElement) go;
                             if(!ge.getTitle().equals(title))
                                 ge.setTitle(title);
-                            if(null!=description&&ge.getDescription()!=null&&!ge.getDescription().equals(description))
+                            if((null!=description&&ge.getDescription()!=null&&!ge.getDescription().equals(description))||(null!=description&&ge.getDescription()==null))
                                 ge.setDescription(description);
 
                             //isMultiInstance = false, isLoop = false, isForCompensation = false,
@@ -746,7 +746,7 @@ public class Modeler extends GenericResource {
                         if(!co.getTitle().equals(title))
                             co.setTitle(title);
 
-                        if(null!=description&&co.getDescription()!=null&&!co.getDescription().equals(description))
+                        if((null!=description&&co.getDescription()!=null&&!co.getDescription().equals(description))||(null!=description&&co.getDescription()==null))
                             co.setDescription(description);
                         
                         if(!co.getSource().getURI().equals(start))
