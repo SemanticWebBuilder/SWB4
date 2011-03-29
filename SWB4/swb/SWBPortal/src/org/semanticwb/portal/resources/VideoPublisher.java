@@ -53,45 +53,54 @@ public class VideoPublisher extends GenericAdmResource {
         Resource base = getResourceBase();
         PrintWriter out = response.getWriter();
 
-        String code = base.getAttribute("code");
-        if( code!=null && !code.trim().equals("") ) {
-            out.println(code);
+        String youtube = base.getAttribute("code");
+        String google =  base.getAttribute("google");
+        int width;
+        try {
+            width = Integer.parseInt(base.getAttribute("width", "320"));
+        }catch(NumberFormatException nfe) {
+            width = 320;
+        }
+        int height;
+        try {
+            height = Integer.parseInt(base.getAttribute("height", "240"));
+        }catch(NumberFormatException nfe) {
+            height = 240;
+        }
+        
+        if(youtube!=null && !youtube.trim().equals("")) {
+            out.println(youtube);
+        }else if(google!=null && !google.trim().equals("")) {
+            String bgcolor = base.getAttribute("bgcolor")==null?"#ffffff":base.getAttribute("bgcolor");
+            out.println("<object id=\"video_"+base.getId()+"\" width=\""+width+"\" height=\""+height+"\" type=\"application/x-shockwave-flash\" data=\"http://video.google.com/googleplayer.swf?docId="+google+"\">");
+            out.println("<param name=\"allowscriptAccess\" value=\"never\" />");
+            out.println("<param name=\"movie\" value=\"http://video.google.com/googleplayer.swf?docId="+google+"\"/>");
+            out.println("<param name=\"quality\" value=\"best\"/>");
+            out.println("<param name=\"bgcolor\" value=\""+bgcolor+"\" />");
+            out.println("<param name=\"scale\" value=\"noScale\" />");
+            out.println("<param name=\"wmode\" value=\"window\"/>");
+            out.println("</object>");
         }else {
             final String webWorkPath = SWBPortal.getWebWorkPath()+base.getWorkPath()+"/";
 
             String clsid, codebase;
             String filename = webWorkPath + base.getAttribute("video");
             String img = base.getAttribute("preview")==null?null : webWorkPath+base.getAttribute("preview");
-
-            int width;
-            try {
-                width = Integer.parseInt(base.getAttribute("width", "320"));
-            }catch(NumberFormatException nfe) {
-                width = 320;
-            }
-            int height;
-            try {
-                height = Integer.parseInt(base.getAttribute("height", "240"));
-            }catch(NumberFormatException nfe) {
-                height = 240;
-            }
-
-            String bgcolor = base.getAttribute("bgcolor")==null?"":" style=\"background-color:"+base.getAttribute("bgcolor")+"\" ";
-            String viewer = base.getAttribute("viewer","#000000").replaceFirst("#", "");
-            String gradient = base.getAttribute("gradient","#696969").replaceFirst("#", "");
-            String panel = base.getAttribute("panel","#696969").replaceFirst("#", "");
-            String control = base.getAttribute("control","#ffd700").replaceFirst("#", "");
-            String over = base.getAttribute("over","#ff4500").replaceFirst("#", "");
-            String slider = base.getAttribute("slider","#ffd700").replaceFirst("#", "");
-
-            String align = base.getAttribute("align")==null?"":" align=\""+base.getAttribute("align")+"\"";
             String standby = base.getAttribute("standby", "Loading Microsoft Windows Media Player components...");
             String automatic = base.getAttribute("automatic","0");
             String controls = base.getAttribute("controls","0");
             String loop = base.getAttribute("loop","0");
+            String bgcolor = base.getAttribute("bgcolor")==null?"":" style=\"background-color:"+base.getAttribute("bgcolor")+"\" ";
 
             if(filename.endsWith(".flv")) {
-                out.println("<object id=\"video_"+base.getId()+"\" type=\"application/x-shockwave-flash\" data=\""+SWBPlatform.getContextPath()+"/swbadmin/player_flv_maxi.swf\" width=\""+(width+20)+"\" height=\""+(height+10)+"\" "+align + bgcolor+">");
+                String viewer = base.getAttribute("viewer","#000000").replaceFirst("#", "");
+                String gradient = base.getAttribute("gradient","#696969").replaceFirst("#", "");
+                String panel = base.getAttribute("panel","#696969").replaceFirst("#", "");
+                String control = base.getAttribute("control","#ffd700").replaceFirst("#", "");
+                String over = base.getAttribute("over","#ff4500").replaceFirst("#", "");
+                String slider = base.getAttribute("slider","#ffd700").replaceFirst("#", "");
+
+                out.println("<object id=\"video_"+base.getId()+"\" type=\"application/x-shockwave-flash\" data=\""+SWBPlatform.getContextPath()+"/swbadmin/player_flv_maxi.swf\" width=\""+width+"\" height=\""+height+"\" "+ bgcolor+">");
                 out.println(" <param name=\"movie\" value=\""+SWBPlatform.getContextPath()+"/swbadmin/player_flv_maxi.swf\" />");
                 out.println(" <param name=\"allowFullScreen\" value=\"true\" />");
                 out.println(" <param name=\"FlashVars\" value=\"flv="+filename+"&amp;width="+width+"&amp;height="+height+"&amp;showstop=1&amp;showvolume=1&amp;showtime=1");
@@ -99,35 +108,21 @@ public class VideoPublisher extends GenericAdmResource {
                     out.println("&amp;startimage="+img);
                 out.println("&amp;showfullscreen=1&amp;bgcolor1="+viewer+"&amp;bgcolor2="+gradient+"&amp;playercolor="+panel+"&amp;buttoncolor="+control+"&amp;buttonovercolor="+over+"&amp;slidercolor1="+slider+"\" />");
                 out.println("</object>");
-
-
-//                clsid = "clsid:d27cdb6e-ae6d-11cf-96b8-444553540000";
-//                codebase = "http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0";
-//                out.println("<object id=\"video_"+base.getId()+"\" class=\"swb-video\" classid=\""+clsid+"\" codebase=\""+codebase+"\" width=\""+width+"\" height=\""+height+"\" align=\""+align+"\">");
-//                out.println("  <param name=\"allowScriptAccess\" value=\"sameDomain\">");
-//                out.println("  <param name=\"movie\" value=\""+SWBPlatform.getContextPath()+"/swbutil/player_flv_maxi.swf?&flv="+filename+"\">");
-//                out.println("  <param name=\"quality\" value=\"high\">");
-//                out.println("  <param name=\"bgcolor\" value=\"#ffffff\">");
-//                out.println("  <param name=\"allowFullScreen\" value=\"true\">");
-//                out.println("  <embed src=\""+SWBPlatform.getContextPath()+"/swbadmin/player_flv_maxi.swf?&flv="+filename+"\" quality=\"high\" align=\""+align+"\" bgcolor=\"#ffffff\" width=\""+width+"\" height=\""+height+"\" allowFullScreen=\"true\" allowScriptAccess=\"sameDomain\" type=\"application/x-shockwave-flash\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\">");
-//                out.println(" </embed>");
-//                out.println("</object>");
             }else if (filename.endsWith(".swf")) {
                 clsid = "clsid:d27cdb6e-ae6d-11cf-96b8-444553540000";
                 codebase = "http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0";
 
-                out.println("<object id=\"video_"+base.getId()+"\" class=\"swb-video\" classid=\""+clsid+"\" codebase=\""+codebase+"\" width=\""+width+"\" height=\""+height+"\" "+align + bgcolor+">");
+                out.println("<object id=\"video_"+base.getId()+"\" class=\"swb-video\" classid=\""+clsid+"\" codebase=\""+codebase+"\" width=\""+width+"\" height=\""+height+"\" "+ bgcolor+">");
                 out.println("  <param name=\"allowScriptAccess\" value=\"sameDomain\"/>");
                 out.println("  <param name=\"movie\" value=\""+filename+"\"/>");
                 out.println("  <param name=\"quality\" value=\"high\"/>");
                 out.println("  <param name=\"bgcolor\" value=\"#ffffff\"/>");
                 out.println("  <embed id=\"embed_"+base.getId()+"\" src=\""+filename+"\" quality=\"high\" width=\""+width+"\" height=\""+height+"\" allowScriptAccess=\"sameDomain\" type=\"application/x-shockwave-flash\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\"></embed>");
                 out.println("</object>");
-
             }else if (filename.endsWith(".avi")) {
                 clsid = "clsid:22d6f312-b0f6-11d0-94ab-0080c74c7e95";
                 codebase = "http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=5,1,52,701";
-                out.println("<object id=\"video_"+base.getId()+"\" class=\"swb-video\" classid=\""+clsid+"\" codebase=\""+codebase+"\" width=\""+width+"\" height=\""+height+"\" standby=\""+standby+"\" type=\"application/x-oleobject\" "+align + bgcolor+">");
+                out.println("<object id=\"video_"+base.getId()+"\" class=\"swb-video\" classid=\""+clsid+"\" codebase=\""+codebase+"\" width=\""+width+"\" height=\""+height+"\" standby=\""+standby+"\" type=\"application/x-oleobject\" "+ bgcolor+">");
                 out.println("  <param name=\"fileName\" value=\""+filename+"\"/>");
                 out.println("  <param name=\"animationatStart\" value=\"true\"/>");
                 out.println("  <param name=\"transparentatStart\" value=\"true\"/>");
@@ -142,7 +137,7 @@ public class VideoPublisher extends GenericAdmResource {
             }else if (filename.endsWith(".wmv")) {
                 clsid = "clsid:22d6f312-b0f6-11d0-94ab-0080c74c7e95";
                 codebase = "http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=5,1,52,701";
-                out.println("<object id=\"video_"+base.getId()+"\" class=\"swb-video\" classid=\""+clsid+"\" codebase=\""+codebase+"\" width=\""+width+"\" height=\""+height+"\" standby=\""+standby+"\" type=\"application/x-oleobject\" "+align + bgcolor+">");
+                out.println("<object id=\"video_"+base.getId()+"\" class=\"swb-video\" classid=\""+clsid+"\" codebase=\""+codebase+"\" width=\""+width+"\" height=\""+height+"\" standby=\""+standby+"\" type=\"application/x-oleobject\" "+ bgcolor+">");
                 out.println("  <param name=\"fileName\" value=\""+filename+"\"/>");
                 out.println("  <param name=\"animationatStart\" value=\"true\"/>");
                 out.println("  <param name=\"transparentatStart\" value=\"true\"/>");
@@ -157,14 +152,15 @@ public class VideoPublisher extends GenericAdmResource {
             }else if (filename.endsWith(".mov")) {
                 clsid = "clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B";
                 codebase = "http://www.apple.com/qtactivex/qtplugin.cab";
-                out.println("<object id=\"video_"+base.getId()+"\" class=\"swb-video\" classid=\""+clsid+"\" codebase=\""+codebase+"\" width=\""+width+"\" height=\""+height+"\" "+align + bgcolor+">");
+                out.println("<object id=\"video_"+base.getId()+"\" class=\"swb-video\" classid=\""+clsid+"\" codebase=\""+codebase+"\" width=\""+width+"\" height=\""+height+"\" "+ bgcolor+">");
                 out.println("  <param name=\"src\" value=\""+filename+"\"/>");
                 out.println("  <param name=\"autoplay\" value=\""+automatic+"\"/>");
                 out.println("  <param name=\"controller\" value=\""+controls+"\"/>");
                 out.println("  <param name=\"loop\" value=\""+loop+"\"/>");
-out.println("<param name=\"controls\" value=\"ImageWindow\">");
-out.println("<param name=\"console\" value=\"video\">");
-out.println("<param name=\"controls\" value=\"ControlPanel\">");
+                if(controls.equals("1")) {
+                    out.println("<param name=\"console\" value=\"video\">");
+                    out.println("<param name=\"controls\" value=\"ControlPanel\">");
+                }
                 out.println("  <embed id=\"embed_"+base.getId()+"\" src=\""+filename+"\" width=\""+width+"\" height=\""+height+"\" autostart=\""+automatic+"\" controller=\""+controls+"\" loop=\""+loop+"\" pluginspage=\"http://www.apple.com/quicktime/download/\">");
                 out.println("  </embed>");
                 out.println("</object>");
@@ -172,7 +168,7 @@ out.println("<param name=\"controls\" value=\"ControlPanel\">");
             }else if (filename.endsWith(".rm")) {
                 clsid = "clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA";
                 codebase = "";
-                out.println("<object id=\"video_"+base.getId()+"\" class=\"swb-video\" classid=\""+clsid+"\" width=\""+width+"\" height=\""+height+"\" "+align + bgcolor+">");
+                out.println("<object id=\"video_"+base.getId()+"\" class=\"swb-video\" classid=\""+clsid+"\" width=\""+width+"\" height=\""+height+"\" "+ bgcolor+">");
                 out.println("  <param name=\"src\" value=\""+filename+"\"/>");
                 out.println("  <param name=\"autostart\" value=\""+automatic+"\"/>");
                 out.println("  <param name=\"controls\" value=\"imagewindow\"/>");
@@ -181,7 +177,7 @@ out.println("<param name=\"controls\" value=\"ControlPanel\">");
                 out.println("  <embed id=\"embed_"+base.getId()+"\" src=\""+filename+"\" width=\""+width+"\" height=\""+height+"\" loop=\""+loop+"\" type=\"audio/x-pn-realaudio-plugin\" controls=\"imagewindow\" console=\"video\" autostart=\""+automatic+"\">");
                 out.println("  </embed>");
                 out.println("</object>");
-                out.println("<object id=\"rmctrl_"+base.getId()+"\" classid=\""+clsid+"\" width=\""+width+"\" height=\"30\" "+align + bgcolor+">");
+                out.println("<object id=\"rmctrl_"+base.getId()+"\" classid=\""+clsid+"\" width=\""+width+"\" height=\"30\" "+ bgcolor+">");
                 out.println("  <param name=\"src\" value=\""+filename+"\"/>");
                 out.println("  <param name=\"autostart\" value=\""+automatic+"\"/>");
                 out.println("  <param name=\"controls\" value=\"ControlPanel\"/>");
@@ -193,7 +189,7 @@ out.println("<param name=\"controls\" value=\"ControlPanel\">");
             }else if (filename.endsWith(".mpg")) {
                 clsid = "clsid:22d6f312-b0f6-11d0-94ab-0080c74c7e95";
                 codebase = "http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=5,1,52,701";
-                out.println("<object id=\"video_"+base.getId()+"\" class=\"swb-video\" classid=\""+clsid+"\" codebase=\""+codebase+"\" width=\""+width+"\" height=\""+height+"\" standby=\""+standby+"\" type=\"application/x-oleobject\" "+align + bgcolor+">");
+                out.println("<object id=\"video_"+base.getId()+"\" class=\"swb-video\" classid=\""+clsid+"\" codebase=\""+codebase+"\" width=\""+width+"\" height=\""+height+"\" standby=\""+standby+"\" type=\"application/x-oleobject\" "+ bgcolor+">");
                 out.println("  <param name=\"fileName\" value=\""+filename+"\"/>");
                 out.println("  <param name=\"animationatStart\" value=\"true\"/>");
                 out.println("  <param name=\"transparentatStart\" value=\"true\"/>");
@@ -210,7 +206,7 @@ out.println("<param name=\"controls\" value=\"ControlPanel\">");
             }else if (filename.endsWith(".mp4")) {
                 clsid = "clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B";
                 codebase = "http://www.apple.com/qtactivex/qtplugin.cab";
-                out.println("<object id=\"video_"+base.getId()+"\" class=\"swb-video\" classid=\""+clsid+"\" codebase=\""+codebase+"\" width=\""+width+"\" height=\""+height+"\" "+align + bgcolor+">");
+                out.println("<object id=\"video_"+base.getId()+"\" class=\"swb-video\" classid=\""+clsid+"\" codebase=\""+codebase+"\" width=\""+width+"\" height=\""+height+"\" "+ bgcolor+">");
                 out.println("  <param name=\"src\" value=\""+filename+"\"/>");
                 out.println("  <param name=\"autoplay\" value=\""+automatic+"\"/>");
                 out.println("  <param name=\"controller\" value=\""+controls+"\"/>");
