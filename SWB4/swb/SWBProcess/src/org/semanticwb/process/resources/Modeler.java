@@ -262,6 +262,9 @@ public class Modeler extends GenericResource {
                 nodes.put(ele);
                 ele.put(PROP_CLASS, obj.getSemanticObject().getSemanticClass().getClassCodeName());
                 ele.put(PROP_TITLE, obj.getTitle());
+
+                if(obj.getDescription()==null) obj.setDescription("");
+
                 ele.put(PROP_DESCRIPTION, obj.getDescription());
                 ele.put(PROP_URI, obj.getURI());
                 ele.put(PROP_X, obj.getX());
@@ -307,7 +310,7 @@ public class Modeler extends GenericResource {
                     coele.put(PROP_START, connectionObject.getSource().getURI());
                     coele.put(PROP_END, connectionObject.getTarget().getURI());
                     coele.put(PROP_TITLE, connectionObject.getTitle());
-                    coele.put(PROP_DESCRIPTION, connectionObject.getDescription());
+                    //coele.put(PROP_DESCRIPTION, connectionObject.getDescription());
                 }
                 if(obj instanceof Containerable) getSubProcessJSON((Containerable)obj,nodes);
             }
@@ -330,6 +333,9 @@ public class Modeler extends GenericResource {
                 nodes.put(ele);
                 ele.put(PROP_CLASS, obj.getSemanticObject().getSemanticClass().getClassCodeName());
                 ele.put(PROP_TITLE, obj.getTitle());
+
+                if(obj.getDescription()==null) obj.setDescription("");
+
                 ele.put(PROP_DESCRIPTION, obj.getDescription());
                 ele.put(PROP_URI, obj.getURI());
                 ele.put(PROP_X, obj.getX());
@@ -374,7 +380,7 @@ public class Modeler extends GenericResource {
                     coele.put(PROP_START, connectionObject.getSource().getURI());
                     coele.put(PROP_END, connectionObject.getTarget().getURI());
                     coele.put(PROP_TITLE, connectionObject.getTitle());
-                    coele.put(PROP_DESCRIPTION, connectionObject.getDescription());
+                    //coele.put(PROP_DESCRIPTION, connectionObject.getDescription());
                 }
                 if(obj instanceof Containerable) getSubProcessJSON((Containerable)obj,nodes);
             }
