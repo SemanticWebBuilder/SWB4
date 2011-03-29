@@ -260,6 +260,7 @@ public class ToolBar extends CustomNode
            ele.put("container",ge.getContainer().uri);
            ele.put("parent",ge.getGraphParent().uri);
            ele.put("title",ge.title);
+           ele.put("labelSize",ge.text.getSize());
            ele.put("description",ge.description);
            //ele.put("type",ge.type);
            ele.put("uri",ge.uri);
@@ -327,6 +328,8 @@ public class ToolBar extends CustomNode
             var clss=getClass().forName(cls);
             var node=clss.newInstance() as Node;
             var ge:GraphicalElement=null;
+            var labelSize:Number;
+            labelSize = js.optInt("labelSize", 10);
             if(node instanceof GraphicalElement)
             {
                 ge=node as GraphicalElement;
@@ -354,6 +357,7 @@ public class ToolBar extends CustomNode
                 ge.isInterrupting = isInterrupting;
                 //println("uri:{ge.uri}");
                 ge.title=title;
+                ge.text.setSize(labelSize);
                 ge.description=description;
                 //ge.setType(type);
                 ge.x=x;
