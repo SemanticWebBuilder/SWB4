@@ -273,13 +273,29 @@ public class DistributorParams
         {
             log.warn("WebPage not Found:"+request.getRequestURI()+" Ref:"+request.getHeader("Referer"));
         }
-        if(webpage==null)
+
+        if(smodel==null)
         {
             user=_getUser(request,SWBContext.getGlobalWebSite());
         }else
         {
-            user=_getUser(request,webpage.getWebSite());
+            if(webpage!=null)
+            {
+                user=_getUser(request,webpage.getWebSite());
+            }else
+            {
+                WebSite site=SWBContext.getWebSite(smodel);
+                if(site!=null)
+                {
+                    user = _getUser(request, site);
+                }
+                else
+                {
+                    user=_getUser(request,SWBContext.getGlobalWebSite());
+                }
+            }
         }
+
         SWBContext.setSessionUser(user);
         //System.out.println("user"+user);
         queryString=_getQueryString(request);
