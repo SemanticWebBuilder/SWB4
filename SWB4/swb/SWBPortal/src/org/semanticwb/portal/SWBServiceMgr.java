@@ -34,7 +34,6 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBObserver;
-import org.semanticwb.model.Dns;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.IPFilter;
 import org.semanticwb.model.Resource;
@@ -163,10 +162,6 @@ public class SWBServiceMgr implements SemanticObserver, SWBObserver {
                                 SWBPortal.writeFileToWorkPath(tpl.getWorkPath()+"/1/"+"template.html", SWBUtils.IO.getStreamFromString(txt), usr);
                             }catch(Exception e){log.error(e);}
                         }
-                        if(obj.instanceOf(Dns.sclass))
-                        {
-                            Dns.refresh();
-                        }
                         if(obj.instanceOf(IPFilter.sclass))
                         {
                             WebSite site=SWBContext.getWebSite(obj.getModel().getName());
@@ -184,10 +179,6 @@ public class SWBServiceMgr implements SemanticObserver, SWBObserver {
                         } else
                         {
                             SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + obj.getWorkPath());
-                        }
-                        if(obj.instanceOf(Dns.sclass))
-                        {
-                            Dns.refresh();
                         }
                         if(obj.instanceOf(IPFilter.sclass))
                         {
@@ -281,10 +272,6 @@ public class SWBServiceMgr implements SemanticObserver, SWBObserver {
                                 SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(res.getResourceBase());
                             }
                         }catch(Exception e){log.error(e);}
-                    }
-                    if(obj.instanceOf(Dns.sclass)&& prop.equals(Dns.swb_dns))
-                    {
-                        Dns.refresh();
                     }
                     if(obj.instanceOf(IPFilter.sclass)&& prop.equals(IPFilter.swb_ipFilterNumber))
                     {

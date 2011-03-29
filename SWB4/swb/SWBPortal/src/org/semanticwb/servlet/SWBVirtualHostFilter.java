@@ -38,6 +38,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.FriendlyURL;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.portal.SWBIPValidationExeption;
@@ -154,11 +155,11 @@ public class SWBVirtualHostFilter implements Filter
 //        log.trace("host:"+host);
 //        log.trace("iserv:"+iserv);
 
-//        System.out.println("uri:"+uri);
-//        System.out.println("cntx:"+cntx);
-//        System.out.println("path:"+path);
-//        System.out.println("host:"+host);
-//        System.out.println("iserv:"+iserv);
+        //System.out.println("uri:"+uri);
+        //System.out.println("cntx:"+cntx);
+        //System.out.println("path:"+path);
+        //System.out.println("host:"+host);
+        //System.out.println("iserv:"+iserv);
 
         boolean isjsp = false;
         InternalServlet serv = intServlets.get(iserv);
@@ -166,6 +167,27 @@ public class SWBVirtualHostFilter implements Filter
         {
             serv = null;
             isjsp = true;
+        }
+
+        //Friendly URLs
+        if(serv==null && !isjsp)
+        {
+            FriendlyURL url=FriendlyURL.getFriendlyURL(path, host);
+            if(url!=null)
+            {
+                if(!url.isOldURL())
+                {
+                    path=url.getWebPage().getRealUrl(null,null);
+                    iserv="swb";
+                    serv = intServlets.get(iserv);
+                    lang=url.getLanguage()!=null?url.getLanguage().getId():null;
+                    country=url.getCountry()!=null?url.getCountry().getId():null;
+                }else
+                {
+                    _response.sendError(301, "Web Page Permanently Moved..");
+                    return;
+                }
+            }
         }
         
         //verifica lenguaje en URI
@@ -297,7 +319,6 @@ public class SWBVirtualHostFilter implements Filter
                 serv.doProcess(_request, _response, dparams);
             }
         }
-
     }
 
     /**
