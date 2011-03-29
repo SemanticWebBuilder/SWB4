@@ -378,6 +378,21 @@ public abstract class TopicBase extends org.semanticwb.model.SWBClass implements
     {
         getSemanticObject().setProperty(swb_tags, value);
     }
+
+    public String getTags(String lang)
+    {
+        return getSemanticObject().getProperty(swb_tags, null, lang);
+    }
+
+    public String getDisplayTags(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_tags, lang);
+    }
+
+    public void setTags(String tags, String lang)
+    {
+        getSemanticObject().setProperty(swb_tags, tags, lang);
+    }
    /**
    * Gets all the org.semanticwb.model.AssMember
    * @return A GenericIterator with all the org.semanticwb.model.AssMember

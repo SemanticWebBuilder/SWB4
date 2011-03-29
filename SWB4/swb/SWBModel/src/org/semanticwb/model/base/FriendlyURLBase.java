@@ -5,6 +5,11 @@ public abstract class FriendlyURLBase extends org.semanticwb.model.SWBClass impl
 {
     public static final org.semanticwb.platform.SemanticProperty swb_friendlyURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#friendlyURL");
     public static final org.semanticwb.platform.SemanticProperty swb_friendlyURLDescription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#friendlyURLDescription");
+   /**
+   * Una Página Web es el elemento de SemanticWebBuilder a través del cual se estructura la información del portal.
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
+    public static final org.semanticwb.platform.SemanticProperty swb_friendlyURLWebPageInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#friendlyURLWebPageInv");
     public static final org.semanticwb.platform.SemanticProperty swb_frindlyOldURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#frindlyOldURL");
     public static final org.semanticwb.platform.SemanticClass swb_FriendlyURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#FriendlyURL");
    /**
@@ -102,6 +107,29 @@ public abstract class FriendlyURLBase extends org.semanticwb.model.SWBClass impl
         public static java.util.Iterator<org.semanticwb.model.FriendlyURL> listFriendlyURLByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.FriendlyURL> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.FriendlyURL with a determined WebPage
+       * @param value WebPage of the type org.semanticwb.model.WebPage
+       * @param model Model of the org.semanticwb.model.FriendlyURL
+       * @return Iterator with all the org.semanticwb.model.FriendlyURL
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.FriendlyURL> listFriendlyURLByWebPage(org.semanticwb.model.WebPage value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.FriendlyURL> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_friendlyURLWebPageInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.FriendlyURL with a determined WebPage
+       * @param value WebPage of the type org.semanticwb.model.WebPage
+       * @return Iterator with all the org.semanticwb.model.FriendlyURL
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.FriendlyURL> listFriendlyURLByWebPage(org.semanticwb.model.WebPage value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.FriendlyURL> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_friendlyURLWebPageInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -292,6 +320,44 @@ public abstract class FriendlyURLBase extends org.semanticwb.model.SWBClass impl
     public void setFriendlyURLDescription(String value)
     {
         getSemanticObject().setProperty(swb_friendlyURLDescription, value);
+    }
+   /**
+   * Sets the value for the property WebPage
+   * @param value WebPage to set
+   */
+
+    public void setWebPage(org.semanticwb.model.WebPage value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_friendlyURLWebPageInv, value.getSemanticObject());
+        }else
+        {
+            removeWebPage();
+        }
+    }
+   /**
+   * Remove the value for WebPage property
+   */
+
+    public void removeWebPage()
+    {
+        getSemanticObject().removeProperty(swb_friendlyURLWebPageInv);
+    }
+
+   /**
+   * Gets the WebPage
+   * @return a org.semanticwb.model.WebPage
+   */
+    public org.semanticwb.model.WebPage getWebPage()
+    {
+         org.semanticwb.model.WebPage ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_friendlyURLWebPageInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**

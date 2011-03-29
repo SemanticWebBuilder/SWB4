@@ -694,6 +694,30 @@ public class User extends UserBase implements Principal
             }
             if(temp!=null)ret=temp;
         }
+        if (ret && obj instanceof Localeable)
+        {
+            Boolean temp=null;
+            Language lang = ((Localeable) obj).getLanguage();
+            if(lang!=null)
+            {
+                if(!lang.getId().equals(getLanguage()))
+                {
+                    ret = false;
+                }
+            }
+        }
+        if (ret && obj instanceof Countryable)
+        {
+            Boolean temp=null;
+            Country country = ((Countryable) obj).getCountry();
+            if(country!=null)
+            {
+                if(!country.getId().equals(getCountry()))
+                {
+                    ret = false;
+                }
+            }
+        }
         //System.out.println("User:"+this+" haveAccess:"+obj+" "+ret);
         return ret;
     }

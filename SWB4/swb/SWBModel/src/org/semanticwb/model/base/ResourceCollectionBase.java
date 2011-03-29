@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Define una agrupacion de objetos de tipo resource 
    */
-public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.PFlowRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.Filterable
+public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.Traceable
 {
    /**
    * Define una categoria dentro de una colección de recursos
@@ -12,15 +12,15 @@ public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBCla
     public static final org.semanticwb.platform.SemanticClass swb_ResourceCollectionCategory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceCollectionCategory");
     public static final org.semanticwb.platform.SemanticProperty swb_hasResourceCollectionCategoryInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasResourceCollectionCategoryInv");
    /**
-   * Una Página Web es el elemento de SemanticWebBuilder a través del cual se estructura la información del portal.
-   */
-    public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
-    public static final org.semanticwb.platform.SemanticProperty swb_displayWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#displayWebPage");
-   /**
    * Objeto por medio del cual se define un tipo de componente o recurso
    */
     public static final org.semanticwb.platform.SemanticClass swb_ResourceType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceType");
     public static final org.semanticwb.platform.SemanticProperty swb_resourceCollectionType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceCollectionType");
+   /**
+   * Una Página Web es el elemento de SemanticWebBuilder a través del cual se estructura la información del portal.
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
+    public static final org.semanticwb.platform.SemanticProperty swb_displayWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#displayWebPage");
    /**
    * Define una agrupacion de objetos de tipo resource
    */
@@ -100,52 +100,6 @@ public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBCla
             return (getResourceCollection(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.model.ResourceCollection with a determined ModifiedBy
-       * @param value ModifiedBy of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.model.ResourceCollection
-       * @return Iterator with all the org.semanticwb.model.ResourceCollection
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.ResourceCollection> listResourceCollectionByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceCollection> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.ResourceCollection with a determined ModifiedBy
-       * @param value ModifiedBy of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.model.ResourceCollection
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.ResourceCollection> listResourceCollectionByModifiedBy(org.semanticwb.model.User value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceCollection> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.ResourceCollection with a determined Resource
-       * @param value Resource of the type org.semanticwb.model.Resource
-       * @param model Model of the org.semanticwb.model.ResourceCollection
-       * @return Iterator with all the org.semanticwb.model.ResourceCollection
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.ResourceCollection> listResourceCollectionByResource(org.semanticwb.model.Resource value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceCollection> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasResource, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.ResourceCollection with a determined Resource
-       * @param value Resource of the type org.semanticwb.model.Resource
-       * @return Iterator with all the org.semanticwb.model.ResourceCollection
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.ResourceCollection> listResourceCollectionByResource(org.semanticwb.model.Resource value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceCollection> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasResource,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.model.ResourceCollection with a determined Category
        * @param value Category of the type org.semanticwb.model.ResourceCollectionCategory
        * @param model Model of the org.semanticwb.model.ResourceCollection
@@ -166,29 +120,6 @@ public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBCla
         public static java.util.Iterator<org.semanticwb.model.ResourceCollection> listResourceCollectionByCategory(org.semanticwb.model.ResourceCollectionCategory value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceCollection> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasResourceCollectionCategoryInv,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.ResourceCollection with a determined DisplayWebPage
-       * @param value DisplayWebPage of the type org.semanticwb.model.WebPage
-       * @param model Model of the org.semanticwb.model.ResourceCollection
-       * @return Iterator with all the org.semanticwb.model.ResourceCollection
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.ResourceCollection> listResourceCollectionByDisplayWebPage(org.semanticwb.model.WebPage value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceCollection> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_displayWebPage, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.ResourceCollection with a determined DisplayWebPage
-       * @param value DisplayWebPage of the type org.semanticwb.model.WebPage
-       * @return Iterator with all the org.semanticwb.model.ResourceCollection
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.ResourceCollection> listResourceCollectionByDisplayWebPage(org.semanticwb.model.WebPage value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceCollection> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_displayWebPage,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -238,6 +169,75 @@ public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBCla
             return it;
         }
        /**
+       * Gets all org.semanticwb.model.ResourceCollection with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.model.ResourceCollection
+       * @return Iterator with all the org.semanticwb.model.ResourceCollection
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.ResourceCollection> listResourceCollectionByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceCollection> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.ResourceCollection with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.model.ResourceCollection
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.ResourceCollection> listResourceCollectionByModifiedBy(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceCollection> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.ResourceCollection with a determined Resource
+       * @param value Resource of the type org.semanticwb.model.Resource
+       * @param model Model of the org.semanticwb.model.ResourceCollection
+       * @return Iterator with all the org.semanticwb.model.ResourceCollection
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.ResourceCollection> listResourceCollectionByResource(org.semanticwb.model.Resource value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceCollection> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasResource, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.ResourceCollection with a determined Resource
+       * @param value Resource of the type org.semanticwb.model.Resource
+       * @return Iterator with all the org.semanticwb.model.ResourceCollection
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.ResourceCollection> listResourceCollectionByResource(org.semanticwb.model.Resource value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceCollection> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasResource,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.ResourceCollection with a determined DisplayWebPage
+       * @param value DisplayWebPage of the type org.semanticwb.model.WebPage
+       * @param model Model of the org.semanticwb.model.ResourceCollection
+       * @return Iterator with all the org.semanticwb.model.ResourceCollection
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.ResourceCollection> listResourceCollectionByDisplayWebPage(org.semanticwb.model.WebPage value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceCollection> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_displayWebPage, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.ResourceCollection with a determined DisplayWebPage
+       * @param value DisplayWebPage of the type org.semanticwb.model.WebPage
+       * @return Iterator with all the org.semanticwb.model.ResourceCollection
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.ResourceCollection> listResourceCollectionByDisplayWebPage(org.semanticwb.model.WebPage value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceCollection> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_displayWebPage,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.model.ResourceCollection with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.model.ResourceCollection
@@ -269,160 +269,6 @@ public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBCla
     public ResourceCollectionBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-/**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
-    }
-   /**
-   * Sets the value for the property ModifiedBy
-   * @param value ModifiedBy to set
-   */
-
-    public void setModifiedBy(org.semanticwb.model.User value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
-        }else
-        {
-            removeModifiedBy();
-        }
-    }
-   /**
-   * Remove the value for ModifiedBy property
-   */
-
-    public void removeModifiedBy()
-    {
-        getSemanticObject().removeProperty(swb_modifiedBy);
-    }
-
-   /**
-   * Gets the ModifiedBy
-   * @return a org.semanticwb.model.User
-   */
-    public org.semanticwb.model.User getModifiedBy()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
-    }
-   /**
-   * Gets all the org.semanticwb.model.Resource
-   * @return A GenericIterator with all the org.semanticwb.model.Resource
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource> listResources()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource>(getSemanticObject().listObjectProperties(swb_hasResource));
-    }
-
-   /**
-   * Gets true if has a Resource
-   * @param value org.semanticwb.model.Resource to verify
-   * @return true if the org.semanticwb.model.Resource exists, false otherwise
-   */
-    public boolean hasResource(org.semanticwb.model.Resource value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(swb_hasResource,value.getSemanticObject());
-        }
-        return ret;
-    }
-   /**
-   * Adds a Resource
-   * @param value org.semanticwb.model.Resource to add
-   */
-
-    public void addResource(org.semanticwb.model.Resource value)
-    {
-        getSemanticObject().addObjectProperty(swb_hasResource, value.getSemanticObject());
-    }
-   /**
-   * Removes all the Resource
-   */
-
-    public void removeAllResource()
-    {
-        getSemanticObject().removeProperty(swb_hasResource);
-    }
-   /**
-   * Removes a Resource
-   * @param value org.semanticwb.model.Resource to remove
-   */
-
-    public void removeResource(org.semanticwb.model.Resource value)
-    {
-        getSemanticObject().removeObjectProperty(swb_hasResource,value.getSemanticObject());
-    }
-
-   /**
-   * Gets the Resource
-   * @return a org.semanticwb.model.Resource
-   */
-    public org.semanticwb.model.Resource getResource()
-    {
-         org.semanticwb.model.Resource ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasResource);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.Resource)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-/**
-* Gets the Title property
-* @return String with the Title
-*/
-    public String getTitle()
-    {
-        return getSemanticObject().getProperty(swb_title);
-    }
-
-/**
-* Sets the Title property
-* @param value long with the Title
-*/
-    public void setTitle(String value)
-    {
-        getSemanticObject().setProperty(swb_title, value);
-    }
-
-    public String getTitle(String lang)
-    {
-        return getSemanticObject().getProperty(swb_title, null, lang);
-    }
-
-    public String getDisplayTitle(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_title, lang);
-    }
-
-    public void setTitle(String title, String lang)
-    {
-        getSemanticObject().setProperty(swb_title, title, lang);
     }
    /**
    * Gets all the org.semanticwb.model.ResourceCollectionCategory
@@ -462,62 +308,6 @@ public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBCla
              ret=(org.semanticwb.model.ResourceCollectionCategory)obj.createGenericInstance();
          }
          return ret;
-    }
-   /**
-   * Sets the value for the property DisplayWebPage
-   * @param value DisplayWebPage to set
-   */
-
-    public void setDisplayWebPage(org.semanticwb.model.WebPage value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_displayWebPage, value.getSemanticObject());
-        }else
-        {
-            removeDisplayWebPage();
-        }
-    }
-   /**
-   * Remove the value for DisplayWebPage property
-   */
-
-    public void removeDisplayWebPage()
-    {
-        getSemanticObject().removeProperty(swb_displayWebPage);
-    }
-
-   /**
-   * Gets the DisplayWebPage
-   * @return a org.semanticwb.model.WebPage
-   */
-    public org.semanticwb.model.WebPage getDisplayWebPage()
-    {
-         org.semanticwb.model.WebPage ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_displayWebPage);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-/**
-* Gets the Updated property
-* @return java.util.Date with the Updated
-*/
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-/**
-* Sets the Updated property
-* @param value long with the Updated
-*/
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
     }
    /**
    * Sets the value for the property ResourceCollectionType
@@ -630,6 +420,216 @@ public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBCla
              ret=(org.semanticwb.model.PFlowRef)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
+    }
+   /**
+   * Sets the value for the property ModifiedBy
+   * @param value ModifiedBy to set
+   */
+
+    public void setModifiedBy(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
+    }
+   /**
+   * Remove the value for ModifiedBy property
+   */
+
+    public void removeModifiedBy()
+    {
+        getSemanticObject().removeProperty(swb_modifiedBy);
+    }
+
+   /**
+   * Gets the ModifiedBy
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getModifiedBy()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
+* Gets the Title property
+* @return String with the Title
+*/
+    public String getTitle()
+    {
+        return getSemanticObject().getProperty(swb_title);
+    }
+
+/**
+* Sets the Title property
+* @param value long with the Title
+*/
+    public void setTitle(String value)
+    {
+        getSemanticObject().setProperty(swb_title, value);
+    }
+
+    public String getTitle(String lang)
+    {
+        return getSemanticObject().getProperty(swb_title, null, lang);
+    }
+
+    public String getDisplayTitle(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
+    }
+
+    public void setTitle(String title, String lang)
+    {
+        getSemanticObject().setProperty(swb_title, title, lang);
+    }
+   /**
+   * Gets all the org.semanticwb.model.Resource
+   * @return A GenericIterator with all the org.semanticwb.model.Resource
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource> listResources()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource>(getSemanticObject().listObjectProperties(swb_hasResource));
+    }
+
+   /**
+   * Gets true if has a Resource
+   * @param value org.semanticwb.model.Resource to verify
+   * @return true if the org.semanticwb.model.Resource exists, false otherwise
+   */
+    public boolean hasResource(org.semanticwb.model.Resource value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasResource,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a Resource
+   * @param value org.semanticwb.model.Resource to add
+   */
+
+    public void addResource(org.semanticwb.model.Resource value)
+    {
+        getSemanticObject().addObjectProperty(swb_hasResource, value.getSemanticObject());
+    }
+   /**
+   * Removes all the Resource
+   */
+
+    public void removeAllResource()
+    {
+        getSemanticObject().removeProperty(swb_hasResource);
+    }
+   /**
+   * Removes a Resource
+   * @param value org.semanticwb.model.Resource to remove
+   */
+
+    public void removeResource(org.semanticwb.model.Resource value)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasResource,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the Resource
+   * @return a org.semanticwb.model.Resource
+   */
+    public org.semanticwb.model.Resource getResource()
+    {
+         org.semanticwb.model.Resource ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasResource);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Resource)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property DisplayWebPage
+   * @param value DisplayWebPage to set
+   */
+
+    public void setDisplayWebPage(org.semanticwb.model.WebPage value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_displayWebPage, value.getSemanticObject());
+        }else
+        {
+            removeDisplayWebPage();
+        }
+    }
+   /**
+   * Remove the value for DisplayWebPage property
+   */
+
+    public void removeDisplayWebPage()
+    {
+        getSemanticObject().removeProperty(swb_displayWebPage);
+    }
+
+   /**
+   * Gets the DisplayWebPage
+   * @return a org.semanticwb.model.WebPage
+   */
+    public org.semanticwb.model.WebPage getDisplayWebPage()
+    {
+         org.semanticwb.model.WebPage ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_displayWebPage);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
    /**
    * Sets the value for the property Creator

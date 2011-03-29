@@ -4,15 +4,15 @@ package org.semanticwb.model.base;
    /**
    * Define una Collección de objetos de una clase especificada con la propiedad "collectionClass" 
    */
-public abstract class CollectionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable
+public abstract class CollectionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
+    public static final org.semanticwb.platform.SemanticClass swb_Class=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Class");
+    public static final org.semanticwb.platform.SemanticProperty swb_collectionClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#collectionClass");
    /**
    * Superclase de todos los tipos de Modelos de SemanticWebBuilder
    */
     public static final org.semanticwb.platform.SemanticClass swb_SWBModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBModel");
     public static final org.semanticwb.platform.SemanticProperty swb_collectionModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#collectionModel");
-    public static final org.semanticwb.platform.SemanticClass swb_Class=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Class");
-    public static final org.semanticwb.platform.SemanticProperty swb_collectionClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#collectionClass");
     public static final org.semanticwb.platform.SemanticProperty swb_hasCollectionListProperties=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasCollectionListProperties");
     public static final org.semanticwb.platform.SemanticProperty swb_hasCollectionSearchProperties=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasCollectionSearchProperties");
    /**
@@ -94,29 +94,6 @@ public abstract class CollectionBase extends org.semanticwb.model.SWBClass imple
             return (getCollection(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.model.Collection with a determined ModifiedBy
-       * @param value ModifiedBy of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.model.Collection
-       * @return Iterator with all the org.semanticwb.model.Collection
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.Collection> listCollectionByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Collection> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.Collection with a determined ModifiedBy
-       * @param value ModifiedBy of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.model.Collection
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.Collection> listCollectionByModifiedBy(org.semanticwb.model.User value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Collection> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.model.Collection with a determined CollectionModel
        * @param value CollectionModel of the type org.semanticwb.model.SWBModel
        * @param model Model of the org.semanticwb.model.Collection
@@ -137,6 +114,29 @@ public abstract class CollectionBase extends org.semanticwb.model.SWBClass imple
         public static java.util.Iterator<org.semanticwb.model.Collection> listCollectionByCollectionModel(org.semanticwb.model.SWBModel value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.Collection> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_collectionModel,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.Collection with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.model.Collection
+       * @return Iterator with all the org.semanticwb.model.Collection
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.Collection> listCollectionByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Collection> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.Collection with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.model.Collection
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.Collection> listCollectionByModifiedBy(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Collection> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -173,6 +173,27 @@ public abstract class CollectionBase extends org.semanticwb.model.SWBClass imple
         super(base);
     }
 
+    public void setCollectionClass(org.semanticwb.platform.SemanticObject value)
+    {
+        getSemanticObject().setObjectProperty(swb_collectionClass, value);
+    }
+
+    public void removeCollectionClass()
+    {
+        getSemanticObject().removeProperty(swb_collectionClass);
+    }
+
+/**
+* Gets the CollectionClass property
+* @return the value for the property as org.semanticwb.platform.SemanticObject
+*/
+    public org.semanticwb.platform.SemanticObject getCollectionClass()
+    {
+         org.semanticwb.platform.SemanticObject ret=null;
+         ret=getSemanticObject().getObjectProperty(swb_collectionClass);
+         return ret;
+    }
+
 /**
 * Gets the Created property
 * @return java.util.Date with the Created
@@ -189,44 +210,6 @@ public abstract class CollectionBase extends org.semanticwb.model.SWBClass imple
     public void setCreated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_created, value);
-    }
-   /**
-   * Sets the value for the property ModifiedBy
-   * @param value ModifiedBy to set
-   */
-
-    public void setModifiedBy(org.semanticwb.model.User value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
-        }else
-        {
-            removeModifiedBy();
-        }
-    }
-   /**
-   * Remove the value for ModifiedBy property
-   */
-
-    public void removeModifiedBy()
-    {
-        getSemanticObject().removeProperty(swb_modifiedBy);
-    }
-
-   /**
-   * Gets the ModifiedBy
-   * @return a org.semanticwb.model.User
-   */
-    public org.semanticwb.model.User getModifiedBy()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
     }
    /**
    * Sets the value for the property CollectionModel
@@ -263,6 +246,44 @@ public abstract class CollectionBase extends org.semanticwb.model.SWBClass imple
          if(obj!=null)
          {
              ret=(org.semanticwb.model.SWBModel)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property ModifiedBy
+   * @param value ModifiedBy to set
+   */
+
+    public void setModifiedBy(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
+    }
+   /**
+   * Remove the value for ModifiedBy property
+   */
+
+    public void removeModifiedBy()
+    {
+        getSemanticObject().removeProperty(swb_modifiedBy);
+    }
+
+   /**
+   * Gets the ModifiedBy
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getModifiedBy()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
@@ -316,27 +337,6 @@ public abstract class CollectionBase extends org.semanticwb.model.SWBClass imple
     public void setUpdated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-    public void setCollectionClass(org.semanticwb.platform.SemanticObject value)
-    {
-        getSemanticObject().setObjectProperty(swb_collectionClass, value);
-    }
-
-    public void removeCollectionClass()
-    {
-        getSemanticObject().removeProperty(swb_collectionClass);
-    }
-
-/**
-* Gets the CollectionClass property
-* @return the value for the property as org.semanticwb.platform.SemanticObject
-*/
-    public org.semanticwb.platform.SemanticObject getCollectionClass()
-    {
-         org.semanticwb.platform.SemanticObject ret=null;
-         ret=getSemanticObject().getObjectProperty(swb_collectionClass);
-         return ret;
     }
 
     public java.util.Iterator<String> listListPropertieses()

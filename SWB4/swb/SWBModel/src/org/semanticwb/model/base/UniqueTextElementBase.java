@@ -3,6 +3,13 @@ package org.semanticwb.model.base;
 
 public abstract class UniqueTextElementBase extends org.semanticwb.model.Text 
 {
+   /**
+   * Elementos separados por comas
+   */
+    public static final org.semanticwb.platform.SemanticProperty swbxf_reservedWords=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#reservedWords");
+   /**
+   * Texto restringido con caracteres validos para Identificador
+   */
     public static final org.semanticwb.platform.SemanticProperty swbxf_restrict4Id=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#restrict4Id");
     public static final org.semanticwb.platform.SemanticClass swbxf_UniqueTextElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#UniqueTextElement");
    /**
@@ -82,6 +89,24 @@ public abstract class UniqueTextElementBase extends org.semanticwb.model.Text
     public UniqueTextElementBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the ReservedWords property
+* @return String with the ReservedWords
+*/
+    public String getReservedWords()
+    {
+        return getSemanticObject().getProperty(swbxf_reservedWords);
+    }
+
+/**
+* Sets the ReservedWords property
+* @param value long with the ReservedWords
+*/
+    public void setReservedWords(String value)
+    {
+        getSemanticObject().setProperty(swbxf_reservedWords, value);
     }
 
 /**

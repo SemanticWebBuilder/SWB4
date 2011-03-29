@@ -208,6 +208,36 @@ public class WebPage extends WebPageBase
 //                }
             }
             return url;
+        }else if(getFriendlyURL()!=null)
+        {
+            User user=SWBContext.getSessionUser(getWebSite().getUserRepository().getId());
+            Iterator<FriendlyURL> it=listFriendlyURLs();
+            FriendlyURL furl=null;
+            int cg=0;
+            while (it.hasNext())
+            {
+                FriendlyURL friendlyURL = it.next();
+                if(friendlyURL.isOldURL())continue;
+                int a=1;
+                if(friendlyURL.getLanguage()!=null)
+                {
+                    if(friendlyURL.getLanguage().getId().equals(user.getLanguage()))a += 3;
+                    else continue;
+                }
+                if(friendlyURL.getCountry()!=null)
+                {
+                    if(friendlyURL.getCountry().getId().equals(user.getCountry()))a += 2;
+                    else continue;
+                }
+                if(cg<a)
+                {
+                    cg = a;
+                    furl=friendlyURL;
+                }
+                //System.out.println(friendlyURL+" "+friendlyURL.getURL()+" "+friendlyURL.getLanguage()+" "+friendlyURL.getCountry()+" "+furl+" "+a+" "+cg+" "+user.getLanguage()+" "+user.getCountry());
+                if(a==6)break;
+            }
+            if(furl!=null)return SWBPlatform.getContextPath()+furl.getURL();
         }
         return getRealUrl();
     }
