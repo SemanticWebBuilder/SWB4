@@ -35,6 +35,7 @@ public class EditableText extends CustomNode
     public var fill : Boolean;
     var textb : TextBox;
     var textl : Text;
+    var editing:Boolean = false;
 
     var first : Boolean =true;
 
@@ -55,16 +56,17 @@ public class EditableText extends CustomNode
 
     public function stopEditing() :Void
     {
+        if (not editing) return;
         textb.commit();
         text=textb.text;
         textb.visible=false;
         textl.visible=true;
-        owner.requestFocus();
-        //cancelEditing();
+        editing = false;
     }
 
     public function cancelEditing() :Void
     {
+        if (not editing) return;
         textb.visible=false;        
         textl.visible=true;
         if (autoSizeParent and owner instanceof GraphicalElement) {
@@ -73,10 +75,12 @@ public class EditableText extends CustomNode
             t.setHeight(textl.boundsInLocal.height + 5);
         }
         owner.requestFocus();
+        editing = false;
     }
 
     public function startEditing() :Void
     {
+        editing = true;
         textb.text=text;
         textl.visible=false;
         textb.visible=true;
