@@ -58,6 +58,12 @@ public class Modeler extends GenericResource {
     private static final String PROP_PARENT = "parent";
     private static final String PROP_CONTAINER = "container";
     private static final String PROCESS_PREFIX = "http://www.semanticwebbuilder.org/swb4/process";
+    private static final String PROP_isMultiInstance = "isMultiInstance";
+    private static final String PROP_isLoop = "isLoop";
+    private static final String PROP_isForCompensation = "isForCompensation";
+    private static final String PROP_isAdHoc = "isAdHoc";
+    private static final String PROP_isTransaction = "isTransaction";
+    private static final String PROP_isInterrupting = "isInterrupting";
 
     private SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
 
@@ -270,6 +276,27 @@ public class Modeler extends GenericResource {
                     ele.put(PROP_PARENT, obj.getParent().getURI());
                 else
                     ele.put(PROP_PARENT, "");
+
+                //Boolean isMultiInstance = null, isLoop = null, isForCompensation = null, 
+                //isAdHoc = null, isTransaction = null, isInterrupting = null;
+                
+                //valores por defecto, cambiar cuando esten listos los cambios en el modelo
+                
+                ele.put(PROP_isMultiInstance, "false");
+                ele.put(PROP_isLoop, "false");
+                ele.put(PROP_isForCompensation, "false");
+                ele.put(PROP_isAdHoc, "false");
+                ele.put(PROP_isTransaction, "false");
+                ele.put(PROP_isInterrupting, "false");
+                
+//                ele.put(PROP_isMultiInstance, Boolean.toString(obj.isMultiInstance()));
+//                ele.put(PROP_isLoop, Boolean.toString(obj.isLoop()));
+//                ele.put(PROP_isForCompensation, Boolean.toString(obj.isForCompensation()));
+//                ele.put(PROP_isAdHoc, Boolean.toString(obj.isAdHoc()));
+//                ele.put(PROP_isTransaction, Boolean.toString(obj.isTransaction()));
+//                ele.put(PROP_isInterrupting, Boolean.toString(obj.isInterrupting()));
+
+
                 Iterator<ConnectionObject> it = obj.listOutputConnectionObjects();
                 while (it.hasNext()) {
                     ConnectionObject connectionObject = it.next();
@@ -279,7 +306,8 @@ public class Modeler extends GenericResource {
                     coele.put(PROP_URI, connectionObject.getURI());
                     coele.put(PROP_START, connectionObject.getSource().getURI());
                     coele.put(PROP_END, connectionObject.getTarget().getURI());
-                    coele.put(PROP_TITLE, connectionObject.getTitle()); 
+                    coele.put(PROP_TITLE, connectionObject.getTitle());
+                    coele.put(PROP_DESCRIPTION, connectionObject.getDescription());
                 }
                 if(obj instanceof Containerable) getSubProcessJSON((Containerable)obj,nodes);
             }
@@ -316,6 +344,26 @@ public class Modeler extends GenericResource {
                     ele.put(PROP_PARENT, obj.getParent().getURI());
                 else
                     ele.put(PROP_PARENT, "");
+
+                //Boolean isMultiInstance = null, isLoop = null, isForCompensation = null,
+                //isAdHoc = null, isTransaction = null, isInterrupting = null;
+
+                //valores por defecto, cambiar cuando esten listos los cambios en el modelo
+
+                ele.put(PROP_isMultiInstance, "false");
+                ele.put(PROP_isLoop, "false");
+                ele.put(PROP_isForCompensation, "false");
+                ele.put(PROP_isAdHoc, "false");
+                ele.put(PROP_isTransaction, "false");
+                ele.put(PROP_isInterrupting, "false");
+
+//                ele.put(PROP_isMultiInstance, Boolean.toString(obj.isMultiInstance()));
+//                ele.put(PROP_isLoop, Boolean.toString(obj.isLoop()));
+//                ele.put(PROP_isForCompensation, Boolean.toString(obj.isForCompensation()));
+//                ele.put(PROP_isAdHoc, Boolean.toString(obj.isAdHoc()));
+//                ele.put(PROP_isTransaction, Boolean.toString(obj.isTransaction()));
+//                ele.put(PROP_isInterrupting, Boolean.toString(obj.isInterrupting()));
+
                 Iterator<ConnectionObject> it = obj.listOutputConnectionObjects();
                 while (it.hasNext()) {
                     ConnectionObject connectionObject = it.next();
@@ -326,6 +374,7 @@ public class Modeler extends GenericResource {
                     coele.put(PROP_START, connectionObject.getSource().getURI());
                     coele.put(PROP_END, connectionObject.getTarget().getURI());
                     coele.put(PROP_TITLE, connectionObject.getTitle());
+                    coele.put(PROP_DESCRIPTION, connectionObject.getDescription());
                 }
                 if(obj instanceof Containerable) getSubProcessJSON((Containerable)obj,nodes);
             }
@@ -487,6 +536,10 @@ public class Modeler extends GenericResource {
         GenericObject go = null;
         String uri = null, sclass = null, title = null, description = null, container = null, parent = null, start = null, end = null;
         int x = 0, y = 0, w = 0, h = 0;
+        Boolean isMultiInstance = null, isLoop = null, isForCompensation = null, isAdHoc = null, isTransaction = null, isInterrupting = null;
+
+        boolean tmpBoolean = false;
+
         SemanticClass semclass = null;
         SemanticModel model = procsite.getSemanticObject().getModel();
         GraphicalElement ge = null;
@@ -510,6 +563,37 @@ public class Modeler extends GenericResource {
                         description=null;
                     }
                         
+                    try {
+                        isMultiInstance = Boolean.parseBoolean(json.getString(PROP_isMultiInstance));
+                    } catch (Exception e) {
+                        isMultiInstance = null;
+                    }
+                    try {
+                        isLoop = Boolean.parseBoolean(json.getString(PROP_isLoop));
+                    } catch (Exception e) {
+                        isLoop = null;
+                    }
+                    try {
+                        isForCompensation = Boolean.parseBoolean(json.getString(PROP_isForCompensation));
+                    } catch (Exception e) {
+                        isForCompensation = null;
+                    }
+                    try {
+                        isAdHoc = Boolean.parseBoolean(json.getString(PROP_isAdHoc));
+                    } catch (Exception e) {
+                        isAdHoc = null;
+                    }
+                    try {
+                        isTransaction = Boolean.parseBoolean(json.getString(PROP_isTransaction));
+                    } catch (Exception e) {
+                        isTransaction = null;
+                    }
+                    try {
+                        isInterrupting = Boolean.parseBoolean(json.getString(PROP_isInterrupting));
+                    } catch (Exception e) {
+                        isInterrupting = null;
+                    }
+
                     x = json.getInt(PROP_X);
                     y = json.getInt(PROP_Y);
                     w = json.getInt(PROP_W);
@@ -527,6 +611,23 @@ public class Modeler extends GenericResource {
                                 ge.setTitle(title);
                             if(null!=description&&!ge.getDescription().equals(description))
                                 ge.setDescription(description);
+
+                            //isMultiInstance = false, isLoop = false, isForCompensation = false,
+                            //isAdHoc = false, isTransaction = false, isInterrupting = false;
+
+//                            if(null!=isMultiInstance)
+//                                ge.setMultiInstance(isMultiInstance.booleanValue());
+//                            if(null!=isLoop)
+//                                ge.setLoop(isLoop.booleanValue());
+//                            if(null!=isForCompensation)
+//                                ge.setForCompensation(isForCompensation.booleanValue());
+//                            if(null!=isAdHoc)
+//                                ge.setAdHoc(isAdHoc.booleanValue());
+//                            if(null!=isTransaction)
+//                                ge.setTransaction(isTransaction.booleanValue());
+//                            if(null!=isInterrupting)
+//                                ge.setInterrupting(isInterrupting.booleanValue());
+
                             if(ge.getX()!=x)
                                 ge.setX(x);
                             if(ge.getY()!=y)
@@ -631,6 +732,7 @@ public class Modeler extends GenericResource {
                     } catch (Exception e) {
                         description=null;
                     }
+
                     if (hmori.get(uri) != null) 
                     {    
                         go = ont.getGenericObject(hmori.get(uri));
