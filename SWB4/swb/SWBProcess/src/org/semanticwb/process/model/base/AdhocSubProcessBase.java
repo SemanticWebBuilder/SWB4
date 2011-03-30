@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class AdhocSubProcessBase extends org.semanticwb.process.model.SubProcess implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.TemplateRefable,org.semanticwb.process.model.Containerable
+public abstract class AdhocSubProcessBase extends org.semanticwb.process.model.SubProcess implements org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Referensable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Containerable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ResourceAssignmentable
 {
     public static final org.semanticwb.platform.SemanticClass swp_AdhocSubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#AdhocSubProcess");
    /**
@@ -237,6 +237,52 @@ public abstract class AdhocSubProcessBase extends org.semanticwb.process.model.S
         public static java.util.Iterator<org.semanticwb.process.model.AdhocSubProcess> listAdhocSubProcessByInputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdhocSubProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasInputConnectionObjectInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.AdhocSubProcess with a determined LoopCharacteristics
+       * @param value LoopCharacteristics of the type org.semanticwb.process.model.LoopCharacteristics
+       * @param model Model of the org.semanticwb.process.model.AdhocSubProcess
+       * @return Iterator with all the org.semanticwb.process.model.AdhocSubProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.AdhocSubProcess> listAdhocSubProcessByLoopCharacteristics(org.semanticwb.process.model.LoopCharacteristics value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdhocSubProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_loopCharacteristics, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.AdhocSubProcess with a determined LoopCharacteristics
+       * @param value LoopCharacteristics of the type org.semanticwb.process.model.LoopCharacteristics
+       * @return Iterator with all the org.semanticwb.process.model.AdhocSubProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.AdhocSubProcess> listAdhocSubProcessByLoopCharacteristics(org.semanticwb.process.model.LoopCharacteristics value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdhocSubProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_loopCharacteristics,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.AdhocSubProcess with a determined ResourceAssignment
+       * @param value ResourceAssignment of the type org.semanticwb.process.model.ResourceAssignment
+       * @param model Model of the org.semanticwb.process.model.AdhocSubProcess
+       * @return Iterator with all the org.semanticwb.process.model.AdhocSubProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.AdhocSubProcess> listAdhocSubProcessByResourceAssignment(org.semanticwb.process.model.ResourceAssignment value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdhocSubProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_resourceAssignment, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.AdhocSubProcess with a determined ResourceAssignment
+       * @param value ResourceAssignment of the type org.semanticwb.process.model.ResourceAssignment
+       * @return Iterator with all the org.semanticwb.process.model.AdhocSubProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.AdhocSubProcess> listAdhocSubProcessByResourceAssignment(org.semanticwb.process.model.ResourceAssignment value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AdhocSubProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_resourceAssignment,value.getSemanticObject(),sclass));
             return it;
         }
        /**

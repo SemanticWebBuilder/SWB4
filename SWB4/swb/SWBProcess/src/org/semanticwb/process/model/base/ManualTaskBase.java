@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ManualTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class ManualTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.process.model.ActivityConfable,org.semanticwb.process.model.Callable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swp_ManualTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ManualTask");
    /**
@@ -194,6 +194,52 @@ public abstract class ManualTaskBase extends org.semanticwb.process.model.Task i
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.ManualTask with a determined LoopCharacteristics
+       * @param value LoopCharacteristics of the type org.semanticwb.process.model.LoopCharacteristics
+       * @param model Model of the org.semanticwb.process.model.ManualTask
+       * @return Iterator with all the org.semanticwb.process.model.ManualTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ManualTask> listManualTaskByLoopCharacteristics(org.semanticwb.process.model.LoopCharacteristics value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ManualTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_loopCharacteristics, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ManualTask with a determined LoopCharacteristics
+       * @param value LoopCharacteristics of the type org.semanticwb.process.model.LoopCharacteristics
+       * @return Iterator with all the org.semanticwb.process.model.ManualTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ManualTask> listManualTaskByLoopCharacteristics(org.semanticwb.process.model.LoopCharacteristics value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ManualTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_loopCharacteristics,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ManualTask with a determined ResourceAssignment
+       * @param value ResourceAssignment of the type org.semanticwb.process.model.ResourceAssignment
+       * @param model Model of the org.semanticwb.process.model.ManualTask
+       * @return Iterator with all the org.semanticwb.process.model.ManualTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ManualTask> listManualTaskByResourceAssignment(org.semanticwb.process.model.ResourceAssignment value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ManualTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_resourceAssignment, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ManualTask with a determined ResourceAssignment
+       * @param value ResourceAssignment of the type org.semanticwb.process.model.ResourceAssignment
+       * @return Iterator with all the org.semanticwb.process.model.ManualTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ManualTask> listManualTaskByResourceAssignment(org.semanticwb.process.model.ResourceAssignment value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ManualTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_resourceAssignment,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.ManualTask with a determined Child
        * @param value Child of the type org.semanticwb.process.model.GraphicalElement
        * @param model Model of the org.semanticwb.process.model.ManualTask
@@ -271,6 +317,24 @@ public abstract class ManualTaskBase extends org.semanticwb.process.model.Task i
     public ManualTaskBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the Callable property
+* @return boolean with the Callable
+*/
+    public boolean isCallable()
+    {
+        return getSemanticObject().getBooleanProperty(swp_callable);
+    }
+
+/**
+* Sets the Callable property
+* @param value long with the Callable
+*/
+    public void setCallable(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swp_callable, value);
     }
 
    /**

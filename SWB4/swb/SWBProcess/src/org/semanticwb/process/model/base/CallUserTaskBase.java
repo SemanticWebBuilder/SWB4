@@ -1,0 +1,321 @@
+package org.semanticwb.process.model.base;
+
+
+public abstract class CallUserTaskBase extends org.semanticwb.process.model.CallTask implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ResourceAssignmentable
+{
+    public static final org.semanticwb.platform.SemanticClass swp_CallUserTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#CallUserTask");
+   /**
+   * The semantic class that represents the currentObject
+   */
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#CallUserTask");
+
+    public static class ClassMgr
+    {
+       /**
+       * Returns a list of CallUserTask for a model
+       * @param model Model to find
+       * @return Iterator of org.semanticwb.process.model.CallUserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallUserTask> listCallUserTasks(org.semanticwb.model.SWBModel model)
+        {
+            java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
+            return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallUserTask>(it, true);
+        }
+       /**
+       * Returns a list of org.semanticwb.process.model.CallUserTask for all models
+       * @return Iterator of org.semanticwb.process.model.CallUserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallUserTask> listCallUserTasks()
+        {
+            java.util.Iterator it=sclass.listInstances();
+            return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallUserTask>(it, true);
+        }
+
+        public static org.semanticwb.process.model.CallUserTask createCallUserTask(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.process.model.CallUserTask.ClassMgr.createCallUserTask(String.valueOf(id), model);
+        }
+       /**
+       * Gets a org.semanticwb.process.model.CallUserTask
+       * @param id Identifier for org.semanticwb.process.model.CallUserTask
+       * @param model Model of the org.semanticwb.process.model.CallUserTask
+       * @return A org.semanticwb.process.model.CallUserTask
+       */
+        public static org.semanticwb.process.model.CallUserTask getCallUserTask(String id, org.semanticwb.model.SWBModel model)
+        {
+            return (org.semanticwb.process.model.CallUserTask)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+        }
+       /**
+       * Create a org.semanticwb.process.model.CallUserTask
+       * @param id Identifier for org.semanticwb.process.model.CallUserTask
+       * @param model Model of the org.semanticwb.process.model.CallUserTask
+       * @return A org.semanticwb.process.model.CallUserTask
+       */
+        public static org.semanticwb.process.model.CallUserTask createCallUserTask(String id, org.semanticwb.model.SWBModel model)
+        {
+            return (org.semanticwb.process.model.CallUserTask)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+        }
+       /**
+       * Remove a org.semanticwb.process.model.CallUserTask
+       * @param id Identifier for org.semanticwb.process.model.CallUserTask
+       * @param model Model of the org.semanticwb.process.model.CallUserTask
+       */
+        public static void removeCallUserTask(String id, org.semanticwb.model.SWBModel model)
+        {
+            model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
+        }
+       /**
+       * Returns true if exists a org.semanticwb.process.model.CallUserTask
+       * @param id Identifier for org.semanticwb.process.model.CallUserTask
+       * @param model Model of the org.semanticwb.process.model.CallUserTask
+       * @return true if the org.semanticwb.process.model.CallUserTask exists, false otherwise
+       */
+
+        public static boolean hasCallUserTask(String id, org.semanticwb.model.SWBModel model)
+        {
+            return (getCallUserTask(id, model)!=null);
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallUserTask with a determined Container
+       * @param value Container of the type org.semanticwb.process.model.Containerable
+       * @param model Model of the org.semanticwb.process.model.CallUserTask
+       * @return Iterator with all the org.semanticwb.process.model.CallUserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallUserTask> listCallUserTaskByContainer(org.semanticwb.process.model.Containerable value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallUserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_container, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallUserTask with a determined Container
+       * @param value Container of the type org.semanticwb.process.model.Containerable
+       * @return Iterator with all the org.semanticwb.process.model.CallUserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallUserTask> listCallUserTaskByContainer(org.semanticwb.process.model.Containerable value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallUserTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_container,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallUserTask with a determined FlowObjectInstance
+       * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
+       * @param model Model of the org.semanticwb.process.model.CallUserTask
+       * @return Iterator with all the org.semanticwb.process.model.CallUserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallUserTask> listCallUserTaskByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallUserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallUserTask with a determined FlowObjectInstance
+       * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
+       * @return Iterator with all the org.semanticwb.process.model.CallUserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallUserTask> listCallUserTaskByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallUserTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallUserTask with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.process.model.CallUserTask
+       * @return Iterator with all the org.semanticwb.process.model.CallUserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallUserTask> listCallUserTaskByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallUserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallUserTask with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.process.model.CallUserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallUserTask> listCallUserTaskByModifiedBy(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallUserTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallUserTask with a determined OutputConnectionObject
+       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
+       * @param model Model of the org.semanticwb.process.model.CallUserTask
+       * @return Iterator with all the org.semanticwb.process.model.CallUserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallUserTask> listCallUserTaskByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallUserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallUserTask with a determined OutputConnectionObject
+       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
+       * @return Iterator with all the org.semanticwb.process.model.CallUserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallUserTask> listCallUserTaskByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallUserTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallUserTask with a determined CalledElement
+       * @param value CalledElement of the type org.semanticwb.process.model.Callable
+       * @param model Model of the org.semanticwb.process.model.CallUserTask
+       * @return Iterator with all the org.semanticwb.process.model.CallUserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallUserTask> listCallUserTaskByCalledElement(org.semanticwb.process.model.Callable value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallUserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_calledElement, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallUserTask with a determined CalledElement
+       * @param value CalledElement of the type org.semanticwb.process.model.Callable
+       * @return Iterator with all the org.semanticwb.process.model.CallUserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallUserTask> listCallUserTaskByCalledElement(org.semanticwb.process.model.Callable value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallUserTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_calledElement,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallUserTask with a determined InputConnectionObject
+       * @param value InputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
+       * @param model Model of the org.semanticwb.process.model.CallUserTask
+       * @return Iterator with all the org.semanticwb.process.model.CallUserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallUserTask> listCallUserTaskByInputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallUserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasInputConnectionObjectInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallUserTask with a determined InputConnectionObject
+       * @param value InputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
+       * @return Iterator with all the org.semanticwb.process.model.CallUserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallUserTask> listCallUserTaskByInputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallUserTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasInputConnectionObjectInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallUserTask with a determined ResourceAssignment
+       * @param value ResourceAssignment of the type org.semanticwb.process.model.ResourceAssignment
+       * @param model Model of the org.semanticwb.process.model.CallUserTask
+       * @return Iterator with all the org.semanticwb.process.model.CallUserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallUserTask> listCallUserTaskByResourceAssignment(org.semanticwb.process.model.ResourceAssignment value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallUserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_resourceAssignment, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallUserTask with a determined ResourceAssignment
+       * @param value ResourceAssignment of the type org.semanticwb.process.model.ResourceAssignment
+       * @return Iterator with all the org.semanticwb.process.model.CallUserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallUserTask> listCallUserTaskByResourceAssignment(org.semanticwb.process.model.ResourceAssignment value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallUserTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_resourceAssignment,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallUserTask with a determined Child
+       * @param value Child of the type org.semanticwb.process.model.GraphicalElement
+       * @param model Model of the org.semanticwb.process.model.CallUserTask
+       * @return Iterator with all the org.semanticwb.process.model.CallUserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallUserTask> listCallUserTaskByChild(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallUserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasChildInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallUserTask with a determined Child
+       * @param value Child of the type org.semanticwb.process.model.GraphicalElement
+       * @return Iterator with all the org.semanticwb.process.model.CallUserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallUserTask> listCallUserTaskByChild(org.semanticwb.process.model.GraphicalElement value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallUserTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasChildInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallUserTask with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.process.model.CallUserTask
+       * @return Iterator with all the org.semanticwb.process.model.CallUserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallUserTask> listCallUserTaskByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallUserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallUserTask with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.process.model.CallUserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallUserTask> listCallUserTaskByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallUserTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallUserTask with a determined Parent
+       * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
+       * @param model Model of the org.semanticwb.process.model.CallUserTask
+       * @return Iterator with all the org.semanticwb.process.model.CallUserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallUserTask> listCallUserTaskByParent(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallUserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_parent, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallUserTask with a determined Parent
+       * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
+       * @return Iterator with all the org.semanticwb.process.model.CallUserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallUserTask> listCallUserTaskByParent(org.semanticwb.process.model.GraphicalElement value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallUserTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_parent,value.getSemanticObject(),sclass));
+            return it;
+        }
+    }
+
+   /**
+   * Constructs a CallUserTaskBase with a SemanticObject
+   * @param base The SemanticObject with the properties for the CallUserTask
+   */
+    public CallUserTaskBase(org.semanticwb.platform.SemanticObject base)
+    {
+        super(base);
+    }
+}

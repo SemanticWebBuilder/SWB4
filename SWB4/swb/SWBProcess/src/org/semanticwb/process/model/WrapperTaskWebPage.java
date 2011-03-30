@@ -62,7 +62,8 @@ public class WrapperTaskWebPage extends org.semanticwb.process.model.base.Wrappe
         UserTask ut=getUserTask();
         if(ut!=null)
         {
-            return ut.listRoleRefs();
+            ResourceAssignment res=ut.getResourceAssignment();
+            if(res!=null)return res.listRoleRefs();
         }
         return super.listRoleRefs();
     }
@@ -72,7 +73,8 @@ public class WrapperTaskWebPage extends org.semanticwb.process.model.base.Wrappe
         UserTask ut=getUserTask();
         if(ut!=null)
         {
-            return ut.listInheritRoleRefs();
+            ResourceAssignment res=ut.getResourceAssignment();
+            if(res!=null)return res.listInheritRoleRefs();
         }
         return super.listInheritRoleRefs();
     }
@@ -83,7 +85,8 @@ public class WrapperTaskWebPage extends org.semanticwb.process.model.base.Wrappe
         UserTask ut=getUserTask();
         if(ut!=null)
         {
-            return ut.hasRoleRef(value);
+            ResourceAssignment res=ut.getResourceAssignment();
+            if(res!=null)return res.hasRoleRef(value);
         }
         return super.hasRoleRef(value);
     }
@@ -93,7 +96,8 @@ public class WrapperTaskWebPage extends org.semanticwb.process.model.base.Wrappe
         UserTask ut=getUserTask();
         if(ut!=null)
         {
-            return ut.getRoleRef();
+            ResourceAssignment res=ut.getResourceAssignment();
+            if(res!=null)return res.getRoleRef();
         }
         return super.getRoleRef();
     }
@@ -134,7 +138,8 @@ public class WrapperTaskWebPage extends org.semanticwb.process.model.base.Wrappe
         UserTask ut=getUserTask();
         if(ut!=null)
         {
-            return ut.listRuleRefs();
+            ResourceAssignment res=ut.getResourceAssignment();
+            if(res!=null)return res.listRuleRefs();
         }
         return super.listRuleRefs();
     }
@@ -144,7 +149,8 @@ public class WrapperTaskWebPage extends org.semanticwb.process.model.base.Wrappe
         UserTask ut=getUserTask();
         if(ut!=null)
         {
-            return ut.listInheritRuleRefs();
+            ResourceAssignment res=ut.getResourceAssignment();
+            if(res!=null)return res.listInheritRuleRefs();
         }
         return super.listInheritRuleRefs();
     }
@@ -154,7 +160,8 @@ public class WrapperTaskWebPage extends org.semanticwb.process.model.base.Wrappe
         UserTask ut=getUserTask();
         if(ut!=null)
         {
-            return ut.hasRuleRef(value);
+            ResourceAssignment res=ut.getResourceAssignment();
+            if(res!=null)return res.hasRuleRef(value);
         }
         return super.hasRuleRef(value);
     }
@@ -164,7 +171,8 @@ public class WrapperTaskWebPage extends org.semanticwb.process.model.base.Wrappe
         UserTask ut=getUserTask();
         if(ut!=null)
         {
-            return ut.getRuleRef();
+            ResourceAssignment res=ut.getResourceAssignment();
+            if(res!=null)return res.getRuleRef();
         }
         return super.getRuleRef();
     }
@@ -175,7 +183,8 @@ public class WrapperTaskWebPage extends org.semanticwb.process.model.base.Wrappe
         UserTask ut=getUserTask();
         if(ut!=null)
         {
-            return ut.listUserGroupRefs();
+            ResourceAssignment res=ut.getResourceAssignment();
+            if(res!=null)return res.listUserGroupRefs();
         }
         return super.listUserGroupRefs();
     }
@@ -185,7 +194,8 @@ public class WrapperTaskWebPage extends org.semanticwb.process.model.base.Wrappe
         UserTask ut=getUserTask();
         if(ut!=null)
         {
-            return ut.listInheritUserGroupRefs();
+            ResourceAssignment res=ut.getResourceAssignment();
+            if(res!=null)return res.listInheritUserGroupRefs();
         }
         return super.listInheritUserGroupRefs();
     }
@@ -197,7 +207,8 @@ public class WrapperTaskWebPage extends org.semanticwb.process.model.base.Wrappe
         UserTask ut=getUserTask();
         if(ut!=null)
         {
-            return ut.hasUserGroupRef(value);
+            ResourceAssignment res=ut.getResourceAssignment();
+            if(res!=null)return res.hasUserGroupRef(value);
         }
         return super.hasUserGroupRef(value);
     }
@@ -207,7 +218,8 @@ public class WrapperTaskWebPage extends org.semanticwb.process.model.base.Wrappe
         UserTask ut=getUserTask();
         if(ut!=null)
         {
-            return ut.getUserGroupRef();
+            ResourceAssignment res=ut.getResourceAssignment();
+            if(res!=null)return res.getUserGroupRef();
         }
         return super.getUserGroupRef();
     }
