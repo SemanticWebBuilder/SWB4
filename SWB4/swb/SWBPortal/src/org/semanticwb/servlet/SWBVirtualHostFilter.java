@@ -184,7 +184,7 @@ public class SWBVirtualHostFilter implements Filter
                     country=url.getCountry()!=null?url.getCountry().getId():null;
                 }else
                 {
-                    _response.sendError(301, "Web Page Permanently Moved..");
+                    _response.sendRedirect(url.getWebPage().getUrl());
                     return;
                 }
             }
