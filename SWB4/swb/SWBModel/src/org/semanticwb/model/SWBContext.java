@@ -357,11 +357,11 @@ public class SWBContext extends SWBContextBase {
                   && obj.listValidObjectProperties(RuleRefable.swb_hasRuleRef).hasNext())
             {
                     ret += "F";
-            }else if (cls.hasProperty(Localeable.swb_language.getName())
+            }else if (!obj.instanceOf(WebSite.sclass) && cls.hasProperty(Localeable.swb_language.getName())
                   && obj.getObjectProperty(Localeable.swb_language)!=null)
             {
                     ret += "F";
-            }else if (cls.hasProperty(Countryable.swb_country.getName())
+            }else if (!obj.instanceOf(WebSite.sclass) && cls.hasProperty(Countryable.swb_country.getName())
                   && obj.getObjectProperty(Countryable.swb_country)!=null)
             {
                     ret += "F";
