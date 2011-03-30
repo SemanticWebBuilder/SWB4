@@ -562,13 +562,7 @@ public class DistributorParams
     private WebPage getDefaultWebpage(HttpServletRequest request)
     {
         Dns dns=Dns.getDns(request.getServerName());
-        //System.out.println("dns:"+dns);
-        if (dns == null && !Dns.containsDns(request.getServerName()))
-        {
-            dns=SWBContext.getGlobalWebSite().getDefaultDns();
-            Dns.cacheDns(request.getServerName(), dns);
-        }
-        //System.out.println("dns:"+dns);
+        
         //encomtrar sitio
         WebPage wp=null;
         if (dns != null)
