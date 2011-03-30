@@ -101,13 +101,27 @@ public class ObjectElement extends org.semanticwb.model.base.ObjectElementBase
             {
                 SemanticObject value=obj.getObjectProperty(prop);
 
-                ret.append("<span>");
+                if(value!=null)
+                {
+                    ret.append("<span>");
 
-                ret.append("<a href=\"?suri=" + value.getEncodedURI() + "\" onclick=\"addNewTab('" + value.getURI()
-                           + "', null, '" + value.getDisplayName(lang) + "');return false;\">"
-                           + value.getDisplayName() + "</a>");
+                    ret.append("<a href=\"?suri=" + value.getEncodedURI() + "\" onclick=\"addNewTab('" + value.getURI()
+                               + "', null, '" + value.getDisplayName(lang) + "');return false;\">"
+                               + value.getDisplayName() + "</a>");
 
-                ret.append("</span>");
+                    ret.append("</span>");
+                }else
+                {
+                    SemanticClass cls2=prop.getRangeClass();
+                    
+                    String url="/swbadmin/jsp/SemObjectEditor.jsp";
+                    url+="?scls="+cls2.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI();
+
+                    ret.append("<a href=\"" + url + "\" onclick=\"javascript:showDialog('" + url
+                               + "', '" + getLocaleString("add",lang)+" "+cls2.getDisplayName(lang) + "');return false;\">"
+                               + getLocaleString("add",lang)+" "+cls2.getDisplayName(lang) + "</a>");
+                    ret.append("<br/>");
+                }
             }
         }
 

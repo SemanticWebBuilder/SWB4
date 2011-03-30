@@ -86,13 +86,16 @@ public class Dns extends DnsBase {
      * Refresh.
      */
     synchronized public static void refresh() {
-        names = new ConcurrentHashMap();
-        Iterator<Dns> it = ClassMgr.listDnses();
-
-        while (it.hasNext())
+        if(names==null)
         {
-            Dns dns = it.next();
-            names.put(dns.getDns(), dns);
+            names = new ConcurrentHashMap();
+            Iterator<Dns> it = ClassMgr.listDnses();
+
+            while (it.hasNext())
+            {
+                Dns dns = it.next();
+                names.put(dns.getDns(), dns);
+            }
         }
     }
 
@@ -109,31 +112,5 @@ public class Dns extends DnsBase {
         return names.get(serverName);
     }
 
-    /**
-     * Cache dns.
-     * 
-     * @param serverName the server name
-     * @param dns the dns
-     */
-    public static void cacheDns(String serverName, Dns dns)
-    {
-        if (names == null) {
-            refresh();
-        }
-        names.put(serverName, dns);
-    }
 
-    /**
-     * Contains dns.
-     * 
-     * @param serverName the server name
-     * @return true, if successful
-     */
-    public static boolean containsDns(String serverName)
-    {
-        if (names == null) {
-            refresh();
-        }
-        return names.containsKey(serverName);
-    }
 }
