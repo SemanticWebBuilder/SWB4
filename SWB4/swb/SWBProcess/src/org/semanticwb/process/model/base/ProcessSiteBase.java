@@ -1,11 +1,10 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Trashable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable,org.semanticwb.model.Indexable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode
+public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Countryable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.Indexable,org.semanticwb.model.Trashable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.FilterableNode
 {
     public static final org.semanticwb.platform.SemanticClass swp_AdhocSubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#AdhocSubProcess");
     public static final org.semanticwb.platform.SemanticClass swp_ProcessPeriod=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessPeriod");
-    public static final org.semanticwb.platform.SemanticClass swp_MultipleSubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#MultipleSubProcess");
     public static final org.semanticwb.platform.SemanticClass swp_ParallelStartEventGateway=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ParallelStartEventGateway");
     public static final org.semanticwb.platform.SemanticClass swp_ExclusiveStartEventGateway=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ExclusiveStartEventGateway");
     public static final org.semanticwb.platform.SemanticClass swp_RuleIntermediateCatchEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#RuleIntermediateCatchEvent");
@@ -19,7 +18,6 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
    * Objeto utilizado para agrupar propiedades que en su conjunto definen una vista dentro de la administración de SWB
    */
     public static final org.semanticwb.platform.SemanticClass swbxf_FormView=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView");
-    public static final org.semanticwb.platform.SemanticClass swp_AdhocTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#AdhocTask");
     public static final org.semanticwb.platform.SemanticClass swp_Task=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Task");
     public static final org.semanticwb.platform.SemanticClass swp_EventBasedGateway=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#EventBasedGateway");
     public static final org.semanticwb.platform.SemanticClass swp_ServiceTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ServiceTask");
@@ -32,7 +30,6 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
     public static final org.semanticwb.platform.SemanticClass swp_UserTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#UserTask");
     public static final org.semanticwb.platform.SemanticClass swp_ProcessObject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessObject");
     public static final org.semanticwb.platform.SemanticClass swp_MultipleStartEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#MultipleStartEvent");
-    public static final org.semanticwb.platform.SemanticClass swp_CompensationTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#CompensationTask");
     public static final org.semanticwb.platform.SemanticClass swp_MessageIntermediateCatchEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#MessageIntermediateCatchEvent");
     public static final org.semanticwb.platform.SemanticClass swp_ProcessRule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessRule");
     public static final org.semanticwb.platform.SemanticClass swp_ReceiveTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ReceiveTask");
@@ -51,7 +48,6 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
     public static final org.semanticwb.platform.SemanticClass swp_SubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#SubProcess");
     public static final org.semanticwb.platform.SemanticClass swp_ComplexGateway=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ComplexGateway");
     public static final org.semanticwb.platform.SemanticClass swp_ErrorEndEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ErrorEndEvent");
-    public static final org.semanticwb.platform.SemanticClass swp_LoopSubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#LoopSubProcess");
     public static final org.semanticwb.platform.SemanticClass swp_TerminationEndEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#TerminationEndEvent");
     public static final org.semanticwb.platform.SemanticClass swp_TimerIntermediateCatchEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#TimerIntermediateCatchEvent");
     public static final org.semanticwb.platform.SemanticClass swp_Event=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Event");
@@ -60,11 +56,9 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
     public static final org.semanticwb.platform.SemanticClass swp_ParallelStartEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ParallelStartEvent");
     public static final org.semanticwb.platform.SemanticClass swp_DirectionalAssociation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#DirectionalAssociation");
     public static final org.semanticwb.platform.SemanticClass swp_MessageStartEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#MessageStartEvent");
-    public static final org.semanticwb.platform.SemanticClass swp_Pool=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Pool");
     public static final org.semanticwb.platform.SemanticClass swp_MessageIntermediateThrowEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#MessageIntermediateThrowEvent");
     public static final org.semanticwb.platform.SemanticClass swp_ScriptTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ScriptTask");
-    public static final org.semanticwb.platform.SemanticClass swp_LoopTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#LoopTask");
-    public static final org.semanticwb.platform.SemanticClass swp_MultipleTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#MultipleTask");
+    public static final org.semanticwb.platform.SemanticClass swp_Pool=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Pool");
     public static final org.semanticwb.platform.SemanticClass swp_LinkIntermediateCatchEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#LinkIntermediateCatchEvent");
     public static final org.semanticwb.platform.SemanticClass swp_DataStoreArtifact=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#DataStoreArtifact");
     public static final org.semanticwb.platform.SemanticClass swp_CompensationIntermediateCatchEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#CompensationIntermediateCatchEvent");
@@ -93,7 +87,6 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
     public static final org.semanticwb.platform.SemanticClass swp_SignalStartEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#SignalStartEvent");
     public static final org.semanticwb.platform.SemanticClass swp_Artifact=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Artifact");
     public static final org.semanticwb.platform.SemanticClass swp_FlowNodeInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#FlowNodeInstance");
-    public static final org.semanticwb.platform.SemanticClass swp_CompensationSubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#CompensationSubProcess");
     public static final org.semanticwb.platform.SemanticClass swp_MultipleIntermediateCatchEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#MultipleIntermediateCatchEvent");
     public static final org.semanticwb.platform.SemanticClass swp_ProcessSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessSite");
    /**
@@ -362,6 +355,29 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined Country
+       * @param value Country of the type org.semanticwb.model.Country
+       * @param model Model of the org.semanticwb.process.model.ProcessSite
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByCountry(org.semanticwb.model.Country value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_country, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined Country
+       * @param value Country of the type org.semanticwb.model.Country
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByCountry(org.semanticwb.model.Country value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_country,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.ProcessSite with a determined HomePage
        * @param value HomePage of the type org.semanticwb.model.WebPage
        * @param model Model of the org.semanticwb.process.model.ProcessSite
@@ -476,36 +492,6 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
     public boolean hasProcessPeriod(String id)
     {
         return org.semanticwb.process.model.ProcessPeriod.ClassMgr.hasProcessPeriod(id, this);
-    }
-
-    public org.semanticwb.process.model.MultipleSubProcess getMultipleSubProcess(String id)
-    {
-        return org.semanticwb.process.model.MultipleSubProcess.ClassMgr.getMultipleSubProcess(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.process.model.MultipleSubProcess> listMultipleSubProcesses()
-    {
-        return org.semanticwb.process.model.MultipleSubProcess.ClassMgr.listMultipleSubProcesses(this);
-    }
-
-    public org.semanticwb.process.model.MultipleSubProcess createMultipleSubProcess(String id)
-    {
-        return org.semanticwb.process.model.MultipleSubProcess.ClassMgr.createMultipleSubProcess(id,this);
-    }
-
-    public org.semanticwb.process.model.MultipleSubProcess createMultipleSubProcess()
-    {
-        long id=getSemanticObject().getModel().getCounter(swp_MultipleSubProcess);
-        return org.semanticwb.process.model.MultipleSubProcess.ClassMgr.createMultipleSubProcess(String.valueOf(id),this);
-    } 
-
-    public void removeMultipleSubProcess(String id)
-    {
-        org.semanticwb.process.model.MultipleSubProcess.ClassMgr.removeMultipleSubProcess(id, this);
-    }
-    public boolean hasMultipleSubProcess(String id)
-    {
-        return org.semanticwb.process.model.MultipleSubProcess.ClassMgr.hasMultipleSubProcess(id, this);
     }
 
     public org.semanticwb.process.model.ParallelStartEventGateway getParallelStartEventGateway(String id)
@@ -806,36 +792,6 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
     public boolean hasFormView(String id)
     {
         return org.semanticwb.model.FormView.ClassMgr.hasFormView(id, this);
-    }
-
-    public org.semanticwb.process.model.AdhocTask getAdhocTask(String id)
-    {
-        return org.semanticwb.process.model.AdhocTask.ClassMgr.getAdhocTask(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.process.model.AdhocTask> listAdhocTasks()
-    {
-        return org.semanticwb.process.model.AdhocTask.ClassMgr.listAdhocTasks(this);
-    }
-
-    public org.semanticwb.process.model.AdhocTask createAdhocTask(String id)
-    {
-        return org.semanticwb.process.model.AdhocTask.ClassMgr.createAdhocTask(id,this);
-    }
-
-    public org.semanticwb.process.model.AdhocTask createAdhocTask()
-    {
-        long id=getSemanticObject().getModel().getCounter(swp_AdhocTask);
-        return org.semanticwb.process.model.AdhocTask.ClassMgr.createAdhocTask(String.valueOf(id),this);
-    } 
-
-    public void removeAdhocTask(String id)
-    {
-        org.semanticwb.process.model.AdhocTask.ClassMgr.removeAdhocTask(id, this);
-    }
-    public boolean hasAdhocTask(String id)
-    {
-        return org.semanticwb.process.model.AdhocTask.ClassMgr.hasAdhocTask(id, this);
     }
 
     public org.semanticwb.process.model.Task getTask(String id)
@@ -1172,36 +1128,6 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
     public boolean hasMultipleStartEvent(String id)
     {
         return org.semanticwb.process.model.MultipleStartEvent.ClassMgr.hasMultipleStartEvent(id, this);
-    }
-
-    public org.semanticwb.process.model.CompensationTask getCompensationTask(String id)
-    {
-        return org.semanticwb.process.model.CompensationTask.ClassMgr.getCompensationTask(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.process.model.CompensationTask> listCompensationTasks()
-    {
-        return org.semanticwb.process.model.CompensationTask.ClassMgr.listCompensationTasks(this);
-    }
-
-    public org.semanticwb.process.model.CompensationTask createCompensationTask(String id)
-    {
-        return org.semanticwb.process.model.CompensationTask.ClassMgr.createCompensationTask(id,this);
-    }
-
-    public org.semanticwb.process.model.CompensationTask createCompensationTask()
-    {
-        long id=getSemanticObject().getModel().getCounter(swp_CompensationTask);
-        return org.semanticwb.process.model.CompensationTask.ClassMgr.createCompensationTask(String.valueOf(id),this);
-    } 
-
-    public void removeCompensationTask(String id)
-    {
-        org.semanticwb.process.model.CompensationTask.ClassMgr.removeCompensationTask(id, this);
-    }
-    public boolean hasCompensationTask(String id)
-    {
-        return org.semanticwb.process.model.CompensationTask.ClassMgr.hasCompensationTask(id, this);
     }
 
     public org.semanticwb.process.model.MessageIntermediateCatchEvent getMessageIntermediateCatchEvent(String id)
@@ -1744,36 +1670,6 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
         return org.semanticwb.process.model.ErrorEndEvent.ClassMgr.hasErrorEndEvent(id, this);
     }
 
-    public org.semanticwb.process.model.LoopSubProcess getLoopSubProcess(String id)
-    {
-        return org.semanticwb.process.model.LoopSubProcess.ClassMgr.getLoopSubProcess(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.process.model.LoopSubProcess> listLoopSubProcesses()
-    {
-        return org.semanticwb.process.model.LoopSubProcess.ClassMgr.listLoopSubProcesses(this);
-    }
-
-    public org.semanticwb.process.model.LoopSubProcess createLoopSubProcess(String id)
-    {
-        return org.semanticwb.process.model.LoopSubProcess.ClassMgr.createLoopSubProcess(id,this);
-    }
-
-    public org.semanticwb.process.model.LoopSubProcess createLoopSubProcess()
-    {
-        long id=getSemanticObject().getModel().getCounter(swp_LoopSubProcess);
-        return org.semanticwb.process.model.LoopSubProcess.ClassMgr.createLoopSubProcess(String.valueOf(id),this);
-    } 
-
-    public void removeLoopSubProcess(String id)
-    {
-        org.semanticwb.process.model.LoopSubProcess.ClassMgr.removeLoopSubProcess(id, this);
-    }
-    public boolean hasLoopSubProcess(String id)
-    {
-        return org.semanticwb.process.model.LoopSubProcess.ClassMgr.hasLoopSubProcess(id, this);
-    }
-
     public org.semanticwb.process.model.TerminationEndEvent getTerminationEndEvent(String id)
     {
         return org.semanticwb.process.model.TerminationEndEvent.ClassMgr.getTerminationEndEvent(id, this);
@@ -2008,36 +1904,6 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
         return org.semanticwb.process.model.MessageStartEvent.ClassMgr.hasMessageStartEvent(id, this);
     }
 
-    public org.semanticwb.process.model.Pool getPool(String id)
-    {
-        return org.semanticwb.process.model.Pool.ClassMgr.getPool(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.process.model.Pool> listPools()
-    {
-        return org.semanticwb.process.model.Pool.ClassMgr.listPools(this);
-    }
-
-    public org.semanticwb.process.model.Pool createPool(String id)
-    {
-        return org.semanticwb.process.model.Pool.ClassMgr.createPool(id,this);
-    }
-
-    public org.semanticwb.process.model.Pool createPool()
-    {
-        long id=getSemanticObject().getModel().getCounter(swp_Pool);
-        return org.semanticwb.process.model.Pool.ClassMgr.createPool(String.valueOf(id),this);
-    } 
-
-    public void removePool(String id)
-    {
-        org.semanticwb.process.model.Pool.ClassMgr.removePool(id, this);
-    }
-    public boolean hasPool(String id)
-    {
-        return org.semanticwb.process.model.Pool.ClassMgr.hasPool(id, this);
-    }
-
     public org.semanticwb.process.model.MessageIntermediateThrowEvent getMessageIntermediateThrowEvent(String id)
     {
         return org.semanticwb.process.model.MessageIntermediateThrowEvent.ClassMgr.getMessageIntermediateThrowEvent(id, this);
@@ -2098,64 +1964,34 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
         return org.semanticwb.process.model.ScriptTask.ClassMgr.hasScriptTask(id, this);
     }
 
-    public org.semanticwb.process.model.LoopTask getLoopTask(String id)
+    public org.semanticwb.process.model.Pool getPool(String id)
     {
-        return org.semanticwb.process.model.LoopTask.ClassMgr.getLoopTask(id, this);
+        return org.semanticwb.process.model.Pool.ClassMgr.getPool(id, this);
     }
 
-    public java.util.Iterator<org.semanticwb.process.model.LoopTask> listLoopTasks()
+    public java.util.Iterator<org.semanticwb.process.model.Pool> listPools()
     {
-        return org.semanticwb.process.model.LoopTask.ClassMgr.listLoopTasks(this);
+        return org.semanticwb.process.model.Pool.ClassMgr.listPools(this);
     }
 
-    public org.semanticwb.process.model.LoopTask createLoopTask(String id)
+    public org.semanticwb.process.model.Pool createPool(String id)
     {
-        return org.semanticwb.process.model.LoopTask.ClassMgr.createLoopTask(id,this);
+        return org.semanticwb.process.model.Pool.ClassMgr.createPool(id,this);
     }
 
-    public org.semanticwb.process.model.LoopTask createLoopTask()
+    public org.semanticwb.process.model.Pool createPool()
     {
-        long id=getSemanticObject().getModel().getCounter(swp_LoopTask);
-        return org.semanticwb.process.model.LoopTask.ClassMgr.createLoopTask(String.valueOf(id),this);
+        long id=getSemanticObject().getModel().getCounter(swp_Pool);
+        return org.semanticwb.process.model.Pool.ClassMgr.createPool(String.valueOf(id),this);
     } 
 
-    public void removeLoopTask(String id)
+    public void removePool(String id)
     {
-        org.semanticwb.process.model.LoopTask.ClassMgr.removeLoopTask(id, this);
+        org.semanticwb.process.model.Pool.ClassMgr.removePool(id, this);
     }
-    public boolean hasLoopTask(String id)
+    public boolean hasPool(String id)
     {
-        return org.semanticwb.process.model.LoopTask.ClassMgr.hasLoopTask(id, this);
-    }
-
-    public org.semanticwb.process.model.MultipleTask getMultipleTask(String id)
-    {
-        return org.semanticwb.process.model.MultipleTask.ClassMgr.getMultipleTask(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.process.model.MultipleTask> listMultipleTasks()
-    {
-        return org.semanticwb.process.model.MultipleTask.ClassMgr.listMultipleTasks(this);
-    }
-
-    public org.semanticwb.process.model.MultipleTask createMultipleTask(String id)
-    {
-        return org.semanticwb.process.model.MultipleTask.ClassMgr.createMultipleTask(id,this);
-    }
-
-    public org.semanticwb.process.model.MultipleTask createMultipleTask()
-    {
-        long id=getSemanticObject().getModel().getCounter(swp_MultipleTask);
-        return org.semanticwb.process.model.MultipleTask.ClassMgr.createMultipleTask(String.valueOf(id),this);
-    } 
-
-    public void removeMultipleTask(String id)
-    {
-        org.semanticwb.process.model.MultipleTask.ClassMgr.removeMultipleTask(id, this);
-    }
-    public boolean hasMultipleTask(String id)
-    {
-        return org.semanticwb.process.model.MultipleTask.ClassMgr.hasMultipleTask(id, this);
+        return org.semanticwb.process.model.Pool.ClassMgr.hasPool(id, this);
     }
 
     public org.semanticwb.process.model.LinkIntermediateCatchEvent getLinkIntermediateCatchEvent(String id)
@@ -2978,36 +2814,6 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
     public boolean hasFlowNodeInstance(String id)
     {
         return org.semanticwb.process.model.FlowNodeInstance.ClassMgr.hasFlowNodeInstance(id, this);
-    }
-
-    public org.semanticwb.process.model.CompensationSubProcess getCompensationSubProcess(String id)
-    {
-        return org.semanticwb.process.model.CompensationSubProcess.ClassMgr.getCompensationSubProcess(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.process.model.CompensationSubProcess> listCompensationSubProcesses()
-    {
-        return org.semanticwb.process.model.CompensationSubProcess.ClassMgr.listCompensationSubProcesses(this);
-    }
-
-    public org.semanticwb.process.model.CompensationSubProcess createCompensationSubProcess(String id)
-    {
-        return org.semanticwb.process.model.CompensationSubProcess.ClassMgr.createCompensationSubProcess(id,this);
-    }
-
-    public org.semanticwb.process.model.CompensationSubProcess createCompensationSubProcess()
-    {
-        long id=getSemanticObject().getModel().getCounter(swp_CompensationSubProcess);
-        return org.semanticwb.process.model.CompensationSubProcess.ClassMgr.createCompensationSubProcess(String.valueOf(id),this);
-    } 
-
-    public void removeCompensationSubProcess(String id)
-    {
-        org.semanticwb.process.model.CompensationSubProcess.ClassMgr.removeCompensationSubProcess(id, this);
-    }
-    public boolean hasCompensationSubProcess(String id)
-    {
-        return org.semanticwb.process.model.CompensationSubProcess.ClassMgr.hasCompensationSubProcess(id, this);
     }
 
     public org.semanticwb.process.model.MultipleIntermediateCatchEvent getMultipleIntermediateCatchEvent(String id)

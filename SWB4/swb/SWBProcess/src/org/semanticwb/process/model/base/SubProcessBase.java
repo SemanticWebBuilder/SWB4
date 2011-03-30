@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class SubProcessBase extends org.semanticwb.process.model.Activity implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.TemplateRefable,org.semanticwb.process.model.Containerable
+public abstract class SubProcessBase extends org.semanticwb.process.model.Activity implements org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Referensable,org.semanticwb.model.TemplateRefable,org.semanticwb.process.model.Containerable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ResourceAssignmentable
 {
     public static final org.semanticwb.platform.SemanticClass swp_SubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#SubProcess");
    /**
@@ -240,6 +240,52 @@ public abstract class SubProcessBase extends org.semanticwb.process.model.Activi
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.SubProcess with a determined LoopCharacteristics
+       * @param value LoopCharacteristics of the type org.semanticwb.process.model.LoopCharacteristics
+       * @param model Model of the org.semanticwb.process.model.SubProcess
+       * @return Iterator with all the org.semanticwb.process.model.SubProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.SubProcess> listSubProcessByLoopCharacteristics(org.semanticwb.process.model.LoopCharacteristics value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SubProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_loopCharacteristics, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.SubProcess with a determined LoopCharacteristics
+       * @param value LoopCharacteristics of the type org.semanticwb.process.model.LoopCharacteristics
+       * @return Iterator with all the org.semanticwb.process.model.SubProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.SubProcess> listSubProcessByLoopCharacteristics(org.semanticwb.process.model.LoopCharacteristics value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SubProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_loopCharacteristics,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.SubProcess with a determined ResourceAssignment
+       * @param value ResourceAssignment of the type org.semanticwb.process.model.ResourceAssignment
+       * @param model Model of the org.semanticwb.process.model.SubProcess
+       * @return Iterator with all the org.semanticwb.process.model.SubProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.SubProcess> listSubProcessByResourceAssignment(org.semanticwb.process.model.ResourceAssignment value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SubProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_resourceAssignment, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.SubProcess with a determined ResourceAssignment
+       * @param value ResourceAssignment of the type org.semanticwb.process.model.ResourceAssignment
+       * @return Iterator with all the org.semanticwb.process.model.SubProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.SubProcess> listSubProcessByResourceAssignment(org.semanticwb.process.model.ResourceAssignment value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SubProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_resourceAssignment,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.SubProcess with a determined Child
        * @param value Child of the type org.semanticwb.process.model.GraphicalElement
        * @param model Model of the org.semanticwb.process.model.SubProcess
@@ -432,6 +478,24 @@ public abstract class SubProcessBase extends org.semanticwb.process.model.Activi
          return ret;
     }
 
+/**
+* Gets the ForCompensation property
+* @return boolean with the ForCompensation
+*/
+    public boolean isForCompensation()
+    {
+        return getSemanticObject().getBooleanProperty(swp_forCompensation);
+    }
+
+/**
+* Sets the ForCompensation property
+* @param value long with the ForCompensation
+*/
+    public void setForCompensation(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swp_forCompensation, value);
+    }
+
     public org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject> listProcessClasses()
     {
         com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getRDFResource().listProperties(swp_hasProcessClass.getRDFProperty());
@@ -461,6 +525,44 @@ public abstract class SubProcessBase extends org.semanticwb.process.model.Activi
     {
          org.semanticwb.platform.SemanticObject ret=null;
          ret=getSemanticObject().getObjectProperty(swp_hasProcessClass);
+         return ret;
+    }
+   /**
+   * Sets the value for the property LoopCharacteristics
+   * @param value LoopCharacteristics to set
+   */
+
+    public void setLoopCharacteristics(org.semanticwb.process.model.LoopCharacteristics value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_loopCharacteristics, value.getSemanticObject());
+        }else
+        {
+            removeLoopCharacteristics();
+        }
+    }
+   /**
+   * Remove the value for LoopCharacteristics property
+   */
+
+    public void removeLoopCharacteristics()
+    {
+        getSemanticObject().removeProperty(swp_loopCharacteristics);
+    }
+
+   /**
+   * Gets the LoopCharacteristics
+   * @return a org.semanticwb.process.model.LoopCharacteristics
+   */
+    public org.semanticwb.process.model.LoopCharacteristics getLoopCharacteristics()
+    {
+         org.semanticwb.process.model.LoopCharacteristics ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_loopCharacteristics);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.LoopCharacteristics)obj.createGenericInstance();
+         }
          return ret;
     }
 

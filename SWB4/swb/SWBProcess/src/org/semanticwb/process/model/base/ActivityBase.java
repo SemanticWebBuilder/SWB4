@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ActivityBase extends org.semanticwb.process.model.FlowNode implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class ActivityBase extends org.semanticwb.process.model.FlowNode implements org.semanticwb.model.Traceable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swp_Activity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Activity");
    /**
@@ -188,6 +188,29 @@ public abstract class ActivityBase extends org.semanticwb.process.model.FlowNode
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.Activity with a determined ResourceAssignment
+       * @param value ResourceAssignment of the type org.semanticwb.process.model.ResourceAssignment
+       * @param model Model of the org.semanticwb.process.model.Activity
+       * @return Iterator with all the org.semanticwb.process.model.Activity
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Activity> listActivityByResourceAssignment(org.semanticwb.process.model.ResourceAssignment value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Activity> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_resourceAssignment, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Activity with a determined ResourceAssignment
+       * @param value ResourceAssignment of the type org.semanticwb.process.model.ResourceAssignment
+       * @return Iterator with all the org.semanticwb.process.model.Activity
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Activity> listActivityByResourceAssignment(org.semanticwb.process.model.ResourceAssignment value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Activity> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_resourceAssignment,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.Activity with a determined Child
        * @param value Child of the type org.semanticwb.process.model.GraphicalElement
        * @param model Model of the org.semanticwb.process.model.Activity
@@ -265,5 +288,43 @@ public abstract class ActivityBase extends org.semanticwb.process.model.FlowNode
     public ActivityBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+   /**
+   * Sets the value for the property ResourceAssignment
+   * @param value ResourceAssignment to set
+   */
+
+    public void setResourceAssignment(org.semanticwb.process.model.ResourceAssignment value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_resourceAssignment, value.getSemanticObject());
+        }else
+        {
+            removeResourceAssignment();
+        }
+    }
+   /**
+   * Remove the value for ResourceAssignment property
+   */
+
+    public void removeResourceAssignment()
+    {
+        getSemanticObject().removeProperty(swp_resourceAssignment);
+    }
+
+   /**
+   * Gets the ResourceAssignment
+   * @return a org.semanticwb.process.model.ResourceAssignment
+   */
+    public org.semanticwb.process.model.ResourceAssignment getResourceAssignment()
+    {
+         org.semanticwb.process.model.ResourceAssignment ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_resourceAssignment);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.ResourceAssignment)obj.createGenericInstance();
+         }
+         return ret;
     }
 }
