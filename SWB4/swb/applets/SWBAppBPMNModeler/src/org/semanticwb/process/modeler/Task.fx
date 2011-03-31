@@ -59,6 +59,13 @@ public class Task extends Activity
         effect: adjust
     }
 
+    def imgMultiSeq = ImageView {
+        image: Image {
+            url: "{__DIR__}images/n_multi_seq.png"
+        }
+        effect: adjust
+    }
+
     def imgComp = ImageView {
         image: Image {
             url: "{__DIR__}images/n_compensa_b.png"
@@ -98,6 +105,11 @@ public class Task extends Activity
         setModifier(TYPE_MULTIPLE, isMultiInstance);
     }
 
+    var multipleseq=bind isSequentialMultiInstance on replace
+    {
+        setModifier(TYPE_MULTIPLE_SEQUENTIAL, isSequentialMultiInstance);
+    }
+
     public override function create(): Node
     {
         blocksMouse = true;
@@ -129,6 +141,14 @@ public class Task extends Activity
                         status: bind if (isMultiInstance) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                         action: function (e: MouseEvent) {
                             this.setModifier(TYPE_MULTIPLE, not isMultiInstance);
+                            ModelerUtils.popup.hide();
+                        }
+                    },
+                    MenuItem {
+                        caption: ##"actMultiInstanceSeq";
+                        status: bind if (isSequentialMultiInstance) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            this.setModifier(TYPE_MULTIPLE_SEQUENTIAL, not isSequentialMultiInstance);
                             ModelerUtils.popup.hide();
                         }
                     },
@@ -430,6 +450,9 @@ public class Task extends Activity
                 if (isMultiInstance) {
                     isMultiInstance = false;
                 }
+                if (isSequentialMultiInstance) {
+                    isSequentialMultiInstance = false;
+                }
             }
         } else if(modif.equals(TYPE_MULTIPLE)) {
             isMultiInstance = val;
@@ -437,6 +460,20 @@ public class Task extends Activity
             if (isMultiInstance) {
                 if (isLoop) {
                     isLoop = false;
+                }
+                if (isSequentialMultiInstance) {
+                    isSequentialMultiInstance = false;
+                }
+            }
+        } else if (modif.equals(TYPE_MULTIPLE_SEQUENTIAL)) {
+            isSequentialMultiInstance = val;
+
+            if (isSequentialMultiInstance) {
+                if (isLoop) {
+                    isLoop = false;
+                }
+                if (isMultiInstance) {
+                    isMultiInstance = false;
                 }
             }
         }
@@ -450,6 +487,8 @@ public class Task extends Activity
             insert imgLoop into icons;
         } else if (isMultiInstance) {
             insert imgMulti into icons;
+        } else if (isSequentialMultiInstance) {
+            insert imgMultiSeq into icons;
         }
 
         if (isForCompensation) {
