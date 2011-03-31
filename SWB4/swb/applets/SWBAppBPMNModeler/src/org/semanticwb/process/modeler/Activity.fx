@@ -15,6 +15,7 @@ import javafx.scene.Node;
 public def TYPE_LOOP="loop";
 public def TYPE_COMPENSATION="compensation";
 public def TYPE_MULTIPLE="multiple";
+public def TYPE_MULTIPLE_SEQUENTIAL="sequential";
 public class Activity extends FlowNode
 {
     public override var over on replace {
