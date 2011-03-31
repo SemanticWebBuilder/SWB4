@@ -20,7 +20,6 @@ import javafx.scene.input.MouseEvent;
 import java.lang.Void;
 import org.semanticwb.process.modeler.ModelerUtils;
 
-
 /**
  * @author javier.solis
  */
@@ -51,6 +50,7 @@ public class GraphicalElement extends CustomNode
     public var resizeType:Number=ResizeNode.RESIZE_A;
     public var modeler:Modeler;
     public var isMultiInstance: Boolean = false;
+    public var isSequentialMultiInstance: Boolean = false;
     public var isLoop: Boolean = false;
     public var isForCompensation: Boolean = false;
     public var isAdHoc: Boolean = false;
@@ -711,4 +711,30 @@ public class GraphicalElement extends CustomNode
             this.text.setSize(size);
         }
     }
+
+//    public function getGraphicsInfos(doc: Document) : Element {
+//        var ret = doc.createElement("NodeGraphicsInfos");
+//        var graphicInfo = doc.createElement("NodeGraphicsInfo");
+//        var coords = doc.createElement("Coordinates");
+//
+//        graphicInfo.appendChild(coords);
+//        ret.appendChild(graphicInfo);
+//
+//        graphicInfo.setAttribute("ToolId", "SemanticWebBuilder_Process_Modeler");
+//        graphicInfo.setAttribute("IsVisible", "{canView()}");
+//        graphicInfo.setAttribute("Width", "{w}");
+//        graphicInfo.setAttribute("Height", "{h}");
+//
+//        if (getGraphParent() instanceof Lane) {
+//            graphicInfo.setAttribute("LaneId", "{getGraphParent().uri}");
+//        }
+//
+//        coords.setAttribute("XCoordinate", "{x}");
+//        coords.setAttribute("YCoordinate", "{y}");
+//        return ret;
+//    }
+//
+//    public function getXPDLDefinition(doc: Document) : Element {
+//        return null;
+//    }
 }
