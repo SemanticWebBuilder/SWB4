@@ -8,7 +8,7 @@
                 <statictext name="txtNotaUserLogin">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {user.login} Login de usuário
+				 {user.login} Login do usuário
 			</font>
 		]]>
                 </statictext>
@@ -26,6 +26,13 @@
 			</font>
 		]]>
                 </statictext>
+                <statictext name="txtNotaUserCountry">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {user.country} Usuário país
+			</font>
+		]]>
+                </statictext>
                 <statictext name="txtNotaWebPath">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
@@ -36,7 +43,7 @@
                 <statictext name="txtNotaDispath">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {dispath} Caminho da instância SWB Dealer
+				 {distpath} Caminho da instância SWB Dealer
 			</font>
 		]]>
                 </statictext>
@@ -78,7 +85,7 @@
                 <statictext name="txtNotaTopicTitle">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {topictitle} Título da página
+				 {topic.title} Título da página
 			</font>
 		]]>
                 </statictext>

@@ -22,35 +22,42 @@
                 <statictext name="txtNotaUserLanguage">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {user.language} Lenguaje del Usuario
+				 {user.language} Código del Lenguaje del Usuario
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaUserCountry">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {user.country} Código del País del Usuario
 			</font>
 		]]>
                 </statictext>
                 <statictext name="txtNotaWebPath">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {webpath} Ruta web
+				 {webpath} Ruta web (del contexto de la instancia de SWB)
 			</font>
 		]]>
                 </statictext>
                 <statictext name="txtNotaDispath">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {dispath} Ruta del distribuidor de instancia SWB
+				 {distpath} Ruta del distribuidor de la instancia de SWB
 			</font>
 		]]>
                 </statictext>
                 <statictext name="txtNotaWebWorkPath">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {webworkpath} Ruta web para este portal
+				 {webworkpath} Ruta web del directorio de trabajo para esta instancia de SWB
 			</font>
 		]]>
                 </statictext>
                 <statictext name="txtNotaWorkPath">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {workpath} Directorio de trabajo para este portal
+				 {workpath} Ruta física del directorio de trabajo de la instancia de SWB
 			</font>
 		]]>
                 </statictext>
@@ -64,21 +71,21 @@
                 <statictext name="txtNotaTopicUrl">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {topicurl} Url de la página
+				 {topicurl} Url de la página en que se desplegará este texto
 			</font>
 		]]>
                 </statictext>
                 <statictext name="txtNotaTopicId">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {topicid} Identificador de la página
+				 {topicid} Identificador de la página en que se desplegará este texto
 			</font>
 		]]>
                 </statictext>
                 <statictext name="txtNotaTopicTitle">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {topictitle} Título de la página
+				 {topic.title} Título de la página en que se desplegará este texto
 			</font>
 		]]>
                 </statictext>
