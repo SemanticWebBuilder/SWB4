@@ -1,6 +1,9 @@
 package org.semanticwb.model;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -54,8 +57,6 @@ public class UniqueTextElement extends org.semanticwb.model.base.UniqueTextEleme
 
         String value = request.getParameter(propName);
 
-       // System.out.println("validate:"+value);
-
         if(value!=null&&value.indexOf(" ")>=0)
         {
             throw new FormValidateException(getLocaleString("error", "No se permiten espacios:") + value);
@@ -63,6 +64,21 @@ public class UniqueTextElement extends org.semanticwb.model.base.UniqueTextEleme
 
         if(value!=null)
         {
+           String reservedWords = getReservedWords() ;
+           if(null!=reservedWords)
+           {
+               HashMap<String,String> hsres = new HashMap<String,String>();
+               StringTokenizer stoken = new StringTokenizer(reservedWords,",");
+               while (stoken.hasMoreTokens()) {
+                   String token = stoken.nextToken();
+                   hsres.put(token,token);
+               }
+               if(hsres.get(value)!=null) // encontro palabra reservada
+               {
+                  throw new FormValidateException(getLocaleString("error", "No se permiten es texto reservado:") + value);
+               }
+           }
+
             SemanticClass sclass = prop.getDomainClass();
             Iterator<SemanticObject> itso = getModel().listInstancesOfClass(sclass);
             while (itso.hasNext()) {
