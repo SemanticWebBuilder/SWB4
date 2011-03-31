@@ -1,5 +1,6 @@
 "actDelete" = "Delete"
-"actMultiInstance" = "Multi-Instance"
+"actMultiInstance" = "Paralel Multi-Instance"
+"actMultiInstanceSeq" = "Sequential Multi-Instance"
 "actLoop" = "Loop"
 "actCompensa" = "Compensation"
 "confirmDelete" = "Are you sure you want to delete %s?"
