@@ -269,6 +269,7 @@ public class ToolBar extends CustomNode
            ele.put("w",ge.w);
            ele.put("h",ge.h);
            ele.put("isMultiInstance",ge.isMultiInstance);
+           ele.put("isSequentialMultiInstance",ge.isSequentialMultiInstance);
            ele.put("isLoop", ge.isLoop);
            ele.put("isForCompensation", ge.isForCompensation);
            ele.put("isInterrupting", ge.isInterrupting);
@@ -341,6 +342,7 @@ public class ToolBar extends CustomNode
                 var description=js.optString("description", "");
                 var isLoop=js.optBoolean("isLoop", false);
                 var isMultiInstance=js.optBoolean("isMultiInstance", false);
+                var isSequentialMultiInstance=js.optBoolean("isSequentialMultiInstance", false);
                 var isForCompensation=js.optBoolean("isForCompensation", false);
                 var isInterrupting=js.optBoolean("isInterrupting", false);
                 //var type=js.getString("type");
@@ -353,6 +355,7 @@ public class ToolBar extends CustomNode
                 ge.uri=uri;
                 ge.isLoop = isLoop;
                 ge.isMultiInstance = isMultiInstance;
+                ge.isSequentialMultiInstance = isSequentialMultiInstance;
                 ge.isForCompensation = isForCompensation;
                 ge.isInterrupting = isInterrupting;
                 //println("uri:{ge.uri}");
