@@ -16,6 +16,7 @@ import org.semanticwb.process.modeler.ModelerUtils;
 import javafx.animation.Interpolator;
 import javafx.animation.Timeline;
 import javafx.scene.paint.Color;
+import javafx.scene.input.MouseEvent;
 
 /**
  * @author javier.solis
@@ -51,13 +52,11 @@ public class Splash extends CustomNode
         y: bind y-ai.height/2
         image:ai
         smooth: false
+        onMouseClicked: function (e: MouseEvent) {
+            this.visible = false;
+        }
     };
 
-    var f=bind focused on replace
-    {
-        if(not f)visible=false;
-    }
-    
     function initializeCustomNode():Void 
     {
         var t:Text;
@@ -87,6 +86,6 @@ public class Splash extends CustomNode
         this.y=y;
         visible=true;
         timeLine.playFromStart();
-        requestFocus();
+        //requestFocus();
     }
 }
