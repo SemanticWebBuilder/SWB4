@@ -1,4 +1,5 @@
-"actMultiInstance" = "Multi-Instance"
+"actMultiInstance" = "Parallel Multi-Instance"
+"actMultiInstanceSeq" = "Sequential Multi-Instance"
 "actLoop" = "Loop"
 "actCompensa" = "Compensation"
 "actCopy" = "Copy"
