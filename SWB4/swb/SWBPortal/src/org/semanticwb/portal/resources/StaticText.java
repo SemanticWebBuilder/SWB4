@@ -129,6 +129,7 @@ public class StaticText extends GenericAdmResource {
         str=SWBUtils.TEXT.replaceAll(str, "{user.login}", paramRequest.getUser().getLogin());
         str=SWBUtils.TEXT.replaceAll(str, "{user.email}", paramRequest.getUser().getEmail());
         str=SWBUtils.TEXT.replaceAll(str, "{user.language}", paramRequest.getUser().getLanguage());
+        str=SWBUtils.TEXT.replaceAll(str, "{user.country}", paramRequest.getUser().getCountry());
         str=SWBUtils.TEXT.replaceAll(str, "{webpath}", SWBPortal.getContextPath());
         str=SWBUtils.TEXT.replaceAll(str, "{distpath}", SWBPortal.getDistributorPath());
         str=SWBUtils.TEXT.replaceAll(str, "{webworkpath}", SWBPortal.getWebWorkPath());
@@ -136,7 +137,7 @@ public class StaticText extends GenericAdmResource {
         str=SWBUtils.TEXT.replaceAll(str, "{websiteid}", paramRequest.getWebPage().getWebSiteId());
         str=SWBUtils.TEXT.replaceAll(str, "{topicurl}", paramRequest.getWebPage().getUrl());
         str=SWBUtils.TEXT.replaceAll(str, "{topicid}", paramRequest.getWebPage().getId());
-        str=SWBUtils.TEXT.replaceAll(str, "{topic.title}", paramRequest.getWebPage().getTitle(paramRequest.getUser().getLanguage()));
+        str=SWBUtils.TEXT.replaceAll(str, "{topic.title}", paramRequest.getWebPage().getDisplayTitle(paramRequest.getUser().getLanguage()));
         if(str.indexOf("{templatepath}")>-1)
         {
             //TODO:pasar template por paramrequest

@@ -22,63 +22,70 @@
                 <statictext name="txtNotaUserLanguage">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {user.language} User Language
+				 {user.language} User's language code
+			</font>
+		]]>
+                </statictext>
+                <statictext name="txtNotaUserCountry">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				 {user.country} User's country code
 			</font>
 		]]>
                 </statictext>
                 <statictext name="txtNotaWebPath">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {webpath} Web path
+				 {webpath} Web path (of this SWB instance's context)
 			</font>
 		]]>
                 </statictext>
                 <statictext name="txtNotaDispath">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {dispath} Distributor path
+				 {distpath} Distributor path for this SWB instance's context
 			</font>
 		]]>
                 </statictext>
                 <statictext name="txtNotaWebWorkPath">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {webworkpath} Web work path
+				 {webworkpath} Web path for this SWB instance's work directory
 			</font>
 		]]>
                 </statictext>
                 <statictext name="txtNotaWorkPath">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {workpath} Work path
+				 {workpath} Physical path for this SWB instance's work directory
 			</font>
 		]]>
                 </statictext>
                 <statictext name="txtNotaWebSiteId">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {websiteid} Web site id
+				 {websiteid} Identifier of the Web site related to this resource
 			</font>
 		]]>
                 </statictext>
                 <statictext name="txtNotaTopicUrl">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {topicurl} Topic url
+				 {topicurl} URL for the page in which this StaticText is displayed
 			</font>
 		]]>
                 </statictext>
                 <statictext name="txtNotaTopicId">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {topicid} Topic id
+				 {topicid} Identifier of the page in which this StaticText is displayed
 			</font>
 		]]>
                 </statictext>
                 <statictext name="txtNotaTopicTitle">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {topictitle} Topic title
+				 {topic.title} Title of the page in which this StaticText is displayed
 			</font>
 		]]>
                 </statictext>
@@ -95,7 +102,7 @@
         <statictext name="txtNote">
 		<![CDATA[
 			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				* Datos requeridos.
+				* Required data.
 			</font>
 		]]>
         </statictext>
