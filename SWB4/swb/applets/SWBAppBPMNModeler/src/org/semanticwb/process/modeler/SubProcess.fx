@@ -65,6 +65,13 @@ public class SubProcess extends Activity
         effect: adjust
     }
 
+    def imgMultiSeq = ImageView {
+        image: Image {
+            url: "{__DIR__}images/n_multi_seq.png"
+        }
+        effect: adjust
+    }
+
     def imgComp = ImageView {
         image: Image {
             url: "{__DIR__}images/n_compensa_b.png"
@@ -100,6 +107,11 @@ public class SubProcess extends Activity
     var multiple=bind isMultiInstance on replace
     {
         setModifier(TYPE_MULTIPLE, isMultiInstance);
+    }
+
+    var multipleseq=bind isSequentialMultiInstance on replace
+    {
+        setModifier(TYPE_MULTIPLE_SEQUENTIAL, isSequentialMultiInstance);
     }
     var trans: Rectangle;
 
@@ -159,6 +171,14 @@ public class SubProcess extends Activity
                             status: bind if (isMultiInstance) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                             action: function (e: MouseEvent) {
                                 this.setModifier(TYPE_MULTIPLE, not isMultiInstance);
+                                ModelerUtils.popup.hide();
+                            }
+                        },
+                        MenuItem {
+                            caption: ##"actMultiInstanceSeq";
+                            status: bind if (isSequentialMultiInstance) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
+                            action: function (e: MouseEvent) {
+                                this.setModifier(TYPE_MULTIPLE_SEQUENTIAL, not isSequentialMultiInstance);
                                 ModelerUtils.popup.hide();
                             }
                         },
@@ -265,6 +285,9 @@ public class SubProcess extends Activity
                 if (isMultiInstance) {
                     isMultiInstance = false;
                 }
+                if (isSequentialMultiInstance) {
+                    isSequentialMultiInstance = false;
+                }
             }
         } else if(modif.equals(TYPE_MULTIPLE)) {
             isMultiInstance = val;
@@ -272,6 +295,20 @@ public class SubProcess extends Activity
             if (isMultiInstance) {
                 if (isLoop) {
                     isLoop = false;
+                }
+                if (isSequentialMultiInstance) {
+                    isSequentialMultiInstance = false;
+                }
+            }
+        } else if (modif.equals(TYPE_MULTIPLE_SEQUENTIAL)) {
+            isSequentialMultiInstance = val;
+
+            if (isSequentialMultiInstance) {
+                if (isLoop) {
+                    isLoop = false;
+                }
+                if (isMultiInstance) {
+                    isMultiInstance = false;
                 }
             }
         }
@@ -289,6 +326,8 @@ public class SubProcess extends Activity
             insert imgLoop into icons;
         } else if (isMultiInstance) {
             insert imgMulti into icons;
+        } else if (isSequentialMultiInstance) {
+            insert imgMultiSeq into icons;
         }
 
         if (isForCompensation) {
@@ -373,4 +412,26 @@ public class SubProcess extends Activity
 
         return t;
     }
+
+//    override public function getXPDLDefinition(doc: Document) : Element {
+//        var ret = doc.createElement("ActivitySet");
+//        var activities = doc.createElement("Activities");
+//        var graphicInfos = getGraphicsInfos(doc);
+//
+//        ret.appendChild(graphicInfos);
+//        ret.setAttribute("Id", uri);
+//        ret.setAttribute("Name", "{title}");
+//
+//        if (type.equals(TYPE_ADHOC)) {
+//            ret.setAttribute("AdHoc", "true");
+//            ret.setAttribute("AdHocOrdering", "Parallel");
+//        }
+//
+//        for (ele in getContainerChilds() where ele instanceof GraphicalElement) {
+//            var activity = (ele as GraphicalElement).getXPDLDefinition(doc);
+//            activities.appendChild(activity);
+//        }
+//
+//        return ret;
+//    }
 }
