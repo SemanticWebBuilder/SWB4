@@ -13,4 +13,6 @@
 "actSignal" = "Signal"
 "actMultiple" = "Multiple"
 "actParallel" = "Parallel"
-"nonInterrupting" = "No-interruptor"
+"interrupting" = "Interrupting"
+"nonInterrupting" = "Non-Interrupting"
+"actBehavior" = "Behavior"
