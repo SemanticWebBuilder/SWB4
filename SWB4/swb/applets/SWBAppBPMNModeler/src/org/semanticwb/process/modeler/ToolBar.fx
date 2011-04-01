@@ -1872,22 +1872,22 @@ public class ToolBar extends CustomNode
                         }
                     }
                 },
-                ImgButton {
-                    text: ##"collection"//ModelerUtils.getLocalizedString("collection")
-                    toolTipText: bind if (showHelp) ##"collectionDescription" else ""
-                    image: "images/doc_objeto1.png"
-                    imageOver: "images/doc_objeto2.png"
-                    action: function():Void
-                    {
-                        modeler.disablePannable=true;
-                        modeler.tempNode=CollectionArtifact
-                        {
-                            modeler:modeler
-                            title: ##"collection"//ModelerUtils.getLocalizedString("collection")
-                            uri:"new:datacollection:{counter++}"
-                        }
-                    }
-                },
+//                ImgButton {
+//                    text: ##"collection"//ModelerUtils.getLocalizedString("collection")
+//                    toolTipText: bind if (showHelp) ##"collectionDescription" else ""
+//                    image: "images/doc_objeto1.png"
+//                    imageOver: "images/doc_objeto2.png"
+//                    action: function():Void
+//                    {
+//                        modeler.disablePannable=true;
+//                        modeler.tempNode=CollectionArtifact
+//                        {
+//                            modeler:modeler
+//                            title: ##"collection"//ModelerUtils.getLocalizedString("collection")
+//                            uri:"new:datacollection:{counter++}"
+//                        }
+//                    }
+//                },
                 ImgButton {
                     text: ##"dataInput"//ModelerUtils.getLocalizedString("dataInput")
                     toolTipText: bind if (showHelp) ##"dataInputDescription" else ""
