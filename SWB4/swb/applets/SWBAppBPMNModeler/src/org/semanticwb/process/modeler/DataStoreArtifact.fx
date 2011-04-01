@@ -59,34 +59,6 @@ public class DataStoreArtifact extends Artifact
                 caption: ##"actType"
                 items: [
                     MenuItem {
-                        caption: ##"actCollection"
-                        action: function (e: MouseEvent) {
-                            ModelerUtils.popup.hide();
-                            var _title = title;
-                            //crear nuevo elemento
-                            var sp = CollectionArtifact {
-                                modeler: modeler
-                                title: _title
-                                uri:"new:datacollection:{this.modeler.toolBar.counter++}"
-                            }
-                            //pasar las entradas al nuevo elemento
-                            for(ele in getInputConnectionObjects()) {
-                                ele.end = sp;
-                            }
-
-                            for (ele in getOutputConnectionObjects()) {
-                                ele.ini = sp;
-                            }
-
-                            sp.x = x;
-                            sp.y = y;
-                            sp.container = container;
-                            sp.setGraphParent(getGraphParent());
-                            modeler.add(sp);
-                            remove(true);
-                        }
-                    },
-                    MenuItem {
                         caption: ##"actInput"
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
