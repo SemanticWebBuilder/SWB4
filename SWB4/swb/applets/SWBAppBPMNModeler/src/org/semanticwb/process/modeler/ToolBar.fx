@@ -1864,7 +1864,7 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=Artifact
+                        modeler.tempNode=DataObject
                         {
                             modeler:modeler
                             title: ##"dataObj"//ModelerUtils.getLocalizedString("dataObj")
@@ -1896,7 +1896,7 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=InputArtifact
+                        modeler.tempNode=DataInput
                         {
                             modeler:modeler
                             title: ##"dataInput"//ModelerUtils.getLocalizedString("dataInput")
@@ -1912,7 +1912,7 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=OutputArtifact
+                        modeler.tempNode=DataOutput
                         {
                             modeler:modeler
                             title: ##"dataOutput"//ModelerUtils.getLocalizedString("dataOutput")
@@ -1928,7 +1928,7 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=DataStoreArtifact
+                        modeler.tempNode=DataStore
                         {
                             modeler:modeler
                             title: ##"dataStore"//ModelerUtils.getLocalizedString("dataStore")
