@@ -119,6 +119,8 @@ public class SWBPlatform
     /** The m_observers. */
     private ArrayList<ThreadObserver> m_observers = null;
 
+    private static String threadName=null;
+
     
     /**
      * Instantiates a new sWB platform.
@@ -162,8 +164,18 @@ public class SWBPlatform
 
         idgen=new IDGenerator();
         secValues = new SWBSecurityInstanceValues(null);
+        threadName=Thread.currentThread().getName();
     }
-    
+
+    /**
+     * Regresa nombre del thread con el que se levanto el platform
+     * @return
+     */
+    public static String getThreadName()
+    {
+        return threadName;
+    }
+
     /**
      * Sets the properties.
      * 
