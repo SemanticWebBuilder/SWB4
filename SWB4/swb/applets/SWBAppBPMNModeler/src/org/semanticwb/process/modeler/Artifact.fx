@@ -6,7 +6,6 @@
 
 package org.semanticwb.process.modeler;
 
-
 public def TYPE_ANNOTATION="annotationartifact";
 public def TYPE_GROUP="groupartifact";
 public class Artifact extends GraphicalElement
