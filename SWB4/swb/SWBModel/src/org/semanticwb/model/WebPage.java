@@ -945,23 +945,31 @@ public class WebPage extends WebPageBase
         String description=null;
         String keywords = null;
 
-        if(resource!=null && resource.getCreator()!=null)author=resource.getCreator().getFullName();
-        author=(String) args.get("author");
+        if(resource!=null)
+        {
+            if(resource.getModifiedBy()!=null)author=resource.getModifiedBy().getFullName();
+            else if(resource.getCreator()!=null)author=resource.getCreator().getFullName();
+            description=resource.getDisplayDescription(lang);
+            keywords=resource.getDisplayTags(lang);
+        }else
+        {
+            if(getModifiedBy()!=null)author=getModifiedBy().getFullName();
+            else if(getCreator()!=null)author=getCreator().getFullName();
+            description=getDisplayDescription(lang);
+            keywords=getDisplayTags(lang);
+        }
+
         if(author==null)author=(String) args.get("author");
-
-        if(resource!=null)description=resource.getDisplayDescription(lang);
-        if(description==null)description=getDisplayDescription(lang);
-        if(description==null)description=(String) args.get("description");
-
-        if(resource!=null)keywords=resource.getTags();
-        if(keywords==null)keywords=getTags();
+        if(description==null)description=(String)args.get("description");
         if(keywords==null)keywords=(String) args.get("keywords");
 
         StringBuffer ret=new StringBuffer();
-        if(author!=null)ret.append("<meta name=\"Author\" content=\""+author+"\"/>\n");
+        if(author!=null)ret.append("<meta name=\"author\" content=\""+author+"\"/>\n");
         if(description!=null)ret.append("<meta name=\"description\" content=\""+description+"\"/>\n");
         if(keywords!=null)ret.append("<meta name=\"keywords\" content=\""+keywords+"\"/>\n");
         return ret.toString();
     }
+
+
 
 }
