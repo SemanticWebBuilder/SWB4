@@ -45,12 +45,28 @@ public class StartEvent extends CatchEvent
 
         var actions : MenuItem[] = [
             MenuItem {
+                caption: ##"actBehavior"
                 status: bind if (getContainer() != null and getContainer() instanceof EventSubProcess) MenuItem.STATUS_ENABLED else MenuItem.STATUS_DISABLED
-                caption: bind if (isInterrupting) ##"nonInterrupting" else ##"interrupting"
-                action: function (e: MouseEvent) {
-                    isInterrupting = not isInterrupting;
-                    ModelerUtils.popup.hide();
-                }
+                items: [
+                    MenuItem {                        
+                        caption: ##"interrupting"
+                        status: bind if (isInterrupting) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
+                            if (isInterrupting) return;
+                            isInterrupting = not isInterrupting;
+                        }
+                    },
+                    MenuItem {
+                        caption: ##"nonInterrupting"
+                        status: bind if (not isInterrupting) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
+                        action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
+                            if (not isInterrupting) return;
+                            isInterrupting = not isInterrupting;
+                        }
+                    }
+                ]
             },
             MenuItem {
                 caption: ##"actType"
