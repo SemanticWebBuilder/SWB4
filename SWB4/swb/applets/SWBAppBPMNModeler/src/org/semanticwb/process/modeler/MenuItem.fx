@@ -97,7 +97,7 @@ public class MenuItem extends CustomNode {
                     function(e: MouseEvent){closeAll()}
                 }
                 onMouseEntered: function (e: MouseEvent) {
-                    if (mchild != null) {
+                    if (mchild != null and status.equals(STATUS_ENABLED)) {
                         showChild(x + w + 4, y + h - 2);
                     }
                     owner.closeMenus(this);
