@@ -941,11 +941,12 @@ public class WebPage extends WebPageBase
     {
         Resource resource=getLastContent();
         String lang = (String) args.get("language");
+        String source = (String) args.get("source");        //content | webpage
         String author=null;
         String description=null;
         String keywords = null;
 
-        if(resource!=null)
+        if(resource!=null && (source==null || (source!=null && !source.equals("webpage"))))
         {
             if(resource.getModifiedBy()!=null)author=resource.getModifiedBy().getFullName();
             else if(resource.getCreator()!=null)author=resource.getCreator().getFullName();
