@@ -60,7 +60,7 @@ import org.w3c.dom.Element;
  * under criteria like configuration. This resource comes from WebBuilder 2 and can
  * be installed as content resource or a strategy resource.
  *
- * @Autor:Jorge Jiménez
+ * @Autor:Jorge Jiménez,Carlos Ramos
  */
 
 public class Promo extends GenericResource {
@@ -127,6 +127,9 @@ public class Promo extends GenericResource {
      */
     public Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException {
         Resource base=paramRequest.getResourceBase();
+        
+        if(base.getAttribute("imgfile")==null)
+            throw new SWBResourceException("Especifique una imagen para el recurso promocional con id "+base.getId());
 
         Document  dom = SWBUtils.XML.getNewDocument();
         Element root = dom.createElement("promo");
@@ -163,6 +166,7 @@ public class Promo extends GenericResource {
 
         e = dom.createElement("more");
         e.setAttribute("url", base.getAttribute("url",""));
+        e.setAttribute("target", base.getAttribute("target","true"));
         e.appendChild(dom.createTextNode( base.getAttribute("more","Ver más") ));
         root.appendChild(e);
 
@@ -196,28 +200,29 @@ public class Promo extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
         Resource base = paramRequest.getResourceBase();
+        PrintWriter out = response.getWriter();
 
         if(base.getAttribute("template")!=null || Boolean.parseBoolean(base.getAttribute("deftmp"))) {
-            PrintWriter out = response.getWriter();
-             try {
+            try {
                 Document dom = getDom(request, response, paramRequest);
                 String html = SWBUtils.XML.transformDom(tpl, dom);
                 out.println(html);
-            }
-            catch(Exception e) {
+            }catch(SWBResourceException swbe) {
+                out.println(swbe.getMessage());
+            }catch(Exception e) {
                 log.error("Error in doView method while rendering the resource base: "+base.getId() +"-"+ base.getTitle(), e);
                 e.printStackTrace(System.out);
             }
         }else {
-            String out;
-            String cssClass = base.getAttribute("cssClass");
-            if(cssClass == null)
-                out = renderWithStyle();
-            else
-                out = render();
-            response.getWriter().println(out);
+            try {
+                if(base.getAttribute("cssClass")==null)
+                    out.println(renderWithStyle());
+                else
+                    out.println(render());
+            }catch(SWBResourceException swbe) {
+                out.println(swbe.getMessage());
+            }
         }
-
     }
 
     /**
@@ -225,7 +230,7 @@ public class Promo extends GenericResource {
      *
      * @return the string
      */
-    private String renderWithStyle() {
+    private String renderWithStyle() throws SWBResourceException {
         StringBuilder out = new StringBuilder();
         Resource base=getResourceBase();
 
@@ -249,8 +254,11 @@ public class Promo extends GenericResource {
 
         String subtitle = base.getAttribute("subtitle");
         String subtitleStyle = base.getAttribute("subtitleStyle");
-
+        
+        if(base.getAttribute("imgfile")==null)
+            throw new SWBResourceException("Especifique una imagen para el recurso promocional con id "+base.getId());
         String imgfile = base.getAttribute("imgfile");
+        
         String caption = base.getAttribute("caption");
         String captionStyle = base.getAttribute("captionStyle");
 
@@ -416,18 +424,21 @@ public class Promo extends GenericResource {
      *
      * @return the string
      */
-    private String render() {
+    private String render() throws SWBResourceException {
         StringBuilder out = new StringBuilder();
         Resource base=getResourceBase();
 
         String cssClass = base.getAttribute("cssClass","");
         String title = base.getAttribute("title");
         String subtitle = base.getAttribute("subtitle");
+
+        if(base.getAttribute("imgfile")==null)
+            throw new SWBResourceException("Especifique una imagen para el recurso promocional con id "+base.getId());
         String imgfile = base.getAttribute("imgfile");
+
         String caption = base.getAttribute("caption");
 
-
-         String imgWidth="";
+        String imgWidth="";
         if(base.getAttribute("imgWidth")!=null){
             imgWidth = "width=\"" + base.getAttribute("imgWidth")+"\"";
         }
@@ -535,20 +546,20 @@ public class Promo extends GenericResource {
      * @param base the base
      * @return the url html
      */
-    private String getUrlHtml(SWBParamRequest paramRequest, Resource base) {
-        StringBuffer ret = new StringBuffer("");
-        SWBResourceURL wburl = paramRequest.getActionUrl();
-
-        ret.append("<a href=\"" + wburl.toString() + "\"");
-        if("0".equals(base.getAttribute("uline", "0").trim())) {
-            ret.append(" style=\"text-decoration:none;\"");
-        }
-        if ("1".equals(base.getAttribute("target", "0").trim())) {
-            ret.append(" target=\"_newprm\"");
-        }
-        ret.append("> \n");
-        return ret.toString();
-    }
+//    private String getUrlHtml(SWBParamRequest paramRequest, Resource base) {
+//        StringBuffer ret = new StringBuffer("");
+//        SWBResourceURL wburl = paramRequest.getActionUrl();
+//
+//        ret.append("<a href=\"" + wburl.toString() + "\"");
+//        if("0".equals(base.getAttribute("uline", "0").trim())) {
+//            ret.append(" style=\"text-decoration:none;\"");
+//        }
+//        if(Boolean.parseBoolean(base.getAttribute("target","true"))) {
+//            ret.append(" target=\"_blank\"");
+//        }
+//        ret.append("> \n");
+//        return ret.toString();
+//    }
 
     /**
      * Obtiene la imagen del promocional asi como su posicionamiento (en caso de
@@ -558,101 +569,101 @@ public class Promo extends GenericResource {
      * @param base the base
      * @return the img promo
      */
-    private String getImgPromo(SWBParamRequest reqParams, Resource base) {
-        StringBuilder ret = new StringBuilder("");
-        String position = base.getAttribute("pos", "3").trim();
-        String img=base.getAttribute("img", "").trim();
-        String url=base.getAttribute("url", "").trim();
-
-        if("1".equals(position)) {
-            ret.append(getImgHtml(reqParams, base));
-            if(!img.endsWith(".swf")) {
-                ret.append(" align=\"left\" vspace=\"1\" hspace=\"5\" /> \n");
-            }
-            ret.append(getTextHtml(base));
-        }else if("2".equals(position)) {
-            ret.append(getTextHtml(base));
-            if(!"".equals(url)) {
-                ret.append("</a> \n");
-            }
-            ret.append("</td> \n");
-            ret.append("<td> \n");
-            if(!"".equals(url)) {
-                ret.append(getUrlHtml(reqParams, base));
-            }
-            ret.append(getImgHtml(reqParams, base));
-            if(!img.endsWith(".swf")) {
-                ret.append(" align=\"left\" vspace=\"1\" hspace=\"5\" /> \n");
-            }
-        }else if("3".equals(position)) {
-            ret.append("<center> \n");
-            ret.append(getImgHtml(reqParams, base));
-            if(!img.endsWith(".swf")) {
-                ret.append(" align=\"left\" /> \n");
-            }
-            ret.append("</center> \n");
-            if(!"".equals(url)) {
-                ret.append("</a> \n");
-            }
-            ret.append("</td> \n");
-            ret.append("</tr> \n");
-            ret.append("<tr> \n");
-            ret.append("<td> \n");
-            if(!"".equals(url)) {
-                ret.append(getUrlHtml(reqParams, base));
-            }
-            ret.append(getTextHtml(base));
-        }else if ("4".equals(position)) {
-            ret.append(getImgHtml(reqParams, base));
-            if(!img.endsWith(".swf")) {
-                ret.append(" align=\"right\" vspace=\"1\" hspace=\"10\" /> \n");
-            }
-            ret.append(getTextHtml(base));
-        }else if("5".equals(position)) {
-            ret.append(getImgHtml(reqParams, base));
-            if(!img.endsWith(".swf")) {
-                ret.append(" /> \n");
-            }
-            if(!"".equals(url)) {
-                ret.append("</a> \n");
-            }
-            ret.append("</td> \n");
-            ret.append("<td> \n");
-            if(!"".equals(url)) {
-                ret.append(getUrlHtml(reqParams, base));
-            }
-            ret.append(getTextHtml(base));
-        }else if("6".equals(position)) {
-            ret.append(getTextHtml(base));
-            if(!"".equals(url)) {
-                ret.append("</a> \n");
-            }
-            ret.append("</td> \n");
-            ret.append("</tr> \n");
-            ret.append("<tr> \n");
-            ret.append("<td> \n");
-            if(!"".equals(url)) {
-                ret.append(getUrlHtml(reqParams, base));
-            }
-            ret.append(getImgHtml(reqParams, base));
-            if(!img.endsWith(".swf")) {
-                ret.append(" /> \n");
-            }
-        }else if("7".equals(position)) {
-            ret.append(getTextHtml(base));
-            ret.append(getImgHtml(reqParams, base));
-            if(!img.endsWith(".swf")) {
-                ret.append(" align=\"left\" vspace=\"1\" hspace=\"5\" /> \n");
-            }
-        }else if("8".equals(position)) {
-            ret.append(getTextHtml(base));
-            ret.append(getImgHtml(reqParams, base));
-            if(!img.endsWith(".swf")) {
-                ret.append(" align=\"right\" vspace=\"1\" hspace=\"10\" /> \n");
-            }
-        }
-        return ret.toString();
-    }
+//    private String getImgPromo(SWBParamRequest reqParams, Resource base) {
+//        StringBuilder ret = new StringBuilder("");
+//        String position = base.getAttribute("pos", "3").trim();
+//        String img=base.getAttribute("img", "").trim();
+//        String url=base.getAttribute("url", "").trim();
+//
+//        if("1".equals(position)) {
+//            ret.append(getImgHtml(reqParams, base));
+//            if(!img.endsWith(".swf")) {
+//                ret.append(" align=\"left\" vspace=\"1\" hspace=\"5\" /> \n");
+//            }
+//            ret.append(getTextHtml(base));
+//        }else if("2".equals(position)) {
+//            ret.append(getTextHtml(base));
+//            if(!"".equals(url)) {
+//                ret.append("</a> \n");
+//            }
+//            ret.append("</td> \n");
+//            ret.append("<td> \n");
+//            if(!"".equals(url)) {
+//                ret.append(getUrlHtml(reqParams, base));
+//            }
+//            ret.append(getImgHtml(reqParams, base));
+//            if(!img.endsWith(".swf")) {
+//                ret.append(" align=\"left\" vspace=\"1\" hspace=\"5\" /> \n");
+//            }
+//        }else if("3".equals(position)) {
+//            ret.append("<center> \n");
+//            ret.append(getImgHtml(reqParams, base));
+//            if(!img.endsWith(".swf")) {
+//                ret.append(" align=\"left\" /> \n");
+//            }
+//            ret.append("</center> \n");
+//            if(!"".equals(url)) {
+//                ret.append("</a> \n");
+//            }
+//            ret.append("</td> \n");
+//            ret.append("</tr> \n");
+//            ret.append("<tr> \n");
+//            ret.append("<td> \n");
+//            if(!"".equals(url)) {
+//                ret.append(getUrlHtml(reqParams, base));
+//            }
+//            ret.append(getTextHtml(base));
+//        }else if ("4".equals(position)) {
+//            ret.append(getImgHtml(reqParams, base));
+//            if(!img.endsWith(".swf")) {
+//                ret.append(" align=\"right\" vspace=\"1\" hspace=\"10\" /> \n");
+//            }
+//            ret.append(getTextHtml(base));
+//        }else if("5".equals(position)) {
+//            ret.append(getImgHtml(reqParams, base));
+//            if(!img.endsWith(".swf")) {
+//                ret.append(" /> \n");
+//            }
+//            if(!"".equals(url)) {
+//                ret.append("</a> \n");
+//            }
+//            ret.append("</td> \n");
+//            ret.append("<td> \n");
+//            if(!"".equals(url)) {
+//                ret.append(getUrlHtml(reqParams, base));
+//            }
+//            ret.append(getTextHtml(base));
+//        }else if("6".equals(position)) {
+//            ret.append(getTextHtml(base));
+//            if(!"".equals(url)) {
+//                ret.append("</a> \n");
+//            }
+//            ret.append("</td> \n");
+//            ret.append("</tr> \n");
+//            ret.append("<tr> \n");
+//            ret.append("<td> \n");
+//            if(!"".equals(url)) {
+//                ret.append(getUrlHtml(reqParams, base));
+//            }
+//            ret.append(getImgHtml(reqParams, base));
+//            if(!img.endsWith(".swf")) {
+//                ret.append(" /> \n");
+//            }
+//        }else if("7".equals(position)) {
+//            ret.append(getTextHtml(base));
+//            ret.append(getImgHtml(reqParams, base));
+//            if(!img.endsWith(".swf")) {
+//                ret.append(" align=\"left\" vspace=\"1\" hspace=\"5\" /> \n");
+//            }
+//        }else if("8".equals(position)) {
+//            ret.append(getTextHtml(base));
+//            ret.append(getImgHtml(reqParams, base));
+//            if(!img.endsWith(".swf")) {
+//                ret.append(" align=\"right\" vspace=\"1\" hspace=\"10\" /> \n");
+//            }
+//        }
+//        return ret.toString();
+//    }
 
     /**
      * Obtiene el html de la imagen.
@@ -661,47 +672,47 @@ public class Promo extends GenericResource {
      * @param base the base
      * @return the img html
      */
-    private String getImgHtml(SWBParamRequest paramRequest, Resource base) {
-        StringBuilder ret = new StringBuilder("");
-        String width=base.getAttribute("width", "");
-        String height=base.getAttribute("height", "");
-
-        if(base.getAttribute("img", "").trim().endsWith(".swf")) {
-            ret.append("<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=5,0,0,0\"");
-            if(!"".equals(width)) {
-                ret.append(" width=\"" + width + "\"");
-            }
-            if(!"".equals(height)) {
-                ret.append(" height=\"" + height + "\"");
-            }
-            ret.append("> \n");
-            ret.append("<param name=movie value=\""+ webWorkPath +"/"+ base.getAttribute("img").trim() +"\"> \n");
-            ret.append("<param name=quality value=high> \n");
-            ret.append("<embed src=\""+ webWorkPath +"/"+ base.getAttribute("img").trim());
-            ret.append("\" quality=high pluginspage=\"http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash\" type=\"application/x-shockwave-flash\"");
-            if (!"".equals(width)) ret.append(" width=\"" + width + "\"");
-            if (!"".equals(height)) ret.append(" height=\"" + height + "\"");
-            ret.append("> \n");
-            ret.append("</embed> \n");
-            ret.append("</object> \n");
-        }else {
-            String border = (String)paramRequest.getArguments().get("border");
-            ////ret.append("<div>");
-            ret.append("<img alt=\"\" src=\""+ webWorkPath +"/"+ base.getAttribute("img").trim() +"\"");
-            if(border != null && !"".equals(border.trim())) {
-                ret.append(" border=\""+ border +"\"");
-            }else {
-                ret.append(" border=\"0\"");
-            }
-            if(!"".equals(width)) {
-                ret.append(" width=\""+ width +"\"");
-            }
-            if(!"".equals(height)) {
-                ret.append(" height=\""+ height +"\"");
-            }
-       }
-        return ret.toString();
-    }
+//    private String getImgHtml(SWBParamRequest paramRequest, Resource base) {
+//        StringBuilder ret = new StringBuilder("");
+//        String width=base.getAttribute("width", "");
+//        String height=base.getAttribute("height", "");
+//
+//        if(base.getAttribute("img", "").trim().endsWith(".swf")) {
+//            ret.append("<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=5,0,0,0\"");
+//            if(!"".equals(width)) {
+//                ret.append(" width=\"" + width + "\"");
+//            }
+//            if(!"".equals(height)) {
+//                ret.append(" height=\"" + height + "\"");
+//            }
+//            ret.append("> \n");
+//            ret.append("<param name=movie value=\""+ webWorkPath +"/"+ base.getAttribute("img").trim() +"\"> \n");
+//            ret.append("<param name=quality value=high> \n");
+//            ret.append("<embed src=\""+ webWorkPath +"/"+ base.getAttribute("img").trim());
+//            ret.append("\" quality=high pluginspage=\"http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash\" type=\"application/x-shockwave-flash\"");
+//            if (!"".equals(width)) ret.append(" width=\"" + width + "\"");
+//            if (!"".equals(height)) ret.append(" height=\"" + height + "\"");
+//            ret.append("> \n");
+//            ret.append("</embed> \n");
+//            ret.append("</object> \n");
+//        }else {
+//            String border = (String)paramRequest.getArguments().get("border");
+//            ////ret.append("<div>");
+//            ret.append("<img alt=\"\" src=\""+ webWorkPath +"/"+ base.getAttribute("img").trim() +"\"");
+//            if(border != null && !"".equals(border.trim())) {
+//                ret.append(" border=\""+ border +"\"");
+//            }else {
+//                ret.append(" border=\"0\"");
+//            }
+//            if(!"".equals(width)) {
+//                ret.append(" width=\""+ width +"\"");
+//            }
+//            if(!"".equals(height)) {
+//                ret.append(" height=\""+ height +"\"");
+//            }
+//       }
+//        return ret.toString();
+//    }
 
     /**
      * Obtiene el texto del promocional ya armado.
@@ -709,20 +720,20 @@ public class Promo extends GenericResource {
      * @param base the base
      * @return the text html
      */
-    private String getTextHtml(Resource base) {
-        StringBuilder ret = new StringBuilder("");
-        if(!"".equals(base.getAttribute("text", ""))) {
-            if(!"".equals(base.getAttribute("textcolor", ""))) {
-                ret.append("<font color=\""+base.getAttribute("textcolor")+"\"> \n");
-            }
-            ////ret.append("<h2 style=\"text-align:justify\">" + base.getAttribute("text").trim() + "</h2>");
-            ret.append(base.getAttribute("text")+"\n");
-            if(!"".equals(base.getAttribute("textcolor", ""))) {
-                ret.append("</font> \n");
-            }
-        }
-        return ret.toString();
-    }
+//    private String getTextHtml(Resource base) {
+//        StringBuilder ret = new StringBuilder("");
+//        if(!"".equals(base.getAttribute("text", ""))) {
+//            if(!"".equals(base.getAttribute("textcolor", ""))) {
+//                ret.append("<font color=\""+base.getAttribute("textcolor")+"\"> \n");
+//            }
+//            ////ret.append("<h2 style=\"text-align:justify\">" + base.getAttribute("text").trim() + "</h2>");
+//            ret.append(base.getAttribute("text")+"\n");
+//            if(!"".equals(base.getAttribute("textcolor", ""))) {
+//                ret.append("</font> \n");
+//            }
+//        }
+//        return ret.toString();
+//    }
 
     /**
      * Process action.
@@ -739,18 +750,25 @@ public class Promo extends GenericResource {
         if(response.Action_EDIT.equals(action)) {
             try {
                 edit(request, response);
-                if( Boolean.parseBoolean(base.getAttribute("wbNoFile_imgfile")) ) {
-                    File file = new File(SWBPortal.getWorkPath()+base.getWorkPath()+"/"+base.getAttribute("imgfile"));
+                if( Boolean.parseBoolean(base.getAttribute("wbNoFile_imghome")) ) {
+                    File file = new File(SWBPortal.getWorkPath()+base.getWorkPath()+"/"+base.getAttribute("imghome"));
                     if(file.exists() && file.delete()) {
-                        base.removeAttribute("imgfile");
-                        base.removeAttribute("wbNoFile_imgfile");
+                        base.removeAttribute("imghome");
+                        base.removeAttribute("wbNoFile_imghome");
                     }
                 }
-                if( Boolean.parseBoolean(base.getAttribute("wbNoFile_template")) ) {
-                    File file = new File(SWBPortal.getWorkPath()+base.getWorkPath()+"/"+base.getAttribute("template"));
+                if( Boolean.parseBoolean(base.getAttribute("wbNoFile_imgown")) ) {
+                    File file = new File(SWBPortal.getWorkPath()+base.getWorkPath()+"/"+base.getAttribute("imgown"));
                     if(file.exists() && file.delete()) {
-                        base.removeAttribute("template");
-                        base.removeAttribute("wbNoFile_template");
+                        base.removeAttribute("imgown");
+                        base.removeAttribute("wbNoFile_imgown");
+                    }
+                }
+                if( Boolean.parseBoolean(base.getAttribute("wbNoFile_imgpict")) ) {
+                    File file = new File(SWBPortal.getWorkPath()+base.getWorkPath()+"/"+base.getAttribute("imgpict"));
+                    if(file.exists() && file.delete()) {
+                        base.removeAttribute("imgpict");
+                        base.removeAttribute("wbNoFile_imgpict");
                     }
                 }
                 base.updateAttributesToDB();
@@ -801,20 +819,52 @@ public class Promo extends GenericResource {
         SWBResourceURL url = paramRequest.getActionUrl().setAction(paramRequest.Action_EDIT);
         htm.append("<script type=\"text/javascript\">\n");
         htm.append("<!--\n");
-        htm.append("  dojo.require(\"dijit.layout.ContentPane\");\n");
-        htm.append("  dojo.require(\"dijit.form.Form\");\n");
-        htm.append("  dojo.require(\"dijit.form.ValidationTextBox\");\n");
-        htm.append("  dojo.require(\"dijit.form.RadioButton\");\n");
-        htm.append("  dojo.require(\"dijit.form.SimpleTextarea\");\n");
-        htm.append("  dojo.require(\"dijit.form.Button\");\n");
+        htm.append("  dojo.require('dijit.layout.ContentPane');");
+        htm.append("  dojo.require('dijit.form.Form');");
+        htm.append("  dojo.require('dijit.form.ValidationTextBox');");
+        htm.append("  dojo.require('dijit.form.RadioButton');");
+        htm.append("  dojo.require('dijit.form.SimpleTextarea');");
+        htm.append("  dojo.require('dijit.form.Button');");
+        htm.append("  function isValid() {");
+        htm.append("    var imgfile = dojo.byId('imgfile');");
+        htm.append("    if(isEmpty(imgfile.value)) {");
+        htm.append("      alert('Especifique una imagen para el promocional');");
+        htm.append("      return false;");
+        htm.append("    }");
+        htm.append("    return valida_frmAdmRes();");
+        htm.append("  }\n");
+
+
+        htm.append("function valida_frmAdmRes() {");
+        htm.append("   pCaracter = dojo.byId('imgfile').value;");
+        htm.append("   var pExt='gif|jpg|jpeg|png';");
+        htm.append("   if(pCaracter.length > 0) {");
+        htm.append("       var swFormat=pExt + '|';");
+        htm.append("       sExt=pCaracter.substring(pCaracter.indexOf('.')).toLowerCase();");
+        htm.append("       var sType='';");
+        htm.append("       var flag=false;");
+        htm.append("       while(swFormat.length > 0 ) {");
+        htm.append("           sType= swFormat.substring(0, swFormat.indexOf('|'));");
+        htm.append("           if(sExt.indexOf(sType)!=-1)");
+        htm.append("               flag=true;");
+        htm.append("           swFormat=swFormat.substring(swFormat.indexOf('|')+1);");
+        htm.append("       }");
+        htm.append("       if(!flag) {");
+        htm.append("           while(pExt.indexOf('|')!=-1)");
+        htm.append("               pExt=pExt.replace('|',',');");
+        htm.append("           alert('El archivo no corresponde a ninguna de las extensiones validas:' + pExt.replace('|',','));");
+        htm.append("           return false;");
+        htm.append("       }");
+        htm.append("   }");
+        htm.append("   return true;");
+        htm.append("}\n");
         htm.append("-->\n");
         htm.append("</script>\n");
+
         htm.append("<div class=\"swbform\">\n");
         htm.append("<form id=\"frmPromo\" dojoType=\"dijit.form.Form\" method=\"post\" enctype=\"multipart/form-data\" action=\""+url+"\">\n");
         htm.append("<fieldset>\n");
         htm.append("    <legend>Datos</legend>\n");
-//        htm.append("    <input type=\"hidden\" id=\"conname\" name=\"conname\" value=\"true\"/>\n");
-//        htm.append("    <input type=\"hidden\" id=\"conname\" name=\"conname\" value=\"true\"/>\n");
         htm.append("    <ul class=\"swbform-ul\">\n");
         htm.append("        <li class=\"swbform-li\">\n");
         htm.append("          <label for=\"title\" class=\"swbform-label\">Título</label>\n");
@@ -836,7 +886,6 @@ public class Promo extends GenericResource {
         htm.append("          <label class=\"swbform-label\"></label>\n");
         if(base.getAttribute("imgfile")!=null)
           htm.append("        <img src=\""+path+base.getAttribute("imgfile")+"\" alt=\"\" hspace=\"5\" />\n");
-        //htm.append("          <input type=\"hidden\" id=\"wbfile_imgfile\" name=\"wbfile_imgfile\" value=\""+base.getAttribute("","")+"\"/>\n");
         htm.append("        </li>\n");
         if(base.getAttribute("imgfile")!=null) {
             htm.append("    <li class=\"swbform-li\">\n");
@@ -1010,7 +1059,7 @@ public class Promo extends GenericResource {
         htm.append("   <legend></legend>\n");
         htm.append("   <ul class=\"swbform-ul\">\n");
         htm.append("      <li>\n");
-        htm.append("         <button type=\"submit\" dojoType=\"dijit.form.Button\">Guardar</button>\n");
+        htm.append("         <button type=\"submit\" dojoType=\"dijit.form.Button\" onclick=\"return isValid()\">Guardar</button>\n");
         htm.append("         <button type=\"reset\" dojoType=\"dijit.form.Button\">Reestablecer</button>\n");
         htm.append("      </li>\n");
         htm.append("   </ul>\n");
