@@ -902,7 +902,7 @@ public class Poll extends GenericResource {
             else if( display == Display.SIMPLE )
                 ret.append("<p class=\"swb-poll-close\"><a href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW).setCallMethod(paramRequest.Call_CONTENT)+"\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></p> \n");
             else
-                ret.append("<p class=\"swb-poll-close\"><a href=\"#\" onmousedown=\"collapse();\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></p> \n");
+                ret.append("<p class=\"swb-poll-close\"><a href=\"javascript:collapse();\">" + base.getAttribute("msg_closewin",paramRequest.getLocaleString("msg_closewin")) + "</a></p> \n");
             
             ret.append("</div> \n");
         }
