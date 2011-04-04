@@ -52,9 +52,16 @@
     <xsl:template match="more">
         <div class="more">
             <p>
-                <a href="{@url}" title="Ver más" style="text-decoration: none;">
-                    <xsl:apply-templates/>
-                </a>
+                <xsl:if test="@target='true'">
+                    <a href="{@url}" title="Ver más" style="text-decoration: none;" target="_blank">
+                        <xsl:apply-templates/>
+                    </a>
+                </xsl:if>
+                <xsl:if test="@target='false'">
+                    <a href="{@url}" title="Ver más" style="text-decoration: none;">
+                        <xsl:apply-templates/>
+                    </a>
+                </xsl:if>
             </p>
         </div>
     </xsl:template>
