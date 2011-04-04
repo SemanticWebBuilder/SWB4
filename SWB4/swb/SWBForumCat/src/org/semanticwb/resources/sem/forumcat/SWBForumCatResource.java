@@ -18,6 +18,7 @@ import org.semanticwb.base.util.SWBMail;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.User;
+import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
@@ -39,6 +40,31 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
     public SWBForumCatResource(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    private static String clean(String html)
+    {
+        html = html.replace("&lt;", "<");
+        html = html.replace("&gt;", ">");
+        String text = html;
+        int pos = text.indexOf("<");
+        while (pos != -1)
+        {
+            int pos2 = text.indexOf(">", pos);
+            if (pos2 == -1)
+            {
+                text = text.substring(0, pos).trim();
+            }
+            else
+            {
+                String tmp = text.substring(0, pos).trim();
+                String tmp2 = text.substring(pos2 + 1).trim();
+                text = tmp + " " + tmp2;
+            }
+            pos = text.indexOf("<");
+        }
+        text = text.trim();
+        return text;
     }
 
     @Override
@@ -76,6 +102,14 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
             if (request.getParameter("page") != null)
             {
                 response.setRenderParameter("page", request.getParameter("page"));
+            }
+            if (request.getParameter("deleted") != null)
+            {
+                response.setRenderParameter("deleted", request.getParameter("deleted"));
+            }
+            if (request.getParameter("cat") != null)
+            {
+                response.setRenderParameter("cat", request.getParameter("cat"));
             }
             if (action.equals("addQuestion"))
             {
@@ -137,13 +171,21 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     if (request.getParameter("categoryuri") != null && !request.getParameter("categoryuri").equals(""))
                     {
                         Question question = (Question) semObject.createGenericInstance();
-                        SemanticObject semObjectChild = SemanticObject.createSemanticObject((request.getParameter("categoryuri")));
-                        WebPage webPage = (WebPage) semObjectChild.createGenericInstance();
-                        question.setWebpage(webPage);
-                        question.setQuestion(placeAnchors(question.getQuestion()));
-                        if (request.getParameter("tags") != null)
+                        boolean canedit = false;
+                        if (question.getCreator() != null && question.getCreator().getId() != null && user.getId() != null && user.getId() != null && question.getCreator().getId().equals(user.getId()))
                         {
-                            question.setTags(request.getParameter("tags"));
+                            canedit = true;
+                        }
+                        if (canedit)
+                        {
+                            SemanticObject semObjectChild = SemanticObject.createSemanticObject((request.getParameter("categoryuri")));
+                            WebPage webPage = (WebPage) semObjectChild.createGenericInstance();
+                            question.setWebpage(webPage);
+                            question.setQuestion(placeAnchors(question.getQuestion()));
+                            if (request.getParameter("tags") != null)
+                            {
+                                question.setTags(request.getParameter("tags"));
+                            }
                         }
                     }
                 }
@@ -164,28 +206,54 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 {
                     response.setRenderParameter("page", request.getParameter("page"));
                 }
+                if (request.getParameter("deleted") != null)
+                        {
+                            response.setRenderParameter("deleted", request.getParameter("deleted"));
+                        }
+                if (request.getParameter("cat") != null)
+                {
+                    response.setRenderParameter("cat", request.getParameter("cat"));
+                }
             }
             else if (action.equals("removeQuestion"))
             {
                 try
                 {
                     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
-//TODO: revisar regla de negocio
                     Question question = (Question) semObject.createGenericInstance();
-                    question.setQueStatus(STATUS_REMOVED);
-//                    semObject.remove();
-                    if (request.getParameter("org") != null)
+                    boolean isAdmin = false;
+                    Role role = user.getUserRepository().getRole("adminForum");
+                    UserGroup group = user.getUserRepository().getUserGroup("admin");
+                    if (role != null && (user.hasRole(role) || user.hasUserGroup(group)))
                     {
-                        response.setAction(request.getParameter("org"));
+                        isAdmin = true;
                     }
-                    else
+                    if (isAdmin || (question.getCreator() != null && question.getCreator().getId() != null && user.getId() != null && question.getCreator().getId().equals(user.getId())))
                     {
-                        response.setAction("edit");
+
+                        question.remove();
+                        if (request.getParameter("org") != null)
+                        {
+                            response.setAction(request.getParameter("org"));
+                        }
+                        else
+                        {
+                            response.setAction("edit");
+                        }
+                        if (request.getParameter("page") != null)
+                        {
+                            response.setRenderParameter("page", request.getParameter("page"));
+                        }
+                        if (request.getParameter("cat") != null)
+                        {
+                            response.setRenderParameter("cat", request.getParameter("cat"));
+                        }
+                        if (request.getParameter("deleted") != null)
+                        {
+                            response.setRenderParameter("deleted", request.getParameter("deleted"));
+                        }
                     }
-                    if (request.getParameter("page") != null)
-                    {
-                        response.setRenderParameter("page", request.getParameter("page"));
-                    }
+
                 }
                 catch (Exception e)
                 {
@@ -230,6 +298,14 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 {
                     response.setRenderParameter("page", request.getParameter("page"));
                 }
+                if (request.getParameter("deleted") != null)
+                        {
+                            response.setRenderParameter("deleted", request.getParameter("deleted"));
+                        }
+                if (request.getParameter("cat") != null)
+                {
+                    response.setRenderParameter("cat", request.getParameter("cat"));
+                }
                 if (isUseScoreSystem() && user != null)
                 {
                     UserPoints points = getUserPointsObject(user, website);
@@ -264,11 +340,27 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     response.setAction("showDetail");
                 }
                 Answer answer = (Answer) semObject.createGenericInstance();
-                answer.setAnswer(placeAnchors(answer.getAnswer()));
-                response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
-                if (request.getParameter("page") != null)
+                boolean canedit = false;
+                if (answer.getCreator() != null && answer.getCreator().getId() != null && user.getId() != null && user.getId() != null && answer.getCreator().getId().equals(user.getId()))
                 {
-                    response.setRenderParameter("page", request.getParameter("page"));
+                    canedit = true;
+                }
+                if (canedit)
+                {
+                    answer.setAnswer(placeAnchors(answer.getAnswer()));
+                    response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
+                    if (request.getParameter("page") != null)
+                    {
+                        response.setRenderParameter("page", request.getParameter("page"));
+                    }
+                    if (request.getParameter("deleted") != null)
+                        {
+                            response.setRenderParameter("deleted", request.getParameter("deleted"));
+                        }
+                    if (request.getParameter("cat") != null)
+                    {
+                        response.setRenderParameter("cat", request.getParameter("cat"));
+                    }
                 }
             }
             else if (action.equals("markQuestionAsInnapropiate"))
@@ -285,7 +377,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         {//Enviar correo a administradores del foro
                             HashSet<User> users = new HashSet<User>();
                             Role role = website.getUserRepository().getRole("adminForum");
-                            if(role!=null)
+                            if (role != null)
                             {
                                 Iterator<User> itusers = User.ClassMgr.listUserByRole(role);
                                 while (itusers.hasNext())
@@ -313,14 +405,14 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                                 {
                                     port = ":" + request.getServerPort();
                                 }
-                                SWBResourceURLImp imp=new SWBResourceURLImp(request, response.getResourceBase(), response.getWebPage(), SWBResourceURL.UrlType_RENDER);
+                                SWBResourceURLImp imp = new SWBResourceURLImp(request, response.getResourceBase(), response.getWebPage(), SWBResourceURL.UrlType_RENDER);
                                 imp.setAction("showDetail");
                                 imp.setParameter("uri", question.getURI());
                                 URL urilocal = new URL(request.getScheme() + "://" + request.getServerName() + port + imp.toString());
                                 swbMail.setAddress(aAddress);
                                 swbMail.setContentType("text/html");
-                                swbMail.setData("Esta respuesta ya sobrepaso el umbral de lo considerado como inapropiado <a href=\""+urilocal+"\"></a>");
-                                swbMail.setSubject("Respuesta inapropiada "+response.getWebPage().getTitle());
+                                swbMail.setData("Un mensaje ya sobrepaso el umbral de lo considerado como inapropiado en la direccion web " + urilocal + " con el texto: " + clean(question.getQuestion()));
+                                swbMail.setSubject("Mensaje inapropiado " + response.getWebPage().getTitle());
                                 swbMail.setFromEmail(SWBPlatform.getEnv("af/adminEmail"));
                                 swbMail.setHostName(SWBPlatform.getEnv("swb/smtpServer"));
                                 SWBUtils.EMAIL.sendBGEmail(swbMail);
@@ -338,6 +430,102 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     {
                         response.setAction("edit");
                     }
+                    if (request.getParameter("page") != null)
+                    {
+                        response.setRenderParameter("page", request.getParameter("page"));
+                    }
+                    if (request.getParameter("deleted") != null)
+                        {
+                            response.setRenderParameter("deleted", request.getParameter("deleted"));
+                        }
+                    if (request.getParameter("cat") != null)
+                    {
+                        response.setRenderParameter("cat", request.getParameter("cat"));
+                    }
+                }
+                catch (Exception e)
+                {
+                    log.error(e);
+                }
+            }
+            else if (action.equals("markAnswerAsInnapropiate"))
+            {
+
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
+                Answer answer = (Answer) semObject.createGenericInstance();
+                try
+                {
+                    if (!answer.isAnsIsAppropiate())
+                    {
+
+                        int innapropiateCount = answer.getAnsInappropriate() + 1;
+                        answer.setAnsInappropriate(innapropiateCount);
+                        if (innapropiateCount % getMaxInnapropiateCount() == 0 && innapropiateCount > 0)
+                        {
+                            //Enviar correo a administradores del foro
+                            HashSet<User> users = new HashSet<User>();
+                            Role role = website.getUserRepository().getRole("adminForum");
+                            if (role != null)
+                            {
+                                Iterator<User> itusers = User.ClassMgr.listUserByRole(role);
+                                while (itusers.hasNext())
+                                {
+                                    User ruser = itusers.next();
+                                    users.add(ruser);
+                                }
+                            }
+                            if (users.size() > 0)
+                            {
+                                SWBMail swbMail = new SWBMail();
+
+                                ArrayList<InternetAddress> aAddress = new ArrayList<InternetAddress>();
+                                for (User ouser : users)
+                                {
+                                    if (ouser.getEmail() != null)
+                                    {
+                                        InternetAddress address1 = new InternetAddress();
+                                        address1.setAddress(ouser.getEmail());
+                                        aAddress.add(address1);
+                                    }
+                                }
+                                String port = "";
+                                if (request.getServerPort() != 80)
+                                {
+                                    port = ":" + request.getServerPort();
+                                }
+                                SWBResourceURLImp imp = new SWBResourceURLImp(request, response.getResourceBase(), response.getWebPage(), SWBResourceURL.UrlType_RENDER);
+                                imp.setAction("showDetail");
+                                imp.setParameter("uri", answer.getAnsQuestion().getURI());
+                                URL urilocal = new URL(request.getScheme() + "://" + request.getServerName() + port + imp.toString());
+                                swbMail.setAddress(aAddress);
+                                swbMail.setContentType("text/html");
+                                swbMail.setData("Una respuesta ya sobrepaso el umbral de lo considerado como inapropiado en la dirección web " + urilocal + " con el texto: " + clean(answer.getAnswer()));
+                                swbMail.setSubject("Respuesta inapropiada " + response.getWebPage().getTitle());
+                                swbMail.setFromEmail(SWBPlatform.getEnv("af/adminEmail"));
+                                swbMail.setHostName(SWBPlatform.getEnv("swb/smtpServer"));
+                                SWBUtils.EMAIL.sendBGEmail(swbMail);
+
+                            }
+
+                        }
+                    }
+                    if (request.getParameter("org") != null)
+                    {
+                        response.setAction(request.getParameter("org"));
+                        response.setRenderParameter("uri", request.getParameter("uri"));
+                    }
+                    else
+                    {
+                        response.setAction("edit");
+                    }
+                    if (request.getParameter("cat") != null)
+                    {
+                        response.setRenderParameter("cat", request.getParameter("cat"));
+                    }
+                    if (request.getParameter("deleted") != null)
+                        {
+                            response.setRenderParameter("deleted", request.getParameter("deleted"));
+                        }
                     if (request.getParameter("page") != null)
                     {
                         response.setRenderParameter("page", request.getParameter("page"));
@@ -393,6 +581,14 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     points.setPoints(points.getPoints() + getPointsBestAnswer());
                 }
                 response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
+                if (request.getParameter("cat") != null)
+                {
+                    response.setRenderParameter("cat", request.getParameter("cat"));
+                }
+                if (request.getParameter("deleted") != null)
+                        {
+                            response.setRenderParameter("deleted", request.getParameter("deleted"));
+                        }
                 if (request.getParameter("page") != null)
                 {
                     response.setRenderParameter("page", request.getParameter("page"));
@@ -402,58 +598,97 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
             {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
                 Question question = (Question) semObject.createGenericInstance();
-                try
+                boolean isAdmin = false;
+                Role role = user.getUserRepository().getRole("adminForum");
+                UserGroup group = user.getUserRepository().getUserGroup("admin");
+                if (role != null && (user.hasRole(role) || user.hasUserGroup(group)))
                 {
-                    if (!question.isClosed())
+                    isAdmin = true;
+                }
+                if (isAdmin || (question.getCreator() != null && question.getCreator().getId() != null && user.getId() != null && question.getCreator().getId().equals(user.getId())))
+                {
+
+                    question.isClosed();
+                    try
                     {
-                        question.setClosed(true);
+                        if (!question.isClosed())
+                        {
+                            question.setClosed(true);
+                        }
                     }
-                }
-                catch (Exception e)
-                {
-                    log.error(e);
-                }
-                if (request.getParameter("org") != null)
-                {
-                    response.setAction(request.getParameter("org"));
-                }
-                else
-                {
-                    response.setAction("showDetail");
-                }
-                response.setRenderParameter("uri", question.getURI());
-                if (request.getParameter("page") != null)
-                {
-                    response.setRenderParameter("page", request.getParameter("page"));
+                    catch (Exception e)
+                    {
+                        log.error(e);
+                    }
+                    if (request.getParameter("org") != null)
+                    {
+                        response.setAction(request.getParameter("org"));
+                    }
+                    else
+                    {
+                        response.setAction("showDetail");
+                    }
+                    response.setRenderParameter("uri", question.getURI());
+                    if (request.getParameter("cat") != null)
+                    {
+                        response.setRenderParameter("cat", request.getParameter("cat"));
+                    }
+                    if (request.getParameter("deleted") != null)
+                        {
+                            response.setRenderParameter("deleted", request.getParameter("deleted"));
+                        }
+                    if (request.getParameter("page") != null)
+                    {
+                        response.setRenderParameter("page", request.getParameter("page"));
+                    }
                 }
             }
             else if (action.equals("openQuestion"))
             {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
                 Question question = (Question) semObject.createGenericInstance();
-                try
+                boolean isAdmin = false;
+                Role role = user.getUserRepository().getRole("adminForum");
+                UserGroup group = user.getUserRepository().getUserGroup("admin");
+                if (role != null && (user.hasRole(role) || user.hasUserGroup(group)))
                 {
-                    if (question.isClosed())
+                    isAdmin = true;
+                }
+                if (isAdmin || (question.getCreator() != null && question.getCreator().getId() != null && user.getId() != null && question.getCreator().getId().equals(user.getId())))
+                {
+
+                    try
                     {
-                        question.setClosed(false);
+                        if (question.isClosed())
+                        {
+                            question.setClosed(false);
+                        }
                     }
-                }
-                catch (Exception e)
-                {
-                    log.error(e);
-                }
-                if (request.getParameter("org") != null)
-                {
-                    response.setAction(request.getParameter("org"));
-                }
-                else
-                {
-                    response.setAction("showDetail");
-                }
-                response.setRenderParameter("uri", question.getURI());
-                if (request.getParameter("page") != null)
-                {
-                    response.setRenderParameter("page", request.getParameter("page"));
+                    catch (Exception e)
+                    {
+                        log.error(e);
+                    }
+                    if (request.getParameter("org") != null)
+                    {
+                        response.setAction(request.getParameter("org"));
+                    }
+                    else
+                    {
+                        response.setAction("showDetail");
+                    }
+                    response.setRenderParameter("uri", question.getURI());
+                    if (request.getParameter("cat") != null)
+                    {
+                        response.setRenderParameter("cat", request.getParameter("cat"));
+                    }
+                    if (request.getParameter("deleted") != null)
+                        {
+                            response.setRenderParameter("deleted", request.getParameter("deleted"));
+                        }
+                    if (request.getParameter("page") != null)
+                    {
+                        response.setRenderParameter("page", request.getParameter("page"));
+                    }
                 }
             }
             else if (action.equals("voteQuestion"))
@@ -499,9 +734,17 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         response.setAction("edit");
                     }
                 }
+                if (request.getParameter("deleted") != null)
+                        {
+                            response.setRenderParameter("deleted", request.getParameter("deleted"));
+                        }
                 if (request.getParameter("page") != null)
                 {
                     response.setRenderParameter("page", request.getParameter("page"));
+                }
+                if (request.getParameter("cat") != null)
+                {
+                    response.setRenderParameter("cat", request.getParameter("cat"));
                 }
             }
             else if (action.equals("voteAnswer"))
@@ -599,37 +842,63 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     }
                     response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
                 }
+                if (request.getParameter("deleted") != null)
+                        {
+                            response.setRenderParameter("deleted", request.getParameter("deleted"));
+                        }
                 if (request.getParameter("page") != null)
                 {
                     response.setRenderParameter("page", request.getParameter("page"));
+                }
+                if (request.getParameter("cat") != null)
+                {
+                    response.setRenderParameter("cat", request.getParameter("cat"));
                 }
             }
             else if (action.equals("removeAnswer"))
             {
-                try
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
+                Answer answer = (Answer) semObject.createGenericInstance();
+                boolean isAdmin = false;
+                Role role = user.getUserRepository().getRole("adminForum");
+                UserGroup group = user.getUserRepository().getUserGroup("admin");
+                if (role != null && (user.hasRole(role) || user.hasUserGroup(group)))
                 {
-                    SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
-                    if (request.getParameter("org") != null)
-                    {
-                        response.setAction(request.getParameter("org"));
-                    }
-                    else
-                    {
-                        response.setAction("showDetail");
-                    }
-                    Answer answer = (Answer) semObject.createGenericInstance();
-                    response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
-//TODO: revisar regla de negocio
-                    answer.setAnsStatus(STATUS_REMOVED);
-//                    semObject.remove();
+                    isAdmin = true;
                 }
-                catch (Exception e)
+                if (isAdmin || (answer.getCreator() != null && answer.getCreator().getId() != null && user.getId() != null && answer.getCreator().getId().equals(user.getId())))
                 {
-                    log.error(e);
+                    try
+                    {
+
+                        if (request.getParameter("org") != null)
+                        {
+                            response.setAction(request.getParameter("org"));
+                        }
+                        else
+                        {
+                            response.setAction("showDetail");
+                        }
+
+                        response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
+                        answer.remove();
+                    }
+                    catch (Exception e)
+                    {
+                        log.error(e);
+                    }
                 }
+                    if (request.getParameter("deleted") != null)
+                        {
+                            response.setRenderParameter("deleted", request.getParameter("deleted"));
+                        }
                 if (request.getParameter("page") != null)
                 {
                     response.setRenderParameter("page", request.getParameter("page"));
+                }
+                if (request.getParameter("cat") != null)
+                {
+                    response.setRenderParameter("cat", request.getParameter("cat"));
                 }
             }
             else if (action.equals("subcribe2question"))
@@ -672,9 +941,17 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     {
                         response.setAction("edit");
                     }
+                    if (request.getParameter("deleted") != null)
+                        {
+                            response.setRenderParameter("deleted", request.getParameter("deleted"));
+                        }
                     if (request.getParameter("page") != null)
                     {
                         response.setRenderParameter("page", request.getParameter("page"));
+                    }
+                    if (request.getParameter("cat") != null)
+                    {
+                        response.setRenderParameter("cat", request.getParameter("cat"));
                     }
                 }
             }
@@ -700,31 +977,103 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
             }
             else if (action.equals("AcceptQuestion"))
             {
-                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
-                Question question = (Question) semObject.createGenericInstance();
-                question.setQueStatus(STATUS_ACEPTED);
-                response.setAction("moderate");
+                boolean isAdmin = false;
+                Role role = user.getUserRepository().getRole("adminForum");
+                UserGroup group = user.getUserRepository().getUserGroup("admin");
+                if (role != null && (user.hasRole(role) || user.hasUserGroup(group)))
+                {
+                    isAdmin = true;
+                }
+                if (isAdmin)
+                {
+                    SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
+                    Question question = (Question) semObject.createGenericInstance();
+                    question.setQueStatus(STATUS_ACEPTED);
+                    response.setAction("moderate");
+                    if (request.getParameter("cat") != null)
+                    {
+                        response.setRenderParameter("cat", request.getParameter("cat"));
+                    }
+                    if (request.getParameter("deleted") != null)
+                    {
+                        response.setRenderParameter("deleted", request.getParameter("deleted"));
+                    }
+                }
             }
             else if (action.equals("AcceptAnswer"))
             {
-                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
-                Answer answer = (Answer) semObject.createGenericInstance();
-                answer.setAnsStatus(STATUS_ACEPTED);
-                response.setAction("moderate");
+                boolean isAdmin = false;
+                Role role = user.getUserRepository().getRole("adminForum");
+                UserGroup group = user.getUserRepository().getUserGroup("admin");
+                if (role != null && (user.hasRole(role) || user.hasUserGroup(group)))
+                {
+                    isAdmin = true;
+                }
+                if (isAdmin)
+                {
+                    SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
+                    Answer answer = (Answer) semObject.createGenericInstance();
+                    answer.setAnsStatus(STATUS_ACEPTED);
+                    response.setAction("moderate");
+                    if (request.getParameter("cat") != null)
+                    {
+                        response.setRenderParameter("cat", request.getParameter("cat"));
+                    }
+                    if (request.getParameter("deleted") != null)
+                    {
+                        response.setRenderParameter("deleted", request.getParameter("deleted"));
+                    }
+                }
             }
             else if (action.equals("RejectQuestion"))
             {
-                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
-                Question question = (Question) semObject.createGenericInstance();
-                question.setQueStatus(STATUS_REMOVED);
-                response.setAction("moderate");
+                boolean isAdmin = false;
+                Role role = user.getUserRepository().getRole("adminForum");
+                UserGroup group = user.getUserRepository().getUserGroup("admin");
+                if (role != null && (user.hasRole(role) || user.hasUserGroup(group)))
+                {
+                    isAdmin = true;
+                }
+                if (isAdmin)
+                {
+                    SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
+                    Question question = (Question) semObject.createGenericInstance();
+                    question.setQueStatus(STATUS_REMOVED);
+                    if (request.getParameter("cat") != null)
+                    {
+                        response.setRenderParameter("cat", request.getParameter("cat"));
+                    }
+                    if (request.getParameter("deleted") != null)
+                    {
+                        response.setRenderParameter("deleted", request.getParameter("deleted"));
+                    }
+                    response.setAction("moderate");
+                }
             }
             else if (action.equals("RejectAnswer"))
             {
-                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
-                Answer answer = (Answer) semObject.createGenericInstance();
-                answer.setAnsStatus(STATUS_REMOVED);
-                response.setAction("moderate");
+                boolean isAdmin = false;
+                Role role = user.getUserRepository().getRole("adminForum");
+                UserGroup group = user.getUserRepository().getUserGroup("admin");
+                if (role != null && (user.hasRole(role) || user.hasUserGroup(group)))
+                {
+                    isAdmin = true;
+                }
+                if (isAdmin)
+                {
+                    SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
+                    Answer answer = (Answer) semObject.createGenericInstance();
+                    answer.setAnsStatus(STATUS_REMOVED);
+                    if (request.getParameter("cat") != null)
+                    {
+                        response.setRenderParameter("cat", request.getParameter("cat"));
+                    }
+                    if (request.getParameter("deleted") != null)
+                    {
+                        response.setRenderParameter("deleted", request.getParameter("deleted"));
+                    }
+                    response.setAction("moderate");
+                }
             }
         }
         response.setMode(response.Mode_VIEW);
