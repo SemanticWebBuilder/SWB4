@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
+    xmlns:cat="http://www.catalogs.org/ontology#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+  xml:base="http://www.catalogs.org/ontology">
+  <owl:Ontology rdf:about="">
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="CP">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >CP</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Catalogs">
+    <swb:hasClass>
+      <owl:Class rdf:ID="Municipio"/>
+    </swb:hasClass>
+    <rdfs:label xml:lang="es">Sitio de catálogos</rdfs:label>
+    <rdfs:label xml:lang="en">Catalogs WebSite</rdfs:label>
+    <swb:hasClass rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Collection"/>
+    <rdfs:comment>Objeto que define un Sitio Web de Catálogos</rdfs:comment>
+    <swb:hasClass>
+      <owl:Class rdf:ID="Estado"/>
+    </swb:hasClass>
+    <swb:hasClass rdf:resource="#CP"/>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#do_AdminWebSite"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebSite"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Model"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Estado">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Estado</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Municipio">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Municipio</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="hasMunicipio">
+    <rdfs:range rdf:resource="#Municipio"/>
+    <rdfs:domain rdf:resource="#Estado"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Municipios</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_municipio">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Municipio</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
+  <swb:CodePackage rdf:ID="pkg">
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >cat</swb:prefix>
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.catalogs</swb:package>
+  </swb:CodePackage>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->
