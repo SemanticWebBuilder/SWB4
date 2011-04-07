@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class DataStoreArtifactBase extends org.semanticwb.process.model.DataObject implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class DataStoreArtifactBase extends org.semanticwb.process.model.ItemAware implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swp_DataStoreArtifact=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#DataStoreArtifact");
    /**

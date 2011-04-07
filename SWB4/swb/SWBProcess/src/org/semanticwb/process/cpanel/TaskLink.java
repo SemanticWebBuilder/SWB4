@@ -115,8 +115,7 @@ public class TaskLink {
              */
             }catch(Exception e){
                 log.error("Error en TaskLink.getFlowNodeParentProcess", e);
-                System.out.println("Error en TaskLink.getFlowNodeParentProcess:" +
-                    e.getMessage());
+                //System.out.println("Error en TaskLink.getFlowNodeParentProcess:" + e.getMessage());
             }
             return strProcessTitle;
         }
@@ -134,8 +133,7 @@ public class TaskLink {
                 }
             }catch(Exception e){
                 log.error("Error en TaskLink.getFlowNodePriority", e);
-                System.out.println("Error en TaskLink.getFlowNodePriority:" +
-                    e.getMessage());
+                //System.out.println("Error en TaskLink.getFlowNodePriority:" + e.getMessage());
             }
             return intPriority;
         }

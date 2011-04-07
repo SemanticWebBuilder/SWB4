@@ -56,7 +56,7 @@ public class ProcessPeriod extends org.semanticwb.process.model.base.ProcessPeri
             }
         }
 
-        // System.out.println("getFilterNode:"+getURI()+" "+m_filternode);
+        //System.out.println("getFilterNode:"+getURI()+" "+m_filternode);
         return m_node;
     }
 
@@ -112,11 +112,11 @@ public class ProcessPeriod extends org.semanticwb.process.model.base.ProcessPeri
                 if (nl.item(x) != null) {
                     String name = nl.item(x).getNodeName();
 
-                    // System.out.println("node:"+name);
+                    //System.out.println("node:"+name);
                     if (name.equals("inidate")) {
                         inidate = new Date(nl.item(x).getFirstChild().getNodeValue());
 
-                        System.out.println("inidate:"+inidate+" "+today);
+                        //System.out.println("inidate:"+inidate+" "+today);
                         if (inidate.after(today)) {
                             ret = false;
                             break;
@@ -128,7 +128,7 @@ public class ProcessPeriod extends org.semanticwb.process.model.base.ProcessPeri
                         enddate.setMinutes(59);
                         enddate.setSeconds(59);
 
-                        System.out.println("enddate:"+enddate+" "+today);
+                        //System.out.println("enddate:"+enddate+" "+today);
                         if (enddate.before(today)) {
                             ret = false;
 
@@ -160,7 +160,7 @@ public class ProcessPeriod extends org.semanticwb.process.model.base.ProcessPeri
                         exdate.setMinutes(m);
                         exdate.setSeconds(s);
 
-                        System.out.println("exdate:"+exdate+" "+cdate);
+                        //System.out.println("exdate:"+exdate+" "+cdate);
                         if (!hasInter && exdate.compareTo(cdate)!=0){
                             ret = false;
                             break;
@@ -170,7 +170,7 @@ public class ProcessPeriod extends org.semanticwb.process.model.base.ProcessPeri
                         long inter=Long.parseLong(time)*1000*60;
                         long act=cdate.getTime()-exdate.getTime();
 
-                        System.out.println("inter:"+act%inter);
+                        //System.out.println("inter:"+act%inter);
                         if(act%inter!=0){
                             ret = false;
                             break;
@@ -213,7 +213,7 @@ public class ProcessPeriod extends org.semanticwb.process.model.base.ProcessPeri
                 }
             }
         }
-        // System.out.println("ret:"+ret);
+        //System.out.println("ret:"+ret);
         return ret;
     }
 
@@ -294,8 +294,8 @@ public class ProcessPeriod extends org.semanticwb.process.model.base.ProcessPeri
                     int difm = actm + dify * 12 - inim;                // diferencia de meses realses contando años
                     int modm = difm % val;                             // modulo de los mese con respecto al valor
 
-                    // System.out.println("difm="+difm);
-                    // System.out.println("modm="+modm);
+                    //System.out.println("difm="+difm);
+                    //System.out.println("modm="+modm);
                     if (modm != 0) {
                         ret = false;
 

@@ -46,8 +46,8 @@ public class ProcessRule extends org.semanticwb.process.model.base.ProcessRuleBa
             i.eval("import org.semanticwb.process.model.*");
 
             ret=i.eval(scond);
-            System.out.println("ret:"+ret);
-            System.out.println("time:"+ (System.currentTimeMillis()-ini ));
+            //System.out.println("ret:"+ret);
+            //System.out.println("time:"+ (System.currentTimeMillis()-ini ));
         }catch(Exception e)
         {
             log.error(e);

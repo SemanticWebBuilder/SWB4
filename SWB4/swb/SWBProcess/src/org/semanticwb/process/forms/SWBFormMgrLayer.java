@@ -62,13 +62,13 @@ public class SWBFormMgrLayer {
         while (it.hasNext()) {
             ProcessObject obj = it.next();
             SemanticClass cls = obj.getSemanticObject().getSemanticClass();
-            System.out.println("CLASE DE FOI:"+cls+", PREFIJO:"+cls.getPrefix());
+            //System.out.println("CLASE DE FOI:"+cls+", PREFIJO:"+cls.getPrefix());
             ArrayList aListProps=new ArrayList();
             Iterator<SemanticProperty> itp = cls.listProperties();
             while (itp.hasNext()) {
                 SemanticProperty prop = itp.next();
                 aListProps.add(prop);
-                System.out.println("PROPIEDAD:"+prop+", PREFIJO:"+cls.getPrefix());
+                //System.out.println("PROPIEDAD:"+prop+", PREFIJO:"+cls.getPrefix());
             }
             hmapClasses.put(cls, aListProps);
         }
@@ -206,9 +206,9 @@ public class SWBFormMgrLayer {
             mgr=addProperties2Mgr(mgr, hmapClasses, xml); //Agrega propiedades que seran actualizadas en BD (Persistidas).
 
             try{
-                System.out.println("Antes de procesar en update2DB");
+                //System.out.println("Antes de procesar en update2DB");
                 mgr.processForm(request);
-                System.out.println("Despues de procesar en update2DB");
+                //System.out.println("Despues de procesar en update2DB");
             }catch(Exception e){
                 log.error(e);
             }
@@ -285,7 +285,7 @@ public class SWBFormMgrLayer {
                                             //Manejo de modo
                                             String swbMode=mgr.MODE_EDIT;
                                             if(smode!=null && smode.length()>0) swbMode=smode;
-                                            System.out.println("AGREGA PROPIEDAD:"+semProp+", CON CLASE:"+cls);
+                                            //System.out.println("AGREGA PROPIEDAD:"+semProp+", CON CLASE:"+cls);
                                             mgr.addProperty(semProp, cls, swbMode);
                                         }
                                     }
