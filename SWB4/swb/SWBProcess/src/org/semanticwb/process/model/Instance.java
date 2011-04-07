@@ -15,7 +15,19 @@ public class Instance extends org.semanticwb.process.model.base.InstanceBase
     public final static int STATUS_ABORTED=3;
     public final static int STATUS_CLOSED=4;
     public final static int STATUS_OPEN=5;
-
+    //public final static int STATUS_READY;
+    //public final static int STATUS_ACTIVE;
+    //public final static int STATUS_INACTIVE;
+    //public final static int STATUS_COMPLETING;
+    //public final static int STATUS_WITHDRAWN;
+    //public final static int STATUS_COMPLETED;
+    //public final static int STATUS_COMPENSATING;
+    //public final static int STATUS_FAILING;
+    //public final static int STATUS_TERMINATING;
+    //public final static int STATUS_COMPENSATED;
+    //public final static int STATUS_FAILED;
+    //public final static int STATUS_TERMINATED;
+    //public final static int STATUS_CLOSED;
     public final static String ACTION_ACCEPT="accept";
     public final static String ACTION_REJECT="reject";
     public final static String ACTION_CANCEL="cancel";
