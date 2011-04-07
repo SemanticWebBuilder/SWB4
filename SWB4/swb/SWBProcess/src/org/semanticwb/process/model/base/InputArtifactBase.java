@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class InputArtifactBase extends org.semanticwb.process.model.DataObject implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class InputArtifactBase extends org.semanticwb.process.model.ItemAware implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Collectionable
 {
     public static final org.semanticwb.platform.SemanticClass swp_InputArtifact=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#InputArtifact");
    /**
@@ -248,5 +248,23 @@ public abstract class InputArtifactBase extends org.semanticwb.process.model.Dat
     public InputArtifactBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the Collection property
+* @return boolean with the Collection
+*/
+    public boolean isCollection()
+    {
+        return getSemanticObject().getBooleanProperty(swp_collection);
+    }
+
+/**
+* Sets the Collection property
+* @param value long with the Collection
+*/
+    public void setCollection(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swp_collection, value);
     }
 }

@@ -180,8 +180,7 @@ public class ProcessProperty
                         new ProcessPropertyOrderComparator();
                 Collections.sort(v,comparator);
             } catch(Exception e){
-                System.out.println("Error en ProcessProperty.sortProcessProperty:" +
-                        e.getMessage());
+                //System.out.println("Error en ProcessProperty.sortProcessProperty:" + e.getMessage());
                 log.error("Error en ProcessProperty.sortProcessProperty", e);
             }
         }

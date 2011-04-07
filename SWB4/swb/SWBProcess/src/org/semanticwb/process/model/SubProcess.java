@@ -25,7 +25,7 @@ public class SubProcess extends org.semanticwb.process.model.base.SubProcessBase
     @Override
     public FlowNodeInstance createInstance(ContainerInstanceable pinst)
     {
-        System.out.println("createInstance subprocess:"+this);
+        //System.out.println("createInstance subprocess:"+this);
         SubProcessInstance inst=(SubProcessInstance)super.createInstance(pinst);
         Iterator<SemanticObject> it=listProcessClasses();
         while(it.hasNext())

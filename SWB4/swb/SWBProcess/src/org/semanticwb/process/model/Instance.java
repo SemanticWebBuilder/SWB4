@@ -40,7 +40,7 @@ public class Instance extends org.semanticwb.process.model.base.InstanceBase
      */
     public void start(User user)
     {
-        System.out.println("start:"+getId()+" "+getProcessElementType().getClass().getName()+" "+getProcessElementType().getTitle());
+        //System.out.println("start:"+getId()+" "+getProcessElementType().getClass().getName()+" "+getProcessElementType().getTitle());
         setStatus(STATUS_PROCESSING);
     }
 
@@ -93,13 +93,13 @@ public class Instance extends org.semanticwb.process.model.base.InstanceBase
      */
     public void execute(User user)
     {
-        System.out.println("execute:"+getId()+" "+getProcessElementType().getClass().getName()+" "+getProcessElementType().getTitle());
+        //System.out.println("execute:"+getId()+" "+getProcessElementType().getClass().getName()+" "+getProcessElementType().getTitle());
         setExecution(getExecution()+1);
     }
 
     public void notifyEvent(FlowNodeInstance from)
     {
-        System.out.println("notifyEvent:"+getId()+" "+getProcessElementType().getClass().getName()+" "+getProcessElementType().getTitle());
+        //System.out.println("notifyEvent:"+getId()+" "+getProcessElementType().getClass().getName()+" "+getProcessElementType().getTitle());
     }
 
 
