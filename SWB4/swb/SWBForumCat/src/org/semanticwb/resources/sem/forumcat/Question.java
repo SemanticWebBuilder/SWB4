@@ -5,14 +5,18 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.model.User;
 import org.semanticwb.portal.indexer.SWBIndexer;
 
-
-public class Question extends org.semanticwb.resources.sem.forumcat.base.QuestionBase 
+public class Question extends org.semanticwb.resources.sem.forumcat.base.QuestionBase
 {
-    static {
-        SWBIndexer index=SWBPortal.getIndexMgr().getDefaultIndexer();
-        if(index!=null)
+
+    static
+    {
+        if (SWBPortal.getIndexMgr() != null)
         {
-            index.registerParser(Question.class, new QuestionParser());
+            SWBIndexer index = SWBPortal.getIndexMgr().getDefaultIndexer();
+            if (index != null)
+            {
+                index.registerParser(Question.class, new QuestionParser());
+            }
         }
     }
 
@@ -21,12 +25,15 @@ public class Question extends org.semanticwb.resources.sem.forumcat.base.Questio
         super(base);
     }
 
-    public boolean isUserSubscribed(User user) {
+    public boolean isUserSubscribed(User user)
+    {
         boolean ret = false;
         Iterator<QuestionSubscription> subscriptions = QuestionSubscription.ClassMgr.listQuestionSubscriptionByQuestionObj(this);
-        while (subscriptions.hasNext() && !ret) {
+        while (subscriptions.hasNext() && !ret)
+        {
             QuestionSubscription subscription = subscriptions.next();
-            if (subscription.getUserObj().getURI().equals(user.getURI())) {
+            if (subscription.getUserObj().getURI().equals(user.getURI()))
+            {
                 ret = true;
             }
         }
@@ -34,12 +41,15 @@ public class Question extends org.semanticwb.resources.sem.forumcat.base.Questio
         return ret;
     }
 
-    public boolean userHasVoted(User user) {
+    public boolean userHasVoted(User user)
+    {
         boolean ret = false;
         Iterator<QuestionVote> votes = QuestionVote.ClassMgr.listQuestionVoteByQuestionVote(this);
-        while (votes.hasNext() && !ret) {
+        while (votes.hasNext() && !ret)
+        {
             QuestionVote vote = votes.next();
-            if (vote.getUserVote().getURI().equals(user.getURI())) {
+            if (vote.getUserVote().getURI().equals(user.getURI()))
+            {
                 ret = true;
             }
         }
@@ -47,21 +57,26 @@ public class Question extends org.semanticwb.resources.sem.forumcat.base.Questio
         return ret;
     }
 
-    public boolean userHasAnswered(User user) {
+    public boolean userHasAnswered(User user)
+    {
         boolean ret = false;
         Iterator<Answer> answers = listAnswerInvs();
-        while (!ret && answers.hasNext()) {
+        while (!ret && answers.hasNext())
+        {
             Answer a = answers.next();
-            if (a.getCreator().getURI().equals(user.getURI())) {
+            if (a.getCreator().getURI().equals(user.getURI()))
+            {
                 ret = true;
             }
         }
         return ret;
     }
 
-    public boolean isAnonymous() {
+    public boolean isAnonymous()
+    {
         boolean ret = true;
-        if (getCreator() != null) {
+        if (getCreator() != null)
+        {
             ret = false;
         }
         return ret;

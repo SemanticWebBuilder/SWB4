@@ -3,12 +3,21 @@ package org.semanticwb.resources.sem.forumcat;
 import java.util.Iterator;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.model.User;
+import org.semanticwb.portal.indexer.SWBIndexer;
 
 
 public class Answer extends org.semanticwb.resources.sem.forumcat.base.AnswerBase 
 {
     static {
-        SWBPortal.getIndexMgr().getDefaultIndexer().registerParser(Answer.class, new AnswerParser());
+        if (SWBPortal.getIndexMgr() != null)
+        {
+            SWBIndexer index = SWBPortal.getIndexMgr().getDefaultIndexer();
+            if (index != null)
+            {
+                index.registerParser(Answer.class, new AnswerParser());
+            }
+        }
+        
     }
 
     public Answer(org.semanticwb.platform.SemanticObject base)
