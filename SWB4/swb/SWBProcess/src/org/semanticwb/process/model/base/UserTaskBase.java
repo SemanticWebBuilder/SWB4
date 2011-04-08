@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class UserTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.model.Resourceable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.process.model.Callable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Expirable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable
+public abstract class UserTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Resourceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.process.model.Callable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable
 {
     public static final org.semanticwb.platform.SemanticClass swp_WrapperTaskWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#WrapperTaskWebPage");
     public static final org.semanticwb.platform.SemanticProperty swp_taskWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#taskWebPage");
@@ -642,24 +642,6 @@ public abstract class UserTaskBase extends org.semanticwb.process.model.Task imp
              ret=(org.semanticwb.process.model.WrapperTaskWebPage)obj.createGenericInstance();
          }
          return ret;
-    }
-
-/**
-* Gets the Expiration property
-* @return java.util.Date with the Expiration
-*/
-    public java.util.Date getExpiration()
-    {
-        return getSemanticObject().getDateProperty(swb_expiration);
-    }
-
-/**
-* Sets the Expiration property
-* @param value long with the Expiration
-*/
-    public void setExpiration(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_expiration, value);
     }
    /**
    * Gets all the org.semanticwb.model.Resource
