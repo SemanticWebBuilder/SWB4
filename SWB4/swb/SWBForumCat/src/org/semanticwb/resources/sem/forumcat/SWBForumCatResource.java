@@ -1039,6 +1039,14 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
                     Question question = (Question) semObject.createGenericInstance();
                     question.setQueStatus(STATUS_REMOVED);
+                    if(question.getCreator()!=null && question.getCreator().getEmail()!=null)
+                    {
+                        String text=clean(question.getQuestion());
+                        String toemail=question.getCreator().getEmail();
+                        String subject="Mensaje rechazado en el foro www.empleo.gob.mx";
+                        String body="El mensaje: "+text+" <br/>Su mensaje fue rechazado por no cumplir con las politicas de uso del portal del empleo";
+                        SWBUtils.EMAIL.sendBGEmail(toemail, subject, body);
+                    }
                     if (request.getParameter("cat") != null)
                     {
                         response.setRenderParameter("cat", request.getParameter("cat"));
@@ -1064,6 +1072,14 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
                     Answer answer = (Answer) semObject.createGenericInstance();
                     answer.setAnsStatus(STATUS_REMOVED);
+                    if(answer.getCreator()!=null && answer.getCreator().getEmail()!=null)
+                    {
+                        String text=clean(answer.getAnswer());
+                        String toemail=answer.getCreator().getEmail();
+                        String subject="Respuesta rechazada en el foro www.empleo.gob.mx";
+                        String body="Su respuesta: "+text+" <br/>Su respuesta fue rechazada por no cumplir con las politicas de uso del portal del empleo";
+                        SWBUtils.EMAIL.sendBGEmail(toemail, subject, body);
+                    }
                     if (request.getParameter("cat") != null)
                     {
                         response.setRenderParameter("cat", request.getParameter("cat"));
