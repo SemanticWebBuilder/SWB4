@@ -207,9 +207,9 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     response.setRenderParameter("page", request.getParameter("page"));
                 }
                 if (request.getParameter("deleted") != null)
-                        {
-                            response.setRenderParameter("deleted", request.getParameter("deleted"));
-                        }
+                {
+                    response.setRenderParameter("deleted", request.getParameter("deleted"));
+                }
                 if (request.getParameter("cat") != null)
                 {
                     response.setRenderParameter("cat", request.getParameter("cat"));
@@ -299,9 +299,9 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     response.setRenderParameter("page", request.getParameter("page"));
                 }
                 if (request.getParameter("deleted") != null)
-                        {
-                            response.setRenderParameter("deleted", request.getParameter("deleted"));
-                        }
+                {
+                    response.setRenderParameter("deleted", request.getParameter("deleted"));
+                }
                 if (request.getParameter("cat") != null)
                 {
                     response.setRenderParameter("cat", request.getParameter("cat"));
@@ -354,9 +354,9 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         response.setRenderParameter("page", request.getParameter("page"));
                     }
                     if (request.getParameter("deleted") != null)
-                        {
-                            response.setRenderParameter("deleted", request.getParameter("deleted"));
-                        }
+                    {
+                        response.setRenderParameter("deleted", request.getParameter("deleted"));
+                    }
                     if (request.getParameter("cat") != null)
                     {
                         response.setRenderParameter("cat", request.getParameter("cat"));
@@ -435,9 +435,9 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         response.setRenderParameter("page", request.getParameter("page"));
                     }
                     if (request.getParameter("deleted") != null)
-                        {
-                            response.setRenderParameter("deleted", request.getParameter("deleted"));
-                        }
+                    {
+                        response.setRenderParameter("deleted", request.getParameter("deleted"));
+                    }
                     if (request.getParameter("cat") != null)
                     {
                         response.setRenderParameter("cat", request.getParameter("cat"));
@@ -523,9 +523,9 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         response.setRenderParameter("cat", request.getParameter("cat"));
                     }
                     if (request.getParameter("deleted") != null)
-                        {
-                            response.setRenderParameter("deleted", request.getParameter("deleted"));
-                        }
+                    {
+                        response.setRenderParameter("deleted", request.getParameter("deleted"));
+                    }
                     if (request.getParameter("page") != null)
                     {
                         response.setRenderParameter("page", request.getParameter("page"));
@@ -586,9 +586,9 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     response.setRenderParameter("cat", request.getParameter("cat"));
                 }
                 if (request.getParameter("deleted") != null)
-                        {
-                            response.setRenderParameter("deleted", request.getParameter("deleted"));
-                        }
+                {
+                    response.setRenderParameter("deleted", request.getParameter("deleted"));
+                }
                 if (request.getParameter("page") != null)
                 {
                     response.setRenderParameter("page", request.getParameter("page"));
@@ -634,9 +634,9 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         response.setRenderParameter("cat", request.getParameter("cat"));
                     }
                     if (request.getParameter("deleted") != null)
-                        {
-                            response.setRenderParameter("deleted", request.getParameter("deleted"));
-                        }
+                    {
+                        response.setRenderParameter("deleted", request.getParameter("deleted"));
+                    }
                     if (request.getParameter("page") != null)
                     {
                         response.setRenderParameter("page", request.getParameter("page"));
@@ -682,9 +682,9 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         response.setRenderParameter("cat", request.getParameter("cat"));
                     }
                     if (request.getParameter("deleted") != null)
-                        {
-                            response.setRenderParameter("deleted", request.getParameter("deleted"));
-                        }
+                    {
+                        response.setRenderParameter("deleted", request.getParameter("deleted"));
+                    }
                     if (request.getParameter("page") != null)
                     {
                         response.setRenderParameter("page", request.getParameter("page"));
@@ -735,9 +735,9 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     }
                 }
                 if (request.getParameter("deleted") != null)
-                        {
-                            response.setRenderParameter("deleted", request.getParameter("deleted"));
-                        }
+                {
+                    response.setRenderParameter("deleted", request.getParameter("deleted"));
+                }
                 if (request.getParameter("page") != null)
                 {
                     response.setRenderParameter("page", request.getParameter("page"));
@@ -843,9 +843,9 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
                 }
                 if (request.getParameter("deleted") != null)
-                        {
-                            response.setRenderParameter("deleted", request.getParameter("deleted"));
-                        }
+                {
+                    response.setRenderParameter("deleted", request.getParameter("deleted"));
+                }
                 if (request.getParameter("page") != null)
                 {
                     response.setRenderParameter("page", request.getParameter("page"));
@@ -888,10 +888,10 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         log.error(e);
                     }
                 }
-                    if (request.getParameter("deleted") != null)
-                        {
-                            response.setRenderParameter("deleted", request.getParameter("deleted"));
-                        }
+                if (request.getParameter("deleted") != null)
+                {
+                    response.setRenderParameter("deleted", request.getParameter("deleted"));
+                }
                 if (request.getParameter("page") != null)
                 {
                     response.setRenderParameter("page", request.getParameter("page"));
@@ -942,9 +942,9 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         response.setAction("edit");
                     }
                     if (request.getParameter("deleted") != null)
-                        {
-                            response.setRenderParameter("deleted", request.getParameter("deleted"));
-                        }
+                    {
+                        response.setRenderParameter("deleted", request.getParameter("deleted"));
+                    }
                     if (request.getParameter("page") != null)
                     {
                         response.setRenderParameter("page", request.getParameter("page"));
@@ -1039,13 +1039,27 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
                     Question question = (Question) semObject.createGenericInstance();
                     question.setQueStatus(STATUS_REMOVED);
-                    if(question.getCreator()!=null && question.getCreator().getEmail()!=null)
+                    if (question.getCreator() != null && question.getCreator().getEmail() != null)
                     {
-                        String text=clean(question.getQuestion());
-                        String toemail=question.getCreator().getEmail();
-                        String subject="Mensaje rechazado en el foro www.empleo.gob.mx";
-                        String body="El mensaje: "+text+" <br/>Su mensaje fue rechazado por no cumplir con las politicas de uso del portal del empleo";
-                        SWBUtils.EMAIL.sendBGEmail(toemail, subject, body);
+                        String text = clean(question.getQuestion());
+                        SWBMail swbMail = new SWBMail();
+                        String toemail = question.getCreator().getEmail();
+                        ArrayList<InternetAddress> aAddress = new ArrayList<InternetAddress>();
+                        try
+                        {
+                            aAddress.add(new InternetAddress(toemail));
+                            swbMail.setAddress(aAddress);
+                            swbMail.setSubject("Mensaje rechazado en el foro " + request.getServerName());
+                            swbMail.setData("Su mensaje fue rechazado por no cumplir con las politicas de uso del portal.<br>" + text);
+                            swbMail.setContentType("text/html");
+                            swbMail.setFromEmail(SWBPlatform.getEnv("af/adminEmail"));
+                            swbMail.setHostName(SWBPlatform.getEnv("swb/smtpServer"));
+                            SWBUtils.EMAIL.sendBGEmail(swbMail);
+                        }
+                        catch (Exception e)
+                        {
+                            log.debug(e);
+                        }
                     }
                     if (request.getParameter("cat") != null)
                     {
@@ -1072,13 +1086,27 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
                     Answer answer = (Answer) semObject.createGenericInstance();
                     answer.setAnsStatus(STATUS_REMOVED);
-                    if(answer.getCreator()!=null && answer.getCreator().getEmail()!=null)
+                    if (answer.getCreator() != null && answer.getCreator().getEmail() != null)
                     {
-                        String text=clean(answer.getAnswer());
-                        String toemail=answer.getCreator().getEmail();
-                        String subject="Respuesta rechazada en el foro www.empleo.gob.mx";
-                        String body="Su respuesta: "+text+" <br/>Su respuesta fue rechazada por no cumplir con las politicas de uso del portal del empleo";
-                        SWBUtils.EMAIL.sendBGEmail(toemail, subject, body);
+                        String text = clean(answer.getAnswer());
+                        String toemail = answer.getCreator().getEmail();
+                        try
+                        {
+                            SWBMail swbMail = new SWBMail();
+                            ArrayList<InternetAddress> aAddress = new ArrayList<InternetAddress>();
+                            aAddress.add(new InternetAddress(toemail));
+                            swbMail.setAddress(aAddress);
+                            swbMail.setSubject("Respuesta rechazada en el foro " + request.getServerName());
+                            swbMail.setData("Su respuesta fue rechazada por no cumplir con las politicas de uso del portal.<br>" + text);
+                            swbMail.setContentType("text/html");
+                            swbMail.setFromEmail(SWBPlatform.getEnv("af/adminEmail"));
+                            swbMail.setHostName(SWBPlatform.getEnv("swb/smtpServer"));
+                            SWBUtils.EMAIL.sendBGEmail(swbMail);
+                        }
+                        catch (Exception e)
+                        {
+                            log.debug(e);
+                        }
                     }
                     if (request.getParameter("cat") != null)
                     {
