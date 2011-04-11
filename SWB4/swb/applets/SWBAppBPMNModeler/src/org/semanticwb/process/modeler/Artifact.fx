@@ -35,7 +35,7 @@ public class Artifact extends GraphicalElement
         if (not(link instanceof AssociationFlow)) {
             ret = false;
             ModelerUtils.setErrorMessage(##"msgError3");
-        } else if (link.ini instanceof Artifact) {
+        } else if (link.ini instanceof Artifact or link.ini instanceof DataObject) {
             ret = false;
             ModelerUtils.setErrorMessage(##"msgError5");
         }
