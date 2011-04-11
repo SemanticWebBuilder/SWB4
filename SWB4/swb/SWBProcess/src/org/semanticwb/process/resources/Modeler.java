@@ -384,24 +384,34 @@ public class Modeler extends GenericResource {
                     ele.put(PROP_PARENT, "");
                 }
 
-                //Boolean isMultiInstance = null, isLoop = null, isForCompensation = null,
-                //isAdHoc = null, isTransaction = null, isInterrupting = null;
+                if (obj instanceof ActivityConfable) {
 
-                //valores por defecto, cambiar cuando esten listos los cambios en el modelo
+                    ActivityConfable tsk = (ActivityConfable) obj;
+                    //Boolean isMultiInstance = null, isLoop = null, isForCompensation = null,
+                    //isAdHoc = null, isTransaction = null, isInterrupting = null;
 
-                ele.put(PROP_isMultiInstance, "false");
-                ele.put(PROP_isLoop, "false");
-                ele.put(PROP_isForCompensation, "false");
-                ele.put(PROP_isAdHoc, "false");
-                ele.put(PROP_isTransaction, "false");
-                ele.put(PROP_isInterrupting, "false");
+                    //valores por defecto, cambiar cuando esten listos los cambios en el modelo
 
-//                ele.put(PROP_isMultiInstance, Boolean.toString(obj.isMultiInstance()));
-//                ele.put(PROP_isLoop, Boolean.toString(obj.isLoop()));
-//                ele.put(PROP_isForCompensation, Boolean.toString(obj.isForCompensation()));
-//                ele.put(PROP_isAdHoc, Boolean.toString(obj.isAdHoc()));
-//                ele.put(PROP_isTransaction, Boolean.toString(obj.isTransaction()));
-//                ele.put(PROP_isInterrupting, Boolean.toString(obj.isInterrupting()));
+//                    ele.put(PROP_isAdHoc, "false");
+//                    ele.put(PROP_isTransaction, "false");
+//                    ele.put(PROP_isInterrupting, "false");
+                    if (tsk.getLoopCharacteristics() != null) {
+                        LoopCharacteristics loopC = tsk.getLoopCharacteristics();
+                        if (loopC instanceof MultiInstanceLoopCharacteristics) {
+                            ele.put(PROP_isMultiInstance, true);
+                        } else {
+                            ele.put(PROP_isMultiInstance, false);
+                        }
+
+                        if (loopC instanceof StandarLoopCharacteristics) {
+                            ele.put(PROP_isLoop, true);
+                        } else {
+                            ele.put(PROP_isLoop, false);
+                        }
+
+                    }
+                    ele.put(PROP_isForCompensation, Boolean.toString(tsk.isForCompensation()));
+                }
 
                 Iterator<ConnectionObject> it = obj.listOutputConnectionObjects();
                 while (it.hasNext()) {
