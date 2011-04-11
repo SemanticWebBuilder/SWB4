@@ -8,6 +8,8 @@ package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
 import org.semanticwb.process.modeler.CompensationIntermediateCatchEvent;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * @author javier.solis
@@ -42,7 +44,7 @@ public class FlowNode extends GraphicalElement
         }
 
         if (link instanceof AssociationFlow) {
-            if (not(link.ini instanceof Artifact) and not(link.ini instanceof CompensationIntermediateCatchEvent and link.ini.getGraphParent() instanceof Activity)) {
+            if (not(link.ini instanceof Artifact or link.ini instanceof DataObject) and not(link.ini instanceof CompensationIntermediateCatchEvent and link.ini.getGraphParent() instanceof Activity)) {
                 ret = false;
                 ModelerUtils.setErrorMessage(##"msgError15");
             }
@@ -56,4 +58,15 @@ public class FlowNode extends GraphicalElement
         }
         return ret;
     }
+
+//    override public function getXPDLDefinition(doc: Document) : Element {
+//        var ret = doc.createElement("Activity");
+//        var graphicInfos = getGraphicsInfos(doc);
+//        ret.appendChild(graphicInfos);
+//
+//        ret.setAttribute("Id", "{uri}");
+//        ret.setAttribute("Name", "{title}");
+//        ret.setAttribute("Description", "{description}");
+//        return ret;
+//    }
 }
