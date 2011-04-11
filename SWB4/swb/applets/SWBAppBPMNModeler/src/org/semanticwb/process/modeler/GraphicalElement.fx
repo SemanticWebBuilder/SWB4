@@ -279,13 +279,13 @@ public class GraphicalElement extends CustomNode
 
         if(e.secondaryButtonDown)
         {
-            var link=ConnectionObject
+            var link=SequenceFlow
             {
                 modeler:modeler
-                //uri:"new:flowlink:{ToolBar.counter++}"
+                uri:"new:flowlink:{ToolBar.counter++}"
                 visible:false
             }
-            //if(canStartLink(link))modeler.tempNode=link;
+            if(canStartLink(link))modeler.tempNode=link;
             modeler.tempNode = link;
         }
     }
