@@ -4,6 +4,7 @@
 "confirmDelete" = "Are you sure you want to delete %s?"
 "confirmDelContents" = "Are you sure you want to delete elements from %s?"
 "msgError16" = "Message Flow must cross Pool boundaries"
+"msgError17" = "Pool cannot be linked using Association Flow"
 "msgError37" = "Pool cannot be linked using Sequence Flow"
 "msgError45" = "Pool cannot be added to a Sub-Process"
 "actCopy" = "Copy"
