@@ -18,6 +18,9 @@ import javafx.util.Sequences;
 import java.util.Comparator;
 import org.semanticwb.process.modeler.GraphicalElement;
 import java.util.HashMap;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.semanticwb.process.modeler.AssociationFlow;
 
 /**
  * @author javier.solis
@@ -136,9 +139,9 @@ public class Pool extends GraphicalElement
             scaleX: bind s;
             scaleY: bind s;
             visible: bind canView()
-            onMouseReleased: function(e: MouseEvent) {
-                captureChilds();
-            }
+//            onMouseReleased: function(e: MouseEvent) {
+//                captureChilds();
+//            }
         };
     }
 
@@ -276,6 +279,11 @@ public class Pool extends GraphicalElement
                 ModelerUtils.setErrorMessage(##"msgError16");
             }
         }
+        if (link instanceof AssociationFlow) {
+            ret = false;
+            ModelerUtils.setErrorMessage(##"msgError17");
+        }
+
         return ret;
     }
 
@@ -368,5 +376,25 @@ public class Pool extends GraphicalElement
         }
 
         return t;
+    }
+
+    override public function getXPDLDefinition(doc: Document) : Element {
+        var ret = doc.createElement("Pool");
+        var lns = doc.createElement("Lanes");
+        var graphicInfos = getGraphicsInfos(doc);
+        ret.appendChild(lns);
+        ret.appendChild(graphicInfos);
+
+        for (lane in lanes) {
+            var ln = lane.getXPDLDefinition(doc);
+            lns.appendChild(ln);
+        }
+
+        ret.setAttribute("Id", "{uri}");
+        ret.setAttribute("Name", "{title}");
+        ret.setAttribute("Orientation", "HORIZONTAL");
+        ret.setAttribute("BoundaryVisible", "true");
+
+        return ret;
     }
 }
