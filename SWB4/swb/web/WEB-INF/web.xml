@@ -13,6 +13,7 @@
     <filter-mapping>
         <filter-name>VirtualHostFilter</filter-name>
         <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
 
     <servlet>
