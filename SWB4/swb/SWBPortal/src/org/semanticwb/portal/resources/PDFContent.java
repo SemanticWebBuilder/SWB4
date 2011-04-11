@@ -95,26 +95,30 @@ public class PDFContent extends GenericAdmResource {
             Resource base = getResourceBase();
             String width = paramRequest.getArgument("width", base.getAttribute("width"));
             try {
-                Integer.parseInt( width.replaceAll("\\D", "") );
+                Integer.parseInt(width.replaceAll("\\D", ""));
             }catch(Exception e) {
-                width = null;
+                width = "250";
             }
             String height = paramRequest.getArgument("height", base.getAttribute("height"));
             try {
                 Integer.parseInt( height.replaceAll("\\D", "") );
             }catch(Exception e) {
-                height = null;
+                height = "250";
             }
-
-            out.print("<object type=\"application/pdf\"");
-            out.print(" data=\""+SWBPortal.getWebWorkPath()+base.getWorkPath()+"/"+base.getAttribute("archive").trim()+"\"");
-            if(width!=null)
-                out.print(" width=\""+width+"\"");
-            if(height!=null)
-                out.print(" height=\""+height+"\"");
-            out.println(" class=\"swb-pdfc\">");
-
-            out.println("</object>");
+            
+            try {
+                StringBuilder htm = new StringBuilder();
+                htm.append("<object type=\"application/pdf\" class=\"swb-pdfc\"");
+                htm.append(" width=\""+width+"\"");
+                htm.append(" height=\""+height+"\"");
+                htm.append(" data=\""+SWBPortal.getWebWorkPath()+base.getWorkPath()+"/"+base.getAttribute("archive").trim()+"\">");
+                htm.append(paramRequest.getLocaleString("msgRequiredInternetExplorer"));
+                htm.append("</object>");
+                out.println(htm.toString());
+            }catch(Exception e) {
+                out.println("<p>"+paramRequest.getLocaleString("msgWrnNoData")+"</p>");
+            }
+            
         }
         out.flush();
         out.close();
