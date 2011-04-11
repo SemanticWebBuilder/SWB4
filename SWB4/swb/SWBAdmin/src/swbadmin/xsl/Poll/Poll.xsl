@@ -61,7 +61,7 @@
     </xsl:template>
     <xsl:template match="results">
         <p class="swb-poll-link">
-            <a href="#" onclick="{@action}" title="{@title}">
+            <a href="javascript:{@action}" title="{@title}">
                 <xsl:apply-templates/>
             </a>
         </p>
