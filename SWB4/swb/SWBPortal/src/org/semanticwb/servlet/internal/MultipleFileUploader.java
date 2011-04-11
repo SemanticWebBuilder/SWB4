@@ -17,8 +17,10 @@ import javax.servlet.http.HttpSessionBindingListener;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBRuntimeException;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
@@ -35,15 +37,20 @@ import org.semanticwb.util.UploaderFileCacheUtils;
 public class MultipleFileUploader implements InternalServlet
 {
 
+    public static Logger log = SWBUtils.getLogger(MultipleFileUploader.class);
 
     {
         File tmpplace = new File(org.semanticwb.SWBPortal.getWorkPath() + "/tmp/");
         if (tmpplace.exists())
         {
             File[] childs = tmpplace.listFiles();
-            for (File tmpfile : childs)
-            {
-                UploaderFileCacheUtils.delete(tmpfile);
+            if (null!=childs){
+                for (File tmpfile : childs)
+                {
+                    UploaderFileCacheUtils.delete(tmpfile);
+                }
+            } else {
+                log.error("MultipleFileUploader: Problem doing listFiles on "+tmpplace.getAbsolutePath());
             }
         }
         UploaderFileCacheUtils.setHomepath(org.semanticwb.SWBPortal.getWorkPath());
