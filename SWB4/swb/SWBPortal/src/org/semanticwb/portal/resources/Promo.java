@@ -24,6 +24,7 @@
 package org.semanticwb.portal.resources;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
@@ -77,7 +78,7 @@ public class Promo extends GenericResource {
     private String webWorkPath;
 
     /** The path. */
-    private String path = SWBPlatform.getContextPath() +"/swbadmin/xsl/Poll/";
+    private String path = SWBPlatform.getContextPath() +"/swbadmin/xsl/Promo/";
 
     /** The restype. */
     private static String restype;
@@ -161,13 +162,13 @@ public class Promo extends GenericResource {
 
         e = dom.createElement("content");
         e.setAttribute("url", base.getAttribute("url",""));
-        e.appendChild(dom.createTextNode( base.getAttribute("text","") ));
+        e.appendChild(dom.createTextNode(base.getAttribute("text","")));
         root.appendChild(e);
 
         e = dom.createElement("more");
         e.setAttribute("url", base.getAttribute("url",""));
         e.setAttribute("target", base.getAttribute("target","true"));
-        e.appendChild(dom.createTextNode( base.getAttribute("more","Ver más") ));
+        e.appendChild(dom.createTextNode(base.getAttribute("more","")));
         root.appendChild(e);
 
         return dom;
@@ -272,10 +273,10 @@ public class Promo extends GenericResource {
             imgHeight = "height=\"" + base.getAttribute("imgHeight")+"\"";
         }
 
-        String text = base.getAttribute("text");
+        String text = base.getAttribute("text","");
         String textStyle = base.getAttribute("textStyle");
 
-        String more = base.getAttribute("more");
+        String more = base.getAttribute("more","");
         String moreStyle = base.getAttribute("moreStyle");
         String url = base.getAttribute("url");
         String uline = base.getAttribute("uline", "0");
@@ -449,8 +450,8 @@ public class Promo extends GenericResource {
         }
 
 
-        String text = base.getAttribute("text");
-        String more = base.getAttribute("more");
+        String text = base.getAttribute("text","");
+        String more = base.getAttribute("more","");
         String url = base.getAttribute("url");
 
         int imgPos;
@@ -750,31 +751,19 @@ public class Promo extends GenericResource {
         if(response.Action_EDIT.equals(action)) {
             try {
                 edit(request, response);
-                if( Boolean.parseBoolean(base.getAttribute("wbNoFile_imghome")) ) {
-                    File file = new File(SWBPortal.getWorkPath()+base.getWorkPath()+"/"+base.getAttribute("imghome"));
+                if( Boolean.parseBoolean(base.getAttribute("wbNoFile_imgfile")) ) {
+                    File file = new File(SWBPortal.getWorkPath()+base.getWorkPath()+"/"+base.getAttribute("imgfile"));
                     if(file.exists() && file.delete()) {
-                        base.removeAttribute("imghome");
-                        base.removeAttribute("wbNoFile_imghome");
-                    }
-                }
-                if( Boolean.parseBoolean(base.getAttribute("wbNoFile_imgown")) ) {
-                    File file = new File(SWBPortal.getWorkPath()+base.getWorkPath()+"/"+base.getAttribute("imgown"));
-                    if(file.exists() && file.delete()) {
-                        base.removeAttribute("imgown");
-                        base.removeAttribute("wbNoFile_imgown");
-                    }
-                }
-                if( Boolean.parseBoolean(base.getAttribute("wbNoFile_imgpict")) ) {
-                    File file = new File(SWBPortal.getWorkPath()+base.getWorkPath()+"/"+base.getAttribute("imgpict"));
-                    if(file.exists() && file.delete()) {
-                        base.removeAttribute("imgpict");
-                        base.removeAttribute("wbNoFile_imgpict");
+                        base.removeAttribute("imgfile");
+                        base.removeAttribute("wbNoFile_imgfile");
                     }
                 }
                 base.updateAttributesToDB();
                 response.setAction(Action_UPDATE);
+            }catch(FileNotFoundException fne) {
+                log.info(fne.getMessage());
             }catch(Exception e) {
-                e.printStackTrace(System.out);
+                log.error(e);
             }
         }
     }
@@ -825,15 +814,17 @@ public class Promo extends GenericResource {
         htm.append("  dojo.require('dijit.form.RadioButton');");
         htm.append("  dojo.require('dijit.form.SimpleTextarea');");
         htm.append("  dojo.require('dijit.form.Button');");
+        
         htm.append("  function isValid() {");
-        htm.append("    var imgfile = dojo.byId('imgfile');");
-        htm.append("    if(isEmpty(imgfile.value)) {");
-        htm.append("      alert('Especifique una imagen para el promocional');");
-        htm.append("      return false;");
-        htm.append("    }");
+        if(base.getAttribute("imgfile")==null) {
+            htm.append("    var imgfile = dojo.byId('imgfile');");
+            htm.append("    if(isEmpty(imgfile.value)&&(!dojo.byId('wbNoFile_imgfile')||dojo.byId('wbNoFile_imgfile')&& !dojo.byId('wbNoFile_imgfile').checked)) {");
+            htm.append("      alert('Especifique una imagen para el promocional');");
+            htm.append("      return false;");
+            htm.append("    }");
+        }
         htm.append("    return valida_frmAdmRes();");
         htm.append("  }\n");
-
 
         htm.append("function valida_frmAdmRes() {");
         htm.append("   pCaracter = dojo.byId('imgfile').value;");
@@ -1070,7 +1061,7 @@ public class Promo extends GenericResource {
         return htm.toString();
     }
 
-    private void edit(HttpServletRequest request, SWBActionResponse response) throws Exception {
+    private void edit(HttpServletRequest request, SWBActionResponse response) throws FileNotFoundException, Exception {
         Resource base = getResourceBase();
 
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
@@ -1090,7 +1081,7 @@ public class Promo extends GenericResource {
                 }else {
                     String filename = item.getName().replaceAll(" ", "_").trim();
                     if(item.getFieldName().equals("imgfile") && filename.equals("") && base.getAttribute("imgfile")==null)
-                        throw new Exception(item.getFieldName()+" es requerido");
+                        throw new FileNotFoundException(item.getFieldName()+" es requerido");
                     else if(!filename.equals("")) {
                         file = new File(SWBPortal.getWorkPath()+base.getWorkPath()+"/"+filename);
                         item.write(file);
