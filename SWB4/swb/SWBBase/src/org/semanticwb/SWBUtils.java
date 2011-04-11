@@ -3247,7 +3247,7 @@ public class SWBUtils {
                 }
                 email.setSubject(subject);
 
-                if (contentType!=null && contentType.equalsIgnoreCase("HTML"))
+                if (contentType!=null && contentType.toLowerCase().indexOf("html")!=-1)
                 {
                     email.setHtmlMsg(data); // set the html message
 
