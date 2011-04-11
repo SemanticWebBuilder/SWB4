@@ -19,6 +19,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import java.lang.Void;
 import org.semanticwb.process.modeler.ModelerUtils;
+import org.w3c.dom.Element;
+import org.w3c.dom.Document;
 
 /**
  * @author javier.solis
@@ -189,6 +191,8 @@ public class GraphicalElement extends CustomNode
         initializeCustomNode();
         return Group
         {
+            scaleX: bind s
+            scaleY: bind s
             content: [
                 text
             ]
@@ -198,6 +202,7 @@ public class GraphicalElement extends CustomNode
 
     override var onMouseClicked = function ( e: MouseEvent ) : Void
     {
+        //println("Elemento {title} - [x: {x}, y:{y}, w:{getScaleWidth()}, h:{getScaleHeight()}]");
         if(modeler.getFocusedNode()==this)
         {
             mouseClicked(e);
@@ -244,7 +249,7 @@ public class GraphicalElement extends CustomNode
 
     override var onMousePressed = function( e: MouseEvent ):Void
     {
-        if(ModelerUtils.clickedNode==null)
+       if(ModelerUtils.clickedNode==null)
         {
             ModelerUtils.clickedNode=this;
             mousePressed(e);
@@ -274,13 +279,14 @@ public class GraphicalElement extends CustomNode
 
         if(e.secondaryButtonDown)
         {
-            var link=SequenceFlow
+            var link=ConnectionObject
             {
                 modeler:modeler
-                uri:"new:flowlink:{ToolBar.counter++}"
+                //uri:"new:flowlink:{ToolBar.counter++}"
                 visible:false
             }
-            if(canStartLink(link))modeler.tempNode=link;
+            //if(canStartLink(link))modeler.tempNode=link;
+            modeler.tempNode = link;
         }
     }
 
@@ -297,70 +303,9 @@ public class GraphicalElement extends CustomNode
     public function mouseReleased( e: MouseEvent )
     {
         if (this instanceof Pool or this instanceof Lane) return;
-        var curNode = e.node as GraphicalElement;
-        //println("MouseReleased in element {curNode.title} at {curNode.boundsInLocal.minX}, {curNode.boundsInLocal.minY}");
-        //shape.requestFocus();
         snapToGrid();
-        var overNode:GraphicalElement;
-        for (ele in modeler.contents where ele instanceof GraphicalElement) {
-            if (ele != this) {
-                var tnode = ele as GraphicalElement;
-                //println("Checking node {tnode.title} at {tnode.boundsInLocal.minX}, {tnode.boundsInLocal.minY}");
-                if (curNode.boundsInLocal.minX > tnode.boundsInLocal.minX) {
-                    //println(" {curNode.title} despues de {tnode.title} en x");
-                    if (curNode.boundsInLocal.minY + curNode.h < tnode.boundsInLocal.minY + tnode.h) {
-                        if (canAttach(tnode)) {
-                            overNode = tnode;
-                            if(overNode instanceof Pool)  //check lanes in pool
-                            {
-                                var p = overNode as Pool;
-                                for(lane in p.lanes)
-                                {
-                                    if(curNode.boundsInLocal.minX > lane.boundsInLocal.minX)
-                                        if (curNode.boundsInLocal.minY + curNode.h < lane.boundsInLocal.minY + lane.h) {
-                                        //if(lane.over)
-                                        {
-                                            overNode=lane;
-                                            //break;
-                                        }
-                                    }
-                                }
-                            }
-                            //println(" {curNode.title} antes de {tnode.title} en y");
-                        }
-                    }
-                }
-            }
-        }
-
-        //check drop over node
-        
-//        for(node in modeler.contents)
-//        {
-//            if(node instanceof GraphicalElement)
-//            {
-//                if(node != this and (node as GraphicalElement).over)
-//                {
-//                    if(canAttach(node as GraphicalElement))
-//                    {
-//                        overNode=node as GraphicalElement;
-//                        if(not(this instanceof Lane) and overNode instanceof Pool)  //check lanes in pool
-//                        {
-//                            var p=overNode as Pool;
-//                            for(lane in p.lanes)
-//                            {
-//                                if(lane.over)
-//                                {
-//                                    overNode=lane;
-//                                    //break;
-//                                }
-//                            }
-//                        }
-//                        //break;
-//                    }
-//                }
-//            }
-//        }
+        var overNode: GraphicalElement = getOverNode();
+        //println("{title} over node {overNode.title}");
         setGraphParent(overNode);
     }
 
@@ -502,6 +447,50 @@ public class GraphicalElement extends CustomNode
     {
         keyReleased(e);
         modeler.keyReleased(e);
+    }
+
+    public function getOverNode() : GraphicalElement {
+        var overNode: GraphicalElement = null;
+        for (ele in modeler.contents where (ele instanceof GraphicalElement and ele != this)) {
+            var t = ele as GraphicalElement;
+            if (canAttach(ele as GraphicalElement)) {
+                if (t instanceof Pool and (t as Pool).inBounds(this)) {
+                    overNode = t;
+                    for (lane in (t as Pool).lanes) {
+                        if (lane.inBounds(this)) {
+                            overNode = lane;
+                        }
+                    }
+                } else {
+                    if (t.inBounds(this)) {
+                        overNode = t;
+                    }
+                }
+            }
+        }
+        return overNode;
+    }
+    
+    public function inBounds(node: GraphicalElement) : Boolean {
+        var ret = false;
+        var nx1 = node.boundsInLocal.minX;
+        var ny1 = node.boundsInLocal.minY;
+        var nx2 = node.boundsInLocal.minX + node.w;
+        var ny2 = node.boundsInLocal.minY + node.h;
+
+        var ex1 = boundsInLocal.minX;
+        var ey1 = boundsInLocal.minY;
+        var ex2 = boundsInLocal.minX + w;
+        var ey2 = boundsInLocal.minY + h;
+        //println("  Revisando si {node.title} [{nx1}, {ny1}][{nx2}, {ny2}] está dentro del lane {lane.title} [{ex1}, {ey1}][{ex2}, {ey2}]");
+        if (nx1 > ex1 and nx2 < ex2) {
+            //println("  {node.title} dentro de {title} en X");
+            if (ny1 > ey1 and ny2 < ey2) {
+                //println("  {node.title} dentro de lane {title} en Y");
+                ret = true;
+            }
+        }
+        return ret;
     }
 
     public function keyReleased( e: KeyEvent )
@@ -712,29 +701,37 @@ public class GraphicalElement extends CustomNode
         }
     }
 
-//    public function getGraphicsInfos(doc: Document) : Element {
-//        var ret = doc.createElement("NodeGraphicsInfos");
-//        var graphicInfo = doc.createElement("NodeGraphicsInfo");
-//        var coords = doc.createElement("Coordinates");
-//
-//        graphicInfo.appendChild(coords);
-//        ret.appendChild(graphicInfo);
-//
-//        graphicInfo.setAttribute("ToolId", "SemanticWebBuilder_Process_Modeler");
-//        graphicInfo.setAttribute("IsVisible", "{canView()}");
-//        graphicInfo.setAttribute("Width", "{w}");
-//        graphicInfo.setAttribute("Height", "{h}");
-//
-//        if (getGraphParent() instanceof Lane) {
-//            graphicInfo.setAttribute("LaneId", "{getGraphParent().uri}");
-//        }
-//
-//        coords.setAttribute("XCoordinate", "{x}");
-//        coords.setAttribute("YCoordinate", "{y}");
-//        return ret;
-//    }
-//
-//    public function getXPDLDefinition(doc: Document) : Element {
-//        return null;
-//    }
+    public function getGraphicsInfos(doc: Document) : Element {
+        var ret = doc.createElement("NodeGraphicsInfos");
+        var graphicInfo = doc.createElement("NodeGraphicsInfo");
+        var coords = doc.createElement("Coordinates");
+        
+        graphicInfo.appendChild(coords);
+        ret.appendChild(graphicInfo);
+
+        graphicInfo.setAttribute("ToolId", "SemanticWebBuilder_Process_Modeler");
+        graphicInfo.setAttribute("IsVisible", "{canView()}");
+        graphicInfo.setAttribute("Width", "{w}");
+        graphicInfo.setAttribute("Height", "{h}");
+
+        if (getGraphParent() instanceof Lane) {
+            graphicInfo.setAttribute("LaneId", "{getGraphParent().uri}");
+        }
+
+        coords.setAttribute("XCoordinate", "{x}");
+        coords.setAttribute("YCoordinate", "{y}");
+        return ret;
+    }
+
+    public function getXPDLDefinition(doc: Document) : Element {
+        return null;
+    }
+
+    public function getScaleWidth() {
+        return w * s;
+    }
+
+    public function getScaleHeight() {
+        return h * s;
+    }
 }
