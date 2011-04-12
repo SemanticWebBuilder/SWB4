@@ -100,21 +100,21 @@ public class Promo extends GenericResource {
         }catch(Exception e) {
             log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
         }
-        if(!"".equals(base.getAttribute("template","").trim())) {
-            try {
-                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
-                path = webWorkPath;
-            }catch(Exception e) {
-                log.error("Error while loading resource template: "+base.getId(), e);
-            }
-        }
-        if( tpl==null || Boolean.parseBoolean(base.getAttribute("deftmp"))) {
+//        if(!"".equals(base.getAttribute("template","").trim())) {
+//            try {
+//                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
+//                path = webWorkPath;
+//            }catch(Exception e) {
+//                log.error("Error while loading resource template: "+base.getId(), e);
+//            }
+//        }
+//        if( tpl==null || Boolean.parseBoolean(base.getAttribute("deftmp"))) {
             try {
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/Promo/PromoRightAligned.xsl"));
             }catch(Exception e) {
                 log.error("Error while loading default resource template: "+base.getId(), e);
             }
-        }
+//        }
     }
 
     /**
@@ -130,7 +130,7 @@ public class Promo extends GenericResource {
         Resource base=paramRequest.getResourceBase();
         
         if(base.getAttribute("imgfile")==null)
-            throw new SWBResourceException("Especifique una imagen para el recurso promocional con id "+base.getId());
+            throw new SWBResourceException(paramRequest.getLocaleString("msgErrResource"));
 
         Document  dom = SWBUtils.XML.getNewDocument();
         Element root = dom.createElement("promo");
@@ -204,9 +204,16 @@ public class Promo extends GenericResource {
         PrintWriter out = response.getWriter();
 
         if(base.getAttribute("template")!=null || Boolean.parseBoolean(base.getAttribute("deftmp"))) {
+            Templates curtpl;
+            try {
+                curtpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
+                path = webWorkPath;
+            }catch(Exception e) {
+                curtpl = tpl;
+            }
             try {
                 Document dom = getDom(request, response, paramRequest);
-                String html = SWBUtils.XML.transformDom(tpl, dom);
+                String html = SWBUtils.XML.transformDom(curtpl, dom);
                 out.println(html);
             }catch(SWBResourceException swbe) {
                 out.println(swbe.getMessage());
@@ -217,9 +224,9 @@ public class Promo extends GenericResource {
         }else {
             try {
                 if(base.getAttribute("cssClass")==null)
-                    out.println(renderWithStyle());
+                    out.println(renderWithStyle(paramRequest));
                 else
-                    out.println(render());
+                    out.println(render(paramRequest));
             }catch(SWBResourceException swbe) {
                 out.println(swbe.getMessage());
             }
@@ -231,7 +238,7 @@ public class Promo extends GenericResource {
      *
      * @return the string
      */
-    private String renderWithStyle() throws SWBResourceException {
+    private String renderWithStyle(SWBParamRequest paramRequest) throws SWBResourceException {
         StringBuilder out = new StringBuilder();
         Resource base=getResourceBase();
 
@@ -257,7 +264,7 @@ public class Promo extends GenericResource {
         String subtitleStyle = base.getAttribute("subtitleStyle");
         
         if(base.getAttribute("imgfile")==null)
-            throw new SWBResourceException("Especifique una imagen para el recurso promocional con id "+base.getId());
+            throw new SWBResourceException(paramRequest.getLocaleString("msgErrResource"));
         String imgfile = base.getAttribute("imgfile");
         
         String caption = base.getAttribute("caption");
@@ -425,7 +432,7 @@ public class Promo extends GenericResource {
      *
      * @return the string
      */
-    private String render() throws SWBResourceException {
+    private String render(SWBParamRequest paramRequest) throws SWBResourceException {
         StringBuilder out = new StringBuilder();
         Resource base=getResourceBase();
 
@@ -434,7 +441,7 @@ public class Promo extends GenericResource {
         String subtitle = base.getAttribute("subtitle");
 
         if(base.getAttribute("imgfile")==null)
-            throw new SWBResourceException("Especifique una imagen para el recurso promocional con id "+base.getId());
+            throw new SWBResourceException(paramRequest.getLocaleString("msgErrResource"));
         String imgfile = base.getAttribute("imgfile");
 
         String caption = base.getAttribute("caption");
@@ -800,7 +807,7 @@ public class Promo extends GenericResource {
         }
     }
 
-    private String getForm(javax.servlet.http.HttpServletRequest request, SWBParamRequest paramRequest) {
+    private String getForm(javax.servlet.http.HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException {
         Resource base=getResourceBase();
         StringBuilder htm = new StringBuilder();
         final String path = SWBPortal.getWebWorkPath()+base.getWorkPath()+"/";
@@ -819,7 +826,7 @@ public class Promo extends GenericResource {
         if(base.getAttribute("imgfile")==null) {
             htm.append("    var imgfile = dojo.byId('imgfile');");
             htm.append("    if(isEmpty(imgfile.value)&&(!dojo.byId('wbNoFile_imgfile')||dojo.byId('wbNoFile_imgfile')&& !dojo.byId('wbNoFile_imgfile').checked)) {");
-            htm.append("      alert('Especifique una imagen para el promocional');");
+            htm.append("      alert('"+paramRequest.getLocaleString("msgWrnNoImage")+"');");
             htm.append("      return false;");
             htm.append("    }");
         }

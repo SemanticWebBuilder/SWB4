@@ -165,21 +165,21 @@ public class Poll extends GenericResource {
         }catch(Exception e) {
             log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
         }
-        if(!"".equals(base.getAttribute("template","").trim())) {
-            try {
-                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
-                path = webWorkPath;
-            }catch(Exception e) {
-                log.error("Error while loading resource template: "+base.getId(), e);
-            }
-        }
-        if( tpl==null ) {
+//        if(!"".equals(base.getAttribute("template","").trim())) {
+//            try {
+//                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
+//                path = webWorkPath;
+//            }catch(Exception e) {
+//                log.error("Error while loading resource template: "+base.getId(), e);
+//            }
+//        }
+//        if( tpl==null ) {
             try {
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/Poll/Poll.xsl"));
             }catch(Exception e) {
                 log.error("Error while loading default resource template: "+base.getId(), e);
             }
-        }
+//        }
     }
 
     /**
@@ -360,16 +360,23 @@ public class Poll extends GenericResource {
             response.setHeader("Cache-Control","no-cache"); //HTTP 1.1
             response.setHeader("Pragma","no-cache"); //HTTP 1.0
             response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
-            Document dom = getDom(request, response, paramRequest);
             try {
-                StringBuilder html = new StringBuilder(SWBUtils.XML.transformDom(tpl, dom));
+                Document dom = getDom(request, response, paramRequest);
+                Templates curtpl = tpl;
+                if(!"".equals(base.getAttribute("template","").trim())) {
+                    try {
+                        curtpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
+                        path = webWorkPath;
+                    }catch(Exception e) {
+                        curtpl = tpl;
+                    }
+                }
+                StringBuilder html = new StringBuilder(SWBUtils.XML.transformDom(curtpl, dom));
                 html.append(getRenderScript(paramRequest));
                 Display display;
-                try
-                {
+                try {
                     display = Display.valueOf(base.getAttribute("display", Display.SLIDE.name()));
-                }catch(Exception noe)
-                {
+                }catch(Exception noe) {
                     display = Display.POPUP;
                 }
                 if(display==Display.SLIDE)
@@ -377,6 +384,8 @@ public class Poll extends GenericResource {
                 response.getWriter().println(html.toString());
             }catch(TransformerException te) {
                 log.error(te);
+            }catch(Exception e) {
+                response.getWriter().println(paramRequest.getLocaleString("msgErrResource"));
             }
         }
     }
