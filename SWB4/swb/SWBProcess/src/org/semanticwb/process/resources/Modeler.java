@@ -384,6 +384,13 @@ public class Modeler extends GenericResource {
                     ele.put(PROP_PARENT, "");
                 }
 
+                if (obj.getLabelSize() != 0) {
+                    ele.put(PROP_labelSize, obj.getLabelSize());
+                } else {
+                    ele.put(PROP_labelSize, 10);
+                }
+
+
                 if (obj instanceof ActivityConfable) {
 
                     ActivityConfable tsk = (ActivityConfable) obj;
