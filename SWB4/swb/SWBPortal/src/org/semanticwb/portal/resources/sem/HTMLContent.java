@@ -464,6 +464,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         }
 
         try {
+            response.setContentType("text/html;charset=ISO-8859-1");
             request.setAttribute("fileContent", content);
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("numversion", versionNumber);
