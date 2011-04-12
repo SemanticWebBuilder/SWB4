@@ -23,6 +23,9 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
         if(this instanceof SubProcess)
         {
             inst=pinst.getProcessSite().createSubProcessInstance();
+        }else if(this instanceof CallProcess)
+        {
+            inst=pinst.getProcessSite().createSubProcessInstance();
         }else
         {
             inst=pinst.getProcessSite().createFlowNodeInstance();

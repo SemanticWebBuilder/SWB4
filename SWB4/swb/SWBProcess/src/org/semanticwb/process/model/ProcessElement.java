@@ -9,5 +9,4 @@ public class ProcessElement extends org.semanticwb.process.model.base.ProcessEle
     {
         super(base);
     }
-
 }
