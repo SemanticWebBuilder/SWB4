@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class SubProcessBase extends org.semanticwb.process.model.Activity implements org.semanticwb.process.model.Containerable,org.semanticwb.model.Referensable,org.semanticwb.model.TemplateRefable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ResourceAssignmentable
+public abstract class SubProcessBase extends org.semanticwb.process.model.Activity implements org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Referensable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.process.model.Containerable,org.semanticwb.process.model.ResourceAssignmentable
 {
     public static final org.semanticwb.platform.SemanticClass swp_SubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#SubProcess");
    /**
@@ -494,38 +494,6 @@ public abstract class SubProcessBase extends org.semanticwb.process.model.Activi
     public void setForCompensation(boolean value)
     {
         getSemanticObject().setBooleanProperty(swp_forCompensation, value);
-    }
-
-    public org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject> listProcessClasses()
-    {
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getRDFResource().listProperties(swp_hasProcessClass.getRDFProperty());
-        return new org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject>(stit);
-    }
-
-    public void addProcessClass(org.semanticwb.platform.SemanticObject value)
-    {
-        getSemanticObject().addObjectProperty(swp_hasProcessClass, value);
-    }
-
-    public void removeAllProcessClass()
-    {
-        getSemanticObject().removeProperty(swp_hasProcessClass);
-    }
-
-    public void removeProcessClass(org.semanticwb.platform.SemanticObject value)
-    {
-        getSemanticObject().removeObjectProperty(swp_hasProcessClass,value);
-    }
-
-/**
-* Gets the ProcessClass property
-* @return the value for the property as org.semanticwb.platform.SemanticObject
-*/
-    public org.semanticwb.platform.SemanticObject getProcessClass()
-    {
-         org.semanticwb.platform.SemanticObject ret=null;
-         ret=getSemanticObject().getObjectProperty(swp_hasProcessClass);
-         return ret;
     }
    /**
    * Sets the value for the property LoopCharacteristics

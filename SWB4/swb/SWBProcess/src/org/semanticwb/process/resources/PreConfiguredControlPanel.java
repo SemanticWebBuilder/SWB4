@@ -3936,11 +3936,13 @@ public class PreConfiguredControlPanel extends GenericAdmResource{
             if(strPropertyUri.contains("http://"))
             {
                 boolean bFound = false;
-                //Iterator<ProcessObject> objit = ppi.getAllProcessObjects().iterator();
-                Iterator<ProcessObject> objit = ppi.listHeraquicalProcessObjects().iterator();
+                //Iterator<SWBClass> objit = ppi.getAllProcessObjects().iterator();
+                Iterator<ItemAwareReference> objit = ppi.listHeraquicalItemAwareReference().iterator();
                 while((objit.hasNext()) && (bFound==false))
                 {
-                    ProcessObject obj = objit.next();
+                    ItemAwareReference item=objit.next();;
+                    SWBClass obj = item.getProcessObject();
+                    //TODO: Revisar variables distintas de la misma clase
                     SemanticObject sob = SemanticObject.getSemanticObject(obj.getURI());
                     SemanticClass cls = sob.getSemanticClass();
                     Iterator<SemanticProperty> itProps = cls.listProperties();
@@ -4387,22 +4389,24 @@ public class PreConfiguredControlPanel extends GenericAdmResource{
                if(ge instanceof FlowNode)
                {
                    FlowNode fob = (FlowNode)ge;
-                   if(fob instanceof org.semanticwb.process.model.SubProcess)
-                   {
-                       org.semanticwb.process.model.SubProcess process = (org.semanticwb.process.model.SubProcess) fob;
-                       Iterator itTemp = process.listProcessClasses();
-                       while(itTemp.hasNext())
-                       {
-                           al.add(index, itTemp.next());
-                           index++;
-                       }
-                   }
+//TODO: Revisar código siguiente comentado                     
+//                   if(fob instanceof org.semanticwb.process.model.SubProcess)
+//                   {
+//                       org.semanticwb.process.model.SubProcess process = (org.semanticwb.process.model.SubProcess) fob;
+//                       Iterator itTemp = process.listProcessClasses();
+//                       while(itTemp.hasNext())
+//                       {
+//                           al.add(index, itTemp.next());
+//                           index++;
+//                       }
+//                   }
                    itArtifacts = al.listIterator();
                }
             }
-            if(index ==0){
-                itArtifacts = selectedProcess.listProcessClasses();
-            }
+//TODO: Revisar código siguiente comentado                     
+//            if(index ==0){
+//                itArtifacts = selectedProcess.listProcessClasses();
+//            }
         } catch(Exception e){
             log.error("Error en PreConfiguredControlPanel.listArtifacts", e);
             System.out.println("Error en PreConfiguredControlPanel." + "listArtifacts:" + e.getMessage());

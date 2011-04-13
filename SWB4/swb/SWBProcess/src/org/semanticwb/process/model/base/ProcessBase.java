@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Hitable,org.semanticwb.model.CalendarRefable,org.semanticwb.process.model.Containerable,org.semanticwb.model.Referensable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Expirable,org.semanticwb.model.Iconable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Callable
+public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Hitable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Callable,org.semanticwb.model.Expirable,org.semanticwb.model.Traceable,org.semanticwb.model.Iconable,org.semanticwb.process.model.Containerable
 {
     public static final org.semanticwb.platform.SemanticClass swp_ProcessWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessWebPage");
     public static final org.semanticwb.platform.SemanticProperty swp_processWebPageInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processWebPageInv");
@@ -683,38 +683,6 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
     public void setMaxHits(long value)
     {
         getSemanticObject().setLongProperty(swb_maxHits, value);
-    }
-
-    public org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject> listProcessClasses()
-    {
-        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getRDFResource().listProperties(swp_hasProcessClass.getRDFProperty());
-        return new org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject>(stit);
-    }
-
-    public void addProcessClass(org.semanticwb.platform.SemanticObject value)
-    {
-        getSemanticObject().addObjectProperty(swp_hasProcessClass, value);
-    }
-
-    public void removeAllProcessClass()
-    {
-        getSemanticObject().removeProperty(swp_hasProcessClass);
-    }
-
-    public void removeProcessClass(org.semanticwb.platform.SemanticObject value)
-    {
-        getSemanticObject().removeObjectProperty(swp_hasProcessClass,value);
-    }
-
-/**
-* Gets the ProcessClass property
-* @return the value for the property as org.semanticwb.platform.SemanticObject
-*/
-    public org.semanticwb.platform.SemanticObject getProcessClass()
-    {
-         org.semanticwb.platform.SemanticObject ret=null;
-         ret=getSemanticObject().getObjectProperty(swp_hasProcessClass);
-         return ret;
     }
 
    /**

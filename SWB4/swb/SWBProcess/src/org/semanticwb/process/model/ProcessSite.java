@@ -12,6 +12,7 @@ public class ProcessSite extends org.semanticwb.process.model.base.ProcessSiteBa
 
     public synchronized ProcessObserver getProcessObserver()
     {
+        //TODO Remove cuando se elimine la instancia del objeto
         ProcessObserver obs=ProcessObserver.ClassMgr.getProcessObserver("Instance",this);
         if(obs==null)
         {
@@ -19,4 +20,27 @@ public class ProcessSite extends org.semanticwb.process.model.base.ProcessSiteBa
         }
         return obs;
     }
+
+    @Override
+    public ProcessDataInstanceModel getProcessDataInstanceModel()
+    {
+        ProcessDataInstanceModel ret=super.getProcessDataInstanceModel();
+
+        if(ret==null)
+        {
+            synchronized(this)
+            {
+                if(super.getProcessDataInstanceModel()==null)
+                {
+                    ret=ProcessDataInstanceModel.ClassMgr.createProcessDataInstanceModel(getId() + "_pdim", "http://pdim." + getId() + ".swb#");
+                    setProcessDataInstanceModel(ret);
+                    addSubModel(ret);
+                }
+            }
+        }   
+
+        return ret;
+    }
+
+
 }

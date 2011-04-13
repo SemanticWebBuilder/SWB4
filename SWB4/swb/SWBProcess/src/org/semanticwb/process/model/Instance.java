@@ -119,17 +119,14 @@ public class Instance extends org.semanticwb.process.model.base.InstanceBase
      * Regresa los objetos de la instancia e instancias padres
      * @return
      */
-    public List<ProcessObject> listHeraquicalProcessObjects()
+    public List<ItemAwareReference> listHeraquicalItemAwareReference()
     {
-        ArrayList<ProcessObject> ret=new ArrayList();
-        if(this instanceof ContainerInstanceable)
+        ArrayList<ItemAwareReference> ret=new ArrayList();
+        Iterator<ItemAwareReference> it=listItemAwareReferences();
+        while (it.hasNext())
         {
-            Iterator<ProcessObject> it=((ContainerInstanceable)this).listProcessObjects();
-            while (it.hasNext())
-            {
-                ProcessObject processObject = it.next();
-                ret.add(processObject);
-            }
+            ItemAwareReference itemAwareReference = it.next();
+            ret.add(itemAwareReference);
         }
         if(this instanceof FlowNodeInstance)
         {
@@ -137,7 +134,7 @@ public class Instance extends org.semanticwb.process.model.base.InstanceBase
             Instance parent=(Instance)flow.getContainerInstance();
             if(parent!=null)
             {
-                ret.addAll(parent.listHeraquicalProcessObjects());
+                ret.addAll(parent.listHeraquicalItemAwareReference());
             }
         }
         return ret;

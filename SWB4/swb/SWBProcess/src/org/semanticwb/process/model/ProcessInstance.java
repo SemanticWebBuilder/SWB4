@@ -53,34 +53,35 @@ public class ProcessInstance extends org.semanticwb.process.model.base.ProcessIn
         eventins.start(user);
     }
 
-    private void listAllProcessObjects(ContainerInstanceable inst, ArrayList arr)
+    private void listAllItemAwareReferences(Instance inst, ArrayList arr)
     {
-        Iterator<ProcessObject> it=inst.listProcessObjects();
+        Iterator<ItemAwareReference> it=inst.listItemAwareReferences();
         while(it.hasNext())
         {
-            ProcessObject obj = it.next();
-            arr.add(obj);
+            ItemAwareReference item=it.next();
+            arr.add(item);
         }
 
-        Iterator<FlowNodeInstance> it2=inst.listFlowNodeInstances();
-        while(it2.hasNext())
+        if(inst instanceof ContainerInstanceable)
         {
-            FlowNodeInstance obj = it2.next();
-            if(obj instanceof ContainerInstanceable)
+            Iterator<FlowNodeInstance> it2=((ContainerInstanceable)inst).listFlowNodeInstances();
+            while(it2.hasNext())
             {
-                listAllProcessObjects((ContainerInstanceable)obj, arr);
+                FlowNodeInstance obj = it2.next();
+                listAllItemAwareReferences(obj, arr);
             }
         }
+
     }
 
     /**
-     * Regresa todos los Objetos de procesos del proceso y subprocesos
+     * Regresa todos los ItemAwareReferences del proceso y subprocesos
      * @return
      */
-    public Iterator<ProcessObject> listAllProcessObjects()
+    public Iterator<ItemAwareReference> listAllItemAwareReferences()
     {
-        ArrayList<ProcessObject> ret=new ArrayList();
-        listAllProcessObjects(this, ret);
+        ArrayList<ItemAwareReference> ret=new ArrayList();
+        listAllItemAwareReferences(this, ret);
         return ret.iterator();
     }
 

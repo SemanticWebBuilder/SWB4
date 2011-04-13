@@ -27,41 +27,7 @@ public class SubProcess extends org.semanticwb.process.model.base.SubProcessBase
     {
         //System.out.println("createInstance subprocess:"+this);
         SubProcessInstance inst=(SubProcessInstance)super.createInstance(pinst);
-        Iterator<SemanticObject> it=listProcessClasses();
-        while(it.hasNext())
-        {
-            SemanticObject sobj=it.next();
-            SemanticModel model=pinst.getSemanticObject().getModel();
-            SemanticClass cls=sobj.transformToSemanticClass();
-            long id=model.getCounter(cls);
-            SemanticObject ins=model.createSemanticObjectById(String.valueOf(id), cls);
-            //System.out.println(sobj+" "+model+" "+cls+" "+id+" "+ins);
-            inst.addProcessObject((ProcessObject)ins.createGenericInstance());
-
-//            Iterator it2=inst.listProcessObjects();
-//            while (it2.hasNext())
-//            {
-//                Object object = it2.next();
-//                System.out.println("obj:"+object);
-//            }
-        }
         return inst;
-    }
-
-    public Iterator<SemanticClass> listHerarquicalProcessClasses()
-    {
-        HashSet<SemanticClass> arr=new HashSet();
-        Iterator<SemanticObject> it=listProcessClasses();
-        while (it.hasNext()) {
-            SemanticObject sobj = it.next();
-            arr.add(sobj.transformToSemanticClass());
-        }
-        Iterator<SemanticClass> it2=getContainer().listHerarquicalProcessClasses();
-        while (it2.hasNext()) {
-            SemanticClass scls = it2.next();
-            arr.add(scls);
-        }
-        return arr.iterator();
     }
 
 

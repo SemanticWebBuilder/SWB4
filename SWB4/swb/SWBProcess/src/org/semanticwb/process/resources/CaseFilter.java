@@ -33,7 +33,6 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.Instance;
 import org.semanticwb.process.model.ProcessSite;
-import org.semanticwb.process.model.ProcessObject;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.FlowNodeInstance;
 import org.semanticwb.process.model.SubProcessInstance;
@@ -71,12 +70,14 @@ import org.w3c.dom.Document;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.model.SWBClass;
 
 import org.semanticwb.process.utils.JRCaseDetail;
 import org.semanticwb.portal.admin.resources.reports.jrresources.JRResource;
 import org.semanticwb.portal.admin.resources.reports.jrresources.JRPdfResource;
 import org.semanticwb.portal.admin.resources.reports.jrresources.JRRtfResource;
 import org.semanticwb.portal.admin.resources.reports.jrresources.JRDataSourceable;
+import org.semanticwb.process.model.ItemAwareReference;
 
 /**
  *
@@ -480,9 +481,9 @@ public class CaseFilter extends GenericResource {
     }
 
     /*private void getObjectsFromInstance(ProcessInstance pinst, ArrayList pobjs) {
-        Iterator<ProcessObject> objit = pinst.getAllProcessObjects().iterator();
+        Iterator<SWBClass> objit = pinst.getAllProcessObjects().iterator();
         while(objit.hasNext()) {
-            ProcessObject obj =  objit.next();
+            SWBClass obj =  objit.next();
             if (!pobjs.contains(obj))
                 pobjs.add(obj);
         }
@@ -495,9 +496,11 @@ public class CaseFilter extends GenericResource {
     }*/
 
     private void getObjectsFromInstance(ProcessInstance pinst, ArrayList pobjs) {
-        Iterator<ProcessObject> objit = pinst.listProcessObjects();
+        Iterator<ItemAwareReference> objit = pinst.listItemAwareReferences();
         while(objit.hasNext()) {
-            ProcessObject obj =  objit.next();
+            ItemAwareReference item=objit.next();
+            SWBClass obj =  item.getProcessObject();
+            //TODO: Verificar nombre del ItemAware
             if (!pobjs.contains(obj))
                 pobjs.add(obj);
         }
@@ -510,9 +513,11 @@ public class CaseFilter extends GenericResource {
     }
 
     private void getObjectsFromInstance(SubProcessInstance spinst, ArrayList pobjs) {
-        Iterator<ProcessObject> objit = spinst.listProcessObjects();
+        Iterator<ItemAwareReference> objit = spinst.listItemAwareReferences();
         while(objit.hasNext()) {
-            ProcessObject obj =  objit.next();
+            ItemAwareReference item=objit.next();
+            SWBClass obj =  item.getProcessObject();
+            //TODO: Verificar nombre del ItemAware
             if (!pobjs.contains(obj))
                 pobjs.add(obj);
         }
@@ -526,14 +531,14 @@ public class CaseFilter extends GenericResource {
 
     private void printProcessObjetcs(HttpServletRequest request, ArrayList pobjs, PrintWriter out, SWBParamRequest paramRequest) throws SWBResourceException {
         out.print(" <table border=\"0\" width=\"100%\" align=\"left\"\n>");
-        Iterator<ProcessObject> objit = pobjs.iterator();
+        Iterator<SWBClass> objit = pobjs.iterator();
         if (objit.hasNext()) {
             while (objit.hasNext()) {
                 String dao = "";
-                ProcessObject obj =  objit.next();
+                SWBClass obj =  objit.next();
                 SemanticObject sob = SemanticObject.getSemanticObject(obj.getURI());
                 SemanticClass cls = sob.getSemanticClass();
-                //System.out.println("ProcessObject: " + obj.getURI() + " " + cls.getRootClass().getName() + " " + cls.getRootClass().getLabel(paramRequest.getUser().getLanguage()));
+                //System.out.println("SWBClass: " + obj.getURI() + " " + cls.getRootClass().getName() + " " + cls.getRootClass().getLabel(paramRequest.getUser().getLanguage()));
                 if (null!=cls.getRootClass().getLabel(paramRequest.getUser().getLanguage()))
                     dao = cls.getRootClass().getLabel(paramRequest.getUser().getLanguage());
                 else
@@ -595,9 +600,9 @@ public class CaseFilter extends GenericResource {
 
     private ArrayList getObjetcsIds(ArrayList pobjs) {
         ArrayList ids = new ArrayList();
-        Iterator<ProcessObject> objit = pobjs.iterator();
+        Iterator<SWBClass> objit = pobjs.iterator();
         while (objit.hasNext()) {
-            ProcessObject obj =  objit.next();
+            SWBClass obj =  objit.next();
             Iterator<SemanticProperty> spit = obj.getSemanticObject().listProperties();
             while(spit.hasNext()) {
                 SemanticProperty sp = spit.next();
@@ -608,9 +613,11 @@ public class CaseFilter extends GenericResource {
     }
 
     private void getObjectsFromInstanceIds(ProcessInstance pinst, ArrayList pobjs) {
-        Iterator<ProcessObject> objit = pinst.listProcessObjects();
+        Iterator<ItemAwareReference> objit = pinst.listItemAwareReferences();
         while(objit.hasNext()) {
-            ProcessObject obj =  objit.next();
+            ItemAwareReference item=objit.next();
+            SWBClass obj =  item.getProcessObject();
+            //TODO: Verificar nombre del ItemAware
             if (!pobjs.contains(obj))
                 pobjs.add(obj);
         }
@@ -623,9 +630,11 @@ public class CaseFilter extends GenericResource {
     }
 
     private void getObjectsFromInstanceIds(SubProcessInstance spinst, ArrayList pobjs) {
-        Iterator<ProcessObject> objit = spinst.listProcessObjects();
+        Iterator<ItemAwareReference> objit = spinst.listItemAwareReferences();
         while(objit.hasNext()) {
-            ProcessObject obj =  objit.next();
+            ItemAwareReference item=objit.next();
+            SWBClass obj =  item.getProcessObject();
+            //TODO: Verificar nombre del ItemAware
             if (!pobjs.contains(obj))
                 pobjs.add(obj);
         }
@@ -655,9 +664,9 @@ public class CaseFilter extends GenericResource {
         out.println("<h3>Propiedades</h3>");
         out.println("<ul>");
         getObjectsFromInstance(pinst, pobjs);
-        Iterator<ProcessObject> objit = pobjs.iterator();
+        Iterator<SWBClass> objit = pobjs.iterator();
         while(objit.hasNext()) {
-            ProcessObject pobj =  objit.next();
+            SWBClass pobj =  objit.next();
             out.println("   <li><b>" + getLabelObject(pobj, paramsRequest) + "</b></li>\n");
             Iterator<SemanticProperty> spit = pobj.getSemanticObject().listProperties();
             while(spit.hasNext()) {
@@ -918,7 +927,7 @@ public class CaseFilter extends GenericResource {
             return "";
     }
 
-    private String getLabelObject(ProcessObject obj, SWBParamRequest paramRequest) {
+    private String getLabelObject(SWBClass obj, SWBParamRequest paramRequest) {
         SemanticObject sob = SemanticObject.getSemanticObject(obj.getURI());
         SemanticClass cls = sob.getSemanticClass();
         if (null!=cls.getRootClass().getLabel(paramRequest.getUser().getLanguage()))

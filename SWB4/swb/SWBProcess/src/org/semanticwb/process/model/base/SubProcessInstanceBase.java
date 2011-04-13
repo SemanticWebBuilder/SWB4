@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class SubProcessInstanceBase extends org.semanticwb.process.model.FlowNodeInstance implements org.semanticwb.model.Traceable,org.semanticwb.process.model.ContainerInstanceable,org.semanticwb.process.model.ProcessTraceable
+public abstract class SubProcessInstanceBase extends org.semanticwb.process.model.FlowNodeInstance implements org.semanticwb.process.model.ProcessTraceable,org.semanticwb.process.model.ContainerInstanceable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass swp_SubProcessInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#SubProcessInstance");
    /**
@@ -171,26 +171,26 @@ public abstract class SubProcessInstanceBase extends org.semanticwb.process.mode
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.SubProcessInstance with a determined ProcessObject
-       * @param value ProcessObject of the type org.semanticwb.process.model.ProcessObject
+       * Gets all org.semanticwb.process.model.SubProcessInstance with a determined ItemAwareReference
+       * @param value ItemAwareReference of the type org.semanticwb.process.model.ItemAwareReference
        * @param model Model of the org.semanticwb.process.model.SubProcessInstance
        * @return Iterator with all the org.semanticwb.process.model.SubProcessInstance
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.SubProcessInstance> listSubProcessInstanceByProcessObject(org.semanticwb.process.model.ProcessObject value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.SubProcessInstance> listSubProcessInstanceByItemAwareReference(org.semanticwb.process.model.ItemAwareReference value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SubProcessInstance> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasProcessObject, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SubProcessInstance> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasItemAwareReference, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.SubProcessInstance with a determined ProcessObject
-       * @param value ProcessObject of the type org.semanticwb.process.model.ProcessObject
+       * Gets all org.semanticwb.process.model.SubProcessInstance with a determined ItemAwareReference
+       * @param value ItemAwareReference of the type org.semanticwb.process.model.ItemAwareReference
        * @return Iterator with all the org.semanticwb.process.model.SubProcessInstance
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.SubProcessInstance> listSubProcessInstanceByProcessObject(org.semanticwb.process.model.ProcessObject value)
+        public static java.util.Iterator<org.semanticwb.process.model.SubProcessInstance> listSubProcessInstanceByItemAwareReference(org.semanticwb.process.model.ItemAwareReference value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SubProcessInstance> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasProcessObject,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SubProcessInstance> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasItemAwareReference,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -340,71 +340,6 @@ public abstract class SubProcessInstanceBase extends org.semanticwb.process.mode
     public SubProcessInstanceBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-   /**
-   * Gets all the org.semanticwb.process.model.ProcessObject
-   * @return A GenericIterator with all the org.semanticwb.process.model.ProcessObject
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessObject> listProcessObjects()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessObject>(getSemanticObject().listObjectProperties(swp_hasProcessObject));
-    }
-
-   /**
-   * Gets true if has a ProcessObject
-   * @param value org.semanticwb.process.model.ProcessObject to verify
-   * @return true if the org.semanticwb.process.model.ProcessObject exists, false otherwise
-   */
-    public boolean hasProcessObject(org.semanticwb.process.model.ProcessObject value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(swp_hasProcessObject,value.getSemanticObject());
-        }
-        return ret;
-    }
-   /**
-   * Adds a ProcessObject
-   * @param value org.semanticwb.process.model.ProcessObject to add
-   */
-
-    public void addProcessObject(org.semanticwb.process.model.ProcessObject value)
-    {
-        getSemanticObject().addObjectProperty(swp_hasProcessObject, value.getSemanticObject());
-    }
-   /**
-   * Removes all the ProcessObject
-   */
-
-    public void removeAllProcessObject()
-    {
-        getSemanticObject().removeProperty(swp_hasProcessObject);
-    }
-   /**
-   * Removes a ProcessObject
-   * @param value org.semanticwb.process.model.ProcessObject to remove
-   */
-
-    public void removeProcessObject(org.semanticwb.process.model.ProcessObject value)
-    {
-        getSemanticObject().removeObjectProperty(swp_hasProcessObject,value.getSemanticObject());
-    }
-
-   /**
-   * Gets the ProcessObject
-   * @return a org.semanticwb.process.model.ProcessObject
-   */
-    public org.semanticwb.process.model.ProcessObject getProcessObject()
-    {
-         org.semanticwb.process.model.ProcessObject ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasProcessObject);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.process.model.ProcessObject)obj.createGenericInstance();
-         }
-         return ret;
     }
    /**
    * Gets all the org.semanticwb.process.model.FlowNodeInstance

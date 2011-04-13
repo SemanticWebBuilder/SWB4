@@ -1,7 +1,5 @@
 package org.semanticwb.process.model;
 
-import bsh.Interpreter;
-import java.util.Date;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;

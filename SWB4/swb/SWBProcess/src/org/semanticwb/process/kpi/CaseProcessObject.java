@@ -25,14 +25,15 @@ package org.semanticwb.process.kpi;
 
 import java.util.Iterator;
 import java.util.ArrayList;
+import org.semanticwb.model.SWBClass;
 import org.semanticwb.process.model.Process;
-import org.semanticwb.process.model.ProcessObject;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.FlowNodeInstance;
 import org.semanticwb.process.model.SubProcessInstance;
 
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
+import org.semanticwb.process.model.ItemAwareReference;
 
 /**
  *
@@ -93,9 +94,11 @@ public class CaseProcessObject {
     }
 
     private static void distinctProcessObjects(ProcessInstance pinst, String processObject, String property, ArrayList distincts) {
-        Iterator<ProcessObject> objit = pinst.listProcessObjects();
+        Iterator<ItemAwareReference> objit = pinst.listItemAwareReferences();
         while(objit.hasNext()) {
-            ProcessObject obj =  objit.next();
+            ItemAwareReference item=objit.next();
+            SWBClass obj = item.getProcessObject();
+            //TODO: Verificar nombre del ItemAware
             if (obj.getSemanticObject().getSemanticClass().getName().equalsIgnoreCase(processObject)) {
                 Iterator<SemanticProperty> spit = obj.getSemanticObject().listProperties();
                 while(spit.hasNext()) {
@@ -114,9 +117,11 @@ public class CaseProcessObject {
     }
 
     private static void distinctProcessObjects(SubProcessInstance spinst, String processObject, String property, ArrayList distincts) {
-        Iterator<ProcessObject> objit = spinst.listProcessObjects();
+        Iterator<ItemAwareReference> objit = spinst.listItemAwareReferences();
         while(objit.hasNext()) {
-            ProcessObject obj =  objit.next();
+            ItemAwareReference item=objit.next();
+            SWBClass obj =  item.getProcessObject();
+            //TODO: Verificar nombre del ItemAware
             if (obj.getSemanticObject().getSemanticClass().getName().equalsIgnoreCase(processObject)) {
                 Iterator<SemanticProperty> spit = obj.getSemanticObject().listProperties();
                 while(spit.hasNext()) {
@@ -135,9 +140,11 @@ public class CaseProcessObject {
     }
 
     private static Object getMinimumProcessObject(ProcessInstance pinst, String processObject, String property, Object minimum) {
-        Iterator<ProcessObject> objit = pinst.listProcessObjects();
+        Iterator<ItemAwareReference> objit = pinst.listItemAwareReferences();
         while(objit.hasNext()) {
-            ProcessObject obj =  objit.next();
+            ItemAwareReference item=objit.next();
+            SWBClass obj =  item.getProcessObject();
+            //TODO: Verificar nombre del ItemAware
             if (obj.getSemanticObject().getSemanticClass().getName().equalsIgnoreCase(processObject)) {
                 Iterator<SemanticProperty> spit = obj.getSemanticObject().listProperties();
                 while(spit.hasNext()) {
@@ -157,9 +164,11 @@ public class CaseProcessObject {
     }
 
     private static Object getMinimumProcessObject(SubProcessInstance pinst, String processObject, String property, Object minimum) {
-        Iterator<ProcessObject> objit = pinst.listProcessObjects();
+        Iterator<ItemAwareReference> objit = pinst.listItemAwareReferences();
         while(objit.hasNext()) {
-            ProcessObject obj =  objit.next();
+            ItemAwareReference item=objit.next();
+            SWBClass obj =  item.getProcessObject();
+            //TODO: Verificar nombre del ItemAware
             if (obj.getSemanticObject().getSemanticClass().getName().equalsIgnoreCase(processObject)) {
                 Iterator<SemanticProperty> spit = obj.getSemanticObject().listProperties();
                 while(spit.hasNext()) {
@@ -179,9 +188,11 @@ public class CaseProcessObject {
     }
 
     private static Object getMaximumProcessObject(ProcessInstance pinst, String processObject, String property, Object maximum) {
-        Iterator<ProcessObject> objit = pinst.listProcessObjects();
+        Iterator<ItemAwareReference> objit = pinst.listItemAwareReferences();
         while(objit.hasNext()) {
-            ProcessObject obj =  objit.next();
+            ItemAwareReference item=objit.next();
+            SWBClass obj =  item.getProcessObject();
+            //TODO: Verificar nombre del ItemAware
             if (obj.getSemanticObject().getSemanticClass().getName().equalsIgnoreCase(processObject)) {
                 Iterator<SemanticProperty> spit = obj.getSemanticObject().listProperties();
                 while(spit.hasNext()) {
@@ -201,9 +212,11 @@ public class CaseProcessObject {
     }
 
     private static Object getMaximumProcessObject(SubProcessInstance spinst, String processObject, String property, Object maximum) {
-        Iterator<ProcessObject> objit = spinst.listProcessObjects();
+        Iterator<ItemAwareReference> objit = spinst.listItemAwareReferences();
         while(objit.hasNext()) {
-            ProcessObject obj =  objit.next();
+            ItemAwareReference item=objit.next();
+            SWBClass obj =  item.getProcessObject();
+            //TODO: Verificar nombre del ItemAware
             if(obj.getSemanticObject().getSemanticClass().getName().equalsIgnoreCase(processObject)) {
                 Iterator<SemanticProperty> spit = obj.getSemanticObject().listProperties();
                 while(spit.hasNext()) {
@@ -223,9 +236,11 @@ public class CaseProcessObject {
     }
 
     private static Object getProcessObjects(ProcessInstance pinst, String processObject, String property, Object sum) {
-        Iterator<ProcessObject> objit = pinst.listProcessObjects();
+        Iterator<ItemAwareReference> objit = pinst.listItemAwareReferences();
         while(objit.hasNext()) {
-            ProcessObject obj =  objit.next();
+            ItemAwareReference item=objit.next();
+            SWBClass obj =  item.getProcessObject();
+            //TODO: Verificar nombre del ItemAware
             if(obj.getSemanticObject().getSemanticClass().getName().equalsIgnoreCase(processObject)) {
                 Iterator<SemanticProperty> spit = obj.getSemanticObject().listProperties();
                 while(spit.hasNext()) {
@@ -245,9 +260,11 @@ public class CaseProcessObject {
     }
 
     private static Object getProcessObjects(SubProcessInstance spinst, String processObject, String property, Object sum) {
-        Iterator<ProcessObject> objit = spinst.listProcessObjects();
-        while (objit.hasNext()) {
-            ProcessObject obj =  objit.next();
+        Iterator<ItemAwareReference> objit = spinst.listItemAwareReferences();
+        while(objit.hasNext()) {
+            ItemAwareReference item=objit.next();
+            SWBClass obj =  item.getProcessObject();
+            //TODO: Verificar nombre del ItemAware
             if (obj.getSemanticObject().getSemanticClass().getName().equalsIgnoreCase(processObject)) {
                 Iterator<SemanticProperty> spit = obj.getSemanticObject().listProperties();
                 while(spit.hasNext()) {

@@ -18,14 +18,15 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.process.model.FlowNodeInstance;
 import org.semanticwb.process.model.Instance;
-import org.semanticwb.process.model.ProcessObject;
 import org.semanticwb.process.model.SWBProcessFormMgr;
 import com.arthurdo.parser.HtmlStreamTokenizer;
 import com.arthurdo.parser.HtmlTag;
 import java.io.ByteArrayInputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
+import org.semanticwb.model.SWBClass;
 import org.semanticwb.portal.SWBForms;
+import org.semanticwb.process.model.ItemAwareReference;
 
 /**
  *
@@ -58,9 +59,12 @@ public class SWBFormMgrLayer {
         String suri = request.getParameter("suri");
         foi = (FlowNodeInstance) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
 
-        Iterator<ProcessObject> it = foi.listHeraquicalProcessObjects().iterator();
-        while (it.hasNext()) {
-            ProcessObject obj = it.next();
+        Iterator<ItemAwareReference> it = foi.listHeraquicalItemAwareReference().iterator();
+        while (it.hasNext())
+        {
+            ItemAwareReference item=it.next();
+            SWBClass obj = item.getProcessObject();
+            //TODO: Revisar variables distintas de la misma clase
             SemanticClass cls = obj.getSemanticObject().getSemanticClass();
             //System.out.println("CLASE DE FOI:"+cls+", PREFIJO:"+cls.getPrefix());
             ArrayList aListProps=new ArrayList();
@@ -190,9 +194,12 @@ public class SWBFormMgrLayer {
 
             HashMap hmapClasses=new HashMap();
             foi = (FlowNodeInstance) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
-            Iterator<ProcessObject> it = foi.listHeraquicalProcessObjects().iterator();
-            while (it.hasNext()) {
-                ProcessObject obj = it.next();
+            Iterator<ItemAwareReference> it = foi.listHeraquicalItemAwareReference().iterator();
+            while (it.hasNext()) 
+            {
+                ItemAwareReference item=it.next();
+                SWBClass obj = item.getProcessObject();
+                //TODO: Revisar variables distintas de la misma clase
                 SemanticClass cls = obj.getSemanticObject().getSemanticClass();
                 ArrayList aListProps=new ArrayList();
                 Iterator<SemanticProperty> itp = cls.listProperties();

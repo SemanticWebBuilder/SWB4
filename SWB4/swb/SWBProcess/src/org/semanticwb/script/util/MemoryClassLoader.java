@@ -72,6 +72,7 @@ public final class MemoryClassLoader extends ClassLoader {
         }
         return c;
     }
+    
     public MemoryClassLoader(ClassLoader parent) {
         super(parent);
     }
@@ -97,6 +98,7 @@ public final class MemoryClassLoader extends ClassLoader {
         JavaCompiler.CompilationTask task=this.compiler.getTask(null, this.manager, null, options, null, list);
         task.call();
     }
+
     public Class<?> findDynamicClass(String name) throws ClassNotFoundException
     {
         synchronized (this.manager) {

@@ -21,6 +21,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
@@ -30,9 +31,8 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.admin.admresources.util.XmlBundle;
-import org.semanticwb.portal.api.SWBParameters;
 import org.semanticwb.process.model.FlowNodeInstance;
-import org.semanticwb.process.model.ProcessObject;
+import org.semanticwb.process.model.ItemAwareReference;
 
 /**
  *
@@ -127,10 +127,13 @@ public class GenericSWBFormsResource extends GenericResource{
         if("savecnf".equals(response.getAction()))
         {
             String data="";
-            Iterator<ProcessObject> it=foi.listHeraquicalProcessObjects().iterator();
+            Iterator<ItemAwareReference> it=foi.listHeraquicalItemAwareReference().iterator();
             while(it.hasNext())
             {
-                ProcessObject obj=it.next();
+                ItemAwareReference item=it.next();
+                SWBClass obj=item.getProcessObject();
+                //TODO: Revisar variables distintas de la misma clase
+
                 SemanticClass cls=obj.getSemanticObject().getSemanticClass();
                 Iterator<SemanticProperty> itp=cls.listProperties();
                 while(itp.hasNext())
@@ -217,10 +220,10 @@ public class GenericSWBFormsResource extends GenericResource{
 
         out.println("<form action=\""+paramRequest.getActionUrl().setAction("savecnf")+"\" method=\"post\">");
         out.println("<input type=\"hidden\" name=\"suri\" value=\""+suri+"\">");
-        Iterator<ProcessObject> it=foi.listHeraquicalProcessObjects().iterator();
+        Iterator<SWBClass> it=foi.listHeraquicalProcessObjects().iterator();
         while(it.hasNext())
         {
-            ProcessObject obj=it.next();
+            SWBClass obj=it.next();
             SemanticClass cls=obj.getSemanticObject().getSemanticClass();
             out.println("<h3>"+cls.getDisplayName(lang)+"</h3>");
             Iterator<SemanticProperty> itp=cls.listProperties();

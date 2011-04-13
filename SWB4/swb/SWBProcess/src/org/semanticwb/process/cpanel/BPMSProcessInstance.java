@@ -223,7 +223,7 @@ public class BPMSProcessInstance {
             {
                 for(int i=0; i<vAllArtifacts.size(); i++)
                 {
-                    ProcessObject pob = (ProcessObject) vAllArtifacts.get(i);
+                    SWBClass pob = (SWBClass) vAllArtifacts.get(i);
                     SemanticObject sob =
                             SemanticObject.getSemanticObject(pob.getURI());
                     SemanticClass cls = sob.getSemanticClass();
@@ -454,7 +454,7 @@ public class BPMSProcessInstance {
                 Vector vArtifacts =  getProcessArtifacts(process);
                 for(int i=0; i<vArtifacts.size(); i++)
                 {
-                    ProcessObject pob = (ProcessObject) vArtifacts.get(i);
+                    SWBClass pob = (SWBClass) vArtifacts.get(i);
 
                     SemanticObject sob =
                             SemanticObject.getSemanticObject(pob.getURI());
@@ -481,7 +481,7 @@ public class BPMSProcessInstance {
         * Regresa un vector con todos los artefactos de una instancia de un proceso
         *
         * @param            floni FlowNodeInstance
-        * @return      		Vector de objetos ProcessObject
+        * @return      		Vector de objetos SWBClass
         * @see
         */
         public static Vector getProcessInstanceArtifacts(FlowNodeInstance floni)
@@ -490,11 +490,12 @@ public class BPMSProcessInstance {
             int index = 0;
             try
             {
-                //java.util.List<ProcessObject> arrPob = floni.getAllProcessObjects();
-                java.util.List<ProcessObject> arrPob = floni.listHeraquicalProcessObjects();
+                //java.util.List<SWBClass> arrPob = floni.getAllProcessObjects();
+                java.util.List<ItemAwareReference> arrPob = floni.listHeraquicalItemAwareReference();
                 for(int j=0; j<arrPob.size(); j++)
                 {
-                    ProcessObject pob = (ProcessObject) arrPob.get(j);
+                    ItemAwareReference item = (ItemAwareReference) arrPob.get(j);
+                    SWBClass pob = item.getProcessObject();
                     vArtifacts.add(index, pob);
                     index++;
                 }
