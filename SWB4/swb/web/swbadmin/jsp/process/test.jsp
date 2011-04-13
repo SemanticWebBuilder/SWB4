@@ -130,10 +130,12 @@
         <h3>Artefactos</h3>
 <%
             out.println("<ul>");
-            Iterator<ProcessObject> objit=pi.listAllProcessObjects();
+            Iterator<ItemAwareReference> objit=pi.listAllItemAwareReferences();
             while(objit.hasNext())
             {
-                ProcessObject obj =  objit.next();
+                ItemAwareReference item=objit.next();
+                ProcessObject obj =  item.getProcessObject();
+                //TODO: Revisar nombre del ItemAware
     %>
                 <li>Object Instance:<%=obj.getURI()%></li>
     <%
