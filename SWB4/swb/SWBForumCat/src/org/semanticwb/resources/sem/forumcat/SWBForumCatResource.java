@@ -73,7 +73,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
         String jsp = getViewJSP();
         if (jsp == null || jsp.trim().equals(""))
         {
-            jsp = "/work/models/"+paramRequest.getWebPage().getWebSite().getId()+"/jsp/"+ this.getClass().getSimpleName() +"/swbForumCat.jsp";
+            jsp = "/swbadmin/jsp/forumCat/swbForumCat.jsp";
         }
         try
         {
