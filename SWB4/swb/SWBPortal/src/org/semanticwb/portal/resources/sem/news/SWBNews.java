@@ -23,7 +23,6 @@
 package org.semanticwb.portal.resources.sem.news;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -35,15 +34,10 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericIterator;
-import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceCollectionCategory;
 import org.semanticwb.model.User;
-import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.portal.SWBFormButton;
-import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 
 // TODO: Auto-generated Javadoc
