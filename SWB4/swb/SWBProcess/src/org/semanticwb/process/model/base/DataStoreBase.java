@@ -3,6 +3,8 @@ package org.semanticwb.process.model.base;
 
 public abstract class DataStoreBase extends org.semanticwb.process.model.ItemAware implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
+    public static final org.semanticwb.platform.SemanticClass swb_Class=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Class");
+    public static final org.semanticwb.platform.SemanticProperty swp_dataStoreClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#dataStoreClass");
     public static final org.semanticwb.platform.SemanticClass swp_DataStore=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#DataStore");
    /**
    * The semantic class that represents the currentObject
@@ -248,6 +250,27 @@ public abstract class DataStoreBase extends org.semanticwb.process.model.ItemAwa
     public DataStoreBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public void setDataStoreClass(org.semanticwb.platform.SemanticObject value)
+    {
+        getSemanticObject().setObjectProperty(swp_dataStoreClass, value);
+    }
+
+    public void removeDataStoreClass()
+    {
+        getSemanticObject().removeProperty(swp_dataStoreClass);
+    }
+
+/**
+* Gets the DataStoreClass property
+* @return the value for the property as org.semanticwb.platform.SemanticObject
+*/
+    public org.semanticwb.platform.SemanticObject getDataStoreClass()
+    {
+         org.semanticwb.platform.SemanticObject ret=null;
+         ret=getSemanticObject().getObjectProperty(swp_dataStoreClass);
+         return ret;
     }
 
    /**

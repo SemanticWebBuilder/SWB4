@@ -1,9 +1,11 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class InstanceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.process.model.ProcessTraceable
+public abstract class InstanceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.process.model.ProcessTraceable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swp_execution=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#execution");
+    public static final org.semanticwb.platform.SemanticClass swp_ItemAwareReference=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ItemAwareReference");
+    public static final org.semanticwb.platform.SemanticProperty swp_hasItemAwareReference=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasItemAwareReference");
     public static final org.semanticwb.platform.SemanticProperty swp_action=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#action");
     public static final org.semanticwb.platform.SemanticProperty swp_status=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#status");
     public static final org.semanticwb.platform.SemanticProperty swp_iteration=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#iteration");
@@ -97,6 +99,29 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
         public static java.util.Iterator<org.semanticwb.process.model.Instance> listInstanceByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Instance> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Instance with a determined ItemAwareReference
+       * @param value ItemAwareReference of the type org.semanticwb.process.model.ItemAwareReference
+       * @param model Model of the org.semanticwb.process.model.Instance
+       * @return Iterator with all the org.semanticwb.process.model.Instance
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Instance> listInstanceByItemAwareReference(org.semanticwb.process.model.ItemAwareReference value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Instance> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasItemAwareReference, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Instance with a determined ItemAwareReference
+       * @param value ItemAwareReference of the type org.semanticwb.process.model.ItemAwareReference
+       * @return Iterator with all the org.semanticwb.process.model.Instance
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Instance> listInstanceByItemAwareReference(org.semanticwb.process.model.ItemAwareReference value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Instance> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasItemAwareReference,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -287,6 +312,71 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
     public void setUpdated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_updated, value);
+    }
+   /**
+   * Gets all the org.semanticwb.process.model.ItemAwareReference
+   * @return A GenericIterator with all the org.semanticwb.process.model.ItemAwareReference
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ItemAwareReference> listItemAwareReferences()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ItemAwareReference>(getSemanticObject().listObjectProperties(swp_hasItemAwareReference));
+    }
+
+   /**
+   * Gets true if has a ItemAwareReference
+   * @param value org.semanticwb.process.model.ItemAwareReference to verify
+   * @return true if the org.semanticwb.process.model.ItemAwareReference exists, false otherwise
+   */
+    public boolean hasItemAwareReference(org.semanticwb.process.model.ItemAwareReference value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swp_hasItemAwareReference,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a ItemAwareReference
+   * @param value org.semanticwb.process.model.ItemAwareReference to add
+   */
+
+    public void addItemAwareReference(org.semanticwb.process.model.ItemAwareReference value)
+    {
+        getSemanticObject().addObjectProperty(swp_hasItemAwareReference, value.getSemanticObject());
+    }
+   /**
+   * Removes all the ItemAwareReference
+   */
+
+    public void removeAllItemAwareReference()
+    {
+        getSemanticObject().removeProperty(swp_hasItemAwareReference);
+    }
+   /**
+   * Removes a ItemAwareReference
+   * @param value org.semanticwb.process.model.ItemAwareReference to remove
+   */
+
+    public void removeItemAwareReference(org.semanticwb.process.model.ItemAwareReference value)
+    {
+        getSemanticObject().removeObjectProperty(swp_hasItemAwareReference,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the ItemAwareReference
+   * @return a org.semanticwb.process.model.ItemAwareReference
+   */
+    public org.semanticwb.process.model.ItemAwareReference getItemAwareReference()
+    {
+         org.semanticwb.process.model.ItemAwareReference ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasItemAwareReference);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.ItemAwareReference)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**

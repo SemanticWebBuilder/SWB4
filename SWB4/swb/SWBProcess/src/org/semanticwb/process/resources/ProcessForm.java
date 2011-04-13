@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +24,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.FormElement;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
@@ -40,7 +42,8 @@ import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.process.forms.SWBFormMgrLayer;
 import org.semanticwb.process.model.FlowNodeInstance;
 import org.semanticwb.process.model.Instance;
-import org.semanticwb.process.model.ProcessObject;
+import org.semanticwb.process.model.ItemAware;
+import org.semanticwb.process.model.ItemAwareReference;
 import org.semanticwb.process.model.SWBProcessFormMgr;
 import org.semanticwb.process.model.UserTask;
 
@@ -89,9 +92,11 @@ public class ProcessForm extends GenericResource {
 
         HashMap<String, SemanticClass> hmclass = new HashMap<String, SemanticClass>();
         HashMap<String, SemanticProperty> hmprops = new HashMap<String, SemanticProperty>();
-        Iterator<ProcessObject> it = foi.listHeraquicalProcessObjects().iterator();
+        Iterator<ItemAwareReference> it = foi.listHeraquicalItemAwareReference().iterator();
         while (it.hasNext()) {
-            ProcessObject obj = it.next();
+            ItemAwareReference item=it.next();
+            SWBClass obj = item.getProcessObject();
+            //TODO: Revisar variables distintas de la misma clase
             SemanticClass cls = obj.getSemanticObject().getSemanticClass();
 
             hmclass.put(cls.getClassId(), cls);
@@ -201,7 +206,10 @@ public class ProcessForm extends GenericResource {
 
         HashMap<String, SemanticClass> hmclass = new HashMap<String, SemanticClass>();
         HashMap<String, SemanticProperty> hmprops = new HashMap<String, SemanticProperty>();
-        Iterator<SemanticClass> it = ut.getContainer().listHerarquicalProcessClasses();
+
+        Map<ItemAware, SemanticClass> map=ut.getHerarquicalRelatedItemAwareClasses();
+        //TODO: Verificar nombres de ItemAware
+        Iterator<SemanticClass> it = map.values().iterator();
         while (it.hasNext()) {
             SemanticClass cls = it.next();
             hmclass.put(cls.getClassId(), cls);
@@ -376,9 +384,11 @@ public class ProcessForm extends GenericResource {
                 i++;
             }
 
-            Iterator<ProcessObject> it = foi.listHeraquicalProcessObjects().iterator();
+            Iterator<ItemAwareReference> it = foi.listHeraquicalItemAwareReference().iterator();
             while (it.hasNext()) {
-                ProcessObject obj = it.next();
+                ItemAwareReference item=it.next();
+                SWBClass obj = item.getProcessObject();
+                //
                 SemanticClass cls = obj.getSemanticObject().getSemanticClass();
                 Iterator<SemanticProperty> itp = cls.listProperties();
                 while (itp.hasNext()) {
@@ -733,7 +743,8 @@ public class ProcessForm extends GenericResource {
             }
         }
 
-        Iterator<SemanticClass> it = ut.getContainer().listHerarquicalProcessClasses();
+        //TODO: Verificar nombres de ItemAware
+        Iterator<SemanticClass> it = ut.getHerarquicalRelatedItemAwareClasses().values().iterator();
         while (it.hasNext()) {
             SemanticClass cls = it.next();
             Iterator<SemanticProperty> itp = cls.listProperties();

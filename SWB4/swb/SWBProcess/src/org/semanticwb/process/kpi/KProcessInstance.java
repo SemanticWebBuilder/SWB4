@@ -25,6 +25,7 @@ package org.semanticwb.process.kpi;
 
 import java.util.Iterator;
 import java.util.ArrayList;
+import org.semanticwb.model.SWBClass;
 
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
@@ -32,10 +33,10 @@ import org.semanticwb.platform.SemanticProperty;
 
 import org.semanticwb.process.utils.Restriction;
 import org.semanticwb.process.model.ProcessSite;
-import org.semanticwb.process.model.ProcessObject;
 import org.semanticwb.process.model.ProcessWebPage;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.FlowNodeInstance;
+import org.semanticwb.process.model.ItemAwareReference;
 import org.semanticwb.process.model.SubProcessInstance;
 
 /**
@@ -178,9 +179,11 @@ public class KProcessInstance {
     }
 
     public static ArrayList filterArtifactsObjects(ProcessInstance pinst, Restriction restriction, ArrayList filterinstances) {
-        Iterator<ProcessObject> objit = pinst.listProcessObjects();
-        while (objit.hasNext()) {
-            ProcessObject obj =  objit.next();
+        Iterator<ItemAwareReference> objit = pinst.listItemAwareReferences();
+        while(objit.hasNext()) {
+            ItemAwareReference item=objit.next();
+            SWBClass obj =  item.getProcessObject();
+            //TODO: Verificar nombre del ItemAware
             Iterator<SemanticProperty> spit = obj.getSemanticObject().listProperties();
             while (spit.hasNext()) {
                 SemanticProperty sp = spit.next();
@@ -208,9 +211,11 @@ public class KProcessInstance {
      *
      */
     public static ArrayList filterArtifactsObjects(SubProcessInstance spinst, Restriction restriction, ArrayList filterinstances) {
-        Iterator<ProcessObject> objit = spinst.listProcessObjects();
-        while (objit.hasNext()) {
-            ProcessObject obj =  objit.next();
+        Iterator<ItemAwareReference> objit = spinst.listItemAwareReferences();
+        while(objit.hasNext()) {
+            ItemAwareReference item=objit.next();
+            SWBClass obj =  item.getProcessObject();
+            //TODO: Verificar nombre del ItemAware
             Iterator<SemanticProperty> spit = obj.getSemanticObject().listProperties();
             while (spit.hasNext()) {
                 SemanticProperty sp = spit.next();

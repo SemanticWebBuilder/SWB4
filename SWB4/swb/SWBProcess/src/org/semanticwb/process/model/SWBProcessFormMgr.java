@@ -16,6 +16,7 @@ import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.FormElement;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.PropertyGroup;
+import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
@@ -59,10 +60,13 @@ public class SWBProcessFormMgr implements SWBForms
         views=new HashMap();
         hidden=new HashMap();
         buttons=new ArrayList();
-        Iterator<ProcessObject> objs=inst.listHeraquicalProcessObjects().iterator();
+
+        Iterator<ItemAwareReference> objs=inst.listHeraquicalItemAwareReference().iterator();
         while (objs.hasNext())
         {
-            ProcessObject processObject = objs.next();
+            ItemAwareReference item=objs.next();
+            SWBClass processObject = item.getProcessObject();
+            //TODO: Revisar variables distintas de la misma clase
             SWBFormMgr mgr=new SWBFormMgr(processObject.getSemanticObject(),null,MODE_EDIT);
             mgr.setType(m_type);
             mgrs.put(processObject.getSemanticObject().getSemanticClass().getURI(),mgr);

@@ -29,7 +29,6 @@ import java.io.PrintWriter;
 import java.io.IOException;
 import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.ProcessSite;
-import org.semanticwb.process.model.ProcessObject;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.FlowNodeInstance;
 import org.semanticwb.process.model.SubProcessInstance;
@@ -47,8 +46,10 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.SWBException;
+import org.semanticwb.model.SWBClass;
 import org.semanticwb.process.utils.Ajax;
 import org.semanticwb.process.kpi.CaseProcessObject;
+import org.semanticwb.process.model.ItemAwareReference;
 
 /**
  *
@@ -440,9 +441,9 @@ public class CaseObject extends GenericResource {
     private void selectObjectProperty(ProcessInstance pinst, PrintWriter out, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         ArrayList pobjs = new ArrayList();
         getObjectsFromInstance(pinst, pobjs);
-        Iterator<ProcessObject> objit = pobjs.iterator();
+        Iterator<SWBClass> objit = pobjs.iterator();
         while(objit.hasNext()) {
-            ProcessObject pobj =  objit.next();
+            SWBClass pobj =  objit.next();
             Iterator<SemanticProperty> spit = pobj.getSemanticObject().listProperties();
             while(spit.hasNext()) {
                 SemanticProperty sp = spit.next();
@@ -452,9 +453,11 @@ public class CaseObject extends GenericResource {
     }
 
     private void getObjectsFromInstance(ProcessInstance pinst, ArrayList pobjs) {
-        Iterator<ProcessObject> objit = pinst.listProcessObjects();
+        Iterator<ItemAwareReference> objit = pinst.listItemAwareReferences();
         while(objit.hasNext()) {
-            ProcessObject obj =  objit.next();
+            ItemAwareReference item=objit.next();
+            SWBClass obj =  item.getProcessObject();
+            //TODO: Verificar nombre del ItemAware
             if (!pobjs.contains(obj))
                 pobjs.add(obj);
         }
@@ -467,9 +470,11 @@ public class CaseObject extends GenericResource {
     }
 
     private void getObjectsFromInstance(SubProcessInstance spinst, ArrayList pobjs) {
-        Iterator<ProcessObject> objit = spinst.listProcessObjects();
+        Iterator<ItemAwareReference> objit = spinst.listItemAwareReferences();
         while(objit.hasNext()) {
-            ProcessObject obj =  objit.next();
+            ItemAwareReference item=objit.next();
+            SWBClass obj =  item.getProcessObject();
+            //TODO: Verificar nombre del ItemAware
             if (!pobjs.contains(obj))
                 pobjs.add(obj);
         }
@@ -619,9 +624,9 @@ public class CaseObject extends GenericResource {
         ProcessInstance pinst = CaseProcessInstance.pop(process);
         if (null != propId && !"".equals(propId)) {
             getObjectsFromInstance(pinst, pobjs);
-            Iterator<ProcessObject> objit = pobjs.iterator();
+            Iterator<SWBClass> objit = pobjs.iterator();
             while(objit.hasNext()) {
-                ProcessObject pobj =  objit.next();
+                SWBClass pobj =  objit.next();
                 Iterator<SemanticProperty> spit = pobj.getSemanticObject().listProperties();
                 while(spit.hasNext()) {
                     SemanticProperty sp = spit.next();
@@ -640,9 +645,9 @@ public class CaseObject extends GenericResource {
         ProcessInstance pinst = CaseProcessInstance.pop(process);
         getObjectsFromInstance(pinst, pobjs);
         StringBuilder propertyname = new StringBuilder();
-        Iterator<ProcessObject> objit = pobjs.iterator();
+        Iterator<SWBClass> objit = pobjs.iterator();
         while(objit.hasNext()) {
-            ProcessObject pobj =  objit.next();
+            SWBClass pobj =  objit.next();
             Iterator<SemanticProperty> spit = pobj.getSemanticObject().listProperties();
             while(spit.hasNext()) {
                 SemanticProperty sp = spit.next();

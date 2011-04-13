@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class CalledFlowNodeInstanceBase extends org.semanticwb.process.model.FlowNodeInstance implements org.semanticwb.model.Traceable,org.semanticwb.process.model.ProcessTraceable
+public abstract class CalledFlowNodeInstanceBase extends org.semanticwb.process.model.FlowNodeInstance implements org.semanticwb.process.model.ProcessTraceable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass swp_CalledFlowNodeInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#CalledFlowNodeInstance");
    /**
@@ -168,6 +168,29 @@ public abstract class CalledFlowNodeInstanceBase extends org.semanticwb.process.
         public static java.util.Iterator<org.semanticwb.process.model.CalledFlowNodeInstance> listCalledFlowNodeInstanceByFlowNodeType(org.semanticwb.process.model.FlowNode value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CalledFlowNodeInstance> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_flowNodeType,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CalledFlowNodeInstance with a determined ItemAwareReference
+       * @param value ItemAwareReference of the type org.semanticwb.process.model.ItemAwareReference
+       * @param model Model of the org.semanticwb.process.model.CalledFlowNodeInstance
+       * @return Iterator with all the org.semanticwb.process.model.CalledFlowNodeInstance
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CalledFlowNodeInstance> listCalledFlowNodeInstanceByItemAwareReference(org.semanticwb.process.model.ItemAwareReference value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CalledFlowNodeInstance> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasItemAwareReference, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CalledFlowNodeInstance with a determined ItemAwareReference
+       * @param value ItemAwareReference of the type org.semanticwb.process.model.ItemAwareReference
+       * @return Iterator with all the org.semanticwb.process.model.CalledFlowNodeInstance
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CalledFlowNodeInstance> listCalledFlowNodeInstanceByItemAwareReference(org.semanticwb.process.model.ItemAwareReference value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CalledFlowNodeInstance> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasItemAwareReference,value.getSemanticObject(),sclass));
             return it;
         }
        /**

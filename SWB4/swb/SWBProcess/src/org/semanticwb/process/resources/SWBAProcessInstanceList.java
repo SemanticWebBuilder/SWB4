@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
@@ -21,10 +22,9 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.portal.resources.sem.SWBRankWebPage;
 import org.semanticwb.process.model.FlowNodeInstance;
+import org.semanticwb.process.model.ItemAwareReference;
 import org.semanticwb.process.model.ProcessInstance;
-import org.semanticwb.process.model.ProcessObject;
 import org.semanticwb.process.model.ProcessSite;
 import org.semanticwb.process.model.SWBProcessMgr;
 import org.semanticwb.process.model.SubProcessInstance;
@@ -116,6 +116,7 @@ public class SWBAProcessInstanceList extends GenericResource {
                 out.println("</thead>");
 
                 out.println("<tbody>");
+                //TODO:Configurar Listar en Proceso o Todas
                 Iterator<ProcessInstance> pit = SWBComparator.sortByCreated(process.listProcessInstances(),false);
                 while (pit.hasNext()) {
                     ProcessInstance pi = pit.next();
@@ -202,9 +203,11 @@ public class SWBAProcessInstanceList extends GenericResource {
                 out.println("</legend>");
 
                 out.println("<ul>");
-                Iterator<ProcessObject> objit = pi.listAllProcessObjects();
+                Iterator<ItemAwareReference> objit = pi.listAllItemAwareReferences();
                 while (objit.hasNext()) {
-                    ProcessObject obj = objit.next();
+                    ItemAwareReference item=objit.next();
+                    SWBClass obj = item.getProcessObject();
+                    //TODO: Verificar nombre del ItemAware
                     out.println("<li>Object Instance:" + obj.getURI() + " ");
                     out.println("<a href=\"#\"  onclick=\"addNewTab('" + obj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(obj.getSemanticObject().getDisplayName()),25) + "');return false;\">" + obj.getSemanticObject().getDisplayName() + "</a>");
                     out.println("</li>");

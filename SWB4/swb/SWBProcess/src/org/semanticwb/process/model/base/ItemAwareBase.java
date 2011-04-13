@@ -3,6 +3,7 @@ package org.semanticwb.process.model.base;
 
 public abstract class ItemAwareBase extends org.semanticwb.process.model.GraphicalElement implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
+    public static final org.semanticwb.platform.SemanticProperty swp_name=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#name");
     public static final org.semanticwb.platform.SemanticClass swp_ItemAware=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ItemAware");
    /**
    * The semantic class that represents the currentObject
@@ -242,5 +243,23 @@ public abstract class ItemAwareBase extends org.semanticwb.process.model.Graphic
     public ItemAwareBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the Name property
+* @return String with the Name
+*/
+    public String getName()
+    {
+        return getSemanticObject().getProperty(swp_name);
+    }
+
+/**
+* Sets the Name property
+* @param value long with the Name
+*/
+    public void setName(String value)
+    {
+        getSemanticObject().setProperty(swp_name, value);
     }
 }

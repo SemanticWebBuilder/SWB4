@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ServiceTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.model.Traceable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ResourceAssignmentable
+public abstract class ServiceTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swp_ServiceTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ServiceTask");
    /**
