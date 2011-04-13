@@ -373,15 +373,18 @@ private SWBResourceCachedMgr cache;
             while(it.hasNext())
             {
                 Resource base=it.next();
-                int camp=0;
-                if(stype==null && base.getResourceSubType()!=null)continue; //verifica recursos sin subtipo
-                if(checkResource(base, user, camp, today, topic))
+                if(base!=null)
                 {
-                    SWBResource wbr=getResource(base);
-                    //System.out.println("checkResource ok:"+wbr.getResourceBase().getId());
-                    if(wbr!=null)
+                    int camp=0;
+                    if(stype==null && base.getResourceSubType()!=null)continue; //verifica recursos sin subtipo
+                    if(checkResource(base, user, camp, today, topic))
                     {
-                        ret.add(wbr);
+                        SWBResource wbr=getResource(base);
+                        //System.out.println("checkResource ok:"+wbr.getResourceBase().getId());
+                        if(wbr!=null)
+                        {
+                            ret.add(wbr);
+                        }
                     }
                 }
             }

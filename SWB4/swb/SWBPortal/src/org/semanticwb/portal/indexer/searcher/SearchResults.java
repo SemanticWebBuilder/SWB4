@@ -29,6 +29,7 @@ import java.util.TreeSet;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.model.Searchable;
 import org.semanticwb.model.User;
+import org.semanticwb.portal.indexer.SWBIndexer;
 import org.semanticwb.portal.indexer.parser.GenericParser;
 
 // TODO: Auto-generated Javadoc
@@ -90,9 +91,13 @@ public class SearchResults {
         Searchable sdoc=doc.getSearchable();
         if(sdoc!=null) {
             //TODO:Traer idexador del modelo
-            GenericParser parser=SWBPortal.getIndexMgr().getDefaultIndexer().getParser(sdoc);
-            if(parser.canUserView(sdoc, m_user)) {
-                docs.add(doc);
+            SWBIndexer index=SWBPortal.getIndexMgr().getDefaultIndexer();
+            if(index!=null)
+            {
+                GenericParser parser=index.getParser(sdoc);
+                if(parser.canUserView(sdoc, m_user)) {
+                 docs.add(doc);
+                }
             }
         }
     }

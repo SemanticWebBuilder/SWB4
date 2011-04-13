@@ -207,7 +207,11 @@ public class SWBServiceMgr implements SemanticObserver, SWBObserver {
                         }
                         if(obj.instanceOf(Searchable.swb_Searchable))
                         {
-                            SWBPortal.getIndexMgr().getDefaultIndexer().removeSearchable(obj.getURI());
+                            SWBIndexer index=SWBPortal.getIndexMgr().getDefaultIndexer();
+                            if(index!=null)
+                            {
+                                index.removeSearchable(obj.getURI());
+                            }
                         }
                         if(obj.instanceOf(Resource.sclass))
                         {
