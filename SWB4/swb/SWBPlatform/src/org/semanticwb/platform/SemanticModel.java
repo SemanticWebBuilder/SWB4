@@ -317,8 +317,8 @@ public class SemanticModel
         Resource res=m_model.createResource(uri);
         res.addProperty(RDF.type, cls.getOntClass());
         //System.out.println("createSemanticObject:"+res+" "+this+" "+cls);
-        //SemanticObject ret=cls.newInstance(res);
-        SemanticObject ret=SemanticObject.createSemanticObject(res, this, cls, true);     //cls.newInstance(res);
+        SemanticObject ret=cls.newInstance(res);
+        //SemanticObject ret=SemanticObject.createSemanticObject(res, this, cls, true);     //cls.newInstance(res);
         SWBPlatform.getSemanticMgr().notifyChange(ret, null,null, SemanticObject.ACT_CREATE);
         //Default Values
         Iterator<SemanticProperty> it=cls.listProperties();

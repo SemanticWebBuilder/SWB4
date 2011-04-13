@@ -73,6 +73,9 @@ public class SemanticClass
     
     /** The m_is swb class. */
     private Boolean m_isSWBClass=null;
+
+    /** No hay codigo generado de la clase */
+    private Boolean m_isSWBVirtClass=null;
     
     /** The m_is swb interface. */
     private Boolean m_isSWBInterface=null;
@@ -97,6 +100,9 @@ public class SemanticClass
 
     /** The m_autogen id. */
     private Boolean m_disableCache=null;
+
+    /** The m_autogen id. */
+    private Boolean m_notClassCodeGeneration=null;
     
     /** The m_cls. */
     private Class m_cls=null;
@@ -233,7 +239,6 @@ public class SemanticClass
      */
     public String getClassName()
     {
-        //TODO: Revisar
         if(m_className==null)
         {
             SemanticClass cls=this;
@@ -423,6 +428,29 @@ public class SemanticClass
         }
         //log.trace("isDisableCache:"+m_disableCache);
         return m_disableCache;
+    }
+
+    /**
+     * Checks if disble cache.
+     *
+     * @return true, if is disable cache
+     */
+    public boolean isNotClassCodeGeneration()
+    {
+        if(m_notClassCodeGeneration==null)
+        {
+            Property prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_PROP_NOTCLASSCODEGENERATION).getRDFProperty();
+            //System.out.println("Class:"+m_class+" ->"+className);
+            try
+            {
+                m_notClassCodeGeneration=m_class.getRequiredProperty(prop).getBoolean();
+            }catch(PropertyNotFoundException noe)
+            {
+                m_notClassCodeGeneration=false;
+            }
+        }
+        //log.trace("isDisableCache:"+m_notClassCodeGeneration);
+        return m_notClassCodeGeneration;
     }
 
 
@@ -1136,6 +1164,7 @@ public class SemanticClass
     private void checkType()
     {
         m_isSWBClass=false;
+        m_isSWBVirtClass=false;
         m_isSWBInterface=false;
         m_isSWBModel=false;
         m_isSWBFormElement=false;
@@ -1150,7 +1179,15 @@ public class SemanticClass
                 break;
             }else if(uri.equals(SemanticVocabulary.SWB_CLASS))
             {
-                m_isSWBClass = true;
+
+                if(isNotClassCodeGeneration())
+                {
+                    m_isSWBVirtClass = true;
+                }
+                else
+                {
+                    m_isSWBClass = true;
+                }
                 break;
             }else if(uri.equals(SemanticVocabulary.SWB_INTERFACE))
             {
@@ -1180,6 +1217,20 @@ public class SemanticClass
             checkType();
         }
         return m_isSWBClass.booleanValue();
+    }
+
+    /**
+     * Checks if is sWB class.
+     *
+     * @return true, if is sWB class
+     */
+    public boolean isSWBVirtualClass()
+    {
+        if(m_isSWBVirtClass==null)
+        {
+            checkType();
+        }
+        return m_isSWBVirtClass.booleanValue();
     }
 
     /**
@@ -1300,8 +1351,9 @@ public class SemanticClass
     }
 
     /**
-     * Checks if is sWB.
-     * 
+     * Identifica si el tipo de clase es del algun tipo de SWBClass, SWBModel,
+     * SWBFormElement, SWBInterface, SWBSemanticResource
+     * excepto SWBVirtualClass (notClassCodeGeneration)
      * @return true, if is sWB
      */
     public boolean isSWB()
