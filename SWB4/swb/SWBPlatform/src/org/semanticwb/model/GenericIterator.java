@@ -28,6 +28,10 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.util.iterator.ClosableIterator;
 import java.util.Iterator;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBException;
+import org.semanticwb.SWBRuntimeException;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.platform.SemanticObject;
 
 // TODO: Auto-generated Javadoc
@@ -39,6 +43,7 @@ import org.semanticwb.platform.SemanticObject;
  */
 public class GenericIterator<T extends GenericObject> implements Iterator
 {
+    public static Logger log=SWBUtils.getLogger(GenericIterator.class);
     
     /** The iterator. */
     private Iterator iterator;
@@ -117,9 +122,13 @@ public class GenericIterator<T extends GenericObject> implements Iterator
             SemanticObject sobj=(SemanticObject)obj;
             return (T)sobj.createGenericInstance();
         }
-        else
+        else if(obj==null)
         {
-            throw new AssertionError("No type found...,"+obj);
+            log.error(new SWBRuntimeException("Item is null"));
+            return null;
+        }else
+        {
+            throw new SWBRuntimeException("No type found...,"+obj);
         }
     }
 }

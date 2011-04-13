@@ -205,7 +205,7 @@ public class SemanticVocabulary
     public static final String SWB_PROP_HASHERARQUICALNODE = URI + "hasHerarquicalNode";
 //    public static final String SWB_PROP_DRAGSUPPORT=URI+"dragSupport";
     /** The Constant SWB_PROP_NOTOBSERVABLE. */
-public static final String SWB_PROP_NOTOBSERVABLE = URI + "notObservable";
+    public static final String SWB_PROP_NOTOBSERVABLE = URI + "notObservable";
     
     /** The Constant SWB_PROP_NOTCODEGENERATION. */
     public static final String SWB_PROP_NOTCODEGENERATION = URI + "notCodeGeneration";
@@ -216,7 +216,7 @@ public static final String SWB_PROP_NOTOBSERVABLE = URI + "notObservable";
 //    public static final String SWB_PROP_PROPINDEX=URI+"propIndex";
     //public static final String SWB_ANNOT_CLASSNAME=URI+"className";
     /** The Constant SWB_ANNOT_PROPERTYCODENAME. */
-public static final String SWB_ANNOT_PROPERTYCODENAME = URI + "propertyCodeName";
+    public static final String SWB_ANNOT_PROPERTYCODENAME = URI + "propertyCodeName";
     
     /** The Constant SWB_ANNOT_CLASSCODENAME. */
     public static final String SWB_ANNOT_CLASSCODENAME = URI + "classCodeName";
@@ -235,6 +235,10 @@ public static final String SWB_ANNOT_PROPERTYCODENAME = URI + "propertyCodeName"
 
     /** The Constant SWB_PROP_DISABLECACHE. */
     public static final String SWB_PROP_DISABLECACHE = URI + "disableCache";
+
+    /** The Constant SWB_PROP_NOTCLASSCODEGENERATION. */
+    public static final String SWB_PROP_NOTCLASSCODEGENERATION = URI + "notClassCodeGeneration";
+
 
     /** The Constant SWB_PROP_PREFIX. */
     public static final String SWB_PROP_PREFIX = URI + "prefix";

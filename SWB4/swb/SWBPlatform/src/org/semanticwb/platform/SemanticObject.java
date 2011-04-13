@@ -2117,7 +2117,7 @@ public Document getDomProperty(SemanticProperty prop)
                         //System.out.println(dep);
                         try
                         {
-                            if(!stack.contains(dep))dep.remove(stack);
+                            if(stack!=null && !stack.contains(dep))dep.remove(stack);
                         }catch(Exception e){log.error(e);}
                     }
                 }
@@ -3316,15 +3316,19 @@ public Document getDomProperty(SemanticProperty prop)
     public Iterator<SemanticObject> listHerarquicalChilds()
     {
         ArrayList<SemanticObject> list=new ArrayList();
-        Iterator<SemanticProperty> it=getSemanticClass().listHerarquicalProperties();
-        while(it.hasNext())
+        SemanticClass cls=getSemanticClass();
+        if(cls!=null)
         {
-            SemanticProperty prop=it.next();
-            Iterator<SemanticObject> it2=listObjectProperties(prop);
-            while(it2.hasNext())
+            Iterator<SemanticProperty> it=cls.listHerarquicalProperties();
+            while(it.hasNext())
             {
-                SemanticObject ch=it2.next();
-                list.add(ch);
+                SemanticProperty prop=it.next();
+                Iterator<SemanticObject> it2=listObjectProperties(prop);
+                while(it2.hasNext())
+                {
+                    SemanticObject ch=it2.next();
+                    list.add(ch);
+                }
             }
         }
         return list.iterator();
