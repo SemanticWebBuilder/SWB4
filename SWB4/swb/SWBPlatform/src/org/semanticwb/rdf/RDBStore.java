@@ -78,7 +78,7 @@ public class RDBStore implements AbstractStore
         conn.setDriver(driver);
         conn.getDriver().setTableNamePrefix("swb_");
         conn.getDriver().setDoDuplicateCheck(false);
-        conn.getDriver().setIsTransactionDb(true);
+        //conn.getDriver().setIsTransactionDb(true);
 
         maker = ModelFactory.createModelRDBMaker(conn);
     }
