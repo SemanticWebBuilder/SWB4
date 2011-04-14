@@ -207,18 +207,24 @@ public class ProcessForm extends GenericResource {
         HashMap<String, SemanticClass> hmclass = new HashMap<String, SemanticClass>();
         HashMap<String, SemanticProperty> hmprops = new HashMap<String, SemanticProperty>();
 
-        Map<ItemAware, SemanticClass> map=ut.getHerarquicalRelatedItemAwareClasses();
-        //TODO: Verificar nombres de ItemAware
-        Iterator<SemanticClass> it = map.values().iterator();
-        while (it.hasNext()) {
-            SemanticClass cls = it.next();
-            hmclass.put(cls.getClassId(), cls);
+        Iterator<ItemAware> it = ut.listHerarquicalRelatedItemAware().iterator();
+        while (it.hasNext()) 
+        {
+            ItemAware item=it.next();
 
-            Iterator<SemanticProperty> itp = cls.listProperties();
-            while (itp.hasNext()) {
-                SemanticProperty prop = itp.next();
-                hmprops.put(prop.getPropId(), prop);
+            SemanticClass cls = item.getItemSemanticClass();
+            if(cls!=null)
+            {
+                hmclass.put(cls.getClassId(), cls);
+
+                Iterator<SemanticProperty> itp = cls.listProperties();
+                while (itp.hasNext()) {
+                    SemanticProperty prop = itp.next();
+                    hmprops.put(prop.getPropId(), prop);
+                }
             }
+
+            //TODO: Agregar propiedades del item
         }
 
         ret.append("<form");
@@ -743,17 +749,22 @@ public class ProcessForm extends GenericResource {
             }
         }
 
-        //TODO: Verificar nombres de ItemAware
-        Iterator<SemanticClass> it = ut.getHerarquicalRelatedItemAwareClasses().values().iterator();
-        while (it.hasNext()) {
-            SemanticClass cls = it.next();
-            Iterator<SemanticProperty> itp = cls.listProperties();
-            while (itp.hasNext()) {
-                SemanticProperty prop = itp.next();
-                String name = cls.getClassId() + "|" + prop.getPropId();
-                hmsc.put(name, prop.getDisplayName(lang));
-                hmprops.put(name, prop);
+        Iterator<ItemAware> it = ut.listHerarquicalRelatedItemAware().iterator();
+        while (it.hasNext()) 
+        {
+            ItemAware item = it.next();
+            SemanticClass cls = item.getItemSemanticClass();
+            if(cls!=null)
+            {
+                Iterator<SemanticProperty> itp = cls.listProperties();
+                while (itp.hasNext()) {
+                    SemanticProperty prop = itp.next();
+                    String name = cls.getClassId() + "|" + prop.getPropId();
+                    hmsc.put(name, prop.getDisplayName(lang));
+                    hmprops.put(name, prop);
+                }
             }
+            //TODO: Agregar propiedades del item
         }
 
         int max = 1;

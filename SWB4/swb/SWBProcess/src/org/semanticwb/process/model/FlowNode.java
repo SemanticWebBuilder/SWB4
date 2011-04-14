@@ -1,14 +1,14 @@
 package org.semanticwb.process.model;
 
-import com.hp.hpl.jena.util.iterator.Map1;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 import org.semanticwb.model.SWBClass;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticProperty;
 
 
 public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase 
@@ -41,22 +41,46 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
         inst.setStatus(Instance.STATUS_INIT);
         inst.setContainerInstance(pinst);
         
-        //
-        Map<ItemAware,SemanticClass> map=getRelatedItemAwareClasses();
-        Iterator<Map.Entry<ItemAware,SemanticClass>> it=map.entrySet().iterator();
+        Iterator<ItemAware> it=listRelatedItemAware().iterator();
         while (it.hasNext())
         {
-            Map.Entry<ItemAware, SemanticClass> entry = it.next();
-            ItemAwareReference ref=ItemAwareReference.ClassMgr.createItemAwareReference(this.getProcessSite());
-            ref.setItemAware(entry.getKey());
+            ItemAware item = it.next();
+            SemanticClass scls=null;
+            SemanticProperty sprop=null;
+            SWBModel model=this.getProcessSite();
+            if(item instanceof DataStore)
+            {
+                DataStore store=(DataStore)item;
+                if(store.getDataStoreClass()!=null)
+                {
+                    scls=store.getDataStoreClass().transformToSemanticClass();
+                }
+            }else if(item instanceof DataObjectItemAware)
+            {
+                DataObjectItemAware data=(DataObjectItemAware)item;
+                if(data.getDataObjectProperty()!=null)
+                {
+                    sprop=data.getDataObjectProperty().transformToSemanticProperty();
+                }else if(data.getDataObjectClass()!=null)
+                {
+                    scls=data.getDataObjectClass().transformToSemanticClass();
+                }
+                model=this.getProcessSite().getProcessDataInstanceModel();
+            }
 
-            SemanticModel model=inst.getSemanticObject().getModel();
-            SemanticClass cls=entry.getValue();
-            long id=model.getCounter(cls);
-            SemanticObject ins=model.createSemanticObjectById(String.valueOf(id), cls);
-            ref.setProcessObject((SWBClass)ins.createGenericInstance());
-            inst.addItemAwareReference(ref);
-            System.out.println("addItemAwareReference:"+ref);            
+            if(scls!=null)
+            {
+                ItemAwareReference ref=ItemAwareReference.ClassMgr.createItemAwareReference(this.getProcessSite());
+                ref.setItemAware(item);
+
+                long id=model.getSemanticModel().getCounter(scls);
+                SemanticObject ins=model.getSemanticModel().createSemanticObjectById(String.valueOf(id), scls);
+                ref.setProcessObject((SWBClass)ins.createGenericInstance());
+                inst.addItemAwareReference(ref);
+                //System.out.println("addItemAwareReference:"+ref);
+            }
+
+            //TODO: Si es una propiedad
         }
 
         return inst;
@@ -123,14 +147,14 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
 
 
     /**
-     * Regresa las ItemAware y la Classes relacionadas con el FlowNode,
+     * Regresa las ItemAware relacionadas con el FlowNode,
      * en el caso de un SubProceso regresa las Globales del Sub Proceso
      * @return
      */
-    public Map<ItemAware, SemanticClass> getRelatedItemAwareClasses()
+    public List<ItemAware> listRelatedItemAware()
     {
-        System.out.println("getRelatedItemAwareClasses:"+this);
-        HashMap<ItemAware,SemanticClass> map=new HashMap();
+        //System.out.println("listRelatedItemAwareClasses:"+this);
+        ArrayList<ItemAware> arr=new ArrayList();
         if(this instanceof SubProcess)
         {
             Iterator<GraphicalElement> it=((SubProcess)this).listContaineds();
@@ -144,11 +168,7 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
 
                     if(!item.listInputConnectionObjects().hasNext() && !item.listOutputConnectionObjects().hasNext())
                     {
-                        SemanticClass cls=ItemAware.getSemanticClass(item);
-                        if(cls!=null)
-                        {
-                            map.put(item, cls);
-                        }
+                        arr.add(item);
                     }
                 }
             }
@@ -162,29 +182,24 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
                 if(gele instanceof ItemAware)
                 {
                     ItemAware item=(ItemAware)gele;
-                    SemanticClass cls=ItemAware.getSemanticClass(item);
-                    if(cls!=null)
-                    {
-                        map.put(item, cls);
-                    }
+                    arr.add(item);
                 }
             }
         }
-        return map;
+        return arr;
     }
 
 
     /**
-     * Regresa las ItemAware y la Classes relacionadas con el FlowNode, asi como de sus contenedores,
+     * Regresa las ItemAware relacionadas con el FlowNode, asi como de sus contenedores,
      * en el caso de un SubProceso regresa las Globales del Sub Proceso y de sus contenedores
      * @return
      */
-    public Map<ItemAware, SemanticClass> getHerarquicalRelatedItemAwareClasses()
+    public List<ItemAware> listHerarquicalRelatedItemAware()
     {
-        System.out.println("getHerarquicalRelatedItemAwareClasses:"+this);
-
-        Map<ItemAware,SemanticClass> map=getRelatedItemAwareClasses();
-        map.putAll(getContainer().getHerarquicalRelatedItemAwareClasses());
-        return map;
+        //System.out.println("getHerarquicalRelatedItemAwareClasses:"+this);
+        ArrayList<ItemAware> arr=new ArrayList(listRelatedItemAware());
+        arr.addAll(getContainer().listHerarquicalRelatedItemAware());
+        return arr;
     }
 }

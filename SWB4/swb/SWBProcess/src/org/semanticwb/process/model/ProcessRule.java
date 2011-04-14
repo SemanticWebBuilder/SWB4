@@ -31,20 +31,8 @@ public class ProcessRule extends org.semanticwb.process.model.base.ProcessRuleBa
         Object ret=null;
         try
         {
-            long ini=System.currentTimeMillis();
-            Interpreter i = new Interpreter();  // Construct an interpreter
-            //i.set("this",this);
-            i.set("instance", instance);
-            //i.set("target", targetInstance);
-            i.set("user", user);
-            if(instance!=null)
-            {
-                i.set("accepted", Instance.ACTION_ACCEPT.equals(instance.getAction()));
-                i.set("rejected", Instance.ACTION_REJECT.equals(instance.getAction()));
-                i.set("canceled", Instance.ACTION_CANCEL.equals(instance.getAction()));
-            }
-            i.eval("import org.semanticwb.process.model.*");
-
+            //long ini=System.currentTimeMillis();
+            Interpreter i = SWBPClassMgr.getInterpreter(instance, user);
             ret=i.eval(scond);
             //System.out.println("ret:"+ret);
             //System.out.println("time:"+ (System.currentTimeMillis()-ini ));
