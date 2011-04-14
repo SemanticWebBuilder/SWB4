@@ -1,14 +1,13 @@
 package org.semanticwb.process.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 import org.semanticwb.model.SWBClass;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticProperty;
 
 public class Process extends org.semanticwb.process.model.base.ProcessBase 
 {
@@ -31,22 +30,45 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
         inst.setProcessType(this);
         inst.setStatus(Instance.STATUS_INIT);
 
-        Map<ItemAware,SemanticClass> map=getRelatedItemAwareClasses();
-        Iterator<Map.Entry<ItemAware,SemanticClass>> it=map.entrySet().iterator();
+        Iterator<ItemAware> it=listRelatedItemAware().iterator();
         while (it.hasNext())
         {
-            Map.Entry<ItemAware, SemanticClass> entry = it.next();
-            ItemAwareReference ref=ItemAwareReference.ClassMgr.createItemAwareReference(this.getProcessSite());
-            ref.setItemAware(entry.getKey());
+            ItemAware item = it.next();
+            SemanticClass scls=null;
+            SemanticProperty sprop=null;
+            SWBModel model=this.getProcessSite();
+            if(item instanceof DataStore)
+            {
+                DataStore store=(DataStore)item;
+                if(store.getDataStoreClass()!=null)
+                {
+                    scls=store.getDataStoreClass().transformToSemanticClass();
+                }
+            }else if(item instanceof DataObjectItemAware)
+            {
+                DataObjectItemAware data=(DataObjectItemAware)item;
+                if(data.getDataObjectProperty()!=null)
+                {
+                    sprop=data.getDataObjectProperty().transformToSemanticProperty();
+                }else if(data.getDataObjectClass()!=null)
+                {
+                    scls=data.getDataObjectClass().transformToSemanticClass();
+                }
+                model=this.getProcessSite().getProcessDataInstanceModel();
+            }
 
-            SemanticModel model=inst.getSemanticObject().getModel();
-            SemanticClass cls=entry.getValue();
-            long id=model.getCounter(cls);
-            SemanticObject ins=model.createSemanticObjectById(String.valueOf(id), cls);
-            ref.setProcessObject((SWBClass)ins.createGenericInstance());
+            if(scls!=null)
+            {
+                ItemAwareReference ref=ItemAwareReference.ClassMgr.createItemAwareReference(this.getProcessSite());
+                ref.setItemAware(item);
 
-            inst.addItemAwareReference(ref);
-            System.out.println("addItemAwareReference:"+ref);
+                long id=model.getSemanticModel().getCounter(scls);
+                SemanticObject ins=model.getSemanticModel().createSemanticObjectById(String.valueOf(id), scls);
+                ref.setProcessObject((SWBClass)ins.createGenericInstance());
+                inst.addItemAwareReference(ref);
+                //System.out.println("addItemAwareReference:"+ref);
+            }
+            //TODO: Si es una propiedad
         }
 
         return inst;
@@ -56,10 +78,10 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
      * Regresa las ItemAware y la Classes relacionadas con el proceso (ItemAware Globales)
      * @return
      */
-    public Map<ItemAware, SemanticClass> getRelatedItemAwareClasses()
+    public List<ItemAware> listRelatedItemAware()
     {
-        System.out.println("getRelatedItemAwareClasses:"+this);
-        HashMap<ItemAware,SemanticClass> map=new HashMap();
+        //System.out.println("getRelatedItemAwareClasses:"+this);
+        ArrayList<ItemAware> arr=new ArrayList();
         Iterator<GraphicalElement> it=listContaineds();
         while (it.hasNext())
         {
@@ -70,25 +92,21 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
 
                 if(!item.listInputConnectionObjects().hasNext() && !item.listOutputConnectionObjects().hasNext())
                 {
-                    SemanticClass cls=ItemAware.getSemanticClass(item);
-                    if(cls!=null)
-                    {
-                        map.put(item, cls);
-                    }
+                    arr.add(item);
                 }
             }
         }
-        return map;
+        return arr;
     }
 
     /**
      * Regresa las ItemAware y la Classes relacionadas con el proceso (ItemAware Globales)
      * @return
      */
-    public Map<ItemAware, SemanticClass> getHerarquicalRelatedItemAwareClasses()
+    public List<ItemAware> listHerarquicalRelatedItemAware()
     {
-        System.out.println("getHerarquicalRelatedItemAwareClasses:"+this);
-        return getRelatedItemAwareClasses();
+        //System.out.println("getHerarquicalRelatedItemAwareClasses:"+this);
+        return listRelatedItemAware();
     }
 
 }

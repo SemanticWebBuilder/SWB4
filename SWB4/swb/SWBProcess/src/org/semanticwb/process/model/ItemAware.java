@@ -1,8 +1,7 @@
 package org.semanticwb.process.model;
 
 import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticObject;
-
+import org.semanticwb.platform.SemanticProperty;
 
 public class ItemAware extends org.semanticwb.process.model.base.ItemAwareBase 
 {
@@ -11,21 +10,39 @@ public class ItemAware extends org.semanticwb.process.model.base.ItemAwareBase
         super(base);
     }
 
-    public static SemanticClass getSemanticClass(ItemAware item)
+    public SemanticClass getItemSemanticClass()
     {
-        if(item instanceof DataStore)
+        SemanticClass scls=null;
+        if(this instanceof DataStore)
         {
-            DataStore store=((DataStore)item);
-
-            SemanticObject obj=store.getDataStoreClass();
-            if(obj!=null)
+            DataStore store=(DataStore)this;
+            if(store.getDataStoreClass()!=null)
             {
-                return obj.transformToSemanticClass();
+                scls=store.getDataStoreClass().transformToSemanticClass();
             }
-        }else
+        }else if(this instanceof DataObjectItemAware)
         {
-            //TODO:
+            DataObjectItemAware data=(DataObjectItemAware)this;
+            if(data.getDataObjectClass()!=null)
+            {
+                scls=data.getDataObjectClass().transformToSemanticClass();
+            }
         }
-        return null;
+        return scls;
     }
+
+    public SemanticProperty getItemSemanticProperty()
+    {
+        SemanticProperty sprop=null;
+        if(this instanceof DataObjectItemAware)
+        {
+            DataObjectItemAware data=(DataObjectItemAware)this;
+            if(data.getDataObjectProperty()!=null)
+            {
+                sprop=data.getDataObjectProperty().transformToSemanticProperty();
+            }
+        }
+        return sprop;
+    }
+    
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.User;
 
 
@@ -96,6 +97,22 @@ public class Instance extends org.semanticwb.process.model.base.InstanceBase
         setAction(action);
         setEnded(new Date());
         setEndedby(user);
+
+        //Elimina instancia de objetos de datos temporales
+        Iterator<ItemAwareReference> it=listItemAwareReferences();
+        while (it.hasNext())
+        {
+            ItemAwareReference itemAwareReference = it.next();
+            SWBClass obj=itemAwareReference.getProcessObject();
+            if(itemAwareReference.getItemAware() instanceof DataObjectItemAware)
+            {
+                //removeItemAwareReference(itemAwareReference);
+                itemAwareReference.remove();
+                obj.remove();
+            }
+        }
+
+        //TODO: Revisar eliminar propiedades temporales del DataObjects
     }
 
 
