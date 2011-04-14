@@ -19,7 +19,6 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
-import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
@@ -33,11 +32,11 @@ import org.semanticwb.process.model.ActivityConfable;
 import org.semanticwb.process.model.ConnectionObject;
 import org.semanticwb.process.model.Containerable;
 import org.semanticwb.process.model.GraphicalElement;
+import org.semanticwb.process.model.Collectionable;
 import org.semanticwb.process.model.LoopCharacteristics;
 import org.semanticwb.process.model.MultiInstanceLoopCharacteristics;
 import org.semanticwb.process.model.ProcessSite;
 import org.semanticwb.process.model.StandarLoopCharacteristics;
-import org.semanticwb.process.model.Task;
 import org.semanticwb.process.model.UserTask;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -64,6 +63,7 @@ public class Modeler extends GenericResource {
     private static final String PROP_CONTAINER = "container";
     private static final String PROCESS_PREFIX = "http://www.semanticwebbuilder.org/swb4/process";
     private static final String PROP_isMultiInstance = "isMultiInstance";
+    private static final String PROP_isCollection = "isCollection";
     private static final String PROP_isLoop = "isLoop";
     private static final String PROP_isForCompensation = "isForCompensation";
     private static final String PROP_isAdHoc = "isAdHoc";
@@ -299,14 +299,6 @@ public class Modeler extends GenericResource {
                 if (obj instanceof ActivityConfable) {
 
                     ActivityConfable tsk = (ActivityConfable) obj;
-                    //Boolean isMultiInstance = null, isLoop = null, isForCompensation = null,
-                    //isAdHoc = null, isTransaction = null, isInterrupting = null;
-
-                    //valores por defecto, cambiar cuando esten listos los cambios en el modelo
-
-//                    ele.put(PROP_isAdHoc, "false");
-//                    ele.put(PROP_isTransaction, "false");
-//                    ele.put(PROP_isInterrupting, "false");
                     if (tsk.getLoopCharacteristics() != null) {
                         LoopCharacteristics loopC = tsk.getLoopCharacteristics();
                         if (loopC instanceof MultiInstanceLoopCharacteristics) {
@@ -320,12 +312,19 @@ public class Modeler extends GenericResource {
                         } else {
                             ele.put(PROP_isLoop, false);
                         }
-
                     }
                     ele.put(PROP_isForCompensation, Boolean.toString(tsk.isForCompensation()));
-//                ele.put(PROP_isAdHoc, Boolean.toString(obj.isAdHoc()));
-//                ele.put(PROP_isTransaction, Boolean.toString(obj.isTransaction()));
-//                ele.put(PROP_isInterrupting, Boolean.toString(obj.isInterrupting()));
+
+                }
+
+                if (obj instanceof Collectionable) {
+
+                    Collectionable colble = (Collectionable) obj;
+                    if(colble.isCollection()){
+                        ele.put(PROP_isCollection, true);
+                    } else {
+                    ele.put(PROP_isCollection, false);
+                    }
                 }
 
 
@@ -394,14 +393,6 @@ public class Modeler extends GenericResource {
                 if (obj instanceof ActivityConfable) {
 
                     ActivityConfable tsk = (ActivityConfable) obj;
-                    //Boolean isMultiInstance = null, isLoop = null, isForCompensation = null,
-                    //isAdHoc = null, isTransaction = null, isInterrupting = null;
-
-                    //valores por defecto, cambiar cuando esten listos los cambios en el modelo
-
-//                    ele.put(PROP_isAdHoc, "false");
-//                    ele.put(PROP_isTransaction, "false");
-//                    ele.put(PROP_isInterrupting, "false");
                     if (tsk.getLoopCharacteristics() != null) {
                         LoopCharacteristics loopC = tsk.getLoopCharacteristics();
                         if (loopC instanceof MultiInstanceLoopCharacteristics) {
@@ -415,9 +406,18 @@ public class Modeler extends GenericResource {
                         } else {
                             ele.put(PROP_isLoop, false);
                         }
-
                     }
                     ele.put(PROP_isForCompensation, Boolean.toString(tsk.isForCompensation()));
+                }
+
+                if (obj instanceof Collectionable) {
+
+                    Collectionable colble = (Collectionable) obj;
+                    if(colble.isCollection()){
+                        ele.put(PROP_isCollection, true);
+                    } else {
+                    ele.put(PROP_isCollection, false);
+                    }
                 }
 
                 Iterator<ConnectionObject> it = obj.listOutputConnectionObjects();
@@ -594,7 +594,7 @@ public class Modeler extends GenericResource {
         GenericObject go = null;
         String uri = null, sclass = null, title = null, description = null, container = null, parent = null, start = null, end = null;
         int x = 0, y = 0, w = 0, h = 0, labelSize = 10;
-        Boolean isMultiInstance = null, isLoop = null, isForCompensation = null, isAdHoc = null, isTransaction = null, isInterrupting = null;
+        Boolean isMultiInstance = null, isLoop = null, isForCompensation = null, isCollection = null, isAdHoc = null, isTransaction = null, isInterrupting = null;
 
         boolean tmpBoolean = false;
 
@@ -659,6 +659,12 @@ public class Modeler extends GenericResource {
                         isInterrupting = null;
                     }
 
+                    try {
+                        isCollection = Boolean.parseBoolean(json.getString(PROP_isCollection));
+                    } catch (Exception e) {
+                        isCollection = null;
+                    }
+
                     x = json.getInt(PROP_X);
                     y = json.getInt(PROP_Y);
                     w = json.getInt(PROP_W);
@@ -697,19 +703,10 @@ public class Modeler extends GenericResource {
 
                             if (go instanceof ActivityConfable) {  //Task
                                 ActivityConfable tsk = (ActivityConfable) go;
-                                //isMultiInstance = false, isLoop = false, isForCompensation = false,
-                                //isAdHoc = false, isTransaction = false, isInterrupting = false;
 
                                 if (null != isForCompensation && isForCompensation.booleanValue()) {
                                     tsk.setForCompensation(isForCompensation.booleanValue());
                                 }
-//                            if(null!=isAdHoc)
-//                                ge.setAdHoc(isAdHoc.booleanValue());
-//                            if(null!=isTransaction)
-//                                ge.setTransaction(isTransaction.booleanValue());
-//                            if(null!=isInterrupting)
-//                                ge.setInterrupting(isInterrupting.booleanValue());
-
 
                                 if (null != isMultiInstance) {
 
@@ -747,8 +744,6 @@ public class Modeler extends GenericResource {
                                             tsk.setLoopCharacteristics(loopchar);
                                         } else if (!(loopchar instanceof StandarLoopCharacteristics)) {
                                             loopchar.getSemanticObject().remove();
-
-
                                             // si no existe se crea uno nuevo y se asigna al task
                                             loopchar = StandarLoopCharacteristics.ClassMgr.createStandarLoopCharacteristics(procsite);
                                             tsk.setLoopCharacteristics(loopchar);
@@ -764,7 +759,15 @@ public class Modeler extends GenericResource {
                                 }
                             }
 
-
+                            // si es un Collectionable se revisa si es colección
+                            if (go instanceof Collectionable) {
+                                Collectionable colble = (Collectionable) go;
+                                if (isCollection != null)
+                                {
+                                    colble.setCollection(isCollection.booleanValue());
+                                }
+                            }
+                            
                             hmnew.put(uri, go.getURI());
                         }
                         hmori.remove(uri);
