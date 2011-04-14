@@ -497,7 +497,14 @@ public class SWBALogs extends GenericResource {
                         if (userId.length() > 1) {
                             log.debug("Usuario: " + userId + " - " + so.getModel().getModelObject().getURI());
                             User rUser = (User) ont.getGenericObject(userId);
-                            out.println("  <td>" + rUser.getFirstName() + " " + (rUser.getLastName() != null ? rUser.getLastName() : " ") + "</td>");
+                            String usrname = userId;
+
+                            if(null!=rUser)
+                            {
+                                usrname = (rUser.getFirstName()!= null ? rUser.getFirstName(): " ") + " " +(rUser.getLastName() != null ? rUser.getLastName() : " ");
+                            }
+
+                            out.println("  <td>" + usrname + "</td>");
                         } else {
                             out.println("  <td>" + userId + "</td>");
                         }
