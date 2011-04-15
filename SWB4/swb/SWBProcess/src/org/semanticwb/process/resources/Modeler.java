@@ -160,6 +160,10 @@ public class Modeler extends GenericResource {
             JSONArray jsarr = null;
             JSONObject jsobj = null;
             try {
+
+                //System.out.println("json recibido: "+node.getTextContent());
+
+
                 jsobj = new JSONObject(node.getTextContent());
                 jsarr = jsobj.getJSONArray("nodes");
 
@@ -319,12 +323,14 @@ public class Modeler extends GenericResource {
 
                 if (obj instanceof Collectionable) {
 
+                    //System.out.println("Es coleccion...");
                     Collectionable colble = (Collectionable) obj;
                     if(colble.isCollection()){
                         ele.put(PROP_isCollection, true);
                     } else {
-                    ele.put(PROP_isCollection, false);
+                        ele.put(PROP_isCollection, false);
                     }
+                    //System.out.println("===>"+colble.isCollection());
                 }
 
 
@@ -411,13 +417,14 @@ public class Modeler extends GenericResource {
                 }
 
                 if (obj instanceof Collectionable) {
-
+                    //System.out.println("Es coleccion subprocess...");
                     Collectionable colble = (Collectionable) obj;
                     if(colble.isCollection()){
                         ele.put(PROP_isCollection, true);
                     } else {
-                    ele.put(PROP_isCollection, false);
+                        ele.put(PROP_isCollection, false);
                     }
+                    //System.out.println("===>"+colble.isCollection());
                 }
 
                 Iterator<ConnectionObject> it = obj.listOutputConnectionObjects();
@@ -661,8 +668,10 @@ public class Modeler extends GenericResource {
 
                     try {
                         isCollection = Boolean.parseBoolean(json.getString(PROP_isCollection));
+                        //System.out.println("Viene isCollecion:"+isCollection.booleanValue());
                     } catch (Exception e) {
                         isCollection = null;
+                        //System.out.println("No viene isCollecion....."+title);
                     }
 
                     x = json.getInt(PROP_X);
@@ -760,10 +769,11 @@ public class Modeler extends GenericResource {
                             }
 
                             // si es un Collectionable se revisa si es colección
-                            if (go instanceof Collectionable) {
+                            if (ge instanceof Collectionable) {
                                 Collectionable colble = (Collectionable) go;
                                 if (isCollection != null)
                                 {
+                                    //System.out.println("Save Collection ===>"+isCollection.booleanValue());
                                     colble.setCollection(isCollection.booleanValue());
                                 }
                             }

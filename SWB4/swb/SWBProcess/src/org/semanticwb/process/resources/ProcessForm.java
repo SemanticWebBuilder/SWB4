@@ -760,7 +760,7 @@ public class ProcessForm extends GenericResource {
                 while (itp.hasNext()) {
                     SemanticProperty prop = itp.next();
                     String name = cls.getClassId() + "|" + prop.getPropId();
-                    hmsc.put(name, prop.getDisplayName(lang));
+                    hmsc.put(name, prop.getPropertyCodeName());
                     hmprops.put(name, prop);
                 }
             }
@@ -870,7 +870,7 @@ public class ProcessForm extends GenericResource {
                 if (hmselected.get(str) == null) {
                     SemanticProperty sp = hmprops.get(str);
                     out.println("<option value=\"" + str + "\">");
-                    out.println(classid+"."+sp.getDisplayName(lang));
+                    out.println(classid+"."+sp.getPropertyCodeName());
                     out.println("</option>");
                 }
             }
@@ -898,7 +898,7 @@ public class ProcessForm extends GenericResource {
 
                 SemanticProperty sp = hmprops.get(str);
                 out.println("<option value=\"" + str + "\">");
-                out.println(classid+"."+sp.getDisplayName(lang));
+                out.println(classid+"."+sp.getPropertyCodeName());
                 out.println("</option>");
             }
             out.println("</select>");
