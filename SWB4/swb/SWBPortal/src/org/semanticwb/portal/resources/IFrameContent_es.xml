@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="ISO-8859-1"?> 
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
-    <form name="frmAdmRes" action="true" enctype="multipart/form-data" method="post" jsframework="dojo" >
+    <form name="frmAdmRes" action="true" method="post" jsframework="dojo" >
         <admdbconnmgr defconn="true"/>
         <fieldset legend="Configuración de contenido">
-            <input type="text" name="url" label=" web 2" promptMessage="Dirección web" jsrequired="true"/>
+            <input type="text" name="url" label="Dirección Web" promptMessage="Dirección web" jsrequired="true"/>
         </fieldset>
+        
+        <div title="Apariencia" open="true">
+        <fieldset legend="Dimensiones">
+            <input type="text" name="width"  label="Ancho" value="640" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Ancho inválido" promptMessage="Ancho. Ejemplos: 90%, 350px, 854" jsrequired="true" />
+            <input type="text" name="height" label="Alto" value="480"  maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválida" promptMessage="Altura. Ejemplos: 90%, 350px, 854" jsrequired="true" />
 
-      
-        <fieldset legend="Configurar Dimensiones">
-            <input type="text" name="width"  label="Ancho" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Ancho inválido" promptMessage="Ancho. Ejemplos: 90%, 350px, 854" jsrequired="true" />
-            <input type="text" name="height" label="Alto"  maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválida" promptMessage="Altura. Ejemplos: 90%, 350px, 854" jsrequired="true" />
             <statictext name="note">
 		<![CDATA[
                     <font style="color: #428AD4; font-family: Verdana; font-size: 10px;">* Dato requerido</font>
 		]]>
-        </statictext>
-
+            </statictext>
         </fieldset>
-       
+       </div>
 
-        
         <fieldset>
             <input type="submit" name="btnSave" id="btnSave" value="Guardar" />
             <input type="reset"  name="btnReset" id="btnReset" value="Restablecer" />
