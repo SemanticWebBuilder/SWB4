@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
-    <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
-    <admdbconnmgr defconn="true"/>
-    <fieldset legend="Content Setting">
-        <input type="file" name="archive" label="PDF Document:" showfile="true" filetype="pdf" isshowfiletype="true" isremovefile="true" removemsg="Remove PDF document" size="40" />
-    </fieldset>
+    <form name="frmAdmRes" action="true" method="post" jsframework="dojo" >
+        <admdbconnmgr defconn="true"/>
+        <fieldset legend="Content Setting">
+            <input type="file" name="archive" label="PDF Document" showfile="true" filetype="pdf" isshowfiletype="true" isremovefile="true" removemsg="Remove PDF document" size="40" jsrequired="true" />
+        </fieldset>
 
-    <fieldset legend="Look and Feel">
-        <input type="text" id="width"  name="width" label="Width" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Invalid width" promptMessage="Width. Examples: 90%, 350px, 854" jsrequired="true" />
-        <input type="text" id="height" name="height" label="Height" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Invalid height" promptMessage="Height. Examples: 90%, 350px, 854" jsrequired="true" />
+        <div title="Look & Feel" open="true">
+        <fieldset legend="Dimensions">
+            <input type="text" name="width"  label="Width" value="640" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Ancho inválido" promptMessage="Ancho. Ejemplos: 90%, 350px, 854" jsrequired="true" />
+            <input type="text" name="height" label="Height" value="480"  maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválida" promptMessage="Altura. Ejemplos: 90%, 350px, 854" jsrequired="true" />
 
-        <statictext name="note">
-        <![CDATA[
-            <font style="color: #428AD4; font-family: Verdana; font-size:10px;">* Required Data</font>
-        ]]>
-        </statictext>
-    </fieldset>
+            <statictext name="note">
+            <![CDATA[
+                <font style="color: #428AD4; font-family: Verdana; font-size:10px;">* Dato requerido</font>
+            ]]>
+            </statictext>
+        </fieldset>
+        </div>
 
-    <fieldset>
-        <input type="submit" name="btnSave" id="btnSave" value="Save" onclick="return jsValida(this.form)" />
-        <input type="reset"  name="btnReset" id="btnReset" value="Reset" />
-    </fieldset>
+        <fieldset>
+            <input type="submit" name="btnSave" id="btnSave" value="Save" onclick="return jsValida(this.form)" />
+            <input type="reset"  name="btnReset" id="btnReset" value="Reset" />
+        </fieldset>
     </form>
     <script type="text/javascript">
     <![CDATA[
