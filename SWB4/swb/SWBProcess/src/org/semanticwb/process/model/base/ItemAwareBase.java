@@ -3,6 +3,8 @@ package org.semanticwb.process.model.base;
 
 public abstract class ItemAwareBase extends org.semanticwb.process.model.GraphicalElement implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
+    public static final org.semanticwb.platform.SemanticClass swb_Class=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Class");
+    public static final org.semanticwb.platform.SemanticProperty swp_dataObjectClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#dataObjectClass");
     public static final org.semanticwb.platform.SemanticProperty swp_name=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#name");
     public static final org.semanticwb.platform.SemanticClass swp_ItemAware=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ItemAware");
    /**
@@ -243,6 +245,27 @@ public abstract class ItemAwareBase extends org.semanticwb.process.model.Graphic
     public ItemAwareBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public void setDataObjectClass(org.semanticwb.platform.SemanticObject value)
+    {
+        getSemanticObject().setObjectProperty(swp_dataObjectClass, value);
+    }
+
+    public void removeDataObjectClass()
+    {
+        getSemanticObject().removeProperty(swp_dataObjectClass);
+    }
+
+/**
+* Gets the DataObjectClass property
+* @return the value for the property as org.semanticwb.platform.SemanticObject
+*/
+    public org.semanticwb.platform.SemanticObject getDataObjectClass()
+    {
+         org.semanticwb.platform.SemanticObject ret=null;
+         ret=getSemanticObject().getObjectProperty(swp_dataObjectClass);
+         return ret;
     }
 
 /**
