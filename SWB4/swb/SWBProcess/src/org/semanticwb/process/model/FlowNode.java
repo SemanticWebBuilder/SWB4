@@ -45,39 +45,31 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
         while (it.hasNext())
         {
             ItemAware item = it.next();
-            SemanticClass scls=null;
-            SemanticProperty sprop=null;
-            SWBModel model=this.getProcessSite();
-            if(item instanceof DataStore)
-            {
-                DataStore store=(DataStore)item;
-                if(store.getDataStoreClass()!=null)
-                {
-                    scls=store.getDataStoreClass().transformToSemanticClass();
-                }
-            }else if(item instanceof DataObjectItemAware)
-            {
-                DataObjectItemAware data=(DataObjectItemAware)item;
-                if(data.getDataObjectProperty()!=null)
-                {
-                    sprop=data.getDataObjectProperty().transformToSemanticProperty();
-                }else if(data.getDataObjectClass()!=null)
-                {
-                    scls=data.getDataObjectClass().transformToSemanticClass();
-                }
-                model=this.getProcessSite().getProcessDataInstanceModel();
-            }
 
-            if(scls!=null)
+            if(!item.listInputConnectionObjects().hasNext())
             {
-                ItemAwareReference ref=ItemAwareReference.ClassMgr.createItemAwareReference(this.getProcessSite());
-                ref.setItemAware(item);
+                SemanticClass scls=item.getItemSemanticClass();
+                SemanticProperty sprop=null;
+                SWBModel model=this.getProcessSite();
+                if(item instanceof Collectionable)
+                {
+                    model=this.getProcessSite().getProcessDataInstanceModel();
+                }
 
-                long id=model.getSemanticModel().getCounter(scls);
-                SemanticObject ins=model.getSemanticModel().createSemanticObjectById(String.valueOf(id), scls);
-                ref.setProcessObject((SWBClass)ins.createGenericInstance());
-                inst.addItemAwareReference(ref);
-                //System.out.println("addItemAwareReference:"+ref);
+                if(scls!=null)
+                {
+                    ItemAwareReference ref=ItemAwareReference.ClassMgr.createItemAwareReference(this.getProcessSite());
+                    ref.setItemAware(item);
+
+                    long id=model.getSemanticModel().getCounter(scls);
+                    SemanticObject ins=model.getSemanticModel().createSemanticObjectById(String.valueOf(id), scls);
+                    ref.setProcessObject((SWBClass)ins.createGenericInstance());
+                    inst.addItemAwareReference(ref);
+                    //System.out.println("addItemAwareReference:"+ref);
+                }
+            }else //Reutiliza los data objects
+            {
+                //No se hace nada ya que los datos ya se agregaron en la salida del ItemAware
             }
 
             //TODO: Si es una propiedad

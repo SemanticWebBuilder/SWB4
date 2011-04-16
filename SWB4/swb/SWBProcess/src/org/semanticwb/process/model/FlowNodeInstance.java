@@ -1,8 +1,14 @@
 package org.semanticwb.process.model;
 
+import com.hp.hpl.jena.rdf.model.Statement;
 import java.util.Date;
 import java.util.Iterator;
+import org.semanticwb.model.SWBClass;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
+import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticProperty;
 
 
 public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNodeInstanceBase 
@@ -73,12 +79,17 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
         super.close(user,status,action);
         System.out.println("close("+user+","+status+","+action+","+nextObjects+")");
         abortDependencies(user);
+
+        connectItemsAware();
+
         if(nextObjects)
         {
             FlowNode type=getFlowNodeType();
             type.nextObject(this, user);
         }
         this.getFlowNodeType().close(this, user);
+
+        removeTemporallyDataobjects();
     }
 
     /**
@@ -94,6 +105,7 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
         type.execute(this, user);
     }
 
+    @Override
     public void notifyEvent(FlowNodeInstance from)
     {
         CatchEvent type=(CatchEvent)getFlowNodeType();
@@ -126,6 +138,10 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
      * busca dentro de los nodo hermanos detro del mismo proceso
      * Si la instancia no esta creada la crea, la inicia y la executa
      * Si la instancia ya existe, la resetea y la executa
+     * @param node
+     * @param con
+     * @param user
+     * @return
      */
     public FlowNodeInstance executeRelatedFlowNodeInstance(FlowNode node, ConnectionObject con, User user)
     {
@@ -158,12 +174,110 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
             inst.start(ref,con,user);
         }else
         {
-            if(con!=null)inst.setFromConnection(con);
+            if(con!=null)
+            {
+                inst.setFromConnection(con);
+            }
             inst.setSourceInstance(ref);
             inst.execute(user);
         }
         return inst;
     }
+
+    /**
+     * Relaciona los ItemAware de de salida con las entradas de los flow nods
+     */
+    protected void connectItemsAware()
+    {
+        //System.out.println("connectItemsAware:"+this);
+        //Tipo de FlowNode
+        FlowNode type=getFlowNodeType();
+        Iterator<ConnectionObject> it=type.listOutputConnectionObjects();
+        while (it.hasNext())
+        {
+            ConnectionObject connectionObject = it.next();
+            if(connectionObject instanceof DirectionalAssociation)
+            {
+                DirectionalAssociation ass=(DirectionalAssociation)connectionObject;
+                GraphicalElement ele=ass.getTarget();
+                //Si el objeto de salida es un DataStore
+                if(ele instanceof ItemAware)
+                {
+                    ItemAware store=(ItemAware)ele;
+                    String var=store.getName();
+                    SemanticClass cls=store.getItemSemanticClass();
+
+                    if(var!=null && cls!=null)
+                    {
+                        Iterator<ItemAwareReference> it2=listHeraquicalItemAwareReference().iterator();
+                        while (it2.hasNext())
+                        {
+                            ItemAwareReference itemAwareReference = it2.next();
+                            if(var.equals(itemAwareReference.getItemAware().getName()) && cls.equals(itemAwareReference.getItemAware().getItemSemanticClass()))
+                            {
+                                SemanticObject in=itemAwareReference.getProcessObject().getSemanticObject();
+                                SWBModel model=this.getProcessSite();
+                                if(store instanceof Collectionable)
+                                {
+                                    model=this.getProcessSite().getProcessDataInstanceModel();
+                                }
+                                SemanticObject out=null;
+                                if(in.getModel().equals(model.getSemanticModel()))
+                                {
+                                    out=in;
+                                }else
+                                {
+                                    long id=model.getSemanticModel().getCounter(cls);
+                                    out=model.getSemanticModel().createSemanticObjectById(String.valueOf(id), cls);
+                                    Iterator<Statement> it3=in.getRDFResource().listProperties();
+                                    while (it3.hasNext())
+                                    {
+                                        Statement statement = it3.next();
+                                        out.getRDFResource().addProperty(statement.getPredicate(), statement.getObject());
+                                    }
+                                }
+
+                                //Revisar si hay salida
+                                Iterator<ConnectionObject> it4=store.listOutputConnectionObjects();
+                                while (it4.hasNext())
+                                {
+                                    ConnectionObject connectionObject1 = it4.next();
+                                    if(connectionObject1 instanceof DirectionalAssociation)
+                                    {
+                                        GraphicalElement gele=connectionObject1.getTarget();
+                                        if(gele instanceof FlowNode)
+                                        {
+                                            FlowNodeInstance inst=getRelatedFlowNodeInstance((FlowNode)gele);
+                                            if(inst==null)
+                                            {
+                                                inst=((FlowNode)gele).createInstance(getContainerInstance());
+                                            }
+                                            //System.out.println("item:"+store);
+                                            //System.out.println("this:"+this);
+                                            //System.out.println("inst:"+inst);
+                                            //System.out.println("gele:"+gele);
+                                            //System.out.println("type:"+getFlowNodeType());
+                                            //System.out.println("connectionObject1:"+connectionObject1);
+                                            //System.out.println("source:"+connectionObject1.getSource());
+                                            //System.out.println("target:"+connectionObject1.getTarget());
+
+                                            ItemAwareReference ref=ItemAwareReference.ClassMgr.createItemAwareReference(this.getProcessSite());
+                                            ref.setItemAware(store);
+                                            ref.setProcessObject((SWBClass)out.createGenericInstance());
+                                            inst.addItemAwareReference(ref);
+                                            itemAwareReference.setProcessObjectReused(true);
+                                            //System.out.println("connectItemsAware set:"+inst);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
 
 

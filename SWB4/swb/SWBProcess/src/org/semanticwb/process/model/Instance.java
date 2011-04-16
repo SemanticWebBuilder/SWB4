@@ -97,21 +97,28 @@ public class Instance extends org.semanticwb.process.model.base.InstanceBase
         setAction(action);
         setEnded(new Date());
         setEndedby(user);
+    }
 
-        //Elimina instancia de objetos de datos temporales
+    /**
+     * Elimina instancia de objetos de datos temporales
+     */
+    protected void removeTemporallyDataobjects()
+    {
         Iterator<ItemAwareReference> it=listItemAwareReferences();
         while (it.hasNext())
         {
             ItemAwareReference itemAwareReference = it.next();
             SWBClass obj=itemAwareReference.getProcessObject();
-            if(itemAwareReference.getItemAware() instanceof DataObjectItemAware)
+            if(itemAwareReference.getItemAware() instanceof Collectionable)
             {
                 //removeItemAwareReference(itemAwareReference);
+                if(!itemAwareReference.isProcessObjectReused())
+                {
+                    obj.remove();
+                }
                 itemAwareReference.remove();
-                obj.remove();
             }
         }
-
         //TODO: Revisar eliminar propiedades temporales del DataObjects
     }
 

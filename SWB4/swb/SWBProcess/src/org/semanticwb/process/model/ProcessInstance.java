@@ -74,6 +74,24 @@ public class ProcessInstance extends org.semanticwb.process.model.base.ProcessIn
 
     }
 
+    @Override
+    public void close(User user, int status, String action)
+    {
+        super.close(user, status, action);
+
+        connectItemsAware();
+
+        removeTemporallyDataobjects();
+    }
+
+    /**
+     * Relaciona los ItemAware de entrada o globales con los ItemAware de salida
+     */
+    protected void connectItemsAware()
+    {
+        //TODO: Revisar variables de salida
+    }
+
     /**
      * Regresa todos los ItemAwareReferences del proceso y subprocesos
      * @return

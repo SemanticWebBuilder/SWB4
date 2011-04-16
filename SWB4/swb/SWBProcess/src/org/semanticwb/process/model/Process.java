@@ -34,26 +34,11 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
         while (it.hasNext())
         {
             ItemAware item = it.next();
-            SemanticClass scls=null;
+            SemanticClass scls=item.getItemSemanticClass();
             SemanticProperty sprop=null;
             SWBModel model=this.getProcessSite();
-            if(item instanceof DataStore)
+            if(item instanceof Collectionable)
             {
-                DataStore store=(DataStore)item;
-                if(store.getDataStoreClass()!=null)
-                {
-                    scls=store.getDataStoreClass().transformToSemanticClass();
-                }
-            }else if(item instanceof DataObjectItemAware)
-            {
-                DataObjectItemAware data=(DataObjectItemAware)item;
-                if(data.getDataObjectProperty()!=null)
-                {
-                    sprop=data.getDataObjectProperty().transformToSemanticProperty();
-                }else if(data.getDataObjectClass()!=null)
-                {
-                    scls=data.getDataObjectClass().transformToSemanticClass();
-                }
                 model=this.getProcessSite().getProcessDataInstanceModel();
             }
 
@@ -68,7 +53,6 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
                 inst.addItemAwareReference(ref);
                 //System.out.println("addItemAwareReference:"+ref);
             }
-            //TODO: Si es una propiedad
         }
 
         return inst;
