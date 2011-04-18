@@ -29,7 +29,7 @@
 "callProcess" = "Proceso llamado"
 "transaction" = "Transacción"
 "startEvents" = "Eventos de inicio"
-"normalStart" = "Normal"
+"normalStart" = "Inicio"
 "messageStart" = "Mensaje"
 "timerStart" = "Temporizado"
 "ruleStart" = "Regla"
