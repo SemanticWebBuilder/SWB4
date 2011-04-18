@@ -56,6 +56,7 @@ public class CodeGeneratorProcess2
             File dir = new File(path+"../../../SWBProcess/src");
             CodeGenerator codeGeneration = new CodeGenerator();
             codeGeneration.generateCode("swp", false, dir);
+            codeGeneration.generateCode("swps", false, dir);
             System.out.println("Generación de clases completa");
         }
         catch (CodeGeneratorException cge)
