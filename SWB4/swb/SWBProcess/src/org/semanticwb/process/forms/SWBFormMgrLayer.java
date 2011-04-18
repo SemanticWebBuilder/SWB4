@@ -43,7 +43,7 @@ public class SWBFormMgrLayer {
     SWBParamRequest paramRequest = null;
     private String htmlType = "dojo";
     private static Logger log = SWBUtils.getLogger(SWBFormMgrLayer.class);
-    HashMap hmapClasses=new HashMap();
+    HashMap<String,ArrayList<SemanticProperty>> hmapClasses=new HashMap();
 
     public SWBFormMgrLayer(String xml, SWBParamRequest paramRequest, HttpServletRequest request) {
         this.xml = xml;
@@ -67,14 +67,14 @@ public class SWBFormMgrLayer {
             //TODO: Revisar variables distintas de la misma clase
             SemanticClass cls = obj.getSemanticObject().getSemanticClass();
             //System.out.println("CLASE DE FOI:"+cls+", PREFIJO:"+cls.getPrefix());
-            ArrayList aListProps=new ArrayList();
+            ArrayList<SemanticProperty> aListProps=new ArrayList();
             Iterator<SemanticProperty> itp = cls.listProperties();
             while (itp.hasNext()) {
                 SemanticProperty prop = itp.next();
                 aListProps.add(prop);
                 //System.out.println("PROPIEDAD:"+prop+", PREFIJO:"+cls.getPrefix());
             }
-            hmapClasses.put(cls, aListProps);
+            hmapClasses.put(item.getItemAware().getName(), aListProps);
         }
 
         mgr = new SWBProcessFormMgr(foi);    
@@ -192,14 +192,13 @@ public class SWBFormMgrLayer {
             SWBProcessFormMgr mgr = new SWBProcessFormMgr(foi);
             mgr.clearProperties();
 
-            HashMap hmapClasses=new HashMap();
+            HashMap<String,ArrayList<SemanticProperty>> hmapClasses=new HashMap();
             foi = (FlowNodeInstance) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
             Iterator<ItemAwareReference> it = foi.listHeraquicalItemAwareReference().iterator();
             while (it.hasNext()) 
             {
                 ItemAwareReference item=it.next();
                 SWBClass obj = item.getProcessObject();
-                //TODO: Revisar variables distintas de la misma clase
                 SemanticClass cls = obj.getSemanticObject().getSemanticClass();
                 ArrayList aListProps=new ArrayList();
                 Iterator<SemanticProperty> itp = cls.listProperties();
@@ -207,7 +206,7 @@ public class SWBFormMgrLayer {
                     SemanticProperty prop = itp.next();
                     aListProps.add(prop);
                 }
-                hmapClasses.put(cls, aListProps);
+                hmapClasses.put(item.getItemAware().getName(), aListProps);
             }
 
             mgr=addProperties2Mgr(mgr, hmapClasses, xml); //Agrega propiedades que seran actualizadas en BD (Persistidas).
@@ -234,7 +233,7 @@ public class SWBFormMgrLayer {
     }
 
 
-    private static SWBProcessFormMgr addProperties2Mgr(SWBProcessFormMgr mgr, HashMap hmapClasses, String xml){
+    private static SWBProcessFormMgr addProperties2Mgr(SWBProcessFormMgr mgr, HashMap<String,ArrayList<SemanticProperty>> hmapClasses, String xml){
         try{
             HtmlTag tag = new HtmlTag();
             HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(xml.getBytes()));
@@ -257,46 +256,43 @@ public class SWBFormMgrLayer {
                             hmap.put(name, value);
                         }
 
-                        String sTagClassComplete=null, sPrefix=null, sTagClass=null, sTagProp=null, smode=null;
+                        String sTagClassComplete=null, sTagVarName=null, sTagProp=null, smode=null;
                         Iterator <String> itTagKeys=hmap.keySet().iterator();
                         while(itTagKeys.hasNext()){
                             String sTagKey=itTagKeys.next();
-                            if(sTagKey.equalsIgnoreCase("class")){
+                            if(sTagKey.equalsIgnoreCase("name")){
                                 sTagClassComplete=(String)hmap.get(sTagKey);
                                 if(sTagClassComplete!=null){
-                                    int pos=sTagClassComplete.indexOf(":");
+                                    int pos=sTagClassComplete.indexOf(".");
                                     if(pos>-1){
-                                        sPrefix=sTagClassComplete.substring(0,pos);
-                                        sTagClass=sTagClassComplete.substring(pos+1);
+                                        sTagVarName=sTagClassComplete.substring(0,pos);
+                                        sTagProp=sTagClassComplete.substring(pos+1);
                                     }
                                 }
-
-                            }else if(sTagKey.equalsIgnoreCase("prop")){
-                                sTagProp=(String)hmap.get(sTagKey);
-                            }if(sTagKey.equalsIgnoreCase("mode")){
+                            }if(sTagKey.equalsIgnoreCase("mode"))
+                            {
                                 smode=(String)hmap.get(sTagKey);
                             }
                         }
 
                         //Saca clase y propiedad
 
-                        Iterator <SemanticClass> itClasses=hmapClasses.keySet().iterator();
+                        Iterator <String> itClasses=hmapClasses.keySet().iterator();
                         while(itClasses.hasNext()){
-                            SemanticClass cls=itClasses.next();
-                            if(sPrefix.equalsIgnoreCase(cls.getPrefix())){
-                                if(cls.getURI().endsWith(sTagClass)){
-                                    Iterator <SemanticProperty> itClassProps=((ArrayList)hmapClasses.get(cls)).iterator();
-                                    while(itClassProps.hasNext()){
-                                        SemanticProperty semProp=itClassProps.next();
-                                        if(semProp.getURI().endsWith(sTagProp)){
-                                            //Manejo de modo
-                                            String swbMode=mgr.MODE_EDIT;
-                                            if(smode!=null && smode.length()>0) swbMode=smode;
-                                            //System.out.println("AGREGA PROPIEDAD:"+semProp+", CON CLASE:"+cls);
-                                            mgr.addProperty(semProp, cls, swbMode);
-                                        }
+                            String varName=itClasses.next();
+                            if(sTagVarName.equalsIgnoreCase(varName))
+                            {
+                                Iterator <SemanticProperty> itClassProps=((ArrayList)hmapClasses.get(varName)).iterator();
+                                while(itClassProps.hasNext()){
+                                    SemanticProperty semProp=itClassProps.next();
+                                    if(semProp.getName().endsWith(sTagProp)){
+                                        //Manejo de modo
+                                        String swbMode=mgr.MODE_EDIT;
+                                        if(smode!=null && smode.length()>0) swbMode=smode;
+                                        //System.out.println("AGREGA PROPIEDAD:"+semProp+", CON CLASE:"+cls);
+                                        mgr.addProperty(semProp, varName, swbMode);
                                     }
-                                 }
+                                }
                             }
                         }
 

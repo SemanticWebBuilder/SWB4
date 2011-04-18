@@ -6,12 +6,14 @@
 package org.semanticwb.process.forms;
 
 import com.arthurdo.parser.HtmlStreamTokenizer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
+import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.SWBFormButton;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -40,7 +42,7 @@ public class SWBButtonTag implements SWBFormLayer {
     HashMap hMapProperties=new HashMap();
 
 
-    public SWBButtonTag(HttpServletRequest request, SWBParamRequest paramRequest, HashMap hmapClasses, HashMap hMapProperties, SWBProcessFormMgr mgr, HtmlStreamTokenizer tok, String htmlType) {
+    public SWBButtonTag(HttpServletRequest request, SWBParamRequest paramRequest, HashMap<String,ArrayList<SemanticProperty>> hmapClasses, HashMap hMapProperties, SWBProcessFormMgr mgr, HtmlStreamTokenizer tok, String htmlType) {
         this.tok = tok;
         stag=tok.getRawString();
         this.request = request;

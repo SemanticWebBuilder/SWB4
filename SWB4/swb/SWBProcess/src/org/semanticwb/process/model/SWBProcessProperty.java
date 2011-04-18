@@ -14,13 +14,13 @@ import org.semanticwb.platform.SemanticProperty;
  */
 public class SWBProcessProperty
 {
-    private SemanticClass m_cls=null;
+    private String m_name=null;
     private SemanticProperty m_prop=null;
     private String m_mode=null;
 
-    public SWBProcessProperty(SemanticClass cls, SemanticProperty prop, String mode)
+    public SWBProcessProperty(String varName, SemanticProperty prop, String mode)
     {
-        this.m_cls=cls;
+        this.m_name=varName;
         this.m_prop=prop;
         this.m_mode=mode;
     }
@@ -28,15 +28,15 @@ public class SWBProcessProperty
     /**
      * @return the m_cls
      */
-    public SemanticClass getSemanticClass() {
-        return m_cls;
+    public String getVarName() {
+        return m_name;
     }
 
     /**
      * @param m_cls the m_cls to set
      */
-    public void setSemanticClass(SemanticClass cls) {
-        this.m_cls = cls;
+    public void setVarName(String varName) {
+        this.m_name = varName;
     }
 
     /**

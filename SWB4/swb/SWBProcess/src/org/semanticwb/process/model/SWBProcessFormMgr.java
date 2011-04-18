@@ -33,7 +33,7 @@ public class SWBProcessFormMgr implements SWBForms
 {
     private FlowNodeInstance m_pinst=null;
     private HashMap<String, SWBFormMgr> mgrs;
-    private HashMap<SemanticClass, HashMap<SemanticProperty, String>> views;
+    private HashMap<String, HashMap<SemanticProperty, String>> views;
 
 
     private Map<SemanticProperty, String> m_propmap=null;
@@ -66,10 +66,11 @@ public class SWBProcessFormMgr implements SWBForms
         {
             ItemAwareReference item=objs.next();
             SWBClass processObject = item.getProcessObject();
-            //TODO: Revisar variables distintas de la misma clase
             SWBFormMgr mgr=new SWBFormMgr(processObject.getSemanticObject(),null,MODE_EDIT);
             mgr.setType(m_type);
-            mgrs.put(processObject.getSemanticObject().getSemanticClass().getURI(),mgr);
+            mgr.setVarName(item.getItemAware().getName());
+            //TODO: agregar variable en ligar del uri de la clase
+            mgrs.put(item.getItemAware().getName(),mgr);
         }
     }
 
@@ -89,21 +90,21 @@ public class SWBProcessFormMgr implements SWBForms
         views=new HashMap();
     }
 
-    public void addProperty(SemanticProperty prop, SemanticClass cls)
+    public void addProperty(SemanticProperty prop, String varName)
     {
-        addProperty(prop, cls, MODE_EDIT);
+        addProperty(prop, varName, MODE_EDIT);
     }
 
-    public void addProperty(SemanticProperty prop, SemanticClass cls, String view)
+    public void addProperty(SemanticProperty prop, String varName, String view)
     {
-        SWBFormMgr mgr=mgrs.get(cls.getURI());
+        SWBFormMgr mgr=mgrs.get(varName);
         mgr.addProperty(prop);
 
-        HashMap map=views.get(cls);
+        HashMap map=views.get(varName);
         if(map==null)
         {
             map=new HashMap();
-            views.put(cls, map);
+            views.put(varName, map);
         }
         map.put(prop, view);
     }
@@ -182,7 +183,7 @@ public class SWBProcessFormMgr implements SWBForms
                     {
                         SemanticProperty semanticProperty = itprop.next();
                         SemanticClass cls=mgr.getSemanticObject().getSemanticClass();
-                        set.add(new SWBProcessProperty(cls,semanticProperty, views.get(cls).get(semanticProperty)));
+                        set.add(new SWBProcessProperty(mgr.getVarName(),semanticProperty, views.get(cls).get(semanticProperty)));
                     }
                 }
             }
@@ -199,10 +200,10 @@ public class SWBProcessFormMgr implements SWBForms
                 while(it.hasNext())
                 {
                     SWBProcessProperty pp=it.next();
-                    SWBFormMgr mgr=mgrs.get(pp.getSemanticClass().getURI());
+                    SWBFormMgr mgr=mgrs.get(pp.getVarName());
                     SemanticProperty prop=pp.getSemanticProperty();
                     FormElement ele=mgr.getFormElement(prop);
-                    mgr.renderProp(request, ret, prop, prop.getName()+"."+pp.getSemanticClass().getName(), ele, pp.getMode());
+                    mgr.renderProp(request, ret, prop, pp.getVarName()+"."+prop.getName(), ele, pp.getMode());
                 }
                 ret.append("	    </table>\n");
                 ret.append("	</fieldset>\n");
@@ -239,19 +240,19 @@ public class SWBProcessFormMgr implements SWBForms
         String smode=request.getParameter(PRM_MODE);
         if(smode!=null)
         {
-            Iterator<SemanticClass> itcls=views.keySet().iterator();
+            Iterator<String> itcls=views.keySet().iterator();
             while (itcls.hasNext())
             {
-                SemanticClass cls=itcls.next();
-                Iterator<SemanticProperty> it=views.get(cls).keySet().iterator();
+                String varName=itcls.next();
+                Iterator<SemanticProperty> it=views.get(varName).keySet().iterator();
                 while(it.hasNext())
                 {
                     SemanticProperty prop=it.next();
-                    SWBFormMgr mgr=mgrs.get(cls.getURI());
-                    if(MODE_EDIT.equals(views.get(cls).get(prop)))
+                    SWBFormMgr mgr=mgrs.get(varName);
+                    if(MODE_EDIT.equals(views.get(varName).get(prop)))
                     {
                         //System.out.println("ProcessElement:"+prop);
-                        mgr.processElement(request, prop, prop.getName()+"."+cls.getName());
+                        mgr.processElement(request, prop, varName+"."+prop.getName());
                     }
                 }
 
@@ -354,10 +355,10 @@ public class SWBProcessFormMgr implements SWBForms
      * @param mode the mode
      * @return the string
      */
-    public String renderLabel(HttpServletRequest request, SemanticProperty prop, SemanticClass cls, String mode)
+    public String renderLabel(HttpServletRequest request, SemanticProperty prop, String varName, String mode)
     {
-        SWBFormMgr mgr=mgrs.get(cls.getURI());
-        return mgr.renderLabel(request, prop, prop.getName()+"."+cls.getName(), mode);
+        SWBFormMgr mgr=mgrs.get(varName);
+        return mgr.renderLabel(request, prop, varName+"."+prop.getName(), mode);
     }
 
 //    /**
@@ -392,22 +393,22 @@ public class SWBProcessFormMgr implements SWBForms
      * @param mode the mode
      * @return the string
      */
-    public String renderElement(HttpServletRequest request, SemanticClass cls, SemanticProperty prop, String mode)
+    public String renderElement(HttpServletRequest request, String varName, SemanticProperty prop, String mode)
     {
-        SWBFormMgr mgr=mgrs.get(cls.getURI());
-        return mgr.renderElement(request, prop, prop.getName()+"."+cls.getName(), mode);
+        SWBFormMgr mgr=mgrs.get(varName);
+        return mgr.renderElement(request, prop, varName+"."+prop.getName(), mode);
     }
 
-    public String renderElement(HttpServletRequest request, SemanticClass cls, SemanticProperty prop, FormElement element, String mode)
+    public String renderElement(HttpServletRequest request, String varName, SemanticProperty prop, FormElement element, String mode)
     {
-        SWBFormMgr mgr=mgrs.get(cls.getURI());
+        SWBFormMgr mgr=mgrs.get(varName);
         if(element!=null)
         {
             element.setModel(mgr.getSemanticObject().getModel());
-            return element.renderElement(request, mgr.getSemanticObject(), prop, prop.getName()+"."+cls.getName(), m_type, mode, m_lang);
+            return element.renderElement(request, mgr.getSemanticObject(), prop, varName+"."+prop.getName(), m_type, mode, m_lang);
         }else
         {
-            return mgr.renderElement(request, prop, prop.getName()+"."+cls.getName(), mode);
+            return mgr.renderElement(request, prop, varName+"."+prop.getName(), mode);
         }
     }
     

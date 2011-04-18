@@ -42,13 +42,12 @@ public class SWBPropertyTag implements SWBFormLayer {
     String sTagProp = null;
     String sformElement=null;
     String smode=null;
-    String sPrefix=null;
-    String sTagClass=null;
+    String sTagVarName=null;
     private static HashMap hMapFE=new HashMap();
 
 
 
-    public SWBPropertyTag(HttpServletRequest request, SWBParamRequest paramRequest, HashMap hmapClasses, HashMap <String, String> hMapProperties, SWBProcessFormMgr mgr, HtmlStreamTokenizer tok, String htmlType) {
+    public SWBPropertyTag(HttpServletRequest request, SWBParamRequest paramRequest, HashMap<String,ArrayList<SemanticProperty>> hmapClasses, HashMap <String, String> hMapProperties, SWBProcessFormMgr mgr, HtmlStreamTokenizer tok, String htmlType) {
         this.tok = tok;
         stag=tok.getRawString();
         this.request = request;
@@ -68,18 +67,16 @@ public class SWBPropertyTag implements SWBFormLayer {
         Iterator <String> itTagKeys=hMapProperties.keySet().iterator();
         while(itTagKeys.hasNext()){
             String sTagKey=itTagKeys.next();
-            if(sTagKey.equalsIgnoreCase("class")){
+            if(sTagKey.equalsIgnoreCase("name")){
                 sTagClassComplete=(String)hMapProperties.get(sTagKey);
                 if(sTagClassComplete!=null){
-                    int pos=sTagClassComplete.indexOf(":");
+                    int pos=sTagClassComplete.indexOf(".");
                     if(pos>-1){
-                        sPrefix=sTagClassComplete.substring(0,pos);
-                        sTagClass=sTagClassComplete.substring(pos+1);
+                        sTagVarName=sTagClassComplete.substring(0,pos);
+                        sTagProp=sTagClassComplete.substring(pos+1);
                     }
                 }
 
-            }else if(sTagKey.equalsIgnoreCase("prop")){
-                sTagProp=(String)hMapProperties.get(sTagKey);
             }if(sTagKey.equalsIgnoreCase("formElement")){
                 sformElement=(String)hMapProperties.get(sTagKey);
             }if(sTagKey.equalsIgnoreCase("mode")){
@@ -93,39 +90,37 @@ public class SWBPropertyTag implements SWBFormLayer {
         String renderElement = null;
         if (request != null) {
             try {
-                Iterator <SemanticClass> itClasses=hmapClasses.keySet().iterator();
+                Iterator <String> itClasses=hmapClasses.keySet().iterator();
                 while(itClasses.hasNext()){
-                    SemanticClass cls=itClasses.next();
-                    if(sPrefix.equalsIgnoreCase(cls.getPrefix())){
-                        if(cls.getURI().endsWith(sTagClass)){
-                            Iterator <SemanticProperty> itClassProps=((ArrayList)hmapClasses.get(cls)).iterator();
-                            while(itClassProps.hasNext()){
-                                SemanticProperty semProp=itClassProps.next();
-                                if(semProp.getURI().endsWith(sTagProp)){
-
-                                    //Manejo de modo
-                                    String swbMode=mgr.MODE_EDIT;
-                                    FormElement frme=null;
-                                    if(smode!=null && smode.length()>0) swbMode=smode;
-                                    if(swbMode.equalsIgnoreCase("edit")) swbMode=mgr.MODE_EDIT;
-                                    else if(swbMode.equalsIgnoreCase("view")) swbMode = mgr.MODE_VIEW;
-                                    if(sformElement!=null && sformElement.length()>0){
-                                        if(hMapFE.size()>0){
-                                            SemanticObject sofe=(SemanticObject)hMapFE.get(sformElement);
-                                            if(sofe!=null){
-                                                frme = (FormElement)sofe.createGenericInstance();
-                                            }
+                    String varName=itClasses.next();
+                    if(sTagVarName.equalsIgnoreCase(varName)){
+                        Iterator <SemanticProperty> itClassProps=((ArrayList)hmapClasses.get(varName)).iterator();
+                        while(itClassProps.hasNext()){
+                            SemanticProperty semProp=itClassProps.next();
+                            if(semProp.getName().endsWith(sTagProp)){
+                                //Manejo de modo
+                                String swbMode=mgr.MODE_EDIT;
+                                FormElement frme=null;
+                                if(smode!=null && smode.length()>0) swbMode=smode;
+                                if(swbMode.equalsIgnoreCase("edit")) swbMode=mgr.MODE_EDIT;
+                                else if(swbMode.equalsIgnoreCase("view")) swbMode = mgr.MODE_VIEW;
+                                if(sformElement!=null && sformElement.length()>0){
+                                    if(hMapFE.size()>0){
+                                        SemanticObject sofe=(SemanticObject)hMapFE.get(sformElement);
+                                        if(sofe!=null){
+                                            frme = (FormElement)sofe.createGenericInstance();
                                         }
                                     }
-                                    if(frme!=null) {
-                                        renderElement=mgr.renderElement(request, cls, semProp, frme, swbMode);
-                                    }
-                                    else {
-                                        renderElement = mgr.renderElement(request, cls, semProp, swbMode);
-                                    }
+                                }
+                                if(frme!=null) {
+                                    renderElement=mgr.renderElement(request, varName, semProp, frme, swbMode);
+                                }
+                                else {
+                                    renderElement = mgr.renderElement(request, varName, semProp, swbMode);
                                 }
                             }
-                         }
+                        }
+                         
                     }
                 }
             } catch (Exception e) {
@@ -157,10 +152,6 @@ public class SWBPropertyTag implements SWBFormLayer {
 
     public String getTag() {
         return stag;
-    }
-
-    public String getTagClass() {
-        return sTagClass;
     }
 
     public String getMoreAttr() {
