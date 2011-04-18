@@ -273,6 +273,9 @@ public class ToolBar extends CustomNode
            ele.put("isLoop", ge.isLoop);
            ele.put("isForCompensation", ge.isForCompensation);
            ele.put("isInterrupting", ge.isInterrupting);
+           if (ge instanceof DataObject) {
+               ele.put("isCollection", (ge as DataObject).isCollection);
+           }
         }
 
         if(node instanceof ConnectionObject)
@@ -350,6 +353,10 @@ public class ToolBar extends CustomNode
                 var y=js.getInt("y");
                 var w=js.getInt("w");
                 var h=js.getInt("h");
+                if (ge instanceof DataObject) {
+                    var isCollection = js.optBoolean("isCollection", false);
+                    (ge as DataObject).isCollection = isCollection;
+                }
 
                 ge.modeler=modeler;
                 ge.uri=uri;
