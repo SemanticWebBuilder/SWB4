@@ -121,6 +121,8 @@ public class SWBFormMgr implements SWBForms
 
     /** The removed. */
     private ArrayList<SemanticProperty> removed=null;
+
+    private String varName=null;
     
     /**
      * Instantiates a new sWB form mgr.
@@ -1206,5 +1208,17 @@ public class SWBFormMgr implements SWBForms
                 ret.append("</td></tr>\n");
                 return ret.toString();
     }
+
+    public void setVarName(String varName)
+    {
+        this.varName = varName;
+    }
+
+    public String getVarName()
+    {
+        return varName;
+    }
+
+    
 
 }
