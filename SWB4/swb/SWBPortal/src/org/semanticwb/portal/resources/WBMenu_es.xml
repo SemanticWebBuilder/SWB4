@@ -5,7 +5,7 @@
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo">
         <admdbconnmgr defconn="true"/>
         <fieldset legend="Aspecto">
-            <input type="file" name="template" label="Plantilla (xsl, xslt): " showfile="true" filetype="xsl|xslt" isshowfiletype="true" isremovefile="true" removemsg="Quitar plantilla de transformación: " msg="Plantilla actual: " bydefault="{@webpath}swbadmin/xsl/WBMenu/WBMenu.xslt" msgbydefault="Plantilla por defecto: " jsrequired="false" />
+            <input type="file" name="template" label="Plantilla (xsl, xslt)" showfile="true" filetype="xsl|xslt" isshowfiletype="true" isremovefile="true" removemsg="Quitar plantilla de transformación: " msg="Plantilla actual: " bydefault="{@webpath}swbadmin/xsl/WBMenu/WBMenu.xslt" msgbydefault="Plantilla por defecto: " jsrequired="false" />
             <input type="checkbox" name="justsons" id="justsons" label="Mostrar solamente hijos" value="true"/>
         </fieldset>
 
