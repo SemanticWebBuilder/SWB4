@@ -16,7 +16,7 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
     public FlowNodeInstance(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-        System.out.println("FlowNodeInstance("+base+")");
+        //System.out.println("FlowNodeInstance("+base+")");
     }
     
     public ProcessInstance getProcessInstance()
@@ -42,7 +42,7 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
     public void start(User user)
     {
         super.start(user);
-        System.out.println("start("+user+")");
+        //System.out.println("start("+user+")");
         execute(user);
     }
     
@@ -53,7 +53,7 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
     public void start(FlowNodeInstance sourceInstance, ConnectionObject sourceConnection, User user)
     {
         super.start(user);
-        System.out.println("start("+sourceInstance+","+sourceConnection+","+user+")");
+        //System.out.println("start("+sourceInstance+","+sourceConnection+","+user+")");
         setSourceInstance(sourceInstance);
         if(sourceConnection!=null)setFromConnection(sourceConnection);
         execute(user);
@@ -77,7 +77,7 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
     public void close(User user, int status, String action, boolean nextObjects)
     {
         super.close(user,status,action);
-        System.out.println("close("+user+","+status+","+action+","+nextObjects+")");
+        //System.out.println("close("+user+","+status+","+action+","+nextObjects+")");
         abortDependencies(user);
 
         connectItemsAware();
@@ -100,7 +100,7 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
     public void execute(User user)
     {
         super.execute(user);
-        System.out.println("execute("+user+")");
+        //System.out.println("execute("+user+")");
         FlowNode type=getFlowNodeType();
         type.execute(this, user);
     }
@@ -287,7 +287,7 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
      */
     public void abortDependencies(User user)
     {
-        System.out.println("abortDependencies:"+getId()+" "+getFlowNodeType().getClass().getName()+" "+getFlowNodeType().getTitle());
+        //System.out.println("abortDependencies:"+getId()+" "+getFlowNodeType().getClass().getName()+" "+getFlowNodeType().getTitle());
         FlowNode type=getFlowNodeType();
 
         //Cerrar dependencias

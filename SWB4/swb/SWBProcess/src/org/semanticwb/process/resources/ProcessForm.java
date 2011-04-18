@@ -96,15 +96,15 @@ public class ProcessForm extends GenericResource {
         while (it.hasNext()) {
             ItemAwareReference item=it.next();
             SWBClass obj = item.getProcessObject();
-            //TODO: Revisar variables distintas de la misma clase
+            
             SemanticClass cls = obj.getSemanticObject().getSemanticClass();
 
-            hmclass.put(cls.getClassId(), cls);
+            hmclass.put(item.getItemAware().getName(), cls);
 
             Iterator<SemanticProperty> itp = cls.listProperties();
             while (itp.hasNext()) {
                 SemanticProperty prop = itp.next();
-                hmprops.put(cls.getClassId()+"|"+prop.getPropId(), prop);
+                hmprops.put(item.getItemAware().getName()+"|"+prop.getPropId(), prop);
             }
         }
 
@@ -126,30 +126,31 @@ public class ProcessForm extends GenericResource {
             while (!base.getAttribute("prop" + max, "").equals("")) {
 
                 String val = base.getAttribute("prop" + max);
-                String classid = "";
+                String varName = "";
                 String propid = "";
                 String modo = "";
                 String fe = "";
                 StringTokenizer stoken = new StringTokenizer(val, "|");
                 if (stoken.hasMoreTokens()) {
-                    classid = stoken.nextToken();
+                    varName = stoken.nextToken();
                     propid = stoken.nextToken();
                     modo = stoken.nextToken();
                     fe = stoken.nextToken();
                 }
 
-                SemanticProperty semprop = hmprops.get(classid+"|"+propid);
+                SemanticProperty semprop = hmprops.get(varName+"|"+propid);
 
                 String strMode = "";
 
-                SemanticClass semclass = hmclass.get(classid);
+                SemanticClass semclass = hmclass.get(varName);
 
-                if (semclass != null && semprop != null) {
+                if (semclass != null && semprop != null)
+                {
                     if (modo.equals(FE_MODE_VIEW)) {
-                        mgr.addProperty(semprop, semclass, SWBFormMgr.MODE_VIEW);
+                        mgr.addProperty(semprop, varName, SWBFormMgr.MODE_VIEW);
                         strMode = SWBFormMgr.MODE_VIEW;
                     } else if (modo.equals(FE_MODE_EDIT)) {
-                        mgr.addProperty(semprop, semclass, SWBFormMgr.MODE_EDIT);
+                        mgr.addProperty(semprop, varName, SWBFormMgr.MODE_EDIT);
                         strMode = SWBFormMgr.MODE_VIEW;
                     }
 
@@ -157,13 +158,13 @@ public class ProcessForm extends GenericResource {
 
                     SWBProcessFormMgr fmgr = new SWBProcessFormMgr(foi);
 
-                    out.println("<tr><td width=\"200px\" align=\"right\"><label for=\"title\">" + fmgr.renderLabel(request, semprop, semclass, modo) + "</label></td>");
+                    out.println("<tr><td width=\"200px\" align=\"right\"><label for=\"title\">" + fmgr.renderLabel(request, semprop, varName, modo) + "</label></td>");
                     out.println("<td>");
                     if (null != sofe) {
                         FormElement frme = (FormElement) sofe.createGenericInstance();
-                        out.println(fmgr.renderElement(request, semclass, semprop, frme, modo));
+                        out.println(fmgr.renderElement(request, varName, semprop, frme, modo));
                     } else {
-                        out.println(fmgr.renderElement(request, semclass, semprop, modo));
+                        out.println(fmgr.renderElement(request, varName, semprop, modo));
                     }
                     out.println("</td></tr>");
                 }
@@ -215,7 +216,7 @@ public class ProcessForm extends GenericResource {
             SemanticClass cls = item.getItemSemanticClass();
             if(cls!=null)
             {
-                hmclass.put(cls.getClassId(), cls);
+                hmclass.put(item.getName(), cls);
 
                 Iterator<SemanticProperty> itp = cls.listProperties();
                 while (itp.hasNext()) {
@@ -243,13 +244,13 @@ public class ProcessForm extends GenericResource {
         while (!base.getAttribute("prop" + max, "").equals("")) {
 
             String val = base.getAttribute("prop" + max);
-            String classid = "";
+            String varName = "";
             String propid = "";
             String modo = "";
             String fe = "";
             StringTokenizer stoken = new StringTokenizer(val, "|");
             if (stoken.hasMoreTokens()) {
-                classid = stoken.nextToken();
+                varName = stoken.nextToken();
                 propid = stoken.nextToken();
                 modo = stoken.nextToken();
                 fe = stoken.nextToken();
@@ -259,7 +260,7 @@ public class ProcessForm extends GenericResource {
 
             String strMode = "";
 
-            SemanticClass semclass = hmclass.get(classid);
+            SemanticClass semclass = hmclass.get(varName);
 
             if (semclass != null && semprop != null) {
                 if (modo.equals(FE_MODE_VIEW)) {
@@ -275,8 +276,8 @@ public class ProcessForm extends GenericResource {
                 }
 
                 ret.append("\n     <tr>");
-                ret.append("\n       <td width=\"200px\" align=\"right\"><label class=\"" + classid + "\" prop=\"" + semprop.getName() + "\" prueba=\"\" /></td>");
-                ret.append("\n       <td><property class=\"" + classid + "\" prop=\"" + semprop.getName() + "\" prueba1=\"\" " + strFE + " Mode=\"" + strMode + "\" /></td>");
+                ret.append("\n       <td width=\"200px\" align=\"right\"><label name=\"" + varName+"."+semprop.getName() + "\" /></td>");
+                ret.append("\n       <td><property name=\"" + varName+"."+semprop.getName() + "\" " + strFE + " mode=\"" + strMode + "\" /></td>");
                 ret.append("\n    </tr>");
             }
             max++;
@@ -378,15 +379,15 @@ public class ProcessForm extends GenericResource {
                 String sprop = base.getAttribute("prop" + i);
                 StringTokenizer stoken = new StringTokenizer(sprop, "|");
 
-                String classid = "";
+                String varName = "";
                 String propid = "";
 
                 if (stoken.hasMoreTokens()) {
-                    classid = stoken.nextToken();
+                    varName = stoken.nextToken();
                     propid = stoken.nextToken();
                 }
 
-                hmprops.put(classid + "|" + propid, sprop);
+                hmprops.put(varName + "|" + propid, sprop);
                 i++;
             }
 
@@ -394,15 +395,15 @@ public class ProcessForm extends GenericResource {
             while (it.hasNext()) {
                 ItemAwareReference item=it.next();
                 SWBClass obj = item.getProcessObject();
-                //
+                String varName=item.getItemAware().getName();
                 SemanticClass cls = obj.getSemanticObject().getSemanticClass();
                 Iterator<SemanticProperty> itp = cls.listProperties();
                 while (itp.hasNext()) {
                     SemanticProperty prop = itp.next();
-                    if (isViewProperty(response, cls, prop, hmprops)) {
-                        mgr.addProperty(prop, cls, SWBFormMgr.MODE_VIEW);
-                    } else if (isEditProperty(response, cls, prop, hmprops)) {
-                        mgr.addProperty(prop, cls, SWBFormMgr.MODE_EDIT);
+                    if (isViewProperty(response, varName, prop, hmprops)) {
+                        mgr.addProperty(prop, varName, SWBFormMgr.MODE_VIEW);
+                    } else if (isEditProperty(response, varName, prop, hmprops)) {
+                        mgr.addProperty(prop, varName, SWBFormMgr.MODE_EDIT);
                     }
                 }
             }
@@ -489,18 +490,18 @@ public class ProcessForm extends GenericResource {
 
                 StringTokenizer stoken = new StringTokenizer(sprop, "|");
 
-                String classid = "";
+                String varName = "";
                 String propid = "";
 
                 if (stoken.hasMoreTokens()) {
-                    classid = stoken.nextToken();
+                    varName = stoken.nextToken();
                     propid = stoken.nextToken();
                 }
 
-                if (hmparam.get(classid + "|" + propid) != null) {
-                    hmparam.remove(classid + "|" + propid);
+                if (hmparam.get(varName + "|" + propid) != null) {
+                    hmparam.remove(varName + "|" + propid);
 
-                } else if (hmparam.get(classid + "|" + propid) == null) {
+                } else if (hmparam.get(varName + "|" + propid) == null) {
                     itstr.remove();
                 }
 
@@ -531,11 +532,11 @@ public class ProcessForm extends GenericResource {
 
                 StringTokenizer stoken = new StringTokenizer(strnew, "|");
 
-                String classid = "";
+                String varName = "";
                 String propid = "";
 
                 if (stoken.hasMoreTokens()) {
-                    classid = stoken.nextToken();
+                    varName = stoken.nextToken();
                     propid = stoken.nextToken();
                 }
 
@@ -588,7 +589,7 @@ public class ProcessForm extends GenericResource {
             // guardando las propiedades de acuerdo al index del display property
             
             list = new ArrayList(hmclsprop.keySet());
-            Collections.sort(list);
+            //Collections.sort(list);
 
             itprop = list.iterator();
             while (itprop.hasNext()) {
@@ -653,14 +654,14 @@ public class ProcessForm extends GenericResource {
                 String prop2change = base.getAttribute("prop" + pid);
                 if (null != prop2change) {
                     StringTokenizer stoken = new StringTokenizer(prop2change, "|");
-                    String classid = "";
+                    String varName = "";
                     String propid = "";
                     String modo = "";
                     String fele = "";
 
                     try {
                         if (stoken.hasMoreTokens()) {
-                            classid = stoken.nextToken();
+                            varName = stoken.nextToken();
                             propid = stoken.nextToken();
                             modo = stoken.nextToken();
                             fele = stoken.nextToken();
@@ -673,7 +674,7 @@ public class ProcessForm extends GenericResource {
                             modo = request.getParameter("mode");
                         }
 
-                        String newvalue = classid + "|" + propid + "|" + modo + "|" + fele;
+                        String newvalue = varName + "|" + propid + "|" + modo + "|" + fele;
 
                         base.setAttribute("prop" + pid, newvalue);
                         base.updateAttributesToDB();
@@ -759,32 +760,31 @@ public class ProcessForm extends GenericResource {
                 Iterator<SemanticProperty> itp = cls.listProperties();
                 while (itp.hasNext()) {
                     SemanticProperty prop = itp.next();
-                    String name = cls.getClassId() + "|" + prop.getPropId();
+                    String name = item.getName() + "|" + prop.getPropId();
                     hmsc.put(name, prop.getPropertyCodeName());
                     hmprops.put(name, prop);
                 }
             }
-            //TODO: Agregar propiedades del item
         }
 
         int max = 1;
         while (!base.getAttribute("prop" + max, "").equals("")) {
 
             String val = base.getAttribute("prop" + max);
-            String classid = "";
+            String varName = "";
             String propid = "";
             String modo = "";
             String fe = "";
             StringTokenizer stoken = new StringTokenizer(val, "|");
             if (stoken.hasMoreTokens()) {
-                classid = stoken.nextToken();
+                varName = stoken.nextToken();
                 propid = stoken.nextToken();
                 modo = stoken.nextToken();
                 fe = stoken.nextToken();
             }
-            if (hmprops.get(classid + "|" + propid) != null) {
+            if (hmprops.get(varName + "|" + propid) != null) {
                 SemanticProperty sprop = ont.getSemanticProperty(propid);
-                hmselected.put(classid + "|" + propid, sprop);
+                hmselected.put(varName + "|" + propid, sprop);
             }
             max++;
         }
@@ -860,17 +860,17 @@ public class ProcessForm extends GenericResource {
             Iterator<String> its = hmprops.keySet().iterator();
             while (its.hasNext()) {
                 String str = its.next();
-                String classid="";
+                String varName="";
                 String propid="";
                 StringTokenizer stoken = new StringTokenizer(str, "|");
                 if (stoken.hasMoreTokens()) {
-                    classid = stoken.nextToken();
+                    varName = stoken.nextToken();
                     propid = stoken.nextToken();
                  }
                 if (hmselected.get(str) == null) {
                     SemanticProperty sp = hmprops.get(str);
                     out.println("<option value=\"" + str + "\">");
-                    out.println(classid+"."+sp.getPropertyCodeName());
+                    out.println(varName+"."+sp.getPropertyCodeName());
                     out.println("</option>");
                 }
             }
@@ -887,18 +887,18 @@ public class ProcessForm extends GenericResource {
             its = hmselected.keySet().iterator();
             while (its.hasNext()) {
                 String str = its.next();
-                String classid="";
+                String varName="";
                 String propid="";
                 StringTokenizer stoken = new StringTokenizer(str, "|");
                 if (stoken.hasMoreTokens()) {
-                    classid = stoken.nextToken();
+                    varName = stoken.nextToken();
                     propid = stoken.nextToken();
                  }
 
 
                 SemanticProperty sp = hmprops.get(str);
                 out.println("<option value=\"" + str + "\">");
-                out.println(classid+"."+sp.getPropertyCodeName());
+                out.println(varName+"."+sp.getPropertyCodeName());
                 out.println("</option>");
             }
             out.println("</select>");
@@ -951,13 +951,13 @@ public class ProcessForm extends GenericResource {
             int i = 1;
             while (!base.getAttribute("prop" + i, "").equals("")) {
                 String val = base.getAttribute("prop" + i);
-                String classid = "";
+                String varName = "";
                 String propid = "";
                 String modo = "";
                 String fe = "";
                 StringTokenizer stoken = new StringTokenizer(val, "|");
                 if (stoken.hasMoreTokens()) {
-                    classid = stoken.nextToken();
+                    varName = stoken.nextToken();
                     propid = stoken.nextToken();
                     modo = stoken.nextToken();
                     fe = stoken.nextToken();
@@ -996,7 +996,7 @@ public class ProcessForm extends GenericResource {
                 out.println("</td>");
                 out.println("<td>");
 
-                out.println(classid + "." + hmsc.get(classid + "|" + propid));
+                out.println(varName + "." + hmsc.get(varName + "|" + propid));
 
                 out.println("</td>");
                 out.println("<td>");
@@ -1209,28 +1209,28 @@ public class ProcessForm extends GenericResource {
         return ret.toString();
     }
 
-    public boolean hasProperty(SWBParameters paramRequest, SemanticClass cls, SemanticProperty prop) {
+    public boolean hasProperty(SWBParameters paramRequest, String varName, SemanticProperty prop) {
         boolean ret = false;
         String data = paramRequest.getResourceBase().getData(paramRequest.getWebPage());
-        if (data != null && data.indexOf(cls.getClassId() + "|" + prop.getPropId()) > -1) {
+        if (data != null && data.indexOf(varName + "|" + prop.getPropId()) > -1) {
             return ret = true;
         }
         return ret;
     }
 
-    public boolean isViewProperty(SWBParameters paramRequest, SemanticClass cls, SemanticProperty prop, HashMap<String, String> hm) {
+    public boolean isViewProperty(SWBParameters paramRequest, String varName, SemanticProperty prop, HashMap<String, String> hm) {
         boolean ret = false;
-        String data = hm.get(cls.getClassId() + "|" + prop.getPropId());
-        if (data != null && data.indexOf(cls.getClassId() + "|" + prop.getPropId() + "|view") > -1) {
+        String data = hm.get(varName + "|" + prop.getPropId());
+        if (data != null && data.indexOf(varName + "|" + prop.getPropId() + "|view") > -1) {
             return ret = true;
         }
         return ret;
     }
 
-    public boolean isEditProperty(SWBParameters paramRequest, SemanticClass cls, SemanticProperty prop, HashMap<String, String> hm) {
+    public boolean isEditProperty(SWBParameters paramRequest, String varName, SemanticProperty prop, HashMap<String, String> hm) {
         boolean ret = false;
-        String data = hm.get(cls.getClassId() + "|" + prop.getPropId());
-        if (data != null && data.indexOf(cls.getClassId() + "|" + prop.getPropId() + "|edit") > -1) {
+        String data = hm.get(varName + "|" + prop.getPropId());
+        if (data != null && data.indexOf(varName + "|" + prop.getPropId() + "|edit") > -1) {
             return ret = true;
         }
         return ret;

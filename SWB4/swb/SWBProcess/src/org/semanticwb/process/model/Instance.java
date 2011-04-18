@@ -91,7 +91,7 @@ public class Instance extends org.semanticwb.process.model.base.InstanceBase
      */
     public void close(User user, int status, String action)
     {
-        System.out.println("close:"+getId()+" "+getProcessElementType().getClass().getName()+" "+getProcessElementType().getTitle()+" "+status+" "+action);
+        //System.out.println("close:"+getId()+" "+getProcessElementType().getClass().getName()+" "+getProcessElementType().getTitle()+" "+status+" "+action);
         //Thread.dumpStack();
         setStatus(status);
         setAction(action);
