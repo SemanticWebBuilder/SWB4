@@ -58,7 +58,7 @@
 "scalInterThrow" = "Scalation Throw"
 "parallelInter" = "Parallel"
 "endEvents" = "End events"
-"normalEnd" = "Normal"
+"normalEnd" = "End"
 "messageEnd" = "Message"
 "errorEnd" = "Error"
 "cancelEnd" = "Cancel"
