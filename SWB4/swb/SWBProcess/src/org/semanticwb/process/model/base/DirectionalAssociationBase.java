@@ -3,6 +3,7 @@ package org.semanticwb.process.model.base;
 
 public abstract class DirectionalAssociationBase extends org.semanticwb.process.model.AssociationFlow implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
+    public static final org.semanticwb.platform.SemanticProperty swp_associationScriptCode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#associationScriptCode");
     public static final org.semanticwb.platform.SemanticClass swp_DirectionalAssociation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#DirectionalAssociation");
    /**
    * The semantic class that represents the currentObject
@@ -179,6 +180,24 @@ public abstract class DirectionalAssociationBase extends org.semanticwb.process.
     public DirectionalAssociationBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the Script property
+* @return String with the Script
+*/
+    public String getScript()
+    {
+        return getSemanticObject().getProperty(swp_associationScriptCode);
+    }
+
+/**
+* Sets the Script property
+* @param value long with the Script
+*/
+    public void setScript(String value)
+    {
+        getSemanticObject().setProperty(swp_associationScriptCode, value);
     }
 
    /**

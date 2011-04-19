@@ -1,17 +1,10 @@
 package org.semanticwb.process.model;
 
 import bsh.Interpreter;
-import java.lang.reflect.Constructor;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.codegen.CodeGenerator;
 import org.semanticwb.model.User;
-import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.script.util.MemoryClassLoader;
 
 public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase 
 {
