@@ -226,7 +226,87 @@ public class ContentUtils {
         }
         return strb.toString();
     }
+    private String getContentByPage(String content, int totPages, int npage, WebPage webpage, Resource base, String contentType, int snpages, String stxtant, String stxtsig, String stfont, int position,String uri) {
+        {
+            StringBuilder strb = new StringBuilder();
+        try {
 
+            StringBuilder strb1 = new StringBuilder();
+
+            strb1.append("<table width=\"100%\">");
+            strb1.append("<tr>");
+            strb1.append("<td align=\"center\">");
+            String path = webpage.getUrl() + "?";
+
+            if (npage > 1) {
+                if(uri==null)
+                    strb1.append("<a href=\"" + path + "page=" + (npage - 1) + "\"><" + stfont + ">" + stxtant + "</font></a> ");
+                else
+                    strb1.append("<a href=\"" + path + "page=" + (npage - 1) + "&uri="+ uri +"\"><" + stfont + ">" + stxtant + "</font></a> ");
+            }
+            int ini = 1;
+            int fin = snpages;
+            int dif = 0;
+            if ((totPages < snpages)) {
+                fin = totPages;
+            }
+            if (totPages > snpages && npage > 1) {
+                dif = npage - 1;
+                if (totPages >= (snpages + dif)) {
+                    fin = snpages + dif;
+                    ini = 1 + dif;
+                } else {
+                    fin = totPages;
+                    ini = totPages - snpages + 1;
+                }
+            }
+
+            for (int i = ini; i <= fin; i++) {
+                if (i != npage) {
+                    if(uri==null)
+                        strb1.append("<a href=\"" + path + "page=" + i + "\"><" + stfont + ">" + String.valueOf(i) + "</font></a> ");
+                    else
+                        strb1.append("<a href=\"" + path + "page=" + i + "&uri="+ uri +"\"><" + stfont + ">" + String.valueOf(i) + "</font></a> ");
+                } else {
+                    strb1.append("<font color=\"RED\">" + String.valueOf(i) + " </font>");
+                }
+            }
+            if (npage < totPages) {
+                if(uri==null)
+                    strb1.append("<a href=\"" + path + "page=" + (npage + 1) + "\"><" + stfont + ">" + stxtsig + "</font></a>");
+                else
+                    strb1.append("<a href=\"" + path + "page=" + (npage + 1) + "&uri="+ uri +"\"><" + stfont + ">" + stxtsig + "</font></a>");
+            }
+            strb1.append("</td>");
+            strb1.append("</tr>");
+            strb1.append("</table>");
+
+            String data=null;
+            if(contentType.equals("MsWord")) data=getContentByPage(content, npage);
+            else if(contentType.equals("OpenOffice")) data=getContentOpenOfficeByPage(content, npage);
+            else if(contentType.equals("HtmlContent")) data=getHtmlContentByPage(content, npage);
+
+            if (position == 1) {
+                strb.append(data);
+                strb.append("<br><br>");
+                strb.append(strb1.toString());
+            } else if (position == 2) {
+                strb.append(strb1.toString());
+                strb.append("<br><br>");
+                strb.append(data);
+            } else if (position == 3) {
+                strb.append(strb1.toString());
+                strb.append("<br><br>");
+                strb.append(data);
+                strb.append("<br><br>");
+                strb.append(strb1.toString());
+            }
+        } catch (Exception e) {
+            log.error(e);
+        }
+        return strb.toString();
+        }
+    }
     /**
      * Pagination ms word.
      * 
@@ -755,6 +835,20 @@ public class ContentUtils {
                 ipage = 1;
             }
             htmlOut = getContentByPage(htmlOut, totPages, ipage, page, base, "HtmlContent", snpages, stxtant, stxtsig, stfont, position);
+        }
+        return htmlOut;
+    }
+
+    public String paginationHtmlContent(String htmlOut, WebPage page, String npage, Resource base, int snpages, String stxtant, String stxtsig, String stfont, int position,String uri) {
+        int totPages = getHtmlContentPagesNumber(htmlOut);
+        if (totPages > 1) {
+            int ipage = 1;
+            if (npage != null) {
+                ipage = Integer.parseInt(npage);
+            } else {
+                ipage = 1;
+            }
+            htmlOut = getContentByPage(htmlOut, totPages, ipage, page, base, "HtmlContent", snpages, stxtant, stxtsig, stfont, position,uri);
         }
         return htmlOut;
     }
