@@ -3450,10 +3450,10 @@
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_friendlyURL">
         <swbxf:formElement>
-          <swbxf:UniqueTextElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#IdTextElement">
-            <rdfs:label>Texto Unico restringido con caracteres validos para Identificador</rdfs:label>
+          <swbxf:UniqueTextElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#uniqueTextElement">
             <swbxf:restrict4Id rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >true</swbxf:restrict4Id>
+            <rdfs:label>Texto Unico restringido con caracteres validos para Identificador</rdfs:label>
           </swbxf:UniqueTextElement>
         </swbxf:formElement>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
@@ -4206,6 +4206,10 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
+  <swb:FormElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#IDTextElement">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Text"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:FormElement>
   <swb:Interface rdf:ID="Validable">
     <rdfs:subClassOf rdf:resource="#SWBInterface"/>
     <rdfs:comment>Interfaz que define propiedades para los elementos que pueden ser validados</rdfs:comment>
@@ -4412,6 +4416,7 @@
     >false</swbxf:sm_userRepository>
   </swbxf:SelectMultiple>
   <swb:DojoFileUpload rdf:ID="fe_DojoFileUpload"/>
+  <swbxf:IDTextElement rdf:ID="idTextElement"/>
   <swbxf:DateElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#fei_birthDate">
     <swb:dateConstraints rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >{max:'{today}'}</swb:dateConstraints>
