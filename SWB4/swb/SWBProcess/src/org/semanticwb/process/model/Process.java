@@ -37,18 +37,31 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
             SemanticClass scls=item.getItemSemanticClass();
             SemanticProperty sprop=null;
             SWBModel model=this.getProcessSite();
+            String id=null;
             if(item instanceof Collectionable)
             {
                 model=this.getProcessSite().getProcessDataInstanceModel();
+            }else
+            {
+                id=((DataStore)item).getDataObjectId();
             }
 
             if(scls!=null)
             {
                 ItemAwareReference ref=ItemAwareReference.ClassMgr.createItemAwareReference(this.getProcessSite());
                 ref.setItemAware(item);
-
-                long id=model.getSemanticModel().getCounter(scls);
-                SemanticObject ins=model.getSemanticModel().createSemanticObjectById(String.valueOf(id), scls);
+                SemanticObject ins=null;
+                if(id==null)
+                {
+                    id=String.valueOf(model.getSemanticModel().getCounter(scls));
+                }else
+                {
+                    ins=SemanticObject.createSemanticObject(model.getSemanticModel().getObjectUri(id, scls));
+                }
+                if(ins==null)
+                {
+                    ins=model.getSemanticModel().createSemanticObjectById(id, scls);
+                }
                 ref.setProcessObject((SWBClass)ins.createGenericInstance());
                 inst.addItemAwareReference(ref);
                 //System.out.println("addItemAwareReference:"+ref);

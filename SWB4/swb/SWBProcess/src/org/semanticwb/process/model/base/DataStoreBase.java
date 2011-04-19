@@ -3,6 +3,7 @@ package org.semanticwb.process.model.base;
 
 public abstract class DataStoreBase extends org.semanticwb.process.model.ItemAware implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
+    public static final org.semanticwb.platform.SemanticProperty swp_dataObjectId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#dataObjectId");
     public static final org.semanticwb.platform.SemanticClass swp_DataStore=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#DataStore");
    /**
    * The semantic class that represents the currentObject
@@ -248,6 +249,24 @@ public abstract class DataStoreBase extends org.semanticwb.process.model.ItemAwa
     public DataStoreBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the DataObjectId property
+* @return String with the DataObjectId
+*/
+    public String getDataObjectId()
+    {
+        return getSemanticObject().getProperty(swp_dataObjectId);
+    }
+
+/**
+* Sets the DataObjectId property
+* @param value long with the DataObjectId
+*/
+    public void setDataObjectId(String value)
+    {
+        getSemanticObject().setProperty(swp_dataObjectId, value);
     }
 
    /**

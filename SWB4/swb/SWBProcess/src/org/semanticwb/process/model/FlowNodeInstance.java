@@ -1,18 +1,23 @@
 package org.semanticwb.process.model;
 
+import bsh.Interpreter;
 import com.hp.hpl.jena.rdf.model.Statement;
-import java.util.Date;
 import java.util.Iterator;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
+import org.semanticwb.model.base.GenericObjectBase;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.platform.SemanticProperty;
 
 
 public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNodeInstanceBase 
 {
+    public static Logger log=SWBUtils.getLogger(ProcessRule.class);
+
     public FlowNodeInstance(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
@@ -80,7 +85,7 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
         //System.out.println("close("+user+","+status+","+action+","+nextObjects+")");
         abortDependencies(user);
 
-        connectItemsAware();
+        connectItemsAware(user);
 
         if(nextObjects)
         {
@@ -187,7 +192,7 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
     /**
      * Relaciona los ItemAware de de salida con las entradas de los flow nods
      */
-    protected void connectItemsAware()
+    protected void connectItemsAware(User user)
     {
         //System.out.println("connectItemsAware:"+this);
         //Tipo de FlowNode
@@ -209,13 +214,34 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
 
                     if(var!=null && cls!=null)
                     {
+                        //evaluacion
+
+                        SemanticObject in=null;
+
+                        String script=ass.getScript();
+                        if(script!=null)
+                        {
+                            Interpreter inter=SWBPClassMgr.getInterpreter(this, user);
+                            try
+                            {
+                                Object ret=inter.eval(script);
+                                if(ret instanceof GenericObject)
+                                {
+                                    in=((GenericObject)ret).getSemanticObject();
+                                }
+                            } catch (Exception e)
+                            {
+                                log.error(e);
+                            }
+                        }
+
                         Iterator<ItemAwareReference> it2=listHeraquicalItemAwareReference().iterator();
                         while (it2.hasNext())
                         {
                             ItemAwareReference itemAwareReference = it2.next();
                             if(var.equals(itemAwareReference.getItemAware().getName()) && cls.equals(itemAwareReference.getItemAware().getItemSemanticClass()))
                             {
-                                SemanticObject in=itemAwareReference.getProcessObject().getSemanticObject();
+                                in=itemAwareReference.getProcessObject().getSemanticObject();
                                 SWBModel model=this.getProcessSite();
                                 if(store instanceof Collectionable)
                                 {
