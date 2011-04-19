@@ -390,7 +390,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                     stxtsig = paramRequest.getLocaleString("txtsig");
                 }
                 if (paginated) {
-                    fileContent = new ContentUtils().paginationHtmlContent(fileContent, page, request.getParameter("page"), resource, snpages, stxtant, stxtsig, stfont, position);
+                    fileContent = new ContentUtils().paginationHtmlContent(fileContent, page, request.getParameter("page"), resource, snpages, stxtant, stxtsig, stfont, position,request.getParameter("uri"));
                 }
                 //Termina Páginación
             }
