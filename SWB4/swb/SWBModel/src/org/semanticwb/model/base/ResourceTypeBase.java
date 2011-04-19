@@ -12,6 +12,7 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
    */
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_hasPTResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPTResource");
+    public static final org.semanticwb.platform.SemanticProperty swb_resourceCacheType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceCacheType");
     public static final org.semanticwb.platform.SemanticProperty swb_resourceBundle=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceBundle");
    /**
    * Define una agrupacion de objetos de tipo resource
@@ -279,6 +280,24 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
              ret=(org.semanticwb.model.Resource)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the ResourceCacheType property
+* @return String with the ResourceCacheType
+*/
+    public String getResourceCacheType()
+    {
+        return getSemanticObject().getProperty(swb_resourceCacheType);
+    }
+
+/**
+* Sets the ResourceCacheType property
+* @param value long with the ResourceCacheType
+*/
+    public void setResourceCacheType(String value)
+    {
+        getSemanticObject().setProperty(swb_resourceCacheType, value);
     }
 
 /**
