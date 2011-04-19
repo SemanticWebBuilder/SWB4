@@ -180,6 +180,8 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                             SemanticObject semObjectChild = SemanticObject.createSemanticObject((request.getParameter("categoryuri")));
                             WebPage webPage = (WebPage) semObjectChild.createGenericInstance();
                             question.setWebpage(webPage);
+                            if(this.isIsModerate())
+                                question.setQueStatus(STATUS_REGISTERED);
                             question.setQuestion(placeAnchors(question.getQuestion()));
                             if (request.getParameter("tags") != null)
                             {
@@ -346,6 +348,8 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 }
                 if (canedit)
                 {
+                    if(this.isIsModerate())
+                        answer.setAnsStatus(STATUS_REGISTERED);
                     answer.setAnswer(placeAnchors(answer.getAnswer()));
                     response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
                     if (request.getParameter("page") != null)
