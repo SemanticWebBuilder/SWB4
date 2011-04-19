@@ -70,7 +70,7 @@
             while(objit.hasNext())
             {
                 ItemAwareReference item=objit.next();
-                ProcessObject obj =  item.getProcessObject();
+                SWBClass obj =  item.getProcessObject();
                 //TODO: Valida nombre del ItemAware
     %>
                 <li>Object Instance:<%=obj.getURI()%></li>

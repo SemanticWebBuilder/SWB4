@@ -134,11 +134,13 @@
             while(objit.hasNext())
             {
                 ItemAwareReference item=objit.next();
-                ProcessObject obj =  item.getProcessObject();
-                //TODO: Revisar nombre del ItemAware
+                SWBClass obj =  item.getProcessObject();
+                if(obj!=null)
+                {
     %>
                 <li>Object Instance:<%=obj.getURI()%></li>
     <%
+                }
                 //SWBFormMgr mgr=new SWBFormMgr(obj.getSemanticObject(),null,SWBFormMgr.MODE_EDIT);
                 //out.println(mgr.renderForm(request));
             }
