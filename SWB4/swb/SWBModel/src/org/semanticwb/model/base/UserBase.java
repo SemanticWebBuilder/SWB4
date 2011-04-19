@@ -691,24 +691,6 @@ public abstract class UserBase extends org.semanticwb.model.SWBClass implements 
     }
 
 /**
-* Gets the FirstName property
-* @return String with the FirstName
-*/
-    public String getFirstName()
-    {
-        return getSemanticObject().getProperty(swb_usrFirstName);
-    }
-
-/**
-* Sets the FirstName property
-* @param value long with the FirstName
-*/
-    public void setFirstName(String value)
-    {
-        getSemanticObject().setProperty(swb_usrFirstName, value);
-    }
-
-/**
 * Gets the Updated property
 * @return java.util.Date with the Updated
 */
@@ -724,6 +706,24 @@ public abstract class UserBase extends org.semanticwb.model.SWBClass implements 
     public void setUpdated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_updated, value);
+    }
+
+/**
+* Gets the FirstName property
+* @return String with the FirstName
+*/
+    public String getFirstName()
+    {
+        return getSemanticObject().getProperty(swb_usrFirstName);
+    }
+
+/**
+* Sets the FirstName property
+* @param value long with the FirstName
+*/
+    public void setFirstName(String value)
+    {
+        getSemanticObject().setProperty(swb_usrFirstName, value);
     }
 
 /**
