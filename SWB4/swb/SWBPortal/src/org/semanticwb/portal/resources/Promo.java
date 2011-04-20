@@ -405,7 +405,7 @@ public class Promo extends GenericResource {
                     if(moreStyle!=null || "0".equals(uline)) {
                         out.append(" style=\""+(moreStyle==null?"":moreStyle+";")+("0".equals(uline)?"text-decoration:none;":"")+"\"");
                     }
-                    if ("1".equalsIgnoreCase(base.getAttribute("target", "0").trim())) {
+                    if(Boolean.parseBoolean(base.getAttribute("target","true"))) {
                         out.append(" target=\"_blank\"");
                     }
                     out.append("> \n");
@@ -528,7 +528,11 @@ public class Promo extends GenericResource {
                 //más...
                 if( url!=null) {
                     out.append("<ul style=\"list-style:none; margin:7px; padding:0px\"><li> \n");
-                    out.append("<a href=\""+url+"\">\n");
+                    out.append("<a href=\""+url+"\"");
+                    if(Boolean.parseBoolean(base.getAttribute("target","true"))) {
+                        out.append(" target=\"_blank\"");
+                    }
+                    out.append(">\n");
                     out.append(more);
                     out.append("\n</a> \n");
                     out.append("</li></ul> \n");
@@ -901,16 +905,23 @@ public class Promo extends GenericResource {
         htm.append("        </li>\n");
         htm.append("        <li class=\"swbform-li\">\n");
         htm.append("            <label for=\"url\" class=\"swbform-label\">Liga</label>\n");
-        htm.append("            <input type=\"text\" id=\"url\" name=\"url\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("url","")+"\" maxlength=\"60\"/>\n");
+        htm.append("            <input type=\"text\" id=\"url\" name=\"url\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("url","")+"\"/>\n");
         htm.append("        </li>\n");
         htm.append("        <li>Mostrar en una nueva ventana</li>\n");
         htm.append("        <li class=\"swbform-li\">\n");
         htm.append("          <label for=\"target_si\" class=\"swbform-label\">Sí</label>\n");
-        htm.append("          <input type=\"radio\" id=\"target_si\" name=\"target\" dojoType=\"dijit.form.RadioButton\" value=\"true\" checked=\"checked\" />\n");
+        htm.append("          <input type=\"radio\" id=\"target_si\" name=\"target\" dojoType=\"dijit.form.RadioButton\" value=\"true\" checked=\"checked\" ");
+        if(Boolean.parseBoolean(base.getAttribute("target")))
+            htm.append(" checked=\"checked\" ");
+        htm.append("/>\n");
         htm.append("        </li>\n");
+
         htm.append("        <li class=\"swbform-li\">\n");
         htm.append("          <label for=\"target_no\" class=\"swbform-label\">No</label>\n");
-        htm.append("          <input type=\"radio\" id=\"target_no\" name=\"target\" dojoType=\"dijit.form.RadioButton\" value=\"false\"/>\n");
+        htm.append("          <input type=\"radio\" id=\"target_no\" name=\"target\" dojoType=\"dijit.form.RadioButton\" value=\"false\" ");
+        if(!Boolean.parseBoolean(base.getAttribute("target")))
+            htm.append(" checked=\"checked\" ");
+        htm.append("/>\n");
         htm.append("        </li>\n");
         htm.append("    </ul>\n");
         htm.append("</fieldset>\n");
