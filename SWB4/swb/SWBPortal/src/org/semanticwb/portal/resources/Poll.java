@@ -1012,12 +1012,41 @@ public class Poll extends GenericResource {
                         }
                     }
 
-                    value = null != fup.getValue("jspfile") && !"".equals(fup.getValue("jspfile").trim()) ? fup.getValue("jspfile").trim() : "";
-                    base.setAttribute("jspfile",value);
-                    value = null != fup.getFileName("template") && !"".equals(fup.getFileName("template").trim()) ? fup.getFileName("template").trim() : null;
-                    String f = admResUtils.getFileName(base, value);
-                    String applet = admResUtils.uploadFileParsed(base, fup, "template");
-                    base.setAttribute("template", f);
+
+
+                    value = null != fup.getValue("jspfile") && !"".equals(fup.getValue("jspfile").trim()) ? fup.getValue("jspfile").trim() : null;
+                    if(value!=null)
+                        base.setAttribute("jspfile",value);
+                    else
+                        base.removeAttribute("jspfile");
+
+                    value = null != fup.getValue("notemplate") && !"".equals(fup.getValue("notemplate").trim()) ? fup.getValue("notemplate").trim() : "0";
+                    if ("1".equals(value) && !"".equals(base.getAttribute("template", "").trim())) {
+                        SWBUtils.IO.removeDirectory(workPath+base.getAttribute("template").trim());
+                        base.removeAttribute("template");
+                    }else {
+                        value = null != fup.getFileName("template") && !"".equals(fup.getFileName("template").trim()) ? fup.getFileName("template").trim() : null;
+                        if (value!=null)
+                        {
+                            String file = admResUtils.getFileName(base, value);
+                            if (file != null && !file.trim().equals(""))
+                            {
+                                if (!admResUtils.isFileType(file, "xsl|xslt")){
+                                    msg=paramRequest.getLocaleString("msgErrFileType") +" <i>xsl, xslt</i>: " + file;
+                                }else {
+                                    if (admResUtils.uploadFile(base, fup, "template")){
+                                        base.setAttribute("template", file);
+                                    }
+                                    else {
+                                        msg=paramRequest.getLocaleString("msgErrUploadFile") +" <i>" + value + "</i>.";
+                                    }
+                                }
+                            }
+                            else {
+                                msg=paramRequest.getLocaleString("msgErrUploadFile") +" <i>" + value + "</i>.";
+                            }
+                        }
+                    }
 
                     value = null != fup.getValue("nobutton") && !"".equals(fup.getValue("nobutton").trim()) ? fup.getValue("nobutton").trim() : "0";
                     if ("1".equals(value) && !"".equals(base.getAttribute("button", "").trim()))
@@ -1083,18 +1112,14 @@ public class Poll extends GenericResource {
                         }
                     }
 
-//                    value = null!=fup.getValue("branches") && !"".equals(fup.getValue("branches")) ? fup.getValue("branches").trim() : "0";
-//                    base.setAttribute("branches", value);
                     value = null != fup.getValue("time") && !"".equals(fup.getValue("time").trim()) ? fup.getValue("time").trim() : "20";
                     base.setAttribute("time", value);
                     setAttribute(base, fup, "wherelinks");
-//                    setAttribute(base, fup, "textcolor");
                     setAttribute(base, fup, "oncevote");
                     setAttribute(base, fup, "vmode");
                     setAttribute(base, fup, "display");
                     setAttribute(base, fup, "porcent");
                     setAttribute(base, fup, "totvote");
-//                    setAttribute(base, fup, "textcolorres");
                     setAttribute(base, fup, "menubar", "yes");
                     setAttribute(base, fup, "toolbar", "yes");
                     setAttribute(base, fup, "status", "yes");
@@ -1111,13 +1136,10 @@ public class Poll extends GenericResource {
                     setAttribute(base, fup, "msg_closewin");
                     setAttribute(base, fup, "msg_totvotes");
                     setAttribute(base, fup, "msg_tovote");
-
                     setAttribute(base, fup, "cssClass");
                     setAttribute(base, fup, "header");
-//                    setAttribute(base, fup, "headerStyle");
 
                     base.updateAttributesToDB();
-                    //Document dom=base.getDom();
                     Document dom=SWBUtils.XML.xmlToDom(base.getXml());
                     if(dom!=null) {
                         removeAllNodes(dom, Node.ELEMENT_NODE, "option");
@@ -1152,28 +1174,25 @@ public class Poll extends GenericResource {
                         }
                     }
                     base.setXml(SWBUtils.XML.domToXml(dom));
-                    //base.getRecResource().update(paramsRequest.getUser().getId(), "Resource with identifier "+base.getId()+" was updated successfully ");
-
                     msg=paramRequest.getLocaleString("msgOkUpdateResource") +" "+ base.getId();
-                    out.println("<script type=\"text/javascript\">");
-                    out.println("<!--");
-                    out.println("  alert('"+msg+"');");
-                    out.println("-->");
-                    out.println("</script>");
-                    if( applet!=null && !applet.trim().equals("") ) {
-                        out.println(applet);
-                    }else {
-                        out.println("<script type=\"text/javascript\">");
-                        out.println("<!--");
-                        out.println("  location='"+paramRequest.getRenderUrl().setAction("edit").toString()+"';");
-                        out.println("-->");
-                        out.println("</script>");
-                    }
-
+                }else {
+                    msg=paramRequest.getLocaleString("msgDataRequired");
                 }
-                else msg=paramRequest.getLocaleString("msgDataRequired");
+            }catch(Exception e) {
+                log.error(e);
+                msg=paramRequest.getLocaleString("msgErrUpdateResource") +" "+ base.getId();
+            }finally {
+                out.println("<script type=\"text/javascript\">");
+                out.println("<!--");
+                out.println("  alert('"+msg+"');");
+                out.println("-->");
+                out.println("</script>");
+                out.println("<script type=\"text/javascript\">");
+                out.println("<!--");
+                out.println("  location='"+paramRequest.getRenderUrl().setAction("edit").toString()+"';");
+                out.println("-->");
+                out.println("</script>");
             }
-            catch(Exception e) { log.error(e); msg=paramRequest.getLocaleString("msgErrUpdateResource") +" "+ base.getId(); }
         }
         else if(action.equals("remove"))
         {
@@ -1544,6 +1563,12 @@ public class Poll extends GenericResource {
             ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_jsp")+"</label>");
             ret.append("<input type=\"text\" name=\"jspfile\" value=\""+base.getAttribute("jspfile", "")+"\" maxlength=\"80\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\""+paramRequest.getLocaleString("lblAdmin_jsp")+"\" />");
             ret.append("</li>");
+            if( base.getAttribute("jspfile")!=null ) {
+                ret.append("<li class=\"swbform-li\">");
+                ret.append("<label class=\"swbform-label\">&nbsp;</label>");
+                ret.append("<label class=\"enfasis\"><input type=\"checkbox\" name=\"nojspfile\" id=\"nojspfile\" value=\"1\" /> "+paramRequest.getLocaleString("lblAdmin_removeImage")+" <i>"+base.getAttribute("imgencuesta")+"</i></label>");
+                ret.append("</li>");
+            }
 
             ret.append("<li class=\"swbform-li\">");
             ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_Template")+" <span class=\"enfasis\">(xsl, xslt)</span></label>");
@@ -1558,15 +1583,20 @@ public class Poll extends GenericResource {
                 ret.append("<label class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_defTemplate")+":&nbsp;Poll.xsl</label>");
             }
             ret.append("</li>");
+            if( base.getAttribute("template")!=null ) {
+                ret.append("<li class=\"swbform-li\">");
+                ret.append("<label class=\"swbform-label\">&nbsp;</label>");
+                ret.append("<label class=\"enfasis\"><input type=\"checkbox\" name=\"notemplate\" id=\"notemplate\" value=\"1\" /> "+paramRequest.getLocaleString("lblAdmin_removeImage")+" <i>"+base.getAttribute("template")+"</i></label>");
+                ret.append("</li>");
+            }
 
             ret.append("</ul> ");
             ret.append("</fieldset> ");
             ret.append("</div>");
 
-
             ret.append("<fieldset>");
-            ret.append(" <button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"submitImgGal\" value=\"Submit\" onclick=\"if(jsValida(dojo.byId('frmAdmRes'))) return true; else return false;\">"+paramRequest.getLocaleString("lblAdmin_submit")+"</button>&nbsp;");
-            ret.append(" <button dojoType=\"dijit.form.Button\" type=\"reset\">"+paramRequest.getLocaleString("lblAdmin_reset")+"</button>");
+            ret.append(" <button dojoType=\"dijit.form.Button\" type=\"submit\" value=\"Submit\" onclick=\"if(jsValida(dojo.byId('frmAdmRes'))) return true; else return false;\">"+paramRequest.getLocaleString("lblAdmin_submit")+"</button>&nbsp;");
+            ret.append(" <button dojoType=\"dijit.form.Button\" type=\"reset\" value=\"Reset\">"+paramRequest.getLocaleString("lblAdmin_reset")+"</button>");
             ret.append("</fieldset>");
 
             ret.append("<fieldset>");
