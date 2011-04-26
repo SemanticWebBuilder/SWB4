@@ -145,8 +145,34 @@ public class IFrameContent extends GenericAdmResource
                 if (height != null)
                     out.print(" height=\"" + height + "\"");
                 out.println(" class=\"swb-ifc\">");
-                out.print("<iframe ");
-                out.print(" src=\"" + base.getAttribute("url") + "\" ");
+                out.print("<iframe id=\"iframecontentswb\" name=\"iframecontentswb\" ");
+
+                String url = base.getAttribute("url");
+                String passparams = base.getAttribute("passparam", "0");
+                if ("1".equals(passparams))
+                {
+                    if (url != null)
+                    {
+                        String qs = request.getQueryString();
+                        if (qs != null)
+                        {
+                            if (qs.indexOf("?") != -1)
+                            {
+                                int pos = qs.indexOf("?");
+                                qs = qs.substring(pos + 1);
+                            }
+                            if (url.indexOf("?") == -1)
+                            {
+                                url = url + "?" + qs;
+                            }
+                            else
+                            {
+                                url = url + "&" + qs;
+                            }
+                        }
+                    }
+                }
+                out.print(" src=\"" + url + "\" ");
                 if (width != null)
                     out.print(" width=\"" + width + "\"");
                 if (height != null)
