@@ -111,8 +111,10 @@ public class JarFile
         {
             InputStream in=getInputStream();
             ByteArrayOutputStream out=new ByteArrayOutputStream((int)length);
-            SWBUtils.IO.copyStream(in, out);
-            cache=out.toByteArray();
+            if (null!=in) {
+                SWBUtils.IO.copyStream(in, out);
+                cache=out.toByteArray();
+            }
         }catch(Exception e){log.error(e);}
     }
 
