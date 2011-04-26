@@ -19,6 +19,7 @@
             </statictext>
         </fieldset>
         </div>
+        
         <div title="Configuración Avanzada" open="true">
         <fieldset legend="Configuración Avanzada">
             <statictext name="passparam">Permitir paso de parametros</statictext>
