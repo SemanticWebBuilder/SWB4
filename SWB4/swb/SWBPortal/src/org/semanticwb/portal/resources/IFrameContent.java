@@ -126,9 +126,6 @@ public class IFrameContent extends GenericAdmResource
                         }
                     }
                 }
-
-
-
                 out.print(" src=\"" + url + "\" ");
                 if (width != null)
                     out.print(" width=\"" + width + "\"");
