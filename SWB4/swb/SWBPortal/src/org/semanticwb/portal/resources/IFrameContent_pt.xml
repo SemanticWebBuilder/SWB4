@@ -19,6 +19,22 @@
             </statictext>
         </fieldset>
         </div>
+
+        <div title="Advanced" open="true">
+        <fieldset legend="Advanced">
+            <statictext name="txtAllow">Allow request parameters</statictext>
+            <input type="radio" id="target1" name="passparam" label="Yes" value="1"/>
+            <input type="radio" id="target0" name="passparam" label="No" value="0" checked="true"/>
+
+            <statictext name="note">
+        <![CDATA[
+            <font style="color: #428AD4; font-family: Verdana; font-size:10px;">
+            * Data required
+            </font>
+        ]]>
+            </statictext>
+        </fieldset>
+        </div>
         
         <fieldset>
             <input type="submit" name="btnSave" id="btnSave" value="Salvar" />
