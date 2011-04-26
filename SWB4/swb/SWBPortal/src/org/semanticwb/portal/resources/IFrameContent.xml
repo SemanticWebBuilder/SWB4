@@ -22,9 +22,9 @@
         
         <div title="Configuración Avanzada" open="true">
         <fieldset legend="Configuración Avanzada">
-            <statictext name="passparam">Permitir paso de parametros</statictext>
-            <input type="radio" id="target1" name="target" label="Sí" value="1"/>
-            <input type="radio" id="target0" name="target" label="No" value="0" checked="true"/>
+            <statictext name="txtAllow">Permitir paso de parametros</statictext>
+            <input type="radio" id="target1" name="passparam" label="Sí" value="1"/>
+            <input type="radio" id="target0" name="passparam" label="No" value="0" checked="true"/>
 
             <statictext name="note">
         <![CDATA[
