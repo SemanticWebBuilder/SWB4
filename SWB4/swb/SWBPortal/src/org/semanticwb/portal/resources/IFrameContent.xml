@@ -19,7 +19,23 @@
             </statictext>
         </fieldset>
         </div>
-        
+        <div title="Configuración Avanzada" open="true">
+        <fieldset legend="Configuración Avanzada">
+            <statictext name="passparam">Permitir paso de parametros</statictext>
+            <input type="radio" id="target1" name="target" label="Sí" value="1"/>
+            <input type="radio" id="target0" name="target" label="No" value="0" checked="true"/>
+
+            <statictext name="note">
+        <![CDATA[
+            <font style="color: #428AD4; font-family: Verdana; font-size:10px;">
+            * Data requerido
+            </font>
+        ]]>
+            </statictext>
+        </fieldset>
+        </div>
+
+
         <fieldset>
             <input type="submit" name="btnSave" id="btnSave" value="Guardar" />
             <input type="reset"  name="btnReset" id="btnReset" value="Restablecer" />
