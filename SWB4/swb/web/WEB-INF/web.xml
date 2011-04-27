@@ -13,7 +13,8 @@
     <filter-mapping>
         <filter-name>VirtualHostFilter</filter-name>
         <url-pattern>/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
+        <!-- Requerido para WebLogic 11 -->
+        <!--dispatcher>REQUEST</dispatcher-->
     </filter-mapping>
 
     <servlet>
