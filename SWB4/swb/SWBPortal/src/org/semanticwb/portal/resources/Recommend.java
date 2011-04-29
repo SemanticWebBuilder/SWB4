@@ -406,8 +406,8 @@ public class Recommend extends GenericAdmResource {
                 addElem(dom, emn, "site", topic.getWebSiteId());
                 addElem(dom, emn, "siteurl", strUrl);
                 addElem(dom, emn, "topic",
-                        topic.getTitle(lang) != null
-                        ? topic.getTitle(lang) : "Sin título");
+                        topic.getDisplayTitle(lang) != null
+                        ? topic.getDisplayTitle(lang) : "Sin título");
                 addElem(dom, emn, "topicurl", strUrl + topic.getUrl());
 
                 if (strFromName != null) {
@@ -439,8 +439,8 @@ public class Recommend extends GenericAdmResource {
                 strHeadermsg += null != strFromName ? "<I>" + strFromName + "</I>" : "";
                 strHeadermsg += " " + paramRequest.getLocaleString("msgBodyMessage") + "<br> \n";
                 strHeadermsg += " <a href=\"" + strUrl + topic.getUrl() + "\">";
-                strHeadermsg += topic.getTitle(lang) != null
-                        ? topic.getTitle(lang) : "Sin título";
+                strHeadermsg += topic.getDisplayTitle(lang) != null
+                        ? topic.getDisplayTitle(lang) : "Sin título";
                 strHeadermsg += "</a> \n";
                 if (strTarMsg != null) {
                     strHeadermsg += "<br><br> \n";
@@ -528,8 +528,8 @@ public class Recommend extends GenericAdmResource {
                 addElem(dom, emn, "site", topic.getWebSiteId());
                 addElem(dom, emn, "siteurl", strUrl);
                 addElem(dom, emn, "topic",
-                        topic.getTitle(lang) != null
-                        ? topic.getTitle(lang) : "Sin título");
+                        topic.getDisplayTitle(lang) != null
+                        ? topic.getDisplayTitle(lang) : "Sin título");
                 addElem(dom, emn, "topicurl", strUrl + topic.getUrl());
 
                 if (strFromName != null) {
@@ -561,8 +561,8 @@ public class Recommend extends GenericAdmResource {
                 strHeadermsg += null != strFromName ? "<I>" + strFromName + "</I>" : "";
                 strHeadermsg += " " + response.getLocaleString("msgBodyMessage") + "<br> \n";
                 strHeadermsg += " <a href=\"" + strUrl + topic.getUrl() + "\">";
-                strHeadermsg += topic.getTitle(lang) != null
-                        ? topic.getTitle(lang) : "Sin título";
+                strHeadermsg += topic.getDisplayTitle(lang) != null
+                        ? topic.getDisplayTitle(lang) : "Sin título";
                 strHeadermsg += "</a> \n";
                 if (strTarMsg != null) {
                     strHeadermsg += "<br><br> \n";
@@ -824,12 +824,20 @@ public class Recommend extends GenericAdmResource {
 
         String html = SWBUtils.XML.transformDom(tpl, dom);
 
-        InternetAddress iaddress = new InternetAddress();
-        iaddress.setAddress(to);
         ArrayList<InternetAddress> addresses = new ArrayList<InternetAddress>();
-        addresses.add(iaddress);
-        if( SWBUtils.EMAIL.sendMail(from, fromname, addresses, null, null, subject, "HTML", html, null, null, null)==null )
-            throw new Exception(response.getLocaleString("msgErrSending"));
+        InternetAddress addressTo = new InternetAddress();
+        addressTo.setAddress(to);
+        addresses.add(addressTo);
+
+        ArrayList<InternetAddress> copy = new ArrayList<InternetAddress>();
+        InternetAddress addressFrom = new InternetAddress();
+        addressFrom.setAddress(from);
+        copy.add(addressFrom);
+
+        String admin = SWBPortal.getEnv("af/adminEmail");
+        if(admin!=null)
+            if( SWBUtils.EMAIL.sendMail(admin, response.getWebPage().getWebSite().getDisplayTitle(response.getUser().getLanguage()), addresses, copy, null, subject, "HTML", html, null, null, null)==null )
+                throw new Exception(response.getLocaleString("msgErrSending"));
     }
     
     /**
