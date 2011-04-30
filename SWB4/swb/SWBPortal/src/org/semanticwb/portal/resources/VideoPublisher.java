@@ -103,6 +103,7 @@ public class VideoPublisher extends GenericAdmResource {
                 out.println("<object id=\"video_"+base.getId()+"\" type=\"application/x-shockwave-flash\" data=\""+SWBPlatform.getContextPath()+"/swbadmin/player_flv_maxi.swf\" width=\""+width+"\" height=\""+height+"\" "+ bgcolor+">");
                 out.println(" <param name=\"movie\" value=\""+SWBPlatform.getContextPath()+"/swbadmin/player_flv_maxi.swf\" />");
                 out.println(" <param name=\"allowFullScreen\" value=\"true\" />");
+                out.println(" <param name=\"wmode\" value=\"transparent\" />");
                 out.println(" <param name=\"FlashVars\" value=\"flv="+filename+"&amp;width="+width+"&amp;height="+height+"&amp;showstop=1&amp;showvolume=1&amp;showtime=1");
                 if(img!=null)
                     out.println("&amp;startimage="+img);
