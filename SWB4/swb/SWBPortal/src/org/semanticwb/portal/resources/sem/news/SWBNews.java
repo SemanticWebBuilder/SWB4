@@ -397,6 +397,11 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
             doRss(request, response, paramRequest);
             return;
         }
+        if (this.getResourceBase().getProperty("mode") != null && "title".equals(this.getResourceBase().getProperty("mode")))
+        {
+            doTitle(request, response, paramRequest);
+            return;
+        }
         String uri = request.getParameter("uri");
         if (uri != null)
         {
