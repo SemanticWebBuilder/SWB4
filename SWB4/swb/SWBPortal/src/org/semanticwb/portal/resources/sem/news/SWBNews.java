@@ -158,9 +158,17 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         {
             doShowNewsByMoth(request, response, paramRequest);
         }
+        else if(paramRequest.getMode().equals("title"))
+        {
+            doTitle(request, response, paramRequest);
+        }
         else if(paramRequest.getMode().equals("rss"))
         {
             doRss(request, response, paramRequest);
+        }
+        else if(paramRequest.getMode().equals("strategy"))
+        {
+            doStategy(request, response, paramRequest);
         }
         else
         {
@@ -305,7 +313,27 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         }
         doView(request, response, paramRequest);
     }
-    
+
+    public void doTitle(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        String basePath="/work/models/"+paramRequest.getWebPage().getWebSite().getId()+"/jsp/"+ this.getClass().getSimpleName() +"/";
+        List<SWBNewContent> news=getNews(null,paramRequest.getUser());
+        String path = basePath+"title.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);        
+        String url=paramRequest.getWebPage().getUrl();
+        try
+        {
+            request.setAttribute("paramRequest", paramRequest);
+            request.setAttribute("news", news);
+            request.setAttribute("url", url);
+            request.setAttribute("this", this);
+            dis.include(request, response);
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+        }
+    }
     /**
      * Do rss.
      * 
@@ -340,6 +368,21 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
     }
 
     
+    public void doStategy(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        String basePath="/work/models/"+paramRequest.getWebPage().getWebSite().getId()+"/jsp/"+ this.getClass().getSimpleName() +"/";
+        String path = basePath+"strategy.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        try
+        {
+            request.setAttribute("paramRequest", paramRequest);            
+            dis.include(request, response);
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+        }
+    }
 
     /* (non-Javadoc)
      * @see org.semanticwb.portal.api.GenericResource#doView(HttpServletRequest, HttpServletResponse, SWBParamRequest)
