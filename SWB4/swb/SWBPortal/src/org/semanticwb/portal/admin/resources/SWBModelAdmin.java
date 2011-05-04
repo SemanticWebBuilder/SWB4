@@ -91,7 +91,7 @@ public class SWBModelAdmin extends GenericResource {
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (paramRequest.getMode().equals("viewmodel")) {
             doViewModel(request, response, paramRequest);
-        } else if (paramRequest.getMode().equals("installmodel")) {
+        }else if (paramRequest.getMode().equals("installmodel")) {
             doInstallModel(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
@@ -252,8 +252,10 @@ public class SWBModelAdmin extends GenericResource {
         try {
             PrintWriter out = response.getWriter();
             SWBResourceURL urlAction = paramRequest.getActionUrl();
+            //SWBResourceURL urlAction = paramRequest.getRenderUrl();
             if (paramRequest.getAction().equals("form")) {
                 try {
+                    urlAction.setMode("install");
                     urlAction.setAction("install");
                     out.println("<form class=\"swbform\" id=\"frmImport1\" action=\"" + urlAction.toString() + "\" dojoType=\"dijit.form.Form\" method=\"post\">");
                     out.println("<fieldset>");
@@ -277,7 +279,7 @@ public class SWBModelAdmin extends GenericResource {
                     out.println("</fieldset>");
                     out.println("<fieldset><span align=\"center\">");
                     //out.append("<tr>");
-                    out.println("<button dojoType='dijit.form.Button' type=\"submit\" onClick=\"if(!dijit.byId('frmImport1').isValid()) return false;\">" + paramRequest.getLocaleString("send") + "</button>");
+                    out.println("<button dojoType='dijit.form.Button' type=\"submit\" onClick=\"if(!dijit.byId('frmImport1').isValid()) return false; return confirm('Esta Operación puede tardar varios minutos,finalizara con la leyenda -Sitio Creado-. Desea Continuar?');\">" + paramRequest.getLocaleString("send") + "</button>");
                     out.println("<button id=\"send\" dojoType=\"dijit.form.Button\" onClick=\"javascript:history.go(-1);\">"+paramRequest.getLocaleString("return")+"</button>");
                     //out.println("</td></tr>");
                     out.println("</span></fieldset>");
@@ -292,6 +294,32 @@ public class SWBModelAdmin extends GenericResource {
             log.error(e);
         }
     }
+
+/*
+    public void doInstallZip(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        if (paramRequest.getAction().equals("install")) {
+            try{
+                PrintWriter out = response.getWriter();
+                out.println("<div class=\"swbform\">");
+                out.println("<form>");
+
+                File file= new File(request.getParameter("zipName"));
+                WebSite website=SWBPortal.UTIL.InstallZip(file, "siteInfo.xml", request.getParameter("wsid"), request.getParameter("wstitle"), out);
+                    
+                out.println("</form>");
+                out.println("</div>");
+
+                SWBResourceURL url = paramRequest.getRenderUrl();
+                url.setMode(paramRequest.Mode_VIEW);
+                url.setParameter("msgKey", "siteCreated");
+                url.setParameter("wsUri", website.getURI());
+                response.sendRedirect(url.toString());
+        }catch(Exception e){
+            log.error(e);
+        }
+        }
+    }
+*/
 
     /**
      * Parses the rdf content.
