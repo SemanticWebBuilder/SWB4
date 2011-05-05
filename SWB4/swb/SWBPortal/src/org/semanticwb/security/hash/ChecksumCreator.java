@@ -10,7 +10,7 @@ import java.io.UnsupportedEncodingException;
  */
 public class ChecksumCreator {
     private static volatile int cont=0;
-    private static int max=25;
+    private static final int max=25;
     private static IMessageDigest[] mdArr = new IMessageDigest[max] ;
 
     static {
