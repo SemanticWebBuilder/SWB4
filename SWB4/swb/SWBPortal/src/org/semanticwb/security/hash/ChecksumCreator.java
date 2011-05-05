@@ -5,22 +5,26 @@ import gnu.crypto.hash.IMessageDigest;
 import java.io.UnsupportedEncodingException;
 
 /**
- * ChecksumCreator IMessageDigest Object Pool to speed up generation of digest values for values stored in SWBStore
+ * ChecksumCreator IMessageDigest Object Pool to speed up
+ * generation of digest values for values stored in SWBStore
  * @author serch
  */
-public class ChecksumCreator {
+public class ChecksumCreator
+{
     private static volatile int cont=0;
     private static final int max=25;
     private static IMessageDigest[] mdArr = new IMessageDigest[max] ;
 
-    static {
+    static
+    {
         for (int i = 0; i<max; i++)
             {
             mdArr[i]= HashFactory.getInstance("Tiger");
         }
     }
 
-    private static synchronized IMessageDigest getMD(){
+    private static synchronized IMessageDigest getMD()
+    {
         if (cont==max) cont=0;
         return mdArr[cont++];
     }
@@ -31,7 +35,8 @@ public class ChecksumCreator {
      * @return Hash of the val
      * @throws UnsupportedEncodingException if val can't get UTF8 encoded
      */
-    public static byte[] getHash(String val) throws UnsupportedEncodingException{
+    public static byte[] getHash(String val) throws UnsupportedEncodingException
+    {
         IMessageDigest md = getMD();
         byte[]cnt;
         synchronized(md){
