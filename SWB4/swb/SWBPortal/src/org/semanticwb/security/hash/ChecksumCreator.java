@@ -18,7 +18,7 @@ public class ChecksumCreator
     static
     {
         for (int i = 0; i<max; i++)
-            {
+        {
             mdArr[i]= HashFactory.getInstance("Tiger");
         }
     }
@@ -39,7 +39,8 @@ public class ChecksumCreator
     {
         IMessageDigest md = getMD();
         byte[]cnt;
-        synchronized(md){
+        synchronized(md)
+        {
             cnt = val.getBytes("UTF8");
             md.update(cnt, 0, cnt.length);
             cnt = md.digest();
