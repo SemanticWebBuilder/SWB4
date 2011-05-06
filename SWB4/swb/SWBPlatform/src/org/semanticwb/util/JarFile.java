@@ -53,6 +53,10 @@ public class JarFile
     
     /** The last modified. */
     private long lastModified;
+
+    private long stamp=System.currentTimeMillis();
+
+    private boolean replaced=false;
     
     /** The in. */
     //private InputStream in=null;
@@ -237,4 +241,26 @@ public class JarFile
     {
         return cache!=null;
     }
+
+    public boolean isExpired()
+    {
+        return System.currentTimeMillis()>(stamp+60000L);
+    }
+
+    public void touch()
+    {
+        stamp=System.currentTimeMillis();
+    }
+
+    public boolean isReplaced()
+    {
+        return replaced;
+    }
+
+    public void setReplaced(boolean replaced)
+    {
+        this.replaced = replaced;
+    }
+
+
 }    
