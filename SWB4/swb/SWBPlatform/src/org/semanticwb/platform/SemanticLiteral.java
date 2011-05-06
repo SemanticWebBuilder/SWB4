@@ -97,6 +97,7 @@ public class SemanticLiteral
     {
         //System.out.println("Val:"+value+" lang:"+lang);
         m_obj=value;
+        if(lang!=null && lang.length()==0)lang=null;
         m_lang=lang;
     }
 
@@ -322,6 +323,7 @@ public class SemanticLiteral
         if(literal!=null)
         {
             ret=literal.getLanguage();
+            if(ret!=null && ret.length()==0)ret=null;
         }else
         {
             ret=m_lang;
