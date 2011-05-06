@@ -630,6 +630,7 @@ public boolean execute(String str, String[] str1) throws java.sql.SQLException
         st.setTimestamp(parameterIndex, x);
     }
 
+
     /* (non-Javadoc)
      * @see java.sql.PreparedStatement#setAsciiStream(int, java.io.InputStream, int)
      */
