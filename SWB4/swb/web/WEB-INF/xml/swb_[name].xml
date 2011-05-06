@@ -6,24 +6,24 @@
             <column id="obj" type="VARCHAR" size="255" acceptNulls="false"/>
             <column id="ext" type="VARCHAR" size="65535" acceptNulls="true"/>
     </table>
-    <index name="[name]_indexSUBJ" table="swb_graph_ts[name]" >
+    <index name="indexSUBJ[name]" table="swb_graph_ts[name]" >
             <colindex id="subj"/>
     </index>
-    <index name="[name]_indexPROP" table="swb_graph_ts[name]" >
+    <index name="indexPROP[name]" table="swb_graph_ts[name]" >
             <colindex id="prop"/>
     </index>
-    <index name="[name]_indexOBJ" table="swb_graph_ts[name]" >
+    <index name="indexOBJ[name]" table="swb_graph_ts[name]" >
             <colindex id="obj"/>
     </index>
-    <index name="[name]_indexSUBJPROP" table="swb_graph_ts[name]" >
+    <index name="indexSUBJPROP[name]" table="swb_graph_ts[name]" >
             <colindex id="subj"/>
             <colindex id="prop"/>
     </index>
-    <index name="[name]_indexPROPOBJ" table="swb_graph_ts[name]" >
+    <index name="indexPROPOBJ[name]" table="swb_graph_ts[name]" >
             <colindex id="prop"/>
             <colindex id="obj"/>
     </index>
-    <index name="[name]_indexSUBJPROPOBJ" table="swb_graph_ts[name]" >
+    <index name="indexSUBJPROPOBJ[name]" table="swb_graph_ts[name]" >
             <colindex id="subj"/>
             <colindex id="prop"/>
             <colindex id="obj"/>
