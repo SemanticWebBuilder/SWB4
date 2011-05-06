@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <db xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <table name="swb_[name]">
+    <table name="swb_graph_ts[name]">
             <column id="subj" type="VARCHAR" size="255" acceptNulls="false"/>
             <column id="prop" type="VARCHAR" size="255" acceptNulls="false"/>
             <column id="obj" type="VARCHAR" size="255" acceptNulls="false"/>
-            <column id="comp" type="VARCHAR" size="255" acceptNulls="false"/>
+            <column id="ext" type="VARCHAR" size="65535" acceptNulls="true"/>
     </table>
-    <index name="[name]_indexSUBJ" table="swb_[name]" >
+    <index name="[name]_indexSUBJ" table="swb_graph_ts[name]" >
             <colindex id="subj"/>
     </index>
-    <index name="[name]_indexPROP" table="swb_[name]" >
+    <index name="[name]_indexPROP" table="swb_graph_ts[name]" >
             <colindex id="prop"/>
     </index>
-    <index name="[name]_indexOBJ" table="swb_[name]" >
+    <index name="[name]_indexOBJ" table="swb_graph_ts[name]" >
             <colindex id="obj"/>
     </index>
-    <index name="[name]_indexCOMP" table="swb_[name]" >
-            <colindex id="comp"/>
-    </index>
-    <index name="[name]_indexSUBJPROP" table="swb_[name]" >
+    <index name="[name]_indexSUBJPROP" table="swb_graph_ts[name]" >
             <colindex id="subj"/>
             <colindex id="prop"/>
     </index>
-    <index name="[name]_indexPROPOBJ" table="swb_[name]" >
+    <index name="[name]_indexPROPOBJ" table="swb_graph_ts[name]" >
+            <colindex id="prop"/>
+            <colindex id="obj"/>
+    </index>
+    <index name="[name]_indexSUBJPROPOBJ" table="swb_graph_ts[name]" >
+            <colindex id="subj"/>
             <colindex id="prop"/>
             <colindex id="obj"/>
     </index>
