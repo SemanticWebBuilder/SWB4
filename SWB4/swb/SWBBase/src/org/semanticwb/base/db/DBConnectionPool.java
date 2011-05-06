@@ -28,7 +28,7 @@
 package org.semanticwb.base.db;
 
 import java.sql.*;
-import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SFBase64;
@@ -49,7 +49,7 @@ public class DBConnectionPool {
     protected int checkedOut;
     
     /** The free connections. */
-    protected Vector freeConnections = new Vector();
+    protected ConcurrentLinkedQueue freeConnections = new ConcurrentLinkedQueue();
     
     /** The max conn. */
     private int maxConn;
@@ -127,10 +127,7 @@ public class DBConnectionPool {
             }
             if (add)
             {
-                synchronized (freeConnections)
-                {
-                    freeConnections.addElement(con);
-                }
+                freeConnections.add(con);
             }
         } catch (Exception e)
         {
@@ -149,15 +146,9 @@ public class DBConnectionPool {
      */
     public Connection getConnection()
     {
-        PoolConnection con = null;
-        synchronized (freeConnections)
-        {
-            if (freeConnections.size() > 0)
-            {
-                // Escoje la primera conexi�n en el vector o utiliza round-robin.
-                con = (PoolConnection) freeConnections.remove(0);
-            }
-        }
+        // Escoje la primera conexi�n en el vector o utiliza round-robin.
+        PoolConnection con = (PoolConnection) freeConnections.poll();
+
         if (con != null)
         {
             try
@@ -252,21 +243,16 @@ public class DBConnectionPool {
     public void release()
     {
         PoolConnection con = null;
-        synchronized (freeConnections)
+        while ((con = (PoolConnection) freeConnections.poll()) != null)
         {
-            while (freeConnections.size() > 0)
+            try
             {
-                con = (PoolConnection) freeConnections.remove(0);
-                try
-                {
-                    con.destroyConnection();
-                    //con.init();
-                    log.debug("Closed connection for pool " + name + ", " + con.getDescription());
-                } catch (Exception e)
-                {
-                    log.error("Can't close connection for pool " + name + ", " + con.getDescription(), e);
-                }
-                con = null;
+                con.destroyConnection();
+                //con.init();
+                log.debug("Closed connection for pool " + name + ", " + con.getDescription());
+            } catch (Exception e)
+            {
+                log.error("Can't close connection for pool " + name + ", " + con.getDescription(), e);
             }
         }
         //System.out.println("release()");
