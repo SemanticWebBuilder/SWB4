@@ -3025,10 +3025,6 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#imgThumbnailWidth">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:domain rdf:resource="#ImageUploadable"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#behaviorRefreshOnShow">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior"/>
@@ -3040,6 +3036,10 @@
         >46</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#imgThumbnailWidth">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#ImageUploadable"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#fileFilter">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -3378,18 +3378,6 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#Class"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="maxHits">
-    <rdfs:domain rdf:resource="#Hitable"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_maxHits">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >95</swb:index>
-        <rdfs:label xml:lang="es">Hits Máximos</rdfs:label>
-        <rdfs:label xml:lang="en">Max Hits</rdfs:label>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="hidden">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_hidden">
@@ -3405,6 +3393,18 @@
     <rdfs:label xml:lang="en">Hidden</rdfs:label>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Indica si el elemento es visible o no</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="maxHits">
+    <rdfs:domain rdf:resource="#Hitable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_maxHits">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >95</swb:index>
+        <rdfs:label xml:lang="es">Hits Máximos</rdfs:label>
+        <rdfs:label xml:lang="en">Max Hits</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="propValue">
     <swb:displayProperty>
@@ -3765,6 +3765,21 @@
     <rdfs:label xml:lang="en">Prefix</rdfs:label>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Nombre del prefijo en la ontología que usará el Generador de Código.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="resourceCacheType">
+    <rdfs:label xml:lang="en">Cache Type</rdfs:label>
+    <rdfs:label xml:lang="es">Tipo de Cache</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_resourceCacheType">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <swbxf:propSelectValues xml:lang="es">Cache por Omisión (Recurso):resource|Cache por Pagina Web:webpage|Cache por Usuario:user|Cache por Idioma:language|Cache por Usuario y Pagina Web:user_webpage</swbxf:propSelectValues>
+        <swbxf:propSelectValues xml:lang="en">Default Cache (Resource):resource|WebPage Cache:webpage|User Cache:user| Language Cahce:language|User and WebPage Cache:user_webpage</swbxf:propSelectValues>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >65</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ResourceType"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrSecurityAnswer">
     <swb:displayProperty>
@@ -4482,6 +4497,7 @@
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >70</swb:index>
   </swbxf:HerarquicalNode>
+  <swbxf:SelectOne rdf:ID="SelectOne_1"/>
   <swbxf:SelectMultiple rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleUserRepWithBlank">
     <swbxf:sm_userRepository rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swbxf:sm_userRepository>
