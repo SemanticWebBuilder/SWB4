@@ -176,7 +176,7 @@ public class PoolConnection implements java.sql.Connection {
      */
     public java.lang.String getDescription()
     {
-        if(description==null || description.length()==0)return stack[8].toString();
+        if(description==null || description.length()==0)return stack[7].toString()+"\n"+stack[8].toString();
         return description;
     }
 
