@@ -7,9 +7,11 @@ package org.semanticwb.rdf;
 
 import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.graph.GraphListener;
+import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.mem.faster.GraphMemFaster;
 import com.hp.hpl.jena.shared.PrefixMapping;
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -169,6 +171,14 @@ public class GraphCached extends GraphMemFaster implements GraphListener
     }
 
 
+//    static long c=0;
+//    @Override
+//    protected ExtendedIterator<Triple> graphBaseFind(Node s, Node p, Node o)
+//    {
+//        System.out.println(c+" s:"+s+" p:"+p+" o:"+o);
+//        c++;
+//        return super.graphBaseFind(s, p, o);
+//    }
 
 
 }
