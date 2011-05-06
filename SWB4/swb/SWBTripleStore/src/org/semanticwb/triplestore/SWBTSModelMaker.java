@@ -55,8 +55,8 @@ public class SWBTSModelMaker
             {
                 String xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/swb_graph.xml");
                 db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), null);
-                xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/swb_longs.xml");
-                db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), null);
+                //xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/swb_longs.xml");
+                //db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), null);
                 xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/swb_prefix.xml");
                 db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), null);
             }catch(Exception e2)
