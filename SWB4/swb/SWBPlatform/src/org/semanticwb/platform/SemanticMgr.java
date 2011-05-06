@@ -254,6 +254,9 @@ public class SemanticMgr implements SWBInstanceObject
         } else if (SWBPlatform.isBigdata())
         {
             clsname="org.semanticwb.bigdata.BigdataStore";
+        } else if (SWBPlatform.isSWBTripleStore())
+        {
+            clsname="org.semanticwb.triplestore.SWBTripleStore";
         }
 
         try
