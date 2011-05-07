@@ -10,6 +10,7 @@ import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.impl.LiteralLabel;
 import com.hp.hpl.jena.graph.impl.LiteralLabelFactory;
 import com.hp.hpl.jena.rdf.model.AnonId;
+import com.hp.hpl.jena.sparql.function.library.substring;
 import java.util.StringTokenizer;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -122,7 +123,10 @@ public class SWBTSUtil
         if(st.hasMoreTokens())tk1=st.nextToken();
         if(st.hasMoreTokens())tk2=st.nextToken();
         if(st.hasMoreTokens())tk3=st.nextToken();
-        if(st.hasMoreTokens())tk4=st.nextToken();
+        if(st.hasMoreTokens())
+        {
+            tk4 = value.substring(tk1.length()+tk2.length()+tk3.length()+3);
+        }
 
         if(tk1.equals("uri"))return Node.createURI(tk2);
         if(tk1.equals("nid"))return Node.createAnon(new AnonId(tk2));
