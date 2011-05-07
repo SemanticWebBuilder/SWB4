@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -37,6 +36,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,6 +48,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Descriptiveable;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
@@ -71,16 +72,12 @@ public class SWBModelAdmin extends GenericResource {
 
     /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBImportWebSite.class);
-    
     /** The PATH. */
     String PATH = SWBPortal.getWorkPath() + "/";
-    
     /** The WEBPATH. */
     String WEBPATH = SWBPortal.getWebWorkPath() + "/sitetemplates/";
-    
     /** The MODELS. */
     String MODELS = PATH + "models/";
-    
     /** The ZIPDIRECTORY. */
     String ZIPDIRECTORY = PATH + "sitetemplates/";
 
@@ -91,7 +88,7 @@ public class SWBModelAdmin extends GenericResource {
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (paramRequest.getMode().equals("viewmodel")) {
             doViewModel(request, response, paramRequest);
-        }else if (paramRequest.getMode().equals("installmodel")) {
+        } else if (paramRequest.getMode().equals("installmodel")) {
             doInstallModel(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
@@ -107,7 +104,7 @@ public class SWBModelAdmin extends GenericResource {
             PrintWriter out = response.getWriter();
             if (request.getParameter("msgKey") != null) {
                 out.println("<script type=\"text/javascript\">");
-                if(request.getParameter("msgKey").equals("siteCreated")){
+                if (request.getParameter("msgKey").equals("siteCreated")) {
                     out.println("parent.addItemByURI(parent.mtreeStore, null, '" + request.getParameter("wsUri") + "');");
                 }
                 out.println("parent.showStatus('" + paramRequest.getLocaleString(request.getParameter("msgKey")) + "');");
@@ -122,15 +119,15 @@ public class SWBModelAdmin extends GenericResource {
             //out.println("<iframe id=\"templates\">");
             //out.println("<div id=\"vtemplates\" dojoType=\"dijit.TitlePane\" title=\"Templates existentes de Sitios \" class=\"admViewTemplates\" open=\"true\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
 
-            
-            out.println("<script type=\"text/javascript\">"+
-                   "dojo.require(\"dojo.parser\");" +
-                   "dojo.require(\"dijit.layout.ContentPane\");"+
-                   "dojo.require(\"dijit.form.Form\");"+
-                   "dojo.require(\"dijit.form.ValidationTextBox\");"+
-                   "dojo.require(\"dijit.form.Button\");"+
-                   "</script>");
-          
+
+            out.println("<script type=\"text/javascript\">"
+                    + "dojo.require(\"dojo.parser\");"
+                    + "dojo.require(\"dijit.layout.ContentPane\");"
+                    + "dojo.require(\"dijit.form.Form\");"
+                    + "dojo.require(\"dijit.form.ValidationTextBox\");"
+                    + "dojo.require(\"dijit.form.Button\");"
+                    + "</script>");
+
             out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
             out.println("<legend>" + paramRequest.getLocaleString("existTpls") + "</legend>");
@@ -140,9 +137,9 @@ public class SWBModelAdmin extends GenericResource {
             out.println("<th><b>" + paramRequest.getLocaleString("tpl") + "</b></th>");
             out.println("<th><b>" + paramRequest.getLocaleString("size") + "</b></th>");
             out.println("<th><b>" + paramRequest.getLocaleString("date") + "</b></th>");
-            out.println("<th><b>"+paramRequest.getLocaleString("install") +"</b></th>");
-            out.println("<th><b>"+paramRequest.getLocaleString("download") + "</b></th>");
-            out.println("<th><b>"+paramRequest.getLocaleString("delete") + "</b></th>");
+            out.println("<th><b>" + paramRequest.getLocaleString("install") + "</b></th>");
+            out.println("<th><b>" + paramRequest.getLocaleString("download") + "</b></th>");
+            out.println("<th><b>" + paramRequest.getLocaleString("delete") + "</b></th>");
             out.println("<th><b>" + paramRequest.getLocaleString("up2comunity") + "</b></th>");
             out.println("</tr>");
             for (int i = 0; i < files.length; i++) {
@@ -160,19 +157,19 @@ public class SWBModelAdmin extends GenericResource {
                     out.println("</td><td>");
                     out.println(filex.length() + " bytes");
                     out.println("</td><td>");
-                    Date date=new Date(filex.lastModified());
-                    SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
+                    Date date = new Date(filex.lastModified());
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                     out.println(sdf.format(date));
                     out.println("</td></td>");
                     url.setMode("installmodel");
                     url.setAction("form");
                     url.setParameter("fileName", fileName);
-                    out.println("<td align=\"center\"><a href=\"" + url.toString() + "\" onclick=\"submitUrl('" + url.toString() + "',this);return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconinst.png\" alt=\""+paramRequest.getLocaleString("install") + "\"/></a></td>");
-                    out.println("<td align=\"center\"><a href=\"" + WEBPATH + filex.getName() + "\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/icondesin.png\" alt=\""+paramRequest.getLocaleString("download") + "\"/></a></td>");
+                    out.println("<td align=\"center\"><a href=\"" + url.toString() + "\" onclick=\"submitUrl('" + url.toString() + "',this);return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconinst.png\" alt=\"" + paramRequest.getLocaleString("install") + "\"/></a></td>");
+                    out.println("<td align=\"center\"><a href=\"" + WEBPATH + filex.getName() + "\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/icondesin.png\" alt=\"" + paramRequest.getLocaleString("download") + "\"/></a></td>");
                     urlAction.setParameter("zipName", filex.getAbsolutePath());
                     urlAction.setAction("delete");
-                    out.println("<td align=\"center\"><a href=\"" + urlAction.toString() + "\" onclick=\"submitUrl('" + urlAction.toString() + "',this);return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconelim.png\" alt=\""+paramRequest.getLocaleString("delete") + "\"/></a></td>");
-                    out.println("<td align=\"left\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconsubcom.png\" alt=\""+paramRequest.getLocaleString("up2comunity") + "\"/></td>");
+                    out.println("<td align=\"center\"><a href=\"" + urlAction.toString() + "\" onclick=\"submitUrl('" + urlAction.toString() + "',this);return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconelim.png\" alt=\"" + paramRequest.getLocaleString("delete") + "\"/></a></td>");
+                    out.println("<td align=\"left\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconsubcom.png\" alt=\"" + paramRequest.getLocaleString("up2comunity") + "\"/></td>");
                     out.println("</tr>");
                 }
             }
@@ -181,12 +178,12 @@ public class SWBModelAdmin extends GenericResource {
             out.println("<fieldset><span align=\"center\">");
             out.println("" + paramRequest.getLocaleString("upload") + "<input type=\"file\" name=\"zipmodel\" value=\"" + paramRequest.getLocaleString("new") + "\"/><br/>");
             //out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id=\"send\" type=\"submit\"dojoType=\"dijit.form.Button\">"+paramRequest.getLocaleString("up")+"</button>");
-            out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"submit\" id=\"send\" value=\""+paramRequest.getLocaleString("up")+"\"/>");
+            out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"submit\" id=\"send\" value=\"" + paramRequest.getLocaleString("up") + "\"/>");
             out.println("</fieldset>");
             out.println("</form>");
             out.println("</div>");
 
-            out.println("<div class=\"swbform\" id=\"vsites\" dojoType=\"dijit.TitlePane\" title=\""+paramRequest.getLocaleString("sites2Save")+"\" open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
+            out.println("<div class=\"swbform\" id=\"vsites\" dojoType=\"dijit.TitlePane\" title=\"" + paramRequest.getLocaleString("sites2Save") + "\" open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
             out.println("<fieldset>");
             out.println("<legend>" + paramRequest.getLocaleString("existTpls") + "</legend>");
             out.println("<div class=\"swbform\">");
@@ -205,7 +202,7 @@ public class SWBModelAdmin extends GenericResource {
             out.println("</fieldset>");
             out.println("</div>");
 
-           
+
 
             out.println(strbf.toString());
         } catch (Exception e) {
@@ -227,13 +224,13 @@ public class SWBModelAdmin extends GenericResource {
         out.println("<div class=\"swbform\">");
         out.println("<form>");
         out.println("<table width=\"75%\" border=\"1\">");
-        out.println("<tr><td colspan=\"2\" align=\"center\"><b>" + paramRequest.getLocaleString("fileContent") + "  " +request.getParameter("zipName") + ":</b></td></tr>");
-        out.println("<tr><td align=\"center\"><b>"+paramRequest.getLocaleString("file")+"</b></td><td align=\"center\"><b>"+paramRequest.getLocaleString("size")+" (bytes)</b></td></tr>");
+        out.println("<tr><td colspan=\"2\" align=\"center\"><b>" + paramRequest.getLocaleString("fileContent") + "  " + request.getParameter("zipName") + ":</b></td></tr>");
+        out.println("<tr><td align=\"center\"><b>" + paramRequest.getLocaleString("file") + "</b></td><td align=\"center\"><b>" + paramRequest.getLocaleString("size") + " (bytes)</b></td></tr>");
         for (Iterator<ZipEntry> itfiles = SWBUtils.IO.readZip(request.getParameter("zipName")); itfiles.hasNext();) {
             ZipEntry zen = itfiles.next();
-            out.println("<tr><td>" + zen.getName() + "</td><td>"+zen.getSize()+"</td></tr>");
+            out.println("<tr><td>" + zen.getName() + "</td><td>" + zen.getSize() + "</td></tr>");
         }
-        out.println("<tr><td colspan=\"2\" align=\"center\"><button id=\"send\" dojoType=\"dijit.form.Button\" onClick=\"javascript:history.go(-1);\"/>"+ paramRequest.getLocaleString("return") + "</button></td></tr>");
+        out.println("<tr><td colspan=\"2\" align=\"center\"><button id=\"send\" dojoType=\"dijit.form.Button\" onClick=\"javascript:history.go(-1);\"/>" + paramRequest.getLocaleString("return") + "</button></td></tr>");
         out.println("</table>");
         out.println("</form>");
         out.println("</div>");
@@ -255,7 +252,7 @@ public class SWBModelAdmin extends GenericResource {
             //SWBResourceURL urlAction = paramRequest.getRenderUrl();
             if (paramRequest.getAction().equals("form")) {
                 try {
-                    urlAction.setMode("install");
+                    //urlAction.setMode("install");
                     urlAction.setAction("install");
                     out.println("<form class=\"swbform\" id=\"frmImport1\" action=\"" + urlAction.toString() + "\" dojoType=\"dijit.form.Form\" method=\"post\">");
                     out.println("<fieldset>");
@@ -265,14 +262,14 @@ public class SWBModelAdmin extends GenericResource {
                     out.println(paramRequest.getLocaleString("msgwsTitle"));
                     out.println("</td>");
                     out.append("<td>");
-                    out.println("<input type=\"text\" value=\""+request.getParameter("fileName")+"\" name=\"wstitle\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Titulo.\" invalidMessage=\"Titulo es requerido.\" onkeyup=\"dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);dijit.byId('swb_create_id').validate()\" trim=\"true\" >");
+                    out.println("<input type=\"text\" value=\"" + request.getParameter("fileName") + "\" name=\"wstitle\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Titulo.\" invalidMessage=\"Titulo es requerido.\" onkeyup=\"dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);dijit.byId('swb_create_id').validate()\" trim=\"true\" >");
                     out.println("</td>");
                     out.append("</tr>");
                     out.append("<tr><td>");
                     out.println("ID:");
                     out.println("</td>");
                     out.append("<td>");
-                    out.println("<input id=\"swb_create_id\" type=\"text\" value=\""+request.getParameter("fileName")+"\" name=\"wsid\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" isValid=\"return canCreateSemanticObject(this.textbox.value);\" invalidMessage=\"Identificador invalido.\" trim=\"true\" >");
+                    out.println("<input id=\"swb_create_id\" type=\"text\" value=\"" + request.getParameter("fileName") + "\" name=\"wsid\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" isValid=\"return canCreateSemanticObject(this.textbox.value);\" invalidMessage=\"Identificador invalido.\" trim=\"true\" >");
                     out.println("</td>");
                     out.append("</tr>");
                     out.println("</table>");
@@ -280,46 +277,130 @@ public class SWBModelAdmin extends GenericResource {
                     out.println("<fieldset><span align=\"center\">");
                     //out.append("<tr>");
                     out.println("<button dojoType='dijit.form.Button' type=\"submit\" onClick=\"if(!dijit.byId('frmImport1').isValid()) return false; return confirm('Esta Operación puede tardar varios minutos,finalizara con la leyenda -Sitio Creado-. Desea Continuar?');\">" + paramRequest.getLocaleString("send") + "</button>");
-                    out.println("<button id=\"send\" dojoType=\"dijit.form.Button\" onClick=\"javascript:history.go(-1);\">"+paramRequest.getLocaleString("return")+"</button>");
+                    out.println("<button id=\"send\" dojoType=\"dijit.form.Button\" onClick=\"javascript:history.go(-1);\">" + paramRequest.getLocaleString("return") + "</button>");
                     //out.println("</td></tr>");
                     out.println("</span></fieldset>");
-                    
+
                     out.println("<input type=\"hidden\" name=\"zipName\" value=\"" + request.getParameter("zipName") + "\"");
                     out.println("</form>");
                 } catch (Exception e) {
                     log.error(e);
+                }
+            } else if (paramRequest.getAction().equals("checkStatus")) {
+                Resource base = getResourceBase();
+                String threadId = request.getParameter("threadId");
+                if (threadId == null) {
+                    out.println("Error al obtener el sitio para revisión de estatus de avance..");
+                }
+                /*
+                Iterator itthreads=Thread.getAllStackTraces().keySet().iterator();
+                while(itthreads.hasNext()){
+                Thread threadTmp=(Thread)itthreads.next();
+                System.out.println("Thead Generico:"+threadTmp.getId());
+                }*/
+
+                SWBModelAdminThreads swbmodeladmThreads = new SWBModelAdminThreads();
+                InstallZipThread thread = (InstallZipThread) swbmodeladmThreads.getThread(Long.parseLong(threadId));
+                if (thread != null) {
+                    SWBResourceURL url1 = paramRequest.getRenderUrl();
+                    String newSiteID = "";
+                    if (request.getParameter("newSiteID") != null) {
+                        newSiteID=request.getParameter("newSiteID");
+                        url1.setParameter("newSiteID", newSiteID);
+                        newSiteID = "- " +newSiteID + " -";
+                    }
+                    
+                    url1.setAction("checkStatus");
+                    url1.setParameter("threadId", threadId);
+
+                    boolean bstep1 = false;
+                    boolean bstep2 = false;
+                    boolean bstep3 = false;
+                    if (thread.getStatus() >= 30) {
+                        bstep1 = true;
+                    }
+                    if (thread.getStatus() >= 80) {
+                        bstep2 = true;
+                    }
+                    if (thread.getStatus() == 100) {
+                        bstep3 = true;
+                        swbmodeladmThreads.removeThread(thread.getId()); //Elimina Thread de Hash
+                        url1.setParameter("wsUri", thread.getWebSiteUri());
+                    }
+
+
+                    StringBuffer status_msg = new StringBuffer();
+
+                    status_msg.append("\n<div id=\"" + base.getId() + "/statusIndex\" class=\"swbform\">");
+                    status_msg.append("\n<fieldset>");
+                    status_msg.append("\n<legend> AVANCE DE CREACIÓN DE SITIO "+ newSiteID +" MEDIANTE PLANTILLA (Espere por favor)</legend>");
+
+                    status_msg.append("<table border=\"1\" width=\"300\">");
+
+                    status_msg.append("<tr heigth=\"20\">");
+                    status_msg.append("<td width=\"100\" bgcolor=\"GREY\" align=\"CENTER\"><font color=\"WHITE\">PASO 1 (Archivos)</font></td>");
+                    status_msg.append("<td width=\"100\" bgcolor=\"GREY\" align=\"CENTER\"><font color=\"WHITE\">PASO 2 (Modelos)</font></td>");
+                    status_msg.append("<td width=\"100\" bgcolor=\"GREY\" align=\"CENTER\"><font color=\"WHITE\">PASO 3 (Recursos)</font></td>");
+                    status_msg.append("</tr>");
+
+
+                    status_msg.append("<tr heigth=\"20\">");
+
+                    status_msg.append("<td width=\"100\" align=\"CENTER\" ");
+                    if (bstep1) {
+                        status_msg.append("bgcolor=\"GREEN\" ");
+                        status_msg.append("><font color=\"WHITE\"><b>COMPLETO</b></font>");
+                    } else {
+                        status_msg.append("bgcolor=\"YELLOW\" ");
+                        status_msg.append("><b>INCOMPLETO</b>");
+                    }
+                    status_msg.append("</td>");
+
+                    status_msg.append("<td width=\"100\" align=\"CENTER\" ");
+                    if (bstep2) {
+                        status_msg.append("bgcolor=\"GREEN\" ");
+                        status_msg.append("><font color=\"WHITE\"><b>COMPLETO</b></font>");
+                    } else {
+                        status_msg.append("bgcolor=\"YELLOW\" ");
+                        status_msg.append("><b>INCOMPLETO</b>");
+                    }
+                    status_msg.append("</td>");
+
+                    status_msg.append("<td width=\"100\" align=\"CENTER\" ");
+                    if (bstep3) {
+                        status_msg.append("bgcolor=\"GREEN\" ");
+                        status_msg.append("><font color=\"WHITE\"><b>COMPLETO</b></font>");
+                    } else {
+                        status_msg.append("bgcolor=\"YELLOW\" ");
+                        status_msg.append("><b>INCOMPLETO</b>");
+                    }
+                    status_msg.append("</td>");
+
+                    status_msg.append("</tr>");
+
+
+                    status_msg.append("</table>");
+
+                    status_msg.append("\n</fieldset>");
+                    status_msg.append("\n</div>");
+
+
+                    out.println(status_msg.toString());
+
+                    if (bstep3) {
+                        url1.setMode(url1.Mode_VIEW);
+                        url1.setParameter("msgKey", "siteCreated");
+                        out.println("<script type=\"text/javascript\">");
+                        out.println("   sleep(500);");
+                        out.println("</script>");
+                    }
+                    out.println("<meta http-equiv=\"refresh\" content=\"4;url=" + url1 + "\" />");
                 }
             }
         } catch (Exception e) {
             log.error(e);
         }
     }
-
-/*
-    public void doInstallZip(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        if (paramRequest.getAction().equals("install")) {
-            try{
-                PrintWriter out = response.getWriter();
-                out.println("<div class=\"swbform\">");
-                out.println("<form>");
-
-                File file= new File(request.getParameter("zipName"));
-                WebSite website=SWBPortal.UTIL.InstallZip(file, "siteInfo.xml", request.getParameter("wsid"), request.getParameter("wstitle"), out);
-                    
-                out.println("</form>");
-                out.println("</div>");
-
-                SWBResourceURL url = paramRequest.getRenderUrl();
-                url.setMode(paramRequest.Mode_VIEW);
-                url.setParameter("msgKey", "siteCreated");
-                url.setParameter("wsUri", website.getURI());
-                response.sendRedirect(url.toString());
-        }catch(Exception e){
-            log.error(e);
-        }
-        }
-    }
-*/
 
     /**
      * Parses the rdf content.
@@ -449,16 +530,20 @@ public class SWBModelAdmin extends GenericResource {
                     zos.putNextEntry(entry);
                     zos.write("Model File SemanticWebBuilderOS".getBytes());
                     zos.closeEntry();
-                } catch (Exception e) {log.error(e);}
+                } catch (Exception e) {
+                    log.error(e);
+                }
 
                 //-------------Generación de archivo rdf del sitio especificado----------------
                 try {
                     File file = new File(zipdirectory + site.getId() + ".nt");
                     FileOutputStream out = new FileOutputStream(file);
-                    site.getSemanticObject().getModel().write(out,"N-TRIPLE");
+                    site.getSemanticObject().getModel().write(out, "N-TRIPLE");
                     out.flush();
                     out.close();
-                } catch (Exception e) {log.error(e);}
+                } catch (Exception e) {
+                    log.error(e);
+                }
                 //----------Generación de archivo siteInfo.xml del sitio especificado-----------
                 ArrayList aFiles = new ArrayList();
                 File file = new File(zipdirectory + "siteInfo.xml");
@@ -476,7 +561,7 @@ public class SWBModelAdmin extends GenericResource {
                         SemanticObject sObj = sitSubModels.next();
                         File fileSubModel = new File(zipdirectory + "/" + sObj.getId() + ".nt");
                         FileOutputStream rdfout = new FileOutputStream(fileSubModel);
-                        sObj.getModel().write(rdfout,"N-TRIPLE");
+                        sObj.getModel().write(rdfout, "N-TRIPLE");
                         rdfout.flush();
                         rdfout.close();
                         //Agregar c/archivo .rdf de submodelos a arreglo de archivos
@@ -536,16 +621,25 @@ public class SWBModelAdmin extends GenericResource {
             } catch (Exception e) {
                 log.error(e);
             }
-        }else if (response.getAction().equals("install")) {
-            try{
-                File file= new File(request.getParameter("zipName"));
-                WebSite website=SWBPortal.UTIL.InstallZip(file, "siteInfo.xml", request.getParameter("wsid"), request.getParameter("wstitle"));
-                response.setMode(response.Mode_VIEW);
-                response.setRenderParameter("msgKey", "siteCreated");
-                response.setRenderParameter("wsUri", website.getURI());
-        }catch(Exception e){
-            log.error(e);
-        }           
-      }
+        } else if (response.getAction().equals("install")) {
+            try {
+                File file = new File(request.getParameter("zipName"));
+                //WebSite website=SWBPortal.UTIL.InstallZip(file, "siteInfo.xml", request.getParameter("wsid"), request.getParameter("wstitle"));
+                InstallZipThread installZipThread = new InstallZipThread(file, "siteInfo.xml", request.getParameter("wsid"), request.getParameter("wstitle"));
+                installZipThread.start();
+
+                SWBModelAdminThreads swbmodeladmThreads = new SWBModelAdminThreads();
+                swbmodeladmThreads.addThread(installZipThread.getId(), installZipThread);
+                //response.setMode(response.Mode_VIEW);
+                //response.setRenderParameter("msgKey", "siteCreated");
+                //response.setRenderParameter("wsUri", website.getURI());
+                response.setRenderParameter("newSiteID", request.getParameter("wsid"));
+                response.setRenderParameter("threadId", "" + installZipThread.getId());
+                response.setMode("installmodel");
+                response.setAction("checkStatus");
+            } catch (Exception e) {
+                log.error(e);
+            }
+        }
     }
 }
