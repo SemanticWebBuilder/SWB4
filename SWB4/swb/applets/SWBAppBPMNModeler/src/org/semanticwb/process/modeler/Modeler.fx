@@ -44,7 +44,7 @@ public class Modeler extends CustomNode
     var actions: MenuItem[];
     var focusedNode: Node;                       //Nodo con el foco
     var scrollOffset:ScrollOffset;
-    var selectedNodes: GraphicalElement[];
+    var selectedNodes: Node[];
     //var styles: HashMap;
     var selectedStyle: String;
     var selectedMode: String;
@@ -392,20 +392,20 @@ public class Modeler extends CustomNode
 //            }
             var ts = Sequences.shuffle(selectedNodes);
             for (ele in ts) {
-                (ele as GraphicalElement).remove(true);
+                if (ele instanceof GraphicalElement) {
+                    (ele as GraphicalElement).remove(true);
+                } else if (ele instanceof ConnectionObject) {
+                    (ele as ConnectionObject).remove();
+                }
             }
             delete selectedNodes;
         }
         if (e.code == e.code.VK_C and e.controlDown) {
             delete copyNodes;
-            for (ele in selectedNodes) {
-                var t = ele.copy();
+            for (ele in selectedNodes where ele instanceof GraphicalElement) {
+                var t = (ele as GraphicalElement).copy();
                 insert t into copyNodes;
             }
-
-//            if (focusedNode != null and focusedNode instanceof GraphicalElement) {
-//                copyNode = (focusedNode as GraphicalElement).copy();
-//            }
         }
         if (e.code == e.code.VK_V and e.controlDown) {
             ModelerUtils.popup.hide();
@@ -432,33 +432,33 @@ public class Modeler extends CustomNode
             delete copyNodes;
         }
         if (e.code == e.code.VK_RIGHT) {
-            for (ele in selectedNodes) {
+            for (ele in selectedNodes where ele instanceof GraphicalElement) {
                 if (not (ele instanceof Lane)) {
-                    ele.x += 10;
+                    (ele as GraphicalElement).x += 10;
                 }
             }
         } else if (e.code == e.code.VK_LEFT) {
-            for (ele in selectedNodes) {
+            for (ele in selectedNodes where ele instanceof GraphicalElement) {
                 if (not (ele instanceof Lane)) {
-                    var sp = ele.x - ele.w / 2;
-                    if (sp - 10 > ele.sceneX) {
-                        ele.x -= 10;
+                    var sp = (ele as GraphicalElement).x - (ele as GraphicalElement).w / 2;
+                    if (sp - 10 > (ele as GraphicalElement).sceneX) {
+                        (ele as GraphicalElement).x -= 10;
                     }
                 }
             }
         } else if (e.code == e.code.VK_UP) {
-            for (ele in selectedNodes) {
+            for (ele in selectedNodes where ele instanceof GraphicalElement) {
                 if (not (ele instanceof Lane)) {
-                    var sp = ele.y - ele.h / 2;
-                    if (sp - 10 > ele.sceneY) {
-                        ele.y -= 10;
+                    var sp = (ele as GraphicalElement).y - (ele as GraphicalElement).h / 2;
+                    if (sp - 10 > (ele as GraphicalElement).sceneY) {
+                        (ele as GraphicalElement).y -= 10;
                     }
                 }
             }
         } else if (e.code == e.code.VK_DOWN) {
-            for (ele in selectedNodes) {
+            for (ele in selectedNodes where ele instanceof GraphicalElement) {
                 if (not (ele instanceof Lane)) {
-                    ele.y += 10;
+                    (ele as GraphicalElement).y += 10;
                 }
             }
         }
@@ -509,6 +509,7 @@ public class Modeler extends CustomNode
                 }
 
                 var a=tempNode as ConnectionObject;
+                getOverNode();
                 if(overNode!=null)
                 {
                     if(overNode.canEndLink(a))a.end=overNode;
@@ -530,6 +531,7 @@ public class Modeler extends CustomNode
         //println("MouseMoved in {e.node}");
         mousex=e.x+getXScroll();
         mousey=e.y+getYScroll();
+        getOverNode();
     }
 
     public function mouseClicked(e: MouseEvent) : Void {
@@ -644,33 +646,46 @@ public class Modeler extends CustomNode
 
     public function unselectAll() : Void {
         for(ele in selectedNodes) {
-            ele.text.stopEditing();
-            ele.selected = false;
-        }
-        for (ele in contents where ele instanceof ConnectionObject) {
-            (ele as ConnectionObject).text.stopEditing();
+            if (ele instanceof GraphicalElement) {
+                (ele as GraphicalElement).text.stopEditing();
+                (ele as GraphicalElement).selected = false;
+            } else if (ele instanceof ConnectionObject) {
+                (ele as ConnectionObject).text.stopEditing();
+                (ele as ConnectionObject).selected = false;
+            }
         }
         delete selectedNodes;
     }
 
-    public function addSelectedNode(ge: GraphicalElement) : Void {
+    public function addSelectedNode(ge: Node) : Void {
         if (Sequences.indexOf(selectedNodes, ge) == -1) {
-            ge.selected = true;
+            if (ge instanceof GraphicalElement) {
+                (ge as GraphicalElement).selected = true;
+            } else if (ge instanceof ConnectionObject) {
+                (ge as ConnectionObject).selected = true;
+            }
             insert ge into selectedNodes;
         }
     }
 
-    public function removeSelectedNode(ge: GraphicalElement) : Void {
+    public function removeSelectedNode(ge: Node) : Void {
         if (Sequences.indexOf(selectedNodes, ge) != -1) {
-            ge.selected = false;
+            if (ge instanceof GraphicalElement) {
+                (ge as GraphicalElement).selected = false;
+            } else if (ge instanceof ConnectionObject) {
+                (ge as ConnectionObject).selected = false;
+            }
             delete ge from selectedNodes;
         }
     }
 
-    public function setSelectedNode(ge: GraphicalElement) : Void {
+    public function setSelectedNode(ge: Node) : Void {
         unselectAll();
         addSelectedNode(ge);
-        ge.selected = true;
+    }
+
+    public function getSelectedNode() : Node {
+        return selectedNodes[0];
     }
 
     public function addCopyNode(ge: GraphicalElement) : Void {
@@ -690,5 +705,14 @@ public class Modeler extends CustomNode
 
     public function isMultiSelection() : Boolean {
         return (selectedNodes != null and selectedNodes.size() > 1);
+    }
+
+    function getOverNode() : Void {
+        for (ele in Sequences.reverse(contents) as Node[] where ele instanceof GraphicalElement) {
+            if (ele.boundsInLocal.contains(mousex, mousey)) {
+                overNode = ele as GraphicalElement;
+                break;
+            }
+        }
     }
 }
