@@ -7,9 +7,9 @@
 package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
 import javafx.scene.shape.Polygon;
+import javafx.scene.input.MouseEvent;
 
 /**
  * @author javier.solis
@@ -19,6 +19,7 @@ public class ConditionalFlow extends SequenceFlow
 {
     public override function create(): Node
     {
+        blocksMouse = true;
         title= ##"condition";
         arrowType=ARROW_TYPE_SEQUENCE;
         notGroup=true;  //No agrega los elementos path y arrow al grupo
@@ -54,19 +55,6 @@ public class ConditionalFlow extends SequenceFlow
         return ret;
     }
 
-    override var onMousePressed = function( e: MouseEvent ):Void
-    {
-        if(ModelerUtils.clickedNode==null)
-        {
-            ModelerUtils.clickedNode=this;
-            modeler.setFocusedNode(this);
-            if(e.clickCount >= 2)
-            {
-                text.startEditing();
-            }
-        }
-    }
-
     public override function copy() : ConnectionObject {
         var t = ConditionalFlow {
             ini: this.ini
@@ -76,5 +64,16 @@ public class ConditionalFlow extends SequenceFlow
             uri:"new:associationflow:{modeler.toolBar.counter++}"
         }
         return t;
+    }
+
+    override var onMouseClicked = function (e: MouseEvent)
+    {
+        if(e.clickCount >= 2)
+        {
+            if(text != null)
+            {
+                text.startEditing();
+            }
+        }
     }
 }
