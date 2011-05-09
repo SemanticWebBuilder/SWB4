@@ -45,10 +45,27 @@ public class ConnectionObject  extends CustomNode
     protected var strokeDash : Float[];
     protected var notGroup : Boolean;               //No agrega los elementos path y arrow al grupo
 
+    public var over:Boolean on replace {
+        if (over and not selected) {
+            path.styleClass = "connObjectHover";
+        } else if (not selected) {
+            path.styleClass = "connObject";
+        }
+    }
+
+    public var selected:Boolean on replace {
+        if (selected) {
+            path.styleClass = "connObjectFocused";
+        } else {
+            path.styleClass = "connObject";
+        }
+    }
+
     var pini: Point;
     var pend: Point;
     public override function create(): Node
     {
+        blocksMouse = true;
         pini=Point{ x: bind getConnectionX(ini,end) y: bind getConnectionY(ini,end) };
         pend=Point{ x: bind getConnectionX(end,ini) y: bind getConnectionY(end,ini) };
         var pinter1=Point{ x: bind getInter1ConnectionX(ini,end,pini,pend) y: bind getInter1ConnectionY(ini,end,pini,pend) };
@@ -181,41 +198,44 @@ public class ConnectionObject  extends CustomNode
         modeler.remove(this);
     }
 
-//    override var onMouseDragged = function ( e: MouseEvent ) : Void
-//    {
-//        if(ModelerUtils.clickedNode==this)
-//        {
-////            x=dx+e.sceneX;
-////            y=dy+e.sceneY;
-//        }
-//    }
+    override var onMouseMoved = function (e: MouseEvent) : Void {
+        modeler.mouseMoved(e);
+    }
 
     override var onMousePressed = function( e: MouseEvent ):Void
     {
         if(ModelerUtils.clickedNode==null)
         {
             ModelerUtils.clickedNode=this;
-            modeler.setFocusedNode(this);            
+            modeler.setSelectedNode(this);
+            modeler.setFocusedNode(this);
         }
+        modeler.mousePressed(e);
     }
 
     override var onMouseReleased = function( e: MouseEvent ):Void
     {
-        //path.requestFocus();
         if(ModelerUtils.clickedNode==this)
         {
             ModelerUtils.clickedNode=null;
         }
+        modeler.mouseReleased(e);
     }
 
-    override var onMouseEntered = function(e)
+    override var onMouseDragged = function (e: MouseEvent) {
+        modeler.mouseDragged(e);
+    }
+
+    override var onMouseEntered = function(e : MouseEvent)
     {
+        over = true;
         if(modeler.tempNode==null and ModelerUtils.clickedNode==null)modeler.disablePannable=true;
         
     }
 
-    override var onMouseExited = function(e)
+    override var onMouseExited = function(e : MouseEvent)
     {
+        over = false;
         if(modeler.tempNode==null and ModelerUtils.clickedNode==null)modeler.disablePannable=false        
     }
 
@@ -223,17 +243,6 @@ public class ConnectionObject  extends CustomNode
     {
         keyPressed(e);
         modeler.keyPressed(e);
-    }
-
-    override var onMouseClicked = function (e)
-    {
-        if(e.clickCount >= 2)
-        {
-            if(text != null)
-            {
-                text.startEditing();
-            }
-        }
     }
 
     public function keyPressed( e: KeyEvent )
