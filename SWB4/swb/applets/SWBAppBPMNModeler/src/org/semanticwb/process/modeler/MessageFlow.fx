@@ -19,6 +19,7 @@ public class MessageFlow extends ConnectionObject
 {
     public override function create(): Node
     {
+        blocksMouse = true;
         title=##"message";
         arrowType=ARROW_TYPE_MESSAGE;
         strokeDash=[2,5];
@@ -49,24 +50,14 @@ public class MessageFlow extends ConnectionObject
         };
     }
 
-    override var onMousePressed = function( e: MouseEvent ):Void
+    override var onMouseClicked = function (e: MouseEvent)
     {
-        if(ModelerUtils.clickedNode==null)
+        if(e.clickCount >= 2)
         {
-            ModelerUtils.clickedNode=this;
-            modeler.setFocusedNode(this);
-            if(e.clickCount >= 2)
+            if(text != null)
             {
                 text.startEditing();
             }
-        }
-    }
-
-    override var onMouseReleased = function( e: MouseEvent ):Void
-    {
-        if(ModelerUtils.clickedNode==this)
-        {
-            ModelerUtils.clickedNode=null;
         }
     }
 }
