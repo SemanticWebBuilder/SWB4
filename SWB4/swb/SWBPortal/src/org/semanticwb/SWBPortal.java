@@ -1501,19 +1501,40 @@ public class SWBPortal
      */
     public static JarFile getAdminFile(String path)
     {
-        JarFile f = new JarFile(path);
-        if (!f.exists())
+        JarFile f = (JarFile) admFiles.get(path);
+        if (f != null)
         {
-            JarFile aux = (JarFile) admFiles.get(path);
-            if (aux != null)
+            JarFile aux=null;
+
+            if(f.isReplaced())
             {
-                f = aux;
+                aux=new JarFile(path);
+            }else
+            {
+                aux=f;
             }
+
+            if(f.isExpired())
+            {
+                JarFile aux2=new JarFile(path);
+                if(aux2.exists())
+                {
+                    f.setReplaced(true);
+                    aux=aux2;
+                }else
+                {
+                    if(f.isReplaced())
+                    {
+                        f.setReplaced(false);
+                    }
+                }
+                f.touch();
+            }
+            f=aux;
+        }else
+        {
+           f = new JarFile(path);
         }
-//        JarFile f = (JarFile) admFiles.get(path);
-//        if (f == null) {
-//            f = new JarFile(path);
-//        }
         return f;
     }
 
