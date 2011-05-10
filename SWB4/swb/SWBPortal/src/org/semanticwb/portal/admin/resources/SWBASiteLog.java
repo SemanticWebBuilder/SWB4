@@ -113,6 +113,9 @@ public class SWBASiteLog extends GenericResource {
                         }
                     }
                 }
+                rs.close();
+                st.close();
+                con.close();
             } catch (Exception e) {
                 log.error(e);
             }
