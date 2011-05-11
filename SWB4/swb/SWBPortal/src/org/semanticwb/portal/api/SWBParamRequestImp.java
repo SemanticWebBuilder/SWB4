@@ -38,6 +38,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
+import org.semanticwb.portal.lib.SWBRequest;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -125,7 +126,11 @@ public class SWBParamRequestImp implements SWBParamRequest
      */
     public SWBParamRequestImp(HttpServletRequest request, Resource resource, WebPage topic, User user)
     {
-        this.request=request;
+        
+        if(!(request instanceof SWBRequest))
+            this.request=new SWBRequest(request);
+        else
+            this.request=request;
         this.resource=resource;
         this.virtResource=resource;
         this.topic=topic;
