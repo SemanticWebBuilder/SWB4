@@ -477,11 +477,6 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     {
         if (request == null)
             return null;
-        String x_forwarded_for=this.getHeader("X-Forwarded-For");
-        if (x_forwarded_for != null && x_forwarded_for.length()>0)
-        {
-            return x_forwarded_for;
-        }
         return request.getRemoteAddr();
     }
 
@@ -558,22 +553,6 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     {
         if (request == null)
             return null;
-
-        String host=this.getHeader("X-Forwarded-Host");
-        if (host != null && host.length()>0)
-        {
-            String port = "";
-            if (request.getServerPort() != 80)
-            {
-                port = ":" + request.getServerPort();
-            }
-            StringBuffer buffer=new StringBuffer(this.getScheme());
-            buffer.append("://");
-            buffer.append(this.getServerName());
-            buffer.append(port);
-            buffer.append(this.getRequestURI());
-            return buffer;
-        }
         return request.getRequestURL();
     }
 
@@ -619,20 +598,6 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     {
         if (request == null)
             return null;
-        String host=this.getHeader("X-Forwarded-Host");
-        if (host != null && host.length()>0)
-        {
-            int pos = host.indexOf(":");
-            if (pos == -1)
-            {
-                return host;
-            }
-            else
-            {
-                host = host.substring(0, pos);
-                return host;
-            }
-        }
         return request.getServerName();//com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/distributor");
     }
 
@@ -648,28 +613,6 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     {
         if (request == null)
             return 0;
-        String host=this.getHeader("X-Forwarded-Host");
-        if (host != null && host.length()>0)
-        {
-            int pos = host.indexOf(":");
-            if (pos == -1)
-            {
-                return 80;
-            }
-            else
-            {
-                String port = host.substring(pos + 1);
-                try
-                {
-                    return Integer.parseInt(port);
-                }
-                catch (NumberFormatException nfe)
-                {
-                    return 80;
-                }
-            }
-
-        }
         return request.getServerPort();
     }
 
