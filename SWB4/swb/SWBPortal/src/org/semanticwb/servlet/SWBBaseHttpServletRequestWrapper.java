@@ -29,14 +29,10 @@
 
 package org.semanticwb.servlet;
 
-import java.io.IOException;
-import java.util.Collections;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletRequest;
 
-import java.util.Hashtable;
 
-import java.util.Locale;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -46,6 +42,12 @@ import java.util.Locale;
  */
 public class SWBBaseHttpServletRequestWrapper extends HttpServletRequestWrapper
 {
+    private String host=null;
+    private String x_forwarded_for=null;
+    private StringBuffer requestURL=null;
+    private String serverName=null;
+    private Integer serverPort=null;
+
     /**
      * Creates a new instance of WBHttpServletRequestWrapper.
      * 
@@ -54,25 +56,30 @@ public class SWBBaseHttpServletRequestWrapper extends HttpServletRequestWrapper
     public SWBBaseHttpServletRequestWrapper(HttpServletRequest request)
     {
         super(request);
+        host=this.getHeader("X-Forwarded-Host");
+        x_forwarded_for=this.getHeader("X-Forwarded-For");
     }
     
     @Override
     public StringBuffer getRequestURL()
     {
-        String host=this.getHeader("X-Forwarded-Host");
         if (host != null && host.length()>0)
         {
-            String port = "";
-            if (this.getServerPort() != 80)
+            if(requestURL==null)
             {
-                port = ":" + this.getServerPort();
+                String port = "";
+                if (this.getServerPort() != 80)
+                {
+                    port = ":" + this.getServerPort();
+                }
+                StringBuffer buffer=new StringBuffer(this.getScheme());
+                buffer.append("://");
+                buffer.append(this.getServerName());
+                buffer.append(port);
+                buffer.append(this.getRequestURI());
+                requestURL=buffer;
             }
-            StringBuffer buffer=new StringBuffer(this.getScheme());
-            buffer.append("://");
-            buffer.append(this.getServerName());
-            buffer.append(port);
-            buffer.append(this.getRequestURI());
-            return buffer;
+            return requestURL;
         }
         return super.getRequestURL();
     }
@@ -80,19 +87,21 @@ public class SWBBaseHttpServletRequestWrapper extends HttpServletRequestWrapper
     @Override
     public String getServerName()
     {
-        String host=this.getHeader("X-Forwarded-Host");
         if (host != null && host.length()>0)
         {
-            int pos = host.indexOf(":");
-            if (pos == -1)
+            if(serverName==null)
             {
-                return host;
+                int pos = host.indexOf(":");
+                if (pos == -1)
+                {
+                    serverName=host;
+                }
+                else
+                {
+                    serverName=host.substring(0, pos);
+                }
             }
-            else
-            {
-                host = host.substring(0, pos);
-                return host;
-            }
+            return serverName;
         }
         return super.getServerName();//com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/distributor");
     }
@@ -100,27 +109,29 @@ public class SWBBaseHttpServletRequestWrapper extends HttpServletRequestWrapper
     @Override
     public int getServerPort()
     {
-        String host=this.getHeader("X-Forwarded-Host");
         if (host != null && host.length()>0)
         {
-            int pos = host.indexOf(":");
-            if (pos == -1)
+            if(serverPort==null)
             {
-                return 80;
-            }
-            else
-            {
-                String port = host.substring(pos + 1);
-                try
+                int pos = host.indexOf(":");
+                if (pos == -1)
                 {
-                    return Integer.parseInt(port);
+                    serverPort=80;
                 }
-                catch (NumberFormatException nfe)
+                else
                 {
-                    return 80;
+                    String port = host.substring(pos + 1);
+                    try
+                    {
+                        serverPort=Integer.parseInt(port);
+                    }
+                    catch (NumberFormatException nfe)
+                    {
+                        serverPort=80;
+                    }
                 }
             }
-
+            return serverPort;
         }
         return super.getServerPort();
     }
@@ -128,7 +139,6 @@ public class SWBBaseHttpServletRequestWrapper extends HttpServletRequestWrapper
     @Override
     public String getRemoteAddr()
     {
-        String x_forwarded_for=this.getHeader("X-Forwarded-For");
         if (x_forwarded_for != null && x_forwarded_for.length()>0)
         {
             return x_forwarded_for;
