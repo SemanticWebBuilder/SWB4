@@ -477,9 +477,9 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     {
         if (request == null)
             return null;
-        if (request.getHeader("X-Forwarded-For") != null && !"".equals(request.getHeader("X-Forwarded-For")))
+        String x_forwarded_for=this.getHeader("X-Forwarded-For");
+        if (x_forwarded_for != null && x_forwarded_for.length()>0)
         {
-            String x_forwarded_for = request.getHeader("X-Forwarded-For");
             return x_forwarded_for;
         }
         return request.getRemoteAddr();
@@ -558,7 +558,9 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     {
         if (request == null)
             return null;
-        if (request.getHeader("X-Forwarded-Host") != null && !"".equals(request.getHeader("X-Forwarded-Host")))
+
+        String host=this.getHeader("X-Forwarded-Host");
+        if (host != null && host.length()>0)
         {
             String port = "";
             if (request.getServerPort() != 80)
@@ -617,9 +619,9 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     {
         if (request == null)
             return null;
-        if (request.getHeader("X-Forwarded-Host") != null && !"".equals(request.getHeader("X-Forwarded-Host")))
+        String host=this.getHeader("X-Forwarded-Host");
+        if (host != null && host.length()>0)
         {
-            String host = request.getHeader("X-Forwarded-Host");
             int pos = host.indexOf(":");
             if (pos == -1)
             {
@@ -646,9 +648,9 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     {
         if (request == null)
             return 0;
-        if (request.getHeader("X-Forwarded-Host") != null && !"".equals(request.getHeader("X-Forwarded-Host")))
+        String host=this.getHeader("X-Forwarded-Host");
+        if (host != null && host.length()>0)
         {
-            String host = request.getHeader("X-Forwarded-Host");
             int pos = host.indexOf(":");
             if (pos == -1)
             {
