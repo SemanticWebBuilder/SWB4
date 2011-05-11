@@ -11,13 +11,18 @@ import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.indexer.SWBIndexer;
 
 
 public class DirectoryObject extends org.semanticwb.portal.community.base.DirectoryObjectBase 
 {
     private static Logger log = SWBUtils.getLogger(DirectoryObject.class);
     static {
-        SWBPortal.getIndexMgr().getDefaultIndexer().registerParser(DirectoryObject.class, new DirectoryObjectParser());
+        SWBIndexer index=SWBPortal.getIndexMgr().getDefaultIndexer();
+        if(index!=null)
+        {
+            index.registerParser(DirectoryObject.class, new DirectoryObjectParser());
+        }
     }
     
     public DirectoryObject(org.semanticwb.platform.SemanticObject base)

@@ -271,13 +271,17 @@ public class Search extends GenericAdmResource {
             query.addTerm(new SearchTerm(SWBIndexer.ATT_MODEL, scope, SearchTerm.OPER_AND));
         }
 
-        SearchResults sres = SWBPortal.getIndexMgr().getDefaultIndexer().search(query, user);
+        SWBIndexer index=SWBPortal.getIndexMgr().getDefaultIndexer();
+        if(index!=null)
+        {
+            SearchResults sres = index.search(query, user);
 
-        Iterator<SearchDocument> docs = sres.listDocuments();
-        while(docs.hasNext()) {
-            SearchDocument doc = docs.next();
-            if (doc.getSearchable() != null) {
-                res.add(doc.getSearchable().getSemanticObject());
+            Iterator<SearchDocument> docs = sres.listDocuments();
+            while(docs.hasNext()) {
+                SearchDocument doc = docs.next();
+                if (doc.getSearchable() != null) {
+                    res.add(doc.getSearchable().getSemanticObject());
+                }
             }
         }
         
