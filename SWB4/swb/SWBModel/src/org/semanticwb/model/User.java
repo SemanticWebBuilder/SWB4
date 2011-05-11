@@ -627,7 +627,7 @@ public class User extends UserBase implements Principal
                 if (rule != null)
                 {
                     temp = Rule.getRuleMgr().eval(this, rule.getURI());
-                    if (ret)
+                    if (temp)
                     {
                         break;
                     }
