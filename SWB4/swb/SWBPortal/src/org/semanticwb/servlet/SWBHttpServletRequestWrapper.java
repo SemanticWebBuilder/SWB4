@@ -382,5 +382,84 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
         */
         return super.getLocales();
     }
+    @Override
+    public StringBuffer getRequestURL()
+    {
+
+        if (this.getHeader("X-Forwarded-Host") != null && !"".equals(this.getHeader("X-Forwarded-Host")))
+        {
+            String port = "";
+            if (this.getServerPort() != 80)
+            {
+                port = ":" + this.getServerPort();
+            }
+            StringBuffer buffer=new StringBuffer(this.getScheme());
+            buffer.append("://");
+            buffer.append(this.getServerName());
+            buffer.append(port);
+            buffer.append(this.getRequestURI());
+            return buffer;
+        }
+        return this.getRequestURL();
+    }
+    @Override
+    public String getServerName()
+    {
+
+        if (this.getHeader("X-Forwarded-Host") != null && !"".equals(this.getHeader("X-Forwarded-Host")))
+        {
+            String host = this.getHeader("X-Forwarded-Host");
+            int pos = host.indexOf(":");
+            if (pos == -1)
+            {
+                return host;
+            }
+            else
+            {
+                host = host.substring(0, pos);
+                return host;
+            }
+        }
+        return this.getServerName();//com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/distributor");
+    }
+    @Override
+    public int getServerPort()
+    {
+       
+        if (this.getHeader("X-Forwarded-Host") != null && !"".equals(this.getHeader("X-Forwarded-Host")))
+        {
+            String host = this.getHeader("X-Forwarded-Host");
+            int pos = host.indexOf(":");
+            if (pos == -1)
+            {
+                return 80;
+            }
+            else
+            {
+                String port = host.substring(pos + 1);
+                try
+                {
+                    return Integer.parseInt(port);
+                }
+                catch (NumberFormatException nfe)
+                {
+                    return 80;
+                }
+            }
+
+        }
+        return this.getServerPort();
+    }
+    @Override
+    public String getRemoteAddr()
+    {
+
+        if (this.getHeader("X-Forwarded-For") != null && !"".equals(this.getHeader("X-Forwarded-For")))
+        {
+            String x_forwarded_for = this.getHeader("X-Forwarded-For");
+            return x_forwarded_for;
+        }
+        return this.getRemoteAddr();
+    }
     
 }
