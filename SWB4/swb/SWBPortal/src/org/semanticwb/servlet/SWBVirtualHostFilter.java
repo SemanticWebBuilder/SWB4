@@ -106,7 +106,7 @@ public class SWBVirtualHostFilter implements Filter
             FilterChain chain)
             throws IOException, ServletException
     {
-        HttpServletRequest _request = (HttpServletRequest) request;
+        HttpServletRequest _request = new SWBBaseHttpServletRequestWrapper((HttpServletRequest) request);
         HttpServletResponse _response = (HttpServletResponse) response;
         log.trace("VirtualHostFilter:doFilter()");
 
