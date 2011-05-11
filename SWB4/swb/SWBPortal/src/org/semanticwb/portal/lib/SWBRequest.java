@@ -1,32 +1,30 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * WBRequest.java
  *
  * Created on 5 de agosto de 2003, 13:49
  */
-
 package org.semanticwb.portal.lib;
 
 import java.util.*;
@@ -39,18 +37,15 @@ import java.util.*;
  */
 public class SWBRequest implements javax.servlet.http.HttpServletRequest
 {
-    
+
     /** The sess. */
     SWBSession sess;
-    
     /** The parms. */
     Hashtable parms = new Hashtable();
-    
     /** The attr. */
-    Hashtable attr=new Hashtable();
-    
+    Hashtable attr = new Hashtable();
     /** The request. */
-    javax.servlet.http.HttpServletRequest request=null;
+    javax.servlet.http.HttpServletRequest request = null;
 
     /**
      * Creates a new instance of WBRequest.
@@ -59,7 +54,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     {
         sess = new SWBSession();
     }
-    
+
     /**
      * Instantiates a new sWB request.
      * 
@@ -67,7 +62,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public SWBRequest(javax.servlet.http.HttpServletRequest request)
     {
-        this.request=request;
+        this.request = request;
     }
 
     /* (non-Javadoc)
@@ -81,7 +76,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public Object getAttribute(String str)
     {
-        if(request==null)
+        if (request == null)
         {
             return attr.get(str);
         }
@@ -98,7 +93,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public java.util.Enumeration getAttributeNames()
     {
-        if(request==null)
+        if (request == null)
         {
             return attr.keys();
         }
@@ -115,7 +110,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public String getAuthType()
     {
-        if(request==null)return null;
+        if (request == null)
+            return null;
         return request.getAuthType();
     }
 
@@ -129,7 +125,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public String getCharacterEncoding()
     {
-        if(request==null)return null;
+        if (request == null)
+            return null;
         return request.getCharacterEncoding();
     }
 
@@ -156,7 +153,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public String getContentType()
     {
-        if(request==null)return "text/html";
+        if (request == null)
+            return "text/html";
         return request.getContentType();
     }
 
@@ -170,7 +168,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public String getContextPath()
     {
-        if(request==null)return null;
+        if (request == null)
+            return null;
         return request.getContextPath();
     }
 
@@ -184,7 +183,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public javax.servlet.http.Cookie[] getCookies()
     {
-        if(request==null)return null;
+        if (request == null)
+            return null;
         return request.getCookies();
     }
 
@@ -268,9 +268,9 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public int getIntHeader(String str)
     {
-        if(request==null)
+        if (request == null)
             return -1;
-        else 
+        else
             return request.getIntHeader(str);
     }
 
@@ -284,7 +284,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public java.util.Locale getLocale()
     {
-        if(request==null)return Locale.getDefault();
+        if (request == null)
+            return Locale.getDefault();
         return request.getLocale();
     }
 
@@ -298,7 +299,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public java.util.Enumeration getLocales()
     {
-        if(request==null)return new Vector().elements();
+        if (request == null)
+            return new Vector().elements();
         return request.getLocales();
     }
 
@@ -312,7 +314,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public String getMethod()
     {
-        if(request==null)return "GET";
+        if (request == null)
+            return "GET";
         return request.getMethod();
     }
 
@@ -327,9 +330,10 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public String getParameter(String str)
     {
-        String ret=null;
-        String [] arr=(String[])parms.get(str);
-        if(arr!=null)ret=arr[0];
+        String ret = null;
+        String[] arr = (String[]) parms.get(str);
+        if (arr != null)
+            ret = arr[0];
         return ret;
     }
 
@@ -370,7 +374,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public String[] getParameterValues(String str)
     {
-        return (String[])parms.get(str);
+        return (String[]) parms.get(str);
     }
 
     /* (non-Javadoc)
@@ -383,7 +387,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public String getPathInfo()
     {
-        if(request==null)return null;
+        if (request == null)
+            return null;
         return request.getPathInfo();
     }
 
@@ -397,7 +402,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public String getPathTranslated()
     {
-        if(request==null)return null;
+        if (request == null)
+            return null;
         return request.getPathTranslated();
     }
 
@@ -411,7 +417,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public String getProtocol()
     {
-        if(request==null)return null;
+        if (request == null)
+            return null;
         return request.getProtocol();
     }
 
@@ -453,7 +460,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public String getRealPath(String str)
     {
-        if(request==null)return null;
+        if (request == null)
+            return null;
         return request.getRealPath(str);
     }
 
@@ -467,10 +475,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public String getRemoteAddr()
     {
-        if(request==null)return null;
-        if(request.getHeader("X-Forwarded-For")!=null && !"".equals(request.getHeader("X-Forwarded-For")))
+        if (request == null)
+            return null;
+        if (request.getHeader("X-Forwarded-For") != null && !"".equals(request.getHeader("X-Forwarded-For")))
         {
-            String x_forwarded_for=request.getHeader("X-Forwarded-For");
+            String x_forwarded_for = request.getHeader("X-Forwarded-For");
             return x_forwarded_for;
         }
         return request.getRemoteAddr();
@@ -486,7 +495,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public String getRemoteHost()
     {
-        if(request==null)return null;
+        if (request == null)
+            return null;
         return request.getRemoteHost();
     }
 
@@ -500,7 +510,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public String getRemoteUser()
     {
-        if(request==null)return null;
+        if (request == null)
+            return null;
         return request.getRemoteUser();
     }
 
@@ -515,7 +526,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public javax.servlet.RequestDispatcher getRequestDispatcher(String str)
     {
-        if(request==null)return null;
+        if (request == null)
+            return null;
         return request.getRequestDispatcher(str);
     }
 
@@ -529,7 +541,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public String getRequestURI()
     {
-        if(request==null)return null;
+        if (request == null)
+            return null;
         return request.getRequestURI();
     }
 
@@ -543,7 +556,24 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public StringBuffer getRequestURL()
     {
-        if(request==null)return null;
+        if (request == null)
+            return null;
+        if (request.getHeader("X-Forwarded-Host") != null && !"".equals(request.getHeader("X-Forwarded-Host")))
+        {
+            String port = "";
+            if (request.getServerPort() != 80)
+            {
+                port = ":" + request.getServerPort();
+            }
+            StringBuffer buffer=new StringBuffer(this.getScheme());
+            buffer.append("://");
+            buffer.append(this.getServerName());
+            buffer.append(port);
+            buffer.append(this.getRequestURI());
+            return buffer;
+
+        }
+
         return request.getRequestURL();
     }
 
@@ -557,7 +587,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public String getRequestedSessionId()
     {
-        if(request==null)sess.getId();
+        if (request == null)
+            sess.getId();
         return request.getRequestedSessionId();
     }
 
@@ -571,7 +602,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public String getScheme()
     {
-        if(request==null)return null;
+        if (request == null)
+            return null;
         return request.getScheme();
     }
 
@@ -585,18 +617,19 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public String getServerName()
     {
-        if(request==null)return null;
-        if(request.getHeader("X-Forwarded-Host")!=null && !"".equals(request.getHeader("X-Forwarded-Host")))
+        if (request == null)
+            return null;
+        if (request.getHeader("X-Forwarded-Host") != null && !"".equals(request.getHeader("X-Forwarded-Host")))
         {
-            String host=request.getHeader("X-Forwarded-Host");
-            int pos=host.indexOf(":");
-            if(pos==-1)
+            String host = request.getHeader("X-Forwarded-Host");
+            int pos = host.indexOf(":");
+            if (pos == -1)
             {
                 return host;
             }
             else
             {
-                host=host.substring(0,pos);
+                host = host.substring(0, pos);
                 return host;
             }
         }
@@ -613,28 +646,29 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public int getServerPort()
     {
-        if(request==null)return 0;
-        if(request.getHeader("X-Forwarded-Host")!=null && !"".equals(request.getHeader("X-Forwarded-Host")))
+        if (request == null)
+            return 0;
+        if (request.getHeader("X-Forwarded-Host") != null && !"".equals(request.getHeader("X-Forwarded-Host")))
         {
-            String host=request.getHeader("X-Forwarded-Host");
-            int pos=host.indexOf(":");
-            if(pos==-1)
+            String host = request.getHeader("X-Forwarded-Host");
+            int pos = host.indexOf(":");
+            if (pos == -1)
             {
                 return 80;
             }
             else
             {
-                String port=host.substring(pos+1);
+                String port = host.substring(pos + 1);
                 try
                 {
                     return Integer.parseInt(port);
                 }
-                catch(NumberFormatException nfe)
+                catch (NumberFormatException nfe)
                 {
                     return 80;
                 }
             }
-            
+
         }
         return request.getServerPort();
     }
@@ -649,7 +683,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public String getServletPath()
     {
-        if(request==null)return null;
+        if (request == null)
+            return null;
         return request.getServletPath();//WBUtils.getInstance().getWebPath();
     }
 
@@ -663,7 +698,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public javax.servlet.http.HttpSession getSession()
     {
-        if(request==null)return sess;
+        if (request == null)
+            return sess;
         return request.getSession();
     }
 
@@ -678,7 +714,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public javax.servlet.http.HttpSession getSession(boolean param)
     {
-        if(request==null)return sess;
+        if (request == null)
+            return sess;
         return request.getSession(param);
     }
 
@@ -692,7 +729,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public java.security.Principal getUserPrincipal()
     {
-        if(request==null)return null;
+        if (request == null)
+            return null;
         return request.getUserPrincipal();
     }
 
@@ -706,7 +744,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public boolean isRequestedSessionIdFromCookie()
     {
-        if(request==null)return false;
+        if (request == null)
+            return false;
         return request.isRequestedSessionIdFromCookie();
     }
 
@@ -720,7 +759,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public boolean isRequestedSessionIdFromURL()
     {
-        if(request==null)return false;
+        if (request == null)
+            return false;
         return request.isRequestedSessionIdFromURL();
     }
 
@@ -734,7 +774,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public boolean isRequestedSessionIdFromUrl()
     {
-        if(request==null)return false;
+        if (request == null)
+            return false;
         return request.isRequestedSessionIdFromUrl();
     }
 
@@ -748,7 +789,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public boolean isRequestedSessionIdValid()
     {
-        if(request==null)return false;
+        if (request == null)
+            return false;
         return request.isRequestedSessionIdValid();
     }
 
@@ -762,7 +804,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public boolean isSecure()
     {
-        if(request==null)return false;
+        if (request == null)
+            return false;
         return request.isSecure();
     }
 
@@ -777,7 +820,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public boolean isUserInRole(String str)
     {
-        if(request==null)return false;
+        if (request == null)
+            return false;
         return request.isUserInRole(str);
     }
 
@@ -791,10 +835,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public void removeAttribute(String str)
     {
-        if(request==null)
+        if (request == null)
         {
             attr.remove(str);
-        }else
+        }
+        else
         {
             request.removeAttribute(str);
         }
@@ -811,12 +856,13 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public void setAttribute(String str, Object obj)
     {
-        if(request==null)
+        if (request == null)
         {
             attr.put(str, obj);
-        }else
+        }
+        else
         {
-            request.setAttribute(str,obj);
+            request.setAttribute(str, obj);
         }
     }
 
@@ -831,7 +877,8 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public void setCharacterEncoding(String str) throws java.io.UnsupportedEncodingException
     {
-        if(request==null)return;
+        if (request == null)
+            return;
         request.setCharacterEncoding(str);
     }
 
@@ -843,22 +890,25 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      */
     public void addParameter(String name, String value)
     {
-        Object obj=parms.get(name);
-        if(obj == null)
+        Object obj = parms.get(name);
+        if (obj == null)
         {
-            parms.put(name, new String[]{value});
-        }else if(obj instanceof String[])
+            parms.put(name, new String[]
+                    {
+                        value
+                    });
+        }
+        else if (obj instanceof String[])
         {
-            String arr[]=(String [])obj;
-            String fin[]=new String[arr.length+1];
-            int x=0;
-            for(;x<arr.length;x++)
+            String arr[] = (String[]) obj;
+            String fin[] = new String[arr.length + 1];
+            int x = 0;
+            for (; x < arr.length; x++)
             {
-                fin[x]=arr[x];
+                fin[x] = arr[x];
             }
-            fin[x]=value;
+            fin[x] = value;
             parms.put(name, fin);
         }
     }
-
 }
