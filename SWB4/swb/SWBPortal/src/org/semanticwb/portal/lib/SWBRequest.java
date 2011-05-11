@@ -468,6 +468,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     public String getRemoteAddr()
     {
         if(request==null)return null;
+        if(request.getHeader("X-Forwarded-For")!=null && !"".equals(request.getHeader("X-Forwarded-For")))
+        {
+            String x_forwarded_for=request.getHeader("X-Forwarded-For");
+            return x_forwarded_for;
+        }
         return request.getRemoteAddr();
     }
 
@@ -581,6 +586,20 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     public String getServerName()
     {
         if(request==null)return null;
+        if(request.getHeader("X-Forwarded-Host")!=null && !"".equals(request.getHeader("X-Forwarded-Host")))
+        {
+            String host=request.getHeader("X-Forwarded-Host");
+            int pos=host.indexOf(":");
+            if(pos==-1)
+            {
+                return host;
+            }
+            else
+            {
+                host=host.substring(0,pos);
+                return host;
+            }
+        }
         return request.getServerName();//com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/distributor");
     }
 
@@ -595,6 +614,28 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     public int getServerPort()
     {
         if(request==null)return 0;
+        if(request.getHeader("X-Forwarded-Host")!=null && !"".equals(request.getHeader("X-Forwarded-Host")))
+        {
+            String host=request.getHeader("X-Forwarded-Host");
+            int pos=host.indexOf(":");
+            if(pos==-1)
+            {
+                return 80;
+            }
+            else
+            {
+                String port=host.substring(pos+1);
+                try
+                {
+                    return Integer.parseInt(port);
+                }
+                catch(NumberFormatException nfe)
+                {
+                    return 80;
+                }
+            }
+            
+        }
         return request.getServerPort();
     }
 
