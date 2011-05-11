@@ -642,9 +642,9 @@ public class Recommend extends GenericAdmResource {
                     }
                 }
 
-                System.out.println("base.getAttribute(lnktexto)="+base.getAttribute("lnktexto"));
-                System.out.println("base.getAttribute(btntexto)="+base.getAttribute("btntexto"));
-                System.out.println("base.getAttribute(img)="+base.getAttribute("img"));
+                //System.out.println("base.getAttribute(lnktexto)="+base.getAttribute("lnktexto"));
+                //System.out.println("base.getAttribute(btntexto)="+base.getAttribute("btntexto"));
+                //System.out.println("base.getAttribute(img)="+base.getAttribute("img"));
 
 
                 if( base.getAttribute("lnktexto")!=null ) {
