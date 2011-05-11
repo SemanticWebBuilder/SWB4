@@ -385,8 +385,8 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
     @Override
     public StringBuffer getRequestURL()
     {
-
-        if (this.getHeader("X-Forwarded-Host") != null && !"".equals(this.getHeader("X-Forwarded-Host")))
+        String host=this.getHeader("X-Forwarded-Host");
+        if (host != null && host.length()>0)
         {
             String port = "";
             if (this.getServerPort() != 80)
@@ -400,15 +400,15 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
             buffer.append(this.getRequestURI());
             return buffer;
         }
-        return this.getRequestURL();
+        return super.getRequestURL();
     }
+
     @Override
     public String getServerName()
     {
-
-        if (this.getHeader("X-Forwarded-Host") != null && !"".equals(this.getHeader("X-Forwarded-Host")))
+        String host=this.getHeader("X-Forwarded-Host");
+        if (host != null && host.length()>0)
         {
-            String host = this.getHeader("X-Forwarded-Host");
             int pos = host.indexOf(":");
             if (pos == -1)
             {
@@ -420,15 +420,15 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
                 return host;
             }
         }
-        return this.getServerName();//com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/distributor");
+        return super.getServerName();//com.infotec.appfw.util.AFUtils.getInstance().getEnv("wb/distributor");
     }
+
     @Override
     public int getServerPort()
     {
-       
-        if (this.getHeader("X-Forwarded-Host") != null && !"".equals(this.getHeader("X-Forwarded-Host")))
+        String host=this.getHeader("X-Forwarded-Host");
+        if (host != null && host.length()>0)
         {
-            String host = this.getHeader("X-Forwarded-Host");
             int pos = host.indexOf(":");
             if (pos == -1)
             {
@@ -448,18 +448,18 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
             }
 
         }
-        return this.getServerPort();
+        return super.getServerPort();
     }
+
     @Override
     public String getRemoteAddr()
     {
-
-        if (this.getHeader("X-Forwarded-For") != null && !"".equals(this.getHeader("X-Forwarded-For")))
+        String x_forwarded_for=this.getHeader("X-Forwarded-For");
+        if (x_forwarded_for != null && x_forwarded_for.length()>0)
         {
-            String x_forwarded_for = this.getHeader("X-Forwarded-For");
             return x_forwarded_for;
         }
-        return this.getRemoteAddr();
+        return super.getRemoteAddr();
     }
     
 }
