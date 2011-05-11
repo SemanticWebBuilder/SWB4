@@ -571,9 +571,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
             buffer.append(port);
             buffer.append(this.getRequestURI());
             return buffer;
-
         }
-
         return request.getRequestURL();
     }
 
