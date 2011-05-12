@@ -83,7 +83,7 @@ public class SocialUser
     public final void refresh(User user, WebSite site)
     {
         lang = user == null || user.getLanguage() == null ? "ALL" : user.getLanguage();
-        country = user == null || user.getCountry() == null ? "ALL" : user.getCountry().getId();
+        country = user == null || user.getCountry() == null ? "ALL" : user.getCountry();
         this.site = site.getId();
 
     }
