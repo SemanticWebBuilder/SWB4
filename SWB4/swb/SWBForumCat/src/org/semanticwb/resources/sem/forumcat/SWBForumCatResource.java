@@ -1052,7 +1052,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         {
                             aAddress.add(new InternetAddress(toemail));
                             swbMail.setAddress(aAddress);
-                            swbMail.setSubject("Mensaje rechazado en el foro " + request.getServerName());
+                            swbMail.setSubject("Mensaje rechazado en el foro " + response.getWebPage().getWebSite().getTitle());
                             swbMail.setData("Su mensaje fue rechazado por no cumplir con las politicas de uso del portal.<br>" + text);
                             swbMail.setContentType("text/html");
                             swbMail.setFromEmail(SWBPlatform.getEnv("af/adminEmail"));
@@ -1099,7 +1099,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                             ArrayList<InternetAddress> aAddress = new ArrayList<InternetAddress>();
                             aAddress.add(new InternetAddress(toemail));
                             swbMail.setAddress(aAddress);
-                            swbMail.setSubject("Respuesta rechazada en el foro " + request.getServerName());
+                            swbMail.setSubject("Respuesta rechazada en el foro " + response.getWebPage().getWebSite().getTitle());
                             swbMail.setData("Su respuesta fue rechazada por no cumplir con las politicas de uso del portal.<br>" + text);
                             swbMail.setContentType("text/html");
                             swbMail.setFromEmail(SWBPlatform.getEnv("af/adminEmail"));
