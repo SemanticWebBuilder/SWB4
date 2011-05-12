@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
       var context="";
+      var word_separator='_';
       var trees= new Array();
 
       var CONST_TAB="/tab";   //Constante sufijo para identificar al tab
@@ -1243,7 +1244,7 @@ function replaceChars4Id(value, lowercase)
         for(var x=0;x<value.length;x++)
         {
             var ch=value.charAt(x);
-            if(ch==' ')ch='_';
+            if(ch==' ')ch=word_separator;
             else if(ch=='á')ch='a';
             else if(ch=='à')ch='a';
             else if(ch=='ã')ch='a';
@@ -1297,7 +1298,7 @@ function replaceChars4Id(value, lowercase)
             else if(ch=='Ñ')ch='N';
             else if(ch=='Ç')ch='C';
             else if(ch=='Ý')ch='Y';
-            if ((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '_')
+            if ((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '_' || ch == '-')
             {
                 id+=ch;
             }
