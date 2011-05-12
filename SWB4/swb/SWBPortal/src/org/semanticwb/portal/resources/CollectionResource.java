@@ -191,6 +191,28 @@ public class CollectionResource extends GenericResource {
             }
             //response.setRenderParameter("statmsg", response.getLocaleString("statmsg1"));
             response.setMode(SWBActionResponse.Mode_VIEW);
+        } else if ("remove".equals(action))
+        {
+            log.debug("processAction(remove)");
+            //System.out.println("sval:"+sval);
+            if (obj instanceof Collection) {
+                Collection col = (Collection) obj;
+
+                String prop = request.getParameter("prop");
+                //System.out.println("Eliminando ... "+prop);
+
+                if(prop!=null&&prop.equals("display"))
+                {
+                    //System.out.println("quitando display");
+                    col.removeListProperties(sval);
+
+                } else if(prop!=null&&prop.equals("search"))
+                {
+                    //System.out.println("quitando search");
+                    col.removeSearchProperties(sval);
+                }
+
+            }
         }
 
         if(id!=null) response.setRenderParameter("suri", id);
