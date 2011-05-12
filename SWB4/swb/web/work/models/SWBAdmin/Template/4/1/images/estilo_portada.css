@@ -83,19 +83,16 @@ h1, h3 {
 	text-decoration:none;
 	color:#336699;
 	padding-left:8px;
-	background: url(bullet_noticias1.gif) no-repeat top left;
 }
 #noticias li a:visited{
 	text-decoration:none;
 	color:#6699CC;
 	padding-left:8px;
-	background: url(bullet_noticias2.gif) no-repeat top left;
 }
 #noticias li a:hover{
 	text-decoration:underline;
 	color:blue;
 	padding-left:8px;
-	background: url(bullet_noticias3.gif) no-repeat top left;
 }
 #noticias li a:active{
 	text-decoration:underline;
