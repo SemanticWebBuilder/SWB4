@@ -96,9 +96,9 @@ public class ResizePoint extends CustomNode
                 {
                     ModelerUtils.clickedNode=null;
                     attachedNode.resizing = false;
-                    if (attachedNode instanceof Pool) {
-                        (attachedNode as Pool).captureChilds();
-                    }
+//                    if (attachedNode instanceof Pool) {
+//                        (attachedNode as Pool).captureChilds();
+//                    }
                     attachedNode.snapToGrid();
                 }
             }
