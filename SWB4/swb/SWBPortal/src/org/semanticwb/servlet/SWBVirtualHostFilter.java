@@ -123,7 +123,7 @@ public class SWBVirtualHostFilter implements Filter
         String uri = _request.getRequestURI();
         String cntx = _request.getContextPath();
         String path = uri.substring(cntx.length());
-        String host = request.getServerName();
+        String host = _request.getServerName();
         String iserv = "";
 
         if (path == null || path.length() == 0)
@@ -238,7 +238,7 @@ public class SWBVirtualHostFilter implements Filter
                     }
                     SWBContext.setSessionUser(user);
                 }
-                chain.doFilter(request, response);
+                chain.doFilter(_request, response);
             }
         }
         catch (Throwable t)
