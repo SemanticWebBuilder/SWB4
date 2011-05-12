@@ -75,7 +75,7 @@ public class FrmProcess implements InternalServlet
             for (int x = 0; x < id.length(); x++)
             {
                 char ch = id.charAt(x);
-                if (!((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '_'))
+                if (!((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || ch == '_' || ch == '-'))
                 {
                     ret = false;
                     break;
