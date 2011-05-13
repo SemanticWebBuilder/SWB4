@@ -1,26 +1,26 @@
-/**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
+/**
+* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+*
+* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (\u2018open source\u2019),
+* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+* del SemanticWebBuilder 4.0.
+*
+* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+* de la misma.
+*
+* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+* dirección electrónica:
 *  http://www.semanticwebbuilder.org
-**/ 
- 
+**/
+
 /*
  * Recommend.java
  *
@@ -61,7 +61,7 @@ import org.w3c.dom.NodeList;
  * Despliega y administra recomendaciones de usuarios
  * finales bajo ciertos criterios (configuraci&oacute;n del recurso).
  *
- * Object that is in charge to unfold and to administer recommendations of end 
+ * Object that is in charge to unfold and to administer recommendations of end
  * users under certain criteria (resource configuration).
  *
  * @author : Vanessa Arredondo N&uacute;&ntilde;ez
@@ -81,20 +81,20 @@ public class Recommend extends GenericAdmResource {
      * de base de datos. <p>the XSLT template that generates the database query
      * results' view.</p>
      */
-    javax.xml.transform.Templates tpl;
+    private javax.xml.transform.Templates tpl;
 
     /**
      * el nombre de la carpeta de trabajo general. <p>the name for the general work directory</p>
      */
     String webWorkPath = "/work";
-    
+
     /** The Constant _FAIL. */
     private static final String _FAIL = "failure";
 
     /**
      * el nombre de la clase de este recurso. <p>this resource's class name</p>
      */
-    final String name = getClass().getName().substring(getClass().getName().lastIndexOf(".") + 1);
+    String name = getClass().getName().substring(getClass().getName().lastIndexOf(".") + 1);
 
     /**
      * la ruta parcial del directorio en que se encuentra la plantilla XSLT por defecto
@@ -102,8 +102,11 @@ public class Recommend extends GenericAdmResource {
      */
     String path = SWBPlatform.getContextPath() + "/swbadmin/xsl/";
 
+    private static final String IMG_ID = "imgseccode";
+    private static final String CODE_FIELDNAME = "code";
 
-    /** 
+
+    /**
      * Creates a new instance of Recommend.
      */
     public Recommend() {
@@ -145,9 +148,6 @@ public class Recommend extends GenericAdmResource {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.semanticwb.portal.api.GenericResource#processAction(HttpServletRequest, SWBActionResponse)
-     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException {
         Resource base = getResourceBase();
@@ -190,7 +190,7 @@ public class Recommend extends GenericAdmResource {
      * Genera un {@code document} con la estructura de informaci&oacute;n definida
      * para la vista de administraci&oacute;n. <p>Generates a {@code document}
      * with the data structure defined for the administration view.</p>
-     * 
+     *
      * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
      * @param response la respuesta hacia el usuario.<p>the response to the user</p>
      * @param paramRequest el objeto generado por SWB y asociado a la petici&oacute;n
@@ -343,7 +343,7 @@ public class Recommend extends GenericAdmResource {
      * Genera un {@code document} con la informaci&oacute;n que se mostrar&aacute;
      * en el correo a enviar. <p>Generates a {@code document} with the data the
      * sending e-mail is going to show.</p>
-     * 
+     *
      * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
      * @param paramRequest el objeto generado por SWB y asociado a la petici&oacute;n
      * del usuario.<p>the object generated by SWB and asociated to the user's request</p>
@@ -631,6 +631,19 @@ public class Recommend extends GenericAdmResource {
                     out.println("<a href=\"#\" onclick=\""+axn+"\" class=\"swb-recommend-stgy\" title=\""+paramRequest.getLocaleString("lblRecommend")+"\">"+paramRequest.getLocaleString("lblRecommend")+"</a>");
                     out.println("</div>");
                 }
+                if(Boolean.parseBoolean(base.getAttribute("captcha","false"))) {
+                    out.println("<script type=\"text/javascript\">");
+                    out.println("<!--");
+                    out.println("function changeSecureCodeImage(imgid) {");
+                    out.println("    var img = dojo.byId(imgid);");
+                    out.println("    if(img) {");
+                    out.println("        var rn = Math.floor(Math.random()*99999);");
+                    out.println("        img.src = '"+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp?nc='+rn;");
+                    out.println("    }");
+                    out.println("}");
+                    out.println("-->");
+                    out.println("</script>");
+                }
             }else {
                 String surl = paramRequest.getWebPage().getUrl();
                 Iterator<Resourceable> res = base.listResourceables();
@@ -641,12 +654,6 @@ public class Recommend extends GenericAdmResource {
                         break;
                     }
                 }
-
-                //System.out.println("base.getAttribute(lnktexto)="+base.getAttribute("lnktexto"));
-                //System.out.println("base.getAttribute(btntexto)="+base.getAttribute("btntexto"));
-                //System.out.println("base.getAttribute(img)="+base.getAttribute("img"));
-
-
                 if( base.getAttribute("lnktexto")!=null ) {
                     out.println("<a href=\""+surl+"\" class=\"swb-recommend-stgy\" title=\""+paramRequest.getLocaleString("lblRecommend")+"\">"+base.getAttribute("lnktexto")+"</a>");
                 }else if( base.getAttribute("btntexto")!=null ) {
@@ -664,7 +671,6 @@ public class Recommend extends GenericAdmResource {
                 }
             }
         }else {
-            System.out.println("base.getAttribute(modal)="+base.getAttribute("modal"));
             if( request.getParameter(_FAIL)!=null ) {
                 out.println("<script type=\"text/javascript\">");
                 out.println("<!--");
@@ -675,22 +681,30 @@ public class Recommend extends GenericAdmResource {
                 out.println("-->");
                 out.println("</script>");
             }
-            /*else if( modal ) {
-                out.println(getModalWindowCode(paramRequest));
-                out.println("openRecommendationModal('recommend" + base.getId() + "','" + base.getAttribute("backgroundcolor", "#000000").trim() + "', " + base.getAttribute("opacity", "80").trim() + ");");
-            }*/
             else {
-                boolean hasCaptcha = Boolean.parseBoolean(base.getAttribute("captcha"));
-                Document dom = getDom(request, response, paramRequest);
                 String html;
                 try {
+                    Document dom = getDom(request, response, paramRequest);
                     html = SWBUtils.XML.transformDom(tpl, dom);
-//                    if(hasCaptcha) {
-//                        String captcha = (getCaptchaScript(paramRequest));
-//                        html = html.replaceFirst("captcha", captcha);
-//                        html = html + getScript(paramRequest);
+//                    if(Boolean.parseBoolean(base.getAttribute("captcha","false"))) {
+//                        html = html.replaceFirst("captcha", getCaptchaScript(paramRequest));
+//                        StringBuilder script = new StringBuilder();
+//                        script.append(html);
+//                        script.append("\n<script type=\"text/javascript\">\n");
+//                        script.append("<!--\n");
+//                        script.append("function changeSecureCodeImage(imgid) {");
+//                        script.append("    var img = dojo.byId(imgid);");
+//                        script.append("    if(img) {");
+//                        script.append("        var rn = Math.floor(Math.random()*99999);");
+//                        script.append("        img.src = '"+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp?nc='+rn;");
+//                        script.append("    }");
+//                        script.append("}\n");
+//                        script.append("-->\n");
+//                        script.append("</script>\n");
+//                        html = script.toString();
+//System.out.println("2. html="+html);
 //                    }else
-//                        html = html.replaceFirst("captcha", "&nbsp;");
+//                        html = html.replaceFirst("captcha", "");
                 }catch(TransformerException te) {
                     html = te.getMessage();
                     log.error(te.getMessage());
@@ -700,9 +714,6 @@ public class Recommend extends GenericAdmResource {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.semanticwb.portal.api.GenericResource#doHelp(HttpServletRequest, HttpServletResponse, SWBParamRequest)
-     */
     @Override
     public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if( paramRequest.getCallMethod()==paramRequest.Call_CONTENT ) {
@@ -733,66 +744,76 @@ public class Recommend extends GenericAdmResource {
      * @throws Exception the exception
      */
     private void  processEmails(HttpServletRequest request, SWBParamRequest paramRequest) throws TransformerException, SWBResourceException, IOException {
-        Document dom = getDomEmail(request, paramRequest);
+        Resource base = getResourceBase();
 
-        String fromname;
-        try {
-            fromname = dom.getElementsByTagName("fromname").item(0).getFirstChild().getNodeValue();
-        }catch(NullPointerException e) {
-            throw new TransformerException(paramRequest.getLocaleString("msgSenderRequired"));
-        }
-        String from;
-        try {
-            from = dom.getElementsByTagName("fromemail").item(0).getFirstChild().getNodeValue();
-        }catch(NullPointerException e) {
-            throw new TransformerException(paramRequest.getLocaleString("msgSenderEmailRequired"));
-        }
-        String toname;
-        try {
-            toname = dom.getElementsByTagName("toname").item(0).getFirstChild().getNodeValue();
-        }catch(NullPointerException e) {
-            throw new TransformerException(paramRequest.getLocaleString("msgReceiverRequired"));
-        }
-        String to;
-        try {
-            to = dom.getElementsByTagName("toemail").item(0).getFirstChild().getNodeValue();
-        }catch(NullPointerException e) {
-            throw new TransformerException(paramRequest.getLocaleString("msgReceiverEmailRequired"));
-        }
+        boolean hasCaptcha = Boolean.parseBoolean(base.getAttribute("captcha"));
+        String securCodeSent = request.getParameter(CODE_FIELDNAME);
+        String securCodeCreated = (String)request.getSession(true).getAttribute("cs");
+        if( (hasCaptcha && securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent)) || !hasCaptcha ) {
+            request.getSession(true).removeAttribute("cs");
+            Document dom = getDomEmail(request, paramRequest);
 
-        String subject;
-        try {
-            subject = dom.getElementsByTagName("subject").item(0).getFirstChild().getNodeValue();
-        }catch(NullPointerException e) {
-            throw new TransformerException(paramRequest.getLocaleString("msgErrSubjectRequired"));
+            String fromname;
+            try {
+                fromname = dom.getElementsByTagName("fromname").item(0).getFirstChild().getNodeValue();
+            }catch(NullPointerException e) {
+                throw new TransformerException(paramRequest.getLocaleString("msgSenderRequired"));
+            }
+            String from;
+            try {
+                from = dom.getElementsByTagName("fromemail").item(0).getFirstChild().getNodeValue();
+            }catch(NullPointerException e) {
+                throw new TransformerException(paramRequest.getLocaleString("msgSenderEmailRequired"));
+            }
+            String toname;
+            try {
+                toname = dom.getElementsByTagName("toname").item(0).getFirstChild().getNodeValue();
+            }catch(NullPointerException e) {
+                throw new TransformerException(paramRequest.getLocaleString("msgReceiverRequired"));
+            }
+            String to;
+            try {
+                to = dom.getElementsByTagName("toemail").item(0).getFirstChild().getNodeValue();
+            }catch(NullPointerException e) {
+                throw new TransformerException(paramRequest.getLocaleString("msgReceiverEmailRequired"));
+            }
+
+            String subject;
+            try {
+                subject = dom.getElementsByTagName("subject").item(0).getFirstChild().getNodeValue();
+            }catch(NullPointerException e) {
+                throw new TransformerException(paramRequest.getLocaleString("msgErrSubjectRequired"));
+            }
+
+            String html = SWBUtils.XML.transformDom(tpl, dom);
+
+    //        InternetAddress iaddress = new InternetAddress();
+    //        iaddress.setAddress(to);
+    //        ArrayList<InternetAddress> addresses = new ArrayList<InternetAddress>();
+    //        addresses.add(iaddress);
+            ArrayList<InternetAddress> addresses = new ArrayList<InternetAddress>();
+            InternetAddress addressTo = new InternetAddress();
+            addressTo.setAddress(to);
+            addresses.add(addressTo);
+
+            ArrayList<InternetAddress> copy = new ArrayList<InternetAddress>();
+            InternetAddress addressFrom = new InternetAddress();
+            addressFrom.setAddress(from);
+            copy.add(addressFrom);
+
+            String admin = SWBPortal.getEnv("af/adminEmail");
+            if(admin!=null)
+                if( SWBUtils.EMAIL.sendMail(admin, base.getWebSite().getDisplayTitle(paramRequest.getUser().getLanguage()), addresses, copy, null, subject, "HTML", html, null, null, null)==null )
+                    throw new TransformerException(paramRequest.getLocaleString("msgErrorSending"));
+        }else {
+            request.getSession(true).removeAttribute("cs");
+            throw new SWBResourceException(paramRequest.getLocaleString("msgErrorSending"));
         }
-
-//        try {
-//            System.out.println("1");
-//            String message = dom.getElementsByTagName("message").item(0).getFirstChild().getNodeValue();
-//            System.out.println("2");
-//            if( message==null ) {
-//                System.out.println("3");
-//                throw new Exception(paramRequest.getLocaleString("msgErrMessageRequired"));
-//            }
-//        }catch(Exception e) {
-//            throw new Exception(paramRequest.getLocaleString("msgErrMessageRequired"));
-//        }
-//        System.out.println("4");
-
-        String html = SWBUtils.XML.transformDom(tpl, dom);
-
-        InternetAddress iaddress = new InternetAddress();
-        iaddress.setAddress(to);
-        ArrayList<InternetAddress> addresses = new ArrayList<InternetAddress>();
-        addresses.add(iaddress);
-        if( SWBUtils.EMAIL.sendMail(from, fromname, addresses, null, null, subject, "HTML", html, null, null, null)==null )
-            throw new TransformerException(paramRequest.getLocaleString("msgErrorSending"));
     }
 
     /**
      * Process emails.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @throws TransformerException the transformer exception
@@ -800,63 +821,72 @@ public class Recommend extends GenericAdmResource {
      * @throws Exception the exception
      */
     private void  processEmails(HttpServletRequest request, SWBActionResponse response) throws TransformerException, SWBResourceException, Exception {
-        Document dom = getDomEmail(request, response);
+        Resource base = getResourceBase();
 
-        String from = dom.getElementsByTagName("fromemail").item(0).getFirstChild().getNodeValue();
-        if( from==null )
-            throw new Exception(response.getLocaleString("msgErrCustomerEmailRequired"));
+        boolean hasCaptcha = Boolean.parseBoolean(base.getAttribute("captcha"));
+        String securCodeSent = request.getParameter(CODE_FIELDNAME);
+        String securCodeCreated = (String)request.getSession(true).getAttribute("cs");
 
-        String fromname = dom.getElementsByTagName("fromname").item(0).getFirstChild().getNodeValue();
-        if( fromname==null )
-            throw new Exception(response.getLocaleString("msgErrCustomerNameRequired"));
+        if( (hasCaptcha && securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent)) || !hasCaptcha ) {
+            Document dom = getDomEmail(request, response);
 
-        String to = dom.getElementsByTagName("toemail").item(0).getFirstChild().getNodeValue();
-        if( to==null )
-            throw new Exception(response.getLocaleString("msgErrManagerEmailRequired"));
+            String from = dom.getElementsByTagName("fromemail").item(0).getFirstChild().getNodeValue();
+            if( from==null )
+                throw new Exception(response.getLocaleString("msgErrCustomerEmailRequired"));
 
-        String subject = dom.getElementsByTagName("subject").item(0).getFirstChild().getNodeValue();
-        if( subject==null )
-            throw new Exception(response.getLocaleString("msgErrSubjectRequired"));
+            String fromname = dom.getElementsByTagName("fromname").item(0).getFirstChild().getNodeValue();
+            if( fromname==null )
+                throw new Exception(response.getLocaleString("msgErrCustomerNameRequired"));
 
-        String message = dom.getElementsByTagName("message").item(0).getFirstChild().getNodeValue();
-        if( message==null )
-            throw new Exception(response.getLocaleString("msgErrMessageRequired"));
+            String to = dom.getElementsByTagName("toemail").item(0).getFirstChild().getNodeValue();
+            if( to==null )
+                throw new Exception(response.getLocaleString("msgErrManagerEmailRequired"));
 
-        String html = SWBUtils.XML.transformDom(tpl, dom);
+            String subject = dom.getElementsByTagName("subject").item(0).getFirstChild().getNodeValue();
+            if( subject==null )
+                throw new Exception(response.getLocaleString("msgErrSubjectRequired"));
 
-        ArrayList<InternetAddress> addresses = new ArrayList<InternetAddress>();
-        InternetAddress addressTo = new InternetAddress();
-        addressTo.setAddress(to);
-        addresses.add(addressTo);
+            String message = dom.getElementsByTagName("message").item(0).getFirstChild().getNodeValue();
+            if( message==null )
+                throw new Exception(response.getLocaleString("msgErrMessageRequired"));
 
-        ArrayList<InternetAddress> copy = new ArrayList<InternetAddress>();
-        InternetAddress addressFrom = new InternetAddress();
-        addressFrom.setAddress(from);
-        copy.add(addressFrom);
+            String html = SWBUtils.XML.transformDom(tpl, dom);
 
-        String admin = SWBPortal.getEnv("af/adminEmail");
-        if(admin!=null)
-            if( SWBUtils.EMAIL.sendMail(admin, response.getWebPage().getWebSite().getDisplayTitle(response.getUser().getLanguage()), addresses, copy, null, subject, "HTML", html, null, null, null)==null )
-                throw new Exception(response.getLocaleString("msgErrSending"));
+            ArrayList<InternetAddress> addresses = new ArrayList<InternetAddress>();
+            InternetAddress addressTo = new InternetAddress();
+            addressTo.setAddress(to);
+            addresses.add(addressTo);
+
+            ArrayList<InternetAddress> copy = new ArrayList<InternetAddress>();
+            InternetAddress addressFrom = new InternetAddress();
+            addressFrom.setAddress(from);
+            copy.add(addressFrom);
+
+            String admin = SWBPortal.getEnv("af/adminEmail");
+            if(admin!=null)
+                if( SWBUtils.EMAIL.sendMail(admin, base.getWebSite().getDisplayTitle(response.getUser().getLanguage()), addresses, copy, null, subject, "HTML", html, null, null, null)==null )
+                    throw new Exception(response.getLocaleString("msgErrSending"));
+        }
+        request.getSession(true).removeAttribute("cs");
     }
-    
+
     /**
      * Gets the captcha script.
-     * 
+     *
      * @param paramRequest the param request
      * @return the captcha script
      * @throws SWBResourceException the sWB resource exception
      */
     private String getCaptchaScript(SWBParamRequest paramRequest) throws SWBResourceException {
         StringBuilder html = new StringBuilder();
-        html.append("<div class=\"swb-coment-imagen\"> \n");
-        html.append("  <p><img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" alt=\"\" id=\"imgseccode\" width=\"155\" height=\"65\" /></p> \n");
-        html.append("  <p><a href=\"#\" onclick=\"changeSecureCodeImage('imgseccode');\">"+paramRequest.getLocaleString("lblDoViewAnotherCode")+"</a></p> \n");
-        html.append("</div> \n");
-        html.append("<div class=\"swb-coment-captcha\"> \n");
-        html.append("  <p><label for=\"cmnt_seccode\">"+paramRequest.getLocaleString("lblDoViewImageIs")+":</label></p> \n");
-        html.append("  <p><input type=\"text\" id=\"cmnt_seccode\" name=\"cmnt_seccode\" /></p> \n");
-        html.append("</div> \n");
+        html.append("<div class=\"swb-captcha-imagen\">");
+        html.append("  <p><img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" alt=\"\" id=\""+IMG_ID+"\" width=\"155\" height=\"65\" /></p>");
+        html.append("  <p><a href=\"javascript:changeSecureCodeImage('"+IMG_ID+"');\">"+paramRequest.getLocaleString("lblDoViewAnotherCode")+"</a></p>");
+        html.append("</div>");
+        html.append("<div class=\"swb-captcha-txt\">");
+        html.append("  <p><label for=\"cmnt_seccode\">"+paramRequest.getLocaleString("lblDoViewImageIs")+":</label></p>");
+        html.append("  <p><input type=\"text\" name=\""+CODE_FIELDNAME+"\" value=\"\"/></p>");
+        html.append("</div>");
         return html.toString();
     }
 
@@ -878,7 +908,7 @@ public class Recommend extends GenericAdmResource {
     /**
      * Agrega la informaci&oacute;n enviada por correo al archivo log de este
      * recurso. <p>Adds the data sent by e-mailto this resource's log file.</p>
-     * 
+     *
      * @param dom <code>document</code> que contiene los datos enviados por correo.
      * <p>the {@code document} which contains the data sent by e-mail.</p>
      * @param user el <code>user</code> que ejecuta la acci&oacute;n de env&iacute;o
@@ -949,13 +979,13 @@ public class Recommend extends GenericAdmResource {
 
         Resource base = paramRequest.getResourceBase();
 
-        StringBuilder buffer = new StringBuilder(400);
-        StringBuilder formBuffer = new StringBuilder(200);
+        StringBuilder buffer = new StringBuilder();
+        StringBuilder formBuffer = new StringBuilder();
 
         buffer.append("<script type=\"text/javascript\">\n");
         buffer.append("<!--\n");
         buffer.append("  var recomDivId = 'recommend" + base.getId() + "';\n");
-        buffer.append("  function sendRecommendation(frm) {\n");
+        buffer.append("  function validate(frm) {\n");
         buffer.append("    var msg = [];\n");
 
         buffer.append("    if( isEmpty(frm.txtFromName.value) )\n");
@@ -966,6 +996,8 @@ public class Recommend extends GenericAdmResource {
         buffer.append("      msg.push('"+paramRequest.getLocaleString("msgReceiverRequired")+"');\n");
         buffer.append("    if( !isValidEmail(frm.txtToEmail.value) )\n");
         buffer.append("      msg.push('"+paramRequest.getLocaleString("msgReceiverEmailRequired")+"');\n");
+        buffer.append("    if( isEmpty(frm."+CODE_FIELDNAME+".value) )\n");
+        buffer.append("      msg.push('"+paramRequest.getLocaleString("msgCaptchaRequired")+"');\n");
 
         buffer.append("    if( msg.length==0 ) {\n");
         buffer.append("      var xhrArgs = {\n");
@@ -1037,11 +1069,11 @@ public class Recommend extends GenericAdmResource {
         formBuffer.append("  <form class=\"swb-rcmnd-frm\" method=\"post\" action=\"" + url + "\" id=\"frmContact\">");
         formBuffer.append("    <p class=\"swb-rcmnd-in\">");
         formBuffer.append("      <label for=\"txtFromName\">" + paramRequest.getLocaleString("lblSender") + "*<\\/label>");
-        formBuffer.append("      <input type=\"text\" id=\"txtFromName\" name=\"txtFromName\" value=\""+strFromName+"\" maxlength=\"100\" />");
+        formBuffer.append("      <input type=\"text\" id=\"txtFromName\" name=\"txtFromName\" value=\""+strFromName+"\" maxlength=\"100\"/>");
         formBuffer.append("    <\\/p>");
         formBuffer.append("    <p class=\"swb-rcmnd-in\">");
         formBuffer.append("      <label for=\"txtFromEmail\">" + paramRequest.getLocaleString("lblSenderEmail") + "*<\\/label>");
-        formBuffer.append("      <input type=\"text\" id=\"txtFromEmail\" name=\"txtFromEmail\" value=\"" + strFromEmail + "\" maxlength=\"80\" />");
+        formBuffer.append("      <input type=\"text\" id=\"txtFromEmail\" name=\"txtFromEmail\" value=\"" + strFromEmail + "\" maxlength=\"80\"/>");
         formBuffer.append("    <\\/p>");
         formBuffer.append("    <p class=\"swb-rcmnd-in\">");
         formBuffer.append("      <label for=\"txtToName\">" + paramRequest.getLocaleString("lblReceiver") + "*<\\/label>");
@@ -1055,9 +1087,13 @@ public class Recommend extends GenericAdmResource {
         formBuffer.append("      <label for=\"tarMsg\">" + paramRequest.getLocaleString("lblMessage") + "<\\/label>");
         formBuffer.append("      <textarea rows=\"5\" cols=\"40\" id=\"tarMsg\" name=\"tarMsg\"><\\/textarea>");
         formBuffer.append("    <\\/p>");
+        if(Boolean.parseBoolean(base.getAttribute("captcha","false"))) {
+            formBuffer.append(getCaptchaScript(paramRequest));
+        }
         formBuffer.append("    <p class=\"swb-rcmnd-cmd\">");
-        formBuffer.append("      <input type=\"button\" value=\"" + paramRequest.getLocaleString("lblSubmit") + "\" onclick=\"sendRecommendation(this.form);\" />");
-        formBuffer.append("      <input type=\"button\" value=\"" + paramRequest.getLocaleString("lblReset") + "\" onclick=\"removeModal(recomDivId);\" />");
+        formBuffer.append("      <input type=\"button\" value=\""+paramRequest.getLocaleString("lblCancel")+"\" onclick=\"removeModal(recomDivId);\"/>");
+        formBuffer.append("      <input type=\"reset\" value=\""+paramRequest.getLocaleString("lblReset")+"\"/>");
+        formBuffer.append("      <input type=\"button\" value=\""+paramRequest.getLocaleString("lblSubmit")+"\" onclick=\"validate(this.form);\"/>");
         formBuffer.append("    <\\/p>");
         formBuffer.append("  <\\/form>");
         formBuffer.append("  <p class=\"swb-rcmnd-warn\">* "+paramRequest.getLocaleString("msgRequiredData")+"<\\/p>");
@@ -1099,7 +1135,7 @@ public class Recommend extends GenericAdmResource {
         }
     }
 
-    public void doSend(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws java.io.IOException {
+    public void doSend(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
