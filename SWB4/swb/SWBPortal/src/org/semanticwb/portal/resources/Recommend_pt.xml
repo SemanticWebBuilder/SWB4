@@ -19,6 +19,7 @@
             <input type="text" name="altlimpiar" label="Texto alterno para la imagen" promptMessage=""/>
             <input type="text" name="btnlimpiar" label="Texto del botón en caso de no definir imagen" promptMessage=""/>
             <input type="checkbox" name="generatelog" label="Generar archivo log" value="1"/>
+            <input type="checkbox" name="captcha" label="Adicionar captcha" value="true"/>
             <input type="text" name="styleClass" label="Nombre de grupo de estilos" promptMessage=""/>
         </fieldset>
         </div>
