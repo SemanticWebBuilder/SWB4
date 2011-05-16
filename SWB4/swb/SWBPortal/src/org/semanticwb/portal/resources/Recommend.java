@@ -781,7 +781,7 @@ public class Recommend extends GenericAdmResource {
             String subject;
             try {
                 //subject = dom.getElementsByTagName("subject").item(0).getFirstChild().getNodeValue();
-                subject = base.getAttribute("subject","No subject").trim();
+                subject = base.getAttribute("subject",paramRequest.getLocaleString("msgSubject")).trim();
             }catch(NullPointerException e) {
                 throw new TransformerException(paramRequest.getLocaleString("msgErrSubjectRequired"));
             }
@@ -840,7 +840,7 @@ public class Recommend extends GenericAdmResource {
                 throw new Exception(response.getLocaleString("msgErrManagerEmailRequired"));
 
             //String subject = dom.getElementsByTagName("subject").item(0).getFirstChild().getNodeValue();
-            String subject = base.getAttribute("subject","No subject").trim();
+            String subject = base.getAttribute("subject",response.getLocaleString("msgSubject")).trim();
             if( subject==null )
                 throw new Exception(response.getLocaleString("msgErrSubjectRequired"));
 
