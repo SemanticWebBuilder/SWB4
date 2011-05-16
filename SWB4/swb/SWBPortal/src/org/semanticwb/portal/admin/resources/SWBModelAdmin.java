@@ -281,7 +281,7 @@ public class SWBModelAdmin extends GenericResource {
                     //out.println("</td></tr>");
                     out.println("</span></fieldset>");
 
-                    out.println("<input type=\"hidden\" name=\"zipName\" value=\"" + request.getParameter("zipName") + "\"");
+                    out.println("<input type=\"hidden\" name=\"zipName\" value=\"" + request.getParameter("zipName") + "\" />");
                     out.println("</form>");
                 } catch (Exception e) {
                     log.error(e);
