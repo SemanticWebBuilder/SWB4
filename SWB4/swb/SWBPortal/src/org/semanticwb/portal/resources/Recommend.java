@@ -780,17 +780,14 @@ public class Recommend extends GenericAdmResource {
 
             String subject;
             try {
-                subject = dom.getElementsByTagName("subject").item(0).getFirstChild().getNodeValue();
+                //subject = dom.getElementsByTagName("subject").item(0).getFirstChild().getNodeValue();
+                subject = base.getAttribute("subject","No subject").trim();
             }catch(NullPointerException e) {
                 throw new TransformerException(paramRequest.getLocaleString("msgErrSubjectRequired"));
             }
 
             String html = SWBUtils.XML.transformDom(tpl, dom);
 
-    //        InternetAddress iaddress = new InternetAddress();
-    //        iaddress.setAddress(to);
-    //        ArrayList<InternetAddress> addresses = new ArrayList<InternetAddress>();
-    //        addresses.add(iaddress);
             ArrayList<InternetAddress> addresses = new ArrayList<InternetAddress>();
             InternetAddress addressTo = new InternetAddress();
             addressTo.setAddress(to);
@@ -842,7 +839,8 @@ public class Recommend extends GenericAdmResource {
             if( to==null )
                 throw new Exception(response.getLocaleString("msgErrManagerEmailRequired"));
 
-            String subject = dom.getElementsByTagName("subject").item(0).getFirstChild().getNodeValue();
+            //String subject = dom.getElementsByTagName("subject").item(0).getFirstChild().getNodeValue();
+            String subject = base.getAttribute("subject","No subject").trim();
             if( subject==null )
                 throw new Exception(response.getLocaleString("msgErrSubjectRequired"));
 
