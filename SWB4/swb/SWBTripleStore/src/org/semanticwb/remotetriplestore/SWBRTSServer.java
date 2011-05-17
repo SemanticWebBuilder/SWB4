@@ -2,6 +2,7 @@
 package org.semanticwb.remotetriplestore;
 
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBAppObject;
 
@@ -14,8 +15,9 @@ public class SWBRTSServer implements SWBAppObject {
     private static Logger log = SWBUtils.getLogger(SWBRTSServer.class);
     public void init()
     {
+        int port = Integer.parseInt(SWBPlatform.getEnv("swb/tripleremoteport", "6666"));
         SWBRTSBridge server = new SWBRTSBridge();
-        server.setPort(6666);
+        server.setPort(port);
         server.start();
     }
 
