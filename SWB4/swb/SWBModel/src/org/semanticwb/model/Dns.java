@@ -94,7 +94,10 @@ public class Dns extends DnsBase {
             while (it.hasNext())
             {
                 Dns dns = it.next();
-                names.put(dns.getDns(), dns);
+                if(dns.getDns()!=null)
+                {
+                    names.put(dns.getDns(), dns);
+                }
             }
         }
     }
