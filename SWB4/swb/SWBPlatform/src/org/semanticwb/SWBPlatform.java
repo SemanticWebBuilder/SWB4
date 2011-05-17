@@ -104,6 +104,9 @@ public class SWBPlatform
     /** The Constant PRESIST_TYPE_TDB. */
     public final static String PRESIST_TYPE_BIGDATA="bigdata";
 
+    /** The Constant PRESIST_TYPE_REMOTEPLATFORM. */
+    public final static String PRESIST_TYPE_SWBREMOTETRIPLESTORE="swbrts";
+
     /** The Constant PRESIST_TYPE_TDB. */
     public final static String PRESIST_TYPE_SWBTRIPLESTORE="swbts";
 
@@ -354,6 +357,9 @@ public class SWBPlatform
         }else if(PRESIST_TYPE_BIGDATA.equalsIgnoreCase(persistenceType))
         {
             SWBPlatform.persistenceType = PRESIST_TYPE_BIGDATA;
+        }else if(PRESIST_TYPE_SWBREMOTETRIPLESTORE.equalsIgnoreCase(persistenceType))
+        {
+            SWBPlatform.persistenceType = PRESIST_TYPE_SWBREMOTETRIPLESTORE;
         }else if(PRESIST_TYPE_SWBTRIPLESTORE.equalsIgnoreCase(persistenceType))
         {
             SWBPlatform.persistenceType = PRESIST_TYPE_SWBTRIPLESTORE;
@@ -886,6 +892,16 @@ public class SWBPlatform
     {
         return persistenceType==PRESIST_TYPE_DEFAULT;
     }
+
+    /*
+     * Checks if is Remotes SWBR
+     * @return true, if is SWBR
+     */
+    public static boolean isRemotePlatform()
+    {
+        return persistenceType==PRESIST_TYPE_SWBREMOTETRIPLESTORE;
+    }
+
 
     //Se invoca cada que el thread del request termina
     public void endThreadRequest()
