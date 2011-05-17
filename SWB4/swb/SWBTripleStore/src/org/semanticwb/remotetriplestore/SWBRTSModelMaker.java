@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.Future;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.remotetriplestore.protocol.Command;
 import org.semanticwb.remotetriplestore.protocol.Response;
@@ -25,7 +26,13 @@ public class SWBRTSModelMaker {
     public SWBRTSModelMaker()
     {
         try {
-            pool = new SWBRTSThreadPool(InetAddress.getByName("192.168.6.139"), 6666);
+            /*
+             * swb/tripleremoteserver=192.168.6.139
+             * swb/tripleremoteport=6666
+             */
+            int port = Integer.parseInt(SWBPlatform.getEnv("swb/tripleremoteport", "6666"));
+            String address = SWBPlatform.getEnv("swb/tripleremoteserver",null);
+            pool = new SWBRTSThreadPool(InetAddress.getByName(address), port);
         } catch (Exception e) {
             log.error(e);
         }
