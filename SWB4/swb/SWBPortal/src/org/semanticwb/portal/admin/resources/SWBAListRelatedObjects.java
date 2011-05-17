@@ -190,8 +190,12 @@ public class SWBAListRelatedObjects extends GenericResource {
 
                 // Titulo, para abrir en un nuevo tab
 
+
+                String stitle = sobj.getDisplayName(user.getLanguage());
+                if(stitle==null||(stitle!=null&&stitle.trim().length()==0)) stitle="[No Title]";
+
                 out.println("<td>");
-                out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "');return false;\" >" + sobj.getDisplayName(user.getLanguage()) + "</a>");
+                out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "');return false;\" >" + stitle + "</a>");
                 out.println("</td>");
 
                 // Tipo del elemento
