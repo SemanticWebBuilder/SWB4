@@ -254,6 +254,9 @@ public class SemanticMgr implements SWBInstanceObject
         } else if (SWBPlatform.isBigdata())
         {
             clsname="org.semanticwb.bigdata.BigdataStore";
+        } else if (SWBPlatform.isRemotePlatform())
+        {
+            clsname="org.semanticwb.remotetriplestore.SWBRemoteTripleStore";
         } else if (SWBPlatform.isSWBTripleStore())
         {
             clsname="org.semanticwb.triplestore.SWBTripleStore";
@@ -1059,5 +1062,8 @@ public class SemanticMgr implements SWBInstanceObject
         }
     }
 
+    public AbstractStore getSWBStore(){
+        return store;
+    }
 
 }
