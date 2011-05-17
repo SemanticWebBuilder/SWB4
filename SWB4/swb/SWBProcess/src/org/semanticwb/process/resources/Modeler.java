@@ -52,6 +52,7 @@ public class Modeler extends GenericResource {
     private static final String PROP_CLASS = "class";
     private static final String PROP_TITLE = "title";
     private static final String PROP_DESCRIPTION = "description";
+    private static final String PROP_CONNPOINTS = "connectionPoints";
     private static final String PROP_URI = "uri";
     private static final String PROP_X = "x";
     private static final String PROP_Y = "y";
@@ -344,6 +345,7 @@ public class Modeler extends GenericResource {
                     coele.put(PROP_START, connectionObject.getSource().getURI());
                     coele.put(PROP_END, connectionObject.getTarget().getURI());
                     coele.put(PROP_TITLE, connectionObject.getTitle());
+                    coele.put(PROP_CONNPOINTS, connectionObject.getConnectionPoints());
                     //coele.put(PROP_DESCRIPTION, connectionObject.getDescription());
                 }
                 if (obj instanceof Containerable) {
@@ -437,6 +439,7 @@ public class Modeler extends GenericResource {
                     coele.put(PROP_START, connectionObject.getSource().getURI());
                     coele.put(PROP_END, connectionObject.getTarget().getURI());
                     coele.put(PROP_TITLE, connectionObject.getTitle());
+                    coele.put(PROP_CONNPOINTS, connectionObject.getConnectionPoints());
                     //coele.put(PROP_DESCRIPTION, connectionObject.getDescription());
                 }
                 if (obj instanceof Containerable) {
@@ -875,6 +878,8 @@ public class Modeler extends GenericResource {
 
             GenericObject gostart = null;
             GenericObject goend = null;
+            String sconnpoints = null;
+
             // Parte para generar el flujo del proceso
             it = hmjson.keySet().iterator();
             while (it.hasNext()) {
@@ -899,6 +904,12 @@ public class Modeler extends GenericResource {
                         description = "";
                     }
 
+                    try {
+                        sconnpoints = json.getString(PROP_CONNPOINTS);
+                    } catch (Exception e) {
+                        sconnpoints = "";
+                    }
+
                     if (hmori.get(uri) != null) {
                         go = ont.getGenericObject(hmori.get(uri));
                         co = (ConnectionObject) go;
@@ -908,6 +919,10 @@ public class Modeler extends GenericResource {
 
                         if ((null != description && co.getDescription() != null && !co.getDescription().equals(description)) || (null != description && co.getDescription() == null)) {
                             co.setDescription(description);
+                        }
+
+                        if ((null != sconnpoints && co.getConnectionPoints() != null && !co.getConnectionPoints().equals(sconnpoints)) || (null != sconnpoints && co.getConnectionPoints() == null)) {
+                            co.setConnectionPoints(sconnpoints);
                         }
 
                         if (!co.getSource().getURI().equals(start)) {
@@ -931,6 +946,9 @@ public class Modeler extends GenericResource {
                             co.setTitle(title);
                             if (null != description) {
                                 co.setDescription(description);
+                            }
+                            if (null != sconnpoints) {
+                                co.setConnectionPoints(sconnpoints);
                             }
                             gostart = ont.getGenericObject(hmnew.get(start));
                             goend = ont.getGenericObject(hmnew.get(end));
