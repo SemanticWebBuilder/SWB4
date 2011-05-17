@@ -1,11 +1,5 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.semanticwb.triplestore;
 
-import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.impl.ModelCom;
 import java.sql.Connection;
@@ -13,7 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import org.semanticwb.Logger;
@@ -137,17 +130,12 @@ public class SWBTSModelMaker
                 ps.executeUpdate();
                 ps.close();
 
-                ps=con.prepareStatement("remove from swb_graph where id=?");
+                ps=con.prepareStatement("delete from swb_graph where id=?");
                 ps.setInt(1, id);
                 ps.executeUpdate();
                 ps.close();
 
-                ps=con.prepareStatement("remove from swb_longs where graphid=?");
-                ps.setInt(1, id);
-                ps.executeUpdate();
-                ps.close();
-
-                ps=con.prepareStatement("remove from swb_prefix where graphid=?");
+                ps=con.prepareStatement("delete from swb_prefix where graphid=?");
                 ps.setInt(1, id);
                 ps.executeUpdate();
                 ps.close();
@@ -161,6 +149,11 @@ public class SWBTSModelMaker
                 log.error(e2);
             }
         }
+    }
+
+    public HashMap<String,Integer> getMap()
+    {
+        return map;
     }
 
 }

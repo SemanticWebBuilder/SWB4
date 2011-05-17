@@ -1,4 +1,4 @@
-package org.semanticwb.triplestore;
+package org.semanticwb.remotetriplestore;
 
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -9,18 +9,18 @@ import org.semanticwb.rdf.AbstractStore;
 
 /**
  *
- * @author jei
+ * @author serch
  */
-public class SWBTripleStore implements AbstractStore
-{
-    private static Logger log=SWBUtils.getLogger(SWBTripleStore.class);
+public class SWBRemoteTripleStore implements AbstractStore {
 
-    SWBTSModelMaker maker;
+    private static Logger log=SWBUtils.getLogger(SWBRemoteTripleStore.class);
+
+    SWBRTSModelMaker maker;
 
     public void init()
     {
-        log.event("SWBTripleStore Initializing...");
-        maker=new SWBTSModelMaker();
+        log.event("SWBRemoteTripleStore Initializing...");
+        maker=new SWBRTSModelMaker();
     }
 
     public void removeModel(String name)
@@ -48,8 +48,4 @@ public class SWBTripleStore implements AbstractStore
         return null;
     }
 
-    public SWBTSModelMaker getMaker()
-    {
-        return maker;
-    }
 }
