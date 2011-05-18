@@ -8,37 +8,45 @@ package org.semanticwb.process.modeler;
 import javafx.scene.Node;
 import javafx.scene.Group;
 import javafx.scene.shape.Line;
+import javafx.scene.transform.Rotate;
+import javafx.util.Math;
+import javafx.scene.input.MouseEvent;
 
 /**
+ * Clase que representa un flujo por defecto en un diagrama BPMN 2.0
  * @author javier.solis
  */
 
 public class DefaultFlow extends SequenceFlow
 {
-    public override function create(): Node
-    {
+    var line: Line;
+    public override function create(): Node {
         blocksMouse = true;
         title= ##"default";
-        arrowType=ARROW_TYPE_SEQUENCE;
         notGroup=true;  //No agrega los elementos path y arrow al grupo
 
-        var difx=bind (points[1].x-points[0].x)*.2;
-        var dify=bind (points[1].y-points[0].y)*.2;
+        var difx=bind (pend.x-pini.x)*.2;
+        var dify=bind (pend.y-pini.y)*.2;
+        var m= bind (pend.y - pini.y) / (pend.x - pini.x);
 
-        var line=Line
+        line=Line
         {
-            startX:bind points[0].x+difx-5
-            startY:bind points[0].y+dify-5
-            endX:bind points[0].x+difx+5
-            endY:bind points[0].y+dify+5
-            styleClass: "connObject"
-            stroke:bind path.stroke
+            startX:bind pini.x+difx-5
+            startY:bind pini.y+dify-5
+            endX:bind pini.x+difx+5
+            endY:bind pini.y+dify+5
+            styleClass: bind path.styleClass
+            transforms: bind if (m != 0) Rotate {
+                pivotX: bind pini.x+difx
+                pivotY: bind pini.y+dify
+                angle: 30
+            } else null
         }
         super.create();
         
         return Group
         {
-            content: [
+            content: bind [
                 Group
                 {
                     content: [
@@ -46,10 +54,48 @@ public class DefaultFlow extends SequenceFlow
                         line,
                         arrow
                     ]
-                }
-                //text
+                },
+                handles
             ]
             visible: bind canView()
+        }
+    }
+
+    override public function createPath() : Void {
+        super.createPath();
+
+        var lnode = pend;
+        if (not handles.isEmpty()) {
+            var han = handles[0];
+            lnode = Point {
+                x: han.x
+                y: han.y
+            }
+        }
+
+        var difx=bind (lnode.x-pini.x)*.2;
+        var dify=bind (lnode.y-pini.y)*.2;
+        var m= bind (lnode.y - pini.y) / (lnode.x - pini.x);
+
+        line=Line
+        {
+            startX:bind pini.x+difx-5
+            startY:bind pini.y+dify-5
+            endX:bind pini.x+difx+5
+            endY:bind pini.y+dify+5
+            styleClass: bind path.styleClass
+            stroke:bind path.stroke
+            transforms: bind if (m != 0 and not Number.isInfinite(m)) Rotate {angle: Math.toDegrees(Math.atan(m)), pivotX: bind pini.x+difx, pivotY: bind pini.y+dify} else null;
+        }
+    }
+
+    public override var onMouseClicked = function (e: MouseEvent) {
+        if (e.button == e.button.SECONDARY) {
+            var p = Point {
+                x: e.sceneX
+                y: e.sceneY
+            };
+            addLineHandler(p);
         }
     }
 
@@ -59,6 +105,10 @@ public class DefaultFlow extends SequenceFlow
             end: this.end
             modeler: this.modeler
             uri:"new:defaultflow:{modeler.toolBar.counter++}"
+        }
+        
+        for (handle in handles) {
+            t.addLineHandler(handle.getPoint());
         }
         return t;
     }
