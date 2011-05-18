@@ -517,7 +517,13 @@ public class Modeler extends CustomNode
                 getOverNode();
                 if(overNode!=null)
                 {
-                    if(overNode.canEndLink(a))a.end=overNode;
+                    if(overNode.canEndLink(a)) {
+                        a.end=overNode;
+                        a.updatePoints();
+                        if (a.handles.isEmpty()) {
+                            a.buildDefaultHandlers();
+                        }
+                    }
                 }else
                 {
                     a.end=null;
