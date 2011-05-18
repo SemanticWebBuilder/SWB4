@@ -165,8 +165,11 @@ public class ConnectionObject  extends CustomNode
             onKeyReleased: onKeyReleased
         };
 
+        labelAnchorStart = pini;
         if (not handles.isEmpty()) {
             labelAnchorEnd = handles[0].getPoint();
+        } else {
+            labelAnchorEnd = pend;
         }
 
         setType(arrowType);
@@ -713,6 +716,8 @@ public class ConnectionObject  extends CustomNode
         }
         addLineHandler(p1);
         addLineHandler(p2);
+        labelAnchorStart = handles[0].getPoint();
+        labelAnchorEnd = handles[1].getPoint();
     }
 
     /**Calcula el ángulo de la flecha del objeto de conexión*/
