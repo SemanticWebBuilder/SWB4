@@ -85,6 +85,7 @@ public class LineHandle extends CustomNode {
         cursor = Cursor.CROSSHAIR;
         setGraphParent();
         snapToGrid();
+        modeler.setSelectedNode(owner);
     }
 
     override var onMouseDragged = function (e: MouseEvent) {
