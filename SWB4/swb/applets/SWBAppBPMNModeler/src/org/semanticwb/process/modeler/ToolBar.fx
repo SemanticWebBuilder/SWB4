@@ -291,6 +291,11 @@ public class ToolBar extends CustomNode
                //var con=node as ConditionalFlow;
                ele.put("action", ge.action);
            }
+           var points = "";
+           for (handle in ge.handles) {
+               points = "{points}{handle.x},{handle.y}|";
+           }
+           ele.put("connectionPoints", points);
         }
         return ele;
     }
@@ -449,9 +454,10 @@ public class ToolBar extends CustomNode
 
             //Connections
             var co:ConnectionObject=null;
+            var co2: ConnectionObject=null;
             if(node instanceof ConnectionObject)
             {
-                co=node as ConnectionObject;
+                co=node as ConnectionObject;                
             }
 
             if(co!=null)
@@ -460,13 +466,31 @@ public class ToolBar extends CustomNode
                 var start=js.getString("start");
                 var end=js.getString("end");
                 var title=js.getString("title");
+                var points: String = js.optString("connectionPoints", null);
+                var s: String[];                
 
                 co.modeler=modeler;
                 co.uri=uri;
                 co.title=title;
                 co.ini=modeler.getGraphElementByURI(start);
                 co.end=modeler.getGraphElementByURI(end);
-                modeler.add(co);
+                if (points != null and not (points.trim().equals(""))) {
+                    s = points.split("\\|");
+                    for (_s in s) {
+                        var p = Point.fromString(_s);
+                        if (p != null) {
+                            co.addLineHandler(p);
+                        }
+                    }
+                }
+
+                co2 = co.copy();
+                co2.uri = co.uri;
+                co2.updatePoints();
+                if (co2.handles.isEmpty()) {
+                    co2.buildDefaultHandlers();
+                }
+                modeler.add(co2);
                 //println("jsobj:{js.toString()}, i: {i}");
             }
             i++;
