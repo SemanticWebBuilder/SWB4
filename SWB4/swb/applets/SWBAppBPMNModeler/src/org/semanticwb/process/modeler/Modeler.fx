@@ -21,6 +21,8 @@ import javafx.scene.input.KeyEvent;
 import org.semanticwb.process.modeler.ConnectionObject;
 
 /**
+ * Clase que representa el área de trabajo y controlador de los elementos de un
+ * diagrama BPMN 2.0
  * @author javier.solis
  */
 
@@ -45,7 +47,6 @@ public class Modeler extends CustomNode
     var focusedNode: Node;                       //Nodo con el foco
     var scrollOffset:ScrollOffset;
     var selectedNodes: Node[];
-    //var styles: HashMap;
     var selectedStyle: String;
     var selectedMode: String;
 
@@ -54,7 +55,6 @@ public class Modeler extends CustomNode
         var resize=ModelerUtils.getResizeNode();
         resize.modeler=this;
         
-         //var ret=ScrollPane
          content=Group
          {
              content:
@@ -70,10 +70,6 @@ public class Modeler extends CustomNode
          }
          selectedStyle = "EyeCandy";
          selectedMode = "Begginer";
-
-//         AddStyle("Vistoso", "Modeler");
-//         AddStyle("Simple", "ModelerFlat");
-//         AddStyle("Blanco y Negro", "ModelerBlackWhite");
 
          actions = [
             MenuItem {
@@ -169,7 +165,7 @@ public class Modeler extends CustomNode
              node:content
              layoutInfo: LayoutInfo{width:bind width, height: bind height}
              pannable: bind pannable and not disablePannable
-             cursor:bind if(pannable)Cursor.MOVE else Cursor.DEFAULT
+             cursor:bind if(scrollView.pannable)Cursor.MOVE else Cursor.DEFAULT
              styleClass: "scrollView"
              
              onMousePressed: function( e: MouseEvent ):Void
@@ -264,16 +260,19 @@ public class Modeler extends CustomNode
     {
     }
 
+    /**Agrega un nodo al espacio de trabajo del modelador*/
     public function add(obj:Node)
     {
         insert obj into contents;
     }
 
+    /**Agrega un nodo al frente del espacio de trabajo del modelador*/
     public function addFirst(obj:Node)
     {
         insert obj before contents[0];
     }
 
+    /**Mueve un nodo al frente del espacio de trabajo del modelador*/
     public function moveFront(fobj:Node, tobj:Node)
     {
         var f=Sequences.indexOf(contents,fobj);
@@ -285,12 +284,13 @@ public class Modeler extends CustomNode
         }
     }
 
-
+    /**Elimina un nodo del espacio de trabajo del modelador*/
     public function remove(obj:Node)
     {
         delete obj from contents;
     }
 
+    /**Obtiene el elemento con el URI especificado del espacio de trabajo del modelador*/
     public function getGraphElementByURI(uri:String):GraphicalElement
     {
         for(node in contents)
@@ -310,6 +310,7 @@ public class Modeler extends CustomNode
         return null;
     }
 
+    /**Obtiene la coordenada X del inicio del área de dibujo del modelador*/
     public bound function getXScroll():Number
     {
         //println("{scrollView.node.boundsInParent} {scrollView.vmin} {scrollView.vmax} {scrollView.vvalue}");
@@ -317,23 +318,27 @@ public class Modeler extends CustomNode
         return -scrollOffset.localToScene(scrollOffset.boundsInLocal).minX;
     }
 
+    /**Obtiene la coordenada Y del inicio del área de dibujo del modelador*/
     public bound function getYScroll():Number
     {
         //return scrollView.vvalue*(scrollView.node.boundsInParent.height-height);
         return -scrollOffset.localToScene(scrollOffset.boundsInLocal).minY;
     }
 
+    /**Establece el elemento que posee el foco del área de trabajo del modelador*/
     public function setFocusedNode(node:Node)
     {
         focusedNode=node;
         ModelerUtils.setResizeNode(node);
     }
 
+    /**Obtiene el elemento que posee el foco del área de trabajo del modelador*/
     public function getFocusedNode():Node
     {
         return focusedNode;
     }
 
+    /**Crea una imágen a partir del área de dibujo del modelador*/
     public function renderToImage(margin:Integer):BufferedImage
     {
         var minx=1000000.0;
@@ -517,6 +522,8 @@ public class Modeler extends CustomNode
                 {
                     a.end=null;
                 }
+                a.updateEndPoint();
+                a.updateStartPoint();
             }
         }
         else if(ModelerUtils.clickedNode instanceof ConnectionObject)
@@ -524,6 +531,8 @@ public class Modeler extends CustomNode
             tempNode=ModelerUtils.clickedNode;
             var a=tempNode as ConnectionObject;
             a.end=null;
+            a.updateEndPoint();
+            a.updateStartPoint();
         }
     }
 
@@ -630,6 +639,8 @@ public class Modeler extends CustomNode
                     {
                         a.ini=ge;
                         add(tempNode);
+                        a.updateStartPoint();
+                        a.updateEndPoint();
                     }
                     close=false;
                     ModelerUtils.clickedNode=null;
@@ -644,6 +655,7 @@ public class Modeler extends CustomNode
         }
     }
 
+    /**Elimina la lista de objetos seleccionados del modelador*/
     public function unselectAll() : Void {
         for(ele in selectedNodes) {
             if (ele instanceof GraphicalElement) {
@@ -657,6 +669,7 @@ public class Modeler extends CustomNode
         delete selectedNodes;
     }
 
+    /**Agrega un elemento a la lista de objetos seleccionados del modelador*/
     public function addSelectedNode(ge: Node) : Void {
         if (Sequences.indexOf(selectedNodes, ge) == -1) {
             if (ge instanceof GraphicalElement) {
@@ -668,6 +681,7 @@ public class Modeler extends CustomNode
         }
     }
 
+    /**Elimina un elemento de la lista de objetos seleccionados del modelador*/
     public function removeSelectedNode(ge: Node) : Void {
         if (Sequences.indexOf(selectedNodes, ge) != -1) {
             if (ge instanceof GraphicalElement) {
@@ -679,34 +693,36 @@ public class Modeler extends CustomNode
         }
     }
 
+    /**Establece el nodo especificado como el único nodo seleccionado*/
     public function setSelectedNode(ge: Node) : Void {
         unselectAll();
         addSelectedNode(ge);
     }
 
+    /**Obtiene el nodo seleccionado*/
     public function getSelectedNode() : Node {
         return selectedNodes[0];
     }
 
+    /**Agrega un elemento a la lista de copias del modelador*/
     public function addCopyNode(ge: GraphicalElement) : Void {
         if (Sequences.indexOf(copyNodes, ge) == -1) {
             insert ge into copyNodes;
         }
     }
 
+    /**Establece el nodo especificado como el elemento de copia del modelador*/
     public function setCopyNode(ge: GraphicalElement) : Void {
         delete copyNodes;
         insert ge into copyNodes;
     }
 
-//    public function AddStyle(name: String, path: String) : Void {
-//        styles.put(name, path);
-//    }
-
+    /**Indica si hay varios elementos seleccionados en el área de dibujo del modelador*/
     public function isMultiSelection() : Boolean {
         return (selectedNodes != null and selectedNodes.size() > 1);
     }
 
+    /**Obtiene el nodo sobre el cual se encuentra posicionado el puntero del ratón*/
     function getOverNode() : Void {
         for (ele in Sequences.reverse(contents) as Node[] where ele instanceof GraphicalElement) {
             if (ele.boundsInLocal.contains(mousex, mousey)) {
