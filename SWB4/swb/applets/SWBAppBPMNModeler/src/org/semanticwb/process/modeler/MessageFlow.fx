@@ -12,6 +12,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.input.MouseEvent;
 
 /**
+ * Clase que representa un flujo de mensaje en un diagrama BPMN 2.0
  * @author javier.solis
  */
 
@@ -24,34 +25,33 @@ public class MessageFlow extends ConnectionObject
         arrowType=ARROW_TYPE_MESSAGE;
         strokeDash=[2,5];
         notGroup=true;  //No agrega los elementos path y arrow al grupo
-        cubicCurve=true;
+        //cubicCurve=true;
         super.create();
         return Group
         {
-            content: [
+            content: bind [
                 Group
                 {
                     content: [
                         path,
                         Circle{
                             radius: 5
-                            centerX:bind points[0].x
-                            centerY:bind points[0].y
-                            styleClass: "connObject"
+                            centerX:bind pini.x
+                            centerY:bind pini.y
+                            styleClass: bind path.styleClass
                             id: "tail"
-                            stroke:bind path.stroke
                         },
                         arrow
                     ]
                 },
-                text
+                text,
+                handles
             ]
             visible: bind canView()
         };
     }
 
-    override var onMouseClicked = function (e: MouseEvent)
-    {
+    public override var onMouseClicked = function (e: MouseEvent) {
         if(e.clickCount >= 2)
         {
             if(text != null)
@@ -59,5 +59,27 @@ public class MessageFlow extends ConnectionObject
                 text.startEditing();
             }
         }
+        if (e.button == e.button.SECONDARY) {
+            var p = Point {
+                x: e.sceneX
+                y: e.sceneY
+            };
+            addLineHandler(p);
+        }
+    }
+
+    public override function copy() : ConnectionObject {
+        var t = MessageFlow {
+            ini: this.ini
+            end: this.end
+            modeler: this.modeler
+            title:this.title
+            uri:"new:messageflow:{modeler.toolBar.counter++}"
+        }
+
+        for (handle in handles) {
+            t.addLineHandler(handle.getPoint());
+        }
+        return t;
     }
 }
