@@ -314,6 +314,23 @@ public class ToolBar extends CustomNode
         return uri;
     }
 
+    /**Sustituye los nombres de clases de versiones anteriores de Modeler*/
+    function assertOldClassName(className: String) : String {
+        var ret = className;
+        if (className.equals("Artifact")) {
+            ret = "DataObject";
+        } else if (className.equals("InputArtifact")) {
+            ret = "DataInput";
+        } else if (className.equals("OutputArtifact")) {
+            ret = "DataOutput";
+        } else if (className.equals("DataStoreArtifact")) {
+            ret = "DataStore";
+        } else if (className.equals("CollectionArtifact")) {
+            ret = "DataObject";
+        }
+        return ret;
+    }
+
     /**
     * Create a process from a JSON
     */
@@ -331,9 +348,13 @@ public class ToolBar extends CustomNode
         {
             //generic
             var js = jsarr.getJSONObject(i);
-            var cls:String="{pkg}.{js.getString("class")}";
-            var uri:String=validateUri(js.getString("uri"));
+            var _cls = js.getString("class");
+            if (_cls.equals("CollectionArtifact")) {
+                js.put("isCollection", true);
+            }
 
+            var cls:String="{pkg}.{assertOldClassName(_cls)}";
+            var uri:String=validateUri(js.getString("uri"));
             var clss=getClass().forName(cls);
             var node=clss.newInstance() as Node;
             var ge:GraphicalElement=null;
@@ -398,7 +419,8 @@ public class ToolBar extends CustomNode
         {
             //generic
             var js = jsarr.getJSONObject(i);
-            var cls:String="{pkg}.{js.getString("class")}";
+            var _cls = js.getString("class");
+            var cls:String="{pkg}.{assertOldClassName(_cls)}";
             var uri:String=validateUri(js.getString("uri"));
 
             var clss=getClass().forName(cls);
@@ -430,7 +452,8 @@ public class ToolBar extends CustomNode
         {
             //generic
             var js = jsarr.getJSONObject(i);
-            var cls:String="{pkg}.{js.getString("class")}";
+            var _cls = js.getString("class");
+            var cls:String="{pkg}.{assertOldClassName(_cls)}";
             var uri:String=validateUri(js.getString("uri"));
 
             var clss=getClass().forName(cls);
