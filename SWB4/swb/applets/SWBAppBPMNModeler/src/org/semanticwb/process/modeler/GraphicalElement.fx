@@ -23,25 +23,17 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Document;
 
 /**
+ * Clase que representa un elemento gráfico en un diagrama BPMN 2.0. Es la
+ * superclase de todos los nodos de flujo en el diagrama.
  * @author javier.solis
  */
 
 public class GraphicalElement extends CustomNode
 {
-    public var over:Boolean;                       //el mause se encuentra sobre el elemento
+    public var over:Boolean;                       //el mouse se encuentra sobre el elemento
     public var selected: Boolean;
     public-read var sceneX:Number;
     public-read var sceneY:Number;
-//    var sx= bind x on replace
-//    {
-//        sceneX=localToScene(x, y).x;
-//    }
-//
-//    var sy= bind y on replace
-//    {
-//        sceneY=localToScene(x, y).y;
-//    }
-
     public var type:String;                     //tipo del elemento
     public var title : String;                  //titulo del elemento
     public var description: String;
@@ -91,6 +83,23 @@ public class GraphicalElement extends CustomNode
     var py = bind graphParent.y on replace
     {
         onParentYChange();
+    }
+
+    var tx = bind x on replace {
+        for (con in getInputConnectionObjects()) {
+            con.updatePoints();
+        }
+        for (con in getOutputConnectionObjects()) {
+            con.updatePoints();
+        }
+    }
+    var ty = bind y on replace {
+        for (con in getInputConnectionObjects()) {
+            con.updatePoints();
+        }
+        for (con in getOutputConnectionObjects()) {
+            con.updatePoints();
+        }
     }
 
     public function onParentXChange()
@@ -200,6 +209,10 @@ public class GraphicalElement extends CustomNode
         }
     }
 
+    override var onMouseMoved = function (e: MouseEvent) {
+        modeler.mouseMoved(e);
+    }
+
     override var onMouseClicked = function ( e: MouseEvent ) : Void
     {
         //println("Elemento {title} - [x: {x}, y:{y}, w:{getScaleWidth()}, h:{getScaleHeight()}]");
@@ -268,9 +281,11 @@ public class GraphicalElement extends CustomNode
                 ModelerUtils.setResizeNode(null);
             }
         } else {
-            modeler.unselectAll();
-            modeler.addSelectedNode(this);
-            modeler.setFocusedNode(this);
+            if (not (modeler.tempNode instanceof ConnectionObject)) {
+                modeler.unselectAll();
+                modeler.addSelectedNode(this);
+                modeler.setFocusedNode(this);
+            }
         }        
         modeler.disablePannable=true;
         dx=x-e.sceneX;
@@ -286,7 +301,8 @@ public class GraphicalElement extends CustomNode
                 visible:false
             }
             if(canStartLink(link))modeler.tempNode=link;
-            modeler.tempNode = link;
+            ModelerUtils.setResizeNode(null);
+            modeler.unselectAll();
         }
     }
 
@@ -305,7 +321,6 @@ public class GraphicalElement extends CustomNode
         if (this instanceof Pool or this instanceof Lane) return;
         snapToGrid();
         var overNode: GraphicalElement = getOverNode();
-        //println("{title} over node {overNode.title}");
         setGraphParent(overNode);
     }
 
@@ -471,12 +486,19 @@ public class GraphicalElement extends CustomNode
         return overNode;
     }
     
-    public function inBounds(node: GraphicalElement) : Boolean {
+    public function inBounds(node: Node) : Boolean {
         var ret = false;
+        var wi = node.boundsInLocal.width;
+        var he = node.boundsInLocal.height;
+        if (node instanceof GraphicalElement) {
+            wi = (node as GraphicalElement).w;
+            he = (node as GraphicalElement).h;
+        }
+
         var nx1 = node.boundsInLocal.minX;
         var ny1 = node.boundsInLocal.minY;
-        var nx2 = node.boundsInLocal.minX + node.w;
-        var ny2 = node.boundsInLocal.minY + node.h;
+        var nx2 = node.boundsInLocal.minX + wi;
+        var ny2 = node.boundsInLocal.minY + he;
 
         var ex1 = boundsInLocal.minX;
         var ey1 = boundsInLocal.minY;
