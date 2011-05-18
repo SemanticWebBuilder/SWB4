@@ -14,11 +14,14 @@ import java.lang.Math;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.LineTo;
-import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.ClosePath;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.shape.PathElement;
+import javafx.util.Sequences;
 
 /**
+ * Clase que representa un objeto de conexión. Es la superclase de todas las
+ * conexiones en un diagrama BPMN 2.0
  * @author javier.solis
  */
 
@@ -32,19 +35,14 @@ public class ConnectionObject  extends CustomNode
     public var modeler:Modeler;
     public var ini : GraphicalElement;
     public var end : GraphicalElement;
-    public var cubicCurve : Boolean;
+    //public var cubicCurve : Boolean;
     public var title : String;
     public var action : String=bind title;
     public var uri : String;
     public var text : EditableText;
-    public var points : Point[];
+    //public var points : Point[];
     public var arrowType : String;
-
-    protected var path : Path;
-    protected var arrow : Path;
-    protected var strokeDash : Float[];
-    protected var notGroup : Boolean;               //No agrega los elementos path y arrow al grupo
-
+    public var handles: LineHandle[];    
     public var over:Boolean on replace {
         if (over and not selected) {
             path.styleClass = "connObjectHover";
@@ -52,7 +50,6 @@ public class ConnectionObject  extends CustomNode
             path.styleClass = "connObject";
         }
     }
-
     public var selected:Boolean on replace {
         if (selected) {
             path.styleClass = "connObjectFocused";
@@ -60,71 +57,77 @@ public class ConnectionObject  extends CustomNode
             path.styleClass = "connObject";
         }
     }
-
-    var pini: Point;
-    var pend: Point;
+    protected var path : Path;
+    protected var arrow : Path;
+    protected var strokeDash : Float[];
+    protected var notGroup : Boolean;               //No agrega los elementos path y arrow al grupo
+    protected var pini: Point;
+    protected var pend: Point;
+    var elements: PathElement[];
+    var labelAnchorStart: Point;
+    var labelAnchorEnd: Point;
+    
     public override function create(): Node
     {
         blocksMouse = true;
-        pini=Point{ x: bind getConnectionX(ini,end) y: bind getConnectionY(ini,end) };
-        pend=Point{ x: bind getConnectionX(end,ini) y: bind getConnectionY(end,ini) };
-        var pinter1=Point{ x: bind getInter1ConnectionX(ini,end,pini,pend) y: bind getInter1ConnectionY(ini,end,pini,pend) };
-        var pinter2=Point{ x: bind getInter2ConnectionX(ini,end,pini,pend) y: bind getInter2ConnectionY(ini,end,pini,pend) };
-        points=[pini,pinter1,pinter2,pend];
+        pini=Point{ x: getStartConnectionX(ini,end) y: getStartConnectionY(ini,end) };
+        pend=Point{ x: getEndConnectionX(end,ini) y: getEndConnectionY(end,ini) };
+        labelAnchorStart = pini;
+        labelAnchorEnd = pend;
 
         text=EditableText
         {
             text: bind title with inverse
-            x: bind pini.x + (pend.x - pini.x) / 2
-            y: bind pini.y + (pend.y - pini.y) / 2
+            x: bind labelAnchorStart.x + (labelAnchorEnd.x - labelAnchorStart.x) / 2
+            y: bind labelAnchorStart.y + (labelAnchorEnd.y - labelAnchorStart.y) / 2
             width: 80
             height: 20
             fill: true
         }
 
-        setType(arrowType);
+        createPath();
         
-        if(cubicCurve)
-        {
-            path=Path {
-                elements: [
-                    MoveTo{x:bind pini.x,y:bind pini.y},
-                    CubicCurveTo {
-                        controlX1: bind pinter1.x
-                        controlY1: bind pinter1.y
-                        controlX2: bind pinter2.x
-                        controlY2: bind pinter2.y
-                        x: bind pend.x
-                        y: bind pend.y
-                    }
-                ]
-                styleClass: "connObject"
-                strokeDashArray: strokeDash
-                onKeyPressed: onKeyPressed
-                onKeyReleased: onKeyReleased
-            };
-        }else
-        {
-            path=Path {
-                elements: [
-                    MoveTo{x:bind pini.x,y:bind pini.y},
-                    LineTo{x:bind pinter1.x,y:bind pinter1.y},
-                    LineTo{x:bind pinter2.x,y:bind pinter2.y},
-                    LineTo{x:bind pend.x,y:bind pend.y}
-                ]
-                styleClass: "connObject"
-                strokeDashArray: strokeDash
-                onKeyPressed: onKeyPressed
-                onKeyReleased: onKeyReleased
-            };
-        }
+//        if(cubicCurve)
+//        {
+//            path=Path {
+//                elements: [
+//                    MoveTo{x:bind pini.x,y:bind pini.y},
+//                    CubicCurveTo {
+//                        controlX1: bind pinter1.x
+//                        controlY1: bind pinter1.y
+//                        controlX2: bind pinter2.x
+//                        controlY2: bind pinter2.y
+//                        x: bind pend.x
+//                        y: bind pend.y
+//                    }
+//                ]
+//                styleClass: "connObject"
+//                strokeDashArray: strokeDash
+//                onKeyPressed: onKeyPressed
+//                onKeyReleased: onKeyReleased
+//            };
+//        }else
+//        {
+//            path=Path {
+//                elements: [
+//                    MoveTo{x:bind pini.x,y:bind pini.y},
+//                    LineTo{x:bind pinter1.x,y:bind pinter1.y},
+//                    LineTo{x:bind pinter2.x,y:bind pinter2.y},
+//                    LineTo{x:bind pend.x,y:bind pend.y}
+//                ]
+//                styleClass: "connObject"
+//                strokeDashArray: strokeDash
+//                onKeyPressed: onKeyPressed
+//                onKeyReleased: onKeyReleased
+//            };
+//        }
 
         var ret;
         if(not notGroup)
         {
             ret=Group
             {
-                content: [
+                content: bind [
                     Group
                     {
                         content: [
@@ -132,7 +135,8 @@ public class ConnectionObject  extends CustomNode
                             arrow
                         ]
                     },
-                    text
+                    text,
+                    handles
                 ]
                 visible: bind canView()
             };
@@ -142,8 +146,44 @@ public class ConnectionObject  extends CustomNode
         }
         return ret;
     }
-    
+
+    /** Dibuja el trayecto del objeto de conexión.*/
+    public function createPath() : Void {
+        //println("Creando linea");
+        delete elements;
+        insert MoveTo{x:bind pini.x,y:bind pini.y} into elements;
+        for (p in handles) {
+            insert LineTo{x: bind p.x,y: bind p.y} into elements;
+        }
+        insert LineTo{x:bind pend.x,y:bind pend.y} into elements;
+
+        path=Path {
+            elements: bind elements
+            styleClass: "connObject"
+            strokeDashArray: strokeDash
+            onKeyPressed: onKeyPressed
+            onKeyReleased: onKeyReleased
+        };
+
+        if (not handles.isEmpty()) {
+            labelAnchorEnd = handles[0].getPoint();
+        }
+
+        setType(arrowType);
+    }
+
+    /**Crea la flecha correspondiente al tipo de objeto de conexión.*/
     function setType(type: String): Void {
+        var lnode = pini;
+
+        if (handles.size()>=1) {
+            var han = handles[handles.size()-1];
+            lnode = Point {
+                x: han.x
+                y: han.y
+            }
+        }
+
         if (type.equals(ARROW_TYPE_SEQUENCE) or type.equals(ARROW_TYPE_ASSOCIATION)) {
             var closePath = null;
             if (type.equals(ARROW_TYPE_SEQUENCE)) {
@@ -152,16 +192,16 @@ public class ConnectionObject  extends CustomNode
             arrow = Path {
                 elements: [
                     MoveTo{
-                        x:bind pend.x+8.0*Math.cos(getArrow(-45.0))
-                        y:bind pend.y-8.0*Math.sin(getArrow(-45.0))
+                        x:bind pend.x+8.0*Math.cos(getArrow(-45.0, lnode))
+                        y:bind pend.y-8.0*Math.sin(getArrow(-45.0, lnode))
                     },
                     LineTo{
                         x:bind pend.x
                         y:bind pend.y
                     },
                     LineTo{
-                        x:bind pend.x+8.0*Math.cos(getArrow(45.0))
-                        y:bind pend.y-8.0*Math.sin(getArrow(45.0))
+                        x:bind pend.x+8.0*Math.cos(getArrow(45.0, lnode))
+                        y:bind pend.y-8.0*Math.sin(getArrow(45.0, lnode))
                     },
                     closePath
                 ]
@@ -173,16 +213,16 @@ public class ConnectionObject  extends CustomNode
             arrow = Path {
                 elements: [
                     MoveTo{
-                        x:bind pend.x+8.0*Math.cos(getArrow(-45.0))
-                        y:bind pend.y-8.0*Math.sin(getArrow(-45.0))
+                        x:bind pend.x+8.0*Math.cos(getArrow(-45.0, lnode))
+                        y:bind pend.y-8.0*Math.sin(getArrow(-45.0, lnode))
                     },
                     LineTo{
                         x:bind pend.x
                         y:bind pend.y
                     },
                     LineTo{
-                        x:bind pend.x+8.0*Math.cos(getArrow(45.0))
-                        y:bind pend.y-8.0*Math.sin(getArrow(45.0))
+                        x:bind pend.x+8.0*Math.cos(getArrow(45.0, lnode))
+                        y:bind pend.y-8.0*Math.sin(getArrow(45.0, lnode))
                     },
                     ClosePath{}
                 ]
@@ -193,6 +233,25 @@ public class ConnectionObject  extends CustomNode
         }
     }
 
+    /**Actualiza los puntos inicial y final del objeto de conexión*/
+    public function updatePoints() {
+        updateStartPoint();
+        updateEndPoint();
+    }
+
+    /**Actualiza el punto inicial del objeto de conexión*/
+    public function updateStartPoint() {
+        pini.x = getStartConnectionX(ini, end);
+        pini.y = getStartConnectionY(ini, end);
+    }
+
+    /**Actualiza el punto final del objeto de conexión*/
+    public function updateEndPoint() {
+        pend.x = getEndConnectionX(end, ini);
+        pend.y = getEndConnectionY(end, ini);
+    }
+
+    /**Elimina el objeto de conexión del área de trabajo*/
     public function remove()
     {
         modeler.remove(this);
@@ -239,6 +298,17 @@ public class ConnectionObject  extends CustomNode
         if(modeler.tempNode==null and ModelerUtils.clickedNode==null)modeler.disablePannable=false        
     }
 
+    override var onMouseClicked = function (e: MouseEvent)
+    {
+        if (e.button == e.button.SECONDARY) {
+            var p = Point {
+                x: e.sceneX
+                y: e.sceneY
+            };
+            addLineHandler(p);
+        }
+    }
+
     override var onKeyPressed = function( e: KeyEvent )
     {
         keyPressed(e);
@@ -263,23 +333,52 @@ public class ConnectionObject  extends CustomNode
     {
     }
 
+    /**Agrega un nodo tirador al trayecto del objeto de conexión en las coordenadas del punto p*/
+    public function addLineHandler(p: Point) : Void {
+        var ha = LineHandle {
+            x: p.x
+            y: p.y
+            modeler: modeler
+            visible: bind selected
+            owner: this
+        }
+        //ha.setGraphParent();
+        
+        insert ha into handles;
+        handles = Sequences.sort(handles, LineHandle.xAscComparator) as LineHandle[];
+        createPath();
+    }
 
-    protected bound function getConnectionX(ini: GraphicalElement, end: GraphicalElement): Number
+    /**Elimina un nodo tirador del trayecto del objeto de conexión*/
+    public function removeLineHandler(lh: LineHandle) : Void {
+        delete lh from handles;
+        createPath();
+    }
+
+    /**Calcula la coordenada en X del punto inicial del objeto de conexión*/
+    protected function getStartConnectionX(ini: GraphicalElement, end: GraphicalElement): Number
     {
-        if(ini!=null)
+        var lnode = Point {x: end.x y: end.y}
+
+        if (not handles.isEmpty()) {
+            var han = handles[0];
+            lnode = Point {x: han.x y: han.y}
+        }
+
+        if(ini != null)
         {
-            if(end!=null)
+            if(end != null)
             {
-                var dx=end.x-ini.x;
-                var dy=end.y-ini.y;
-                if(Math.abs(dx)>=Math.abs(dy))
+                var dx = lnode.x - ini.x;
+                var dy = lnode.y - ini.y;
+                if(Math.abs(dx) >= Math.abs(dy))
                 {
-                    if(dx>0)
+                    if(dx > 0)
                     {
-                        ini.x+ini.w/2+2;
+                        ini.x + ini.w / 2 + 2;
                     }else
                     {
-                        ini.x-ini.w/2-2;
+                        ini.x - ini.w / 2 - 2;
                     }
                 }else
                 {
@@ -287,16 +386,16 @@ public class ConnectionObject  extends CustomNode
                 }
             }else
             {
-                var dx=modeler.mousex-ini.x;
-                var dy=modeler.mousey-ini.y;
-                if(Math.abs(dx)>=Math.abs(dy))
+                var dx = modeler.mousex - ini.x;
+                var dy = modeler.mousey - ini.y;
+                if(Math.abs(dx) >= Math.abs(dy))
                 {
-                    if(dx>0)
+                    if(dx > 0)
                     {
-                        ini.x+ini.w/2+2;
+                        ini.x + ini.w / 2 + 2;
                     }else
                     {
-                        ini.x-ini.w/2-2;
+                        ini.x - ini.w / 2 - 2;
                     }
                 }else
                 {
@@ -305,16 +404,16 @@ public class ConnectionObject  extends CustomNode
             }
         }else
         {
-            var dx=end.x-modeler.mousex;
-            var dy=end.y-modeler.mousey;
-            if(Math.abs(dx)>=Math.abs(dy))
+            var dx = end.x - modeler.mousex;
+            var dy = end.y - modeler.mousey;
+            if(Math.abs(dx) >= Math.abs(dy))
             {
-                if(dx>0)
+                if(dx > 0)
                 {
-                    modeler.mousex+10/2+2;
+                    modeler.mousex + 10 / 2 + 2;
                 }else
                 {
-                    modeler.mousex-10/2-2;
+                    modeler.mousex - 10 / 2 - 2;
                 }
             }else
             {
@@ -323,22 +422,30 @@ public class ConnectionObject  extends CustomNode
         }
     }
 
-    protected bound function getConnectionY(ini: GraphicalElement, end: GraphicalElement): Number
+    /**Calcula la coordenada en Y del punto inicial del objeto de conexión*/
+    protected function getStartConnectionY(ini: GraphicalElement, end: GraphicalElement): Number
     {
-        if(ini!=null)
+        var lnode = Point {x: end.x y: end.y}
+
+        if (not handles.isEmpty()) {
+            var han = handles[0];
+            lnode = Point {x: han.x y: han.y}
+        }
+
+        if(ini != null)
         {
-            if(end!=null)
+            if(end != null)
             {
-                var dx=end.x-ini.x;
-                var dy=end.y-ini.y;
-                if(Math.abs(dy)>Math.abs(dx))
+                var dx = lnode.x - ini.x;
+                var dy = lnode.y - ini.y;
+                if(Math.abs(dy) > Math.abs(dx))
                 {
-                    if(dy>0)
+                    if(dy > 0)
                     {
-                        ini.y+ini.h/2+2;
+                        ini.y + ini.h / 2 + 2;
                     }else
                     {
-                        ini.y-ini.h/2-2;
+                        ini.y - ini.h / 2 - 2;
                     }
                 }else
                 {
@@ -346,16 +453,16 @@ public class ConnectionObject  extends CustomNode
                 }
             }else
             {
-                var dx=modeler.mousex-ini.x;
-                var dy=modeler.mousey-ini.y;
-                if(Math.abs(dy)>Math.abs(dx))
+                var dx = modeler.mousex - ini.x;
+                var dy = modeler.mousey - ini.y;
+                if(Math.abs(dy) > Math.abs(dx))
                 {
-                    if(dy>0)
+                    if(dy > 0)
                     {
-                        ini.y+ini.h/2+2;
+                        ini.y + ini.h / 2 + 2;
                     }else
                     {
-                        ini.y-ini.h/2-2;
+                        ini.y - ini.h / 2 - 2;
                     }
                 }else
                 {
@@ -364,16 +471,16 @@ public class ConnectionObject  extends CustomNode
             }
         }else
         {
-            var dx=end.x-modeler.mousex;
-            var dy=end.y-modeler.mousey;
-            if(Math.abs(dy)>Math.abs(dx))
+            var dx = end.x - modeler.mousex;
+            var dy = end.y - modeler.mousey;
+            if(Math.abs(dy) > Math.abs(dx))
             {
-                if(dy>0)
+                if(dy > 0)
                 {
-                    modeler.mousey+10/2+2;
+                    modeler.mousey + 10 / 2 + 2;
                 }else
                 {
-                    modeler.mousey-10/2-2;
+                    modeler.mousey - 10 / 2 - 2;
                 }
             }else
             {
@@ -382,7 +489,142 @@ public class ConnectionObject  extends CustomNode
         }
     }
 
-    protected bound function getInter1ConnectionX(ini: GraphicalElement, end: GraphicalElement, pini: Point,pend: Point): Number
+    /**Calcula la coordenada en X del punto final del objeto de conexión*/
+    protected function getEndConnectionX(ini: GraphicalElement, end: GraphicalElement): Number
+    {
+        var lnode = Point {x: end.x y: end.y}
+
+        if (not handles.isEmpty()) {
+            var han = handles[handles.size()-1];
+            lnode = Point {x: han.x y: han.y}
+        }
+
+        if(ini != null)
+        {
+            if(end != null)
+            {
+                var dx = lnode.x - ini.x;
+                var dy = lnode.y - ini.y;
+                if(Math.abs(dx) >= Math.abs(dy))
+                {
+                    if(dx > 0)
+                    {
+                        ini.x + ini.w / 2 + 2;
+                    }else
+                    {
+                        ini.x - ini.w / 2 - 2;
+                    }
+                }else
+                {
+                    ini.x;
+                }
+            }else
+            {
+                var dx = modeler.mousex - ini.x;
+                var dy = modeler.mousey - ini.y;
+                if(Math.abs(dx) >= Math.abs(dy))
+                {
+                    if(dx > 0)
+                    {
+                        ini.x + ini.w / 2 + 2;
+                    }else
+                    {
+                        ini.x - ini.w / 2 - 2;
+                    }
+                }else
+                {
+                    ini.x;
+                }
+            }
+        }else
+        {
+            var dx = end.x - modeler.mousex;
+            var dy = end.y - modeler.mousey;
+            if(Math.abs(dx) >= Math.abs(dy))
+            {
+                if(dx > 0)
+                {
+                    modeler.mousex + 10 / 2 + 2;
+                }else
+                {
+                    modeler.mousex - 10 / 2 - 2;
+                }
+            }else
+            {
+                modeler.mousex;
+            }
+        }
+    }
+
+    /**Calcula la coordenada en Y del punto final del objeto de conexión*/
+    protected function getEndConnectionY(ini: GraphicalElement, end: GraphicalElement): Number
+    {
+        var lnode = Point {x: end.x y: end.y}
+
+        if (not handles.isEmpty()) {
+            var han = handles[handles.size()-1];
+            lnode = Point {x: han.x y: han.y}
+        }
+
+        if(ini != null)
+        {
+            if(end != null)
+            {
+                var dx = lnode.x - ini.x;
+                var dy = lnode.y - ini.y;
+                if(Math.abs(dy) > Math.abs(dx))
+                {
+                    if(dy > 0)
+                    {
+                        ini.y + ini.h / 2 + 2;
+                    }else
+                    {
+                        ini.y - ini.h / 2 - 2;
+                    }
+                }else
+                {
+                    ini.y;
+                }
+            }else
+            {
+                var dx = modeler.mousex - ini.x;
+                var dy = modeler.mousey - ini.y;
+                if(Math.abs(dy) > Math.abs(dx))
+                {
+                    if(dy > 0)
+                    {
+                        ini.y + ini.h / 2 + 2;
+                    }else
+                    {
+                        ini.y - ini.h / 2 - 2;
+                    }
+                }else
+                {
+                    ini.y;
+                }
+            }
+        }else
+        {
+            var dx = end.x - modeler.mousex;
+            var dy = end.y - modeler.mousey;
+            if(Math.abs(dy) > Math.abs(dx))
+            {
+                if(dy > 0)
+                {
+                    modeler.mousey + 10 / 2 + 2;
+                }else
+                {
+                    modeler.mousey - 10 / 2 - 2;
+                }
+            }else
+            {
+                modeler.mousey;
+            }
+        }
+    }
+
+    /**Calcula la coordenada en X del primer tirador intermedio del objeto de conexión*/
+    function getInter1ConnectionX(ini: GraphicalElement, end: GraphicalElement, pini: Point,pend: Point): Number
     {
         if(end!=null)
         {
@@ -399,7 +641,8 @@ public class ConnectionObject  extends CustomNode
         }
     }
 
-    protected bound function getInter1ConnectionY(ini: GraphicalElement, end: GraphicalElement, pini: Point,pend: Point): Number
+    /**Calcula la coordenada en Y del primer tirador intermedio del objeto de conexión*/
+    function getInter1ConnectionY(ini: GraphicalElement, end: GraphicalElement, pini: Point,pend: Point): Number
     {
         if(end!=null)
         {
@@ -416,7 +659,8 @@ public class ConnectionObject  extends CustomNode
         }
     }
 
-    protected bound function getInter2ConnectionX(ini: GraphicalElement, end: GraphicalElement, pini: Point,pend: Point): Number
+    /**Calcula la coordenada en X del segundo tirador intermedio del objeto de conexión*/
+    function getInter2ConnectionX(ini: GraphicalElement, end: GraphicalElement, pini: Point,pend: Point): Number
     {
         if(end!=null)
         {
@@ -435,7 +679,8 @@ public class ConnectionObject  extends CustomNode
         }
     }
 
-    protected bound function getInter2ConnectionY(ini: GraphicalElement, end: GraphicalElement, pini: Point,pend: Point): Number
+    /**Calcula la coordenada en Y del segundo tirador intermedio del objeto de conexión*/
+    function getInter2ConnectionY(ini: GraphicalElement, end: GraphicalElement, pini: Point,pend: Point): Number
     {
         if(end!=null)
         {
@@ -453,36 +698,56 @@ public class ConnectionObject  extends CustomNode
         }
     }
 
-    protected bound function getArrow(grad: Number) : Number
-    {
-        var pini:Point=points[(sizeof points)-2];
-        var pend:Point=points[(sizeof points)-1];
+    /**Agrega los tiradores por defecto al objeto de conexión*/
+    public function buildDefaultHandlers() {        
+        if (pini.x == pend.x or pini.y == pend.y) return;
 
-        if(pend.x >= pini.x)
-        {
-            Math.PI-Math.atan((pend.y-pini.y)/(pend.x-pini.x))+(grad*Math.PI)/180;
-        }else
-        {
-            2*Math.PI-Math.atan((pend.y-pini.y)/(pend.x-pini.x))+(grad*Math.PI)/180;
+        delete handles;
+        var p1 = Point {
+            x: getInter1ConnectionX(ini, end, pini, pend)
+            y: getInter1ConnectionY(ini, end, pini, pend)
         }
-
+        var p2 = Point {
+            x: getInter2ConnectionX(ini, end, pini, pend)
+            y: getInter2ConnectionY(ini, end, pini, pend)
+        }
+        addLineHandler(p1);
+        addLineHandler(p2);
     }
 
+    /**Calcula el ángulo de la flecha del objeto de conexión*/
+    protected bound function getArrow(grad: Number, p: Point) : Number
+    {
+        if(pend.x >= p.x)
+        {
+            Math.PI-Math.atan((pend.y-p.y)/(pend.x-p.x))+(grad*Math.PI)/180;
+        }else
+        {
+            2*Math.PI-Math.atan((pend.y-p.y)/(pend.x-p.x))+(grad*Math.PI)/180;
+        }
+    }
+
+    /**Indica si el objeto de conexión es visible en el área de trabajo*/
     public bound function canView():Boolean
     {
         return modeler.containerElement==ini.container or modeler.containerElement==end.container;
     }
 
+    /**Hace una copia del objeto de conexión.*/
     public function copy() : ConnectionObject {
         var t = ConnectionObject {
             ini: this.ini
             end: this.end
             arrowType: this.arrowType
-            cubicCurve: this.cubicCurve
+            //cubicCurve: this.cubicCurve
             notGroup: this.notGroup
             modeler: this.modeler
             title:this.title
             uri:"new:sequenceflow:{modeler.toolBar.counter++}"
+        }
+
+        for (handle in handles) {
+            t.addLineHandler(handle.getPoint());
         }
         return t;
     }
