@@ -262,7 +262,7 @@ public class SWBUsrRep extends GenericResource {
                     out.println("<button dojoType='dijit.form.Button' type=\"submit\" onClick=\"if(!dijit.byId('frmImport1').isValid()) return false;\">" + paramRequest.getLocaleLogString("send") + "</button>");
                     out.println("<button id=\"send\" dojoType=\"dijit.form.Button\" onClick=\"javascript:history.go(-1);\">"+paramRequest.getLocaleLogString("return")+"</button>");
                     out.println("</span></fieldset>");
-                    out.println("<input type=\"hidden\" name=\"zipName\" value=\"" + request.getParameter("zipName") + "\"");
+                    out.println("<input type=\"hidden\" name=\"zipName\" value=\"" + request.getParameter("zipName") + "\"/>");
                     out.println("</form>");
                 } catch (Exception e) {
                     log.debug(e);
@@ -431,7 +431,9 @@ public class SWBUsrRep extends GenericResource {
         }else if (response.getAction().equals("install")) {
             String siteInfo = SWBUtils.IO.readFileFromZipAsString(request.getParameter("zipName"), "siteInfo.xml");
             String oldIDModel = null, oldNamespace = null, oldTitle = null, oldDescription = null;
+            System.out.println("siteInfoJ:"+siteInfo);
             Document dom = SWBUtils.XML.xmlToDom(siteInfo);
+            System.out.println("domJ:"+dom);
             Node nodeModel = dom.getFirstChild();
             if (nodeModel.getNodeName().equals("model")) {
                 HashMap smodels = new HashMap();
