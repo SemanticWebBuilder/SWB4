@@ -287,6 +287,7 @@ public class Promo extends GenericResource {
         String moreStyle = base.getAttribute("moreStyle");
         String url = base.getAttribute("url");
         String uline = base.getAttribute("uline", "0");
+        boolean target = Boolean.parseBoolean(base.getAttribute("target"));
 
         int imgPos;
         try {
@@ -314,43 +315,104 @@ public class Promo extends GenericResource {
             String margin = "";
             StringBuilder img = new StringBuilder("");
             if(imgfile != null) {
+                boolean hasLink = base.getAttribute("more")==null && url!=null;
                 if(imgPos == 3) {
-                    img.append("<div style=\"text-align:center; float:right; margin:10px\"> \n");
-                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +" /></span> \n");
+                    img.append("<div style=\"text-align:center; float:right; margin:10px\">");
+                    img.append("<span>");
+                    if(hasLink) {
+                        img.append("<a href=\""+url+"\"");
+                        if(textStyle!=null || "0".equals(uline))
+                            img.append(" style=\""+(textStyle==null?"":textStyle+";")+("0".equals(uline)?"text-decoration:none;":"")+"\"");
+                        if(target)
+                            img.append(" target=\"_blank\"");
+                        img.append(">");
+                    }
+                    img.append("<img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +"/>");
+                    if(hasLink)
+                        img.append("</a>");
+                    img.append("</span>\n");
                     if(caption != null) {
                         img.append("<h6"+(captionStyle==null?"":" style=\""+captionStyle+"\"")+"><span>"+caption+"</span></h6> \n");
                     }
-                    img.append("</div> \n");
+                    img.append("</div>\n");
                     margin = "margin-right:"+(imgWidth+20)+"px;";
                     out.append(img);
                 }else if(imgPos == 4) {
-                    img.append("<div style=\"text-align:center; float:left; margin:10px\"> \n");
-                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +" /></span> \n");
+                    img.append("<div style=\"text-align:center; float:left; margin:10px\">");
+                    img.append("<span>");
+                    if(hasLink){
+                        img.append("<a href=\""+url+"\"");
+                        if(textStyle!=null || "0".equals(uline))
+                            img.append(" style=\""+(textStyle==null?"":textStyle+";")+("0".equals(uline)?"text-decoration:none;":"")+"\"");
+                        if(target)
+                            img.append(" target=\"_blank\"");
+                        img.append(">");
+                    }
+                    img.append("<img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +"/>");
+                    if(hasLink)
+                        img.append("</a>");
+                    img.append("</span>\n");
                     if(caption != null) {
                         img.append("<h6"+(captionStyle==null?"":" style=\""+captionStyle+"\"")+"><span>"+caption+"</span></h6> \n");
                     }
-                    img.append("</div> \n");
+                    img.append("</div>\n");
                     margin = "margin-left:"+(imgWidth+20)+"px;";
                     out.append(img);
                 }else if(imgPos == 2) {
-                    img.append("<div style=\"text-align:center; float:right; margin:10px;\"> \n");
-                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +" /></span> \n");
+                    img.append("<div style=\"text-align:center; float:right; margin:10px;\">");
+                    img.append("<span>");
+                    if(hasLink) {
+                        img.append("<a href=\""+url+"\"");
+                        if(textStyle!=null || "0".equals(uline))
+                            img.append(" style=\""+(textStyle==null?"":textStyle+";")+("0".equals(uline)?"text-decoration:none;":"")+"\"");
+                        if(target)
+                            img.append(" target=\"_blank\"");
+                        img.append(">");
+                    }
+                    img.append("<img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +"/>");
+                    if(hasLink)
+                        img.append("</a>");
+                    img.append("</span>\n");
                     if(caption != null) {
                         img.append("<h6"+(captionStyle==null?"":" style=\""+captionStyle+"\"")+"><span>"+caption+"</span></h6> \n");
                     }
-                    img.append("</div> \n");
+                    img.append("</div>\n");
                     out.append(img);
                 }else if(imgPos == 1) {
-                    img.append("<div style=\"text-align:center; float:left; margin:10px;\"> \n");
-                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +" /></span> \n");
+                    img.append("<div style=\"text-align:center; float:left; margin:10px;\">");
+                    img.append("<span>");
+                    if(hasLink) {
+                        img.append("<a href=\""+url+"\"");
+                        if(textStyle!=null || "0".equals(uline))
+                            img.append(" style=\""+(textStyle==null?"":textStyle+";")+("0".equals(uline)?"text-decoration:none;":"")+"\"");
+                        if(target)
+                            img.append(" target=\"_blank\"");
+                        img.append(">");
+                    }
+                    img.append("<img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +"/>");
+                    if(hasLink)
+                        img.append("</a>");
+                    img.append("</span>\n");
                     if(caption != null) {
                         img.append("<h6"+(captionStyle==null?"":" style=\""+captionStyle+"\"")+"><span>"+caption+"</span></h6> \n");
                     }
-                    img.append("</div> \n");
+                    img.append("</div>\n");
                     out.append(img);
                 }else if(imgPos == 5) {
                     img.append("<div style=\"text-align:center\"> \n");
-                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +" /></span> \n");
+                    img.append("<span>");
+                    if(hasLink) {
+                        img.append("<a href=\""+url+"\"");
+                        if(textStyle!=null || "0".equals(uline))
+                            img.append(" style=\""+(textStyle==null?"":textStyle+";")+("0".equals(uline)?"text-decoration:none;":"")+"\"");
+                        if(target)
+                            img.append(" target=\"_blank\"");
+                        img.append(">");
+                    }
+                    img.append("<img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +"/>");
+                    if(hasLink)
+                        img.append("</a>");
+                    img.append("</span>\n");
                     if(caption != null) {
                         img.append("<h6"+(captionStyle==null?"":" style=\""+captionStyle+"\"")+"><span>"+caption+"</span></h6> \n");
                     }
@@ -358,67 +420,76 @@ public class Promo extends GenericResource {
                     out.append(img);
                 }else {
                     imgPos = 6;
-                    img.append("<div style=\"text-align:center\"> \n");
-                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +" /></span> \n");
+                    img.append("<div style=\"text-align:center\">");
+                    img.append("<span>");
+                    if(hasLink) {
+                        img.append("<a href=\""+url+"\"");
+                        if(textStyle!=null || "0".equals(uline))
+                            img.append(" style=\""+(textStyle==null?"":textStyle+";")+("0".equals(uline)?"text-decoration:none;":"")+"\"");
+                        if(target)
+                            img.append(" target=\"_blank\"");
+                        img.append(">");
+                    }
+                    img.append("<img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +"/>");
+                    if(hasLink)
+                        img.append("</a>");
+                    img.append("</span>\n");
                     if(caption != null) {
                         img.append("<h6"+(captionStyle==null?"":" style=\""+captionStyle+"\"")+"><span>"+caption+"</span></h6> \n");
                     }
-                    img.append("</div> \n");
+                    img.append("</div>\n");
                 }
             }
 
             //subtitle
             if(subtitle != null) {
-                out.append("<h2"+(subtitleStyle==null?"":" style=\""+subtitleStyle+"\"")+"><span>"+subtitle+"</span></h2> \n");
+                out.append("<h2"+(subtitleStyle==null?"":" style=\""+subtitleStyle+"\"")+"><span>"+subtitle+"</span></h2>\n");
             }
 
             if( base.getAttribute("more")==null ) {
                 //texto
-                out.append("<p style=\"text-align:justify;"+margin+"\"> \n");
+                out.append("<p style=\"text-align:justify;"+margin+"\">");
                 if(url != null) {
                     out.append("<a href=\""+url+"\"");
                     if(textStyle!=null || "0".equals(uline)) {
                         out.append(" style=\""+(textStyle==null?"":textStyle+";")+("0".equals(uline)?"text-decoration:none;":"")+"\"");
                     }
-                    if ("1".equalsIgnoreCase(base.getAttribute("target", "0").trim())) {
+                    if(target)
                         out.append(" target=\"_blank\"");
-                    }
-                    out.append("> \n");
+                    out.append(">");
                     out.append(text);
-                    out.append("\n</a> \n");
+                    out.append("</a>\n");
                 }else {
-                    out.append("<span "+(textStyle==null?"":"style=\""+textStyle+"\"")+"> \n");
+                    out.append("<span "+(textStyle==null?"":"style=\""+textStyle+"\"")+">");
                     out.append(text);
-                    out.append("</span> \n");
+                    out.append("</span>\n");
                 }
-                out.append("</p> \n");
+                out.append("</p>\n");
             }else {
-                out.append("<p style=\"text-align:justify;"+margin+"\"> \n");
-                out.append("<span "+(textStyle==null?"":"style=\""+textStyle+"\"")+"> \n");
+                out.append("<p style=\"text-align:justify;"+margin+"\">");
+                out.append("<span "+(textStyle==null?"":"style=\""+textStyle+"\"")+">");
                 out.append(text);
-                out.append("</span> \n");
-                out.append("</p> \n");
+                out.append("</span>");
+                out.append("</p>\n");
                 //más...
                 if( url!=null) {
-                    out.append("<ul style=\"list-style:none; margin:7px; padding:0px\"><li> \n");
+                    out.append("<ul style=\"list-style:none; margin:7px; padding:0px\"><li>");
                     out.append("<a href=\""+url+"\"");
                     if(moreStyle!=null || "0".equals(uline)) {
                         out.append(" style=\""+(moreStyle==null?"":moreStyle+";")+("0".equals(uline)?"text-decoration:none;":"")+"\"");
                     }
-                    if(Boolean.parseBoolean(base.getAttribute("target","true"))) {
+                    if(target)
                         out.append(" target=\"_blank\"");
-                    }
-                    out.append("> \n");
+                    out.append(">");
                     out.append(more);
-                    out.append("\n</a> \n");
-                    out.append("</li></ul> \n");
+                    out.append("</a>");
+                    out.append("</li></ul>\n");
                 }
             }
 
             if( imgfile!=null && imgPos==6 ) {
                 out.append(img);
             }
-
             //marco
             out.append("</div>");
         }catch (Exception e) {
@@ -436,8 +507,21 @@ public class Promo extends GenericResource {
         StringBuilder out = new StringBuilder();
         Resource base=getResourceBase();
 
-        String cssClass = base.getAttribute("cssClass","");
+        int width;
+        try {
+            width = Integer.parseInt(base.getAttribute("width","0"));
+        }catch(NumberFormatException nfe) {
+            width = 0;
+        }
+        int height;
+        try {
+            height = Integer.parseInt(base.getAttribute("height","0"));
+        }catch(NumberFormatException nfe) {
+            height = 0;
+        }
+
         String title = base.getAttribute("title");
+
         String subtitle = base.getAttribute("subtitle");
 
         if(base.getAttribute("imgfile")==null)
@@ -456,10 +540,13 @@ public class Promo extends GenericResource {
             imgHeight = "height=\"" + base.getAttribute("imgHeight")+"\"";
         }
 
-
         String text = base.getAttribute("text","");
+
         String more = base.getAttribute("more","");
         String url = base.getAttribute("url");
+        String uline = base.getAttribute("uline", "0");
+        boolean target = Boolean.parseBoolean(base.getAttribute("target"));
+        String cssClass = base.getAttribute("cssClass","");
 
         int imgPos;
         try {
@@ -470,79 +557,186 @@ public class Promo extends GenericResource {
 
         try {
             //marco
-            out.append("<div class=\""+cssClass+"\"> \n");
+            out.append("<div class=\""+cssClass+"\">");
 
             //title
             if(title != null) {
-                out.append("<h1><span> \n");
+                out.append("<h2><span> \n");
                 out.append(title);
-                out.append("</span></h1> \n");
+                out.append("</span></h2> \n");
             }
 
             //image
+            String margin = "";
             StringBuilder img = new StringBuilder("");
             if(imgfile != null) {
-                if(imgPos != 6) {
-                    img.append("<div> \n");
-                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +" /></span> \n");
-                    if(caption != null) {
-                        img.append("<h6><span>"+caption+"</span></h6> \n");
+                boolean hasLink = base.getAttribute("more")==null && url!=null;
+                if(imgPos == 3) {
+                    img.append("<div style=\"text-align:center; float:right; margin:10px\">");
+                    img.append("<span>");
+                    if(hasLink) {
+                        img.append("<a href=\""+url+"\"");
+                        if("0".equals(uline))
+                            img.append(" style=\"text-decoration:none;\" ");
+                        if(target)
+                            img.append(" target=\"_blank\"");
+                        img.append(">");
                     }
+                    img.append("<img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +"/>");
+                    if(hasLink)
+                        img.append("</a>");
+                    img.append("</span>\n");
+                    if(caption != null)
+                        img.append("<h6><span>"+caption+"</span></h6> \n");
+                    img.append("</div>\n");
+                    margin = "margin-right:"+(imgWidth+20)+"px;";
+                    out.append(img);
+                }else if(imgPos == 4) {
+                    img.append("<div style=\"text-align:center; float:left; margin:10px\">");
+                    img.append("<span>");
+                    if(hasLink){
+                        img.append("<a href=\""+url+"\"");
+                        if("0".equals(uline))
+                            img.append(" style=\"text-decoration:none;\" ");
+                        if(target)
+                            img.append(" target=\"_blank\"");
+                        img.append(">");
+                    }
+                    img.append("<img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +"/>");
+                    if(hasLink)
+                        img.append("</a>");
+                    img.append("</span>\n");
+                    if(caption != null)
+                        img.append("<h6><span>"+caption+"</span></h6> \n");
+                    img.append("</div>\n");
+                    margin = "margin-left:"+(imgWidth+20)+"px;";
+                    out.append(img);
+                }else if(imgPos == 2) {
+                    img.append("<div style=\"text-align:center; float:right; margin:10px;\">");
+                    img.append("<span>");
+                    if(hasLink) {
+                        img.append("<a href=\""+url+"\"");
+                        if("0".equals(uline))
+                            img.append(" style=\"text-decoration:none;\" ");
+                        if(target)
+                            img.append(" target=\"_blank\"");
+                        img.append(">");
+                    }
+                    img.append("<img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +"/>");
+                    if(hasLink)
+                        img.append("</a>");
+                    img.append("</span>\n");
+                    if(caption != null)
+                        img.append("<h6><span>"+caption+"</span></h6> \n");
+                    img.append("</div>\n");
+                    out.append(img);
+                }else if(imgPos == 1) {
+                    img.append("<div style=\"text-align:center; float:left; margin:10px;\">");
+                    img.append("<span>");
+                    if(hasLink) {
+                        img.append("<a href=\""+url+"\"");
+                        if("0".equals(uline))
+                            img.append(" style=\"text-decoration:none;\" ");
+                        if(target)
+                            img.append(" target=\"_blank\"");
+                        img.append(">");
+                    }
+                    img.append("<img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +"/>");
+                    if(hasLink)
+                        img.append("</a>");
+                    img.append("</span>\n");
+                    if(caption != null)
+                        img.append("<h6><span>"+caption+"</span></h6> \n");
+                    img.append("</div>\n");
+                    out.append(img);
+                }else if(imgPos == 5) {
+                    img.append("<div style=\"text-align:center\"> \n");
+                    img.append("<span>");
+                    if(hasLink) {
+                        img.append("<a href=\""+url+"\"");
+                        if("0".equals(uline))
+                            img.append(" style=\"text-decoration:none;\" ");
+                        if(target)
+                            img.append(" target=\"_blank\"");
+                        img.append(">");
+                    }
+                    img.append("<img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +"/>");
+                    if(hasLink)
+                        img.append("</a>");
+                    img.append("</span>\n");
+                    if(caption != null)
+                        img.append("<h6><span>"+caption+"</span></h6> \n");
                     img.append("</div> \n");
                     out.append(img);
                 }else {
                     imgPos = 6;
-                    img.append("<div> \n");
-                    img.append("<span><img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +" /></span> \n");
-                    if(caption != null) {
-                        img.append("<h6><span>"+caption+"</span></h6> \n");
+                    img.append("<div style=\"text-align:center\">");
+                    img.append("<span>");
+                    if(hasLink) {
+                        img.append("<a href=\""+url+"\"");
+                        if("0".equals(uline))
+                            img.append(" style=\"text-decoration:none;\" ");
+                        if(target)
+                            img.append(" target=\"_blank\"");
+                        img.append(">");
                     }
-                    img.append("</div> \n");
+                    img.append("<img src=\""+webWorkPath+"/"+imgfile+"\" " +imgWidth+ " "+ imgHeight +"/>");
+                    if(hasLink)
+                        img.append("</a>");
+                    img.append("</span>\n");
+                    if(caption != null)
+                        img.append("<h6><span>"+caption+"</span></h6> \n");
+                    img.append("</div>\n");
                 }
             }
 
             //subtitle
             if(subtitle != null) {
-                out.append("<h2><span>"+subtitle+"</span></h2> \n");
+                out.append("<h2><span>"+subtitle+"</span></h2>\n");
             }
 
             if( base.getAttribute("more")==null ) {
                 //texto
-                out.append("<p> \n");
+                out.append("<p>");
                 if(url != null) {
-                    out.append("<a href=\""+url+"\">\n");
-                    out.append(text);
-                    out.append("\n</a> \n");
-                }else {
-                    out.append("<span> \n");
-                    out.append(text);
-                    out.append("</span> \n");
-                }
-                out.append("</p> \n");
-            }else {
-                out.append("<p> \n");
-                out.append("<span> \n");
-                out.append(text);
-                out.append("</span> \n");
-                out.append("</p> \n");
-                //más...
-                if( url!=null) {
-                    out.append("<ul style=\"list-style:none; margin:7px; padding:0px\"><li> \n");
                     out.append("<a href=\""+url+"\"");
-                    if(Boolean.parseBoolean(base.getAttribute("target","true"))) {
+                    if("0".equals(uline))
+                        out.append(" style=\"text-decoration:none;\" ");
+                    if(target)
                         out.append(" target=\"_blank\"");
-                    }
-                    out.append(">\n");
+                    out.append(">");
+                    out.append(text);
+                    out.append("</a>\n");
+                }else {
+                    out.append("<span>");
+                    out.append(text);
+                    out.append("</span>\n");
+                }
+                out.append("</p>\n");
+            }else {
+                out.append("<p>");
+                out.append("<span>");
+                out.append(text);
+                out.append("</span>");
+                out.append("</p>\n");
+                //más...
+                if(url!=null) {
+                    out.append("<ul style=\"list-style:none; margin:7px; padding:0px\"><li>");
+                    out.append("<a href=\""+url+"\"");
+                    if("0".equals(uline))
+                        out.append(" style=\"text-decoration:none;\" ");
+                    if(target)
+                        out.append(" target=\"_blank\"");
+                    out.append(">");
                     out.append(more);
-                    out.append("\n</a> \n");
-                    out.append("</li></ul> \n");
+                    out.append("</a>");
+                    out.append("</li></ul>\n");
                 }
             }
 
             if( imgfile!=null && imgPos==6 ) {
                 out.append(img);
             }
-
             //marco
             out.append("</div>");
         }catch (Exception e) {
@@ -910,8 +1104,9 @@ public class Promo extends GenericResource {
         htm.append("        <li>Mostrar en una nueva ventana</li>\n");
         htm.append("        <li class=\"swbform-li\">\n");
         htm.append("          <label for=\"target_si\" class=\"swbform-label\">Sí</label>\n");
-        htm.append("          <input type=\"radio\" id=\"target_si\" name=\"target\" dojoType=\"dijit.form.RadioButton\" value=\"true\" checked=\"checked\" ");
-        if(Boolean.parseBoolean(base.getAttribute("target")))
+        htm.append("          <input type=\"radio\" id=\"target_si\" name=\"target\" dojoType=\"dijit.form.RadioButton\" value=\"true\" ");
+        boolean target = Boolean.parseBoolean(base.getAttribute("target"));
+        if(target)
             htm.append(" checked=\"checked\" ");
         htm.append("/>\n");
         htm.append("        </li>\n");
@@ -919,7 +1114,7 @@ public class Promo extends GenericResource {
         htm.append("        <li class=\"swbform-li\">\n");
         htm.append("          <label for=\"target_no\" class=\"swbform-label\">No</label>\n");
         htm.append("          <input type=\"radio\" id=\"target_no\" name=\"target\" dojoType=\"dijit.form.RadioButton\" value=\"false\" ");
-        if(!Boolean.parseBoolean(base.getAttribute("target")))
+        if(!target)
             htm.append(" checked=\"checked\" ");
         htm.append("/>\n");
         htm.append("        </li>\n");
