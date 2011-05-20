@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
@@ -149,6 +150,28 @@ public class DojoImageUpload extends org.semanticwb.model.base.DojoImageUploadBa
             } else
             {
                 ImageResizer.resize(file, getImgThumbnailWidth(), getImgThumbnailHeight(), true, new File(path, "thmb_"+name), name.substring(name.lastIndexOf(".") + 1));
+            }
+
+            String thumbs=getImgThumbnailList();
+            if(thumbs!=null)
+            {
+                int x=1;
+                StringTokenizer st=new StringTokenizer(thumbs,"|");
+                while(st.hasMoreTokens())
+                {
+                    String tk=st.nextToken();
+                    StringTokenizer st2=new StringTokenizer(tk,"x");
+                    int w=Integer.parseInt(st2.nextToken());
+                    int h=Integer.parseInt(st2.nextToken());
+                    if (isImgCrop())
+                    {
+                        ImageResizer.resizeCrop(file, w, h, new File(path, "thmb"+x+"_"+name), name.substring(name.lastIndexOf(".") + 1));
+                    } else
+                    {
+                        ImageResizer.resize(file, w, h, true, new File(path, "thmb"+x+"_"+name), name.substring(name.lastIndexOf(".") + 1));
+                    }
+                    x++;
+                }
             }
         }
     }

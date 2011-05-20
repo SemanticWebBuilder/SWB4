@@ -120,6 +120,24 @@ public abstract class DojoImageUploadBase extends org.semanticwb.model.DojoFileU
     }
 
 /**
+* Gets the ImgThumbnailList property
+* @return String with the ImgThumbnailList
+*/
+    public String getImgThumbnailList()
+    {
+        return getSemanticObject().getProperty(swbxf_imgThumbnailList);
+    }
+
+/**
+* Sets the ImgThumbnailList property
+* @param value long with the ImgThumbnailList
+*/
+    public void setImgThumbnailList(String value)
+    {
+        getSemanticObject().setProperty(swbxf_imgThumbnailList, value);
+    }
+
+/**
 * Gets the ImgMaxWidth property
 * @return int with the ImgMaxWidth
 */
