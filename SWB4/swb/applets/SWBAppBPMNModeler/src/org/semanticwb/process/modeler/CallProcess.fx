@@ -133,6 +133,7 @@ public class CallProcess extends CallActivity {
     override public function copy() : GraphicalElement {
         var t = CallProcess {
             title: this.title
+            description: this.description
             type: this.type
             modeler: this.modeler
             container: this.container
