@@ -75,10 +75,12 @@ public class CallTask extends CallActivity {
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = CallManualTask {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:callmanualtask:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -106,10 +108,12 @@ public class CallTask extends CallActivity {
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = CallBusinessRuleTask {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:callbusinessruletask:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -137,10 +141,12 @@ public class CallTask extends CallActivity {
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = CallScriptTask {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:callscripttask:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -168,10 +174,12 @@ public class CallTask extends CallActivity {
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = CallUserTask {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:callusertask:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -281,6 +289,7 @@ public class CallTask extends CallActivity {
     override public function copy() : GraphicalElement {
         var t = CallTask {
             title: this.title
+            description: this.description
             type: this.type
             modeler: this.modeler
             isLoop: this.isLoop
