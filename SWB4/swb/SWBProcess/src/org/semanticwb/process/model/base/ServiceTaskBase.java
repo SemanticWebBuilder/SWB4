@@ -1,8 +1,10 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ServiceTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ActivityConfable
+public abstract class ServiceTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.process.model.ActivityConfable
 {
+    public static final org.semanticwb.platform.SemanticClass swp_ProcessService=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessService");
+    public static final org.semanticwb.platform.SemanticProperty swp_processService=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processService");
     public static final org.semanticwb.platform.SemanticClass swp_ServiceTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ServiceTask");
    /**
    * The semantic class that represents the currentObject
@@ -99,6 +101,29 @@ public abstract class ServiceTaskBase extends org.semanticwb.process.model.Task 
         public static java.util.Iterator<org.semanticwb.process.model.ServiceTask> listServiceTaskByContainer(org.semanticwb.process.model.Containerable value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ServiceTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_container,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ServiceTask with a determined ProcessService
+       * @param value ProcessService of the type org.semanticwb.process.model.ProcessService
+       * @param model Model of the org.semanticwb.process.model.ServiceTask
+       * @return Iterator with all the org.semanticwb.process.model.ServiceTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ServiceTask> listServiceTaskByProcessService(org.semanticwb.process.model.ProcessService value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ServiceTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_processService, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ServiceTask with a determined ProcessService
+       * @param value ProcessService of the type org.semanticwb.process.model.ProcessService
+       * @return Iterator with all the org.semanticwb.process.model.ServiceTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ServiceTask> listServiceTaskByProcessService(org.semanticwb.process.model.ProcessService value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ServiceTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_processService,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -317,6 +342,44 @@ public abstract class ServiceTaskBase extends org.semanticwb.process.model.Task 
     public ServiceTaskBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+   /**
+   * Sets the value for the property ProcessService
+   * @param value ProcessService to set
+   */
+
+    public void setProcessService(org.semanticwb.process.model.ProcessService value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_processService, value.getSemanticObject());
+        }else
+        {
+            removeProcessService();
+        }
+    }
+   /**
+   * Remove the value for ProcessService property
+   */
+
+    public void removeProcessService()
+    {
+        getSemanticObject().removeProperty(swp_processService);
+    }
+
+   /**
+   * Gets the ProcessService
+   * @return a org.semanticwb.process.model.ProcessService
+   */
+    public org.semanticwb.process.model.ProcessService getProcessService()
+    {
+         org.semanticwb.process.model.ProcessService ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_processService);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.ProcessService)obj.createGenericInstance();
+         }
+         return ret;
     }
 
    /**
