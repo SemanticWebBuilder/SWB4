@@ -7,6 +7,7 @@ public abstract class StoreArtifactBase extends org.semanticwb.process.model.Pro
     public static final org.semanticwb.platform.SemanticProperty swp_processDirectory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processDirectory");
     public static final org.semanticwb.platform.SemanticClass swp_ProcessFileTemplate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessFileTemplate");
     public static final org.semanticwb.platform.SemanticProperty swp_processFileTemplate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processFileTemplate");
+    public static final org.semanticwb.platform.SemanticProperty swp_processFileName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processFileName");
     public static final org.semanticwb.platform.SemanticProperty swp_processFileTemplateScript=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processFileTemplateScript");
     public static final org.semanticwb.platform.SemanticClass swp_StoreArtifact=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#StoreArtifact");
    /**
@@ -208,6 +209,24 @@ public abstract class StoreArtifactBase extends org.semanticwb.process.model.Pro
              ret=(org.semanticwb.process.model.ProcessFileTemplate)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the ProcessFileName property
+* @return String with the ProcessFileName
+*/
+    public String getProcessFileName()
+    {
+        return getSemanticObject().getProperty(swp_processFileName);
+    }
+
+/**
+* Sets the ProcessFileName property
+* @param value long with the ProcessFileName
+*/
+    public void setProcessFileName(String value)
+    {
+        getSemanticObject().setProperty(swp_processFileName, value);
     }
 
 /**
