@@ -48,10 +48,12 @@ public class ComplexGateway extends Gateway
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = ExclusiveGateway {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:exclusivegateway:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -76,10 +78,12 @@ public class ComplexGateway extends Gateway
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = InclusiveGateway {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:inclusivegateway:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -171,6 +175,7 @@ public class ComplexGateway extends Gateway
     override public function copy() : GraphicalElement {
         var t = ComplexGateway {
             title: this.title
+            description: this.description
             type: this.type
             modeler: this.modeler
             container: this.container
