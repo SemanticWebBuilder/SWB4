@@ -138,10 +138,12 @@ public class DataObject  extends GraphicalElement {
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = DataInput {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 isCollection: isCollection
                                 uri:"new:datainput:{this.modeler.toolBar.counter++}"
                             }
@@ -168,10 +170,12 @@ public class DataObject  extends GraphicalElement {
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = DataOutput {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 isCollection: isCollection
                                 uri:"new:dataoutput:{this.modeler.toolBar.counter++}"
                             }
@@ -198,10 +202,12 @@ public class DataObject  extends GraphicalElement {
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = DataStore {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:datastore:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -325,6 +331,7 @@ public class DataObject  extends GraphicalElement {
         var t = DataObject {
             title: this.title
             type: this.type
+            description: this.description
             modeler: this.modeler
             isCollection: isCollection
             isLoop: this.isLoop
