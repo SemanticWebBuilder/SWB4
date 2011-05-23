@@ -50,10 +50,12 @@ public class EndEvent extends ThrowEvent
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = MessageEndEvent {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:endtevent:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -81,10 +83,12 @@ public class EndEvent extends ThrowEvent
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = SignalEndEvent {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:endevent:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -112,10 +116,12 @@ public class EndEvent extends ThrowEvent
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = ErrorEndEvent {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:endevent:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -143,10 +149,12 @@ public class EndEvent extends ThrowEvent
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = CancelationEndEvent {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:endevent:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -174,10 +182,12 @@ public class EndEvent extends ThrowEvent
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = CompensationEndEvent {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:endevent:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -205,10 +215,12 @@ public class EndEvent extends ThrowEvent
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = MultipleEndEvent {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:endevent:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -236,10 +248,12 @@ public class EndEvent extends ThrowEvent
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = ScalationEndEvent {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:endevent:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -267,10 +281,12 @@ public class EndEvent extends ThrowEvent
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = TerminationEndEvent {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:endevent:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
