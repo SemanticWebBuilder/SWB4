@@ -122,6 +122,21 @@
     >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
+  <owl:Class rdf:ID="RepositoryFile">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#RoleRefable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Versionable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#RuleRefable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Hitable"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRefable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Expirable"/>
+  </owl:Class>
   <owl:Class rdf:ID="MessageEndEvent">
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_EndEvent">
@@ -464,6 +479,15 @@
     >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
+  <owl:Class rdf:ID="SendMail">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ProcessService"/>
+    </rdfs:subClassOf>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:label>SendMail</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
   <owl:Class rdf:ID="ParallelStartEvent">
     <swb:displayObject rdf:resource="#do_StartEvent"/>
     <rdfs:subClassOf>
@@ -668,7 +692,6 @@
       <owl:Class rdf:ID="ProcessInstance"/>
     </swb:hasClass>
     <swb:hasClass rdf:resource="#MultipleStartEvent"/>
-    <swb:hasClass rdf:resource="#IntermediateCatchEvent"/>
     <swb:hasClass>
       <swb:Class rdf:ID="TransactionSubProcess">
         <swb:displayObject rdf:resource="#do_SubProcess"/>
@@ -678,6 +701,7 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </swb:hasClass>
+    <swb:hasClass rdf:resource="#IntermediateCatchEvent"/>
     <swb:hasClass rdf:resource="#CompensationEndEvent"/>
     <swb:hasClass>
       <owl:Class rdf:ID="Process"/>
@@ -706,6 +730,7 @@
     <swb:hasClass rdf:resource="#RuleIntermediateCatchEvent"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Countries"/>
     <swb:hasClass rdf:resource="#ServiceTask"/>
+    <swb:hasClass rdf:resource="#CatchEvent"/>
     <swb:hasClass>
       <swb:Class rdf:ID="DataStore">
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -715,7 +740,6 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </swb:hasClass>
-    <swb:hasClass rdf:resource="#CatchEvent"/>
     <swb:hasClass>
       <owl:Class rdf:about="#Task"/>
     </swb:hasClass>
@@ -932,6 +956,20 @@
     >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
+  <owl:Class rdf:about="#ProcessService">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:label xml:lang="en">Service</rdfs:label>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_ProcessService">
+        <swbxf:doNotInstanceable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swbxf:doNotInstanceable>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconResourceType</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdfs:label xml:lang="es">Servicio</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
   <owl:Class rdf:about="#SignalEndEvent">
     <swb:displayObject rdf:resource="#do_EndEvent"/>
     <rdfs:subClassOf rdf:resource="#EndEvent"/>
@@ -1026,9 +1064,6 @@
   </owl:Class>
   <owl:Class rdf:about="#Process">
     <rdfs:subClassOf rdf:resource="#ProcessElement"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#CalendarRefable"/>
     <rdfs:subClassOf>
       <owl:Restriction>
         <owl:allValuesFrom rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
@@ -1037,6 +1072,9 @@
         </owl:onProperty>
       </owl:Restriction>
     </rdfs:subClassOf>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#CalendarRefable"/>
     <rdfs:label xml:lang="es">Proceso</rdfs:label>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
@@ -1127,6 +1165,18 @@
     <rdfs:range rdf:resource="#StartEvent"/>
     <rdfs:domain rdf:resource="#ProcessObserver"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="processService">
+    <rdfs:domain rdf:resource="#ServiceTask"/>
+    <rdfs:range rdf:resource="#ProcessService"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_processService">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+        <swbxf:propGroup rdf:resource="#grp_Process"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasTargetInstanceInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >hasTargetInstance</swb:propertyCodeName>
@@ -1158,8 +1208,8 @@
     <rdfs:range>
       <swb:Model rdf:ID="ProcessDataInstanceModel">
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBModel"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Model>
     </rdfs:range>
     <rdfs:domain rdf:resource="#ProcessSite"/>
@@ -1340,16 +1390,16 @@
     <rdfs:domain rdf:resource="#ProcessTraceable"/>
     <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="parent">
+    <owl:inverseOf rdf:resource="#hasChildInv"/>
+    <rdfs:range rdf:resource="#GraphicalElement"/>
+    <rdfs:domain rdf:resource="#GraphicalElement"/>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasOutputConnectionObjectInv">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >hasOutputConnectionObject</swb:propertyCodeName>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="parent">
-    <owl:inverseOf rdf:resource="#hasChildInv"/>
-    <rdfs:range rdf:resource="#GraphicalElement"/>
-    <rdfs:domain rdf:resource="#GraphicalElement"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="flowNodeType">
     <rdfs:range rdf:resource="#FlowNode"/>
@@ -1440,6 +1490,12 @@
     <rdfs:domain rdf:resource="#ProcessObserver"/>
     <rdfs:range rdf:resource="#FlowNodeInstance"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasRepositoryFile">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:cloneDependency>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasProcessInv">
     <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:cloneDependency>
@@ -1479,6 +1535,25 @@
     <rdfs:range rdf:resource="#ResourceAssignment"/>
     <rdfs:domain rdf:resource="#ResourceAssignmentable"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="repositoryDirectory">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_repositoryDirectory">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Directory</rdfs:label>
+    <rdfs:label xml:lang="es">Directorio</rdfs:label>
+    <owl:inverseOf rdf:resource="#hasRepositoryFile"/>
+    <rdfs:range>
+      <swb:Class rdf:ID="RepositoryDirectory">
+        <swb:displayObject rdf:resource="#do_ProcessWebPage"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#RepositoryFile"/>
+  </owl:ObjectProperty>
   <owl:DatatypeProperty rdf:ID="processObjectReused">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#ItemAwareReference"/>
@@ -1486,6 +1561,18 @@
   <owl:DatatypeProperty rdf:ID="labelSize">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#GraphicalElement"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="sendMailTo">
+    <rdfs:domain rdf:resource="#SendMail"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >to</swb:propertyCodeName>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_sendMailTo">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/process/schema#floatValue">
     <swb:displayProperty>
@@ -1514,30 +1601,18 @@
     <rdfs:domain rdf:resource="#GraphicalElement"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="gatewayMode">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>{Converging|Diverging|Mixed} Indica el modo en que la compuerta se usa.</rdfs:comment>
-    <rdfs:label xml:lang="en">Mode</rdfs:label>
-    <rdfs:label xml:lang="es">Modo</rdfs:label>
-    <rdfs:domain rdf:resource="#Gateway"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="processPriority">
     <rdfs:domain rdf:resource="#ProcessInstance"/>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >priority</swb:propertyCodeName>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="interruptor">
-    <rdfs:domain rdf:resource="#CatchEvent"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:label>Interruptor</rdfs:label>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_interruptor">
-        <swbxf:propGroup rdf:resource="#grp_Process"/>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >200</swb:index>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
+  <owl:DatatypeProperty rdf:ID="gatewayMode">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>{Converging|Diverging|Mixed} Indica el modo en que la compuerta se usa.</rdfs:comment>
+    <rdfs:label xml:lang="en">Mode</rdfs:label>
+    <rdfs:label xml:lang="es">Modo</rdfs:label>
+    <rdfs:domain rdf:resource="#Gateway"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/process/schema#booleanValue">
     <swb:displayProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/process/schema#dp_DataType"/>
@@ -1550,6 +1625,18 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:domain>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="interruptor">
+    <rdfs:domain rdf:resource="#CatchEvent"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:label>Interruptor</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_interruptor">
+        <swbxf:propGroup rdf:resource="#grp_Process"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="name">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -1627,6 +1714,10 @@
       </swb:Class>
     </rdfs:domain>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="connectionPoints">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ConnectionObject"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="automaticAssignation">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_automaticAssignation">
@@ -1674,7 +1765,6 @@
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_dataObjectId">
         <swbxf:propGroup rdf:resource="#grp_Process"/>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#idTextElement"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >95</swb:index>
       </swbxf:DisplayProperty>
@@ -1719,8 +1809,8 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
     <rdfs:domain>
       <swb:Class rdf:about="http://www.semanticwebbuilder.org/swb4/process/schema#Date">
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
         <rdfs:subClassOf rdf:resource="#DataTypes"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:domain>
   </owl:DatatypeProperty>
@@ -1752,6 +1842,18 @@
     <rdfs:label xml:lang="es">Numero de tokens para inicio</rdfs:label>
     <rdfs:label xml:lang="en">Start tokens number</rdfs:label>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="sendMailSubject">
+    <rdfs:domain rdf:resource="#SendMail"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >subject</swb:propertyCodeName>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_sendMailSubject">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="width">
     <rdfs:domain rdf:resource="#GraphicalElement"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
@@ -1776,10 +1878,35 @@
     <rdfs:domain rdf:resource="#GraphicalElement"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="sendMailContent">
+    <rdfs:domain rdf:resource="#SendMail"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >content</swb:propertyCodeName>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_sendMailContent">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >40</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="scriptCode">
     <rdfs:domain rdf:resource="#ScriptTask"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty rdf:resource="#dp_scriptCode"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="sendMailFrom">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >from</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#SendMail"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_sendMailFrom">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="status">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
