@@ -497,6 +497,12 @@
     <rdfs:label>SendMail</rdfs:label>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
+  <owl:Class rdf:ID="DefaultFlow">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#SequenceFlow"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
   <owl:Class rdf:ID="CompensationStartEvent">
     <swb:displayObject rdf:resource="#do_StartEvent"/>
     <rdfs:subClassOf>
@@ -504,12 +510,6 @@
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="DefaultFlow">
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#SequenceFlow"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="CompensationIntermediateThrowEvent">
@@ -578,6 +578,10 @@
     >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
+  <owl:Class rdf:about="#EventBasedGateway">
+    <rdfs:subClassOf rdf:resource="#Gateway"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
   <owl:Class rdf:ID="ScriptTask">
     <rdfs:subClassOf rdf:resource="#Callable"/>
     <swb:displayObject rdf:resource="#do_Task"/>
@@ -586,10 +590,6 @@
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:about="#EventBasedGateway">
-    <rdfs:subClassOf rdf:resource="#Gateway"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="AnnotationArtifact">
@@ -1221,10 +1221,8 @@
     >hasTargetInstance</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="processFileTemplate">
-    <rdfs:label xml:lang="en">File Template</rdfs:label>
     <rdfs:label xml:lang="es">Platilla del Archivo</rdfs:label>
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
+    <rdfs:label xml:lang="en">File Template</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_processFileTemplate">
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
@@ -1906,6 +1904,18 @@
     <rdfs:label xml:lang="en">Collection</rdfs:label>
     <rdfs:label xml:lang="es">Colección</rdfs:label>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="sendMailSubject">
+    <rdfs:domain rdf:resource="#SendMail"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >subject</swb:propertyCodeName>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_sendMailSubject">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="startTokens">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_startTokens">
@@ -1919,18 +1929,6 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:label xml:lang="es">Numero de tokens para inicio</rdfs:label>
     <rdfs:label xml:lang="en">Start tokens number</rdfs:label>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="sendMailSubject">
-    <rdfs:domain rdf:resource="#SendMail"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >subject</swb:propertyCodeName>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_sendMailSubject">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >30</swb:index>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="width">
     <rdfs:domain rdf:resource="#GraphicalElement"/>
@@ -2032,6 +2030,20 @@
     <rdfs:label xml:lang="es">Condición</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#ProcessRule"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="processFileName">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_processFileName">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >5</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:canUsedAsName>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#StoreArtifact"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="ended">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
