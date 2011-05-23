@@ -82,4 +82,13 @@ public abstract class ProcessServiceBase extends org.semanticwb.model.SWBClass
     {
         super(base);
     }
+
+   /**
+   * Gets the ProcessSite
+   * @return a instance of org.semanticwb.process.model.ProcessSite
+   */
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }
