@@ -179,10 +179,12 @@ public class Task extends Activity
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = UserTask {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:usertask:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -210,10 +212,12 @@ public class Task extends Activity
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = ServiceTask {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:usertask:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -241,10 +245,12 @@ public class Task extends Activity
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = ScriptTask {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:scripttask:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -272,10 +278,12 @@ public class Task extends Activity
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = BusinessRuleTask {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:ruletask:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -303,10 +311,12 @@ public class Task extends Activity
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = ManualTask {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:manualtask:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -337,10 +347,12 @@ public class Task extends Activity
                 action: function (e: MouseEvent) {
                     ModelerUtils.popup.hide();
                     var _title = title;
+                    var _desc = description;
                     //crear nuevo elemento
                     var sp = SubProcess {
                         modeler: modeler
                         title: _title
+                        description: _desc
                         uri:"new:subprocess:{this.modeler.toolBar.counter++}"
                     }
                     //pasar las entradas al nuevo elemento
@@ -499,6 +511,7 @@ public class Task extends Activity
     override public function copy() : GraphicalElement {
         var t = Task {
             title: this.title
+            description: this.description
             type: this.type
             modeler: this.modeler
             isLoop: this.isLoop
