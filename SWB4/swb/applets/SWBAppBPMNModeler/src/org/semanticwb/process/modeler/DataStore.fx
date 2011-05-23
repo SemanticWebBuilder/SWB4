@@ -60,10 +60,12 @@ override public function create(): Node
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = DataInput {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:datainput:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -88,10 +90,12 @@ override public function create(): Node
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = DataOutput {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:dataoutput:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -117,10 +121,12 @@ override public function create(): Node
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc = description;
                             //crear nuevo elemento
                             var sp = DataStore {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:datastore:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -189,6 +195,7 @@ override public function create(): Node
     override public function copy() : GraphicalElement {
         var t = DataStore {
             title: this.title
+            description: this.description
             type: this.type
             modeler: this.modeler
             container: this.container
