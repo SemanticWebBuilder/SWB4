@@ -140,6 +140,7 @@ public class AnnotationArtifact extends Artifact
     override public function copy() : GraphicalElement {
         var t = AnnotationArtifact {
             title: this.title
+            description: this.description
             type: this.type
             modeler: this.modeler
             isLoop: this.isLoop
