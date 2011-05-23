@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class CallScriptTaskBase extends org.semanticwb.process.model.CallTask implements org.semanticwb.model.Traceable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Descriptiveable
+public abstract class CallScriptTaskBase extends org.semanticwb.process.model.CallTask implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ResourceAssignmentable
 {
     public static final org.semanticwb.platform.SemanticClass swp_CallScriptTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#CallScriptTask");
    /**
