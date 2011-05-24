@@ -382,10 +382,10 @@ public class SWBATrash extends GenericResource {
             out.println("</td>");
 
             out.println("<td>");
-            out.println("<a href=\"#\" onclick=\"addNewTab('" + semObj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + semObj.getDisplayName() + "');return false;\" title=\""+paramRequest.getLocaleString("msg_SODetail")+"\">"+semObj.getDisplayName(user.getLanguage())+"</a>");
+            out.println("<a href=\"#\" onclick=\"addNewTab('" + semObj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + semObj.getDisplayName() + "');return false;\" title=\""+paramRequest.getLocaleString("msg_SODetail")+"\">"+semObj.getDisplayName(user.getLanguage()).replaceAll("'", "")+"</a>");
             out.println("</td>");
             out.println("<td>");
-            out.println(semObj.getSemanticClass().getName());
+            out.println(semObj.getSemanticClass()!=null?semObj.getSemanticClass().getName():"--");
             out.println("</td>");
             out.println("<td>");
             if (semObj.getProperty(Traceable.swb_created) != null) {

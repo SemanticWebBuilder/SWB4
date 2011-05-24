@@ -417,7 +417,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                 urlr.setParameter("sval", sobj.getURI());
                 urlr.setParameter(prop.getName(), prop.getURI());
                 urlr.setAction("remove");
-                out.println("<a href=\"#\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + semobj.getDisplayName(user.getLanguage()) + "?')){submitUrl('" + urlr + "',this);} else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=0></a>");
+                out.println("<a href=\"#\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + semobj.getDisplayName(user.getLanguage()).replaceAll("'","") + "?')){submitUrl('" + urlr + "',this);} else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=0></a>");
                 out.println("</td>");
                 out.println("<td>");
 
@@ -439,7 +439,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                 urlchoose.setParameter("act", "edit");
 
                 //out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "');return false;\" >" + stitle + "</a>"); //onclick=\"submitUrl('"+urlchoose+"',this); return false;\"
-                out.println("<a href=\"#\"  onclick=\"addNewTab('" + semobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "');return false;\" >" + semobj.getDisplayName(user.getLanguage()) + "</a>"); //onclick=\"submitUrl('"+urlchoose+"',this); return false;\"
+                out.println("<a href=\"#\"  onclick=\"addNewTab('" + semobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName().replaceAll("'", "") + "');return false;\" >" + semobj.getDisplayName(user.getLanguage()).replaceAll("'", "") + "</a>"); //onclick=\"submitUrl('"+urlchoose+"',this); return false;\"
                 out.println("</td>");
                 if (hmprop.get(Localeable.swb_language) != null) {
                     semprop = (SemanticProperty) hmprop.get(Localeable.swb_language);
