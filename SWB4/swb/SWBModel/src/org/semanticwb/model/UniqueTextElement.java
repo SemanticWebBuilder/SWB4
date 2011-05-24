@@ -64,6 +64,22 @@ public class UniqueTextElement extends org.semanticwb.model.base.UniqueTextEleme
 
         if(value!=null)
         {
+
+            int l = value.length();
+            for (int x = 0; x < l; x++)
+            {
+                char ch = value.charAt(x);
+                if ((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z')
+                        || (ch >= 'A' && ch <= 'Z') || ch == '_' || ch == '/' || ch == '-')
+                {
+                    //pasa caracter
+                } else
+                {
+                    throw new FormValidateException("No es permitido la letra " + ch +" en el Id del elemento.");
+                }
+            }
+
+
            String reservedWords = getReservedWords() ;
            if(null!=reservedWords)
            {
