@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.DisplayObject;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.FormElement;
 import org.semanticwb.model.FormElementURL;
@@ -123,6 +124,8 @@ public class SWBFormMgr implements SWBForms
     private ArrayList<SemanticProperty> removed=null;
 
     private String varName=null;
+
+    private boolean selectClass=false;
     
     /**
      * Instantiates a new sWB form mgr.
@@ -180,6 +183,16 @@ public class SWBFormMgr implements SWBForms
             //System.out.println("add:"+prop);
             addProperty(prop,filterRequired);
         }
+    }
+
+    public void setSelectClass(boolean selectClass)
+    {
+        this.selectClass = selectClass;
+    }
+
+    public boolean isSelectClass()
+    {
+        return selectClass;
     }
 
     /**
@@ -399,6 +412,76 @@ public class SWBFormMgr implements SWBForms
         this.m_type = type;
     }
 
+    /**
+     * Gets the identifier element.
+     *
+     * @return the identifier element
+     */
+    private String getSelectClassElement()
+    {
+        boolean DOJO=false;
+        boolean IPHONE=false;
+        boolean XHTML=false;
+        if(m_type.equals(TYPE_XHTML))XHTML=true;
+        if(m_type.equals(TYPE_DOJO))DOJO=true;
+        if(m_type.equals(TYPE_IPHONE))IPHONE=true;
+
+        StringBuffer ret=new StringBuffer();
+
+        String imsg="La clase es requerido.";
+        if (m_lang.equals("en"))
+        {
+            imsg = "The class is required.";
+        }
+
+        String clase=getLocaleString("class",m_lang);
+        Iterator<SemanticClass> it=m_cls.listSubClasses();
+        if(it.hasNext())
+        {
+            ret.append("	    <tr><td align=\"right\">\n");
+            ret.append("                <label>"+clase+" <em>*</em></label>\n");
+            ret.append("        </td><td>\n");
+
+            ret.append("<select name=\"" + PRM_CLS + "\"");
+
+            if (DOJO) {
+                ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""
+                           + imsg + "\" >");
+            }
+
+            ArrayList<SemanticClass> arr=new ArrayList();
+            arr.add(m_cls);
+            while (it.hasNext())
+            {
+                SemanticClass semanticClass = it.next();
+                arr.add(semanticClass);
+            }
+
+            it=arr.iterator();
+            while (it.hasNext())
+            {
+                SemanticClass semanticClass = it.next();
+                //System.out.println("cls:"+semanticClass);
+                boolean instanceable=true;
+                if(semanticClass.getDisplayObject()!=null)
+                {
+                    DisplayObject disp=(DisplayObject)semanticClass.getDisplayObject().createGenericInstance();
+                    instanceable=!disp.isDoNotInstanceable();
+                }
+                if (instanceable)
+                {
+                    //System.out.println("cls2:"+semanticClass);
+                    ret.append("<option value=\"" + semanticClass.getURI() + "\" ");
+                    ret.append(">" + semanticClass.getDisplayName(m_lang) + "</option>");
+                }
+            }
+            ret.append("</select>");
+            ret.append("	    </td></tr>\n");
+        }
+        return ret.toString();
+    }
+
+
 
     /**
      * Gets the identifier element.
@@ -418,6 +501,7 @@ public class SWBFormMgr implements SWBForms
         String sid=getLocaleString("identifier",m_lang);
         String model=m_ref.getModel().getName();
         String clsid=m_cls.getClassId();
+
         ret.append("	    <tr><td align=\"right\">\n");
         ret.append("                <label>"+sid+" <em>*</em></label>\n");
         ret.append("        </td><td>\n");
@@ -437,7 +521,10 @@ public class SWBFormMgr implements SWBForms
     {
         StringBuffer ret=new StringBuffer();
         if(m_obj!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_URI+"\" value=\""+m_obj.getURI()+"\"/>\n");
-        if(m_cls!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_CLS+"\" value=\""+m_cls.getURI()+"\"/>\n");
+        if(m_cls!=null && !selectClass || (selectClass && !m_cls.listSubClasses().hasNext()))
+        {
+            ret.append("    <input type=\"hidden\" name=\"" + PRM_CLS + "\" value=\"" + m_cls.getURI() + "\"/>\n");
+        }
         if(m_mode!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_MODE+"\" value=\""+m_mode+"\"/>\n");
         if(m_ref!=null)ret.append("    <input type=\"hidden\" name=\""+PRM_REF+"\" value=\""+m_ref.getURI()+"\"/>\n");
         Iterator<Map.Entry<String,String>> hit=hidden.entrySet().iterator();
@@ -610,6 +697,9 @@ public class SWBFormMgr implements SWBForms
             ret.append("	<fieldset>\n");
             //ret.append("	    <legend>"+group.getSemanticObject().getDisplayName(m_lang)+"</legend>");
             ret.append("	    <table>\n");
+
+            if(selectClass)ret.append(getSelectClassElement());
+
             Iterator<PropertyGroup> itgp=SWBComparator.sortSortableObject(groups.keySet().iterator());
             while(itgp.hasNext())
             {

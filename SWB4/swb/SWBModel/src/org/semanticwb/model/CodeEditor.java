@@ -127,8 +127,6 @@ public class CodeEditor extends org.semanticwb.model.base.CodeEditorBase {
             ret.append("<span _id=\"" + id + "\" name=\"" + name + "\">" + value + "</span>\n");
         }
 
-        ret.append("Test:" + getLanguage());
-
         return ret.toString();
     }
 }
