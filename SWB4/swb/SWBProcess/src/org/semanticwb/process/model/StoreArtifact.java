@@ -9,6 +9,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.process.resources.ProcessFileRepository;
 import org.semanticwb.process.utils.XDocReport;
 
 public class StoreArtifact extends org.semanticwb.process.model.base.StoreArtifactBase 
@@ -26,8 +27,7 @@ public class StoreArtifact extends org.semanticwb.process.model.base.StoreArtifa
         super.execute(instance, user);
 
         String filePath=SWBPortal.getWorkPath()+getProcessFileTemplate().getWorkPath()+"/"+getProcessFileTemplate().getFileName();
-        String out="e:/"+getProcessFileName();
-        XDocReport rep=new XDocReport(getProcessFileName(), filePath, out);
+        XDocReport rep=new XDocReport(getProcessFileName(), filePath);
 
         //rep.addContextList("", null, null);
 
@@ -57,8 +57,25 @@ public class StoreArtifact extends org.semanticwb.process.model.base.StoreArtifa
             }
         }
 
-        rep.generateReport();
 
+        RepositoryFile file=null;
+        String id=getRepositoryFileId();
+        if(id!=null)
+        {
+            file=RepositoryFile.ClassMgr.getRepositoryFile(id, getProcessSite());
+        }
+             
+        if(file==null)
+        {
+            file=RepositoryFile.ClassMgr.createRepositoryFile(getProcessSite());
+        }
+        file.setRepositoryDirectory(getProcessDirectory());
+        file.setTitle(getProcessFileName());
+
+        try
+        {
+            rep.generateReport(file.storeFile(getProcessFileName(), null, false));
+        }catch(Exception e){log.error(e);}
 
 //        String code=getScript();
 

@@ -32,6 +32,12 @@ public abstract class ProcessServiceBase extends org.semanticwb.model.SWBClass
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessService>(it, true);
         }
+
+        public static org.semanticwb.process.model.ProcessService createProcessService(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.process.model.ProcessService.ClassMgr.createProcessService(String.valueOf(id), model);
+        }
        /**
        * Gets a org.semanticwb.process.model.ProcessService
        * @param id Identifier for org.semanticwb.process.model.ProcessService
