@@ -152,7 +152,7 @@ public class SWBUtils {
     private static String applicationPath = "" + SWBUtils.class.getResource("/");
     static
     {
-        if(applicationPath.endsWith("/"))applicationPath.substring(0,applicationPath.length()-1);
+        if(applicationPath.endsWith("/"))applicationPath=applicationPath.substring(0,applicationPath.length()-1);
     }
     /**
      * Defines the size used for creating arrays that will be used in I/O operations.
