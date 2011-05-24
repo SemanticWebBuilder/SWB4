@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.ArrayList;
 import java.io.PrintWriter;
 import java.io.IOException;
+import java.util.Enumeration;
 import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.ProcessSite;
 import org.semanticwb.process.model.ProcessInstance;
@@ -46,7 +47,10 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPlatform;
+import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.SWBClass;
+import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.process.utils.Ajax;
 import org.semanticwb.process.kpi.CaseProcessObject;
 import org.semanticwb.process.model.ItemAwareReference;
@@ -74,17 +78,32 @@ public class CaseObject extends GenericResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+
+
         PrintWriter out = response.getWriter();
-        SWBResourceURL edit = paramRequest.getRenderUrl().setMode(paramRequest.Mode_EDIT);
-        edit.setParameter("suri", request.getParameter("suri"));
+
+        Enumeration enuparam = request.getParameterNames();
+        while (enuparam.hasMoreElements()) {
+            String sparam = (String)enuparam.nextElement();
+            System.out.println("param: "+sparam+" ("+request.getParameter(sparam)+")");
+        }
+        
+        SWBResourceURL edit = paramRequest.getRenderUrl();
+        edit.setMode(SWBResourceURL.Mode_EDIT);
+        String suri = request.getParameter("suri");
+        edit.setParameter("suri", suri);
         out.print("<div class=\"swbform\">\n");
         out.print("  <fieldset>\n");
-        out.print("    <a href=\"" + edit + "\">" + paramRequest.getLocaleString("config") + "</a>");
+        out.print("    <button dojoType=\"dijit.form.Button\" onClick=\"submitUrl('" + edit + "',this.domNode); return false;\">" + paramRequest.getLocaleString("config") + "</button>");
         out.print("  </fieldset>\n");
         out.print("  <fieldset>\n");
         out.print("    <legend>" + paramRequest.getLocaleString("CASE_OBJECT") + "</legend>\n");
-        if (null != request.getParameter("suri"))
-            doGraph(request, response, paramRequest, request.getParameter("suri"));
+        if (null != suri)
+            doGraph(request, response, paramRequest, suri);
         out.print("  </fieldset>\n");
         out.print("</div>\n");
     }
@@ -101,6 +120,7 @@ public class CaseObject extends GenericResource {
 
     public void doPie(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, Process process) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
+        long lid = System.currentTimeMillis();
         setPlotTheme(getAttribute(process.getURI(), "plot_theme"));
         out.println("<script type=\"text/javascript\">");
         out.println("   dojo.require(\"dojox.charting.Chart2D\");");
@@ -109,7 +129,7 @@ public class CaseObject extends GenericResource {
         out.println("   dojo.require(\"dojox.charting.action2d.Tooltip\");");
         out.println("   dojo.require(\"dojox.charting.action2d.Highlight\");");
         out.println("   makeObjects = function(){");
-        out.println("       var chart = new dojox.charting.Chart2D(\"instances\");");
+        out.println("       var chart = new dojox.charting.Chart2D(\""+lid+"_instances\");");
         out.println("       chart.setTheme(dojox.charting.themes.PlotKit.blue);");
         out.println("       chart.addPlot(\"default\", {");
         out.println("           type: \"Pie\",");
@@ -128,19 +148,20 @@ public class CaseObject extends GenericResource {
         out.println("   };");
         out.println("   dojo.addOnLoad(makeObjects);");
         out.println("</script>");
-        out.println("<div id=\"title\" style=\"width:400px; height:25px; text-align:center;\"><label>" + process.getTitle() + "</label></div>\n");
-        out.println("<div id=\"instances\" style=\"width: 400px; height: 300px;\"></div>");
-        out.println("<div id=\"stage\" style=\"width:400px; height:50px; text-align:center;\"><label>" + (!"".equalsIgnoreCase(getAttribute(process.getURI(),"object_property")) ? getObjectTitle(process.getURI(),paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "</label></div>\n");
+        out.println("<div id=\""+lid+"_title\" style=\"width:400px; height:25px; text-align:center;\"><label>" + process.getTitle() + "</label></div>\n");
+        out.println("<div id=\""+lid+"_instances\" style=\"width: 400px; height: 300px;\"></div>");
+        out.println("<div id=\""+lid+"_stage\" style=\"width:400px; height:50px; text-align:center;\"><label>" + (!"".equalsIgnoreCase(getAttribute(process.getURI(),"object_property")) ? getObjectTitle(process.getURI(),paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "</label></div>\n");
     }
 
     public void doBars(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, Process process) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         setPlotTheme(getAttribute(process.getURI(), "plot_theme"));
-        out.println(Ajax.getChartScript());
-        out.println("<div id=\"title\" style=\"width:400px; height:25px; text-align:center;\"><label>" + process.getTitle() + "</label></div>\n");
-        out.println("<div id='instances' style='width:400px; height:300px;'></div>\n");
+        //out.println(Ajax.getChartScript());
+        long lid = System.currentTimeMillis();
+        out.println("<div id=\""+lid+"_title\" style=\"width:400px; height:25px; text-align:center;\"><label>" + process.getTitle() + "</label></div>\n");
+        out.println("<div id='"+lid+"_instances' style='width:400px; height:300px;'></div>\n");
         out.println("<script type=\"text/javascript\">\n");
-        out.println("    var bargraph = new Grafico.BarGraph($('instances'), " + getData(process) + ",\n");
+        out.println("    var bargraph = new Grafico.BarGraph($('"+lid+"_instances'), " + getData(process) + ",\n");
         out.println("        {\n");
         out.println("           labels :			  " + getTitles(paramRequest) + ",\n");
         out.println("           color :				  '" + colour + "',\n");
@@ -157,17 +178,19 @@ public class CaseObject extends GenericResource {
         out.println("        }\n");
         out.println("    );\n");
         out.println("</script>\n");
-        out.println("<div id=\"stage\" style=\"width:400px; height:50px; text-align:center;\"><label>" + (!"".equalsIgnoreCase(getAttribute(process.getURI(),"object_property")) ? getObjectTitle(process.getURI(),paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "</label></div>\n");
+        out.println("<div id=\""+lid+"_stage\" style=\"width:400px; height:50px; text-align:center;\"><label>" + (!"".equalsIgnoreCase(getAttribute(process.getURI(),"object_property")) ? getObjectTitle(process.getURI(),paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "</label></div>\n");
     }
 
     public void doArea(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, Process process) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         setPlotTheme(getAttribute(process.getURI(), "plot_theme"));
-        out.println(Ajax.getChartScript());
-        out.println("<div id=\"title\" style=\"width:400px; height:25px; text-align:center;\"><label>" + process.getTitle() + "</label></div>\n");
-        out.println("<div id='instances' style='width:400px; height:300px;'></div>\n");
+        //out.println(Ajax.getChartScript());
+        long lid = System.currentTimeMillis();
+
+        out.println("<div id=\""+lid+"_title\" style=\"width:400px; height:25px; text-align:center;\"><label>" + process.getTitle() + "</label></div>\n");
+        out.println("<div id=\""+lid+"_instances\" style=\"width:400px; height:300px;\"></div>\n");
         out.println("<script type=\"text/javascript\">\n");
-        out.println("    var areagraph = new Grafico.AreaGraph($('instances'), { workload: " + getData(process) + " },");
+        out.println("    var areagraph = new Grafico.AreaGraph($('"+lid+"_instances'), { workload: " + getData(process) + " },");
         out.println("        {");
         out.println("           grid :                false,");
         out.println("           area_opacity :        " + opacity + ",");
@@ -185,7 +208,7 @@ public class CaseObject extends GenericResource {
         out.println("        }\n");
         out.println("    );\n");
         out.println("</script>\n");
-        out.println("<div id=\"stage\" style=\"width:400px; height:50px; text-align:center;\"><label>" + (!"".equalsIgnoreCase(getAttribute(process.getURI(),"object_property")) ? getObjectTitle(process.getURI(),paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "</label></div>\n");
+        out.println("<div id=\""+lid+"_stage\" style=\"width:400px; height:50px; text-align:center;\"><label>" + (!"".equalsIgnoreCase(getAttribute(process.getURI(),"object_property")) ? getObjectTitle(process.getURI(),paramRequest) : paramRequest.getLocaleString("DEFAULT_VIEW")) + "</label></div>\n");
     }
 
     public void doAdminCase(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -206,7 +229,8 @@ public class CaseObject extends GenericResource {
         out.print("  <fieldset>\n");
         out.print(paramRequest.getLocaleString("CASE_OBJECT"));
         out.print("  </fieldset>\n");
-        out.print("  <form id=\"case\" name=\"case\" action=" + url.toString() + " method=\"post\">\n");
+        long lid =System.currentTimeMillis();
+        out.print("  <form id=\""+lid+"_case\" name=\"case\" action=" + url.toString() + " method=\"post\" onsubmit=\"submitForm('"+lid+"_case'); return false;\">\n");
         /*out.print("      <fieldset>\n");
         out.print("          <legend>" + paramRequest.getLocaleString("process") + "</legend>\n");
         out.print("          <table border=\"0\"  width=\"70%\" align=\"center\">\n");
@@ -235,7 +259,7 @@ public class CaseObject extends GenericResource {
         out.print("                  <td>\n");
         out.print("                      <select id=\"object_property\" name=\"object_property\">\n");
         Process process = getProcess(suri);
-        ProcessInstance pinst = getProcessInstance(process.getId());
+        ProcessInstance pinst = process.getProcessInstance(); //getProcessInstance(process.getId());
         //ProcessInstance pinst = getProcessInstance(getResourceBase().getAttribute("process",""));
         if (null != pinst)
             selectObjectProperty(pinst, out, paramRequest);
@@ -321,7 +345,7 @@ public class CaseObject extends GenericResource {
         out.print("         <button  dojoType=\"dijit.form.Button\" type=\"submit\" >"+paramRequest.getLocaleString("apply")+"</button>");
         url = paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW);
         url.setParameter("suri", suri);
-        out.print("         <button dojoType=\"dijit.form.Button\" onClick=location='" + url + "'>"+paramRequest.getLocaleString("return")+"</button>");
+        out.print("         <button dojoType=\"dijit.form.Button\" onClick=\"submitUrl('" + url + "',this.domNode); return false;\">"+paramRequest.getLocaleString("return")+"</button>");
         out.print("     </fieldset>\n");
         out.print(" </form>\n");
         out.print("</div>\n");
@@ -403,10 +427,10 @@ public class CaseObject extends GenericResource {
         out.print("         </table>\n");
         out.print("     </fieldset>\n");
         out.print("     <fieldset>\n");
-        out.print("         <button dojoType=\"dijit.form.Button\" onClick=location='" + url + "'>"+paramRequest.getLocaleString("config")+"</button>");
+        out.print("         <button dojoType=\"dijit.form.Button\" onClick=\"submitUrl('" + url + "',this.domNode); return false;\">"+paramRequest.getLocaleString("config")+"</button>");
         url = paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW);
         url.setParameter("suri", suri);
-        out.print("         <button dojoType=\"dijit.form.Button\" onClick=location='" + url + "'>"+paramRequest.getLocaleString("return")+"</button>");
+        out.print("         <button dojoType=\"dijit.form.Button\" onClick=\"submitUrl('" + url + "',this.domNode); return false;\">"+paramRequest.getLocaleString("return")+"</button>");
         out.print("     </fieldset>\n");
         out.print("</div>\n");
     }
@@ -425,6 +449,7 @@ public class CaseObject extends GenericResource {
     }
 
     private ProcessInstance getProcessInstance(String processId) {
+
         Iterator isites = ProcessSite.ClassMgr.listProcessSites();
         while (isites.hasNext()) {
             ProcessSite site = (ProcessSite)isites.next();
@@ -440,6 +465,9 @@ public class CaseObject extends GenericResource {
 
     private void selectObjectProperty(ProcessInstance pinst, PrintWriter out, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         ArrayList pobjs = new ArrayList();
+
+        System.out.println("selectObjectProperty");
+
         getObjectsFromInstance(pinst, pobjs);
         Iterator<SWBClass> objit = pobjs.iterator();
         while(objit.hasNext()) {
@@ -670,17 +698,25 @@ public class CaseObject extends GenericResource {
     }
 
     private Process getProcess(String suri) {
-        Iterator isites = ProcessSite.ClassMgr.listProcessSites();
-        while (isites.hasNext()) {
-            ProcessSite site = (ProcessSite)isites.next();
-            Iterator<Process> itprocess = site.listProcesses();
-            while (itprocess.hasNext()) {
-                Process process = itprocess.next();
-                if (suri.equalsIgnoreCase(process.getURI()))
-                    return process;
-            }
+
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        GenericObject gobj = ont.getGenericObject(suri);
+        Process process = null;
+        if (gobj instanceof org.semanticwb.process.model.Process) {
+            process = (org.semanticwb.process.model.Process) gobj;
         }
-        return null;
+
+//        Iterator isites = ProcessSite.ClassMgr.listProcessSites();
+//        while (isites.hasNext()) {
+//            ProcessSite site = (ProcessSite)isites.next();
+//            Iterator<Process> itprocess = site.listProcesses();
+//            while (itprocess.hasNext()) {
+//                Process process = itprocess.next();
+//                if (suri.equalsIgnoreCase(process.getURI()))
+//                    return process;
+//            }
+//        }
+        return process;
     }
 
     private String getTitle(SemanticProperty sp, SWBParamRequest paramRequest) {
