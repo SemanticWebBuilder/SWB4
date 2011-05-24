@@ -13,6 +13,7 @@ import com.hp.hpl.jena.shared.PrefixMapping;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Timestamp;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
@@ -80,16 +81,20 @@ public class SWBTSGraph extends GraphBase
 
             if(sext.length()==0)
             {
-                ps=con.prepareStatement("INSERT INTO swb_graph_ts"+getId()+" (subj, prop, obj) VALUES (?, ?, ?)");
+                ps=con.prepareStatement("INSERT INTO swb_graph_ts"+getId()+" (subj, prop, obj, timems) VALUES (?, ?, ?, ?)");
             }else
             {
-                ps=con.prepareStatement("INSERT INTO swb_graph_ts"+getId()+" (subj, prop, obj, ext) VALUES (?, ?, ?, ?)");
+                ps=con.prepareStatement("INSERT INTO swb_graph_ts"+getId()+" (subj, prop, obj, timems, ext) VALUES (?, ?, ?, ?, ?)");
             }
 
             ps.setString(1, subj);
             ps.setString(2, prop);
             ps.setString(3, obj);
-            if(sext.length()>0)ps.setAsciiStream(4, SWBUtils.IO.getStreamFromString(sext),sext.length());
+            ps.setLong(4, System.currentTimeMillis());
+            if(sext.length()>0)
+            {
+                ps.setAsciiStream(5, SWBUtils.IO.getStreamFromString(sext), sext.length());
+            }
 
             ps.executeUpdate();
             ps.close();
