@@ -115,7 +115,7 @@ public class ObjectElement extends org.semanticwb.model.base.ObjectElementBase
                     SemanticClass cls2=prop.getRangeClass();
                     
                     String url="/swbadmin/jsp/SemObjectEditor.jsp";
-                    url+="?scls="+cls2.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI();
+                    url+="?scls="+cls2.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI()+"&chcls=true";
 
                     ret.append("<a href=\"" + url + "\" onclick=\"javascript:showDialog('" + url
                                + "', '" + getLocaleString("add",lang)+" "+cls2.getDisplayName(lang) + "');return false;\">"
