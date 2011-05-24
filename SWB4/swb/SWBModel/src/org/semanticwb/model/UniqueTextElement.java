@@ -59,7 +59,7 @@ public class UniqueTextElement extends org.semanticwb.model.base.UniqueTextEleme
 
         if(value!=null&&value.indexOf(" ")>=0)
         {
-            throw new FormValidateException(getLocaleString("error", "No se permiten espacios:") + value);
+            throw new FormValidateException( "No se permiten espacios:" + value);
         }
 
         if(value!=null)
@@ -91,7 +91,7 @@ public class UniqueTextElement extends org.semanticwb.model.base.UniqueTextEleme
                }
                if(hsres.get(value)!=null) // encontro palabra reservada
                {
-                  throw new FormValidateException(getLocaleString("error", "No se permiten es texto reservado:") + value);
+                  throw new FormValidateException("No se permiten es texto reservado:"+ value);
                }
            }
 
@@ -104,7 +104,7 @@ public class UniqueTextElement extends org.semanticwb.model.base.UniqueTextEleme
                 if(soval!=null&&value.equals(soval))
                 {
                     //existe texto igual
-                    throw new FormValidateException(getLocaleString("error", "Ya existe Texto(URL):") + value);
+                    throw new FormValidateException("Ya existe Texto(URL):"+ value);
                 }
             }
         }
