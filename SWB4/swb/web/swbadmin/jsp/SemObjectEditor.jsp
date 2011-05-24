@@ -61,6 +61,8 @@
     String scls=request.getParameter("scls");
     String sref=request.getParameter("sref");
     String sprop=request.getParameter("sprop");
+    String chcls=request.getParameter("chcls");
+
     String reloadTab=request.getParameter("reloadTab");
     //System.out.println("SemObjectEditor suri:"+suri+" scls:"+scls+" sref:"+sref+" sprop:"+sprop);
     //System.out.println("debug:1");
@@ -105,6 +107,7 @@ try
         if(reloadTab!=null)frm.addHiddenParameter("reloadTab",reloadTab);
         frm.setSubmitByAjax(true);
         frm.setType(SWBFormMgr.TYPE_DOJO);
+        if(chcls!=null)frm.setSelectClass(true);
 
         //System.out.println("scls"+scls+" sref"+sref+" sprop:"+sprop);
         SemanticObject obj=null;
