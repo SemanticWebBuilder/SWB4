@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class BusinessRuleTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Traceable,org.semanticwb.process.model.Callable
+public abstract class BusinessRuleTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.process.model.Callable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass swp_BusinessRuleTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#BusinessRuleTask");
    /**

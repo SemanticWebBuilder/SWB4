@@ -33,14 +33,12 @@ public class XDocReport
 
     String _name;
     String _templatePath;
-    String _outPath;
     IXDocReport report = null;
     IContext context = null;
 
-    public XDocReport(String name, String templatePath, String outPath) {
+    public XDocReport(String name, String templatePath) {
         _name = name;
         _templatePath = templatePath;
-        _outPath = outPath;
         
         try {
             InputStream in = new FileInputStream(templatePath);
@@ -75,10 +73,10 @@ public class XDocReport
         }
     }
 
-    public void generateReport() {
+    public void generateReport(String outPath) {
         try {
             if (report != null) {
-                OutputStream out = new FileOutputStream(new File(_outPath));
+                OutputStream out = new FileOutputStream(new File(outPath));
                 report.process(context, out);
                 out.flush();
                 out.close();
@@ -89,4 +87,19 @@ public class XDocReport
             log.error(e);
         }
     }
+
+    public void generateReport(OutputStream out) {
+        try {
+            if (report != null) {
+                report.process(context, out);
+                out.flush();
+                out.close();
+            }
+        } catch (IOException e) {
+            log.error(e);
+        } catch (XDocReportException e) {
+            log.error(e);
+        }
+    }
+
 }
