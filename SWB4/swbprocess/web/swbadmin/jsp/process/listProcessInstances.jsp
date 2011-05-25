@@ -18,7 +18,7 @@
 %>
 
 <div class="post">
-    <h2 class="title"><a href="#">Instancias del Proceso <%=process.getDisplayTitle(user.getLanguage())%></a></h2>
+    <h2 class="title">Instancias del Proceso <%=process.getDisplayTitle(user.getLanguage())%></h2>
     <%
     Iterator<ProcessInstance> it = SWBProcessMgr.getActiveProcessInstance(site, process).iterator();
     if (it.hasNext()) {
@@ -48,6 +48,9 @@
                     <th align="center">
                         Creador - Tarea
                     </th>
+                    <th align="center">
+                        Acciones
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -68,7 +71,7 @@
                                     <%=pi.getId()%>
                                 </td>
                                 <td align="center">
-                                    <a href="<%=task.getTaskWebPage().getUrl()%>?suri=<%=tkinst.getEncodedURI()%>"><%=task.getDisplayTitle(lang)%></a>
+                                    <%=task.getDisplayTitle(lang)%>
                                 </td>
                                 <td align="center">
                                     <%=tkinst.getStatus()%>
@@ -84,6 +87,9 @@
                                 </td>
                                 <td align="center">
                                     <%=tkinst.getCreator().getFullName()%>
+                                </td>
+                                <td align="center">
+                                    <a href="<%=task.getTaskWebPage().getUrl()%>?suri=<%=tkinst.getEncodedURI()%>">Ver</a>
                                 </td>
                             </tr>
                         <%
