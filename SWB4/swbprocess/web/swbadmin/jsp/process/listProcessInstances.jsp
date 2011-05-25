@@ -36,13 +36,13 @@
                         Estado
                     </th>
                     <th align="center">
-                        Creación - Proceso
+                        Creaci&oacute;n - Proceso
                     </th>
                     <th align="center">
                         Creador - Proceso
                     </th>
                     <th align="center">
-                        Creación - Tarea
+                        Creaci&oacute;n - Tarea
                     </th>
                     <th align="center">
                         Creador - Tarea
