@@ -5,6 +5,7 @@
 package org.semanticwb.process.resources;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -335,7 +336,7 @@ public class ProcessFileRepository extends GenericResource {
             urlnew.setParameter("act", "newfile");
 
             out.println("<div>");
-            out.println("<form method=\"post\" action=\"" + urlnew + "\" enctype=\"multipart/form-data\">");
+            out.println("<form method=\"post\" action=\"" + urlnew + "\" >"); //enctype=\"multipart/form-data\"
             out.println("<table>");
             out.println("<tbody>");
             out.println("<tr>");
@@ -441,21 +442,27 @@ public class ProcessFileRepository extends GenericResource {
         }
 
         if ("newfile".equals(action)) {
-            org.semanticwb.portal.util.FileUpload fup = new org.semanticwb.portal.util.FileUpload();
-            fup.getFiles(request, null);
-            String fname = fup.getFileName("ffile");
-            String ftitle = fup.getValue("ftitle");
-            String fdescription = fup.getValue("fdescription");
-            String fcomment = fup.getValue("fcomment");
+            //            org.semanticwb.portal.util.FileUpload fup = new org.semanticwb.portal.util.FileUpload();
+//            fup.getFiles(request, null);
 
-            byte[] bcont = fup.getFileData("ffile");
+
+
+            String fname = request.getParameter("ffile");
+            String ftitle = request.getParameter("ftitle");
+            String fdescription = request.getParameter("fdescription");
+            String fcomment = request.getParameter("fcomment");
+
+            File f = new File(fname);
+            FileInputStream in = new FileInputStream(f);
+
+            System.out.println("file name: "+f.getName());
 
             RepositoryDirectory repoDir = (RepositoryDirectory) response.getWebPage();
             RepositoryFile repoFile = RepositoryFile.ClassMgr.createRepositoryFile(repoDir.getProcessSite());
             repoFile.setRepositoryDirectory(repoDir);
             repoFile.setTitle(ftitle);
             repoFile.setDescription(fdescription);
-            repoFile.storeFile(fname, new ByteArrayInputStream(bcont), fcomment, false);
+            repoFile.storeFile(f.getName(), in, fcomment, false);
         }else if ("removefile".equals(action))
         {
             String fid = request.getParameter("fid");
