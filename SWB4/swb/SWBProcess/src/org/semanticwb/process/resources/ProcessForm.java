@@ -118,9 +118,8 @@ public class ProcessForm extends GenericResource {
             out.println("<form id=\"" + foi.getId() + "/form\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"" + urlact + "\" method=\"post\">");
             out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\"/>");
             out.println("<input type=\"hidden\" name=\"smode\" value=\"edit\"/>");
-            out.println("<fieldset>");
-            out.println("<legend>Datos Generales</legend>");
-            out.println("<table>");
+
+            boolean printHeaders=false;
 
             int max = 1;
             while (!base.getAttribute("prop" + max, "").equals("")) {
@@ -158,6 +157,14 @@ public class ProcessForm extends GenericResource {
 
                     SWBProcessFormMgr fmgr = new SWBProcessFormMgr(foi);
 
+                    if(!printHeaders)
+                    {
+                        out.println("<fieldset>");
+                        out.println("<legend>Datos Generales</legend>");
+                        out.println("<table>");
+                        printHeaders=true;
+                    }
+
                     out.println("<tr><td width=\"200px\" align=\"right\"><label for=\"title\">" + fmgr.renderLabel(request, semprop, varName, modo) + "</label></td>");
                     out.println("<td>");
                     if (null != sofe) {
@@ -171,8 +178,12 @@ public class ProcessForm extends GenericResource {
                 max++;
             }
 
-            out.println("    </table>");
-            out.println("</fieldset>");
+            if(printHeaders)
+            {
+                out.println("    </table>");
+                out.println("</fieldset>");
+            }
+
             out.println("<fieldset><span align=\"center\">");
             
             if(base.getAttribute("btnSave","").equals("use")) out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">Guardar</button>");
