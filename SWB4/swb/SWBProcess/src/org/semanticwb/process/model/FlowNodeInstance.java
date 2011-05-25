@@ -2,6 +2,7 @@ package org.semanticwb.process.model;
 
 import bsh.Interpreter;
 import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.vocabulary.RDF;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -259,7 +260,10 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
                                     while (it3.hasNext())
                                     {
                                         Statement statement = it3.next();
-                                        out.getRDFResource().addProperty(statement.getPredicate(), statement.getObject());
+                                        if(!statement.getPredicate().equals(RDF.type))
+                                        {
+                                            out.getRDFResource().addProperty(statement.getPredicate(), statement.getObject());
+                                        }
                                     }
                                 }
 
