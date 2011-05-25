@@ -14,9 +14,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -39,6 +43,7 @@ public class SWBAAdminSearch extends GenericAdmResource {
         if (null == action) {
             action = "";
         }
+
 
         // usedas = true; para buscar recurso o contenido
         // usedas = false; para buscar Página Webo Sección
@@ -71,13 +76,36 @@ public class SWBAAdminSearch extends GenericAdmResource {
         Iterator<WebSite> itws = WebSite.ClassMgr.listWebSites();
         while (itws.hasNext()) {
             WebSite webSite = itws.next();
-            selectws = "";
-            if (wsid != null && wsid.equals(webSite.getId())) {
-                selectws = "selected";
+            if (webSite.isValid()) {
+                selectws = "";
+                if (wsid != null && wsid.equals(webSite.getId())) {
+                    selectws = "selected";
+                }
+                out.println("<option value=\"" + webSite.getId() + "\" " + selectws + " >");
+                out.println(webSite.getId());
+                out.println("</option>");
             }
-            out.println("<option value=\"" + webSite.getId() + "\" " + selectws + " >");
-            out.println(webSite.getId());
-            out.println("</option>");
+        }
+        Iterator<SemanticClass> itsc = WebSite.sclass.listSubClasses();
+        while (itsc.hasNext()) {
+            SemanticClass semanticClass = itsc.next();
+            Iterator<SemanticObject> itso = semanticClass.listInstances();
+            while (itso.hasNext()) {
+                SemanticObject semanticObject = itso.next();
+                if (semanticObject.createGenericInstance() instanceof WebSite) {
+                    WebSite webSite = (WebSite) semanticObject.createGenericInstance();
+                    if (webSite.isValid()&&!webSite.getId().equals(SWBContext.WEBSITE_ADMIN)&&!webSite.getId().equals(SWBContext.WEBSITE_GLOBAL)&&!webSite.getId().equals(SWBContext.WEBSITE_ONTEDITOR)) {
+                        selectws = "";
+                        if (wsid != null && wsid.equals(webSite.getId())) {
+                            selectws = "selected";
+                        }
+                        out.println("<option value=\"" + webSite.getId() + "\" " + selectws + " >");
+                        out.println(webSite.getId());
+                        out.println("</option>");
+                    }
+                }
+            }
+
         }
         out.println("</select>");
         out.println("</li>");
@@ -120,7 +148,9 @@ public class SWBAAdminSearch extends GenericAdmResource {
             if (wsid != null) {
                 // considerar paginación y ordenarlos por creación
                 WebSite ws = WebSite.ClassMgr.getWebSite(wsid);
+                //System.out.println("ws:"+ws.getNameSpace());
                 if (isResSearch) {
+                    //System.out.println("Recurso...");
                     Resource resource = null;
                     resource = ws.getResource(searctxt);
                     if (searchtype.equals("id") && resource != null) {
@@ -129,13 +159,15 @@ public class SWBAAdminSearch extends GenericAdmResource {
                         Iterator<Resource> itres = ws.listResources();
                         while (itres.hasNext()) {
                             resource = itres.next();
-                            if (!searchtype.equals("id") && resource.getDisplayTitle(usr.getLanguage()).indexOf(searctxt) > -1) {
+                            //System.out.println("res:"+resource.getDisplayTitle(usr.getLanguage()));
+                            if (!searchtype.equals("id") && resource.getDisplayTitle(usr.getLanguage())!=null&& resource.getDisplayTitle(usr.getLanguage()).indexOf(searctxt) > -1) {
                                 hmresult.put(resource, resource);
                             }
                         }
                     }
                 } else {
 
+                    //System.out.println("Sección...");
                     WebPage webPage = null;
                     webPage = ws.getWebPage(searctxt);
                     if (searchtype.equals("id") && webPage != null) {
@@ -144,7 +176,8 @@ public class SWBAAdminSearch extends GenericAdmResource {
                         Iterator<WebPage> itwp = ws.listWebPages();
                         while (itwp.hasNext()) {
                             webPage = itwp.next();
-                            if (!searchtype.equals("id") && webPage.getDisplayTitle(usr.getLanguage()).indexOf(searctxt) > -1) {
+                            //System.out.println("wp:"+webPage.getDisplayTitle(usr.getLanguage()));
+                            if (!searchtype.equals("id") && webPage.getDisplayTitle(usr.getLanguage())!=null&&webPage.getDisplayTitle(usr.getLanguage()).indexOf(searctxt) > -1) {
                                 hmresult.put(webPage, webPage);
                             }
                         }
