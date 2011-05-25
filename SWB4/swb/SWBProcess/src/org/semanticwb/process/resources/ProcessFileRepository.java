@@ -111,19 +111,19 @@ public class ProcessFileRepository extends GenericResource {
                 VersionInfo vi = repositoryFile.getLastVersion();
 
                 out.println("<a href=\"" + urldetail + "\">");
-                out.println(vi!=null&&vi.getVersionFile()!=null?vi.getVersionFile():"--");
+                out.println(vi != null && vi.getVersionFile() != null ? vi.getVersionFile() : "--");
                 out.println("</a>");
                 out.println("</td>");
                 out.println("<td>");
                 out.println(repositoryFile.getDisplayTitle(usr.getLanguage()));
                 out.println("</td>");
                 out.println("<td align=\"center\">");
-                out.println(vi!=null&&vi.getUpdated() != null ? format.format(vi.getUpdated()) : "--");
+                out.println(vi != null && vi.getUpdated() != null ? format.format(vi.getUpdated()) : "--");
                 out.println("</td>");
                 out.println("<td>");
-                out.println(vi!=null&&vi.getModifiedBy()!=null&&vi.getModifiedBy().getFullName()!=null?vi.getModifiedBy().getFullName():"--");
+                out.println(vi != null && vi.getModifiedBy() != null && vi.getModifiedBy().getFullName() != null ? vi.getModifiedBy().getFullName() : "--");
                 out.println("</td>");
-                
+
                 out.println("<td>");
                 SWBResourceURL urlremove = paramRequest.getActionUrl();
                 urlremove.setAction("removefile");
@@ -193,6 +193,45 @@ public class ProcessFileRepository extends GenericResource {
             out.println("(<a href=\"" + urlverhistoy + "\">versiones</a>)");
             out.println("</td>");
             out.println("</tr>");
+
+            out.println("<tr>");
+            out.println("<td align=\"right\">");
+            out.println("Agregar nueva Versión:");
+            out.println("</td>");
+
+            SWBResourceURL urlnewVer = paramRequest.getRenderUrl();
+
+            out.println("<td>");
+            out.println("<script type=\"text/javascript\">");
+            out.println("function validaVersion(forma)");
+            out.println("  {");
+            out.println("       if(forma.newVersion.selectedValue!='0')");
+            out.println("           return true;");
+            out.println("       else return false;");
+            out.println("  }");
+            out.println("</script>");
+            out.println("<form method=\"post\" action=\"" + urlnewVer + "\">");
+            out.println("<input type=\"hidden\" name=\"act\" value=\"new\">");
+            out.println("<input type=\"hidden\" name=\"fid\" value=\"" + fid + "\">");
+            out.println("<select name=\"newVersion\" onsubmit=\"validaVersion(this);\">");
+            out.println("<option value=\"0\">--</option>");
+
+            float fver = Float.parseFloat(vl.getVersionValue());
+            fver = fver + 0.1F;
+            
+            int iver = (int) fver;
+            iver = iver + 1;
+
+            out.println("<option value=\"fraction\">" + fver + "</option>");
+            out.println("<option value=\"nextInt\">" + (float)iver + "</option>");
+
+
+            out.println("</select>");
+            out.println("<button type=\"submit\">Agregar</button>");
+            out.println("</form>");
+            out.println("</td>");
+            out.println("</tr>");
+
             out.println("<tr>");
             out.println("<td align=\"right\">");
             out.println("Creado:");
@@ -335,8 +374,46 @@ public class ProcessFileRepository extends GenericResource {
             urlnew.setAction("newfile");
             urlnew.setParameter("act", "newfile");
 
+            String fid = request.getParameter("fid");
+            String newVersion = request.getParameter("newVersion");
+            String sNxtVersion = "";
+            RepositoryFile repoFile = null;
+            String stitle = "";
+            String sdescription = "";
+            if (null != fid && null != newVersion) {
+                boolean incremento = Boolean.FALSE;
+                if (newVersion.equals("nextInt")) {
+                    incremento = Boolean.TRUE;
+                }
+
+                repoFile = RepositoryFile.ClassMgr.getRepositoryFile(fid, repoDir.getProcessSite());
+
+                stitle=repoFile.getDisplayTitle(usr.getLanguage());
+                sdescription=repoFile.getDisplayDescription(usr.getLanguage());
+
+                VersionInfo vl = repoFile.getLastVersion();
+                float fver = Float.parseFloat(vl.getVersionValue());
+                fver = fver + 0.1F;
+
+                int iver = (int) fver;
+                iver = iver + 1;
+
+                sNxtVersion = "" + fver;
+
+                if (incremento) {
+                    sNxtVersion = "" + (float)iver;
+                }
+            }
+
             out.println("<div>");
-            out.println("<form method=\"post\" action=\"" + urlnew + "\" >"); //enctype=\"multipart/form-data\"
+            out.println("<form method=\"post\" action=\"" + urlnew + "\" >"); 
+
+            if (null != fid && null != newVersion) {
+                out.println("<input type=\"hidden\" name=\"newVersion\" value=\"" + newVersion + "\">");
+                out.println("<input type=\"hidden\" name=\"fid\" value=\"" + fid + "\">");
+            }
+
+
             out.println("<table>");
             out.println("<tbody>");
             out.println("<tr>");
@@ -344,7 +421,7 @@ public class ProcessFileRepository extends GenericResource {
             out.println("Título:");
             out.println("</td>");
             out.println("<td>");
-            out.println("<input type=\"text\" name=\"ftitle\">");
+            out.println("<input type=\"text\" name=\"ftitle\" value=\""+stitle+"\">");
             out.println("</td>");
             out.println("</tr>");
             out.println("<tr>");
@@ -352,7 +429,7 @@ public class ProcessFileRepository extends GenericResource {
             out.println("Descripción:");
             out.println("</td>");
             out.println("<td>");
-            out.println("<input type=\"text\" name=\"fdescription\">");
+            out.println("<input type=\"text\" name=\"fdescription\" value=\""+sdescription+"\">");
             out.println("</td>");
             out.println("</tr>");
             out.println("<tr>");
@@ -363,6 +440,21 @@ public class ProcessFileRepository extends GenericResource {
             out.println("<input type=\"text\" name=\"fcomment\">");
             out.println("</td>");
             out.println("</tr>");
+
+            if (null != fid && null != newVersion) {
+
+                out.println("<tr>");
+                out.println("<td align=\"right\">");
+                out.println("Versión del archivo a agregar:");
+                out.println("</td>");
+                out.println("<td>");
+                out.println(sNxtVersion);
+                out.println("</td>");
+                out.println("</tr>");
+
+            }
+
+
             out.println("<tr>");
             out.println("<td align=\"right\">");
             out.println("Archivo:");
@@ -434,18 +526,31 @@ public class ProcessFileRepository extends GenericResource {
     }
 
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
-    {
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
         if (action == null) {
             action = "";
         }
 
         if ("newfile".equals(action)) {
-            //            org.semanticwb.portal.util.FileUpload fup = new org.semanticwb.portal.util.FileUpload();
-//            fup.getFiles(request, null);
 
+            String fid = request.getParameter("fid");
+            String newVersion = request.getParameter("newVersion");
+            RepositoryDirectory repoDir = (RepositoryDirectory) response.getWebPage();
+            RepositoryFile repoFile = null;
 
+            boolean incremento = Boolean.FALSE;
+
+            if(fid!=null)
+            {
+                repoFile = RepositoryFile.ClassMgr.getRepositoryFile(fid, repoDir.getProcessSite());
+                if (newVersion!=null&&newVersion.equals("nextInt")) {
+                    incremento = Boolean.TRUE;
+                }
+            } else {
+                repoFile = RepositoryFile.ClassMgr.createRepositoryFile(repoDir.getProcessSite());
+                repoFile.setRepositoryDirectory(repoDir);
+            }
 
             String fname = request.getParameter("ffile");
             String ftitle = request.getParameter("ftitle");
@@ -454,17 +559,12 @@ public class ProcessFileRepository extends GenericResource {
 
             File f = new File(fname);
             FileInputStream in = new FileInputStream(f);
-
-            System.out.println("file name: "+f.getName());
-
-            RepositoryDirectory repoDir = (RepositoryDirectory) response.getWebPage();
-            RepositoryFile repoFile = RepositoryFile.ClassMgr.createRepositoryFile(repoDir.getProcessSite());
-            repoFile.setRepositoryDirectory(repoDir);
+            
             repoFile.setTitle(ftitle);
             repoFile.setDescription(fdescription);
-            repoFile.storeFile(f.getName(), in, fcomment, false);
-        }else if ("removefile".equals(action))
-        {
+            repoFile.storeFile(f.getName(), in, fcomment, incremento);
+
+        } else if ("removefile".equals(action)) {
             String fid = request.getParameter("fid");
             RepositoryDirectory repoDir = (RepositoryDirectory) response.getWebPage();
             RepositoryFile repoFile = RepositoryFile.ClassMgr.getRepositoryFile(fid, repoDir.getProcessSite());
