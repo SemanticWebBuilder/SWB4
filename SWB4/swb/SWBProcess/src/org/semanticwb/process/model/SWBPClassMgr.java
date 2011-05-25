@@ -116,4 +116,9 @@ public class SWBPClassMgr
         }
     }
 
+    public static ClassLoader getClassLoader()
+    {
+        return mcls;
+    }
+
 }
