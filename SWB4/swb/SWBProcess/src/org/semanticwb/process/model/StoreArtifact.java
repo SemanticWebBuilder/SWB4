@@ -1,15 +1,11 @@
 package org.semanticwb.process.model;
-
 import java.lang.reflect.Constructor;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.process.resources.ProcessFileRepository;
 import org.semanticwb.process.utils.XDocReport;
 
 public class StoreArtifact extends org.semanticwb.process.model.base.StoreArtifactBase 
@@ -26,8 +22,8 @@ public class StoreArtifact extends org.semanticwb.process.model.base.StoreArtifa
     {
         super.execute(instance, user);
 
-        String filePath=SWBPortal.getWorkPath()+getProcessFileTemplate().getWorkPath()+"/"+getProcessFileTemplate().getFileName();
-        XDocReport rep=new XDocReport(getProcessFileName(), filePath);
+        String filePath=SWBPortal.getWorkPath()+this.getProcessFileTemplate().getWorkPath()+"/"+this.getProcessFileTemplate().getFileName();
+        XDocReport rep=new XDocReport(this.getProcessFileName(), filePath);
 
         //rep.addContextList("", null, null);
 
@@ -57,78 +53,25 @@ public class StoreArtifact extends org.semanticwb.process.model.base.StoreArtifa
             }
         }
 
-
         RepositoryFile file=null;
-        String id=getRepositoryFileId();
+        String id=this.getRepositoryFileId();
         if(id!=null)
         {
-            file=RepositoryFile.ClassMgr.getRepositoryFile(id, getProcessSite());
+            file=RepositoryFile.ClassMgr.getRepositoryFile(id, this.getProcessSite());
         }
-             
+
         if(file==null)
         {
-            file=RepositoryFile.ClassMgr.createRepositoryFile(getProcessSite());
+            file=RepositoryFile.ClassMgr.createRepositoryFile(this.getProcessSite());
         }
-        file.setRepositoryDirectory(getProcessDirectory());
-        file.setTitle(getProcessFileName());
+        file.setRepositoryDirectory(this.getProcessDirectory());
+        file.setTitle(this.getProcessFileName());
 
         try
         {
-            rep.generateReport(file.storeFile(getProcessFileName(), null, false));
+            rep.generateReport(file.storeFile(this.getProcessFileName(), null, false));
         }catch(Exception e){log.error(e);}
 
-//        String code=getScript();
-
-//        try
-//        {
-//            Map map=null;
-//            if(code!=null)
-//            {
-//                Interpreter i = SWBPClassMgr.getInterpreter(instance, user);
-//                Object ret=i.eval(code);
-//                if(ret!=null && ret instanceof Map)
-//                {
-//                    map=(Map)ret;
-//                }
-//            }
-//
-//            String filePath=SWBPortal.getWorkPath()+getProcessFileTemplate().getWorkPath()+"/"+getProcessFileTemplate().getFileName();
-//            System.out.println(filePath);
-//            XWPFDocument document = new XWPFDocument(new FileInputStream(filePath));
-//
-//            if(map!=null)
-//            {
-//                Iterator<XWPFParagraph> paragraphs = document.getParagraphsIterator();
-//                while (paragraphs.hasNext()) {
-//                    XWPFParagraph paragraph = paragraphs.next();
-//                    getParagraphBookmarks(paragraph, map);
-//                }
-//            }
-//
-//            document.write(new FileOutputStream("e:/"+getProcessFileName()));
-//
-//        }catch(Exception e)
-//        {
-//            log.error(e);
-//        }
     }
-
-//    public void getParagraphBookmarks(XWPFParagraph paragraph, Map<String, String> map) {
-//        CTP ctp = paragraph.getCTP();
-//        Iterator<CTBookmark> bookmarks = ctp.getBookmarkStartList().iterator();
-//
-//        //System.out.println("c:"+C);
-//        int i=0;
-//        while (bookmarks.hasNext()) {
-//            CTBookmark bookmark = bookmarks.next();
-//            if (map.containsKey(bookmark.getName())) {
-//                CTR ctr = ctp.addNewR();
-//                CTText text = ctr.addNewT();
-//                text.setStringValue(map.get(bookmark.getName()));
-//            }
-//            bookmark.setNil();
-//        }
-//    }
-
 
 }

@@ -48,14 +48,18 @@ public final class MemoryClassLoader extends ClassLoader {
     {
         // First, check if the class has already been loaded
         //System.out.println("Enter loadClass:"+name);
-        Class c = findClass(name);
-        if (c == null)
+        Class c = findLoadedClass(name);
+        if(c==null)
         {
-            c=getParentClass(name);
-        }
-        if (resolve)
-        {
-            resolveClass(c);
+            c = findClass(name);
+            if (c == null)
+            {
+                c=getParentClass(name);
+            }
+            if (resolve)
+            {
+                resolveClass(c);
+            }
         }
         return c;
     }
