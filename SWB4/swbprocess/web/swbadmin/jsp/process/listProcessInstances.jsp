@@ -12,7 +12,6 @@
     User user = paramRequest.getUser();
     WebPage topic = paramRequest.getWebPage();
     ProcessSite site = (ProcessSite) paramRequest.getWebPage().getWebSite();
-    String url = paramRequest.getRenderUrl().setParameter("act", "cpi").toString();
     String lang = user.getLanguage();
     org.semanticwb.process.model.Process process = SWBProcessMgr.getProcess(topic);
 %>
@@ -100,9 +99,9 @@
         %>
         </tbody>
     </table>
-</div>
         <%
     } else {
         %><h3>No hay instancias del proceso</h3><%
     }
         %>
+</div>
