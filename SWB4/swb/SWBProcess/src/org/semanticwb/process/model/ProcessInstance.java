@@ -103,5 +103,26 @@ public class ProcessInstance extends org.semanticwb.process.model.base.ProcessIn
         return ret.iterator();
     }
 
+    public Iterator<FlowNodeInstance> listAllFlowNodeInstance()
+    {
+        ArrayList<FlowNodeInstance> arr=new ArrayList();
+        Iterator<FlowNodeInstance> it=listFlowNodeInstances();
+        while (it.hasNext())
+        {
+            FlowNodeInstance flowNodeInstance = it.next();
+            arr.add(flowNodeInstance);
+            if(flowNodeInstance instanceof SubProcessInstance)
+            {
+                Iterator<FlowNodeInstance> it2=((SubProcessInstance)(flowNodeInstance)).listAllFlowNodeInstance();
+                while (it2.hasNext())
+                {
+                    FlowNodeInstance flowNodeInstance2 = it2.next();
+                    arr.add(flowNodeInstance2);
+                }
+            }
+        }
+        return arr.iterator();
+    }
+
 
 }

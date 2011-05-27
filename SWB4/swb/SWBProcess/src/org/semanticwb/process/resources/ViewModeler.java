@@ -7,6 +7,7 @@ package org.semanticwb.process.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +20,8 @@ import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.process.model.FlowNodeInstance;
+import org.semanticwb.process.model.Instance;
 import org.semanticwb.process.model.ProcessInstance;
 import org.w3c.dom.Document;
 
@@ -93,7 +96,21 @@ public class ViewModeler extends Modeler
         String donePath="";
         String curAct="";
 
-        //pinst.l
+        Iterator<FlowNodeInstance> it=pinst.listAllFlowNodeInstance();
+        while (it.hasNext())
+        {
+            FlowNodeInstance fni = it.next();
+            if(fni.getStatus()==Instance.STATUS_CLOSED)
+            {
+                donePath+="|"+fni.getFlowNodeType().getURI();
+            }
+            if(fni.getStatus()==Instance.STATUS_PROCESSING)
+            {
+                curAct+="|"+fni.getFlowNodeType().getURI();
+            }
+        }
+        if(donePath.length()>0)donePath=donePath.substring(1);
+        if(curAct.length()>0)curAct=curAct.substring(1);
 
         PrintWriter out = response.getWriter();
         SWBResourceURL urlapp = paramsRequest.getRenderUrl();
