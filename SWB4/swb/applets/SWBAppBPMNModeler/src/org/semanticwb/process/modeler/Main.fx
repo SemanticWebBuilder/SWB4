@@ -52,7 +52,7 @@ modeler.organizeMap();
 if (mode.equals("view")) {
     modeler.lock();
     modeler.setDoneProcessPath(donePath);
-    modeler.setCurrentProcessActivities(currentActivities);
+    modeler.setCurrentProcessActivities(currentActivities);    
 } else if (mode.equals("edit")) {
     modeler.unLock();
 }
@@ -66,6 +66,10 @@ var toolbar:ToolBar = ToolBar
 }
 
 modeler.toolBar=toolbar;
+
+if (mode.equals("view")) {
+    toolbar.loadProcess();
+}
 
 var path:ContainerPath = ContainerPath
 {
