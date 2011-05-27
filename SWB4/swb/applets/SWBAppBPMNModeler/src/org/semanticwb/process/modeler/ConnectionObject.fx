@@ -261,61 +261,77 @@ public class ConnectionObject  extends CustomNode
     }
 
     override var onMouseMoved = function (e: MouseEvent) : Void {
-        modeler.mouseMoved(e);
+        if (not modeler.isLocked()) {
+            modeler.mouseMoved(e);
+        }
     }
 
     override var onMousePressed = function( e: MouseEvent ):Void
     {
-        if(ModelerUtils.clickedNode==null)
-        {
-            ModelerUtils.clickedNode=this;
-            modeler.setSelectedNode(this);
-            modeler.setFocusedNode(this);
+        if (not modeler.isLocked()) {
+            if(ModelerUtils.clickedNode==null)
+            {
+                ModelerUtils.clickedNode=this;
+                modeler.setSelectedNode(this);
+                modeler.setFocusedNode(this);
+            }
+            modeler.mousePressed(e);
         }
-        modeler.mousePressed(e);
     }
 
     override var onMouseReleased = function( e: MouseEvent ):Void
     {
-        if(ModelerUtils.clickedNode==this)
-        {
-            ModelerUtils.clickedNode=null;
+        if (not modeler.isLocked()) {
+            if(ModelerUtils.clickedNode==this)
+            {
+                ModelerUtils.clickedNode=null;
+            }
+            modeler.mouseReleased(e);
         }
-        modeler.mouseReleased(e);
     }
 
     override var onMouseDragged = function (e: MouseEvent) {
-        modeler.mouseDragged(e);
+        if (not modeler.isLocked()) {
+            modeler.mouseDragged(e);
+        }
     }
 
     override var onMouseEntered = function(e : MouseEvent)
     {
-        over = true;
-        if(modeler.tempNode==null and ModelerUtils.clickedNode==null)modeler.disablePannable=true;
+        if (not modeler.isLocked()) {
+            over = true;
+            if(modeler.tempNode==null and ModelerUtils.clickedNode==null)modeler.disablePannable=true;
+        }
         
     }
 
     override var onMouseExited = function(e : MouseEvent)
     {
-        over = false;
-        if(modeler.tempNode==null and ModelerUtils.clickedNode==null)modeler.disablePannable=false        
+        if (not modeler.isLocked()) {
+            over = false;
+            if(modeler.tempNode==null and ModelerUtils.clickedNode==null)modeler.disablePannable=false
+        }
     }
 
     override var onMouseClicked = function (e: MouseEvent)
     {
-        if (e.button == e.button.SECONDARY) {
-            var p = Point {
-                x: e.sceneX
-                y: e.sceneY
-            };
-            addLineHandler(p);
+        if (not modeler.isLocked()) {
+            if (e.button == e.button.SECONDARY) {
+                var p = Point {
+                    x: e.sceneX
+                    y: e.sceneY
+                };
+                addLineHandler(p);
+            }
         }
     }
 
     override var onKeyPressed = function( e: KeyEvent )
     {
-        keyPressed(e);
-        modeler.keyPressed(e);
+        if (not modeler.isLocked()) {
+            keyPressed(e);
+            modeler.keyPressed(e);
+        }
     }
 
     public function keyPressed( e: KeyEvent )
@@ -328,8 +344,10 @@ public class ConnectionObject  extends CustomNode
 
     override var onKeyReleased = function( e: KeyEvent )
     {
-        keyReleased(e);
-        modeler.keyReleased(e);
+        if (not modeler.isLocked()) {
+            keyReleased(e);
+            modeler.keyReleased(e);
+        }
     }
 
     public function keyReleased( e: KeyEvent )
