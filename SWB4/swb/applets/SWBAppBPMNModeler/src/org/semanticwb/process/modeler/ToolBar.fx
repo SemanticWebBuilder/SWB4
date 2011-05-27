@@ -122,6 +122,11 @@ public class ToolBar extends CustomNode
                 delete modeler.contents;
                 modeler.containerElement=null;
                 createProcess(proc);
+                var apath: String = "new:subprocess:17|new:usertask:1";
+                var activ: String = "new:subprocess:12";
+                modeler.lock();
+                modeler.setDoneProcessPath(apath);
+                modeler.setCurrentProcessActivities(activ);
             }catch(e:Exception){Alert.inform("Error",e.getMessage());}
         }
     }
@@ -464,6 +469,8 @@ public class ToolBar extends CustomNode
             if(node instanceof GraphicalElement)
             {
                 ge=modeler.getGraphElementByURI(uri);
+//                ge.setStatus(GraphicalElement.STATUS_DONE);
+                println("{ge.title} - {ge.uri}");
             }
 
             if(ge!=null)
@@ -2207,6 +2214,7 @@ public class ToolBar extends CustomNode
              ]
              cursor:Cursor.HAND;
              blocksMouse:true
+             ///visible: bind not (modeler.isLocked())
         };
 
         return ret;
