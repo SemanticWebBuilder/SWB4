@@ -84,7 +84,8 @@ public class ViewModeler extends Modeler
     }
 
     @Override
-    public void doApplet(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+    public void doApplet(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
+    {
         String suri = request.getParameter("suri");
         SemanticObject sobj=SemanticObject.createSemanticObject(suri);
         System.out.println("doApplet:"+suri+" "+sobj);
