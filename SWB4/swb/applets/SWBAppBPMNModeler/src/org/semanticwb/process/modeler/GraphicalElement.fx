@@ -21,6 +21,8 @@ import java.lang.Void;
 import org.semanticwb.process.modeler.ModelerUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Document;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
 
 /**
  * Clase que representa un elemento gráfico en un diagrama BPMN 2.0. Es la
@@ -28,6 +30,9 @@ import org.w3c.dom.Document;
  * @author javier.solis
  */
 
+public def STATUS_DONE: Number = 1;
+public def STATUS_ACTIVE: Number = 2;
+public def STATUS_NONE: Number = 3;
 public class GraphicalElement extends CustomNode
 {
     public var over:Boolean;                       //el mouse se encuentra sobre el elemento
@@ -69,6 +74,7 @@ public class GraphicalElement extends CustomNode
     protected var container:GraphicalElement;                 //Container Element
     protected var containerChilds:GraphicalElement[];         //Container Childs
     protected var menuOptions: MenuItem[];
+    public var status: Number;
 
     var mx : Number;                               //temporal movimiento x
     var my : Number;                               //temporal movimiento y
@@ -106,6 +112,40 @@ public class GraphicalElement extends CustomNode
     {
        if(graphParent!=null and not graphParent.resizing)x=px+dpx;
        //println("Cambiando X");
+    }
+
+    public function setStatus(stat: Number) : Void {
+        status = stat;
+        println("Setting status to {stat}");
+        if (this instanceof Activity) {
+            if (status == STATUS_ACTIVE) {
+                shape.styleClass = "taskInProgress";
+                effect = DropShadow { offsetY: 3 color: Color.color(0.4, 0.4, 0.4) };
+                if (container != null) {
+                    container.shape.styleClass = "taskInProgress";
+                    container.effect = DropShadow { offsetY: 3 color: Color.color(0.4, 0.4, 0.4) };
+                }
+            } else if (status == STATUS_DONE) {
+                shape.styleClass = "taskDone";
+                effect = null;
+                if (containerable) {
+                    for (child in containerChilds where child instanceof Activity) {
+                        child.setStatus(STATUS_DONE);
+                    }
+                }
+            } else if (status == STATUS_NONE) {
+                shape.styleClass = "task";
+                effect = null;
+                if (container != null) {
+                    container.setStatus(STATUS_NONE);
+                }
+                if (containerable) {
+                    for (child in containerChilds where child instanceof Activity) {
+                        child.setStatus(STATUS_NONE);
+                    }
+                }
+            }
+        }
     }
 
     public function onParentYChange()
@@ -210,17 +250,21 @@ public class GraphicalElement extends CustomNode
     }
 
     override var onMouseMoved = function (e: MouseEvent) {
-        modeler.mouseMoved(e);
+        if (not modeler.isLocked()) {
+            modeler.mouseMoved(e);
+        }
     }
 
     override var onMouseClicked = function ( e: MouseEvent ) : Void
     {
         //println("Elemento {title} - [x: {x}, y:{y}, w:{getScaleWidth()}, h:{getScaleHeight()}]");
-        if(modeler.getFocusedNode()==this)
-        {
-            mouseClicked(e);
+        if (not modeler.isLocked()) {
+            if(modeler.getFocusedNode()== this)
+            {
+                mouseClicked(e);
+            }
+            modeler.mouseClicked(e);
         }
-        modeler.mouseClicked(e);
     }
 
     public function mouseClicked( e: MouseEvent )
@@ -244,84 +288,96 @@ public class GraphicalElement extends CustomNode
 
     override var onMouseDragged = function ( e: MouseEvent ) : Void
     {
-        if(ModelerUtils.clickedNode==this)
-        {
-            ModelerUtils.stopToolTip();
-            mouseDragged(e);
+        if (not modeler.isLocked()) {
+            if(ModelerUtils.clickedNode==this)
+            {
+                ModelerUtils.stopToolTip();
+                mouseDragged(e);
+            }
+            modeler.mouseDragged(e);
         }
-        modeler.mouseDragged(e);
     }
 
     public function mouseDragged( e: MouseEvent )
     {
-        var ax=dx+e.sceneX;
-        var ay=dy+e.sceneY;
-        if(ax-w/2>0)x=ax else x=w/2;
-        if(ay-h/2>0)y=ay else y=h/2;
+        if (not modeler.isLocked()) {
+            var ax=dx+e.sceneX;
+            var ay=dy+e.sceneY;
+            if(ax-w/2>0)x=ax else x=w/2;
+            if(ay-h/2>0)y=ay else y=h/2;
+        }
     }
 
     override var onMousePressed = function( e: MouseEvent ):Void
     {
-       if(ModelerUtils.clickedNode==null)
-        {
-            ModelerUtils.clickedNode=this;
-            mousePressed(e);
+        if (not modeler.isLocked()) {
+           if(ModelerUtils.clickedNode==null)
+            {
+                ModelerUtils.clickedNode=this;
+                mousePressed(e);
+            }
+            modeler.mousePressed(e);
         }
-        modeler.mousePressed(e);
     }
 
     public function mousePressed( e: MouseEvent )
     {
-        if (e.controlDown) {
-            if (selected) {
-                modeler.removeSelectedNode(this);
+        if (not modeler.isLocked()) {
+            if (e.controlDown) {
+                if (selected) {
+                    modeler.removeSelectedNode(this);
+                } else {
+                    modeler.addSelectedNode(this);
+                    modeler.setFocusedNode(this);
+                    ModelerUtils.setResizeNode(null);
+                }
             } else {
-                modeler.addSelectedNode(this);
-                modeler.setFocusedNode(this);
-                ModelerUtils.setResizeNode(null);
+                if (not (modeler.tempNode instanceof ConnectionObject)) {
+                    modeler.unselectAll();
+                    modeler.addSelectedNode(this);
+                    modeler.setFocusedNode(this);
+                }
             }
-        } else {
-            if (not (modeler.tempNode instanceof ConnectionObject)) {
-                modeler.unselectAll();
-                modeler.addSelectedNode(this);
-                modeler.setFocusedNode(this);
-            }
-        }        
-        modeler.disablePannable=true;
-        dx=x-e.sceneX;
-        dy=y-e.sceneY;
-        //requestFocus();
+            modeler.disablePannable=true;
+            dx=x-e.sceneX;
+            dy=y-e.sceneY;
+            //requestFocus();
 
-        if(e.secondaryButtonDown)
-        {
-            var link=SequenceFlow
+            if(e.secondaryButtonDown)
             {
-                modeler:modeler
-                uri:"new:flowlink:{ToolBar.counter++}"
-                visible:false
+                var link=SequenceFlow
+                {
+                    modeler:modeler
+                    uri:"new:flowlink:{ToolBar.counter++}"
+                    visible:false
+                }
+                if(canStartLink(link))modeler.tempNode=link;
+                ModelerUtils.setResizeNode(null);
+                modeler.unselectAll();
             }
-            if(canStartLink(link))modeler.tempNode=link;
-            ModelerUtils.setResizeNode(null);
-            modeler.unselectAll();
         }
     }
 
     override var onMouseReleased = function( e: MouseEvent ):Void
     {
-        if(ModelerUtils.clickedNode==this)
-        {
-            ModelerUtils.clickedNode=null;
-            mouseReleased(e);
+        if (not modeler.isLocked()) {
+            if(ModelerUtils.clickedNode==this)
+            {
+                ModelerUtils.clickedNode=null;
+                mouseReleased(e);
+            }
+            modeler.mouseReleased(e);
         }
-        modeler.mouseReleased(e);
     }
 
     public function mouseReleased( e: MouseEvent )
     {
-        if (this instanceof Pool or this instanceof Lane) return;
-        snapToGrid();
-        var overNode: GraphicalElement = getOverNode();
-        setGraphParent(overNode);
+        if (not modeler.isLocked()) {
+            if (this instanceof Pool or this instanceof Lane) return;
+            snapToGrid();
+            var overNode: GraphicalElement = getOverNode();
+            setGraphParent(overNode);
+        }
     }
 
     public function getGraphParent() : GraphicalElement
@@ -387,28 +443,34 @@ public class GraphicalElement extends CustomNode
 
     override var onMouseEntered = function(e)
     {
-        over=true;
-        if (not resizing) {
-            if (title == null or title.trim() == "") {
-                //ModelerUtils.startToolTip("{toolTipText}", x - w / 2 - modeler.getXScroll(), y + h / 2 - modeler.getYScroll() + 3);
-            } else {
-                ModelerUtils.startToolTip("{title}", x - w / 2 - modeler.getXScroll(), y + h / 2 - modeler.getYScroll() + 3);
+        if (not modeler.isLocked()) {
+            over=true;
+            if (not resizing) {
+                if (title == null or title.trim() == "") {
+                    //ModelerUtils.startToolTip("{toolTipText}", x - w / 2 - modeler.getXScroll(), y + h / 2 - modeler.getYScroll() + 3);
+                } else {
+                    ModelerUtils.startToolTip("{title}", x - w / 2 - modeler.getXScroll(), y + h / 2 - modeler.getYScroll() + 3);
+                }
             }
+            mouseEntered(e);
         }
-        mouseEntered(e);
     }
 
     public function mouseEntered( e: MouseEvent )
     {
-        modeler.overNode=this;
-        if(modeler.tempNode==null)modeler.disablePannable=true;
+        if (not modeler.isLocked()) {
+            modeler.overNode=this;
+            if(modeler.tempNode==null)modeler.disablePannable=true;
+        }
     }
 
     override var onMouseExited = function(e)
     {
-        over=false;
-        ModelerUtils.stopToolTip();
-        mouseExited(e);
+        if (not modeler.isLocked()) {
+            over=false;
+            ModelerUtils.stopToolTip();
+            mouseExited(e);
+        }
     }
 
     public function mouseExited( e: MouseEvent )
@@ -422,8 +484,10 @@ public class GraphicalElement extends CustomNode
 
     override var onKeyPressed = function( e: KeyEvent )
     {
-        keyPressed(e);
-        modeler.keyPressed(e);
+        if (not modeler.isLocked()) {
+            keyPressed(e);
+            modeler.keyPressed(e);
+        }
     }
 
     public function keyPressed( e: KeyEvent )
@@ -455,13 +519,17 @@ public class GraphicalElement extends CustomNode
 //            this.y += 10;
 //            ModelerUtils.setResizeNode(this);
 //        }
-        modeler.keyPressed(e);
+        if (not modeler.isLocked()) {
+            modeler.keyPressed(e);
+        }
     }
 
     override var onKeyReleased = function( e: KeyEvent )
     {
-        keyReleased(e);
-        modeler.keyReleased(e);
+        if (not modeler.isLocked()) {
+            keyReleased(e);
+            modeler.keyReleased(e);
+        }
     }
 
     public function getOverNode() : GraphicalElement {
