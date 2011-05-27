@@ -93,7 +93,7 @@ public class ViewModeler extends Modeler
         String donePath="";
         String curAct="";
 
-        pinst.l
+        //pinst.l
 
         PrintWriter out = response.getWriter();
         SWBResourceURL urlapp = paramsRequest.getRenderUrl();
