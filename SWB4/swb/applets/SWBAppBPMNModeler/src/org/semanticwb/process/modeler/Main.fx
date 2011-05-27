@@ -26,6 +26,8 @@ var currentActivities : String = FX.getArgument("currentActivities") as String;
 var mode: String = FX.getArgument("mode") as String;
 
 if (mode == null) mode= "edit";
+if (donePath == null) donePath="";
+if (currentActivities == null) currentActivities="";
 //var lang : String = "es";
 println("Lang:{lang} {Locale.getDefault()}");
 if(lang!=null)Locale.setDefault(new Locale(lang));
