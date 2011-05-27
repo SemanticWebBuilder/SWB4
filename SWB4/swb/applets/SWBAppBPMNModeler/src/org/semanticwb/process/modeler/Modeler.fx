@@ -19,6 +19,8 @@ import javafx.scene.Cursor;
 import javafx.util.Sequences;
 import javafx.scene.input.KeyEvent;
 import org.semanticwb.process.modeler.ConnectionObject;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Clase que representa el área de trabajo y controlador de los elementos de un
@@ -49,6 +51,7 @@ public class Modeler extends CustomNode
     var selectedNodes: Node[];
     var selectedStyle: String;
     var selectedMode: String;
+    var locked: Boolean = false;
 
     public override function create(): Node
     {
@@ -170,39 +173,87 @@ public class Modeler extends CustomNode
              
              onMousePressed: function( e: MouseEvent ):Void
              {
-                this.mousePressed(e);
+                if (not locked) {
+                    this.mousePressed(e);
+                }
              }
              
              onMouseDragged: function( e: MouseEvent ):Void
              {
-                this.mouseDragged(e);
+                if (not locked) {
+                    this.mouseDragged(e);
+                }
              }
              
              onMouseReleased: function( e: MouseEvent ):Void
              {
-                 this.mouseReleased(e);
+                 if (not locked) {
+                    this.mouseReleased(e);
+                 }
              }
 
              onMouseClicked: function (e: MouseEvent) : Void {
-                this.mouseClicked(e);
+                if (not locked) {
+                    this.mouseClicked(e);
+                }
              }
 
              onMouseMoved: function (e: MouseEvent) {
-                this.mouseMoved(e);
+                if (not locked) {
+                    this.mouseMoved(e);
+                }
              }
 
              onKeyPressed: function (e: KeyEvent): Void
              {
-                 this.keyPressed(e);
+                 if (not locked) {
+                    this.keyPressed(e);
+                 }
              }
 
              onKeyReleased: function (e: KeyEvent): Void
              {
-                 this.keyReleased(e);
+                 if (not locked) {
+                    this.keyReleased(e);
+                 }
              }
 
          };
          return scrollView;
+    }
+
+    public function setDoneProcessPath(urilist: String) {
+        var uris: String[] = urilist.trim().split("\\|");
+        for (uri in uris) {
+            if (uri != null and not uri.trim().equals("")){
+                var ge = getGraphElementByURI(uri);
+                if (ge != null)
+                    ge.setStatus(GraphicalElement.STATUS_DONE);
+            }
+        }
+    }
+
+    public function setCurrentProcessActivities(urilist: String) {
+        var uris: String[] = urilist.trim().split("\\|");
+        for (uri in uris) {
+            if (uri != null and not uri.trim().equals("")){
+                var ge = getGraphElementByURI(uri);
+                if (ge != null)
+                    ge.setStatus(GraphicalElement.STATUS_ACTIVE);
+            }
+        }
+    }
+    
+    public function lock() {
+        locked = true;
+    }
+
+    public function unLock() {
+        locked = false;
+    }
+
+    public function isLocked() : Boolean {
+        return locked;
     }
 
     public function load(home: String)
@@ -263,7 +314,7 @@ public class Modeler extends CustomNode
     /**Agrega un nodo al espacio de trabajo del modelador*/
     public function add(obj:Node)
     {
-        insert obj into contents;
+            insert obj into contents;
     }
 
     /**Agrega un nodo al frente del espacio de trabajo del modelador*/
