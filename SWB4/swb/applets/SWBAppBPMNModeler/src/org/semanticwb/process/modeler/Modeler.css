@@ -23,11 +23,16 @@
     -tooltip-light-first-color: #FFFFFF;
     -task-first-color: #FFFFFF;
     -task-second-color: #BFD2E0;
+    -taskdone-first-color: #FFFFFF;
+    -taskdone-second-color:#206cb0;
+    -taskinprogress-first-color: #FFFFFF;
+    -taskinprogress-second-color: #cdde87;
     -containerbutton-color:#F2F2F2;
     -containerbutton-stroke:#666666;
     -pool-normal-stroke:#ADADAE;
     -pool-color:#E8E8FF;
 }
+
 .modifierGateway {
     -fx-stroke: -gateway-normal-stroke;
     -fx-stroke-width: 3;
@@ -586,4 +591,22 @@
     -fx-stroke: #03689a;
     -fx-stroke-width: 1;
     -fx-opacity: 0.7;
+}
+
+.taskDone {
+    -fx-arc-width: 15;
+    -fx-arc-height: 15;
+    -fx-stroke: -focus-stroke;
+    -fx-stroke-width: 2;
+    -fx-cursor: hand;
+    -fx-fill:linear (0%,0%) to (0%,100%) stops (0%,-taskinprogress-first-color) (100%,-taskinprogress-second-color);
+}
+
+.taskInProgress {
+    -fx-arc-width: 15;
+    -fx-arc-height: 15;
+    -fx-stroke: #000000;
+    -fx-stroke-width: 2;
+    -fx-cursor: hand;
+    -fx-fill:linear (0%,0%) to (0%,100%) stops (0%,-taskdone-first-color) (100%,-taskdone-second-color);
 }
