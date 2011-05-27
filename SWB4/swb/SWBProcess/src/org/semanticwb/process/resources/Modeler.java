@@ -541,7 +541,7 @@ public class Modeler extends GenericResource {
         return ele;
     }
 
-    private Document getError(int id) {
+    public Document getError(int id) {
         Document dom = null;
         try {
             dom = SWBUtils.XML.getNewDocument();

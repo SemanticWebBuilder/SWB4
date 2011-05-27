@@ -3,6 +3,7 @@ package org.semanticwb.process.model;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
@@ -40,7 +41,8 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
         inst.setFlowNodeType(this);
         inst.setStatus(Instance.STATUS_INIT);
         inst.setContainerInstance(pinst);
-        
+
+        //Crea las instancias de los item aware de entrada  que a su vez no tengan entradas
         Iterator<ItemAware> it=listRelatedItemAware().iterator();
         while (it.hasNext())
         {
@@ -86,6 +88,44 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
             }
         }
 
+        //crear instancias de itemaware temporales para los itemaware de salida que no tengan referencias herarquicas
+        Iterator<ConnectionObject> it2=listOutputConnectionObjects();
+        while (it2.hasNext())
+        {
+            ConnectionObject connectionObject = it2.next();
+            GraphicalElement gele=connectionObject.getTarget();
+            if(gele instanceof ItemAware)
+            {
+                ItemAware item=(ItemAware)gele;
+                SemanticClass scls=item.getItemSemanticClass();
+                if(scls!=null)
+                {
+                    boolean hasItemAwarereference=false;
+                    //verifica si existe alguna referencia al itemAware
+                    Iterator<ItemAware> it3=listHerarquicalRelatedItemAware().iterator();
+                    while (it3.hasNext())
+                    {
+                        ItemAware itemAware = it3.next();
+                        if(item.getName().equals(itemAware.getName()) && item.getItemSemanticClass().equals(itemAware.getItemSemanticClass()))
+                        {
+                            hasItemAwarereference=true;
+                        }
+                    }
+                    //si no existe crea una referencia temporal al itemAware para su uso en la tarea
+                    if(!hasItemAwarereference)
+                    {
+                        ItemAwareReference ref=ItemAwareReference.ClassMgr.createItemAwareReference(this.getProcessSite());
+                        ref.setItemAware(item);
+                        ref.setItemAwareTemporal(true);
+                        SWBModel model=this.getProcessSite().getProcessDataInstanceModel();
+                        String id=id=String.valueOf(model.getSemanticModel().getCounter(scls));
+                        SemanticObject ins=model.getSemanticModel().createSemanticObjectById(id, scls);
+                        ref.setProcessObject((SWBClass)ins.createGenericInstance());
+                        inst.addItemAwareReference(ref);
+                    }
+                }
+            }
+        }
         return inst;
     }
 
@@ -148,10 +188,9 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
         return ret;
     }
 
-
     /**
      * Regresa las ItemAware relacionadas con el FlowNode,
-     * en el caso de un SubProceso regresa las Globales del Sub Proceso
+     * en el caso de un SubProceso regresa tambien los itemAware globales contenidos dentro del Sub Proceso
      * @return
      */
     public List<ItemAware> listRelatedItemAware()
@@ -175,18 +214,17 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
                     }
                 }
             }
-        }else
+        }
+
+        Iterator<ConnectionObject> it=listInputConnectionObjects();
+        while (it.hasNext())
         {
-            Iterator<ConnectionObject> it=listInputConnectionObjects();
-            while (it.hasNext())
+            ConnectionObject connectionObject = it.next();
+            GraphicalElement gele=connectionObject.getSource();
+            if(gele instanceof ItemAware)
             {
-                ConnectionObject connectionObject = it.next();
-                GraphicalElement gele=connectionObject.getSource();
-                if(gele instanceof ItemAware)
-                {
-                    ItemAware item=(ItemAware)gele;
-                    arr.add(item);
-                }
+                ItemAware item=(ItemAware)gele;
+                arr.add(item);
             }
         }
         return arr;
@@ -205,4 +243,47 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
         arr.addAll(getContainer().listHerarquicalRelatedItemAware());
         return arr;
     }
+
+    /**
+     * Regresa las ItemAware relacionadas con el FlowNode, asi como de sus contenedores,
+     * en el caso de un SubProceso regresa las Globales del Sub Proceso y de sus contenedores,
+     * ademas regresa los ItemAware de salida que no tengan referencias de entrada del FlowNodo actual
+     * @return
+     */
+    public List<ItemAware> listHerarquicalRelatedItemAwarePlusNullOutputs()
+    {
+        //System.out.println("getHerarquicalRelatedItemAwareClasses:"+this);
+        ArrayList<ItemAware> arr=new ArrayList(listRelatedItemAware());
+        arr.addAll(getContainer().listHerarquicalRelatedItemAware());
+
+        //crear instancias de itemaware temporales para los itemaware de salida que no tengan referencias herarquicas
+        Iterator<ConnectionObject> it2=listOutputConnectionObjects();
+        while (it2.hasNext())
+        {
+            ConnectionObject connectionObject = it2.next();
+            GraphicalElement gele=connectionObject.getTarget();
+            if(gele instanceof ItemAware)
+            {
+                ItemAware item=(ItemAware)gele;
+                SemanticClass scls=item.getItemSemanticClass();
+                if(scls!=null)
+                {
+                    boolean hasItemAwarereference=false;
+                    //verifica si existe alguna referencia al itemAware
+                    Iterator<ItemAware> it3=SWBUtils.Collections.copyIterator(arr.iterator()).iterator();
+                    while (it3.hasNext())
+                    {
+                        ItemAware item2 = it3.next();
+                        if(item.getName().equals(item2.getName()) && item.getItemSemanticClass().equals(item2.getItemSemanticClass()))
+                        {
+                            hasItemAwarereference=true;
+                        }
+                    }
+                    if(!hasItemAwarereference)arr.add(item);
+                }
+            }
+        }
+        return arr;
+    }
+
 }

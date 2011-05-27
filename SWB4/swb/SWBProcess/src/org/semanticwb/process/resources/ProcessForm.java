@@ -219,7 +219,7 @@ public class ProcessForm extends GenericResource {
         HashMap<String, SemanticClass> hmclass = new HashMap<String, SemanticClass>();
         HashMap<String, SemanticProperty> hmprops = new HashMap<String, SemanticProperty>();
 
-        Iterator<ItemAware> it = ut.listHerarquicalRelatedItemAware().iterator();
+        Iterator<ItemAware> it = ut.listHerarquicalRelatedItemAwarePlusNullOutputs().iterator();
         while (it.hasNext()) 
         {
             ItemAware item=it.next();
@@ -761,7 +761,7 @@ public class ProcessForm extends GenericResource {
             }
         }
 
-        Iterator<ItemAware> it = ut.listHerarquicalRelatedItemAware().iterator();
+        Iterator<ItemAware> it = ut.listHerarquicalRelatedItemAwarePlusNullOutputs().iterator();
         while (it.hasNext()) 
         {
             ItemAware item = it.next();
