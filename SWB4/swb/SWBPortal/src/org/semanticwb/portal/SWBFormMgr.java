@@ -124,6 +124,7 @@ public class SWBFormMgr implements SWBForms
     private ArrayList<SemanticProperty> removed=null;
 
     private String varName=null;
+    private SemanticObject varRef=null;
 
     private boolean selectClass=false;
     
@@ -1302,6 +1303,16 @@ public class SWBFormMgr implements SWBForms
     public void setVarName(String varName)
     {
         this.varName = varName;
+    }
+
+    public void setVarReference(SemanticObject obj)
+    {
+        this.varRef = obj;
+    }
+
+    public SemanticObject getVarReference()
+    {
+        return varRef;
     }
 
     public String getVarName()
