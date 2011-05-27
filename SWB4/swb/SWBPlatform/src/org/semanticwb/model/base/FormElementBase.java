@@ -65,6 +65,8 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
     /** The filter html tags. */
     private boolean filterHTMLTags=true;
 
+    private String label=null;
+
     /**
      * Instantiates a new form element base.
      * 
@@ -173,7 +175,8 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
     {
         String ret="";
         String name=propName;
-        String label=prop.getDisplayName(lang);
+        String label=this.label;
+        if(label==null)label=prop.getDisplayName(lang);
         SemanticObject sobj=prop.getDisplayProperty();
         boolean required=prop.isRequired();
 
@@ -313,5 +316,9 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
         process(request, obj, prop, prop.getName());
     }
 
+    public void setLabel(String label)
+    {
+        this.label=label;
+    }
 
 }
