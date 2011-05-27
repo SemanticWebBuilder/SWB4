@@ -3,6 +3,7 @@ package org.semanticwb.process.model.base;
 
 public abstract class ItemAwareReferenceBase extends org.semanticwb.model.base.GenericObjectBase 
 {
+    public static final org.semanticwb.platform.SemanticProperty swp_itemAwareTemporal=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#itemAwareTemporal");
    /**
    * Indica si el elemento es válido
    */
@@ -145,6 +146,24 @@ public abstract class ItemAwareReferenceBase extends org.semanticwb.model.base.G
     public ItemAwareReferenceBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the ItemAwareTemporal property
+* @return boolean with the ItemAwareTemporal
+*/
+    public boolean isItemAwareTemporal()
+    {
+        return getSemanticObject().getBooleanProperty(swp_itemAwareTemporal);
+    }
+
+/**
+* Sets the ItemAwareTemporal property
+* @param value long with the ItemAwareTemporal
+*/
+    public void setItemAwareTemporal(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swp_itemAwareTemporal, value);
     }
 
 /**

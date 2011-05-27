@@ -109,7 +109,8 @@ public class Instance extends org.semanticwb.process.model.base.InstanceBase
         {
             ItemAwareReference itemAwareReference = it.next();
             SWBClass obj=itemAwareReference.getProcessObject();
-            if(itemAwareReference.getItemAware() instanceof Collectionable)
+            System.out.println("removeTemporallyDataobjects:"+this+" "+itemAwareReference+" "+itemAwareReference.getItemAware());
+            if(itemAwareReference.getItemAware() instanceof Collectionable || itemAwareReference.isItemAwareTemporal())
             {
                 //removeItemAwareReference(itemAwareReference);
                 if(!itemAwareReference.isProcessObjectReused())

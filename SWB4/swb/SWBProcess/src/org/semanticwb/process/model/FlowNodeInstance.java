@@ -244,7 +244,7 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
                             {
                                 in=itemAwareReference.getProcessObject().getSemanticObject();
                                 SWBModel model=this.getProcessSite();
-                                if(store instanceof Collectionable)
+                                if(store instanceof Collectionable)  //No es dataStore (es temporal)
                                 {
                                     model=this.getProcessSite().getProcessDataInstanceModel();
                                 }
@@ -265,6 +265,10 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
                                             out.getRDFResource().addProperty(statement.getPredicate(), statement.getObject());
                                         }
                                     }
+                                    ItemAwareReference ref=ItemAwareReference.ClassMgr.createItemAwareReference(this.getProcessSite());
+                                    ref.setItemAware(store);
+                                    ref.setProcessObject((SWBClass)out.createGenericInstance());
+                                    this.addItemAwareReference(ref);
                                 }
 
                                 //Revisar si hay salida
