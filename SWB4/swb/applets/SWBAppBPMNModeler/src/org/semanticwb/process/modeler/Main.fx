@@ -21,13 +21,17 @@ var maxx : Number = bind scene.width; //on replace{ modeler.organizeMap();};
 var maxy : Number = bind scene.height; //on replace{ modeler.organizeMap();};
 
 var lang : String = FX.getArgument("lang") as String;
+var donePath : String = FX.getArgument("donePath") as String;
+var currentActivities : String = FX.getArgument("currentActivities") as String;
+var mode: String = FX.getArgument("mode") as String;
+
+if (mode == null) mode= "edit";
 //var lang : String = "es";
 println("Lang:{lang} {Locale.getDefault()}");
 if(lang!=null)Locale.setDefault(new Locale(lang));
 println("Locale:{Locale.getDefault()}");
 var localizer: StringLocalizer = StringLocalizer{}
 //public-read var inBrowser = "true".equals(FX.getArgument("isApplet") as String);
-
 ModelerUtils.setLocalizer(localizer);
 
 var modeler:Modeler = Modeler
@@ -42,6 +46,14 @@ var modeler:Modeler = Modeler
 
 modeler.load("home");
 modeler.organizeMap();
+
+if (mode.equals("view")) {
+    modeler.lock();
+    modeler.setDoneProcessPath(donePath);
+    modeler.setCurrentProcessActivities(currentActivities);
+} else if (mode.equals("edit")) {
+    modeler.unLock();
+}
 
 var toolbar:ToolBar = ToolBar
 {
