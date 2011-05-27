@@ -2214,7 +2214,7 @@ public class ToolBar extends CustomNode
              ]
              cursor:Cursor.HAND;
              blocksMouse:true
-             ///visible: bind not (modeler.isLocked())
+             visible: bind not (modeler.isLocked())
         };
 
         return ret;
