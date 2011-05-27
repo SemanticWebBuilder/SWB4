@@ -1,5 +1,6 @@
 package org.semanticwb.process.model;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import org.semanticwb.model.User;
 
@@ -44,6 +45,27 @@ public class SubProcessInstance extends org.semanticwb.process.model.base.SubPro
     {
         FlowNodeInstance eventins=event.createInstance(this);
         eventins.start(user);
+    }
+
+    public Iterator<FlowNodeInstance> listAllFlowNodeInstance()
+    {
+        ArrayList<FlowNodeInstance> arr=new ArrayList();
+        Iterator<FlowNodeInstance> it=listFlowNodeInstances();
+        while (it.hasNext())
+        {
+            FlowNodeInstance flowNodeInstance = it.next();
+            arr.add(flowNodeInstance);
+            if(flowNodeInstance instanceof SubProcessInstance)
+            {
+                Iterator<FlowNodeInstance> it2=((SubProcessInstance)(flowNodeInstance)).listAllFlowNodeInstance();
+                while (it2.hasNext())
+                {
+                    FlowNodeInstance flowNodeInstance2 = it2.next();
+                    arr.add(flowNodeInstance2);
+                }
+            }
+        }
+        return arr.iterator();
     }
 
 
