@@ -194,4 +194,6 @@ public interface FormElement extends GenericObject
      * @param model the new model
      */
     public void setModel(SemanticModel model);
+
+    public void setLabel(String label);
 }
