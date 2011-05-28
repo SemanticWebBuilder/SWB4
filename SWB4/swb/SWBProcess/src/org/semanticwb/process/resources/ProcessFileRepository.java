@@ -14,6 +14,7 @@ import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
@@ -58,6 +59,7 @@ public class ProcessFileRepository extends GenericResource
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
+        String path = SWBPlatform.getContextPath() + "/swbadmin/images/repositoryfile/";
         PrintWriter out = response.getWriter();
         String suri = request.getParameter("suri");
         User usr = paramRequest.getUser();
@@ -73,7 +75,7 @@ public class ProcessFileRepository extends GenericResource
         if ("".equals(action))
         {
 
-            out.println("<div>");
+            out.println("<div id=\"ProcessFileRepository\">");
             out.println("<table width=\"100%\">");
             out.println("<thead>");
             out.println("<tr>");
@@ -85,6 +87,9 @@ public class ProcessFileRepository extends GenericResource
             out.println("</th>");
             out.println("<th>");
             out.println("Nombre");
+            out.println("</th>");
+            out.println("<th>");
+            out.println("Versión");
             out.println("</th>");
             out.println("<th>");
             out.println("Modificado");
@@ -116,12 +121,29 @@ public class ProcessFileRepository extends GenericResource
 
                 VersionInfo vi = repositoryFile.getLastVersion();
 
-                out.println("<a href=\"" + urldetail + "\">");
-                out.println(vi != null && vi.getVersionFile() != null ? vi.getVersionFile() : "--");
+                String file = "";
+                String type = "";;
+                if(vi != null && vi.getVersionFile() != null)
+                {
+                    file = vi.getVersionFile();
+                    type = getFileName(file);
+                }
+
+                SWBResourceURL urlview = paramRequest.getRenderUrl();
+                urlview.setCallMethod(SWBResourceURL.Call_DIRECT);
+                urlview.setParameter("fid", fid);
+                urlview.setMode(MODE_GETFILE);
+                urlview.setParameter("verNum", "" + vi.getVersionNumber());
+
+                out.println("<a href=\"" + urlview + "\">");
+                out.println("<img border=0 src='" + path + "" + type + "' alt=\"" + getFileType(file) + "\" />");
                 out.println("</a>");
                 out.println("</td>");
                 out.println("<td>");
                 out.println(repositoryFile.getDisplayTitle(usr.getLanguage()));
+                out.println("</td>");
+                out.println("<td>");
+                out.println(vi.getVersionValue());
                 out.println("</td>");
                 out.println("<td align=\"center\">");
                 out.println(vi != null && vi.getUpdated() != null ? format.format(vi.getUpdated()) : "--");
@@ -131,12 +153,21 @@ public class ProcessFileRepository extends GenericResource
                 out.println("</td>");
 
                 out.println("<td>");
+
+                out.println("<a href=\"" + urldetail + "\"><img src=\"" + path + "info.gif\" border=\"0\" alt=\"ver detalle\"/>");
+
+                out.println("</a>");
+
+
+
                 SWBResourceURL urlremove = paramRequest.getActionUrl();
                 urlremove.setAction("removefile");
                 urlremove.setParameter("act", "remove");
                 urlremove.setParameter("fid", fid);
-                out.println("<a href=\"" + urlremove + "\">" + "eliminar" + "</a>");
+                out.println("<a href=\"" + urlremove + "\">");
 
+                out.println("<img src=\"" + path + "delete.gif\" border=\"0\" alt=\"eliminar\"/>");
+                out.println("</a>");
                 out.println("</td>");
 
                 out.println("</tr>");
@@ -158,7 +189,7 @@ public class ProcessFileRepository extends GenericResource
         {
             String fid = request.getParameter("fid");
             RepositoryFile repoFile = RepositoryFile.ClassMgr.getRepositoryFile(fid, repoDir.getProcessSite());
-            out.println("<div>");
+            out.println("<div id=\"ProcessFileRepository\">");
             out.println("<table>");
             out.println("<tbody>");
             out.println("<tr>");
@@ -283,7 +314,7 @@ public class ProcessFileRepository extends GenericResource
             }
             if (ver != null)
             {
-                out.println("<div>");
+                out.println("<div id=\"ProcessFileRepository\">");
                 out.println("<table width=\"100%\">");
                 out.println("<thead>");
                 out.println("<tr>");
@@ -421,7 +452,7 @@ public class ProcessFileRepository extends GenericResource
                 }
             }
 
-            out.println("<div>");
+            out.println("<div id=\"ProcessFileRepository\">");
             out.println("<form method=\"post\" action=\"" + urlnew + "\"  enctype=\"multipart/form-data\">");
 
             if (null != fid && null != newVersion)
@@ -603,4 +634,87 @@ public class ProcessFileRepository extends GenericResource
 
 
     }
+
+    public String getFileType(String filename) {
+        String file = "Document";
+        String type = filename.toLowerCase();
+        if (type.indexOf(".bmp") != -1) {
+            file = "Image";
+        } else if (type.indexOf(".pdf") != -1) {
+            file = "Adobe Acrobat";
+        } else if (type.indexOf(".xls") != -1 || type.indexOf(".xlsx") != -1) {
+            file = "Microsoft Excel";
+        } else if (type.indexOf(".html") != -1 || type.indexOf(".htm") != -1) {
+            file = "HTML file";
+        } else if (type.indexOf("jpg") != -1 || type.indexOf("jpeg") != -1) {
+            file = "Image";
+        } else if (type.indexOf(".ppt") != -1 || type.indexOf(".pptx") != -1) {
+            file = "Microsoft Power Point";
+        } else if (type.indexOf(".vsd") != -1) {
+            file = "Microsoft Visio";
+        } else if (type.indexOf(".mpp") != -1) {
+            file = "Microsoft Project";
+        } else if (type.indexOf(".mmap") != -1) {
+            file = "Mind Manager";
+        } else if (type.indexOf(".exe") != -1) {
+            file = "Application";
+        } else if (type.indexOf(".txt") != -1) {
+            file = "Text file";
+        } else if (type.indexOf(".properties") != -1) {
+            file = "Properties file";
+        } else if (type.indexOf(".doc") != -1 || type.indexOf(".docx") != -1) {
+            file = "Microsoft Word";
+        } else if (type.indexOf(".xml") != -1) {
+            file = "XML file";
+        } else if (type.indexOf(".gif") != -1 || type.indexOf(".png") != -1) {
+            file = "Image";
+        } else if (type.indexOf(".avi") != -1) {
+            file = "Media file";
+        } else if (type.indexOf(".mp3") != -1) {
+            file = "Audio file";
+        } else if (type.indexOf(".wav") != -1) {
+            file = "Audio file";
+        } else if (type.indexOf(".xsl") != -1) {
+            file = "XSLT file";
+        }
+        return file;
+    }
+
+    public String getFileName(String filename) {
+        String file = "ico_default2.gif";
+        String type = filename.toLowerCase();
+        if (type.indexOf(".bmp") != -1) {
+            file = "ico_bmp.gif";
+        } else if (type.indexOf(".pdf") != -1) {
+            file = "ico_acrobat.gif";
+        } else if (type.indexOf(".xls") != -1 || type.indexOf(".xlsx") != -1) {
+            file = "ico_excel.gif";
+        } else if (type.indexOf(".html") != -1 || type.indexOf(".htm") != -1) {
+            file = "ico_html.gif";
+        } else if (type.indexOf("jpg") != -1 || type.indexOf("jpeg") != -1) {
+            file = "ico_jpeg.gif";
+        } else if (type.indexOf(".ppt") != -1 || type.indexOf(".pptx") != -1) {
+            file = "ico_powerpoint.gif";
+        } else if (type.indexOf(".exe") != -1) {
+            file = "ico_program.gif";
+        } else if (type.indexOf(".txt") != -1 || type.indexOf(".properties") != -1) {
+            file = "ico_text.gif";
+        } else if (type.indexOf(".doc") != -1 || type.indexOf(".docx") != -1) {
+            file = "ico_word.gif";
+        } else if (type.indexOf(".xml") != -1 || type.indexOf(".xsl") != -1) {
+            file = "ico_xml.gif";
+        } else if (type.indexOf(".mmap") != -1) {
+            file = "ico_mindmanager.GIF";
+        } else if (type.indexOf(".gif") != -1) {
+            file = "ico_gif.gif";
+        } else if (type.indexOf(".avi") != -1) {
+            file = "ico_video.gif";
+        } else if (type.indexOf(".mp3") != -1) {
+            file = "ico_audio.gif";
+        } else if (type.indexOf(".wav") != -1) {
+            file = "ico_audio.gif";
+        }
+        return file;
+    }
+
 }
