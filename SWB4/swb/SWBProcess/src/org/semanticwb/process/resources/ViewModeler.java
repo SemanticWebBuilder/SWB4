@@ -7,23 +7,12 @@ package org.semanticwb.process.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBUtils;
-import org.semanticwb.model.GenericObject;
-import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.process.model.FlowNodeInstance;
-import org.semanticwb.process.model.Instance;
-import org.semanticwb.process.model.ProcessInstance;
-import org.w3c.dom.Document;
 
 /**
  *
@@ -31,93 +20,18 @@ import org.w3c.dom.Document;
  */
 public class ViewModeler extends Modeler
 {
-    private static Logger log = SWBUtils.getLogger(ViewModeler.class);
-
     @Override
-    public void doGateway(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
-        PrintWriter out = response.getWriter();
-        ServletInputStream in = request.getInputStream();
-        Document dom = SWBUtils.XML.xmlToDom(in);
-
-        if (!dom.getFirstChild().getNodeName().equals("req")) {
-            response.sendError(404, request.getRequestURI());
-            return;
-        }
-
-        String cmd = null;
-        if (dom.getElementsByTagName("cmd").getLength() > 0) {
-            cmd = dom.getElementsByTagName("cmd").item(0).getFirstChild().getNodeValue();
-        }
-        if (cmd == null) {
-            response.sendError(404, request.getRequestURI());
-            return;
-        }
-
-        if (cmd.equals("getProcessJSON")) {
-            try {
-                SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-                GenericObject go = ont.getGenericObject(request.getParameter("suri"));
-                org.semanticwb.process.model.Process process = null;
-                if (go != null && go instanceof org.semanticwb.process.model.Process) {
-                    process = (org.semanticwb.process.model.Process) go;
-                    String json = getProcessJSON(process).toString();
-                    out.print(json);
-                } else {
-                    log.error("Error to create JSON: Process not found");
-                    out.print("ERROR: Process not found");
-                }
-            } catch (Exception e) {
-                log.error("Error to create JSON...", e);
-                out.print("ERROR:" + e.getMessage());
-            }
-        } else {
-            String ret;
-            Document res = null;//getService(cmd, dom, paramRequest.getUser(), request, response, paramRequest);
-            if (res == null) {
-                ret = SWBUtils.XML.domToXml(getError(3));
-            } else {
-                ret = SWBUtils.XML.domToXml(res, true);
-            }
-            out.print(new String(ret.getBytes()));
-        }
-    }
-
-    @Override
-    public void doApplet(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
-    {
+    public void doApplet(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         String suri = request.getParameter("suri");
-        SemanticObject sobj=SemanticObject.createSemanticObject(suri);
-        System.out.println("doApplet:"+suri+" "+sobj);
-        if(sobj==null)return;
-
-        ProcessInstance pinst=(ProcessInstance)sobj.createGenericInstance();
-        org.semanticwb.process.model.Process process=pinst.getProcessType();
-
-        String donePath="";
-        String curAct="";
-
-        Iterator<FlowNodeInstance> it=pinst.listAllFlowNodeInstance();
-        while (it.hasNext())
-        {
-            FlowNodeInstance fni = it.next();
-            if(fni.getStatus()==Instance.STATUS_CLOSED)
-            {
-                donePath+="|"+fni.getFlowNodeType().getURI();
-            }
-            if(fni.getStatus()==Instance.STATUS_PROCESSING)
-            {
-                curAct+="|"+fni.getFlowNodeType().getURI();
-            }
-        }
-        if(donePath.length()>0)donePath=donePath.substring(1);
-        if(curAct.length()>0)curAct=curAct.substring(1);
-
+        String pending = request.getParameter("pending");
+        String done = request.getParameter("done");
+        if (pending == null)pending="";
+        if (done == null)done="";
         PrintWriter out = response.getWriter();
         SWBResourceURL urlapp = paramsRequest.getRenderUrl();
         urlapp.setMode("gateway");
         urlapp.setCallMethod(urlapp.Call_DIRECT);
-        urlapp.setParameter("suri", process.getURI());
+        urlapp.setParameter("suri", suri);
 
         out.println("<html>");
         out.println("<head>");
@@ -131,6 +45,8 @@ public class ViewModeler extends Modeler
         out.println("        {");
         out.println("              archive: \"" + SWBPlatform.getContextPath() + "/swbadmin/lib/SWBAppBPMNModeler.jar," + SWBPlatform.getContextPath() + "/swbadmin/lib/json.jar," + SWBPlatform.getContextPath() + "/swbadmin/lib/SWBAplCommons.jar\",");
         out.println("              draggable: true,");
+        //out.println("              width: document.body.scrollWidth,");
+        //out.println("              height: document.body.scrollHeight,");
         out.println("              width: \"100%\",");
         out.println("              height: \"100%\",");
         out.println("              code: \"org.semanticwb.process.modeler.Main\",");
@@ -138,17 +54,37 @@ public class ViewModeler extends Modeler
         out.println("        },");
         out.println("        {");
         out.println("              lang: \"" + paramsRequest.getUser().getLanguage() + "\",");
-        out.println("              jsess: \"" + request.getSession().getId() + "\",");
-        out.println("              cgipath: \"" + urlapp + "\",");
         out.println("              mode: \"view\",");
-        out.println("              donePath: \""+donePath+"\",");
-        out.println("              currentActivities: \""+curAct+"\"");
+        out.println("              pending: \""+pending+"\",");
+        out.println("              done: \""+done+"\",");
+        out.println("              jsess: \"" + request.getSession().getId() + "\",");
+        out.println("              cgipath: \"" + urlapp + "\"");
         out.println("        }");
         out.println("    );");
         out.println("    </script>");
         out.println("  </div>");
         out.println(" </body>");
         out.println("</html>");
+    }
+
+    @Override
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        String suri = request.getParameter("suri");
+        String current = request.getParameter("current");
+        if (current==null)current="";
+
+        SWBResourceURL urlapp = paramsRequest.getRenderUrl();
+        urlapp.setMode("applet");
+        urlapp.setCallMethod(urlapp.Call_DIRECT);
+        urlapp.setParameter("suri", suri);
+        urlapp.setParameter("current", current);
+
+        out.println("<div class=\"applet\">");
+        out.println("<iframe dojoType_=\"dijit.layout.ContentPane\" src=\"" + urlapp + "\" width=\"800px\" height=\"600px\" frameborder=\"0\" scrolling=\"no\"></iframe>");
+        //String idframe = "ifr_" + getResourceBase().getId();
+        //out.println("<iframe alt=\"Modeler\" scrolling=\"no\" frameborder=\"0\" name==\"" + idframe + "\" id=\"" + idframe + "\" src=\"" + urlapp + "\" width=\"100%\" onload=\"this.style.height = " + idframe + ".document.body.scrollHeight + 5\" ></iframe>"); //height=\"100%\"
+        out.println("</div>");
     }
 
 
