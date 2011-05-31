@@ -48,6 +48,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.*;
 import java.sql.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 
@@ -265,7 +266,7 @@ public class SWBADBPool extends GenericResource {
                 out.println("</div>");
             }
 
-            HashMap timepool = (HashMap) timelock.getPools().get(selectedPool.getName());
+            ConcurrentHashMap timepool = (ConcurrentHashMap) timelock.getPools().get(selectedPool.getName());
             if (timepool != null) {
                 HashMap pool2 = new HashMap(timepool);
                 int ps = pool2.size();
