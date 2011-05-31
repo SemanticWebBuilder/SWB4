@@ -361,7 +361,7 @@
 
         if(addChilds)
         {
-            Iterator<HerarquicalNode> sit=node.listHerarquicalNodes();
+            Iterator<HerarquicalNode> sit=SWBComparator.sortSortableObject(node.listHerarquicalNodes());
             while(sit.hasNext())
             {
                 HerarquicalNode cnode=sit.next();
@@ -920,7 +920,7 @@
 
         if(addChilds)
         {
-            Iterator<HerarquicalNode> sit=node.listHerarquicalNodes();
+            Iterator<HerarquicalNode> sit=SWBComparator.sortSortableObject(node.listHerarquicalNodes());
             while(sit.hasNext())
             {
                 HerarquicalNode cnode=sit.next();
@@ -1004,7 +1004,7 @@
 
         if(addChilds)
         {
-            Iterator<HerarquicalNode> sit=node.listHerarquicalNodes();
+            Iterator<HerarquicalNode> sit=SWBComparator.sortSortableObject(node.listHerarquicalNodes());
             while(sit.hasNext())
             {
                 HerarquicalNode cnode=sit.next();
