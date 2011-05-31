@@ -3,6 +3,9 @@ package org.semanticwb.process.model.base;
 
 public abstract class WebServiceInvokerBase extends org.semanticwb.process.model.ProcessService 
 {
+    public static final org.semanticwb.platform.SemanticProperty swp_wsMethod=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#wsMethod");
+    public static final org.semanticwb.platform.SemanticClass swp_WebServiceParameter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#WebServiceParameter");
+    public static final org.semanticwb.platform.SemanticProperty swp_hasWebServiceParameter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasWebServiceParameter");
     public static final org.semanticwb.platform.SemanticClass swp_WebService=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#WebService");
     public static final org.semanticwb.platform.SemanticProperty swp_webService=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#webService");
     public static final org.semanticwb.platform.SemanticClass swp_WebServiceInvoker=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#WebServiceInvoker");
@@ -81,6 +84,29 @@ public abstract class WebServiceInvokerBase extends org.semanticwb.process.model
             return (getWebServiceInvoker(id, model)!=null);
         }
        /**
+       * Gets all org.semanticwb.process.model.WebServiceInvoker with a determined WebServiceParameter
+       * @param value WebServiceParameter of the type org.semanticwb.process.model.WebServiceParameter
+       * @param model Model of the org.semanticwb.process.model.WebServiceInvoker
+       * @return Iterator with all the org.semanticwb.process.model.WebServiceInvoker
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.WebServiceInvoker> listWebServiceInvokerByWebServiceParameter(org.semanticwb.process.model.WebServiceParameter value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.WebServiceInvoker> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasWebServiceParameter, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.WebServiceInvoker with a determined WebServiceParameter
+       * @param value WebServiceParameter of the type org.semanticwb.process.model.WebServiceParameter
+       * @return Iterator with all the org.semanticwb.process.model.WebServiceInvoker
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.WebServiceInvoker> listWebServiceInvokerByWebServiceParameter(org.semanticwb.process.model.WebServiceParameter value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.WebServiceInvoker> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasWebServiceParameter,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.WebServiceInvoker with a determined WebService
        * @param value WebService of the type org.semanticwb.process.model.WebService
        * @param model Model of the org.semanticwb.process.model.WebServiceInvoker
@@ -112,6 +138,89 @@ public abstract class WebServiceInvokerBase extends org.semanticwb.process.model
     public WebServiceInvokerBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the Method property
+* @return String with the Method
+*/
+    public String getMethod()
+    {
+        return getSemanticObject().getProperty(swp_wsMethod);
+    }
+
+/**
+* Sets the Method property
+* @param value long with the Method
+*/
+    public void setMethod(String value)
+    {
+        getSemanticObject().setProperty(swp_wsMethod, value);
+    }
+   /**
+   * Gets all the org.semanticwb.process.model.WebServiceParameter
+   * @return A GenericIterator with all the org.semanticwb.process.model.WebServiceParameter
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.WebServiceParameter> listWebServiceParameters()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.WebServiceParameter>(getSemanticObject().listObjectProperties(swp_hasWebServiceParameter));
+    }
+
+   /**
+   * Gets true if has a WebServiceParameter
+   * @param value org.semanticwb.process.model.WebServiceParameter to verify
+   * @return true if the org.semanticwb.process.model.WebServiceParameter exists, false otherwise
+   */
+    public boolean hasWebServiceParameter(org.semanticwb.process.model.WebServiceParameter value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swp_hasWebServiceParameter,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a WebServiceParameter
+   * @param value org.semanticwb.process.model.WebServiceParameter to add
+   */
+
+    public void addWebServiceParameter(org.semanticwb.process.model.WebServiceParameter value)
+    {
+        getSemanticObject().addObjectProperty(swp_hasWebServiceParameter, value.getSemanticObject());
+    }
+   /**
+   * Removes all the WebServiceParameter
+   */
+
+    public void removeAllWebServiceParameter()
+    {
+        getSemanticObject().removeProperty(swp_hasWebServiceParameter);
+    }
+   /**
+   * Removes a WebServiceParameter
+   * @param value org.semanticwb.process.model.WebServiceParameter to remove
+   */
+
+    public void removeWebServiceParameter(org.semanticwb.process.model.WebServiceParameter value)
+    {
+        getSemanticObject().removeObjectProperty(swp_hasWebServiceParameter,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the WebServiceParameter
+   * @return a org.semanticwb.process.model.WebServiceParameter
+   */
+    public org.semanticwb.process.model.WebServiceParameter getWebServiceParameter()
+    {
+         org.semanticwb.process.model.WebServiceParameter ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasWebServiceParameter);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.WebServiceParameter)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Sets the value for the property WebService

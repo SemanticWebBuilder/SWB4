@@ -1,8 +1,12 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class RepositoryFileBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.model.Expirable,org.semanticwb.model.Versionable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Hitable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable
+public abstract class RepositoryFileBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Versionable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Hitable,org.semanticwb.model.Expirable,org.semanticwb.model.Referensable
 {
+   /**
+   * Indica si el elemento es válido
+   */
+    public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
     public static final org.semanticwb.platform.SemanticClass swp_RepositoryDirectory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#RepositoryDirectory");
     public static final org.semanticwb.platform.SemanticProperty swp_repositoryDirectory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#repositoryDirectory");
     public static final org.semanticwb.platform.SemanticClass swp_RepositoryFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#RepositoryFile");
@@ -423,6 +427,26 @@ public abstract class RepositoryFileBase extends org.semanticwb.model.SWBClass i
     public void setActive(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb_active, value);
+    }
+
+/**
+* Gets the Valid property
+* @return boolean with the Valid
+*/
+    public boolean isValid()
+    {
+        //Override this method in RepositoryFile object
+        return getSemanticObject().getBooleanProperty(swb_valid,false);
+    }
+
+/**
+* Sets the Valid property
+* @param value long with the Valid
+*/
+    public void setValid(boolean value)
+    {
+        //Override this method in RepositoryFile object
+        getSemanticObject().setBooleanProperty(swb_valid, value,false);
     }
 
 /**
@@ -861,6 +885,16 @@ public abstract class RepositoryFileBase extends org.semanticwb.model.SWBClass i
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
+    public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
+    {
+        return new org.semanticwb.model.GenericIterator(getSemanticObject().listRelatedObjects(),true);
     }
 
    /**
