@@ -29,6 +29,7 @@ package org.semanticwb.base.db;
 
 import java.util.*;
 import java.sql.Timestamp;
+import java.util.concurrent.ConcurrentHashMap;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
@@ -49,7 +50,7 @@ public class PoolConnectionTimeLock extends TimerTask {
     private Timer timer = null;
     //private Timestamp lastupdate;
     /** The pools. */
-    private HashMap pools = new HashMap();
+    private ConcurrentHashMap pools = new ConcurrentHashMap();
     
     /** The last time. */
     private long lastTime = System.currentTimeMillis();
@@ -67,7 +68,7 @@ public class PoolConnectionTimeLock extends TimerTask {
      * 
      * @param con the con
      */
-    public synchronized void addConnection(PoolConnection con)
+    public void addConnection(PoolConnection con)
     {
         if (con != null)
         {
@@ -80,10 +81,10 @@ public class PoolConnectionTimeLock extends TimerTask {
                 }
                 lastTime = time;
                 con.setId(time);
-                HashMap pool = (HashMap) pools.get(con.getPool().getName());
+                ConcurrentHashMap pool = (ConcurrentHashMap) pools.get(con.getPool().getName());
                 if (pool == null)
                 {
-                    pool = new HashMap();
+                    pool = new ConcurrentHashMap();
                     pools.put(con.getPool().getName(), pool);
                 }
                 //con.printTrackTrace(System.out);
@@ -100,13 +101,13 @@ public class PoolConnectionTimeLock extends TimerTask {
      * 
      * @param con the con
      */
-    public synchronized void removeConnection(PoolConnection con)
+    public void removeConnection(PoolConnection con)
     {
         if (con != null)
         {
             try
             {
-                HashMap pool = (HashMap) pools.get(con.getPool().getName());
+                ConcurrentHashMap pool = (ConcurrentHashMap) pools.get(con.getPool().getName());
                 if (pool != null)
                 {
                     pool.remove(Long.valueOf(con.getId()));
@@ -129,7 +130,7 @@ public class PoolConnectionTimeLock extends TimerTask {
         Iterator it = pools.values().iterator();
         while (it.hasNext())
         {
-            HashMap pool = new HashMap((HashMap) it.next());
+            ConcurrentHashMap pool = new ConcurrentHashMap((ConcurrentHashMap) it.next());
             Iterator it2 = pool.entrySet().iterator();
             while (it2.hasNext())
             {
@@ -187,11 +188,8 @@ public class PoolConnectionTimeLock extends TimerTask {
      * @return Value of property pools.
      *
      */
-    public java.util.HashMap getPools()
+    public HashMap getPools()
     {
-        synchronized (pools)
-        {
-            return new HashMap(pools);
-        }
+        return new HashMap(pools);
     }
 }
