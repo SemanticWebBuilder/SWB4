@@ -1,8 +1,12 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class DBConnectionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class DBConnectionBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
+   /**
+   * Indica si el elemento es válido
+   */
+    public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
     public static final org.semanticwb.platform.SemanticProperty swp_dbconPassword=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#dbconPassword");
     public static final org.semanticwb.platform.SemanticProperty swp_dbconUser=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#dbconUser");
     public static final org.semanticwb.platform.SemanticProperty swp_dbconUrl=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#dbconUrl");
@@ -130,6 +134,26 @@ public abstract class DBConnectionBase extends org.semanticwb.model.SWBClass imp
     public DBConnectionBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the Valid property
+* @return boolean with the Valid
+*/
+    public boolean isValid()
+    {
+        //Override this method in DBConnection object
+        return getSemanticObject().getBooleanProperty(swb_valid,false);
+    }
+
+/**
+* Sets the Valid property
+* @param value long with the Valid
+*/
+    public void setValid(boolean value)
+    {
+        //Override this method in DBConnection object
+        getSemanticObject().setBooleanProperty(swb_valid, value,false);
     }
 
 /**
@@ -362,5 +386,15 @@ public abstract class DBConnectionBase extends org.semanticwb.model.SWBClass imp
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+    public void remove()
+    {
+        getSemanticObject().remove();
+    }
+
+    public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
+    {
+        return new org.semanticwb.model.GenericIterator(getSemanticObject().listRelatedObjects(),true);
     }
 }
