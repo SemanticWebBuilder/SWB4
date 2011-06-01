@@ -157,7 +157,7 @@ public class WSMethodParameterConfig extends GenericResource {
                     while (itwsp.hasNext()) {
                         WebServiceParameter webServiceParameter = itwsp.next();
                         hm.put(webServiceParameter.getParameterName(), webServiceParameter.getParameterValue());
-                        System.out.println("param: " + webServiceParameter.getParameterName() + " , " + webServiceParameter.getParameterValue());
+//                        System.out.println("param: " + webServiceParameter.getParameterName() + " , " + webServiceParameter.getParameterValue());
                     }
                     String urlwsrv = wsrv.getUrl();
                     if (urlwsrv != null) {
@@ -170,33 +170,46 @@ public class WSMethodParameterConfig extends GenericResource {
                                 out.println("<form id=\"" + idform + "_wsrvin\" method=\"post\" action=\"" + urlupd + "\" onsubmit=\"submitForm('" + idform + "_wsrvin'); return false;\">");
                                 out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\">");
                                 out.println("<input type=\"hidden\" name=\"idmethod\" value=\"" + method + "\">");
+
                                 out.println("<fieldset>");
                                 out.println("<legend>Lista de parámetros</legend>");
+                                out.println("<table>");
+                                out.println("<tbody>");
                                 ServiceInfo info = source.getServiceInfo();
                                 Method minfo = info.getMethod(method);
 /// Mostrar lista de parámetros
                                 Parameter[] params = minfo.getAllParameters();
                                 if (params.length > 0) {
                                     boolean isPREQ = Boolean.FALSE;
-                                    out.println("<ul  style=\"list-style-type:none;\">");
+                                    //out.println("<ul  style=\"list-style-type:none;\">");
                                     for (Parameter allparam : params) {
-                                        out.println("<li><label for=\"p_" + allparam.getName() + "\">");
+                                        out.println("<tr><td align=\"right\" width=\"200px\">");
+                                        out.println("<label for=\"p_" + allparam.getName() + "\">");
 
                                         isPREQ = Boolean.FALSE;
                                         if (allparam.isRequired()) {
                                             isPREQ = Boolean.TRUE;
                                         }
 
+                                        out.println(allparam.getName()+"&nbsp;");
                                         if (isPREQ) {
-                                            out.println("(*)");
+                                            out.println("<em>*</em>");
+                                        } else {
+                                            out.println("&nbsp;");
                                         }
-                                        out.println(allparam.getName() + ": </label>");
+                                        
+                                        out.println("</label>");
+                                        out.println("</td><td>");
                                         String pvalue = hm.get(allparam.getName()) != null ? hm.get(allparam.getName()) : "";
                                         out.println("<input dojoType=\"dijit.form.TextBox\" name=\"p_" + allparam.getName() + "\" type=\"text\" " + (isPREQ ? "required=\"true\" invalidMessage=\"Valor del parámetro requerido.\" " : "") + " value=\"" + pvalue + "\">");
-                                        out.println("</li>");
+                                        out.println("</td>");
+                                        out.println("</tr>");
                                     }
-                                    out.println("</ul>");
+                                    
                                 }
+
+                                out.println("</tbody>");
+                                out.println("</table>");
                                 out.println("</fieldset>");
                                 out.println("<fieldset>");
                                 out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" >Guardar</button>");
@@ -278,7 +291,7 @@ public class WSMethodParameterConfig extends GenericResource {
 
                     if (idMethod != null && !idMethod.equals(wsrvin.getMethod())) {
                         // borramos parametros existentes
-//                        wsrvin.removeAllWebServiceParameter();
+                        wsrvin.removeAllWebServiceParameter();
                     }
 
                     WebService wsrv = wsrvin.getWebService();
@@ -290,7 +303,7 @@ public class WSMethodParameterConfig extends GenericResource {
                     while (itwsp.hasNext()) {
                         WebServiceParameter webServiceParameter = itwsp.next();
                         hm.put(webServiceParameter.getParameterName(), webServiceParameter);
-                        System.out.println("processaction ite:" + webServiceParameter.getParameterName());
+//                        System.out.println("processaction ite:" + webServiceParameter.getParameterName());
                     }
 
                     try {
@@ -303,13 +316,13 @@ public class WSMethodParameterConfig extends GenericResource {
                             Parameter[] params = minfo.getAllParameters();
                             if (params.length > 0) {
 
-                                System.out.println("Revisando parametros...");
+//                                System.out.println("Revisando parametros...");
                                 for (Parameter allparam : params) {
 
                                     String paramName = allparam.getName();
                                     String paramVal = request.getParameter("p_" + paramName);
 
-                                    System.out.println("param: " + paramName + ", " + paramVal);
+//                                    System.out.println("param: " + paramName + ", " + paramVal);
                                     try {
                                         WebServiceParameter wsp = hm.get(paramName);
 
@@ -318,7 +331,12 @@ public class WSMethodParameterConfig extends GenericResource {
                                             wsp.setParameterName(paramName);
                                             wsrvin.addWebServiceParameter(wsp);
                                         }
-                                        wsp.setParameterValue(paramVal);
+                                        if(paramVal!=null&&paramVal.trim().length()>0)
+                                        {
+                                            wsp.setParameterValue(paramVal);
+                                        } else {
+                                            wsrvin.removeWebServiceParameter(wsp);
+                                        }
                                     } catch (Exception ein) {
                                         log.error("Error al crear WebServiceParameter",ein);
                                     }
