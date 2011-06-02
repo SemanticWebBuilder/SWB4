@@ -3,6 +3,7 @@ package org.semanticwb.process.model.base;
 
 public abstract class SQLQueryBase extends org.semanticwb.process.model.ProcessService 
 {
+    public static final org.semanticwb.platform.SemanticProperty swp_sqlQuery=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#sqlQuery");
     public static final org.semanticwb.platform.SemanticClass swp_SQLQuery=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#SQLQuery");
    /**
    * The semantic class that represents the currentObject
@@ -87,5 +88,23 @@ public abstract class SQLQueryBase extends org.semanticwb.process.model.ProcessS
     public SQLQueryBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the Query property
+* @return String with the Query
+*/
+    public String getQuery()
+    {
+        return getSemanticObject().getProperty(swp_sqlQuery);
+    }
+
+/**
+* Sets the Query property
+* @param value long with the Query
+*/
+    public void setQuery(String value)
+    {
+        getSemanticObject().setProperty(swp_sqlQuery, value);
     }
 }

@@ -3,6 +3,7 @@ package org.semanticwb.process.model.base;
 
 public abstract class SparQLQueryBase extends org.semanticwb.process.model.ProcessService 
 {
+    public static final org.semanticwb.platform.SemanticProperty swp_sparQLQuery=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#sparQLQuery");
     public static final org.semanticwb.platform.SemanticClass swp_SparQLQuery=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#SparQLQuery");
    /**
    * The semantic class that represents the currentObject
@@ -87,5 +88,23 @@ public abstract class SparQLQueryBase extends org.semanticwb.process.model.Proce
     public SparQLQueryBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the Query property
+* @return String with the Query
+*/
+    public String getQuery()
+    {
+        return getSemanticObject().getProperty(swp_sparQLQuery);
+    }
+
+/**
+* Sets the Query property
+* @param value long with the Query
+*/
+    public void setQuery(String value)
+    {
+        getSemanticObject().setProperty(swp_sparQLQuery, value);
     }
 }
