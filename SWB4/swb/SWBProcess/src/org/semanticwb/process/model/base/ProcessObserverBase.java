@@ -267,29 +267,6 @@ public abstract class ProcessObserverBase extends org.semanticwb.process.model.P
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.ProcessObserver with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.process.model.ProcessObserver
-       * @return Iterator with all the org.semanticwb.process.model.ProcessObserver
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.ProcessObserver> listProcessObserverByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessObserver> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.ProcessObserver with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.process.model.ProcessObserver
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.ProcessObserver> listProcessObserverByCreator(org.semanticwb.model.User value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessObserver> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.ProcessObserver with a determined MessageObserverInstance
        * @param value MessageObserverInstance of the type org.semanticwb.process.model.FlowNodeInstance
        * @param model Model of the org.semanticwb.process.model.ProcessObserver
@@ -310,6 +287,29 @@ public abstract class ProcessObserverBase extends org.semanticwb.process.model.P
         public static java.util.Iterator<org.semanticwb.process.model.ProcessObserver> listProcessObserverByMessageObserverInstance(org.semanticwb.process.model.FlowNodeInstance value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessObserver> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasMessageObserverInstance,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessObserver with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.process.model.ProcessObserver
+       * @return Iterator with all the org.semanticwb.process.model.ProcessObserver
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessObserver> listProcessObserverByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessObserver> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessObserver with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.process.model.ProcessObserver
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessObserver> listProcessObserverByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessObserver> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
     }

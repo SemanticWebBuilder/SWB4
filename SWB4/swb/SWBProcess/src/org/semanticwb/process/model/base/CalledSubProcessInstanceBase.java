@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class CalledSubProcessInstanceBase extends org.semanticwb.process.model.SubProcessInstance implements org.semanticwb.process.model.ContainerInstanceable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ProcessTraceable
+public abstract class CalledSubProcessInstanceBase extends org.semanticwb.process.model.SubProcessInstance implements org.semanticwb.model.Traceable,org.semanticwb.process.model.ContainerInstanceable,org.semanticwb.process.model.ProcessTraceable
 {
     public static final org.semanticwb.platform.SemanticClass swp_CalledSubProcessInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#CalledSubProcessInstance");
    /**
@@ -286,29 +286,6 @@ public abstract class CalledSubProcessInstanceBase extends org.semanticwb.proces
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.CalledSubProcessInstance with a determined SourceInstance
-       * @param value SourceInstance of the type org.semanticwb.process.model.FlowNodeInstance
-       * @param model Model of the org.semanticwb.process.model.CalledSubProcessInstance
-       * @return Iterator with all the org.semanticwb.process.model.CalledSubProcessInstance
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.CalledSubProcessInstance> listCalledSubProcessInstanceBySourceInstance(org.semanticwb.process.model.FlowNodeInstance value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CalledSubProcessInstance> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_sourceInstance, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.CalledSubProcessInstance with a determined SourceInstance
-       * @param value SourceInstance of the type org.semanticwb.process.model.FlowNodeInstance
-       * @return Iterator with all the org.semanticwb.process.model.CalledSubProcessInstance
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.CalledSubProcessInstance> listCalledSubProcessInstanceBySourceInstance(org.semanticwb.process.model.FlowNodeInstance value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CalledSubProcessInstance> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_sourceInstance,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.CalledSubProcessInstance with a determined FlowNodeInstance
        * @param value FlowNodeInstance of the type org.semanticwb.process.model.FlowNodeInstance
        * @param model Model of the org.semanticwb.process.model.CalledSubProcessInstance
@@ -329,6 +306,29 @@ public abstract class CalledSubProcessInstanceBase extends org.semanticwb.proces
         public static java.util.Iterator<org.semanticwb.process.model.CalledSubProcessInstance> listCalledSubProcessInstanceByFlowNodeInstance(org.semanticwb.process.model.FlowNodeInstance value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CalledSubProcessInstance> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstancesInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CalledSubProcessInstance with a determined SourceInstance
+       * @param value SourceInstance of the type org.semanticwb.process.model.FlowNodeInstance
+       * @param model Model of the org.semanticwb.process.model.CalledSubProcessInstance
+       * @return Iterator with all the org.semanticwb.process.model.CalledSubProcessInstance
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CalledSubProcessInstance> listCalledSubProcessInstanceBySourceInstance(org.semanticwb.process.model.FlowNodeInstance value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CalledSubProcessInstance> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_sourceInstance, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CalledSubProcessInstance with a determined SourceInstance
+       * @param value SourceInstance of the type org.semanticwb.process.model.FlowNodeInstance
+       * @return Iterator with all the org.semanticwb.process.model.CalledSubProcessInstance
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CalledSubProcessInstance> listCalledSubProcessInstanceBySourceInstance(org.semanticwb.process.model.FlowNodeInstance value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CalledSubProcessInstance> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_sourceInstance,value.getSemanticObject(),sclass));
             return it;
         }
     }

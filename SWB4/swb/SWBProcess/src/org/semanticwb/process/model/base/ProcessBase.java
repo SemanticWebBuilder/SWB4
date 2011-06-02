@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Iconable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.process.model.Callable,org.semanticwb.model.Activeable,org.semanticwb.model.Hitable,org.semanticwb.process.model.Containerable,org.semanticwb.model.Expirable,org.semanticwb.model.Referensable
+public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Iconable,org.semanticwb.process.model.Callable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Activeable,org.semanticwb.process.model.Containerable,org.semanticwb.model.Hitable,org.semanticwb.model.Expirable,org.semanticwb.model.Referensable
 {
     public static final org.semanticwb.platform.SemanticClass swp_ProcessWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessWebPage");
     public static final org.semanticwb.platform.SemanticProperty swp_processWebPageInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processWebPageInv");
@@ -358,6 +358,26 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
          }
          return ret;
     }
+
+/**
+* Gets the Hits property
+* @return long with the Hits
+*/
+    public long getHits()
+    {
+        //Override this method in Process object
+        return getSemanticObject().getLongProperty(swb_hits,false);
+    }
+
+/**
+* Sets the Hits property
+* @param value long with the Hits
+*/
+    public void setHits(long value)
+    {
+        //Override this method in Process object
+        getSemanticObject().setLongProperty(swb_hits, value,false);
+    }
    /**
    * Sets the value for the property ProcessGroup
    * @param value ProcessGroup to set
@@ -395,26 +415,6 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
              ret=(org.semanticwb.process.model.ProcessGroup)obj.createGenericInstance();
          }
          return ret;
-    }
-
-/**
-* Gets the Hits property
-* @return long with the Hits
-*/
-    public long getHits()
-    {
-        //Override this method in Process object
-        return getSemanticObject().getLongProperty(swb_hits,false);
-    }
-
-/**
-* Sets the Hits property
-* @param value long with the Hits
-*/
-    public void setHits(long value)
-    {
-        //Override this method in Process object
-        getSemanticObject().setLongProperty(swb_hits, value,false);
     }
 
 /**

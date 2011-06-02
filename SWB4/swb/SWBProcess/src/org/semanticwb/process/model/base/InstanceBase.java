@@ -125,29 +125,6 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.Instance with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.process.model.Instance
-       * @return Iterator with all the org.semanticwb.process.model.Instance
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.Instance> listInstanceByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Instance> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.Instance with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.process.model.Instance
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.Instance> listInstanceByCreator(org.semanticwb.model.User value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Instance> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.Instance with a determined Assignedto
        * @param value Assignedto of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.Instance
@@ -168,6 +145,29 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
         public static java.util.Iterator<org.semanticwb.process.model.Instance> listInstanceByAssignedto(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Instance> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_assignedto,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Instance with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.process.model.Instance
+       * @return Iterator with all the org.semanticwb.process.model.Instance
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Instance> listInstanceByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Instance> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Instance with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.process.model.Instance
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Instance> listInstanceByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Instance> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -398,24 +398,6 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
     }
 
 /**
-* Gets the Status property
-* @return int with the Status
-*/
-    public int getStatus()
-    {
-        return getSemanticObject().getIntProperty(swp_status);
-    }
-
-/**
-* Sets the Status property
-* @param value long with the Status
-*/
-    public void setStatus(int value)
-    {
-        getSemanticObject().setIntProperty(swp_status, value);
-    }
-
-/**
 * Gets the Assigned property
 * @return java.util.Date with the Assigned
 */
@@ -434,6 +416,24 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
     }
 
 /**
+* Gets the Status property
+* @return int with the Status
+*/
+    public int getStatus()
+    {
+        return getSemanticObject().getIntProperty(swp_status);
+    }
+
+/**
+* Sets the Status property
+* @param value long with the Status
+*/
+    public void setStatus(int value)
+    {
+        getSemanticObject().setIntProperty(swp_status, value);
+    }
+
+/**
 * Gets the Iteration property
 * @return int with the Iteration
 */
@@ -449,44 +449,6 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
     public void setIteration(int value)
     {
         getSemanticObject().setIntProperty(swp_iteration, value);
-    }
-   /**
-   * Sets the value for the property Creator
-   * @param value Creator to set
-   */
-
-    public void setCreator(org.semanticwb.model.User value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
-        }else
-        {
-            removeCreator();
-        }
-    }
-   /**
-   * Remove the value for Creator property
-   */
-
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(swb_creator);
-    }
-
-   /**
-   * Gets the Creator
-   * @return a org.semanticwb.model.User
-   */
-    public org.semanticwb.model.User getCreator()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
     }
    /**
    * Sets the value for the property Assignedto
@@ -520,6 +482,44 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
     {
          org.semanticwb.model.User ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_assignedto);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property Creator
+   * @param value Creator to set
+   */
+
+    public void setCreator(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
+    }
+   /**
+   * Remove the value for Creator property
+   */
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(swb_creator);
+    }
+
+   /**
+   * Gets the Creator
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getCreator()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
