@@ -382,29 +382,6 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.ProcessSite with a determined Country
-       * @param value Country of the type org.semanticwb.model.Country
-       * @param model Model of the org.semanticwb.process.model.ProcessSite
-       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByCountry(org.semanticwb.model.Country value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_country, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.ProcessSite with a determined Country
-       * @param value Country of the type org.semanticwb.model.Country
-       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByCountry(org.semanticwb.model.Country value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_country,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.ProcessSite with a determined HomePage
        * @param value HomePage of the type org.semanticwb.model.WebPage
        * @param model Model of the org.semanticwb.process.model.ProcessSite
@@ -425,6 +402,29 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
         public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByHomePage(org.semanticwb.model.WebPage value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_homePage,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined Country
+       * @param value Country of the type org.semanticwb.model.Country
+       * @param model Model of the org.semanticwb.process.model.ProcessSite
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByCountry(org.semanticwb.model.Country value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_country, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessSite with a determined Country
+       * @param value Country of the type org.semanticwb.model.Country
+       * @return Iterator with all the org.semanticwb.process.model.ProcessSite
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessSite> listProcessSiteByCountry(org.semanticwb.model.Country value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessSite> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_country,value.getSemanticObject(),sclass));
             return it;
         }
        /**

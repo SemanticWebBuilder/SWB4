@@ -154,29 +154,6 @@ public abstract class RepositoryFileBase extends org.semanticwb.model.base.Gener
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.RepositoryFile with a determined ActualVersion
-       * @param value ActualVersion of the type org.semanticwb.model.VersionInfo
-       * @param model Model of the org.semanticwb.process.model.RepositoryFile
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryFile
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByActualVersion(org.semanticwb.model.VersionInfo value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_actualVersion, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.RepositoryFile with a determined ActualVersion
-       * @param value ActualVersion of the type org.semanticwb.model.VersionInfo
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryFile
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByActualVersion(org.semanticwb.model.VersionInfo value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_actualVersion,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.RepositoryFile with a determined RepositoryDirectory
        * @param value RepositoryDirectory of the type org.semanticwb.process.model.RepositoryDirectory
        * @param model Model of the org.semanticwb.process.model.RepositoryFile
@@ -197,6 +174,29 @@ public abstract class RepositoryFileBase extends org.semanticwb.model.base.Gener
         public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByRepositoryDirectory(org.semanticwb.process.model.RepositoryDirectory value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_repositoryDirectory,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryFile with a determined ActualVersion
+       * @param value ActualVersion of the type org.semanticwb.model.VersionInfo
+       * @param model Model of the org.semanticwb.process.model.RepositoryFile
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryFile
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByActualVersion(org.semanticwb.model.VersionInfo value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_actualVersion, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryFile with a determined ActualVersion
+       * @param value ActualVersion of the type org.semanticwb.model.VersionInfo
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryFile
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByActualVersion(org.semanticwb.model.VersionInfo value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_actualVersion,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -556,44 +556,6 @@ public abstract class RepositoryFileBase extends org.semanticwb.model.base.Gener
         getSemanticObject().setProperty(swb_title, title, lang);
     }
    /**
-   * Sets the value for the property ActualVersion
-   * @param value ActualVersion to set
-   */
-
-    public void setActualVersion(org.semanticwb.model.VersionInfo value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_actualVersion, value.getSemanticObject());
-        }else
-        {
-            removeActualVersion();
-        }
-    }
-   /**
-   * Remove the value for ActualVersion property
-   */
-
-    public void removeActualVersion()
-    {
-        getSemanticObject().removeProperty(swb_actualVersion);
-    }
-
-   /**
-   * Gets the ActualVersion
-   * @return a org.semanticwb.model.VersionInfo
-   */
-    public org.semanticwb.model.VersionInfo getActualVersion()
-    {
-         org.semanticwb.model.VersionInfo ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_actualVersion);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.VersionInfo)obj.createGenericInstance();
-         }
-         return ret;
-    }
-   /**
    * Sets the value for the property RepositoryDirectory
    * @param value RepositoryDirectory to set
    */
@@ -628,6 +590,44 @@ public abstract class RepositoryFileBase extends org.semanticwb.model.base.Gener
          if(obj!=null)
          {
              ret=(org.semanticwb.process.model.RepositoryDirectory)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property ActualVersion
+   * @param value ActualVersion to set
+   */
+
+    public void setActualVersion(org.semanticwb.model.VersionInfo value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_actualVersion, value.getSemanticObject());
+        }else
+        {
+            removeActualVersion();
+        }
+    }
+   /**
+   * Remove the value for ActualVersion property
+   */
+
+    public void removeActualVersion()
+    {
+        getSemanticObject().removeProperty(swb_actualVersion);
+    }
+
+   /**
+   * Gets the ActualVersion
+   * @return a org.semanticwb.model.VersionInfo
+   */
+    public org.semanticwb.model.VersionInfo getActualVersion()
+    {
+         org.semanticwb.model.VersionInfo ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_actualVersion);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.VersionInfo)obj.createGenericInstance();
          }
          return ret;
     }

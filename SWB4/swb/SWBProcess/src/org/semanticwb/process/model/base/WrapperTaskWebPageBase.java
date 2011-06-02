@@ -443,29 +443,6 @@ public abstract class WrapperTaskWebPageBase extends org.semanticwb.model.WebPag
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.WrapperTaskWebPage with a determined RuleRef
-       * @param value RuleRef of the type org.semanticwb.model.RuleRef
-       * @param model Model of the org.semanticwb.process.model.WrapperTaskWebPage
-       * @return Iterator with all the org.semanticwb.process.model.WrapperTaskWebPage
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.WrapperTaskWebPage> listWrapperTaskWebPageByRuleRef(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.WrapperTaskWebPage> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.WrapperTaskWebPage with a determined RuleRef
-       * @param value RuleRef of the type org.semanticwb.model.RuleRef
-       * @return Iterator with all the org.semanticwb.process.model.WrapperTaskWebPage
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.WrapperTaskWebPage> listWrapperTaskWebPageByRuleRef(org.semanticwb.model.RuleRef value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.WrapperTaskWebPage> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.WrapperTaskWebPage with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.WrapperTaskWebPage
@@ -486,6 +463,29 @@ public abstract class WrapperTaskWebPageBase extends org.semanticwb.model.WebPag
         public static java.util.Iterator<org.semanticwb.process.model.WrapperTaskWebPage> listWrapperTaskWebPageByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.WrapperTaskWebPage> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.WrapperTaskWebPage with a determined RuleRef
+       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * @param model Model of the org.semanticwb.process.model.WrapperTaskWebPage
+       * @return Iterator with all the org.semanticwb.process.model.WrapperTaskWebPage
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.WrapperTaskWebPage> listWrapperTaskWebPageByRuleRef(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.WrapperTaskWebPage> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.WrapperTaskWebPage with a determined RuleRef
+       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * @return Iterator with all the org.semanticwb.process.model.WrapperTaskWebPage
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.WrapperTaskWebPage> listWrapperTaskWebPageByRuleRef(org.semanticwb.model.RuleRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.WrapperTaskWebPage> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
             return it;
         }
        /**

@@ -3,7 +3,10 @@ package org.semanticwb.process.model.base;
 
 public abstract class SQLQueryBase extends org.semanticwb.process.model.ProcessService 
 {
+    public static final org.semanticwb.platform.SemanticClass swp_DBConnection=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#DBConnection");
+    public static final org.semanticwb.platform.SemanticProperty swp_dbConnection=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#dbConnection");
     public static final org.semanticwb.platform.SemanticProperty swp_sqlQuery=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#sqlQuery");
+    public static final org.semanticwb.platform.SemanticProperty swp_sqlCode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#sqlCode");
     public static final org.semanticwb.platform.SemanticClass swp_SQLQuery=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#SQLQuery");
    /**
    * The semantic class that represents the currentObject
@@ -79,6 +82,29 @@ public abstract class SQLQueryBase extends org.semanticwb.process.model.ProcessS
         {
             return (getSQLQuery(id, model)!=null);
         }
+       /**
+       * Gets all org.semanticwb.process.model.SQLQuery with a determined DbConnection
+       * @param value DbConnection of the type org.semanticwb.process.model.DBConnection
+       * @param model Model of the org.semanticwb.process.model.SQLQuery
+       * @return Iterator with all the org.semanticwb.process.model.SQLQuery
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.SQLQuery> listSQLQueryByDbConnection(org.semanticwb.process.model.DBConnection value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SQLQuery> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_dbConnection, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.SQLQuery with a determined DbConnection
+       * @param value DbConnection of the type org.semanticwb.process.model.DBConnection
+       * @return Iterator with all the org.semanticwb.process.model.SQLQuery
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.SQLQuery> listSQLQueryByDbConnection(org.semanticwb.process.model.DBConnection value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SQLQuery> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_dbConnection,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**
@@ -88,6 +114,44 @@ public abstract class SQLQueryBase extends org.semanticwb.process.model.ProcessS
     public SQLQueryBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+   /**
+   * Sets the value for the property DbConnection
+   * @param value DbConnection to set
+   */
+
+    public void setDbConnection(org.semanticwb.process.model.DBConnection value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_dbConnection, value.getSemanticObject());
+        }else
+        {
+            removeDbConnection();
+        }
+    }
+   /**
+   * Remove the value for DbConnection property
+   */
+
+    public void removeDbConnection()
+    {
+        getSemanticObject().removeProperty(swp_dbConnection);
+    }
+
+   /**
+   * Gets the DbConnection
+   * @return a org.semanticwb.process.model.DBConnection
+   */
+    public org.semanticwb.process.model.DBConnection getDbConnection()
+    {
+         org.semanticwb.process.model.DBConnection ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_dbConnection);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.DBConnection)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**
@@ -106,5 +170,23 @@ public abstract class SQLQueryBase extends org.semanticwb.process.model.ProcessS
     public void setQuery(String value)
     {
         getSemanticObject().setProperty(swp_sqlQuery, value);
+    }
+
+/**
+* Gets the Code property
+* @return String with the Code
+*/
+    public String getCode()
+    {
+        return getSemanticObject().getProperty(swp_sqlCode);
+    }
+
+/**
+* Sets the Code property
+* @param value long with the Code
+*/
+    public void setCode(String value)
+    {
+        getSemanticObject().setProperty(swp_sqlCode, value);
     }
 }
