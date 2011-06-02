@@ -227,7 +227,8 @@ public class RetrievePassword extends GenericAdmResource {
             response.setRenderParameter("msg", "msgEmailRequired");
         }else if( securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent) && !user.isSigned() ) {
             String portalname = site.getDisplayTitle(response.getUser().getLanguage());
-            WebPage wp = site.getWebPage(base.getAttribute("tid"));
+            WebPage wp = site.getWebPage(base.getAttribute("tid"))==null?site.getHomePage():site.getWebPage(base.getAttribute("tid"));
+            
             if(username!=null && ur.getUserByLogin(username)!=null) {
                 user = ur.getUserByLogin(username);
                 String admin = SWBPortal.getEnv("af/adminEmail");
