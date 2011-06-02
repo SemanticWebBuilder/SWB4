@@ -20,19 +20,76 @@ public class FriendlyURL extends org.semanticwb.model.base.FriendlyURLBase
 
     static
     {
-        sclass.registerObserver(new SemanticObserver() {
+        refresh();
 
+        swb_friendlyURL.registerObserver(new SemanticObserver()
+        {
             public void notify(SemanticObject obj, Object prop, String lang, String action)
             {
-                urls=null;
+                removeObject(obj);
+                addFriendlyUrl((FriendlyURL)obj.createGenericInstance());
             }
         });
+
+        swb_FriendlyURL.registerObserver(new SemanticObserver()
+        {
+            public void notify(SemanticObject obj, Object prop, String lang, String action)
+            {
+                if(action.equals(SemanticObject.ACT_REMOVE))
+                {
+                    removeObject(obj);
+                }
+            }
+        });
+    }
+
+    private static void removeObject(SemanticObject obj)
+    {
+        Iterator it=urls.values().iterator();
+        while (it.hasNext())
+        {
+            Object object = it.next();
+            if(object instanceof FriendlyURL)
+            {
+                FriendlyURL f=(FriendlyURL)object;
+                if(f.getURI().equals(obj.getURI()))it.remove();
+            }
+            if(object instanceof ArrayList)
+            {
+                Iterator<FriendlyURL> it2=((ArrayList)object).iterator();
+                while (it2.hasNext())
+                {
+                    FriendlyURL f=(FriendlyURL)it2.next();
+                    if(f.getURI().equals(obj.getURI()))it.remove();
+                }
+            }
+        }
+    }
+
+    private static void addFriendlyUrl(FriendlyURL url)
+    {
+        Object obj=urls.get(url.getURL());
+
+        if(obj==null)
+        {
+            urls.put(url.getURL(), url);
+        }else if(obj instanceof FriendlyURL)
+        {
+            ArrayList<FriendlyURL> arr=new ArrayList();
+            arr.add((FriendlyURL)obj);
+            arr.add(url);
+            urls.put(url.getURL(), arr);
+        }else if(obj instanceof ArrayList)
+        {
+            ArrayList<FriendlyURL> arr=(ArrayList<FriendlyURL>)obj;
+            arr.add(url);
+        }
     }
 
     /**
      * Refresh.
      */
-    synchronized public static void refresh() 
+    public static void refresh() 
     {
         if(urls!=null)return;
         urls = new ConcurrentHashMap();
@@ -41,22 +98,7 @@ public class FriendlyURL extends org.semanticwb.model.base.FriendlyURLBase
         while (it.hasNext())
         {
             FriendlyURL url = it.next();
-            Object obj=urls.get(url.getURL());
-
-            if(obj==null)
-            {
-                urls.put(url.getURL(), url);
-            }else if(obj instanceof FriendlyURL)
-            {
-                ArrayList<FriendlyURL> arr=new ArrayList();
-                arr.add((FriendlyURL)obj);
-                arr.add(url);
-                urls.put(url.getURL(), arr);
-            }else if(obj instanceof ArrayList)
-            {
-                ArrayList<FriendlyURL> arr=(ArrayList<FriendlyURL>)obj;
-                arr.add(url);
-            }
+            addFriendlyUrl(url);
         }
     }
 
@@ -68,9 +110,6 @@ public class FriendlyURL extends org.semanticwb.model.base.FriendlyURLBase
      */
     public static FriendlyURL getFriendlyURL(String path, String host)
     {
-        if (urls == null) {
-            refresh();
-        }
         Object obj=urls.get(path);
         if(obj==null)return null;
         if(obj instanceof FriendlyURL)return (FriendlyURL)obj;
