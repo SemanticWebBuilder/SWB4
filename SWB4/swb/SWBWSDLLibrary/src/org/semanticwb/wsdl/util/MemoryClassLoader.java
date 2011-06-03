@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.wsdl.util;
 
 /**
@@ -15,6 +14,7 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,26 +26,25 @@ import javax.tools.JavaFileObject.Kind;
 import javax.tools.SimpleJavaFileObject;
 import javax.tools.ToolProvider;
 
+public final class MemoryClassLoader extends ClassLoader
+{
 
-public final class MemoryClassLoader extends ClassLoader {
-
-
+    Map<String, Class> classes = Collections.synchronizedMap(new HashMap<String, Class>());
     private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
     private final MemoryFileManager manager = new MemoryFileManager(this.compiler);
 
     /*public MemoryClassLoader(String classname, String filecontent) {
-        this(Collections.singletonMap(classname, filecontent));
+    this(Collections.singletonMap(classname, filecontent));
     }
 
     public MemoryClassLoader(Map<String, String> map) {
 
-        List<Source> list = new ArrayList<Source>();
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            list.add(new Source(entry.getKey(), Kind.SOURCE, entry.getValue()));
-        }
-        this.compiler.getTask(null, this.manager, null, null, null, list).call();
+    List<Source> list = new ArrayList<Source>();
+    for (Map.Entry<String, String> entry : map.entrySet()) {
+    list.add(new Source(entry.getKey(), Kind.SOURCE, entry.getValue()));
+    }
+    this.compiler.getTask(null, this.manager, null, null, null, list).call();
     }*/
-
     @Override
     protected synchronized Class loadClass(String name, boolean resolve)
             throws ClassNotFoundException
@@ -55,7 +54,7 @@ public final class MemoryClassLoader extends ClassLoader {
         Class c = findClass(name);
         if (c == null)
         {
-            c=getParentClass(name);
+            c = getParentClass(name);
         }
         if (resolve)
         {
@@ -66,25 +65,28 @@ public final class MemoryClassLoader extends ClassLoader {
 
     private synchronized Class getParentClass(String name) throws ClassNotFoundException
     {
-        Class c=null;
+        Class c = null;
         if (getParent() != null)
         {
             c = getParent().loadClass(name);
-        } else
+        }
+        else
         {
             c = findSystemClass(name);
         }
         return c;
     }
-    public MemoryClassLoader(ClassLoader parent) {
+
+    public MemoryClassLoader(ClassLoader parent)
+    {
         super(parent);
     }
-
 
     public void addAll(Map<String, String> map)
     {
         List<Source> list = new ArrayList<Source>();
-        for (Map.Entry<String, String> entry : map.entrySet()) {
+        for (Map.Entry<String, String> entry : map.entrySet())
+        {
             list.add(new Source(entry.getKey(), Kind.SOURCE, entry.getValue()));
         }
 
@@ -98,14 +100,17 @@ public final class MemoryClassLoader extends ClassLoader {
 
         options.add(sb.toString());
 
-        JavaCompiler.CompilationTask task=this.compiler.getTask(null, this.manager, null, options, null, list);
+        JavaCompiler.CompilationTask task = this.compiler.getTask(null, this.manager, null, options, null, list);
         task.call();
     }
+
     public Class<?> findDynamicClass(String name) throws ClassNotFoundException
     {
-        synchronized (this.manager) {
+        synchronized (this.manager)
+        {
             Output mc = this.manager.map.remove(name);
-            if (mc != null) {
+            if (mc != null)
+            {
                 byte[] array = mc.toByteArray();
                 return defineClass(name, array, 0, array.length);
             }
@@ -114,16 +119,29 @@ public final class MemoryClassLoader extends ClassLoader {
     }
 
     @Override
-    protected Class<?> findClass(String name) throws ClassNotFoundException {
+    protected Class<?> findClass(String name) throws ClassNotFoundException
+    {
 
-        synchronized (this.manager) {
-            Output mc = this.manager.map.remove(name);
-            if (mc != null) {
-                byte[] array = mc.toByteArray();
-                return defineClass(name, array, 0, array.length);
+        if (classes.containsKey(name))
+        {
+            return classes.get(name);
+        }
+        else
+        {
+            synchronized (this.manager)
+            {
+                Output mc = this.manager.map.remove(name);
+                if (mc != null)
+                {
+                    byte[] array = mc.toByteArray();
+                    Class _clazz=defineClass(name, array, 0, array.length);
+                    classes.put(name, _clazz);
+                    return _clazz;
+                }
             }
         }
-        if(getParent()!=null)
+
+        if (getParent() != null)
         {
             return getParent().loadClass(name);
         }
@@ -133,10 +151,11 @@ public final class MemoryClassLoader extends ClassLoader {
         }
 
     }
+
     public String[] getClasses()
     {
-        ArrayList<String> names=new ArrayList<String>();
-        for(String name : this.manager.map.keySet())
+        ArrayList<String> names = new ArrayList<String>();
+        for (String name : this.manager.map.keySet())
         {
             names.add(name);
         }
@@ -145,9 +164,11 @@ public final class MemoryClassLoader extends ClassLoader {
 
     public byte[] getCode(String name)
     {
-        synchronized (this.manager) {
+        synchronized (this.manager)
+        {
             Output mc = this.manager.map.get(name);
-            if (mc != null) {
+            if (mc != null)
+            {
                 byte[] array = mc.toByteArray();
                 return array;
             }
@@ -155,48 +176,61 @@ public final class MemoryClassLoader extends ClassLoader {
         return null;
     }
 
-    private static final class MemoryFileManager extends ForwardingJavaFileManager<JavaFileManager> {
+    private static final class MemoryFileManager extends ForwardingJavaFileManager<JavaFileManager>
+    {
+
         private final Map<String, Output> map = new HashMap<String, Output>();
 
-        MemoryFileManager(JavaCompiler compiler) {
+        MemoryFileManager(JavaCompiler compiler)
+        {
             super(compiler.getStandardFileManager(null, null, null));
         }
 
         @Override
-        public Output getJavaFileForOutput(Location location, String name, Kind kind, FileObject source) {
+        public Output getJavaFileForOutput(Location location, String name, Kind kind, FileObject source)
+        {
             Output mc = new Output(name, kind);
             this.map.put(name, mc);
             return mc;
         }
     }
 
-    private static final class Output extends SimpleJavaFileObject {
+    private static final class Output extends SimpleJavaFileObject
+    {
+
         private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        Output(String name, Kind kind) {
+        Output(String name, Kind kind)
+        {
             super(URI.create("memo:///" + name.replace('.', '/') + kind.extension), kind);
         }
 
-        byte[] toByteArray() {
+        byte[] toByteArray()
+        {
             return this.baos.toByteArray();
         }
 
         @Override
-        public ByteArrayOutputStream openOutputStream() {
+        public ByteArrayOutputStream openOutputStream()
+        {
             return this.baos;
         }
     }
 
-    private static final class Source extends SimpleJavaFileObject {
+    private static final class Source extends SimpleJavaFileObject
+    {
+
         private final String content;
 
-        Source(String name, Kind kind, String content) {
+        Source(String name, Kind kind, String content)
+        {
             super(URI.create("memo:///" + name.replace('.', '/') + kind.extension), kind);
             this.content = content;
         }
 
         @Override
-        public CharSequence getCharContent(boolean ignore) {
+        public CharSequence getCharContent(boolean ignore)
+        {
             return this.content;
         }
     }
