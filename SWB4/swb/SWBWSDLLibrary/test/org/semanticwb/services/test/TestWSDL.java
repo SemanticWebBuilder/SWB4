@@ -61,8 +61,11 @@ public class TestWSDL
     {
         try
         {
+            //WSDL wsdl = new WSDL(new URL("http://www.webservicex.com/globalweather.asmx?WSDL"));
+
             WSDL wsdl = new WSDL(new URL("http://www.kirupafx.com/WebService/TopMovies.asmx?WSDL"));
             //WSDL wsdl = new WSDL(new URL("http://soaptest.parasoft.com/calculator.wsdl"));
+            //WSDL wsdl = new WSDL(new URL("http://www.currencyserver.de/webservice/currencyserverwebservice.asmx?WSDL"));
             
             ServiceInfo info = wsdl.getServiceInfo();
             for (Operation op : info.getOperations())
@@ -86,6 +89,8 @@ public class TestWSDL
                                 prop.fill(obj, 5l);
                             else if(prop.getType().equals("java.lang.double"))
                                 prop.fill(obj, 5d);
+                            else if(prop.getType().equals("java.lang.String"))
+                                prop.fill(obj, "mx");
                         }
 
                         parameters.add(new Parameter("parameters", obj));
