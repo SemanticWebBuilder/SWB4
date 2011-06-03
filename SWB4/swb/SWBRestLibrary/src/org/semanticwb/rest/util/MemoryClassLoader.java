@@ -15,6 +15,7 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,7 @@ import javax.tools.ToolProvider;
 
 public final class MemoryClassLoader extends ClassLoader {
 
-
+    Map<String, Class> classes = Collections.synchronizedMap(new HashMap<String, Class>());
     private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
     private final MemoryFileManager manager = new MemoryFileManager(this.compiler);
 
@@ -116,11 +117,22 @@ public final class MemoryClassLoader extends ClassLoader {
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
 
-        synchronized (this.manager) {
-            Output mc = this.manager.map.remove(name);
-            if (mc != null) {
-                byte[] array = mc.toByteArray();
-                return defineClass(name, array, 0, array.length);
+        if (classes.containsKey(name))
+        {
+            return classes.get(name);
+        }
+        else
+        {
+            synchronized (this.manager)
+            {
+                Output mc = this.manager.map.remove(name);
+                if (mc != null)
+                {
+                    byte[] array = mc.toByteArray();
+                    Class _clazz=defineClass(name, array, 0, array.length);
+                    classes.put(name, _clazz);
+                    return _clazz;
+                }
             }
         }
         if(getParent()!=null)
