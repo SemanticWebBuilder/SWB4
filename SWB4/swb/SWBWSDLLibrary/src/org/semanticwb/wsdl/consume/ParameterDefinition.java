@@ -40,9 +40,10 @@ public class ParameterDefinition
     private Class clazz;
     private final MemoryClassLoader l = new MemoryClassLoader(getClass().getClassLoader());
     private final Operation operation;
-    public ParameterDefinition(Element part,Operation operation)
+
+    public ParameterDefinition(Element part, Operation operation) throws ServiceException
     {
-        this.operation=operation;
+        this.operation = operation;
         this.part = part;
         String _name = "";
         if (part.getAttribute("name") != null)
@@ -62,42 +63,45 @@ public class ParameterDefinition
             if (definitions.length > 0)
             {
                 definition = definitions[0];
-                Element schema=getSchema(definition);
-                if(schema==null)
+                Element schema = getSchema(definition);
+                if (schema == null)
                 {
-                    Document doc=definition.getOwnerDocument();
-                    schema=doc.getDocumentElement();
+                    Document doc = definition.getOwnerDocument();
+                    schema = doc.getDocumentElement();
                 }
-                String elementName=definition.getAttribute("name");
+                String elementName = definition.getAttribute("name");
                 this.namespace = schema.getAttribute("targetNamespace");
-                final String className = toUpperCase(definition.getAttribute("name"));
+                final String className = toUpperCase(elementName);
                 tagnames.put(className, elementName);
                 final String code = getCode(definition, className);
                 _classes.put(className, code);
                 l.addAll(_classes);
-                try
+
+                for (String classNameToAdd : _classes.keySet())
                 {
-                    for (String classNameToAdd : _classes.keySet())
+                    try
                     {
                         Class _clazz = l.loadClass(classNameToAdd);
                         this.classDictionary.put(classNameToAdd, _clazz);
-                        if(classNameToAdd.equals(className))
+                        if (classNameToAdd.equals(className))
                         {
-                            this.clazz=_clazz;
+                            this.clazz = _clazz;
                         }
-                        
+
                         //ClassInfo info = new ClassInfo(_clazz, code,elementName,namespace,tagname);
                         ClassInfo info = new ClassInfo(_clazz, code, elementName, namespace, this, tagnames);
                         this.classes.put(_clazz, info);
                     }
-                    
+                    catch (ClassNotFoundException cnfe)
+                    {
+                        log.error(cnfe);
+                        throw new ServiceException(cnfe);
+                    }
                 }
-                catch (ClassNotFoundException cnfe)
-                {
-                    log.error(cnfe);
-                }
-                
-                
+
+
+
+
             }
             if (_type.startsWith("tns:"))
             {
@@ -108,25 +112,26 @@ public class ParameterDefinition
         this.type = _type;
 
     }
+
     public final Element getSchema(final Node element)
     {
-        if(element==null)
+        if (element == null)
         {
             return null;
         }
-        Node parent=element.getParentNode();
-        if(parent==null)
+        Node parent = element.getParentNode();
+        if (parent == null)
         {
             return null;
         }
-        if(parent instanceof Element)
+        if (parent instanceof Element)
         {
-            Element testSchema=(Element)parent;
-            if(testSchema.getNamespaceURI().equals(element.getNamespaceURI()) && testSchema.getLocalName().equals("schema"))
+            Element testSchema = (Element) parent;
+            if (testSchema.getNamespaceURI().equals(element.getNamespaceURI()) && testSchema.getLocalName().equals("schema"))
             {
                 return testSchema;
             }
-            parent=parent.getParentNode();
+            parent = parent.getParentNode();
             return getSchema(parent);
         }
         else
@@ -134,10 +139,11 @@ public class ParameterDefinition
             return getSchema(parent);
         }
     }
+
     public static String toUpperCase(String data)
     {
         String letter = data.substring(0, 1);
-        return "Class"+letter.toUpperCase() + data.substring(1).toLowerCase();
+        return "Class" + letter.toUpperCase() + data.substring(1).toLowerCase();
     }
 
     private void getCode(Element element, String className, StringBuilder sb)
@@ -171,52 +177,50 @@ public class ParameterDefinition
         }
         if (_name.equals("element"))
         {
-            String _tagname=element.getAttribute("name");
-            if(_tagname.equals(""))
+            String _tagname = element.getAttribute("name");
+            if (_tagname.equals(""))
             {
-                String ref=element.getAttribute("ref");
-                int pos=ref.indexOf(":");
-                if(pos!=-1)
+                String ref = element.getAttribute("ref");
+                int pos = ref.indexOf(":");
+                if (pos != -1)
                 {
-                    String prefix=ref.substring(0,pos);
-                    String localname=ref.substring(pos+1);
-                    Document doc=element.getOwnerDocument();
+                    String prefix = ref.substring(0, pos);
+                    String localname = ref.substring(pos + 1);
+                    Document doc = element.getOwnerDocument();
                     String xml = SWBUtils.XML.domToXml(doc, "utf-8", true);
                     StringReader r = new StringReader(xml);
                     SAXBuilder builder = new SAXBuilder();
-                    String uri=null;
+                    String uri = null;
                     try
                     {
                         org.jdom.Document jdom = builder.build(r);
                         Namespace ns = jdom.getRootElement().getNamespace(prefix);
-                        uri = ns.getURI();                       
+                        uri = ns.getURI();
                     }
                     catch (Exception e)
                     {
                         log.error(e);
                     }
-                    if(localname.equals("schema") && SCHEMA_NAMESPACE.equals(uri))
+                    if (localname.equals("schema") && SCHEMA_NAMESPACE.equals(uri))
                     {
-
                     }
                     else
                     {
-                        
                     }
                 }
 
             }
             String varname = element.getAttribute("name").toLowerCase();
-            tagnames.put(varname,_tagname);
+            tagnames.put(varname, _tagname);
             String varType = element.getAttribute("type");
-            if(varType.equals(""))
+            if (varType.equals(""))
             {
-                String _className=toUpperCase(_tagname);
-                String code=getCode(element, className);
+                String _className = toUpperCase(_tagname);
+                String code = getCode(element, className);
                 _classes.put(_className, code);
                 String minOccurs = element.getAttribute("minOccurs");
                 String maxOccurs = element.getAttribute("maxOccurs");
-                String _varname=varname;
+                String _varname = varname;
                 if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
                 {
                     sb.append(" public final java.util.ArrayList<").append(_className).append("> ").append(_varname).append("=new java.util.ArrayList<").append(_className).append(">();" + NL);
@@ -287,13 +291,13 @@ public class ParameterDefinition
                         log.error(e);
                     }
 
-                }                
+                }
             }
             if (!isBasic)
             {
-                
-                String _varname=_tagname.toLowerCase();
-                String _className=toUpperCase(_tagname);
+
+                String _varname = _tagname.toLowerCase();
+                String _className = toUpperCase(_tagname);
                 tagnames.put(_className, _tagname);
                 tagnames.put(_varname, _tagname);
                 Element[] elements = XMLDocumentUtil.getElement(varType, element.getOwnerDocument(), "element");
@@ -301,10 +305,10 @@ public class ParameterDefinition
                 {
                     elements = XMLDocumentUtil.getElement(varType, element.getOwnerDocument(), "complexType");
                 }
-                if(elements.length>0)
+                if (elements.length > 0)
                 {
-                    Element elementToCode=elements[0];
-                    String code=getCode(elementToCode, _className);
+                    Element elementToCode = elements[0];
+                    String code = getCode(elementToCode, _className);
                     _classes.put(_className, code);
                 }
 
@@ -323,8 +327,8 @@ public class ParameterDefinition
             }
             else
             {
-                String tagname=element.getAttribute("name");
-                tagnames.put(varname.toLowerCase(),tagname );
+                String tagname = element.getAttribute("name");
+                tagnames.put(varname.toLowerCase(), tagname);
                 String minOccurs = element.getAttribute("minOccurs");
                 String maxOccurs = element.getAttribute("maxOccurs");
                 if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
@@ -383,24 +387,26 @@ public class ParameterDefinition
         {
             return clazz.newInstance();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             log.error(e);
         }
         return null;
     }
+
     public ClassInfo getInfo(Class clazz)
     {
         return classes.get(clazz);
     }
+
     public ClassInfo getInfo(String clazz) throws ServiceException
     {
         try
         {
-            Class _clazz=classDictionary.get(clazz);
+            Class _clazz = classDictionary.get(clazz);
             return getInfo(_clazz);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new ServiceException(e);
         }
@@ -410,14 +416,14 @@ public class ParameterDefinition
     {
         try
         {
-            Class _clazz=classDictionary.get(clazz);
-            if(_clazz==null)
+            Class _clazz = classDictionary.get(clazz);
+            if (_clazz == null)
             {
                 return Class.forName(clazz);
             }
             return _clazz;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new ServiceException(e);
         }
@@ -442,41 +448,42 @@ public class ParameterDefinition
     {
         return namespace;
     }
+
     public Document toDocument(Parameter parameter)
     {
-        Document doc=SWBUtils.XML.getNewDocument();
-        Object value=parameter.getValue();
-        ClassInfo info=getInfo(value.getClass());
+        Document doc = SWBUtils.XML.getNewDocument();
+        Object value = parameter.getValue();
+        ClassInfo info = getInfo(value.getClass());
         //Element element=doc.createElementNS(namespace, parameter.getName());
-        Element child=info.createElement(value, doc);
+        Element child = info.createElement(value, doc);
         //element.appendChild(child);
         doc.appendChild(child);
 
-        System.out.println("xml: "+SWBUtils.XML.domToXml(doc));
+        System.out.println("xml: " + SWBUtils.XML.domToXml(doc));
         return doc;
     }
+
     public Object getValue(Document document) throws ServiceException
     {
-        System.out.println(" xml response: "+SWBUtils.XML.domToXml(document));
+        System.out.println(" xml response: " + SWBUtils.XML.domToXml(document));
         //String tagname=tagnames.get(toUpperCase(type));
-        NodeList list=document.getElementsByTagNameNS(namespace, type);
-        if(list.getLength()>0)
+        NodeList list = document.getElementsByTagNameNS(namespace, type);
+        if (list.getLength() > 0)
         {
-            for(int i=0;i<list.getLength();i++)
+            for (int i = 0; i < list.getLength(); i++)
             {
-                Element element=(Element)list.item(i);
-                ClassInfo info=getInfo(clazz);
-                PropertyInfo[] properties=info.getProperties();
-                Object instance=this.getInstance();
-                if(properties.length==0)
+                Element element = (Element) list.item(i);
+                ClassInfo info = getInfo(clazz);
+                PropertyInfo[] properties = info.getProperties();
+                Object instance = this.getInstance();
+                if (properties.length == 0)
                 {
-
                 }
                 else
                 {
-                    for(PropertyInfo prop : properties)
+                    for (PropertyInfo prop : properties)
                     {
-                        Object objprop=prop.getValue(element,instance);
+                        Object objprop = prop.getValue(element, instance);
                         prop.fill(instance, objprop);
                     }
                 }
