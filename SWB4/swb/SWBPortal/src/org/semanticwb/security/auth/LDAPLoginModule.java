@@ -24,9 +24,6 @@
 package org.semanticwb.security.auth;
 
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.Map;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
@@ -143,7 +140,7 @@ public class LDAPLoginModule implements LoginModule
 
             try
             {
-            principal.checkCredential(credential);
+            principal.checkCredential(credential); 
 
             } catch (java.security.NoSuchAlgorithmException ex)
                     //NoSuchAlgorithmException & UnsupportedEncodingException,
@@ -163,19 +160,14 @@ public class LDAPLoginModule implements LoginModule
      */
     public boolean commit() throws LoginException
     {
-        boolean flag = false;
+        boolean flag = false; 
         if (!loginflag)
         {
             return false;
         }
-        Iterator it = subject.getPrincipals().iterator();
-        User tmp = null;
-        if (it.hasNext())
-        {
-            tmp = (User) it.next();
-        }
+        subject.getPrincipals().clear();
+        subject.getPrincipals().add(principal);
         subject.getPrivateCredentials().add(credential);
-
         return loginflag;
     }
 
