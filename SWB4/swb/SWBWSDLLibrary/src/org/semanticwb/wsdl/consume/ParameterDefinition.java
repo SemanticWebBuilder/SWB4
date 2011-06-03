@@ -171,9 +171,32 @@ public class ParameterDefinition
         }
         if (_name.equals("element"))
         {
-            String varname = element.getAttribute("name");
-            tagnames.put(varname.toLowerCase(),varname);
+            String _tagname=element.getAttribute("name");
+            if(_tagname.equals(""))
+            {
+                String ref=element.getAttribute("ref");
+            }
+            String varname = element.getAttribute("name").toLowerCase();
+            tagnames.put(varname,_tagname);
             String varType = element.getAttribute("type");
+            if(varType.equals(""))
+            {
+                String _className=toUpperCase(_tagname);
+                String code=getCode(element, className);
+                _classes.put(_className, code);
+                String minOccurs = element.getAttribute("minOccurs");
+                String maxOccurs = element.getAttribute("maxOccurs");
+                String _varname=varname;
+                if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
+                {
+                    sb.append(" public final java.util.ArrayList<").append(_className).append("> ").append(_varname).append("=new java.util.ArrayList<").append(_className).append(">();" + NL);
+                }
+                if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
+                {
+                    sb.append(" public ").append(_className).append(" ").append(_varname).append(";" + NL);
+                }
+                return;
+            }
             Document doc = element.getOwnerDocument();
             boolean isBasic = false;
             int pos = varType.indexOf(":");
@@ -238,10 +261,9 @@ public class ParameterDefinition
             }
             if (!isBasic)
             {
-
-                String _tagname=element.getAttribute("name");
+                
                 String _varname=_tagname.toLowerCase();
-                String _className=toUpperCase(element.getAttribute("name"));
+                String _className=toUpperCase(_tagname);
                 tagnames.put(_className, _tagname);
                 tagnames.put(_varname, _tagname);
                 Element[] elements = XMLDocumentUtil.getElement(varType, element.getOwnerDocument(), "element");
@@ -267,46 +289,6 @@ public class ParameterDefinition
                     sb.append(" public ").append(_className).append(" ").append(_varname).append(";" + NL);
                 }
 
-//                Element[] elements = XMLDocumentUtil.getElement(varType, element.getOwnerDocument(), "element");
-//                if (elements.length == 0)
-//                {
-//                    elements = XMLDocumentUtil.getElement(varType, element.getOwnerDocument(), "complexType");
-//                }
-//                for (Element newelement : elements)
-//                {
-//                    element=newelement;
-//                    getCode(element, className,sb);
-//                }
-                /*String tagTosearch=varType;
-                String tagname=varType;
-                varType=toUpperCase(varType);
-                tagnames.put(varType, tagname);
-                Element[] elements = XMLDocumentUtil.getElement(tagTosearch, element.getOwnerDocument(), "element");
-                if (elements.length == 0)
-                {
-                    elements = XMLDocumentUtil.getElement(tagTosearch, element.getOwnerDocument(), "complexType");
-                }
-                for (Element newelement : elements)
-                {
-                    String newClassName = toUpperCase(varType);
-                    if (!newelement.getAttribute("name").equals(""))
-                    {
-                        newClassName = toUpperCase(newelement.getAttribute("name"));
-                    }
-                    String code = getCode(newelement, newClassName);
-                    this._classes.put(newClassName, code);
-                    tagnames.put(newClassName, newelement.getAttribute("name"));
-                    String minOccurs = newelement.getAttribute("minOccurs");
-                    String maxOccurs = newelement.getAttribute("maxOccurs");
-                    if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
-                    {
-                        sb.append(" public final java.util.ArrayList<").append(varType).append("> ").append(varname.toLowerCase()).append("=new java.util.ArrayList<").append(varType).append(">();" + NL);
-                    }
-                    if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
-                    {
-                        sb.append(" public ").append(varType).append(" ").append(varname.toLowerCase()).append(";" + NL);
-                    }
-                }*/
 
             }
             else
