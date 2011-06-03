@@ -137,7 +137,7 @@ public class ParameterDefinition
     public static String toUpperCase(String data)
     {
         String letter = data.substring(0, 1);
-        return letter.toUpperCase() + data.substring(1).toLowerCase();
+        return "Class"+letter.toUpperCase() + data.substring(1).toLowerCase();
     }
 
     private void getCode(Element element, String className, StringBuilder sb)
@@ -175,6 +175,36 @@ public class ParameterDefinition
             if(_tagname.equals(""))
             {
                 String ref=element.getAttribute("ref");
+                int pos=ref.indexOf(":");
+                if(pos!=-1)
+                {
+                    String prefix=ref.substring(0,pos);
+                    String localname=ref.substring(pos+1);
+                    Document doc=element.getOwnerDocument();
+                    String xml = SWBUtils.XML.domToXml(doc, "utf-8", true);
+                    StringReader r = new StringReader(xml);
+                    SAXBuilder builder = new SAXBuilder();
+                    String uri=null;
+                    try
+                    {
+                        org.jdom.Document jdom = builder.build(r);
+                        Namespace ns = jdom.getRootElement().getNamespace(prefix);
+                        uri = ns.getURI();                       
+                    }
+                    catch (Exception e)
+                    {
+                        log.error(e);
+                    }
+                    if(localname.equals("schema") && SCHEMA_NAMESPACE.equals(uri))
+                    {
+
+                    }
+                    else
+                    {
+                        
+                    }
+                }
+
             }
             String varname = element.getAttribute("name").toLowerCase();
             tagnames.put(varname,_tagname);
