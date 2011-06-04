@@ -210,12 +210,8 @@ public class ModalDialog extends CustomNode {
                                         if (boundNode != null) {
                                             tit.commit();
                                             desc.commit();
-                                            println("Tit Before: {boundNode.title}");
                                             boundNode.title = tit.text;
-                                            println("Tit After: {boundNode.title}");
-                                            println("Desc Before: {boundNode.description}");
                                             boundNode.description = desc.text;
-                                            println("Desc After: {boundNode.description}");
                                         }
                                     }
                                 }
