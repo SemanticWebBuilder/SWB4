@@ -309,21 +309,23 @@ public class Pool extends GraphicalElement
     }
 
     public override function copy () : GraphicalElement {
-        println("Copiando pool {title} - {uri} - w:{w}, h:{h}");
+        //println("Copiando pool {title} - {uri} - w:{w}, h:{h}");
         var t = Pool {
             title: this.title
+            description: this.description
             modeler: this.modeler
             w: this.w
             h: this.h
             uri:"new:pool:{modeler.toolBar.counter++}"
         }
 
-        println("Creado pool {title} - {uri} - w:{w}, h:{h}");
+        //println("Creado pool {title} - {uri} - w:{w}, h:{h}");
 
         for (lane in lanes) {
-            println("  Copiando lane {lane.title} - {lane.uri} - w:{lane.w}, h:{lane.h}, idx:{lane.idx}");
+            //println("  Copiando lane {lane.title} - {lane.uri} - w:{lane.w}, h:{lane.h}, idx:{lane.idx}");
             var l = Lane {
                 title: lane.title
+                description: lane.description
                 modeler: this.modeler
                 w: bind t.w
                 h: lane.h
@@ -331,16 +333,16 @@ public class Pool extends GraphicalElement
                 idx: lane.idx
             };
 
-            println("  *Creado lane {l.title} - {l.uri} - w:{l.w}, h:{l.h}, idx:{l.idx}");
+            //println("  *Creado lane {l.title} - {l.uri} - w:{l.w}, h:{l.h}, idx:{l.idx}");
             l.setGraphParent(t);
-            println("  *GraphParent: {l.graphParent}");
+            //println("  *GraphParent: {l.graphParent}");
             l.setContainer(getContainer());
             insert l into t.lanes;
             
         }
-        println("-Actualizando tamaño del pool - original w:{t.w}, h:{t.h}");
+        //println("-Actualizando tamaño del pool - original w:{t.w}, h:{t.h}");
         t.updateSize();
-        println("-Nuevo tamaño del pool w:{t.w}, h:{t.h}");
+        //println("-Nuevo tamaño del pool w:{t.w}, h:{t.h}");
 
         var conObjects: ConnectionObject[];
         var objMap = HashMap {};
