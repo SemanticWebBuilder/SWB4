@@ -24,16 +24,6 @@ public class AssociationFlow extends ConnectionObject
         return ret;
     }    
 
-    public override var onMouseClicked = function (e: MouseEvent) {
-        if (e.button == e.button.SECONDARY) {
-            var p = Point {
-                x: e.sceneX
-                y: e.sceneY
-            };
-            addLineHandler(p);
-        }
-    }
-    
     public override function copy() : ConnectionObject {
         var t = AssociationFlow {
             ini: this.ini
