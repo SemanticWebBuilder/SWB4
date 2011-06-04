@@ -10,7 +10,6 @@ import javafx.scene.Group;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Rotate;
 import javafx.util.Math;
-import javafx.scene.input.MouseEvent;
 
 /**
  * Clase que representa un flujo por defecto en un diagrama BPMN 2.0
@@ -64,7 +63,7 @@ public class DefaultFlow extends SequenceFlow
     override public function createPath() : Void {
         super.createPath();
 
-        var lnode = pend;
+        var lnode = pinter1;
         if (not handles.isEmpty()) {
             var han = handles[0];
             lnode = Point {
@@ -86,16 +85,6 @@ public class DefaultFlow extends SequenceFlow
             styleClass: bind path.styleClass
             stroke:bind path.stroke
             transforms: bind if (m != 0 and not Number.isInfinite(m)) Rotate {angle: Math.toDegrees(Math.atan(m)), pivotX: bind pini.x+difx, pivotY: bind pini.y+dify} else null;
-        }
-    }
-
-    public override var onMouseClicked = function (e: MouseEvent) {
-        if (e.button == e.button.SECONDARY) {
-            var p = Point {
-                x: e.sceneX
-                y: e.sceneY
-            };
-            addLineHandler(p);
         }
     }
 
