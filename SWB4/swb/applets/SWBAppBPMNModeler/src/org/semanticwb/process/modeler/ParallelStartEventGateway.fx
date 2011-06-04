@@ -95,6 +95,7 @@ public class ParallelStartEventGateway extends EventBasedGateway
     override public function copy() : GraphicalElement {
         var t = ParallelStartEventGateway {
             title: this.title
+            description: this.description
             type: this.type
             modeler: this.modeler
             container: this.container
