@@ -78,10 +78,12 @@ public class StartEvent extends CatchEvent
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc=description;
                             //crear nuevo elemento
                             var sp = MessageStartEvent {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:startevent:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -109,10 +111,12 @@ public class StartEvent extends CatchEvent
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc=description;
                             //crear nuevo elemento
                             var sp = TimerStartEvent {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:startevent:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -140,10 +144,12 @@ public class StartEvent extends CatchEvent
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc=description;
                             //crear nuevo elemento
                             var sp = RuleStartEvent {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:startevent:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -171,10 +177,12 @@ public class StartEvent extends CatchEvent
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc=description;
                             //crear nuevo elemento
                             var sp = SignalStartEvent {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:startevent:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -202,10 +210,12 @@ public class StartEvent extends CatchEvent
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc=description;
                             //crear nuevo elemento
                             var sp = MultipleStartEvent {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:startevent:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -233,10 +243,12 @@ public class StartEvent extends CatchEvent
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
                             var _title = title;
+                            var _desc=description;
                             //crear nuevo elemento
                             var sp = ParallelStartEvent {
                                 modeler: modeler
                                 title: _title
+                                description: _desc
                                 uri:"new:startevent:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -344,6 +356,7 @@ public class StartEvent extends CatchEvent
     override public function copy() : GraphicalElement {
         var t = StartEvent {
             title: this.title
+            description: this.description
             type: this.type
             modeler: this.modeler
             container: this.container
