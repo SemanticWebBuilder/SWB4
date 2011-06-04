@@ -28,7 +28,7 @@ public class ConditionalFlow extends SequenceFlow
         arrowType=ARROW_TYPE_SEQUENCE;
         notGroup=true;  //No agrega los elementos path y arrow al grupo
         
-        var lnode = pend;
+        var lnode = pinter1;
         if (not handles.isEmpty()) {
             lnode = Point {
                 x: handles[0].x
@@ -71,7 +71,7 @@ public class ConditionalFlow extends SequenceFlow
 
     override public function createPath() : Void {
         super.createPath();
-        var lnode = pend;
+        var lnode = pinter1;
         if (not handles.isEmpty()) {
             lnode = Point {
                 x: handles[0].x
@@ -102,11 +102,16 @@ public class ConditionalFlow extends SequenceFlow
             }
         }
         if (e.button == e.button.SECONDARY) {
+            isMultiLine=true;
             var p = Point {
                 x: e.sceneX
                 y: e.sceneY
             };
-            addLineHandler(p);
+            if (handles.isEmpty()) {
+                buildDefaultHandlers();
+            } else {
+                addLineHandler(p);
+            }
         }
     }
 
