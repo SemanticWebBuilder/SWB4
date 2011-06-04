@@ -71,6 +71,7 @@ public class LineHandle extends CustomNode {
             radius: 5
             styleClass: "lineHandle"
         }
+        snapToGrid();
         return c;
     }
 
