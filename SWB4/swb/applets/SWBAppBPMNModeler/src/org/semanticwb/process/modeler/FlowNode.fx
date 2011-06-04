@@ -8,8 +8,6 @@ package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
 import org.semanticwb.process.modeler.CompensationIntermediateCatchEvent;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 /**
  * @author javier.solis
