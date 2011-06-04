@@ -7,7 +7,6 @@
 package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
-import javafx.scene.input.MouseEvent;
 
 /**
  * Clase que representa un flujo de asociación direccional en un diagrama BPMN 2.0
@@ -23,16 +22,6 @@ public class DirectionalAssociation extends AssociationFlow
         //cubicCurve=true;
         var ret=super.create();
         return ret;
-    }
-
-    public override var onMouseClicked = function (e: MouseEvent) {
-        if (e.button == e.button.SECONDARY) {
-            var p = Point {
-                x: e.sceneX
-                y: e.sceneY
-            };
-            addLineHandler(p);
-        }
     }
 
     public override function copy() : ConnectionObject {
