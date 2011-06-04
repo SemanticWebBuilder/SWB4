@@ -23,6 +23,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Document;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
+import javafx.animation.Interpolator;
+import javafx.animation.Timeline;
 
 /**
  * Clase que representa un elemento gráfico en un diagrama BPMN 2.0. Es la
@@ -116,11 +118,25 @@ public class GraphicalElement extends CustomNode
 
     public function setStatus(stat: Number) : Void {
         status = stat;
-        println("Setting status to {stat}");
+        //println("Setting status to {stat}");
         if (this instanceof Activity) {
             if (status == STATUS_ACTIVE) {
                 shape.styleClass = "taskInProgress";
-                effect = DropShadow { offsetY: 3 color: Color.color(0.4, 0.4, 0.4) };
+                def timeLine: Timeline = Timeline {
+                    autoReverse: true
+                    repeatCount: Timeline.INDEFINITE
+                    keyFrames: [
+                        at (0s) {
+                            opacity => 0.0;
+                        },
+                        at (800ms) {
+                            opacity => 1.0 tween Interpolator.EASEBOTH;
+                        }
+                    ]
+                }
+                timeLine.playFromStart();
+                var e = DropShadow { offsetY: 3 color: Color.color(0.4, 0.4, 0.4) };
+                effect = e;
                 if (container != null) {
                     container.shape.styleClass = "taskInProgress";
                     container.effect = DropShadow { offsetY: 3 color: Color.color(0.4, 0.4, 0.4) };
