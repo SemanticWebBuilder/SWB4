@@ -157,6 +157,7 @@ public class IntermediateThrowEvent extends ThrowEvent
     override public function copy() : GraphicalElement {
         var t = IntermediateThrowEvent {
             title: this.title
+            description: this.description
             type: this.type
             modeler: this.modeler
             container: this.container
