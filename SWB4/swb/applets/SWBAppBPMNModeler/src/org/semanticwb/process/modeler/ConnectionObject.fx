@@ -40,6 +40,7 @@ public class ConnectionObject  extends CustomNode
     public var action : String=bind title;
     public var uri : String;
     public var text : EditableText;
+    public var isMultiLine: Boolean;
     //public var points : Point[];
     public var arrowType : String;
     public var handles: LineHandle[];    
@@ -63,6 +64,8 @@ public class ConnectionObject  extends CustomNode
     protected var notGroup : Boolean;               //No agrega los elementos path y arrow al grupo
     protected var pini: Point;
     protected var pend: Point;
+    protected var pinter1: Point;
+    protected var pinter2: Point;
     var elements: PathElement[];
     var labelAnchorStart: Point;
     var labelAnchorEnd: Point;
@@ -70,8 +73,11 @@ public class ConnectionObject  extends CustomNode
     public override function create(): Node
     {
         blocksMouse = true;
+        isMultiLine=false;
         pini=Point{ x: getStartConnectionX(ini,end) y: getStartConnectionY(ini,end) };
         pend=Point{ x: getEndConnectionX(end,ini) y: getEndConnectionY(end,ini) };
+        pinter1=Point{ x: getInter1ConnectionX(ini, end, pini, pend), y: getInter1ConnectionY(ini, end, pini, pend)};
+        pinter2=Point{ x: getInter2ConnectionX(ini, end, pini, pend), y: getInter2ConnectionY(ini, end, pini, pend)};
         labelAnchorStart = pini;
         labelAnchorEnd = pend;
 
@@ -152,8 +158,15 @@ public class ConnectionObject  extends CustomNode
         //println("Creando linea");
         delete elements;
         insert MoveTo{x:bind pini.x,y:bind pini.y} into elements;
-        for (p in handles) {
-            insert LineTo{x: bind p.x,y: bind p.y} into elements;
+        if (isMultiLine) {
+            for (p in handles) {
+                insert LineTo{x: bind p.x,y: bind p.y} into elements;
+            }
+        } else {
+            if (end != null) {
+                insert LineTo{x: bind pinter1.x,y: bind pinter1.y} into elements;
+                insert LineTo{x: bind pinter2.x,y: bind pinter2.y} into elements;
+            }
         }
         insert LineTo{x:bind pend.x,y:bind pend.y} into elements;
 
@@ -165,13 +178,7 @@ public class ConnectionObject  extends CustomNode
             onKeyReleased: onKeyReleased
         };
 
-        labelAnchorStart = pini;
-        if (not handles.isEmpty()) {
-            labelAnchorEnd = handles[0].getPoint();
-        } else {
-            labelAnchorEnd = pend;
-        }
-
+        updateLabelAnchors();
         setType(arrowType);
     }
 
@@ -179,12 +186,16 @@ public class ConnectionObject  extends CustomNode
     function setType(type: String): Void {
         var lnode = pini;
 
-        if (handles.size()>=1) {
-            var han = handles[handles.size()-1];
-            lnode = Point {
-                x: han.x
-                y: han.y
+        if (isMultiLine) {
+            if (handles.size()>=1) {
+                var han = handles[handles.size()-1];
+                lnode = Point {
+                    x: han.x
+                    y: han.y
+                }
             }
+        } else {
+            lnode = pinter2;
         }
 
         if (type.equals(ARROW_TYPE_SEQUENCE) or type.equals(ARROW_TYPE_ASSOCIATION)) {
@@ -240,6 +251,13 @@ public class ConnectionObject  extends CustomNode
     public function updatePoints() {
         updateStartPoint();
         updateEndPoint();
+        updateMiddlePoints();
+        createPath();
+    }
+
+    function updateMiddlePoints() {
+        pinter1=Point{ x: getInter1ConnectionX(ini, end, pini, pend), y: getInter1ConnectionY(ini, end, pini, pend)};
+        pinter2=Point{ x: getInter2ConnectionX(ini, end, pini, pend), y: getInter2ConnectionY(ini, end, pini, pend)};
     }
 
     /**Actualiza el punto inicial del objeto de conexión*/
@@ -253,6 +271,16 @@ public class ConnectionObject  extends CustomNode
         pend.x = getEndConnectionX(end, ini);
         pend.y = getEndConnectionY(end, ini);
     }
+
+    public function updateLabelAnchors() {
+        labelAnchorStart = pini;
+        if (not handles.isEmpty()) {
+            labelAnchorEnd = handles[0].getPoint();
+        } else {
+            labelAnchorEnd = pend;
+        }
+    }
+
 
     /**Elimina el objeto de conexión del área de trabajo*/
     public function remove()
@@ -321,7 +349,12 @@ public class ConnectionObject  extends CustomNode
                     x: e.sceneX
                     y: e.sceneY
                 };
-                addLineHandler(p);
+                isMultiLine = true;
+                if (handles.isEmpty()) {
+                    buildDefaultHandlers();
+                } else {
+                    addLineHandler(p);
+                }
             }
         }
     }
@@ -373,7 +406,29 @@ public class ConnectionObject  extends CustomNode
     /**Elimina un nodo tirador del trayecto del objeto de conexión*/
     public function removeLineHandler(lh: LineHandle) : Void {
         delete lh from handles;
-        createPath();
+        if (handles.isEmpty()) {
+            isMultiLine=false;
+        }
+        updatePoints();
+    }
+
+    /**Agrega los tiradores por defecto al objeto de conexión*/
+    public function buildDefaultHandlers() {
+        if (pini.x == pend.x or pini.y == pend.y) return;
+
+        delete handles;
+        var p1 = Point {
+            x: getInter1ConnectionX(ini, end, pini, pend)
+            y: getInter1ConnectionY(ini, end, pini, pend)
+        }
+        var p2 = Point {
+            x: getInter2ConnectionX(ini, end, pini, pend)
+            y: getInter2ConnectionY(ini, end, pini, pend)
+        }
+        addLineHandler(p1);
+        addLineHandler(p2);
+        labelAnchorStart = handles[0].getPoint();
+        labelAnchorEnd = handles[1].getPoint();
     }
 
     /**Calcula la coordenada en X del punto inicial del objeto de conexión*/
@@ -717,26 +772,7 @@ public class ConnectionObject  extends CustomNode
             var ret=getInter1ConnectionY(ini, end, pini, pend);
             ret;
         }
-    }
-
-    /**Agrega los tiradores por defecto al objeto de conexión*/
-    public function buildDefaultHandlers() {        
-        if (pini.x == pend.x or pini.y == pend.y) return;
-
-        delete handles;
-        var p1 = Point {
-            x: getInter1ConnectionX(ini, end, pini, pend)
-            y: getInter1ConnectionY(ini, end, pini, pend)
-        }
-        var p2 = Point {
-            x: getInter2ConnectionX(ini, end, pini, pend)
-            y: getInter2ConnectionY(ini, end, pini, pend)
-        }
-        addLineHandler(p1);
-        addLineHandler(p2);
-        labelAnchorStart = handles[0].getPoint();
-        labelAnchorEnd = handles[1].getPoint();
-    }
+    }    
 
     /**Calcula el ángulo de la flecha del objeto de conexión*/
     protected bound function getArrow(grad: Number, p: Point) : Number
