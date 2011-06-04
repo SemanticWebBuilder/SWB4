@@ -95,6 +95,7 @@ public class ParallelGateway extends Gateway
     override public function copy() : GraphicalElement {
         var t = ParallelGateway {
             title: this.title
+            description: this.description
             type: this.type
             modeler: this.modeler
             container: this.container
