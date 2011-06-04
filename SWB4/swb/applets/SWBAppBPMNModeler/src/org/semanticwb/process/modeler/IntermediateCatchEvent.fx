@@ -175,6 +175,7 @@ public class IntermediateCatchEvent extends CatchEvent
     override public function copy() : GraphicalElement {
         var t = IntermediateCatchEvent {
             title: this.title
+            description: this.description
             type: this.type
             modeler: this.modeler
             container: this.container
