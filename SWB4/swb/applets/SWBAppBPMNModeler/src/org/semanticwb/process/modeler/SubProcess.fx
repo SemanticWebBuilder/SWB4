@@ -46,7 +46,7 @@ public class SubProcess extends Activity
         onMouseClicked:function(e: MouseEvent): Void {
             if (e.clickCount >= 2 and containerable) {
                 modeler.containerElement=this;
-                modeler.setSelectedNode(this);
+                modeler.unselectAll();
             }
         },
     }
@@ -364,6 +364,7 @@ public class SubProcess extends Activity
     public override function copy() : GraphicalElement {
         var t = SubProcess {
             title: this.title
+            description: this.description
             type: this.type
             modeler: this.modeler
             isLoop: this.isLoop
