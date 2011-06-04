@@ -95,6 +95,7 @@ public class ExclusiveStartEventGateway extends EventBasedGateway
     override public function copy() : GraphicalElement {
         var t = ExclusiveStartEventGateway {
             title: this.title
+            description: this.description
             type: this.type
             modeler: this.modeler
             container: this.container
