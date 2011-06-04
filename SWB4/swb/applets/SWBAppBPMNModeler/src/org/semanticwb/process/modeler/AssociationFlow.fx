@@ -7,7 +7,6 @@
 package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
-import javafx.scene.input.MouseEvent;
 
 /**
  * Clase que representa un flujo de asociación en un diagrama BPMN 2.0
