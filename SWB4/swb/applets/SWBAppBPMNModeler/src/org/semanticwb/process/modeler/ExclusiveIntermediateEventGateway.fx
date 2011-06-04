@@ -102,6 +102,7 @@ public class ExclusiveIntermediateEventGateway extends EventBasedGateway
     override public function copy() : GraphicalElement {
         var t = ExclusiveIntermediateEventGateway {
             title: this.title
+            description: this.description
             type: this.type
             modeler: this.modeler
             container: this.container
