@@ -8,6 +8,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -17,7 +19,7 @@ import org.w3c.dom.NodeList;
  */
 public class PropertyInfo
 {
-
+    private static final Logger log = SWBUtils.getLogger(PropertyInfo.class);
     private final Field field;
     private final String name;
     private final String type;
@@ -25,6 +27,7 @@ public class PropertyInfo
     private final ClassInfo info;
     private final String tagname;
     private final boolean isBasic;
+
     public PropertyInfo(Field field, ClassInfo info, String tagname)
     {
         this.tagname = tagname;
@@ -32,7 +35,7 @@ public class PropertyInfo
         name = field.getName();
         ismultiple = field.getType().isArray();
         String _type = field.getType().getCanonicalName();
-        boolean _isBasic=field.getType().isPrimitive();
+        boolean _isBasic = field.getType().isPrimitive();
         if (_type.equals("java.util.ArrayList"))
         {
             ismultiple = true;
@@ -41,11 +44,11 @@ public class PropertyInfo
             if (stringListType.getActualTypeArguments() != null && stringListType.getActualTypeArguments().length > 0 && stringListType.getActualTypeArguments()[0] instanceof Class)
             {
                 _type = ((Class) stringListType.getActualTypeArguments()[0]).getCanonicalName();
-                _isBasic=((Class) stringListType.getActualTypeArguments()[0]).isPrimitive();
+                _isBasic = ((Class) stringListType.getActualTypeArguments()[0]).isPrimitive();
             }
 
         }
-        this.isBasic=_isBasic;
+        this.isBasic = _isBasic;
         if (_type.equals("float"))
         {
             _type = "java.lang." + _type;
@@ -77,10 +80,12 @@ public class PropertyInfo
         this.type = _type;
         this.info = info;
     }
+
     public boolean isBasic()
     {
         return isBasic;
     }
+
     public String getName()
     {
         return name;
@@ -90,7 +95,23 @@ public class PropertyInfo
     {
         return field;
     }
+    public PropertyInfo[] getProperties()
+    {        
+        if(!isBasic)
+        {
+            try
+            {
+                ClassInfo propInfo = info.getParameterDefinition().getInfo(type);
+                return propInfo.getProperties();
+            }
+            catch(ServiceException se)
+            {
+                log.warn(se);
+            }
 
+        }
+        return new PropertyInfo[0];
+    }
     public Object getValue(Object instance)
     {
         try
@@ -153,6 +174,19 @@ public class PropertyInfo
     public String toString()
     {
         return "PropertyInfo{" + "name=" + name + '}';
+    }
+
+    public Object newInstance() throws ServiceException
+    {
+        try
+        {
+            Class _clazz = Class.forName(type);
+            return _clazz.newInstance();
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e);
+        }
     }
 
     public ArrayList<Object> getValues(Element element, Object instance) throws ServiceException
