@@ -41,4 +41,19 @@ public class Input
     {
         return parameters.toArray(new ParameterDefinition[parameters.size()]);
     }
+    public ParameterDefinition getParameterDefinitionByName(String name)
+    {
+        if(name==null)
+        {
+            throw new NullPointerException("The name can not be null");
+        }
+        for(ParameterDefinition def : parameters)
+        {
+            if(name.equals(def.getName()))
+            {
+                return def;
+            }
+        }
+        return null;
+    }
 }
