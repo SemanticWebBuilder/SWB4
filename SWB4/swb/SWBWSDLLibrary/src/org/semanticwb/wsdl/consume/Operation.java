@@ -47,7 +47,7 @@ public class Operation
     private final Ouput output;
     private final ServiceInfo info;
 
-    public Operation(Element operation, ServiceInfo info)
+    public Operation(Element operation, ServiceInfo info) throws ServiceException
     {
         this.info = info;
         this.operation = operation;
