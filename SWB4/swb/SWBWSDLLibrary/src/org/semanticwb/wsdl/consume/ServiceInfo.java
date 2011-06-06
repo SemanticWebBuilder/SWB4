@@ -339,4 +339,19 @@ public class ServiceInfo
     {
         return url;
     }
+    public Operation getOperationByName(String name)
+    {
+        if(name==null)
+        {
+            throw new NullPointerException("The operation name is null");
+        }
+        for(Operation op : operations)
+        {
+            if(name.equals(op.getName()))
+            {
+                return op;
+            }
+        }
+        return null;
+    }
 }
