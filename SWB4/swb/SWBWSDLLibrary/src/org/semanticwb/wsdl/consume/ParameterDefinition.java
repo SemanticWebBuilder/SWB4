@@ -411,7 +411,7 @@ public class ParameterDefinition
         return clazz;
     }
 
-    public Object getInstance()
+    public Object newInstance()
     {
         try
         {
@@ -505,7 +505,7 @@ public class ParameterDefinition
                 Element element = (Element) list.item(i);
                 ClassInfo info = getInfo(clazz);
                 PropertyInfo[] properties = info.getProperties();
-                Object instance = this.getInstance();
+                Object instance = this.newInstance();
                 if (properties.length == 0)
                 {
                 }
