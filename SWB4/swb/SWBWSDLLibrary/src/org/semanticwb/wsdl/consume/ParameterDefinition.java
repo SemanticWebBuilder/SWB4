@@ -30,7 +30,7 @@ public class ParameterDefinition
     private static final String NL = "\r\n";
     private final String name;
     private final String type;
-    private final Element part;
+    //private final Element part;
     private Element definition;
     private String namespace;
     private final HashMap<Class, ClassInfo> classes = new HashMap<Class, ClassInfo>();
@@ -44,7 +44,7 @@ public class ParameterDefinition
     public ParameterDefinition(Element part, Operation operation) throws ServiceException
     {
         this.operation = operation;
-        this.part = part;
+        //this.part = part;
         String _name = "";
         if (part.getAttribute("name") != null)
         {
@@ -162,6 +162,10 @@ public class ParameterDefinition
                 }
             }
         }
+        if (_name.equals("restriction"))
+        {
+
+        }
         if (_name.equals("simpleType"))
         {
             NodeList childs = element.getChildNodes();
@@ -240,6 +244,10 @@ public class ParameterDefinition
                 }
                 if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
                 {
+                    if("1".equals(minOccurs) && "1".equals(maxOccurs))
+                    {
+                        sb.append("@Required" + NL);
+                    }
                     sb.append(" public ").append(_className).append(" ").append(_varname).append(";" + NL);
                 }
                 return;
@@ -337,6 +345,10 @@ public class ParameterDefinition
                 }
                 if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
                 {
+                    if("1".equals(minOccurs) && "1".equals(maxOccurs))
+                    {
+                        sb.append("@Required" + NL);
+                    }
                     sb.append(" public ").append(_className).append(" ").append(_varname).append(";" + NL);
                 }
 
@@ -364,7 +376,8 @@ public class ParameterDefinition
     private String getCode(Element element, String className)
     {
         StringBuilder sb = new StringBuilder();
-
+        sb.append("import org.semanticwb.wsdl.consume.Required;" + NL);
+        sb.append("" + NL);
         sb.append("public class ").append(className).append(" {" + NL);
         sb.append("" + NL);
         sb.append("     public ").append(className).append("()" + NL);
