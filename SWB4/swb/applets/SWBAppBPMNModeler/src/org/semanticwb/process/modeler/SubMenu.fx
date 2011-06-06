@@ -90,6 +90,7 @@ public class SubMenu extends CustomNode
             ]
             onMouseEntered: function( e: MouseEvent ):Void
             {
+                if (not modeler.isLocked()) {
                  over=true;
 
                  if(toolBar!=null)
@@ -107,32 +108,43 @@ public class SubMenu extends CustomNode
                         ModelerUtils.startToolTip(text, toolTipText, layoutX, layoutY+layoutBounds.height);
                      }
                  }
+                 }
             }
             onMouseExited: function( e: MouseEvent ):Void
             {
+                if (not modeler.isLocked()) {
                  over=false;
                  ModelerUtils.stopToolTip();
+                 }
             }
             onMousePressed: function( e: MouseEvent ):Void
             {
+                if (not modeler.isLocked()) {
                  if(modeler.tempNode==null)modeler.disablePannable=true;
                  ModelerUtils.clickedNode=this;
                  ModelerUtils.popup.hide();
                  clicked=true;
+                 }
             }
             onMouseReleased: function( e: MouseEvent ):Void
             {
+                if (not modeler.isLocked()) {
                 if(modeler.tempNode==null)modeler.disablePannable=false;
                 ModelerUtils.clickedNode=null;
+                }
             }
             onKeyPressed: function( e: KeyEvent ):Void
             {
+                if (not modeler.isLocked()) {
                  if(e.code==e.code.VK_SPACE)action();
                  modeler.keyPressed(e);
+                 }
             }
             onKeyReleased: function( e: KeyEvent ):Void
             {
+                if (not modeler.isLocked()) {
                  modeler.keyReleased(e);
+                 }
             }
 
         }
