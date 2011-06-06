@@ -40,7 +40,6 @@ public class ConnectionObject  extends CustomNode
     public var action : String=bind title;
     public var uri : String;
     public var text : EditableText;
-    public var isMultiLine: Boolean;
     //public var points : Point[];
     public var arrowType : String;
     public var handles: LineHandle[];    
@@ -73,7 +72,6 @@ public class ConnectionObject  extends CustomNode
     public override function create(): Node
     {
         blocksMouse = true;
-        isMultiLine=false;
         pini=Point{ x: getStartConnectionX(ini,end) y: getStartConnectionY(ini,end) };
         pend=Point{ x: getEndConnectionX(end,ini) y: getEndConnectionY(end,ini) };
         pinter1=Point{ x: getInter1ConnectionX(ini, end, pini, pend), y: getInter1ConnectionY(ini, end, pini, pend)};
@@ -158,7 +156,7 @@ public class ConnectionObject  extends CustomNode
         //println("Creando linea");
         delete elements;
         insert MoveTo{x:bind pini.x,y:bind pini.y} into elements;
-        if (isMultiLine) {
+        if (not handles.isEmpty()) {
             for (p in handles) {
                 insert LineTo{x: bind p.x,y: bind p.y} into elements;
             }
@@ -186,7 +184,7 @@ public class ConnectionObject  extends CustomNode
     function setType(type: String): Void {
         var lnode = pini;
 
-        if (isMultiLine) {
+        if (not handles.isEmpty()) {
             if (handles.size()>=1) {
                 var han = handles[handles.size()-1];
                 lnode = Point {
@@ -349,7 +347,6 @@ public class ConnectionObject  extends CustomNode
                     x: e.sceneX
                     y: e.sceneY
                 };
-                isMultiLine = true;
                 if (handles.isEmpty()) {
                     buildDefaultHandlers();
                 } else {
@@ -406,9 +403,6 @@ public class ConnectionObject  extends CustomNode
     /**Elimina un nodo tirador del trayecto del objeto de conexión*/
     public function removeLineHandler(lh: LineHandle) : Void {
         delete lh from handles;
-        if (handles.isEmpty()) {
-            isMultiLine=false;
-        }
         updatePoints();
     }
 
