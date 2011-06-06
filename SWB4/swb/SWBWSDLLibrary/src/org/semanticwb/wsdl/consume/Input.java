@@ -6,7 +6,6 @@ package org.semanticwb.wsdl.consume;
 
 import java.util.ArrayList;
 import org.semanticwb.wsdl.util.XMLDocumentUtil;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -20,7 +19,7 @@ public class Input
     private final ArrayList<ParameterDefinition> parameters = new ArrayList<ParameterDefinition>();
     private final Element input;
     private final Operation operation;
-    public Input(Element input,Operation operation)
+    public Input(Element input,Operation operation) throws ServiceException
     {
         this.operation=operation;
         this.input = input;

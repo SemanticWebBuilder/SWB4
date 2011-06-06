@@ -19,7 +19,7 @@ public class Ouput
     private final ArrayList<ParameterDefinition> parameters = new ArrayList<ParameterDefinition>();
     private final Element output;
     private final Operation operation;
-    public Ouput(Element output,Operation operation)
+    public Ouput(Element output,Operation operation) throws ServiceException
     {
         this.operation=operation;
         this.output = output;
