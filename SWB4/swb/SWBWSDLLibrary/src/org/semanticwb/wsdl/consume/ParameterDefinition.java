@@ -162,6 +162,19 @@ public class ParameterDefinition
                 }
             }
         }
+        if (_name.equals("simpleType"))
+        {
+            NodeList childs = element.getChildNodes();
+            for (int i = 0; i < childs.getLength(); i++)
+            {
+                if (childs.item(i) instanceof Element)
+                {
+                    Element childElement = (Element) childs.item(i);
+                    getCode(childElement, className, sb);
+
+                }
+            }
+        }
         if (_name.equals("sequence"))
         {
             NodeList childs = element.getChildNodes();
@@ -304,6 +317,10 @@ public class ParameterDefinition
                 if (elements.length == 0)
                 {
                     elements = XMLDocumentUtil.getElement(varType, element.getOwnerDocument(), "complexType");
+                }
+                if (elements.length == 0)
+                {
+                    elements = XMLDocumentUtil.getElement(varType, element.getOwnerDocument(), "simpleType");
                 }
                 if (elements.length > 0)
                 {
