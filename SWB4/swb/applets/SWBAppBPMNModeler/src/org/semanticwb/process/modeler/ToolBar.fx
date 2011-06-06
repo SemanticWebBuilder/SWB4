@@ -79,9 +79,13 @@ public class ToolBar extends CustomNode
     public var y:Number;
     public var w:Number;
     public var h:Number;
+    public var simpleMode:Boolean=false;
     var dx : Number;                        //temporal drag x
     var dy : Number;                        //temporal drag y
     var isApplet:Boolean=FX.getArgument(WBConnection.PRM_CGIPATH).toString()!=null;
+    var ret:Group;
+    var simpleBar: Group;
+    var fullBar: Group;
 
     var fileChooser = javax.swing.JFileChooser{};
     var imageFileChooser = javax.swing.JFileChooser{};
@@ -122,11 +126,6 @@ public class ToolBar extends CustomNode
                 delete modeler.contents;
                 modeler.containerElement=null;
                 createProcess(proc);
-                var apath: String = "new:subprocess:17|new:usertask:1";
-                var activ: String = "new:subprocess:12";
-                modeler.lock();
-                modeler.setDoneProcessPath(apath);
-                modeler.setCurrentProcessActivities(activ);
             }catch(e:Exception){Alert.inform("Error",e.getMessage());}
         }
     }
@@ -469,8 +468,6 @@ public class ToolBar extends CustomNode
             if(node instanceof GraphicalElement)
             {
                 ge=modeler.getGraphElementByURI(uri);
-//                ge.setStatus(GraphicalElement.STATUS_DONE);
-                println("{ge.title} - {ge.uri}");
             }
 
             if(ge!=null)
@@ -514,13 +511,8 @@ public class ToolBar extends CustomNode
                     }
                 }
 
-                co2 = co.copy();
-                co2.uri = co.uri;
-                co2.updatePoints();
-                if (co2.handles.isEmpty()) {
-                    co2.buildDefaultHandlers();
-                }
-                modeler.add(co2);
+                modeler.add(co);
+                co.updatePoints();
                 //println("jsobj:{js.toString()}, i: {i}");
             }
             i++;
@@ -2048,12 +2040,9 @@ public class ToolBar extends CustomNode
         var flow: Flow;
         var imt: ImageView = null;
 
-        var ret=Group
-        {
+        simpleBar = Group {
              layoutX:bind x
              layoutY:bind y
-             //scaleX:.5
-             //scaleY:.5
              content: [
                 flow = Flow {
                     height: bind h
@@ -2063,7 +2052,92 @@ public class ToolBar extends CustomNode
                             image: imgTitleBar
                             smooth: false
                             cursor:Cursor.MOVE
-                            //blocksMouse:true
+                            onMousePressed: function (e: MouseEvent): Void
+                            {
+                                ModelerUtils.clickedNode=this;
+                                modeler.disablePannable=true;
+                                dx=x-e.sceneX;
+                                dy=y-e.sceneY;
+                            }
+                            onMouseDragged: function (e: MouseEvent): Void
+                            {
+                                var tx = dx + e.sceneX;
+                                var ty = dy + e.sceneY;
+                                if (tx >= 0 and e.sceneX <= stage.scene.width) {
+                                    x=dx+e.sceneX;
+                                }
+                                if (ty >= 0 and e.sceneY <= stage.scene.height) {
+                                    y=dy+e.sceneY;
+                                }
+                            }
+                            onMouseReleased: function (e: MouseEvent): Void
+                            {
+                                ModelerUtils.clickedNode=null;
+                                modeler.disablePannable=false;
+                            }
+                        },
+                        ImgButton {
+                            text: bind if (not hidden) ##"hideTooltip" else ##"showTooltip"
+                            toolBar:this;
+                            image: bind if (not hidden) "images/sube_1.png" else "images/baja_1.png"
+                            imageOver: bind if (not hidden) "images/sube_2.png" else "images/baja_2.png"
+                            action: function():Void
+                            {
+                                ModelerUtils.stopToolTip();
+                                hidden = not hidden;
+                                if (hidden) {
+                                    imt = ImageView {
+                                        image: imgBottomBar
+                                        smooth: false
+                                    };
+                                    insert imt after flow.content[1];
+                                } else {
+                                    if (imt != null) {
+                                        delete imt from flow.content;
+                                        imt = null;
+                                    }
+                                }
+                            }
+                        },
+                        ImgButton {
+                            text: bind if(not stage.fullScreen) ##"maximizeTooltip" else ##"minimizeTooltip"
+                            toolBar:this;
+                            image: bind if(not stage.fullScreen) "images/maxim_1.png" else "images/minim_1.png"
+                            imageOver: bind if(not stage.fullScreen) "images/maxim_2.png" else "images/minim_2.png"
+                            action: function():Void
+                            {
+                                ModelerUtils.clickedNode=null;
+                                modeler.disablePannable=false;
+                                stage.fullScreen = not stage.fullScreen;
+                            }
+                            visible: bind not hidden
+                        },
+                        ImageView {
+                            image: imgBottomBar
+                            smooth: false
+                            visible: bind not hidden
+                        }
+                    ]
+                }
+             ]
+             cursor:Cursor.HAND;
+             blocksMouse:true
+             visible: bind modeler.isLocked()
+            };
+
+            fullBar=Group
+            {
+             layoutX:bind x
+             layoutY:bind y
+             content: [
+                flow = Flow {
+                    height: bind h
+                    width: bind w
+                    content: [
+                        ImageView {
+                            image: imgTitleBar
+                            smooth: false
+                            cursor:Cursor.MOVE
                             onMousePressed: function (e: MouseEvent): Void
                             {
                                 ModelerUtils.clickedNode=this;
@@ -2216,6 +2290,12 @@ public class ToolBar extends CustomNode
              blocksMouse:true
              visible: bind not (modeler.isLocked())
         };
+
+        if (simpleMode) {
+            ret = simpleBar;
+        } else  {
+            ret = fullBar;
+        }
 
         return ret;
     }
