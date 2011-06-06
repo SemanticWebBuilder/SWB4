@@ -102,7 +102,6 @@ public class ConditionalFlow extends SequenceFlow
             }
         }
         if (e.button == e.button.SECONDARY) {
-            isMultiLine=true;
             var p = Point {
                 x: e.sceneX
                 y: e.sceneY
