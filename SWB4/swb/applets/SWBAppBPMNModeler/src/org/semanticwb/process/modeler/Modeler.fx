@@ -238,8 +238,14 @@ public class Modeler extends CustomNode
         for (uri in uris) {
             if (uri != null and not uri.trim().equals("")){
                 var ge = getGraphElementByURI(uri);
-                if (ge != null)
+                if (ge != null) {
                     ge.setStatus(GraphicalElement.STATUS_ACTIVE);
+                    var parent = ge.container;
+                    while (parent != null) {
+                        parent.setStatus(GraphicalElement.STATUS_ACTIVE);
+                        parent = parent.container;
+                    }
+                }
             }
         }
     }
@@ -571,16 +577,13 @@ public class Modeler extends CustomNode
                     if(overNode.canEndLink(a)) {
                         a.end=overNode;
                         a.updatePoints();
-                        if (a.handles.isEmpty()) {
-                            a.buildDefaultHandlers();
-                        }
                     }
                 }else
                 {
                     a.end=null;
                 }
-                a.updateEndPoint();
-                a.updateStartPoint();
+                a.updatePoints();
+                //a.updateStartPoint();
             }
         }
         else if(ModelerUtils.clickedNode instanceof ConnectionObject)
@@ -588,8 +591,9 @@ public class Modeler extends CustomNode
             tempNode=ModelerUtils.clickedNode;
             var a=tempNode as ConnectionObject;
             a.end=null;
-            a.updateEndPoint();
-            a.updateStartPoint();
+            a.updatePoints();
+            //a.updateEndPoint();
+            //a.updateStartPoint();
         }
     }
 
@@ -696,8 +700,9 @@ public class Modeler extends CustomNode
                     {
                         a.ini=ge;
                         add(tempNode);
-                        a.updateStartPoint();
-                        a.updateEndPoint();
+                        a.updatePoints();
+                        //a.updateStartPoint();
+                        //a.updateEndPoint();
                     }
                     close=false;
                     ModelerUtils.clickedNode=null;
