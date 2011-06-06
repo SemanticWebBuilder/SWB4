@@ -188,7 +188,7 @@ public class PropertyInfo
     {
         try
         {
-            Class _clazz = Class.forName(type);
+            Class _clazz = this.getDefinitionClass();
             return _clazz.newInstance();
         }
         catch (Exception e)

@@ -522,4 +522,34 @@ public class ParameterDefinition
         }
         return null;
     }
+
+    @Override
+    public String toString()
+    {
+        return "ParameterDefinition{" + "name=" + name + "clazz=" + clazz + "l=" + l + '}';
+    }
+    public PropertyInfo[] getProperties()
+    {
+        ClassInfo info = getInfo(this.clazz);
+        return info.getProperties();
+    }
+
+    public PropertyInfo getPropertyInfoByName(String name)
+    {
+        if(name==null)
+        {
+            throw new NullPointerException("The name can not be null");
+        }
+        ClassInfo info = getInfo(this.clazz);
+        for(PropertyInfo prop : info.getProperties())
+        {
+            if(name.equalsIgnoreCase(prop.getName()))
+            {
+                return prop;
+            }
+        }
+        return null;
+    }
+    
+
 }
