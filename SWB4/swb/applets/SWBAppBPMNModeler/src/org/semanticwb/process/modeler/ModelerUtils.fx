@@ -36,6 +36,14 @@ public var dialog = ModalDialog {
     visible: false
 }
 
+//public var idialog = IndicatorsDialog {
+//    w: 390
+//    h: 180
+//    borderSize: 1
+//    title: "Indicadores"
+//    visible: false
+//}
+
 public function setDialogNode(node: GraphicalElement) {
     dialog.setBoundNode(node);
 }
@@ -62,13 +70,13 @@ public var popup=MenuPopup {
         MenuItem {
            caption: "Item1"
            action: function(e: MouseEvent) {
-               println("Item1 clicked");
+               //println("Item1 clicked");
            }
         },
         MenuItem {
            caption: "Item2"
            action: function(e: MouseEvent) {
-               println("Item2 clicked");
+               //println("Item2 clicked");
            }
         }
     ]
