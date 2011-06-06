@@ -24,7 +24,7 @@ public class PropertyInfo
     private boolean ismultiple = false;
     private final ClassInfo info;
     private final String tagname;
-
+    private final boolean isBasic;
     public PropertyInfo(Field field, ClassInfo info, String tagname)
     {
         this.tagname = tagname;
@@ -32,6 +32,7 @@ public class PropertyInfo
         name = field.getName();
         ismultiple = field.getType().isArray();
         String _type = field.getType().getCanonicalName();
+        boolean _isBasic=field.getType().isPrimitive();
         if (_type.equals("java.util.ArrayList"))
         {
             ismultiple = true;
@@ -40,9 +41,11 @@ public class PropertyInfo
             if (stringListType.getActualTypeArguments() != null && stringListType.getActualTypeArguments().length > 0 && stringListType.getActualTypeArguments()[0] instanceof Class)
             {
                 _type = ((Class) stringListType.getActualTypeArguments()[0]).getCanonicalName();
+                _isBasic=((Class) stringListType.getActualTypeArguments()[0]).isPrimitive();
             }
 
         }
+        this.isBasic=_isBasic;
         if (_type.equals("float"))
         {
             _type = "java.lang." + _type;
@@ -74,7 +77,10 @@ public class PropertyInfo
         this.type = _type;
         this.info = info;
     }
-
+    public boolean isBasic()
+    {
+        return isBasic;
+    }
     public String getName()
     {
         return name;
