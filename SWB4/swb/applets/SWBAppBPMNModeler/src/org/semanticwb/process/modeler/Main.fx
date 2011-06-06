@@ -21,8 +21,8 @@ var maxx : Number = bind scene.width; //on replace{ modeler.organizeMap();};
 var maxy : Number = bind scene.height; //on replace{ modeler.organizeMap();};
 
 var lang : String = FX.getArgument("lang") as String;
-var donePath : String = FX.getArgument("donePath") as String;
-var currentActivities : String = FX.getArgument("currentActivities") as String;
+var donePath : String = FX.getArgument("done") as String;
+var currentActivities : String = FX.getArgument("pending") as String;
 var mode: String = FX.getArgument("mode") as String;
 
 if (mode == null) mode= "edit";
@@ -48,15 +48,7 @@ var modeler:Modeler = Modeler
 
 modeler.load("home");
 modeler.organizeMap();
-
-if (mode.equals("view")) {
-    modeler.lock();
-    modeler.setDoneProcessPath(donePath);
-    modeler.setCurrentProcessActivities(currentActivities);    
-} else if (mode.equals("edit")) {
-    modeler.unLock();
-}
-
+/**********************************************/
 var toolbar:ToolBar = ToolBar
 {
     w:49
@@ -65,11 +57,27 @@ var toolbar:ToolBar = ToolBar
     showHelp: true
 }
 
-modeler.toolBar=toolbar;
+if (not (mode.equals("view"))) {
+    modeler.unLock();
+}
 
 if (mode.equals("view")) {
+    modeler.lock();
+    toolbar = null;
+    toolbar = ToolBar
+    {
+        w:49
+        h:bind maxy
+        modeler: modeler
+        showHelp: true
+        simpleMode: true
+    }
     toolbar.loadProcess();
+    modeler.setCurrentProcessActivities(currentActivities);
 }
+/**********************************************/
+
+modeler.toolBar=toolbar;
 
 var path:ContainerPath = ContainerPath
 {
@@ -88,6 +96,7 @@ var scene : Scene = Scene {
         toolbar,
         ModelerUtils.getToolTip(),
         ModelerUtils.dialog,
+        //ModelerUtils.idialog,
 //            MenuBar{
 //                menus: [
 //                    Menu{
