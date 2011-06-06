@@ -60,7 +60,6 @@ public class MessageFlow extends ConnectionObject
             }
         }
         if (e.button == e.button.SECONDARY) {
-            isMultiLine=true;
             var p = Point {
                 x: e.sceneX
                 y: e.sceneY
