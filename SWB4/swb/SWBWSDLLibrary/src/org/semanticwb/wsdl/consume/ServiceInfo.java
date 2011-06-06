@@ -39,7 +39,7 @@ public class ServiceInfo
     private static final String APPLICATION_WSDL_CONTENT_TYPE ="application/wsdl+xml";
     private final URL url;
     private Document doc;
-    HashSet<Operation> operations = new HashSet<Operation>();
+    private final HashSet<Operation> operations = new HashSet<Operation>();
 
     public ServiceInfo(URL url)
     {
