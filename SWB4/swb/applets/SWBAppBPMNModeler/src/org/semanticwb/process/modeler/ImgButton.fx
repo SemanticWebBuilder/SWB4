@@ -113,12 +113,17 @@ public class ImgButton extends CustomNode
                  ModelerUtils.clickedNode=this;
                  var tmpCursor=cursor;
                  cursor=Cursor.WAIT;
-                 action();
                  cursor=tmpCursor;
             }
             onMouseReleased: function( e: MouseEvent ):Void
             {
                 ModelerUtils.clickedNode=null;
+            }
+
+            onMouseClicked: function( e: MouseEvent ):Void
+            {
+                subMenu.onMouseExited(e);
+                action();
             }
 
             onKeyTyped: function( e: KeyEvent ):Void
