@@ -36,7 +36,7 @@ public class PropertyInfo
         name = field.getName();
         ismultiple = field.getType().isArray();
         String _type = field.getType().getCanonicalName();
-        boolean _isBasic = field.getType().isPrimitive();
+        
         Required req=field.getAnnotation(Required.class);
         boolean _required=false;
         if(req!=null)
@@ -44,6 +44,7 @@ public class PropertyInfo
             _required=true;
         }
         this.required=_required;
+        boolean _isBasic = field.getType().isPrimitive();
         if (_type.equals("java.util.ArrayList"))
         {
             ismultiple = true;
@@ -56,7 +57,8 @@ public class PropertyInfo
             }
 
         }
-        this.isBasic = _isBasic;
+
+        
         if (_type.equals("float"))
         {
             _type = "java.lang." + _type;
@@ -85,6 +87,15 @@ public class PropertyInfo
         {
             _type = "java.lang." + _type;
         }
+        if(_type.equals("java.lang.String"))
+        {
+            _isBasic=true;
+        }
+        if(_type.equals("java.lang.Date"))
+        {
+            _isBasic=true;
+        }
+        this.isBasic = _isBasic;
         this.type = _type;
         this.info = info;
     }

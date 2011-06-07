@@ -38,12 +38,26 @@ public class ParameterDefinition
     private final Map<String, Class> classDictionary = new HashMap<String, Class>();
     private final Map<String, String> tagnames = new HashMap<String, String>();
     private Class clazz;
-    private final MemoryClassLoader l = new MemoryClassLoader(getClass().getClassLoader());
-    private final Operation operation;
+    private final MemoryClassLoader l = new MemoryClassLoader(getClass().getClassLoader());    
+    private final org.jdom.Document jdom;
 
-    public ParameterDefinition(Element part, Operation operation) throws ServiceException
-    {
-        this.operation = operation;
+    public ParameterDefinition(Element part) throws ServiceException
+    {        
+        Document doc = part.getOwnerDocument();
+        String xml = SWBUtils.XML.domToXml(doc, "utf-8", true);
+        StringReader r = new StringReader(xml);
+        SAXBuilder builder = new SAXBuilder();
+        org.jdom.Document _jdom = null;
+        try
+        {
+            _jdom = builder.build(r);
+        }
+        catch (Exception e)
+        {
+
+            log.error(e);
+        }
+        this.jdom = _jdom;
         //this.part = part;
         String _name = "";
         if (part.getAttribute("name") != null)
@@ -65,8 +79,7 @@ public class ParameterDefinition
                 definition = definitions[0];
                 Element schema = getSchema(definition);
                 if (schema == null)
-                {
-                    Document doc = definition.getOwnerDocument();
+                {                    
                     schema = doc.getDocumentElement();
                 }
                 String elementName = definition.getAttribute("name");
@@ -181,31 +194,17 @@ public class ParameterDefinition
 
             if (isEnumeration)
             {
-                varType = element.getAttribute("name");
-                String _varname = varType.toLowerCase();
-
+                //varType = element.getAttribute("name");
+                String _varname = ((Element) element.getParentNode()).getAttribute("name").toLowerCase();
                 String base = element.getAttribute("base");
                 int pos = base.indexOf(":");
                 if (pos != -1)
                 {
                     String prefix = base.substring(0, pos);
                     String localname = base.substring(pos + 1);
-                    Document doc = element.getOwnerDocument();
-                    String xml = SWBUtils.XML.domToXml(doc, "utf-8", true);
-                    StringReader r = new StringReader(xml);
-                    SAXBuilder builder = new SAXBuilder();
-                    String uri = null;
-                    try
-                    {
-                        org.jdom.Document jdom = builder.build(r);
-                        Namespace ns = jdom.getRootElement().getNamespace(prefix);
-                        uri = ns.getURI();
-                    }
-                    catch (Exception e)
-                    {
-                        log.error(e);
-                    }
-
+                    varType = localname;
+                    Namespace ns = jdom.getRootElement().getNamespace(prefix);
+                    String uri = ns==null?"":ns.getURI();                    
                     if (uri != null && uri.equals(SCHEMA_NAMESPACE))
                     {
 
@@ -285,21 +284,8 @@ public class ParameterDefinition
                 {
                     String prefix = ref.substring(0, pos);
                     String localname = ref.substring(pos + 1);
-                    Document doc = element.getOwnerDocument();
-                    String xml = SWBUtils.XML.domToXml(doc, "utf-8", true);
-                    StringReader r = new StringReader(xml);
-                    SAXBuilder builder = new SAXBuilder();
-                    String uri = null;
-                    try
-                    {
-                        org.jdom.Document jdom = builder.build(r);
-                        Namespace ns = jdom.getRootElement().getNamespace(prefix);
-                        uri = ns.getURI();
-                    }
-                    catch (Exception e)
-                    {
-                        log.error(e);
-                    }
+                    Namespace ns = jdom.getRootElement().getNamespace(prefix);
+                    String uri = ns==null?"":ns.getURI();
                     if (localname.equals("schema") && SCHEMA_NAMESPACE.equals(uri))
                     {
                     }
@@ -333,8 +319,7 @@ public class ParameterDefinition
                     sb.append(" public ").append(_className).append(" ").append(_varname).append(";" + NL);
                 }
                 return;
-            }
-            Document doc = element.getOwnerDocument();
+            }            
             boolean isBasic = false;
             int pos = varType.indexOf(":");
             if (pos != -1)
@@ -343,55 +328,44 @@ public class ParameterDefinition
                 String prefix = varType.substring(0, pos);
                 varType = varType.substring(pos + 1);
                 if (!prefix.equals("tns"))
-                {
-                    String xml = SWBUtils.XML.domToXml(doc, "utf-8", true);
-                    StringReader r = new StringReader(xml);
-                    SAXBuilder builder = new SAXBuilder();
-                    try
+                {                    
+                    Namespace ns = jdom.getRootElement().getNamespace(prefix);
+                    String uri = ns==null?"":ns.getURI();
+                    if (uri != null && uri.equals(SCHEMA_NAMESPACE))
                     {
-                        org.jdom.Document jdom = builder.build(r);
-                        Namespace ns = jdom.getRootElement().getNamespace(prefix);
-                        String uri = ns.getURI();
-                        if (uri != null && uri.equals(SCHEMA_NAMESPACE))
+                        isBasic = true;
+                        if ("string".equals(varType))
                         {
-                            isBasic = true;
-                            if ("string".equals(varType))
-                            {
-                                varType = "String";
-                            }
-                            if ("int".equals(varType))
-                            {
-                                varType = "int";
-                            }
-                            if ("long".equals(varType))
-                            {
-                                varType = "long";
-                            }
-                            if ("boolean".equals(varType))
-                            {
-                                varType = "boolean";
-                            }
-                            if ("float".equals(varType))
-                            {
-                                varType = "float";
-                            }
-                            if ("short".equals(varType))
-                            {
-                                varType = "short";
-                            }
-                            if ("byte".equals(varType))
-                            {
-                                varType = "byte";
-                            }
-                            if ("datetime".equals(varType))
-                            {
-                                varType = "java.util.Date";
-                            }
+                            varType = "String";
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        log.error(e);
+                        if ("int".equals(varType))
+                        {
+                            varType = "int";
+                        }
+                        if ("long".equals(varType))
+                        {
+                            varType = "long";
+                        }
+                        if ("boolean".equals(varType))
+                        {
+                            varType = "boolean";
+                        }
+                        if ("float".equals(varType))
+                        {
+                            varType = "float";
+                        }
+                        if ("short".equals(varType))
+                        {
+                            varType = "short";
+                        }
+                        if ("byte".equals(varType))
+                        {
+                            varType = "byte";
+                        }
+                        if ("datetime".equals(varType))
+                        {
+                            varType = "java.util.Date";
+                        }
                     }
 
                 }
@@ -565,20 +539,16 @@ public class ParameterDefinition
     {
         Document doc = SWBUtils.XML.getNewDocument();
         Object value = parameter.getValue();
-        ClassInfo info = getInfo(value.getClass());
-        //Element element=doc.createElementNS(namespace, parameter.getName());
-        Element child = info.createElement(value, doc);
-        //element.appendChild(child);
+        ClassInfo info = getInfo(value.getClass());        
+        Element child = info.createElement(value, doc);        
         doc.appendChild(child);
-
         System.out.println("xml: " + SWBUtils.XML.domToXml(doc));
         return doc;
     }
 
     public Object getValue(Document document) throws ServiceException
     {
-        System.out.println(" xml response: " + SWBUtils.XML.domToXml(document));
-        //String tagname=tagnames.get(toUpperCase(type));
+        System.out.println(" xml response: " + SWBUtils.XML.domToXml(document));        
         NodeList list = document.getElementsByTagNameNS(namespace, type);
         if (list.getLength() > 0)
         {

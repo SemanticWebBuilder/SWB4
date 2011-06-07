@@ -31,7 +31,7 @@ public class Ouput
             for (int j = 0; j < parts.getLength(); j++)
             {
                 Element epart = (Element) parts.item(j);
-                ParameterDefinition parameter = new ParameterDefinition(epart,operation);
+                ParameterDefinition parameter = new ParameterDefinition(epart);
                 parameters.add(parameter);
             }
 
