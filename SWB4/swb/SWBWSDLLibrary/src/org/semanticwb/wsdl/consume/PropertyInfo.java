@@ -27,7 +27,8 @@ public class PropertyInfo
     private final ClassInfo info;
     private final String tagname;
     private final boolean isBasic;
-    private final boolean required;    
+    private final boolean required;
+    private final boolean isRestricted;
     public PropertyInfo(Field field, ClassInfo info)
     {
         
@@ -42,6 +43,15 @@ public class PropertyInfo
             _tagname=Tagname.name();
         }
         this.tagname=_tagname;
+
+        boolean _isRestricted=false;
+        EnnumerationRestriction ennumerationRestriction=field.getAnnotation(EnnumerationRestriction.class);
+        if(ennumerationRestriction!=null)
+        {
+            _isRestricted=true;
+        }
+        this.isRestricted=_isRestricted;
+
         Required req=field.getAnnotation(Required.class);
         boolean _required=false;
         if(req!=null)
@@ -104,6 +114,10 @@ public class PropertyInfo
         this.type = _type;
         this.info = info;
     }
+    public boolean isRestricted()
+    {
+        return isRestricted;
+    }
     public String getTagName()
     {
         return tagname;
@@ -159,6 +173,22 @@ public class PropertyInfo
     {
         if (field.getDeclaringClass().getCanonicalName().equals(instance.getClass().getCanonicalName()))
         {
+            EnnumerationRestriction ennumerationRestriction=field.getAnnotation(EnnumerationRestriction.class);
+            if(ennumerationRestriction!=null)
+            {
+                boolean found=false;
+                for(String valueEnnumeration : ennumerationRestriction.values())
+                {
+                    if(valueEnnumeration.equals(value.toString()))
+                    {
+                        found=true;
+                    }
+                }
+                if(!found)
+                {
+                    throw new ServiceException("The values is not value");
+                }
+            }
             try
             {
                 field.set(instance, value);
