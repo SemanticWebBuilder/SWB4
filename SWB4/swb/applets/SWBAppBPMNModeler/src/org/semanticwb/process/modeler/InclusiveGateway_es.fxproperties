@@ -1,3 +1,6 @@
+"msgError1" = "Una compuerta inclusiva no puede tener flujos de secuencia salientes"
+"msgError2" = "Una compuerta inclusiva no puede tener más de un flujo por defecto"
+"msgError3" = "Una compuerta basada en eventos sólo puede ligarse con Eventos"
 "actCopy" = "Copiar"
 "actCut" = "Cortar"
 "actType" = "Tipo"
