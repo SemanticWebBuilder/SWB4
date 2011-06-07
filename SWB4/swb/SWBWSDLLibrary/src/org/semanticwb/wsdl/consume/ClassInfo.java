@@ -83,7 +83,7 @@ public class ClassInfo
         return properties.toArray(new PropertyInfo[properties.size()]);
     }
 
-    public Element createElement(Object value, Document doc)
+    public Element createElement(Object value, Document doc) throws ServiceException
     {
         Element element = doc.createElementNS(namespace, name);
         if (properties.isEmpty()) // simple type
@@ -96,6 +96,10 @@ public class ClassInfo
             for (PropertyInfo prop : properties)
             {
                 Object valueprop = prop.getValue(value);
+                if(valueprop==null && prop.isRequired())
+                {
+                    throw new ServiceException("The property "+ prop.getName() +" is required");
+                }
                 if (valueprop != null)
                 {
                     String _tagname=tagnames.get(prop.getName());

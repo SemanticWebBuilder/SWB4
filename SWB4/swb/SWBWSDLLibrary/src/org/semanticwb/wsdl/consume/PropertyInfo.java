@@ -99,7 +99,10 @@ public class PropertyInfo
         this.type = _type;
         this.info = info;
     }
-
+    public boolean isRequired()
+    {
+        return required;
+    }
     public boolean isBasic()
     {
         return isBasic;
@@ -260,6 +263,10 @@ public class PropertyInfo
                 for (PropertyInfo prop : propInfo.getProperties())
                 {
                     Object valueprop = prop.getValue(element, propInstance);
+                    if(valueprop==null && prop.isRequired())
+                    {
+                        throw new ServiceException("The property "+ prop.getName() +" is required");
+                    }
                     prop.fill(propInstance, valueprop);
                 }
             }
@@ -343,6 +350,10 @@ public class PropertyInfo
                     else
                     {
                         Object valueprop = prop.getValue(element, propInstance);
+                        if(valueprop==null && prop.isRequired())
+                        {
+                            throw new ServiceException("The property "+ prop.getName() +" is required");
+                        }
                         prop.fill(propInstance, valueprop);
                     }
                 }
