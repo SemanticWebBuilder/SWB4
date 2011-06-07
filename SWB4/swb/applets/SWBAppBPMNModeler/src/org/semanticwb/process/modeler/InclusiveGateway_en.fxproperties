@@ -1,3 +1,6 @@
+"msgError1" = "Inclusive Gateway cannot have outgoing Sequence Flow"
+"msgError2" = "Inclusive Gateway can have only one outgoing Default Flow"
+"msgError3" = "Event-based Gateway can only be linked to Events"
 "actCopy" = "Copy"
 "actCut" = "Cut"
 "actType" = "Type"
