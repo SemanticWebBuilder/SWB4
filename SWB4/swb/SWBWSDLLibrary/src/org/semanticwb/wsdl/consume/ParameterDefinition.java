@@ -33,9 +33,8 @@ public class ParameterDefinition
     //private final Element part;
     private Element definition;
     private String namespace;
-    private final HashMap<Class, ClassInfo> classes = new HashMap<Class, ClassInfo>();
-    private final Map<String, String> _classes = new HashMap<String, String>();
-    private final Map<String, Class> classDictionary = new HashMap<String, Class>();    
+    private final HashMap<Class, ClassInfo> classInfoDictionary = new HashMap<Class, ClassInfo>();
+    private final Map<String, String> classesToCompile = new HashMap<String, String>();    
     private Class clazz;
     private final MemoryClassLoader l = new MemoryClassLoader(getClass().getClassLoader());
     private final org.jdom.Document jdom;
@@ -84,15 +83,14 @@ public class ParameterDefinition
                 this.namespace = schema.getAttribute("targetNamespace");
                 final String className = toUpperCase(elementName);                
                 final String code = getCode(definition, className,elementName);
-                _classes.put(className, code);
-                l.addAll(_classes);
+                classesToCompile.put(className, code);
+                l.addAll(classesToCompile);
 
-                for (String classNameToAdd : _classes.keySet())
+                for (String classNameToAdd : classesToCompile.keySet())
                 {
                     try
                     {
-                        Class _clazz = l.loadClass(classNameToAdd);
-                        this.classDictionary.put(classNameToAdd, _clazz);
+                        Class _clazz = l.loadClass(classNameToAdd);                        
                         if (classNameToAdd.equals(className))
                         {
                             this.clazz = _clazz;
@@ -100,7 +98,7 @@ public class ParameterDefinition
 
                         //ClassInfo info = new ClassInfo(_clazz, code,elementName,namespace,tagname);
                         ClassInfo info = new ClassInfo(_clazz, code, elementName, namespace, this);
-                        this.classes.put(_clazz, info);
+                        this.classInfoDictionary.put(_clazz, info);
                     }
                     catch (ClassNotFoundException cnfe)
                     {
@@ -393,7 +391,7 @@ public class ParameterDefinition
             if (varType.equals(""))
             {
                 String code = getCode(element, className,_tagname);
-                _classes.put(_className, code);
+                classesToCompile.put(_className, code);
                 String minOccurs = element.getAttribute("minOccurs");
                 String maxOccurs = element.getAttribute("maxOccurs");
                 if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
@@ -456,7 +454,7 @@ public class ParameterDefinition
                     {
 
                         String code = getCode(elementToCode, _className,_tagname);
-                        _classes.put(_className, code);
+                        classesToCompile.put(_className, code);
                         String minOccurs = element.getAttribute("minOccurs");
                         String maxOccurs = element.getAttribute("maxOccurs");
                         if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
@@ -554,14 +552,15 @@ public class ParameterDefinition
 
     public ClassInfo getInfo(Class clazz)
     {
-        return classes.get(clazz);
+
+        return classInfoDictionary.get(clazz);
     }
 
     public ClassInfo getInfo(String clazz) throws ServiceException
     {
         try
         {
-            Class _clazz = classDictionary.get(clazz);
+            Class _clazz = l.loadClass(clazz);
             return getInfo(_clazz);
         }
         catch (Exception e)
@@ -574,7 +573,7 @@ public class ParameterDefinition
     {
         try
         {
-            Class _clazz = classDictionary.get(clazz);
+            Class _clazz = l.loadClass(clazz);
             if (_clazz == null)
             {
                 return Class.forName(clazz);
