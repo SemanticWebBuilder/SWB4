@@ -197,7 +197,7 @@ public class PropertyInfo
                     {
                         sb.deleteCharAt(sb.length()-1);
                     }
-                    throw new ServiceException("The value is not valid ( "+ sb.toString() +" ) are valid");
+                    throw new ServiceException("The value is not valid, ("+ sb.toString() +") are valid");
                 }
             }
             try
