@@ -36,7 +36,7 @@ public class Operation
     protected static final String TEXT_XML = "text/xml";
     private static final Logger log = SWBUtils.getLogger(Operation.class);
     private static final String SOAP_ENVELOPE_NAMESPACE = "http://schemas.xmlsoap.org/soap/envelope/";
-    private static final String SOAP12_EVELOPE_NAMESPACE = "http://www.w3.org/2001/12/soap-envelope";
+    private static final String SOAP12_ENVELOPE_NAMESPACE = "http://www.w3.org/2001/12/soap-envelope";
     private static final String SOAP_WSDL_ENVELOPE_NAMESPACE = "http://schemas.xmlsoap.org/wsdl/soap/";
     private static final String SOAP12_NAMESPACE = "http://schemas.xmlsoap.org/wsdl/soap12/";
     private String portType = null;
@@ -166,12 +166,11 @@ public class Operation
     private Document execute12(Document doc, Element binding) throws ServiceException
     {
         URL url = getURL(binding);
-        String soapAction = "\"" + getSoapAction(binding) + "\"";
+        
         try
         {
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("POST");
-            con.setRequestProperty("SOAPAction", soapAction);
+            con.setRequestMethod("POST");            
             {
                 String charset = Charset.forName("utf-8").name();
                 con.setRequestProperty(CONTENT_TYPE, "text/xml" + "; charset=" + charset);
@@ -381,11 +380,20 @@ public class Operation
         }
     }
 
-    private Document serialize(ArrayList<ParameterToExecute> parameters, Element bindig) throws ServiceException
+    private Document serialize(ArrayList<ParameterToExecute> parameters, boolean issoap12) throws ServiceException
     {
 
         Document doc = SWBUtils.XML.getNewDocument();
-        Element body = createEmptyEnvelope(doc);
+        Element body=null;
+        if(issoap12)
+        {
+            body = createEmptyEnvelope12(doc);
+        }
+        else
+        {
+            body = createEmptyEnvelope(doc);
+        }
+        
         for (ParameterToExecute p : parameters)
         {
             Document docParameter = p.getDefinition().toDocument(p.getParameter());
@@ -409,10 +417,10 @@ public class Operation
 
     private Element createEmptyEnvelope12(Document doc)
     {
-        Element envelope = doc.createElementNS(SOAP12_EVELOPE_NAMESPACE, "Envelope");
-        Element header = doc.createElementNS(SOAP12_EVELOPE_NAMESPACE, "Header");
+        Element envelope = doc.createElementNS(SOAP12_ENVELOPE_NAMESPACE, "Envelope");
+        Element header = doc.createElementNS(SOAP12_ENVELOPE_NAMESPACE, "Header");
         envelope.appendChild(header);
-        Element body = doc.createElementNS(SOAP12_EVELOPE_NAMESPACE, "Body");
+        Element body = doc.createElementNS(SOAP12_ENVELOPE_NAMESPACE, "Body");
         envelope.appendChild(body);
         doc.appendChild(envelope);
         return body;
@@ -469,12 +477,38 @@ public class Operation
         {
             throw new ServiceException("The service can not be executed (Supported binding was not found)");
         }
-        Document docExecute = serialize(execute, binding);
-        Document docResponse = execute(docExecute, binding);
+        boolean issoap12=isSoap12(binding);
+        Document docExecute = serialize(execute, issoap12);
+        Document docResponse=null;
+        if(issoap12)
+        {
+            docResponse = execute12(docExecute, binding);
+        }
+        else
+        {
+            docResponse = execute(docExecute, binding);
+        }
+        
         return deserialize(docResponse);
 
     }
-
+    public boolean isSoap12(Element binding)
+    {
+        boolean isSoap12=false;
+        NodeList bindigs=binding.getElementsByTagNameNS(SOAP12_NAMESPACE, "binding");
+        for(int i=0;i<bindigs.getLength();i++)
+        {
+            if(bindigs.item(i) instanceof Element)
+            {
+                Element soapbinding=(Element)bindigs.item(i);
+                if(soapbinding.getAttribute("transport").equals("http://schemas.xmlsoap.org/soap/http"))
+                {
+                    return true;
+                }
+            }
+        }
+        return isSoap12;
+    }
     public URL getURL(Element binding)
     {
         String _bindingname = binding.getAttribute("name");
