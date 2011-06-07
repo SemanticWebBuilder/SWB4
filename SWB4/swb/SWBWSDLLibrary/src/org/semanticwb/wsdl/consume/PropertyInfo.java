@@ -27,16 +27,21 @@ public class PropertyInfo
     private final ClassInfo info;
     private final String tagname;
     private final boolean isBasic;
-    private final boolean required;
-
-    public PropertyInfo(Field field, ClassInfo info, String tagname)
+    private final boolean required;    
+    public PropertyInfo(Field field, ClassInfo info)
     {
-        this.tagname = tagname;
+        
         this.field = field;
         name = field.getName();
         ismultiple = field.getType().isArray();
         String _type = field.getType().getCanonicalName();
-        
+        String _tagname=this.name;
+        Tagname Tagname=field.getAnnotation(Tagname.class);
+        if(Tagname!=null)
+        {
+            _tagname=Tagname.name();
+        }
+        this.tagname=_tagname;
         Required req=field.getAnnotation(Required.class);
         boolean _required=false;
         if(req!=null)
@@ -98,6 +103,10 @@ public class PropertyInfo
         this.isBasic = _isBasic;
         this.type = _type;
         this.info = info;
+    }
+    public String getTagName()
+    {
+        return tagname;
     }
     public boolean isRequired()
     {

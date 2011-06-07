@@ -24,11 +24,11 @@ public class ClassInfo
     private final String name;
     private final String namespace;
     private final ParameterDefinition definition;
-    private final Map<String, String> tagnames;
+    
 
-    public ClassInfo(Class clazz, String code, String name, String namespace, ParameterDefinition definition, final Map<String, String> tagnames)
+    public ClassInfo(Class clazz, String code, String name, String namespace, ParameterDefinition definition)
     {
-        this.tagnames = tagnames;
+        
         this.definition = definition;
         this.name = name;
         this.namespace = namespace;
@@ -38,9 +38,8 @@ public class ClassInfo
         if (!_package.equals("java.lang"))
         {
             for (Field field : clazz.getFields())
-            {
-                String tagname = tagnames.get(field.getName());
-                PropertyInfo prop = new PropertyInfo(field, this, tagname);
+            {                
+                PropertyInfo prop = new PropertyInfo(field, this);
                 this.properties.add(prop);
             }
         }
@@ -102,7 +101,7 @@ public class ClassInfo
                 }
                 if (valueprop != null)
                 {
-                    String _tagname=tagnames.get(prop.getName());
+                    String _tagname=prop.getTagName();
                     Element elementCont = doc.createElementNS(namespace, _tagname);
                     element.appendChild(elementCont);
                     Class _clazz = valueprop.getClass();
