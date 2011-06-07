@@ -164,6 +164,88 @@ public class ParameterDefinition
         }
         if (_name.equals("restriction"))
         {
+            boolean isEnumeration = false;
+            NodeList childs = element.getChildNodes();
+            for (int i = 0; i < childs.getLength(); i++)
+            {
+                if (childs.item(i) instanceof Element)
+                {
+                    Element childElement = (Element) childs.item(i);
+                    if (childElement.getLocalName().equals("enumeration"))
+                    {
+                        isEnumeration = true;
+                    }
+                }
+            }
+            String varType = null;
+
+            if (isEnumeration)
+            {
+                varType = element.getAttribute("name");
+                String _varname = varType.toLowerCase();
+
+                String base = element.getAttribute("base");
+                int pos = base.indexOf(":");
+                if (pos != -1)
+                {
+                    String prefix = base.substring(0, pos);
+                    String localname = base.substring(pos + 1);
+                    Document doc = element.getOwnerDocument();
+                    String xml = SWBUtils.XML.domToXml(doc, "utf-8", true);
+                    StringReader r = new StringReader(xml);
+                    SAXBuilder builder = new SAXBuilder();
+                    String uri = null;
+                    try
+                    {
+                        org.jdom.Document jdom = builder.build(r);
+                        Namespace ns = jdom.getRootElement().getNamespace(prefix);
+                        uri = ns.getURI();
+                    }
+                    catch (Exception e)
+                    {
+                        log.error(e);
+                    }
+
+                    if (uri != null && uri.equals(SCHEMA_NAMESPACE))
+                    {
+
+                        if ("string".equals(varType))
+                        {
+                            varType = "String";
+                        }
+                        if ("int".equals(varType))
+                        {
+                            varType = "int";
+                        }
+                        if ("long".equals(varType))
+                        {
+                            varType = "long";
+                        }
+                        if ("boolean".equals(varType))
+                        {
+                            varType = "boolean";
+                        }
+                        if ("float".equals(varType))
+                        {
+                            varType = "float";
+                        }
+                        if ("short".equals(varType))
+                        {
+                            varType = "short";
+                        }
+                        if ("byte".equals(varType))
+                        {
+                            varType = "byte";
+                        }
+                        if ("datetime".equals(varType))
+                        {
+                            varType = "java.util.Date";
+                        }
+                    }
+                    sb.append(" public ").append(varType).append(" ").append(_varname).append(";" + NL);
+
+                }
+            }
 
         }
         if (_name.equals("simpleType"))
@@ -244,7 +326,7 @@ public class ParameterDefinition
                 }
                 if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
                 {
-                    if("1".equals(minOccurs) && "1".equals(maxOccurs))
+                    if ("1".equals(minOccurs) && "1".equals(maxOccurs))
                     {
                         sb.append("@Required" + NL);
                     }
@@ -345,7 +427,7 @@ public class ParameterDefinition
                 }
                 if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
                 {
-                    if("1".equals(minOccurs) && "1".equals(maxOccurs))
+                    if ("1".equals(minOccurs) && "1".equals(maxOccurs))
                     {
                         sb.append("@Required" + NL);
                     }
@@ -528,6 +610,7 @@ public class ParameterDefinition
     {
         return "ParameterDefinition{" + "name=" + name + "clazz=" + clazz + "l=" + l + '}';
     }
+
     public PropertyInfo[] getProperties()
     {
         ClassInfo info = getInfo(this.clazz);
@@ -536,20 +619,18 @@ public class ParameterDefinition
 
     public PropertyInfo getPropertyInfoByName(String name)
     {
-        if(name==null)
+        if (name == null)
         {
             throw new NullPointerException("The name can not be null");
         }
         ClassInfo info = getInfo(this.clazz);
-        for(PropertyInfo prop : info.getProperties())
+        for (PropertyInfo prop : info.getProperties())
         {
-            if(name.equalsIgnoreCase(prop.getName()))
+            if (name.equalsIgnoreCase(prop.getName()))
             {
                 return prop;
             }
         }
         return null;
     }
-    
-
 }
