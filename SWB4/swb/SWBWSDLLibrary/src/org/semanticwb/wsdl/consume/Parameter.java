@@ -23,6 +23,7 @@ public class Parameter {
     {
         this.name=name;
         this.value=value;
+        this.definition=definition;
     }
     public ParameterDefinition getDefinition()
     {
