@@ -182,11 +182,12 @@ public class PropertyInfo
                     if(valueEnnumeration.equals(value.toString()))
                     {
                         found=true;
+                        break;
                     }
                 }
                 if(!found)
                 {
-                    throw new ServiceException("The values is not value");
+                    throw new ServiceException("The value is not valid");
                 }
             }
             try
