@@ -187,7 +187,17 @@ public class PropertyInfo
                 }
                 if(!found)
                 {
-                    throw new ServiceException("The value is not valid");
+                    StringBuilder sb=new StringBuilder();
+                    for(String valueEnnumeration : ennumerationRestriction.values())
+                    {
+                        sb.append(valueEnnumeration);
+                        sb.append(",");
+                    }
+                    if(sb.length()>0)
+                    {
+                        sb.deleteCharAt(sb.length()-1);
+                    }
+                    throw new ServiceException("The value is not valid ( "+ sb.toString() +" ) are valid");
                 }
             }
             try
