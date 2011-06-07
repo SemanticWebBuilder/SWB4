@@ -38,11 +38,11 @@ public class ParameterDefinition
     private final Map<String, Class> classDictionary = new HashMap<String, Class>();
     private final Map<String, String> tagnames = new HashMap<String, String>();
     private Class clazz;
-    private final MemoryClassLoader l = new MemoryClassLoader(getClass().getClassLoader());    
+    private final MemoryClassLoader l = new MemoryClassLoader(getClass().getClassLoader());
     private final org.jdom.Document jdom;
 
     public ParameterDefinition(Element part) throws ServiceException
-    {        
+    {
         Document doc = part.getOwnerDocument();
         String xml = SWBUtils.XML.domToXml(doc, "utf-8", true);
         StringReader r = new StringReader(xml);
@@ -78,7 +78,7 @@ public class ParameterDefinition
                 definition = definitions[0];
                 Element schema = getSchema(definition);
                 if (schema == null)
-                {                    
+                {
                     schema = doc.getDocumentElement();
                 }
                 String elementName = definition.getAttribute("name");
@@ -158,6 +158,90 @@ public class ParameterDefinition
         return "Class" + letter.toUpperCase() + data.substring(1).toLowerCase();
     }
 
+    private String getName(String name)
+    {
+        String _name = name;
+        int pos = name.indexOf(":");
+        if (pos != -1)
+        {
+            String prefix = name.substring(0, pos);
+            _name = name.substring(pos + 1);
+        }
+        return _name;
+    }
+
+    private String getNamespaceType(String name)
+    {
+        String _namespace = "";
+        int pos = name.indexOf(":");
+        if (pos != -1)
+        {
+            String prefix = name.substring(0, pos);
+            Namespace ns = jdom.getRootElement().getNamespace(prefix);
+            _namespace = ns == null ? "" : ns.getURI();
+        }
+        return _namespace;
+    }
+
+    private String getType(String name)
+    {
+        String varType = name;
+
+        String uri = "";
+        int pos = name.indexOf(":");
+        if (pos != -1)
+        {
+            String prefix = name.substring(0, pos);
+            varType = name.substring(pos + 1);
+            Namespace ns = jdom.getRootElement().getNamespace(prefix);
+            uri = ns == null ? "" : ns.getURI();
+        }
+        if (uri != null && uri.equals(SCHEMA_NAMESPACE))
+        {
+
+            if ("string".equals(varType))
+            {
+                varType = "String";
+            }
+            if ("int".equals(varType))
+            {
+                varType = "int";
+            }
+            if ("long".equals(varType))
+            {
+                varType = "long";
+            }
+            if ("boolean".equals(varType))
+            {
+                varType = "boolean";
+            }
+            if ("float".equals(varType))
+            {
+                varType = "float";
+            }
+            if ("short".equals(varType))
+            {
+                varType = "short";
+            }
+            if ("byte".equals(varType))
+            {
+                varType = "byte";
+            }
+            if ("datetime".equals(varType))
+            {
+                varType = "java.util.Date";
+            }
+        }
+        return varType;
+
+    }
+
+    public Boolean isRef(Element element)
+    {
+        String ref = element.getAttribute("ref");
+        return !"".equals(ref);
+    }
+
     private void getCode(Element element, String className, StringBuilder sb)
     {
         String _name = element.getLocalName();
@@ -196,53 +280,7 @@ public class ParameterDefinition
                 //varType = element.getAttribute("name");
                 String _varname = ((Element) element.getParentNode()).getAttribute("name").toLowerCase();
                 String base = element.getAttribute("base");
-                int pos = base.indexOf(":");
-                if (pos != -1)
-                {
-                    String prefix = base.substring(0, pos);
-                    String localname = base.substring(pos + 1);
-                    varType = localname;
-                    Namespace ns = jdom.getRootElement().getNamespace(prefix);
-                    String uri = ns==null?"":ns.getURI();                    
-                    if (uri != null && uri.equals(SCHEMA_NAMESPACE))
-                    {
-
-                        if ("string".equals(varType))
-                        {
-                            varType = "String";
-                        }
-                        if ("int".equals(varType))
-                        {
-                            varType = "int";
-                        }
-                        if ("long".equals(varType))
-                        {
-                            varType = "long";
-                        }
-                        if ("boolean".equals(varType))
-                        {
-                            varType = "boolean";
-                        }
-                        if ("float".equals(varType))
-                        {
-                            varType = "float";
-                        }
-                        if ("short".equals(varType))
-                        {
-                            varType = "short";
-                        }
-                        if ("byte".equals(varType))
-                        {
-                            varType = "byte";
-                        }
-                        if ("datetime".equals(varType))
-                        {
-                            varType = "java.util.Date";
-                        }
-                    }
-                    sb.append(" public ").append(varType).append(" ").append(_varname).append(";" + NL);
-
-                }
+                varType = getType(base);
             }
 
         }
@@ -274,37 +312,32 @@ public class ParameterDefinition
         }
         if (_name.equals("element"))
         {
+            if (isRef(element))
+            {
+                return;
+            }
             String _tagname = element.getAttribute("name");
             if (_tagname.equals(""))
             {
-                String ref = element.getAttribute("ref");
-                int pos = ref.indexOf(":");
-                if (pos != -1)
-                {
-                    String prefix = ref.substring(0, pos);
-                    String localname = ref.substring(pos + 1);
-                    Namespace ns = jdom.getRootElement().getNamespace(prefix);
-                    String uri = ns==null?"":ns.getURI();
-                    if (localname.equals("schema") && SCHEMA_NAMESPACE.equals(uri))
-                    {
-                    }
-                    else
-                    {
-                    }
-                }
-
+                return;
             }
-            String varname = element.getAttribute("name").toLowerCase();
-            tagnames.put(varname, _tagname);
-            String varType = element.getAttribute("type");
-            if (varType.equals(""))
+            String _className = toUpperCase(_tagname);
+            String _varname = _tagname.toLowerCase();
+            tagnames.put(_varname, _tagname);
+            String _type = element.getAttribute("type");
+            String varType = getType(_type);
+            String uri = getNamespaceType(_type);
+            boolean isBasic = false;
+            if (uri.equals(SCHEMA_NAMESPACE))
             {
-                String _className = toUpperCase(_tagname);
+                isBasic = true;
+            }
+            if (varType.equals(""))
+            {                
                 String code = getCode(element, className);
                 _classes.put(_className, code);
                 String minOccurs = element.getAttribute("minOccurs");
-                String maxOccurs = element.getAttribute("maxOccurs");
-                String _varname = varname;
+                String maxOccurs = element.getAttribute("maxOccurs");                
                 if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
                 {
                     sb.append(" public final java.util.ArrayList<").append(_className).append("> ").append(_varname).append("=new java.util.ArrayList<").append(_className).append(">();" + NL);
@@ -318,64 +351,11 @@ public class ParameterDefinition
                     sb.append(" public ").append(_className).append(" ").append(_varname).append(";" + NL);
                 }
                 return;
-            }            
-            boolean isBasic = false;
-            int pos = varType.indexOf(":");
-            if (pos != -1)
-            {
-
-                String prefix = varType.substring(0, pos);
-                varType = varType.substring(pos + 1);
-                if (!prefix.equals("tns"))
-                {                    
-                    Namespace ns = jdom.getRootElement().getNamespace(prefix);
-                    String uri = ns==null?"":ns.getURI();
-                    if (uri != null && uri.equals(SCHEMA_NAMESPACE))
-                    {
-                        isBasic = true;
-                        if ("string".equals(varType))
-                        {
-                            varType = "String";
-                        }
-                        if ("int".equals(varType))
-                        {
-                            varType = "int";
-                        }
-                        if ("long".equals(varType))
-                        {
-                            varType = "long";
-                        }
-                        if ("boolean".equals(varType))
-                        {
-                            varType = "boolean";
-                        }
-                        if ("float".equals(varType))
-                        {
-                            varType = "float";
-                        }
-                        if ("short".equals(varType))
-                        {
-                            varType = "short";
-                        }
-                        if ("byte".equals(varType))
-                        {
-                            varType = "byte";
-                        }
-                        if ("datetime".equals(varType))
-                        {
-                            varType = "java.util.Date";
-                        }
-                    }
-
-                }
             }
             if (!isBasic)
-            {
-
-                String _varname = _tagname.toLowerCase();
-                String _className = toUpperCase(_tagname);
-                tagnames.put(_className, _tagname);
-                tagnames.put(_varname, _tagname);
+            {               
+                
+                tagnames.put(_className, _tagname);                
                 Element[] elements = XMLDocumentUtil.getElement(varType, element.getOwnerDocument(), "element");
                 if (elements.length == 0)
                 {
@@ -412,18 +392,20 @@ public class ParameterDefinition
             else
             {
                 String tagname = element.getAttribute("name");
-                tagnames.put(varname.toLowerCase(), tagname);
+                tagnames.put(_varname, tagname);
                 String minOccurs = element.getAttribute("minOccurs");
                 String maxOccurs = element.getAttribute("maxOccurs");
                 if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
                 {
-                    sb.append(" public final java.util.ArrayList<").append(varType).append("> ").append(varname.toLowerCase()).append("=new java.util.ArrayList<").append(varType).append(">();" + NL);
+                    sb.append(" public final java.util.ArrayList<").append(varType).append("> ").append(_varname).append("=new java.util.ArrayList<").append(varType).append(">();" + NL);
                 }
                 if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
                 {
-                    sb.append(" public ").append(varType).append(" ").append(varname.toLowerCase()).append(";" + NL);
+                    sb.append(" public ").append(varType).append(" ").append(_varname).append(";" + NL);
                 }
             }
+
+
 
         }
     }
@@ -538,8 +520,8 @@ public class ParameterDefinition
     {
         Document doc = SWBUtils.XML.getNewDocument();
         Object value = parameter.getValue();
-        ClassInfo info = getInfo(value.getClass());        
-        Element child = info.createElement(value, doc);        
+        ClassInfo info = getInfo(value.getClass());
+        Element child = info.createElement(value, doc);
         doc.appendChild(child);
         System.out.println("xml: " + SWBUtils.XML.domToXml(doc));
         return doc;
@@ -547,7 +529,7 @@ public class ParameterDefinition
 
     public Object getValue(Document document) throws ServiceException
     {
-        System.out.println(" xml response: " + SWBUtils.XML.domToXml(document));        
+        System.out.println(" xml response: " + SWBUtils.XML.domToXml(document));
         NodeList list = document.getElementsByTagNameNS(namespace, type);
         if (list.getLength() > 0)
         {
