@@ -601,7 +601,7 @@ public class ParameterDefinition
         return namespace;
     }
 
-    public Document toDocument(Parameter parameter)
+    public Document toDocument(Parameter parameter) throws ServiceException
     {
         Document doc = SWBUtils.XML.getNewDocument();
         Object value = parameter.getValue();
