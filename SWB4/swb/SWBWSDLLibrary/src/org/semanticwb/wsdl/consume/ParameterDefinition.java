@@ -35,8 +35,7 @@ public class ParameterDefinition
     private String namespace;
     private final HashMap<Class, ClassInfo> classes = new HashMap<Class, ClassInfo>();
     private final Map<String, String> _classes = new HashMap<String, String>();
-    private final Map<String, Class> classDictionary = new HashMap<String, Class>();
-    private final Map<String, String> tagnames = new HashMap<String, String>();
+    private final Map<String, Class> classDictionary = new HashMap<String, Class>();    
     private Class clazz;
     private final MemoryClassLoader l = new MemoryClassLoader(getClass().getClassLoader());
     private final org.jdom.Document jdom;
@@ -83,9 +82,8 @@ public class ParameterDefinition
                 }
                 String elementName = definition.getAttribute("name");
                 this.namespace = schema.getAttribute("targetNamespace");
-                final String className = toUpperCase(elementName);
-                tagnames.put(className, elementName);
-                final String code = getCode(definition, className);
+                final String className = toUpperCase(elementName);                
+                final String code = getCode(definition, className,elementName);
                 _classes.put(className, code);
                 l.addAll(_classes);
 
@@ -101,7 +99,7 @@ public class ParameterDefinition
                         }
 
                         //ClassInfo info = new ClassInfo(_clazz, code,elementName,namespace,tagname);
-                        ClassInfo info = new ClassInfo(_clazz, code, elementName, namespace, this, tagnames);
+                        ClassInfo info = new ClassInfo(_clazz, code, elementName, namespace, this);
                         this.classes.put(_clazz, info);
                     }
                     catch (ClassNotFoundException cnfe)
@@ -322,17 +320,20 @@ public class ParameterDefinition
 
             if (isEnumeration)
             {
-                String _varname = ((Element) element.getParentNode()).getAttribute("name").toLowerCase();
+                String _tagname=((Element) element.getParentNode()).getAttribute("name");
+                String _varname = _tagname.toLowerCase();
                 String base = element.getAttribute("base");
                 String varType = getType(base);
                 String minOccurs = element.getAttribute("minOccurs");
                 String maxOccurs = element.getAttribute("maxOccurs");
                 if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
                 {
+                    sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
                     sb.append(" public final java.util.ArrayList<").append(varType).append("> ").append(_varname).append("=new java.util.ArrayList<").append(varType).append(">();" + NL);
                 }
                 if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
                 {
+                    sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
                     if ("1".equals(minOccurs) && "1".equals(maxOccurs))
                     {
                         sb.append("@Required" + NL);
@@ -380,8 +381,7 @@ public class ParameterDefinition
                 return;
             }
             String _className = toUpperCase(_tagname);
-            String _varname = _tagname.toLowerCase();
-            tagnames.put(_varname, _tagname);
+            String _varname = _tagname.toLowerCase();            
             String _type = element.getAttribute("type");
             String varType = getType(_type);
             String uri = getNamespaceType(_type);
@@ -392,16 +392,18 @@ public class ParameterDefinition
             }
             if (varType.equals(""))
             {
-                String code = getCode(element, className);
+                String code = getCode(element, className,_tagname);
                 _classes.put(_className, code);
                 String minOccurs = element.getAttribute("minOccurs");
                 String maxOccurs = element.getAttribute("maxOccurs");
                 if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
                 {
+                    sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
                     sb.append(" public final java.util.ArrayList<").append(_className).append("> ").append(_varname).append("=new java.util.ArrayList<").append(_className).append(">();" + NL);
                 }
                 if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
                 {
+                    sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
                     if ("1".equals(minOccurs) && "1".equals(maxOccurs))
                     {
                         sb.append("@Required" + NL);
@@ -412,8 +414,7 @@ public class ParameterDefinition
             }
             if (!isBasic)
             {
-
-                tagnames.put(_className, _tagname);
+                
                 Element[] elements = XMLDocumentUtil.getElement(varType, element.getOwnerDocument(), "element");
                 if (elements.length == 0)
                 {
@@ -432,16 +433,17 @@ public class ParameterDefinition
                     if (uri.equals(SCHEMA_NAMESPACE))
                     {
                         _className = _type;
-                        _varname = _tagname.toLowerCase();
-                        tagnames.put(_varname,_tagname);
+                        _varname = _tagname.toLowerCase();                        
                         String minOccurs = element.getAttribute("minOccurs");
                         String maxOccurs = element.getAttribute("maxOccurs");
                         if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
                         {
+                            sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
                             sb.append(" public final java.util.ArrayList<").append(_className).append("> ").append(_varname).append("=new java.util.ArrayList<").append(_className).append(">();" + NL);
                         }
                         if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
                         {
+                            sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
                             if ("1".equals(minOccurs) && "1".equals(maxOccurs))
                             {
                                 sb.append("@Required" + NL);
@@ -453,16 +455,18 @@ public class ParameterDefinition
                     else
                     {
 
-                        String code = getCode(elementToCode, _className);
+                        String code = getCode(elementToCode, _className,_tagname);
                         _classes.put(_className, code);
                         String minOccurs = element.getAttribute("minOccurs");
                         String maxOccurs = element.getAttribute("maxOccurs");
                         if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
                         {
+                            sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
                             sb.append(" public final java.util.ArrayList<").append(_className).append("> ").append(_varname).append("=new java.util.ArrayList<").append(_className).append(">();" + NL);
                         }
                         if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
                         {
+                            sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
                             if ("1".equals(minOccurs) && "1".equals(maxOccurs))
                             {
                                 sb.append("@Required" + NL);
@@ -475,17 +479,17 @@ public class ParameterDefinition
 
             }
             else
-            {
-                String tagname = element.getAttribute("name");
-                tagnames.put(_varname, tagname);
+            {                
                 String minOccurs = element.getAttribute("minOccurs");
                 String maxOccurs = element.getAttribute("maxOccurs");
                 if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
                 {
+                    sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
                     sb.append(" public final java.util.ArrayList<").append(varType).append("> ").append(_varname).append("=new java.util.ArrayList<").append(varType).append(">();" + NL);
                 }
                 if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
                 {
+                    sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
                     sb.append(" public ").append(varType).append(" ").append(_varname).append(";" + NL);
                 }
             }
@@ -495,11 +499,13 @@ public class ParameterDefinition
         }
     }
 
-    private String getCode(Element element, String className)
+    private String getCode(Element element, String className,String tagname)
     {
         StringBuilder sb = new StringBuilder();
         sb.append("import org.semanticwb.wsdl.consume.Required;" + NL);
+        sb.append("import org.semanticwb.wsdl.consume.Tagname;" + NL);
         sb.append("" + NL);
+        sb.append("@Tagname(name=\"").append(tagname).append("\")" + NL);
         sb.append("public class ").append(className).append(" {" + NL);
         sb.append("" + NL);
         sb.append("     public ").append(className).append("()" + NL);
