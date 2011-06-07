@@ -350,4 +350,19 @@ public class PropertyInfo
         }
         return null;
     }
+    public PropertyInfo getPropertyInfoByName(String name)
+    {
+        if (name == null)
+        {
+            throw new NullPointerException("The name can not be null");
+        }
+        for (PropertyInfo prop : this.getProperties())
+        {
+            if (name.equalsIgnoreCase(prop.getName()))
+            {
+                return prop;
+            }
+        }
+        return null;
+    }
 }

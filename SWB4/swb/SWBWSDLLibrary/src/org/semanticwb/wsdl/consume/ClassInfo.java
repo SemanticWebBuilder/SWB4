@@ -98,7 +98,8 @@ public class ClassInfo
                 Object valueprop = prop.getValue(value);
                 if (valueprop != null)
                 {
-                    Element elementCont = doc.createElementNS(namespace, prop.getName());
+                    String _tagname=tagnames.get(prop.getName());
+                    Element elementCont = doc.createElementNS(namespace, _tagname);
                     element.appendChild(elementCont);
                     Class _clazz = valueprop.getClass();
                     String _package = _clazz.getPackage() == null ? "" : _clazz.getPackage().getName();
