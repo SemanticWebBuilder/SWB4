@@ -607,8 +607,7 @@ public class ParameterDefinition
         Object value = parameter.getValue();
         ClassInfo info = getInfo(value.getClass());
         Element child = info.createElement(value, doc);
-        doc.appendChild(child);
-        System.out.println("xml: " + SWBUtils.XML.domToXml(doc));
+        doc.appendChild(child);        
         return doc;
     }
 
