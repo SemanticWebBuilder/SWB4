@@ -54,7 +54,6 @@ public class ParameterDefinition
         }
         catch (Exception e)
         {
-
             log.error(e);
         }
         this.jdom = _jdom;
