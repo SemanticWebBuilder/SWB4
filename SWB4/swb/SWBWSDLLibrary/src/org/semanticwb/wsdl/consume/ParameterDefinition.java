@@ -34,7 +34,7 @@ public class ParameterDefinition
     private Element definition;
     private String namespace;
     private final HashMap<Class, ClassInfo> classInfoDictionary = new HashMap<Class, ClassInfo>();
-    private final Map<String, String> classesToCompile = new HashMap<String, String>();    
+    private final Map<String, String> classesToCompile = new HashMap<String, String>();
     private Class clazz;
     private final MemoryClassLoader l = new MemoryClassLoader(getClass().getClassLoader());
     private final org.jdom.Document jdom;
@@ -81,8 +81,8 @@ public class ParameterDefinition
                 }
                 String elementName = definition.getAttribute("name");
                 this.namespace = schema.getAttribute("targetNamespace");
-                final String className = toUpperCase(elementName);                
-                final String code = getCode(definition, className,elementName);
+                final String className = toUpperCase(elementName);
+                final String code = getCode(definition, className, elementName);
                 classesToCompile.put(className, code);
                 l.addAll(classesToCompile);
 
@@ -90,7 +90,7 @@ public class ParameterDefinition
                 {
                     try
                     {
-                        Class _clazz = l.loadClass(classNameToAdd);                        
+                        Class _clazz = l.loadClass(classNameToAdd);
                         if (classNameToAdd.equals(className))
                         {
                             this.clazz = _clazz;
@@ -283,6 +283,41 @@ public class ParameterDefinition
         return !"".equals(ref);
     }
 
+    
+    private void checkRestrictions(Element element, StringBuilder sb)
+    {
+        NodeList childs = element.getChildNodes();
+        for (int i = 0; i < childs.getLength(); i++)
+        {
+            if (childs.item(i) instanceof Element)
+            {
+                Element childElement = (Element) childs.item(i);
+                if (childElement.getLocalName().equals("restriction"))
+                {
+                    NodeList enumerations = childElement.getElementsByTagNameNS(SCHEMA_NAMESPACE, "enumeration");
+                    if (enumerations.getLength() > 0)
+                    {
+                        StringBuilder values = new StringBuilder();
+                        for (int j = 0; j < enumerations.getLength(); j++)
+                        {
+                            Element enumeration = (Element) enumerations.item(j);
+                            String value = enumeration.getAttribute("value");
+                            values.append("\"");
+                            values.append(value);
+                            values.append("\"");
+                            values.append(",");
+                        }
+                        if(values.length()>0)
+                        {
+                            values.deleteCharAt(values.length()-1);
+                        }
+                        sb.append("@EnnumerationRestriction(values={").append(values.toString()).append("})");
+                    }
+                }
+            }
+        }
+    }
+
     private void getCode(Element element, String className, StringBuilder sb)
     {
         String _name = element.getLocalName();
@@ -318,7 +353,7 @@ public class ParameterDefinition
 
             if (isEnumeration)
             {
-                String _tagname=((Element) element.getParentNode()).getAttribute("name");
+                String _tagname = ((Element) element.getParentNode()).getAttribute("name");
                 String _varname = _tagname.toLowerCase();
                 String base = element.getAttribute("base");
                 String varType = getType(base);
@@ -379,7 +414,7 @@ public class ParameterDefinition
                 return;
             }
             String _className = toUpperCase(_tagname);
-            String _varname = _tagname.toLowerCase();            
+            String _varname = _tagname.toLowerCase();
             String _type = element.getAttribute("type");
             String varType = getType(_type);
             String uri = getNamespaceType(_type);
@@ -390,10 +425,13 @@ public class ParameterDefinition
             }
             if (varType.equals(""))
             {
-                String code = getCode(element, className,_tagname);
+                String code = getCode(element, className, _tagname);
                 classesToCompile.put(_className, code);
                 String minOccurs = element.getAttribute("minOccurs");
                 String maxOccurs = element.getAttribute("maxOccurs");
+
+                checkRestrictions(element, sb);
+
                 if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
                 {
                     sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
@@ -412,7 +450,7 @@ public class ParameterDefinition
             }
             if (!isBasic)
             {
-                
+
                 Element[] elements = XMLDocumentUtil.getElement(varType, element.getOwnerDocument(), "element");
                 if (elements.length == 0)
                 {
@@ -428,10 +466,11 @@ public class ParameterDefinition
                     _type = getType(elementToCode);
                     uri = getNamespaceType(elementToCode);
                     _className = toUpperCase(elementToCode.getAttribute("name"));
+                    checkRestrictions(elementToCode, sb);
                     if (uri.equals(SCHEMA_NAMESPACE))
                     {
                         _className = _type;
-                        _varname = _tagname.toLowerCase();                        
+                        _varname = _tagname.toLowerCase();
                         String minOccurs = element.getAttribute("minOccurs");
                         String maxOccurs = element.getAttribute("maxOccurs");
                         if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
@@ -453,7 +492,7 @@ public class ParameterDefinition
                     else
                     {
 
-                        String code = getCode(elementToCode, _className,_tagname);
+                        String code = getCode(elementToCode, _className, _tagname);
                         classesToCompile.put(_className, code);
                         String minOccurs = element.getAttribute("minOccurs");
                         String maxOccurs = element.getAttribute("maxOccurs");
@@ -477,7 +516,7 @@ public class ParameterDefinition
 
             }
             else
-            {                
+            {
                 String minOccurs = element.getAttribute("minOccurs");
                 String maxOccurs = element.getAttribute("maxOccurs");
                 if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
@@ -497,11 +536,12 @@ public class ParameterDefinition
         }
     }
 
-    private String getCode(Element element, String className,String tagname)
+    private String getCode(Element element, String className, String tagname)
     {
         StringBuilder sb = new StringBuilder();
         sb.append("import org.semanticwb.wsdl.consume.Required;" + NL);
         sb.append("import org.semanticwb.wsdl.consume.Tagname;" + NL);
+        sb.append("import org.semanticwb.wsdl.consume.EnnumerationRestriction;" + NL);
         sb.append("" + NL);
         sb.append("@Tagname(name=\"").append(tagname).append("\")" + NL);
         sb.append("public class ").append(className).append(" {" + NL);
@@ -612,7 +652,7 @@ public class ParameterDefinition
         Object value = parameter.getValue();
         ClassInfo info = getInfo(value.getClass());
         Element child = info.createElement(value, doc);
-        doc.appendChild(child);        
+        doc.appendChild(child);
         return doc;
     }
 
