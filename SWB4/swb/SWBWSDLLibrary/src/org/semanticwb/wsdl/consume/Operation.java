@@ -436,7 +436,7 @@ public class Operation
         for(ParameterDefinition definition : output.getParameters())
         {
             Object value=definition.getValue(response);
-            deserialize.add(new Parameter(definition.getName(), value));
+            deserialize.add(new Parameter(definition.getName(), value,definition));
         }
         return deserialize.toArray(new Parameter[deserialize.size()]);
     }

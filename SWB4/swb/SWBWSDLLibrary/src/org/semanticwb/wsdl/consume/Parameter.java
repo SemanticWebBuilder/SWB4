@@ -13,10 +13,20 @@ public class Parameter {
 
     private final String name;
     private final Object value;
+    private ParameterDefinition definition;
     public Parameter(String name,Object value)
     {
         this.name=name;
         this.value=value;
+    }
+    public Parameter(String name,Object value,ParameterDefinition definition)
+    {
+        this.name=name;
+        this.value=value;
+    }
+    public ParameterDefinition getDefinition()
+    {
+        return definition;
     }
     public String getName()
     {
