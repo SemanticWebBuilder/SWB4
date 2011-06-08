@@ -67,7 +67,7 @@ public class TestWSDL
             ParameterDefinition def=op.getInput().getParameterDefinitionByName("parameters");
             Object conversionRate=def.newInstance();
             PropertyInfo FromCurrencyprop=def.getPropertyInfoByName("FromCurrency");            
-            FromCurrencyprop.fill(conversionRate, "BBD");
+            FromCurrencyprop.fill(conversionRate, "XXX");
             
 
             PropertyInfo ToCurrencyprop=def.getPropertyInfoByName("ToCurrency");            
