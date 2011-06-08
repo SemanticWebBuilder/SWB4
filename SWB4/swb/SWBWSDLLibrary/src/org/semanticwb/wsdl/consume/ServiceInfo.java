@@ -34,6 +34,8 @@ public class ServiceInfo
     private static final String APPLICATION_XML = "application/xml";
     private static final Logger log = SWBUtils.getLogger(ServiceInfo.class);
     private static final String SCHEMA_NAMESPACE = "http://www.w3.org/2000/10/XMLSchema";
+    private static final String SCHEMA_2001_NAMESPACE = "http://www.w3.org/2001/XMLSchema";
+
     private static final String WSDL_NAMESPACE = "http://schemas.xmlsoap.org/wsdl/";
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String APPLICATION_WSDL_CONTENT_TYPE ="application/wsdl+xml";
@@ -142,7 +144,7 @@ public class ServiceInfo
 
     private void extractIncludes() throws ServiceException
     {
-        NodeList nodesgrammars = doc.getElementsByTagNameNS(WSDL_NAMESPACE, "definitions");
+        NodeList nodesgrammars = doc.getElementsByTagNameNS(WSDL_NAMESPACE, "types");
         for (int i = 0; i < nodesgrammars.getLength(); i++)
         {
             if (nodesgrammars.item(i) instanceof Element)
@@ -150,13 +152,18 @@ public class ServiceInfo
                 Element grammars = (Element) nodesgrammars.item(i);
                 ArrayList<Document> includes = new ArrayList<Document>();
                 ArrayList<Element> toDelete = new ArrayList<Element>();
-                NodeList nodes = grammars.getElementsByTagNameNS(WSDL_NAMESPACE, "include");
+                NodeList nodes = grammars.getElementsByTagNameNS(SCHEMA_NAMESPACE, "import");
+                if(nodes.getLength()==0)
+                {
+                    nodes = grammars.getElementsByTagNameNS(SCHEMA_2001_NAMESPACE, "import");
+                }
                 for (int j = 0; j < nodes.getLength(); j++)
                 {
                     if (nodes.item(j) instanceof Element)
                     {
                         Element include = (Element) nodes.item(j);
-                        String spath = include.getAttribute("location");
+                        toDelete.add((Element)include.getParentNode());
+                        String spath = include.getAttribute("schemaLocation");
                         URL path = url;
                         try
                         {
@@ -201,6 +208,8 @@ public class ServiceInfo
                 for (Document includedoc : includes)
                 {
                     importInLine(includedoc, grammars);
+                    System.out.println("xml "+SWBUtils.XML.domToXml(grammars.getOwnerDocument()));
+
                 }
 
             }
@@ -282,10 +291,15 @@ public class ServiceInfo
                     if (pos != -1)
                     {
                         String scharset = contentType.substring(pos + 8).trim();
+                        contentType=contentType.substring(0,pos).trim();
+                        if(contentType.endsWith(";"))
+                        {
+                            contentType=contentType.substring(0,contentType.length()-1);
+                        }
                         charset = Charset.forName(scharset);
                     }
                 }
-                if (con.getHeaderField(CONTENT_TYPE) != null && (con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(APPLICATION_XML) || con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(TEXT_XML)))
+                if (contentType != null && (contentType.equalsIgnoreCase(APPLICATION_XML) || contentType.equalsIgnoreCase(TEXT_XML)))
                 {
                     InputStreamReader reader = new InputStreamReader(con.getInputStream(), charset);
                     DOMOutputter out = new DOMOutputter();
