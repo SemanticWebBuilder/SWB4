@@ -24,7 +24,7 @@ public class Input
         this.operation=operation;
         this.input = input;
         String message = input.getAttribute("message");
-        Element[] elements = XMLDocumentUtil.getElement(message, input.getOwnerDocument(),"message");
+        Element[] elements = XMLDocumentUtil.getElementByName(message, input.getOwnerDocument(),"message");
         for (Element eMessage : elements)
         {
             NodeList parts = eMessage.getElementsByTagNameNS(input.getNamespaceURI(), "part");
