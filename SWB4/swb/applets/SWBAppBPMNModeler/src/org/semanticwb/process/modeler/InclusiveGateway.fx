@@ -150,6 +150,28 @@ public class InclusiveGateway extends Gateway
         };
     }
 
+    override public function canStartLink(link: ConnectionObject) : Boolean {
+        var ret = super.canStartLink(link);
+        var count = 0;
+
+        for (ele in getOutputConnectionObjects()) {
+            if (ele instanceof DefaultFlow) {
+                count++;
+            }
+        }
+
+        if (not (link instanceof ConditionalFlow or link instanceof DefaultFlow)) {
+            ModelerUtils.setErrorMessage(##"msgError1");
+            ret = false;
+        }
+
+        if (link instanceof DefaultFlow and count > 0) {
+            ModelerUtils.setErrorMessage(##"msgError2");
+            ret = false;
+        }
+        return ret;
+    }
+
     override public function copy() : GraphicalElement {
         var t = InclusiveGateway {
             title: this.title
