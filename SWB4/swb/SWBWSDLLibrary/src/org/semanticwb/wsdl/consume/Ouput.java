@@ -24,7 +24,7 @@ public class Ouput
         this.operation=operation;
         this.output = output;
         String message = output.getAttribute("message");
-        Element[] elements = XMLDocumentUtil.getElement(message, output.getOwnerDocument(),"message");
+        Element[] elements = XMLDocumentUtil.getElementByName(message, output.getOwnerDocument(),"message");
         for (Element eMessage : elements)
         {
             NodeList parts = eMessage.getElementsByTagNameNS(output.getNamespaceURI(), "part");

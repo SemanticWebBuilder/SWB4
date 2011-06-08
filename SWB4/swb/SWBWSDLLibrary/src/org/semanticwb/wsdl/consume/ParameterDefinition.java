@@ -5,6 +5,7 @@
 package org.semanticwb.wsdl.consume;
 
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.jdom.Namespace;
@@ -38,10 +39,12 @@ public class ParameterDefinition
     private Class clazz;
     private final MemoryClassLoader l = new MemoryClassLoader(getClass().getClassLoader());
     private final org.jdom.Document jdom;
+    private final ArrayList<Element> schemas = new ArrayList<Element>();
 
     public ParameterDefinition(Element part) throws ServiceException
     {
         Document doc = part.getOwnerDocument();
+        getSchemas(doc);
         String xml = SWBUtils.XML.domToXml(doc, "utf-8", true);
         StringReader r = new StringReader(xml);
         SAXBuilder builder = new SAXBuilder();
@@ -53,6 +56,7 @@ public class ParameterDefinition
         catch (Exception e)
         {
             log.error(e);
+            throw new ServiceException(e);
         }
         this.jdom = _jdom;
         //this.part = part;
@@ -63,54 +67,58 @@ public class ParameterDefinition
         }
         this.name = _name;
         String _type = null;
+
         if (!part.getAttribute("type").equals(""))
         {
             _type = part.getAttribute("type");
+            definition = XMLDocumentUtil.getGlobalElement(schemas, _type, _jdom);
         }
         if (!part.getAttribute("element").equals(""))
         {
             _type = part.getAttribute("element");
-            Element[] definitions = XMLDocumentUtil.getElement(_type, part.getOwnerDocument(), "element");
-            if (definitions.length > 0)
+            //Element[] definitions = XMLDocumentUtil.getElement(_type, part.getOwnerDocument(), "element");
+            definition = XMLDocumentUtil.getGlobalElement(schemas, _type, _jdom);
+            if (definition == null)
             {
-                definition = definitions[0];
-                Element schema = getSchema(definition);
-                if (schema == null)
-                {
-                    schema = doc.getDocumentElement();
-                }
-                String elementName = definition.getAttribute("name");
-                this.namespace = schema.getAttribute("targetNamespace");
-                final String className = toUpperCase(elementName);
-                final String code = getCode(definition, className, elementName);
-                classesToCompile.put(className, code);
-                l.addAll(classesToCompile);
-
-                for (String classNameToAdd : classesToCompile.keySet())
-                {
-                    try
-                    {
-                        Class _clazz = l.loadClass(classNameToAdd);
-                        if (classNameToAdd.equals(className))
-                        {
-                            this.clazz = _clazz;
-                        }
-
-                        //ClassInfo info = new ClassInfo(_clazz, code,elementName,namespace,tagname);
-                        ClassInfo info = new ClassInfo(_clazz, code, elementName, namespace, this);
-                        this.classInfoDictionary.put(_clazz, info);
-                    }
-                    catch (ClassNotFoundException cnfe)
-                    {
-                        log.error(cnfe);
-                        throw new ServiceException(cnfe);
-                    }
-                }
-
-
-
-
+                throw new ServiceException("The element definition " + _type + " was not found");
             }
+            Element schema = getSchema(definition);
+            if (schema == null)
+            {
+                schema = doc.getDocumentElement();
+            }
+            String elementName = definition.getAttribute("name");
+            this.namespace = schema.getAttribute("targetNamespace");
+            final String className = toUpperCase(elementName);
+            final String code = getCode(definition, className, elementName);
+            classesToCompile.put(className, code);
+            l.addAll(classesToCompile);
+
+            for (String classNameToAdd : classesToCompile.keySet())
+            {
+                try
+                {
+                    Class _clazz = l.loadClass(classNameToAdd);
+                    if (classNameToAdd.equals(className))
+                    {
+                        this.clazz = _clazz;
+                    }
+
+                    //ClassInfo info = new ClassInfo(_clazz, code,elementName,namespace,tagname);
+                    ClassInfo info = new ClassInfo(_clazz, code, elementName, namespace, this);
+                    this.classInfoDictionary.put(_clazz, info);
+                }
+                catch (ClassNotFoundException cnfe)
+                {
+                    log.error(cnfe);
+                    throw new ServiceException(cnfe);
+                }
+            }
+
+
+
+
+
             if (_type.startsWith("tns:"))
             {
                 _type = _type.substring(4);
@@ -119,6 +127,15 @@ public class ParameterDefinition
         }
         this.type = _type;
 
+    }
+
+    private void getSchemas(Document doc)
+    {
+        NodeList _schemas = doc.getElementsByTagNameNS(SCHEMA_NAMESPACE, "schema");
+        for (int i = 0; i < _schemas.getLength(); i++)
+        {
+            schemas.add((Element) _schemas.item(i));
+        }
     }
 
     public final Element getSchema(final Node element)
@@ -244,33 +261,41 @@ public class ParameterDefinition
             {
                 varType = "String";
             }
-            if ("int".equals(varType))
+            else if ("int".equals(varType))
             {
                 varType = "int";
             }
-            if ("long".equals(varType))
+            else if ("long".equals(varType))
             {
                 varType = "long";
             }
-            if ("boolean".equals(varType))
+            else if ("boolean".equals(varType))
             {
                 varType = "boolean";
             }
-            if ("float".equals(varType))
+            else if ("float".equals(varType))
             {
                 varType = "float";
             }
-            if ("short".equals(varType))
+            else if ("short".equals(varType))
             {
                 varType = "short";
             }
-            if ("byte".equals(varType))
+            else if ("byte".equals(varType))
             {
                 varType = "byte";
             }
-            if ("datetime".equals(varType))
+            else if ("double".equals(varType))
+            {
+                varType = "double";
+            }
+            else if ("datetime".equals(varType))
             {
                 varType = "java.util.Date";
+            }
+            else
+            {
+                varType = "String";
             }
         }
         return varType;
@@ -283,7 +308,6 @@ public class ParameterDefinition
         return !"".equals(ref);
     }
 
-    
     private void checkRestrictions(Element element, StringBuilder sb)
     {
         NodeList childs = element.getChildNodes();
@@ -307,9 +331,9 @@ public class ParameterDefinition
                             values.append("\"");
                             values.append(",");
                         }
-                        if(values.length()>0)
+                        if (values.length() > 0)
                         {
-                            values.deleteCharAt(values.length()-1);
+                            values.deleteCharAt(values.length() - 1);
                         }
                         sb.append("@EnnumerationRestriction(values={").append(values.toString()).append("})");
                     }
@@ -318,7 +342,7 @@ public class ParameterDefinition
         }
     }
 
-    private void getCode(Element element, String className, StringBuilder sb)
+    private void getCode(Element element, String className, StringBuilder sb) throws ServiceException
     {
         String _name = element.getLocalName();
         if (_name.equals("complexType"))
@@ -451,67 +475,73 @@ public class ParameterDefinition
             if (!isBasic)
             {
 
-                Element[] elements = XMLDocumentUtil.getElement(varType, element.getOwnerDocument(), "element");
-                if (elements.length == 0)
-                {
-                    elements = XMLDocumentUtil.getElement(varType, element.getOwnerDocument(), "complexType");
-                }
-                if (elements.length == 0)
-                {
-                    elements = XMLDocumentUtil.getElement(varType, element.getOwnerDocument(), "simpleType");
-                }
-                if (elements.length > 0)
-                {
-                    Element elementToCode = elements[0];
-                    _type = getType(elementToCode);
-                    uri = getNamespaceType(elementToCode);
-                    _className = toUpperCase(elementToCode.getAttribute("name"));
-                    checkRestrictions(elementToCode, sb);
-                    if (uri.equals(SCHEMA_NAMESPACE))
-                    {
-                        _className = _type;
-                        _varname = _tagname.toLowerCase();
-                        String minOccurs = element.getAttribute("minOccurs");
-                        String maxOccurs = element.getAttribute("maxOccurs");
-                        if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
-                        {
-                            sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
-                            sb.append(" public final java.util.ArrayList<").append(_className).append("> ").append(_varname).append("=new java.util.ArrayList<").append(_className).append(">();" + NL);
-                        }
-                        if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
-                        {
-                            sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
-                            if ("1".equals(minOccurs) && "1".equals(maxOccurs))
-                            {
-                                sb.append("@Required" + NL);
-                            }
-                            sb.append(" public ").append(_className).append(" ").append(_varname).append(";" + NL);
-                        }
+                //XMLDocumentUtil.getElement(
+                //                Element[] elements = XMLDocumentUtil.getElement(varType, element.getOwnerDocument(), "element");
+                //                if (elements.length == 0)
+                //                {
+                //                    elements = XMLDocumentUtil.getElement(varType, element.getOwnerDocument(), "complexType");
+                //                }
+                //                if (elements.length == 0)
+                //                {
+                //                    elements = XMLDocumentUtil.getElement(varType, element.getOwnerDocument(), "simpleType");
+                //                }
+                Element elementToCode = XMLDocumentUtil.getElementByType(schemas, _type, jdom);
 
-                    }
-                    else
-                    {
+                if (elementToCode == null)
+                {
+                    throw new ServiceException("The element " + _type + " was not found");
+                }
 
-                        String code = getCode(elementToCode, _className, _tagname);
-                        classesToCompile.put(_className, code);
-                        String minOccurs = element.getAttribute("minOccurs");
-                        String maxOccurs = element.getAttribute("maxOccurs");
-                        if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
+
+                _type = getType(elementToCode);
+                uri = getNamespaceType(elementToCode);
+                _className = toUpperCase(elementToCode.getAttribute("name"));
+                checkRestrictions(elementToCode, sb);
+                if (uri.equals(SCHEMA_NAMESPACE))
+                {
+                    _className = _type;
+                    _varname = _tagname.toLowerCase();
+                    String minOccurs = element.getAttribute("minOccurs");
+                    String maxOccurs = element.getAttribute("maxOccurs");
+                    if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
+                    {
+                        sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
+                        sb.append(" public final java.util.ArrayList<").append(_className).append("> ").append(_varname).append("=new java.util.ArrayList<").append(_className).append(">();" + NL);
+                    }
+                    if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
+                    {
+                        sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
+                        if ("1".equals(minOccurs) && "1".equals(maxOccurs))
                         {
-                            sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
-                            sb.append(" public final java.util.ArrayList<").append(_className).append("> ").append(_varname).append("=new java.util.ArrayList<").append(_className).append(">();" + NL);
+                            sb.append("@Required" + NL);
                         }
-                        if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
+                        sb.append(" public ").append(_className).append(" ").append(_varname).append(";" + NL);
+                    }
+
+                }
+                else
+                {
+
+                    String code = getCode(elementToCode, _className, _tagname);
+                    classesToCompile.put(_className, code);
+                    String minOccurs = element.getAttribute("minOccurs");
+                    String maxOccurs = element.getAttribute("maxOccurs");
+                    if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
+                    {
+                        sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
+                        sb.append(" public final java.util.ArrayList<").append(_className).append("> ").append(_varname).append("=new java.util.ArrayList<").append(_className).append(">();" + NL);
+                    }
+                    if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
+                    {
+                        sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
+                        if ("1".equals(minOccurs) && "1".equals(maxOccurs))
                         {
-                            sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
-                            if ("1".equals(minOccurs) && "1".equals(maxOccurs))
-                            {
-                                sb.append("@Required" + NL);
-                            }
-                            sb.append(" public ").append(_className).append(" ").append(_varname).append(";" + NL);
+                            sb.append("@Required" + NL);
                         }
+                        sb.append(" public ").append(_className).append(" ").append(_varname).append(";" + NL);
                     }
                 }
+
 
 
             }
@@ -536,7 +566,7 @@ public class ParameterDefinition
         }
     }
 
-    private String getCode(Element element, String className, String tagname)
+    private String getCode(Element element, String className, String tagname) throws ServiceException
     {
         StringBuilder sb = new StringBuilder();
         sb.append("import org.semanticwb.wsdl.consume.Required;" + NL);
@@ -559,6 +589,63 @@ public class ParameterDefinition
                 getCode(childElement, className, sb);
 
             }
+        }
+        String _type = element.getAttribute("type");
+        if (!_type.equals(""))
+        {
+            if (XMLDocumentUtil.isBasic(_type, jdom))
+            {
+                String _tagname = tagname;
+                String _varname = _tagname.toLowerCase();
+                String _varType = getType(_type);
+                String minOccurs = element.getAttribute("minOccurs");
+                String maxOccurs = element.getAttribute("maxOccurs");
+                if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
+                {
+                    sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
+                    sb.append(" public final java.util.ArrayList<").append(_varType).append("> ").append(_varname).append("=new java.util.ArrayList<").append(_varType).append(">();" + NL);
+                }
+                if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
+                {
+                    sb.append("@Tagname(name=\"").append(_varType).append("\")" + NL);
+                    if ("1".equals(minOccurs) && "1".equals(maxOccurs))
+                    {
+                        sb.append("@Required" + NL);
+                    }
+                    sb.append(" public ").append(_varType).append(" ").append(_varname).append(";" + NL);
+                }
+            }
+            else
+            {
+                Element elementToCode = XMLDocumentUtil.getElementByType(schemas, _type, jdom);
+                if (elementToCode == null)
+                {
+                    throw new ServiceException("The element with name " + _type + " was not found");
+                }
+                String _tagname = elementToCode.getAttribute("name");
+                String _className = toUpperCase(_tagname);
+                String code = getCode(elementToCode, _className, _tagname);
+                this.classesToCompile.put(_className, code);
+                String _varname = _tagname.toLowerCase();
+                String minOccurs = element.getAttribute("minOccurs");
+                String maxOccurs = element.getAttribute("maxOccurs");
+                if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
+                {
+                    sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
+                    sb.append(" public final java.util.ArrayList<").append(_className).append("> ").append(_varname).append("=new java.util.ArrayList<").append(_className).append(">();" + NL);
+                }
+                if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
+                {
+                    sb.append("@Tagname(name=\"").append(_className).append("\")" + NL);
+                    if ("1".equals(minOccurs) && "1".equals(maxOccurs))
+                    {
+                        sb.append("@Required" + NL);
+                    }
+                    sb.append(" public ").append(_className).append(" ").append(_varname).append(";" + NL);
+                }
+            }
+
+
         }
         sb.append("     @Override" + NL);
         sb.append("     public String toString()" + NL);
