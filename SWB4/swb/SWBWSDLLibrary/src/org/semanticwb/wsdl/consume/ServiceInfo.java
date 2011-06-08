@@ -208,8 +208,6 @@ public class ServiceInfo
                 for (Document includedoc : includes)
                 {
                     importInLine(includedoc, grammars);
-                    System.out.println("xml "+SWBUtils.XML.domToXml(grammars.getOwnerDocument()));
-
                 }
 
             }
