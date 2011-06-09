@@ -358,7 +358,7 @@ public class ServiceInfo
             for (int i = 0; i < _operations.getLength(); i++)
             {
                 Element operationElement = (Element) _operations.item(i);
-                Operation operation = new Operation(operationElement, this, _jdom);
+                Operation operation = new Operation(operationElement, _jdom);
                 operations.add(operation);
             }
         }
