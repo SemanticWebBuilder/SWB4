@@ -35,6 +35,25 @@ function valida()
     submitform();
 }
 
+function validateEditFile()
+{
+    if(document.frmnewdoc.repftitle.value=="")
+    {
+        alert("Defina el título");
+        return;
+    }
+    if(document.frmnewdoc.repfdescription.value=="")
+    {
+        alert("Indique la descripción");
+        return;
+    }
+//    if(document.frmnewdoc.repfdoc.value=="")
+//    {
+//        alert("Defina un archivo");
+//        return;
+//    }
+    submitform();
+}
 
 function validateAddFolder()
 {
