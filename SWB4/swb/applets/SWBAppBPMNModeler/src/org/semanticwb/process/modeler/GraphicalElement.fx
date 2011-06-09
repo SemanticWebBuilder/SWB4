@@ -19,8 +19,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import java.lang.Void;
 import org.semanticwb.process.modeler.ModelerUtils;
-import org.w3c.dom.Element;
-import org.w3c.dom.Document;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.animation.Interpolator;
@@ -807,34 +805,20 @@ public class GraphicalElement extends CustomNode
         }
     }
 
-    public function getGraphicsInfos(doc: Document) : Element {
-        var ret = doc.createElement("NodeGraphicsInfos");
-        var graphicInfo = doc.createElement("NodeGraphicsInfo");
-        var coords = doc.createElement("Coordinates");
-        
-        graphicInfo.appendChild(coords);
-        ret.appendChild(graphicInfo);
-
-        graphicInfo.setAttribute("ToolId", "SemanticWebBuilder_Process_Modeler");
-        graphicInfo.setAttribute("IsVisible", "{canView()}");
-        graphicInfo.setAttribute("Width", "{w}");
-        graphicInfo.setAttribute("Height", "{h}");
-
-        if (getGraphParent() instanceof Lane) {
-            graphicInfo.setAttribute("LaneId", "{getGraphParent().uri}");
-        }
-
-        coords.setAttribute("XCoordinate", "{x}");
-        coords.setAttribute("YCoordinate", "{y}");
-        return ret;
-    }
-
-    public function getXPDLDefinition(doc: Document) : Element {
-        return null;
-    }
-
     public function getScaleWidth() {
         return w * s;
+    }
+
+    public function getURI(): String {
+        return uri;
+    }
+
+    public function getTitle(): String {
+        return title;
+    }
+
+    public function getDescription(): String {
+        return description;
     }
 
     public function getScaleHeight() {
