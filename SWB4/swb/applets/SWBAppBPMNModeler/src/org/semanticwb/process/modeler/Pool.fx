@@ -18,11 +18,10 @@ import javafx.util.Sequences;
 import java.util.Comparator;
 import org.semanticwb.process.modeler.GraphicalElement;
 import java.util.HashMap;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.semanticwb.process.modeler.AssociationFlow;
 
 /**
+ * Clase que representa un Pool en un diagrama BPMN 2.0.
  * @author javier.solis
  */
 
@@ -145,6 +144,7 @@ public class Pool extends GraphicalElement
         };
     }
 
+    /**Adhiere al pool los elementos que se encuentran debajo*/
     public function captureChilds() {
         for (ele in modeler.contents) {
             if (ele instanceof GraphicalElement and not (ele instanceof Lane or ele instanceof Pool or ele instanceof Artifact)) {
@@ -171,6 +171,7 @@ public class Pool extends GraphicalElement
        }
     }
 
+    /**Elimina un Lane del Pool*/
     public function removeLane(lane:Lane)
     {
         delete lane from lanes;
@@ -205,7 +206,8 @@ public class Pool extends GraphicalElement
 
         updateSize();
     }
-
+    
+    /**Agrega un Lane al Pool*/
     public function addLane():Lane
     {
         var lane=Lane
@@ -225,6 +227,7 @@ public class Pool extends GraphicalElement
         return lane;
     }
 
+    /**Actualiza el tamaño del Pool de acuerdo al tamaño de los lanes*/
     public override function updateSize()
     {
         var t:Number=0;
@@ -246,6 +249,7 @@ public class Pool extends GraphicalElement
         }
     }
 
+    /**Obtiene el Lane con el URI especificado*/
     public function getLaneByURI(uri:String):GraphicalElement
     {
         for(lane in lanes)
@@ -296,6 +300,7 @@ public class Pool extends GraphicalElement
         return ret;
     }
 
+    /**Elimina todos los elementos adheridos al Pool*/
     public function removeChilds() {
         var ch = Sequences.shuffle(getgraphChilds());
         for (ele in ch) {
@@ -378,25 +383,5 @@ public class Pool extends GraphicalElement
         }
 
         return t;
-    }
-
-    override public function getXPDLDefinition(doc: Document) : Element {
-        var ret = doc.createElement("Pool");
-        var lns = doc.createElement("Lanes");
-        var graphicInfos = getGraphicsInfos(doc);
-        ret.appendChild(lns);
-        ret.appendChild(graphicInfos);
-
-        for (lane in lanes) {
-            var ln = lane.getXPDLDefinition(doc);
-            lns.appendChild(ln);
-        }
-
-        ret.setAttribute("Id", "{uri}");
-        ret.setAttribute("Name", "{title}");
-        ret.setAttribute("Orientation", "HORIZONTAL");
-        ret.setAttribute("BoundaryVisible", "true");
-
-        return ret;
     }
 }
