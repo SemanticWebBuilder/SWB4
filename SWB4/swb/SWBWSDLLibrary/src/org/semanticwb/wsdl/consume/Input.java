@@ -19,37 +19,41 @@ public class Input
     private final ArrayList<ParameterDefinition> parameters = new ArrayList<ParameterDefinition>();
     private final Element input;
     private final Operation operation;
-    public Input(Element input,Operation operation) throws ServiceException
+
+    public Input(Element input, Operation operation, org.jdom.Document _jdom) throws ServiceException
     {
-        this.operation=operation;
+        this.operation = operation;
         this.input = input;
         String message = input.getAttribute("message");
-        Element[] elements = XMLDocumentUtil.getElementByName(message, input.getOwnerDocument(),"message");
-        for (Element eMessage : elements)
+        Element eMessage = XMLDocumentUtil.getElementByName(message, "message",input.getOwnerDocument());
+        if (eMessage == null)
         {
-            NodeList parts = eMessage.getElementsByTagNameNS(input.getNamespaceURI(), "part");
-            for (int j = 0; j < parts.getLength(); j++)
-            {
-                Element epart = (Element) parts.item(j);
-                ParameterDefinition parameter = new ParameterDefinition(epart);
-                parameters.add(parameter);
-            }
+            throw new ServiceException("The message " + message + " was not found");
         }
+        NodeList parts = eMessage.getElementsByTagNameNS(input.getNamespaceURI(), "part");
+        for (int j = 0; j < parts.getLength(); j++)
+        {
+            Element epart = (Element) parts.item(j);
+            ParameterDefinition parameter = new ParameterDefinition(epart,_jdom);
+            parameters.add(parameter);
+        }
+
     }
 
     public ParameterDefinition[] getParameters()
     {
         return parameters.toArray(new ParameterDefinition[parameters.size()]);
     }
+
     public ParameterDefinition getParameterDefinitionByName(String name)
     {
-        if(name==null)
+        if (name == null)
         {
             throw new NullPointerException("The name can not be null");
         }
-        for(ParameterDefinition def : parameters)
+        for (ParameterDefinition def : parameters)
         {
-            if(name.equals(def.getName()))
+            if (name.equals(def.getName()))
             {
                 return def;
             }

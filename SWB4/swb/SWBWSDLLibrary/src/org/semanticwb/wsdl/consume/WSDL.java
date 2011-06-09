@@ -17,6 +17,7 @@ public class WSDL
 
     public WSDL(URL url)
     {
+        
         if (url == null)
             throw new NullPointerException("The url can not be null");
         if (!(url.getProtocol().toLowerCase().startsWith("http") || url.getProtocol().toLowerCase().startsWith("https")))
@@ -24,6 +25,7 @@ public class WSDL
             throw new IllegalArgumentException("The protocol " + url.getProtocol() + " is not suported (only http or https is supported)");
         }
         this.url = url;
+        
 
     }
 

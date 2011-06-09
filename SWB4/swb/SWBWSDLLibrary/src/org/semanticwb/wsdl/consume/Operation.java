@@ -30,7 +30,7 @@ import org.w3c.dom.NodeList;
  */
 public class Operation
 {
-
+    
     private static final String APPLICATION_XML = "application/xml";
     private static final String CONTENT_TYPE = "Content-Type";
     protected static final String TEXT_XML = "text/xml";
@@ -47,7 +47,7 @@ public class Operation
     private final Ouput output;
     private final ServiceInfo info;
 
-    public Operation(Element operation, ServiceInfo info) throws ServiceException
+    public Operation(Element operation, ServiceInfo info,org.jdom.Document _jdom) throws ServiceException
     {
         this.info = info;
         this.operation = operation;
@@ -62,7 +62,7 @@ public class Operation
         for (int i = 0; i < _inputs.getLength(); i++)
         {
             Element einput = (Element) _inputs.item(i);
-            _input = new Input(einput, this);
+            _input = new Input(einput, this,_jdom);
         }
         this.input = _input;
 
@@ -72,7 +72,7 @@ public class Operation
         for (int i = 0; i < _outputs.getLength(); i++)
         {
             Element eoutput = (Element) _outputs.item(i);
-            _output = new Ouput(eoutput, this);
+            _output = new Ouput(eoutput, this,_jdom);
 
         }
         this.output = _output;
