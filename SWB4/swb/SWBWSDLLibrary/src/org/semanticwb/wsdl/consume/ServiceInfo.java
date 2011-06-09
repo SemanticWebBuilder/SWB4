@@ -6,6 +6,7 @@ package org.semanticwb.wsdl.consume;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
@@ -35,21 +36,23 @@ public class ServiceInfo
     private static final Logger log = SWBUtils.getLogger(ServiceInfo.class);
     private static final String SCHEMA_NAMESPACE = "http://www.w3.org/2000/10/XMLSchema";
     private static final String SCHEMA_2001_NAMESPACE = "http://www.w3.org/2001/XMLSchema";
-
     private static final String WSDL_NAMESPACE = "http://schemas.xmlsoap.org/wsdl/";
     private static final String CONTENT_TYPE = "Content-Type";
-    private static final String APPLICATION_WSDL_CONTENT_TYPE ="application/wsdl+xml";
+    private static final String APPLICATION_WSDL_CONTENT_TYPE = "application/wsdl+xml";
     private final URL url;
     private Document doc;
+    private ArrayList<Document> schemas = new ArrayList<Document>();
     private final HashSet<Operation> operations = new HashSet<Operation>();
 
     public ServiceInfo(URL url)
     {
         this.url = url;
+
     }
 
     public void loadService() throws ServiceException
     {
+
         try
         {
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -122,15 +125,15 @@ public class ServiceInfo
         {
             return false;
         }
-        String attname="";
-        String prefix=doc.getDocumentElement().getPrefix();
-        if(prefix==null)
+        String attname = "";
+        String prefix = doc.getDocumentElement().getPrefix();
+        if (prefix == null)
         {
-            attname="xmlns";
+            attname = "xmlns";
         }
         else
         {
-            attname="xmlns:"+prefix;
+            attname = "xmlns:" + prefix;
         }
 
         String xmlns = doc.getDocumentElement().getAttribute(attname);
@@ -153,7 +156,7 @@ public class ServiceInfo
                 ArrayList<Document> includes = new ArrayList<Document>();
                 ArrayList<Element> toDelete = new ArrayList<Element>();
                 NodeList nodes = grammars.getElementsByTagNameNS(SCHEMA_NAMESPACE, "import");
-                if(nodes.getLength()==0)
+                if (nodes.getLength() == 0)
                 {
                     nodes = grammars.getElementsByTagNameNS(SCHEMA_2001_NAMESPACE, "import");
                 }
@@ -162,7 +165,7 @@ public class ServiceInfo
                     if (nodes.item(j) instanceof Element)
                     {
                         Element include = (Element) nodes.item(j);
-                        toDelete.add((Element)include.getParentNode());
+                        toDelete.add((Element) include.getParentNode());
                         String spath = include.getAttribute("schemaLocation");
                         URL path = url;
                         try
@@ -219,55 +222,55 @@ public class ServiceInfo
         return true;
         /*SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         boolean validate = false;
-
+        
         String docschema = null;
         InputStream in = XMLConstants.class.getResourceAsStream("/org/semanticwb/wsdl/util/wsdlschema.xml");
-
         
-
-
+        
+        
+        
         try
         {
-            InputStreamReader reader = new InputStreamReader(in, Charset.forName("utf-8"));
-            char[] buffer = new char[1024];
-            StringBuilder sb = new StringBuilder();
-            int read = reader.read(buffer);
-            while (read != -1)
-            {
-                sb.append(new String(buffer, 0, buffer.length));
-                read = reader.read(buffer);
-            }
-            docschema=sb.toString();
-            in.close();
+        InputStreamReader reader = new InputStreamReader(in, Charset.forName("utf-8"));
+        char[] buffer = new char[1024];
+        StringBuilder sb = new StringBuilder();
+        int read = reader.read(buffer);
+        while (read != -1)
+        {
+        sb.append(new String(buffer, 0, buffer.length));
+        read = reader.read(buffer);
+        }
+        docschema=sb.toString();
+        in.close();
         }
         catch (Exception e)
         {
-            log.debug(e);
+        log.debug(e);
         }
         if (docschema != null)
         {
-
-            StringReader reader = new StringReader(docschema);
-            Source schemaFile = new StreamSource(reader);
-            try
-            {
-                Schema schema = factory.newSchema(schemaFile);
-                Validator validator = schema.newValidator();
-                DOMSource source = new DOMSource(doc);
-                validator.validate(source);
-                validate = true;
-            }
-            catch (IOException ioe)
-            {
-                log.debug(ioe);
-                validate = false;
-            }
-            catch (SAXException saxe)
-            {
-                String xml = SWBUtils.XML.domToXml(doc, Charset.defaultCharset().name(), true);
-                log.debug("El documento no es válido con namespace " + doc.getDocumentElement().getNamespaceURI() + "\r\n " + xml, saxe);
-                validate = false;
-            }
+        
+        StringReader reader = new StringReader(docschema);
+        Source schemaFile = new StreamSource(reader);
+        try
+        {
+        Schema schema = factory.newSchema(schemaFile);
+        Validator validator = schema.newValidator();
+        DOMSource source = new DOMSource(doc);
+        validator.validate(source);
+        validate = true;
+        }
+        catch (IOException ioe)
+        {
+        log.debug(ioe);
+        validate = false;
+        }
+        catch (SAXException saxe)
+        {
+        String xml = SWBUtils.XML.domToXml(doc, Charset.defaultCharset().name(), true);
+        log.debug("El documento no es válido con namespace " + doc.getDocumentElement().getNamespaceURI() + "\r\n " + xml, saxe);
+        validate = false;
+        }
         }
         return validate;*/
     }
@@ -289,10 +292,10 @@ public class ServiceInfo
                     if (pos != -1)
                     {
                         String scharset = contentType.substring(pos + 8).trim();
-                        contentType=contentType.substring(0,pos).trim();
-                        if(contentType.endsWith(";"))
+                        contentType = contentType.substring(0, pos).trim();
+                        if (contentType.endsWith(";"))
                         {
-                            contentType=contentType.substring(0,contentType.length()-1);
+                            contentType = contentType.substring(0, contentType.length() - 1);
                         }
                         charset = Charset.forName(scharset);
                     }
@@ -334,12 +337,30 @@ public class ServiceInfo
 
     private void fill() throws ServiceException
     {
-        NodeList _operations = doc.getElementsByTagNameNS(WSDL_NAMESPACE,"operation");
-        for (int i = 0; i < _operations.getLength(); i++)
+        String xml = SWBUtils.XML.domToXml(doc, "utf-8", true);
+        StringReader r = new StringReader(xml);
+        SAXBuilder builder = new SAXBuilder();
+        org.jdom.Document _jdom = null;
+        try
         {
-            Element operationElement = (Element) _operations.item(i);
-            Operation operation = new Operation(operationElement,this);
-            operations.add(operation);
+            _jdom = builder.build(r);
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+            throw new ServiceException(e);
+        }
+        NodeList _portTypes = doc.getElementsByTagNameNS(WSDL_NAMESPACE, "portType");
+        for (int j = 0; j < _portTypes.getLength(); j++)
+        {
+            Element _portType = (Element) _portTypes.item(j);
+            NodeList _operations = _portType.getElementsByTagNameNS(WSDL_NAMESPACE, "operation");
+            for (int i = 0; i < _operations.getLength(); i++)
+            {
+                Element operationElement = (Element) _operations.item(i);
+                Operation operation = new Operation(operationElement, this, _jdom);
+                operations.add(operation);
+            }
         }
     }
 
@@ -347,19 +368,21 @@ public class ServiceInfo
     {
         return operations.toArray(new Operation[operations.size()]);
     }
+
     public URL getUrl()
     {
         return url;
     }
+
     public Operation getOperationByName(String name)
     {
-        if(name==null)
+        if (name == null)
         {
             throw new NullPointerException("The operation name is null");
         }
-        for(Operation op : operations)
+        for (Operation op : operations)
         {
-            if(name.equals(op.getName()))
+            if (name.equals(op.getName()))
             {
                 return op;
             }
