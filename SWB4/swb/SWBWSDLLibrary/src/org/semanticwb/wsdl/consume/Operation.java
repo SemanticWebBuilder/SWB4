@@ -45,11 +45,10 @@ public class Operation
     private final Element operation;
     private final Input input;
     private final Ouput output;
-    private final ServiceInfo info;
+    
 
-    public Operation(Element operation, ServiceInfo info,org.jdom.Document _jdom) throws ServiceException
-    {
-        this.info = info;
+    public Operation(Element operation,org.jdom.Document _jdom) throws ServiceException
+    {        
         this.operation = operation;
         if (operation.getParentNode() != null && operation.getParentNode() instanceof Element)
         {
