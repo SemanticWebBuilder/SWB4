@@ -29,7 +29,9 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.StringTokenizer;
@@ -78,6 +80,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
     private static final String MODE_DIRS = "showdirs";
     private static final String MODE_ADDFORM = "getAddForm";
     private static final String MODE_GETFILE = "getFile";
+    private static final String MODE_SELFOLDER = "selFolder";
     private static final String FILE_DETAIL = "fdetail";
     private static final String REP_FILE = "swbfilerep:RepositoryFile";
     private static final String REP_FOLDER = "swbfilerep:RepositoryFolder";
@@ -88,6 +91,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
     private static final String DEFAULT_MIME_TYPE = "application/octet-stream";
     private String IDREP = null;
     private String resUUID = null;
+    private static final String PARAM_UUID = "UUID";
 
     static {
         try {
@@ -114,7 +118,10 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             doAddForm(request, response, paramRequest);
         } else if (paramRequest.getMode().equals(MODE_GETFILE)) {
             doGetFile(request, response, paramRequest);
-        } else {
+        } //        else if (paramRequest.getMode().equals(MODE_SELFOLDER)) {
+        //            doSelectFolders(request, response, paramRequest);
+        //        }
+        else {
             super.processRequest(request, response, paramRequest);
         }
     }
@@ -211,7 +218,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         StringBuffer ret = new StringBuffer("");
         User user = paramRequest.getUser();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss");
         int luser = getLevelUser(user);
         Session session = null;
 
@@ -236,18 +243,21 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             Node nodePage = session.getNodeByUUID(parentUUID);
             NodeIterator nit = nodePage.getNodes();
 
-            ret.append("\n<div class=\"swbform\">");
+            ret.append(getLinkStyle());
+
+            ret.append("\n<div style=\"position: relative; float: left;width: 600px;\">"); // class=\"swbform\"
+            ret.append("\n<fieldset>");
             ret.append("\n<table width=\"100%\">");
             ret.append("\n<thead >");
 
             ret.append("\n<tr >");
-            ret.append("\n<th colspan=\"2\">");
+            ret.append("\n<th colspan=\"4\">");
             ret.append("\n" + nodePage.getProperty("swb:title").getString());
             ret.append("\n</th>");
-            ret.append("\n<th colspan=\"2\">");
-            //ret.append("\n<img src=\"" + path + "suscribe.gif\" border=\"0\"/>Suscribirse a directorio");
-            ret.append("\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-            ret.append("\n</th>");
+//            ret.append("\n<th colspan=\"2\">");
+//            //ret.append("\n<img src=\"" + path + "suscribe.gif\" border=\"0\"/>Suscribirse a directorio");
+//            ret.append("\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+//            ret.append("\n</th>");
             ret.append("\n<th colspan=\"2\" style=\"text-align:right;\">");
             SWBResourceURL urladd = paramRequest.getRenderUrl();
             urladd.setAction("addfile");
@@ -263,18 +273,22 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             ret.append("\n</th>");
             ret.append("\n</tr>");
 
-            ret.append("\n<tr>");
+            SWBResourceURL urlorder = paramRequest.getRenderUrl();
+            urlorder.setParameter("parentUUID", parentUUID);
+
+
+            ret.append("\n<tr bgcolor=\"#B8B8B8\">");
             ret.append("\n<th >");
             ret.append("\n" + paramRequest.getLocaleString("msgInfo"));
             ret.append("\n</th>");
             ret.append("\n<th>");
-            ret.append("\n" + paramRequest.getLocaleString("msgType"));
+            ret.append("\n<a href=\"" + urlorder + "&orderBy=type\" title=\"Ordenar por tipo\">" + paramRequest.getLocaleString("msgType") + "</a>");
             ret.append("\n</th>");
             ret.append("\n<th>");
-            ret.append("\n" + paramRequest.getLocaleString("msgTitle"));
+            ret.append("\n<a href=\"" + urlorder + "&orderBy=title\" title=\"Ordenar por título\">" + paramRequest.getLocaleString("msgTitle") + "</a>");
             ret.append("\n</th>");
             ret.append("\n<th>");
-            ret.append("\n" + paramRequest.getLocaleString("msgDate"));
+            ret.append("\n<a href=\"" + urlorder + "&orderBy=date\" title=\"Ordenar por fecha\">" + paramRequest.getLocaleString("msgDate") + "</a>");
             ret.append("\n</th>");
             ret.append("\n<th>");
             ret.append("\n" + paramRequest.getLocaleString("msgSelect"));
@@ -287,10 +301,50 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 
             int nfiles = 0;
             if (nit.hasNext()) {
-                ret.append("\n<tbody>");
-                while (nit.hasNext()) {
 
-                    Node nodo = nit.nextNode();
+                String orderBy = request.getParameter("orderBy");
+                if (null == orderBy) {
+                    orderBy = "title";
+                }
+
+
+                HashMap<String, Node> hmNodes = new HashMap<String, Node>();
+
+                while (nit.hasNext()) {
+                    Node nodofolder = nit.nextNode();
+
+                    String skey = nodofolder.getUUID();
+
+                    if (orderBy.equals("title")) {
+                        skey = nodofolder.getProperty("swb:title").getString();
+
+                    } else if (orderBy.equals("date")) {
+                        //nodo.getProperty("jcr:created").getDate().getTime())
+                        skey = nodofolder.getProperty("jcr:created").getDate().getTime() + "";
+
+                    } else if (orderBy.equals("type")) {
+                        String file = nodofolder.getName();
+                        String type = getFileName(file);
+
+                        skey = type + "-" + nodofolder.getProperty("swb:title").getString();
+                        hmNodes.put(skey, nodofolder);
+                    }
+                    hmNodes.put(skey, nodofolder);
+                }
+
+                ArrayList list = new ArrayList(hmNodes.keySet());
+                Collections.sort(list);
+
+                ret.append("\n<tbody>");
+
+                String bgcolor = "#FFFFFF";
+
+                Iterator<String> lnit = list.iterator();
+
+                while (lnit.hasNext()) {
+
+                    String skey = lnit.next();
+                    Node nodo = hmNodes.get(skey);
 
                     if (nodo.getPrimaryNodeType().getName().equals(REP_FILE)) {
                         boolean isdeleted = false;
@@ -303,13 +357,24 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                         if (nodo != null && !isdeleted) {
                             nfiles++;
                             UUID = nodo.getUUID();
-                            ret.append("\n<tr>");
+
+
+
+                            ret.append("\n<tr bgcolor=\"" + bgcolor + "\">");
+
+                            if (bgcolor.equals("#FFFFFF")) {
+                                bgcolor = "#E8E8E8";
+                            } else {
+                                bgcolor = "#FFFFFF";
+                            }
+
                             ret.append("\n<td>");
                             SWBResourceURL urldetail = paramRequest.getRenderUrl();
                             urldetail.setMode(MODE_ADDFORM);
-                            urldetail.setParameter("uuid", nodo.getUUID());
+                            urldetail.setParameter(PARAM_UUID, nodo.getUUID());
                             urldetail.setParameter("repNS", IDREP);
                             urldetail.setAction(FILE_DETAIL);
+                            urldetail.setParameter("parentUUID", parentUUID);
                             ret.append("\n<a href=\"#\" onclick=\"window.location='" + urldetail + "';\"><img src=\"" + path + "info.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msgFileDetail") + "\"/></a>");
                             ret.append("\n</td>");
                             ret.append("\n<td>");
@@ -333,8 +398,9 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                             ret.append("\n</td>");
                             ret.append("\n<td>");
                             SWBResourceURL uout = paramRequest.getActionUrl();
-                            uout.setParameter("uuid", UUID);
+                            uout.setParameter(PARAM_UUID, UUID);
                             uout.setParameter("repNS", IDREP);
+                            uout.setParameter("parentUUID", parentUUID);
 
                             Node ndata = nodo.getNode(JCR_CONTENT);
                             String s_usrID = ndata.getProperty(SWBFILEREPUSERID).getString();
@@ -349,10 +415,11 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 
                             if (!ndata.isCheckedOut() && luser > 1) {
                                 SWBResourceURL duout = paramRequest.getActionUrl();
-                                duout.setParameter("uuid", UUID);
+                                duout.setParameter(PARAM_UUID, UUID);
                                 duout.setParameter("repNS", IDREP);
                                 duout.setAction("check");
                                 duout.setParameter("faction", "out");
+                                duout.setParameter("parentUUID", parentUUID);
 
                                 ret.append("\n<a href=\"#\" onclick=\"window.location='" + duout + "';\">");
                                 ret.append("\n<img src=\"" + path + "out.gif\" border=\"0\"/>");
@@ -360,10 +427,11 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                             } else if (paramRequest.getUser().getId().equals(autor.getId())) {
                                 //ret.append("\n<img src=\"" + path + "reserved.gif\" border=\"0\"/>");
                                 SWBResourceURL uin = paramRequest.getRenderUrl();
-                                uin.setParameter("uuid", UUID);
+                                uin.setParameter(PARAM_UUID, UUID);
                                 uin.setParameter("repNS", IDREP);
                                 uin.setMode(SWBResourceURL.Mode_EDIT);
                                 uin.setAction("checkin");
+                                uin.setParameter("parentUUID", parentUUID);
                                 ret.append("\n<a href=\"#\" onclick=\"window.location='" + uin + "';\">");
                                 ret.append("\n<img src=\"" + path + "in.gif\" border=\"0\"alt=\"" + paramRequest.getLocaleString("msgFileUpdate") + "\"/>");
                                 ret.append("\n</a>");
@@ -389,10 +457,10 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                             ret.append("\n</td>");
                             ret.append("\n<td>");
                             SWBResourceURL usus = paramRequest.getRenderUrl();
-                            usus.setParameter("uuid", UUID);
+                            usus.setParameter(PARAM_UUID, UUID);
                             usus.setParameter("repNS", IDREP);
                             SWBResourceURL uview = paramRequest.getRenderUrl();
-                            uview.setParameter("uuid", UUID);
+                            uview.setParameter(PARAM_UUID, UUID);
                             uview.setParameter("repNS", IDREP);
                             //ret.append("\n<img src=\"" + path + "suscribe.gif\" border=\"0\"/>");
 
@@ -401,7 +469,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 
                             if (user != null && user.getId().equals(autor.getId()) || luser == 3) {
                                 SWBResourceURL udel = paramRequest.getActionUrl();
-                                udel.setParameter("uuid", UUID);
+                                udel.setParameter(PARAM_UUID, UUID);
                                 udel.setParameter("repNS", IDREP);
                                 udel.setAction("removefile");
                                 ret.append("\n<a href=\"#\" onclick=\"if(confirm('" + paramRequest.getLocaleString("msgAlertConfirmRemoveFile") + " " + nodo.getName() + "?')){ window.location='" + udel + "';} else { return false; }\">");
@@ -440,7 +508,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             ret.append("\n</th>");
             ret.append("\n<th colspan=\"2\" style=\"text-align:right;\">");
             if (user != null && luser > 1) {
-                ret.append("\n<a href=\"" + urladd + "\">");
+                ret.append("\n<a style=\"text-decoration:none;\" href=\"" + urladd + "\">");
                 ret.append("\n<img src=\"" + path + "add.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msgAltAddFile") + "\"/>");
                 ret.append("\n" + paramRequest.getLocaleString("msgALTAddFile"));
                 ret.append("\n</a>");
@@ -451,6 +519,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             ret.append("\n</tfoot>");
 
             ret.append("\n</table>");
+            ret.append("\n</fieldset>");
             ret.append("\n</div>");
 
         } catch (Exception e) {
@@ -465,7 +534,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 
             SWBResourceURL urlgetfile = paramRequest.getRenderUrl();
             urlgetfile.setMode(MODE_GETFILE);
-            urlgetfile.setParameter("uuid", request.getParameter("fuuid"));
+            urlgetfile.setParameter(PARAM_UUID, request.getParameter("fuuid"));
             urlgetfile.setParameter("repNS", request.getParameter("repNS"));
             urlgetfile.setAction("inline");
             urlgetfile.setCallMethod(SWBResourceURL.Call_DIRECT);
@@ -477,16 +546,15 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         return ret.toString();
     }
 
-    public String doSelectFolders(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        StringBuffer ret = new StringBuffer("");
-        ret.append("\n<div >");
-        ret.append("\n<ul>");
-        ret.append("\n</ul>");
-        ret.append("\n</div>");
-        ret.append(doShowFiles(request, response, paramRequest));
-        return ret.toString();
-    }
-
+//    public String doSelectFolders(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+//        StringBuffer ret = new StringBuffer("");
+//        ret.append("\n<div >");
+//        ret.append("\n<ul>");
+//        ret.append("\n</ul>");
+//        ret.append("\n</div>");
+//        ret.append(doShowFiles(request, response, paramRequest));
+//        return ret.toString();
+//    }
     public String doShowDirs(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         StringBuffer ret = new StringBuffer("");
         User user = paramRequest.getUser();
@@ -498,7 +566,8 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             loadResUUID(wp, user);
         }
         ret.append("\n<script>include_dom('" + SWBPlatform.getContextPath() + "/swbadmin/js/repositoryfile.js');</script>");
-        ret.append("\n<div>");
+        ret.append(getLinkStyle());
+        ret.append("\n<div style=\"position: relative; float: left;width: 240px;\">");
         SWBResourceURL urlfol = paramRequest.getRenderUrl();
         //urlfol.setAction("addfolder");
         urlfol.setMode(SWBResourceURL.Mode_VIEW);
@@ -507,24 +576,69 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         try {
             ret.append("\n<fieldset>");
 
-            ret.append("\n<ul>");
+            ret.append("\n<ul style=\"list-style-type:none; text-decoration:none;\">");
 
             session = rep.login(new SWBCredentials(user), IDREP);
             Node nodePage = session.getNodeByUUID(resUUID);
+
             if (user != null && user.isSigned()) {
-                ret.append("<li><a href=\"#\" onclick=\"javascript:setParentUUID(document." + formid + ",'" + resUUID + "'); window.location='" + urlfol + "';\"><img src=\"" + path + "icon-foldera.gif\" border=\"0\" alt=\"\"/> " + nodePage.getProperty("swb:title").getString() + "</a></li>");
+
+                SWBResourceURL urledit = paramRequest.getRenderUrl();
+                urledit.setAction("editfolder");
+                urledit.setMode(MODE_ADDFORM);
+                urledit.setParameter("parentUUID", resUUID);
+                urledit.setParameter(PARAM_UUID, resUUID);
+
+                ret.append("\n<li style=\"list-style-type:none; text-decoration:none;\">");
+                ret.append("\n<a href=\"#\" onclick=\"window.location='" + urledit + "';\"><img src=\"" + path + "icon-foldera.gif\" border=\"0\" alt=\"\"/></a>");
+                ret.append("\n<a href=\"#\" onclick=\"javascript:setParentUUID(document." + formid + ",'" + resUUID + "'); window.location='" + urlfol + "';\">" + nodePage.getProperty("swb:title").getString() + "</a></li>");
+                //ret.append("\n<a href=\"#\" onclick=\"window.location='" + urledit + "';\"><img src=\"" + path + "icon-foldera.gif\" border=\"0\" alt=\"edit folder\"/></a>");
             } else {
-                ret.append("<li><a href=\"#\"><img src=\"" + path + "icon-foldera.gif\" border=\"0\" alt=\"\"/>" + nodePage.getProperty("swb:title").getString() + "</a></li>");
+                ret.append("<li style=\"list-style-type:none;\"><a href=\"#\"><img src=\"" + path + "icon-foldera.gif\" border=\"0\" alt=\"\"/>" + nodePage.getProperty("swb:title").getString() + "</a></li>");
             }
             NodeIterator nit = nodePage.getNodes(REP_FOLDER);
             if (nit.hasNext()) {
-                ret.append("\n<ul>");
+
+                HashMap<String, Node> hmNodes = new HashMap<String, Node>();
+
                 while (nit.hasNext()) {
                     Node nodofolder = nit.nextNode();
+
+                    boolean isDeleted = Boolean.FALSE;
+                    if (nodofolder.getProperty(SWB_FILEREP_DELETED) != null) {
+                        //System.out.println("folder borrado: "+nodofolder.getProperty(SWB_FILEREP_DELETED).getBoolean());
+                        isDeleted = nodofolder.getProperty(SWB_FILEREP_DELETED).getBoolean();
+                    }
+
+                    String skey = nodofolder.getProperty("swb:title").getString();
+                    if (!isDeleted) {
+                        hmNodes.put(skey, nodofolder);
+                    }
+                }
+
+                ArrayList list = new ArrayList(hmNodes.keySet());
+                Collections.sort(list);
+
+                ret.append("\n<ul>");
+                Iterator<String> itdis = list.iterator();
+                while (itdis.hasNext()) {
+
+                    String key = itdis.next();
+
+                    Node nodofolder = hmNodes.get(key);
+
+                    SWBResourceURL urledit = paramRequest.getRenderUrl();
+                    urledit.setAction("editfolder");
+                    urledit.setMode(MODE_ADDFORM);
+                    urledit.setParameter("parentUUID", resUUID);
+                    urledit.setParameter(PARAM_UUID, nodofolder.getUUID());
+
                     if (user != null && user.isSigned()) {
-                        ret.append("<li><a href=\"#\" onclick=\"javascript:setParentUUID(document." + formid + ",'" + nodofolder.getUUID() + "'); window.location='" + urlfol + "?parentUUID=" + nodofolder.getUUID() + "';\"><img src=\"" + path + "icon-foldera.gif\" border=\"0\" alt=\"\"/>" + nodofolder.getProperty("swb:title").getString() + "</a></li>");
+                        ret.append("\n<li style=\"list-style-type:none;\">");
+                        ret.append("\n<a href=\"#\" onclick=\"window.location='" + urledit + "';\"><img src=\"" + path + "icon-foldera.gif\" border=\"0\" alt=\"edit folder\"/></a>");
+                        ret.append("\n<a href=\"#\" onclick=\"javascript:setParentUUID(document." + formid + ",'" + nodofolder.getUUID() + "'); window.location='" + urlfol + "?parentUUID=" + nodofolder.getUUID() + "';\">" + nodofolder.getProperty("swb:title").getString() + "</a></li>");
                     } else {
-                        ret.append("<li><a href=\"#\"><img src=\"" + path + "icon-foldera.gif\" border=\"0\" alt=\"\"/>" + nodofolder.getProperty("swb:title").getString() + "</a></li>");
+                        ret.append("<li style=\"list-style-type:none;\"><a href=\"#\"><img src=\"" + path + "icon-foldera.gif\" border=\"0\" alt=\"\"/>" + nodofolder.getProperty("swb:title").getString() + "</a></li>");
                     }
                 }
                 ret.append("\n</ul>");
@@ -561,6 +675,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 
         Session session = null;
         String parentUUID = request.getParameter("parentUUID");
+        String fUUID = request.getParameter(PARAM_UUID);
         String action = paramRequest.getAction();
         if (action == null) {
             action = "";
@@ -581,6 +696,8 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         }
 
         ret.append("\n<script>include_dom('" + SWBPlatform.getContextPath() + "/swbadmin/js/repositoryfile.js');</script>");
+
+        ret.append(getLinkStyle());
 
         if (action.equals("addfile")) {
 
@@ -642,12 +759,80 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             ret.append("\n<input type=\"button\"  name=\"s\" value=\"" + paramRequest.getLocaleString("msgBTNSave") + "\" onclick=\"javascript:valida();\" />\r\n");
             SWBResourceURL urlb = paramRequest.getRenderUrl();
             urlb.setMode(SWBResourceURL.Mode_VIEW);
+            urlb.setParameter("parentUUID", parentUUID);
             ret.append("\n<input type=\"button\"  name=\"cancel\" value=\"" + paramRequest.getLocaleString("msgBTNCancel") + "\" onclick=\"window.location='" + urlb.toString() + "';\" />\r\n");
             //ret.append("\n</form>");
             ret.append("\n</fieldset>");
             ret.append("\n</form>");
             ret.append("\n</div>");
-        } else if (action.equals("addfolder")) {
+        } //        else if (action.equals("editfile")) {
+        //
+        //            String folderTitle = dir.getDisplayName();
+        //            if (!resUUID.equals(parentUUID)) {
+        //                try {
+        //
+        //                    session = rep.login(credentials, IDREP);
+        //                    Node nf = session.getNodeByUUID(parentUUID);
+        //                    if (null != nf) {
+        //                        folderTitle = folderTitle + " - " + nf.getProperty("swb:title").getString();
+        //                    }
+        //                } catch (Exception e) {
+        //                    log.error("Error al tratar de cargar el nodo de la carpeta con UUID: " + parentUUID, e);
+        //                } finally {
+        //                    if (session != null) {
+        //                        session.logout();
+        //                    }
+        //                }
+        //            }
+        //            url.setAction("updatefile");
+        //            ret.append("\n<div class=\"swbform\">");
+        //            ret.append("\n<form name=\"frmnewdoc\" method=\"post\"  action=\"" + url.toString() + "\">"); //enctype=\"multipart/form-data\"
+        //            ret.append("\n<fieldset>");
+        //            ret.append("\n<legend>");
+        //            ret.append("\n<img src=\"" + path + "icon-foldera.gif\" border=\"0\" title=\"" + folderTitle+"\"/> " + folderTitle);
+        //            ret.append("\n</legend>");
+        //            //ret.append("\n<form name=\"frmnewdoc\" method=\"post\" enctype=\"multipart/form-data\" action=\"" + url.toString() + "\">");
+        //            ret.append("\n<input type=\"hidden\" name=\"repNS\" value=\"" + IDREP + "\">");
+        //            ret.append("\n<input type=\"hidden\" name=\"parentUUID\" value=\"" + parentUUID + "\">");
+        //            ret.append("\n<input type=\"hidden\" name=\"UUID\" value=\"" + UUID + "\">"); //uuid file
+        //            ret.append("\n<table width=\"100%\"  border=\"0\">");
+        //            ret.append("\n<tr>");
+        //            ret.append("\n<td width=\"200\">");
+        //            ret.append("\n" + paramRequest.getLocaleString("msgTitleDocument"));
+        //            ret.append("\n</td>");
+        //            ret.append("\n<td>");
+        //            ret.append("\n<input  type=\"text\" maxlength=\"99\" name=\"repftitle\" value=\""+stitle+"\">");
+        //            ret.append("\n</td>");
+        //            ret.append("\n</tr>");
+        //            ret.append("\n<tr>");
+        //            ret.append("\n<td width=\"200\">");
+        //            ret.append("\n" + paramRequest.getLocaleString("msgDescription"));
+        //            ret.append("\n</td>");
+        //            ret.append("\n<td>");
+        //            ret.append("\n<textarea rows=\"5\" name=\"repfdescription\" cols=\"20\" onKeyDown=\"textCounter(this.form.repfdescription,255);\" onKeyUp=\"textCounter(this.form.repfdescription,255);\">"+sdescription+"</textarea>");
+        //            ret.append("\n</td>");
+        //            ret.append("\n</tr>");
+        ////            ret.append("\n<tr>");
+        ////            ret.append("\n<td width=\"200\">");
+        ////            ret.append("\n" + paramRequest.getLocaleString("msgFile"));
+        ////            ret.append("\n</td>");
+        ////            ret.append("\n<td>");
+        ////            ret.append("\n<input type=\"file\"  name=\"repfdoc\">");
+        ////            ret.append("\n</td>");
+        ////            ret.append("\n</tr>");
+        //            ret.append("\n</table>");
+        //            ret.append("\n</fieldset>");
+        //            ret.append("\n<fieldset>");
+        //            ret.append("\n<input type=\"button\"  name=\"s\" value=\"" + paramRequest.getLocaleString("msgBTNSave") + "\" onclick=\"javascript:valida();\" />\r\n");
+        //            SWBResourceURL urlb = paramRequest.getRenderUrl();
+        //            urlb.setMode(SWBResourceURL.Mode_VIEW);
+        //            ret.append("\n<input type=\"button\"  name=\"cancel\" value=\"" + paramRequest.getLocaleString("msgBTNCancel") + "\" onclick=\"window.location='" + urlb.toString() + "';\" />\r\n");
+        //            //ret.append("\n</form>");
+        //            ret.append("\n</fieldset>");
+        //            ret.append("\n</form>");
+        //            ret.append("\n</div>");
+        //        }
+        else if (action.equals("addfolder")) {
             url.setAction("addfolder");
             ret.append("\n<div class=\"swbform\">");
             ret.append("\n<form name=\"frmnewfolder\" method=\"post\" action=\"" + url.toString() + "\">");
@@ -681,15 +866,83 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             ret.append("\n<input type=\"button\"  name=\"s\" value=\"" + paramRequest.getLocaleString("msgBTNSave") + "\" onclick=\"javascript:validateAddFolder();\" />\r\n");
             SWBResourceURL urlb = paramRequest.getRenderUrl();
             urlb.setMode(SWBResourceURL.Mode_VIEW);
+            urlb.setParameter("parentUUID", parentUUID);
             ret.append("\n<input type=\"button\"  name=\"cancel\" value=\"" + paramRequest.getLocaleString("msgBTNCancel") + "\" onclick=\"window.location='" + urlb.toString() + "';\" />\r\n");
             //ret.append("\n</form>");
+            ret.append("\n</fieldset>");
+            ret.append("\n</form>");
+            ret.append("\n</div>");
+        } else if (action.equals("editfolder")) {
+
+
+            String ftitle = "";
+            String fdescription = "";
+
+            try {
+                session = rep.login(credentials, IDREP);
+                Node fnode = session.getNodeByUUID(fUUID);
+                ftitle = fnode.getProperty("swb:title").getString();
+                fdescription = fnode.getProperty("swb:description").getString();
+
+            } catch (Exception e) {
+                log.error("Error al cargar la información de la carpeta para editarla", e);
+            }
+
+
+
+            url.setAction("updatefolder");
+            ret.append("\n<div class=\"swbform\">");
+            ret.append("\n<form name=\"frmnewfolder\" method=\"post\" action=\"" + url.toString() + "\">");
+            ret.append("\n<fieldset>");
+            ret.append("\n<legend>");
+            ret.append("\n<img src=\"" + path + "icon-foldera.gif\" border=\"0\" alt=\"\"/> " + dir.getDisplayName());
+            ret.append("\n</legend>");
+            //ret.append("\n<form name=\"frmnewfolder\" method=\"post\" action=\"" + url.toString() + "\">");
+            ret.append("\n<input type=\"hidden\" name=\"repNS\" value=\"" + IDREP + "\">");
+            ret.append("\n<input type=\"hidden\" name=\"parentUUID\" value=\"" + parentUUID + "\">");
+            ret.append("\n<input type=\"hidden\" name=\"" + PARAM_UUID + "\" value=\"" + fUUID + "\">");
+            ret.append("\n<table width=\"100%\"  border=\"0\">");
+            ret.append("\n<tr>");
+            ret.append("\n<td width=\"200\">");
+            ret.append("\n" + paramRequest.getLocaleString("msgFolderName"));
+            ret.append("\n</td>");
+            ret.append("\n<td>");
+            ret.append("\n<input  type=\"text\" maxlength=\"99\" name=\"repftitle\" value=\"" + ftitle + "\">");
+            ret.append("\n</td>");
+            ret.append("\n</tr>");
+            ret.append("\n<tr>");
+            ret.append("\n<td width=\"200\">");
+            ret.append("\n" + paramRequest.getLocaleString("msgDescription"));
+            ret.append("\n</td>");
+            ret.append("\n<td>");
+            ret.append("\n<textarea rows=\"5\" name=\"repfdescription\" cols=\"20\" onKeyDown=\"textCounter(this.form.repfdescription,255);\" onKeyUp=\"textCounter(this.form.repfdescription,255);\">" + fdescription + "</textarea>");
+            ret.append("\n</td>");
+            ret.append("\n</tr>");
+            ret.append("\n</table>");
+            ret.append("\n</fieldset>");
+            ret.append("\n<fieldset>");
+            ret.append("\n<input type=\"button\"  name=\"s\" value=\"" + paramRequest.getLocaleString("msgBTNSave") + "\" onclick=\"javascript:validateAddFolder();\" />\r\n");
+            SWBResourceURL urlb = paramRequest.getRenderUrl();
+            urlb.setMode(SWBResourceURL.Mode_VIEW);
+            urlb.setParameter("parentUUID", parentUUID);
+            ret.append("\n<input type=\"button\"  name=\"cancel\" value=\"" + paramRequest.getLocaleString("msgBTNCancel") + "\" onclick=\"window.location='" + urlb.toString() + "';\" />\r\n");
+
+            if (!parentUUID.equals(fUUID)) {
+                SWBResourceURL urlrem = paramRequest.getActionUrl();
+                urlrem.setMode(SWBResourceURL.Mode_VIEW);
+                urlrem.setAction("removefolder");
+                urlrem.setParameter("repNS", IDREP);
+                urlrem.setParameter("parentUUID", parentUUID);
+                urlrem.setParameter(PARAM_UUID, fUUID);
+                ret.append("\n<input type=\"button\"  name=\"btnremove\" value=\"Eliminar carpeta\" onclick=\"if(confirm('Eliminar carpeta y todos los archivos contenidos. ¿Estás seguro de eliminar la carpeta?')){window.location='" + urlrem.toString() + "'} else { return false;};\" />\r\n");
+            }
             ret.append("\n</fieldset>");
             ret.append("\n</form>");
             ret.append("\n</div>");
         } else if (action.equals(FILE_DETAIL)) {
 
             String folderTitle = dir.getDisplayName();
-            String UUID = request.getParameter("uuid");
+            String UUID = request.getParameter(PARAM_UUID);
 
             Node nodo = null;
             Node nf = null;
@@ -712,7 +965,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             }
             url.setAction("updatefile");
             ret.append("\n<div class=\"swbform\">");
-            ret.append("\n<form name=\"frmnewdoc\" method=\"post\" enctype=\"multipart/form-data\" action=\"" + url.toString() + "\">");
+            ret.append("\n<form name=\"frmnewdoc\" method=\"post\"  action=\"" + url.toString() + "\">"); //enctype=\"multipart/form-data\"
             ret.append("\n<fieldset>");
             ret.append("\n<legend>");
             ret.append("\n<img src=\"" + path + "icon-foldera.gif\" border=\"0\" alt=\"\"/> " + folderTitle);
@@ -720,10 +973,11 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             //ret.append("\n<form name=\"frmnewdoc\" method=\"post\" enctype=\"multipart/form-data\" action=\"" + url.toString() + "\">");
             ret.append("\n<input type=\"hidden\" name=\"repNS\" value=\"" + IDREP + "\" />");
             ret.append("\n<input type=\"hidden\" name=\"parentUUID\" value=\"" + parentUUID + "\" />");
-            ret.append("\n<input type=\"hidden\" name=\"uuid\" value=\"" + UUID + "\" />");
+            ret.append("\n<input type=\"hidden\" name=\"" + PARAM_UUID + "\" value=\"" + UUID + "\" />");
             ret.append("\n<table width=\"100%\"  border=\"0\" >");
             try {
 
+                boolean editFile = Boolean.FALSE;
                 session = rep.login(credentials, IDREP);
                 nodo = session.getNodeByUUID(UUID);
 
@@ -734,7 +988,28 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                     ret.append("\n" + paramRequest.getLocaleString("msgTitle"));
                     ret.append("\n:</td>");
                     ret.append("\n<td>");
-                    ret.append("\n" + nodo.getProperty("swb:title").getString());
+
+                    String vn = getLastVersionOfcontent(session, "", UUID);
+
+                    User autor = user.getUserRepository().getUser(nc.getProperty(SWBFILEREPUSERID).getString());
+
+                    String fullname = paramRequest.getLocaleString("msgUsrAnonymous");
+                    if (autor != null) {
+                        fullname = autor.getFullName();
+                    }
+
+                    if (luser == 3 || paramRequest.getUser().getId().equals(autor.getId())) {
+
+                        editFile = Boolean.TRUE;
+
+                    }
+
+                    if (editFile) {
+                        ret.append("\n<input type=\"text\" maxlength=\"99\" name=\"repftitle\" value=\"" + nodo.getProperty("swb:title").getString() + "\">");
+                    } else {
+                        ret.append("\n" + nodo.getProperty("swb:title").getString());
+                    }
+
                     ret.append("\n</td>");
                     ret.append("\n</tr>");
                     ret.append("\n<tr>");
@@ -742,7 +1017,14 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                     ret.append("\n" + paramRequest.getLocaleString("msgDescription"));
                     ret.append("\n:</td>");
                     ret.append("\n<td>");
-                    ret.append("\n" + nodo.getProperty("swb:description").getString());
+
+                    if (editFile) {
+                        ret.append("\n<textarea rows=\"5\" name=\"repfdescription\" cols=\"20\" onKeyDown=\"textCounter(this.form.repfdescription,255);\" onKeyUp=\"textCounter(this.form.repfdescription,255);\">" + nodo.getProperty("swb:description").getString() + "</textarea>");
+
+                    } else {
+                        ret.append("\n" + nodo.getProperty("swb:description").getString());
+                    }
+
                     ret.append("\n</td>");
                     ret.append("\n</tr>");
 
@@ -756,14 +1038,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                     ret.append("\n</td>");
                     ret.append("\n</tr>");
 
-                    String vn = getLastVersionOfcontent(session, "", UUID);
 
-                    User autor = user.getUserRepository().getUser(nc.getProperty(SWBFILEREPUSERID).getString());
-
-                    String fullname = paramRequest.getLocaleString("msgUsrAnonymous");
-                    if (autor != null) {
-                        fullname = autor.getFullName();
-                    }
 
                     ret.append("\n<tr>");
                     ret.append("\n<td>");
@@ -782,7 +1057,8 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                     SWBResourceURL urlv = paramRequest.getRenderUrl();
 
                     urlv.setAction("showfileversions");
-                    urlv.setParameter("uuid", UUID);
+                    urlv.setParameter(PARAM_UUID, UUID);
+                    urlv.setParameter("parentUUID", parentUUID);
                     urlv.setParameter("repNS", IDREP);
 
                     ret.append("\n" + vn + " (<a href=\"" + urlv + "\">" + paramRequest.getLocaleString("msgViewVersionHistory") + "</a>)");
@@ -821,22 +1097,25 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                     ret.append("\n<tr>");
                     ret.append("\n<td>");
                     SWBResourceURL usus = paramRequest.getRenderUrl();
-                    usus.setParameter("uuid", UUID);
+                    usus.setParameter(PARAM_UUID, UUID);
                     usus.setParameter("repNS", IDREP);
+                    usus.setParameter("parentUUID", parentUUID);
 
 
                     SWBResourceURL urlgetfile = paramRequest.getRenderUrl();
                     urlgetfile.setMode(MODE_GETFILE);
-                    urlgetfile.setParameter("uuid", UUID);
+                    urlgetfile.setParameter(PARAM_UUID, UUID);
                     urlgetfile.setParameter("repNS", IDREP);
                     urlgetfile.setAction("inline");
                     urlgetfile.setCallMethod(SWBResourceURL.Call_DIRECT);
                     urlgetfile.setWindowState(SWBResourceURL.WinState_MAXIMIZED);
+                    urlgetfile.setParameter("parentUUID", parentUUID);
                     ret.append("\n<a href=\"#\" onclick=\"window.location='" + urlgetfile + "';\" title=\"" + paramRequest.getLocaleString("msgViewFile") + "\"><img border=\"0\" src=\"" + path + "preview.gif\" alt=\"\" /></a>");
 
                     if (luser == 3 || paramRequest.getUser().getId().equals(autor.getId())) {
                         SWBResourceURL udel = paramRequest.getActionUrl();
-                        udel.setParameter("uuid", UUID);
+                        udel.setParameter(PARAM_UUID, UUID);
+                        udel.setParameter("parentUUID", parentUUID);
                         udel.setParameter("repNS", IDREP);
                         udel.setAction("removefile");
                         ret.append("\n<a href=\"#\" onclick=\"if(confirm('" + paramRequest.getLocaleString("msgAlertConfirmRemoveFile") + " " + nodo.getName() + "?')){ window.location='" + udel + "';} else { return false; }\">");
@@ -893,9 +1172,12 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             ret.append("\n</table>");
             ret.append("\n</fieldset>");
             ret.append("\n<fieldset>");
-            ret.append("\n<input type=\"button\"  name=\"s\" value=\"" + paramRequest.getLocaleString("msgBTNSave") + "\" onclick=\"javascript:valida();\" />\r\n");
+            ret.append("\n<input type=\"button\"  name=\"s\" value=\"" + paramRequest.getLocaleString("msgBTNSave") + "\" onclick=\"javascript:validateEditFile();\" />\r\n");
             SWBResourceURL urlb = paramRequest.getRenderUrl();
             urlb.setMode(SWBResourceURL.Mode_VIEW);
+            urlb.setParameter("parentUUID", parentUUID);
+            urlb.setAction(FILE_DETAIL);
+            urlb.setParameter(PARAM_UUID, UUID);
             ret.append("\n<input type=\"button\"  name=\"cancel\" value=\"" + paramRequest.getLocaleString("msgBTNCancel") + "\" onclick=\"window.location='" + urlb.toString() + "';\" />\r\n");
             //ret.append("\n</form>");
             ret.append("\n</fieldset>");
@@ -905,7 +1187,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         } else if (action.equals("showfileversions")) {
 
             String folderTitle = dir.getDisplayName();
-            String UUID = request.getParameter("uuid");
+            String UUID = request.getParameter(PARAM_UUID);
             String repNS = request.getParameter("repNS");
             Node nf = null;
             if (null != UUID) {
@@ -953,7 +1235,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 
                     Node ndata = nf.getNode(JCR_CONTENT);
 
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy hh:mm:ss");
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss");
                     VersionIterator it = ndata.getVersionHistory().getAllVersions();
                     ret.append("\n<tbody>");
                     while (it.hasNext()) {
@@ -989,12 +1271,13 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 
                             SWBResourceURL urlgetfile = paramRequest.getRenderUrl();
                             urlgetfile.setMode(MODE_GETFILE);
-                            urlgetfile.setParameter("uuid", UUID);
+                            urlgetfile.setParameter(PARAM_UUID, UUID);
                             urlgetfile.setParameter("repNS", IDREP);
                             urlgetfile.setParameter("version", numversion);
                             urlgetfile.setAction("inline");
                             urlgetfile.setCallMethod(SWBResourceURL.Call_DIRECT);
                             urlgetfile.setWindowState(SWBResourceURL.WinState_MAXIMIZED);
+                            urlgetfile.setParameter("parentUUID", parentUUID);
 
                             ret.append("\n<td>");
                             ret.append("\n<a href=\"#\" onclick=\"window.location='" + urlgetfile + "';\" title=\"" + paramRequest.getLocaleString("msgViewFile") + "\"><img border=\"0\" src=\"" + path + "preview.gif\" alt=\"" + paramRequest.getLocaleString("msgAltViewVersion") + "\" /></a>");
@@ -1013,6 +1296,8 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             //ret.append("\n<input type='button'  name='s' value='" + paramRequest.getLocaleString("msgBTNSave") + "' onclick='javascript:valida();'>\r\n");
             SWBResourceURL urlb = paramRequest.getRenderUrl();
             urlb.setMode(SWBResourceURL.Mode_VIEW);
+            urlb.setParameter("parentUUID", parentUUID);
+            urlb.setParameter(PARAM_UUID, UUID);
             ret.append("\n<input type=\"button\"  name=\"cancel\" value=\"" + paramRequest.getLocaleString("msgBTNCancel") + "\" onclick=\"window.location='" + urlb.toString() + "'\" />\r\n");
             //ret.append("\n</form>");
             ret.append("\n</fieldset>");
@@ -1118,11 +1403,11 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 
             out.println("<tr><td colspan=\"2\"><B>" + paramRequest.getLocaleString("msgRolesDefinitionLevel") + "</b></td></tr>");
             out.println("<tr><td align=\"right\" width=150>" + paramRequest.getLocaleString("msgView") + ":</td>");
-            out.println("<td><select name=\"ver\">" + getSelectOptions("ver",wsite,paramRequest) + "</select></td></tr>");
+            out.println("<td><select name=\"ver\">" + getSelectOptions("ver", wsite, paramRequest) + "</select></td></tr>");
             out.println("<tr><td align=\"right\" width=150>" + paramRequest.getLocaleString("msgModify") + ":</td>");
-            out.println("<td><select name=\"modificar\">" + getSelectOptions("modificar",wsite,paramRequest) + "</select></td></tr>");
+            out.println("<td><select name=\"modificar\">" + getSelectOptions("modificar", wsite, paramRequest) + "</select></td></tr>");
             out.println("<tr><td align=\"right\"  width=150>" + paramRequest.getLocaleString("msgAdministrate") + ":</td>");
-            out.println("<td><select name=\"administrar\">" + getSelectOptions("administrar",wsite,paramRequest) + "</select></td></tr>");
+            out.println("<td><select name=\"administrar\">" + getSelectOptions("administrar", wsite, paramRequest) + "</select></td></tr>");
             out.println("<tr><td align=\"right\"  width=150>" + paramRequest.getLocaleString("msgShowSubDirs") + ":</td>");
             out.println("<td><input type=\"checkbox\" name=\"showdirectory\" value=\"1\" " + strCheck + " " + strEnable + ">");
             out.println("</td></tr>");
@@ -1286,11 +1571,11 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                                 out.println("<td><a href=\"mailto:" + usrcreator.getEmail() + "\">" + usrcreator.getEmail() + "</a></td>");
                                 out.println("<td>");
                                 SWBResourceURL urlrecover = paramRequest.getActionUrl();
-                                urlrecover.setParameter("uuid", nfi.getUUID());
+                                urlrecover.setParameter(PARAM_UUID, nfi.getUUID());
                                 urlrecover.setParameter("repNS", ns);
                                 urlrecover.setAction("admin_recover");
                                 SWBResourceURL urldel = paramRequest.getActionUrl();
-                                urldel.setParameter("uuid", nfi.getUUID());
+                                urldel.setParameter(PARAM_UUID, nfi.getUUID());
                                 urldel.setParameter("repNS", ns);
                                 urldel.setAction("admin_delete");
                                 out.println("<a href=\"#\" onclick=\"submitUrl('" + urlrecover + "',this); return false;\">" + "<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/recover.gif\" border=\"0\" title=\"" + paramRequest.getLocaleString("msgAltRestore") + "\" >" + "</a>");
@@ -1325,11 +1610,11 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                                         out.println("<td><a href=\"mailto:" + usrcreator.getEmail() + "\">" + usrcreator.getEmail() + "</a></td>");
                                         out.println("<td>");
                                         SWBResourceURL urlrecover = paramRequest.getActionUrl();
-                                        urlrecover.setParameter("uuid", nfi.getUUID());
+                                        urlrecover.setParameter(PARAM_UUID, nfi.getUUID());
                                         urlrecover.setParameter("repNS", ns);
                                         urlrecover.setAction("admin_recover");
                                         SWBResourceURL urldel = paramRequest.getActionUrl();
-                                        urldel.setParameter("uuid", nfi.getUUID());
+                                        urldel.setParameter(PARAM_UUID, nfi.getUUID());
                                         urldel.setParameter("repNS", ns);
                                         urldel.setAction("admin_delete");
                                         out.println("<a href=\"#\" onclick=\"submitUrl('" + urlrecover + "',this); return false;\">" + "<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/recover.gif\" border=\"0\" title=\"" + paramRequest.getLocaleString("msgAltRestore") + "\" >" + "</a>");
@@ -1450,7 +1735,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         } else if ("admin_recover".equals(action)) //recuperación de archivo eliminado
         {
 
-            String UUID = request.getParameter("uuid");
+            String UUID = request.getParameter(PARAM_UUID);
             try {
                 session = rep.login(credentials, repNS);
                 Node fnode = session.getNodeByUUID(UUID);
@@ -1474,7 +1759,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             response.setAction("showold");
         } else if ("admin_delete".equals(action)) //eliminación completa del archivo previa/ marcado como eliminado
         {
-            String UUID = request.getParameter("uuid");
+            String UUID = request.getParameter(PARAM_UUID);
             try {
                 session = rep.login(credentials, repNS);
                 Node fnode = session.getNodeByUUID(UUID);
@@ -1586,7 +1871,8 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             response.setMode(SWBActionResponse.Mode_VIEW);
         } else if ("removefile".equals(action)) // marcar archivo como eliminado lógico
         {
-            String UUID = request.getParameter("uuid");
+
+            String UUID = request.getParameter(PARAM_UUID);
             try {
                 session = rep.login(credentials, repNS);
                 Node fnode = session.getNodeByUUID(UUID);
@@ -1607,15 +1893,22 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             response.setMode(SWBActionResponse.Mode_VIEW);
         } else if ("removefolder".equals(action)) // marcar folder como eliminado
         {
-            String UUID = request.getParameter("uuid");
+            String pUUID = request.getParameter("´parentUUID");
+            String fUUID = request.getParameter(PARAM_UUID);
             try {
                 session = rep.login(credentials, repNS);
-                Node fnode = session.getNodeByUUID(UUID);
+                Node fnode = session.getNodeByUUID(fUUID);
                 fnode.setProperty(SWB_FILEREP_DELETED, Boolean.TRUE);
                 NodeIterator nit = fnode.getNodes();
                 while (nit.hasNext()) {
                     Node nodo = nit.nextNode();
+                    Node fc = nodo.getNode(JCR_CONTENT);
+                    if (!nodo.isCheckedOut()) {
+                        fc.checkout();
+                    }
+                    nodo.checkout();
                     nodo.setProperty(SWB_FILEREP_DELETED, Boolean.TRUE);
+                    nodo.save();
                 }
                 fnode.save();
             } catch (Exception e) {
@@ -1626,7 +1919,87 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                 }
             }
         } else if ("updatefile".equals(action)) {
+
+            boolean isChecked = false;
+            String strTitle = request.getParameter("repftitle");
+            String strDescription = request.getParameter("repfdescription");
+            String pUUID = request.getParameter("parentUUID");
+            String UUID = request.getParameter(PARAM_UUID);
+            if (pUUID == null) {
+                pUUID = resUUID;
+            }
+            try {
+
+                session = rep.login(credentials, repNS);
+                Node fnode = session.getNodeByUUID(UUID);
+                Node contenido = fnode.getNode(JCR_CONTENT);
+
+                if (!contenido.isCheckedOut()) {
+                    contenido.checkout();
+                    contenido.setProperty(SWBFILEREPUSERID, user.getId());
+                    contenido.save();
+                    fnode.checkout();
+                    fnode.save();
+                    isChecked = true;
+                }
+
+                fnode.setProperty("swb:title", strTitle);
+                fnode.setProperty("swb:description", strDescription);
+
+                if (isChecked) {
+                    contenido.restore(contenido.getBaseVersion(), false);
+                    contenido.save();
+                    Version ver = contenido.checkin();
+                    VersionHistory history = ver.getContainingHistory();
+                    ver.remove();
+                    history.save();
+                    //fnode.checkin();
+                    fnode.save();
+                }
+
+
+
+            } catch (Exception e) {
+                log.error("Error al crear folder processAction.updateFile", e);
+            } finally {
+                if (session != null) {
+                    session.logout();
+                }
+            }
+            response.setRenderParameter("parentUUID", pUUID);
+            response.setRenderParameter(PARAM_UUID, UUID);
+            response.setMode(SWBActionResponse.Mode_VIEW);
+
+
+
         } else if ("updatefolder".equals(action)) {
+
+            String strTitle = request.getParameter("repftitle");
+            String strDescription = request.getParameter("repfdescription");
+            String pUUID = request.getParameter("parentUUID");
+            String UUID = request.getParameter(PARAM_UUID);
+            if (pUUID == null) {
+                pUUID = resUUID;
+            }
+            try {
+
+                session = rep.login(credentials, repNS);
+                Node fnode = session.getNodeByUUID(UUID);
+
+                fnode.setProperty("swb:title", strTitle);
+                fnode.setProperty("swb:description", strDescription);
+                fnode.save();
+
+            } catch (Exception e) {
+                log.error("Error al crear folder processAction.updateFolder", e);
+            } finally {
+                if (session != null) {
+                    session.logout();
+                }
+            }
+            response.setRenderParameter("parentUUID", pUUID);
+            response.setMode(SWBActionResponse.Mode_VIEW);
+
         } else if ("check".equals(action)) {
             String faction = "";
             if (request.getParameter("faction") != null && request.getParameter("faction").trim().length() > 0) {
@@ -1649,7 +2022,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                     if (comentario.trim().length() == 0) {
                         comentario = "Nueva versión";
                     }
-                    parentUUID = fup.getValue("uuid");
+                    parentUUID = fup.getValue(PARAM_UUID);
                     if (parentUUID == null) {
                         parentUUID = resUUID;
                     }
@@ -1695,11 +2068,14 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                         session.logout();
                     }
                 }
+                if (request.getParameter("parentUUID") != null) {
+                    response.setRenderParameter("parentUUID", request.getParameter("parentUUID"));
+                }
                 response.setMode(SWBActionResponse.Mode_VIEW);
 
             } else if ("undo".equals(faction)) {
 
-                String UUID = request.getParameter("uuid");
+                String UUID = request.getParameter(PARAM_UUID);
                 try {
                     session = rep.login(credentials, repNS);
                     Node fnode = session.getNodeByUUID(UUID);
@@ -1718,8 +2094,13 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                         session.logout();
                     }
                 }
+
+                if (request.getParameter("parentUUID") != null) {
+                    response.setRenderParameter("parentUUID", request.getParameter("parentUUID"));
+                }
+
             } else if ("out".equals(faction)) {
-                String UUID = request.getParameter("uuid");
+                String UUID = request.getParameter(PARAM_UUID);
                 try {
                     session = rep.login(credentials, repNS);
                     Node fnode = session.getNodeByUUID(UUID);
@@ -1734,6 +2115,9 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                 response.setRenderParameter("repNS", repNS);
                 response.setRenderParameter("getfile", "true");
                 response.setMode(SWBActionResponse.Mode_VIEW);
+                if (request.getParameter("parentUUID") != null) {
+                    response.setRenderParameter("parentUUID", request.getParameter("parentUUID"));
+                }
 
             }
         }
@@ -1749,7 +2133,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 
         PrintWriter out = response.getWriter();
         User user = paramRequest.getUser();
-        String uuid = request.getParameter("uuid");
+        String uuid = request.getParameter(PARAM_UUID);
         String ns = request.getParameter("repNS");
         String path = SWBPlatform.getContextPath() + "/swbadmin/images/repositoryfile/";
         String action = paramRequest.getAction();
@@ -1772,7 +2156,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                 urla.setAction("check");
                 out.println("<div >");
                 out.println("<form method=\"post\" action=\"" + urla + "\" enctype=\"multipart/form-data\" >");
-                out.println("<input type=\"hidden\" name=\"uuid\" value=\"" + uuid + "\" />");
+                out.println("<input type=\"hidden\" name=\"" + PARAM_UUID + "\" value=\"" + uuid + "\" />");
                 out.println("<input type=\"hidden\" name=\"repNS\" value=\"" + ns + "\" />");
                 out.println("<fieldset>");
                 out.println("<legend>" + paramRequest.getLocaleString("msgVersionUpdate") + "</legend>");
@@ -1820,7 +2204,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         response.setHeader("Pragma", "no-cache");
 
         User user = paramRequest.getUser();
-        String uuid = request.getParameter("uuid");
+        String uuid = request.getParameter(PARAM_UUID);
         String uuidtoken = null;
         String ns = request.getParameter("repNS");
         String versionfile = request.getParameter("version");
@@ -2166,5 +2550,17 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                 session.logout();
             }
         }
+    }
+
+    private String getLinkStyle() {
+        StringBuilder ret = new StringBuilder();
+        ret.append("\n<style type=\"text/css\">");
+        ret.append("\n a:link {text-decoration: none}");
+        ret.append("\n a:visited {text-decoration: none}");
+        ret.append("\n a:active {text-decoration: none}");
+        ret.append("\n a:hover {text-decoration: none}");
+        ret.append("\n</style>");
+
+        return ret.toString();
     }
 }
