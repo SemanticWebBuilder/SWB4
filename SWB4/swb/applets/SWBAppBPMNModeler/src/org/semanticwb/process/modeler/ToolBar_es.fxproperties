@@ -100,6 +100,7 @@
 "minimizeTooltip" = "Minimizar"
 "swpFileFilter" = "Archivos SWP"
 "exportFileFilter" = "Archivos PNG"
+"xpdlFileFilter" = "Archivos XPDL"
 "msgSent" = "Los datos fueron enviados correctamente"
 "msgSaveAlert" = "Se perderán los cambios que no haya guardado, ¿Desea continuar?"
 "alertMsg" = "Atención"
