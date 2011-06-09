@@ -1545,13 +1545,19 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                 out.println("<form action=\"" + urlShowOld.toString() + "\" name=\"frmdelfile\" method=\"post\">");
                 out.println("<table width=\"100%\" border=\"0\">");
                 out.println("<tr><th>" + paramRequest.getLocaleString("msgTHFolder") + "</th><th>" + paramRequest.getLocaleString("msgTHFileName") + "</th><th>" + paramRequest.getLocaleString("msgTHCreated") + "</th><th>" + paramRequest.getLocaleString("msgTHEmialUser") + "</th><th>" + paramRequest.getLocaleString("msgTHAction") + "</th></tr>");
+
+                //System.out.println("Resource UUID: "+swbresUUID);
+
                 if (!swbresUUID.equals("")) {
                     nodeRep = session.getNodeByUUID(swbresUUID);
                 }
+
+                //System.out.println("Nodo repositorio: "+nodeRep.getNodes().nextNode().getProperty("swb:title").getString());
+
                 if (nodeRep != null) {
                     String rowColor = "";
                     boolean cambiaColor = true;
-                    NodeIterator itn = nodeRep.getNodes();
+                    NodeIterator itn = nodeRep.getNodes().nextNode().getNodes();
                     while (itn.hasNext()) {
                         nf = itn.nextNode();
                         if (nf.getPrimaryNodeType().getName().equals(REP_FOLDER)) {
@@ -1571,11 +1577,11 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                                 out.println("<td><a href=\"mailto:" + usrcreator.getEmail() + "\">" + usrcreator.getEmail() + "</a></td>");
                                 out.println("<td>");
                                 SWBResourceURL urlrecover = paramRequest.getActionUrl();
-                                urlrecover.setParameter(PARAM_UUID, nfi.getUUID());
+                                urlrecover.setParameter(PARAM_UUID, nf.getUUID());
                                 urlrecover.setParameter("repNS", ns);
-                                urlrecover.setAction("admin_recover");
+                                urlrecover.setAction("admin_recover_folder");
                                 SWBResourceURL urldel = paramRequest.getActionUrl();
-                                urldel.setParameter(PARAM_UUID, nfi.getUUID());
+                                urldel.setParameter(PARAM_UUID, nf.getUUID());
                                 urldel.setParameter("repNS", ns);
                                 urldel.setAction("admin_delete");
                                 out.println("<a href=\"#\" onclick=\"submitUrl('" + urlrecover + "',this); return false;\">" + "<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/recover.gif\" border=\"0\" title=\"" + paramRequest.getLocaleString("msgAltRestore") + "\" >" + "</a>");
@@ -1732,6 +1738,38 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             response.setMode(SWBActionResponse.Mode_ADMIN);
             response.setAction("edit");
 
+        }  else if ("admin_recover_folder".equals(action)) //recuperación de carpeta
+        {
+
+            String UUID = request.getParameter(PARAM_UUID);
+            try {
+                session = rep.login(credentials, repNS);
+                Node nodofolder = session.getNodeByUUID(UUID);
+
+                // recuperando folder eliminado
+
+                if(nodofolder!=null)
+                {
+                    boolean isDeleted = Boolean.FALSE;
+                    if (nodofolder.getProperty(SWB_FILEREP_DELETED) != null) {
+                        isDeleted = nodofolder.getProperty(SWB_FILEREP_DELETED).getBoolean();
+                    }
+                    if(isDeleted)
+                    {
+                        nodofolder.setProperty(SWB_FILEREP_DELETED, Boolean.FALSE);
+                        nodofolder.save();
+                    }
+                }
+
+            } catch (Exception e) {
+                log.error("Error al hacer el Folder Recover processAction.admin_recover_folder", e);
+            } finally {
+                if (session != null) {
+                    session.logout();
+                }
+            }
+            response.setMode(SWBActionResponse.Mode_ADMIN);
+            response.setAction("showold");
         } else if ("admin_recover".equals(action)) //recuperación de archivo eliminado
         {
 
@@ -1739,8 +1777,38 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             try {
                 session = rep.login(credentials, repNS);
                 Node fnode = session.getNodeByUUID(UUID);
+
+                // recuperando folder eliminado
+                Node nodofolder = fnode.getParent();
+
+                if(nodofolder!=null)
+                {
+                    boolean isDeleted = Boolean.FALSE;
+                    if (nodofolder.getProperty(SWB_FILEREP_DELETED) != null) {
+                        isDeleted = nodofolder.getProperty(SWB_FILEREP_DELETED).getBoolean();
+                    }
+                    if(isDeleted)
+                    {
+                        nodofolder.setProperty(SWB_FILEREP_DELETED, Boolean.FALSE);
+                        nodofolder.save();
+                    }
+                }
+
+                if (!nodofolder.isCheckedOut()) {
+                    fnode.checkout();
+                }
+                fnode.checkout();
+                //fnode.save();
+
                 fnode.setProperty(SWB_FILEREP_DELETED, Boolean.FALSE);
                 Node contenido = fnode.getNode(JCR_CONTENT);
+
+                if(!contenido.isCheckedOut())
+                {
+                    contenido.checkout();
+                    contenido.save();
+                }
+
                 contenido.restore(contenido.getBaseVersion(), false);
                 contenido.save();
                 fnode.save();
