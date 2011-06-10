@@ -11,6 +11,7 @@
         <fieldset legend="Dimensiones">
             <input type="text" name="width"  label="Ancho" value="640" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Ancho inválido" promptMessage="Ancho. Ejemplos: 90%, 350px, 854" jsrequired="true" />
             <input type="text" name="height" label="Alto" value="480"  maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválida" promptMessage="Altura. Ejemplos: 90%, 350px, 854" jsrequired="true" />
+            <input type="checkbox" name="fb" label="Borde" value="true" promptMessage="Mostrar borde en IE"/>
 
             <statictext name="note">
 		<![CDATA[
@@ -22,7 +23,7 @@
        
        <div title="Configuración Avanzada" open="true">
        <fieldset legend="Configuración Avanzada">
-            <statictext name="txtAllow">Permitir paso de parametros</statictext>
+            <statictext name="txtAllow">Permitir paso de parámetros</statictext>
             <input type="radio" id="target1" name="passparam" label="Sí" value="1"/>
             <input type="radio" id="target0" name="passparam" label="No" value="0" checked="true"/>
 
