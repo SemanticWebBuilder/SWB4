@@ -18,6 +18,21 @@ import org.semanticwb.process.modeler.TimerStartEvent;
 import org.semanticwb.process.modeler.RuleStartEvent;
 import org.semanticwb.process.modeler.SignalStartEvent;
 import org.semanticwb.process.modeler.MultipleStartEvent;
+import org.semanticwb.process.modeler.AdhocSubProcess;
+import org.semanticwb.process.modeler.TimerIntermediateCatchEvent;
+import org.semanticwb.process.modeler.IntermediateCatchEvent;
+import org.semanticwb.process.modeler.RuleIntermediateCatchEvent;
+import org.semanticwb.process.modeler.SignalIntermediateCatchEvent;
+import org.semanticwb.process.modeler.MultipleIntermediateCatchEvent;
+import org.semanticwb.process.modeler.MultipleIntermediateThrowEvent;
+import org.semanticwb.process.modeler.LinkIntermediateCatchEvent;
+import org.semanticwb.process.modeler.IntermediateThrowEvent;
+import org.semanticwb.process.modeler.ErrorIntermediateCatchEvent;
+import org.semanticwb.process.modeler.CancelationIntermediateCatchEvent;
+import org.semanticwb.process.modeler.CancelationEndEvent;
+import org.w3c.dom.DOMException;
+import java.lang.IllegalArgumentException;
+import javax.xml.transform.TransformerException;
 
 /**
  * @author Hasdai Pacheco {haxdai@gmail.com}
@@ -47,10 +62,14 @@ public class XPDLTransformer {
         var dbfac = DocumentBuilderFactory.newInstance();
         var docBuilder = dbfac.newDocumentBuilder();
         doc = docBuilder.newDocument();
-        doc.setXmlStandalone(false);
-        doc.setXmlVersion("1.0");
+        try {
+            doc.setXmlStandalone(false);
+            doc.setXmlVersion("1.0");
+        } catch(ex : DOMException) {
+            ex.printStackTrace();
+        }
+        
         workflows = null;
-
         getPackageDefinition();
     }
 
@@ -66,12 +85,20 @@ public class XPDLTransformer {
     public function saveXPDL(file : File) {
         var transf = TransformerFactory.newInstance();
         var trans = transf.newTransformer();
-        trans.setOutputProperty(OutputKeys.INDENT, "yes");
-        trans.setOutputProperty(OutputKeys.METHOD, "xml");
+        try {
+            trans.setOutputProperty(OutputKeys.INDENT, "yes");
+            trans.setOutputProperty(OutputKeys.METHOD, "xml");
+        } catch(ex : IllegalArgumentException) {
+            ex.printStackTrace();
+        }
 
         var result = new StreamResult(file);
         var source = new DOMSource(doc);
-        trans.transform(source, result);
+        try {
+            trans.transform(source, result);
+        } catch(ex : TransformerException) {
+            ex.printStackTrace();
+        }
     }
     
     function getGraphicsInfos(ge: GraphicalElement): Element {
@@ -79,39 +106,43 @@ public class XPDLTransformer {
         var graphicInfo = doc.createElementNS(namespaceUri, "{namespacePrefix}:NodeGraphicsInfo");
         var coords = doc.createElementNS(namespaceUri, "{namespacePrefix}:Coordinates");
 
-        graphicInfo.appendChild(coords);
-        graphicInfos.appendChild(graphicInfo);
+        addChild(graphicInfo, coords);
+        addChild(graphicInfos, graphicInfo);
 
-        graphicInfo.setAttribute("ToolId", toolId);
-        graphicInfo.setAttribute("IsVisible", "{ge.canView()}");
-        graphicInfo.setAttribute("Width", "{ge.w}");
-        graphicInfo.setAttribute("Height", "{ge.h}");
+        addAttribute(graphicInfo, "ToolId", toolId);
+        addAttribute(graphicInfo, "IsVisible", "{ge.canView()}");
+        addAttribute(graphicInfo, "Width", "{ge.w}");
+        addAttribute(graphicInfo, "Height", "{ge.h}");
 
         if (ge.getGraphParent() instanceof Lane) {
-            graphicInfo.setAttribute("LaneId", "{ge.getGraphParent().uri}");
+            addAttribute(graphicInfo, "LaneId", "{ge.getGraphParent().uri}");
         }
 
-        coords.setAttribute("XCoordinate", "{ge.x}");
-        coords.setAttribute("YCoordinate", "{ge.y}");
+        addAttribute(coords, "XCoordinate", "{ge.x}");
+        addAttribute(coords, "YCoordinate", "{ge.y}");
         return graphicInfos;
     }
 
     public function getPackageDefinition() {
         if (pkg == null) {
             pkg = doc.createElementNS(namespaceUri, "{namespacePrefix}:Package");
-            doc.appendChild(pkg);
+            try {
+                doc.appendChild(pkg);
+            } catch (e: DOMException) {
+                e.printStackTrace();
+            }
         }
         pools = doc.createElementNS(namespaceUri, "{namespacePrefix}:Pools");
 
-        pkg.setAttribute("xmlns", namespaceUri);
-        pkg.setAttribute("xmlns:xsi", xsi);
-        pkg.setAttribute("xsi:location", xsiLocation);
+        addAttribute(pkg, "xmlns", namespaceUri);
+        addAttribute(pkg, "xmlns:xsi", xsi);
+        addAttribute(pkg, "xsi:location", xsiLocation);
         //TODO: Ver cómo se van a crear los IDs y nombres para los paquetes (pueden ser los grupos de procesos?)
-        pkg.setAttribute("Id", "processID");
-        pkg.setAttribute("Name", "processName");
-        
-        pkg.appendChild(getPackageHeader());
-        pkg.appendChild(pools);
+        addAttribute(pkg, "Id", "processID");
+        addAttribute(pkg, "Name", "processName");
+
+        addChild(pkg, getPackageHeader());
+        addChild(pkg, pools);
     }
 
     function getPackageHeader() : Element {
@@ -120,13 +151,17 @@ public class XPDLTransformer {
         var vendor = doc.createElementNS(namespaceUri, "{namespacePrefix}:Vendor");
         var created = doc.createElementNS(namespaceUri, "{namespacePrefix}:Created");
 
-        version.setTextContent(xpdlVersion);
-        vendor.setTextContent(vendorName);
-        created.setTextContent(new Date().toString());
+        try {
+            version.setTextContent(xpdlVersion);
+            vendor.setTextContent(vendorName);
+            created.setTextContent(new Date().toString());
+        } catch (e: DOMException) {
+            e.printStackTrace();
+        }
 
-        ret.appendChild(version);
-        ret.appendChild(vendor);
-        ret.appendChild(created);
+        addChild(ret, version);
+        addChild(ret, vendor);
+        addChild(ret, created);
         return ret;
     }
 
@@ -134,69 +169,107 @@ public class XPDLTransformer {
         var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:Pool");
         var lanes = doc.createElementNS(namespaceUri, "{namespacePrefix}:Lanes");
 
-        ret.setAttribute("BoundaryVisible", "true");
-        ret.setAttribute("Id", pool.getURI());
-        ret.setAttribute("MainPool", "false");
-        ret.setAttribute("Name", pool.getTitle());
-        ret.setAttribute("Orientation", ORIENTATION_HORIZONTAL);
-        ret.setAttribute("Process", pool.getURI());
+        addAttribute(ret, "BoundaryVisible", "true");
+        addAttribute(ret, "Id", pool.getURI());
+        addAttribute(ret, "MainPool", "false");
+        addAttribute(ret, "Name", pool.getTitle());
+        addAttribute(ret, "Orientation", ORIENTATION_HORIZONTAL);
+        addAttribute(ret, "Process", pool.getURI());
 
-        ret.appendChild(getGraphicsInfos(pool));
+        addChild(ret, getGraphicsInfos(pool));
         if (not pool.lanes.isEmpty()) {
             for (lane in pool.lanes) {
-                lanes.appendChild(getLaneDefinition(lane));
+                addChild(lanes, getLaneDefinition(lane));
             }
-            ret.appendChild(lanes);
+            addChild(ret, lanes);
         }
-        pools.appendChild(ret);
+        addChild(pools, ret);
         addWorkFlowDefinition(pool);
     }
 
-    function getActivitySet(subprocess: SubProcess): Element {
-        return null;
+    function addActivitySetDefinition(subprocess: SubProcess, actSet: Element) : Void {
+        var aset = doc.createElementNS(namespaceUri, "{namespacePrefix}:ActivitySet");
+        var activities = doc.createElementNS(namespaceUri, "{namespacePrefix}:Activities");
+
+        addAttribute(aset, "Id", "{subprocess.getURI()}set");
+        addAttribute(aset, "Name", subprocess.getTitle());
+        if (subprocess instanceof AdhocSubProcess) {
+            addAttribute(aset, "AdHoc", "true");
+            addAttribute(aset, "AdHocOrdering", "Parallel");
+        } else {
+            addAttribute(aset, "AdHoc", "false");
+        }
+
+        var hasActivities = false;
+        for (child in subprocess.getContainerChilds()) {
+            addChild(activities, getActivityDefinition(child));
+            if (hasActivities == false) {
+                hasActivities = true;
+            }
+            if (child instanceof SubProcess) {
+                addActivitySetDefinition(child as SubProcess, actSet);
+            }
+        }
+
+        if (hasActivities) {
+            addChild(aset, activities);
+        }
+        addChild(actSet, aset);
     }
 
     function getActivityDefinition(ge: GraphicalElement) : Element {
         var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:Activity");
-        ret.setAttribute("StartQuantity", "1");
-        ret.setAttribute("CompletionQuantity", "1");
-        ret.setAttribute("Id", ge.getURI());
-        ret.setAttribute("Name", ge.getTitle());
-        ret.setAttribute("IsForCompensation", "{ge.isForCompensation}");
+
+        addAttribute(ret, "StartQuantity", "1");
+        addAttribute(ret, "CompletionQuantity", "1");
+        addAttribute(ret, "Id", ge.getURI());
+        addAttribute(ret, "Name", ge.getTitle());
+        addAttribute(ret, "IsForCompensation", "{ge.isForCompensation}");
 
         if (ge instanceof TransactionSubProcess) {
-            ret.setAttribute("IsATransaction", "true");
+            addAttribute(ret, "IsATransaction", "true");
+        }
+
+        if (ge instanceof SubProcess) {
+            var block = doc.createElementNS(namespaceUri, "{namespacePrefix}:BlockActivity");
+            addAttribute(block, "ActivitySetId", "{ge.getURI()}set");
+            addAttribute(block, "View", "COLLAPSED");
+            addChild(ret, block);
         }
 
         if (ge.isLoop) {
             var loop = doc.createElementNS(namespaceUri, "{namespacePrefix}:Loop");
             var standard = doc.createElementNS(namespaceUri, "{namespacePrefix}:LoopStandard");
 
-            standard.setAttribute("TestTime", "After");
-            loop.setAttribute("LoopType", "Standard");
-            loop.appendChild(standard);
-            ret.appendChild(loop);
+            addAttribute(standard, "TestTime", "After");
+            addAttribute(loop, "LoopType", "Standard");
+            addChild(loop, standard);
+            addChild(ret, loop);
         }
 
         if (ge.isSequentialMultiInstance or ge.isMultiInstance) {
             var loop = doc.createElementNS(namespaceUri, "{namespacePrefix}:Loop");
             var multi = doc.createElementNS(namespaceUri, "{namespacePrefix}:LoopMultiInstance");
 
-            multi.setAttribute("MI_FlowCondition", "All");
+            addAttribute(multi, "MI_FlowCondition", "All");
             if (ge.isSequentialMultiInstance) {
-                multi.setAttribute("MI_Ordering", "Sequential");
+                addAttribute(multi, "MI_Ordering", "Sequential");
             } else if (ge.isMultiInstance) {
-                multi.setAttribute("MI_Ordering", "Parallel");
+                addAttribute(multi, "MI_Ordering", "Parallel");
             }
-            loop.setAttribute("LoopType", "MultiInstance");
-            loop.appendChild(multi);
-            ret.appendChild(loop);
+            addAttribute(loop, "LoopType", "MultiInstance");
+            addChild(loop, multi);
+            addChild(ret, loop);
         }
         
-        if (ge instanceof Event) ret.appendChild(getEventDefinition(ge as Event));
-        if (ge instanceof Task) ret.appendChild(getTaskDefinition(ge as Task));
+        if (ge instanceof Event) {
+            addChild(ret, getEventDefinition(ge as Event));
+        }
 
-        ret.appendChild(getGraphicsInfos(ge));
+        if (ge instanceof Task) {
+            addChild(ret, getTaskDefinition(ge as Task));
+        }
+        addChild(ret, getGraphicsInfos(ge));
         return ret;
     }
 
@@ -206,35 +279,35 @@ public class XPDLTransformer {
         
         if (task instanceof UserTask) {
             var tskuser = doc.createElementNS(namespaceUri, "{namespacePrefix}:TaskUser");
-            tskuser.setAttribute("Implementation", "Unspecified");
-            tsk.appendChild(tskuser);
-            ret.appendChild(tsk);
+            addAttribute(tskuser, "Implementation", "Unspecified");
+            addChild(tsk, tskuser);
+            addChild(ret, tsk);
         } else if (task instanceof ServiceTask) {
             var tskserv = doc.createElementNS(namespaceUri, "{namespacePrefix}:TaskService");
-            tskserv.setAttribute("Implementation", "WebService");
-            tsk.appendChild(tskserv);
-            ret.appendChild(tsk);
+            addAttribute(tskserv, "Implementation", "WebService");
+            addChild(tsk, tskserv);
+            addChild(ret, tsk);
         } else if (task instanceof ScriptTask) {
             var tskserv = doc.createElementNS(namespaceUri, "{namespacePrefix}:TaskScript");
-            tskserv.appendChild(doc.createElementNS(namespaceUri, "{namespacePrefix}:Script"));
-            tsk.appendChild(tskserv);
-            ret.appendChild(tsk);
+            addChild(tskserv, doc.createElementNS(namespaceUri, "{namespacePrefix}:Script"));
+            addChild(tsk, tskserv);
+            addChild(ret, tsk);
         } else if (task instanceof ManualTask) {
             var tskuser = doc.createElementNS(namespaceUri, "{namespacePrefix}:TaskManual");
-            tsk.appendChild(tskuser);
-            ret.appendChild(tsk);
+            addChild(tsk, tskuser);
+            addChild(ret, tsk);
         } else if (task instanceof SendTask) {
             var tskserv = doc.createElementNS(namespaceUri, "{namespacePrefix}:TaskSend");
-            tskserv.setAttribute("Implementation", "WebService");
-            tsk.appendChild(tskserv);
-            ret.appendChild(tsk);
+            addAttribute(tskserv, "Implementation", "WebService");
+            addChild(tsk, tskserv);
+            addChild(ret, tsk);
         } else if (task instanceof ReceiveTask) {
             var tskserv = doc.createElementNS(namespaceUri, "{namespacePrefix}:TaskReceive");
-            tskserv.setAttribute("Implementation", "WebService");
-            tsk.appendChild(tskserv);
-            ret.appendChild(tsk);
+            addAttribute(tskserv, "Implementation", "WebService");
+            addChild(tsk, tskserv);
+            addChild(ret, tsk);
         } else {
-            ret.appendChild(doc.createElementNS(namespaceUri, "{namespacePrefix}:No"));
+            addChild(ret, doc.createElementNS(namespaceUri, "{namespacePrefix}:No"));
         }
 
         return ret;
@@ -244,19 +317,23 @@ public class XPDLTransformer {
         var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:WorkflowProcess");
         var header = doc.createElementNS(namespaceUri, "{namespacePrefix}:ProcessHeader");
         var created = doc.createElementNS(namespaceUri, "{namespacePrefix}:Created");
-        var activitySets = doc.createElementNS(namespaceUri, "{namespacePrefix}:ActivitySet");
+        var activitySets = doc.createElementNS(namespaceUri, "{namespacePrefix}:ActivitySets");
         var activities = doc.createElementNS(namespaceUri, "{namespacePrefix}:Activities");
 
-        created.setTextContent(new Date().toString());
+        try {
+            created.setTextContent(new Date().toString());
+        } catch (e: DOMException) {
+            e.printStackTrace();
+        }
 
-        ret.setAttribute("Id", pool.getURI());
-        ret.setAttribute("Name", pool.getTitle());
-        header.appendChild(created);
-        ret.appendChild(header);
+        addAttribute(ret, "Id", pool.getURI());
+        addAttribute(ret, "Name", pool.getTitle());
+        addChild(header, created);
+        addChild(ret, header);
 
         if (workflows == null) {
             workflows = doc.createElementNS(namespaceUri, "{namespacePrefix}:WorkflowProcesses");
-            pkg.appendChild(workflows);
+            addChild(pkg, workflows);
         }
 
         var hasActivities = false;
@@ -264,6 +341,8 @@ public class XPDLTransformer {
         if (not pool.lanes.isEmpty()) {
             for (lane in pool.lanes) {
                 for (child in lane.getgraphChilds()) {
+                    addChild(activities, getActivityDefinition(child));
+
                     if (hasActivities == false) {
                         hasActivities = true;
                     }
@@ -271,13 +350,14 @@ public class XPDLTransformer {
                         if (hasActivitySets == false) {
                             hasActivitySets = true;
                         }
-                    } else {
-                        activities.appendChild(getActivityDefinition(child));
+                        addActivitySetDefinition(child as SubProcess, activitySets);
                     }
                 }
             }
         } else {
             for (child in pool.getgraphChilds()) {
+                addChild(activities, getActivityDefinition(child));
+
                 if (hasActivities == false) {
                     hasActivities = true;
                 }
@@ -285,31 +365,31 @@ public class XPDLTransformer {
                     if (hasActivitySets == false) {
                         hasActivitySets = true;
                     }
-                } else {
-                    activities.appendChild(getActivityDefinition(child));
+                    addActivitySetDefinition(child as SubProcess, activitySets);
                 }
             }
         }
 
         if (hasActivities) {
-            ret.appendChild(activities);
+            addChild(ret, activities);
         }
         if (hasActivitySets) {
-            ret.appendChild(activitySets);
+            addChild(ret, activitySets);
         }
-        workflows.appendChild(ret);
+
+        addChild(workflows, ret);
     }
 
     function getLaneDefinition(lane: Lane) : Element {
         var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:Lane");
 
-        ret.setAttribute("Id", lane.getURI());
-        ret.setAttribute("Name", lane.getTitle());
+        addAttribute(ret, "Id", lane.getURI());
+        addAttribute(ret, "Name", lane.getTitle());
         if (lane.getGraphParent() instanceof Lane) {
-            ret.setAttribute("ParentLane", lane.getGraphParent().getURI());
+            addAttribute(ret, "ParentLane", lane.getGraphParent().getURI());
         }
-        ret.setAttribute("ParentPool", lane.getPool().getURI());
-        ret.appendChild(getGraphicsInfos(lane));
+        addAttribute(ret, "ParentPool", lane.getPool().getURI());
+        addChild(ret, getGraphicsInfos(lane));
         
         return ret;
     }
@@ -317,9 +397,57 @@ public class XPDLTransformer {
     function getEventDefinition(evt: Event) : Element {
         var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:Event");
         if (evt instanceof StartEvent) {
-            ret.appendChild(getStartEventDefinition(evt as StartEvent));
+            addChild(ret, getStartEventDefinition(evt as StartEvent));
+        } else if (evt instanceof IntermediateCatchEvent or evt instanceof IntermediateThrowEvent) {
+            addChild(ret, getInterEventDefinition(evt as Event));
+        } else if (evt instanceof EndEvent) {
+            addChild(ret, getEndEventDefinition(evt as EndEvent));
         }
+
         return ret;
+    }
+
+    function getTriggerTimerDefinition() : Element {
+        var resMessage = doc.createElementNS(namespaceUri, "{namespacePrefix}:TriggerTimer");
+        addChild(resMessage, doc.createElementNS(namespaceUri, "{namespacePrefix}:TimeDate"));
+        return resMessage;
+    }
+
+    function getTriggerMessageDefinition(isCatch: Boolean) : Element {
+        var resMessage = doc.createElementNS(namespaceUri, "{namespacePrefix}:TriggerResultMessage");
+        if (isCatch) {
+            addAttribute(resMessage, "CatchThrow", "CATCH");
+        } else {
+            addAttribute(resMessage, "CatchThrow", "THROW");
+        }
+        return resMessage;
+    }
+
+    function getTriggerSignalDefinition(isCatch: Boolean) : Element {
+        var resMessage = doc.createElementNS(namespaceUri, "{namespacePrefix}:TriggerResultSignal");
+        if (isCatch) {
+            addAttribute(resMessage, "CatchThrow", "CATCH");
+        } else {
+            addAttribute(resMessage, "CatchThrow", "THROW");
+        }
+        return resMessage;
+    }
+
+    function getTriggerLinkDefinition(isCatch: Boolean) : Element {
+        var resMessage = doc.createElementNS(namespaceUri, "{namespacePrefix}:TriggerResultLink");
+        if (isCatch) {
+            addAttribute(resMessage, "CatchThrow", "CATCH");
+        } else {
+            addAttribute(resMessage, "CatchThrow", "THROW");
+        }
+        return resMessage;
+    }
+
+    function getTriggerMultipleDefinition(isCatch: Boolean) : Element {
+        var resMessage = doc.createElementNS(namespaceUri, "{namespacePrefix}:TriggerMultiple");
+        addChild(resMessage, getTriggerMessageDefinition(isCatch));
+        addChild(resMessage, getTriggerTimerDefinition());
+        return resMessage;
     }
 
     function getStartEventDefinition(evt: StartEvent) : Element {
@@ -327,37 +455,113 @@ public class XPDLTransformer {
         var trig = "None";
         
         if (evt instanceof TimerStartEvent) {
+            addChild(ret, getTriggerTimerDefinition());
             trig = "Timer";
-            var resMessage = doc.createElementNS(namespaceUri, "{namespacePrefix}:TriggerTimer");
-            resMessage.appendChild(doc.createElementNS(namespaceUri, "{namespacePrefix}:TimeDate"));
-            ret.appendChild(resMessage);
         } else if (evt instanceof MessageStartEvent) {
-            var resMessage = doc.createElementNS(namespaceUri, "{namespacePrefix}:TriggerResultMessage");
-            resMessage.setAttribute("CatchThrow", "CATCH");
+            addAttribute(ret, "Implementation", "Unspecified");
+            addChild(ret, getTriggerMessageDefinition(true));
             trig = "Message";
-            ret.setAttribute("Implementation", "Unspecified");
-            ret.appendChild(resMessage);
         } else if (evt instanceof RuleStartEvent) {
             trig = "Conditional"
         } else if (evt instanceof SignalStartEvent) {
-            var resMessage = doc.createElementNS(namespaceUri, "{namespacePrefix}:TriggerResultSignal");
-            resMessage.setAttribute("CatchThrow", "CATCH");
-            ret.appendChild(resMessage);
+            addChild(ret, getTriggerSignalDefinition(true));
             trig = "Signal";
         } else if (evt instanceof MultipleStartEvent) {
-            var resMessage = doc.createElementNS(namespaceUri, "{namespacePrefix}:TriggerMultiple");
-            var rMessage = doc.createElementNS(namespaceUri, "{namespacePrefix}:TriggerResultMessage");
-            var tMessage = doc.createElementNS(namespaceUri, "{namespacePrefix}:TriggerTimer");
-
-            tMessage.appendChild(doc.createElementNS(namespaceUri, "{namespacePrefix}:TimeDate"));
-            rMessage.setAttribute("CatchThrow", "CATCH");
-
-            resMessage.appendChild(rMessage);
-            resMessage.appendChild(tMessage);
-            ret.appendChild(resMessage);
+            addChild(ret, getTriggerMultipleDefinition(true));
             trig = "Multiple";
         }
-        ret.setAttribute("Trigger", trig);
+
+        addAttribute(ret, "Trigger", trig);
         return ret;
+    }
+
+    function getInterEventDefinition(evt: Event) : Element {
+        var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:IntermediateEvent");
+        var trig = "None";
+
+        if (evt instanceof TimerIntermediateCatchEvent) {
+            addChild(ret, getTriggerTimerDefinition());
+            trig = "Timer";
+        } else if (evt instanceof MessageIntermediateCatchEvent) {
+            addAttribute(ret, "Implementation", "Unspecified");
+            addChild(ret, getTriggerMessageDefinition(true));
+            trig = "Message";
+        }  else if (evt instanceof MessageIntermediateThrowEvent) {
+            addAttribute(ret, "Implementation", "Unspecified");
+            addChild(ret, getTriggerMessageDefinition(false));
+            trig = "Message";
+        } else if (evt instanceof RuleIntermediateCatchEvent) {
+            trig = "Conditional"
+        } else if (evt instanceof SignalIntermediateCatchEvent) {
+            addChild(ret, getTriggerSignalDefinition(true));
+            trig = "Signal";
+        } else if (evt instanceof SignalIntermediateThrowEvent) {
+            addChild(ret, getTriggerSignalDefinition(false));
+            trig = "Signal";
+        } else if (evt instanceof MultipleIntermediateCatchEvent) {
+            addChild(ret, getTriggerMultipleDefinition(true));
+            trig = "Multiple";
+        } else if (evt instanceof MultipleIntermediateThrowEvent) {
+            addChild(ret, getTriggerMultipleDefinition(false));
+            trig = "Multiple";
+        } else if (evt instanceof LinkIntermediateCatchEvent) {
+            trig = "Link";
+            addChild(ret, getTriggerLinkDefinition(true));
+        } else if (evt instanceof LinkIntermediateThrowEvent) {
+            trig = "Link";
+            addChild(ret, getTriggerLinkDefinition(false));
+        } else if (evt instanceof ErrorIntermediateCatchEvent) {
+            trig = "Error";
+        } else if (evt instanceof CancelationIntermediateCatchEvent ) {
+            trig = "Cancel";
+        } else if (evt instanceof CompensationIntermediateCatchEvent or evt instanceof CompensationIntermediateThrowEvent) {
+            trig = "Compensation";
+        }
+
+        addAttribute(ret, "Trigger", trig);
+        return ret;
+    }
+
+    function getEndEventDefinition(evt: EndEvent) : Element {
+        var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:EndEvent");
+        var trig = "None";
+
+        if (evt instanceof MessageEndEvent) {
+            addChild(ret, getTriggerMessageDefinition(false));
+            addAttribute(ret, "Implementation", "Unspecified");
+            trig = "Message";
+        } else if (evt instanceof ErrorEndEvent) {
+            trig = "Error"
+        } else if (evt instanceof CancelationEndEvent) {
+            trig = "Cancel";
+        } else if (evt instanceof CompensationEndEvent) {
+            trig = "Compensation";
+        } else if (evt instanceof SignalEndEvent) {
+            addChild(ret, getTriggerSignalDefinition(false));
+            trig = "Signal";
+        } else if (evt instanceof MultipleEndEvent) {
+            addChild(ret, getTriggerMultipleDefinition(false));
+            trig = "Multiple";
+        } else if (evt instanceof TerminationEndEvent) {
+            trig = "Terminate";
+        }
+        addAttribute(ret, "Result", trig);
+        return ret;
+    }
+
+    function addAttribute(ele: Element, att : String, val : String) {
+        try {
+            ele.setAttribute(att, val);
+        } catch(ex : DOMException) {
+            ex.printStackTrace();
+        }
+    }
+
+    function addChild(ele: Element, child: Element) {
+        try {
+            ele.appendChild(child);
+        } catch(ex : DOMException) {
+            ex.printStackTrace();
+        }
     }
 }
