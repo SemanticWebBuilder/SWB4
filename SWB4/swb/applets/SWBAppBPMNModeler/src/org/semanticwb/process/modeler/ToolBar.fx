@@ -88,6 +88,7 @@ public class ToolBar extends CustomNode
     var fullBar: Group;
 
     var fileChooser = javax.swing.JFileChooser{};
+    var xpdlFileChooser = javax.swing.JFileChooser{};
     var imageFileChooser = javax.swing.JFileChooser{};
     var hidden:Boolean = false;
 
@@ -522,9 +523,11 @@ public class ToolBar extends CustomNode
     public override function create(): Node
     {
         var filter = FileFilter{};
-        fileChooser.setFileFilter(filter);
         var imgFilter = ImageFileFilter{};
+        var xpdlFilter = XPDLFileFilter{};
+        fileChooser.setFileFilter(filter);
         imageFileChooser.setFileFilter(imgFilter);
+        xpdlFileChooser.setFileFilter(xpdlFilter);
 
         if(isApplet)loadProcess();
 
@@ -621,17 +624,31 @@ public class ToolBar extends CustomNode
                         saveAsImage();
                     }
                 },
-//                ImgButton {
-//                    text: ##"exportxpdl"//ModelerUtils.getLocalizedString("export")
-//                    image: "images/file_saveasxpdl1.png"
-//                    imageOver: "images/file_saveasxpdl2.png"
-//                    action: function():Void
-//                    {
-//                        ModelerUtils.clickedNode=null;
-//                        modeler.disablePannable=false;
-//                        //getXPDL();
-//                    }
-//                },
+                ImgButton {
+                    text: ##"exportxpdl"//ModelerUtils.getLocalizedString("export")
+                    image: "images/file_saveasxpdl1.png"
+                    imageOver: "images/file_saveasxpdl2.png"
+                    action: function():Void
+                    {
+                        ModelerUtils.clickedNode=null;
+                        modeler.disablePannable=false;
+                        if (xpdlFileChooser.showSaveDialog(null) == javax.swing.JFileChooser.APPROVE_OPTION)
+                        {
+                            var file = xpdlFileChooser.getSelectedFile();
+                            if(not file.getName().toLowerCase().endsWith("xpdl"))
+                            {
+                                file=new File("{file.getPath()}.xpdl");
+                            }
+
+                            try
+                            {
+                                var trans = XPDLTransformer{};
+                                trans.getXPDLDocument(modeler);
+                                trans.saveXPDL(file);
+                            }catch(e:Exception){Alert.inform("Error",e.getMessage());}
+                        }
+                    }
+                },
                 /*ImgButton {
                     text: ##"print"//ModelerUtils.getLocalizedString("print")
                     image: "images/file_print1.png"
@@ -2344,5 +2361,15 @@ class ImageFileFilter extends javax.swing.filechooser.FileFilter {
 
     override public function accept(f: java.io.File) : Boolean {
         return f.isDirectory() or f.getName().endsWith(".png")
+    }
+}
+
+class XPDLFileFilter extends javax.swing.filechooser.FileFilter {
+    override public function getDescription() : String {
+        return ##"xpdlFileFilter"//ModelerUtils.getLocalizedString("exportFileFilter");
+    }
+
+    override public function accept(f: java.io.File) : Boolean {
+        return f.isDirectory() or f.getName().endsWith(".xpdl")
     }
 }
