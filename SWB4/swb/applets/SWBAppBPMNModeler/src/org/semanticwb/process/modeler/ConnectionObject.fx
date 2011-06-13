@@ -809,4 +809,27 @@ public class ConnectionObject  extends CustomNode
     public function getURI() : String {
         return uri;
     }
+
+    public function getTitle() : String {
+        return title;
+    }
+
+    public function getStartPoint() : Point {
+        return pini;
+    }
+
+    public function getEndPoint() : Point {
+        return pend;
+    }
+
+    public function getPoints() : Point [] {
+        var ret: Point[];
+        insert pini into ret;
+        for (ele in handles) {
+            insert (ele as LineHandle).getPoint() into ret;
+        }
+        insert pend into ret;
+        return ret;
+    }
+
 }
