@@ -804,4 +804,9 @@ public class ConnectionObject  extends CustomNode
         }
         return t;
     }
+
+    /**Obtiene el URI del objeto de conexión*/
+    public function getURI() : String {
+        return uri;
+    }
 }
