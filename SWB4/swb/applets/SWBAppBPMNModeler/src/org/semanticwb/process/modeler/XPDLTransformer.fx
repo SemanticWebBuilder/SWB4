@@ -41,6 +41,7 @@ import org.semanticwb.process.modeler.InclusiveGateway;
 import org.semanticwb.process.modeler.ExclusiveStartEventGateway;
 import org.semanticwb.process.modeler.ComplexGateway;
 import org.semanticwb.process.modeler.AnnotationArtifact;
+import javafx.util.Sequences;
 
 /**
  * @author Hasdai Pacheco {haxdai@gmail.com}
@@ -64,7 +65,6 @@ public class XPDLTransformer {
     var artifacts: Element;
     var workflows: Element;
     var pkg:Element;
-
 
     postinit  {
         var dbfac = DocumentBuilderFactory.newInstance();
@@ -98,8 +98,6 @@ public class XPDLTransformer {
                     addChild(pkg, artifacts);
                     addChild(artifacts, getDataObjectDefinition(ele as DataObject))
                 }
-            } else if (ele instanceof ConnectionObject) {
-                println("Analizando conexión {(ele as ConnectionObject).getURI()}");
             }
         }
         
@@ -145,6 +143,23 @@ public class XPDLTransformer {
 
         addAttribute(coords, "XCoordinate", "{ge.x}");
         addAttribute(coords, "YCoordinate", "{ge.y}");
+        return graphicInfos;
+    }
+
+    function getConnectorGraphicsInfos(conn: ConnectionObject): Element {
+        var graphicInfos = doc.createElementNS(namespaceUri, "{namespacePrefix}:ConnectorGraphicsInfos");
+        var graphicInfo = doc.createElementNS(namespaceUri, "{namespacePrefix}:ConnectorGraphicsInfo");        
+
+        addChild(graphicInfos, graphicInfo);
+        addAttribute(graphicInfo, "ToolId", toolId);
+        addAttribute(graphicInfo, "IsVisible", "{conn.canView()}");
+
+        for (p in conn.getPoints()) {
+            var coords = doc.createElementNS(namespaceUri, "{namespacePrefix}:Coordinates");
+            addAttribute(coords, "XCoordinate", "{p.x}");
+            addAttribute(coords, "YCoordinate", "{p.y}");
+            addChild(graphicInfo, coords);
+        }
         return graphicInfos;
     }
 
@@ -213,8 +228,10 @@ public class XPDLTransformer {
     }
 
     function addActivitySetDefinition(subprocess: SubProcess, actSet: Element) : Void {
+        var connections:ConnectionObject[];
         var aset = doc.createElementNS(namespaceUri, "{namespacePrefix}:ActivitySet");
         var activities = doc.createElementNS(namespaceUri, "{namespacePrefix}:Activities");
+        var transitions = doc.createElementNS(namespaceUri, "{namespacePrefix}:Transitions");
 
         addAttribute(aset, "Id", "{subprocess.getURI()}set");
         addAttribute(aset, "Name", subprocess.getTitle());
@@ -226,6 +243,7 @@ public class XPDLTransformer {
         }
 
         var hasActivities = false;
+        var hasTransitions = false;
         for (child in subprocess.getContainerChilds()) {
             addChild(activities, getActivityDefinition(child));
             if (hasActivities == false) {
@@ -236,8 +254,29 @@ public class XPDLTransformer {
             }
         }
 
+        for (con in subprocess.modeler.contents where con instanceof ConnectionObject) {
+            var c = con as ConnectionObject;
+            if (c instanceof AssociationFlow) {
+
+            } else if (c.ini.container.equals(subprocess) or c.end.container.equals(subprocess)) {
+                if (hasTransitions == false) {
+                    hasTransitions = true;
+                }
+                if (Sequences.indexOf(connections, c) == -1) {
+                    insert c into connections;
+                }
+            }
+        }
+
         if (hasActivities) {
             addChild(aset, activities);
+        }
+
+        if (hasTransitions) {
+            for (c in connections) {
+                addChild(transitions, getTransitionDefinition(c));
+            }
+            addChild(aset, transitions);
         }
         addChild(actSet, aset);
     }
@@ -420,11 +459,13 @@ public class XPDLTransformer {
     }
 
     public function addWorkFlowDefinition(pool: Pool) {
+        var connections: ConnectionObject[];
         var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:WorkflowProcess");
         var header = doc.createElementNS(namespaceUri, "{namespacePrefix}:ProcessHeader");
         var created = doc.createElementNS(namespaceUri, "{namespacePrefix}:Created");
         var activitySets = doc.createElementNS(namespaceUri, "{namespacePrefix}:ActivitySets");
         var activities = doc.createElementNS(namespaceUri, "{namespacePrefix}:Activities");
+        var transitions = doc.createElementNS(namespaceUri, "{namespacePrefix}:Transitions");
 
         try {
             created.setTextContent(new Date().toString());
@@ -444,11 +485,12 @@ public class XPDLTransformer {
 
         var hasActivities = false;
         var hasActivitySets = false;
+        var hasTransitions = false;
         if (not pool.lanes.isEmpty()) {
             for (lane in pool.lanes) {
                 for (child in lane.getgraphChilds()) {
                     if (child instanceof Artifact or child instanceof DataObject) {
-
+                        
                     } else {
                         addChild(activities, getActivityDefinition(child));
 
@@ -467,7 +509,7 @@ public class XPDLTransformer {
         } else {
             for (child in pool.getgraphChilds()) {
                 if (child instanceof Artifact or child instanceof DataObject) {
-                
+                    
                 } else {
                     addChild(activities, getActivityDefinition(child));
 
@@ -484,13 +526,50 @@ public class XPDLTransformer {
             }
         }
 
+        for (conn in pool.modeler.contents where conn instanceof ConnectionObject) {
+            var c = conn as ConnectionObject;
+            if (c instanceof AssociationFlow) {
+
+            } else if (c.ini.getPool().equals(pool) or c.end.getPool().equals(pool)) {
+                if (c.ini.container == null and c.end.container == null) {
+                    if (hasTransitions == false) {
+                        hasTransitions = true;
+                    }
+                    if (Sequences.indexOf(connections, c) == -1) {
+                        insert c into connections;
+                    }
+                }
+            }
+        }
+
         if (hasActivities) {
             addChild(ret, activities);
         }
         if (hasActivitySets) {
             addChild(ret, activitySets);
         }
+        if (hasTransitions) {
+            for (c in connections) {
+                addChild(transitions, getTransitionDefinition(c));
+            }
+            addChild(ret, transitions);
+        }
+
         addChild(workflows, ret);
+    }
+
+    function getTransitionDefinition(conn: ConnectionObject) : Element {
+        var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:Transition");
+        addAttribute(ret, "Id", conn.getURI());
+        addAttribute(ret, "Name", conn.getTitle());
+        addAttribute(ret, "From", conn.ini.getURI());
+        addAttribute(ret, "To", conn.end.getURI());
+
+        if (conn instanceof ConditionalFlow) {
+            addAttribute(ret, "Condition", conn.getTitle());
+        }
+        addChild(ret, getConnectorGraphicsInfos(conn));
+        return ret;
     }
 
     function getLaneDefinition(lane: Lane) : Element {
