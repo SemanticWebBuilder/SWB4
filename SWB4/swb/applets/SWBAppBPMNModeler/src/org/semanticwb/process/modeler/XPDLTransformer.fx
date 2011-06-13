@@ -79,6 +79,7 @@ public class XPDLTransformer {
         
         workflows = null;
         artifacts = null;
+        associations = null;
         getPackageDefinition();
     }
 
@@ -96,14 +97,34 @@ public class XPDLTransformer {
                 if (artifacts == null) {
                     artifacts = doc.createElementNS(namespaceUri, "{namespacePrefix}:Artifacts");
                     addChild(pkg, artifacts);
-                    addChild(artifacts, getDataObjectDefinition(ele as DataObject))
                 }
+                addChild(artifacts, getDataObjectDefinition(ele as DataObject))
+            } else if (ele instanceof AssociationFlow) {
+                if (associations == null) {
+                    associations = doc.createElementNS(namespaceUri, "{namespacePrefix}:Associations");
+                    addChild(pkg, associations);
+                }
+                addChild(associations, getAssociationDefinition(ele as AssociationFlow));
             }
         }
         
         //return doc;
     }
 
+    public function getAssociationDefinition(assoc: AssociationFlow) : Element {
+        var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:Association");
+
+        addAttribute(ret, "Id", assoc.getURI());
+        addAttribute(ret, "Source", assoc.ini.getURI());
+        addAttribute(ret, "Target", assoc.end.getURI());
+        if (assoc instanceof DirectionalAssociation) {
+            addAttribute(ret, "AssociationDirection", "From");
+        } else {
+            addAttribute(ret, "AssociationDirection", "None");
+        }
+        addChild(ret, getConnectorGraphicsInfos(assoc));
+        return ret;
+    }
 
     public function saveXPDL(file : File) {
         var transf = TransformerFactory.newInstance();
