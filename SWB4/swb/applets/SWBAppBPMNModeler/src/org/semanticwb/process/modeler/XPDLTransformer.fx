@@ -33,6 +33,14 @@ import org.semanticwb.process.modeler.CancelationEndEvent;
 import org.w3c.dom.DOMException;
 import java.lang.IllegalArgumentException;
 import javax.xml.transform.TransformerException;
+import org.semanticwb.process.modeler.ExclusiveGateway;
+import org.semanticwb.process.modeler.ExclusiveIntermediateEventGateway;
+import org.semanticwb.process.modeler.ParallelGateway;
+import org.semanticwb.process.modeler.ParallelStartEventGateway;
+import org.semanticwb.process.modeler.InclusiveGateway;
+import org.semanticwb.process.modeler.ExclusiveStartEventGateway;
+import org.semanticwb.process.modeler.ComplexGateway;
+import org.semanticwb.process.modeler.AnnotationArtifact;
 
 /**
  * @author Hasdai Pacheco {haxdai@gmail.com}
@@ -70,12 +78,29 @@ public class XPDLTransformer {
         }
         
         workflows = null;
+        artifacts = null;
         getPackageDefinition();
     }
 
     public function getXPDLDocument(modeler: Modeler) {//: Document {
-        for (ele in modeler.contents where ele instanceof Pool) {
-            addPoolDefinition(ele as Pool);
+        for (ele in modeler.contents) {
+            if (ele instanceof Pool) {
+                addPoolDefinition(ele as Pool);
+            } else if (ele instanceof Artifact) {
+                if (artifacts == null) {
+                    artifacts = doc.createElementNS(namespaceUri, "{namespacePrefix}:Artifacts");
+                    addChild(pkg, artifacts);
+                }
+                addChild(artifacts, getArtifactDefinition(ele as Artifact));
+            } else if (ele instanceof DataObject) {
+                if (artifacts == null) {
+                    artifacts = doc.createElementNS(namespaceUri, "{namespacePrefix}:Artifacts");
+                    addChild(pkg, artifacts);
+                    addChild(artifacts, getDataObjectDefinition(ele as DataObject))
+                }
+            } else if (ele instanceof ConnectionObject) {
+                println("Analizando conexión {(ele as ConnectionObject).getURI()}");
+            }
         }
         
         //return doc;
@@ -269,7 +294,88 @@ public class XPDLTransformer {
         if (ge instanceof Task) {
             addChild(ret, getTaskDefinition(ge as Task));
         }
+
+        if (ge instanceof Gateway) {
+            addChild(ret, getGatewayDefinition(ge as Gateway));
+        }
+
         addChild(ret, getGraphicsInfos(ge));
+        return ret;
+    }
+
+    function getArtifactDefinition(artif: Artifact) : Element {
+        var artifact = doc.createElementNS(namespaceUri, "{namespacePrefix}:Artifact");
+
+        addAttribute(artifact, "Id", artif.getURI());
+        addAttribute(artifact, "Name", artif.getURI());
+        if (artif instanceof AnnotationArtifact) {
+            addAttribute(artifact, "ArtifactType", "Annotation");
+            addAttribute(artifact, "TextAnnotation", artif.getTitle());
+
+        } else if (artif instanceof GroupArtifact) {
+            addAttribute(artifact, "ArtifactType", "Group");
+        }
+
+        addChild(artifact, getGraphicsInfos(artif));
+        return artifact;
+    }
+
+    function getDataObjectDefinition(dataObject: DataObject) : Element {
+        var artifact = doc.createElementNS(namespaceUri, "{namespacePrefix}:Artifact");
+        var data = doc.createElementNS(namespaceUri, "{namespacePrefix}:DataObject");
+
+        addAttribute(artifact, "Id", dataObject.getURI());
+        addAttribute(artifact, "Name", dataObject.getURI());
+        addAttribute(data, "Id", dataObject.getURI());
+        addAttribute(data, "Name", dataObject.getTitle());
+        addChild(artifact, data);
+        addChild(artifact, getGraphicsInfos(dataObject));
+        
+        return artifact;
+    }
+
+    function getTransitionRestrictions(gateway: Gateway) {
+        
+    }
+
+    function getGatewayDefinition(gateway: Gateway) : Element {
+        var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:Route");
+        var restrict = doc.createElementNS(namespaceUri, "{namespacePrefix}:TransitionRestrictions");
+        var instantiate = "false";
+
+        if (gateway instanceof ExclusiveGateway) {
+            addAttribute(ret, "GatewayType", "Exclusive");
+            addAttribute(ret, "ExclusiveType", "Data");
+            addAttribute(ret, "MarkerVisible", "true");
+        } else if (gateway instanceof ExclusiveIntermediateEventGateway) {
+            addAttribute(ret, "GatewayType", "Exclusive");
+            addAttribute(ret, "ExclusiveType", "Event");
+            addAttribute(ret, "MarkerVisible", "false");
+        } else if (gateway instanceof ParallelGateway) {
+            addAttribute(ret, "GatewayType", "Parallel");
+            addAttribute(ret, "ExclusiveType", "Data");
+            addAttribute(ret, "MarkerVisible", "false");
+        } else if (gateway instanceof ParallelStartEventGateway) {
+            addAttribute(ret, "GatewayType", "Parallel");
+            addAttribute(ret, "ExclusiveType", "Event");
+            addAttribute(ret, "MarkerVisible", "false");
+            instantiate = "true";
+        } else if (gateway instanceof InclusiveGateway) {
+            addAttribute(ret, "GatewayType", "Inclusive");
+            addAttribute(ret, "ExclusiveType", "Data");
+            addAttribute(ret, "MarkerVisible", "false");
+        } else if (gateway instanceof ExclusiveStartEventGateway) {
+            addAttribute(ret, "GatewayType", "Exclusive");
+            addAttribute(ret, "ExclusiveType", "Event");
+            addAttribute(ret, "MarkerVisible", "false");
+            instantiate = "true";
+        } else if (gateway instanceof ComplexGateway) {
+            addAttribute(ret, "GatewayType", "Complex");
+            addAttribute(ret, "ExclusiveType", "Data");
+            addAttribute(ret, "MarkerVisible", "false");
+        }
+        addAttribute(ret, "Instantiate", instantiate);
+
         return ret;
     }
 
@@ -341,6 +447,28 @@ public class XPDLTransformer {
         if (not pool.lanes.isEmpty()) {
             for (lane in pool.lanes) {
                 for (child in lane.getgraphChilds()) {
+                    if (child instanceof Artifact or child instanceof DataObject) {
+
+                    } else {
+                        addChild(activities, getActivityDefinition(child));
+
+                        if (hasActivities == false) {
+                            hasActivities = true;
+                        }
+                        if (child instanceof SubProcess) {
+                            if (hasActivitySets == false) {
+                                hasActivitySets = true;
+                            }
+                            addActivitySetDefinition(child as SubProcess, activitySets);
+                        }
+                    }
+                }
+            }
+        } else {
+            for (child in pool.getgraphChilds()) {
+                if (child instanceof Artifact or child instanceof DataObject) {
+                
+                } else {
                     addChild(activities, getActivityDefinition(child));
 
                     if (hasActivities == false) {
@@ -354,20 +482,6 @@ public class XPDLTransformer {
                     }
                 }
             }
-        } else {
-            for (child in pool.getgraphChilds()) {
-                addChild(activities, getActivityDefinition(child));
-
-                if (hasActivities == false) {
-                    hasActivities = true;
-                }
-                if (child instanceof SubProcess) {
-                    if (hasActivitySets == false) {
-                        hasActivitySets = true;
-                    }
-                    addActivitySetDefinition(child as SubProcess, activitySets);
-                }
-            }
         }
 
         if (hasActivities) {
@@ -376,7 +490,6 @@ public class XPDLTransformer {
         if (hasActivitySets) {
             addChild(ret, activitySets);
         }
-
         addChild(workflows, ret);
     }
 
