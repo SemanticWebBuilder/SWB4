@@ -62,24 +62,7 @@ public class ParameterDefinition
             String _namespace = getNamespaceType(_type);
             if (SCHEMA_NAMESPACE.equals(_namespace))
             {
-//                StringBuilder sb=new StringBuilder();
-//                
-//                String minOccurs = part.getAttribute("minOccurs");
-//                String maxOccurs = part.getAttribute("maxOccurs");
-//                if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
-//                {
-//                    sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
-//                    sb.append(" public final java.util.ArrayList<").append(varType).append("> ").append(_varname).append("=new java.util.ArrayList<").append(varType).append(">();" + NL);
-//                }
-//                if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
-//                {
-//                    sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
-//                    if ("1".equals(minOccurs) && "1".equals(maxOccurs))
-//                    {
-//                        sb.append("@Required" + NL);
-//                    }
-//                    sb.append(" public ").append(varType).append(" ").append(_varname).append(";" + NL);
-//                }
+                
             }
             else
             {
@@ -96,7 +79,7 @@ public class ParameterDefinition
                 String elementName = definition.getAttribute("name");
                 this.namespace = schema.getAttribute("targetNamespace");
                 final String className = toUpperCase(elementName);                
-                if (classesToCompile.containsKey(className))
+                if (!classesToCompile.containsKey(className))
                 {
                     final String code = getCode(definition, className, elementName);
                     classesToCompile.put(className, code);
@@ -142,7 +125,7 @@ public class ParameterDefinition
             String elementName = definition.getAttribute("name");
             this.namespace = schema.getAttribute("targetNamespace");
             final String _className = toUpperCase(elementName);            
-            if (classesToCompile.containsKey(_className))
+            if (!classesToCompile.containsKey(_className))
             {
                 final String code = getCode(definition, _className, elementName);
                 classesToCompile.put(_className, code);
@@ -519,7 +502,7 @@ public class ParameterDefinition
                 if (element.getAttribute("name").equals(""))
                 {
                     
-                    if (classesToCompile.containsKey(_className))
+                    if (!classesToCompile.containsKey(_className))
                     {
                         String code = getCode(element, _className, _tagname);
                         classesToCompile.put(_className, code);
@@ -550,7 +533,7 @@ public class ParameterDefinition
                 {
                     _tagname = element.getAttribute("name");
                     _className = toUpperCase(_tagname);                    
-                    if (classesToCompile.containsKey(_className))
+                    if (!classesToCompile.containsKey(_className))
                     {
                         String code = getCode(element, _className, _tagname);
                         classesToCompile.put(_className, code);
@@ -618,9 +601,10 @@ public class ParameterDefinition
                 {
 
 
-                    String code = getCode(elementToCode, _className, _tagname);                    
-                    if (classesToCompile.containsKey(_className))
+                    
+                    if (!classesToCompile.containsKey(_className))
                     {
+                        String code = getCode(elementToCode, _className, _tagname);                    
                         classesToCompile.put(_className, code);
                     }
                     String minOccurs = element.getAttribute("minOccurs");
@@ -651,7 +635,15 @@ public class ParameterDefinition
                 if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
                 {
                     sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
-                    sb.append(" public final java.util.ArrayList<").append(varType).append("> ").append(_varname).append("=new java.util.ArrayList<").append(varType).append(">();" + NL);
+                    if(varType.equals("String") || varType.equals("java.util.Date"))
+                    {
+                        sb.append(" public final java.util.ArrayList<").append(varType).append("> ").append(_varname).append("=new java.util.ArrayList<").append(varType).append(">();" + NL);
+                    }
+                    else
+                    {
+                        varType=basicToObject(varType);
+                        sb.append(" public final java.util.ArrayList<").append(varType).append("> ").append(_varname).append("=new java.util.ArrayList<").append(varType).append(">();" + NL);
+                    }
                 }
                 if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
                 {
@@ -664,7 +656,41 @@ public class ParameterDefinition
 
         }
     }
-
+    private String basicToObject(String varType)
+    {
+        if(varType.equals("boolean"))
+        {
+            return "Boolean";
+        }
+        else if(varType.equals("int"))
+        {
+            return "Integer";
+        }
+        else if(varType.equals("long"))
+        {
+            return "Long";
+        }
+        else if(varType.equals("double"))
+        {
+            return "Double";
+        }
+        else if(varType.equals("float"))
+        {
+            return "Float";
+        }
+        else if(varType.equals("short"))
+        {
+            return "Short";
+        }
+        else if(varType.equals("byte"))
+        {
+            return "Byte";
+        }
+        else
+        {
+            return toUpperCase(varType);
+        }
+    }
     private String getCode(Element element, String className, String tagname) throws ServiceException
     {
         StringBuilder sb = new StringBuilder();
@@ -725,7 +751,7 @@ public class ParameterDefinition
                 String _tagname = elementToCode.getAttribute("name");
                 String _className = toUpperCase(_tagname);
                 
-                if (classesToCompile.containsKey(_className))
+                if (!classesToCompile.containsKey(_className))
                 {
                     String code = getCode(elementToCode, _className, _tagname);
                     classesToCompile.put(_className, code);
