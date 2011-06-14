@@ -162,8 +162,8 @@ public class XPDLTransformer {
             addAttribute(graphicInfo, "LaneId", "{ge.getGraphParent().uri}");
         }
 
-        addAttribute(coords, "XCoordinate", "{ge.x}");
-        addAttribute(coords, "YCoordinate", "{ge.y}");
+        addAttribute(coords, "XCoordinate", "{ge.localToScene(ge.layoutBounds.minX, ge.layoutBounds.minY).x}");
+        addAttribute(coords, "YCoordinate", "{ge.localToScene(ge.layoutBounds.minX, ge.layoutBounds.minY).y}");
         return graphicInfos;
     }
 
@@ -388,6 +388,7 @@ public class XPDLTransformer {
         addAttribute(artifact, "Name", dataObject.getURI());
         addAttribute(data, "Id", dataObject.getURI());
         addAttribute(data, "Name", dataObject.getTitle());
+        addAttribute(artifact, "ArtifactType", "DataObject");
         addChild(artifact, data);
         addChild(artifact, getGraphicsInfos(dataObject));
         
