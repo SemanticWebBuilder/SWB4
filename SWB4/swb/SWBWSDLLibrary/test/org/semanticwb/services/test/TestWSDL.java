@@ -4,6 +4,7 @@
  */
 package org.semanticwb.services.test;
 
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ import org.semanticwb.wsdl.consume.WSDL;
  */
 public class TestWSDL
 {
+    
 
     public TestWSDL()
     {
@@ -54,6 +56,27 @@ public class TestWSDL
     {
     }
     @Test
+    @Ignore
+    public void test()
+    {
+        try
+        {
+            
+            WSDL wsdl = new WSDL(new URL("http://www.biess.fin.ec:8080/BiessShopService/OrdenWSService?wsdl"));
+            ServiceInfo info = wsdl.getServiceInfo();
+            for (Operation op : info.getOperations())
+            {
+                System.out.println("Operation :" + op.getName());
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
     //@Ignore
     public void ConversionRate()
     {
@@ -62,33 +85,33 @@ public class TestWSDL
 
             WSDL wsdl = new WSDL(new URL("http://www.webservicex.net/CurrencyConvertor.asmx?WSDL"));
             ServiceInfo info = wsdl.getServiceInfo();
-            Operation op=info.getOperationByName("ConversionRate");
+            Operation op = info.getOperationByName("ConversionRate");
             List<Parameter> parameters = new ArrayList<Parameter>();
-            ParameterDefinition def=op.getInput().getParameterDefinitionByName("parameters");
-            Object conversionRate=def.newInstance();
-            PropertyInfo FromCurrencyprop=def.getPropertyInfoByName("FromCurrency");            
+            ParameterDefinition def = op.getInput().getParameterDefinitionByName("parameters");
+            Object conversionRate = def.newInstance();
+            PropertyInfo FromCurrencyprop = def.getPropertyInfoByName("FromCurrency");
             FromCurrencyprop.fill(conversionRate, "XXX");
-            
 
-            PropertyInfo ToCurrencyprop=def.getPropertyInfoByName("ToCurrency");            
+
+            PropertyInfo ToCurrencyprop = def.getPropertyInfoByName("ToCurrency");
             ToCurrencyprop.fill(conversionRate, "DZD");
 
-            
 
 
-            Parameter  p=new Parameter("parameters",conversionRate);
+
+            Parameter p = new Parameter("parameters", conversionRate);
             parameters.add(p);
-            Parameter[] result = op.execute(parameters);            
+            Parameter[] result = op.execute(parameters);
             for (Parameter outparameter : result)
             {
                 Object value = outparameter.getValue();
-                PropertyInfo prop=outparameter.getDefinition().getPropertyInfoByName("ConversionRateResult");
-                value=prop.getValue(value);
+                PropertyInfo prop = outparameter.getDefinition().getPropertyInfoByName("ConversionRateResult");
+                value = prop.getValue(value);
                 System.out.println(value);
             }
 
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -144,9 +167,8 @@ public class TestWSDL
                                 {
                                     Object obj = prop.newInstance();
                                     prop.fill(instance, obj);
-                                    for(PropertyInfo innerprop :  prop.getProperties())
+                                    for (PropertyInfo innerprop : prop.getProperties())
                                     {
-                                        
                                     }
                                 }
                                 catch (Exception e)
