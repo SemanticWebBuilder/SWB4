@@ -5,6 +5,7 @@
 package org.semanticwb.wsdl.consume;
 
 import java.net.URL;
+import org.w3c.dom.Document;
 
 /**
  *
@@ -12,7 +13,7 @@ import java.net.URL;
  */
 public class WSDL
 {
-
+    private static final String WSDL_NAMESPACE = "http://schemas.xmlsoap.org/wsdl/";
     private final URL url;
 
     public WSDL(URL url)
@@ -28,7 +29,26 @@ public class WSDL
         
 
     }
+    public static boolean isWSDL(Document doc)
+    {
+        String attname = "";
+        String prefix = doc.getDocumentElement().getPrefix();
+        if (prefix == null)
+        {
+            attname = "xmlns";
+        }
+        else
+        {
+            attname = "xmlns:" + prefix;
+        }
 
+        String xmlns = doc.getDocumentElement().getAttribute(attname);
+        if (!(xmlns.equals(WSDL_NAMESPACE)))
+        {
+            return true;
+        }
+        return false;
+    }
     public ServiceInfo getServiceInfo() throws ServiceException
     {
         ServiceInfo serviceInfo = new ServiceInfo(this.url);
