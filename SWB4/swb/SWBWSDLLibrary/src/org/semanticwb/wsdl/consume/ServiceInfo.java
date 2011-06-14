@@ -118,7 +118,7 @@ public class ServiceInfo
             throw new ServiceException(ioe);
         }
     }
-
+    
     public boolean isWSDL()
     {
         if (!validate(doc))
