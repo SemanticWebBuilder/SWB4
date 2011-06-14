@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import org.w3c.dom.Document;
 
 
 /**
@@ -69,7 +70,28 @@ public class RestSource
             throw new IllegalArgumentException("The protocol " + url.getProtocol() + " is not suported (only http or https is supported)");
         }
     }
+    public static boolean isWADL(Document doc)
+    {
 
+        String attname = "";
+        String prefix = doc.getDocumentElement().getPrefix();
+        if (prefix == null)
+        {
+            attname = "xmlns";
+        }
+        else
+        {
+            attname = "xmlns:" + prefix;
+        }
+
+        String xmlns = doc.getDocumentElement().getAttribute(attname);
+        if (!(xmlns.equals(RestPublish.WADL_NS_2006) || xmlns.equals(RestPublish.WADL_NS_2009)))
+        {
+            return true;
+        }
+        return false;        
+        
+    }
     public ServiceInfo getServiceInfo() throws RestException
     {
         ServiceInfo serviceInfo = new ServiceInfo(this.wadlurl);
