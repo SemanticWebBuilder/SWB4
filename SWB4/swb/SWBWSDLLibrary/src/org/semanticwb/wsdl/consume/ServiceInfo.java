@@ -5,6 +5,7 @@
 package org.semanticwb.wsdl.consume;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
@@ -13,6 +14,13 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashSet;
+import javax.xml.XMLConstants;
+import javax.xml.transform.Source;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
@@ -23,6 +31,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -49,7 +58,27 @@ public class ServiceInfo
         this.url = url;
 
     }
-
+    /*private void extractSchemas()
+    {
+        NodeList _schemas=doc.getElementsByTagNameNS(SCHEMA_2001_NAMESPACE, "schema");
+        ArrayList<Element> eSchemas=new ArrayList<Element>();
+        for(int i=0;i<_schemas.getLength();i++)
+        {
+            Element schema=(Element)_schemas.item(i);
+            eSchemas.add(schema);           
+        }
+        for(Element schema : eSchemas)
+        {
+            Document doc_schema=SWBUtils.XML.getNewDocument();
+            Node newSchema=doc_schema.importNode(schema, true);
+            doc_schema.appendChild(newSchema);  
+        }
+        for(Element schema : eSchemas)
+        {
+            schema.getParentNode().removeChild(schema);
+        }
+        
+    }*/
     public void loadService() throws ServiceException
     {
 
@@ -118,9 +147,10 @@ public class ServiceInfo
             throw new ServiceException(ioe);
         }
     }
-    
+
     public boolean isWSDL()
     {
+        
         if (!validate(doc))
         {
             return false;
@@ -219,60 +249,62 @@ public class ServiceInfo
 
     private boolean validate(Document doc)
     {
-        return true;
-        /*SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        boolean validate = false;
         
+        String tns = doc.getDocumentElement().getAttribute("targetNamespace");
+        String tns_prefix = doc.getDocumentElement().getAttribute("xmlns:tns");
+        if (tns_prefix.equals(""))
+        {
+            doc.getDocumentElement().setAttribute("xmlns:tns", tns);
+        }
+        //return true;
+        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        boolean validate = false;
+
         String docschema = null;
         InputStream in = XMLConstants.class.getResourceAsStream("/org/semanticwb/wsdl/util/wsdlschema.xml");
-        
-        
-        
-        
+
+
+
+
         try
         {
-        InputStreamReader reader = new InputStreamReader(in, Charset.forName("utf-8"));
-        char[] buffer = new char[1024];
-        StringBuilder sb = new StringBuilder();
-        int read = reader.read(buffer);
-        while (read != -1)
-        {
-        sb.append(new String(buffer, 0, buffer.length));
-        read = reader.read(buffer);
-        }
-        docschema=sb.toString();
-        in.close();
+            InputStreamReader reader = new InputStreamReader(in, Charset.forName("utf-8"));
+            DOMOutputter out = new DOMOutputter();
+            SAXBuilder builder = new SAXBuilder();
+            Document docSchema = out.output(builder.build(reader));
+            docschema = SWBUtils.XML.domToXml(docSchema);
+
         }
         catch (Exception e)
         {
-        log.debug(e);
+            log.debug(e);
         }
         if (docschema != null)
         {
-        
-        StringReader reader = new StringReader(docschema);
-        Source schemaFile = new StreamSource(reader);
-        try
-        {
-        Schema schema = factory.newSchema(schemaFile);
-        Validator validator = schema.newValidator();
-        DOMSource source = new DOMSource(doc);
-        validator.validate(source);
-        validate = true;
+
+            StringReader reader = new StringReader(docschema);
+            Source schemaFile = new StreamSource(reader);
+            try
+            {
+                Schema schema = factory.newSchema(schemaFile);
+                Validator validator = schema.newValidator();
+                DOMSource source = new DOMSource(doc);
+                validator.validate(source);
+                validate = true;
+            }
+            catch (IOException ioe)
+            {
+                log.debug(ioe);
+                validate = false;
+            }
+            catch (SAXException saxe)
+            {
+                String xml = SWBUtils.XML.domToXml(doc, Charset.defaultCharset().name(), true);
+                log.debug("El documento no es válido con namespace " + doc.getDocumentElement().getNamespaceURI() + "\r\n " + xml, saxe);
+                validate = false;
+            }
         }
-        catch (IOException ioe)
-        {
-        log.debug(ioe);
-        validate = false;
-        }
-        catch (SAXException saxe)
-        {
-        String xml = SWBUtils.XML.domToXml(doc, Charset.defaultCharset().name(), true);
-        log.debug("El documento no es válido con namespace " + doc.getDocumentElement().getNamespaceURI() + "\r\n " + xml, saxe);
-        validate = false;
-        }
-        }
-        return validate;*/
+        return validate;
     }
 
     private Document getDocument(URL url) throws ServiceException
