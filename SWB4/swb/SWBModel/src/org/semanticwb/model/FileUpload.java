@@ -153,12 +153,14 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
             value = "";
         }
 
+      
         if (mode.equals("edit") || mode.equals("create")) {
             String attchMsg = "";
             String ext= "";
-            //if(getFileFilter()!=null) ext=getFileFilter();
+            if(getFileFilter()!=null) ext=getFileFilter();
             if(ext.trim().length()==0 && request.getAttribute("extensions")!=null)  ext=(String)request.getAttribute("extensions");
-            //String ext= "jpg|gif|png";
+            if(ext.trim().length()==0)  ext= "jpg|jpeg|gif|png";
+
 
             if ((name != null) && (request.getAttribute("attachCount_" + name) != null)) {
                 attchMsg = lang.equals("en")?"Existing files":"Archivo(s) existentes:";
