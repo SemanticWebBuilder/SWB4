@@ -505,13 +505,10 @@ public class ServiceInfo
         {
             return false;
         }
-        String xmlns = doc.getDocumentElement().getAttribute("xmlns");
-        if (!(xmlns.equals(RestPublish.WADL_NS_2006) || xmlns.equals(RestPublish.WADL_NS_2009)))
+        if(!RestSource.isWADL(doc))
         {
             return false;
-
-        }
-        WADL_NS = xmlns;
+        }        
         try
         {
             NodeList nodes = doc.getElementsByTagNameNS(WADL_NS, "application");
