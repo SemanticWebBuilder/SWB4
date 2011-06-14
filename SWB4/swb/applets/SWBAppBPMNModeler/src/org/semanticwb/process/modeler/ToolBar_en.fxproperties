@@ -1,6 +1,7 @@
 "new" = "New"
 "file" = "File"
 "open" = "Open"
+"openTitle" = "Open existing diagram"
 "save" = "Save"
 "send" = "Send model"
 "export" = "Export"
