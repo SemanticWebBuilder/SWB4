@@ -55,6 +55,28 @@ public class TestWSDL
     public void tearDown()
     {
     }
+    
+    @Test
+    //@Ignore
+    public void amazon()
+    {
+        try
+        {
+            
+            WSDL wsdl = new WSDL(new URL("http://webservices.amazon.com/AWSECommerceService/AWSECommerceService.wsdl"));
+            ServiceInfo info = wsdl.getServiceInfo();
+            for (Operation op : info.getOperations())
+            {
+                System.out.println("Operation: " + op.getName());
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+    
     @Test
     @Ignore
     public void test()
@@ -77,7 +99,7 @@ public class TestWSDL
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void ConversionRate()
     {
         try
