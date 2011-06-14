@@ -1,6 +1,7 @@
 "new" = "Nuevo"
 "file" = "Archivo"
 "open" = "Abrir"
+"openTitle" = "Abrir diagrama"
 "save" = "Guardar"
 "send" = "Enviar modelo"
 "export" = "Exportar"
