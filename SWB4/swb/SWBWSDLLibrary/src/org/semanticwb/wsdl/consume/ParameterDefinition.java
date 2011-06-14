@@ -55,10 +55,10 @@ public class ParameterDefinition
 
         if (!part.getAttribute("type").equals(""))
         {
-            String _tagname=name;
+            String _tagname = name;
             _type = part.getAttribute("type");
             String varType = getType(_type);
-            String _varname="_"+_name.toLowerCase();
+            String _varname = "_" + _name.toLowerCase();
             String _namespace = getNamespaceType(_type);
             if (SCHEMA_NAMESPACE.equals(_namespace))
             {
@@ -95,9 +95,13 @@ public class ParameterDefinition
                 }
                 String elementName = definition.getAttribute("name");
                 this.namespace = schema.getAttribute("targetNamespace");
-                final String className = toUpperCase(elementName);
-                final String code = getCode(definition, className, elementName);
-                classesToCompile.put(className, code);
+                final String className = toUpperCase(elementName);                
+                if (classesToCompile.containsKey(className))
+                {
+                    final String code = getCode(definition, className, elementName);
+                    classesToCompile.put(className, code);
+                }
+
                 l.addAll(classesToCompile);
 
                 for (String classNameToAdd : classesToCompile.keySet())
@@ -109,9 +113,8 @@ public class ParameterDefinition
                         {
                             this.clazz = _clazz;
                         }
-
                         //ClassInfo info = new ClassInfo(_clazz, code,elementName,namespace,tagname);
-                        ClassInfo info = new ClassInfo(_clazz, code, elementName, namespace, this);
+                        ClassInfo info = new ClassInfo(_clazz, classesToCompile.get(classNameToAdd), elementName, namespace, this);
                         this.classInfoDictionary.put(_clazz, info);
                     }
                     catch (ClassNotFoundException cnfe)
@@ -138,9 +141,13 @@ public class ParameterDefinition
             }
             String elementName = definition.getAttribute("name");
             this.namespace = schema.getAttribute("targetNamespace");
-            final String className = toUpperCase(elementName);
-            final String code = getCode(definition, className, elementName);
-            classesToCompile.put(className, code);
+            final String _className = toUpperCase(elementName);            
+            if (classesToCompile.containsKey(_className))
+            {
+                final String code = getCode(definition, _className, elementName);
+                classesToCompile.put(_className, code);
+            }
+
             l.addAll(classesToCompile);
 
             for (String classNameToAdd : classesToCompile.keySet())
@@ -148,13 +155,13 @@ public class ParameterDefinition
                 try
                 {
                     Class _clazz = l.loadClass(classNameToAdd);
-                    if (classNameToAdd.equals(className))
+                    if (classNameToAdd.equals(_className))
                     {
                         this.clazz = _clazz;
                     }
 
                     //ClassInfo info = new ClassInfo(_clazz, code,elementName,namespace,tagname);
-                    ClassInfo info = new ClassInfo(_clazz, code, elementName, namespace, this);
+                    ClassInfo info = new ClassInfo(_clazz, classesToCompile.get(classNameToAdd), elementName, namespace, this);
                     this.classInfoDictionary.put(_clazz, info);
                 }
                 catch (ClassNotFoundException cnfe)
@@ -427,7 +434,7 @@ public class ParameterDefinition
             if (isEnumeration)
             {
                 String _tagname = ((Element) element.getParentNode()).getAttribute("name");
-                String _varname = "_"+_tagname.toLowerCase();
+                String _varname = "_" + _tagname.toLowerCase();
                 String base = element.getAttribute("base");
                 String varType = getType(base);
                 String minOccurs = element.getAttribute("minOccurs");
@@ -479,7 +486,17 @@ public class ParameterDefinition
         {
             if (isRef(element))
             {
-                return;
+                String ref = element.getAttribute("ref");
+                String minOccurs = element.getAttribute("minOccurs");
+                String maxOccurs = element.getAttribute("maxOccurs");
+                element = XMLDocumentUtil.getGlobalElement(schemas, ref, jdom);
+                if (element == null)
+                {
+                    throw new ServiceException("The element " + ref + " was not found");
+                }
+                element.setAttribute("minOccurs", minOccurs);
+                element.setAttribute("maxOccurs", maxOccurs);
+
             }
             String _tagname = element.getAttribute("name");
             if (_tagname.equals(""))
@@ -487,7 +504,7 @@ public class ParameterDefinition
                 return;
             }
             String _className = toUpperCase(_tagname);
-            String _varname = "_"+_tagname.toLowerCase();
+            String _varname = "_" + _tagname.toLowerCase();
             String _type = element.getAttribute("type");
             String varType = getType(_type);
             String uri = getNamespaceType(_type);
@@ -498,42 +515,71 @@ public class ParameterDefinition
             }
             if (varType.equals(""))
             {
-                String code = getCode(element, className, _tagname);
-                classesToCompile.put(_className, code);
-                String minOccurs = element.getAttribute("minOccurs");
-                String maxOccurs = element.getAttribute("maxOccurs");
 
-                checkRestrictions(element, sb);
-
-                if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
+                if (element.getAttribute("name").equals(""))
                 {
-                    sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
-                    sb.append(" public final java.util.ArrayList<").append(_className).append("> ").append(_varname).append("=new java.util.ArrayList<").append(_className).append(">();" + NL);
-                }
-                if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
-                {
-                    sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
-                    if ("1".equals(minOccurs) && "1".equals(maxOccurs))
+                    
+                    if (classesToCompile.containsKey(_className))
                     {
-                        sb.append("@Required" + NL);
+                        String code = getCode(element, _className, _tagname);
+                        classesToCompile.put(_className, code);
                     }
-                    sb.append(" public ").append(_className).append(" ").append(_varname).append(";" + NL);
+
+                    String minOccurs = element.getAttribute("minOccurs");
+                    String maxOccurs = element.getAttribute("maxOccurs");
+
+                    checkRestrictions(element, sb);
+
+                    if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
+                    {
+                        sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
+                        sb.append(" public final java.util.ArrayList<").append(_className).append("> ").append(_varname).append("=new java.util.ArrayList<").append(_className).append(">();" + NL);
+                    }
+                    if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
+                    {
+                        sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
+                        if ("1".equals(minOccurs) && "1".equals(maxOccurs))
+                        {
+                            sb.append("@Required" + NL);
+                        }
+                        sb.append(" public ").append(_className).append(" ").append(_varname).append(";" + NL);
+                    }
+                    return;
                 }
-                return;
+                else
+                {
+                    _tagname = element.getAttribute("name");
+                    _className = toUpperCase(_tagname);                    
+                    if (classesToCompile.containsKey(_className))
+                    {
+                        String code = getCode(element, _className, _tagname);
+                        classesToCompile.put(_className, code);
+                    }
+                    String minOccurs = element.getAttribute("minOccurs");
+                    String maxOccurs = element.getAttribute("maxOccurs");
+
+                    checkRestrictions(element, sb);
+
+                    if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
+                    {
+                        sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
+                        sb.append(" public final java.util.ArrayList<").append(_className).append("> ").append(_varname).append("=new java.util.ArrayList<").append(_className).append(">();" + NL);
+                    }
+                    if (("".equals(minOccurs) || "1".equals(minOccurs) || "0".equals(minOccurs)) && ("1".equals(maxOccurs) || "".equals(maxOccurs)))
+                    {
+                        sb.append("@Tagname(name=\"").append(_tagname).append("\")" + NL);
+                        if ("1".equals(minOccurs) && "1".equals(maxOccurs))
+                        {
+                            sb.append("@Required" + NL);
+                        }
+                        sb.append(" public ").append(_className).append(" ").append(_varname).append(";" + NL);
+                    }
+                    return;
+                }
             }
             if (!isBasic)
             {
 
-                //XMLDocumentUtil.getElement(
-                //                Element[] elements = XMLDocumentUtil.getElement(varType, element.getOwnerDocument(), "element");
-                //                if (elements.length == 0)
-                //                {
-                //                    elements = XMLDocumentUtil.getElement(varType, element.getOwnerDocument(), "complexType");
-                //                }
-                //                if (elements.length == 0)
-                //                {
-                //                    elements = XMLDocumentUtil.getElement(varType, element.getOwnerDocument(), "simpleType");
-                //                }
                 Element elementToCode = XMLDocumentUtil.getElementByType(schemas, _type, jdom);
 
                 if (elementToCode == null)
@@ -571,8 +617,12 @@ public class ParameterDefinition
                 else
                 {
 
-                    String code = getCode(elementToCode, _className, _tagname);
-                    classesToCompile.put(_className, code);
+
+                    String code = getCode(elementToCode, _className, _tagname);                    
+                    if (classesToCompile.containsKey(_className))
+                    {
+                        classesToCompile.put(_className, code);
+                    }
                     String minOccurs = element.getAttribute("minOccurs");
                     String maxOccurs = element.getAttribute("maxOccurs");
                     if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
@@ -622,6 +672,7 @@ public class ParameterDefinition
         sb.append("import org.semanticwb.wsdl.consume.Tagname;" + NL);
         sb.append("import org.semanticwb.wsdl.consume.EnnumerationRestriction;" + NL);
         sb.append("" + NL);
+        classesToCompile.put(className, "");
         sb.append("@Tagname(name=\"").append(tagname).append("\")" + NL);
         sb.append("public class ").append(className).append(" {" + NL);
         sb.append("" + NL);
@@ -645,7 +696,7 @@ public class ParameterDefinition
             if (XMLDocumentUtil.isBasic(_type, jdom))
             {
                 String _tagname = tagname;
-                String _varname = "_"+_tagname.toLowerCase();
+                String _varname = "_" + _tagname.toLowerCase();
                 String _varType = getType(_type);
                 String minOccurs = element.getAttribute("minOccurs");
                 String maxOccurs = element.getAttribute("maxOccurs");
@@ -673,9 +724,14 @@ public class ParameterDefinition
                 }
                 String _tagname = elementToCode.getAttribute("name");
                 String _className = toUpperCase(_tagname);
-                String code = getCode(elementToCode, _className, _tagname);
-                this.classesToCompile.put(_className, code);
-                String _varname = "_"+_tagname.toLowerCase();
+                
+                if (classesToCompile.containsKey(_className))
+                {
+                    String code = getCode(elementToCode, _className, _tagname);
+                    classesToCompile.put(_className, code);
+                }
+
+                String _varname = "_" + _tagname.toLowerCase();
                 String minOccurs = element.getAttribute("minOccurs");
                 String maxOccurs = element.getAttribute("maxOccurs");
                 if ("0".equals(minOccurs) && "unbounded".equals(maxOccurs))
