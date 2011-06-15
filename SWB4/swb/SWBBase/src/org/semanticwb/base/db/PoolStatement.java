@@ -371,7 +371,6 @@ public boolean execute(String str, String[] str1) throws java.sql.SQLException
     }
 
 //********************************** version 1.6
-/**
     public void setPoolable(boolean poolable) throws SQLException {
         st.setPoolable(poolable);
     }
@@ -387,6 +386,4 @@ public boolean execute(String str, String[] str1) throws java.sql.SQLException
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
         return st.isWrapperFor(iface);
     }
-
-//*/
 }

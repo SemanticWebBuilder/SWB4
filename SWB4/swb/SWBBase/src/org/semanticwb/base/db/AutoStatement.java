@@ -648,7 +648,6 @@ public boolean execute(String str, String[] str1) throws java.sql.SQLException
         return st.getGeneratedKeys();
     }
 //********************************** version 1.6
-/*
     public void setPoolable(boolean poolable) throws SQLException {
     checkStatement();
     st.setPoolable(poolable);
@@ -669,5 +668,4 @@ public boolean execute(String str, String[] str1) throws java.sql.SQLException
     return st.isWrapperFor(iface);
     }
 
-    //*/
 }

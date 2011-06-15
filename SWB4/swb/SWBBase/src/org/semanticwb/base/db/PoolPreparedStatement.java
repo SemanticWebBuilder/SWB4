@@ -815,7 +815,6 @@ public boolean execute(String str, String[] str1) throws java.sql.SQLException
         return st.getParameterMetaData();
     }
 //********************************** version 1.6
-    /**
 
     public void setPoolable(boolean poolable) throws SQLException {
     st.setPoolable(poolable);
@@ -923,8 +922,4 @@ public boolean execute(String str, String[] str1) throws java.sql.SQLException
     st.setSQLXML(parameterIndex, xmlObject);
     }
 
-
-
-
-    //*/
 }
