@@ -659,7 +659,7 @@ public java.sql.Savepoint setSavepoint() throws java.sql.SQLException
         return idle_time;
     }
 //********************************* JAVA 1.6   
-    /**
+    
     public Clob createClob() throws SQLException {
     return con.createClob();
     }
@@ -713,5 +713,4 @@ public java.sql.Savepoint setSavepoint() throws java.sql.SQLException
     }
     
 
-    //*/
 }

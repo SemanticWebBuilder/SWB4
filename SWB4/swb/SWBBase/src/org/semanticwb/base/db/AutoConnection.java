@@ -686,7 +686,6 @@ public class AutoConnection implements Connection
     }
 
 //********************************* JAVA 1.6
-/*
     public Clob createClob() throws SQLException {
         checkConnection();
         return con.createClob();
@@ -752,6 +751,4 @@ public class AutoConnection implements Connection
         return con.isWrapperFor(iface);
     }
 
-
-//*/
 }
