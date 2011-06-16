@@ -6,9 +6,9 @@ package org.semanticwb.model.base;
    */
 public abstract class SelectOneBase extends org.semanticwb.model.base.FormElementBase 
 {
+    public static final org.semanticwb.platform.SemanticProperty swbxf_so_nullSuport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_nullSuport");
     public static final org.semanticwb.platform.SemanticProperty swbxf_so_globalScope=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_globalScope");
     public static final org.semanticwb.platform.SemanticProperty swbxf_so_userRepository=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_userRepository");
-    public static final org.semanticwb.platform.SemanticProperty swbxf_so_nullSuport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_nullSuport");
    /**
    * Elemento que muestra un componente grafico para seleccionar una opcion
    */
@@ -93,6 +93,24 @@ public abstract class SelectOneBase extends org.semanticwb.model.base.FormElemen
     }
 
 /**
+* Gets the BlankSuport property
+* @return boolean with the BlankSuport
+*/
+    public boolean isBlankSuport()
+    {
+        return getSemanticObject().getBooleanProperty(swbxf_so_nullSuport);
+    }
+
+/**
+* Sets the BlankSuport property
+* @param value long with the BlankSuport
+*/
+    public void setBlankSuport(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swbxf_so_nullSuport, value);
+    }
+
+/**
 * Gets the GlobalScope property
 * @return boolean with the GlobalScope
 */
@@ -126,24 +144,6 @@ public abstract class SelectOneBase extends org.semanticwb.model.base.FormElemen
     public void setUserRepository(boolean value)
     {
         getSemanticObject().setBooleanProperty(swbxf_so_userRepository, value);
-    }
-
-/**
-* Gets the BlankSuport property
-* @return boolean with the BlankSuport
-*/
-    public boolean isBlankSuport()
-    {
-        return getSemanticObject().getBooleanProperty(swbxf_so_nullSuport);
-    }
-
-/**
-* Sets the BlankSuport property
-* @param value long with the BlankSuport
-*/
-    public void setBlankSuport(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swbxf_so_nullSuport, value);
     }
 
     public void remove()

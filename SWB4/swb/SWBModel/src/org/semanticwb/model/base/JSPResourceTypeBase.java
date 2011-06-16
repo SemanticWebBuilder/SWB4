@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto por medio del cual se define un tipo de componente o recurso, con especializacion de estilo JSP 
    */
-public abstract class JSPResourceTypeBase extends org.semanticwb.model.ResourceType implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode
+public abstract class JSPResourceTypeBase extends org.semanticwb.model.ResourceType implements org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode
 {
     public static final org.semanticwb.platform.SemanticProperty swb_rtJspPath=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#rtJspPath");
    /**
@@ -80,6 +80,29 @@ public abstract class JSPResourceTypeBase extends org.semanticwb.model.ResourceT
             return (getJSPResourceType(id, model)!=null);
         }
        /**
+       * Gets all org.semanticwb.model.JSPResourceType with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.model.JSPResourceType
+       * @return Iterator with all the org.semanticwb.model.JSPResourceType
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.JSPResourceType> listJSPResourceTypeByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.JSPResourceType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.JSPResourceType with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.model.JSPResourceType
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.JSPResourceType> listJSPResourceTypeByModifiedBy(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.JSPResourceType> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.model.JSPResourceType with a determined Resource
        * @param value Resource of the type org.semanticwb.model.Resource
        * @param model Model of the org.semanticwb.model.JSPResourceType
@@ -103,26 +126,26 @@ public abstract class JSPResourceTypeBase extends org.semanticwb.model.ResourceT
             return it;
         }
        /**
-       * Gets all org.semanticwb.model.JSPResourceType with a determined ModifiedBy
-       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * Gets all org.semanticwb.model.JSPResourceType with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.model.JSPResourceType
        * @return Iterator with all the org.semanticwb.model.JSPResourceType
        */
 
-        public static java.util.Iterator<org.semanticwb.model.JSPResourceType> listJSPResourceTypeByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.JSPResourceType> listJSPResourceTypeByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.JSPResourceType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.JSPResourceType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.model.JSPResourceType with a determined ModifiedBy
-       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * Gets all org.semanticwb.model.JSPResourceType with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
        * @return Iterator with all the org.semanticwb.model.JSPResourceType
        */
 
-        public static java.util.Iterator<org.semanticwb.model.JSPResourceType> listJSPResourceTypeByModifiedBy(org.semanticwb.model.User value)
+        public static java.util.Iterator<org.semanticwb.model.JSPResourceType> listJSPResourceTypeByCreator(org.semanticwb.model.User value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.JSPResourceType> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.JSPResourceType> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -169,29 +192,6 @@ public abstract class JSPResourceTypeBase extends org.semanticwb.model.ResourceT
         public static java.util.Iterator<org.semanticwb.model.JSPResourceType> listJSPResourceTypeBySubType(org.semanticwb.model.ResourceSubType value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.JSPResourceType> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasPTSubType,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.JSPResourceType with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.model.JSPResourceType
-       * @return Iterator with all the org.semanticwb.model.JSPResourceType
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.JSPResourceType> listJSPResourceTypeByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.JSPResourceType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.JSPResourceType with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.model.JSPResourceType
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.JSPResourceType> listJSPResourceTypeByCreator(org.semanticwb.model.User value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.JSPResourceType> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
     }

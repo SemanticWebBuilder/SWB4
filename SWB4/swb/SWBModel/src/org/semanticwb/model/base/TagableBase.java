@@ -13,6 +13,4 @@ public interface TagableBase extends org.semanticwb.model.GenericObject
 
     public String getTags();
 
-    public void setTags(String value);
-
 }

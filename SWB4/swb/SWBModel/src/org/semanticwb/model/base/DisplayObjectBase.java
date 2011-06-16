@@ -6,17 +6,17 @@ package org.semanticwb.model.base;
    */
 public abstract class DisplayObjectBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Iconable
 {
-    public static final org.semanticwb.platform.SemanticProperty swbxf_doDispatcher=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#doDispatcher");
-    public static final org.semanticwb.platform.SemanticProperty swbxf_doTreeController=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#doTreeController");
    /**
    * Define que este tipo de objeto soporta drag and drop en el arbol de administracion de SWB
    */
     public static final org.semanticwb.platform.SemanticProperty swbxf_dragSupport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#dragSupport");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_dropMatchLevel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#dropMatchLevel");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_doTreeController=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#doTreeController");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_doDispatcher=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#doDispatcher");
    /**
    * Define que no se puedan crear instancias de la clase en el arbol de administracion de SWB
    */
     public static final org.semanticwb.platform.SemanticProperty swbxf_doNotInstanceable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#doNotInstanceable");
-    public static final org.semanticwb.platform.SemanticProperty swbxf_dropMatchLevel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#dropMatchLevel");
    /**
    * Objeto utilizado para definir caracteristicas visuales de una clase dentro de la administracion de SWB
    */
@@ -101,6 +101,24 @@ public abstract class DisplayObjectBase extends org.semanticwb.model.SWBClass im
     }
 
 /**
+* Gets the DragSupport property
+* @return boolean with the DragSupport
+*/
+    public boolean isDragSupport()
+    {
+        return getSemanticObject().getBooleanProperty(swbxf_dragSupport);
+    }
+
+/**
+* Sets the DragSupport property
+* @param value long with the DragSupport
+*/
+    public void setDragSupport(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swbxf_dragSupport, value);
+    }
+
+/**
 * Gets the IconClass property
 * @return String with the IconClass
 */
@@ -119,21 +137,21 @@ public abstract class DisplayObjectBase extends org.semanticwb.model.SWBClass im
     }
 
 /**
-* Gets the DoDispatcher property
-* @return String with the DoDispatcher
+* Gets the DropMatchLevel property
+* @return int with the DropMatchLevel
 */
-    public String getDoDispatcher()
+    public int getDropMatchLevel()
     {
-        return getSemanticObject().getProperty(swbxf_doDispatcher);
+        return getSemanticObject().getIntProperty(swbxf_dropMatchLevel);
     }
 
 /**
-* Sets the DoDispatcher property
-* @param value long with the DoDispatcher
+* Sets the DropMatchLevel property
+* @param value long with the DropMatchLevel
 */
-    public void setDoDispatcher(String value)
+    public void setDropMatchLevel(int value)
     {
-        getSemanticObject().setProperty(swbxf_doDispatcher, value);
+        getSemanticObject().setIntProperty(swbxf_dropMatchLevel, value);
     }
 
 /**
@@ -155,21 +173,21 @@ public abstract class DisplayObjectBase extends org.semanticwb.model.SWBClass im
     }
 
 /**
-* Gets the DragSupport property
-* @return boolean with the DragSupport
+* Gets the DoDispatcher property
+* @return String with the DoDispatcher
 */
-    public boolean isDragSupport()
+    public String getDoDispatcher()
     {
-        return getSemanticObject().getBooleanProperty(swbxf_dragSupport);
+        return getSemanticObject().getProperty(swbxf_doDispatcher);
     }
 
 /**
-* Sets the DragSupport property
-* @param value long with the DragSupport
+* Sets the DoDispatcher property
+* @param value long with the DoDispatcher
 */
-    public void setDragSupport(boolean value)
+    public void setDoDispatcher(String value)
     {
-        getSemanticObject().setBooleanProperty(swbxf_dragSupport, value);
+        getSemanticObject().setProperty(swbxf_doDispatcher, value);
     }
 
 /**
@@ -188,23 +206,5 @@ public abstract class DisplayObjectBase extends org.semanticwb.model.SWBClass im
     public void setDoNotInstanceable(boolean value)
     {
         getSemanticObject().setBooleanProperty(swbxf_doNotInstanceable, value);
-    }
-
-/**
-* Gets the DropMatchLevel property
-* @return int with the DropMatchLevel
-*/
-    public int getDropMatchLevel()
-    {
-        return getSemanticObject().getIntProperty(swbxf_dropMatchLevel);
-    }
-
-/**
-* Sets the DropMatchLevel property
-* @param value long with the DropMatchLevel
-*/
-    public void setDropMatchLevel(int value)
-    {
-        getSemanticObject().setIntProperty(swbxf_dropMatchLevel, value);
     }
 }

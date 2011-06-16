@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class ModelPropertyBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class ModelPropertyBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_propValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#propValue");
     public static final org.semanticwb.platform.SemanticClass swb_ModelProperty=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ModelProperty");
@@ -131,21 +131,21 @@ public abstract class ModelPropertyBase extends org.semanticwb.model.SWBClass im
     }
 
 /**
-* Gets the Created property
-* @return java.util.Date with the Created
+* Gets the Value property
+* @return String with the Value
 */
-    public java.util.Date getCreated()
+    public String getValue()
     {
-        return getSemanticObject().getDateProperty(swb_created);
+        return getSemanticObject().getProperty(swb_propValue);
     }
 
 /**
-* Sets the Created property
-* @param value long with the Created
+* Sets the Value property
+* @param value long with the Value
 */
-    public void setCreated(java.util.Date value)
+    public void setValue(String value)
     {
-        getSemanticObject().setDateProperty(swb_created, value);
+        getSemanticObject().setProperty(swb_propValue, value);
     }
    /**
    * Sets the value for the property ModifiedBy
@@ -179,6 +179,44 @@ public abstract class ModelPropertyBase extends org.semanticwb.model.SWBClass im
     {
          org.semanticwb.model.User ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property Creator
+   * @param value Creator to set
+   */
+
+    public void setCreator(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
+    }
+   /**
+   * Remove the value for Creator property
+   */
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(swb_creator);
+    }
+
+   /**
+   * Gets the Creator
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getCreator()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
@@ -238,59 +276,21 @@ public abstract class ModelPropertyBase extends org.semanticwb.model.SWBClass im
     }
 
 /**
-* Gets the Value property
-* @return String with the Value
+* Gets the Created property
+* @return java.util.Date with the Created
 */
-    public String getValue()
+    public java.util.Date getCreated()
     {
-        return getSemanticObject().getProperty(swb_propValue);
+        return getSemanticObject().getDateProperty(swb_created);
     }
 
 /**
-* Sets the Value property
-* @param value long with the Value
+* Sets the Created property
+* @param value long with the Created
 */
-    public void setValue(String value)
+    public void setCreated(java.util.Date value)
     {
-        getSemanticObject().setProperty(swb_propValue, value);
-    }
-   /**
-   * Sets the value for the property Creator
-   * @param value Creator to set
-   */
-
-    public void setCreator(org.semanticwb.model.User value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
-        }else
-        {
-            removeCreator();
-        }
-    }
-   /**
-   * Remove the value for Creator property
-   */
-
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(swb_creator);
-    }
-
-   /**
-   * Gets the Creator
-   * @return a org.semanticwb.model.User
-   */
-    public org.semanticwb.model.User getCreator()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
+        getSemanticObject().setDateProperty(swb_created, value);
     }
 
 /**

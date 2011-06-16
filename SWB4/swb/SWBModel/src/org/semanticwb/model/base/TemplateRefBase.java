@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Referencia a un objeto de tipo Template 
    */
-public abstract class TemplateRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Inheritable,org.semanticwb.model.Activeable,org.semanticwb.model.Priorityable
+public abstract class TemplateRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Priorityable,org.semanticwb.model.Activeable,org.semanticwb.model.Inheritable
 {
    /**
    * Las Plantillas son documentos HTML que sirven de base a SemanticWebBuilder para poder mostrar el "look & feel" del sitio, así como la distribución de todos los elementos en la pagina.
@@ -122,6 +122,24 @@ public abstract class TemplateRefBase extends org.semanticwb.model.Reference imp
     {
         super(base);
     }
+
+/**
+* Gets the Priority property
+* @return int with the Priority
+*/
+    public int getPriority()
+    {
+        return getSemanticObject().getIntProperty(swb_priority);
+    }
+
+/**
+* Sets the Priority property
+* @param value long with the Priority
+*/
+    public void setPriority(int value)
+    {
+        getSemanticObject().setIntProperty(swb_priority, value);
+    }
    /**
    * Sets the value for the property Template
    * @param value Template to set
@@ -159,24 +177,6 @@ public abstract class TemplateRefBase extends org.semanticwb.model.Reference imp
              ret=(org.semanticwb.model.Template)obj.createGenericInstance();
          }
          return ret;
-    }
-
-/**
-* Gets the Priority property
-* @return int with the Priority
-*/
-    public int getPriority()
-    {
-        return getSemanticObject().getIntProperty(swb_priority);
-    }
-
-/**
-* Sets the Priority property
-* @param value long with the Priority
-*/
-    public void setPriority(int value)
-    {
-        getSemanticObject().setIntProperty(swb_priority, value);
     }
 
 /**

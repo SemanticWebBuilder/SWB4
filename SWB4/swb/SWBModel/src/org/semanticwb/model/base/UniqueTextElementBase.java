@@ -4,13 +4,13 @@ package org.semanticwb.model.base;
 public abstract class UniqueTextElementBase extends org.semanticwb.model.Text 
 {
    /**
-   * Elementos separados por comas
-   */
-    public static final org.semanticwb.platform.SemanticProperty swbxf_reservedWords=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#reservedWords");
-   /**
    * Texto restringido con caracteres validos para Identificador
    */
     public static final org.semanticwb.platform.SemanticProperty swbxf_restrict4Id=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#restrict4Id");
+   /**
+   * Elementos separados por comas
+   */
+    public static final org.semanticwb.platform.SemanticProperty swbxf_reservedWords=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#reservedWords");
     public static final org.semanticwb.platform.SemanticClass swbxf_UniqueTextElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#UniqueTextElement");
    /**
    * The semantic class that represents the currentObject
@@ -92,24 +92,6 @@ public abstract class UniqueTextElementBase extends org.semanticwb.model.Text
     }
 
 /**
-* Gets the ReservedWords property
-* @return String with the ReservedWords
-*/
-    public String getReservedWords()
-    {
-        return getSemanticObject().getProperty(swbxf_reservedWords);
-    }
-
-/**
-* Sets the ReservedWords property
-* @param value long with the ReservedWords
-*/
-    public void setReservedWords(String value)
-    {
-        getSemanticObject().setProperty(swbxf_reservedWords, value);
-    }
-
-/**
 * Gets the Restrict4Id property
 * @return boolean with the Restrict4Id
 */
@@ -125,5 +107,23 @@ public abstract class UniqueTextElementBase extends org.semanticwb.model.Text
     public void setRestrict4Id(boolean value)
     {
         getSemanticObject().setBooleanProperty(swbxf_restrict4Id, value);
+    }
+
+/**
+* Gets the ReservedWords property
+* @return String with the ReservedWords
+*/
+    public String getReservedWords()
+    {
+        return getSemanticObject().getProperty(swbxf_reservedWords);
+    }
+
+/**
+* Sets the ReservedWords property
+* @param value long with the ReservedWords
+*/
+    public void setReservedWords(String value)
+    {
+        getSemanticObject().setProperty(swbxf_reservedWords, value);
     }
 }

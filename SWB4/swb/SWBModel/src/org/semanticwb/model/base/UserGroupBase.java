@@ -4,19 +4,19 @@ package org.semanticwb.model.base;
    /**
    * Objeto que define un grupo de usuarios dentro de un repositorio de usuarios para filtrar componente, seccion, plantillas, etc. 
    */
-public abstract class UserGroupBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Undeleteable
+public abstract class UserGroupBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable
 {
+   /**
+   * Objeto que define un grupo de usuarios dentro de un repositorio de usuarios para filtrar componente, seccion, plantillas, etc.
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_UserGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroup");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasUsrGrpChild=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasUsrGrpChild");
+    public static final org.semanticwb.platform.SemanticProperty swb_usrgrpParent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrgrpParent");
    /**
    * Interfaz que define propiedades para los elementos que pueden tener asociado uno grupo de usuarios
    */
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupable");
     public static final org.semanticwb.platform.SemanticProperty swb_hasGroupedUser=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasGroupedUser");
-   /**
-   * Objeto que define un grupo de usuarios dentro de un repositorio de usuarios para filtrar componente, seccion, plantillas, etc.
-   */
-    public static final org.semanticwb.platform.SemanticClass swb_UserGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroup");
-    public static final org.semanticwb.platform.SemanticProperty swb_usrgrpParent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrgrpParent");
-    public static final org.semanticwb.platform.SemanticProperty swb_hasUsrGrpChild=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasUsrGrpChild");
    /**
    * The semantic class that represents the currentObject
    */
@@ -86,29 +86,6 @@ public abstract class UserGroupBase extends org.semanticwb.model.SWBClass implem
             return (getUserGroup(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.model.UserGroup with a determined User
-       * @param value User of the type org.semanticwb.model.UserGroupable
-       * @param model Model of the org.semanticwb.model.UserGroup
-       * @return Iterator with all the org.semanticwb.model.UserGroup
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.UserGroup> listUserGroupByUser(org.semanticwb.model.UserGroupable value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasGroupedUser, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.UserGroup with a determined User
-       * @param value User of the type org.semanticwb.model.UserGroupable
-       * @return Iterator with all the org.semanticwb.model.UserGroup
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.UserGroup> listUserGroupByUser(org.semanticwb.model.UserGroupable value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasGroupedUser,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.model.UserGroup with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.model.UserGroup
@@ -129,29 +106,6 @@ public abstract class UserGroupBase extends org.semanticwb.model.SWBClass implem
         public static java.util.Iterator<org.semanticwb.model.UserGroup> listUserGroupByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.UserGroup with a determined Parent
-       * @param value Parent of the type org.semanticwb.model.UserGroup
-       * @param model Model of the org.semanticwb.model.UserGroup
-       * @return Iterator with all the org.semanticwb.model.UserGroup
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.UserGroup> listUserGroupByParent(org.semanticwb.model.UserGroup value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_usrgrpParent, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.UserGroup with a determined Parent
-       * @param value Parent of the type org.semanticwb.model.UserGroup
-       * @return Iterator with all the org.semanticwb.model.UserGroup
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.UserGroup> listUserGroupByParent(org.semanticwb.model.UserGroup value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_usrgrpParent,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -178,6 +132,29 @@ public abstract class UserGroupBase extends org.semanticwb.model.SWBClass implem
             return it;
         }
        /**
+       * Gets all org.semanticwb.model.UserGroup with a determined Parent
+       * @param value Parent of the type org.semanticwb.model.UserGroup
+       * @param model Model of the org.semanticwb.model.UserGroup
+       * @return Iterator with all the org.semanticwb.model.UserGroup
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.UserGroup> listUserGroupByParent(org.semanticwb.model.UserGroup value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_usrgrpParent, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.UserGroup with a determined Parent
+       * @param value Parent of the type org.semanticwb.model.UserGroup
+       * @return Iterator with all the org.semanticwb.model.UserGroup
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.UserGroup> listUserGroupByParent(org.semanticwb.model.UserGroup value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_usrgrpParent,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.model.UserGroup with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.model.UserGroup
@@ -200,6 +177,29 @@ public abstract class UserGroupBase extends org.semanticwb.model.SWBClass implem
             org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.model.UserGroup with a determined User
+       * @param value User of the type org.semanticwb.model.UserGroupable
+       * @param model Model of the org.semanticwb.model.UserGroup
+       * @return Iterator with all the org.semanticwb.model.UserGroup
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.UserGroup> listUserGroupByUser(org.semanticwb.model.UserGroupable value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasGroupedUser, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.UserGroup with a determined User
+       * @param value User of the type org.semanticwb.model.UserGroupable
+       * @return Iterator with all the org.semanticwb.model.UserGroup
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.UserGroup> listUserGroupByUser(org.semanticwb.model.UserGroupable value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasGroupedUser,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**
@@ -209,63 +209,6 @@ public abstract class UserGroupBase extends org.semanticwb.model.SWBClass implem
     public UserGroupBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-   /**
-   * Gets all the org.semanticwb.model.UserGroupable
-   * @return A GenericIterator with all the org.semanticwb.model.UserGroupable
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupable> listUsers()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupable>(getSemanticObject().listObjectProperties(swb_hasGroupedUser));
-    }
-
-   /**
-   * Gets true if has a User
-   * @param value org.semanticwb.model.UserGroupable to verify
-   * @return true if the org.semanticwb.model.UserGroupable exists, false otherwise
-   */
-    public boolean hasUser(org.semanticwb.model.UserGroupable value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(swb_hasGroupedUser,value.getSemanticObject());
-        }
-        return ret;
-    }
-
-   /**
-   * Gets the User
-   * @return a org.semanticwb.model.UserGroupable
-   */
-    public org.semanticwb.model.UserGroupable getUser()
-    {
-         org.semanticwb.model.UserGroupable ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasGroupedUser);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.UserGroupable)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-/**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
     }
    /**
    * Sets the value for the property ModifiedBy
@@ -299,6 +242,121 @@ public abstract class UserGroupBase extends org.semanticwb.model.SWBClass implem
     {
          org.semanticwb.model.User ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Gets all the org.semanticwb.model.UserGroup
+   * @return A GenericIterator with all the org.semanticwb.model.UserGroup
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> listChilds()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup>(getSemanticObject().listObjectProperties(swb_hasUsrGrpChild));
+    }
+
+   /**
+   * Gets true if has a Child
+   * @param value org.semanticwb.model.UserGroup to verify
+   * @return true if the org.semanticwb.model.UserGroup exists, false otherwise
+   */
+    public boolean hasChild(org.semanticwb.model.UserGroup value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasUsrGrpChild,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets the Child
+   * @return a org.semanticwb.model.UserGroup
+   */
+    public org.semanticwb.model.UserGroup getChild()
+    {
+         org.semanticwb.model.UserGroup ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasUsrGrpChild);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.UserGroup)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property Parent
+   * @param value Parent to set
+   */
+
+    public void setParent(org.semanticwb.model.UserGroup value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_usrgrpParent, value.getSemanticObject());
+        }else
+        {
+            removeParent();
+        }
+    }
+   /**
+   * Remove the value for Parent property
+   */
+
+    public void removeParent()
+    {
+        getSemanticObject().removeProperty(swb_usrgrpParent);
+    }
+
+   /**
+   * Gets the Parent
+   * @return a org.semanticwb.model.UserGroup
+   */
+    public org.semanticwb.model.UserGroup getParent()
+    {
+         org.semanticwb.model.UserGroup ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_usrgrpParent);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.UserGroup)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property Creator
+   * @param value Creator to set
+   */
+
+    public void setCreator(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
+    }
+   /**
+   * Remove the value for Creator property
+   */
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(swb_creator);
+    }
+
+   /**
+   * Gets the Creator
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getCreator()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
@@ -356,118 +414,60 @@ public abstract class UserGroupBase extends org.semanticwb.model.SWBClass implem
     {
         getSemanticObject().setDateProperty(swb_updated, value);
     }
-   /**
-   * Sets the value for the property Parent
-   * @param value Parent to set
-   */
 
-    public void setParent(org.semanticwb.model.UserGroup value)
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
     {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_usrgrpParent, value.getSemanticObject());
-        }else
-        {
-            removeParent();
-        }
-    }
-   /**
-   * Remove the value for Parent property
-   */
-
-    public void removeParent()
-    {
-        getSemanticObject().removeProperty(swb_usrgrpParent);
+        return getSemanticObject().getDateProperty(swb_created);
     }
 
-   /**
-   * Gets the Parent
-   * @return a org.semanticwb.model.UserGroup
-   */
-    public org.semanticwb.model.UserGroup getParent()
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
     {
-         org.semanticwb.model.UserGroup ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_usrgrpParent);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.UserGroup)obj.createGenericInstance();
-         }
-         return ret;
+        getSemanticObject().setDateProperty(swb_created, value);
     }
    /**
-   * Gets all the org.semanticwb.model.UserGroup
-   * @return A GenericIterator with all the org.semanticwb.model.UserGroup
+   * Gets all the org.semanticwb.model.UserGroupable
+   * @return A GenericIterator with all the org.semanticwb.model.UserGroupable
    */
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> listChilds()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupable> listUsers()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup>(getSemanticObject().listObjectProperties(swb_hasUsrGrpChild));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupable>(getSemanticObject().listObjectProperties(swb_hasGroupedUser));
     }
 
    /**
-   * Gets true if has a Child
-   * @param value org.semanticwb.model.UserGroup to verify
-   * @return true if the org.semanticwb.model.UserGroup exists, false otherwise
+   * Gets true if has a User
+   * @param value org.semanticwb.model.UserGroupable to verify
+   * @return true if the org.semanticwb.model.UserGroupable exists, false otherwise
    */
-    public boolean hasChild(org.semanticwb.model.UserGroup value)
+    public boolean hasUser(org.semanticwb.model.UserGroupable value)
     {
         boolean ret=false;
         if(value!=null)
         {
-           ret=getSemanticObject().hasObjectProperty(swb_hasUsrGrpChild,value.getSemanticObject());
+           ret=getSemanticObject().hasObjectProperty(swb_hasGroupedUser,value.getSemanticObject());
         }
         return ret;
     }
 
    /**
-   * Gets the Child
-   * @return a org.semanticwb.model.UserGroup
+   * Gets the User
+   * @return a org.semanticwb.model.UserGroupable
    */
-    public org.semanticwb.model.UserGroup getChild()
+    public org.semanticwb.model.UserGroupable getUser()
     {
-         org.semanticwb.model.UserGroup ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasUsrGrpChild);
+         org.semanticwb.model.UserGroupable ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasGroupedUser);
          if(obj!=null)
          {
-             ret=(org.semanticwb.model.UserGroup)obj.createGenericInstance();
-         }
-         return ret;
-    }
-   /**
-   * Sets the value for the property Creator
-   * @param value Creator to set
-   */
-
-    public void setCreator(org.semanticwb.model.User value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
-        }else
-        {
-            removeCreator();
-        }
-    }
-   /**
-   * Remove the value for Creator property
-   */
-
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(swb_creator);
-    }
-
-   /**
-   * Gets the Creator
-   * @return a org.semanticwb.model.User
-   */
-    public org.semanticwb.model.User getCreator()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+             ret=(org.semanticwb.model.UserGroupable)obj.createGenericInstance();
          }
          return ret;
     }
