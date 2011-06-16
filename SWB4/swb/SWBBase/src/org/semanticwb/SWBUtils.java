@@ -1105,7 +1105,7 @@ System.out.println("chr="+chr);
                 if ( chr==ch || (chr >= '0' && chr <= '9') || (chr >= 'a' && chr <= 'z')
                         || (chr >= 'A' && chr <= 'Z') || chr == '_')
                 {
-                    ret.append(ch);
+                    ret.append(chr);
                 }
             }
             aux = ret.toString();
