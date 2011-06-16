@@ -19,8 +19,6 @@ import javafx.scene.Cursor;
 import javafx.util.Sequences;
 import javafx.scene.input.KeyEvent;
 import org.semanticwb.process.modeler.ConnectionObject;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Clase que representa el área de trabajo y controlador de los elementos de un
@@ -439,15 +437,12 @@ public class Modeler extends CustomNode
         if(e.text.toLowerCase().equals("z") and e.controlDown==true)
         {
             toolBar.undo();
-        }
-        if(e.text.toLowerCase().equals("y") and e.controlDown==true)
+        } else if(e.text.toLowerCase().equals("y") and e.controlDown==true)
         {
             toolBar.redo();
-        }
-        if (e.code == e.code.VK_ESCAPE) {
+        } else if (e.code == e.code.VK_ESCAPE) {
             ModelerUtils.popup.hide();
-        }
-        if (e.code == e.code.VK_DELETE) {
+        } else if (e.code == e.code.VK_DELETE) {
 //            if (focusedNode != null and focusedNode instanceof GraphicalElement) {
 //                (focusedNode as GraphicalElement).remove(true);
 //                focusedNode = null;
@@ -461,15 +456,23 @@ public class Modeler extends CustomNode
                 }
             }
             delete selectedNodes;
-        }
-        if (e.code == e.code.VK_C and e.controlDown) {
+        } else if (e.code == e.code.VK_C and e.controlDown) {
             delete copyNodes;
             for (ele in selectedNodes where ele instanceof GraphicalElement) {
                 var t = (ele as GraphicalElement).copy();
                 insert t into copyNodes;
             }
-        }
-        if (e.code == e.code.VK_V and e.controlDown) {
+            unselectAll();
+            ModelerUtils.setResizeNode(null);
+        } else if (e.code == e.code.VK_X and e.controlDown) {
+            delete copyNodes;
+            for (ele in selectedNodes where ele instanceof GraphicalElement) {
+                var t = (ele as GraphicalElement).cut();
+                insert t into copyNodes;
+            }
+            unselectAll();
+            ModelerUtils.setResizeNode(null);
+        } else if (e.code == e.code.VK_V and e.controlDown) {
             ModelerUtils.popup.hide();
             for (ele in copyNodes) {
                 if (ele.canAddToDiagram()) {
@@ -492,8 +495,7 @@ public class Modeler extends CustomNode
                 }
             }
             delete copyNodes;
-        }
-        if (e.code == e.code.VK_RIGHT) {
+        } else if (e.code == e.code.VK_RIGHT) {
             for (ele in selectedNodes where ele instanceof GraphicalElement) {
                 if (not (ele instanceof Lane)) {
                     (ele as GraphicalElement).x += 10;
