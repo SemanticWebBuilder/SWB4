@@ -3,16 +3,16 @@ package org.semanticwb.portal.resources.sem.base;
 
 public abstract class HTMLContentBase extends org.semanticwb.portal.resources.sem.Content implements org.semanticwb.model.Versionable,org.semanticwb.model.ResourceVersionable
 {
+    public static final org.semanticwb.platform.SemanticProperty swbres_contentPaginated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#contentPaginated");
+    public static final org.semanticwb.platform.SemanticProperty swbres_nextLinkText=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#nextLinkText");
     public static final org.semanticwb.platform.SemanticClass swb_VersionInfo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#VersionInfo");
     public static final org.semanticwb.platform.SemanticProperty swb_actualVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#actualVersion");
     public static final org.semanticwb.platform.SemanticProperty swbres_formerLinkText=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#formerLinkText");
-    public static final org.semanticwb.platform.SemanticProperty swb_lastVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#lastVersion");
-    public static final org.semanticwb.platform.SemanticProperty swbres_deleteStyles=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#deleteStyles");
     public static final org.semanticwb.platform.SemanticProperty swbres_fontStyle=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#fontStyle");
-    public static final org.semanticwb.platform.SemanticProperty swbres_nextLinkText=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#nextLinkText");
+    public static final org.semanticwb.platform.SemanticProperty swbres_deleteStyles=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#deleteStyles");
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_semanticResourceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#semanticResourceInv");
-    public static final org.semanticwb.platform.SemanticProperty swbres_contentPaginated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#contentPaginated");
+    public static final org.semanticwb.platform.SemanticProperty swb_lastVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#lastVersion");
     public static final org.semanticwb.platform.SemanticClass swbres_HTMLContent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/resource/ontology#HTMLContent");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/resource/ontology#HTMLContent");
 
@@ -46,6 +46,42 @@ public abstract class HTMLContentBase extends org.semanticwb.portal.resources.se
     {
         if(obj==null)return false;
         return hashCode()==obj.hashCode();
+    }
+
+/**
+* Gets the ContentPaginated property
+* @return boolean with the ContentPaginated
+*/
+    public boolean isContentPaginated()
+    {
+        return getSemanticObject().getBooleanProperty(swbres_contentPaginated);
+    }
+
+/**
+* Sets the ContentPaginated property
+* @param value long with the ContentPaginated
+*/
+    public void setContentPaginated(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swbres_contentPaginated, value);
+    }
+
+/**
+* Gets the NextLinkText property
+* @return String with the NextLinkText
+*/
+    public String getNextLinkText()
+    {
+        return getSemanticObject().getProperty(swbres_nextLinkText);
+    }
+
+/**
+* Sets the NextLinkText property
+* @param value long with the NextLinkText
+*/
+    public void setNextLinkText(String value)
+    {
+        getSemanticObject().setProperty(swbres_nextLinkText, value);
     }
    /**
    * Sets the value for the property ActualVersion
@@ -103,62 +139,6 @@ public abstract class HTMLContentBase extends org.semanticwb.portal.resources.se
     {
         getSemanticObject().setProperty(swbres_formerLinkText, value);
     }
-   /**
-   * Sets the value for the property LastVersion
-   * @param value LastVersion to set
-   */
-
-    public void setLastVersion(org.semanticwb.model.VersionInfo value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_lastVersion, value.getSemanticObject());
-        }else
-        {
-            removeLastVersion();
-        }
-    }
-   /**
-   * Remove the value for LastVersion property
-   */
-
-    public void removeLastVersion()
-    {
-        getSemanticObject().removeProperty(swb_lastVersion);
-    }
-
-   /**
-   * Gets the LastVersion
-   * @return a org.semanticwb.model.VersionInfo
-   */
-    public org.semanticwb.model.VersionInfo getLastVersion()
-    {
-         org.semanticwb.model.VersionInfo ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_lastVersion);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.VersionInfo)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-/**
-* Gets the DeleteStyles property
-* @return boolean with the DeleteStyles
-*/
-    public boolean isDeleteStyles()
-    {
-        return getSemanticObject().getBooleanProperty(swbres_deleteStyles);
-    }
-
-/**
-* Sets the DeleteStyles property
-* @param value long with the DeleteStyles
-*/
-    public void setDeleteStyles(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swbres_deleteStyles, value);
-    }
 
 /**
 * Gets the FontStyle property
@@ -179,21 +159,21 @@ public abstract class HTMLContentBase extends org.semanticwb.portal.resources.se
     }
 
 /**
-* Gets the NextLinkText property
-* @return String with the NextLinkText
+* Gets the DeleteStyles property
+* @return boolean with the DeleteStyles
 */
-    public String getNextLinkText()
+    public boolean isDeleteStyles()
     {
-        return getSemanticObject().getProperty(swbres_nextLinkText);
+        return getSemanticObject().getBooleanProperty(swbres_deleteStyles);
     }
 
 /**
-* Sets the NextLinkText property
-* @param value long with the NextLinkText
+* Sets the DeleteStyles property
+* @param value long with the DeleteStyles
 */
-    public void setNextLinkText(String value)
+    public void setDeleteStyles(boolean value)
     {
-        getSemanticObject().setProperty(swbres_nextLinkText, value);
+        getSemanticObject().setBooleanProperty(swbres_deleteStyles, value);
     }
    /**
    * Sets the value for the property Resource
@@ -233,22 +213,42 @@ public abstract class HTMLContentBase extends org.semanticwb.portal.resources.se
          }
          return ret;
     }
+   /**
+   * Sets the value for the property LastVersion
+   * @param value LastVersion to set
+   */
 
-/**
-* Gets the ContentPaginated property
-* @return boolean with the ContentPaginated
-*/
-    public boolean isContentPaginated()
+    public void setLastVersion(org.semanticwb.model.VersionInfo value)
     {
-        return getSemanticObject().getBooleanProperty(swbres_contentPaginated);
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_lastVersion, value.getSemanticObject());
+        }else
+        {
+            removeLastVersion();
+        }
+    }
+   /**
+   * Remove the value for LastVersion property
+   */
+
+    public void removeLastVersion()
+    {
+        getSemanticObject().removeProperty(swb_lastVersion);
     }
 
-/**
-* Sets the ContentPaginated property
-* @param value long with the ContentPaginated
-*/
-    public void setContentPaginated(boolean value)
+   /**
+   * Gets the LastVersion
+   * @return a org.semanticwb.model.VersionInfo
+   */
+    public org.semanticwb.model.VersionInfo getLastVersion()
     {
-        getSemanticObject().setBooleanProperty(swbres_contentPaginated, value);
+         org.semanticwb.model.VersionInfo ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_lastVersion);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.VersionInfo)obj.createGenericInstance();
+         }
+         return ret;
     }
 }
