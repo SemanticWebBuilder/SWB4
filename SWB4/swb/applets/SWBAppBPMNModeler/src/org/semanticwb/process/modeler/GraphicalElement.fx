@@ -768,6 +768,7 @@ public class GraphicalElement extends CustomNode
     public function copy() : GraphicalElement {
         return GraphicalElement {
             title: this.title
+            description: this.description
             type: this.type
             modeler: this.modeler
             isLoop: this.isLoop
@@ -795,7 +796,6 @@ public class GraphicalElement extends CustomNode
             modeler.remove(node);
         }
 
-        ModelerUtils.setResizeNode(null);
         return this;
     }
 
