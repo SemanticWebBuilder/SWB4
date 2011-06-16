@@ -328,6 +328,9 @@ public class SWBAWebPageContents extends GenericResource {
             SemanticObject semO = null;
             Iterator<SemanticProperty> itcol = null;
             Iterator<SemanticObject> itso = obj.listObjectProperties(prop);
+
+            //System.out.println("busqueda:"+busqueda);
+
             if (!busqueda.equals("")) {
                 while (itso.hasNext()) {
                     semO = itso.next();
@@ -346,6 +349,7 @@ public class SWBAWebPageContents extends GenericResource {
                         SemanticProperty sprop = itcol.next();
                         occ = occ + reviewSemProp(sprop, semO, paramRequest);
                     }
+                    //System.out.println("occ:"+occ);
                     occ = occ.toLowerCase();
                     if (occ.indexOf(busqueda.toLowerCase()) > -1) {
                         hmfiltro.put(semO.getURI(), semO);
@@ -366,7 +370,7 @@ public class SWBAWebPageContents extends GenericResource {
                 }
             }
 
-            if (hmfiltro.isEmpty()) {
+            if (busqueda.trim().length()==0) {  //hmfiltro.isEmpty()&&
                 itso = hmbus.values().iterator(); //obj.listObjectProperties(prop);
             } else {
                 itso = hmfiltro.values().iterator();
@@ -524,7 +528,7 @@ public class SWBAWebPageContents extends GenericResource {
                 urlchoose.setParameter("sobj", sobj.getURI());
                 urlchoose.setParameter("act", "edit");
                 //out.println("<div class=\"dojoDndItem\"><a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(sobj.getDisplayName()), 25) + "');return false;\">" + stitle + "</a></div>");
-                out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(sobj.getDisplayName()), 25) + "');return false;\">" + stitle + "</a>");
+                out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(sobj.getDisplayName()), 25) + "');return false;\" title=\""+getDisplaySemObj(sobj, user.getLanguage())+"\">" + stitle + "</a>");
                 out.println("</td>");
                 if (hmprop.get(Resource.swb_resourceType) != null) {
                     semprop = (SemanticProperty) hmprop.get(Resource.swb_resourceType);
@@ -1704,7 +1708,7 @@ public class SWBAWebPageContents extends GenericResource {
         String ret = null;
 
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss", new Locale(paramsRequest.getUser().getLanguage()));
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.", new Locale(paramsRequest.getUser().getLanguage()));
             if (prop.isDataTypeProperty()) {
                 if (prop.isBoolean()) {
                     boolean bvalue = obj.getBooleanProperty(prop);
