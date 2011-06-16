@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Un Filtro permite configurar un recurso para que se despliegue sólo en ciertas páginas dentro de un Sitio Web, es decir, restringe el acceso a ciertas funcionalidades a nivel de navegación. 
    */
-public abstract class AdminFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.XMLable,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable
+public abstract class AdminFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.XMLable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Un Filtro permite configurar un recurso para que se despliegue sólo en ciertas páginas dentro de un Sitio Web, es decir, restringe el acceso a ciertas funcionalidades a nivel de navegación.
@@ -140,24 +140,6 @@ public abstract class AdminFilterBase extends org.semanticwb.model.SWBClass impl
     {
         super(base);
     }
-
-/**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
-    }
    /**
    * Sets the value for the property ModifiedBy
    * @param value ModifiedBy to set
@@ -190,6 +172,44 @@ public abstract class AdminFilterBase extends org.semanticwb.model.SWBClass impl
     {
          org.semanticwb.model.User ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property Creator
+   * @param value Creator to set
+   */
+
+    public void setCreator(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
+    }
+   /**
+   * Remove the value for Creator property
+   */
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(swb_creator);
+    }
+
+   /**
+   * Gets the Creator
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getCreator()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
@@ -231,24 +251,6 @@ public abstract class AdminFilterBase extends org.semanticwb.model.SWBClass impl
     }
 
 /**
-* Gets the Xml property
-* @return String with the Xml
-*/
-    public String getXml()
-    {
-        return getSemanticObject().getProperty(swb_xml);
-    }
-
-/**
-* Sets the Xml property
-* @param value long with the Xml
-*/
-    public void setXml(String value)
-    {
-        getSemanticObject().setProperty(swb_xml, value);
-    }
-
-/**
 * Gets the Updated property
 * @return java.util.Date with the Updated
 */
@@ -265,43 +267,23 @@ public abstract class AdminFilterBase extends org.semanticwb.model.SWBClass impl
     {
         getSemanticObject().setDateProperty(swb_updated, value);
     }
-   /**
-   * Sets the value for the property Creator
-   * @param value Creator to set
-   */
 
-    public void setCreator(org.semanticwb.model.User value)
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
     {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
-        }else
-        {
-            removeCreator();
-        }
-    }
-   /**
-   * Remove the value for Creator property
-   */
-
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(swb_creator);
+        return getSemanticObject().getDateProperty(swb_created);
     }
 
-   /**
-   * Gets the Creator
-   * @return a org.semanticwb.model.User
-   */
-    public org.semanticwb.model.User getCreator()
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
     {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
+        getSemanticObject().setDateProperty(swb_created, value);
     }
 
 /**
@@ -353,6 +335,24 @@ public abstract class AdminFilterBase extends org.semanticwb.model.SWBClass impl
     public void setUndeleteable(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb_undeleteable, value);
+    }
+
+/**
+* Gets the Xml property
+* @return String with the Xml
+*/
+    public String getXml()
+    {
+        return getSemanticObject().getProperty(swb_xml);
+    }
+
+/**
+* Sets the Xml property
+* @param value long with the Xml
+*/
+    public void setXml(String value)
+    {
+        getSemanticObject().setProperty(swb_xml, value);
     }
 
    /**

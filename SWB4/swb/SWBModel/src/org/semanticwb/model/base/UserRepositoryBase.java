@@ -4,17 +4,17 @@ package org.semanticwb.model.base;
    /**
    * Objeto que define un Repositorio de Usuarios 
    */
-public abstract class UserRepositoryBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableNode,org.semanticwb.model.OntologyDepable
+public abstract class UserRepositoryBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Traceable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_userRepCallBackHandlerClassName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepCallBackHandlerClassName");
    /**
    * Lista de preguntas de seguridad. Ejemplo: (1|Color favorito:2|Marca de auto:3|licencia de conducir)
    */
     public static final org.semanticwb.platform.SemanticProperty swb_userRepSecurityQuestionList=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepSecurityQuestionList");
-    public static final org.semanticwb.platform.SemanticProperty swb_userRepAlternateLoginURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepAlternateLoginURL");
-    public static final org.semanticwb.platform.SemanticProperty swb_userRepCallBackHandlerClassName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepCallBackHandlerClassName");
     public static final org.semanticwb.platform.SemanticProperty swb_userRepLoginContext=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepLoginContext");
-    public static final org.semanticwb.platform.SemanticProperty swb_userRepAuthMethod=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepAuthMethod");
     public static final org.semanticwb.platform.SemanticProperty swb_userRepExternalConfigFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepExternalConfigFile");
+    public static final org.semanticwb.platform.SemanticProperty swb_userRepAuthMethod=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepAuthMethod");
+    public static final org.semanticwb.platform.SemanticProperty swb_userRepAlternateLoginURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepAlternateLoginURL");
    /**
    * Objeto que define un grupo de usuarios dentro de un repositorio de usuarios para filtrar componente, seccion, plantillas, etc.
    */
@@ -117,29 +117,6 @@ public abstract class UserRepositoryBase extends org.semanticwb.model.SWBModel i
             return (getUserRepository(id)!=null);
         }
        /**
-       * Gets all org.semanticwb.model.UserRepository with a determined ModelProperty
-       * @param value ModelProperty of the type org.semanticwb.model.ModelProperty
-       * @param model Model of the org.semanticwb.model.UserRepository
-       * @return Iterator with all the org.semanticwb.model.UserRepository
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositoryByModelProperty(org.semanticwb.model.ModelProperty value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasModelProperty, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.UserRepository with a determined ModelProperty
-       * @param value ModelProperty of the type org.semanticwb.model.ModelProperty
-       * @return Iterator with all the org.semanticwb.model.UserRepository
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositoryByModelProperty(org.semanticwb.model.ModelProperty value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasModelProperty,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.model.UserRepository with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.model.UserRepository
@@ -163,26 +140,26 @@ public abstract class UserRepositoryBase extends org.semanticwb.model.SWBModel i
             return it;
         }
        /**
-       * Gets all org.semanticwb.model.UserRepository with a determined ParentWebSite
-       * @param value ParentWebSite of the type org.semanticwb.model.WebSite
+       * Gets all org.semanticwb.model.UserRepository with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.model.UserRepository
        * @return Iterator with all the org.semanticwb.model.UserRepository
        */
 
-        public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositoryByParentWebSite(org.semanticwb.model.WebSite value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositoryByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_parentWebSite, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.model.UserRepository with a determined ParentWebSite
-       * @param value ParentWebSite of the type org.semanticwb.model.WebSite
+       * Gets all org.semanticwb.model.UserRepository with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
        * @return Iterator with all the org.semanticwb.model.UserRepository
        */
 
-        public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositoryByParentWebSite(org.semanticwb.model.WebSite value)
+        public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositoryByCreator(org.semanticwb.model.User value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_parentWebSite,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -209,26 +186,49 @@ public abstract class UserRepositoryBase extends org.semanticwb.model.SWBModel i
             return it;
         }
        /**
-       * Gets all org.semanticwb.model.UserRepository with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
+       * Gets all org.semanticwb.model.UserRepository with a determined ParentWebSite
+       * @param value ParentWebSite of the type org.semanticwb.model.WebSite
        * @param model Model of the org.semanticwb.model.UserRepository
        * @return Iterator with all the org.semanticwb.model.UserRepository
        */
 
-        public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositoryByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositoryByParentWebSite(org.semanticwb.model.WebSite value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_parentWebSite, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.model.UserRepository with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
+       * Gets all org.semanticwb.model.UserRepository with a determined ParentWebSite
+       * @param value ParentWebSite of the type org.semanticwb.model.WebSite
        * @return Iterator with all the org.semanticwb.model.UserRepository
        */
 
-        public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositoryByCreator(org.semanticwb.model.User value)
+        public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositoryByParentWebSite(org.semanticwb.model.WebSite value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_parentWebSite,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.UserRepository with a determined ModelProperty
+       * @param value ModelProperty of the type org.semanticwb.model.ModelProperty
+       * @param model Model of the org.semanticwb.model.UserRepository
+       * @return Iterator with all the org.semanticwb.model.UserRepository
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositoryByModelProperty(org.semanticwb.model.ModelProperty value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasModelProperty, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.UserRepository with a determined ModelProperty
+       * @param value ModelProperty of the type org.semanticwb.model.ModelProperty
+       * @return Iterator with all the org.semanticwb.model.UserRepository
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositoryByModelProperty(org.semanticwb.model.ModelProperty value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasModelProperty,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -240,111 +240,6 @@ public abstract class UserRepositoryBase extends org.semanticwb.model.SWBModel i
     public UserRepositoryBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-/**
-* Gets the UserRepSecurityQuestionList property
-* @return String with the UserRepSecurityQuestionList
-*/
-    public String getUserRepSecurityQuestionList()
-    {
-        return getSemanticObject().getProperty(swb_userRepSecurityQuestionList);
-    }
-
-/**
-* Sets the UserRepSecurityQuestionList property
-* @param value long with the UserRepSecurityQuestionList
-*/
-    public void setUserRepSecurityQuestionList(String value)
-    {
-        getSemanticObject().setProperty(swb_userRepSecurityQuestionList, value);
-    }
-
-    public String getUserRepSecurityQuestionList(String lang)
-    {
-        return getSemanticObject().getProperty(swb_userRepSecurityQuestionList, null, lang);
-    }
-
-    public String getDisplayUserRepSecurityQuestionList(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_userRepSecurityQuestionList, lang);
-    }
-
-    public void setUserRepSecurityQuestionList(String userRepSecurityQuestionList, String lang)
-    {
-        getSemanticObject().setProperty(swb_userRepSecurityQuestionList, userRepSecurityQuestionList, lang);
-    }
-
-/**
-* Gets the AlternateLoginURL property
-* @return String with the AlternateLoginURL
-*/
-    public String getAlternateLoginURL()
-    {
-        return getSemanticObject().getProperty(swb_userRepAlternateLoginURL);
-    }
-
-/**
-* Sets the AlternateLoginURL property
-* @param value long with the AlternateLoginURL
-*/
-    public void setAlternateLoginURL(String value)
-    {
-        getSemanticObject().setProperty(swb_userRepAlternateLoginURL, value);
-    }
-
-/**
-* Gets the CallBackHandlerClassName property
-* @return String with the CallBackHandlerClassName
-*/
-    public String getCallBackHandlerClassName()
-    {
-        return getSemanticObject().getProperty(swb_userRepCallBackHandlerClassName);
-    }
-
-/**
-* Sets the CallBackHandlerClassName property
-* @param value long with the CallBackHandlerClassName
-*/
-    public void setCallBackHandlerClassName(String value)
-    {
-        getSemanticObject().setProperty(swb_userRepCallBackHandlerClassName, value);
-    }
-
-/**
-* Gets the Undeleteable property
-* @return boolean with the Undeleteable
-*/
-    public boolean isUndeleteable()
-    {
-        return getSemanticObject().getBooleanProperty(swb_undeleteable);
-    }
-
-/**
-* Sets the Undeleteable property
-* @param value long with the Undeleteable
-*/
-    public void setUndeleteable(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swb_undeleteable, value);
-    }
-
-/**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
     }
    /**
    * Sets the value for the property ModifiedBy
@@ -386,72 +281,39 @@ public abstract class UserRepositoryBase extends org.semanticwb.model.SWBModel i
     }
 
 /**
-* Gets the LoginContext property
-* @return String with the LoginContext
+* Gets the CallBackHandlerClassName property
+* @return String with the CallBackHandlerClassName
 */
-    public String getLoginContext()
+    public String getCallBackHandlerClassName()
     {
-        return getSemanticObject().getProperty(swb_userRepLoginContext);
+        return getSemanticObject().getProperty(swb_userRepCallBackHandlerClassName);
     }
 
 /**
-* Sets the LoginContext property
-* @param value long with the LoginContext
+* Sets the CallBackHandlerClassName property
+* @param value long with the CallBackHandlerClassName
 */
-    public void setLoginContext(String value)
+    public void setCallBackHandlerClassName(String value)
     {
-        getSemanticObject().setProperty(swb_userRepLoginContext, value);
+        getSemanticObject().setProperty(swb_userRepCallBackHandlerClassName, value);
     }
 
 /**
-* Gets the Title property
-* @return String with the Title
+* Gets the Created property
+* @return java.util.Date with the Created
 */
-    public String getTitle()
+    public java.util.Date getCreated()
     {
-        return getSemanticObject().getProperty(swb_title);
+        return getSemanticObject().getDateProperty(swb_created);
     }
 
 /**
-* Sets the Title property
-* @param value long with the Title
+* Sets the Created property
+* @param value long with the Created
 */
-    public void setTitle(String value)
+    public void setCreated(java.util.Date value)
     {
-        getSemanticObject().setProperty(swb_title, value);
-    }
-
-    public String getTitle(String lang)
-    {
-        return getSemanticObject().getProperty(swb_title, null, lang);
-    }
-
-    public String getDisplayTitle(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_title, lang);
-    }
-
-    public void setTitle(String title, String lang)
-    {
-        getSemanticObject().setProperty(swb_title, title, lang);
-    }
-
-/**
-* Gets the AuthMethod property
-* @return String with the AuthMethod
-*/
-    public String getAuthMethod()
-    {
-        return getSemanticObject().getProperty(swb_userRepAuthMethod);
-    }
-
-/**
-* Sets the AuthMethod property
-* @param value long with the AuthMethod
-*/
-    public void setAuthMethod(String value)
-    {
-        getSemanticObject().setProperty(swb_userRepAuthMethod, value);
+        getSemanticObject().setDateProperty(swb_created, value);
     }
 
 /**
@@ -470,6 +332,110 @@ public abstract class UserRepositoryBase extends org.semanticwb.model.SWBModel i
     public void setUpdated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_updated, value);
+    }
+
+/**
+* Gets the Description property
+* @return String with the Description
+*/
+    public String getDescription()
+    {
+        return getSemanticObject().getProperty(swb_description);
+    }
+
+/**
+* Sets the Description property
+* @param value long with the Description
+*/
+    public void setDescription(String value)
+    {
+        getSemanticObject().setProperty(swb_description, value);
+    }
+
+    public String getDescription(String lang)
+    {
+        return getSemanticObject().getProperty(swb_description, null, lang);
+    }
+
+    public String getDisplayDescription(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_description, lang);
+    }
+
+    public void setDescription(String description, String lang)
+    {
+        getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+/**
+* Gets the UserRepSecurityQuestionList property
+* @return String with the UserRepSecurityQuestionList
+*/
+    public String getUserRepSecurityQuestionList()
+    {
+        return getSemanticObject().getProperty(swb_userRepSecurityQuestionList);
+    }
+
+/**
+* Sets the UserRepSecurityQuestionList property
+* @param value long with the UserRepSecurityQuestionList
+*/
+    public void setUserRepSecurityQuestionList(String value)
+    {
+        getSemanticObject().setProperty(swb_userRepSecurityQuestionList, value);
+    }
+
+    public String getUserRepSecurityQuestionList(String lang)
+    {
+        return getSemanticObject().getProperty(swb_userRepSecurityQuestionList, null, lang);
+    }
+
+    public String getDisplayUserRepSecurityQuestionList(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_userRepSecurityQuestionList, lang);
+    }
+
+    public void setUserRepSecurityQuestionList(String userRepSecurityQuestionList, String lang)
+    {
+        getSemanticObject().setProperty(swb_userRepSecurityQuestionList, userRepSecurityQuestionList, lang);
+    }
+   /**
+   * Sets the value for the property Creator
+   * @param value Creator to set
+   */
+
+    public void setCreator(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
+    }
+   /**
+   * Remove the value for Creator property
+   */
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(swb_creator);
+    }
+
+   /**
+   * Gets the Creator
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getCreator()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Gets all the org.semanticwb.model.Ontology
@@ -536,43 +502,74 @@ public abstract class UserRepositoryBase extends org.semanticwb.model.SWBModel i
          }
          return ret;
     }
-   /**
-   * Sets the value for the property Creator
-   * @param value Creator to set
-   */
 
-    public void setCreator(org.semanticwb.model.User value)
+/**
+* Gets the Title property
+* @return String with the Title
+*/
+    public String getTitle()
     {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
-        }else
-        {
-            removeCreator();
-        }
-    }
-   /**
-   * Remove the value for Creator property
-   */
-
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(swb_creator);
+        return getSemanticObject().getProperty(swb_title);
     }
 
-   /**
-   * Gets the Creator
-   * @return a org.semanticwb.model.User
-   */
-    public org.semanticwb.model.User getCreator()
+/**
+* Sets the Title property
+* @param value long with the Title
+*/
+    public void setTitle(String value)
     {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
+        getSemanticObject().setProperty(swb_title, value);
+    }
+
+    public String getTitle(String lang)
+    {
+        return getSemanticObject().getProperty(swb_title, null, lang);
+    }
+
+    public String getDisplayTitle(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
+    }
+
+    public void setTitle(String title, String lang)
+    {
+        getSemanticObject().setProperty(swb_title, title, lang);
+    }
+
+/**
+* Gets the LoginContext property
+* @return String with the LoginContext
+*/
+    public String getLoginContext()
+    {
+        return getSemanticObject().getProperty(swb_userRepLoginContext);
+    }
+
+/**
+* Sets the LoginContext property
+* @param value long with the LoginContext
+*/
+    public void setLoginContext(String value)
+    {
+        getSemanticObject().setProperty(swb_userRepLoginContext, value);
+    }
+
+/**
+* Gets the Undeleteable property
+* @return boolean with the Undeleteable
+*/
+    public boolean isUndeleteable()
+    {
+        return getSemanticObject().getBooleanProperty(swb_undeleteable);
+    }
+
+/**
+* Sets the Undeleteable property
+* @param value long with the Undeleteable
+*/
+    public void setUndeleteable(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_undeleteable, value);
     }
 
 /**
@@ -594,36 +591,39 @@ public abstract class UserRepositoryBase extends org.semanticwb.model.SWBModel i
     }
 
 /**
-* Gets the Description property
-* @return String with the Description
+* Gets the AuthMethod property
+* @return String with the AuthMethod
 */
-    public String getDescription()
+    public String getAuthMethod()
     {
-        return getSemanticObject().getProperty(swb_description);
+        return getSemanticObject().getProperty(swb_userRepAuthMethod);
     }
 
 /**
-* Sets the Description property
-* @param value long with the Description
+* Sets the AuthMethod property
+* @param value long with the AuthMethod
 */
-    public void setDescription(String value)
+    public void setAuthMethod(String value)
     {
-        getSemanticObject().setProperty(swb_description, value);
+        getSemanticObject().setProperty(swb_userRepAuthMethod, value);
     }
 
-    public String getDescription(String lang)
+/**
+* Gets the AlternateLoginURL property
+* @return String with the AlternateLoginURL
+*/
+    public String getAlternateLoginURL()
     {
-        return getSemanticObject().getProperty(swb_description, null, lang);
+        return getSemanticObject().getProperty(swb_userRepAlternateLoginURL);
     }
 
-    public String getDisplayDescription(String lang)
+/**
+* Sets the AlternateLoginURL property
+* @param value long with the AlternateLoginURL
+*/
+    public void setAlternateLoginURL(String value)
     {
-        return getSemanticObject().getLocaleProperty(swb_description, lang);
-    }
-
-    public void setDescription(String description, String lang)
-    {
-        getSemanticObject().setProperty(swb_description, description, lang);
+        getSemanticObject().setProperty(swb_userRepAlternateLoginURL, value);
     }
 
     public org.semanticwb.model.UserGroup getUserGroup(String id)

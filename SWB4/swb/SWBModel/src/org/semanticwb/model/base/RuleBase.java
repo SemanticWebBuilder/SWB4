@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto que define una regla de negocio, utilizando los atributos del usuario para filtrar componente, seccion, plantillas, etc. 
    */
-public abstract class RuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.XMLable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass
+public abstract class RuleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.XMLable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable
 {
    /**
    * Referencia a un objeto de tipo Rule
@@ -113,29 +113,6 @@ public abstract class RuleBase extends org.semanticwb.model.SWBClass implements 
             return it;
         }
        /**
-       * Gets all org.semanticwb.model.Rule with a determined RuleRefInv
-       * @param value RuleRefInv of the type org.semanticwb.model.RuleRef
-       * @param model Model of the org.semanticwb.model.Rule
-       * @return Iterator with all the org.semanticwb.model.Rule
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.Rule> listRuleByRuleRefInv(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRefInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.Rule with a determined RuleRefInv
-       * @param value RuleRefInv of the type org.semanticwb.model.RuleRef
-       * @return Iterator with all the org.semanticwb.model.Rule
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.Rule> listRuleByRuleRefInv(org.semanticwb.model.RuleRef value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRefInv,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.model.Rule with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.model.Rule
@@ -158,6 +135,29 @@ public abstract class RuleBase extends org.semanticwb.model.SWBClass implements 
             org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.model.Rule with a determined RuleRefInv
+       * @param value RuleRefInv of the type org.semanticwb.model.RuleRef
+       * @param model Model of the org.semanticwb.model.Rule
+       * @return Iterator with all the org.semanticwb.model.Rule
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.Rule> listRuleByRuleRefInv(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRefInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.Rule with a determined RuleRefInv
+       * @param value RuleRefInv of the type org.semanticwb.model.RuleRef
+       * @return Iterator with all the org.semanticwb.model.Rule
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.Rule> listRuleByRuleRefInv(org.semanticwb.model.RuleRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Rule> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRefInv,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**
@@ -167,24 +167,6 @@ public abstract class RuleBase extends org.semanticwb.model.SWBClass implements 
     public RuleBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-/**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
     }
    /**
    * Sets the value for the property ModifiedBy
@@ -221,114 +203,6 @@ public abstract class RuleBase extends org.semanticwb.model.SWBClass implements 
          if(obj!=null)
          {
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-/**
-* Gets the Title property
-* @return String with the Title
-*/
-    public String getTitle()
-    {
-        return getSemanticObject().getProperty(swb_title);
-    }
-
-/**
-* Sets the Title property
-* @param value long with the Title
-*/
-    public void setTitle(String value)
-    {
-        getSemanticObject().setProperty(swb_title, value);
-    }
-
-    public String getTitle(String lang)
-    {
-        return getSemanticObject().getProperty(swb_title, null, lang);
-    }
-
-    public String getDisplayTitle(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_title, lang);
-    }
-
-    public void setTitle(String title, String lang)
-    {
-        getSemanticObject().setProperty(swb_title, title, lang);
-    }
-
-/**
-* Gets the Xml property
-* @return String with the Xml
-*/
-    public String getXml()
-    {
-        return getSemanticObject().getProperty(swb_xml);
-    }
-
-/**
-* Sets the Xml property
-* @param value long with the Xml
-*/
-    public void setXml(String value)
-    {
-        getSemanticObject().setProperty(swb_xml, value);
-    }
-
-/**
-* Gets the Updated property
-* @return java.util.Date with the Updated
-*/
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-/**
-* Sets the Updated property
-* @param value long with the Updated
-*/
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
-    }
-   /**
-   * Gets all the org.semanticwb.model.RuleRef
-   * @return A GenericIterator with all the org.semanticwb.model.RuleRef
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> listRuleRefInvs()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(getSemanticObject().listObjectProperties(swb_hasRuleRefInv));
-    }
-
-   /**
-   * Gets true if has a RuleRefInv
-   * @param value org.semanticwb.model.RuleRef to verify
-   * @return true if the org.semanticwb.model.RuleRef exists, false otherwise
-   */
-    public boolean hasRuleRefInv(org.semanticwb.model.RuleRef value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(swb_hasRuleRefInv,value.getSemanticObject());
-        }
-        return ret;
-    }
-
-   /**
-   * Gets the RuleRefInv
-   * @return a org.semanticwb.model.RuleRef
-   */
-    public org.semanticwb.model.RuleRef getRuleRefInv()
-    {
-         org.semanticwb.model.RuleRef ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRuleRefInv);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.RuleRef)obj.createGenericInstance();
          }
          return ret;
     }
@@ -372,6 +246,75 @@ public abstract class RuleBase extends org.semanticwb.model.SWBClass implements 
     }
 
 /**
+* Gets the Title property
+* @return String with the Title
+*/
+    public String getTitle()
+    {
+        return getSemanticObject().getProperty(swb_title);
+    }
+
+/**
+* Sets the Title property
+* @param value long with the Title
+*/
+    public void setTitle(String value)
+    {
+        getSemanticObject().setProperty(swb_title, value);
+    }
+
+    public String getTitle(String lang)
+    {
+        return getSemanticObject().getProperty(swb_title, null, lang);
+    }
+
+    public String getDisplayTitle(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
+    }
+
+    public void setTitle(String title, String lang)
+    {
+        getSemanticObject().setProperty(swb_title, title, lang);
+    }
+
+/**
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
+    }
+
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+/**
 * Gets the Description property
 * @return String with the Description
 */
@@ -402,6 +345,63 @@ public abstract class RuleBase extends org.semanticwb.model.SWBClass implements 
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+/**
+* Gets the Xml property
+* @return String with the Xml
+*/
+    public String getXml()
+    {
+        return getSemanticObject().getProperty(swb_xml);
+    }
+
+/**
+* Sets the Xml property
+* @param value long with the Xml
+*/
+    public void setXml(String value)
+    {
+        getSemanticObject().setProperty(swb_xml, value);
+    }
+   /**
+   * Gets all the org.semanticwb.model.RuleRef
+   * @return A GenericIterator with all the org.semanticwb.model.RuleRef
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> listRuleRefInvs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(getSemanticObject().listObjectProperties(swb_hasRuleRefInv));
+    }
+
+   /**
+   * Gets true if has a RuleRefInv
+   * @param value org.semanticwb.model.RuleRef to verify
+   * @return true if the org.semanticwb.model.RuleRef exists, false otherwise
+   */
+    public boolean hasRuleRefInv(org.semanticwb.model.RuleRef value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasRuleRefInv,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets the RuleRefInv
+   * @return a org.semanticwb.model.RuleRef
+   */
+    public org.semanticwb.model.RuleRef getRuleRefInv()
+    {
+         org.semanticwb.model.RuleRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRuleRefInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.RuleRef)obj.createGenericInstance();
+         }
+         return ret;
     }
 
    /**

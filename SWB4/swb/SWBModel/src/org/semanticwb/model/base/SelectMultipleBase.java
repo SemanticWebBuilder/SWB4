@@ -6,8 +6,8 @@ package org.semanticwb.model.base;
    */
 public abstract class SelectMultipleBase extends org.semanticwb.model.base.FormElementBase 
 {
-    public static final org.semanticwb.platform.SemanticProperty swbxf_sm_userRepository=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#sm_userRepository");
     public static final org.semanticwb.platform.SemanticProperty swbxf_sm_globalScope=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#sm_globalScope");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_sm_userRepository=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#sm_userRepository");
     public static final org.semanticwb.platform.SemanticProperty swbxf_sm_nullSuport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#sm_nullSuport");
    /**
    * Elemento que muestra un componente grafico para seleccionar multriples opciones
@@ -93,24 +93,6 @@ public abstract class SelectMultipleBase extends org.semanticwb.model.base.FormE
     }
 
 /**
-* Gets the Sm_userRepository property
-* @return boolean with the Sm_userRepository
-*/
-    public boolean isSm_userRepository()
-    {
-        return getSemanticObject().getBooleanProperty(swbxf_sm_userRepository);
-    }
-
-/**
-* Sets the Sm_userRepository property
-* @param value long with the Sm_userRepository
-*/
-    public void setSm_userRepository(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swbxf_sm_userRepository, value);
-    }
-
-/**
 * Gets the GlobalScope property
 * @return boolean with the GlobalScope
 */
@@ -126,6 +108,24 @@ public abstract class SelectMultipleBase extends org.semanticwb.model.base.FormE
     public void setGlobalScope(boolean value)
     {
         getSemanticObject().setBooleanProperty(swbxf_sm_globalScope, value);
+    }
+
+/**
+* Gets the Sm_userRepository property
+* @return boolean with the Sm_userRepository
+*/
+    public boolean isSm_userRepository()
+    {
+        return getSemanticObject().getBooleanProperty(swbxf_sm_userRepository);
+    }
+
+/**
+* Sets the Sm_userRepository property
+* @param value long with the Sm_userRepository
+*/
+    public void setSm_userRepository(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swbxf_sm_userRepository, value);
     }
 
 /**

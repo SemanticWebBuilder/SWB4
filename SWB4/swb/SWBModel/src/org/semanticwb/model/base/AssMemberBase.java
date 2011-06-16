@@ -11,12 +11,12 @@ public abstract class AssMemberBase extends org.semanticwb.model.SWBClass
    */
     public static final org.semanticwb.platform.SemanticClass swb_Topic=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Topic");
     public static final org.semanticwb.platform.SemanticProperty swb_assMember=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#assMember");
-    public static final org.semanticwb.platform.SemanticProperty swb_assRole=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#assRole");
    /**
    * Define una asociacion entre dos miembros en la especificacion de TopicMaps
    */
     public static final org.semanticwb.platform.SemanticClass swb_Association=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Association");
     public static final org.semanticwb.platform.SemanticProperty swb_associationInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#associationInv");
+    public static final org.semanticwb.platform.SemanticProperty swb_assRole=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#assRole");
    /**
    * Miembro participante dentro de una asociacion en la especificacion de TopicMaps
    */
@@ -119,29 +119,6 @@ public abstract class AssMemberBase extends org.semanticwb.model.SWBClass
             return it;
         }
        /**
-       * Gets all org.semanticwb.model.AssMember with a determined Role
-       * @param value Role of the type org.semanticwb.model.Topic
-       * @param model Model of the org.semanticwb.model.AssMember
-       * @return Iterator with all the org.semanticwb.model.AssMember
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.AssMember> listAssMemberByRole(org.semanticwb.model.Topic value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.AssMember> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_assRole, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.AssMember with a determined Role
-       * @param value Role of the type org.semanticwb.model.Topic
-       * @return Iterator with all the org.semanticwb.model.AssMember
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.AssMember> listAssMemberByRole(org.semanticwb.model.Topic value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.AssMember> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_assRole,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.model.AssMember with a determined Association
        * @param value Association of the type org.semanticwb.model.Association
        * @param model Model of the org.semanticwb.model.AssMember
@@ -162,6 +139,29 @@ public abstract class AssMemberBase extends org.semanticwb.model.SWBClass
         public static java.util.Iterator<org.semanticwb.model.AssMember> listAssMemberByAssociation(org.semanticwb.model.Association value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.AssMember> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_associationInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.AssMember with a determined Role
+       * @param value Role of the type org.semanticwb.model.Topic
+       * @param model Model of the org.semanticwb.model.AssMember
+       * @return Iterator with all the org.semanticwb.model.AssMember
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.AssMember> listAssMemberByRole(org.semanticwb.model.Topic value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.AssMember> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_assRole, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.AssMember with a determined Role
+       * @param value Role of the type org.semanticwb.model.Topic
+       * @return Iterator with all the org.semanticwb.model.AssMember
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.AssMember> listAssMemberByRole(org.semanticwb.model.Topic value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.AssMember> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_assRole,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -213,44 +213,6 @@ public abstract class AssMemberBase extends org.semanticwb.model.SWBClass
          return ret;
     }
    /**
-   * Sets the value for the property Role
-   * @param value Role to set
-   */
-
-    public void setRole(org.semanticwb.model.Topic value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_assRole, value.getSemanticObject());
-        }else
-        {
-            removeRole();
-        }
-    }
-   /**
-   * Remove the value for Role property
-   */
-
-    public void removeRole()
-    {
-        getSemanticObject().removeProperty(swb_assRole);
-    }
-
-   /**
-   * Gets the Role
-   * @return a org.semanticwb.model.Topic
-   */
-    public org.semanticwb.model.Topic getRole()
-    {
-         org.semanticwb.model.Topic ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_assRole);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.Topic)obj.createGenericInstance();
-         }
-         return ret;
-    }
-   /**
    * Sets the value for the property Association
    * @param value Association to set
    */
@@ -285,6 +247,44 @@ public abstract class AssMemberBase extends org.semanticwb.model.SWBClass
          if(obj!=null)
          {
              ret=(org.semanticwb.model.Association)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property Role
+   * @param value Role to set
+   */
+
+    public void setRole(org.semanticwb.model.Topic value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_assRole, value.getSemanticObject());
+        }else
+        {
+            removeRole();
+        }
+    }
+   /**
+   * Remove the value for Role property
+   */
+
+    public void removeRole()
+    {
+        getSemanticObject().removeProperty(swb_assRole);
+    }
+
+   /**
+   * Gets the Role
+   * @return a org.semanticwb.model.Topic
+   */
+    public org.semanticwb.model.Topic getRole()
+    {
+         org.semanticwb.model.Topic ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_assRole);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Topic)obj.createGenericInstance();
          }
          return ret;
     }

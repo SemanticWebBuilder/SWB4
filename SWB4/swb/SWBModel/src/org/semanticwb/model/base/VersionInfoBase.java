@@ -7,21 +7,21 @@ package org.semanticwb.model.base;
 public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable
 {
    /**
-   * Objeto utilizado para identificar una version de algun componente
-   */
-    public static final org.semanticwb.platform.SemanticClass swb_VersionInfo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#VersionInfo");
-    public static final org.semanticwb.platform.SemanticProperty swb_previousVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#previousVersion");
-    public static final org.semanticwb.platform.SemanticProperty swb_versionComment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionComment");
-    public static final org.semanticwb.platform.SemanticProperty swb_nextVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#nextVersion");
-    public static final org.semanticwb.platform.SemanticProperty swb_versionAuthorized=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionAuthorized");
-    public static final org.semanticwb.platform.SemanticProperty swb_versionNumber=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionNumber");
-    public static final org.semanticwb.platform.SemanticProperty swb_versionValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionValue");
-   /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
    */
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_versionLockedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionLockedBy");
+    public static final org.semanticwb.platform.SemanticProperty swb_versionValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionValue");
+    public static final org.semanticwb.platform.SemanticProperty swb_versionComment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionComment");
+    public static final org.semanticwb.platform.SemanticProperty swb_versionAuthorized=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionAuthorized");
     public static final org.semanticwb.platform.SemanticProperty swb_versionFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionFile");
+    public static final org.semanticwb.platform.SemanticProperty swb_versionNumber=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionNumber");
+   /**
+   * Objeto utilizado para identificar una version de algun componente
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_VersionInfo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#VersionInfo");
+    public static final org.semanticwb.platform.SemanticProperty swb_nextVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#nextVersion");
+    public static final org.semanticwb.platform.SemanticProperty swb_previousVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#previousVersion");
    /**
    * The semantic class that represents the currentObject
    */
@@ -97,52 +97,6 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
             return (getVersionInfo(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.model.VersionInfo with a determined PreviousVersion
-       * @param value PreviousVersion of the type org.semanticwb.model.VersionInfo
-       * @param model Model of the org.semanticwb.model.VersionInfo
-       * @return Iterator with all the org.semanticwb.model.VersionInfo
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.VersionInfo> listVersionInfoByPreviousVersion(org.semanticwb.model.VersionInfo value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.VersionInfo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_previousVersion, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.VersionInfo with a determined PreviousVersion
-       * @param value PreviousVersion of the type org.semanticwb.model.VersionInfo
-       * @return Iterator with all the org.semanticwb.model.VersionInfo
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.VersionInfo> listVersionInfoByPreviousVersion(org.semanticwb.model.VersionInfo value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.VersionInfo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_previousVersion,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.VersionInfo with a determined NextVersion
-       * @param value NextVersion of the type org.semanticwb.model.VersionInfo
-       * @param model Model of the org.semanticwb.model.VersionInfo
-       * @return Iterator with all the org.semanticwb.model.VersionInfo
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.VersionInfo> listVersionInfoByNextVersion(org.semanticwb.model.VersionInfo value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.VersionInfo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_nextVersion, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.VersionInfo with a determined NextVersion
-       * @param value NextVersion of the type org.semanticwb.model.VersionInfo
-       * @return Iterator with all the org.semanticwb.model.VersionInfo
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.VersionInfo> listVersionInfoByNextVersion(org.semanticwb.model.VersionInfo value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.VersionInfo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_nextVersion,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.model.VersionInfo with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.model.VersionInfo
@@ -189,6 +143,29 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
             return it;
         }
        /**
+       * Gets all org.semanticwb.model.VersionInfo with a determined NextVersion
+       * @param value NextVersion of the type org.semanticwb.model.VersionInfo
+       * @param model Model of the org.semanticwb.model.VersionInfo
+       * @return Iterator with all the org.semanticwb.model.VersionInfo
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.VersionInfo> listVersionInfoByNextVersion(org.semanticwb.model.VersionInfo value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.VersionInfo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_nextVersion, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.VersionInfo with a determined NextVersion
+       * @param value NextVersion of the type org.semanticwb.model.VersionInfo
+       * @return Iterator with all the org.semanticwb.model.VersionInfo
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.VersionInfo> listVersionInfoByNextVersion(org.semanticwb.model.VersionInfo value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.VersionInfo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_nextVersion,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.model.VersionInfo with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.model.VersionInfo
@@ -211,6 +188,29 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
             org.semanticwb.model.GenericIterator<org.semanticwb.model.VersionInfo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.model.VersionInfo with a determined PreviousVersion
+       * @param value PreviousVersion of the type org.semanticwb.model.VersionInfo
+       * @param model Model of the org.semanticwb.model.VersionInfo
+       * @return Iterator with all the org.semanticwb.model.VersionInfo
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.VersionInfo> listVersionInfoByPreviousVersion(org.semanticwb.model.VersionInfo value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.VersionInfo> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_previousVersion, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.VersionInfo with a determined PreviousVersion
+       * @param value PreviousVersion of the type org.semanticwb.model.VersionInfo
+       * @return Iterator with all the org.semanticwb.model.VersionInfo
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.VersionInfo> listVersionInfoByPreviousVersion(org.semanticwb.model.VersionInfo value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.VersionInfo> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_previousVersion,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**
@@ -220,154 +220,6 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
     public VersionInfoBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-   /**
-   * Sets the value for the property PreviousVersion
-   * @param value PreviousVersion to set
-   */
-
-    public void setPreviousVersion(org.semanticwb.model.VersionInfo value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_previousVersion, value.getSemanticObject());
-        }else
-        {
-            removePreviousVersion();
-        }
-    }
-   /**
-   * Remove the value for PreviousVersion property
-   */
-
-    public void removePreviousVersion()
-    {
-        getSemanticObject().removeProperty(swb_previousVersion);
-    }
-
-   /**
-   * Gets the PreviousVersion
-   * @return a org.semanticwb.model.VersionInfo
-   */
-    public org.semanticwb.model.VersionInfo getPreviousVersion()
-    {
-         org.semanticwb.model.VersionInfo ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_previousVersion);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.VersionInfo)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-/**
-* Gets the VersionComment property
-* @return String with the VersionComment
-*/
-    public String getVersionComment()
-    {
-        return getSemanticObject().getProperty(swb_versionComment);
-    }
-
-/**
-* Sets the VersionComment property
-* @param value long with the VersionComment
-*/
-    public void setVersionComment(String value)
-    {
-        getSemanticObject().setProperty(swb_versionComment, value);
-    }
-   /**
-   * Sets the value for the property NextVersion
-   * @param value NextVersion to set
-   */
-
-    public void setNextVersion(org.semanticwb.model.VersionInfo value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_nextVersion, value.getSemanticObject());
-        }else
-        {
-            removeNextVersion();
-        }
-    }
-   /**
-   * Remove the value for NextVersion property
-   */
-
-    public void removeNextVersion()
-    {
-        getSemanticObject().removeProperty(swb_nextVersion);
-    }
-
-   /**
-   * Gets the NextVersion
-   * @return a org.semanticwb.model.VersionInfo
-   */
-    public org.semanticwb.model.VersionInfo getNextVersion()
-    {
-         org.semanticwb.model.VersionInfo ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_nextVersion);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.VersionInfo)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-/**
-* Gets the VersionAuthorized property
-* @return boolean with the VersionAuthorized
-*/
-    public boolean isVersionAuthorized()
-    {
-        return getSemanticObject().getBooleanProperty(swb_versionAuthorized);
-    }
-
-/**
-* Sets the VersionAuthorized property
-* @param value long with the VersionAuthorized
-*/
-    public void setVersionAuthorized(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swb_versionAuthorized, value);
-    }
-
-/**
-* Gets the VersionNumber property
-* @return int with the VersionNumber
-*/
-    public int getVersionNumber()
-    {
-        return getSemanticObject().getIntProperty(swb_versionNumber);
-    }
-
-/**
-* Sets the VersionNumber property
-* @param value long with the VersionNumber
-*/
-    public void setVersionNumber(int value)
-    {
-        getSemanticObject().setIntProperty(swb_versionNumber, value);
-    }
-
-/**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
     }
    /**
    * Sets the value for the property ModifiedBy
@@ -406,42 +258,6 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
-    }
-
-/**
-* Gets the VersionValue property
-* @return String with the VersionValue
-*/
-    public String getVersionValue()
-    {
-        return getSemanticObject().getProperty(swb_versionValue);
-    }
-
-/**
-* Sets the VersionValue property
-* @param value long with the VersionValue
-*/
-    public void setVersionValue(String value)
-    {
-        getSemanticObject().setProperty(swb_versionValue, value);
-    }
-
-/**
-* Gets the Updated property
-* @return java.util.Date with the Updated
-*/
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-/**
-* Sets the Updated property
-* @param value long with the Updated
-*/
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
     }
    /**
    * Sets the value for the property VersionLockedBy
@@ -483,6 +299,96 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
     }
 
 /**
+* Gets the VersionValue property
+* @return String with the VersionValue
+*/
+    public String getVersionValue()
+    {
+        return getSemanticObject().getProperty(swb_versionValue);
+    }
+
+/**
+* Sets the VersionValue property
+* @param value long with the VersionValue
+*/
+    public void setVersionValue(String value)
+    {
+        getSemanticObject().setProperty(swb_versionValue, value);
+    }
+
+/**
+* Gets the VersionComment property
+* @return String with the VersionComment
+*/
+    public String getVersionComment()
+    {
+        return getSemanticObject().getProperty(swb_versionComment);
+    }
+
+/**
+* Sets the VersionComment property
+* @param value long with the VersionComment
+*/
+    public void setVersionComment(String value)
+    {
+        getSemanticObject().setProperty(swb_versionComment, value);
+    }
+
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+/**
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
+    }
+
+/**
+* Gets the VersionAuthorized property
+* @return boolean with the VersionAuthorized
+*/
+    public boolean isVersionAuthorized()
+    {
+        return getSemanticObject().getBooleanProperty(swb_versionAuthorized);
+    }
+
+/**
+* Sets the VersionAuthorized property
+* @param value long with the VersionAuthorized
+*/
+    public void setVersionAuthorized(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_versionAuthorized, value);
+    }
+
+/**
 * Gets the VersionFile property
 * @return String with the VersionFile
 */
@@ -498,6 +404,62 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
     public void setVersionFile(String value)
     {
         getSemanticObject().setProperty(swb_versionFile, value);
+    }
+
+/**
+* Gets the VersionNumber property
+* @return int with the VersionNumber
+*/
+    public int getVersionNumber()
+    {
+        return getSemanticObject().getIntProperty(swb_versionNumber);
+    }
+
+/**
+* Sets the VersionNumber property
+* @param value long with the VersionNumber
+*/
+    public void setVersionNumber(int value)
+    {
+        getSemanticObject().setIntProperty(swb_versionNumber, value);
+    }
+   /**
+   * Sets the value for the property NextVersion
+   * @param value NextVersion to set
+   */
+
+    public void setNextVersion(org.semanticwb.model.VersionInfo value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_nextVersion, value.getSemanticObject());
+        }else
+        {
+            removeNextVersion();
+        }
+    }
+   /**
+   * Remove the value for NextVersion property
+   */
+
+    public void removeNextVersion()
+    {
+        getSemanticObject().removeProperty(swb_nextVersion);
+    }
+
+   /**
+   * Gets the NextVersion
+   * @return a org.semanticwb.model.VersionInfo
+   */
+    public org.semanticwb.model.VersionInfo getNextVersion()
+    {
+         org.semanticwb.model.VersionInfo ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_nextVersion);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.VersionInfo)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Sets the value for the property Creator
@@ -534,6 +496,44 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
          if(obj!=null)
          {
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property PreviousVersion
+   * @param value PreviousVersion to set
+   */
+
+    public void setPreviousVersion(org.semanticwb.model.VersionInfo value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_previousVersion, value.getSemanticObject());
+        }else
+        {
+            removePreviousVersion();
+        }
+    }
+   /**
+   * Remove the value for PreviousVersion property
+   */
+
+    public void removePreviousVersion()
+    {
+        getSemanticObject().removeProperty(swb_previousVersion);
+    }
+
+   /**
+   * Gets the PreviousVersion
+   * @return a org.semanticwb.model.VersionInfo
+   */
+    public org.semanticwb.model.VersionInfo getPreviousVersion()
+    {
+         org.semanticwb.model.VersionInfo ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_previousVersion);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.VersionInfo)obj.createGenericInstance();
          }
          return ret;
     }

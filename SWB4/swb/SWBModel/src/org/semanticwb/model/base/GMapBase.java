@@ -6,8 +6,8 @@ package org.semanticwb.model.base;
    */
 public abstract class GMapBase extends org.semanticwb.model.base.FormElementBase 
 {
-    public static final org.semanticwb.platform.SemanticProperty swbxf_initLatitude=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#initLatitude");
     public static final org.semanticwb.platform.SemanticProperty swb_initLongitude=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#initLongitude");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_initLatitude=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#initLatitude");
     public static final org.semanticwb.platform.SemanticProperty swb_initStep=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#initStep");
    /**
    * Elemento que muestra un componente grafico (Google Maps) para geolocalizar un punto
@@ -93,24 +93,6 @@ public abstract class GMapBase extends org.semanticwb.model.base.FormElementBase
     }
 
 /**
-* Gets the InitLatitude property
-* @return double with the InitLatitude
-*/
-    public double getInitLatitude()
-    {
-        return getSemanticObject().getDoubleProperty(swbxf_initLatitude);
-    }
-
-/**
-* Sets the InitLatitude property
-* @param value long with the InitLatitude
-*/
-    public void setInitLatitude(double value)
-    {
-        getSemanticObject().setDoubleProperty(swbxf_initLatitude, value);
-    }
-
-/**
 * Gets the InitLongitude property
 * @return double with the InitLongitude
 */
@@ -126,6 +108,24 @@ public abstract class GMapBase extends org.semanticwb.model.base.FormElementBase
     public void setInitLongitude(double value)
     {
         getSemanticObject().setDoubleProperty(swb_initLongitude, value);
+    }
+
+/**
+* Gets the InitLatitude property
+* @return double with the InitLatitude
+*/
+    public double getInitLatitude()
+    {
+        return getSemanticObject().getDoubleProperty(swbxf_initLatitude);
+    }
+
+/**
+* Sets the InitLatitude property
+* @param value long with the InitLatitude
+*/
+    public void setInitLatitude(double value)
+    {
+        getSemanticObject().setDoubleProperty(swbxf_initLatitude, value);
     }
 
 /**

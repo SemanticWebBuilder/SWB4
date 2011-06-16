@@ -6,20 +6,20 @@ package org.semanticwb.model.base;
    */
 public abstract class PFlowInstanceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.PFlowable
 {
-    public static final org.semanticwb.platform.SemanticProperty swb_pfiTime=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#pfiTime");
    /**
    * Un recurso es un componente en una Página Web con el cual el usuario tiene interacción
    */
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_pfinstResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#pfinstResource");
+    public static final org.semanticwb.platform.SemanticProperty swb_pfiStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#pfiStatus");
+    public static final org.semanticwb.platform.SemanticProperty swb_pfiTime=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#pfiTime");
+    public static final org.semanticwb.platform.SemanticProperty swb_pfiStep=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#pfiStep");
    /**
    * Un Flujo de Publicación es una serie de autorizaciones por las que pasa un contenido antes de publicarse en un Sitio Web
    */
     public static final org.semanticwb.platform.SemanticClass swb_PFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlow");
     public static final org.semanticwb.platform.SemanticProperty swb_pfiPFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#pfiPFlow");
-    public static final org.semanticwb.platform.SemanticProperty swb_pfiStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#pfiStatus");
     public static final org.semanticwb.platform.SemanticProperty swb_pfiVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#pfiVersion");
-    public static final org.semanticwb.platform.SemanticProperty swb_pfiStep=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#pfiStep");
    /**
    * Instancia de un recurso asociado a un flujo de publicación.
    */
@@ -154,24 +154,6 @@ public abstract class PFlowInstanceBase extends org.semanticwb.model.SWBClass im
     {
         super(base);
     }
-
-/**
-* Gets the Time property
-* @return java.util.Date with the Time
-*/
-    public java.util.Date getTime()
-    {
-        return getSemanticObject().getDateProperty(swb_pfiTime);
-    }
-
-/**
-* Sets the Time property
-* @param value long with the Time
-*/
-    public void setTime(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_pfiTime, value);
-    }
    /**
    * Sets the value for the property PfinstResource
    * @param value PfinstResource to set
@@ -209,6 +191,60 @@ public abstract class PFlowInstanceBase extends org.semanticwb.model.SWBClass im
              ret=(org.semanticwb.model.Resource)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Status property
+* @return int with the Status
+*/
+    public int getStatus()
+    {
+        return getSemanticObject().getIntProperty(swb_pfiStatus);
+    }
+
+/**
+* Sets the Status property
+* @param value long with the Status
+*/
+    public void setStatus(int value)
+    {
+        getSemanticObject().setIntProperty(swb_pfiStatus, value);
+    }
+
+/**
+* Gets the Time property
+* @return java.util.Date with the Time
+*/
+    public java.util.Date getTime()
+    {
+        return getSemanticObject().getDateProperty(swb_pfiTime);
+    }
+
+/**
+* Sets the Time property
+* @param value long with the Time
+*/
+    public void setTime(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_pfiTime, value);
+    }
+
+/**
+* Gets the Step property
+* @return String with the Step
+*/
+    public String getStep()
+    {
+        return getSemanticObject().getProperty(swb_pfiStep);
+    }
+
+/**
+* Sets the Step property
+* @param value long with the Step
+*/
+    public void setStep(String value)
+    {
+        getSemanticObject().setProperty(swb_pfiStep, value);
     }
    /**
    * Sets the value for the property Pflow
@@ -250,24 +286,6 @@ public abstract class PFlowInstanceBase extends org.semanticwb.model.SWBClass im
     }
 
 /**
-* Gets the Status property
-* @return int with the Status
-*/
-    public int getStatus()
-    {
-        return getSemanticObject().getIntProperty(swb_pfiStatus);
-    }
-
-/**
-* Sets the Status property
-* @param value long with the Status
-*/
-    public void setStatus(int value)
-    {
-        getSemanticObject().setIntProperty(swb_pfiStatus, value);
-    }
-
-/**
 * Gets the Version property
 * @return int with the Version
 */
@@ -283,24 +301,6 @@ public abstract class PFlowInstanceBase extends org.semanticwb.model.SWBClass im
     public void setVersion(int value)
     {
         getSemanticObject().setIntProperty(swb_pfiVersion, value);
-    }
-
-/**
-* Gets the Step property
-* @return String with the Step
-*/
-    public String getStep()
-    {
-        return getSemanticObject().getProperty(swb_pfiStep);
-    }
-
-/**
-* Sets the Step property
-* @param value long with the Step
-*/
-    public void setStep(String value)
-    {
-        getSemanticObject().setProperty(swb_pfiStep, value);
     }
 
    /**
