@@ -54,6 +54,7 @@ import org.semanticwb.servlet.internal.Monitor;
 import org.semanticwb.servlet.internal.MultipleFileUploader;
 import org.semanticwb.servlet.internal.P3PFile;
 import org.semanticwb.servlet.internal.RobotFile;
+import org.semanticwb.servlet.internal.TreeSelectFormElement;
 import org.semanticwb.servlet.internal.Upload;
 import org.semanticwb.servlet.internal.UploadFormElement;
 
@@ -378,6 +379,10 @@ public class SWBVirtualHostFilter implements Filter
             {
                 log.error(cnfe);
             }
+            InternalServlet treeSelectFormElement = new TreeSelectFormElement();
+            intServlets.put("treeSelect", treeSelectFormElement);
+            treeSelectFormElement.init(filterConfig.getServletContext());
+
 
             InternalServlet upload = new Upload();
             intServlets.put("wbupload", upload);
