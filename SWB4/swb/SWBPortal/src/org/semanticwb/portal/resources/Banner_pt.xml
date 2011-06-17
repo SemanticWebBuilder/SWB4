@@ -27,31 +27,31 @@
 
         <div title="Configurações Avançadas" open="false">
             <fieldset legend="Externas Banner">
-                <textarea id="code" name="code" label="* Código" rows="5" cols="50" wrap="virtual"/>
+                <textarea id="code" name="code" label="Código" rows="5" cols="50" wrap="virtual"/>
                 <input type="text" id="index" name="index" label="Ordem do índice" maxlength="7" regExp="\d{1,7}" invalidMessage="Índice inválido" promptMessage="Índice numérico da imagem" />
             </fieldset>
         </div>
 
         <fieldset>
             <statictext name="txtNotaTitle">
-		<![CDATA[
-			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {title} Título
-			</font>
-		]]>
+                <![CDATA[
+                    <font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+                         {title} Título
+                    </font>
+                ]]>
             </statictext>
             <statictext name="txtNotaDescription">
 		<![CDATA[
-			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {description} Descrição
-			</font>
+                    <font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+                         {description} Descrição
+                    </font>
 		]]>
             </statictext>
             <statictext name="txtNotaImage">
 		<![CDATA[
-			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {image} Imagem
-			</font>
+                    <font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+                         {image} Imagem
+                    </font>
 		]]>
             </statictext>
             <input type="submit" name="btnSave" id="btnSave" value="Salvar" onclick="return jsValida(this.form)" />
@@ -65,14 +65,14 @@
         dojo.require("dijit.form.ValidationTextBox");
 
         function jsValida(frm) {
-            if(!isEmpty(dojo.byId('url').value) && isEmpty(dojo.byId('img').value) && !dojo.byId('wbNoFile_img')) {
-                alert('Especifique uma imagem para o banner');
-                dojo.byId('img').focus();
-                return false;
-            }
             if(isEmpty(dojo.byId('img').value) && isEmpty(dojo.byId('code').value) && !dojo.byId('wbNoFile_img')) {
                 alert('Definir uma configuração básica');
                 dojo.byId('url').focus();
+                return false;
+            }
+            if(isEmpty(dojo.byId('img').value) && !dojo.byId('wbNoFile_img')) {
+                alert('Especifique uma imagem para o banner');
+                dojo.byId('img').focus();
                 return false;
             }
             return true;

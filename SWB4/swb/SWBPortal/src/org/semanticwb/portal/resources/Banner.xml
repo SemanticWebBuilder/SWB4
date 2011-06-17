@@ -27,7 +27,7 @@
 
         <div title="Configuración Avanzada" open="false">
             <fieldset legend="Banner externo">
-                <textarea id="code" name="code" label="* Código" rows="5" cols="50" wrap="virtual"/>
+                <textarea id="code" name="code" label="Código" rows="5" cols="50" wrap="virtual"/>
                 <input type="text" id="index" name="index" label="Índice de ordenamiento" maxlength="7" regExp="\d{1,7}" invalidMessage="Índice inválido" promptMessage="Índice numérico de la imagen" />
             </fieldset>
         </div>
@@ -35,23 +35,23 @@
         <fieldset>
             <statictext name="txtNotaTitle">
 		<![CDATA[
-			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {title} Título del recurso
-			</font>
+                    <font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+                         {title} Título del recurso
+                    </font>
 		]]>
             </statictext>
             <statictext name="txtNotaDescription">
 		<![CDATA[
-			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {description} Descripción del recurso
-			</font>
+                    <font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+                         {description} Descripción del recurso
+                    </font>
 		]]>
             </statictext>
             <statictext name="txtNotaImage">
 		<![CDATA[
-			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				 {image} Imagen del recurso
-			</font>
+                    <font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+                         {image} Imagen del recurso
+                    </font>
 		]]>
             </statictext>
             <input type="submit" name="btnSave" id="btnSave" value="Guardar" onclick="return jsValida(this.form)" />
@@ -65,14 +65,15 @@
         dojo.require("dijit.form.ValidationTextBox");
 
         function jsValida(frm) {
-            if(!isEmpty(dojo.byId('url').value) && isEmpty(dojo.byId('img').value) && !dojo.byId('wbNoFile_img')) {
-                alert('Especifique una imagen para el banner');
+            if(isEmpty(dojo.byId('img').value) && isEmpty(dojo.byId('code').value) && !dojo.byId('wbNoFile_img')) {
+                alert('Defina una configuración básica');
                 dojo.byId('img').focus();
                 return false;
             }
-            if(isEmpty(dojo.byId('img').value) && isEmpty(dojo.byId('code').value) && !dojo.byId('wbNoFile_img')) {
-                alert('Defina una configuración básica');
-                dojo.byId('url').focus();
+            /*if(!isEmpty(dojo.byId('url').value) && isEmpty(dojo.byId('img').value) && !dojo.byId('wbNoFile_img')) {*/
+            if(isEmpty(dojo.byId('img').value) && !dojo.byId('wbNoFile_img')) {
+                alert('Especifique una imagen para el banner');
+                dojo.byId('img').focus();
                 return false;
             }
             return true;
