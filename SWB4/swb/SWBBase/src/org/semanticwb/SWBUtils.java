@@ -985,7 +985,6 @@ public class SWBUtils {
             for (int x = 0; x < l; x++)
             {
                 char ch = aux.charAt(x);
-System.out.println("ch="+ch);
                 if ((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z')
                         || (ch >= 'A' && ch <= 'Z') || ch == '_')
                 {
@@ -1003,7 +1002,7 @@ System.out.println("ch="+ch);
          *
          * @param txt a string in which the characters are going to be replaced
          * @param replaceSpaces a {@code boolean} indicating if blank spaces are going to be replaced or not
-         * @param ch a {@code char} especifica algún caracter permitido
+         * @param ch a {@code char} especifica algún caracter de puntuación permitido
          * @return a string similar to {@code txt} but with neither accented or
          * special characters nor symbols in it. un objeto string similar
          * a {@code txt} pero sin caracteres acentuados o especiales y sin s&iacute;mbolos
@@ -1101,7 +1100,6 @@ System.out.println("ch="+ch);
             for (int x = 0; x < l; x++)
             {
                 char chr = aux.charAt(x);
-System.out.println("chr="+chr);
                 if ( chr==ch || (chr >= '0' && chr <= '9') || (chr >= 'a' && chr <= 'z')
                         || (chr >= 'A' && chr <= 'Z') || chr == '_')
                 {
