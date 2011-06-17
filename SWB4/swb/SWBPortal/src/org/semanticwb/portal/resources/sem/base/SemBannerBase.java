@@ -3,17 +3,19 @@ package org.semanticwb.portal.resources.sem.base;
 
 public abstract class SemBannerBase extends org.semanticwb.portal.api.GenericSemResource 
 {
-    public static final org.semanticwb.platform.SemanticProperty swbres_banrInternalUrl=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#banrInternalUrl");
+    public static final org.semanticwb.platform.SemanticProperty swbres_banrOpenNewWindow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#banrOpenNewWindow");
     public static final org.semanticwb.platform.SemanticProperty swbres_banrLongDescr=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#banrLongDescr");
-    public static final org.semanticwb.platform.SemanticProperty swbres_banrAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#banrAction");
     public static final org.semanticwb.platform.SemanticProperty swbres_banrExternalUrl=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#banrExternalUrl");
-    public static final org.semanticwb.platform.SemanticProperty swbres_banrAlterText=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#banrAlterText");
     public static final org.semanticwb.platform.SemanticProperty swbres_banrImgHeight=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#banrImgHeight");
     public static final org.semanticwb.platform.SemanticProperty swbres_banrImgWidth=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#banrImgWidth");
-    public static final org.semanticwb.platform.SemanticProperty swbres_banrOrderingIndex=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#banrOrderingIndex");
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_semanticResourceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#semanticResourceInv");
     public static final org.semanticwb.platform.SemanticProperty swbres_banrCode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#banrCode");
+    public static final org.semanticwb.platform.SemanticProperty swbres_banrInternalUrl=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#banrInternalUrl");
+    public static final org.semanticwb.platform.SemanticProperty swbres_banrAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#banrAction");
+    public static final org.semanticwb.platform.SemanticProperty swbres_banrAlterText=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#banrAlterText");
+    public static final org.semanticwb.platform.SemanticProperty swbres_banrTitle=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#banrTitle");
+    public static final org.semanticwb.platform.SemanticProperty swbres_banrOrderingIndex=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#banrOrderingIndex");
     public static final org.semanticwb.platform.SemanticProperty swbres_banrImage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#banrImage");
     public static final org.semanticwb.platform.SemanticClass swbres_SemBanner=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/resource/ontology#semBanner");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/resource/ontology#semBanner");
@@ -51,21 +53,21 @@ public abstract class SemBannerBase extends org.semanticwb.portal.api.GenericSem
     }
 
 /**
-* Gets the BanrInternalUrl property
-* @return String with the BanrInternalUrl
+* Gets the BanrOpenNewWindow property
+* @return boolean with the BanrOpenNewWindow
 */
-    public String getBanrInternalUrl()
+    public boolean isBanrOpenNewWindow()
     {
-        return getSemanticObject().getProperty(swbres_banrInternalUrl);
+        return getSemanticObject().getBooleanProperty(swbres_banrOpenNewWindow);
     }
 
 /**
-* Sets the BanrInternalUrl property
-* @param value long with the BanrInternalUrl
+* Sets the BanrOpenNewWindow property
+* @param value long with the BanrOpenNewWindow
 */
-    public void setBanrInternalUrl(String value)
+    public void setBanrOpenNewWindow(boolean value)
     {
-        getSemanticObject().setProperty(swbres_banrInternalUrl, value);
+        getSemanticObject().setBooleanProperty(swbres_banrOpenNewWindow, value);
     }
 
 /**
@@ -87,24 +89,6 @@ public abstract class SemBannerBase extends org.semanticwb.portal.api.GenericSem
     }
 
 /**
-* Gets the BanrAction property
-* @return String with the BanrAction
-*/
-    public String getBanrAction()
-    {
-        return getSemanticObject().getProperty(swbres_banrAction);
-    }
-
-/**
-* Sets the BanrAction property
-* @param value long with the BanrAction
-*/
-    public void setBanrAction(String value)
-    {
-        getSemanticObject().setProperty(swbres_banrAction, value);
-    }
-
-/**
 * Gets the BanrExternalUrl property
 * @return String with the BanrExternalUrl
 */
@@ -120,24 +104,6 @@ public abstract class SemBannerBase extends org.semanticwb.portal.api.GenericSem
     public void setBanrExternalUrl(String value)
     {
         getSemanticObject().setProperty(swbres_banrExternalUrl, value);
-    }
-
-/**
-* Gets the BanrAlterText property
-* @return String with the BanrAlterText
-*/
-    public String getBanrAlterText()
-    {
-        return getSemanticObject().getProperty(swbres_banrAlterText);
-    }
-
-/**
-* Sets the BanrAlterText property
-* @param value long with the BanrAlterText
-*/
-    public void setBanrAlterText(String value)
-    {
-        getSemanticObject().setProperty(swbres_banrAlterText, value);
     }
 
 /**
@@ -174,24 +140,6 @@ public abstract class SemBannerBase extends org.semanticwb.portal.api.GenericSem
     public void setBanrImgWidth(int value)
     {
         getSemanticObject().setIntProperty(swbres_banrImgWidth, value);
-    }
-
-/**
-* Gets the BanrOrderingIndex property
-* @return int with the BanrOrderingIndex
-*/
-    public int getBanrOrderingIndex()
-    {
-        return getSemanticObject().getIntProperty(swbres_banrOrderingIndex);
-    }
-
-/**
-* Sets the BanrOrderingIndex property
-* @param value long with the BanrOrderingIndex
-*/
-    public void setBanrOrderingIndex(int value)
-    {
-        getSemanticObject().setIntProperty(swbres_banrOrderingIndex, value);
     }
    /**
    * Sets the value for the property Resource
@@ -248,6 +196,96 @@ public abstract class SemBannerBase extends org.semanticwb.portal.api.GenericSem
     public void setBanrCode(String value)
     {
         getSemanticObject().setProperty(swbres_banrCode, value);
+    }
+
+/**
+* Gets the BanrInternalUrl property
+* @return String with the BanrInternalUrl
+*/
+    public String getBanrInternalUrl()
+    {
+        return getSemanticObject().getProperty(swbres_banrInternalUrl);
+    }
+
+/**
+* Sets the BanrInternalUrl property
+* @param value long with the BanrInternalUrl
+*/
+    public void setBanrInternalUrl(String value)
+    {
+        getSemanticObject().setProperty(swbres_banrInternalUrl, value);
+    }
+
+/**
+* Gets the BanrAction property
+* @return String with the BanrAction
+*/
+    public String getBanrAction()
+    {
+        return getSemanticObject().getProperty(swbres_banrAction);
+    }
+
+/**
+* Sets the BanrAction property
+* @param value long with the BanrAction
+*/
+    public void setBanrAction(String value)
+    {
+        getSemanticObject().setProperty(swbres_banrAction, value);
+    }
+
+/**
+* Gets the BanrAlterText property
+* @return String with the BanrAlterText
+*/
+    public String getBanrAlterText()
+    {
+        return getSemanticObject().getProperty(swbres_banrAlterText);
+    }
+
+/**
+* Sets the BanrAlterText property
+* @param value long with the BanrAlterText
+*/
+    public void setBanrAlterText(String value)
+    {
+        getSemanticObject().setProperty(swbres_banrAlterText, value);
+    }
+
+/**
+* Gets the BanrTitle property
+* @return String with the BanrTitle
+*/
+    public String getBanrTitle()
+    {
+        return getSemanticObject().getProperty(swbres_banrTitle);
+    }
+
+/**
+* Sets the BanrTitle property
+* @param value long with the BanrTitle
+*/
+    public void setBanrTitle(String value)
+    {
+        getSemanticObject().setProperty(swbres_banrTitle, value);
+    }
+
+/**
+* Gets the BanrOrderingIndex property
+* @return int with the BanrOrderingIndex
+*/
+    public int getBanrOrderingIndex()
+    {
+        return getSemanticObject().getIntProperty(swbres_banrOrderingIndex);
+    }
+
+/**
+* Sets the BanrOrderingIndex property
+* @param value long with the BanrOrderingIndex
+*/
+    public void setBanrOrderingIndex(int value)
+    {
+        getSemanticObject().setIntProperty(swbres_banrOrderingIndex, value);
     }
 
 /**

@@ -9,6 +9,7 @@ public abstract class SemPromoBase extends org.semanticwb.portal.api.GenericSemR
     public static final org.semanticwb.platform.SemanticProperty swbres_promSubtitleStyle=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#promSubtitleStyle");
     public static final org.semanticwb.platform.SemanticProperty swbres_promText=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#promText");
     public static final org.semanticwb.platform.SemanticProperty swbres_promLinkText=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#promLinkText");
+    public static final org.semanticwb.platform.SemanticProperty swbres_promTitle=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#promTitle");
     public static final org.semanticwb.platform.SemanticProperty swbres_promFooter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#promFooter");
     public static final org.semanticwb.platform.SemanticProperty swbres_promImgPosition=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#promImgPosition");
     public static final org.semanticwb.platform.SemanticProperty swbres_promImgHeight=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#promImgHeight");
@@ -25,6 +26,7 @@ public abstract class SemPromoBase extends org.semanticwb.portal.api.GenericSemR
     public static final org.semanticwb.platform.SemanticProperty swbres_promInternalUrl=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#promInternalUrl");
     public static final org.semanticwb.platform.SemanticProperty swbres_promTextColor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#promTextColor");
     public static final org.semanticwb.platform.SemanticProperty swbres_promUnderlineLink=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#promUnderlineLink");
+    public static final org.semanticwb.platform.SemanticProperty swbres_promOpenNewWindow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#promOpenNewWindow");
     public static final org.semanticwb.platform.SemanticProperty swbres_promImgWidth=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#promImgWidth");
     public static final org.semanticwb.platform.SemanticProperty swbres_promSubtitle=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/resource/ontology#promSubtitle");
     public static final org.semanticwb.platform.SemanticClass swbres_SemPromo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/resource/ontology#semPromo");
@@ -168,6 +170,24 @@ public abstract class SemPromoBase extends org.semanticwb.portal.api.GenericSemR
     public void setPromLinkText(String value)
     {
         getSemanticObject().setProperty(swbres_promLinkText, value);
+    }
+
+/**
+* Gets the PromTitle property
+* @return String with the PromTitle
+*/
+    public String getPromTitle()
+    {
+        return getSemanticObject().getProperty(swbres_promTitle);
+    }
+
+/**
+* Sets the PromTitle property
+* @param value long with the PromTitle
+*/
+    public void setPromTitle(String value)
+    {
+        getSemanticObject().setProperty(swbres_promTitle, value);
     }
 
 /**
@@ -458,6 +478,24 @@ public abstract class SemPromoBase extends org.semanticwb.portal.api.GenericSemR
     public void setPromUnderlineLink(boolean value)
     {
         getSemanticObject().setBooleanProperty(swbres_promUnderlineLink, value);
+    }
+
+/**
+* Gets the PromOpenNewWindow property
+* @return boolean with the PromOpenNewWindow
+*/
+    public boolean isPromOpenNewWindow()
+    {
+        return getSemanticObject().getBooleanProperty(swbres_promOpenNewWindow);
+    }
+
+/**
+* Sets the PromOpenNewWindow property
+* @param value long with the PromOpenNewWindow
+*/
+    public void setPromOpenNewWindow(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swbres_promOpenNewWindow, value);
     }
 
 /**
