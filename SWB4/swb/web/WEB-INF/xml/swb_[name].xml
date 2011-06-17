@@ -5,7 +5,7 @@
             <column id="prop" type="VARCHAR" size="255" acceptNulls="false"/>
             <column id="obj" type="VARCHAR" size="255" acceptNulls="false"/>
             <column id="timems" type="BIGINT" size="20" default="0" acceptNulls="false"/>
-            <column id="ext" type="VARCHAR" size="65535" acceptNulls="true"/>
+            <column id="ext" type="CLOB" acceptNulls="true"/>
     </table>
     <index name="indexSUBJ[name]" table="swb_graph_ts[name]" >
             <colindex id="subj"/>
