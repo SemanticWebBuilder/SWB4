@@ -63,6 +63,7 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.portal.util.FileUpload;
+import org.semanticwb.servlet.internal.EditFile;
 import org.w3c.dom.Document;
 //import org.semanticwb.repository.VersionHistory;
 
@@ -424,7 +425,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                                 ret.append("\n<a href=\"#\" onclick=\"window.location='" + duout + "';\">");
                                 ret.append("\n<img src=\"" + path + "out.gif\" border=\"0\"/>");
                                 ret.append("\n</a>");
-                            } else if (paramRequest.getUser().getId().equals(autor.getId())) {
+                            } else if (paramRequest.getUser().getId().equals(autor.getId())&&luser>1) {
                                 //ret.append("\n<img src=\"" + path + "reserved.gif\" border=\"0\"/>");
                                 SWBResourceURL uin = paramRequest.getRenderUrl();
                                 uin.setParameter(PARAM_UUID, UUID);
@@ -467,7 +468,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                             ret.append("\n<a href=\"" + urlgetfile + "/" + UUID + "/" + file + "\" onclick=\"window.location='" + urlgetfile + "/" + UUID + "/" + file + "'; return false;\" alt=\"\"><img src=\"" + path + "preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msgViewFile") + "\"/></a>");
 
 
-                            if (user != null && user.getId().equals(autor.getId()) || luser == 3) {
+                            if ((user != null && user.getId().equals(autor.getId())) || luser == 3) {
                                 SWBResourceURL udel = paramRequest.getActionUrl();
                                 udel.setParameter(PARAM_UUID, UUID);
                                 udel.setParameter("repNS", IDREP);
@@ -558,6 +559,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
     public String doShowDirs(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         StringBuffer ret = new StringBuffer("");
         User user = paramRequest.getUser();
+        int luser = getLevelUser(user);
         WebPage wp = paramRequest.getWebPage();
         Session session = null;
         String path = SWBPlatform.getContextPath() + "/swbadmin/images/repositoryfile/";
@@ -652,7 +654,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         ret.append("\n</ul>");
         ret.append("\n</fieldset>");
 
-        if (user != null && user.isSigned()) {
+        if (user != null && user.isSigned() && luser>2) {
             ret.append("\n<fieldset>");
             SWBResourceURL urladd = paramRequest.getRenderUrl();
             urladd.setAction("addfolder");
@@ -921,13 +923,17 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             ret.append("\n</table>");
             ret.append("\n</fieldset>");
             ret.append("\n<fieldset>");
-            ret.append("\n<input type=\"button\"  name=\"s\" value=\"" + paramRequest.getLocaleString("msgBTNSave") + "\" onclick=\"javascript:validateAddFolder();\" />\r\n");
+
+            if(luser>2)
+            {
+                ret.append("\n<input type=\"button\"  name=\"s\" value=\"" + paramRequest.getLocaleString("msgBTNSave") + "\" onclick=\"javascript:validateAddFolder();\" />\r\n");
+            }
             SWBResourceURL urlb = paramRequest.getRenderUrl();
             urlb.setMode(SWBResourceURL.Mode_VIEW);
             urlb.setParameter("parentUUID", parentUUID);
             ret.append("\n<input type=\"button\"  name=\"cancel\" value=\"" + paramRequest.getLocaleString("msgBTNCancel") + "\" onclick=\"window.location='" + urlb.toString() + "';\" />\r\n");
 
-            if (!parentUUID.equals(fUUID)) {
+            if (!parentUUID.equals(fUUID) && luser>2) {
                 SWBResourceURL urlrem = paramRequest.getActionUrl();
                 urlrem.setMode(SWBResourceURL.Mode_VIEW);
                 urlrem.setAction("removefolder");
@@ -975,9 +981,10 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             ret.append("\n<input type=\"hidden\" name=\"parentUUID\" value=\"" + parentUUID + "\" />");
             ret.append("\n<input type=\"hidden\" name=\"" + PARAM_UUID + "\" value=\"" + UUID + "\" />");
             ret.append("\n<table width=\"100%\"  border=\"0\" >");
+            boolean editFile = Boolean.FALSE;
             try {
 
-                boolean editFile = Boolean.FALSE;
+               
                 session = rep.login(credentials, IDREP);
                 nodo = session.getNodeByUUID(UUID);
 
@@ -1172,7 +1179,10 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             ret.append("\n</table>");
             ret.append("\n</fieldset>");
             ret.append("\n<fieldset>");
-            ret.append("\n<input type=\"button\"  name=\"s\" value=\"" + paramRequest.getLocaleString("msgBTNSave") + "\" onclick=\"javascript:validateEditFile();\" />\r\n");
+            if(editFile)
+            {
+                ret.append("\n<input type=\"button\"  name=\"s\" value=\"" + paramRequest.getLocaleString("msgBTNSave") + "\" onclick=\"javascript:validateEditFile();\" />\r\n");
+            }
             SWBResourceURL urlb = paramRequest.getRenderUrl();
             urlb.setMode(SWBResourceURL.Mode_VIEW);
             urlb.setParameter("parentUUID", parentUUID);
@@ -1235,15 +1245,31 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 
                     Node ndata = nf.getNode(JCR_CONTENT);
 
+
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss");
-                    VersionIterator it = ndata.getVersionHistory().getAllVersions();
+
+                    VersionHistory vhis = ndata.getVersionHistory();
+                    VersionIterator it = vhis.getAllVersions();
+
                     ret.append("\n<tbody>");
                     while (it.hasNext()) {
                         Version version = it.nextVersion();
+                        
                         if (!version.getName().equals("jcr:rootVersion")) {
+
+                            String numversion = version.getName();
+
+                            String[] lblvers = vhis.getVersionLabels(version);
+                            if(lblvers==null||lblvers.length==0)
+                            {
+                                numversion = version.getName();
+                            } else {
+                                numversion = lblvers[0];
+                            }
+
                             Node fnode = version.getNode(JCR_FROZEN_NODE);
                             String comment = fnode.getProperty(SWBFILEREPCOMMENT).getString();
-                            String numversion = version.getName();
+                            
                             String lastModified = sdf.format(version.getProperty("jcr:created").getDate().getTime());
                             User autor = user.getUserRepository().getUser(fnode.getProperty(SWBFILEREPUSERID).getString());
 
@@ -2076,6 +2102,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             if ("in".equals(faction)) {
                 String filename = null;
 
+                //String lblVersion = null;
                 String parentUUID = null;
                 try {
 
@@ -2083,6 +2110,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                     fup.getFiles(request, null);
 
                     repNS = fup.getValue("repNS");
+                    //lblVersion = fup.getValue("version_number");
 
                     filename = fup.getFileName("fileversion");
                     String comentario = fup.getValue("commentversion");
@@ -2122,10 +2150,15 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                     nodeRes.setProperty(SWBFILEREPUSERID, user.getId());
                     nodeRes.setProperty(SWBFILEREPFILESIZE, bcont.length);
 
+//                    VersionHistory vhis = nodeRes.getVersionHistory();
+//                    vhis.addVersionLabel(nodeRes.getName(), lblVersion, true);
+//                    vhis.save();
+
                     nodeFile.save();
                     nodeRes.save();
 
                     Version version = nodeRes.checkin();
+
 
                     log.debug("Version created with number " + version.getName());
 
@@ -2219,6 +2252,23 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                 String vernum = getLastVersionOfcontent(session, ns, uuid);
 
                 Node nc = nodo.getNode(JCR_CONTENT);
+
+                VersionHistory verhis = nodo.getVersionHistory();
+                
+//                Version version = null;
+//                if(verhis.hasVersionLabel(vernum))
+//                {
+//                    version = verhis.getVersionByLabel(vernum);
+//                }
+
+//                if(version==null) version = nodo.getVersionHistory().getVersion(vernum);
+
+                float fvnum = Float.parseFloat(vernum);
+                float fvnum_short = fvnum+0.10F;
+                float fvnum_big = (int)fvnum_short+1;
+
+                //System.out.println("fvnum:"+fvnum+" nxt-short:"+fvnum_short+" nxt-big:"+fvnum_big);
+
                 SWBResourceURL urla = paramRequest.getActionUrl();
                 urla.setParameter("faction", "in");
                 urla.setAction("check");
@@ -2240,8 +2290,12 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                 out.println("</tr>");
                 out.println("<tr>");
                 out.println("<td>" + paramRequest.getLocaleString("msgFile") + ":</td>");
-                out.println("<td>" + filename + " ver. " + vernum + "</td>");
+                out.println("<td>" + filename + " ver. " + vernum +"</td>");
                 out.println("</tr>");
+//                out.println("<tr>");
+//                out.println("<td>" + paramRequest.getLocaleString("msgNextVersion") + ":</td>");
+//                out.println("<td><select name=\"version_number\"><option value=\"short\">"+fvnum_short+"</option><option value=\"big\">"+fvnum_big+"</option></select></td>");
+//                out.println("</tr>");
                 out.println("<tr>");
                 out.println("<td>" + paramRequest.getLocaleString("msgFileNewVerComm") + ":</td>");
                 out.println("<td><textarea id=\"commentversion\" name=\"commentversion\" rows=\"5\" cols=\"20\"></textarea></td>");
