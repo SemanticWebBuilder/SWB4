@@ -782,8 +782,8 @@ public class SWBImportWebSite extends GenericResource {
                     lang.setTitle("Español", "es");
                     lang.setTitle("Spanish", "en");
                     lang = site.createLanguage("en");
-                    lang.setTitle("Ingles");
-                    lang.setTitle("Ingles", "es");
+                    lang.setTitle("Inglés");
+                    lang.setTitle("Inglés", "es");
                     lang.setTitle("English", "en");
                     //Envia estatus a pantalla
                     out.println("<script type=\"text/javascript\">");
