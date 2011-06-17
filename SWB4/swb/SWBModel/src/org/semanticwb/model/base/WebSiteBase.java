@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto que define un Sitio Web 
    */
-public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Indexable,org.semanticwb.model.Filterable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Countryable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableNode
+public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Countryable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Localeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Indexable
 {
    /**
    * Superclase de todos los tipos de Modelos de SemanticWebBuilder
@@ -111,17 +111,17 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
    */
     public static final org.semanticwb.platform.SemanticClass swb_TemplateRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateRef");
    /**
-   * Objeto por medio del cual se define un tipo de componente o recurso
+   * Un recurso es un componente en una Página Web con el cual el usuario tiene interacción
    */
-    public static final org.semanticwb.platform.SemanticClass swb_ResourceType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceType");
+    public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
    /**
    * Referencia a un objeto de tipo Calendar
    */
     public static final org.semanticwb.platform.SemanticClass swb_CalendarRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#CalendarRef");
    /**
-   * Un recurso es un componente en una Página Web con el cual el usuario tiene interacción
+   * Objeto por medio del cual se define un tipo de componente o recurso
    */
-    public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
+    public static final org.semanticwb.platform.SemanticClass swb_ResourceType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceType");
    /**
    * Instancia de un recurso asociado a un flujo de publicación.
    */
@@ -1713,28 +1713,34 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
         return org.semanticwb.model.TemplateRef.ClassMgr.hasTemplateRef(id, this);
     }
 
-    public org.semanticwb.model.ResourceType getResourceType(String id)
+    public org.semanticwb.model.Resource getResource(String id)
     {
-        return org.semanticwb.model.ResourceType.ClassMgr.getResourceType(id, this);
+        return org.semanticwb.model.Resource.ClassMgr.getResource(id, this);
     }
 
-    public java.util.Iterator<org.semanticwb.model.ResourceType> listResourceTypes()
+    public java.util.Iterator<org.semanticwb.model.Resource> listResources()
     {
-        return org.semanticwb.model.ResourceType.ClassMgr.listResourceTypes(this);
+        return org.semanticwb.model.Resource.ClassMgr.listResources(this);
     }
 
-    public org.semanticwb.model.ResourceType createResourceType(String id)
+    public org.semanticwb.model.Resource createResource(String id)
     {
-        return org.semanticwb.model.ResourceType.ClassMgr.createResourceType(id,this);
+        return org.semanticwb.model.Resource.ClassMgr.createResource(id,this);
     }
 
-    public void removeResourceType(String id)
+    public org.semanticwb.model.Resource createResource()
     {
-        org.semanticwb.model.ResourceType.ClassMgr.removeResourceType(id, this);
+        long id=getSemanticObject().getModel().getCounter(swb_Resource);
+        return org.semanticwb.model.Resource.ClassMgr.createResource(String.valueOf(id),this);
+    } 
+
+    public void removeResource(String id)
+    {
+        org.semanticwb.model.Resource.ClassMgr.removeResource(id, this);
     }
-    public boolean hasResourceType(String id)
+    public boolean hasResource(String id)
     {
-        return org.semanticwb.model.ResourceType.ClassMgr.hasResourceType(id, this);
+        return org.semanticwb.model.Resource.ClassMgr.hasResource(id, this);
     }
 
     public org.semanticwb.model.CalendarRef getCalendarRef(String id)
@@ -1767,34 +1773,28 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
         return org.semanticwb.model.CalendarRef.ClassMgr.hasCalendarRef(id, this);
     }
 
-    public org.semanticwb.model.Resource getResource(String id)
+    public org.semanticwb.model.ResourceType getResourceType(String id)
     {
-        return org.semanticwb.model.Resource.ClassMgr.getResource(id, this);
+        return org.semanticwb.model.ResourceType.ClassMgr.getResourceType(id, this);
     }
 
-    public java.util.Iterator<org.semanticwb.model.Resource> listResources()
+    public java.util.Iterator<org.semanticwb.model.ResourceType> listResourceTypes()
     {
-        return org.semanticwb.model.Resource.ClassMgr.listResources(this);
+        return org.semanticwb.model.ResourceType.ClassMgr.listResourceTypes(this);
     }
 
-    public org.semanticwb.model.Resource createResource(String id)
+    public org.semanticwb.model.ResourceType createResourceType(String id)
     {
-        return org.semanticwb.model.Resource.ClassMgr.createResource(id,this);
+        return org.semanticwb.model.ResourceType.ClassMgr.createResourceType(id,this);
     }
 
-    public org.semanticwb.model.Resource createResource()
+    public void removeResourceType(String id)
     {
-        long id=getSemanticObject().getModel().getCounter(swb_Resource);
-        return org.semanticwb.model.Resource.ClassMgr.createResource(String.valueOf(id),this);
-    } 
-
-    public void removeResource(String id)
-    {
-        org.semanticwb.model.Resource.ClassMgr.removeResource(id, this);
+        org.semanticwb.model.ResourceType.ClassMgr.removeResourceType(id, this);
     }
-    public boolean hasResource(String id)
+    public boolean hasResourceType(String id)
     {
-        return org.semanticwb.model.Resource.ClassMgr.hasResource(id, this);
+        return org.semanticwb.model.ResourceType.ClassMgr.hasResourceType(id, this);
     }
 
     public org.semanticwb.model.PFlowInstance getPFlowInstance(String id)
