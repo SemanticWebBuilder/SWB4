@@ -42,6 +42,7 @@ import org.semanticwb.process.modeler.ExclusiveStartEventGateway;
 import org.semanticwb.process.modeler.ComplexGateway;
 import org.semanticwb.process.modeler.AnnotationArtifact;
 import javafx.util.Sequences;
+import org.semanticwb.process.modeler.EventBasedGateway;
 
 /**
  *   Clase que implementa la funcionalidad para generar un archivo XPDL a partir
@@ -372,6 +373,7 @@ public class XPDLTransformer {
             addChild(ret, getGatewayDefinition(ge as Gateway));
         }
 
+        addTransitionRestrictions(ret, ge);
         addChild(ret, getGraphicsInfos(ge));
         return ret;
     }
@@ -410,14 +412,91 @@ public class XPDLTransformer {
         return artifact;
     }
 
-    function getTransitionRestrictions(gateway: Gateway) {
+    /**Obtiene las restricciones de flujos de salida y entrada del elemento*/
+    function addTransitionRestrictions(activity: Element, ge: GraphicalElement) : Void {
+        var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:TransitionRestrictions");
+        var tr = doc.createElementNS(namespaceUri, "{namespacePrefix}:TransitionRestriction");
+        var type = "Exclusive";
+        var etype = "Data";
+        var addOuts = false;
+        var addIns = false;
+
+        if (ge.getOutputConnectionObjects().size() > 1) {
+            for (ele in ge.getOutputConnectionObjects() where ele instanceof SequenceFlow) {
+                if (not addOuts) {
+                    addOuts = true;
+                }
+            }
+        }
+
+        if (ge.getInputConnectionObjects().size() > 1) {
+            for (ele in ge.getInputConnectionObjects() where ele instanceof SequenceFlow) {
+                if (not addIns) {
+                    addIns = true;
+                }
+            }
+        }
+
+        if (ge instanceof ExclusiveGateway) {
+            type = "Exclusive";
+        } else if (ge instanceof InclusiveGateway) {
+            type = "Inclusive";
+        } else if (ge instanceof ComplexGateway) {
+            type = "Complex";
+        } else if (ge instanceof ParallelGateway) {
+            type = "Parallel";
+        } else if (ge instanceof EventBasedGateway) {
+            type = "Exclusive";
+            etype= "Event";
+        } else if (ge instanceof ExclusiveStartEventGateway) {
+            type = "Exclusive";
+            etype= "Event";
+        } else if (ge instanceof ParallelStartEventGateway) {
+            type = "Parallel";
+            etype= "Event";
+        }
+
+        if (addOuts) {
+            var split = doc.createElementNS(namespaceUri, "{namespacePrefix}:Split");
+            var refs = doc.createElementNS(namespaceUri, "{namespacePrefix}:TransitionRefs");
+
+            if (ge instanceof Gateway) {
+                addAttribute(split, "type", type);
+                addAttribute(split, "ExclusiveType", etype);
+            } else {
+                addAttribute(split, "type", "Inclusive");
+            }
+
+            for (ele in ge.getOutputConnectionObjects() where ele instanceof SequenceFlow) {
+                var ref = doc.createElementNS(namespaceUri, "{namespacePrefix}:TransitionRef");
+                addAttribute(ref, "Id", ele.getURI());
+                addChild(refs, ref);
+            }
+            addChild(split, refs);
+            addChild(tr, split);
+            addChild(ret, tr);
+        }
+
+        if (addIns) {
+            var join = doc.createElementNS(namespaceUri, "{namespacePrefix}:Join");
+
+            if (ge instanceof Gateway) {
+                addAttribute(join, "type", type);
+            } else {
+                addAttribute(join, "type", "Exclusive");
+            }
+            addChild(tr, join);
+            addChild(ret, tr);
+        }
         
+        if (addIns or addOuts) {
+            addChild(activity, ret);
+        }
     }
 
     /**Obtiene la definición XPDL de un Gateway*/
     function getGatewayDefinition(gateway: Gateway) : Element {
         var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:Route");
-        var restrict = doc.createElementNS(namespaceUri, "{namespacePrefix}:TransitionRestrictions");
         var instantiate = "false";
         //TODO: Agregar las restricciones de los flujos de la compuerta
         if (gateway instanceof ExclusiveGateway) {
@@ -450,7 +529,7 @@ public class XPDLTransformer {
             addAttribute(ret, "GatewayType", "Complex");
             addAttribute(ret, "ExclusiveType", "Data");
             addAttribute(ret, "MarkerVisible", "false");
-        }
+        }        
         addAttribute(ret, "Instantiate", instantiate);
 
         return ret;
