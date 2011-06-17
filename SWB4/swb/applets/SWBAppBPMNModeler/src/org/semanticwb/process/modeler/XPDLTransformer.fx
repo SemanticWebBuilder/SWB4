@@ -44,6 +44,8 @@ import org.semanticwb.process.modeler.AnnotationArtifact;
 import javafx.util.Sequences;
 
 /**
+ *   Clase que implementa la funcionalidad para generar un archivo XPDL a partir
+ *   de los elementos en el modelador.
  * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 
@@ -83,6 +85,7 @@ public class XPDLTransformer {
         getPackageDefinition();
     }
 
+    /**Recorre los elementos en el modelador para generar las definiciones correspondientes en XPDL*/
     public function getXPDLDocument(modeler: Modeler) {//: Document {
         for (ele in modeler.contents) {
             if (ele instanceof Pool) {
@@ -111,6 +114,7 @@ public class XPDLTransformer {
         //return doc;
     }
 
+    /**Obtiene la definición XPDL de una asociación*/
     public function getAssociationDefinition(assoc: AssociationFlow) : Element {
         var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:Association");
 
@@ -126,6 +130,7 @@ public class XPDLTransformer {
         return ret;
     }
 
+    /**Guarda la estructura del documento XPDL en un archivo*/
     public function saveXPDL(file : File) {
         var transf = TransformerFactory.newInstance();
         var trans = transf.newTransformer();
@@ -144,7 +149,8 @@ public class XPDLTransformer {
             ex.printStackTrace();
         }
     }
-    
+
+    /**Obtiene la definición XPDL de la información gráfica agregada por distintas herramientas a un elemento*/
     function getGraphicsInfos(ge: GraphicalElement): Element {
         var graphicInfos = doc.createElementNS(namespaceUri, "{namespacePrefix}:NodeGraphicsInfos");
         var graphicInfo = doc.createElementNS(namespaceUri, "{namespacePrefix}:NodeGraphicsInfo");
@@ -167,6 +173,7 @@ public class XPDLTransformer {
         return graphicInfos;
     }
 
+    /**Obtiene la definición XPDL de la información gráfica agregada por SWBP Modeler a un elemento*/
     function getConnectorGraphicsInfos(conn: ConnectionObject): Element {
         var graphicInfos = doc.createElementNS(namespaceUri, "{namespacePrefix}:ConnectorGraphicsInfos");
         var graphicInfo = doc.createElementNS(namespaceUri, "{namespacePrefix}:ConnectorGraphicsInfo");        
@@ -184,6 +191,7 @@ public class XPDLTransformer {
         return graphicInfos;
     }
 
+    /**Obtiene la definición XPDL del paquete de procesos*/
     public function getPackageDefinition() {
         if (pkg == null) {
             pkg = doc.createElementNS(namespaceUri, "{namespacePrefix}:Package");
@@ -206,6 +214,7 @@ public class XPDLTransformer {
         addChild(pkg, pools);
     }
 
+    /**Obtiene la definición XPDL del encabezado del paquete de procesos*/
     function getPackageHeader() : Element {
         var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:PackageHeader");
         var version = doc.createElementNS(namespaceUri, "{namespacePrefix}:XPDLVersion");
@@ -226,6 +235,8 @@ public class XPDLTransformer {
         return ret;
     }
 
+    /**Agrega la definición XPDL de un Pool a la lista de Pools del documento,
+     de igual manera agrega una definición de proceso a la lista de flujos de trabajo*/
     function addPoolDefinition(pool: Pool) {
         var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:Pool");
         var lanes = doc.createElementNS(namespaceUri, "{namespacePrefix}:Lanes");
@@ -248,6 +259,7 @@ public class XPDLTransformer {
         addWorkFlowDefinition(pool);
     }
 
+    /**agrega una definición XPDL de un subproceso*/
     function addActivitySetDefinition(subprocess: SubProcess, actSet: Element) : Void {
         var connections:ConnectionObject[];
         var aset = doc.createElementNS(namespaceUri, "{namespacePrefix}:ActivitySet");
@@ -302,6 +314,7 @@ public class XPDLTransformer {
         addChild(actSet, aset);
     }
 
+    /**Obtiene la definición XPDL de una actividad (cuaquier elemento en el modelo)*/
     function getActivityDefinition(ge: GraphicalElement) : Element {
         var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:Activity");
 
@@ -363,6 +376,7 @@ public class XPDLTransformer {
         return ret;
     }
 
+    /**Obtiene la definición XPDL de un artefacto*/
     function getArtifactDefinition(artif: Artifact) : Element {
         var artifact = doc.createElementNS(namespaceUri, "{namespacePrefix}:Artifact");
 
@@ -380,6 +394,7 @@ public class XPDLTransformer {
         return artifact;
     }
 
+    /**Obtiene la definición XPDL de un Objeto de datos*/
     function getDataObjectDefinition(dataObject: DataObject) : Element {
         var artifact = doc.createElementNS(namespaceUri, "{namespacePrefix}:Artifact");
         var data = doc.createElementNS(namespaceUri, "{namespacePrefix}:DataObject");
@@ -399,11 +414,12 @@ public class XPDLTransformer {
         
     }
 
+    /**Obtiene la definición XPDL de un Gateway*/
     function getGatewayDefinition(gateway: Gateway) : Element {
         var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:Route");
         var restrict = doc.createElementNS(namespaceUri, "{namespacePrefix}:TransitionRestrictions");
         var instantiate = "false";
-
+        //TODO: Agregar las restricciones de los flujos de la compuerta
         if (gateway instanceof ExclusiveGateway) {
             addAttribute(ret, "GatewayType", "Exclusive");
             addAttribute(ret, "ExclusiveType", "Data");
@@ -440,6 +456,7 @@ public class XPDLTransformer {
         return ret;
     }
 
+    /**Obtiene la definición XPDL de una tarea*/
     function getTaskDefinition(task: Task) : Element {
         var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:Implementation");
         var tsk = doc.createElementNS(namespaceUri, "{namespacePrefix}:Task");
@@ -480,6 +497,7 @@ public class XPDLTransformer {
         return ret;
     }
 
+    /**Agrega la definición XPDL de un flujo de proceso a la lista de flujos de procesos del documento XPDL*/
     public function addWorkFlowDefinition(pool: Pool) {
         var connections: ConnectionObject[];
         var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:WorkflowProcess");
@@ -580,6 +598,7 @@ public class XPDLTransformer {
         addChild(workflows, ret);
     }
 
+    /**Obtiene la definición XPDL de los objetos de conexión del diagrama*/
     function getTransitionDefinition(conn: ConnectionObject) : Element {
         var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:Transition");
         addAttribute(ret, "Id", conn.getURI());
@@ -594,6 +613,7 @@ public class XPDLTransformer {
         return ret;
     }
 
+    /**Obtiene la definición XPDL de un Lane*/
     function getLaneDefinition(lane: Lane) : Element {
         var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:Lane");
 
@@ -608,6 +628,7 @@ public class XPDLTransformer {
         return ret;
     }
 
+    /**Obtiene la definición XPDL de un evento*/
     function getEventDefinition(evt: Event) : Element {
         var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:Event");
         if (evt instanceof StartEvent) {
@@ -621,12 +642,14 @@ public class XPDLTransformer {
         return ret;
     }
 
+    /**Obtiene la definición XPDL de un disparador por timer*/
     function getTriggerTimerDefinition() : Element {
         var resMessage = doc.createElementNS(namespaceUri, "{namespacePrefix}:TriggerTimer");
         addChild(resMessage, doc.createElementNS(namespaceUri, "{namespacePrefix}:TimeDate"));
         return resMessage;
     }
 
+    /**Obtiene la definición XPDL de un disparador por mensaje*/
     function getTriggerMessageDefinition(isCatch: Boolean) : Element {
         var resMessage = doc.createElementNS(namespaceUri, "{namespacePrefix}:TriggerResultMessage");
         if (isCatch) {
@@ -637,6 +660,7 @@ public class XPDLTransformer {
         return resMessage;
     }
 
+    /**Obtiene la definición XPDL de un disparador por señal*/
     function getTriggerSignalDefinition(isCatch: Boolean) : Element {
         var resMessage = doc.createElementNS(namespaceUri, "{namespacePrefix}:TriggerResultSignal");
         if (isCatch) {
@@ -647,6 +671,7 @@ public class XPDLTransformer {
         return resMessage;
     }
 
+    /**Obtiene la definición XPDL de un dispadador por enlace*/
     function getTriggerLinkDefinition(isCatch: Boolean) : Element {
         var resMessage = doc.createElementNS(namespaceUri, "{namespacePrefix}:TriggerResultLink");
         if (isCatch) {
@@ -657,6 +682,7 @@ public class XPDLTransformer {
         return resMessage;
     }
 
+    /**Obtiene la definición XPDL de un disparador múltiple*/
     function getTriggerMultipleDefinition(isCatch: Boolean) : Element {
         var resMessage = doc.createElementNS(namespaceUri, "{namespacePrefix}:TriggerMultiple");
         addChild(resMessage, getTriggerMessageDefinition(isCatch));
@@ -664,6 +690,7 @@ public class XPDLTransformer {
         return resMessage;
     }
 
+    /**Obtiene la definición XPDL de un evento de inicio*/
     function getStartEventDefinition(evt: StartEvent) : Element {
         var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:StartEvent");
         var trig = "None";
@@ -689,6 +716,7 @@ public class XPDLTransformer {
         return ret;
     }
 
+    /**Obtiene la definición XPDL de un evento intermedio*/
     function getInterEventDefinition(evt: Event) : Element {
         var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:IntermediateEvent");
         var trig = "None";
@@ -736,6 +764,7 @@ public class XPDLTransformer {
         return ret;
     }
 
+    /**Obtiene la definición XPDL de un evento final*/
     function getEndEventDefinition(evt: EndEvent) : Element {
         var ret = doc.createElementNS(namespaceUri, "{namespacePrefix}:EndEvent");
         var trig = "None";
@@ -763,6 +792,7 @@ public class XPDLTransformer {
         return ret;
     }
 
+    /**Agrega un atributo al nodo especificado con el valor especificado*/
     function addAttribute(ele: Element, att : String, val : String) {
         try {
             ele.setAttribute(att, val);
@@ -771,6 +801,7 @@ public class XPDLTransformer {
         }
     }
 
+    /**Agrega un nodo como hijo del nodo especificado*/
     function addChild(ele: Element, child: Element) {
         try {
             ele.appendChild(child);
