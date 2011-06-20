@@ -114,6 +114,7 @@ public class ToolBar extends CustomNode
 
     public function openProcess(): Void
     {
+        fileChooser.setDialogTitle(##"openTitle");
         //fileChooser.setDialogType(javax.swing.JFileChooser.OPEN_DIALOG);
         if (fileChooser.showOpenDialog(null) == javax.swing.JFileChooser.APPROVE_OPTION)
         {
@@ -162,6 +163,7 @@ public class ToolBar extends CustomNode
 
     public function saveProcess(): Void
     {
+        fileChooser.setDialogTitle(##"saveTitle");
         if (fileChooser.showSaveDialog(null) == javax.swing.JFileChooser.APPROVE_OPTION)
         {
             var file = fileChooser.getSelectedFile();
@@ -528,10 +530,11 @@ public class ToolBar extends CustomNode
         fileChooser.setFileFilter(filter);
         imageFileChooser.setFileFilter(imgFilter);
         xpdlFileChooser.setFileFilter(xpdlFilter);
-
+        imageFileChooser.setDialogTitle(##"saveImageTitle");
+        xpdlFileChooser.setDialogTitle(##"saveXPDLTitle");
         if(isApplet)loadProcess();
-
-        var file=SubMenu
+        
+        var file:SubMenu=SubMenu
         {
             modeler: modeler
             toolBar:this
@@ -564,6 +567,7 @@ public class ToolBar extends CustomNode
                             modeler.disablePannable=false;
                             delete modeler.contents;
                         }
+                        file.closeSubMenu();
                     }
                 },
                 ImgButton {
@@ -572,6 +576,7 @@ public class ToolBar extends CustomNode
                     imageOver: "images/file_abrir2.png"
                     action: function():Void
                     {
+                        file.closeSubMenu();
                         var tit = ##"alertMsg";
                         var msg = ##"msgSaveAlert";
                         if(modeler.contents != null and not modeler.contents.isEmpty()) {
