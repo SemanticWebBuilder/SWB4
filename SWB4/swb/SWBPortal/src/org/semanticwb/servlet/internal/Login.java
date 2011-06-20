@@ -73,6 +73,8 @@ public class Login implements InternalServlet
     /** The secure. */
     boolean secure = false;
 
+    String paramList = "";
+
     /** The adm map. */
     String admMap=null;
 
@@ -105,6 +107,7 @@ public class Login implements InternalServlet
     {
         log.event("Initializing InternalServlet Login...");
         secure = SWBPlatform.getEnv("swb/secureAdmin", "false").equalsIgnoreCase("true");
+        paramList = SWBPlatform.getEnv("swb/ExternalParamList","");
         admMap=SWBContext.WEBSITE_ADMIN;
         //TODO: preparar los aspectos configurables de la autenticación
     }
@@ -195,7 +198,14 @@ public class Login implements InternalServlet
         Subject subject = SWBPortal.getUserMgr().getSubject(request, dparams.getWebPage().getWebSiteId());
         String uri = request.getRequestURI();
         String path = SWBPlatform.getContextPath();
-        User user = null;
+        boolean inLoginFase=false;
+        User user = null; //System.out.println("Externo: "+ur.getId()+":"+ur.isExternal());
+        if (ur.isExternal()) {
+            String[]list =paramList.split(",");
+            for (String param:list){ //System.out.println("paramlist:"+param);
+                if (request.getParameter(param)!=null) inLoginFase=true;
+            }
+        }
         Iterator it = subject.getPrincipals().iterator();
         if (it.hasNext())
         {
@@ -265,7 +275,8 @@ public class Login implements InternalServlet
         {
             path = uri.replaceFirst(_name, SWBPlatform.getEnv("swb/distributor"));
         }
-        if (null == request.getParameter("wb_username"))
+        if (null != request.getParameter("wb_username") ) inLoginFase=true;
+        if (!inLoginFase)
         {
             log.debug("Request a new username...");
             doResponse(request, response, dparams, null, authMethod);
@@ -750,11 +761,11 @@ public class Login implements InternalServlet
         lc = new LoginContext(context, subject, callbackHandler);
         lc.login();
 
-        Iterator it = subject.getPrincipals().iterator();
+        Iterator it = subject.getPrincipals().iterator(); 
         if (it.hasNext())
         {
             user = (User) it.next();
-            log.trace("user checked?:" + user.hashCode() + ":" + user.isSigned());
+            log.trace("l user checked?:" + user.hashCode() + ":" + user.isSigned());
         }
         if(null==user.getLanguage()) user.setLanguage("es"); //forzar lenguage si no se dio de alta.
         cleanBlockedEntry(matchKey);

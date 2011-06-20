@@ -348,7 +348,7 @@ public class SWBUserMgr
             User user = (User) it.next();
             if(user.getUserRepository().equals(ur))
             {
-                log.trace("user checked?:"+user.hashCode()+":"+user.isSigned());
+                log.trace("M user checked?:"+user.hashCode()+":"+user.isSigned());
                 Login.sendLoginLog(request, user);
             }
         }

@@ -20,6 +20,7 @@ import javax.security.auth.callback.TextInputCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
+import org.json.JSONException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
@@ -64,18 +65,18 @@ public class FBLoginModule implements LoginModule
     /** The website. */
     protected String website = null;
     
-    /** The fb session. */
-    protected String fbSession = null;
-    
-    /** The fb secret. */
-    protected String fbSecret = null;
-    
-    /** The fb key. */
-    protected String fbKey = null;
-    
-    /** The fb sig. */
-    protected String fbSig = null;
-    
+//    /** The fb session. */
+//    protected String fbSession = null;
+//
+//    /** The fb secret. */
+//    protected String fbSecret = null;
+//
+//    /** The fb key. */
+//    protected String fbKey = null;
+//
+//    /** The fb sig. */
+//    protected String fbSig = null;
+//
     /** The fbflag. */
     protected boolean fbflag = false;
 
@@ -102,26 +103,35 @@ public class FBLoginModule implements LoginModule
         }
 
         String login;
-        Callback[] callbacks = new Callback[7];
+        String code;
+        Callback[] callbacks = new Callback[2];
         callbacks[0] = new NameCallback("login");
-        callbacks[1] = new PasswordCallback("password", false);
-        callbacks[2] = new TextInputCallback("Site");
-        callbacks[3] = new TextInputCallback("Session");
-        callbacks[4] = new TextInputCallback("Secret");
-        callbacks[5] = new TextInputCallback("key");
-        callbacks[6] = new TextInputCallback("sig");
+        SWB4FacebookBridge bridge = null;
+        FBUserPojo upojo = null;
+        callbacks[1] = new TextInputCallback("Site");
+//        callbacks[1] = new PasswordCallback("password", false);
+//        callbacks[2] = new TextInputCallback("Site");
+//        callbacks[3] = new TextInputCallback("Session");
+//        callbacks[4] = new TextInputCallback("Secret");
+//        callbacks[5] = new TextInputCallback("key");
+//        callbacks[6] = new TextInputCallback("sig");
         try
         {
             log.trace("callback:" + callbackHandler);
             callbackHandler.handle(callbacks);
-            login = ((NameCallback) callbacks[0]).getName();
-            credential = ((PasswordCallback) callbacks[1]).getPassword();
-            ((PasswordCallback) callbacks[1]).clearPassword();
-            website = ((TextInputCallback) callbacks[2]).getText();
-            fbSession = ((TextInputCallback) callbacks[3]).getText();
-            fbSecret = ((TextInputCallback) callbacks[4]).getText();
-            fbKey = ((TextInputCallback) callbacks[5]).getText();
-            fbSig = ((TextInputCallback) callbacks[6]).getText();
+            code = ((NameCallback) callbacks[0]).getName();
+            website = ((TextInputCallback) callbacks[1]).getText();
+            bridge = (SWB4FacebookBridge) SWBContext.getWebSite(website).getUserRepository().getBridge();
+            upojo = bridge.authenticateFB(code);
+            login=upojo.usrId;
+            credential = code;
+//            credential = ((PasswordCallback) callbacks[1]).getPassword();
+//            ((PasswordCallback) callbacks[1]).clearPassword();
+//            website = ((TextInputCallback) callbacks[2]).getText();
+//            fbSession = ((TextInputCallback) callbacks[3]).getText();
+//            fbSecret = ((TextInputCallback) callbacks[4]).getText();
+//            fbKey = ((TextInputCallback) callbacks[5]).getText();
+//            fbSig = ((TextInputCallback) callbacks[6]).getText();
         } catch (IOException ex)
         {
             log.error("IO Error Login a user", ex);
@@ -130,23 +140,28 @@ public class FBLoginModule implements LoginModule
         {
             log.error("UnsupportedCallbackException Error Login a user", ex);
             throw new LoginException("UnsupportedCallbackException Error: " + ex.getMessage());
+        } catch (JSONException json){
+            log.error("JSONException Error Login a user", json);
+            throw new LoginException("JSONException Error: " + json.getMessage());
         }
         log.trace("WebSite id: " + website);
         WebSite ws = SWBContext.getWebSite(website);
         UserRepository ur = ws.getUserRepository();
         principal = ur.getUserByLogin(login);
         //TODO Checar lo del repositorio de usuarios
-        if (null == principal)
-        {
-            principal = ur.getUserByExternalID(fbSession);
-            if (null == principal)
-            {
-                throw new LoginException("User inexistent");
-            } else
-            {
-                fbflag = true;
-            }
-        }
+//        if (null == principal)
+//        {
+//            principal=ur.createUser();
+//            bridge.syncUser(login, principal);
+//            principal = ur.getUserByLogin(login); System.out.println("++++++++"+principal);
+//            if (null == principal)
+//            {
+//                throw new LoginException("User inexistent");
+//            } else
+//            {
+//                fbflag = true;
+//            }
+//        }
 
         //System.out.println(principal.getClass().getName());
         if (!principal.isValid())
@@ -163,25 +178,27 @@ public class FBLoginModule implements LoginModule
 //                    "\n" + SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential)) +
 //                    "\n" + (new String((char[]) credential)) +
 //                    "\n" + principal.getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential))));
-            if (fbflag)
-            {
-                SWB4FacebookBridge bridge = (SWB4FacebookBridge) principal.getUserRepository().getBridge();
-                IFacebookRestClient<Object> userClient = new FacebookJsonRestClient(bridge.getAppKey(), bridge.getAppSecret(), fbKey);
-                FacebookWebappHelper<Object> facebook = new FacebookWebappHelper(null, null, bridge.getAppKey(), bridge.getAppSecret(), userClient);
-                credential = facebook;
-                if (!facebook.get_loggedin_user().equals(Long.valueOf(fbSession)))
-                {
-                    throw new LoginException("fb Auth failed:");
-                }
-            } else
-            {
-
-                String alg = principal.getPassword().substring(1,principal.getPassword().indexOf("}"));
-                if (!principal.getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential), alg)))
-                {
-                    throw new LoginException("Password Mistmatch:");
-                }
-            }
+//            System.out.println("flag: "+fbflag);
+//            if (fbflag)
+//            {
+                principal.checkCredential(code);
+//                SWB4FacebookBridge bridge = (SWB4FacebookBridge) principal.getUserRepository().getBridge();
+//                IFacebookRestClient<Object> userClient = new FacebookJsonRestClient(bridge.getAppKey(), bridge.getAppSecret(), fbKey);
+//                FacebookWebappHelper<Object> facebook = new FacebookWebappHelper(null, null, bridge.getAppKey(), bridge.getAppSecret(), userClient);
+//                credential = facebook;
+//                if (!facebook.get_loggedin_user().equals(Long.valueOf(fbSession)))
+//                {
+//                    throw new LoginException("fb Auth failed:");
+//                }
+//            } else
+//            {
+//
+//                String alg = principal.getPassword().substring(1,principal.getPassword().indexOf("}"));
+//                if (!principal.getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential), alg)))
+//                {
+//                    throw new LoginException("Password Mistmatch:");
+//                }
+//            }
         } catch ( java.security.NoSuchAlgorithmException ex)
         //NoSuchAlgorithmException & UnsupportedEncodingException,
         //Wrapped up, it doesn't matter which one, we just can't do anything else

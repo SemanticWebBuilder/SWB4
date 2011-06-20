@@ -24,14 +24,19 @@
 package org.semanticwb.security.auth;
 
 import java.util.Properties;
+import java.util.Iterator;
+import org.json.JSONException;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import java.io.InputStream;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
-import org.semanticwb.servlet.SWBVirtualHostFilter;
-import org.semanticwb.servlet.internal.InternalServlet;
+import java.io.IOException;
+import java.net.URL;
+import javax.net.ssl.HttpsURLConnection;
+import org.json.JSONObject;
+import org.semanticwb.base.util.SWBSoftkHashMap;
+import org.semanticwb.model.GenericIterator;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -63,6 +68,9 @@ public class SWB4FacebookBridge extends ExtUserRepInt
     /** The app base domain. */
     private String appBaseDomain;
 
+    private String loginURL;
+
+    private SWBSoftkHashMap<String, FBUserPojo> fbuserbuffer;
 
     /**
      * Instantiates a new sW b4 facebook bridge.
@@ -78,17 +86,21 @@ public class SWB4FacebookBridge extends ExtUserRepInt
         this.appSecret = props.getProperty("appSecret", null);
         this.appID = props.getProperty("appID", null);
         this.appBaseDomain = props.getProperty("appBaseDomain", null);
-        String loginClass = props.getProperty("loginClass", "");
-        try
-        {
-            Class clase = Class.forName(loginClass);
-            InternalServlet fblogin = (InternalServlet)clase.getConstructors()[0].newInstance();
-            ((SWBVirtualHostFilter)SWBPortal.getVirtualHostFilter()).addMapping("fblogin", fblogin);
-            fblogin.init(SWBPortal.getServletContext());
-        } catch (Exception ex)
-        {
-            log.error(ex);
-        }
+        this.loginURL = props.getProperty("loginURL", null);
+        this.fbuserbuffer = new SWBSoftkHashMap<String, FBUserPojo>(50);
+        UserRep.setAlternateLoginURL("https://www.facebook.com/dialog/oauth?client_id="+appID+"&redirect_uri="+loginURL+"&scope=email");
+        
+//        String loginClass = props.getProperty("loginClass", "");
+//        try
+//        {
+//            Class clase = Class.forName(loginClass);
+//            InternalServlet fblogin = (InternalServlet)clase.getConstructors()[0].newInstance();
+//            ((SWBVirtualHostFilter)SWBPortal.getVirtualHostFilter()).addMapping("fblogin", fblogin);
+//            fblogin.init(SWBPortal.getServletContext());
+//        } catch (Exception ex)
+//        {
+//            log.error(ex);
+//        }
 
     }
 
@@ -115,9 +127,20 @@ public class SWB4FacebookBridge extends ExtUserRepInt
      * @return true, if successful
      */
     @Override
-    public boolean validateCredential(String login, Object credential)
+    public boolean validateCredential(String login, Object credential) //login==code
     {
-        return true;
+//        System.out.println("============validateCredential==========");
+//        System.out.println("login: "+login);
+//        System.out.println("credential: "+credential.toString());
+//        System.out.println("****************************************" + login);
+//        Thread.currentThread().dumpStack();
+//        System.out.println("****************************************");
+
+        FBUserPojo pojo=null;
+        try {
+            pojo=authenticateFB((String)credential);
+        } catch (Exception noe) {}
+        return null!=pojo;
     }
 
     /* (non-Javadoc)
@@ -133,7 +156,43 @@ public class SWB4FacebookBridge extends ExtUserRepInt
     @Override
     public boolean syncUser(String login, User user)
     {
-        return false;
+//        System.out.println("============syncUser==========");
+//        System.out.println("user"+user);
+//        System.out.println("****************************************" + login);
+//        Thread.currentThread().dumpStack();
+//        System.out.println("****************************************");
+        User ret = user;
+        FBUserPojo pojo = null;
+        pojo = fbuserbuffer.get(login);
+        if (null != pojo)
+        {
+            if (null == ret)
+            {
+                Iterator aux = userRep.getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_usrLogin.getRDFProperty(),
+                        userRep.getSemanticObject().getModel().getRDFModel().createLiteral(login));
+                Iterator it = new GenericIterator(aux, true);
+                if (it.hasNext())
+                {
+                    ret = (User) it.next();
+                } else
+                {
+                    ret = userRep.createUser();
+                }
+            }
+//        try {
+//            pojo=authenticateFB(login);
+            ret.setLogin(pojo.usrId);
+            ret.setLanguage(null != pojo.locale ? pojo.locale.substring(0, 2) : "es");
+            ret.setFirstName(pojo.usrFirstName);
+            ret.setLastName(pojo.usrLastName);
+            ret.setEmail(pojo.usrMail);
+            ret.setActive(true);
+            ret.setPassword("{CRYPT}" + pojo.access_token);
+            user=ret;
+//        } catch (Exception noe) {}
+        }
+        System.out.println("login:"+login+" pojo:"+pojo);
+        return null != pojo;
     }
 
     /**
@@ -176,6 +235,62 @@ public class SWB4FacebookBridge extends ExtUserRepInt
         return appSecret;
     }
 
-    
+    public FBUserPojo authenticateFB(String code) throws IOException, JSONException
+    {
+//        System.out.println("***************authenticateFB******************");
+//
+//        System.out.println(code);
+//        System.out.println("****************************************");
+//        Thread.currentThread().dumpStack();
+//        System.out.println("****************************************");
+        FBUserPojo pojo = null;
+        URL url = new URL("https://graph.facebook.com/oauth/access_token"
+                        + "?client_id="+appID
+                        + "&redirect_uri="+loginURL //http://logindemo.com:8084/DemoFB/FaceBookAcc
+                        + "&client_secret="+appSecret
+                        + "&code=" + code);
+        HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        con.connect();
+        int resc = con.getResponseCode();
+        String resm = con.getResponseMessage();
+        InputStream in = null;
+        if (resc <300)
+        in = con.getInputStream();
+        else
+            in = con.getErrorStream();
+        String datos = SWBUtils.IO.readInputStream(in);
+        System.out.println("error:"+datos);
+        String access_token=datos.substring(datos.indexOf("=")+1,datos.indexOf("&"));
+        in.close();
+        url = new URL("https://graph.facebook.com/me?access_token="+access_token);
+        con = (HttpsURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        con.connect();
+        resc = con.getResponseCode();
+        resm = con.getResponseMessage();
+        in = con.getInputStream();
+        String datosUser = SWBUtils.IO.readInputStream(in);
+        in.close();
+        JSONObject jobj = new JSONObject(datosUser);
+        pojo = new FBUserPojo();
+        pojo.usrId=jobj.getString("id");
+        pojo.usrFirstName=jobj.getString("first_name");
+        pojo.usrLastName=jobj.getString("last_name");
+        pojo.usrMail=jobj.getString("email");
+        pojo.locale=jobj.getString("locale");
+        pojo.access_token=access_token;
+        fbuserbuffer.put(pojo.usrId, pojo);
+        return pojo;
+    }
 
+}
+
+class FBUserPojo {
+    String usrId;
+    String usrFirstName;
+    String usrLastName;
+    String usrMail;
+    String locale;
+    String access_token;
 }
