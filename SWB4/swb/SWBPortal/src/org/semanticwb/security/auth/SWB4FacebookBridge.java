@@ -191,7 +191,7 @@ public class SWB4FacebookBridge extends ExtUserRepInt
             user=ret;
 //        } catch (Exception noe) {}
         }
-        System.out.println("login:"+login+" pojo:"+pojo);
+//        System.out.println("login:"+login+" pojo:"+pojo);
         return null != pojo;
     }
 
@@ -260,7 +260,7 @@ public class SWB4FacebookBridge extends ExtUserRepInt
         else
             in = con.getErrorStream();
         String datos = SWBUtils.IO.readInputStream(in);
-        System.out.println("error:"+datos);
+//        System.out.println("error:"+datos);
         String access_token=datos.substring(datos.indexOf("=")+1,datos.indexOf("&"));
         in.close();
         url = new URL("https://graph.facebook.com/me?access_token="+access_token);
