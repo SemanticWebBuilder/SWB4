@@ -47,12 +47,6 @@ public abstract class FormViewBase extends org.semanticwb.model.SWBClass impleme
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.model.FormView>(it, true);
         }
-
-        public static org.semanticwb.model.FormView createFormView(org.semanticwb.model.SWBModel model)
-        {
-            long id=model.getSemanticObject().getModel().getCounter(sclass);
-            return org.semanticwb.model.FormView.ClassMgr.createFormView(String.valueOf(id), model);
-        }
        /**
        * Gets a org.semanticwb.model.FormView
        * @param id Identifier for org.semanticwb.model.FormView

@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Sparql queries que pueden ser definidos y reutilizados dentro de una ontologia 
    */
-public abstract class SparqlQueryBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class SparqlQueryBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
    /**
    * Sparql queries que pueden ser definidos y reutilizados dentro de una ontologia
