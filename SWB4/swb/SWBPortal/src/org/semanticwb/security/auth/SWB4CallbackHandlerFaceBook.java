@@ -86,23 +86,23 @@ public class SWB4CallbackHandlerFaceBook extends SWB4CallbackHandler
      */
     public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException
     {
-        String login = request.getParameter("wb_username");
-        String password = request.getParameter("wb_password");
-        String session = request.getParameter("session");
-        String sesid = null;
-        String secret = null;
-        String key = null;
-        String sig = null;
-        try
-        {
-            JSONObject obj = new JSONObject(session);
-            sesid = obj.getString("uid");
-            secret = obj.getString("secret");
-            key = obj.getString("session_key");
-            sig = obj.getString("sig");
-        } catch (JSONException ex)
-        {
-        }
+        String login = request.getParameter("code");
+//        String password = request.getParameter("wb_password");
+//        String session = request.getParameter("session");
+//        String sesid = null;
+//        String secret = null;
+//        String key = null;
+//        String sig = null;
+//        try
+//        {
+//            JSONObject obj = new JSONObject(session);
+//            sesid = obj.getString("uid");
+//            secret = obj.getString("secret");
+//            key = obj.getString("session_key");
+//            sig = obj.getString("sig");
+//        } catch (JSONException ex)
+//        {
+//        }
         for (int i = 0; i < callbacks.length; i++)
         {
             if (callbacks[i] instanceof NameCallback)
@@ -110,33 +110,35 @@ public class SWB4CallbackHandlerFaceBook extends SWB4CallbackHandler
                 NameCallback nameCallback = (NameCallback) callbacks[i];
                 nameCallback.setName(login);
 
-            } else if (callbacks[i] instanceof PasswordCallback)
-            {
-                PasswordCallback passwordCallback = (PasswordCallback) callbacks[i];
-                passwordCallback.setPassword(password == null ? null : password.toCharArray());
-            } else if (callbacks[i] instanceof TextInputCallback)
+            }
+//            else if (callbacks[i] instanceof PasswordCallback)
+//            {
+//                PasswordCallback passwordCallback = (PasswordCallback) callbacks[i];
+//                passwordCallback.setPassword(password == null ? null : password.toCharArray());
+//            }
+            else if (callbacks[i] instanceof TextInputCallback)
             {
                 TextInputCallback textInputCallback = (TextInputCallback) callbacks[i];
                 if (textInputCallback.getPrompt().equals("Site"))
                 {
                     textInputCallback.setText(website);
                 }
-                if (textInputCallback.getPrompt().equals("Session"))
-                {
-                    textInputCallback.setText(sesid);
-                }
-                if (textInputCallback.getPrompt().equals("Secret"))
-                {
-                    textInputCallback.setText(secret);
-                }
-                if (textInputCallback.getPrompt().equals("key"))
-                {
-                    textInputCallback.setText(key);
-                }
-                if (textInputCallback.getPrompt().equals("sig"))
-                {
-                    textInputCallback.setText(sig);
-                }
+//                if (textInputCallback.getPrompt().equals("Session"))
+//                {
+//                    textInputCallback.setText(sesid);
+//                }
+//                if (textInputCallback.getPrompt().equals("Secret"))
+//                {
+//                    textInputCallback.setText(secret);
+//                }
+//                if (textInputCallback.getPrompt().equals("key"))
+//                {
+//                    textInputCallback.setText(key);
+//                }
+//                if (textInputCallback.getPrompt().equals("sig"))
+//                {
+//                    textInputCallback.setText(sig);
+//                }
             }
         }
     }
