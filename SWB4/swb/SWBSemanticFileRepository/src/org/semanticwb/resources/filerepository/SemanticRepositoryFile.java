@@ -30,7 +30,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
@@ -53,7 +52,6 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.jcr170.implementation.SWBCredentials;
 import org.semanticwb.jcr170.implementation.SWBRepository;
 import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.Resource;
 import org.semanticwb.model.Role;
 
 import org.semanticwb.model.User;
@@ -63,8 +61,6 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.portal.util.FileUpload;
-import org.semanticwb.servlet.internal.EditFile;
-import org.w3c.dom.Document;
 //import org.semanticwb.repository.VersionHistory;
 
 //org.semanticwb.resources.filerepository.SemanticRepositoryFile
@@ -317,17 +313,17 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                     String skey = nodofolder.getUUID();
 
                     if (orderBy.equals("title")) {
-                        skey = nodofolder.getProperty("swb:title").getString();
+                        skey = nodofolder.getProperty("swb:title").getString()+ "-" +nodofolder.getUUID();
 
                     } else if (orderBy.equals("date")) {
                         //nodo.getProperty("jcr:created").getDate().getTime())
-                        skey = nodofolder.getProperty("jcr:created").getDate().getTime() + "";
+                        skey = nodofolder.getProperty("jcr:created").getDate().getTime() + "-" +nodofolder.getUUID();
 
                     } else if (orderBy.equals("type")) {
                         String file = nodofolder.getName();
                         String type = getFileName(file);
 
-                        skey = type + "-" + nodofolder.getProperty("swb:title").getString();
+                        skey = type + "-" + nodofolder.getProperty("swb:title").getString()+ "-" +nodofolder.getUUID();
                         hmNodes.put(skey, nodofolder);
                     }
                     hmNodes.put(skey, nodofolder);
