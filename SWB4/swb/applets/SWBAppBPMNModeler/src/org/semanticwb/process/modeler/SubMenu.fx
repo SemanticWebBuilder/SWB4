@@ -192,7 +192,7 @@ public class SubMenu extends CustomNode
          return content;
     }
 
-    public function closeSubMenu() : Void{
+    public function closeSubMenu() : Void {
         clicked = false;
     }
 }
