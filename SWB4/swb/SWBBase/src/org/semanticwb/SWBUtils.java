@@ -3714,18 +3714,30 @@ public class SWBUtils {
      * <p>Provee varias operaciones comunes que involucran documentos DOM y su
      * contenido.</p>
      */
-    public static class XML {
-
+    public static class XML 
+    {
         /**
          * The only one instance of this object for the entire application.
          * <p>La &uacute;nica instancia de este objeto para toda la aplicaci&oacute;n.</p>
          */
         private static XML m_xml = null;
-        /**
-         * A DOM object tree producer.
-         * <p>Un generador de &aacute;rboles de objetos DOM.</p>
-         */
-        private DocumentBuilderFactory m_dbf = null;
+        
+        private final ThreadLocal<DocumentBuilderFactory> m_dbf = new ThreadLocal<DocumentBuilderFactory>()
+        {
+            public DocumentBuilderFactory  initialValue()
+            {
+                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+                dbf.setNamespaceAware(true);
+                dbf.setIgnoringElementContentWhitespace(true);                
+                return  dbf;
+            }
+        };
+        
+//        /**
+//         * A DOM object tree producer.
+//         * <p>Un generador de &aacute;rboles de objetos DOM.</p>
+//         */
+//        private DocumentBuilderFactory m_dbf = null;
         /**
          * Creator of objects of type {@link javax.xml.transform.Transformer} and
          * {@link javax.xml.transform.Templates}.
@@ -3798,7 +3810,7 @@ public class SWBUtils {
         public static DocumentBuilderFactory getDocumentBuilderFactory()
         {
             XML xml = getInstance();
-            return xml.m_dbf;
+            return xml.m_dbf.get();
         }
 
         /**
@@ -3827,9 +3839,9 @@ public class SWBUtils {
         {
             try
             {
-                m_dbf = DocumentBuilderFactory.newInstance();
-                m_dbf.setNamespaceAware(true);
-                m_dbf.setIgnoringElementContentWhitespace(true);
+//                m_dbf = DocumentBuilderFactory.newInstance();
+//                m_dbf.setNamespaceAware(true);
+//                m_dbf.setIgnoringElementContentWhitespace(true);
                 //db=dbf.newDocumentBuilder();
                 //xpath
                 xpath_factory = javax.xml.xpath.XPathFactory.newInstance();
