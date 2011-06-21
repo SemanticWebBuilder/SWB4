@@ -37,9 +37,9 @@ public class WSDLParameterDefinition implements ParameterDefinition
     private final ServiceInfo service;
     private final HashSet<WSDLParameterDefinition> properties = new HashSet<WSDLParameterDefinition>();
 
-    public WSDLParameterDefinition(String namespace,Element definition, String type, String name, boolean isRequired, ServiceInfo service)
+    public WSDLParameterDefinition(String namespace, Element definition, String type, String name, boolean isRequired, ServiceInfo service)
     {
-        this.namespace=namespace;
+        this.namespace = namespace;
         this.service = service;
         this.name = name;
         this.type = type;
@@ -56,7 +56,7 @@ public class WSDLParameterDefinition implements ParameterDefinition
         this.service = service;
         this.part = part;
         this.isMultiple = false;
-        
+
         String _name = "";
         if (part.getAttribute("name") != null)
         {
@@ -73,7 +73,7 @@ public class WSDLParameterDefinition implements ParameterDefinition
             _type = part.getAttribute("type");
             _isBasic = XMLDocumentUtil.isBasic(_type, service.getJDom());
             if (!_isBasic)
-            {                
+            {
                 _definition = XMLDocumentUtil.getElementByType(_type, service, part);
                 fillProperties(part);
             }
@@ -84,7 +84,7 @@ public class WSDLParameterDefinition implements ParameterDefinition
             _type = part.getAttribute("element");
             _isBasic = XMLDocumentUtil.isBasic(_type, service.getJDom());
             if (!_isBasic)
-            {                
+            {
                 _definition = XMLDocumentUtil.getGlobalElement(_type, service);
             }
         }
@@ -97,14 +97,14 @@ public class WSDLParameterDefinition implements ParameterDefinition
         {
             throw new ServiceException("The element definition " + _type + " was not found");
         }
-        String _namespace=null;
+        String _namespace = null;
         if (definition != null)
         {
-            _namespace=XMLDocumentUtil.getTargetNamespace(definition.getOwnerDocument());
+            _namespace = XMLDocumentUtil.getTargetNamespace(definition.getOwnerDocument());
             fillProperties(_definition);
-            
+
         }
-        this.namespace=_namespace;
+        this.namespace = _namespace;
     }
 
     @Override
@@ -149,7 +149,7 @@ public class WSDLParameterDefinition implements ParameterDefinition
         return this.properties.toArray(new ParameterDefinition[properties.size()]);
     }
 
-    private void fillProperties(Element element, boolean isRequired, boolean isMultiple,String name) throws ServiceException
+    private void fillProperties(Element element, boolean isRequired, boolean isMultiple, String name) throws ServiceException
     {
         String _name = element.getLocalName();
         if (_name.equals("complexType") || _name.equals("simpleType") || _name.equals("sequence") || _name.equals("simpleContent") || _name.equals("extension"))
@@ -160,19 +160,13 @@ public class WSDLParameterDefinition implements ParameterDefinition
                 if (childs.item(i) instanceof Element)
                 {
                     Element childElement = (Element) childs.item(i);
-                    fillProperties(childElement,isRequired,isMultiple,name);
+                    fillProperties(childElement, isRequired, isMultiple, name);
                 }
             }
-        } 
+        }
         else if (_name.equals("restriction"))
-        {                        
-            String base = element.getAttribute("base");
-            if (XMLDocumentUtil.isBasic(base, service.getJDom()))
-            {                
-                String _namespace=XMLDocumentUtil.getTargetNamespace(element.getOwnerDocument());
-                WSDLParameterDefinition parameter = new WSDLParameterDefinition(_namespace,element, base, name, isRequired, service);
-                this.properties.add(parameter);
-            }
+        {
+
             boolean isEnumeration = false;
             NodeList childs = element.getChildNodes();
             for (int i = 0; i < childs.getLength(); i++)
@@ -185,6 +179,18 @@ public class WSDLParameterDefinition implements ParameterDefinition
                         isEnumeration = true;
                     }
                 }
+            }
+
+            String base = element.getAttribute("base");
+            if (XMLDocumentUtil.isBasic(base, service.getJDom()))
+            {
+                if (isEnumeration)
+                {
+                    String _namespace = XMLDocumentUtil.getTargetNamespace(element.getOwnerDocument());
+                    EnnumerationParameterDefinition parameter = new EnnumerationParameterDefinition(_namespace, element, base, name, isRequired, service);
+                    this.properties.add(parameter);
+                }
+
             }
 
         }
@@ -204,7 +210,7 @@ public class WSDLParameterDefinition implements ParameterDefinition
                     fillProperties(childElement);
                 }
             }
-        }        
+        }
         else if (_name.equals("attribute"))
         {
 
@@ -216,8 +222,8 @@ public class WSDLParameterDefinition implements ParameterDefinition
             boolean _isMultiple = false;
             String _type = element.getAttribute("type");
             String _nameAttribute = element.getAttribute("name");
-            String _namespace=XMLDocumentUtil.getTargetNamespace(element.getOwnerDocument());
-            WSDLParameterDefinition parameter = new WSDLParameterDefinition(_namespace,element, _type, _nameAttribute, _isRequired, service);
+            String _namespace = XMLDocumentUtil.getTargetNamespace(element.getOwnerDocument());
+            WSDLParameterDefinition parameter = new WSDLParameterDefinition(_namespace, element, _type, _nameAttribute, _isRequired, service);
             this.properties.add(parameter);
         }
         else if (_name.equals("element"))
@@ -242,7 +248,7 @@ public class WSDLParameterDefinition implements ParameterDefinition
                 {
                     throw new ServiceException("The element " + ref + " was not found");
                 }
-                fillProperties(element, _isRequired, _isMultiple,_name);
+                fillProperties(element, _isRequired, _isMultiple, _name);
 
             }
             else if (!element.getAttribute("type").equals("")) // es de un tipo
@@ -250,16 +256,16 @@ public class WSDLParameterDefinition implements ParameterDefinition
                 String _type = element.getAttribute("type");
                 String _nameElement = element.getAttribute("name");
                 if (XMLDocumentUtil.isBasic(_type, XMLDocumentUtil.toJdom(definition.getOwnerDocument())))
-                {                    
-                    String _namespace=XMLDocumentUtil.getTargetNamespace(element.getOwnerDocument());
-                    WSDLParameterDefinition parameter = new WSDLParameterDefinition(_namespace,element, _type, _nameElement, _isRequired, service);
+                {
+                    String _namespace = XMLDocumentUtil.getTargetNamespace(element.getOwnerDocument());
+                    WSDLParameterDefinition parameter = new WSDLParameterDefinition(_namespace, element, _type, _nameElement, _isRequired, service);
                     this.properties.add(parameter);
                 }
                 else
                 {
-                    Element elementToCode = XMLDocumentUtil.getElementByTypeFromSchema(_type, element.getOwnerDocument());                                      
-                    String nameElement=element.getAttribute("name");
-                    fillProperties(elementToCode,_isRequired,_isMultiple,nameElement);
+                    Element elementToCode = XMLDocumentUtil.getElementByTypeFromSchema(_type, element.getOwnerDocument());
+                    String nameElement = element.getAttribute("name");
+                    fillProperties(elementToCode, _isRequired, _isMultiple, nameElement);
                 }
             }
             else // continua la definición debajo del elemento
@@ -308,34 +314,35 @@ public class WSDLParameterDefinition implements ParameterDefinition
         }
         return schemaToClazz;
     }
+
     public void add(Element element, Object value) throws ServiceException
     {
-        Element elementProp = element.getOwnerDocument().createElementNS(namespace,this.name);
-        if(!properties.isEmpty())
+        Element elementProp = element.getOwnerDocument().createElementNS(namespace, this.name);
+        if (!properties.isEmpty())
         {
-            if(value instanceof JSONObject)
+            if (value instanceof JSONObject)
             {
-                JSONObject json=(JSONObject)value;
-                for(WSDLParameterDefinition parameter : this.properties)
+                JSONObject json = (JSONObject) value;
+                for (WSDLParameterDefinition parameter : this.properties)
                 {
-                    String _name=parameter.getName();
-                    if(json.has(_name))
+                    String _name = parameter.getName();
+                    if (json.has(_name))
                     {
                         try
                         {
-                            Object valueParameter=json.get(_name);
-                            parameter.add(element, value);                            
+                            Object valueParameter = json.get(_name);
+                            parameter.add(element, value);
                         }
-                        catch(JSONException e)
+                        catch (JSONException e)
                         {
-                            throw  new ServiceException(e);
+                            throw new ServiceException(e);
                         }
                     }
                     else
                     {
-                        if(parameter.isRequired)
+                        if (parameter.isRequired)
                         {
-                            throw new ServiceException("The parameter "+_name+" was not found");
+                            throw new ServiceException("The parameter " + _name + " was not found");
                         }
                     }
                 }
@@ -344,44 +351,45 @@ public class WSDLParameterDefinition implements ParameterDefinition
             {
                 throw new ServiceException("The parameters are not included");
             }
-            
+
         }
         else
         {
-                      
-            Text text=element.getOwnerDocument().createTextNode(value.toString());
+
+            Text text = element.getOwnerDocument().createTextNode(value.toString());
             elementProp.appendChild(text);
         }
         element.appendChild(elementProp);
     }
+
     public void add(Document doc, Object value) throws ServiceException
-    {        
-        Element element = doc.createElementNS(namespace,this.name);
-        if(!properties.isEmpty())
+    {
+        Element element = doc.createElementNS(namespace, this.name);
+        if (!properties.isEmpty())
         {
-            if(value instanceof JSONObject)
+            if (value instanceof JSONObject)
             {
-                JSONObject json=(JSONObject)value;
-                for(WSDLParameterDefinition parameter : this.properties)
+                JSONObject json = (JSONObject) value;
+                for (WSDLParameterDefinition parameter : this.properties)
                 {
-                    String _name=parameter.getName();
-                    if(json.has(_name))
+                    String _name = parameter.getName();
+                    if (json.has(_name))
                     {
                         try
                         {
-                            Object valueParameter=json.get(_name);
-                            parameter.add(element, valueParameter);                            
+                            Object valueParameter = json.get(_name);
+                            parameter.add(element, valueParameter);
                         }
-                        catch(JSONException e)
+                        catch (JSONException e)
                         {
-                            throw  new ServiceException(e);
+                            throw new ServiceException(e);
                         }
                     }
                     else
                     {
-                        if(parameter.isRequired)
+                        if (parameter.isRequired)
                         {
-                            throw new ServiceException("The parameter "+_name+" was not found");
+                            throw new ServiceException("The parameter " + _name + " was not found");
                         }
                     }
                 }
@@ -390,7 +398,7 @@ public class WSDLParameterDefinition implements ParameterDefinition
             {
                 throw new ServiceException("The parameters are not included");
             }
-            
+
         }
         doc.appendChild(element);
     }
