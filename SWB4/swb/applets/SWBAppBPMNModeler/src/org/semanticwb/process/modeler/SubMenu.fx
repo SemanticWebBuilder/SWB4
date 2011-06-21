@@ -189,7 +189,10 @@ public class SubMenu extends CustomNode
             button.subMenu=this;
             button.toolBar=toolBar;
          }
-
          return content;
+    }
+
+    public function closeSubMenu() : Void{
+        clicked = false;
     }
 }
