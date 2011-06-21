@@ -71,8 +71,7 @@ public class SWBNewContent extends org.semanticwb.portal.resources.sem.news.base
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-
-        //out.println("<div id=\""+getSemanticObject().getURI()+"/admform\" dojoType=\"dijit.layout.ContentPane\"  loadingMessage=\"<center><img src='"+SWBPlatform.getContextPath()+"/swbadmin/images/loading.gif'/><center>\">");
+        
         SWBFormMgr mgr = new SWBFormMgr(getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
         mgr.setSubmitByAjax(true);
         mgr.setFilterHTMLTags(false);
@@ -83,7 +82,7 @@ public class SWBNewContent extends org.semanticwb.portal.resources.sem.news.base
 
         String cntUrl = null;
         String mymsg = "";
-        String uri = "";
+        
 
         if ("update".equals(paramRequest.getAction())) {
             try {
@@ -122,20 +121,20 @@ public class SWBNewContent extends org.semanticwb.portal.resources.sem.news.base
                     WebPage dwp = null;
                     if(rtype.getResourceCollection()!=null)
                     {
-//                        System.out.println("Obteniendo resCollection");
+
                         rcoll = rtype.getResourceCollection();
-//                        System.out.println("Coleccion: "+rcoll==null?"nulo":rcoll.getTitle());
+
                     }
                     if(null!=rcoll)
                     {
-//                        System.out.println("Obteniendo WP");
+
                         dwp = rcoll.getDisplayWebPage();
-//                        System.out.println("WP: "+dwp==null?"nulo":dwp.getURI());
+
                     }
 
                     sndTwr = true;
 
-//                    System.out.println("Entro para mostrar twitter");
+
 
                     String protocol = request.getProtocol();
 
@@ -162,23 +161,8 @@ public class SWBNewContent extends org.semanticwb.portal.resources.sem.news.base
                     if(srvrport!=80) cntUrl += ":"+ srvrport;
 
                     cntUrl += ctxpath+wpurl;
-
-//                    System.out.println("URL: "+cntUrl);
-//                    System.out.println("protocol: "+request.getProtocol());
-//                    System.out.println("remoteHost: "+request.getRemoteHost());
-//                    System.out.println("remoteAdrs: "+request.getRemoteAddr());
-//                    System.out.println("server: "+request.getServerName());
-//                    System.out.println("port: "+request.getServerPort());
-//                    System.out.println("context: "+SWBPlatform.getContextPath());
-//                    System.out.println("wpurl: "+dwp!=null?dwp.getUrl():" -- ");
-//                    System.out.println("new content:"+ncnt.getResourceBase().getSemanticObject().getEncodedURI());
-
                     cntUrl = URLEncoder.encode(cntUrl);
-
-                    cntUrl += "?uri="+ ncnt.getResourceBase().getSemanticObject().getEncodedURI();
-
-//                    System.out.println("encode url: "+cntUrl);
-
+                    cntUrl += "?uri="+ ncnt.getResourceBase().getSemanticObject().getId();
                     mymsg=URLEncoder.encode(ncnt.getOriginalTitle());
 
 

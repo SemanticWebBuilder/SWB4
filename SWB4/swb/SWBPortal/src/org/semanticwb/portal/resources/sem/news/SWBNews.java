@@ -240,7 +240,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
                     }
                     else
                     {
-                        if (uri.equals(resource.getURI()))
+                        if (uri.equals(resource.getURI()) || uri.equals(resource.getId()))
                         {
                             
                             try
@@ -402,7 +402,13 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
             doTitle(request, response, paramRequest);
             return;
         }
+
+
+
         String uri = request.getParameter("uri");
+
+
+
         if (uri != null)
         {
             uri = uri.trim();
