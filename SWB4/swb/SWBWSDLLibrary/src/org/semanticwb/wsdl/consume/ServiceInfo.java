@@ -50,7 +50,7 @@ public class ServiceInfo
     private static final String APPLICATION_WSDL_CONTENT_TYPE = "application/wsdl+xml";
     private final URL url;
     private Document doc;
-    private ArrayList<Document> schemas = new ArrayList<Document>();
+    //private ArrayList<Document> schemas = new ArrayList<Document>();
     private final HashSet<Operation> operations = new HashSet<Operation>();
 
     public ServiceInfo(URL url)
@@ -60,25 +60,26 @@ public class ServiceInfo
     }
     /*private void extractSchemas()
     {
-        NodeList _schemas=doc.getElementsByTagNameNS(SCHEMA_2001_NAMESPACE, "schema");
-        ArrayList<Element> eSchemas=new ArrayList<Element>();
-        for(int i=0;i<_schemas.getLength();i++)
-        {
-            Element schema=(Element)_schemas.item(i);
-            eSchemas.add(schema);           
-        }
-        for(Element schema : eSchemas)
-        {
-            Document doc_schema=SWBUtils.XML.getNewDocument();
-            Node newSchema=doc_schema.importNode(schema, true);
-            doc_schema.appendChild(newSchema);  
-        }
-        for(Element schema : eSchemas)
-        {
-            schema.getParentNode().removeChild(schema);
-        }
-        
+    NodeList _schemas=doc.getElementsByTagNameNS(SCHEMA_2001_NAMESPACE, "schema");
+    ArrayList<Element> eSchemas=new ArrayList<Element>();
+    for(int i=0;i<_schemas.getLength();i++)
+    {
+    Element schema=(Element)_schemas.item(i);
+    eSchemas.add(schema);           
+    }
+    for(Element schema : eSchemas)
+    {
+    Document doc_schema=SWBUtils.XML.getNewDocument();
+    Node newSchema=doc_schema.importNode(schema, true);
+    doc_schema.appendChild(newSchema);  
+    }
+    for(Element schema : eSchemas)
+    {
+    schema.getParentNode().removeChild(schema);
+    }
+    
     }*/
+
     public void loadService() throws ServiceException
     {
 
@@ -150,8 +151,9 @@ public class ServiceInfo
 
     public boolean isWSDL()
     {
-        
-        if (!validate(doc))
+
+
+        if (!validate())
         {
             return false;
         }
@@ -173,6 +175,7 @@ public class ServiceInfo
 
         }
         return true;
+
     }
 
     private void extractIncludes() throws ServiceException
@@ -247,16 +250,11 @@ public class ServiceInfo
         }
     }
 
-    private boolean validate(Document doc)
+    private boolean validate()
     {
-        
-        String tns = doc.getDocumentElement().getAttribute("targetNamespace");
-        String tns_prefix = doc.getDocumentElement().getAttribute("xmlns:tns");
-        if (tns_prefix.equals(""))
-        {
-            doc.getDocumentElement().setAttribute("xmlns:tns", tns);
-        }
-        //return true;
+
+
+
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         boolean validate = false;
 
