@@ -763,6 +763,9 @@ public class SWBPortal
 
         indmgr = new SWBIndexMgr();
         indmgr.init();
+        
+        log.event("Loading Friendly Urls...");
+        FriendlyURL.refresh();
 
         //Inicializa el RuleMgr
         Rule.getRuleMgr();
