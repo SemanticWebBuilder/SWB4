@@ -40,7 +40,13 @@ public class EnnumerationParameterDefinition extends WSDLParameterDefinition
         String _value=value.toString();
         if(!values.contains(_value))
         {
-            throw new ServiceException("The value "+_value +" is not valid");
+            StringBuilder sb=new StringBuilder();
+            for(String svalue : values)
+            {
+                sb.append(" ");
+                sb.append(svalue);
+            }
+            throw new ServiceException("The value "+_value +" is not valid, valid values are "+sb.toString().trim());
         }
         super.add(element, value);        
     }
