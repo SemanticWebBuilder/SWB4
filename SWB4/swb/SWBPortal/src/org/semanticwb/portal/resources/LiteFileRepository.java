@@ -247,7 +247,7 @@ public class LiteFileRepository extends GenericResource {
                     urlremove.setAction("removefile");
                     urlremove.setParameter("act", "remove");
                     urlremove.setParameter("fid", fid);
-                    out.println("<a href=\"#\" onclick=\"if(confirm('¿Estás seguro de querer eliminar este archivo?')){window.location='"+urlremove+"';} else {return false;}\">");
+                    out.println("<a href=\"#\" onclick=\"if(confirm('¿Estás seguro de querer eliminar este archivo?')){window.location='" + urlremove + "';} else {return false;}\">");
                     out.println("<img src=\"" + path + "delete.gif\" border=\"0\" alt=\"eliminar\"/>");
                     out.println("</a>");
                 }
@@ -379,6 +379,17 @@ public class LiteFileRepository extends GenericResource {
             out.println("<tfoot>");
             out.println("<tr>");
             out.println("<td colspan=\"2\" align=\"right\">");
+
+            if (luser == 3 || (vl.getCreator() != null && vl.getCreator().equals(usr) && luser > 1)) {
+                SWBResourceURL urlremove = paramRequest.getActionUrl();
+                urlremove.setAction("removefile");
+                urlremove.setParameter("act", "remove");
+                urlremove.setParameter("fid", fid);
+                out.println("<button type=\"button\" onclick=\"if(confirm('¿Estás seguro de querer eliminar este archivo?')){window.location='" + urlremove + "';} else {return false;}\">Eliminar");
+                //out.println("<img src=\"" + path + "delete.gif\" border=\"0\" alt=\"eliminar\"/>");
+                out.println("</button>");
+            }
+
             SWBResourceURL urlbck = paramRequest.getRenderUrl();
             urlbck.setParameter("act", "");
             out.println("<button onclick=\"window.location='" + urlbck + "';\">Regresar</button>");
@@ -451,6 +462,15 @@ public class LiteFileRepository extends GenericResource {
                     out.println("<tr>");
                     out.println("<td align=\"center\" >");
 
+                    String file = "";
+                    String type = "";
+
+                    if (ver != null && ver.getVersionFile() != null) {
+                        file = ver.getVersionFile();
+                        type = getFileName(file);
+                    }
+
+
                     if (luser > 0) {
                         SWBResourceURL urlview = paramRequest.getRenderUrl();
                         urlview.setCallMethod(SWBResourceURL.Call_DIRECT);
@@ -458,10 +478,26 @@ public class LiteFileRepository extends GenericResource {
                         urlview.setMode(MODE_GETFILE);
                         urlview.setParameter("verNum", "" + ver.getVersionNumber());
 
-                        out.println("<a href=\"" + urlview + "\">ver</a>");
+                        out.println("<a href=\"" + urlview + "\">");
+                        out.println("<img border=0 src='" + path + "" + type + "' alt=\"" + getFileType(file) + "\" />");
+                        out.println("</a>");
                     } else {
-                        out.println("---");
+                        out.println("<img border=0 src='" + path + "" + type + "' alt=\"" + getFileType(file) + "\" />");
                     }
+
+
+
+//                    if (luser > 0) {
+//                        SWBResourceURL urlview = paramRequest.getRenderUrl();
+//                        urlview.setCallMethod(SWBResourceURL.Call_DIRECT);
+//                        urlview.setParameter("fid", fid);
+//                        urlview.setMode(MODE_GETFILE);
+//                        urlview.setParameter("verNum", "" + ver.getVersionNumber());
+//
+//                        out.println("<a href=\"" + urlview + "\">ver</a>");
+//                    } else {
+//                        out.println("---");
+//                    }
                     out.println("</td>");
                     out.println("<td align=\"center\">");
                     out.println(ver.getVersionValue());
@@ -513,8 +549,7 @@ public class LiteFileRepository extends GenericResource {
                 boolean incremento = Boolean.FALSE;
                 if (newVersion.equals("nextInt")) {
                     incremento = Boolean.TRUE;
-                } else if(newVersion.equals("fraction"))
-                {
+                } else if (newVersion.equals("fraction")) {
                     incremento = Boolean.FALSE;
                 }
 
@@ -928,28 +963,28 @@ public class LiteFileRepository extends GenericResource {
         }
     }
 
-    public OutputStream storeFile(String name, String comment, boolean bigVersionInc, RepositoryFile repoFile) throws FileNotFoundException
-    {
-        VersionInfo v=VersionInfo.ClassMgr.createVersionInfo(repoFile.getRepositoryFileDirectory().getWebSite());
+    public OutputStream storeFile(String name, String comment, boolean bigVersionInc, RepositoryFile repoFile) throws FileNotFoundException {
+        VersionInfo v = VersionInfo.ClassMgr.createVersionInfo(repoFile.getRepositoryFileDirectory().getWebSite());
         v.setVersionFile(name);
-        if(comment!=null)
-        {
+        if (comment != null) {
             v.setVersionComment(comment);
         }
         VersionInfo vl = repoFile.getLastVersion();
-        String sver="1.0";
-        int ver=1;
-        if(vl!=null)
-        {
+        String sver = "1.0";
+        int ver = 1;
+        if (vl != null) {
             vl.setNextVersion(v);
             v.setPreviousVersion(vl);
-            ver=vl.getVersionNumber();
-            sver=vl.getVersionValue();
+            ver = vl.getVersionNumber();
+            sver = vl.getVersionValue();
 
-            float f=Float.valueOf(sver);
-            if(bigVersionInc)f=(int)f+1;
-            else f=f+0.10F;
-            sver=""+f;
+            float f = Float.valueOf(sver);
+            if (bigVersionInc) {
+                f = (int) f + 1;
+            } else {
+                f = f + 0.10F;
+            }
+            sver = "" + f;
             ver++;
         }
         v.setVersionNumber(ver);
@@ -957,9 +992,9 @@ public class LiteFileRepository extends GenericResource {
         repoFile.setActualVersion(v);
         repoFile.setLastVersion(v);
 
-        File file=new File(SWBPortal.getWorkPath()+repoFile.getWorkPath()+"/"+ver);
+        File file = new File(SWBPortal.getWorkPath() + repoFile.getWorkPath() + "/" + ver);
         file.mkdirs();
-        return  new FileOutputStream(SWBPortal.getWorkPath()+repoFile.getWorkPath()+"/"+ver+"/"+name);
+        return new FileOutputStream(SWBPortal.getWorkPath() + repoFile.getWorkPath() + "/" + ver + "/" + name);
     }
 
     /**
@@ -971,14 +1006,11 @@ public class LiteFileRepository extends GenericResource {
      * @param comment
      * @param bigVersionInc
      */
-    public void storeFile(String name, InputStream in, String comment, boolean bigVersionInc, RepositoryFile repoFile)
-    {
-        try
-        {
-            OutputStream out=storeFile(name, comment, bigVersionInc, repoFile);
+    public void storeFile(String name, InputStream in, String comment, boolean bigVersionInc, RepositoryFile repoFile) {
+        try {
+            OutputStream out = storeFile(name, comment, bigVersionInc, repoFile);
             SWBUtils.IO.copyStream(in, out);
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
             log.error(e);
         }
     }
