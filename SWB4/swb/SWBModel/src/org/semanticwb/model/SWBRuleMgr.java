@@ -198,18 +198,30 @@ public class SWBRuleMgr
  */
     public boolean eval(User user, String rule_uri)
     {
-        //System.out.println("rule:"+rule+" site:"+topicmap);
+        //System.out.println("rule:"+rule_uri+" "+user);
         boolean ret=false;
         Document rul = doms.get(rule_uri);
+        //System.out.println("xml:"+SWBUtils.XML.domToXml(rul));
         if(rul==null)
         {
-            SemanticObject obj=SemanticObject.createSemanticObject(rule_uri);
-            if(obj!=null)
+            synchronized(this)
             {
-                reloadRule((Rule)obj.createGenericInstance());
                 rul = doms.get(rule_uri);
+                if(rul==null)
+                {
+                    SemanticObject obj=SemanticObject.createSemanticObject(rule_uri);
+                    if(obj!=null)
+                    {
+                        reloadRule((Rule)obj.createGenericInstance());
+                        rul = doms.get(rule_uri);
+                    }
+                    
+                }
+
             }
+            
         }
+        
         if (user != null && rul != null)
         {
             Node node = rul.getChildNodes().item(0);
