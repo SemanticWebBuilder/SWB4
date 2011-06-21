@@ -189,6 +189,10 @@ public class WSDLOperation implements Operation
             ebody.appendChild(node);            
             String xml=SWBUtils.XML.domToXml(ebody.getOwnerDocument());
             Document response = execute12(request);
+            if(SOAPRemoteException.isError(response))
+            {
+                throw SOAPRemoteException.createRemoteException(response);
+            }
             xml=SWBUtils.XML.domToXml(response);
             return XMLDocumentUtil.toJSON(response);
         }
