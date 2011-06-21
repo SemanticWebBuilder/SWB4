@@ -10,6 +10,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import org.semanticwb.webservices.Operation;
 import org.semanticwb.webservices.Service;
@@ -24,18 +25,20 @@ import org.w3c.dom.NodeList;
  */
 public class WADLResource implements Service
 {
+
     private final String id;
     private final URL path;
-    private final HashSet<WADLOperation> operations = new HashSet<WADLOperation>();
+    private final HashMap<String, WADLOperation> operations = new HashMap<String, WADLOperation>();
     private final HashSet<WADLResource> services = new HashSet<WADLResource>();
-    public WADLResource(Element eresource,URL basePath,ServiceInfo service) throws ServiceException
+
+    public WADLResource(Element eresource, URL basePath, ServiceInfo service) throws ServiceException
     {
         String _id = eresource.getAttribute("id");
         if (_id == null || eresource.getAttribute("id").trim().equals(""))
         {
             _id = eresource.getAttribute("path");
         }
-        this.id=_id;
+        this.id = _id;
         URL _path;
         if (eresource.getAttribute("path") != null && !eresource.getAttribute("path").trim().equals(""))
         {
@@ -72,29 +75,30 @@ public class WADLResource implements Service
         {
             _path = basePath;
         }
-        this.path=_path;
-        
+        this.path = _path;
+
         NodeList childs = eresource.getChildNodes();
         for (int i = 0; i < childs.getLength(); i++)
         {
             if (childs.item(i) instanceof Element && ((Element) childs.item(i)).getNamespaceURI().equals(eresource.getNamespaceURI()))
             {
-                Element child=(Element)childs.item(i);
+                Element child = (Element) childs.item(i);
                 if (child.getLocalName().equals("method"))
                 {
-                    Element eMetod=(Element) childs.item(i);
-                    WADLOperation m = new WADLOperation(eMetod, service);                    
-                    operations.add(m);
+                    Element eMetod = (Element) childs.item(i);
+                    WADLOperation m = new WADLOperation(eMetod, service);
+                    operations.put(m.getName(), m);
                 }
                 if (child.getLocalName().equals("resource"))
                 {
-                    WADLResource resource=new WADLResource(child, basePath,service);
-                    services.add(resource);                    
-                    
+                    WADLResource resource = new WADLResource(child, basePath, service);
+                    services.add(resource);
+
                 }
             }
         }
-    }    
+    }
+
     @Override
     public String getId()
     {
@@ -110,13 +114,31 @@ public class WADLResource implements Service
     @Override
     public Operation[] getOperations()
     {
-        ArrayList<Operation> getOperations=new ArrayList<Operation>();
-        getOperations.addAll(this.operations);
-        for(WADLResource resource : this.services)
+        ArrayList<Operation> getOperations = new ArrayList<Operation>();
+        getOperations.addAll(this.operations.values());
+        for (WADLResource resource : this.services)
         {
             getOperations.addAll(Arrays.asList(resource.getOperations()));
         }
         return getOperations.toArray(new Operation[getOperations.size()]);
     }
-    
+
+    @Override
+    public Operation getOperationByName(String name)
+    {
+        Operation op = this.operations.get(name);
+        if (op != null)
+        {
+            return op;
+        }
+        for (Service service : this.services)
+        {
+            op = service.getOperationByName(name);
+            if (op != null)
+            {
+                return op;
+            }
+        }
+        return null;
+    }
 }

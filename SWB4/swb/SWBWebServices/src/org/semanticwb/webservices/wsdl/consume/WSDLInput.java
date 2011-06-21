@@ -10,7 +10,6 @@ import org.semanticwb.webservices.Request;
 import org.semanticwb.webservices.ServiceException;
 import org.semanticwb.webservices.ServiceInfo;
 import org.semanticwb.webservices.util.XMLDocumentUtil;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -50,6 +49,10 @@ public class WSDLInput implements Request
     public ParameterDefinition[] getDefinitions()
     {
         return parameters.toArray(new ParameterDefinition[parameters.size()]);
+    }
+    public WSDLParameterDefinition[] getWSDLParameterDefinitions()
+    {
+        return parameters.toArray(new WSDLParameterDefinition[parameters.size()]);
     }
     
 }

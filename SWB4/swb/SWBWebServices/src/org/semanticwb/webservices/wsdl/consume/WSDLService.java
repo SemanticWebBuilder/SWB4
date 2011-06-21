@@ -5,6 +5,7 @@
 package org.semanticwb.webservices.wsdl.consume;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import org.semanticwb.webservices.Operation;
 import org.semanticwb.webservices.Service;
@@ -22,7 +23,7 @@ public class WSDLService implements Service
 {
 
     private final String name;
-    private final HashSet<WSDLOperation> operations = new HashSet<WSDLOperation>();
+    private final HashMap<String,WSDLOperation> operations = new HashMap<String,WSDLOperation>();
 
     public WSDLService(Element service, ServiceInfo serviceInfo) throws ServiceException
     {
@@ -48,7 +49,7 @@ public class WSDLService implements Service
             {
                 Element operationElement = (Element) _operations.item(i);
                 WSDLOperation operation = new WSDLOperation(operationElement, serviceInfo,_portType,eBinding);
-                operations.add(operation);
+                operations.put(operation.getName(),operation);
             }
 
 //            int pos = _binding.indexOf(":");
@@ -104,7 +105,13 @@ public class WSDLService implements Service
     public Operation[] getOperations()
     {
         ArrayList<Operation> getOperations = new ArrayList<Operation>();
-        getOperations.addAll(this.operations);
+        getOperations.addAll(this.operations.values());
         return getOperations.toArray(new Operation[getOperations.size()]);
+    }
+
+    @Override
+    public Operation getOperationByName(String name)
+    {
+        return operations.get(name);
     }
 }

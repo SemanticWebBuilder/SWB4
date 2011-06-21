@@ -430,7 +430,11 @@ public class XMLDocumentUtil
         org.jdom.Document jdom = dom.build(doc);
         return jdom;
     }
-
+    
+    public static JSONObject toJSON(org.w3c.dom.Document doc)
+    {
+        return null;
+    }
     public static String getPrefix(org.w3c.dom.Document doc, String namespace)
     {
         org.jdom.Document jdom = toJdom(doc);

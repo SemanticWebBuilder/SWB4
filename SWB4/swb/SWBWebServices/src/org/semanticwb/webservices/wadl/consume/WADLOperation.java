@@ -5,12 +5,14 @@
 package org.semanticwb.webservices.wadl.consume;
 
 import org.json.JSONObject;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.webservices.Request;
 import org.semanticwb.webservices.Operation;
 import org.semanticwb.webservices.Response;
 import org.semanticwb.webservices.ServiceException;
 import org.semanticwb.webservices.ServiceInfo;
 import org.semanticwb.webservices.util.HTTPMethod;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -100,9 +102,15 @@ public class WADLOperation implements Operation
         return output;
     }
 
-    @Override
-    public JSONObject execute(JSONObject object)
+    private Document toDocument(JSONObject object)
     {
+        Document doc=SWBUtils.XML.getNewDocument();
+        return doc;
+    }
+    @Override
+    public JSONObject execute(JSONObject object) throws ServiceException
+    {
+        
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
