@@ -44,6 +44,7 @@ public class WSDLOperation implements Operation
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String SOAP_WSDL_ENVELOPE_NAMESPACE = "http://schemas.xmlsoap.org/wsdl/soap/";
     private static final String APPLICATION_XML = "application/xml";
+    private final String operationname;
     private final String name;
     private final Element binding;
     private final Element portType;
@@ -53,6 +54,7 @@ public class WSDLOperation implements Operation
 
     public WSDLOperation(Element operation, ServiceInfo service, Element portType, Element binding) throws ServiceException
     {
+        this.operationname=(operation.getAttribute("name") == null ? "" : operation.getAttribute("name"));
         this.operation = operation;
         this.portType = portType;
         this.binding = binding;
@@ -170,18 +172,24 @@ public class WSDLOperation implements Operation
             Element ebody=createEmptyEnvelope(request);
             Node node=ebody.getOwnerDocument().importNode(body.getDocumentElement(), true);
             ebody.appendChild(node);            
-            String xml=SWBUtils.XML.domToXml(ebody.getOwnerDocument());
+            String xml=SWBUtils.XML.domToXml(ebody.getOwnerDocument());            
             Document response = execute(request);
+            if(SOAPRemoteException.isError(response))
+            {
+                throw SOAPRemoteException.createRemoteException(response);
+            }
+            xml=SWBUtils.XML.domToXml(response);
             return XMLDocumentUtil.toJSON(response);
         }
         else if (isSoap12())
         {
             Document request=SWBUtils.XML.getNewDocument();
-            Element ebody=createEmptyEnvelope(request);
+            Element ebody=createEmptyEnvelope12(request);
             Node node=ebody.getOwnerDocument().importNode(body.getDocumentElement(), true);
             ebody.appendChild(node);            
             String xml=SWBUtils.XML.domToXml(ebody.getOwnerDocument());
             Document response = execute12(request);
+            xml=SWBUtils.XML.domToXml(response);
             return XMLDocumentUtil.toJSON(response);
         }
         else
@@ -241,7 +249,7 @@ public class WSDLOperation implements Operation
         {
             Element _operation = (Element) list.item(i);
             String _name = _operation.getAttribute("name");
-            if (_name.equals(this.name))
+            if (_name.equals(this.operationname))
             {
                 NodeList soapoperations = _operation.getElementsByTagNameNS(SOAP_WSDL_ENVELOPE_NAMESPACE, "operation");
                 for (int j = 0; j < soapoperations.getLength(); i++)
