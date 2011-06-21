@@ -20,8 +20,6 @@ public class FriendlyURL extends org.semanticwb.model.base.FriendlyURLBase
 
     static
     {
-        refresh();
-
         swb_friendlyURL.registerObserver(new SemanticObserver()
         {
             public void notify(SemanticObject obj, Object prop, String lang, String action)
@@ -110,6 +108,7 @@ public class FriendlyURL extends org.semanticwb.model.base.FriendlyURLBase
      */
     public static FriendlyURL getFriendlyURL(String path, String host)
     {
+        if(urls==null)return null;
         Object obj=urls.get(path);
         if(obj==null)return null;
         if(obj instanceof FriendlyURL)return (FriendlyURL)obj;
