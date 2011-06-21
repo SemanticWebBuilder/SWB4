@@ -13,4 +13,5 @@ public interface Service
     public String getId();
     public Service[] getServices();
     public Operation[] getOperations();
+    public Operation getOperationByName(String name);
 }
