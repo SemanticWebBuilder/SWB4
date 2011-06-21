@@ -726,8 +726,9 @@ public class SemanticClass
     {
         try
         {
-            //System.out.println(getURI());
-            //System.out.println(getClassName());
+            //System.out.print(getURI()+" ");
+            //System.out.print(getClassName()+" ");
+            //System.out.println(getConstructor());
             return (GenericObject)getConstructor().newInstance(obj);
         }
         catch(Exception ie)
