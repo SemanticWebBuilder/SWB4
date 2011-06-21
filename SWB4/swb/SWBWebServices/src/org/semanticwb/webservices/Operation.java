@@ -15,5 +15,5 @@ public interface Operation
     public String getName();    
     public Request getInput();
     public Response getOutput();
-    public JSONObject execute(JSONObject object);
+    public JSONObject execute(JSONObject object) throws ServiceException;
 }
