@@ -29,6 +29,7 @@ import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.StringTokenizer;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -41,6 +42,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.User;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -979,6 +981,7 @@ public class Poll extends GenericResource {
                 if (value!=null && option!=null)
                 {
                     base.setAttribute("question", value);
+                    
                     value = null != fup.getValue("noimgencuesta") && !"".equals(fup.getValue("noimgencuesta").trim()) ? fup.getValue("noimgencuesta").trim() : "0";
                     if ("1".equals(value) && !"".equals(base.getAttribute("imgencuesta", "").trim()))
                     {
@@ -1047,8 +1050,7 @@ public class Poll extends GenericResource {
                             }
                         }
                     }
-
-                    value = null != fup.getValue("nobutton") && !"".equals(fup.getValue("nobutton").trim()) ? fup.getValue("nobutton").trim() : "0";
+                    value = null != fup.getValue("noimg_button") && !"".equals(fup.getValue("noimg_button").trim()) ? fup.getValue("noimg_button").trim() : "0";
                     if ("1".equals(value) && !"".equals(base.getAttribute("button", "").trim()))
                     {
                         SWBUtils.IO.removeDirectory(workPath+base.getAttribute("button").trim());
@@ -1229,12 +1231,12 @@ public class Poll extends GenericResource {
             ret.append("<ul class=\"swbform-ul\"> ");
             ret.append("<li class=\"swbform-li\">");
             ret.append("<label for=\"question\" class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_question")+"<span class=\"requerido\">*</span></label>");
-            ret.append("<input type=\"text\" name=\"question\" id=\"question\" value=\""+base.getAttribute("question","").replaceAll("\"", "&#34;")+"\" maxlength=\"80\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\""+paramRequest.getLocaleString("lblAdmin_msgQuestion")+"\" required=\"true\" />");
+            ret.append("<input type=\"text\" name=\"question\" id=\"question\" value=\""+base.getAttribute("question","").replaceAll("\"", "&#34;")+"\" maxlength=\"120\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\""+paramRequest.getLocaleString("lblAdmin_msgQuestion")+"\" required=\"true\" />");
             ret.append("</li>");
 
             ret.append("<li class=\"swbform-li\">");
             ret.append("<label for=\"txtOption\" class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_option")+"<span class=\"requerido\">*</span></label>");
-            ret.append("<input type=\"text\" name=\"txtOption\" id=\"txtOption\" maxlength=\"80\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\""+paramRequest.getLocaleString("lblAdmin_msgOption")+"\" />");
+            ret.append("<input type=\"text\" name=\"txtOption\" id=\"txtOption\" maxlength=\"120\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\""+paramRequest.getLocaleString("lblAdmin_msgOption")+"\" />");
             ret.append("<input type=\"hidden\" name=\"option\" value=\""+base.getAttribute("option","").trim().replaceAll("\"", "&#34;")+"\" />");
             ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblAdmin_btnAdd")+"\" onclick=\"addOption(this.form.selOption, this.form.txtOption)\" />");
             ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblAdmin_btnEdit")+"\" onclick=\"updateOption(this.form.selOption, this.form.txtOption)\" />");
@@ -1262,8 +1264,8 @@ public class Poll extends GenericResource {
             ret.append("<label for=\"txtLink\" class=\"swbform-label\">"+paramRequest.getLocaleString("lblAdmin_link")+"</label>");
             ret.append("<input type=\"text\" name=\"txtLink\" id=\"txtLink\" maxlength=\"120\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\""+paramRequest.getLocaleString("lblAdmin_link")+"\" />");
             ret.append("<input type=\"hidden\" name=\"link\" value=\""+base.getAttribute("link","").trim().replaceAll("\"", "&#34;")+"\" />");
-            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblAdmin_btnAdd")+"\" onclick=\"addOption(this.form.selLink, this.form.txtLink)\" />");
-            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblAdmin_btnEdit")+"\" onclick=\"updateOption(this.form.selLink, this.form.txtLink)\" />");
+            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblAdmin_btnAdd")+"\" onclick=\"addUrlOption(this.form.selLink, this.form.txtLink)\" />");
+            ret.append("<input type=\"button\" value=\""+paramRequest.getLocaleString("lblAdmin_btnEdit")+"\" onclick=\"updateUrlOption(this.form.selLink, this.form.txtLink)\" />");
             ret.append("</li>");
             ret.append("<li class=\"swbform-li\">");
             ret.append("<label class=\"swbform-label\">&nbsp;</label>");
@@ -1600,7 +1602,7 @@ public class Poll extends GenericResource {
             ret.append("</fieldset>");
 
             ret.append("<fieldset>");
-            ret.append("<span class=\"requerido\">*</span> " + paramRequest.getLocaleString("lblAdmin_required"));
+            ret.append("<p><span class=\"requerido\">*</span> " + paramRequest.getLocaleString("lblAdmin_required")+"</p>");
             ret.append("</fieldset>");
             ret.append("</form> ");
             ret.append("</div>");
@@ -1683,12 +1685,13 @@ public class Poll extends GenericResource {
      * @throws SWBResourceException the sWB resource exception
      */
     private String getAdminScript(SWBParamRequest paramRequest) throws SWBResourceException {
-        StringBuilder script = new StringBuilder();
+        Locale locale = new Locale(paramRequest.getUser().getLanguage());
 
+        StringBuilder script = new StringBuilder();
         script.append("\n<script type=\"text/javascript\">\n");
         script.append("<!--\n");
         script.append("var swOk=0, optionObj;");
-        script.append("function jsValida(pForm)");
+        script.append("\nfunction jsValida(pForm)");
         script.append("{");
         script.append("   if(pForm.question.value==null || pForm.question.value=='' || pForm.question.value==' ')");
         script.append("   {");
@@ -1733,15 +1736,40 @@ public class Poll extends GenericResource {
         script.append("   }");
         script.append("   return true;");
         script.append("}");
+
+        script.append("\nfunction addUrlOption(pInSel, pInTxt) {");
+        script.append("    duplicateOption(pInSel, pInTxt);");
+        script.append("    if(swOk==0) {");
+        script.append("      if(isUrl(pInTxt.value)) {");
+        script.append("        optionObj = new Option(pInTxt.value, pInTxt.value);");
+        script.append("        pInSel.options[pInSel.length]=optionObj;");
+        script.append("      }else {");
+        script.append("        alert('"+paramRequest.getLocaleString("msgBadUrl")+"');");
+        script.append("      }");
+        script.append("    }");
+        script.append("}\n");
+
+        script.append("\nfunction updateUrlOption(pInSel, pInTxt) {");
+        script.append("    duplicateOption(pInSel, pInTxt);");
+        script.append("    if(swOk==0) {");
+        script.append("      if(isUrl(pInTxt.value)) {");
+        script.append("        if(confirm('"+SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadUpdateOption_msg", locale) + " ' + pInSel.options[pInSel.selectedIndex].value + '?')) {");
+        script.append("          pInSel.options[pInSel.selectedIndex].value=pInTxt.value;");
+        script.append("          pInSel.options[pInSel.selectedIndex].text=pInTxt.value;");
+        script.append("        }");
+        script.append("      }");
+        script.append("    }");
+        script.append("}\n");
+
         script.append(admResUtils.loadAddOption());
         script.append(admResUtils.loadEditOption());
-        script.append(admResUtils.loadUpdateOption());
-        script.append(admResUtils.loadDeleteOption());
-        script.append(admResUtils.loadDuplicateOption());
-        script.append(admResUtils.loadIsFileType());
-        script.append(admResUtils.loadIsNumber());
-        script.append(admResUtils.loadSetPrefix());
-        script.append(admResUtils.loadIsHexadecimal());
+        script.append(admResUtils.loadUpdateOption(locale));
+        script.append(admResUtils.loadDeleteOption(locale));
+        script.append(admResUtils.loadDuplicateOption(locale));
+        script.append(admResUtils.loadIsFileType(locale));
+        script.append(admResUtils.loadIsNumber(locale));
+        script.append(admResUtils.loadSetPrefix(locale));
+        script.append(admResUtils.loadIsHexadecimal(locale));
         script.append("\n-->");
         script.append("\n</script>");
 
