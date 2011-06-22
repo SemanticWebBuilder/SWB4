@@ -27,7 +27,7 @@
 
         <div title="Advanced" open="false">
             <fieldset legend="External banner">
-                <textarea id="code" name="code" label="Code" rows="5" cols="50" wrap="virtual"/>
+                <textarea id="code" name="code" label="Code" rows="5" cols="50"/>
                 <input type="text" id="index" name="index" label="Index order" maxlength="7" regExp="\d{1,7}" invalidMessage="Invalid index" promptMessage="Numerical index of the image" />
             </fieldset>
         </div>
