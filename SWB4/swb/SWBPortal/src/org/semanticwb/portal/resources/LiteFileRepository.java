@@ -319,7 +319,7 @@ public class LiteFileRepository extends GenericResource {
             out.println("</td>");
             out.println("</tr>");
 
-            if (luser == 3 || (vl.getCreator() != null && vl.getCreator().equals(usr) && luser > 1)) {
+            if (luser >= 2 || (vl.getCreator() != null && vl.getCreator().equals(usr) && luser > 1)) {
                 out.println("<tr>");
                 out.println("<td align=\"right\">");
                 out.println("Agregar nueva Versión:");
