@@ -27,7 +27,7 @@
 
         <div title="Configuración Avanzada" open="false">
             <fieldset legend="Banner externo">
-                <textarea id="code" name="code" label="* Código" rows="5" cols="50" wrap="virtual"/>
+                <textarea id="code" name="code" label="Código" rows="5" cols="50"/>
                 <input type="text" id="index" name="index" label="Índice de ordenamiento" maxlength="7" regExp="\d{1,7}" invalidMessage="Índice inválido" promptMessage="Índice numérico de la imagen" />
             </fieldset>
         </div>
