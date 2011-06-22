@@ -265,6 +265,9 @@ public class LiteFileRepository extends GenericResource {
                 SWBResourceURL urlnew = paramRequest.getRenderUrl();
                 urlnew.setParameter("act", "new");
                 out.println("<button onclick=\"window.location='" + urlnew + "';\">" + "Agregar archivo" + "</button>");
+                SWBResourceURL urlnewDirectory = paramRequest.getRenderUrl();
+                urlnewDirectory.setParameter("act", "newDirectory");
+                out.println("<button onclick=\"window.location='" + urlnewDirectory + "';\">" + "Agregar carpeta" + "</button>");
             }
 
             out.println("</td>");
@@ -643,6 +646,50 @@ public class LiteFileRepository extends GenericResource {
             out.println("</table>");
             out.println("</form>");
             out.println("</div>");
+        } else if ("newDirectory".equals(action)) {
+
+            SWBResourceURL urlnew = paramRequest.getActionUrl();
+            urlnew.setAction("newDir");
+            urlnew.setParameter("act", "newDir");
+
+            out.println("<div id=\"ProcessFileRepository\">");
+            out.println("<form method=\"post\" action=\"" + urlnew + "\" >");
+            out.println("<table>");
+            out.println("<tbody>");
+            out.println("<tr>");
+            out.println("<td colspan=\"2\" align=\"right\">Agregar Nueva Carpeta");
+            out.println("</td>");
+            out.println("</tr>");
+            out.println("<tr>");
+            out.println("<td align=\"right\">");
+            out.println("Título:");
+            out.println("</td>");
+            out.println("<td>");
+            out.println("<input type=\"text\" name=\"d_title\" value=\"\">");
+            out.println("</td>");
+            out.println("</tr>");
+            out.println("<tr>");
+            out.println("<td align=\"right\">");
+            out.println("Descripción:");
+            out.println("</td>");
+            out.println("<td>");
+            out.println("<textarea name=\"d_description\"></textarea>");
+            out.println("</td>");
+            out.println("</tr>");
+            out.println("</tbody>");
+            out.println("<tfoot>");
+            out.println("<tr>");
+            out.println("<td colspan=\"2\" align=\"right\">");
+            out.println("<button type=\"submit\" >Agregar</button>");
+            SWBResourceURL urlbck = paramRequest.getRenderUrl();
+            urlbck.setParameter("act", "");
+            out.println("<button type=\"button\" onclick=\"window.location='" + urlbck + "';\">Regresar</button>");
+            out.println("</td>");
+            out.println("</tr>");
+            out.println("</tbody>");
+            out.println("</table>");
+            out.println("</form>");
+            out.println("</div>");
         }
     }
 
@@ -670,7 +717,6 @@ public class LiteFileRepository extends GenericResource {
                 ver = ver.getPreviousVersion();
             }
         }
-
         try {
             response.setContentType(DEFAULT_MIME_TYPE);
             response.setHeader("Content-Disposition", "attachment; filename=\"" + ver.getVersionFile() + "\";");
@@ -680,10 +726,6 @@ public class LiteFileRepository extends GenericResource {
         } catch (Exception e) {
             log.error("Error al obtener el archivo del Repositorio de documentos.", e);
         }
-
-
-
-
     }
 
     @Override
@@ -717,7 +759,6 @@ public class LiteFileRepository extends GenericResource {
             out.println("<legend>");
             out.println(paramRequest.getLocaleString("msgFileRepositoryRes"));
             out.println("</legend>");
-
 
             out.println("<table width=\"100%\" border=\"0\" >");
 
@@ -789,9 +830,8 @@ public class LiteFileRepository extends GenericResource {
             }
 
         } catch (Exception e) {
+            log.error("Error al cargal opciones de selección. getSelectOptions()", e);
         }
-
-
 
         return strTemp;
     }
@@ -891,6 +931,9 @@ public class LiteFileRepository extends GenericResource {
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+
+        WebPage wpage = response.getWebPage();
+        WebSite wsite = wpage.getWebSite();
         String action = response.getAction();
         if (action == null) {
             action = "";
@@ -960,6 +1003,47 @@ public class LiteFileRepository extends GenericResource {
             }
             response.setMode(SWBActionResponse.Mode_ADMIN);
             response.setAction("edit");
+        } else if ("newDir".equals(action)) {
+
+            String title = request.getParameter("d_title");
+            String description = request.getParameter("d_description");
+            String idnewwp = SWBPlatform.getIDGenerator().getID(title, null);
+
+            try {
+
+                WebPage wp = wsite.getWebPage(idnewwp);
+
+                if (wp != null) {
+                    idnewwp = "dir_" + idnewwp;
+                }
+
+                wp = wsite.getWebPage(idnewwp);
+
+                if (wp == null) {
+                    wp = wsite.createWebPage(idnewwp);
+
+                    wp.setTitle(title);
+                    wp.setDescription(description);
+                    wp.setSortName(title);
+                    wp.setActive(Boolean.TRUE);
+                    wp.setParent(wpage);
+
+                    Resource res = wsite.createResource();
+                    res.setResourceType(wsite.getResourceType("LiteFileRepository"));
+                    res.setTitle("Repositorio de documentos");
+                    res.setActive(Boolean.TRUE);
+
+                    res.setAttribute(LVL_VIEW, getResourceBase().getAttribute(LVL_VIEW));
+                    res.setAttribute(LVL_MODIFY, getResourceBase().getAttribute(LVL_MODIFY));
+                    res.setAttribute(LVL_ADMIN, getResourceBase().getAttribute(LVL_ADMIN));
+
+                    res.updateAttributesToDB();
+                    wp.addResource(res);
+
+                }
+            } catch (Exception e) {
+                log.error("Error al agregar carpeta al repositorio de documentos.");
+            }
         }
     }
 
