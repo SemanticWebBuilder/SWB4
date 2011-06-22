@@ -7,7 +7,6 @@ package org.semanticwb.process.resources;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
@@ -27,22 +26,20 @@ import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.process.model.WebService;
 import org.semanticwb.process.model.WebServiceInvoker;
 import org.semanticwb.process.model.WebServiceParameter;
-import org.semanticwb.rest.consume.Method;
-import org.semanticwb.rest.consume.Parameter;
-import org.semanticwb.rest.consume.ParameterDefinition;
-import org.semanticwb.rest.consume.ParameterValue;
-import org.semanticwb.rest.consume.RepresentationResponse;
-import org.semanticwb.rest.consume.RestSource;
-import org.semanticwb.rest.consume.ServiceInfo;
-import org.semanticwb.rest.consume.XmlResponse;
+import org.semanticwb.webservices.Operation;
+import org.semanticwb.webservices.ParameterDefinition;
+import org.semanticwb.webservices.Service;
+import org.semanticwb.webservices.ServiceInfo;
+
+import org.w3c.dom.Document;
 
 /**
  *
  * @author juan.fernandez
  */
-public class WSMethodParameterConfig extends GenericResource {
+public class WSOperationParameterConfig extends GenericResource {
 
-    private Logger log = SWBUtils.getLogger(WSMethodParameterConfig.class);
+    private Logger log = SWBUtils.getLogger(WSOperationParameterConfig.class);
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -73,10 +70,10 @@ public class WSMethodParameterConfig extends GenericResource {
                 method = "";
             }
 
-            Method mselected = null;
+            Operation opersel = null;
 
             WebService wsrv = wsrvin.getWebService();
-
+//            String wstype = getWSType(wsrv);
             if (wsrv != null) {
                 out.println("<div class=\"swbform\">");
 
@@ -87,32 +84,40 @@ public class WSMethodParameterConfig extends GenericResource {
                 out.println("<form id=\"" + idform + "_wsrvin\" method=\"post\" action=\"" + urlupd + "\" onsubmit=\"submitForm('" + idform + "_wsrvin');return false;\">");
                 out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\">");
                 out.println("<fieldset>");
-                out.println("<legend>Lista de métodos definidos en el WebService</legend>");
+                out.println("<legend>Lista de operaciones definidas en el WebService</legend>");
+
+                //Revisando tipo de web-service WADL o WSDL
 
                 String urlwsrv = wsrv.getUrl();
                 //System.out.println("WebService: " + wsrv.getDisplayTitle(usr.getLanguage()) + " url: " + urlwsrv);
-                if (urlwsrv != null) {
-                    try {
-                        RestSource source = new RestSource(new URL(urlwsrv));
-                        if (source != null) {
-                            ServiceInfo info = source.getServiceInfo();
-                            Method[] methods = info.getMethods();
 
+                if (urlwsrv != null) {
+
+                    try {
+                        ServiceInfo sinfo = org.semanticwb.webservices.WebService.getServiceinfo(new URL(urlwsrv));
+
+                        if (sinfo != null) {
                             out.println("<ul style=\"list-style-type:none;\">");
                             out.println("<li>");
-                            out.println("<laber for=\"idmethod\">Métodos: </label><select name=\"idmethod\">");
-                            for (Method m : methods) {
-                                Method minfo = m;
+                            out.println("<label for=\"idmethod\">Oparaciones: </label><select name=\"idmethod\">");
 
-                                if (minfo.getId().equals(method)) {
-                                    mselected = minfo;
+                            for (Service service : sinfo.getServices()) {
+
+                                out.println("<optgroup>" + service.getId());
+
+                                for (Operation op : service.getOperations()) {
+
+                                    Operation opinfo = op;
+                                    if (opinfo.getName().equals(method)) {
+                                        opersel = opinfo;
+                                    }
+                                    out.println("<option value=\"" + opinfo.getName() + "\" " + (opinfo.getName().equals(method) ? "selected" : "") + ">");
+                                    out.println(opinfo.getName());
+                                    out.println("</option>");
                                 }
-
-
-                                out.println("<option value=\"" + minfo.getId() + "\" " + (minfo.getId().equals(method) ? "selected" : "") + ">");
-                                out.println(minfo.getId());
-                                out.println("</option>");
+                                out.println("</optgroup>");
                             }
+
                             out.println("</select>");
                             out.println("</li>");
                             out.println("</ul>");
@@ -148,6 +153,7 @@ public class WSMethodParameterConfig extends GenericResource {
             }
 
             if (!method.equals("") && method.length() > 0) {
+
                 long idform = System.currentTimeMillis();
                 //Se tiene configurado un método, se muestran los parámetros correspondientes:
                 if (wsrv != null) {
@@ -157,72 +163,73 @@ public class WSMethodParameterConfig extends GenericResource {
                     while (itwsp.hasNext()) {
                         WebServiceParameter webServiceParameter = itwsp.next();
                         hm.put(webServiceParameter.getParameterName(), webServiceParameter.getParameterValue());
-//                        System.out.println("param: " + webServiceParameter.getParameterName() + " , " + webServiceParameter.getParameterValue());
                     }
                     String urlwsrv = wsrv.getUrl();
                     if (urlwsrv != null) {
                         try {
-                            RestSource source = new RestSource(new URL(urlwsrv));
-                            if (source != null) {
-                                SWBResourceURL urlupd = paramRequest.getActionUrl();
-                                urlupd.setAction("updParameters");
-                                out.println("<div class=\"swbform\">");
-                                out.println("<form id=\"" + idform + "_wsrvin\" method=\"post\" action=\"" + urlupd + "\" onsubmit=\"submitForm('" + idform + "_wsrvin'); return false;\">");
-                                out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\">");
-                                out.println("<input type=\"hidden\" name=\"idmethod\" value=\"" + method + "\">");
+                            ServiceInfo info = org.semanticwb.webservices.WebService.getServiceinfo(new URL(urlwsrv));
 
-                                out.println("<fieldset>");
-                                out.println("<legend>Lista de parámetros</legend>");
-                                out.println("<table>");
-                                out.println("<tbody>");
-                                ServiceInfo info = source.getServiceInfo();
-                                Method minfo = info.getMethod(method);
-/// Mostrar lista de parámetros
-                                Parameter[] params = minfo.getAllParameters();
-                                if (params.length > 0) {
-                                    boolean isPREQ = Boolean.FALSE;
-                                    //out.println("<ul  style=\"list-style-type:none;\">");
-                                    for (Parameter allparam : params) {
-                                        out.println("<tr><td align=\"right\" width=\"200px\">");
-                                        out.println("<label for=\"p_" + allparam.getName() + "\">");
+                            SWBResourceURL urlupd = paramRequest.getActionUrl();
+                            urlupd.setAction("updParameters");
+                            out.println("<div class=\"swbform\">");
+                            out.println("<form id=\"" + idform + "_wsrvin\" method=\"post\" action=\"" + urlupd + "\" onsubmit=\"submitForm('" + idform + "_wsrvin'); return false;\">");
+                            out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\">");
+                            out.println("<input type=\"hidden\" name=\"idmethod\" value=\"" + method + "\">");
 
-                                        isPREQ = Boolean.FALSE;
-                                        if (allparam.isRequired()) {
-                                            isPREQ = Boolean.TRUE;
-                                        }
+                            out.println("<fieldset>");
+                            out.println("<legend>Lista de parámetros</legend>");
+                            out.println("<table>");
+                            out.println("<tbody>");
 
-                                        out.println(allparam.getName()+"&nbsp;");
-                                        if (isPREQ) {
-                                            out.println("<em>*</em>");
-                                        } else {
-                                            out.println("&nbsp;");
-                                        }
-                                        
-                                        out.println("</label>");
-                                        out.println("</td><td>");
-                                        String pvalue = hm.get(allparam.getName()) != null ? hm.get(allparam.getName()) : "";
-                                        out.println("<input dojoType=\"dijit.form.TextBox\" name=\"p_" + allparam.getName() + "\" type=\"text\" " + (isPREQ ? "required=\"true\" invalidMessage=\"Valor del parámetro requerido.\" " : "") + " value=\"" + pvalue + "\">");
-                                        out.println("</td>");
-                                        out.println("</tr>");
+                            Operation operinfo = null;
+
+                            for (Service service : info.getServices()) {
+                                for (Operation operation : service.getOperations()) {
+                                    if (operation.getName().equals(method)) {
+                                        operinfo = operation;
+                                        break;
                                     }
-                                    
+                                }
+                            }
+
+                            /// Mostrar lista de parámetros
+                            ParameterDefinition[] params = operinfo.getInput().getDefinitions();
+
+                            if (params.length > 0) {
+                                boolean isPREQ = Boolean.TRUE; //FALSE;
+                                String isType = "";
+                                for (ParameterDefinition allparam : params) {
+
+                                    isType = "";
+                                    isType = allparam.isBasic() ? "B" : "-";
+                                    isType += allparam.isMultiple() ? "M" : "-";
+                                    isType += allparam.isRequired() ? "R" : "-";
+
+
+                                    out.println("<tr><td align=\"right\" width=\"200px\">");
+                                    out.println("<label for=\"p_" + allparam.getName() + "\">");
+                                    out.println(allparam.getName() +"["+allparam.getDefinitionType()+ "]&nbsp;(" + isType + "):");
+                                    out.println("</label>");
+                                    out.println("</td><td>");
+                                    String pvalue = hm.get(allparam.getName()) != null ? hm.get(allparam.getName()) : "";
+                                    out.println("<input dojoType=\"dijit.form.TextBox\" name=\"p_" + allparam.getName() + "\" type=\"text\" " + (allparam.isRequired() ? "required=\"true\" invalidMessage=\"Valor del parámetro requerido.\" " : "") + " value=\"" + pvalue + "\">");
+                                    out.println("</td>");
+                                    out.println("</tr>");
                                 }
 
-                                out.println("</tbody>");
-                                out.println("</table>");
-                                out.println("</fieldset>");
-                                out.println("<fieldset>");
-                                out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" >Guardar</button>");
-                                out.println("</fieldset>");
-                                out.println("</form>");
-                                out.println("</div>");
-
-                            } else {
-                                log.error("Configuración de URL del WebService inválido.");
-                                out.println("<fieldset>");
-                                out.println("<h2>URL del WebService inválido.</h2>");
-                                out.println("</fieldset>");
                             }
+
+                            out.println("</tbody>");
+                            out.println("</table>");
+                            out.println("</fieldset>");
+                            out.println("<fieldset>");
+                            out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" >Guardar</button>");
+                            out.println("</fieldset>");
+                            out.println("<fieldset>");
+                            out.println("* Notación: [Tipo definición] (B:Básico, M:Múltiple, R:Requerido)");
+                            out.println("</fieldset>");
+                            out.println("</form>");
+                            out.println("</div>");
 
                         } catch (Exception e) {
                             log.debug(e);
@@ -234,12 +241,8 @@ public class WSMethodParameterConfig extends GenericResource {
                     out.println("<h2>Falta seleccionar el WebService.</h2>");
                     out.println("</fieldset>");
                 }
-
             }
-
         }
-
-
     }
 
     @Override
@@ -262,9 +265,6 @@ public class WSMethodParameterConfig extends GenericResource {
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         GenericObject gobj = ont.getGenericObject(suri);
 
-
-
-
         WebServiceInvoker wsrvin = null;
 
         if (act.equals("updMethod")) {
@@ -272,15 +272,10 @@ public class WSMethodParameterConfig extends GenericResource {
             if (gobj != null) {
                 if (gobj instanceof WebServiceInvoker) {
                     wsrvin = (WebServiceInvoker) gobj;
-
                     String idMethod = request.getParameter("idmethod");
-
                     wsrvin.setMethod(idMethod);
-
                 }
             }
-
-
         } else if (act.equals("updParameters")) {
 
             if (gobj != null) {
@@ -307,17 +302,26 @@ public class WSMethodParameterConfig extends GenericResource {
                     }
 
                     try {
-                        RestSource source = new RestSource(new URL(urlwsrv));
-                        if (source != null) {
+                        ServiceInfo info = org.semanticwb.webservices.WebService.getServiceinfo(new URL(urlwsrv));
+                        if (info != null) {
 
-                            ServiceInfo info = source.getServiceInfo();
-                            Method minfo = info.getMethod(idMethod);
-/// Mostrar lista de parámetros
-                            Parameter[] params = minfo.getAllParameters();
+                            Operation operinfo = null;
+
+                            for (Service service : info.getServices()) {
+                                for (Operation operation : service.getOperations()) {
+                                    if (operation.getName().equals(idMethod)) {
+                                        operinfo = operation;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            /// Mostrar lista de parámetros
+                            ParameterDefinition[] params = operinfo.getInput().getDefinitions();
                             if (params.length > 0) {
 
 //                                System.out.println("Revisando parametros...");
-                                for (Parameter allparam : params) {
+                                for (ParameterDefinition allparam : params) {
 
                                     String paramName = allparam.getName();
                                     String paramVal = request.getParameter("p_" + paramName);
@@ -331,14 +335,14 @@ public class WSMethodParameterConfig extends GenericResource {
                                             wsp.setParameterName(paramName);
                                             wsrvin.addWebServiceParameter(wsp);
                                         }
-                                        if(paramVal!=null&&paramVal.trim().length()>0)
-                                        {
+                                        if (paramVal != null && paramVal.trim().length() > 0) {
                                             wsp.setParameterValue(paramVal);
                                         } else {
                                             wsrvin.removeWebServiceParameter(wsp);
+                                            wsp.remove();
                                         }
                                     } catch (Exception ein) {
-                                        log.error("Error al crear WebServiceParameter",ein);
+                                        log.error("Error al crear WebServiceParameter", ein);
                                     }
                                 }
                             }
