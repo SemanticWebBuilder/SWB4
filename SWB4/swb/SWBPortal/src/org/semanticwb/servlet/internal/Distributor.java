@@ -204,7 +204,6 @@ public class Distributor implements InternalServlet
                     log.debug("Distributor->send403");
                     sendError403(request, response);
 //                }
-
                 return false;
             }
 
