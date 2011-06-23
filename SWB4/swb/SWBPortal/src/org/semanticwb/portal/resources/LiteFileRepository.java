@@ -1033,9 +1033,9 @@ public class LiteFileRepository extends GenericResource {
                     res.setTitle("Repositorio de documentos");
                     res.setActive(Boolean.TRUE);
 
-                    res.setAttribute(LVL_VIEW, getResourceBase().getAttribute(LVL_VIEW));
-                    res.setAttribute(LVL_MODIFY, getResourceBase().getAttribute(LVL_MODIFY));
-                    res.setAttribute(LVL_ADMIN, getResourceBase().getAttribute(LVL_ADMIN));
+                    res.setAttribute(LVL_VIEW, getResourceBase().getAttribute(LVL_VIEW, "0"));
+                    res.setAttribute(LVL_MODIFY, getResourceBase().getAttribute(LVL_MODIFY, "0"));
+                    res.setAttribute(LVL_ADMIN, getResourceBase().getAttribute(LVL_ADMIN, "0"));
 
                     res.updateAttributesToDB();
                     wp.addResource(res);
