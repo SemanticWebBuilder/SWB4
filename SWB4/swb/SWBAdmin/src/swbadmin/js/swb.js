@@ -345,7 +345,7 @@
               });
           }else
           {
-              alert("Datos Invalidos...");
+              alert("Datos Inválidos...");
           }
       }
 
