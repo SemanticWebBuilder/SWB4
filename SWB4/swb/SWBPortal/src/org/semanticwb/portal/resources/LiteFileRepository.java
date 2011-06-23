@@ -40,6 +40,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 //import org.semanticwb.process.model.RepositoryDirectory;
 import org.semanticwb.model.RepositoryFile;
+import org.semanticwb.portal.api.SWBResourceURLImp;
 
 /**
  *
@@ -1039,6 +1040,9 @@ public class LiteFileRepository extends GenericResource {
 
                     res.updateAttributesToDB();
                     wp.addResource(res);
+
+                    SWBResourceURLImp url = new SWBResourceURLImp(request,res,wp,SWBResourceURL.UrlType_RENDER);
+                    response.sendRedirect(url.toString());
 
                 }
             } catch (Exception e) {
