@@ -878,8 +878,12 @@ public class User extends UserBase implements Principal
         visited.add(page.getId());
         synchronized(history)
         {
-            history.add(page.getId());
-            if(history.size()>25)history.removeLast();
+            String f=history.getFirst();
+            if(f!=null && !f.equals(page.getId()))
+            {
+                history.add(page.getId());
+                if(history.size()>25)history.removeLast();
+            }
         }
     }
 
