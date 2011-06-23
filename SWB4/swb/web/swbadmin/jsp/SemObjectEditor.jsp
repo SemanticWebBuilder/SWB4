@@ -242,7 +242,7 @@ try
             }else
             {
                 //frm.addButton("<button dojoType='dijit.form.Button' onclick=\"showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive"+"');\">Eliminar de Favoritos</button>");
-                frm.addButton(new SWBFormButton().setTitle("Eliminar de Favoritos", "es").setTitle("Remove of Favorites", "en").setAttribute("onclick", "showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive"+"');").setBusyButton(true));
+                frm.addButton(new SWBFormButton().setTitle("Eliminar de Favoritos", "es").setTitle("Delete from Favorites", "en").setAttribute("onclick", "showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive"+"');").setBusyButton(true));
             }
         }
 
@@ -250,8 +250,13 @@ try
         {
             if(obj.getBooleanProperty(Undeleteable.swb_undeleteable)==false)
             {
-                //frm.addButton("<button dojoType='dijit.form.Button' onclick=\"if(confirm('Eliminar el elemento?'))showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI()+"');\">Eliminar</button>");
-                frm.addButton(SWBFormButton.newDeleteButton().setAttribute("onclick", "if(confirm('Eliminar el elemento?'))showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI()+"');"));
+                if(user.getLanguage().equals("es"))
+                {
+                    frm.addButton(SWBFormButton.newDeleteButton().setAttribute("onclick", "if(confirm('¿Eliminar el elemento?'))showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI()+"');"));
+                }else
+                {
+                    frm.addButton(SWBFormButton.newDeleteButton().setAttribute("onclick", "if(confirm('Delete element?'))showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI()+"');"));
+                }
             }
         }
 
