@@ -136,17 +136,6 @@ public class IFrameContent extends GenericAdmResource
                 out.println(" class=\"swb-ifc\">");
                 out.println("</iframe>");
             }else {
-                out.print("<object type=\"text/html\"");
-                if( userAgent!=null && userAgent.indexOf("msie")>=0 )
-                    out.print(" classid=\"clsid:25336920-03F9-11CF-8FD0-00AA00686F13\"");
-                out.print(" data=\"" + base.getAttribute("url") + "\"");
-                if(width != null)
-                    out.print(" width=\"" + width + "\"");
-                if(height != null)
-                    out.print(" height=\"" + height + "\"");
-                out.println(" class=\"swb-ifc\">");
-                out.print("<iframe id=\"iframecontentswb\" name=\"iframecontentswb\" ");
-
                 String url = base.getAttribute("url");
                 String passparams = base.getAttribute("passparam", "0");
                 if("1".equals(passparams))
@@ -172,6 +161,18 @@ public class IFrameContent extends GenericAdmResource
                         }
                     }
                 }
+                out.print("<object type=\"text/html\"");
+                if( userAgent!=null && userAgent.indexOf("msie")>=0 )
+                    out.print(" classid=\"clsid:25336920-03F9-11CF-8FD0-00AA00686F13\"");
+                out.print(" data=\"" + url + "\"");
+                if(width != null)
+                    out.print(" width=\"" + width + "\"");
+                if(height != null)
+                    out.print(" height=\"" + height + "\"");
+                out.println(" class=\"swb-ifc\">");
+                out.print("<iframe id=\"iframecontentswb\" name=\"iframecontentswb\" ");
+
+                
                 out.print(" src=\"" + url + "\" ");
                 if(width != null)
                     out.print(" width=\"" + width + "\"");
