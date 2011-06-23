@@ -1453,7 +1453,7 @@ public class WBAdmResourceUtils {
      */
     public String loadAddOption()
     {
-        StringBuffer sbfRet = new StringBuffer();
+        StringBuilder sbfRet = new StringBuilder();
         sbfRet.append("\nfunction addOption(pInSel, pInTxt)");
         sbfRet.append("\n{");
         sbfRet.append("\n   duplicateOption(pInSel, pInTxt);");
@@ -1473,7 +1473,7 @@ public class WBAdmResourceUtils {
      */
     public String loadEditOption()
     {
-        StringBuffer sbfRet = new StringBuffer();
+        StringBuilder sbfRet = new StringBuilder();
         sbfRet.append("\nfunction editOption(pInSel, pInTxt)");
         sbfRet.append("\n{");
         sbfRet.append("\n   if(pInSel && pInSel.selectedIndex>=0)");
@@ -1489,13 +1489,29 @@ public class WBAdmResourceUtils {
      */
     public String loadUpdateOption()
     {
-        StringBuffer sbfRet = new StringBuffer();
+        StringBuilder sbfRet = new StringBuilder();
         sbfRet.append("\nfunction updateOption(pInSel, pInTxt)");
         sbfRet.append("\n{");
         sbfRet.append("\n   duplicateOption(pInSel, pInTxt);");
         sbfRet.append("\n   if(swOk!=1)");
         sbfRet.append("\n   {");
         sbfRet.append("\n       if(confirm('" + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadUpdateOption_msg") + " ' + pInSel.options[pInSel.selectedIndex].value + '?'))");
+        sbfRet.append("\n       pInSel.options[pInSel.selectedIndex].value=pInTxt.value;");
+        sbfRet.append("\n       pInSel.options[pInSel.selectedIndex].text=pInTxt.value;");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n}");
+        return sbfRet.toString();
+    }
+
+    public String loadUpdateOption(Locale locale)
+    {
+        StringBuilder sbfRet = new StringBuilder();
+        sbfRet.append("\nfunction updateOption(pInSel, pInTxt)");
+        sbfRet.append("\n{");
+        sbfRet.append("\n   duplicateOption(pInSel, pInTxt);");
+        sbfRet.append("\n   if(swOk!=1)");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n       if(confirm('" + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadUpdateOption_msg", locale) + " ' + pInSel.options[pInSel.selectedIndex].value + '?'))");
         sbfRet.append("\n       pInSel.options[pInSel.selectedIndex].value=pInTxt.value;");
         sbfRet.append("\n       pInSel.options[pInSel.selectedIndex].text=pInTxt.value;");
         sbfRet.append("\n   }");
@@ -1510,11 +1526,45 @@ public class WBAdmResourceUtils {
      */
     public String loadDeleteOption()
     {
-        StringBuffer sbfRet = new StringBuffer();
+        StringBuilder sbfRet = new StringBuilder();
         sbfRet.append("\nfunction deleteOption(pInSel, pInTxt)");
         sbfRet.append("\n{");
         sbfRet.append("\n   var aryEle = new Array();");
         sbfRet.append("\n   if(confirm('" +SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadDeleteOption_msg") + "'))");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n       pInTxt.value='';");
+        sbfRet.append("\n       for(var i=0, j=0; i<pInSel.length; i++)");
+        sbfRet.append("\n       {");
+        sbfRet.append("\n           if(!pInSel[i].selected)");
+        sbfRet.append("\n           {");
+        sbfRet.append("\n               aryEle[j]=pInSel.options[i].value;");
+        sbfRet.append("\n               j++;");
+        sbfRet.append("\n           }");
+        sbfRet.append("\n       }");
+        sbfRet.append("\n       while(pInSel.length!=0)");
+        sbfRet.append("\n       {");
+        sbfRet.append("\n           for( i=1;i<=pInSel.length;i++)");
+        sbfRet.append("\n           {");
+        sbfRet.append("\n               pInSel.options[0]=null;");
+        sbfRet.append("\n           }");
+        sbfRet.append("\n       }");
+        sbfRet.append("\n       for(var i=0; i<aryEle.length; i++)");
+        sbfRet.append("\n       {");
+        sbfRet.append("\n           optionObj = new Option(aryEle[i], aryEle[i]);");
+        sbfRet.append("\n           pInSel.options[pInSel.length]=optionObj;");
+        sbfRet.append("\n       }");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n}");
+        return sbfRet.toString();
+    }
+
+    public String loadDeleteOption(Locale locale)
+    {
+        StringBuilder sbfRet = new StringBuilder();
+        sbfRet.append("\nfunction deleteOption(pInSel, pInTxt)");
+        sbfRet.append("\n{");
+        sbfRet.append("\n   var aryEle = new Array();");
+        sbfRet.append("\n   if(confirm('"+SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadDeleteOption_msg", locale)+"'))");
         sbfRet.append("\n   {");
         sbfRet.append("\n       pInTxt.value='';");
         sbfRet.append("\n       for(var i=0, j=0; i<pInSel.length; i++)");
@@ -1549,11 +1599,11 @@ public class WBAdmResourceUtils {
      */
     public String loadDuplicateOption()
     {
-        StringBuffer sbfRet = new StringBuffer();
+        StringBuilder sbfRet = new StringBuilder();
         sbfRet.append("\nfunction duplicateOption(pInSel, pInTxt)");
         sbfRet.append("\n{");
         sbfRet.append("\n   swOk=0;");
-        sbfRet.append("\n   if(pInTxt.value==null || pInTxt.value=='' || pInTxt.value==' ')");
+        sbfRet.append("\n   if(isEmpty(pInTxt.value))");
         sbfRet.append("\n   {");
         sbfRet.append("\n       alert('" + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadDuplicateOption_error") + ".');");
         sbfRet.append("\n       swOk=1;");
@@ -1570,6 +1620,30 @@ public class WBAdmResourceUtils {
         sbfRet.append("\n}");
         return sbfRet.toString();
     }
+
+    public String loadDuplicateOption(Locale locale)
+    {
+        StringBuilder sbfRet = new StringBuilder();
+        sbfRet.append("\nfunction duplicateOption(pInSel, pInTxt)");
+        sbfRet.append("\n{");
+        sbfRet.append("\n   swOk=0;");
+        sbfRet.append("\n   if(isEmpty(pInTxt.value))");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n       alert('"+SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadDuplicateOption_error", locale)+".');");
+        sbfRet.append("\n       swOk=1;");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n   for(var i=0; i<pInSel.length; i++)");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n       if(pInSel.options[i].value==pInTxt.value)");
+        sbfRet.append("\n       {");
+        sbfRet.append("\n           alert('"+SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadDuplicateOption_msg", locale)+" '+ pInTxt.value);");
+        sbfRet.append("\n           swOk=1;");
+        sbfRet.append("\n           break;");
+        sbfRet.append("\n       }");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n}");
+        return sbfRet.toString();
+    }
     
     /**
      * Crea una función JavaScript específica.
@@ -1578,10 +1652,10 @@ public class WBAdmResourceUtils {
      */
     public String loadIsFileType()
     {
-        StringBuffer sbfRet = new StringBuffer();
+        StringBuilder sbfRet = new StringBuilder();
         sbfRet.append("\nfunction isFileType(pFile, pExt)");
         sbfRet.append("\n{");
-        sbfRet.append("\n   if(pFile.value.length > 0)");
+        sbfRet.append("\n   if(pFile && !isEmpty(pFile.value))");
         sbfRet.append("\n   {");
         sbfRet.append("\n      var swFormat=pExt + '|';");
         sbfRet.append("\n      sExt=pFile.value.substring(pFile.value.indexOf(\".\")).toLowerCase();");
@@ -1600,6 +1674,31 @@ public class WBAdmResourceUtils {
         sbfRet.append("\n}");
         return sbfRet.toString();
     }
+
+    public String loadIsFileType(Locale locale)
+    {
+        StringBuilder sbfRet = new StringBuilder();
+        sbfRet.append("\nfunction isFileType(pFile, pExt)");
+        sbfRet.append("\n{");
+        sbfRet.append("\n   if(pFile && !isEmpty(pFile.value))");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n      var swFormat=pExt + '|';");
+        sbfRet.append("\n      sExt=pFile.value.substring(pFile.value.indexOf(\".\")).toLowerCase();");
+        sbfRet.append("\n      var sType='';");
+        sbfRet.append("\n      while(swFormat.length > 0 )");
+        sbfRet.append("\n      {");
+        sbfRet.append("\n         sType= swFormat.substring(0, swFormat.indexOf(\"|\"));");
+        sbfRet.append("\n         if(sExt.indexOf(sType)!=-1) return true;");
+        sbfRet.append("\n         swFormat=swFormat.substring(swFormat.indexOf(\"|\")+1);");
+        sbfRet.append("\n      }");
+        sbfRet.append("\n      while(pExt.indexOf(\"|\")!=-1) pExt=pExt.replace('|',',');");
+        sbfRet.append("\n      alert(\""+SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadIsFile_msgext", locale)+": \" + pExt.replace('|',','));");
+        sbfRet.append("\n      return false;");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n   else return true;");
+        sbfRet.append("\n}");
+        return sbfRet.toString();
+    }
     
     /**
      * Crea una función JavaScript específica.
@@ -1608,7 +1707,7 @@ public class WBAdmResourceUtils {
      */
     public String loadIsNumber()
     {
-        StringBuffer sbfRet = new StringBuffer();
+        StringBuilder sbfRet = new StringBuilder();
         sbfRet.append("\nfunction isNumber(pIn)");
         sbfRet.append("\n{");
         sbfRet.append("\n   pCaracter=pIn.value;");
@@ -1619,6 +1718,27 @@ public class WBAdmResourceUtils {
         sbfRet.append("\n       {");
         sbfRet.append("\n           pIn.focus();");
         sbfRet.append("\n           alert('" + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadIsNumber_msg") + ".');");
+        sbfRet.append("\n           return false;");
+        sbfRet.append("\n       }");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n   return true;");
+        sbfRet.append("\n}");
+        return sbfRet.toString();
+    }
+
+    public String loadIsNumber(Locale locale)
+    {
+        StringBuilder sbfRet = new StringBuilder();
+        sbfRet.append("\nfunction isNumber(pIn)");
+        sbfRet.append("\n{");
+        sbfRet.append("\n   pCaracter=pIn.value;");
+        sbfRet.append("\n   for (var i=0;i<pCaracter.length;i++)");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n       var sByte=pCaracter.substring(i,i+1);");
+        sbfRet.append("\n       if (sByte<\"0\" || sByte>\"9\")");
+        sbfRet.append("\n       {");
+        sbfRet.append("\n           pIn.focus();");
+        sbfRet.append("\n           alert('" + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadIsNumber_msg", locale) + ".');");
         sbfRet.append("\n           return false;");
         sbfRet.append("\n       }");
         sbfRet.append("\n   }");
@@ -1650,6 +1770,24 @@ public class WBAdmResourceUtils {
         sbfRet.append("\n }");
         return sbfRet.toString();
     }
+
+    public String loadIsNumber(int radix, Locale locale) {
+        if(radix!=8 && radix!=10 && radix!=16) {
+            radix = 10;
+        }
+        StringBuffer sbfRet = new StringBuffer();
+        sbfRet.append("\n function isInt(textBoxIn) {");
+        sbfRet.append("\n    var pCaracter = textBoxIn.value;");
+
+        sbfRet.append("\n    if( isNaN(pCaracter) ) {");
+        sbfRet.append("\n       alert('"+SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadIsNumber_msg", locale)+".');");
+        sbfRet.append("\n       textBoxIn.focus();");
+        sbfRet.append("\n       return false;");
+        sbfRet.append("\n    }");
+        sbfRet.append("\n    return true;");
+        sbfRet.append("\n }");
+        return sbfRet.toString();
+    }
     
     
     /**
@@ -1659,7 +1797,7 @@ public class WBAdmResourceUtils {
      */
     public String loadSetPrefix()
     {
-        StringBuffer sbfRet = new StringBuffer();
+        StringBuilder sbfRet = new StringBuilder();
         sbfRet.append("\nfunction setPrefix(pIn, pPx)");
         sbfRet.append("\n{");
         sbfRet.append("\n   if(pIn.type==\"text\")");
@@ -1679,6 +1817,38 @@ public class WBAdmResourceUtils {
         sbfRet.append("\n           if (pIn.options[i].value.substring(0, pPx.length).indexOf(pPx)==-1)");
         sbfRet.append("\n           {");
         sbfRet.append("\n               alert('" + SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadSetPrefixmsg2") + ": ' + pPx);");
+        sbfRet.append("\n               pIn.focus();");
+        sbfRet.append("\n               return false;");
+        sbfRet.append("\n           }");
+        sbfRet.append("\n       }");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n   return true;");
+        sbfRet.append("\n}");
+        return sbfRet.toString();
+    }
+
+    public String loadSetPrefix(Locale locale)
+    {
+        StringBuilder sbfRet = new StringBuilder();
+        sbfRet.append("\nfunction setPrefix(pIn, pPx)");
+        sbfRet.append("\n{");
+        sbfRet.append("\n   if(pIn.type==\"text\")");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n       if (pIn.value.substring(0, pPx.length).indexOf(pPx)==-1)");
+        sbfRet.append("\n       {");
+        sbfRet.append("\n           alert('"+SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadSetPrefix_msg1", locale)+": ' + pPx);");
+        sbfRet.append("\n           pIn.value=pPx+pIn.value;");
+        sbfRet.append("\n           pIn.focus();");
+        sbfRet.append("\n           return false;");
+        sbfRet.append("\n       }");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n   if(pIn.type==\"select-one\" || pIn.type==\"select-multiple\")");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n       for(var i=0; i<pIn.length; i++)");
+        sbfRet.append("\n       {");
+        sbfRet.append("\n           if (pIn.options[i].value.substring(0, pPx.length).indexOf(pPx)==-1)");
+        sbfRet.append("\n           {");
+        sbfRet.append("\n               alert('"+SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadSetPrefixmsg2", locale)+": ' + pPx);");
         sbfRet.append("\n               pIn.focus();");
         sbfRet.append("\n               return false;");
         sbfRet.append("\n           }");
@@ -1722,7 +1892,36 @@ public class WBAdmResourceUtils {
         sbfRet.append("\n   return true;");
         sbfRet.append("\n}");  
         return sbfRet.toString();
-    }  
+    }
+
+    public String loadIsHexadecimal(Locale locale)
+    {
+        StringBuffer sbfRet = new StringBuffer();
+        sbfRet.append("\nfunction isHexadecimal(pIn)");
+        sbfRet.append("\n{");
+        sbfRet.append("\n   var swFormat=\"0123456789ABCDEF\";");
+        sbfRet.append("\n   pIn.value=pIn.value.toUpperCase();");
+        sbfRet.append("\n   if(pIn.value.length<7)");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n       alert('"+SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadIsHexadecinal_msgLength", locale)+"');");
+        sbfRet.append("\n       pIn.focus();");
+        sbfRet.append("\n       return false;");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n   if (!setPrefix(pIn, '#')) return false;");
+        sbfRet.append("\n   for(var i=1; i < pIn.value.length; i++)");
+        sbfRet.append("\n   {");
+        sbfRet.append("\n       swOk= pIn.value.substring(i, i+1);");
+        sbfRet.append("\n       if (swFormat.indexOf(swOk, 0)==-1)");
+        sbfRet.append("\n       {");
+        sbfRet.append("\n           alert('"+SWBUtils.TEXT.getLocaleString("locale_swb_util", "usrmsg_WBResource_loadIsHexadecinal_msgHexadecinal", locale)+"');");
+        sbfRet.append("\n           pIn.focus();");
+        sbfRet.append("\n           return false;");
+        sbfRet.append("\n       }");
+        sbfRet.append("\n   }");
+        sbfRet.append("\n   return true;");
+        sbfRet.append("\n}");
+        return sbfRet.toString();
+    }
     
      /**
      * Crea una función JavaScript específica.
