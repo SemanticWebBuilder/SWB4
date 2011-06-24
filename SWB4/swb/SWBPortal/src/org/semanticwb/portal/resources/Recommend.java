@@ -785,7 +785,6 @@ public class Recommend extends GenericAdmResource {
             }catch(NullPointerException e) {
                 throw new TransformerException(paramRequest.getLocaleString("msgErrSubjectRequired"));
             }
-System.out.println("\n\n\ndom="+SWBUtils.XML.domToXml(dom));
             String html = SWBUtils.XML.transformDom(tpl, dom);
 
             ArrayList<InternetAddress> addresses = new ArrayList<InternetAddress>();
