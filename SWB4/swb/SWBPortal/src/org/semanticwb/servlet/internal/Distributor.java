@@ -169,7 +169,7 @@ public class Distributor implements InternalServlet
 //                }
 //            }
 
-            if (webpage == null || (!admin && webpage.getWebSite().equals(admMap))) 
+            if (webpage == null || (!admin && webpage.getWebSite().getId().equals(admMap))) 
             {
                 response.sendError(404, "La pagina " + request.getRequestURI() + " no existe... ");
                 log.debug("Distributor: SendError 404");
