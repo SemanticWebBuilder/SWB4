@@ -63,13 +63,13 @@
         {
             switch(opt)
             {
-                    case '1':	frm.btntexto.value='';
-                                    frm.lnktexto.value='';
-                                    break
-                    case '2':  	frm.btnenviar.value='';
-                                    break
-                    case '3':   	frm.btnlimpiar.value='';
-                                    break
+                case '1':frm.btntexto.value='';
+                        frm.lnktexto.value='';
+                        break;
+                case '2':frm.btnenviar.value='';
+                        break;
+                case '3':frm.btnlimpiar.value='';
+                        break;
             }
         }
         function jsValida(frm)
