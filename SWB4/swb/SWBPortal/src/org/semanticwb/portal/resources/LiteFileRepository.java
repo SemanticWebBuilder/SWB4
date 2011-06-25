@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.text.FieldPosition;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,6 +44,7 @@ import org.semanticwb.portal.api.SWBResourceURL;
 //import org.semanticwb.process.model.RepositoryDirectory;
 import org.semanticwb.model.RepositoryFile;
 import org.semanticwb.portal.api.SWBResourceURLImp;
+import sun.tools.jar.resources.jar;
 
 /**
  *
@@ -55,6 +59,7 @@ public class LiteFileRepository extends GenericResource {
     private static final String LVL_VIEW = "prop_view";
     private static final String LVL_MODIFY = "prop_modify";
     private static final String LVL_ADMIN = "prop_admin";
+    private static final NumberFormat numf = NumberFormat.getNumberInstance();
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -71,6 +76,8 @@ public class LiteFileRepository extends GenericResource {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
+
+        numf.setMaximumFractionDigits(1);
 
         String path = SWBPlatform.getContextPath() + "/swbadmin/images/repositoryfile/";
         PrintWriter out = response.getWriter();
@@ -159,7 +166,6 @@ public class LiteFileRepository extends GenericResource {
                     User usrc = version.getCreator();
 
                     skey = " - " + repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
-                    ;
 
                     if (usrc != null) {
                         skey = usrc.getFullName() + skey;
@@ -184,10 +190,10 @@ public class LiteFileRepository extends GenericResource {
                 RepositoryFile repositoryFile = hmNodes.get(skey);
                 VersionInfo vi = repositoryFile.getLastVersion();
 
-//                if(vi==null) {
-//                    repositoryFile.remove();
-//                    continue;
-//                }
+                if (vi == null) {
+                    repositoryFile.remove();
+                    continue;
+                }
 
 
                 out.println("<tr>");
@@ -333,27 +339,33 @@ public class LiteFileRepository extends GenericResource {
 
                 out.println("<td>");
                 out.println("<script type=\"text/javascript\">");
-                out.println("function validaVersion(forma)");
+                out.println("function validaVersion()");
                 out.println("  {");
-                out.println("       if(forma.newVersion.selectedValue!='0')");
-                out.println("           return true;");
-                out.println("       else return false;");
+                out.println("       if(document.frmNewVersion.newVersion.value=='0')");
+                out.println("       {");
+                out.println("          alert('Selecciona número de versión a agregar.');");
+                out.println("       }");
+                out.println("       else { document.frmNewVersion.submit(); }");
                 out.println("  }");
                 out.println("</script>");
-                out.println("<form method=\"post\" action=\"" + urlnewVer + "\">");
+                out.println("<form id=\"frmNewVersion\" name=\"frmNewVersion\" method=\"post\" action=\"" + urlnewVer + "\" onsubmit=\"validaVersion();return false;\">");
                 out.println("<input type=\"hidden\" name=\"act\" value=\"new\">");
                 out.println("<input type=\"hidden\" name=\"fid\" value=\"" + fid + "\">");
-                out.println("<select name=\"newVersion\" onsubmit=\"validaVersion(this);\">");
+                out.println("<select id=\"newVersion\" name=\"newVersion\" >");
                 out.println("<option value=\"0\">--</option>");
 
-                float fver = Float.parseFloat(vl.getVersionValue());
-                fver = fver + 0.10F;
+                double fver = Double.parseDouble(vl.getVersionValue());
+                fver = fver + 0.10D;
+
+
+
+
 
                 int iver = (int) fver;
                 iver = iver + 1;
 
-                out.println("<option value=\"fraction\">" + fver + "</option>");
-                out.println("<option value=\"nextInt\">" + (float) iver + "</option>");
+                out.println("<option value=\"fraction\">" + numf.format(fver) + "</option>");
+                out.println("<option value=\"nextInt\">" + (float)iver + "</option>");
 
 
                 out.println("</select>");
@@ -549,6 +561,7 @@ public class LiteFileRepository extends GenericResource {
             RepositoryFile repoFile = null;
             String stitle = "";
             String sdescription = "";
+            VersionInfo vl = null;
             if (null != fid && null != newVersion) {
                 boolean incremento = Boolean.FALSE;
                 if (newVersion.equals("nextInt")) {
@@ -562,26 +575,60 @@ public class LiteFileRepository extends GenericResource {
                 stitle = repoFile.getDisplayTitle(usr.getLanguage());
                 sdescription = repoFile.getDisplayDescription(usr.getLanguage());
 
-                VersionInfo vl = repoFile.getLastVersion();
-                float fver = Float.parseFloat(vl.getVersionValue());
-                fver = fver + 0.10F;
+                vl = repoFile.getLastVersion();
+                double fver = Double.parseDouble(vl.getVersionValue());
+                fver = fver + 0.10D;
+
 
                 int iver = (int) fver;
                 iver = iver + 1;
 
-                sNxtVersion = "" + fver;
+                sNxtVersion = numf.format(fver);
 
                 if (incremento) {
-                    sNxtVersion = "" + (float) iver;
+                    sNxtVersion = ""+(float)iver;
                 }
             }
 
+            out.println("<script type=\"text/javascript\" >");
+            out.println("function valida() ");
+            out.println("{ ");
+            out.println("   if(document.frmnewdoc.ftitle.value=='') ");
+            out.println("     { ");
+            out.println("         alert('Defina el título'); ");
+            out.println("         return; ");
+            out.println("     } ");
+            out.println("   if(document.frmnewdoc.fdescription.value=='') ");
+            out.println("     { ");
+            out.println("         alert('Indique la descripción'); ");
+            out.println("         return; ");
+            out.println("     } ");
+            out.println("   if(document.frmnewdoc.ffile.value=='') ");
+            out.println("     { ");
+            out.println("         alert('Defina un archivo'); ");
+            out.println("         return; ");
+            out.println("     } ");
+
+            if (null != fid && null != newVersion) {
+                out.println("   var filename = document.frmnewdoc.ffile.value;");
+                out.println("   if(filename.indexOf('" + vl.getVersionFile() + "')==-1) ");
+                out.println("     { ");
+                out.println("         alert('Archivo seleccionado inválido. Debe ser " + vl.getVersionFile() + "'); ");
+                out.println("         return; ");
+                out.println("     } ");
+            }
+
+            out.println("   document.frmnewdoc.submit();");
+            out.println("} ");
+            out.println("</script>");
+
             out.println("<div id=\"ProcessFileRepository\">");
-            out.println("<form method=\"post\" action=\"" + urlnew + "\"  enctype=\"multipart/form-data\">");
+            out.println("<form id=\"frmnewdoc\" name=\"frmnewdoc\" method=\"post\" action=\"" + urlnew + "\"  enctype=\"multipart/form-data\" onsubmit=\"valida();return false;\">");
 
             if (null != fid && null != newVersion) {
                 out.println("<input type=\"hidden\" name=\"newVersion\" value=\"" + newVersion + "\">");
                 out.println("<input type=\"hidden\" name=\"fid\" value=\"" + fid + "\">");
+                //out.println("<input type=\"hidden\" name=\"fcurrent\" value=\"" + vl.getVersionFile() + "\">");
             }
 
             out.println("<table>");
@@ -653,8 +700,26 @@ public class LiteFileRepository extends GenericResource {
             urlnew.setAction("newDir");
             urlnew.setParameter("act", "newDir");
 
+
+            out.println("<script type=\"text/javascript\" >");
+            out.println("function validaDir() ");
+            out.println("{ ");
+            out.println("   if(document.frmDir.d_title.value=='') ");
+            out.println("     { ");
+            out.println("         alert('Defina el título'); ");
+            out.println("         return; ");
+            out.println("     } ");
+            out.println("   if(document.frmDir.d_description.value=='') ");
+            out.println("     { ");
+            out.println("         alert('Indique la descripción'); ");
+            out.println("         return; ");
+            out.println("     } ");
+            out.println("   document.frmDir.submit();");
+            out.println("} ");
+            out.println("</script>");
+
             out.println("<div id=\"ProcessFileRepository\">");
-            out.println("<form method=\"post\" action=\"" + urlnew + "\" >");
+            out.println("<form id=\"frmDir\" name=\"frmDir\" method=\"post\" action=\"" + urlnew + "\" onsubmit=\"validaDir();return false;\">");
             out.println("<table>");
             out.println("<tbody>");
             out.println("<tr>");
@@ -1041,7 +1106,7 @@ public class LiteFileRepository extends GenericResource {
                     res.updateAttributesToDB();
                     wp.addResource(res);
 
-                    SWBResourceURLImp url = new SWBResourceURLImp(request,res,wp,SWBResourceURL.UrlType_RENDER);
+                    SWBResourceURLImp url = new SWBResourceURLImp(request, res, wp, SWBResourceURL.UrlType_RENDER);
                     response.sendRedirect(url.toString());
 
                 }
@@ -1054,6 +1119,9 @@ public class LiteFileRepository extends GenericResource {
     public OutputStream storeFile(String name, String comment, boolean bigVersionInc, RepositoryFile repoFile) throws FileNotFoundException {
         VersionInfo v = VersionInfo.ClassMgr.createVersionInfo(repoFile.getRepositoryFileDirectory().getWebSite());
         v.setVersionFile(name);
+
+        numf.setMaximumFractionDigits(1);
+
         if (comment != null) {
             v.setVersionComment(comment);
         }
@@ -1066,13 +1134,15 @@ public class LiteFileRepository extends GenericResource {
             ver = vl.getVersionNumber();
             sver = vl.getVersionValue();
 
-            float f = Float.valueOf(sver);
+            double f = Double.parseDouble(sver);
+
             if (bigVersionInc) {
                 f = (int) f + 1;
+                sver = ""+(float)f;
             } else {
-                f = f + 0.10F;
+                f = f + 0.10D;
+                sver = numf.format(f);
             }
-            sver = "" + f;
             ver++;
         }
         v.setVersionNumber(ver);
