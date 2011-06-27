@@ -7,6 +7,7 @@
 package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 
 /**
  * @author javier.solis
@@ -18,6 +19,8 @@ public def TYPE_MULTIPLE="multiple";
 public def TYPE_MULTIPLE_SEQUENTIAL="sequential";
 public class Activity extends FlowNode
 {
+    protected var attachedEvents: IntermediateCatchEvent[];
+    
     public override var over on replace {
         if (over and not selected) {
             shape.styleClass = "taskHover";
@@ -40,6 +43,33 @@ public class Activity extends FlowNode
         return ret;
     }
 
+    override public function mousePressed( e: MouseEvent )
+    {
+        super.mousePressed(e);
+        updateAttachedEventsPosition();
+    }
+
+    override public function mouseDragged( e: MouseEvent )
+    {
+        if (not modeler.isLocked()) {
+            var ax=dx+e.sceneX;
+            var ay=dy+e.sceneY;
+            if(ax-w/2>0)x=ax else x=w/2;
+            if(ay-h/2>0)y=ay else y=h/2;
+            updateAttachedEventsPosition();
+        }
+    }
+
+    override public function mouseReleased( e: MouseEvent )
+    {
+        if (not modeler.isLocked()) {
+            var overNode: GraphicalElement = getOverNode();
+            setGraphParent(overNode);
+            snapToGrid();
+            updateAttachedEventsPosition();
+        }
+    }
+
     public override function canEndLink(link:ConnectionObject) : Boolean {
         var ret = super.canEndLink(link);
 
@@ -60,5 +90,11 @@ public class Activity extends FlowNode
             ret = false;
         }
         return ret;
+    }
+
+    public function updateAttachedEventsPosition() : Void {
+        for (evt in attachedEvents) {
+            evt.y = y + h /2 ;
+        }
     }
 }
