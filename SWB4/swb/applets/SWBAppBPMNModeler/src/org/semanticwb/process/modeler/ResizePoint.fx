@@ -90,6 +90,7 @@ public class ResizePoint extends CustomNode
                     attachedNode.resizing = true;
                 }
             }
+            
             onMouseReleased:function( e: MouseEvent ):Void
             {
                 if(ModelerUtils.clickedNode==this)
@@ -100,8 +101,13 @@ public class ResizePoint extends CustomNode
 //                        (attachedNode as Pool).captureChilds();
 //                    }
                     attachedNode.snapToGrid();
+                    if (attachedNode instanceof Activity) {
+                        (attachedNode as Activity).updateAttachedEventsPosition();
+                    }
+                    
                 }
             }
+            
             onMouseDragged:function( e: MouseEvent ):Void
             {
                 if(ModelerUtils.clickedNode==this)
@@ -132,5 +138,4 @@ public class ResizePoint extends CustomNode
         };
         return c;
     }
-
 }
