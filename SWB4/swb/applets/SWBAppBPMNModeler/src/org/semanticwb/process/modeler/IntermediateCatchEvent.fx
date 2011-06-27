@@ -20,6 +20,8 @@ import org.semanticwb.process.modeler.ModelerUtils;
 
 public class IntermediateCatchEvent extends CatchEvent
 {
+    var attachedTo: Activity;
+
     public override var over on replace {
         if (over and not selected) {
             shape.styleClass = "interEventHover";
@@ -38,6 +40,7 @@ public class IntermediateCatchEvent extends CatchEvent
     
     public override function create(): Node
     {
+        attachedTo = null;
         blocksMouse = true;
         initializeCustomNode();
         w=30;
@@ -170,6 +173,37 @@ public class IntermediateCatchEvent extends CatchEvent
             ModelerUtils.setErrorMessage(##"msgError22");
         }
         return ret;
+    }
+
+    override public function mouseReleased( e: MouseEvent )
+    {
+        if (not modeler.isLocked()) {
+            var overNode: GraphicalElement = getOverNode();
+            if (overNode instanceof Activity) {
+                if (attachedTo != null) {
+                    delete this from attachedTo.attachedEvents;
+                    attachedTo = null;
+                }
+                var act = overNode as Activity;
+                attachedTo = act;
+                insert this into act.attachedEvents;
+                act.updateAttachedEventsPosition();
+            } else if (overNode == null) {
+                delete this from attachedTo.attachedEvents;
+                attachedTo = null;
+            }
+            
+            setGraphParent(overNode);
+            snapToGrid();
+        }
+    }
+
+    override public function snapToGrid()
+    {
+        if(not (graphParent instanceof Activity))
+        {
+            super.snapToGrid();
+        }
     }
 
     override public function copy() : GraphicalElement {
