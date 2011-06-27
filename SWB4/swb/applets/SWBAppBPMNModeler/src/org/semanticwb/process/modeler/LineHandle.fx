@@ -84,7 +84,6 @@ public class LineHandle extends CustomNode {
 
     override var onMouseReleased = function(e: MouseEvent) {
         cursor = Cursor.CROSSHAIR;
-        setGraphParent();
         snapToGrid();
         modeler.setSelectedNode(owner);
     }
@@ -121,29 +120,6 @@ public class LineHandle extends CustomNode {
             x: x
             y: y
         }
-    }
-
-    /**Obtiene el nodo sobre el cual se encuentra el elemento actual.*/
-    public function getOverNode() : GraphicalElement {
-        var overNode: GraphicalElement = null;
-        for (ele in modeler.contents where ele instanceof Pool) {
-            var t = ele as Pool;
-            if (t.inBounds(this)) {
-                overNode = t;
-                for (lane in (t as Pool).lanes) {
-                    if (lane.inBounds(this)) {
-                        overNode = lane;
-                    }
-                }
-            }
-        }
-
-        return overNode;
-    }
-
-    /**Establece el nodo padre del tirador*/
-    public function setGraphParent() {
-        graphParent = getOverNode();
     }
 
     /**Crea una copia del tirador*/
