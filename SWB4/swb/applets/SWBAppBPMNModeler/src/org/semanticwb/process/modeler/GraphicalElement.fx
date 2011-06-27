@@ -388,9 +388,9 @@ public class GraphicalElement extends CustomNode
     {
         if (not modeler.isLocked()) {
             if (this instanceof Pool or this instanceof Lane) return;
-            snapToGrid();
             var overNode: GraphicalElement = getOverNode();
             setGraphParent(overNode);
+            snapToGrid();
         }
     }
 
@@ -499,7 +499,7 @@ public class GraphicalElement extends CustomNode
     override var onKeyPressed = function( e: KeyEvent )
     {
         if (not modeler.isLocked()) {
-            keyPressed(e);
+            //keyPressed(e);
             modeler.keyPressed(e);
         }
     }
@@ -532,16 +532,13 @@ public class GraphicalElement extends CustomNode
 //            ModelerUtils.setResizeNode(null);
 //            this.y += 10;
 //            ModelerUtils.setResizeNode(this);
-//        }
-        if (not modeler.isLocked()) {
-            modeler.keyPressed(e);
-        }
+//        }       
     }
 
     override var onKeyReleased = function( e: KeyEvent )
     {
         if (not modeler.isLocked()) {
-            keyReleased(e);
+            //keyReleased(e);
             modeler.keyReleased(e);
         }
     }
@@ -568,24 +565,24 @@ public class GraphicalElement extends CustomNode
         return overNode;
     }
     
-    public function inBounds(node: Node) : Boolean {
+    public function inBounds(node: GraphicalElement) : Boolean {
         var ret = false;
-        var wi = node.boundsInLocal.width;
-        var he = node.boundsInLocal.height;
-        if (node instanceof GraphicalElement) {
-            wi = (node as GraphicalElement).w;
-            he = (node as GraphicalElement).h;
-        }
+        var wi = node.shape.boundsInLocal.width;
+        var he = node.shape.boundsInLocal.height;
+//        if (node instanceof GraphicalElement) {
+//            wi = (node as GraphicalElement).w;
+//            he = (node as GraphicalElement).h;
+//        }
 
-        var nx1 = node.boundsInLocal.minX;
-        var ny1 = node.boundsInLocal.minY;
-        var nx2 = node.boundsInLocal.minX + wi;
-        var ny2 = node.boundsInLocal.minY + he;
+        var nx1 = node.shape.boundsInLocal.minX;
+        var ny1 = node.shape.boundsInLocal.minY;
+        var nx2 = node.shape.boundsInLocal.minX + wi;
+        var ny2 = node.shape.boundsInLocal.minY + he;
 
-        var ex1 = boundsInLocal.minX;
-        var ey1 = boundsInLocal.minY;
-        var ex2 = boundsInLocal.minX + w;
-        var ey2 = boundsInLocal.minY + h;
+        var ex1 = shape.boundsInLocal.minX;
+        var ey1 = shape.boundsInLocal.minY;
+        var ex2 = shape.boundsInLocal.minX + w;
+        var ey2 = shape.boundsInLocal.minY + h;
         //println("  Revisando si {node.title} [{nx1}, {ny1}][{nx2}, {ny2}] está dentro del lane {lane.title} [{ex1}, {ey1}][{ex2}, {ey2}]");
         if (nx1 > ex1 and nx2 < ex2) {
             //println("  {node.title} dentro de {title} en X");
