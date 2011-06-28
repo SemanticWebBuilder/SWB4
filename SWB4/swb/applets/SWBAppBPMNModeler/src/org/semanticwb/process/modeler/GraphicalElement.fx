@@ -532,7 +532,7 @@ public class GraphicalElement extends CustomNode
 //            ModelerUtils.setResizeNode(null);
 //            this.y += 10;
 //            ModelerUtils.setResizeNode(this);
-//        }       
+//        }
     }
 
     override var onKeyReleased = function( e: KeyEvent )
@@ -564,15 +564,15 @@ public class GraphicalElement extends CustomNode
         }
         return overNode;
     }
-    
+
     public function inBounds(node: GraphicalElement) : Boolean {
         var ret = false;
         var wi = node.shape.boundsInLocal.width;
         var he = node.shape.boundsInLocal.height;
-//        if (node instanceof GraphicalElement) {
-//            wi = (node as GraphicalElement).w;
-//            he = (node as GraphicalElement).h;
-//        }
+        //if (node instanceof GraphicalElement) {
+        //    wi = (node as GraphicalElement).w;
+        //    he = (node as GraphicalElement).h;
+        //}
 
         var nx1 = node.shape.boundsInLocal.minX;
         var ny1 = node.shape.boundsInLocal.minY;
@@ -761,7 +761,7 @@ public class GraphicalElement extends CustomNode
             minH = h;
         }
     }
-    
+
     public function copy() : GraphicalElement {
         return GraphicalElement {
             title: this.title
@@ -774,7 +774,7 @@ public class GraphicalElement extends CustomNode
             container: this.container
         }
     }
-    
+
     public function cut () : GraphicalElement {
         var del:Node[];
         if (modeler.containerElement != null) {
