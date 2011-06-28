@@ -178,13 +178,11 @@ public class Task extends Activity
                         caption: ##"actUser"
                         action: function (e: MouseEvent) {
                             ModelerUtils.popup.hide();
-                            var _title = title;
-                            var _desc = description;
                             //crear nuevo elemento
                             var sp = UserTask {
                                 modeler: modeler
-                                title: _title
-                                description: _desc
+                                title: title
+                                description: description
                                 uri:"new:usertask:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
@@ -196,6 +194,22 @@ public class Task extends Activity
                                 ele.ini = sp;
                             }
 
+                            //copiar los eventos adheridos
+                            for (ele in graphChilds where ele instanceof IntermediateCatchEvent) {
+                                var ae:IntermediateCatchEvent = (ele.copy() as IntermediateCatchEvent);
+                                for (co in ele.getOutputConnectionObjects()) {
+                                    co.ini = ae;
+                                }
+                                ae.graphParent = sp;
+                                insert ae into sp.graphChilds;
+                                ae.x = ele.x;
+                                ae.y = ele.y;
+                                ae.dpx = ele.dpx;
+                                ae.dpy = ele.dpy;
+                                modeler.add(ae);
+                                modeler.moveFront(ae, sp);
+                            }
+
                             sp.x = x;
                             sp.y = y;
                             sp.container = container;
@@ -203,6 +217,7 @@ public class Task extends Activity
                             sp.h = h;
                             sp.setGraphParent(getGraphParent());
                             modeler.add(sp);
+                            sp.updateAttachedEventsPosition();
                             remove(true);
                         }
                     },
@@ -218,7 +233,7 @@ public class Task extends Activity
                                 modeler: modeler
                                 title: _title
                                 description: _desc
-                                uri:"new:usertask:{this.modeler.toolBar.counter++}"
+                                uri:"new:servicetask:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
                             for(ele in getInputConnectionObjects()) {
@@ -229,6 +244,22 @@ public class Task extends Activity
                                 ele.ini = sp;
                             }
 
+                            //copiar los eventos adheridos
+                            for (ele in graphChilds where ele instanceof IntermediateCatchEvent) {
+                                var ae:IntermediateCatchEvent = (ele.copy() as IntermediateCatchEvent);
+                                for (co in ele.getOutputConnectionObjects()) {
+                                    co.ini = ae;
+                                }
+                                ae.graphParent = sp;
+                                insert ae into sp.graphChilds;
+                                ae.x = ele.x;
+                                ae.y = ele.y;
+                                ae.dpx = ele.dpx;
+                                ae.dpy = ele.dpy;
+                                modeler.add(ae);
+                                modeler.moveFront(ae, sp);
+                            }
+
                             sp.x = x;
                             sp.y = y;
                             sp.container = container;
@@ -236,6 +267,7 @@ public class Task extends Activity
                             sp.h = h;
                             sp.setGraphParent(getGraphParent());
                             modeler.add(sp);
+                            sp.updateAttachedEventsPosition();
                             remove(true);
                         }
                     },
@@ -262,6 +294,22 @@ public class Task extends Activity
                                 ele.ini = sp;
                             }
 
+                            //copiar los eventos adheridos
+                            for (ele in graphChilds where ele instanceof IntermediateCatchEvent) {
+                                var ae:IntermediateCatchEvent = (ele.copy() as IntermediateCatchEvent);
+                                for (co in ele.getOutputConnectionObjects()) {
+                                    co.ini = ae;
+                                }
+                                ae.graphParent = sp;
+                                insert ae into sp.graphChilds;
+                                ae.x = ele.x;
+                                ae.y = ele.y;
+                                ae.dpx = ele.dpx;
+                                ae.dpy = ele.dpy;
+                                modeler.add(ae);
+                                modeler.moveFront(ae, sp);
+                            }
+
                             sp.x = x;
                             sp.y = y;
                             sp.container = container;
@@ -269,6 +317,7 @@ public class Task extends Activity
                             sp.h = h;
                             sp.setGraphParent(getGraphParent());
                             modeler.add(sp);
+                            sp.updateAttachedEventsPosition();
                             remove(true);
                         }
                     },
@@ -295,6 +344,22 @@ public class Task extends Activity
                                 ele.ini = sp;
                             }
 
+                            //copiar los eventos adheridos
+                            for (ele in graphChilds where ele instanceof IntermediateCatchEvent) {
+                                var ae:IntermediateCatchEvent = (ele.copy() as IntermediateCatchEvent);
+                                for (co in ele.getOutputConnectionObjects()) {
+                                    co.ini = ae;
+                                }
+                                ae.graphParent = sp;
+                                insert ae into sp.graphChilds;
+                                ae.x = ele.x;
+                                ae.y = ele.y;
+                                ae.dpx = ele.dpx;
+                                ae.dpy = ele.dpy;
+                                modeler.add(ae);
+                                modeler.moveFront(ae, sp);
+                            }
+
                             sp.x = x;
                             sp.y = y;
                             sp.container = container;
@@ -302,6 +367,7 @@ public class Task extends Activity
                             sp.h = h;
                             sp.setGraphParent(getGraphParent());
                             modeler.add(sp);
+                            sp.updateAttachedEventsPosition();
                             remove(true);
                         }
                     },
@@ -328,6 +394,22 @@ public class Task extends Activity
                                 ele.ini = sp;
                             }
 
+                            //copiar los eventos adheridos
+                            for (ele in graphChilds where ele instanceof IntermediateCatchEvent) {
+                                var ae:IntermediateCatchEvent = (ele.copy() as IntermediateCatchEvent);
+                                for (co in ele.getOutputConnectionObjects()) {
+                                    co.ini = ae;
+                                }
+                                ae.graphParent = sp;
+                                insert ae into sp.graphChilds;
+                                ae.x = ele.x;
+                                ae.y = ele.y;
+                                ae.dpx = ele.dpx;
+                                ae.dpy = ele.dpy;
+                                modeler.add(ae);
+                                modeler.moveFront(ae, sp);
+                            }
+
                             sp.x = x;
                             sp.y = y;
                             sp.container = container;
@@ -335,6 +417,7 @@ public class Task extends Activity
                             sp.h = h;
                             sp.setGraphParent(getGraphParent());
                             modeler.add(sp);
+                            sp.updateAttachedEventsPosition();
                             remove(true);
                         }
                     },
@@ -364,6 +447,22 @@ public class Task extends Activity
                         ele.ini = sp;
                     }
 
+                    //copiar los eventos adheridos
+                    for (ele in graphChilds where ele instanceof IntermediateCatchEvent) {
+                        var ae:IntermediateCatchEvent = (ele.copy() as IntermediateCatchEvent);
+                        for (co in ele.getOutputConnectionObjects()) {
+                            co.ini = ae;
+                        }
+                        ae.graphParent = sp;
+                        insert ae into sp.graphChilds;
+                        ae.x = ele.x;
+                        ae.y = ele.y;
+                        ae.dpx = ele.dpx;
+                        ae.dpy = ele.dpy;
+                        modeler.add(ae);
+                        modeler.moveFront(ae, sp);
+                    }
+
                     sp.x = x;
                     sp.y = y;
                     sp.container = container;
@@ -371,6 +470,7 @@ public class Task extends Activity
                     sp.h = h;
                     sp.setGraphParent(getGraphParent());
                     modeler.add(sp);
+                    sp.updateAttachedEventsPosition();
                     remove(true);
                 }
             },
