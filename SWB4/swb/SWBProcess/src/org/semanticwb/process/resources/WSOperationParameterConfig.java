@@ -154,6 +154,9 @@ public class WSOperationParameterConfig extends GenericResource {
 
             if (!method.equals("") && method.length() > 0) {
 
+
+                System.out.println("Se tiene configurado una operación: "+method);
+
                 long idform = System.currentTimeMillis();
                 //Se tiene configurado un método, se muestran los parámetros correspondientes:
                 if (wsrv != null) {
@@ -196,7 +199,7 @@ public class WSOperationParameterConfig extends GenericResource {
                             ParameterDefinition[] params = operinfo.getInput().getDefinitions();
 
                             if (params.length > 0) {
-                                boolean isPREQ = Boolean.TRUE; //FALSE;
+                                //boolean isPREQ = Boolean.TRUE; //FALSE;
                                 String isType = "";
                                 for (ParameterDefinition allparam : params) {
 
@@ -320,13 +323,11 @@ public class WSOperationParameterConfig extends GenericResource {
                             ParameterDefinition[] params = operinfo.getInput().getDefinitions();
                             if (params.length > 0) {
 
-//                                System.out.println("Revisando parametros...");
                                 for (ParameterDefinition allparam : params) {
 
                                     String paramName = allparam.getName();
                                     String paramVal = request.getParameter("p_" + paramName);
 
-//                                    System.out.println("param: " + paramName + ", " + paramVal);
                                     try {
                                         WebServiceParameter wsp = hm.get(paramName);
 
