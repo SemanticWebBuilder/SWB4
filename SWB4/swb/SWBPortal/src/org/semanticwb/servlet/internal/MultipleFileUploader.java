@@ -118,6 +118,7 @@ public class MultipleFileUploader implements InternalServlet
         //System.out.println("user: " + user.getFullName() + ":" + user.isSigned());
         if (ServletFileUpload.isMultipartContent(request))
         {
+System.out.println("\n\ncad="+cad);
             List<UploadedFile> archivos = UploaderFileCacheUtils.get(cad); System.out.println("archivos:"+archivos);
             String subcad = "f" + archivos.size() + cad.substring(4); //si no existe archivos, debemos ignorar el request, el NPE nos facilita salir
             if (archivos != null)
