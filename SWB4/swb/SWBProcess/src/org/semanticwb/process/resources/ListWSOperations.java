@@ -79,49 +79,47 @@ public class ListWSOperations extends GenericResource {
             String urlwsrv = wsrv.getUrl();
             if (urlwsrv != null) {
                 try {
-                    ServiceInfo info = org.semanticwb.webservices.WebService.getServiceinfo(new URL(urlwsrv)); 
+                    ServiceInfo info = org.semanticwb.webservices.WebService.getServiceinfo(new URL(urlwsrv));
                     out.println("<tbody>");
 
                     String isType = "";
 
                     for (Service service : info.getServices()) {
+
+                        System.out.println("service.getId():" + service.getId());
+
                         for (Operation operation : service.getOperations()) {
+
+                            System.out.println("operation.getName():" + operation.getName());
+
                             out.println("<tr>");
                             out.println("<td valign=\"top\">");
-                            out.println(service.getId()+" - "+operation.getName());
+                            out.println(service.getId() + " - " + operation.getName());
                             out.println("</td>");
                             out.println("<td valign=\"top\">");
-                            ParameterDefinition[] params = operation.getInput().getDefinitions();
-                            if (params.length > 0) {
-                                out.println("<ul>");
-                                for (ParameterDefinition allparam : params) {
-                                    isType = "";
-                                    isType = allparam.isBasic()?"B":"-";
-                                    isType += allparam.isMultiple()?"M":"-";
-                                    isType += allparam.isRequired()?"R":"-";
+                            out.println("<ul>");
+                            for (ParameterDefinition allparam : operation.getInput().getDefinitions()) {
+                                isType = "";
+                                isType = allparam.isBasic() ? "B" : "-";
+                                isType += allparam.isMultiple() ? "M" : "-";
+                                isType += allparam.isRequired() ? "R" : "-";
 
-                                    out.println("<li>" + allparam.getName() + " ["+allparam.getDefinitionType()+"]("+isType+")</li>");
-                                }
-                                out.println("</ul>");
-                            } else {
-                                out.println("---");
+                                out.println("<li>" + allparam.getName() + " [" + allparam.getDefinitionType() + "](" + isType + ")</li>");
                             }
+                            out.println("</ul>");
+
                             out.println("</td>");
                             out.println("<td valign=\"top\">");
-                            params = operation.getOutput().getDefinitions();
-                            if (params.length > 0) {
-                                out.println("<ul>");
-                                for (ParameterDefinition allparam : params) {
-                                    isType = "";
-                                    isType = allparam.isBasic()?"B":"-";
-                                    isType += allparam.isMultiple()?"M":"-";
-                                    isType += allparam.isRequired()?"R":"-";
-                                    out.println("<li>" + allparam.getName() + " ["+allparam.getDefinitionType()+"]("+isType+")</li>");
-                                }
-                                out.println("</ul>");
-                            } else {
-                                out.println("---");
+                            out.println("<ul>");
+                            for (ParameterDefinition allparam : operation.getOutput().getDefinitions()) {
+                                isType = "";
+                                isType = allparam.isBasic() ? "B" : "-";
+                                isType += allparam.isMultiple() ? "M" : "-";
+                                isType += allparam.isRequired() ? "R" : "-";
+                                out.println("<li>" + allparam.getName() + " [" + allparam.getDefinitionType() + "](" + isType + ")</li>");
                             }
+                            out.println("</ul>");
+
                             out.println("</td>");
                             out.println("</tr>");
                         }
