@@ -19,8 +19,6 @@ public def TYPE_MULTIPLE="multiple";
 public def TYPE_MULTIPLE_SEQUENTIAL="sequential";
 public class Activity extends FlowNode
 {
-    protected var attachedEvents: IntermediateCatchEvent[];
-    
     public override var over on replace {
         if (over and not selected) {
             shape.styleClass = "taskHover";
@@ -93,8 +91,9 @@ public class Activity extends FlowNode
     }
 
     public function updateAttachedEventsPosition() : Void {
-        for (evt in attachedEvents) {
+        for (evt in graphChilds) {
             evt.y = y + h /2 ;
+            modeler.moveFront(evt, this);
         }
     }
 }
