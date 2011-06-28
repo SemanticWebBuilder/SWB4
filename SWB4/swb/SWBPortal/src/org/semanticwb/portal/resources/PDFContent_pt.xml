@@ -4,7 +4,7 @@
     <form name="frmAdmRes" action="true" method="post" jsframework="dojo" >
         <admdbconnmgr defconn="true"/>
         <fieldset legend="Configuración de contenido">
-            <input type="file" name="archive" label="Documento PDF" showfile="true" filetype="pdf" isshowfiletype="true" isremovefile="true" removemsg="Quitar documento PDF" size="40" jsrequired="true" />
+            <input type="file" name="archive" label="Documento PDF" showfile="true" filetype="pdf" isshowfiletype="true" isremovefile="true" removemsg="Quitar documento PDF" size="40" />
         </fieldset>
 
         <div title="Aparência" open="true">
@@ -28,7 +28,7 @@
     <script type="text/javascript">
     <![CDATA[
         function jsValida(frm) {
-             if(!dojo.byId('archive').value && !dojo.byId('wbNoFile_archive')) {
+            if(isEmpty(dojo.byId('archive').value) && !dojo.byId('wbNoFile_archive')) {
                 alert('Especifique um documento PDF para o recurso');
                 dojo.byId('archive').focus();
                 return false;
