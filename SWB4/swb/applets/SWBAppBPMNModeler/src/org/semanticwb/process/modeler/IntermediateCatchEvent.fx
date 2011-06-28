@@ -20,7 +20,15 @@ import org.semanticwb.process.modeler.ModelerUtils;
 
 public class IntermediateCatchEvent extends CatchEvent
 {
-    var attachedTo: Activity;
+    //public var attachedTo: Activity;
+    var px = bind graphParent.x on replace
+    {
+        onParentXChange();
+    }
+    var py = bind graphParent.y on replace
+    {
+        onParentYChange();
+    }
 
     public override var over on replace {
         if (over and not selected) {
@@ -40,7 +48,7 @@ public class IntermediateCatchEvent extends CatchEvent
     
     public override function create(): Node
     {
-        attachedTo = null;
+        //attachedTo = null;
         blocksMouse = true;
         initializeCustomNode();
         w=30;
@@ -179,23 +187,41 @@ public class IntermediateCatchEvent extends CatchEvent
     {
         if (not modeler.isLocked()) {
             var overNode: GraphicalElement = getOverNode();
-            if (overNode instanceof Activity) {
-                if (attachedTo != null) {
-                    delete this from attachedTo.attachedEvents;
-                    attachedTo = null;
-                }
-                var act = overNode as Activity;
-                attachedTo = act;
-                insert this into act.attachedEvents;
-                act.updateAttachedEventsPosition();
-            } else if (overNode == null) {
-                delete this from attachedTo.attachedEvents;
-                attachedTo = null;
-            }
-            
             setGraphParent(overNode);
+            if (overNode instanceof Activity) {
+                //if (attachedTo != null) {
+                //    attachedTo = null;
+                //}
+                //var act = overNode as Activity;
+                //attachedTo = act;
+                (graphParent as Activity).updateAttachedEventsPosition();
+            } //else if (overNode == null) {
+            //    attachedTo = null;
+            //}
             snapToGrid();
         }
+    }
+
+    override public function onParentXChange() {
+       if(graphParent!=null and not graphParent.resizing) {
+           x=px+dpx;
+           if (graphParent instanceof Activity) {
+           //if (attachedTo != null) {
+            (graphParent as Activity).updateAttachedEventsPosition();
+           }
+       }
+       //println("Cambiando X");
+    }
+
+    override public function onParentYChange() {
+        if(graphParent!=null and not graphParent.resizing) {
+            y=py+dpy;
+            if (graphParent instanceof Activity) {
+            //if (attachedTo != null) {
+                (graphParent as Activity).updateAttachedEventsPosition();
+            }
+        }
+        //println("Cambiando Y");
     }
 
     override public function snapToGrid()
