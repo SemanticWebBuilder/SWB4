@@ -122,7 +122,7 @@ public class WSDLParameterDefinition implements ParameterDefinition
     @Override
     public boolean isMultiple()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return isMultiple;
     }
 
     @Override
