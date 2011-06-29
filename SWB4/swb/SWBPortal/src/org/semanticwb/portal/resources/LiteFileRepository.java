@@ -13,9 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.text.FieldPosition;
 import java.text.NumberFormat;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +42,6 @@ import org.semanticwb.portal.api.SWBResourceURL;
 //import org.semanticwb.process.model.RepositoryDirectory;
 import org.semanticwb.model.RepositoryFile;
 import org.semanticwb.portal.api.SWBResourceURLImp;
-import sun.tools.jar.resources.jar;
 
 /**
  *
