@@ -78,6 +78,8 @@ public class Login implements InternalServlet
     /** The adm map. */
     String admMap=null;
 
+    boolean admin = true;
+
     //Constantes para primer implementación
 
     /** The blocked list. */
@@ -108,6 +110,7 @@ public class Login implements InternalServlet
         log.event("Initializing InternalServlet Login...");
         secure = SWBPlatform.getEnv("swb/secureAdmin", "false").equalsIgnoreCase("true");
         paramList = SWBPlatform.getEnv("swb/ExternalParamList","");
+        admin = SWBPlatform.getEnv("swb/administration", "true").equalsIgnoreCase("true");
         admMap=SWBContext.WEBSITE_ADMIN;
         //TODO: preparar los aspectos configurables de la autenticación
     }
@@ -188,6 +191,12 @@ public class Login implements InternalServlet
         {
             return;
         }
+        if (dparams.getWebPage() == null || (!admin && dparams.getWebPage().getWebSite().getId().equals(admMap)))
+            {
+                response.sendError(404, "La pagina " + request.getRequestURI() + " no existe... ");
+                log.debug("Distributor: SendError 404");
+                return ;
+            }
         if (secure  && admMap.equalsIgnoreCase(dparams.getWebPage().getWebSiteId()) && !request.isSecure()){
             sendRedirect(response, "https://"+request.getServerName()+request.getRequestURI());
         }
