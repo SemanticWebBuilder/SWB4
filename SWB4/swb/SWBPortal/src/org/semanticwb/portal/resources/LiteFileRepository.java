@@ -354,14 +354,14 @@ public class LiteFileRepository extends GenericResource {
                 double fver = Double.parseDouble(vl.getVersionValue());
                 fver = fver + 0.10D;
 
-
-
-
+                String sfver = numf.format(fver);
+                if(sfver.indexOf(".")==-1)
+                    sfver = ""+(float)fver;
 
                 int iver = (int) fver;
                 iver = iver + 1;
 
-                out.println("<option value=\"fraction\">" + numf.format(fver) + "</option>");
+                out.println("<option value=\"fraction\">" + sfver + "</option>");
                 out.println("<option value=\"nextInt\">" + (float)iver + "</option>");
 
 
@@ -576,11 +576,15 @@ public class LiteFileRepository extends GenericResource {
                 double fver = Double.parseDouble(vl.getVersionValue());
                 fver = fver + 0.10D;
 
+                String sfver = numf.format(fver);
+                if(sfver.indexOf(".")==-1)
+                    sfver = ""+(float)fver;
+
 
                 int iver = (int) fver;
                 iver = iver + 1;
 
-                sNxtVersion = numf.format(fver);
+                sNxtVersion = sfver;
 
                 if (incremento) {
                     sNxtVersion = ""+(float)iver;
@@ -1138,7 +1142,11 @@ public class LiteFileRepository extends GenericResource {
                 sver = ""+(float)f;
             } else {
                 f = f + 0.10D;
-                sver = numf.format(f);
+
+                String sfver = numf.format(f);
+                if(sfver.indexOf(".")==-1)
+                    sfver = ""+(float)f;
+                sver = sfver;
             }
             ver++;
         }
