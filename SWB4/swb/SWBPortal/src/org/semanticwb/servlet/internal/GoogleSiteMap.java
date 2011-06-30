@@ -45,6 +45,7 @@ public class GoogleSiteMap implements InternalServlet {
     public void doProcess(HttpServletRequest req, HttpServletResponse resp, DistributorParams dparams) throws IOException, ServletException
     {
         String lang = "es";
+        String country = "mx";
         String host = "http://"+req.getServerName();
         if (req.getServerPort()!=80) host += ":"+req.getServerPort();
         //resp.setHeader("Content-Encoding", "gzip");
@@ -66,6 +67,10 @@ public class GoogleSiteMap implements InternalServlet {
             {
                 lang=map.getLanguage().getId();
             }
+            if(map.getCountry()!=null)
+            {
+                country=map.getCountry().getId();
+            }
 //            if (SWBContext.WEBSITE_GLOBAL.equals(map.getId()))
 //            {
 //                continue;
@@ -82,34 +87,63 @@ public class GoogleSiteMap implements InternalServlet {
                 }
             }
             WebPage topicH = map.getHomePage();
-            if (null!= topicH.getWebSite().getLanguage()) lang = topicH.getWebSite().getLanguage().getId(); else lang = "es";
-            ret.append("<url><loc>" + hn +topicH.getRealUrl() + "</loc>");
-            if (!"".equals(topicH.getContentsLastUpdate(lang, "yyyy-mm-dd")))
-                    ret.append("<lastmod>"+topicH.getContentsLastUpdate(lang, "yyyy-mm-dd")+"</lastmod>");
-            ret.append("<priority>0.8</priority></url>");
-            Iterator<WebPage> chanels =topicH.listVisibleChilds(lang);
-            while (chanels.hasNext())
-            {
-                WebPage chanel = chanels.next();
-                if (null!= chanel.getWebSite().getLanguage()) lang = chanel.getWebSite().getLanguage().getId(); else lang = "es";
-                ret.append("<url><loc>" + hn + chanel.getRealUrl() + "</loc>");
-            if (!"".equals(chanel.getContentsLastUpdate(lang, "yyyy-mm-dd")))
-                    ret.append("<lastmod>"+chanel.getContentsLastUpdate(lang, "yyyy-mm-dd")+"</lastmod>");
-            ret.append("<priority>0.5</priority></url>");
-                Iterator sections = chanel.listVisibleChilds(lang);
-                while (sections.hasNext())
-                {
-                    WebPage section = (WebPage) sections.next();
-                    if (null!= section.getWebSite().getLanguage()) lang = section.getWebSite().getLanguage().getId(); else lang = "es";
-                    ret.append("<url><loc>" + hn + section.getRealUrl() + "</loc>");
-            if (!"".equals(section.getContentsLastUpdate(lang, "yyyy-mm-dd")))
-                    ret.append("<lastmod>"+section.getContentsLastUpdate(lang, "yyyy-mm-dd")+"</lastmod>");
-            ret.append("<priority>0.3</priority></url>");
-                }
-            }
+            processWebPage(ret, hn, topicH, 95, lang, country);
+
+//            if (null!= topicH.getWebSite().getLanguage()) lang = topicH.getWebSite().getLanguage().getId(); else lang = "es";
+//            ret.append("<url><loc>" + hn +topicH.getRealUrl() + "</loc>");
+//            if (!"".equals(topicH.getContentsLastUpdate(lang, "yyyy-mm-dd")))
+//                    ret.append("<lastmod>"+topicH.getContentsLastUpdate(lang, "yyyy-mm-dd")+"</lastmod>");
+//            ret.append("<priority>0.8</priority></url>");
+//            Iterator<WebPage> chanels =topicH.listVisibleChilds(lang);
+//            while (chanels.hasNext())
+//            {
+//                WebPage chanel = chanels.next();
+//                if (null!= chanel.getWebSite().getLanguage()) lang = chanel.getWebSite().getLanguage().getId(); else lang = "es";
+//                ret.append("<url><loc>" + hn + chanel.getRealUrl() + "</loc>");
+//            if (!"".equals(chanel.getContentsLastUpdate(lang, "yyyy-mm-dd")))
+//                    ret.append("<lastmod>"+chanel.getContentsLastUpdate(lang, "yyyy-mm-dd")+"</lastmod>");
+//            ret.append("<priority>0.5</priority></url>");
+//                Iterator sections = chanel.listVisibleChilds(lang);
+//                while (sections.hasNext())
+//                {
+//                    WebPage section = (WebPage) sections.next();
+//                    if (null!= section.getWebSite().getLanguage()) lang = section.getWebSite().getLanguage().getId(); else lang = "es";
+//                    ret.append("<url><loc>" + hn + section.getRealUrl() + "</loc>");
+//            if (!"".equals(section.getContentsLastUpdate(lang, "yyyy-mm-dd")))
+//                    ret.append("<lastmod>"+section.getContentsLastUpdate(lang, "yyyy-mm-dd")+"</lastmod>");
+//            ret.append("<priority>0.3</priority></url>");
+//                }
+//            }
         }
         ret.append("</urlset>");
         resp.getWriter().print(SWBUtils.TEXT.encode(ret.toString(), SWBUtils.TEXT.CHARSET_UTF8));
+    }
+
+    void processWebPage(StringBuffer ret, String hn, WebPage page, int score, String lang, String country)
+    {
+        int tscore = score-5;
+        String scoregap = score==5?"05":""+score;
+        if (page.isVisible())
+        {
+            String urlcnt;
+            if (null!=lang && null!=country){
+                urlcnt = page.getRealUrl(lang, country);
+            } else if (null!=lang) {
+                urlcnt = page.getRealUrl(lang);
+            } else {
+                urlcnt = page.getRealUrl();
+            }
+            ret.append("<url><loc>" + hn +urlcnt + "</loc>");
+            if (!"".equals(page.getContentsLastUpdate(lang, "yyyy-mm-dd")))
+                    ret.append("<lastmod>"+page.getContentsLastUpdate(lang, "yyyy-mm-dd")+"</lastmod>");
+            ret.append("<priority>0."+scoregap+"</priority></url>");
+        }
+        Iterator<WebPage> childs =page.listChilds(lang, true, false, null, true);
+        if (score!=5) { tscore = score;}
+        while (childs.hasNext())
+        {
+            processWebPage(ret, hn, childs.next(), tscore, lang, country);
+        }
     }
 
 }
