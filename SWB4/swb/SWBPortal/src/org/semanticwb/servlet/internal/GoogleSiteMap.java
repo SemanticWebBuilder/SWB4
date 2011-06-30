@@ -139,7 +139,7 @@ public class GoogleSiteMap implements InternalServlet {
             ret.append("<priority>0."+scoregap+"</priority></url>");
         }
         Iterator<WebPage> childs =page.listChilds(lang, true, false, null, true);
-        if (score!=5) { tscore = score;}
+        if (score==5) { tscore = score;}
         while (childs.hasNext())
         {
             processWebPage(ret, hn, childs.next(), tscore, lang, country);
