@@ -96,4 +96,18 @@ public class Activity extends FlowNode
             modeler.moveFront(evt, this);
         }
     }
+
+    override public function getBoundsStart() : Point {
+        return Point {
+            x: x - w / 2
+            y: y - h / 2
+        }
+    }
+
+    override public function getBoundsEnd() : Point {
+        return Point {
+            x: x - w / 2 +w
+            y: y - h / 2 +h
+        }
+    }
 }
