@@ -88,14 +88,14 @@ public class DataObject  extends GraphicalElement {
     {
         blocksMouse = true;
         setCommonMenuOptions();
-        w=55;
-        h=60;
+        w=50;
+        h=55;
         text=EditableText
         {
             text: bind title with inverse
             x:bind x
-            y:bind y
-            width: bind w
+            y:bind y + h/2 + text.height/2// + 2 + text.height / 2
+            width: bind w + 50
             height: bind h
             styleClass: "dataObject"
             id: "label"
@@ -320,7 +320,7 @@ public class DataObject  extends GraphicalElement {
         if (not(link instanceof AssociationFlow)) {
             ret = false;
             ModelerUtils.setErrorMessage(##"msgError3");
-        } else if (link.ini instanceof Artifact or link.ini instanceof DataObject) {
+        } else if (link.ini instanceof Artifact) {
             ret = false;
             ModelerUtils.setErrorMessage(##"msgError5");
         }
@@ -343,5 +343,19 @@ public class DataObject  extends GraphicalElement {
             uri: "new:{type}:{modeler.toolBar.counter++}"
         }
         return t;
+    }
+
+    override public function getBoundsStart() : Point {
+        return Point {
+            x: x - w / 2
+            y: y - h / 2
+        }
+    }
+
+    override public function getBoundsEnd() : Point {
+        return Point {
+            x: x - w / 2 +w
+            y: y - h / 2 +h
+        }
     }
 }
