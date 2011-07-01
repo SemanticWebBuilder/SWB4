@@ -161,7 +161,7 @@ public class TreeSelectFormElement implements InternalServlet {
         Iterator<WebPage> childs=pageroot.listChilds();
         while(childs.hasNext()) {
             WebPage webpage = childs.next();
-            if(webpage.getId() != null) {
+            if(webpage.getId() != null && !webpage.isDeleted()) {
                 if(!list.isEmpty()) {
                     if(list.contains(webpage)) {
                         toggleopen = true;
