@@ -21,14 +21,14 @@ override public function create(): Node
     {
         blocksMouse = true;
         setCommonMenuOptions();
-        w=80;
-        h=60;
+        w=60;
+        h=50;
         text=EditableText
         {
             text: bind title with inverse
             x:bind x
-            y:bind y+10
-            width: bind w
+            y:bind y + h/2 + text.height/2
+            width: bind w + 50
             height: bind h
         }
 
