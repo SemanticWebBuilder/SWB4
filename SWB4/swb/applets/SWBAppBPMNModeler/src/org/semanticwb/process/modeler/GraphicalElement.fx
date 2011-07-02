@@ -567,22 +567,18 @@ public class GraphicalElement extends CustomNode
 
     public function inBounds(node: GraphicalElement) : Boolean {
         var ret = false;
-        var wi = node.shape.boundsInLocal.width;
-        var he = node.shape.boundsInLocal.height;
-        //if (node instanceof GraphicalElement) {
-        //    wi = (node as GraphicalElement).w;
-        //    he = (node as GraphicalElement).h;
-        //}
+        var b1 = node.getBounds();
+        var b2 = getBounds();
 
-        var nx1 = node.shape.boundsInLocal.minX;
-        var ny1 = node.shape.boundsInLocal.minY;
-        var nx2 = node.shape.boundsInLocal.minX + wi;
-        var ny2 = node.shape.boundsInLocal.minY + he;
+        var nx1 = b1.topLeft.x;
+        var ny1 = b1.topLeft.y;
+        var nx2 = b1.bottomRight.x;
+        var ny2 = b1.bottomRight.y;
 
-        var ex1 = shape.boundsInLocal.minX;
-        var ey1 = shape.boundsInLocal.minY;
-        var ex2 = shape.boundsInLocal.minX + w;
-        var ey2 = shape.boundsInLocal.minY + h;
+        var ex1 = b2.topLeft.x;
+        var ey1 = b2.topLeft.y;
+        var ex2 = b2.bottomRight.x;
+        var ey2 = b2.bottomRight.y;
         //println("  Revisando si {node.title} [{nx1}, {ny1}][{nx2}, {ny2}] está dentro del lane {lane.title} [{ex1}, {ey1}][{ex2}, {ey2}]");
         if (nx1 > ex1 and nx2 < ex2) {
             //println("  {node.title} dentro de {title} en X");
@@ -820,5 +816,19 @@ public class GraphicalElement extends CustomNode
 
     public function getScaleHeight() {
         return h * s;
+    }
+
+    /**Obtiene los límites del rectángulo que encierra a la figura del elemento*/
+    public function getBounds() : Bounds {
+        return Bounds {
+            topLeft: Point {
+                x: x
+                y: y
+            },
+            bottomRight: Point {
+                x: x+w
+                y: y+h
+            }
+        }
     }
 }
