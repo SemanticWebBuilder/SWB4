@@ -384,4 +384,17 @@ public class Pool extends GraphicalElement
 
         return t;
     }
+
+    override public function getBounds() : Bounds {
+        return Bounds {
+            topLeft: Point {
+                x: x - w / 2
+                y: y - h / 2
+            },
+            bottomRight: Point {
+                x: x - w / 2 +w
+                y: y - h / 2 +h
+            }
+        }
+    }
 }
