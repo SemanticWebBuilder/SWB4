@@ -1351,7 +1351,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         User user = paramRequest.getUser();
 
         WebPage wpage = paramRequest.getWebPage();
-        WebSite wsite = wpage.getWebSite();
+        WebSite wsite = getResourceBase().getWebSite(); //wpage.getWebSite();
 
         IDREP = docRepNS(request, response, paramRequest);
 
@@ -1693,9 +1693,21 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             StringBuffer strRules = new StringBuffer("");
             strRules.append("\n<option value=\"0\">" + paramRequest.getLocaleString("msgSelNone") + "</option>");
             strRules.append("\n<optgroup label=\"Roles\">");
+
+            String slang = user.getLanguage();
+            String stitle = "";
             while (iRoles.hasNext()) {
                 Role oRole = iRoles.next();
-                strRules.append("\n<option value=\"" + oRole.getURI() + "\" " + (selectedItem.equals(oRole.getURI()) ? "selected" : "") + ">" + oRole.getDisplayTitle(user.getLanguage()) + "</option>");
+                if(null!=oRole&&selectedItem!=null)
+                {
+                    stitle = "";
+                    if(oRole.getDisplayTitle(slang)!=null) stitle = oRole.getDisplayTitle(slang);
+                    else if(oRole.getTitle(slang)!=null) stitle = oRole.getTitle(slang);
+                    else if(oRole.getTitle()!=null) stitle = oRole.getTitle();
+                    else stitle = oRole.getId();
+
+                    strRules.append("\n<option value=\"" + oRole.getURI() + "\" " + (selectedItem.equals(oRole.getURI()) ? "selected" : "") + ">" + stitle + "</option>");
+                }
             }
             strRules.append("\n</optgroup>");
 
@@ -1710,7 +1722,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                 strTemp = strRules.toString();
             }
 
-        } catch (Exception e) {
+        } catch (Exception e) { log.error("Error al cargar los roles del repositorio de usuarios.",e);
         }
 
 
