@@ -186,6 +186,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 }
                 else
                 {
+                    // no pass
                     response.setAction("add");
                     if (request.getParameter("page") != null)
                     {
@@ -264,7 +265,8 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     {
                         response.setAction("edit");
                     }
-                    response.setRenderParameter("uri", request.getParameter("uri"));
+                    if (request.getParameter("uri") != null)
+                        response.setRenderParameter("uri", request.getParameter("uri"));
                     if (request.getParameter("page") != null)
                     {
                         response.setRenderParameter("page", request.getParameter("page"));
@@ -280,8 +282,10 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 }
                 else
                 {
+                    // no pass
                     response.setAction("editQuestion");
-                    response.setRenderParameter("uri", request.getParameter("uri"));
+                    if (request.getParameter("uri") != null)
+                        response.setRenderParameter("uri", request.getParameter("uri"));
                     if (request.getParameter("page") != null)
                     {
                         response.setRenderParameter("page", request.getParameter("page"));
@@ -419,12 +423,15 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         }
                         points.setPoints(points.getPoints() + getPointsAnswer());
                     }
-                    response.setRenderParameter("uri", request.getParameter("uri"));
+                    if (request.getParameter("uri") != null)
+                        response.setRenderParameter("uri", request.getParameter("uri"));
                 }
                 else
                 {
+                    // no pass
                     response.setAction("answerQuestion");
-                    response.setRenderParameter("uri", request.getParameter("uri"));
+                    if (request.getParameter("uri") != null)
+                        response.setRenderParameter("uri", request.getParameter("uri"));
                     if (request.getParameter("page") != null)
                     {
                         response.setRenderParameter("page", request.getParameter("page"));
@@ -491,7 +498,8 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         if (this.isIsModerate())
                             answer.setAnsStatus(STATUS_REGISTERED);
                         answer.setAnswer(placeAnchors(answer.getAnswer()));
-                        response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
+                        if (answer.getAnsQuestion().getURI() != null)
+                            response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
                         if (request.getParameter("page") != null)
                         {
                             response.setRenderParameter("page", request.getParameter("page"));
@@ -508,8 +516,10 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 }
                 else
                 {
+                    // no pass
                     response.setAction("editAnswer");
-                    response.setRenderParameter("uri", request.getParameter("uri"));
+                    if (request.getParameter("uri") != null)
+                        response.setRenderParameter("uri", request.getParameter("uri"));
                     if (request.getParameter("page") != null)
                     {
                         response.setRenderParameter("page", request.getParameter("page"));
@@ -585,7 +595,8 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     if (request.getParameter("org") != null)
                     {
                         response.setAction(request.getParameter("org"));
-                        response.setRenderParameter("uri", request.getParameter("uri"));
+                        if (request.getParameter("uri") != null)
+                            response.setRenderParameter("uri", request.getParameter("uri"));
                     }
                     else
                     {
@@ -673,7 +684,8 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     if (request.getParameter("org") != null)
                     {
                         response.setAction(request.getParameter("org"));
-                        response.setRenderParameter("uri", request.getParameter("uri"));
+                        if (request.getParameter("uri") != null)
+                            response.setRenderParameter("uri", request.getParameter("uri"));
                     }
                     else
                     {
@@ -741,7 +753,8 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     }
                     points.setPoints(points.getPoints() + getPointsBestAnswer());
                 }
-                response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
+                if (answer.getAnsQuestion().getURI() != null)
+                    response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
                 if (request.getParameter("cat") != null)
                 {
                     response.setRenderParameter("cat", request.getParameter("cat"));
@@ -789,7 +802,8 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     {
                         response.setAction("showDetail");
                     }
-                    response.setRenderParameter("uri", question.getURI());
+                    if (question.getURI() != null)
+                        response.setRenderParameter("uri", question.getURI());
                     if (request.getParameter("cat") != null)
                     {
                         response.setRenderParameter("cat", request.getParameter("cat"));
@@ -837,7 +851,8 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     {
                         response.setAction("showDetail");
                     }
-                    response.setRenderParameter("uri", question.getURI());
+                    if (question.getURI() != null)
+                        response.setRenderParameter("uri", question.getURI());
                     if (request.getParameter("cat") != null)
                     {
                         response.setRenderParameter("cat", request.getParameter("cat"));
@@ -888,7 +903,8 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     if (request.getParameter("org") != null)
                     {
                         response.setAction(request.getParameter("org"));
-                        response.setRenderParameter("uri", request.getParameter("uri"));
+                        if (request.getParameter("uri") != null)
+                            response.setRenderParameter("uri", request.getParameter("uri"));
                     }
                     else
                     {
@@ -1001,7 +1017,8 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     {
                         response.setAction("showDetail");
                     }
-                    response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
+                    if (answer.getAnsQuestion().getURI() != null)
+                        response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
                 }
                 if (request.getParameter("deleted") != null)
                 {
@@ -1041,7 +1058,8 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                             response.setAction("showDetail");
                         }
 
-                        response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
+                        if (answer.getAnsQuestion().getURI() != null)
+                            response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
                         answer.remove();
                     }
                     catch (Exception e)
@@ -1096,7 +1114,8 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     if (request.getParameter("org") != null)
                     {
                         response.setAction(request.getParameter("org"));
-                        response.setRenderParameter("uri", request.getParameter("uri"));
+                        if (request.getParameter("uri") != null)
+                            response.setRenderParameter("uri", request.getParameter("uri"));
                     }
                     else
                     {
