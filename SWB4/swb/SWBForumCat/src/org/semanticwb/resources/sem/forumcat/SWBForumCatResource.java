@@ -124,7 +124,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 if (cadena != null)
                 {
                     String _cadena = request.getParameter("code");
-                    if (cadena.equals(_cadena))
+                    if (cadena.equalsIgnoreCase(_cadena))
                     {
                         pass = true;
                         request.getSession().removeAttribute(sAttr);
@@ -212,7 +212,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 if (cadena != null)
                 {
                     String _cadena = request.getParameter("code");
-                    if (cadena.equals(_cadena))
+                    if (cadena.equalsIgnoreCase(_cadena))
                     {
                         pass = true;
                         request.getSession().removeAttribute(sAttr);
@@ -352,7 +352,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 if (cadena != null)
                 {
                     String _cadena = request.getParameter("code");
-                    if (cadena.equals(_cadena))
+                    if (cadena.equalsIgnoreCase(_cadena))
                     {
                         pass = true;
                         request.getSession().removeAttribute(sAttr);
@@ -450,7 +450,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 if (cadena != null)
                 {
                     String _cadena = request.getParameter("code");
-                    if (cadena.equals(_cadena))
+                    if (cadena.equalsIgnoreCase(_cadena))
                     {
                         pass = true;
                         request.getSession().removeAttribute(sAttr);
