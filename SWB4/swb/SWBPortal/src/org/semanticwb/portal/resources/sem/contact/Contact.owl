@@ -1,0 +1,645 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+    xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:contact="http://www.semanticwebbuilder.org/portal/resources/Contact#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xml:base="http://www.semanticwebbuilder.org/portal/resources/Contact">
+  <owl:Ontology rdf:about="">
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="Category">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Sortable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Iconable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:label xml:lang="en">Category</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:label xml:lang="es">Categoría</rdfs:label>
+    <rdfs:comment xml:lang="en">Category</rdfs:comment>
+    <rdfs:comment xml:lang="es">Categoría</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Phone">
+    <rdfs:comment xml:lang="en">Phone</rdfs:comment>
+    <rdfs:comment xml:lang="es">Teléfono</rdfs:comment>
+    <rdfs:label xml:lang="en">Phone</rdfs:label>
+    <rdfs:label xml:lang="es">Teléfono</rdfs:label>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="dp_phone"/>
+    </swb:displayObject>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Address">
+    <rdfs:comment xml:lang="en">Address</rdfs:comment>
+    <rdfs:comment xml:lang="es">Dirección</rdfs:comment>
+    <rdfs:label xml:lang="en">Address</rdfs:label>
+    <rdfs:label xml:lang="es">Dirección</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="eveningPhone">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_eveningPhone">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >170</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="en">Evening Phone</rdfs:comment>
+    <rdfs:comment xml:lang="es">Teléfono de recados</rdfs:comment>
+    <rdfs:label xml:lang="en">Evening Phone</rdfs:label>
+    <rdfs:label xml:lang="es">Teléfono de recados</rdfs:label>
+    <rdfs:domain>
+      <swb:Class rdf:ID="Contact">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Iconable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Sortable"/>
+        <rdfs:comment xml:lang="en">Contact</rdfs:comment>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:comment xml:lang="es">Contacto</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPageable"/>
+        <rdfs:label xml:lang="es">Contacto</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:label xml:lang="en">Contact</rdfs:label>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="#Phone"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="category">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_category">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="#Category"/>
+    <rdfs:domain rdf:resource="#Contact"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="country">
+    <rdfs:label xml:lang="es">País o región</rdfs:label>
+    <rdfs:comment xml:lang="en">Country</rdfs:comment>
+    <rdfs:label xml:lang="en">Country or Region</rdfs:label>
+    <rdfs:comment xml:lang="es">País</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_country">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Address"/>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Country"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="editRole">
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Role"/>
+    <rdfs:label xml:lang="en">Edit Role</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_editRole">
+        <swbxf:propPromptMessage xml:lang="en">Role to edit the contacts directory</swbxf:propPromptMessage>
+        <swbxf:propPromptMessage xml:lang="es">Rol para editar el directorio de contactos</swbxf:propPromptMessage>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneUserRep"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="en">Edit Role</rdfs:comment>
+    <rdfs:label xml:lang="es">Rol para editar</rdfs:label>
+    <rdfs:comment xml:lang="es">Rol para editar</rdfs:comment>
+    <rdfs:domain>
+      <swb:SemanticResource rdf:ID="ContactDirectory">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:SemanticResource>
+    </rdfs:domain>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="homeAddress">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_homeAddress">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >190</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="en">Home Address</rdfs:comment>
+    <rdfs:comment xml:lang="es">Dirección particular</rdfs:comment>
+    <rdfs:label xml:lang="en">Home Address</rdfs:label>
+    <rdfs:label xml:lang="es">Dirección particular</rdfs:label>
+    <rdfs:domain rdf:resource="#Contact"/>
+    <rdfs:range rdf:resource="#Address"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="mobilePhone">
+    <rdfs:range rdf:resource="#Phone"/>
+    <rdfs:label xml:lang="en">Mobile Phone</rdfs:label>
+    <rdfs:label xml:lang="es">Teléfono celular</rdfs:label>
+    <rdfs:comment xml:lang="es">Teléfono celular</rdfs:comment>
+    <rdfs:comment xml:lang="en">Cell Phone</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_mobilePhone">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >160</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:domain rdf:resource="#Contact"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="region">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_region">
+        <swbxf:propInvalidMessage xml:lang="en">Country or Region incorrect</swbxf:propInvalidMessage>
+        <swbxf:propInvalidMessage xml:lang="es">País o región incorrecto</swbxf:propInvalidMessage>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="en">Country or Region</rdfs:comment>
+    <rdfs:comment xml:lang="es">País o región</rdfs:comment>
+    <rdfs:label xml:lang="en">Country or Region</rdfs:label>
+    <rdfs:label xml:lang="es">País o región</rdfs:label>
+    <rdfs:domain rdf:resource="#Phone"/>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Country"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="faxPhone">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_faxPhone">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >150</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="en">Fax Phone</rdfs:comment>
+    <rdfs:comment xml:lang="es">Teléfono de fax</rdfs:comment>
+    <rdfs:label xml:lang="en">Fax Phone</rdfs:label>
+    <rdfs:label xml:lang="es">Teléfono de fax</rdfs:label>
+    <rdfs:domain rdf:resource="#Contact"/>
+    <rdfs:range rdf:resource="#Phone"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="workAddress">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_workAddress">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >180</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="en">Work Address</rdfs:comment>
+    <rdfs:comment xml:lang="es">Dirección de trabajo</rdfs:comment>
+    <rdfs:label xml:lang="en">Work Address</rdfs:label>
+    <rdfs:label xml:lang="es">Dirección de trabajo</rdfs:label>
+    <rdfs:domain rdf:resource="#Contact"/>
+    <rdfs:range rdf:resource="#Address"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasContact">
+    <rdfs:range rdf:resource="#Contact"/>
+    <rdfs:domain rdf:resource="#ContactDirectory"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="otherAddress">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_otherAddress">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >191</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="en">Other Address</rdfs:comment>
+    <rdfs:comment xml:lang="es">Dirección alterna</rdfs:comment>
+    <rdfs:label xml:lang="en">Other Address</rdfs:label>
+    <rdfs:label xml:lang="es">Dirección alterna</rdfs:label>
+    <rdfs:domain rdf:resource="#Contact"/>
+    <rdfs:range rdf:resource="#Address"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="workPhone">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_workPhone">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >120</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="es">Teléfono de trabajo</rdfs:comment>
+    <rdfs:domain rdf:resource="#Contact"/>
+    <rdfs:range rdf:resource="#Phone"/>
+    <rdfs:comment xml:lang="en">Work Phone</rdfs:comment>
+    <rdfs:label xml:lang="es">Teléfono de trabajo</rdfs:label>
+    <rdfs:label xml:lang="en">Work Phone</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="homePhone">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_homePhone">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >140</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="en">Home Phone</rdfs:comment>
+    <rdfs:comment xml:lang="es">Teléfono particular</rdfs:comment>
+    <rdfs:label xml:lang="en">Home Phone</rdfs:label>
+    <rdfs:label xml:lang="es">Teléfono particular</rdfs:label>
+    <rdfs:domain rdf:resource="#Contact"/>
+    <rdfs:range rdf:resource="#Phone"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="workPhone2">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_workPhone2">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >130</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="en">Second Work Phone</rdfs:comment>
+    <rdfs:comment xml:lang="es">Teléfono de trabajo secundario</rdfs:comment>
+    <rdfs:label xml:lang="en">Work Phone 2</rdfs:label>
+    <rdfs:label xml:lang="es">Teléfono de trabajo 2</rdfs:label>
+    <rdfs:domain rdf:resource="#Contact"/>
+    <rdfs:range rdf:resource="#Phone"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="position">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_position">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="en">Position</rdfs:comment>
+    <rdfs:comment xml:lang="es">Cargo</rdfs:comment>
+    <rdfs:label xml:lang="en">Position</rdfs:label>
+    <rdfs:label xml:lang="es">Cargo</rdfs:label>
+    <rdfs:domain rdf:resource="#Contact"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="cp">
+    <rdfs:comment xml:lang="en">ZIP Code</rdfs:comment>
+    <rdfs:comment xml:lang="es">Código postal</rdfs:comment>
+    <rdfs:label xml:lang="en">ZIP Code</rdfs:label>
+    <rdfs:label xml:lang="es">Código postal</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_cp">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Address"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="lastName">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_lastName">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="en">Last Name</rdfs:comment>
+    <rdfs:comment xml:lang="es">Primer apelldio</rdfs:comment>
+    <rdfs:label xml:lang="en">Last Name</rdfs:label>
+    <rdfs:label xml:lang="es">Primer apelldio</rdfs:label>
+    <rdfs:domain rdf:resource="#Contact"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="ext">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_ext">
+        <swbxf:propInvalidMessage xml:lang="en">Extension incorrect</swbxf:propInvalidMessage>
+        <swbxf:propInvalidMessage xml:lang="es">Extensión incorrrecta</swbxf:propInvalidMessage>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >40</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="en">Extension</rdfs:comment>
+    <rdfs:comment xml:lang="es">Extensión</rdfs:comment>
+    <rdfs:label xml:lang="en">Extension</rdfs:label>
+    <rdfs:label xml:lang="es">Extensión</rdfs:label>
+    <rdfs:domain rdf:resource="#Phone"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="color">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_color">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="en">Color</rdfs:comment>
+    <rdfs:comment xml:lang="es">Color</rdfs:comment>
+    <rdfs:label xml:lang="en">Color</rdfs:label>
+    <rdfs:label xml:lang="es">Color</rdfs:label>
+    <rdfs:domain rdf:resource="#Category"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="treatment">
+    <rdfs:label xml:lang="en">Treatment</rdfs:label>
+    <rdfs:comment xml:lang="es">Trato</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_treatment">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
+        <swbxf:propSelectValues xml:lang="es">c:C.|d:D.|dr:Dr.|dra:Dra.|ing:Ing.|prof:Prof.|sr:Sr.|sra:Sra.|srta:Srta.|lic:Lic.|mtro:Mtro.</swbxf:propSelectValues>
+        <swbxf:propSelectValues xml:lang="en">mr:Mr.|mrs:Mrs.|prof:Prof.|dr:Dr.</swbxf:propSelectValues>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Trato</rdfs:label>
+    <rdfs:comment xml:lang="en">Treatment</rdfs:comment>
+    <rdfs:domain rdf:resource="#Contact"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="email3">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Correo electrónico terciario</rdfs:label>
+    <rdfs:comment xml:lang="es">Correo terciario</rdfs:comment>
+    <rdfs:comment xml:lang="en">Third Email</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_email3">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >90</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Third Email</rdfs:label>
+    <rdfs:domain rdf:resource="#Contact"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="state">
+    <rdfs:label xml:lang="es">Estado o Provincia</rdfs:label>
+    <rdfs:comment xml:lang="es">Estado</rdfs:comment>
+    <rdfs:comment xml:lang="en">State</rdfs:comment>
+    <rdfs:label xml:lang="en">State</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_state">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >40</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Address"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="areaCode">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_areaCode">
+        <swbxf:propInvalidMessage xml:lang="en">Area Code incorrect</swbxf:propInvalidMessage>
+        <swbxf:propInvalidMessage xml:lang="es">Código de area incorrrecto</swbxf:propInvalidMessage>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="en">Area Code</rdfs:comment>
+    <rdfs:comment xml:lang="es">Código de área</rdfs:comment>
+    <rdfs:label xml:lang="en">Area Code</rdfs:label>
+    <rdfs:label xml:lang="es">Código de área</rdfs:label>
+    <rdfs:domain rdf:resource="#Phone"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="firstName">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_firstName">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="en">First Name</rdfs:comment>
+    <rdfs:comment xml:lang="es">Nombre</rdfs:comment>
+    <rdfs:label xml:lang="en">First Name</rdfs:label>
+    <rdfs:label xml:lang="es">Nombre</rdfs:label>
+    <rdfs:domain rdf:resource="#Contact"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="email2">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_email2">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >80</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="es">Correo electrónico secundario</rdfs:comment>
+    <rdfs:comment xml:lang="en">Second Email</rdfs:comment>
+    <rdfs:label xml:lang="es">Correo secundario</rdfs:label>
+    <rdfs:label xml:lang="en">Second Email</rdfs:label>
+    <rdfs:domain rdf:resource="#Contact"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="isToCheck">
+    <rdfs:comment xml:lang="en">This address, is to Check?</rdfs:comment>
+    <rdfs:comment xml:lang="es">¿Esta dirección, es para facturar?</rdfs:comment>
+    <rdfs:label xml:lang="es">Para facturar</rdfs:label>
+    <rdfs:label xml:lang="en">To Check</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_isToCheck">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >70</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Address"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="organization">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_organization">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="en">Organization</rdfs:comment>
+    <rdfs:comment xml:lang="es">Organización</rdfs:comment>
+    <rdfs:label xml:lang="en">Organization</rdfs:label>
+    <rdfs:label xml:lang="es">Organización</rdfs:label>
+    <rdfs:domain rdf:resource="#Contact"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="street">
+    <rdfs:comment xml:lang="en">Street address</rdfs:comment>
+    <rdfs:comment xml:lang="es">Calle y número</rdfs:comment>
+    <rdfs:label xml:lang="en">Street</rdfs:label>
+    <rdfs:label xml:lang="es">Calle y número</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_street">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Address"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="secondLastName">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_secondLastName">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >40</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="en">Second Last Name</rdfs:comment>
+    <rdfs:comment xml:lang="es">Segundo apellido</rdfs:comment>
+    <rdfs:label xml:lang="en">Second Last Name</rdfs:label>
+    <rdfs:label xml:lang="es">Segundo apellido</rdfs:label>
+    <rdfs:domain rdf:resource="#Contact"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="email">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_email">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >70</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="en">Email</rdfs:comment>
+    <rdfs:comment xml:lang="es">Correo electrónico</rdfs:comment>
+    <rdfs:label xml:lang="en">Email</rdfs:label>
+    <rdfs:label xml:lang="es">Correo electrónico</rdfs:label>
+    <rdfs:domain rdf:resource="#Contact"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="photo">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_photo">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="en">Photo</rdfs:comment>
+    <rdfs:comment xml:lang="es">Foto</rdfs:comment>
+    <rdfs:label xml:lang="en">Photo</rdfs:label>
+    <rdfs:label xml:lang="es">Foto</rdfs:label>
+    <rdfs:domain rdf:resource="#Contact"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="webpage">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_webpage">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >110</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="en">Web Page</rdfs:comment>
+    <rdfs:comment xml:lang="es">Página web</rdfs:comment>
+    <rdfs:label xml:lang="en">Web Page</rdfs:label>
+    <rdfs:label xml:lang="es">Página web</rdfs:label>
+    <rdfs:domain rdf:resource="#Contact"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="city">
+    <rdfs:comment xml:lang="es">Ciudad</rdfs:comment>
+    <rdfs:comment xml:lang="en">City</rdfs:comment>
+    <rdfs:label xml:lang="es">Ciudad</rdfs:label>
+    <rdfs:label xml:lang="en">City</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_city">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Address"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="localNumber">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_number">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swbxf:propInvalidMessage xml:lang="en">Local number incorrect</swbxf:propInvalidMessage>
+        <swbxf:propInvalidMessage xml:lang="es">Número incorrecto</swbxf:propInvalidMessage>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="en">Number</rdfs:comment>
+    <rdfs:comment xml:lang="es">Número local</rdfs:comment>
+    <rdfs:label xml:lang="en">Number</rdfs:label>
+    <rdfs:label xml:lang="es">Número local</rdfs:label>
+    <rdfs:domain rdf:resource="#Phone"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="isToMail">
+    <rdfs:comment xml:lang="es">¿Esta dirección, es para correspondencia?</rdfs:comment>
+    <rdfs:comment xml:lang="en">This address, is to mail?</rdfs:comment>
+    <rdfs:label xml:lang="es">Para correspondencia</rdfs:label>
+    <rdfs:label xml:lang="en">To Mail</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_isToMail">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >80</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Address"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="suburb">
+    <rdfs:label xml:lang="es">Colonia o Localidad</rdfs:label>
+    <rdfs:comment xml:lang="es">Colonia</rdfs:comment>
+    <rdfs:label xml:lang="en">County</rdfs:label>
+    <rdfs:comment xml:lang="en">County</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_suburb">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Address"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <swb:CodePackage rdf:ID="pkg">
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >contact</swb:prefix>
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.portal.resources.sem.contact</swb:package>
+  </swb:CodePackage>
+  <contact:PhoneFE rdf:ID="phone"/>
+  <swbxf:DisplayProperty rdf:ID="x"/>
+  <swb:FormElement rdf:ID="PhoneFE">
+    <rdfs:comment xml:lang="en">Element that displays a graphic component to capture the data entry</rdfs:comment>
+    <rdfs:comment xml:lang="es">Elemento que muestra un componente grafico para capturar los datos telefónicos</rdfs:comment>
+    <rdfs:label xml:lang="en">Phone</rdfs:label>
+    <rdfs:label xml:lang="es">Teléfono</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBFormElement"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:FormElement>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->
