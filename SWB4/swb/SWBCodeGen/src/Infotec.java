@@ -9,10 +9,10 @@ import org.semanticwb.codegen.CodeGeneratorException;
  * @author carlos.ramos
  */
 
-public class PortalEmpleoCG {
+public class Infotec {
     public static void main(String []args)
     {
-        new PortalEmpleoCG().codeGen(args);
+        new Infotec().codeGen(args);
     }
 
     public void codeGen(String []args)
@@ -22,8 +22,7 @@ public class PortalEmpleoCG {
         //SWBPlatform.getSemanticMgr().initializeDB();
         SWBPlatform.getSemanticMgr().addBaseOntology("C:/desarrollo/SWB4/swb/web/WEB-INF/owl/swb.owl");
         SWBPlatform.getSemanticMgr().addBaseOntology("C:/desarrollo/SWB4/swb/web/WEB-INF/owl/community.owl");
-        //SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../../../swbproys/PortaldelEmpleo/empleo/src/portalempleo.owl");
-        SWBPlatform.getSemanticMgr().addBaseOntology("C:/desarrollo/swbproys/PortaldelEmpleo/empleo/src/portalempleo.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology("C:/desarrollo/swbproys/portalInfotec/infotec/src/portal.infotec.owl");
         SWBPlatform.getSemanticMgr().loadBaseVocabulary();
         //SWBPlatform.getSemanticMgr().loadDBModels();
         SWBPlatform.getSemanticMgr().getOntology().rebind();
@@ -31,9 +30,9 @@ public class PortalEmpleoCG {
         try
         {
             String path = getClass().getResource("/").getPath().replaceAll("%20", " ");
-            File dir = new File(path+"../../../../../swbproys/PortaldelEmpleo/empleo/src");
+            File dir = new File(path+"../../../../../swbproys/portalInfotec/infotec/src");
             CodeGenerator codeGeneration = new CodeGenerator();
-            codeGeneration.generateCode("portalempleo", false, dir);
+            codeGeneration.generateCode("infotec", false, dir);
             System.out.println("Generación de clases completa: "+dir);
         }
         catch (CodeGeneratorException cge)
