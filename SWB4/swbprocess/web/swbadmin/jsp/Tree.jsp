@@ -274,6 +274,7 @@
     public void addHerarquicalNode(JSONArray arr, HerarquicalNode node, SemanticObject obj, boolean addChilds, User user) throws JSONException
     {
         if(!SWBPortal.getAdminFilterMgr().haveAccessToHerarquicalNode(user, obj.getURI(), node))return;
+        if(obj.getBooleanProperty(Trashable.swb_deleted)==true)return;
 
         if(node.getId().equals("hn_Classes"))
         {
@@ -360,7 +361,7 @@
 
         if(addChilds)
         {
-            Iterator<HerarquicalNode> sit=node.listHerarquicalNodes();
+            Iterator<HerarquicalNode> sit=SWBComparator.sortSortableObject(node.listHerarquicalNodes());
             while(sit.hasNext())
             {
                 HerarquicalNode cnode=sit.next();
@@ -403,10 +404,11 @@
     public void addResourceType(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy, User user) throws JSONException
     {
         if(!SWBPortal.getAdminFilterMgr().haveTreeAccessToSemanticObject(user, obj))return;
+        if(obj.getBooleanProperty(Trashable.swb_deleted)==true)return;
+        
         String lang=user.getLanguage();
         boolean hasChilds=false;
         SemanticClass cls=obj.getSemanticClass();
-        SemanticObject dispobj=cls.getDisplayObject();
         String type=cls.getClassId();
         ResourceType restype=(ResourceType)obj.createGenericInstance();
 
@@ -423,9 +425,9 @@
         arr.put(jobj);
 
         //dragSupport
-        if(dispobj!=null)
+        DisplayObject dp=DisplayObject.getDisplayObject(cls);
+        if(dp!=null)
         {
-            DisplayObject dp=(DisplayObject)dispobj.createGenericInstance();
             jobj.put("dragSupport", dp.isDragSupport());
             jobj.put("dropMatchLevel", dp.getDropMatchLevel());
         }
@@ -595,11 +597,11 @@
     {
         boolean fullaccess=SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(user, obj);
         if(!fullaccess && !SWBPortal.getAdminFilterMgr().haveChildAccessToSemanticObject(user, obj))return;
+        if(obj.getBooleanProperty(Trashable.swb_deleted)==true)return;
 
         String lang=user.getLanguage();
         boolean hasChilds=false;
         SemanticClass cls=obj.getSemanticClass();
-        SemanticObject dispobj=cls.getDisplayObject();
         SemanticModel model=obj.getModel();
         String type=cls.getClassId();
 
@@ -607,7 +609,7 @@
         //System.out.println("obj:"+obj+" virtual:"+virparent);
 
         //TODO:Comentaresto cuando liberemos rep. docs.
-        if(cls.equals(org.semanticwb.repository.Workspace.sclass))
+        if(cls.equals(org.semanticwb.repository.Workspace.sclass) || cls.equals(org.semanticwb.process.model.ProcessDataInstanceModel.sclass))
         {
             return;
         }
@@ -640,9 +642,9 @@
         arr.put(jobj);
 
         //dragSupport
-        if(dispobj!=null && !virtual)
+        DisplayObject dp=DisplayObject.getDisplayObject(cls);
+        if(dp!=null && !virtual)
         {
-            DisplayObject dp=(DisplayObject)dispobj.createGenericInstance();
             jobj.put("dragSupport", dp.isDragSupport());
             jobj.put("dropMatchLevel", dp.getDropMatchLevel());
         }
@@ -684,7 +686,11 @@
                 {
                     if(checkInverse(cls, rcls, inv))
                     {
-                        menus.put(getMenuItem(getLocaleString("add",lang)+" "+rcls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+rcls.getDisplayName(lang))));
+                        DisplayObject dpc=DisplayObject.getDisplayObject(rcls);
+                        if(dpc==null || !dpc.isDoNotInstanceable())
+                        {
+                            menus.put(getMenuItem(getLocaleString("add",lang)+" "+rcls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+rcls.getDisplayName(lang))));
+                        }
                         dropacc.put(rcls.getClassId());
                     }
                 }
@@ -703,7 +709,11 @@
                                 if(checkInverse(cls, scls, inv))
                                 {
                                     //System.out.println("addMenu");
-                                    menus.put(getMenuItem(getLocaleString("add",lang)+" "+scls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+scls.getDisplayName(lang))));
+                                    DisplayObject dpc=DisplayObject.getDisplayObject(scls);
+                                    if(dpc==null || !dpc.isDoNotInstanceable())
+                                    {
+                                        menus.put(getMenuItem(getLocaleString("add",lang)+" "+scls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+scls.getDisplayName(lang))));
+                                    }
                                     dropacc.put(scls.getClassId());
                                 }
                             }
@@ -910,7 +920,7 @@
 
         if(addChilds)
         {
-            Iterator<HerarquicalNode> sit=node.listHerarquicalNodes();
+            Iterator<HerarquicalNode> sit=SWBComparator.sortSortableObject(node.listHerarquicalNodes());
             while(sit.hasNext())
             {
                 HerarquicalNode cnode=sit.next();
@@ -994,7 +1004,7 @@
 
         if(addChilds)
         {
-            Iterator<HerarquicalNode> sit=node.listHerarquicalNodes();
+            Iterator<HerarquicalNode> sit=SWBComparator.sortSortableObject(node.listHerarquicalNodes());
             while(sit.hasNext())
             {
                 HerarquicalNode cnode=sit.next();
