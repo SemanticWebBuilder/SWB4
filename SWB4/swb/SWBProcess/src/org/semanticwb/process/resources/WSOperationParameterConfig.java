@@ -155,7 +155,7 @@ public class WSOperationParameterConfig extends GenericResource {
             if (!method.equals("") && method.length() > 0) {
 
 
-                System.out.println("Se tiene configurado una operación: "+method);
+                //System.out.println("Se tiene configurado una operación: " + method);
 
                 long idform = System.currentTimeMillis();
                 //Se tiene configurado un método, se muestran los parámetros correspondientes:
@@ -207,15 +207,32 @@ public class WSOperationParameterConfig extends GenericResource {
                                     isType = allparam.isBasic() ? "B" : "-";
                                     isType += allparam.isMultiple() ? "M" : "-";
                                     isType += allparam.isRequired() ? "R" : "-";
-
-
-                                    out.println("<tr><td align=\"right\" width=\"200px\">");
+                                    out.println("<tr><td align=\"right\" valign=\"top\" width=\"200px\">");
                                     out.println("<label for=\"p_" + allparam.getName() + "\">");
-                                    out.println(allparam.getName() +"["+allparam.getDefinitionType()+ "]&nbsp;(" + isType + "):");
+                                    out.println(allparam.getName() + "[" + allparam.getDefinitionType() + "]&nbsp;(" + isType + "):");
                                     out.println("</label>");
-                                    out.println("</td><td>");
-                                    String pvalue = hm.get(allparam.getName()) != null ? hm.get(allparam.getName()) : "";
-                                    out.println("<input dojoType=\"dijit.form.TextBox\" name=\"p_" + allparam.getName() + "\" type=\"text\" " + (allparam.isRequired() ? "required=\"true\" invalidMessage=\"Valor del parámetro requerido.\" " : "") + " value=\"" + pvalue + "\">");
+                                    out.println("</td>");
+                                    out.println("<td>");
+                                    ///////////////////////////////////////////////////////
+                                    if (!allparam.isBasic()) {
+                                        out.println("<table>");
+                                        for (ParameterDefinition paramdef : allparam.getProperties()) {
+                                            isType = "";
+                                            isType = paramdef.isBasic() ? "B" : "-";
+                                            isType += paramdef.isMultiple() ? "M" : "-";
+                                            isType += paramdef.isRequired() ? "R" : "-";
+                                            String pvalue = hm.get(allparam.getName() + "_" + paramdef.getName()) != null ? hm.get(allparam.getName() + "_" + paramdef.getName()) : "";
+                                            out.println("<tr>");
+                                            out.println("<td>" + paramdef.getName() + " [" + paramdef.getDefinitionType() + "](" + isType + ")</td>");
+                                            out.println("<td><input dojoType=\"dijit.form.TextBox\" name=\"p_" + allparam.getName() + "_" + paramdef.getName() + "\" type=\"text\" " + (paramdef.isRequired() ? "required=\"true\" invalidMessage=\"Valor del parámetro requerido.\" " : "") + " value=\"" + pvalue + "\"></td>");
+                                            out.println("</tr>");
+                                        }
+                                        out.println("</table>");
+                                    } else {
+                                        ////////////////////////////////////////////////////////
+                                        String pvalue = hm.get(allparam.getName()) != null ? hm.get(allparam.getName()) : "";
+                                        out.println("<input dojoType=\"dijit.form.TextBox\" name=\"p_" + allparam.getName() + "\" type=\"text\" " + (allparam.isRequired() ? "required=\"true\" invalidMessage=\"Valor del parámetro requerido.\" " : "") + " value=\"" + pvalue + "\">");
+                                    }
                                     out.println("</td>");
                                     out.println("</tr>");
                                 }
@@ -328,22 +345,49 @@ public class WSOperationParameterConfig extends GenericResource {
                                     String paramName = allparam.getName();
                                     String paramVal = request.getParameter("p_" + paramName);
 
-                                    try {
-                                        WebServiceParameter wsp = hm.get(paramName);
+                                    if (allparam.isBasic()) {
+                                        try {
+                                            WebServiceParameter wsp = hm.get(paramName);
 
-                                        if (wsp == null) {
-                                            wsp = WebServiceParameter.ClassMgr.createWebServiceParameter(wsrvin.getProcessSite());
-                                            wsp.setParameterName(paramName);
-                                            wsrvin.addWebServiceParameter(wsp);
+                                            if (wsp == null) {
+                                                wsp = WebServiceParameter.ClassMgr.createWebServiceParameter(wsrvin.getProcessSite());
+                                                wsp.setParameterName(paramName);
+                                                wsrvin.addWebServiceParameter(wsp);
+                                            }
+                                            if (paramVal != null && paramVal.trim().length() > 0) {
+                                                wsp.setParameterValue(paramVal);
+                                            } else {
+                                                wsrvin.removeWebServiceParameter(wsp);
+                                                wsp.remove();
+                                            }
+                                        } catch (Exception ein) {
+                                            log.error("Error al crear WebServiceParameter", ein);
                                         }
-                                        if (paramVal != null && paramVal.trim().length() > 0) {
-                                            wsp.setParameterValue(paramVal);
-                                        } else {
-                                            wsrvin.removeWebServiceParameter(wsp);
-                                            wsp.remove();
+                                    } else {
+
+
+                                        for (ParameterDefinition paramdef : allparam.getProperties()) {
+                                            paramName = allparam.getName() + "_" + paramdef.getName();
+                                            paramVal = request.getParameter("p_" + paramName);
+
+                                            try {
+                                                WebServiceParameter wsp = hm.get(paramName);
+
+                                                if (wsp == null) {
+                                                    wsp = WebServiceParameter.ClassMgr.createWebServiceParameter(wsrvin.getProcessSite());
+                                                    wsp.setParameterName(paramName);
+                                                    wsrvin.addWebServiceParameter(wsp);
+                                                }
+                                                if (paramVal != null && paramVal.trim().length() > 0) {
+                                                    wsp.setParameterValue(paramVal);
+                                                } else {
+                                                    wsrvin.removeWebServiceParameter(wsp);
+                                                    wsp.remove();
+                                                }
+                                            } catch (Exception ein) {
+                                                log.error("Error al crear WebServiceParameter", ein);
+                                            }
                                         }
-                                    } catch (Exception ein) {
-                                        log.error("Error al crear WebServiceParameter", ein);
                                     }
                                 }
                             }

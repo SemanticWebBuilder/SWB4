@@ -59,18 +59,18 @@ public class ListWSOperations extends GenericResource {
 
             out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
-            out.println("<legend>Lista de métodos definidos en el WebService</legend>");
+            out.println("<legend>Lista de mÃ©todos definidos en el WebService</legend>");
             out.println("<table width=\"100%\" border=\"1\">");
             out.println("<thead>");
             out.println("<tr>");
             out.println("<th>");
-            out.println("Id Servicio - Operacion");
+            out.println("Id Servicio - Operaci&oacute;n");
             out.println("</th>");
             out.println("<th>");
-            out.println("Parámetros Entrada");
+            out.println("Par&aacute;metros Entrada");
             out.println("</th>");
             out.println("<th>");
-            out.println("Parámetros Salida");
+            out.println("Par&aacute;metros Salida");
             out.println("</th>");
             out.println("</tr>");
             out.println("</thead>");
@@ -86,11 +86,11 @@ public class ListWSOperations extends GenericResource {
 
                     for (Service service : info.getServices()) {
 
-                        System.out.println("service.getId():" + service.getId());
+                        //System.out.println("service.getId():" + service.getId());
 
                         for (Operation operation : service.getOperations()) {
 
-                            System.out.println("operation.getName():" + operation.getName());
+                            //System.out.println("operation.getName():" + operation.getName());
 
                             out.println("<tr>");
                             out.println("<td valign=\"top\">");
@@ -98,26 +98,62 @@ public class ListWSOperations extends GenericResource {
                             out.println("</td>");
                             out.println("<td valign=\"top\">");
                             out.println("<ul>");
-                            for (ParameterDefinition allparam : operation.getInput().getDefinitions()) {
-                                isType = "";
-                                isType = allparam.isBasic() ? "B" : "-";
-                                isType += allparam.isMultiple() ? "M" : "-";
-                                isType += allparam.isRequired() ? "R" : "-";
+                            try {
+                                for (ParameterDefinition allparam : operation.getInput().getDefinitions()) {
+                                    isType = "";
+                                    isType = allparam.isBasic() ? "B" : "-";
+                                    isType += allparam.isMultiple() ? "M" : "-";
+                                    isType += allparam.isRequired() ? "R" : "-";
 
-                                out.println("<li>" + allparam.getName() + " [" + allparam.getDefinitionType() + "](" + isType + ")</li>");
+                                    out.println("<li>" + allparam.getName() + " [" + allparam.getDefinitionType() + "](" + isType + ")");
+                                    if(!allparam.isBasic()){
+                                        out.println("<ul>");
+                                        for(ParameterDefinition paramdef: allparam.getProperties()){
+                                            isType = "";
+                                            isType = paramdef.isBasic() ? "B" : "-";
+                                            isType += paramdef.isMultiple() ? "M" : "-";
+                                            isType += paramdef.isRequired() ? "R" : "-";
+                                            out.println("<li>" + paramdef.getName() + " [" + paramdef.getDefinitionType() + "](" + isType + ")");
+                                        }
+                                        out.println("</ul>");
+                                    }
+                                    out.println("</li>");
+                                }
+                            } catch (Exception e) {
+                                log.error("Error al cargar parametros de entrada.", e);
                             }
+
                             out.println("</ul>");
 
                             out.println("</td>");
                             out.println("<td valign=\"top\">");
                             out.println("<ul>");
-                            for (ParameterDefinition allparam : operation.getOutput().getDefinitions()) {
-                                isType = "";
-                                isType = allparam.isBasic() ? "B" : "-";
-                                isType += allparam.isMultiple() ? "M" : "-";
-                                isType += allparam.isRequired() ? "R" : "-";
-                                out.println("<li>" + allparam.getName() + " [" + allparam.getDefinitionType() + "](" + isType + ")</li>");
+                            try {
+                                for (ParameterDefinition allparam : operation.getOutput().getDefinitions()) {
+
+                                    isType = "";
+                                    isType = allparam.isBasic() ? "B" : "-";
+                                    isType += allparam.isMultiple() ? "M" : "-";
+                                    isType += allparam.isRequired() ? "R" : "-";
+                                    out.println("<li>" + allparam.getName() + " [" + allparam.getDefinitionType() + "](" + isType + ")");
+                                    if(!allparam.isBasic()){
+                                        out.println("<ul>");
+                                        for(ParameterDefinition paramdef: allparam.getProperties()){
+                                            isType = "";
+                                            isType = paramdef.isBasic() ? "B" : "-";
+                                            isType += paramdef.isMultiple() ? "M" : "-";
+                                            isType += paramdef.isRequired() ? "R" : "-";
+                                            out.println("<li>" + paramdef.getName() + " [" + paramdef.getDefinitionType() + "](" + isType + ")");
+                                        }
+                                        out.println("</ul>");
+                                    }
+                                    out.println("</li>");
+
+                                }
+                            } catch (Exception e) {
+                                log.error("Error al cargar parametros de entrada.", e);
                             }
+
                             out.println("</ul>");
 
                             out.println("</td>");
@@ -132,7 +168,7 @@ public class ListWSOperations extends GenericResource {
                 out.println("</table>");
                 out.println("</fieldset>");
                 out.println("<fieldset>");
-                out.println("* Notación: [Tipo definición] (B:Básico, M:Múltiple, R:Requerido)");
+                out.println("* NotaciÃ³n: [Tipo definiciÃ³n] (B:BÃ¡sico, M:MÃºltiple, R:Requerido)");
                 out.println("</fieldset>");
                 out.println("</div>");
             } else {
