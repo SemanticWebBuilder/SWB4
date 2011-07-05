@@ -1,0 +1,516 @@
+/* 
+    Document   : calendar
+    Created on : 3/05/2011, 11:32:18 AM
+    Author     : Martha
+    Description:
+        Purpose of the stylesheet follows.
+*/
+#containerGral {
+    float: left;
+    width: 720px;
+    margin-bottom: 40px;
+    height:auto
+}
+.imgWidth {
+    width:150px;
+}
+.events p {
+    font-family: Tahoma, Geneva, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #FFF;
+    margin: 0px;
+    padding-top: 6px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 10px;
+    _background-color: #F90;
+    display: block;
+    height: 24px;
+    width: 260px;
+}
+.calendar .weekdays p {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    display: block;
+    float: left;
+    width: 100px;
+    text-align: center;
+    margin-right: 1px;
+    margin-left: 1px;
+    background-color: #00A7BA;
+    color: #FFFFFF;
+}
+.calendar {
+    height: auto;
+    width: 720px;
+    margin-bottom: 5px;
+}
+.events a {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #333333;
+    text-decoration: none;
+}
+.events a:hover {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #00A7BA;
+    text-decoration: none
+}
+.tooltip {
+    background-color: #DEF0EE;
+    height: 150px;
+    width: 300px;
+    padding: 10px;
+    overflow: hidden;
+    border: 1px solid #006699;
+}
+.tooltip h1 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 0px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 5px;
+    margin-left: 0px;
+    color: #5D8199;
+}
+.tooltip img {
+    float: left;
+    border: 1px solid #0099CC;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+.tooltip p {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #333333;
+    margin: 0px;
+    padding: 0px;
+}
+/*.jevtip-title {
+display:none}*/
+.currentMonth {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #00A7BA;
+    text-align: center;
+    display: block;
+    height: 22px;
+    width: 280px;
+    padding-top: 3px;
+    float: left;
+}
+.containerMonth {
+    clear: both;
+    height: 25px;
+    width: 700px;
+    margin-right: auto;
+    margin-left: auto;
+}
+.selectYear .textSelectYear  {
+    font-family: Tahoma, Geneva, sans-serif;
+    color: #00A7BA;
+    font-size: 12px;
+    font-weight: bold;
+    display: block;
+    width: 645px;
+    float: left;
+    height: 10px;
+    padding-top: 5px;
+    text-align: right;
+    margin-bottom: 10px;
+}
+.selectYear {
+    height: 35px;
+    width: 720px;
+    margin-top: 5px;
+}
+.selectYear #menuSelectYear  {
+    font-family: Tahoma, Geneva, sans-serif;
+    font-weight: bold;
+    color: #00A7BA;
+}
+.calendarBox {
+    float: left;
+    height: 100px;
+    width: 100px;
+    background-color: #D6E7E4;
+    margin-top: 1px;
+    margin-right: 1px;
+    margin-bottom: 1px;
+    margin-left: 1px;
+}
+.calendarBox .day {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    height: 18px;
+    width: 90px;
+    padding-left: 10px;
+    padding-top: 2px;
+}
+.calendarBox .events {
+    height: 70px;
+    width: 90px;
+    margin: 0px;
+    padding: 5px;
+}
+.empty {
+    background-color: #CCCCCC;
+}
+.monthTitle a {
+    float: left;
+    /*padding-left: 180px;
+    padding-right: 180px;*/
+}
+
+/*Ventana Popup*/
+.dijitTooltip {
+    z-Index: 10010;
+}
+.dijitTooltip h1 {
+    padding-top: 3px;
+    padding-bottom: 7px;
+}
+.dijitTooltip p {
+    line-height: 14px;
+}
+.showPopUp {
+    background-color: #D6E7E4;
+    margin:1px;
+}
+.showPopUpAllEvts {
+    margin: 0;
+    padding-left: 55px;
+    padding-bottom: 25px;
+}
+.showPopUpAllEvts a {
+    color: #333333;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 13px;
+    text-decoration: none;
+    line-height:24px;
+}
+p.moreEvts {
+    width: 56px;
+    background-color: #D6E7E4;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 6px;
+    padding-top: 5px;
+    display: block;
+    height: 16px;
+}
+p.day2 {
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    height: 18px;
+    padding-left: 20px;
+    padding-top: 2px;
+    width: auto;
+}
+#showPopUpEvts {
+    z-Index:10000;
+    position:absolute;
+    top:0%;
+    left:0%;
+    width:100%;
+    height:100%;
+}
+#showPopUpEvts .opBackground {
+    width:100%;
+    height:100%;
+    background-color:#000000;
+    position:fixed;
+    top:0pt;
+    left:0pt;
+    z-Index:10001;
+    opacity: 0.75;
+}
+#showPopUpEvts .containerEvts {
+    position:absolute;
+    top:0%;
+    left:0%;
+    width:100%;
+    height:100%;
+}
+#showPopUpEvts .allPopUpEvts {
+    z-index: 10005;
+    background-color:white;
+    position: relative;
+    bottom:-100%;
+    left: 30%;
+    width: 520px;
+    height: auto;
+    border: 3px double white;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: -5px;
+    margin-bottom:5px;
+}
+#showPopUpEvts .allPopUpEvts span {
+    color: #333333;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 13px;
+    text-decoration: none;
+    position: relative;
+    margin: 0px;
+    width: inherit;
+}
+
+/*#showPopUpEvts .opBackground {
+    width:100%;
+    height:100%;
+    background-color:#000000;
+    position:fixed;
+    top:0pt;
+    left:0pt;
+    z-Index:10001;
+    opacity: 0.75;
+}
+#showPopUpEvts .containerEvts {
+    position:absolute;
+    top:0%;
+    left:0%;
+    width:100%;
+    height:100%;
+}
+#showPopUpEvts .allPopUpEvts {
+    z-index: 10005;
+    background-color:white;
+    position: relative;
+    bottom:-100%;
+    left: 30%;
+    width: 520px;
+    height: auto;
+    border: 3px double white;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: -5px;
+    margin-bottom:5px;
+}
+#showPopUpEvts .allPopUpEvts span {
+    color: #333333;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 13px;
+    text-decoration: none;
+    position: relative;
+    margin: 0px;
+    width: inherit;
+}*/
+
+/*.hasjevtip1 {
+    z-Index: 10010;
+}*/
+.tooltip1 {
+    background-color: #DEF0EE;
+    height: 150px;
+    width: 300px;
+    padding: 10px;
+    overflow: hidden;
+    border: 1px solid #006699;
+    position:relative;
+
+}
+.tooltip1 h1 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 0px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 5px;
+    margin-left: 0px;
+    color: #5D8199;
+}
+.tooltip1 img {
+    float: left;
+    border: 1px solid #0099CC;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+.tooltip1 p {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #333333;
+    margin: 0px;
+    padding: 0px;
+}
+.txtCalendarBox {
+    color: #333333;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 11px;
+    text-decoration: none;
+    width: auto;
+    background-color: #D6E7E4;
+    font-weight: normal;
+    padding: 0px;
+}
+.showPopUp p{
+    padding:0px;
+    margin:0px;
+}
+
+/*Ver eventos creados para eliminar o actualizar*/
+.listBox1 {
+    width: 20% !important;
+    float:left;
+    display: block;
+}
+.listBox2 {
+    width: 40%;
+    float:left;
+    text-align: center;
+}
+.listBox3 {
+    width: 50%;
+    float:left;
+}
+.headerListBox {
+    width: 100%;
+    padding-bottom: 3px;
+    padding-top: 3px;
+    font-style: italic;
+    font-weight: bold;
+    font-family: serif;
+    height: auto;
+    text-align: center;
+}
+.listBoxes {
+    width: 100%;
+    padding-top: 6px;
+    height: auto;
+    text-align: center;
+}
+
+/*Eventos mostrados en forma general*/
+.linkG a {
+    text-align: right;
+}
+
+/*CSS para el thumbnailCalendar*/
+.Thumbnailcalendar .weekdays p {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    display: block;
+    float: left;
+    width: 26px;
+    text-align: center;
+    margin-right: 1px;
+    margin-left: 1px;
+    background-color: #00A7BA;
+    color: #FFFFFF;
+}
+.Thumbnailcalendar {
+    height: auto;
+    width: 196px;
+    margin-bottom: 0px;
+}
+.calendarBoxThumb {
+    float: left;
+    height: 35px;
+    width: 26px;
+    background-color: #D6E7E4;
+    margin-top: 1px;
+    margin-right: 1px;
+    margin-bottom: 1px;
+    margin-left: 1px;
+}
+.calendarBoxThumb .day {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    height: 18px;
+    width: 18px;
+}
+.calendarBoxThumb .events {
+    height: 18px;
+    width: 18px;
+    margin: 0px;
+}
+.empty {
+    background-color: #CCCCCC;
+}
+p.moreEvtsThumb {
+    width: 18px;
+    background-color: #D6E7E4;
+    display: block;
+    height: 16px;
+}
+.eventsThumb p {
+    font-family: Tahoma, Geneva, sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    color: #FFF;
+    margin: 0px;
+    _background-color: #F90;
+    display: block;
+    height: 12px;
+    width: 13px;
+}
+.containerMonthTumb {
+    clear: both;
+    height: 16px;
+    width: 196px;/*700px*/
+    margin-right: auto;
+    margin-left: auto;
+}
+.imgWidthTumb {
+    width:30px;
+    height: 16px;
+}
+#containerGralThum .imgWidthTumb img {
+    margin-top: 0px;
+    height: 15px;
+}
+
+.currentMonthTumb {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #00A7BA;
+    text-align: center;
+    display: block;
+    height: 16px;/*22*/
+    width: 140px;/*280*/
+    padding-top: 0px;
+    float: left;
+}
+.selectYearTumb .textSelectYear  {
+    font-family: Tahoma, Geneva, sans-serif;
+    color: #00A7BA;
+    font-size: 12px;
+    font-weight: bold;
+    display: block;
+    width: 120px;
+    float: left;
+    height: 10px;
+    padding-top: 5px;
+    text-align: right;
+    margin-bottom: 10px;
+}
+.selectYearTumb {
+    height: 35px;
+    width: 196px;
+    margin-top: 5px;
+}
+.selectYearTumb #menuSelectYearTumb  {
+    font-family: Tahoma, Geneva, sans-serif;
+    font-weight: bold;
+    color: #00A7BA;
+}
+#containerGralThum {
+    float: left;
+    width: 196px;
+    margin-bottom: 40px;
+    height:auto
+}
