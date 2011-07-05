@@ -168,7 +168,7 @@ public class ListWSOperations extends GenericResource {
                 out.println("</table>");
                 out.println("</fieldset>");
                 out.println("<fieldset>");
-                out.println("* NotaciÃ³n: [Tipo definiciÃ³n] (B:BÃ¡sico, M:MÃºltiple, R:Requerido)");
+                out.println("* Notación: [Tipo definición] (B:Básico, M:Múltiple, R:Requerido)");
                 out.println("</fieldset>");
                 out.println("</div>");
             } else {
