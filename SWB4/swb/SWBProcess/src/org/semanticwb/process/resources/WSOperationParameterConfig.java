@@ -221,7 +221,7 @@ public class WSOperationParameterConfig extends GenericResource {
                                             isType = paramdef.isBasic() ? "B" : "-";
                                             isType += paramdef.isMultiple() ? "M" : "-";
                                             isType += paramdef.isRequired() ? "R" : "-";
-                                            String pvalue = hm.get(allparam.getName() + "_" + paramdef.getName()) != null ? hm.get(allparam.getName() + "_" + paramdef.getName()) : "";
+                                            String pvalue = hm.get(allparam.getName() + "." + paramdef.getName()) != null ? hm.get(allparam.getName() + "." + paramdef.getName()) : "";
                                             out.println("<tr>");
                                             out.println("<td>" + paramdef.getName() + " [" + paramdef.getDefinitionType() + "](" + isType + ")</td>");
                                             out.println("<td><input dojoType=\"dijit.form.TextBox\" name=\"p_" + allparam.getName() + "_" + paramdef.getName() + "\" type=\"text\" " + (paramdef.isRequired() ? "required=\"true\" invalidMessage=\"Valor del parámetro requerido.\" " : "") + " value=\"" + pvalue + "\"></td>");
@@ -367,8 +367,8 @@ public class WSOperationParameterConfig extends GenericResource {
 
 
                                         for (ParameterDefinition paramdef : allparam.getProperties()) {
-                                            paramName = allparam.getName() + "_" + paramdef.getName();
-                                            paramVal = request.getParameter("p_" + paramName);
+                                            paramName = allparam.getName() + "." + paramdef.getName();
+                                            paramVal = request.getParameter("p_" + allparam.getName() + "_" + paramdef.getName());
 
                                             try {
                                                 WebServiceParameter wsp = hm.get(paramName);
