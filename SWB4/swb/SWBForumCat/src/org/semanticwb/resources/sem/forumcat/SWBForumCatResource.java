@@ -132,7 +132,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 }
                 else
                 {
-                    pass = true;
+                    pass = false;
                 }
                 if (pass)
                 {
@@ -221,7 +221,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 }
                 else
                 {
-                    pass = true;
+                    pass = false;
                 }
                 if (pass)
                 {
@@ -364,7 +364,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 }
                 else
                 {
-                    pass = true;
+                    pass = false;
                 }
                 if (pass)
                 {
@@ -465,7 +465,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 }
                 else
                 {
-                    pass = true;
+                    pass = false;
                 }
                 if (pass)
                 {
