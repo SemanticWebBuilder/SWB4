@@ -233,7 +233,7 @@ public class SWBTSUtil
         if(node.isBlank())return "nid|"+node.getBlankNodeId().toString();
         if(node.isURI())
         {
-            if(node.getURI().length()==0)return null;
+            //if(node.getURI().length()==0)return null;
             //System.out.println(node.getURI());
             return "uri|"+node.getURI();
         }

@@ -61,6 +61,8 @@ public class SWBTSGraph extends GraphBase
             String hprop=SWBTSUtil.getHashText(prop);
             String obj=SWBTSUtil.node2String(t.getObject());
             String hobj=SWBTSUtil.getHashText(obj);
+            
+            //if(subj==null || prop==null || obj==null)return;
 
             String sext="";
             if(hsubj!=null)
