@@ -155,6 +155,7 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
                     if(!(""+uri).equals(""+ouri))
                     {
                         SemanticObject aux=SWBPlatform.getSemanticMgr().getOntology().getSemanticObject(uri);
+                        //System.out.println("uri:"+uri+" ("+aux+")");
                         if(aux!=null)
                         {
                             obj.setObjectProperty(prop, aux);
