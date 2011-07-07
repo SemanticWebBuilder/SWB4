@@ -1,29 +1,8 @@
-/**  
- * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
- * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
- * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
- * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
- * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
- * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
- *
- * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
- * del SemanticWebBuilder 4.0.
- *
- * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
- *  http://www.semanticwebbuilder.org
- **/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package org.semanticwb.portal.admin.resources;
 
 import java.io.File;
@@ -36,7 +15,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.zip.ZipEntry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,13 +40,11 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class SWBModelAdmin.
- * 
+ *
  * @author jorge.jimenez
  */
-public class SWBModelAdmin extends GenericResource {
+public class SWBSaveDBData extends GenericResource {
 
     /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBImportWebSite.class);
@@ -145,7 +121,7 @@ public class SWBModelAdmin extends GenericResource {
             for (int i = 0; i < files.length; i++) {
                 File filex = files[i];
                 String fileName = filex.getName();
-                if (filex.isFile() && fileName.endsWith(".zip") && !fileName.endsWith("_adv.zip") && !fileName.endsWith("_db.zip")) {
+                if (filex.isFile() && fileName.endsWith("_db.zip")) {
                     int pos = fileName.lastIndexOf(".");
                     if (pos > -1) {
                         fileName = fileName.substring(0, pos);
@@ -212,7 +188,7 @@ public class SWBModelAdmin extends GenericResource {
 
     /**
      * Do view model.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramRequest the param request
@@ -238,7 +214,7 @@ public class SWBModelAdmin extends GenericResource {
 
     /**
      * Do install model.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramRequest the param request
@@ -309,16 +285,17 @@ public class SWBModelAdmin extends GenericResource {
                         url1.setParameter("newSiteID", newSiteID);
                         newSiteID = "- " +newSiteID + " -";
                     }
-                    
+
                     url1.setAction("checkStatus");
                     url1.setParameter("threadId", threadId);
 
-                    boolean bstep1 = false;
+                    //boolean bstep1 = false;
                     boolean bstep2 = false;
                     boolean bstep3 = false;
+                    /* Aqui no se utiliza, porque no se copian archivos
                     if (thread.getStatus() >= 30) {
                         bstep1 = true;
-                    }
+                    }*/
                     if (thread.getStatus() >= 80) {
                         bstep2 = true;
                     }
@@ -333,28 +310,18 @@ public class SWBModelAdmin extends GenericResource {
 
                     status_msg.append("\n<div id=\"" + base.getId() + "/statusIndex\" class=\"swbform\">");
                     status_msg.append("\n<fieldset>");
-                    status_msg.append("\n<legend> AVANCE DE CREACIÓN DE SITIO "+ newSiteID +" MEDIANTE PLANTILLA (Espere por favor)</legend>");
+                    status_msg.append("\n<legend> AVANCE DE CREACIÓN DE SITIO "+ newSiteID +" MEDIANTE PLANTILLA DE BD (Espere por favor)</legend>");
 
                     status_msg.append("<table border=\"1\" width=\"300\">");
 
                     status_msg.append("<tr heigth=\"20\">");
-                    status_msg.append("<td width=\"100\" bgcolor=\"GREY\" align=\"CENTER\"><font color=\"WHITE\">PASO 1 (Archivos)</font></td>");
-                    status_msg.append("<td width=\"100\" bgcolor=\"GREY\" align=\"CENTER\"><font color=\"WHITE\">PASO 2 (Modelos)</font></td>");
-                    status_msg.append("<td width=\"100\" bgcolor=\"GREY\" align=\"CENTER\"><font color=\"WHITE\">PASO 3 (Recursos)</font></td>");
+                    
+                    status_msg.append("<td width=\"100\" bgcolor=\"GREY\" align=\"CENTER\"><font color=\"WHITE\">PASO 1 (Modelos)</font></td>");
+                    status_msg.append("<td width=\"100\" bgcolor=\"GREY\" align=\"CENTER\"><font color=\"WHITE\">PASO 2 (Recursos)</font></td>");
                     status_msg.append("</tr>");
 
 
                     status_msg.append("<tr heigth=\"20\">");
-
-                    status_msg.append("<td width=\"100\" align=\"CENTER\" ");
-                    if (bstep1) {
-                        status_msg.append("bgcolor=\"GREEN\" ");
-                        status_msg.append("><font color=\"WHITE\"><b>COMPLETO</b></font>");
-                    } else {
-                        status_msg.append("bgcolor=\"YELLOW\" ");
-                        status_msg.append("><b>INCOMPLETO</b>");
-                    }
-                    status_msg.append("</td>");
 
                     status_msg.append("<td width=\"100\" align=\"CENTER\" ");
                     if (bstep2) {
@@ -404,7 +371,7 @@ public class SWBModelAdmin extends GenericResource {
 
     /**
      * Parses the rdf content.
-     * 
+     *
      * @param rdfcontent the rdfcontent
      * @param oldName the old name
      * @param newName the new name
@@ -449,7 +416,7 @@ public class SWBModelAdmin extends GenericResource {
 
     /**
      * Metodo sobrado en este momento, pero servira para cuando un submodelo (sitio), tenga mas submodelos (sitios,repositorios).
-     * 
+     *
      * @param node the node
      * @param smodels the smodels
      */
@@ -515,14 +482,14 @@ public class SWBModelAdmin extends GenericResource {
                 String uri = request.getParameter("wsid");
                 WebSite site = SWBContext.getWebSite(uri);
                 String path = SWBPortal.getWorkPath() + "/";
-                String modelspath = path + "models/";
+                //String modelspath = path + "models/";
                 String zipdirectory = path + "sitetemplates/";
-                String zipFile = zipdirectory + site.getId() + ".zip";
+                String zipFile = zipdirectory + site.getId() + "_db.zip";
                 //---------Generación de archivo zip de carpeta work de sitio especificado-------------
                 java.util.zip.ZipOutputStream zos = new java.util.zip.ZipOutputStream(new FileOutputStream(zipFile));
-                java.io.File directory = new File(modelspath + site.getId() + "/");
-                java.io.File base = new File(modelspath);
-                org.semanticwb.SWBUtils.IO.zip(directory, base, zos);
+                //java.io.File directory = new File(modelspath + site.getId() + "/");
+                //java.io.File base = new File(modelspath);
+                //org.semanticwb.SWBUtils.IO.zip(directory, base, zos);  //Graba filesystem de sitio en archivo zip
                 //Graba archivo cualquiera
                 zos.setComment("Model File SemanticWebBuilderOS");
                 try {
@@ -567,8 +534,8 @@ public class SWBModelAdmin extends GenericResource {
                         //Agregar c/archivo .rdf de submodelos a arreglo de archivos
                         aFiles.add(fileSubModel);
                         //graba el directorio work de c/submodelo en archivo zip
-                        directory = new File(modelspath + sObj.getId() + "/");
-                        org.semanticwb.SWBUtils.IO.zip(directory, base, zos);
+                        //directory = new File(modelspath + sObj.getId() + "/");
+                        //org.semanticwb.SWBUtils.IO.zip(directory, base, zos);
                         //Genera datos de c/summodelo en archivo siteInfo.xml
                         strbr.append("<model>\n");
                         strbr.append("<type>" + sObj.getSemanticClass() + "</type>\n");
