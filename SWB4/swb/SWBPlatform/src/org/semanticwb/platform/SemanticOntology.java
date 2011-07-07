@@ -160,7 +160,7 @@ public class SemanticOntology
     {
         log.debug("getResource:"+uri);
         //new Exception().printStackTrace();
-        if(uri==null)return null;
+        if(uri==null || uri.length()==0)return null;
         Resource ret=null;
         Property type=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty();
         int i=uri.indexOf('#');

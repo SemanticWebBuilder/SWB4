@@ -1395,6 +1395,7 @@ public Document getDomProperty(SemanticProperty prop)
      */
     public SemanticObject setObjectProperty(SemanticProperty prop, SemanticObject object)
     {
+        //System.out.println("setObjectProperty:"+prop+" "+object);
         if (m_virtual)
         {
             ArrayList list = (ArrayList) m_virtprops.get(prop.getURI());
@@ -1410,8 +1411,10 @@ public Document getDomProperty(SemanticProperty prop)
         Object old=getPropertyValueCache(prop, null);
         Property iprop = prop.getRDFProperty();
         Statement stm = m_res.getProperty(iprop);
+        //System.out.println("stm:"+stm);
         if (stm != null)
         {
+            //System.out.println("object:"+object.getRDFResource());
             stm.changeObject(object.getRDFResource());
         }
         else
