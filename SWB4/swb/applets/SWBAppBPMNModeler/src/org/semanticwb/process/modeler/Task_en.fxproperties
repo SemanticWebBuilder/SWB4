@@ -6,6 +6,7 @@
 "actCut" = "Cut"
 "actChange" = "Convert to sub-process"
 "actType" = "Type"
+"actAbstract" = "Abstract"
 "actUser" = "User"
 "actService" = "Service"
 "actScript" = "Script"
