@@ -107,9 +107,10 @@ public class SemBanner extends org.semanticwb.portal.resources.sem.base.SemBanne
                     if(url != null) {
                         out.print("<a class=\"swb-banner\"");
                         out.print(" href=\"" + url + "\"");
-                        out.print(" onclick=\"window.location.href='" + url + "';return true;\"");//paramRequest.getActionUrl()
                         if(banner.isBanrOpenNewWindow()) {
                             out.print(" target=\"_blank\"");
+                        } else {
+                            out.print(" onclick=\"window.location.href='" + url + "';return true;\"");//paramRequest.getActionUrl()
                         }
                         String title = banner.getTitle(request, paramRequest) == null ? "" : banner.getTitle(request, paramRequest);
                         out.println(" title=\"" + title + "\">");
