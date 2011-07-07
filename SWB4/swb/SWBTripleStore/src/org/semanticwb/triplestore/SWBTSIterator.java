@@ -45,7 +45,7 @@ public class SWBTSIterator implements ExtendedIterator<Triple>
 
     private static int counter=0;
 
-    public SWBTSIterator(SWBTSGraph graph, TripleMatch tm)
+     public SWBTSIterator(SWBTSGraph graph, TripleMatch tm)
     {
         counter++;
         //System.out.println("SWBTSIterator:"+counter+" tm:"+tm+" "+graph.getName());
@@ -56,6 +56,7 @@ public class SWBTSIterator implements ExtendedIterator<Triple>
         String subj=SWBTSUtil.node2HashString(tm.getMatchSubject(),"lgs");
         String prop=SWBTSUtil.node2HashString(tm.getMatchPredicate(),"lgp");
         String obj=SWBTSUtil.node2HashString(tm.getMatchObject(),"lgo");
+        
         //System.out.println("subj:"+subj+" prop:"+prop+" obj:"+obj);
 
         try
