@@ -19,6 +19,7 @@ import org.semanticwb.process.modeler.ModelerUtils;
 import org.semanticwb.process.modeler.SendTask;
 import org.semanticwb.process.modeler.ReceiveTask;
 import org.semanticwb.process.modeler.BusinessRuleTask;
+import org.semanticwb.process.modeler.ManualTask;
 
 /**
  * @author javier.solis
@@ -184,6 +185,54 @@ public class Task extends Activity
                                 title: title
                                 description: description
                                 uri:"new:usertask:{this.modeler.toolBar.counter++}"
+                            }
+                            //pasar las entradas al nuevo elemento
+                            for(ele in getInputConnectionObjects()) {
+                                ele.end = sp;
+                            }
+
+                            for (ele in getOutputConnectionObjects()) {
+                                ele.ini = sp;
+                            }
+
+                            //copiar los eventos adheridos
+                            for (ele in graphChilds where ele instanceof IntermediateCatchEvent) {
+                                var ae:IntermediateCatchEvent = (ele.copy() as IntermediateCatchEvent);
+                                for (co in ele.getOutputConnectionObjects()) {
+                                    co.ini = ae;
+                                }
+                                ae.graphParent = sp;
+                                insert ae into sp.graphChilds;
+                                ae.x = ele.x;
+                                ae.y = ele.y;
+                                ae.dpx = ele.dpx;
+                                ae.dpy = ele.dpy;
+                                modeler.add(ae);
+                                modeler.moveFront(ae, sp);
+                            }
+
+                            sp.x = x;
+                            sp.y = y;
+                            sp.container = container;
+                            sp.w = w;
+                            sp.h = h;
+                            sp.setGraphParent(getGraphParent());
+                            modeler.add(sp);
+                            sp.updateAttachedEventsPosition();
+                            remove(true);
+                        }
+                    },
+                    MenuItem {
+                        status: bind if ((not(this instanceof SendTask) and not (this instanceof ReceiveTask)) and (this instanceof UserTask) or (this instanceof ManualTask) or (this instanceof ScriptTask) or (this instanceof ServiceTask) or (this instanceof BusinessRuleTask)) MenuItem.STATUS_ENABLED else MenuItem.STATUS_DISABLED
+                        caption: ##"actAbstract"
+                        action: function (e: MouseEvent) {
+                            ModelerUtils.popup.hide();
+                            //crear nuevo elemento
+                            var sp = Task {
+                                modeler: modeler
+                                title: title
+                                description: description
+                                uri:"new:task:{this.modeler.toolBar.counter++}"
                             }
                             //pasar las entradas al nuevo elemento
                             for(ele in getInputConnectionObjects()) {
