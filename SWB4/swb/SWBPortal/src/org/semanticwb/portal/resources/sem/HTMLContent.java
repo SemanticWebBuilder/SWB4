@@ -303,7 +303,6 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest)
             throws SWBResourceException, IOException {
-
         WebPage page = paramRequest.getWebPage();
         Resource resource = getResourceBase();
         VersionInfo vi = getActualVersion();
@@ -362,6 +361,8 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                 log.error("HTMLContent - Getting \"paginated\" property", e);
             }
             if (fileContent.indexOf("content=\"Microsoft Word") > 0) {
+                fileContent = SWBUtils.TEXT.replaceAll(fileContent, "<workpath/>",
+                    SWBPortal.getWebWorkPath() + resource.getWorkPath() + "/" + versionNumber + "/");
                 boolean deleteStyles = false;
                 try {
                     deleteStyles = this.isDeleteStyles();
@@ -574,20 +575,29 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                     String directorioConTmp = directorioSinTmp + "tmp/";
                     textToSave = SWBUtils.TEXT.replaceAll(textToSave, directorioConTmp, directorioSinTmp);
                 }
-                //Replace WorkPath
+                //Remplaza del contenido las rutas de los archivos relacionados por <workpath/>
                 textToSave = SWBUtils.TEXT.replaceAll(textToSave, workingDirectory+"/"+versionNumber+"/", "<workpath/>");
 
                 int i = textToSave.indexOf("<workpath/>");
-                while (i >- 1) {
-                    String fileName = textToSave.substring(i + 11, textToSave.indexOf("\"", i + 11));
-                    String s = SWBPortal.getWorkPath() + resource.getWorkPath() + "/" + versionNumber + "/" + fileName;
-                    int ls = fileName.indexOf("/");
-                    if (ls >- 1) {
-                        fileName = fileName.substring(ls + 1);
-                    }
-                    //Solo copia archivos de versiones anteriores
-                    if (s.indexOf(resource.getWorkPath() + "/" + versionNumber) == -1) {
-                        SWBUtils.IO.copy(s, directoryToCreate + "/" + fileName, false, "", "");
+                //Parsea el contenido en busca de imagenes que no tengan ruta absoluta desde /work...
+                while (i > -1) {
+                    try {
+                        String delimiter = "" + textToSave.charAt(i - 1);
+                        if (!delimiter.equalsIgnoreCase("\"") && !delimiter.equalsIgnoreCase("'")) {
+                            delimiter = " ";
+                        }
+                        String fileName = textToSave.substring(i + 11, textToSave.indexOf(delimiter, i + 11));
+                        String s = SWBPortal.getWorkPath() + resource.getWorkPath() + "/" + versionNumber + "/" + fileName;
+                        int ls = fileName.indexOf("/");
+                        if (ls > -1) {
+                            fileName = fileName.substring(ls + 1);
+                        }
+                        //Solo copia archivos de versiones anteriores
+                        if (s.indexOf(resource.getWorkPath() + "/" + versionNumber) == -1) {
+                            SWBUtils.IO.copy(s, directoryToCreate + "/" + fileName, false, "", "");
+                        }
+                    } catch (Exception e) {
+                        log.error("Al barrer el contenido buscando archivos asociados", e);
                     }
                     i = textToSave.indexOf("<workpath/>", i + 11);
                 }
