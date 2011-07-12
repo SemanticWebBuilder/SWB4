@@ -11,6 +11,7 @@ import com.hp.hpl.jena.shared.PrefixMapping;
 import java.util.Iterator;
 import java.util.Map;
 import com.hp.hpl.jena.rdf.model.impl.Util;
+import java.util.HashMap;
 import org.openrdf.model.impl.ValueFactoryImpl;
 
 /**
@@ -98,7 +99,15 @@ public class BigdataPrefixMapping implements PrefixMapping
 
     public Map<String, String> getNsPrefixMap()
     {
-        return sail.getDatabase().getNamespaces();
+       
+        Map<String,String> m=new HashMap<String, String>();
+        Iterator<Map.Entry<String,String>> it=sail.getDatabase().getNamespaces().entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, String> entry = it.next();
+            m.put(entry.getValue(), entry.getKey());
+        }
+        //System.out.println("map:"+sail.getDatabase().getNamespaces());
+        return m;
     }
 
     public String expandPrefix(String prefixed)
