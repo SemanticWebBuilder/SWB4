@@ -241,18 +241,19 @@
 
         var todaysYear = today.getFullYear();
 
-        function makeArray() {
-            for (i = 0; i < makeArray.arguments.length; i++)
-                    this[i + 1] = makeArray.arguments[i];
-        }
+        var months = new makeArray("<%=paramRequest.getLocaleString("lb_month1")%>",
+                                   "<%=paramRequest.getLocaleString("lb_month2")%>",
+                                   "<%=paramRequest.getLocaleString("lb_month3")%>",
+                                   "<%=paramRequest.getLocaleString("lb_month4")%>",
+                                   "<%=paramRequest.getLocaleString("lb_month5")%>",
+                                   "<%=paramRequest.getLocaleString("lb_month6")%>",
+                                   "<%=paramRequest.getLocaleString("lb_month7")%>",
+                                   "<%=paramRequest.getLocaleString("lb_month8")%>",
+                                   "<%=paramRequest.getLocaleString("lb_month9")%>",
+                                   "<%=paramRequest.getLocaleString("lb_month10")%>",
+                                   "<%=paramRequest.getLocaleString("lb_month11")%>",
+                                   "<%=paramRequest.getLocaleString("lb_month12")%>");
 
-        var semanas = new makeArray( "<%=paramRequest.getLocaleString("lb_day1")%>",
-                                     "<%=paramRequest.getLocaleString("lb_day2")%>",
-                                     "<%=paramRequest.getLocaleString("lb_day3")%>",
-                                     "<%=paramRequest.getLocaleString("lb_day4")%>",
-                                     "<%=paramRequest.getLocaleString("lb_day5")%>",
-                                     "<%=paramRequest.getLocaleString("lb_day6")%>",
-                                     "<%=paramRequest.getLocaleString("lb_day7")%>");
         var date = new Date();
         var day = date.getDate();
         var month = date.getMonth() + 1;
@@ -263,18 +264,6 @@
 
         function changeMonth(buttonpressed) {
             day = date.getDate();
-            var months = new makeArray("<%=paramRequest.getLocaleString("lb_month1")%>",
-                                       "<%=paramRequest.getLocaleString("lb_month2")%>",
-                                       "<%=paramRequest.getLocaleString("lb_month3")%>",
-                                       "<%=paramRequest.getLocaleString("lb_month4")%>",
-                                       "<%=paramRequest.getLocaleString("lb_month5")%>",
-                                       "<%=paramRequest.getLocaleString("lb_month6")%>",
-                                       "<%=paramRequest.getLocaleString("lb_month7")%>",
-                                       "<%=paramRequest.getLocaleString("lb_month8")%>",
-                                       "<%=paramRequest.getLocaleString("lb_month9")%>",
-                                       "<%=paramRequest.getLocaleString("lb_month10")%>",
-                                       "<%=paramRequest.getLocaleString("lb_month11")%>",
-                                       "<%=paramRequest.getLocaleString("lb_month12")%>");
             var auxMonth = month;
             var auxYear = year;
 
@@ -372,18 +361,6 @@
             chanYear = y.options[y.selectedIndex].value;
             year = chanYear;
             if (year <= <%=maxYear%> && year >= <%=minYear%>) {
-                 var months = new makeArray("<%=paramRequest.getLocaleString("lb_month1")%>",
-                                            "<%=paramRequest.getLocaleString("lb_month2")%>",
-                                            "<%=paramRequest.getLocaleString("lb_month3")%>",
-                                            "<%=paramRequest.getLocaleString("lb_month4")%>",
-                                            "<%=paramRequest.getLocaleString("lb_month5")%>",
-                                            "<%=paramRequest.getLocaleString("lb_month6")%>",
-                                            "<%=paramRequest.getLocaleString("lb_month7")%>",
-                                            "<%=paramRequest.getLocaleString("lb_month8")%>",
-                                            "<%=paramRequest.getLocaleString("lb_month9")%>",
-                                            "<%=paramRequest.getLocaleString("lb_month10")%>",
-                                            "<%=paramRequest.getLocaleString("lb_month11")%>",
-                                            "<%=paramRequest.getLocaleString("lb_month12")%>");
                 var firstDate = new Date(String(month) + "/1/" + String(year));
                 var firstDay = firstDate.getUTCDay();
                 var lastDate = new Date(String(month) + "/" + lastDayOfMonth(month, year) + "/" + String(year));

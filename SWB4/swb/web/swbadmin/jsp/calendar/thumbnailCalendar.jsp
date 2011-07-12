@@ -113,36 +113,6 @@
                         arrayEvts[mm] = datos1_<%=cal.getId()%>_thum[Elemento][Eventos1].title;
                         mm = mm + 1 ;
                     }
-                   /*if (arrayEvts.length > 0) {
-                       var i = Math.ceil(Math.random()*arrayEvts.length)-1;
-                       var name = "eventCal" + ido + "_Event" + 0;
-                       l = l + 1;
-                        var length = listToolTip.length;
-                        var urlEv = datos1[Elemento][arrayEvts[i]].url;
-                        var target = "";
-                        if(datos1[Elemento][arrayEvts[i]].target != null && datos1[Elemento][arrayEvts[i]].target != "") {
-                            target = "target='" + datos1[Elemento][arrayEvts[i]].target + "' ";
-                        }
-                        if (urlEv!="") {
-                            dataEvent = dataEvent + "<a "+ target +"href=\"" + urlEv + "\" id=\"" + name + "\" class=\"txtCalendarBox\">+" +
-                                datos1[Elemento][arrayEvts[i]].title + "</a><br>";
-                        } else {
-                            dataEvent = dataEvent + "<span id=\"" + name + "\" class=\"txtCalendarBox\"><em>+" +
-                                datos1[Elemento][arrayEvts[i]].title + "</em></span><br>";
-                        }
-                        listToolTip[length] = name;
-                        var img = datos1[Elemento][arrayEvts[i]].image;
-                        var dataName = "";
-                        var descr = datos1[Elemento][arrayEvts[i]].description;
-                        descr=descr.replace (/\n/g,"<br>");
-                        if (img != "") {
-                            dataName = "<div class='tooltip'><h1>" + datos1[Elemento][arrayEvts[i]].title + "</h1> <img src='" + datos1[Elemento][arrayEvts[i]].image + "'/> <p>" + datos1[Elemento][arrayEvts[i]].rdates + "</p><p>" + descr + "</p></div>";
-                        } else {
-                            dataName = "<div class='tooltip'><h1>" + datos1[Elemento][arrayEvts[i]].title + "</h1><p>" + datos1[Elemento][arrayEvts[i]].rdates + "</p><p>" + descr + "</p></div>";
-                        }
-                        listToolTip[length+1] = dataName;
-                    }*/
-
                     var array = new Array();
                     array[0] = Elemento;
                     array[1] = '"<%=cal.getId()%>"';
@@ -253,33 +223,22 @@
         var yy = date.getYear();
         var year<%=cal.getId()%>_tumb = (yy < 1000) ? yy + 1900 : yy;
 
-        function makeArray() {
-            for (i = 0; i < makeArray.arguments.length; i++)
-                    this[i + 1] = makeArray.arguments[i];
-        }
+        var months = new makeArray("<%=paramRequest.getLocaleString("lb_month1")%>",
+                                   "<%=paramRequest.getLocaleString("lb_month2")%>",
+                                   "<%=paramRequest.getLocaleString("lb_month3")%>",
+                                   "<%=paramRequest.getLocaleString("lb_month4")%>",
+                                   "<%=paramRequest.getLocaleString("lb_month5")%>",
+                                   "<%=paramRequest.getLocaleString("lb_month6")%>",
+                                   "<%=paramRequest.getLocaleString("lb_month7")%>",
+                                   "<%=paramRequest.getLocaleString("lb_month8")%>",
+                                   "<%=paramRequest.getLocaleString("lb_month9")%>",
+                                   "<%=paramRequest.getLocaleString("lb_month10")%>",
+                                   "<%=paramRequest.getLocaleString("lb_month11")%>",
+                                   "<%=paramRequest.getLocaleString("lb_month12")%>");
 
-        var semanas = new makeArray( "<%=paramRequest.getLocaleString("lb_day1_2")%>",
-                                     "<%=paramRequest.getLocaleString("lb_day2_2")%>",
-                                     "<%=paramRequest.getLocaleString("lb_day3_2")%>",
-                                     "<%=paramRequest.getLocaleString("lb_day4_2")%>",
-                                     "<%=paramRequest.getLocaleString("lb_day5_2")%>",
-                                     "<%=paramRequest.getLocaleString("lb_day6_2")%>",
-                                     "<%=paramRequest.getLocaleString("lb_day7_2")%>");
-        
         function changeMonth<%=cal.getId()%>_tumb(buttonpressed) {
             day = date.getDate();
-            var months = new makeArray("<%=paramRequest.getLocaleString("lb_month1")%>",
-                                       "<%=paramRequest.getLocaleString("lb_month2")%>",
-                                       "<%=paramRequest.getLocaleString("lb_month3")%>",
-                                       "<%=paramRequest.getLocaleString("lb_month4")%>",
-                                       "<%=paramRequest.getLocaleString("lb_month5")%>",
-                                       "<%=paramRequest.getLocaleString("lb_month6")%>",
-                                       "<%=paramRequest.getLocaleString("lb_month7")%>",
-                                       "<%=paramRequest.getLocaleString("lb_month8")%>",
-                                       "<%=paramRequest.getLocaleString("lb_month9")%>",
-                                       "<%=paramRequest.getLocaleString("lb_month10")%>",
-                                       "<%=paramRequest.getLocaleString("lb_month11")%>",
-                                       "<%=paramRequest.getLocaleString("lb_month12")%>");
+
             var auxMonth = month<%=cal.getId()%>_tumb;
             var auxYear = year<%=cal.getId()%>_tumb;
 
@@ -378,18 +337,6 @@
             chanYear = y.options[y.selectedIndex].value;
             year<%=cal.getId()%>_tumb = chanYear;
             if (year<%=cal.getId()%>_tumb <= <%=maxYear%> && year<%=cal.getId()%>_tumb >= <%=minYear%>) {
-                 var months = new makeArray("<%=paramRequest.getLocaleString("lb_month1")%>",
-                                            "<%=paramRequest.getLocaleString("lb_month2")%>",
-                                            "<%=paramRequest.getLocaleString("lb_month3")%>",
-                                            "<%=paramRequest.getLocaleString("lb_month4")%>",
-                                            "<%=paramRequest.getLocaleString("lb_month5")%>",
-                                            "<%=paramRequest.getLocaleString("lb_month6")%>",
-                                            "<%=paramRequest.getLocaleString("lb_month7")%>",
-                                            "<%=paramRequest.getLocaleString("lb_month8")%>",
-                                            "<%=paramRequest.getLocaleString("lb_month9")%>",
-                                            "<%=paramRequest.getLocaleString("lb_month10")%>",
-                                            "<%=paramRequest.getLocaleString("lb_month11")%>",
-                                            "<%=paramRequest.getLocaleString("lb_month12")%>");
                 var firstDate = new Date(String(month<%=cal.getId()%>_tumb) + "/1/" + String(year<%=cal.getId()%>_tumb));
                 var firstDay = firstDate.getUTCDay();
                 var lastDate = new Date(String(month<%=cal.getId()%>_tumb) + "/" + lastDayOfMonth(month<%=cal.getId()%>_tumb, year<%=cal.getId()%>_tumb) + "/" + String(year<%=cal.getId()%>_tumb));
@@ -428,9 +375,9 @@
     <div class="month">
         <div class="monthTitle">
             <div class="containerMonthTumb">
-                <span class="imgWidthTumb"><a href="javascript:void(0);" onClick="changeMonth<%=cal.getId()%>_tumb('prevmonth')"><img src="<%=org.semanticwb.SWBPlatform.getContextPath()%>/swbadmin/images/img2.png" border="0"/></a></span>
+                <span class="imgWidthTumb"><a href="javascript:void(0);" onClick="changeMonth<%=cal.getId()%>_tumb('prevmonth')"><img src="<%=org.semanticwb.SWBPlatform.getContextPath()%>/swbadmin/images/calendar/img2.png" border="0"/></a></span>
                 <span class="currentMonthTumb" id="<%=cal.getId()%>_thumcurrentMonth"></span>
-                <span class="imgWidthTumb"><a href="javascript:void(0);" onClick="changeMonth<%=cal.getId()%>_tumb('nextmonth')"><img src="<%=org.semanticwb.SWBPlatform.getContextPath()%>/swbadmin/images/img1.png" border="0"/></a></span>
+                <span class="imgWidthTumb"><a href="javascript:void(0);" onClick="changeMonth<%=cal.getId()%>_tumb('nextmonth')"><img src="<%=org.semanticwb.SWBPlatform.getContextPath()%>/swbadmin/images/calendar/img1.png" border="0"/></a></span>
             </div>
         </div>
     </div>
