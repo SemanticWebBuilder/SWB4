@@ -426,7 +426,7 @@
     <div class="selecSubscr">
     <%if(isSubscriptor) {%>
         <a href="<%=urlSave.setAction("saveSubCal").setParameter("uriCancel", uriSubscription)%>"><%=paramRequest.getLocaleString("lb_cancelSubscription")%></a>
-    <%} else {%>
+    <%} else if(user.isSigned()){%>
         <a href="<%=urlSave.setAction("saveSubCal")%>"><%=paramRequest.getLocaleString("lb_subscription")%></a>
     <%}%>
     </div>
