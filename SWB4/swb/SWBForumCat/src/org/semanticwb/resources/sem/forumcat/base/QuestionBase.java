@@ -1,12 +1,12 @@
 package org.semanticwb.resources.sem.forumcat.base;
 
 
-public abstract class QuestionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Viewable,org.semanticwb.model.Searchable,org.semanticwb.model.Tagable
+public abstract class QuestionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Searchable,org.semanticwb.model.Viewable,org.semanticwb.model.Traceable,org.semanticwb.model.Tagable
 {
-    public static final org.semanticwb.platform.SemanticClass forumCat_SWBForumCatResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#SWBForumCatResource");
-    public static final org.semanticwb.platform.SemanticProperty forumCat_forumResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#forumResource");
     public static final org.semanticwb.platform.SemanticClass forumCat_QuestionSubscription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#QuestionSubscription");
     public static final org.semanticwb.platform.SemanticProperty forumCat_questionObjInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#questionObjInv");
+    public static final org.semanticwb.platform.SemanticClass forumCat_SWBForumCatResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#SWBForumCatResource");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_forumResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#forumResource");
    /**
    * Una Página Web es el elemento de SemanticWebBuilder a través del cual se estructura la información del portal.
    */
@@ -18,12 +18,12 @@ public abstract class QuestionBase extends org.semanticwb.model.SWBClass impleme
    */
     public static final org.semanticwb.platform.SemanticProperty forumCat_hasQuestionAttachments=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#hasQuestionAttachments");
     public static final org.semanticwb.platform.SemanticProperty forumCat_queStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#queStatus");
-    public static final org.semanticwb.platform.SemanticClass forumCat_Answer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#Answer");
-    public static final org.semanticwb.platform.SemanticProperty forumCat_hasAnswerInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#hasAnswerInv");
    /**
    * Indica si la pregunta ha sido cerrada por su creador.
    */
     public static final org.semanticwb.platform.SemanticProperty forumCat_closed=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#closed");
+    public static final org.semanticwb.platform.SemanticClass forumCat_Answer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#Answer");
+    public static final org.semanticwb.platform.SemanticProperty forumCat_hasAnswerInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#hasAnswerInv");
     public static final org.semanticwb.platform.SemanticProperty forumCat_question=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#question");
     public static final org.semanticwb.platform.SemanticProperty forumCat_queIsApropiate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#queIsApropiate");
     public static final org.semanticwb.platform.SemanticProperty forumCat_specifications=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/SWBForumCategory#specifications");
@@ -127,29 +127,6 @@ public abstract class QuestionBase extends org.semanticwb.model.SWBClass impleme
             return it;
         }
        /**
-       * Gets all org.semanticwb.resources.sem.forumcat.Question with a determined ForumResource
-       * @param value ForumResource of the type org.semanticwb.resources.sem.forumcat.SWBForumCatResource
-       * @param model Model of the org.semanticwb.resources.sem.forumcat.Question
-       * @return Iterator with all the org.semanticwb.resources.sem.forumcat.Question
-       */
-
-        public static java.util.Iterator<org.semanticwb.resources.sem.forumcat.Question> listQuestionByForumResource(org.semanticwb.resources.sem.forumcat.SWBForumCatResource value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.resources.sem.forumcat.Question> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(forumCat_forumResource, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.resources.sem.forumcat.Question with a determined ForumResource
-       * @param value ForumResource of the type org.semanticwb.resources.sem.forumcat.SWBForumCatResource
-       * @return Iterator with all the org.semanticwb.resources.sem.forumcat.Question
-       */
-
-        public static java.util.Iterator<org.semanticwb.resources.sem.forumcat.Question> listQuestionByForumResource(org.semanticwb.resources.sem.forumcat.SWBForumCatResource value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.resources.sem.forumcat.Question> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(forumCat_forumResource,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.resources.sem.forumcat.Question with a determined QuestionObjInv
        * @param value QuestionObjInv of the type org.semanticwb.resources.sem.forumcat.QuestionSubscription
        * @param model Model of the org.semanticwb.resources.sem.forumcat.Question
@@ -170,6 +147,29 @@ public abstract class QuestionBase extends org.semanticwb.model.SWBClass impleme
         public static java.util.Iterator<org.semanticwb.resources.sem.forumcat.Question> listQuestionByQuestionObjInv(org.semanticwb.resources.sem.forumcat.QuestionSubscription value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.resources.sem.forumcat.Question> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(forumCat_questionObjInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.resources.sem.forumcat.Question with a determined ForumResource
+       * @param value ForumResource of the type org.semanticwb.resources.sem.forumcat.SWBForumCatResource
+       * @param model Model of the org.semanticwb.resources.sem.forumcat.Question
+       * @return Iterator with all the org.semanticwb.resources.sem.forumcat.Question
+       */
+
+        public static java.util.Iterator<org.semanticwb.resources.sem.forumcat.Question> listQuestionByForumResource(org.semanticwb.resources.sem.forumcat.SWBForumCatResource value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.resources.sem.forumcat.Question> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(forumCat_forumResource, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.resources.sem.forumcat.Question with a determined ForumResource
+       * @param value ForumResource of the type org.semanticwb.resources.sem.forumcat.SWBForumCatResource
+       * @return Iterator with all the org.semanticwb.resources.sem.forumcat.Question
+       */
+
+        public static java.util.Iterator<org.semanticwb.resources.sem.forumcat.Question> listQuestionByForumResource(org.semanticwb.resources.sem.forumcat.SWBForumCatResource value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.resources.sem.forumcat.Question> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(forumCat_forumResource,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -291,24 +291,6 @@ public abstract class QuestionBase extends org.semanticwb.model.SWBClass impleme
     }
 
 /**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
-    }
-
-/**
 * Gets the Updated property
 * @return java.util.Date with the Updated
 */
@@ -325,43 +307,23 @@ public abstract class QuestionBase extends org.semanticwb.model.SWBClass impleme
     {
         getSemanticObject().setDateProperty(swb_updated, value);
     }
-   /**
-   * Sets the value for the property ForumResource
-   * @param value ForumResource to set
-   */
 
-    public void setForumResource(org.semanticwb.resources.sem.forumcat.SWBForumCatResource value)
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
     {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(forumCat_forumResource, value.getSemanticObject());
-        }else
-        {
-            removeForumResource();
-        }
-    }
-   /**
-   * Remove the value for ForumResource property
-   */
-
-    public void removeForumResource()
-    {
-        getSemanticObject().removeProperty(forumCat_forumResource);
+        return getSemanticObject().getDateProperty(swb_created);
     }
 
-   /**
-   * Gets the ForumResource
-   * @return a org.semanticwb.resources.sem.forumcat.SWBForumCatResource
-   */
-    public org.semanticwb.resources.sem.forumcat.SWBForumCatResource getForumResource()
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
     {
-         org.semanticwb.resources.sem.forumcat.SWBForumCatResource ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(forumCat_forumResource);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.resources.sem.forumcat.SWBForumCatResource)obj.createGenericInstance();
-         }
-         return ret;
+        getSemanticObject().setDateProperty(swb_created, value);
     }
    /**
    * Sets the value for the property QuestionObjInv
@@ -398,6 +360,44 @@ public abstract class QuestionBase extends org.semanticwb.model.SWBClass impleme
          if(obj!=null)
          {
              ret=(org.semanticwb.resources.sem.forumcat.QuestionSubscription)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property ForumResource
+   * @param value ForumResource to set
+   */
+
+    public void setForumResource(org.semanticwb.resources.sem.forumcat.SWBForumCatResource value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(forumCat_forumResource, value.getSemanticObject());
+        }else
+        {
+            removeForumResource();
+        }
+    }
+   /**
+   * Remove the value for ForumResource property
+   */
+
+    public void removeForumResource()
+    {
+        getSemanticObject().removeProperty(forumCat_forumResource);
+    }
+
+   /**
+   * Gets the ForumResource
+   * @return a org.semanticwb.resources.sem.forumcat.SWBForumCatResource
+   */
+    public org.semanticwb.resources.sem.forumcat.SWBForumCatResource getForumResource()
+    {
+         org.semanticwb.resources.sem.forumcat.SWBForumCatResource ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(forumCat_forumResource);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.resources.sem.forumcat.SWBForumCatResource)obj.createGenericInstance();
          }
          return ret;
     }
@@ -540,6 +540,24 @@ public abstract class QuestionBase extends org.semanticwb.model.SWBClass impleme
          }
          return ret;
     }
+
+/**
+* Gets the Closed property
+* @return boolean with the Closed
+*/
+    public boolean isClosed()
+    {
+        return getSemanticObject().getBooleanProperty(forumCat_closed);
+    }
+
+/**
+* Sets the Closed property
+* @param value long with the Closed
+*/
+    public void setClosed(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(forumCat_closed, value);
+    }
    /**
    * Gets all the org.semanticwb.resources.sem.forumcat.Answer
    * @return A GenericIterator with all the org.semanticwb.resources.sem.forumcat.Answer
@@ -578,24 +596,6 @@ public abstract class QuestionBase extends org.semanticwb.model.SWBClass impleme
              ret=(org.semanticwb.resources.sem.forumcat.Answer)obj.createGenericInstance();
          }
          return ret;
-    }
-
-/**
-* Gets the Closed property
-* @return boolean with the Closed
-*/
-    public boolean isClosed()
-    {
-        return getSemanticObject().getBooleanProperty(forumCat_closed);
-    }
-
-/**
-* Sets the Closed property
-* @param value long with the Closed
-*/
-    public void setClosed(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(forumCat_closed, value);
     }
 
 /**
@@ -650,6 +650,21 @@ public abstract class QuestionBase extends org.semanticwb.model.SWBClass impleme
     public void setTags(String value)
     {
         getSemanticObject().setProperty(swb_tags, value);
+    }
+
+    public String getTags(String lang)
+    {
+        return getSemanticObject().getProperty(swb_tags, null, lang);
+    }
+
+    public String getDisplayTags(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_tags, lang);
+    }
+
+    public void setTags(String tags, String lang)
+    {
+        getSemanticObject().setProperty(swb_tags, tags, lang);
     }
 
 /**
