@@ -18,6 +18,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
@@ -819,6 +820,19 @@ public class Modeler extends GenericResource {
 
 
                         if (semclass.equals(UserTask.swp_UserTask)) {
+
+                            if(procsite.getResourceType("ProcessForm")==null)
+                            {
+                                ResourceType resType = procsite.createResourceType("ProcessForm");
+                                resType.setTitle("ProcessForm");
+                                resType.setTitle("ProcessForm","en");
+                                resType.setDescription("ProcessForm");
+                                resType.setDescription("ProcessForm","es");
+                                resType.setResourceClassName("org.semanticwb.process.resources.ProcessForm");
+                                resType.setResourceBundle("org.semanticwb.process.resources.ProcessForm");
+                                resType.setResourceMode(ResourceType.MODE_SYSTEM);
+                            }                           
+
                             if (procsite.getResourceType("ProcessForm") != null) {
                                 Resource res = procsite.createResource();
                                 res.setResourceType(procsite.getResourceType("ProcessForm"));
