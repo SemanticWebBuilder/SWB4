@@ -134,7 +134,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 {
                     pass = false;
                 }
-                if (pass)
+                if (pass || !isCaptcha())
                 {
                     SWBFormMgr mgr = new SWBFormMgr(Question.forumCat_Question, getResourceBase().getSemanticObject(), SWBFormMgr.MODE_EDIT);
                     try
@@ -147,7 +147,10 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         }
                         question.setCreated(Calendar.getInstance().getTime());
                         question.setForumResource(this);
-                        question.setQuestion(placeAnchors(question.getQuestion()));
+                        String validQuestion = placeAnchors(question.getQuestion());
+                        validQuestion = validQuestion.replaceAll("\r\n","<br>");
+                        question.setQuestion(validQuestion);
+                       // question.setQuestion(placeAnchors(question.getQuestion()));
                         question.setQuestionReferences(request.getParameter("questionReferences"));
                         if (request.getParameter("tags") != null)
                         {
@@ -223,16 +226,20 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 {
                     pass = false;
                 }
-                if (pass)
+                if (pass || !isCaptcha())
                 {
                     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
                     SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
                     try
                     {
                         mgr.processForm(request);
+                        Question question = (Question) semObject.createGenericInstance();
+                        String validQuestion = placeAnchors(question.getQuestion());
+                        validQuestion = validQuestion.replaceAll("\r\n","<br>");
+                        question.setQuestion(validQuestion);
                         if (request.getParameter("categoryuri") != null && !request.getParameter("categoryuri").equals(""))
                         {
-                            Question question = (Question) semObject.createGenericInstance();
+                            
                             boolean canedit = false;
                             if (question.getCreator() != null && question.getCreator().getId() != null && user.getId() != null && user.getId() != null && question.getCreator().getId().equals(user.getId()))
                             {
@@ -366,7 +373,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 {
                     pass = false;
                 }
-                if (pass)
+                if (pass || !isCaptcha())
                 {
                     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
                     Question question = (Question) semObject.createGenericInstance();
@@ -376,7 +383,13 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         SemanticObject semObjectChild = mgr.processForm(request);
                         Answer answer = (Answer) semObjectChild.createGenericInstance();
                         answer.setAnsQuestion(question);
-                        answer.setAnswer(placeAnchors(answer.getAnswer()));
+
+
+                        String validAnswer = placeAnchors(answer.getAnswer());
+                        validAnswer = validAnswer.replaceAll("\r\n","<br>");
+                        answer.setAnswer(validAnswer);
+
+                        //answer.setAnswer(placeAnchors(answer.getAnswer()));
                         answer.setReferences(request.getParameter("references"));
                         answer.setCreated(Calendar.getInstance().getTime());
                         if (isIsModerate())
@@ -467,7 +480,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 {
                     pass = false;
                 }
-                if (pass)
+                if (pass || !isCaptcha())
                 {
                     SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
                     SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
@@ -497,7 +510,12 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     {
                         if (this.isIsModerate())
                             answer.setAnsStatus(STATUS_REGISTERED);
-                        answer.setAnswer(placeAnchors(answer.getAnswer()));
+
+                        String validAnswer = placeAnchors(answer.getAnswer());
+                        validAnswer = validAnswer.replaceAll("\r\n","<br>");
+                        answer.setAnswer(validAnswer);
+
+                        //answer.setAnswer(placeAnchors(answer.getAnswer()));
                         if (answer.getAnsQuestion().getURI() != null)
                             response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
                         if (request.getParameter("page") != null)
