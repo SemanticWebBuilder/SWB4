@@ -2678,6 +2678,7 @@
                         org.semanticwb.model.Role swbr = org.semanticwb.model.Role.ClassMgr.createRole(Integer.toString(wbr.getId()), urep);
                         swbr.setTitle(wbr.getName());
                         swbr.setDescription(wbr.getDescription());
+                        swbr.setTitle(wbr.getName(),"es");
                         numelem++;
                     }
                 }
