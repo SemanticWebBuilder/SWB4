@@ -39,7 +39,7 @@
     text-align: center;
     margin-right: 1px;
     margin-left: 1px;
-    background-color: #00A7BA;
+    background-color: #808080;
     color: #FFFFFF;
 }
 .calendar {
@@ -56,16 +56,16 @@
 .events a:hover {
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 11px;
-    color: #00A7BA;
+    color: #808080;
     text-decoration: none
 }
 .tooltip {
-    background-color: #DEF0EE;
+    background-color: #C0C0C0;
     height: 150px;
     width: 300px;
     padding: 10px;
     overflow: hidden;
-    border: 1px solid #006699;
+    border: 1px solid #4B4B4B;
 }
 .tooltip h1 {
     font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -76,11 +76,11 @@
     margin-right: 0px;
     margin-bottom: 5px;
     margin-left: 0px;
-    color: #5D8199;
+    color: #FFF;
 }
 .tooltip img {
     float: left;
-    border: 1px solid #0099CC;
+    border: 1px solid #FFF;
     margin-right: 10px;
     margin-bottom: 5px;
 }
@@ -97,7 +97,7 @@ display:none}*/
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 16px;
     font-weight: bold;
-    color: #00A7BA;
+    color: #808080;
     text-align: center;
     display: block;
     height: 22px;
@@ -114,7 +114,7 @@ display:none}*/
 }
 .selectYear .textSelectYear  {
     font-family: Tahoma, Geneva, sans-serif;
-    color: #00A7BA;
+    color: #808080;
     font-size: 12px;
     font-weight: bold;
     display: block;
@@ -133,13 +133,13 @@ display:none}*/
 .selectYear #menuSelectYear  {
     font-family: Tahoma, Geneva, sans-serif;
     font-weight: bold;
-    color: #00A7BA;
+    color: #808080;
 }
 .calendarBox {
     float: left;
     height: 100px;
     width: 100px;
-    background-color: #D6E7E4;
+    background-color: #DDD;
     margin-top: 1px;
     margin-right: 1px;
     margin-bottom: 1px;
@@ -161,7 +161,7 @@ display:none}*/
     padding: 5px;
 }
 .empty {
-    background-color: #CCCCCC;
+    background-color: #969696;
 }
 .monthTitle a {
     float: left;
@@ -181,7 +181,7 @@ display:none}*/
     line-height: 14px;
 }
 .showPopUp {
-    background-color: #D6E7E4;
+    background-color: #DDD;
     margin:1px;
 }
 .showPopUpAllEvts {
@@ -198,7 +198,7 @@ display:none}*/
 }
 p.moreEvts {
     width: 56px;
-    background-color: #D6E7E4;
+    background-color: #DDD;
     padding-bottom: 0px;
     padding-left: 0px;
     padding-right: 6px;
@@ -311,12 +311,12 @@ p.day2 {
     z-Index: 10010;
 }*/
 .tooltip1 {
-    background-color: #DEF0EE;
+    background-color: #C0C0C0;
     height: 150px;
     width: 300px;
     padding: 10px;
     overflow: hidden;
-    border: 1px solid #006699;
+    border: 1px solid #4B4B4B;
     position:relative;
 
 }
@@ -329,11 +329,11 @@ p.day2 {
     margin-right: 0px;
     margin-bottom: 5px;
     margin-left: 0px;
-    color: #5D8199;
+    color: #FFF;
 }
 .tooltip1 img {
     float: left;
-    border: 1px solid #0099CC;
+    border: 1px solid #FFF;
     margin-right: 10px;
     margin-bottom: 5px;
 }
@@ -350,7 +350,7 @@ p.day2 {
     font-size: 11px;
     text-decoration: none;
     width: auto;
-    background-color: #D6E7E4;
+    background-color: #DDD;
     font-weight: normal;
     padding: 0px;
 }
@@ -407,7 +407,7 @@ p.day2 {
     text-align: center;
     margin-right: 1px;
     margin-left: 1px;
-    background-color: #00A7BA;
+    background-color: #808080;
     color: #FFFFFF;
 }
 .Thumbnailcalendar {
@@ -419,7 +419,7 @@ p.day2 {
     float: left;
     height: 35px;
     width: 26px;
-    background-color: #D6E7E4;
+    background-color: #DDD;
     margin-top: 1px;
     margin-right: 1px;
     margin-bottom: 1px;
@@ -438,11 +438,11 @@ p.day2 {
     margin: 0px;
 }
 .empty {
-    background-color: #CCCCCC;
+    background-color: #969696;
 }
 p.moreEvtsThumb {
     width: 18px;
-    background-color: #D6E7E4;
+    background-color: #DDD;
     display: block;
     height: 16px;
 }
@@ -477,7 +477,7 @@ p.moreEvtsThumb {
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 14px;
     font-weight: bold;
-    color: #00A7BA;
+    color: #808080;
     text-align: center;
     display: block;
     height: 16px;/*22*/
@@ -487,7 +487,7 @@ p.moreEvtsThumb {
 }
 .selectYearTumb .textSelectYear  {
     font-family: Tahoma, Geneva, sans-serif;
-    color: #00A7BA;
+    color: #808080;
     font-size: 12px;
     font-weight: bold;
     display: block;
@@ -506,7 +506,7 @@ p.moreEvtsThumb {
 .selectYearTumb #menuSelectYearTumb  {
     font-family: Tahoma, Geneva, sans-serif;
     font-weight: bold;
-    color: #00A7BA;
+    color: #808080;
 }
 #containerGralThum {
     float: left;
