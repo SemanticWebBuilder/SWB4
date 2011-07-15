@@ -44,8 +44,8 @@ public class GoogleSiteMap implements InternalServlet {
      */
     public void doProcess(HttpServletRequest req, HttpServletResponse resp, DistributorParams dparams) throws IOException, ServletException
     {
-        String lang = "es";
-        String country = "mx";
+        String lang = dparams.getUser().getLanguage();
+//        String country = "mx";
         String host = "http://"+req.getServerName();
         if (req.getServerPort()!=80) host += ":"+req.getServerPort();
         //resp.setHeader("Content-Encoding", "gzip");
@@ -63,14 +63,15 @@ public class GoogleSiteMap implements InternalServlet {
         {
             //WebSite map = maps.next();
             WebSite map = SWBContext.getWebSite(modelid);
-            if(map.getLanguage()!=null)
-            {
-                lang=map.getLanguage().getId();
-            }
-            if(map.getCountry()!=null)
-            {
-                country=map.getCountry().getId();
-            }
+
+//            if(map.getLanguage()!=null)
+//            {
+//                lang=map.getLanguage().getId();
+//            }
+//            if(map.getCountry()!=null)
+//            {
+//                country=map.getCountry().getId();
+//            }
 //            if (SWBContext.WEBSITE_GLOBAL.equals(map.getId()))
 //            {
 //                continue;
@@ -87,7 +88,7 @@ public class GoogleSiteMap implements InternalServlet {
                 }
             }
             WebPage topicH = map.getHomePage();
-            processWebPage(ret, hn, topicH, 95, lang, country);
+            processWebPage(ret, hn, topicH, 95, lang);
 
 //            if (null!= topicH.getWebSite().getLanguage()) lang = topicH.getWebSite().getLanguage().getId(); else lang = "es";
 //            ret.append("<url><loc>" + hn +topicH.getRealUrl() + "</loc>");
@@ -119,20 +120,21 @@ public class GoogleSiteMap implements InternalServlet {
         resp.getWriter().print(SWBUtils.TEXT.encode(ret.toString(), SWBUtils.TEXT.CHARSET_UTF8));
     }
 
-    void processWebPage(StringBuffer ret, String hn, WebPage page, int score, String lang, String country)
+    void processWebPage(StringBuffer ret, String hn, WebPage page, int score, String lang)
     {
         int tscore = score-5;
         String scoregap = score==5?"05":""+score;
         if (page.isVisible())
         {
             String urlcnt;
-            if (null!=lang && null!=country){
-                urlcnt = page.getRealUrl(lang, country);
-            } else if (null!=lang) {
-                urlcnt = page.getRealUrl(lang);
-            } else {
-                urlcnt = page.getRealUrl();
-            }
+            urlcnt = page.getUrl();
+//            if (null!=lang && null!=country){
+//                urlcnt = page.getRealUrl(lang, country);
+//            } else if (null!=lang) {
+//                urlcnt = page.getRealUrl(lang);
+//            } else {
+//                urlcnt = page.getRealUrl();
+//            }
             ret.append("<url><loc>" + hn +urlcnt + "</loc>");
             if (!"".equals(page.getContentsLastUpdate(lang, "yyyy-mm-dd")))
                     ret.append("<lastmod>"+page.getContentsLastUpdate(lang, "yyyy-mm-dd")+"</lastmod>");
@@ -142,7 +144,7 @@ public class GoogleSiteMap implements InternalServlet {
         if (score==5) { tscore = score;}
         while (childs.hasNext())
         {
-            processWebPage(ret, hn, childs.next(), tscore, lang, country);
+            processWebPage(ret, hn, childs.next(), tscore, lang);
         }
     }
 

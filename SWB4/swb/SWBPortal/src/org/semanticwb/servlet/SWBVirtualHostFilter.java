@@ -126,6 +126,7 @@ public class SWBVirtualHostFilter implements Filter
         String path = uri.substring(cntx.length());
         String host = _request.getServerName();
         String iserv = "";
+        String iservnext=null;
 
         if (path == null || path.length() == 0)
         {
@@ -137,6 +138,7 @@ public class SWBVirtualHostFilter implements Filter
             if (j > 0)
             {
                 iserv = path.substring(1, j);
+                iservnext = path.substring(j+1);
             }
             else
             {
@@ -203,6 +205,8 @@ public class SWBVirtualHostFilter implements Filter
                 lang=iserv.substring(0,2);
                 country=iserv.substring(3);
             }
+            if(iservnext!=null)serv = intServlets.get(iservnext);
+            if(serv==null)serv=dist;
         }
 
 //        String real=WBVirtualHostMgr.getInstance().getVirtualHost(path,host);
