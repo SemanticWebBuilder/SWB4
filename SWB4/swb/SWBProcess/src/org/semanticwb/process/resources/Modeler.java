@@ -110,6 +110,7 @@ public class Modeler extends GenericResource {
                     process = (org.semanticwb.process.model.Process) go;
                     String json = getProcessJSON(process).toString();
                     out.print(json);
+                    //System.out.println("json:"+json);
                 } else {
                     log.error("Error to create JSON: Process not found");
                     out.print("ERROR: Process not found");
@@ -173,6 +174,9 @@ public class Modeler extends GenericResource {
                 for (int i = 0; i < jsarr.length(); i++) {
                     jsobj = jsarr.getJSONObject(i);
                     str_uri = jsobj.getString(PROP_URI);
+
+                    //System.out.println("json uri:"+str_uri);
+
                     hmjson.put(str_uri, jsobj);
                 }
                 createProcessElements(process, request, response, paramRequest, hmjson);
@@ -626,6 +630,7 @@ public class Modeler extends GenericResource {
                     continue;
                 }
 
+                // primero se crean los elementos graficos del modelo
                 if (semclass.isSubClass(GraphicalElement.swp_GraphicalElement)) {
                     title = json.getString(PROP_TITLE);
                     try {
@@ -678,6 +683,8 @@ public class Modeler extends GenericResource {
                         //System.out.println("No viene isCollecion....."+title);
                     }
 
+                    //System.out.println("uri: "+uri);
+
                     x = json.getInt(PROP_X);
                     y = json.getInt(PROP_Y);
                     w = json.getInt(PROP_W);
@@ -686,10 +693,12 @@ public class Modeler extends GenericResource {
                     container = json.getString(PROP_CONTAINER);
                     labelSize = json.getInt(PROP_labelSize);
 
+                    // revisando si el elemento existe
                     if (hmori.get(uri) != null) {
                         go = ont.getGenericObject(uri);
 
                         if (go instanceof GraphicalElement) {
+                            // actualizando datos en elemento existente
                             ge = (GraphicalElement) go;
                             if (!ge.getTitle().equals(title)) {
                                 ge.setTitle(title);
@@ -781,12 +790,15 @@ public class Modeler extends GenericResource {
                                     colble.setCollection(isCollection.booleanValue());
                                 }
                             }
-                            
+                            // se agrega en este hm para la parte de la secuencia del proceso
                             hmnew.put(uri, go.getURI());
                         }
+                        // se quita elemento que ha sido actualizado
                         hmori.remove(uri);
 
                     } else {
+                        //Se genera el nuevo elemento
+                        //System.out.println("new element: "+semclass);
                         long id = model.getCounter(semclass);
                         GenericObject gi = model.createGenericObject(model.getObjectUri(String.valueOf(id), semclass), semclass);
                         ge = (GraphicalElement) gi;
@@ -798,6 +810,10 @@ public class Modeler extends GenericResource {
                         ge.setY(y);
                         ge.setHeight(h);
                         ge.setWidth(w);
+
+                        //System.out.println("uri: "+uri+" new uri: "+gi.getURI());
+
+                        // se agrega nuevo elemento en el hmnew
                         hmnew.put(uri, gi.getURI());
 
                         ///////////////////////////////////////
@@ -844,9 +860,9 @@ public class Modeler extends GenericResource {
                         ////////////////////////////////////////
 
 
-                    }
-                }
-            }
+                    } // termina else
+                } // termina if graphicalElement
+            } //termina while
 
             // Parte para relacionar elementos container y parents
             it = hmjson.keySet().iterator();
@@ -911,6 +927,7 @@ public class Modeler extends GenericResource {
                 if (semclass.isSubClass(ConnectionObject.swp_ConnectionObject)) {
                     start = json.getString(PROP_START);
                     end = json.getString(PROP_END);
+
                     title = json.getString(PROP_TITLE);
                     try {
                         description = json.getString(PROP_DESCRIPTION);
@@ -924,6 +941,7 @@ public class Modeler extends GenericResource {
                         sconnpoints = "";
                     }
 
+                    // revisando si existe elemento coneccion
                     if (hmori.get(uri) != null) {
                         go = ont.getGenericObject(hmori.get(uri));
                         co = (ConnectionObject) go;
@@ -942,7 +960,7 @@ public class Modeler extends GenericResource {
                         if (!co.getSource().getURI().equals(start)) {
                             if (hmnew.get(start) != null) {
                                 gostart = ont.getGenericObject(hmnew.get(start));
-                                co.setSource(ge);
+                                co.setSource((GraphicalElement)gostart);
                             }
                         }
                         if (!co.getTarget().getURI().equals(end)) {
