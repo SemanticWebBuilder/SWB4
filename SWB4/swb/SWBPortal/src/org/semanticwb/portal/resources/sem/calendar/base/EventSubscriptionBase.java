@@ -101,29 +101,6 @@ public abstract class EventSubscriptionBase extends org.semanticwb.model.SWBClas
             return (getEventSubscription(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.portal.resources.sem.calendar.EventSubscription with a determined ModifiedBy
-       * @param value ModifiedBy of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.portal.resources.sem.calendar.EventSubscription
-       * @return Iterator with all the org.semanticwb.portal.resources.sem.calendar.EventSubscription
-       */
-
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.calendar.EventSubscription> listEventSubscriptionByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.calendar.EventSubscription> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.portal.resources.sem.calendar.EventSubscription with a determined ModifiedBy
-       * @param value ModifiedBy of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.portal.resources.sem.calendar.EventSubscription
-       */
-
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.calendar.EventSubscription> listEventSubscriptionByModifiedBy(org.semanticwb.model.User value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.calendar.EventSubscription> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.portal.resources.sem.calendar.EventSubscription with a determined UserEventSubscription
        * @param value UserEventSubscription of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.portal.resources.sem.calendar.EventSubscription
@@ -147,26 +124,26 @@ public abstract class EventSubscriptionBase extends org.semanticwb.model.SWBClas
             return it;
         }
        /**
-       * Gets all org.semanticwb.portal.resources.sem.calendar.EventSubscription with a determined EventSubscription
-       * @param value EventSubscription of the type org.semanticwb.portal.resources.sem.calendar.Event
+       * Gets all org.semanticwb.portal.resources.sem.calendar.EventSubscription with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.portal.resources.sem.calendar.EventSubscription
        * @return Iterator with all the org.semanticwb.portal.resources.sem.calendar.EventSubscription
        */
 
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.calendar.EventSubscription> listEventSubscriptionByEventSubscription(org.semanticwb.portal.resources.sem.calendar.Event value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.calendar.EventSubscription> listEventSubscriptionByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.calendar.EventSubscription> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(cal_eventSubscription, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.calendar.EventSubscription> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.portal.resources.sem.calendar.EventSubscription with a determined EventSubscription
-       * @param value EventSubscription of the type org.semanticwb.portal.resources.sem.calendar.Event
+       * Gets all org.semanticwb.portal.resources.sem.calendar.EventSubscription with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
        * @return Iterator with all the org.semanticwb.portal.resources.sem.calendar.EventSubscription
        */
 
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.calendar.EventSubscription> listEventSubscriptionByEventSubscription(org.semanticwb.portal.resources.sem.calendar.Event value)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.calendar.EventSubscription> listEventSubscriptionByModifiedBy(org.semanticwb.model.User value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.calendar.EventSubscription> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(cal_eventSubscription,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.calendar.EventSubscription> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -192,6 +169,29 @@ public abstract class EventSubscriptionBase extends org.semanticwb.model.SWBClas
             org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.calendar.EventSubscription> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.calendar.EventSubscription with a determined EventSubscription
+       * @param value EventSubscription of the type org.semanticwb.portal.resources.sem.calendar.Event
+       * @param model Model of the org.semanticwb.portal.resources.sem.calendar.EventSubscription
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.calendar.EventSubscription
+       */
+
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.calendar.EventSubscription> listEventSubscriptionByEventSubscription(org.semanticwb.portal.resources.sem.calendar.Event value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.calendar.EventSubscription> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(cal_eventSubscription, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.calendar.EventSubscription with a determined EventSubscription
+       * @param value EventSubscription of the type org.semanticwb.portal.resources.sem.calendar.Event
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.calendar.EventSubscription
+       */
+
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.calendar.EventSubscription> listEventSubscriptionByEventSubscription(org.semanticwb.portal.resources.sem.calendar.Event value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.calendar.EventSubscription> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(cal_eventSubscription,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**
@@ -202,23 +202,43 @@ public abstract class EventSubscriptionBase extends org.semanticwb.model.SWBClas
     {
         super(base);
     }
+   /**
+   * Sets the value for the property UserEventSubscription
+   * @param value UserEventSubscription to set
+   */
 
-/**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
+    public void setUserEventSubscription(org.semanticwb.model.User value)
     {
-        return getSemanticObject().getDateProperty(swb_created);
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(cal_userEventSubscription, value.getSemanticObject());
+        }else
+        {
+            removeUserEventSubscription();
+        }
+    }
+   /**
+   * Remove the value for UserEventSubscription property
+   */
+
+    public void removeUserEventSubscription()
+    {
+        getSemanticObject().removeProperty(cal_userEventSubscription);
     }
 
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
+   /**
+   * Gets the UserEventSubscription
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getUserEventSubscription()
     {
-        getSemanticObject().setDateProperty(swb_created, value);
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(cal_userEventSubscription);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Sets the value for the property ModifiedBy
@@ -259,37 +279,37 @@ public abstract class EventSubscriptionBase extends org.semanticwb.model.SWBClas
          return ret;
     }
    /**
-   * Sets the value for the property UserEventSubscription
-   * @param value UserEventSubscription to set
+   * Sets the value for the property Creator
+   * @param value Creator to set
    */
 
-    public void setUserEventSubscription(org.semanticwb.model.User value)
+    public void setCreator(org.semanticwb.model.User value)
     {
         if(value!=null)
         {
-            getSemanticObject().setObjectProperty(cal_userEventSubscription, value.getSemanticObject());
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
         }else
         {
-            removeUserEventSubscription();
+            removeCreator();
         }
     }
    /**
-   * Remove the value for UserEventSubscription property
+   * Remove the value for Creator property
    */
 
-    public void removeUserEventSubscription()
+    public void removeCreator()
     {
-        getSemanticObject().removeProperty(cal_userEventSubscription);
+        getSemanticObject().removeProperty(swb_creator);
     }
 
    /**
-   * Gets the UserEventSubscription
+   * Gets the Creator
    * @return a org.semanticwb.model.User
    */
-    public org.semanticwb.model.User getUserEventSubscription()
+    public org.semanticwb.model.User getCreator()
     {
          org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(cal_userEventSubscription);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
          if(obj!=null)
          {
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
@@ -313,6 +333,24 @@ public abstract class EventSubscriptionBase extends org.semanticwb.model.SWBClas
     public void setUpdated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_updated, value);
+    }
+
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
     }
    /**
    * Sets the value for the property EventSubscription
@@ -349,44 +387,6 @@ public abstract class EventSubscriptionBase extends org.semanticwb.model.SWBClas
          if(obj!=null)
          {
              ret=(org.semanticwb.portal.resources.sem.calendar.Event)obj.createGenericInstance();
-         }
-         return ret;
-    }
-   /**
-   * Sets the value for the property Creator
-   * @param value Creator to set
-   */
-
-    public void setCreator(org.semanticwb.model.User value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
-        }else
-        {
-            removeCreator();
-        }
-    }
-   /**
-   * Remove the value for Creator property
-   */
-
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(swb_creator);
-    }
-
-   /**
-   * Gets the Creator
-   * @return a org.semanticwb.model.User
-   */
-    public org.semanticwb.model.User getCreator()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }

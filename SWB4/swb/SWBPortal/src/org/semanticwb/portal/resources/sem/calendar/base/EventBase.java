@@ -7,9 +7,29 @@ package org.semanticwb.portal.resources.sem.calendar.base;
 public abstract class EventBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Searchable
 {
    /**
+   * Fecha final del Evento
+   */
+    public static final org.semanticwb.platform.SemanticProperty cal_eventEndDate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/calendar#eventEndDate");
+   /**
+   * Almacena la url de una página externa para mostrar el detalle del Evento
+   */
+    public static final org.semanticwb.platform.SemanticProperty cal_urlExternal=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/calendar#urlExternal");
+   /**
    * Utilizado para mostrar en una ventana o pestaña distinta a la actual
    */
     public static final org.semanticwb.platform.SemanticProperty cal_newWindow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/calendar#newWindow");
+   /**
+   * Almacena la foto relacionada al Evento
+   */
+    public static final org.semanticwb.platform.SemanticProperty cal_image=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/calendar#image");
+   /**
+   * Visualiza los eventos en una página interna del sitio
+   */
+    public static final org.semanticwb.platform.SemanticProperty cal_urlInternal=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/calendar#urlInternal");
+   /**
+   * Almacena el detalle del evento
+   */
+    public static final org.semanticwb.platform.SemanticProperty cal_contentEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/calendar#contentEvent");
    /**
    * Fecha de Inicio del Evento
    */
@@ -19,29 +39,9 @@ public abstract class EventBase extends org.semanticwb.model.SWBClass implements
    */
     public static final org.semanticwb.platform.SemanticProperty cal_photoPrincipal=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/calendar#photoPrincipal");
    /**
-   * Fecha final del Evento
-   */
-    public static final org.semanticwb.platform.SemanticProperty cal_eventEndDate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/calendar#eventEndDate");
-   /**
-   * Almacena la foto relacionada al Evento
-   */
-    public static final org.semanticwb.platform.SemanticProperty cal_image=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/calendar#image");
-   /**
-   * Almacena el detalle del evento
-   */
-    public static final org.semanticwb.platform.SemanticProperty cal_contentEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/calendar#contentEvent");
-   /**
    * Determina si el evento se repite en la misma fecha indicada de inicio y de fin
    */
     public static final org.semanticwb.platform.SemanticProperty cal_periodicity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/calendar#periodicity");
-   /**
-   * Visualiza los eventos en una página interna del sitio
-   */
-    public static final org.semanticwb.platform.SemanticProperty cal_urlInternal=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/calendar#urlInternal");
-   /**
-   * Almacena la url de una página externa para mostrar el detalle del Evento
-   */
-    public static final org.semanticwb.platform.SemanticProperty cal_urlExternal=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/calendar#urlExternal");
    /**
    * Define la estructura de datos de los eventos a mostrar en el calendario.
    */
@@ -121,29 +121,6 @@ public abstract class EventBase extends org.semanticwb.model.SWBClass implements
             return (getEvent(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.portal.resources.sem.calendar.Event with a determined Language
-       * @param value Language of the type org.semanticwb.model.Language
-       * @param model Model of the org.semanticwb.portal.resources.sem.calendar.Event
-       * @return Iterator with all the org.semanticwb.portal.resources.sem.calendar.Event
-       */
-
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.calendar.Event> listEventByLanguage(org.semanticwb.model.Language value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.calendar.Event> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_language, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.portal.resources.sem.calendar.Event with a determined Language
-       * @param value Language of the type org.semanticwb.model.Language
-       * @return Iterator with all the org.semanticwb.portal.resources.sem.calendar.Event
-       */
-
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.calendar.Event> listEventByLanguage(org.semanticwb.model.Language value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.calendar.Event> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_language,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.portal.resources.sem.calendar.Event with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.portal.resources.sem.calendar.Event
@@ -164,6 +141,29 @@ public abstract class EventBase extends org.semanticwb.model.SWBClass implements
         public static java.util.Iterator<org.semanticwb.portal.resources.sem.calendar.Event> listEventByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.calendar.Event> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.calendar.Event with a determined Language
+       * @param value Language of the type org.semanticwb.model.Language
+       * @param model Model of the org.semanticwb.portal.resources.sem.calendar.Event
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.calendar.Event
+       */
+
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.calendar.Event> listEventByLanguage(org.semanticwb.model.Language value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.calendar.Event> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_language, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.portal.resources.sem.calendar.Event with a determined Language
+       * @param value Language of the type org.semanticwb.model.Language
+       * @return Iterator with all the org.semanticwb.portal.resources.sem.calendar.Event
+       */
+
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.calendar.Event> listEventByLanguage(org.semanticwb.model.Language value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.calendar.Event> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_language,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -199,6 +199,149 @@ public abstract class EventBase extends org.semanticwb.model.SWBClass implements
     {
         super(base);
     }
+   /**
+   * Sets the value for the property ModifiedBy
+   * @param value ModifiedBy to set
+   */
+
+    public void setModifiedBy(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
+    }
+   /**
+   * Remove the value for ModifiedBy property
+   */
+
+    public void removeModifiedBy()
+    {
+        getSemanticObject().removeProperty(swb_modifiedBy);
+    }
+
+   /**
+   * Gets the ModifiedBy
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getModifiedBy()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
+* Gets the EventEndDate property
+* @return String with the EventEndDate
+*/
+    public String getEventEndDate()
+    {
+        return getSemanticObject().getProperty(cal_eventEndDate);
+    }
+
+/**
+* Sets the EventEndDate property
+* @param value long with the EventEndDate
+*/
+    public void setEventEndDate(String value)
+    {
+        getSemanticObject().setProperty(cal_eventEndDate, value);
+    }
+
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+/**
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
+    }
+
+/**
+* Gets the Description property
+* @return String with the Description
+*/
+    public String getDescription()
+    {
+        return getSemanticObject().getProperty(swb_description);
+    }
+
+/**
+* Sets the Description property
+* @param value long with the Description
+*/
+    public void setDescription(String value)
+    {
+        getSemanticObject().setProperty(swb_description, value);
+    }
+
+    public String getDescription(String lang)
+    {
+        return getSemanticObject().getProperty(swb_description, null, lang);
+    }
+
+    public String getDisplayDescription(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_description, lang);
+    }
+
+    public void setDescription(String description, String lang)
+    {
+        getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+/**
+* Gets the UrlExternal property
+* @return String with the UrlExternal
+*/
+    public String getUrlExternal()
+    {
+        return getSemanticObject().getProperty(cal_urlExternal);
+    }
+
+/**
+* Sets the UrlExternal property
+* @param value long with the UrlExternal
+*/
+    public void setUrlExternal(String value)
+    {
+        getSemanticObject().setProperty(cal_urlExternal, value);
+    }
 
 /**
 * Gets the NewWindow property
@@ -219,21 +362,39 @@ public abstract class EventBase extends org.semanticwb.model.SWBClass implements
     }
 
 /**
-* Gets the EventInitDate property
-* @return String with the EventInitDate
+* Gets the Image property
+* @return String with the Image
 */
-    public String getEventInitDate()
+    public String getImage()
     {
-        return getSemanticObject().getProperty(cal_eventInitDate);
+        return getSemanticObject().getProperty(cal_image);
     }
 
 /**
-* Sets the EventInitDate property
-* @param value long with the EventInitDate
+* Sets the Image property
+* @param value long with the Image
 */
-    public void setEventInitDate(String value)
+    public void setImage(String value)
     {
-        getSemanticObject().setProperty(cal_eventInitDate, value);
+        getSemanticObject().setProperty(cal_image, value);
+    }
+
+/**
+* Gets the UrlInternal property
+* @return boolean with the UrlInternal
+*/
+    public boolean isUrlInternal()
+    {
+        return getSemanticObject().getBooleanProperty(cal_urlInternal);
+    }
+
+/**
+* Sets the UrlInternal property
+* @param value long with the UrlInternal
+*/
+    public void setUrlInternal(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(cal_urlInternal, value);
     }
 
 /**
@@ -293,167 +454,6 @@ public abstract class EventBase extends org.semanticwb.model.SWBClass implements
     }
 
 /**
-* Gets the PhotoPrincipal property
-* @return String with the PhotoPrincipal
-*/
-    public String getPhotoPrincipal()
-    {
-        return getSemanticObject().getProperty(cal_photoPrincipal);
-    }
-
-/**
-* Sets the PhotoPrincipal property
-* @param value long with the PhotoPrincipal
-*/
-    public void setPhotoPrincipal(String value)
-    {
-        getSemanticObject().setProperty(cal_photoPrincipal, value);
-    }
-
-/**
-* Gets the EventEndDate property
-* @return String with the EventEndDate
-*/
-    public String getEventEndDate()
-    {
-        return getSemanticObject().getProperty(cal_eventEndDate);
-    }
-
-/**
-* Sets the EventEndDate property
-* @param value long with the EventEndDate
-*/
-    public void setEventEndDate(String value)
-    {
-        getSemanticObject().setProperty(cal_eventEndDate, value);
-    }
-
-/**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
-    }
-   /**
-   * Sets the value for the property ModifiedBy
-   * @param value ModifiedBy to set
-   */
-
-    public void setModifiedBy(org.semanticwb.model.User value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
-        }else
-        {
-            removeModifiedBy();
-        }
-    }
-   /**
-   * Remove the value for ModifiedBy property
-   */
-
-    public void removeModifiedBy()
-    {
-        getSemanticObject().removeProperty(swb_modifiedBy);
-    }
-
-   /**
-   * Gets the ModifiedBy
-   * @return a org.semanticwb.model.User
-   */
-    public org.semanticwb.model.User getModifiedBy()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-/**
-* Gets the Title property
-* @return String with the Title
-*/
-    public String getTitle()
-    {
-        return getSemanticObject().getProperty(swb_title);
-    }
-
-/**
-* Sets the Title property
-* @param value long with the Title
-*/
-    public void setTitle(String value)
-    {
-        getSemanticObject().setProperty(swb_title, value);
-    }
-
-    public String getTitle(String lang)
-    {
-        return getSemanticObject().getProperty(swb_title, null, lang);
-    }
-
-    public String getDisplayTitle(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_title, lang);
-    }
-
-    public void setTitle(String title, String lang)
-    {
-        getSemanticObject().setProperty(swb_title, title, lang);
-    }
-
-/**
-* Gets the Updated property
-* @return java.util.Date with the Updated
-*/
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-/**
-* Sets the Updated property
-* @param value long with the Updated
-*/
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-/**
-* Gets the Image property
-* @return String with the Image
-*/
-    public String getImage()
-    {
-        return getSemanticObject().getProperty(cal_image);
-    }
-
-/**
-* Sets the Image property
-* @param value long with the Image
-*/
-    public void setImage(String value)
-    {
-        getSemanticObject().setProperty(cal_image, value);
-    }
-
-/**
 * Gets the ContentEvent property
 * @return String with the ContentEvent
 */
@@ -472,57 +472,39 @@ public abstract class EventBase extends org.semanticwb.model.SWBClass implements
     }
 
 /**
-* Gets the Periodicity property
-* @return String with the Periodicity
+* Gets the EventInitDate property
+* @return String with the EventInitDate
 */
-    public String getPeriodicity()
+    public String getEventInitDate()
     {
-        return getSemanticObject().getProperty(cal_periodicity);
+        return getSemanticObject().getProperty(cal_eventInitDate);
     }
 
 /**
-* Sets the Periodicity property
-* @param value long with the Periodicity
+* Sets the EventInitDate property
+* @param value long with the EventInitDate
 */
-    public void setPeriodicity(String value)
+    public void setEventInitDate(String value)
     {
-        getSemanticObject().setProperty(cal_periodicity, value);
+        getSemanticObject().setProperty(cal_eventInitDate, value);
     }
 
 /**
-* Gets the UrlInternal property
-* @return boolean with the UrlInternal
+* Gets the PhotoPrincipal property
+* @return String with the PhotoPrincipal
 */
-    public boolean isUrlInternal()
+    public String getPhotoPrincipal()
     {
-        return getSemanticObject().getBooleanProperty(cal_urlInternal);
+        return getSemanticObject().getProperty(cal_photoPrincipal);
     }
 
 /**
-* Sets the UrlInternal property
-* @param value long with the UrlInternal
+* Sets the PhotoPrincipal property
+* @param value long with the PhotoPrincipal
 */
-    public void setUrlInternal(boolean value)
+    public void setPhotoPrincipal(String value)
     {
-        getSemanticObject().setBooleanProperty(cal_urlInternal, value);
-    }
-
-/**
-* Gets the UrlExternal property
-* @return String with the UrlExternal
-*/
-    public String getUrlExternal()
-    {
-        return getSemanticObject().getProperty(cal_urlExternal);
-    }
-
-/**
-* Sets the UrlExternal property
-* @param value long with the UrlExternal
-*/
-    public void setUrlExternal(String value)
-    {
-        getSemanticObject().setProperty(cal_urlExternal, value);
+        getSemanticObject().setProperty(cal_photoPrincipal, value);
     }
    /**
    * Sets the value for the property Creator
@@ -564,35 +546,53 @@ public abstract class EventBase extends org.semanticwb.model.SWBClass implements
     }
 
 /**
-* Gets the Description property
-* @return String with the Description
+* Gets the Title property
+* @return String with the Title
 */
-    public String getDescription()
+    public String getTitle()
     {
-        return getSemanticObject().getProperty(swb_description);
+        return getSemanticObject().getProperty(swb_title);
     }
 
 /**
-* Sets the Description property
-* @param value long with the Description
+* Sets the Title property
+* @param value long with the Title
 */
-    public void setDescription(String value)
+    public void setTitle(String value)
     {
-        getSemanticObject().setProperty(swb_description, value);
+        getSemanticObject().setProperty(swb_title, value);
     }
 
-    public String getDescription(String lang)
+    public String getTitle(String lang)
     {
-        return getSemanticObject().getProperty(swb_description, null, lang);
+        return getSemanticObject().getProperty(swb_title, null, lang);
     }
 
-    public String getDisplayDescription(String lang)
+    public String getDisplayTitle(String lang)
     {
-        return getSemanticObject().getLocaleProperty(swb_description, lang);
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
     }
 
-    public void setDescription(String description, String lang)
+    public void setTitle(String title, String lang)
     {
-        getSemanticObject().setProperty(swb_description, description, lang);
+        getSemanticObject().setProperty(swb_title, title, lang);
+    }
+
+/**
+* Gets the Periodicity property
+* @return String with the Periodicity
+*/
+    public String getPeriodicity()
+    {
+        return getSemanticObject().getProperty(cal_periodicity);
+    }
+
+/**
+* Sets the Periodicity property
+* @param value long with the Periodicity
+*/
+    public void setPeriodicity(String value)
+    {
+        getSemanticObject().setProperty(cal_periodicity, value);
     }
 }
