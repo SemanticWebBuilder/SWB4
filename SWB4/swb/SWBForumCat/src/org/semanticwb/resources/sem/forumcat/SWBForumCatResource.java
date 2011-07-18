@@ -203,6 +203,9 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     {
                         response.setRenderParameter("cat", request.getParameter("cat"));
                     }
+                    if(isCaptcha()) {
+                        response.setRenderParameter("cptcha", "true");
+                    }
                 }
             }
             else if (action.equals("editQuestion"))
@@ -305,6 +308,9 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     {
                         response.setRenderParameter("cat", request.getParameter("cat"));
                     }
+                    if(isCaptcha()) {
+                        response.setRenderParameter("cptcha", "true");
+                    }
                 }
             }
             else if (action.equals("removeQuestion"))
@@ -344,6 +350,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         {
                             response.setRenderParameter("deleted", request.getParameter("deleted"));
                         }
+
                     }
 
                 }
@@ -457,6 +464,9 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     {
                         response.setRenderParameter("deleted", request.getParameter("deleted"));
                     }
+                    if(isCaptcha()) {
+                        response.setRenderParameter("cptcha", "true");
+                    }
                 }
             }
             else if (action.equals("editAnswer"))
@@ -549,6 +559,9 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     if (request.getParameter("deleted") != null)
                     {
                         response.setRenderParameter("deleted", request.getParameter("deleted"));
+                    }
+                    if(isCaptcha()) {
+                        response.setRenderParameter("cptcha", "true");
                     }
                 }
             }
