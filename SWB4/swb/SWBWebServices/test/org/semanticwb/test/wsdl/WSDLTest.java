@@ -9,6 +9,7 @@ import com.sun.xml.internal.ws.api.model.Parameter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import junit.framework.Assert;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -54,7 +55,7 @@ public class WSDLTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void ConversionRate()
     {
         try
@@ -78,14 +79,32 @@ public class WSDLTest
     }
 
     @Test
-    @Ignore
+    public void OrdenWSService()
+    {
+        try
+        {
+            ServiceInfo info = WebService.getServiceinfo(new URL("http://www.biess.fin.ec:8080/BiessShopService/OrdenWSService?wsdl"));
+            Assert.assertEquals(info.getServices().length,1);
+            Service service=info.getServices()[0];
+            Assert.assertEquals(service.getOperations().length,2);
+            
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+    }
+
+    @Test
+    //@Ignore
     public void testLoadWSDL()
     {
         try
         {
-            //"
-            ServiceInfo info = WebService.getServiceinfo(new URL("http://webservices.amazon.com/AWSECommerceService/AWSECommerceService.wsdl"));
-            //ServiceInfo info=WebService.getServiceinfo(new URL("http://www.biess.fin.ec:8080/BiessShopService/OrdenWSService?wsdl"));
+            
+            ServiceInfo info = WebService.getServiceinfo(new URL("http://webservices.amazon.com/AWSECommerceService/AWSECommerceService.wsdl"));            
             //ServiceInfo info=WebService.getServiceinfo(new URL("http://www.webservicex.net/CurrencyConvertor.asmx?WSDL"));
 
             for (Service service : info.getServices())
@@ -96,7 +115,11 @@ public class WSDLTest
                     System.out.println("operation: " + operation.getName());
                     for (ParameterDefinition def : operation.getInput().getDefinitions())
                     {
-                        System.out.println("code: \r\n" + def.getDefinitionClass().getCode());
+                        System.out.println("def:" + def.getName());
+                    }
+                    for (ParameterDefinition def : operation.getOutput().getDefinitions())
+                    {
+                        System.out.println("def out:" + def.getName());
                     }
                 }
             }
@@ -104,6 +127,7 @@ public class WSDLTest
         catch (Exception e)
         {
             e.printStackTrace();
+            Assert.fail(e.getMessage());
         }
     }
     // TODO add test methods here.
