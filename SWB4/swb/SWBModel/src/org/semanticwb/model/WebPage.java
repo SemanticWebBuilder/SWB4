@@ -370,12 +370,12 @@ public class WebPage extends WebPageBase
             {
                 if(hd==null || (hd!=null && !hd.contains(tp)))
                 {
-                    if (links.equals("true") && tp.isActive())
+                    if (links.equals("true") && tp.isVisible())
                     {
                         ret.insert(0, separator);
                         ret.insert(0, "<a href=\"" + tp.getUrl() + "\" " + cssclass + " "+target+">" + tp.getDisplayName(language) + "</a>");
                     }
-                    else if(active==null || (tp.isActive() && active!=null && !active.toLowerCase().trim().equals("true")))
+                    else if(active==null || (tp.isVisible() && active!=null && !active.toLowerCase().trim().equals("true")))
                     {
                         ret.insert(0, separator);
                         ret.insert(0, tp.getDisplayName(language));
