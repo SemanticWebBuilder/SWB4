@@ -79,6 +79,7 @@ import org.apache.commons.mail.EmailAttachment;
 import java.util.Collection;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Formatter;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
@@ -5472,6 +5473,19 @@ public class SWBUtils {
             } 
             return data;
         }
+        
+        /**
+         * Converts an byte array into a Hex String
+         * @param arr byte array
+         * @return String
+         */        
+        public static String byteArrayToHexString(byte[] arr) {
+            Formatter formatter = new Formatter();
+            for (byte b : arr) {
+                formatter.format("%02x", b);
+            }
+            return formatter.toString();
+        }            
 
         /**
          * decrypt an RSA passowrd
