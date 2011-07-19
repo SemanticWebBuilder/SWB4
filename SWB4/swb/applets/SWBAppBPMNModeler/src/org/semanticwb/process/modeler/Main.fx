@@ -22,7 +22,7 @@ var maxy : Number = bind scene.height; //on replace{ modeler.organizeMap();};
 
 var lang : String = FX.getArgument("lang") as String;
 var donePath : String = FX.getArgument("done") as String;
-var currentActivities : String = FX.getArgument("pending") as String;
+var currentActivities : String = FX.getArgument("currentActivities") as String;
 var mode: String = FX.getArgument("mode") as String;
 
 if (mode == null) mode= "edit";
