@@ -6,6 +6,7 @@ package org.semanticwb.process.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import javax.servlet.ServletInputStream;
@@ -477,6 +478,10 @@ public class Modeler extends GenericResource {
 
     public void doApplet(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         String suri = request.getParameter("suri");
+        String current = request.getParameter("currentActivities");
+        if (current==null) current="";
+        String mode = request.getParameter("mode");
+        if (mode == null) mode = "edit";
         PrintWriter out = response.getWriter();
         SWBResourceURL urlapp = paramsRequest.getRenderUrl();
         urlapp.setMode("gateway");
@@ -505,6 +510,8 @@ public class Modeler extends GenericResource {
         out.println("        {");
         out.println("              lang: \"" + paramsRequest.getUser().getLanguage() + "\",");
         out.println("              jsess: \"" + request.getSession().getId() + "\",");
+        out.println("              currentActivities: \""+URLDecoder.decode(current)+"\",");
+        out.println("              mode: \""+mode+"\",");
         out.println("              cgipath: \"" + urlapp + "\"");
         out.println("        }");
         out.println("    );");
@@ -518,11 +525,17 @@ public class Modeler extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         String suri = request.getParameter("suri");
+        String current = request.getParameter("currentActivities");
+        if (current == null) current = "";
+        String mode = request.getParameter("mode");
+        if (mode == null) mode = "edit";
 
         SWBResourceURL urlapp = paramsRequest.getRenderUrl();
         urlapp.setMode("applet");
         urlapp.setCallMethod(urlapp.Call_DIRECT);
         urlapp.setParameter("suri", suri);
+        urlapp.setParameter("currentActivities", current);
+        urlapp.setParameter("mode", mode);
 
         out.println("<div class=\"applet\">");
         out.println("<iframe dojoType_=\"dijit.layout.ContentPane\" src=\"" + urlapp + "\" width=\"100%\" height=\"100%\" frameborder=\"0\" scrolling=\"no\"></iframe>");
