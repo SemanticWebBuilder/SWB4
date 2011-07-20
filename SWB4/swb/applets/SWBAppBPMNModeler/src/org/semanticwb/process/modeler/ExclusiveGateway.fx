@@ -197,6 +197,14 @@ public class ExclusiveGateway extends Gateway
         return ret;
     }
 
+    override public function getDefaultFlow() : ConnectionObject {
+        var link = ConditionalFlow {
+            modeler:modeler
+            uri:"new:conditionalflow:{modeler.toolBar.counter++}"
+        }
+        return link;
+    }
+
     override public function copy() : GraphicalElement {
         var t = ExclusiveGateway {
             title: this.title
