@@ -223,6 +223,12 @@
         var yy = date.getYear();
         var year<%=cal.getId()%>_tumb = (yy < 1000) ? yy + 1900 : yy;
 
+        function makeArray() {
+            for (i = 0; i < makeArray.arguments.length; i++)
+                    this[i + 1] = makeArray.arguments[i];
+        }
+
+
         var months = new makeArray("<%=paramRequest.getLocaleString("lb_month1")%>",
                                    "<%=paramRequest.getLocaleString("lb_month2")%>",
                                    "<%=paramRequest.getLocaleString("lb_month3")%>",
