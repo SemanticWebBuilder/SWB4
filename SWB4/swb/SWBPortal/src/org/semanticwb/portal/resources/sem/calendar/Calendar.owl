@@ -9,35 +9,25 @@
     xmlns:cal="http://www.semanticwebbuilder.org/swb4/calendar#"
   xml:base="http://www.semanticwebbuilder.org/swb4/calendar">
   <owl:Ontology rdf:about="">
-    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
   </owl:Ontology>
-  <owl:Class rdf:ID="EventSubscription">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <rdfs:comment>Almacena la subscripción de un usuario a un Evento</rdfs:comment>
-    <rdfs:label xml:lang="en">Event subscription</rdfs:label>
+  <owl:Class rdf:ID="Calendar">
+    <rdfs:comment>Recurso que presenta un calendario de eventos al que se pueden subscribir los usuarios del sistema en base al rol o grupo que tienen asignado.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRefable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#RoleRefable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:label xml:lang="es">Subscripción a un evento</rdfs:label>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="CalendarSubscription">
-    <rdfs:label xml:lang="es">Subscripción a un Calendario</rdfs:label>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <rdfs:comment>Almacena la Subscripción de un usuario a un calendario</rdfs:comment>
-    <rdfs:label xml:lang="en">Calendar Subscription</rdfs:label>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Localeable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Trashable"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SemanticResource"/>
   </owl:Class>
   <owl:Class rdf:ID="Event">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
     <rdfs:comment>Define la estructura de datos de los eventos a mostrar en el calendario.</rdfs:comment>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdfs:label xml:lang="es">Evento</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Searchable"/>
     <rdfs:label xml:lang="en">Event</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
@@ -48,442 +38,457 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
   </owl:Class>
   <owl:ObjectProperty rdf:ID="hasEvents">
-    <rdfs:domain>
-      <swb:SemanticResource rdf:ID="Calendar">
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Trashable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Localeable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#RoleRefable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRefable"/>
-        <rdfs:comment>Recurso que presenta un calendario de eventos al que se pueden subscribir los usuarios del sistema en base al rol o grupo que tienen asignado.</rdfs:comment>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:SemanticResource>
-    </rdfs:domain>
-    <rdfs:range rdf:resource="#Event"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Eventos asociados a un calendario</rdfs:comment>
-    <rdfs:label xml:lang="es">Eventos</rdfs:label>
-    <rdfs:label xml:lang="en">Events</rdfs:label>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_hasEvents"/>
     </swb:displayProperty>
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
+    <rdfs:label xml:lang="en">Events</rdfs:label>
+    <rdfs:label xml:lang="es">Eventos</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Eventos asociados a un calendario</rdfs:comment>
+    <rdfs:range rdf:resource="#Event"/>
+    <rdfs:domain rdf:resource="#Calendar"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="eventSubscription">
-    <rdfs:range rdf:resource="#Event"/>
-    <rdfs:domain rdf:resource="#EventSubscription"/>
-    <rdfs:comment>Almacena el evento al que se subscribió un usuario</rdfs:comment>
-    <rdfs:label xml:lang="en">Event for subscription</rdfs:label>
-    <rdfs:label xml:lang="es">Evento a subscribirse</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_EventSubscription">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
         <swbxf:propGroup>
           <swbxf:PropertyGroup rdf:ID="events">
+            <rdfs:label xml:lang="es">Datos Evento</rdfs:label>
+            <rdfs:label xml:lang="en">Event Data</rdfs:label>
             <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
             >100</swb:index>
-            <rdfs:label xml:lang="en">Event Data</rdfs:label>
-            <rdfs:label xml:lang="es">Datos Evento</rdfs:label>
           </swbxf:PropertyGroup>
         </swbxf:propGroup>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >100</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:label xml:lang="es">Evento a subscribirse</rdfs:label>
+    <rdfs:label xml:lang="en">Event for subscription</rdfs:label>
+    <rdfs:comment>Almacena el evento al que se subscribió un usuario</rdfs:comment>
+    <rdfs:domain>
+      <swb:Class rdf:ID="EventSubscription">
+        <rdfs:label xml:lang="es">Subscripción a un evento</rdfs:label>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:label xml:lang="en">Event subscription</rdfs:label>
+        <rdfs:comment>Almacena la subscripción de un usuario a un Evento</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="#Event"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="calendarSubscription">
+    <rdfs:domain>
+      <swb:Class rdf:ID="CalendarSubscription">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:label xml:lang="en">Calendar Subscription</rdfs:label>
+        <rdfs:comment>Almacena la Subscripción de un usuario a un calendario</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdfs:label xml:lang="es">Subscripción a un Calendario</rdfs:label>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+    <rdfs:comment>Almacena el calendario al que se subscribe un usuario</rdfs:comment>
+    <rdfs:label xml:lang="es">Calendario a Suscribir</rdfs:label>
+    <rdfs:label xml:lang="en">Calendar Subscription</rdfs:label>
+    <rdfs:range rdf:resource="#Calendar"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_calendarSubscription">
-        <swbxf:propGroup>
-          <swbxf:PropertyGroup rdf:ID="calendarSettings">
-            <rdfs:label xml:lang="es">Configuración de Calendario</rdfs:label>
-            <rdfs:label xml:lang="en">Calendar Settings</rdfs:label>
-          </swbxf:PropertyGroup>
-        </swbxf:propGroup>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >100</swb:index>
+        <swbxf:propGroup>
+          <swbxf:PropertyGroup rdf:ID="calendarSettings">
+            <rdfs:label xml:lang="en">Calendar settings</rdfs:label>
+            <rdfs:label xml:lang="es">Configuración de calendario</rdfs:label>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >110</swb:index>
+          </swbxf:PropertyGroup>
+        </swbxf:propGroup>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="#Calendar"/>
-    <rdfs:label xml:lang="en">Calendar Subscription</rdfs:label>
-    <rdfs:label xml:lang="es">Calendario a Suscribir</rdfs:label>
-    <rdfs:comment>Almacena el calendario al que se subscribe un usuario</rdfs:comment>
-    <rdfs:domain rdf:resource="#CalendarSubscription"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="userEventSubscription">
-    <rdfs:domain rdf:resource="#EventSubscription"/>
-    <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="hasUserEventSubscriptionInv"/>
-    </owl:inverseOf>
-    <rdfs:label xml:lang="en">Usuario subscripto al evento</rdfs:label>
-    <rdfs:comment>Almacena el usuario subscrito a un Evento</rdfs:comment>
-    <rdfs:label xml:lang="en">User subscribed to an event</rdfs:label>
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_userEventSubscription">
         <swbxf:propGroup rdf:resource="#events"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+    <rdfs:label xml:lang="en">User subscribed to an event</rdfs:label>
+    <rdfs:comment>Almacena el usuario subscrito a un Evento</rdfs:comment>
+    <rdfs:label xml:lang="en">Usuario subscripto al evento</rdfs:label>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasUserEventSubscriptionInv"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="#EventSubscription"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasUserEventSubscriptionInv">
-    <rdfs:label xml:lang="es">Eventos del usuario</rdfs:label>
-    <rdfs:label xml:lang="en">User's events</rdfs:label>
-    <rdfs:comment>Almacena todos los eventos a los que está subscrito un usuario.</rdfs:comment>
     <swb:notCodeGeneration rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:notCodeGeneration>
+    <rdfs:comment>Almacena todos los eventos a los que está subscrito un usuario.</rdfs:comment>
+    <rdfs:label xml:lang="en">User's events</rdfs:label>
+    <rdfs:label xml:lang="es">Eventos del usuario</rdfs:label>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasUserCalendarSubscriptionInv">
+    <rdfs:label xml:lang="es">Subscripciones del usuario</rdfs:label>
+    <rdfs:comment>Contiene todos los calendarios asociados a un usuario</rdfs:comment>
+    <rdfs:label xml:lang="en">User's subscriptions</rdfs:label>
     <swb:notCodeGeneration rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:notCodeGeneration>
-    <rdfs:label xml:lang="en">User's subscriptions</rdfs:label>
-    <rdfs:comment>Contiene todos los calendarios asociados a un usuario</rdfs:comment>
-    <rdfs:label xml:lang="es">Subscripciones del usuario</rdfs:label>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="userCalendarSubscription">
-    <rdfs:domain rdf:resource="#CalendarSubscription"/>
-    <owl:inverseOf rdf:resource="#hasUserCalendarSubscriptionInv"/>
-    <rdfs:label xml:lang="en">User Subscriber to a Calendar</rdfs:label>
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
-    <rdfs:comment>Almacena el usuario subscrito a un Calendario</rdfs:comment>
-    <rdfs:label xml:lang="en">Usuario subscrito al Calendario</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_hasUserCalendarSubscription">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >110</swb:index>
         <swbxf:propGroup>
           <swbxf:PropertyGroup rdf:ID="calendarData">
-            <rdfs:label xml:lang="es">Datos calendario</rdfs:label>
             <rdfs:label xml:lang="en">Calendar data</rdfs:label>
+            <rdfs:label xml:lang="es">Datos calendario</rdfs:label>
           </swbxf:PropertyGroup>
         </swbxf:propGroup>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >110</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:label xml:lang="en">Usuario subscrito al Calendario</rdfs:label>
+    <rdfs:comment>Almacena el usuario subscrito a un Calendario</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+    <rdfs:label xml:lang="en">User Subscriber to a Calendar</rdfs:label>
+    <owl:inverseOf rdf:resource="#hasUserCalendarSubscriptionInv"/>
+    <rdfs:domain rdf:resource="#CalendarSubscription"/>
   </owl:ObjectProperty>
   <owl:DatatypeProperty rdf:ID="nextYear">
-    <rdfs:label xml:lang="es">Mostrar opción año siguiente</rdfs:label>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Almacena si debe mostrarse o no el año anterior</rdfs:comment>
-    <rdfs:domain rdf:resource="#Calendar"/>
-    <rdfs:label xml:lang="en">Show option next year</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_NextYear">
+        <rdfs:label xml:lang="en">Show option next year</rdfs:label>
+        <rdfs:label xml:lang="es">Mostrar año siguiente</rdfs:label>
+        <swbxf:propGroup rdf:resource="#calendarSettings"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >110</swb:index>
-        <swbxf:propGroup rdf:resource="#calendarSettings"/>
-        <rdfs:label xml:lang="es">Mostrar año siguiente</rdfs:label>
-        <rdfs:label xml:lang="en">Show option next year</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="eventEndDate">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_eventEndDate">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >30</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DateElement_1"/>
-        <swbxf:propGroup rdf:resource="#events"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:label xml:lang="es">Fecha de Fin</rdfs:label>
-    <rdfs:label xml:lang="en">End Date</rdfs:label>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Fecha final del Evento</rdfs:comment>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Event"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="newWindow">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="#Event"/>
-    <rdfs:label xml:lang="en">Open new window</rdfs:label>
-    <rdfs:label xml:lang="es">Abrir en nueva ventana</rdfs:label>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Utilizado para mostrar en una ventana o pestaña distinta a la actual</rdfs:comment>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_target">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >60</swb:index>
-        <swbxf:propGroup rdf:resource="#events"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="JspStrategy">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_JspStrategy">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >140</swb:index>
-        <rdfs:label xml:lang="en">Jsp for the strategy view</rdfs:label>
-        <rdfs:label xml:lang="es">Jsp para la vista de estrategia</rdfs:label>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
-        <swbxf:propGroup rdf:resource="#calendarSettings"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:domain rdf:resource="#Calendar"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Almacena la ruta del jsp externo que visualiza el modo estrategia del calendario</rdfs:comment>
-    <rdfs:label xml:lang="en">Jsp for the strategy view</rdfs:label>
-    <rdfs:label xml:lang="es">Jsp para la vista de estrategia</rdfs:label>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="periodicity">
-    <rdfs:label xml:lang="en">Periodicity</rdfs:label>
-    <rdfs:label xml:lang="es">Periodicidad</rdfs:label>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Determina si el evento se repite en la misma fecha indicada de inicio y de fin</rdfs:comment>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Event"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_Periodicity">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >10</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
-        <swbxf:propSelectValues xml:lang="es">none:Ninguno|yearly:Anual|monthly:Mensual|weekly:Semanal</swbxf:propSelectValues>
-        <swbxf:propSelectValues xml:lang="en">none:None|yearly:Yearly|monthly:Monthly|weekly:Weekly</swbxf:propSelectValues>
-        <swbxf:propGroup rdf:resource="#events"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="idPage">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_IdPage">
-        <swbxf:propGroup>
-          <swbxf:PropertyGroup rdf:ID="eventDetailView">
-            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >120</swb:index>
-            <rdfs:label xml:lang="es">Vista del detalle de eventos</rdfs:label>
-            <rdfs:label xml:lang="en">Event detail view</rdfs:label>
-          </swbxf:PropertyGroup>
-        </swbxf:propGroup>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >150</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#fe_TreeSelect"/>
-        <rdfs:label xml:lang="es">Id página web</rdfs:label>
-        <rdfs:label xml:lang="en">Id page web</rdfs:label>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:label xml:lang="en">Id page web</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:label xml:lang="es">Id página web</rdfs:label>
-    <rdfs:domain rdf:resource="#Calendar"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Almacena la url que redirecciona hacia una página interna donde se mostrará el detalle de los Eventos</rdfs:comment>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="contentEvent">
-    <rdfs:domain rdf:resource="#Event"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Almacena el detalle del evento</rdfs:comment>
-    <rdfs:label xml:lang="es">Contenido del Evento</rdfs:label>
-    <rdfs:label xml:lang="en">Event content</rdfs:label>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="urlInternal">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_urlInternal">
-        <swbxf:propGroup rdf:resource="#events"/>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >40</swb:index>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:label xml:lang="en">Internal url</rdfs:label>
-    <rdfs:label xml:lang="es">Url interna</rdfs:label>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Visualiza los eventos en una página interna del sitio</rdfs:comment>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="#Event"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="JspView">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_JspView">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >130</swb:index>
-        <rdfs:label xml:lang="en">Jsp for the calendar view</rdfs:label>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
-        <swbxf:propGroup rdf:resource="#calendarSettings"/>
-        <rdfs:label xml:lang="es">Jsp para la vista del calendario</rdfs:label>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:domain rdf:resource="#Calendar"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Almacena la ruta del jsp externo que visualiza el modo vista general del calendario</rdfs:comment>
-    <rdfs:label xml:lang="en">Jsp for the calendar view</rdfs:label>
-    <rdfs:label xml:lang="es">Jsp para la vista del calendario</rdfs:label>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="previousYear">
-    <rdfs:label xml:lang="en">Show option previous year</rdfs:label>
-    <rdfs:label xml:lang="es">Mostrar opción año anterior</rdfs:label>
+    <rdfs:label xml:lang="en">Show option next year</rdfs:label>
     <rdfs:domain rdf:resource="#Calendar"/>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Almacena si debe mostrarse o no el año anterior</rdfs:comment>
+    <rdfs:label xml:lang="es">Mostrar opción año siguiente</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="eventEndDate">
+    <rdfs:domain rdf:resource="#Event"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Fecha final del Evento</rdfs:comment>
+    <rdfs:label xml:lang="en">End Date</rdfs:label>
+    <rdfs:label xml:lang="es">Fecha de Fin</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_eventEndDate">
+        <swbxf:propGroup rdf:resource="#events"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DateElement_1"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="newWindow">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_target">
+        <swbxf:propGroup rdf:resource="#events"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Utilizado para mostrar en una ventana o pestaña distinta a la actual</rdfs:comment>
+    <rdfs:label xml:lang="es">Abrir en nueva ventana</rdfs:label>
+    <rdfs:label xml:lang="en">Open new window</rdfs:label>
+    <rdfs:domain rdf:resource="#Event"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="JspStrategy">
+    <rdfs:label xml:lang="es">Jsp para la vista de estrategia</rdfs:label>
+    <rdfs:label xml:lang="en">Jsp for the strategy view</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Almacena la ruta del jsp externo que visualiza el modo estrategia del calendario</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Calendar"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_JspStrategy">
+        <swbxf:propGroup rdf:resource="#calendarSettings"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <rdfs:label xml:lang="es">Jsp para la vista de estrategia</rdfs:label>
+        <rdfs:label xml:lang="en">Jsp for the strategy view</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >140</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="periodicity">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_Periodicity">
+        <swbxf:propGroup rdf:resource="#events"/>
+        <swbxf:propSelectValues xml:lang="en">none:None|yearly:Yearly|monthly:Monthly|weekly:Weekly</swbxf:propSelectValues>
+        <swbxf:propSelectValues xml:lang="es">none:Ninguno|yearly:Anual|monthly:Mensual|weekly:Semanal</swbxf:propSelectValues>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#Event"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Determina si el evento se repite en la misma fecha indicada de inicio y de fin</rdfs:comment>
+    <rdfs:label xml:lang="es">Periodicidad</rdfs:label>
+    <rdfs:label xml:lang="en">Periodicity</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="idPage">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Almacena la url que redirecciona hacia una página interna donde se mostrará el detalle de los Eventos</rdfs:comment>
+    <rdfs:domain rdf:resource="#Calendar"/>
+    <rdfs:label xml:lang="es">Id página web</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="en">Id page web</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_IdPage">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+        <rdfs:label xml:lang="es">Id página web</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#fe_TreeSelect"/>
+        <rdfs:label xml:lang="en">Id page web</rdfs:label>
+        <swbxf:propGroup>
+          <swbxf:PropertyGroup rdf:ID="eventDetailView">
+            <rdfs:label xml:lang="en">Event detail view</rdfs:label>
+            <rdfs:label xml:lang="es">Vista del detalle de eventos</rdfs:label>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >120</swb:index>
+          </swbxf:PropertyGroup>
+        </swbxf:propGroup>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="contentEvent">
+    <rdfs:label xml:lang="en">Event content</rdfs:label>
+    <rdfs:label xml:lang="es">Contenido del Evento</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Almacena el detalle del evento</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Event"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="urlInternal">
+    <rdfs:domain rdf:resource="#Event"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Visualiza los eventos en una página interna del sitio</rdfs:comment>
+    <rdfs:label xml:lang="es">Url interna</rdfs:label>
+    <rdfs:label xml:lang="en">Internal url</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_urlInternal">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >40</swb:index>
+        <swbxf:propGroup rdf:resource="#events"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="JspView">
+    <rdfs:label xml:lang="es">Jsp para la vista del calendario</rdfs:label>
+    <rdfs:label xml:lang="en">Jsp for the calendar view</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Almacena la ruta del jsp externo que visualiza el modo vista general del calendario</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Calendar"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_JspView">
+        <rdfs:label xml:lang="es">Jsp para la vista del calendario</rdfs:label>
+        <swbxf:propGroup rdf:resource="#calendarSettings"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <rdfs:label xml:lang="en">Jsp for the calendar view</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >130</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="previousYear">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_PreviousYear">
-        <swbxf:propGroup rdf:resource="#calendarSettings"/>
+        <rdfs:label xml:lang="en">Show option previous year</rdfs:label>
+        <rdfs:label xml:lang="es">Mostrar opción año anterior</rdfs:label>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >120</swb:index>
-        <rdfs:label xml:lang="es">Mostrar opción año anterior</rdfs:label>
-        <rdfs:label xml:lang="en">Show option previous year</rdfs:label>
+        <swbxf:propGroup rdf:resource="#calendarSettings"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Almacena si debe mostrarse o no el año anterior</rdfs:comment>
+    <rdfs:domain rdf:resource="#Calendar"/>
+    <rdfs:label xml:lang="es">Mostrar opción año anterior</rdfs:label>
+    <rdfs:label xml:lang="en">Show option previous year</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="urlExternal">
-    <rdfs:label xml:lang="en">External url</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Event"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Almacena la url de una página externa para mostrar el detalle del Evento</rdfs:comment>
-    <rdfs:label xml:lang="es">Url externo</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_UrlExternal">
+        <swbxf:propGroup rdf:resource="#events"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >50</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
-        <swbxf:propGroup rdf:resource="#events"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="roleForAdmin">
-    <rdfs:domain rdf:resource="#Calendar"/>
+    <rdfs:label xml:lang="es">Url externo</rdfs:label>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Almacena los roles que pueden administrar los eventos del calendario</rdfs:comment>
-    <rdfs:label xml:lang="es">Identificador del Rol</rdfs:label>
-    <rdfs:label xml:lang="en">Role identifier</rdfs:label>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_roleForAdmin">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >120</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
-        <swbxf:propGroup rdf:resource="#calendarSettings"/>
-        <rdfs:label xml:lang="es">Identificador del Rol</rdfs:label>
-        <rdfs:label xml:lang="en">Role identifier</rdfs:label>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="image">
-    <rdfs:label xml:lang="es">Foto secundaria</rdfs:label>
+    >Almacena la url de una página externa para mostrar el detalle del Evento</rdfs:comment>
     <rdfs:domain rdf:resource="#Event"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:label xml:lang="en">Photo</rdfs:label>
-    <rdfs:comment>Almacena la foto relacionada al Evento</rdfs:comment>
+    <rdfs:label xml:lang="en">External url</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="roleForAdmin">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_Image">
+      <swbxf:DisplayProperty rdf:ID="dp_roleForAdmin">
+        <rdfs:label xml:lang="en">Role identifier</rdfs:label>
+        <rdfs:label xml:lang="es">Identificador del Rol</rdfs:label>
+        <swbxf:propGroup rdf:resource="#calendarSettings"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >80</swb:index>
-        <swbxf:formElement>
-          <swbxf:FileUpload rdf:ID="DojoImageUpload_img">
-            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
-            >200000</swbxf:fileMaxSize>
-            <swbxf:imgThumbnail rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >false</swbxf:imgThumbnail>
-            <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >false</swbxf:imgCrop>
-          </swbxf:FileUpload>
-        </swbxf:formElement>
-        <swbxf:propGroup rdf:resource="#events"/>
+        >120</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:label xml:lang="en">Role identifier</rdfs:label>
+    <rdfs:label xml:lang="es">Identificador del Rol</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Almacena los roles que pueden administrar los eventos del calendario</rdfs:comment>
+    <rdfs:domain rdf:resource="#Calendar"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="image">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_Image">
+        <swbxf:propGroup rdf:resource="#events"/>
+        <swbxf:formElement>
+          <swbxf:FileUpload rdf:ID="DojoImageUpload_img">
+            <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:imgCrop>
+            <swbxf:imgThumbnail rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:imgThumbnail>
+            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+            >200000</swbxf:fileMaxSize>
+          </swbxf:FileUpload>
+        </swbxf:formElement>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >80</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>Almacena la foto relacionada al Evento</rdfs:comment>
+    <rdfs:label xml:lang="en">Photo</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Event"/>
+    <rdfs:label xml:lang="es">Foto secundaria</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="paginationEvents">
+    <rdfs:label xml:lang="es">Eventos por página</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:label xml:lang="en">Events for page</rdfs:label>
+    <rdfs:domain rdf:resource="#Calendar"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Almacena el número de eventos a mostrar por página</rdfs:comment>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_paginationEvents">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >120</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        >100</swb:index>
+        <rdfs:label xml:lang="es">Eventos por página</rdfs:label>
         <swbxf:propGroup>
           <swbxf:PropertyGroup rdf:ID="eventAdminView">
             <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >100</swb:index>
+            >130</swb:index>
             <rdfs:label xml:lang="en">Event administration view</rdfs:label>
             <rdfs:label xml:lang="es">Vista de administración de eventos</rdfs:label>
           </swbxf:PropertyGroup>
         </swbxf:propGroup>
-        <rdfs:label xml:lang="es">Eventos por página</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
         <rdfs:label xml:lang="en">Events for page</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Almacena el número de eventos a mostrar por página</rdfs:comment>
-    <rdfs:domain rdf:resource="#Calendar"/>
-    <rdfs:label xml:lang="en">Events for page</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:label xml:lang="es">Eventos por página</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="eventInitDate">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_eventInitDate">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >20</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DateElement_1"/>
-        <swbxf:propGroup rdf:resource="#events"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:label xml:lang="en">Start date</rdfs:label>
-    <rdfs:label xml:lang="es">Fecha de Inicio</rdfs:label>
+    <rdfs:domain rdf:resource="#Event"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Fecha de Inicio del Evento</rdfs:comment>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Event"/>
+    <rdfs:label xml:lang="es">Fecha de Inicio</rdfs:label>
+    <rdfs:label xml:lang="en">Start date</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_eventInitDate">
+        <swbxf:propGroup rdf:resource="#events"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DateElement_1"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="numberNearEvents">
+    <rdfs:domain rdf:resource="#Calendar"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Almacena el número de eventos que desplegará cuando el recurso sea llamado por el método de Estrategia</rdfs:comment>
+    <rdfs:label xml:lang="en">Number of near events to display</rdfs:label>
+    <rdfs:label xml:lang="es">Número de eventos próximos a mostrar</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_NumNearEvt">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >130</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        >100</swb:index>
+        <rdfs:label xml:lang="en">Number of near events to display</rdfs:label>
         <swbxf:propGroup>
           <swbxf:PropertyGroup rdf:ID="strategyView">
-            <rdfs:label xml:lang="es">Vista de Estrategia</rdfs:label>
-            <rdfs:label xml:lang="en">Strategy View</rdfs:label>
+            <rdfs:label xml:lang="en">Strategy view</rdfs:label>
+            <rdfs:label xml:lang="es">Vista de estrategia</rdfs:label>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >140</swb:index>
           </swbxf:PropertyGroup>
         </swbxf:propGroup>
-        <rdfs:label xml:lang="en">Number of near events to display</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
         <rdfs:label xml:lang="es">Número de eventos próximos a mostrar</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="es">Número de eventos próximos a mostrar</rdfs:label>
-    <rdfs:label xml:lang="en">Number of near events to display</rdfs:label>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Almacena el número de eventos que desplegará cuando el recurso sea llamado por el método de Estrategia</rdfs:comment>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:domain rdf:resource="#Calendar"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="photoPrincipal">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_PhotoPrincipal">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >70</swb:index>
-        <swbxf:formElement>
-          <swbxf:FileUpload rdf:ID="dojoUploadImgPrin">
-            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
-            >200000</swbxf:fileMaxSize>
-            <swbxf:imgThumbnail rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >false</swbxf:imgThumbnail>
-            <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >false</swbxf:imgCrop>
-          </swbxf:FileUpload>
-        </swbxf:formElement>
-        <swbxf:propGroup rdf:resource="#events"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:label xml:lang="en">Photo principal</rdfs:label>
-    <rdfs:label xml:lang="es">Foto principal</rdfs:label>
+    <rdfs:domain rdf:resource="#Event"/>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Foto principal, que se visualiza en el detalle del evento</rdfs:comment>
-    <rdfs:domain rdf:resource="#Event"/>
+    <rdfs:label xml:lang="es">Foto principal</rdfs:label>
+    <rdfs:label xml:lang="en">Photo principal</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_PhotoPrincipal">
+        <swbxf:propGroup rdf:resource="#events"/>
+        <swbxf:formElement>
+          <swbxf:FileUpload rdf:ID="dojoUploadImgPrin">
+            <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:imgCrop>
+            <swbxf:imgThumbnail rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:imgThumbnail>
+            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+            >200000</swbxf:fileMaxSize>
+          </swbxf:FileUpload>
+        </swbxf:formElement>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >70</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
   </owl:DatatypeProperty>
   <swbxf:DisplayProperty rdf:ID="dp_contentEvent">
-    <swbxf:propGroup rdf:resource="#events"/>
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >150</swb:index>
+    <swbxf:propGroup rdf:resource="#events"/>
   </swbxf:DisplayProperty>
   <swb:CodePackage rdf:ID="pkg">
-    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >cal</swb:prefix>
     <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.portal.resources.sem.calendar</swb:package>
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >cal</swb:prefix>
   </swb:CodePackage>
 </rdf:RDF>
 
