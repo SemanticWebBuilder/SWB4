@@ -313,6 +313,14 @@ public class Pool extends GraphicalElement
         }
     }
 
+    override public function getDefaultFlow() : ConnectionObject {
+        var link = MessageFlow {
+            modeler:modeler
+            uri:"new:messageflow:{modeler.toolBar.counter++}"
+        }
+        return link;
+    }
+
     public override function copy () : GraphicalElement {
         //println("Copiando pool {title} - {uri} - w:{w}, h:{h}");
         var t = Pool {
