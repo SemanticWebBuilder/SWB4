@@ -359,12 +359,12 @@ public class GraphicalElement extends CustomNode
 
             if(e.secondaryButtonDown)
             {
-                var link=SequenceFlow
-                {
-                    modeler:modeler
-                    uri:"new:flowlink:{ToolBar.counter++}"
-                    visible:false
-                }
+                var link=getDefaultFlow();//SequenceFlow
+//                {
+//                    modeler:modeler
+//                    uri:"new:flowlink:{ToolBar.counter++}"
+//                    visible:false
+//                }
                 if(canStartLink(link))modeler.tempNode=link;
                 ModelerUtils.setResizeNode(null);
                 modeler.unselectAll();
@@ -415,6 +415,15 @@ public class GraphicalElement extends CustomNode
             delete this from graphParent.graphChilds;
             graphParent=null;
         }
+    }
+
+    public function getDefaultFlow() : ConnectionObject {
+        var link = SequenceFlow {
+            modeler:modeler
+            uri:"new:flowlink:{ToolBar.counter++}"
+            visible:false
+        }
+        return link;
     }
 
     public function getContainer():GraphicalElement
