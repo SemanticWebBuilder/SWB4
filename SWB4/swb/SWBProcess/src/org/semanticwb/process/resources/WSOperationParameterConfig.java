@@ -7,6 +7,7 @@ package org.semanticwb.process.resources;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
@@ -30,8 +31,6 @@ import org.semanticwb.webservices.Operation;
 import org.semanticwb.webservices.ParameterDefinition;
 import org.semanticwb.webservices.Service;
 import org.semanticwb.webservices.ServiceInfo;
-
-import org.w3c.dom.Document;
 
 /**
  *
@@ -89,7 +88,7 @@ public class WSOperationParameterConfig extends GenericResource {
                 //Revisando tipo de web-service WADL o WSDL
 
                 String urlwsrv = wsrv.getUrl();
-                //System.out.println("WebService: " + wsrv.getDisplayTitle(usr.getLanguage()) + " url: " + urlwsrv);
+                ////System.out.println("WebService: " + wsrv.getDisplayTitle(usr.getLanguage()) + " url: " + urlwsrv);
 
                 if (urlwsrv != null) {
 
@@ -154,8 +153,14 @@ public class WSOperationParameterConfig extends GenericResource {
 
             if (!method.equals("") && method.length() > 0) {
 
+                int nivel = 0;
+                if (null != request.getParameter("nivel")) {
+                    nivel = Integer.parseInt(request.getParameter("nivel"));
+                }
 
-                //System.out.println("Se tiene configurado una operación: " + method);
+                String clickedObj = request.getParameter("clickedObj");
+
+                //System.out.println("Nivel: " + nivel);
 
                 long idform = System.currentTimeMillis();
                 //Se tiene configurado un método, se muestran los parámetros correspondientes:
@@ -165,6 +170,9 @@ public class WSOperationParameterConfig extends GenericResource {
                     Iterator<WebServiceParameter> itwsp = wsrvin.listWebServiceParameters();
                     while (itwsp.hasNext()) {
                         WebServiceParameter webServiceParameter = itwsp.next();
+
+                        //System.out.println("ws paramName: " + webServiceParameter.getParameterName() + ", " + webServiceParameter.getParameterValue());
+
                         hm.put(webServiceParameter.getParameterName(), webServiceParameter.getParameterValue());
                     }
                     String urlwsrv = wsrv.getUrl();
@@ -195,58 +203,136 @@ public class WSOperationParameterConfig extends GenericResource {
                                 }
                             }
 
+                            out.println("<tr>");
+                            out.println("<td align=\"left\" colspan=\"2\">");
+                            SWBResourceURL url0 = paramRequest.getRenderUrl();
+                            url0.setParameter("suri", suri);
+                            url0.setParameter("idmethod", method);
+                            url0.setParameter("nivel", "0");
+                            out.println("<a href=\"#\" onclick=\"submitUrl('" + url0 + "',this);return false;\">Iniciales</a>");
+                            String pnames = request.getParameter("params");
+                            if (null == pnames) {
+                                pnames = "";
+                            }
+                            String[] insideparams = pnames.split(",");
+                            int cont = 1;
+                            if (null != insideparams) {
+                                for (String param : insideparams) {
+                                    if (cont <= insideparams.length) {
+                                        out.println("&nbsp;|&nbsp;");
+                                    }
+                                    SWBResourceURL urlp = paramRequest.getRenderUrl();
+                                    urlp.setParameter("suri", suri);
+                                    urlp.setParameter("idmethod", method);
+                                    urlp.setParameter("nivel", "" + cont);
+                                    out.println("<a href=\"#\" onclick=\"submitUrl('" + urlp + "',this);return false;\">" + param + "</a>");
+                                    cont++;
+                                }
+                            }
+
+                            out.println("</td>");
+                            out.println("</tr>");
+
                             /// Mostrar lista de parámetros
                             ParameterDefinition[] params = operinfo.getInput().getDefinitions();
+                            if (nivel > 0 && clickedObj != null) {
+                                ParameterDefinition pdef = findParDef(operinfo, null, nivel-1, pnames, 0);
+                                params = pdef.getProperties();
+                                //System.out.println("Salio de findParDef..."+params.length);
+                            }
+
+
+
 
                             if (params.length > 0) {
-                                //boolean isPREQ = Boolean.TRUE; //FALSE;
+
                                 String isType = "";
+                                out.println("<tr>");
+                                out.println("<td colspan=\"2\" width=\"100%\">");
+                                out.println("<table width=\"100%\">");
+                                out.println("<thead>");
+                                out.println("<tr>");
+                                out.println("<th>");
+                                out.println("Nombre");
+                                out.println("</th>");
+                                out.println("<th>");
+                                out.println("Tipo");
+                                out.println("</th>");
+                                out.println("<th>");
+                                out.println("Básico");
+                                out.println("</th>");
+                                out.println("<th>");
+                                out.println("Múltiple");
+                                out.println("</th>");
+                                out.println("<th>");
+                                out.println("Requerido");
+                                out.println("</th>");
+                                out.println("<th>");
+                                out.println("&nbsp;");
+                                out.println("</th>");
+                                out.println("</tr>");
+                                out.println("</thead>");
+                                out.println("<tbody>");
+
+
+
                                 for (ParameterDefinition allparam : params) {
 
-                                    isType = "";
-                                    isType = allparam.isBasic() ? "B" : "-";
-                                    isType += allparam.isMultiple() ? "M" : "-";
-                                    isType += allparam.isRequired() ? "R" : "-";
-                                    out.println("<tr><td align=\"right\" valign=\"top\" width=\"200px\">");
-                                    out.println("<label for=\"p_" + allparam.getName() + "\">");
-                                    out.println(allparam.getName() + "[" + allparam.getDefinitionType() + "]&nbsp;(" + isType + "):");
-                                    out.println("</label>");
-                                    out.println("</td>");
+                                    String key = (clickedObj != null ? clickedObj + "." : "");
+                                    key = key.replace("_", ".");
+
+                                    key = key + allparam.getName() + "." + allparam.getDefinitionType();
+
+                                    //System.out.println("key: " + key);
+
+                                    String pvalue = hm.get(key) != null ? hm.get(key) : "";
+                                    out.println("<tr>");
+                                    out.println("<td>" + allparam.getName() + "</td>");
                                     out.println("<td>");
-                                    ///////////////////////////////////////////////////////
                                     if (!allparam.isBasic()) {
-                                        out.println("<table>");
-                                        for (ParameterDefinition paramdef : allparam.getProperties()) {
-                                            isType = "";
-                                            isType = paramdef.isBasic() ? "B" : "-";
-                                            isType += paramdef.isMultiple() ? "M" : "-";
-                                            isType += paramdef.isRequired() ? "R" : "-";
-                                            String pvalue = hm.get(allparam.getName() + "." + paramdef.getName()) != null ? hm.get(allparam.getName() + "." + paramdef.getName()) : "";
-                                            out.println("<tr>");
-                                            out.println("<td>" + paramdef.getName() + " [" + paramdef.getDefinitionType() + "](" + isType + ")</td>");
-                                            out.println("<td><input dojoType=\"dijit.form.TextBox\" name=\"p_" + allparam.getName() + "_" + paramdef.getName() + "\" type=\"text\" " + (paramdef.isRequired() ? "required=\"true\" invalidMessage=\"Valor del parámetro requerido.\" " : "") + " value=\"" + pvalue + "\"></td>");
-                                            out.println("</tr>");
-                                        }
-                                        out.println("</table>");
+
+                                        //todo: falta considerar nivel como parámetro
+
+                                        SWBResourceURL urldetail = paramRequest.getRenderUrl();
+                                        urldetail.setParameter("suri", suri);
+                                        urldetail.setParameter("idmethod", method);
+                                        urldetail.setParameter("params", (pnames.length() > 0 ? pnames + "," : "") + allparam.getName());
+                                        urldetail.setParameter("clickedObj", allparam.getName());
+                                        urldetail.setParameter("nivel", "" + (nivel + 1));
+                                        out.println("<a href=\"#\" onclick=\"submitUrl('" + urldetail + "',this); return false;\">" + allparam.getDefinitionType() + "</a>");
                                     } else {
-                                        ////////////////////////////////////////////////////////
-                                        String pvalue = hm.get(allparam.getName()) != null ? hm.get(allparam.getName()) : "";
-                                        out.println("<input dojoType=\"dijit.form.TextBox\" name=\"p_" + allparam.getName() + "\" type=\"text\" " + (allparam.isRequired() ? "required=\"true\" invalidMessage=\"Valor del parámetro requerido.\" " : "") + " value=\"" + pvalue + "\">");
+                                        out.println(allparam.getDefinitionType());
+                                    }
+
+                                    out.println("</td>");
+
+                                    out.println("<td>" + (allparam.isBasic() ? "Sí" : "No") + "</td>");
+                                    out.println("<td>" + (allparam.isMultiple() ? "Sí" : "No") + "</td>");
+                                    out.println("<td>" + (allparam.isRequired() ? "Sí" : "No") + "</td>");
+                                    out.println("<td>");
+
+                                    String tmpClick = pnames.replace(" ", "");
+                                    tmpClick = tmpClick.replaceAll(",", ".");
+
+
+                                    if (allparam.isBasic()) {
+                                        out.println("<input dojoType=\"dijit.form.TextBox\" name=\"p_" + (tmpClick != null ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "\" type=\"text\" " + (allparam.isRequired() ? "required=\"true\" invalidMessage=\"Valor del parámetro requerido.\" " : "") + " value=\"" + pvalue + "\">");
+                                    } else {
+                                        out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
                                     }
                                     out.println("</td>");
                                     out.println("</tr>");
                                 }
-
+                                out.println("</tbody>");
+                                out.println("</table>");
+                                out.println("</td>");
+                                out.println("</tr>");
                             }
-
                             out.println("</tbody>");
                             out.println("</table>");
                             out.println("</fieldset>");
                             out.println("<fieldset>");
                             out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" >Guardar</button>");
-                            out.println("</fieldset>");
-                            out.println("<fieldset>");
-                            out.println("* Notación: [Tipo definición] (B:Básico, M:Múltiple, R:Requerido)");
                             out.println("</fieldset>");
                             out.println("</form>");
                             out.println("</div>");
@@ -263,6 +349,25 @@ public class WSOperationParameterConfig extends GenericResource {
                 }
             }
         }
+    }
+
+    private ParameterDefinition findParDef(Operation oper, ParameterDefinition paramDef, int nivel, String pnames, int currentlevel) {
+        ParameterDefinition[] defs = null;
+        String[] data = pnames.split(",");
+
+        ParameterDefinition pdret = null;
+        //System.out.println(" params: " + pnames);
+            defs = oper.getInput().getDefinitions();
+            for (ParameterDefinition pdef : defs) {
+                if (pdef.getName().equals(data[currentlevel]) && currentlevel < nivel) {
+                    pdret = findParDef(oper, pdef, nivel, pnames, currentlevel + 1);
+                    break;
+                } else if (pdef.getName().equals(data[currentlevel]) && currentlevel == nivel ) {
+                    pdret = pdef;
+                    break;
+                }
+            }
+        return pdret;
     }
 
     @Override
@@ -293,7 +398,11 @@ public class WSOperationParameterConfig extends GenericResource {
                 if (gobj instanceof WebServiceInvoker) {
                     wsrvin = (WebServiceInvoker) gobj;
                     String idMethod = request.getParameter("idmethod");
+                    String tmpMethod = wsrvin.getMethod();
                     wsrvin.setMethod(idMethod);
+                    if (!idMethod.equals(tmpMethod)) {
+                        wsrvin.removeAllWebServiceParameter();
+                    }
                 }
             }
         } else if (act.equals("updParameters")) {
@@ -304,11 +413,6 @@ public class WSOperationParameterConfig extends GenericResource {
 
                     String idMethod = request.getParameter("idmethod");
 
-                    if (idMethod != null && !idMethod.equals(wsrvin.getMethod())) {
-                        // borramos parametros existentes
-                        wsrvin.removeAllWebServiceParameter();
-                    }
-
                     WebService wsrv = wsrvin.getWebService();
 
                     String urlwsrv = wsrv.getUrl();
@@ -318,7 +422,6 @@ public class WSOperationParameterConfig extends GenericResource {
                     while (itwsp.hasNext()) {
                         WebServiceParameter webServiceParameter = itwsp.next();
                         hm.put(webServiceParameter.getParameterName(), webServiceParameter);
-//                        System.out.println("processaction ite:" + webServiceParameter.getParameterName());
                     }
 
                     try {
@@ -338,56 +441,51 @@ public class WSOperationParameterConfig extends GenericResource {
 
                             /// Mostrar lista de parámetros
                             ParameterDefinition[] params = operinfo.getInput().getDefinitions();
-                            if (params.length > 0) {
+                            int nivel = 0;
+                            try {
+                                nivel = Integer.parseInt(request.getParameter("nivel"));
+                            } catch (Exception e) {
+                            }
+                            String clickedObj = request.getParameter("clickedObj");
 
-                                for (ParameterDefinition allparam : params) {
+                            Enumeration<String> enu = request.getParameterNames();
 
-                                    String paramName = allparam.getName();
-                                    String paramVal = request.getParameter("p_" + paramName);
+                            while (enu.hasMoreElements()) {
+                                String parametro = enu.nextElement();
+                                String paramvalue = request.getParameter(parametro);
+                                //System.out.println("( " + parametro + " ) ==> " + paramvalue);
 
-                                    if (allparam.isBasic()) {
-                                        try {
-                                            WebServiceParameter wsp = hm.get(paramName);
+                                if (parametro.startsWith("p_")) {
+                                    try {
+                                        String ptmp = parametro.substring(parametro.indexOf("p_") + 2);
 
-                                            if (wsp == null) {
-                                                wsp = WebServiceParameter.ClassMgr.createWebServiceParameter(wsrvin.getProcessSite());
-                                                wsp.setParameterName(paramName);
-                                                wsrvin.addWebServiceParameter(wsp);
-                                            }
-                                            if (paramVal != null && paramVal.trim().length() > 0) {
-                                                wsp.setParameterValue(paramVal);
-                                            } else {
-                                                wsrvin.removeWebServiceParameter(wsp);
-                                                wsp.remove();
-                                            }
-                                        } catch (Exception ein) {
-                                            log.error("Error al crear WebServiceParameter", ein);
+                                        ptmp = ptmp.replace("-", ".");
+                                        ptmp = ptmp.replace("_", ".");
+                                        //System.out.println("parametro: " + ptmp);
+                                        //ptmp = (clickedObj!=null?clickedObj+".":"");
+                                        ////System.out.println("ptmp:"+clickedObj+"."+ptmp);
+                                        WebServiceParameter wsp = hm.get(ptmp);
+
+                                        if (wsp == null) {
+                                            //System.out.println("wsp null => creando webServiceParameter ...");
+                                            wsp = WebServiceParameter.ClassMgr.createWebServiceParameter(wsrvin.getProcessSite());
+                                            wsp.setParameterName(ptmp);
+
+                                            System.out.print("Parameter : " + ptmp);
+
+                                            wsrvin.addWebServiceParameter(wsp);
+
                                         }
-                                    } else {
+                                        if (paramvalue != null && paramvalue.trim().length() > 0) {
+                                            wsp.setParameterValue(paramvalue);
 
-
-                                        for (ParameterDefinition paramdef : allparam.getProperties()) {
-                                            paramName = allparam.getName() + "." + paramdef.getName();
-                                            paramVal = request.getParameter("p_" + allparam.getName() + "_" + paramdef.getName());
-
-                                            try {
-                                                WebServiceParameter wsp = hm.get(paramName);
-
-                                                if (wsp == null) {
-                                                    wsp = WebServiceParameter.ClassMgr.createWebServiceParameter(wsrvin.getProcessSite());
-                                                    wsp.setParameterName(paramName);
-                                                    wsrvin.addWebServiceParameter(wsp);
-                                                }
-                                                if (paramVal != null && paramVal.trim().length() > 0) {
-                                                    wsp.setParameterValue(paramVal);
-                                                } else {
-                                                    wsrvin.removeWebServiceParameter(wsp);
-                                                    wsp.remove();
-                                                }
-                                            } catch (Exception ein) {
-                                                log.error("Error al crear WebServiceParameter", ein);
-                                            }
+                                            //System.out.println(", value: " + paramvalue);
+                                        } else {
+                                            wsrvin.removeWebServiceParameter(wsp);
+                                            wsp.remove();
                                         }
+                                    } catch (Exception ein) {
+                                        log.error("Error al crear WebServiceParameter", ein);
                                     }
                                 }
                             }
