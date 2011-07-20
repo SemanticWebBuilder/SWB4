@@ -327,6 +327,14 @@ public class DataObject  extends GraphicalElement {
         return ret;
     }
 
+    override public function getDefaultFlow() : ConnectionObject {
+        var link = DirectionalAssociation {
+            modeler:modeler
+            uri:"new:dirassociationflow:{modeler.toolBar.counter++}"
+        }
+        return link;
+    }
+
     override public function copy() : GraphicalElement {
         var t = DataObject {
             title: this.title
@@ -344,7 +352,7 @@ public class DataObject  extends GraphicalElement {
         }
         return t;
     }
-
+    
     override public function getBounds() : Bounds {
         return Bounds {
             topLeft: Point {
