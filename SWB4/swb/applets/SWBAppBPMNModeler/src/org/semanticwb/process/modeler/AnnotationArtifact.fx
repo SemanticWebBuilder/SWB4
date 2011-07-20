@@ -137,6 +137,14 @@ public class AnnotationArtifact extends Artifact
         return ret;
     }
 
+    override public function getDefaultFlow() : ConnectionObject {
+        var link = AssociationFlow {
+            modeler:modeler
+            uri:"new:associationflow:{modeler.toolBar.counter++}"
+        }
+        return link;
+    }
+
     override public function copy() : GraphicalElement {
         var t = AnnotationArtifact {
             title: this.title
