@@ -536,7 +536,7 @@ public class Modeler extends GenericResource {
         urlapp.setParameter("suri", suri);
         urlapp.setParameter("currentActivities", current);
         urlapp.setParameter("mode", mode);
-
+        
         out.println("<div class=\"applet\">");
         out.println("<iframe dojoType_=\"dijit.layout.ContentPane\" src=\"" + urlapp + "\" width=\"100%\" height=\"100%\" frameborder=\"0\" scrolling=\"no\"></iframe>");
         //String idframe = "ifr_" + getResourceBase().getId();
