@@ -5210,6 +5210,17 @@ public class SWBUtils {
      */
     public static class CryptoWrapper {
 
+        private static SecureRandom sr = null;
+
+
+        static {
+            try {
+                sr = SecureRandom.getInstance("SHA1PRNG");
+                } catch (NoSuchAlgorithmException NSAE) {
+                    log.error("Instantiating the secure Random generator", NSAE);
+                }
+        }
+
         /**
          * Performs the diggestion of the message in {@code toEncode} through the
          * SHA-512 algorithm, with a previous validation.
@@ -5498,6 +5509,17 @@ public class SWBUtils {
             String ret = new String(c.doFinal(hexStringToByteArray(password)));
             return ret;
         }
+
+        /**
+         * Generates a Secure random script of 64 bits, encoded in a String
+         * @return String encoded nuance
+         */
+        public static String genCryptoToken(){
+            BigInteger number = BigInteger.probablePrime(64, sr);
+            return number.toString(36);
+        }
+
+
     }
 
    
