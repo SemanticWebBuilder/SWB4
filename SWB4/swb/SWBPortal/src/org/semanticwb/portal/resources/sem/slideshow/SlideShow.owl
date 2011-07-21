@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:slideshow="http://www.semanticwebbuilder.org/swb4/slideshow#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+    xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xml:base="http://www.semanticwebbuilder.org/swb4/slideshow">
+  <owl:Ontology rdf:about="">
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
+  </owl:Ontology>
+  <owl:ObjectProperty rdf:ID="hasPictureSlides">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_carousell">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModelWithBlank"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+        <rdfs:label xml:lang="en">SlideShow</rdfs:label>
+        <rdfs:label xml:lang="es">Carrusel de diapositivas</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment xml:lang="en">SlideShow</rdfs:comment>
+    <rdfs:comment xml:lang="es">Carrusel de diapositivas</rdfs:comment>
+    <rdfs:range>
+      <swb:Class rdf:ID="PictureSlide">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain>
+      <swb:SemanticResource rdf:ID="Viewer">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:SemanticResource>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="poster">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_poster">
+        <swbxf:formElement>
+          <swb:DojoImageUpload rdf:ID="ImageUpload">
+            <swbxf:imgThumbnail rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:imgThumbnail>
+            <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:imgCrop>
+            <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >*.jpg:JPG|*.gif:GIF|*.png:PNG</swbxf:fileFilter>
+          </swb:DojoImageUpload>
+        </swbxf:formElement>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+        <rdfs:label xml:lang="en">Poster</rdfs:label>
+        <rdfs:label xml:lang="es">Cartel</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="es">Cartel</rdfs:comment>
+    <rdfs:comment xml:lang="en">Poster</rdfs:comment>
+    <rdfs:domain rdf:resource="#PictureSlide"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="alt">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_alt">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+        <rdfs:label xml:lang="es">Texto alterno</rdfs:label>
+        <rdfs:label xml:lang="en">Alternative text</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <swb:localeable rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:localeable>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="es">Descripción alterna. Pauta de accesibilidad</rdfs:comment>
+    <rdfs:comment xml:lang="en">Alternative descriptions. Accessibility Guidelines</rdfs:comment>
+    <rdfs:domain rdf:resource="#PictureSlide"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="targetNew">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_targetNew"/>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment xml:lang="es">Abrir en otra ventana</rdfs:comment>
+    <rdfs:comment xml:lang="en">Open in other window</rdfs:comment>
+    <rdfs:domain rdf:resource="#Viewer"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="internalURL">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_internalURL">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#fe_TreeSelect"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >40</swb:index>
+        <rdfs:label xml:lang="es">URL interna</rdfs:label>
+        <rdfs:label xml:lang="en">Internal URL</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="es">URL interna</rdfs:comment>
+    <rdfs:comment xml:lang="en">Internal URL</rdfs:comment>
+    <rdfs:domain rdf:resource="#PictureSlide"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="thmbn">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_thmbn">
+        <swbxf:formElement rdf:resource="#ImageUpload"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >70</swb:index>
+        <rdfs:label xml:lang="en">Thumbnail</rdfs:label>
+        <rdfs:label xml:lang="es">Imagen miniatura</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="en">Thumbnail</rdfs:comment>
+    <rdfs:comment xml:lang="es">Imagen miniatura</rdfs:comment>
+    <rdfs:domain rdf:resource="#PictureSlide"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="externalURL">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_externalURL">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#UrlFormElement_1"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+        <rdfs:label xml:lang="es">URL external</rdfs:label>
+        <rdfs:label xml:lang="en">External URL</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="es">URL externa</rdfs:comment>
+    <rdfs:comment xml:lang="en">External URL</rdfs:comment>
+    <rdfs:domain rdf:resource="#PictureSlide"/>
+  </owl:DatatypeProperty>
+  <swb:CodePackage rdf:ID="pkg">
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >slideshow</swb:prefix>
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.portal.resources.sem.slideshow</swb:package>
+  </swb:CodePackage>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->
