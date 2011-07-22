@@ -194,6 +194,61 @@ public class WSDLParameterDefinition implements ParameterDefinition
             }
 
         }
+        else if (_name.equals("element"))
+        {
+            String minOccurs = element.getAttribute("minOccurs");
+            String maxOccurs = element.getAttribute("maxOccurs");
+            boolean _isRequired = false;
+            if ("1".equals(minOccurs))
+            {
+                _isRequired = true;
+            }
+            boolean _isMultiple = false;
+            if ("unbounded".equals(maxOccurs))
+            {
+                _isMultiple = true;
+            }
+            if (XMLDocumentUtil.isRef(element)) // es una referencia
+            {
+                String ref = element.getAttribute("ref");
+                element = XMLDocumentUtil.getGlobalElement(ref, service);
+                if (element == null)
+                {
+                    throw new ServiceException("The element " + ref + " was not found");
+                }
+                fillProperties(element, _isRequired, _isMultiple, _name);
+
+            }
+            else if (!element.getAttribute("type").equals("")) // es de un tipo
+            {
+                String _type = element.getAttribute("type");
+                String _nameElement = element.getAttribute("name");
+                if (XMLDocumentUtil.isBasic(_type, XMLDocumentUtil.toJdom(definition.getOwnerDocument())))
+                {
+                    String _namespace = XMLDocumentUtil.getTargetNamespace(element.getOwnerDocument());
+                    WSDLParameterDefinition parameter = new WSDLParameterDefinition(_namespace, element, _type, _nameElement, _isRequired, service);
+                    this.properties.add(parameter);
+                }
+                else
+                {
+                    Element elementToCode = XMLDocumentUtil.getElementByTypeFromSchema(_type, element.getOwnerDocument());
+                    String nameElement = element.getAttribute("name");
+                    fillProperties(elementToCode, _isRequired, _isMultiple, nameElement);
+                }
+            }
+            else // continua la definición debajo del elemento
+            {
+                NodeList childs = element.getChildNodes();
+                for (int i = 0; i < childs.getLength(); i++)
+                {
+                    if (childs.item(i) instanceof Element)
+                    {
+                        Element childElement = (Element) childs.item(i);
+                        fillProperties(childElement);
+                    }
+                }
+            }
+        }
     }
 
     private void fillProperties(Element element) throws ServiceException
