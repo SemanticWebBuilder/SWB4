@@ -51,7 +51,7 @@ public class Viewer extends org.semanticwb.portal.resources.sem.slideshow.base.V
                     url = pic.getExternalURL()==null || pic.getExternalURL().isEmpty()?pic.getInternalURL():pic.getExternalURL();
                     preload.append(" var imagen").append(i).append(" = new Image(); imagen").append(i++).append(".src = '").append(SWBPortal.getWebWorkPath()).append(pic.getWorkPath()).append("/").append("poster_").append(pic.getId()).append("_").append(pic.getPoster()).append("';\n");
                     //script.append("  <a href=\"javascript:nav('crwlr_bckg','").append(SWBPortal.getWebWorkPath()).append(pic.getWorkPath()).append("/").append("poster_").append(pic.getId()).append("_").append(pic.getPoster()).append("','").append(url).append("')\" title=\"").append(pic.getTitle(lang)).append("\" class=\"crwlr_a\"><img alt=\"").append(pic.getAlt(lang)).append("\" class=\"crwlr_img\" src=\"").append(SWBPortal.getWebWorkPath()).append(pic.getWorkPath()).append("/").append("thmbn_").append(pic.getId()).append("_").append(pic.getThmbn()).append("\" /></a>\n");
-                }   script.append("  <a href=\"javascript:nav('crwlr_bckg','"+SWBPortal.getWebWorkPath()+pic.getWorkPath()+"/poster_"+pic.getId()+"_"+pic.getPoster()+"','"+url+"','"+pic.getTitle(lang) +"','"+pic.getDescription(lang) +"')\" title=\""+pic.getTitle(lang)+"\" class=\"crwlr_a\"><img alt=\""+pic.getAlt(lang)+"\" class=\"crwlr_img\" src=\""+SWBPortal.getWebWorkPath()+pic.getWorkPath()+"/thmbn_"+pic.getId()+"_"+pic.getThmbn()+"\" /></a>\n");
+                }   script.append("  <a href=\"javascript:nav('crwlr_bckg','"+SWBPortal.getWebWorkPath()+pic.getWorkPath()+"/poster_"+pic.getId()+"_"+pic.getPoster()+"','"+url+"','"+(pic.getTitle(lang)==null?pic.getTitle():pic.getTitle(lang))+"','"+(pic.getDescription(lang)==null?pic.getDescription():pic.getDescription(lang))+"')\" title=\""+(pic.getTitle(lang)==null?pic.getTitle():pic.getTitle(lang))+"\" class=\"crwlr_a\"><img alt=\""+(pic.getAlt(lang)==null?pic.getAlt():pic.getAlt(lang))+"\" class=\"crwlr_img\" src=\""+SWBPortal.getWebWorkPath()+pic.getWorkPath()+"/thmbn_"+pic.getId()+"_"+pic.getThmbn()+"\" /></a>\n");
             }
             out.println(getScript());
             out.println("<script type=\"text/javascript\">");
@@ -67,21 +67,21 @@ public class Viewer extends org.semanticwb.portal.resources.sem.slideshow.base.V
             out.println("  }");
             out.println("</script>");
 
-            out.println("<div id=\"pm_carousel_slideshow\">");
+            out.println("<div class=\"swb-slideshow\">");
             Random r = new Random();
             r.setSeed((new Date()).getTime());        
             i = r.nextInt(rs.size());
             url = rs.get(i).getExternalURL()==null || rs.get(i).getExternalURL().isEmpty()?rs.get(i).getInternalURL():rs.get(i).getExternalURL();
             if(isTargetNew())
-                out.println("  <a href=\""+url+"\" target=\"_blank\" class=\"crwlr_a\"><img class=\"crwlr_img\" src=\""+SWBPortal.getWebWorkPath()+rs.get(i).getWorkPath()+"/poster_"+rs.get(i).getId()+"_"+rs.get(i).getPoster()+"\" alt=\""+rs.get(i).getAlt()+"\" id=\"crwlr_bckg\"/></a>");
+                out.println("  <a href=\""+url+"\" target=\"_blank\" class=\"crwlr_a\"><img id=\"crwlr_bckg\" class=\"crwlr_img\" src=\""+SWBPortal.getWebWorkPath()+rs.get(i).getWorkPath()+"/poster_"+rs.get(i).getId()+"_"+rs.get(i).getPoster()+"\" alt=\""+(rs.get(i).getAlt(lang)==null?rs.get(i).getAlt():rs.get(i).getAlt(lang))+"\" /></a>");
             else
-                out.println("  <a href=\""+url+"\" class=\"crwlr_a\"><img class=\"crwlr_img\" src=\""+SWBPortal.getWebWorkPath()+rs.get(i).getWorkPath()+"/poster_"+rs.get(i).getId()+"_"+rs.get(i).getPoster()+"\" alt=\""+rs.get(i).getAlt()+"\" id=\"crwlr_bckg\"/></a>");
+                out.println("  <a href=\""+url+"\" class=\"crwlr_a\"><img id=\"crwlr_bckg\" class=\"crwlr_img\" src=\""+SWBPortal.getWebWorkPath()+rs.get(i).getWorkPath()+"/poster_"+rs.get(i).getId()+"_"+rs.get(i).getPoster()+"\" alt=\""+(rs.get(i).getAlt(lang)==null?rs.get(i).getAlt():rs.get(i).getAlt(lang))+"\" /></a>");
             
             out.println("  <div id=\"pics_"+getId()+"\">");
             out.println(script.toString());
             out.println("  </div>");
-            out.println("  <div class=\"title\"><p id=\"pic_title\">"+rs.get(i).getTitle(lang) +"</p></div>");
-            out.println("  <div class=\"desc\"><p id=\"pic_desc\">"+rs.get(i).getDescription(lang) +"</p></div>");
+            out.println("  <div class=\"title\"><p id=\"pic_title\">"+(rs.get(i).getTitle(lang)==null?rs.get(i).getTitle():rs.get(i).getTitle(lang))+"</p></div>");
+            out.println("  <div class=\"desc\"><p id=\"pic_desc\">"+(rs.get(i).getDescription(lang)==null?rs.get(i).getDescription():rs.get(i).getDescription(lang))+"</p></div>");
             out.println("</div>");
 
             out.println("<script type=\"text/javascript\">");
