@@ -59,7 +59,7 @@ public class ListWSOperations extends GenericResource {
 
             out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
-            out.println("<legend>Lista de mÃ©todos definidos en el WebService</legend>");
+            out.println("<legend>Lista de métodos definidos en el WebService</legend>");
             out.println("<table width=\"100%\" border=\"1\">");
             out.println("<thead>");
             out.println("<tr>");
