@@ -59,7 +59,7 @@ public class ListWSOperations extends GenericResource {
 
             out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
-            out.println("<legend>Lista de métodos definidos en el WebService</legend>");
+            out.println("<legend>Lista de m&eacute;todos definidos en el WebService</legend>");
             out.println("<table width=\"100%\" border=\"1\">");
             out.println("<thead>");
             out.println("<tr>");
@@ -120,7 +120,7 @@ public class ListWSOperations extends GenericResource {
                                     out.println("</li>");
                                 }
                             } catch (Exception e) {
-                                log.error("Error al cargar parametros de entrada.", e);
+                                log.error("Error al cargar par&aacute;metros de entrada.", e);
                             }
 
                             out.println("</ul>");
@@ -151,7 +151,7 @@ public class ListWSOperations extends GenericResource {
 
                                 }
                             } catch (Exception e) {
-                                log.error("Error al cargar parametros de entrada.", e);
+                                log.error("Error al cargar par&aacute;metros de salida.", e);
                             }
 
                             out.println("</ul>");
@@ -168,7 +168,7 @@ public class ListWSOperations extends GenericResource {
                 out.println("</table>");
                 out.println("</fieldset>");
                 out.println("<fieldset>");
-                out.println("* Notación: [Tipo definición] (B:Básico, M:Múltiple, R:Requerido)");
+                out.println("* Notaci&oacute;n: [Tipo definici&oacute;n] (B:B&aacute;sico, M:M&uacute;ltiple, R:Requerido)");
                 out.println("</fieldset>");
                 out.println("</div>");
             } else {
