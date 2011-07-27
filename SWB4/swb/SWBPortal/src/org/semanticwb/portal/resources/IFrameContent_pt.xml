@@ -12,32 +12,26 @@
             <input type="text" name="width"  label="Largura" value="640" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Largura inválida" promptMessage="Largura. Exemplos: 90%, 350px, 854" jsrequired="true" />
             <input type="text" name="height" label="Altura" value="480"  maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválida" promptMessage="Altura. Exemplos: 90%, 350px, 854" jsrequired="true" />
             <input type="checkbox" name="fb" label="Borda" value="true" promptMessage="Borda mostar en IE"/>
+        </fieldset>
+        </div>
 
+        <div title="Configurações Avançadas" open="true">
+        <fieldset legend="Parâmetros">
+            <statictext name="txtAllow">Permitir que os parâmetros da requisição</statictext>
+            <input type="radio" id="target1" name="passparam" label="Yes" value="1"/>
+            <input type="radio" id="target0" name="passparam" label="No" value="0" checked="true"/>
+        </fieldset>
+        <fieldset legend="Script">
+            <input type="text" name="script" label="Script" promptMessage="Javascript manipulador de eventos onLoad" />
+        </fieldset>
+        </div>
+        
+        <fieldset>
             <statictext name="note">
                 <![CDATA[
                     <font style="color: #428AD4; font-family: Verdana; font-size: 10px;">* Requisitos de dados</font>
                 ]]>
             </statictext>
-        </fieldset>
-        </div>
-
-        <div title="Advanced" open="true">
-        <fieldset legend="Advanced">
-            <statictext name="txtAllow">Permitir que os parâmetros da requisição</statictext>
-            <input type="radio" id="target1" name="passparam" label="Yes" value="1"/>
-            <input type="radio" id="target0" name="passparam" label="No" value="0" checked="true"/>
-
-            <statictext name="note">
-        <![CDATA[
-            <font style="color: #428AD4; font-family: Verdana; font-size:10px;">
-            * Data required
-            </font>
-        ]]>
-            </statictext>
-        </fieldset>
-        </div>
-        
-        <fieldset>
             <input type="submit" name="btnSave" id="btnSave" value="Salvar" />
             <input type="reset"  name="btnReset" id="btnReset" value="Reset" />
         </fieldset>

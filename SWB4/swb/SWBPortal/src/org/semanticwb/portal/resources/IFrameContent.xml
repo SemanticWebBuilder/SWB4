@@ -12,33 +12,26 @@
             <input type="text" name="width"  label="Ancho" value="640" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Ancho inválido" promptMessage="Ancho. Ejemplos: 90%, 350px, 854" jsrequired="true" />
             <input type="text" name="height" label="Alto" value="480"  maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválida" promptMessage="Altura. Ejemplos: 90%, 350px, 854" jsrequired="true" />
             <input type="checkbox" name="fb" label="Borde" value="true" promptMessage="Mostrar borde en IE"/>
-
-            <statictext name="note">
-		<![CDATA[
-                    <font style="color: #428AD4; font-family: Verdana; font-size: 10px;">* Dato requerido</font>
-		]]>
-            </statictext>
         </fieldset>
         </div>
         
         <div title="Configuración Avanzada" open="true">
-        <fieldset legend="Configuración Avanzada">
+        <fieldset legend="Parámetros">
             <statictext name="txtAllow">Permitir paso de parámetros</statictext>
             <input type="radio" id="target1" name="passparam" label="Sí" value="1"/>
             <input type="radio" id="target0" name="passparam" label="No" value="0" checked="true"/>
-
-            <statictext name="note">
-        <![CDATA[
-            <font style="color: #428AD4; font-family: Verdana; font-size:10px;">
-            * Data requerido
-            </font>
-        ]]>
-            </statictext>
+        </fieldset>
+        <fieldset legend="Script">
+            <input type="text" name="script" label="Script" promptMessage="Javascript para el manejador del evento onLoad" />
         </fieldset>
         </div>
 
-
         <fieldset>
+            <statictext name="note">
+		<![CDATA[
+                    <font style="color: #428AD4; font-family: Verdana; font-size: 10px;">* Dato requerido</font>
+		]]>
+            </statictext>            
             <input type="submit" name="btnSave" id="btnSave" value="Guardar" />
             <input type="reset"  name="btnReset" id="btnReset" value="Restablecer" />
         </fieldset>
