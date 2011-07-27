@@ -96,88 +96,131 @@ public class IFrameContent extends GenericAdmResource
             {
                 height = null;
             }
-            String userAgent = request.getHeader("User-Agent")==null?null:request.getHeader("User-Agent").toLowerCase();
-            if( userAgent!=null && (userAgent.indexOf("msie 5")>=0 || userAgent.indexOf("msie 6")>=0 || userAgent.indexOf("msie 7")>=0) ) {
-                out.print("<iframe id=\"iframecontentswb\" name=\"iframecontentswb\" ");
-                String url = base.getAttribute("url");
-                String passparams = base.getAttribute("passparam", "0");
-                if ("1".equals(passparams))
+            String url = base.getAttribute("url","#");
+            String script = base.getAttribute("script");
+            
+            out.print("<iframe id=\"iframecontentswb\" name=\"iframecontentswb\" ");
+            String passparams = base.getAttribute("passparam", "0");
+            if ("1".equals(passparams))
+            {
+                if (url != null)
                 {
-                    if (url != null)
+                    String qs = request.getQueryString();
+                    if (qs != null)
                     {
-                        String qs = request.getQueryString();
-                        if (qs != null)
+                        if (qs.indexOf("?") != -1)
                         {
-                            if (qs.indexOf("?") != -1)
-                            {
-                                int pos = qs.indexOf("?");
-                                qs = qs.substring(pos + 1);
-                            }
-                            if (url.indexOf("?") == -1)
-                            {
-                                url = url + "?" + qs;
-                            }
-                            else
-                            {
-                                url = url + "&" + qs;
-                            }
+                            int pos = qs.indexOf("?");
+                            qs = qs.substring(pos + 1);
+                        }
+                        if (url.indexOf("?") == -1)
+                        {
+                            url = url + "?" + qs;
+                        }
+                        else
+                        {
+                            url = url + "&" + qs;
                         }
                     }
                 }
-                out.print(" src=\"" + url + "\" ");
-                if (width != null)
-                    out.print(" width=\"" + width + "\"");
-                if (height != null)
-                    out.print(" height=\"" + height + "\"");
-                if(base.getAttribute("fb")!=null)
-                    out.print(" frameborder=\"1\"");
-                else
-                    out.print(" frameborder=\"0\"");
-                out.println(" class=\"swb-ifc\">");
-                out.println("</iframe>");
-            }else {
-                String url = base.getAttribute("url");
-                String passparams = base.getAttribute("passparam", "0");
-                if("1".equals(passparams))
-                {
-                    if(url != null)
-                    {
-                        String qs = request.getQueryString();
-                        if(qs != null)
-                        {
-                            if(qs.indexOf("?") != -1)
-                            {
-                                int pos = qs.indexOf("?");
-                                qs = qs.substring(pos + 1);
-                            }
-                            if(url.indexOf("?") == -1)
-                            {
-                                url = url + "?" + qs;
-                            }
-                            else
-                            {
-                                url = url + "&" + qs;
-                            }
-                        }
-                    }
-                }
-                
-                out.print("<iframe id=\"iframecontentswb\" name=\"iframecontentswb\" ");
-
-                
-                out.print(" src=\"" + url + "\" ");
-                if(width != null)
-                    out.print(" width=\"" + width + "\"");
-                if(height != null)
-                    out.print(" height=\"" + height + "\"");
-                if(base.getAttribute("fb")!=null)
-                    out.print(" frameborder=\"1\"");
-                else
-                    out.print(" frameborder=\"0\"");
-                out.println(" class=\"swb-ifc\">");
-                out.println("</iframe>");
-                
             }
+            out.print(" src=\"" + url + "\" ");
+            if (width != null)
+                out.print(" width=\"" + width + "\"");
+            if (height != null)
+                out.print(" height=\"" + height + "\"");
+            if(base.getAttribute("fb")!=null)
+                out.print(" frameborder=\"1\"");
+            else
+                out.print(" frameborder=\"0\"");
+            
+            if(script != null && !script.isEmpty())
+                out.print(" onload=\""+script+"\"");
+            
+            out.println(" class=\"swb-ifc\">");
+            out.println("</iframe>");
+//            String userAgent = request.getHeader("User-Agent")==null?null:request.getHeader("User-Agent").toLowerCase();
+//            if( userAgent!=null && (userAgent.indexOf("msie 5")>=0 || userAgent.indexOf("msie 6")>=0 || userAgent.indexOf("msie 7")>=0) ) {
+//                out.print("<iframe id=\"iframecontentswb\" name=\"iframecontentswb\" ");
+//                String url = base.getAttribute("url");
+//                String passparams = base.getAttribute("passparam", "0");
+//                if ("1".equals(passparams))
+//                {
+//                    if (url != null)
+//                    {
+//                        String qs = request.getQueryString();
+//                        if (qs != null)
+//                        {
+//                            if (qs.indexOf("?") != -1)
+//                            {
+//                                int pos = qs.indexOf("?");
+//                                qs = qs.substring(pos + 1);
+//                            }
+//                            if (url.indexOf("?") == -1)
+//                            {
+//                                url = url + "?" + qs;
+//                            }
+//                            else
+//                            {
+//                                url = url + "&" + qs;
+//                            }
+//                        }
+//                    }
+//                }
+//                out.print(" src=\"" + url + "\" ");
+//                if (width != null)
+//                    out.print(" width=\"" + width + "\"");
+//                if (height != null)
+//                    out.print(" height=\"" + height + "\"");
+//                if(base.getAttribute("fb")!=null)
+//                    out.print(" frameborder=\"1\"");
+//                else
+//                    out.print(" frameborder=\"0\"");
+//                out.println(" class=\"swb-ifc\">");
+//                out.println("</iframe>");
+//            }else {
+//                String url = base.getAttribute("url");
+//                String passparams = base.getAttribute("passparam", "0");
+//                if("1".equals(passparams))
+//                {
+//                    if(url != null)
+//                    {
+//                        String qs = request.getQueryString();
+//                        if(qs != null)
+//                        {
+//                            if(qs.indexOf("?") != -1)
+//                            {
+//                                int pos = qs.indexOf("?");
+//                                qs = qs.substring(pos + 1);
+//                            }
+//                            if(url.indexOf("?") == -1)
+//                            {
+//                                url = url + "?" + qs;
+//                            }
+//                            else
+//                            {
+//                                url = url + "&" + qs;
+//                            }
+//                        }
+//                    }
+//                }
+//                
+//                out.print("<iframe id=\"iframecontentswb\" name=\"iframecontentswb\" ");
+//
+//                
+//                out.print(" src=\"" + url + "\" ");
+//                if(width != null)
+//                    out.print(" width=\"" + width + "\"");
+//                if(height != null)
+//                    out.print(" height=\"" + height + "\"");
+//                if(base.getAttribute("fb")!=null)
+//                    out.print(" frameborder=\"1\"");
+//                else
+//                    out.print(" frameborder=\"0\"");
+//                out.println(" class=\"swb-ifc\">");
+//                out.println("</iframe>");
+//                
+//            }
         }
         else
         {
