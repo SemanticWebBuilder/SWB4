@@ -1,0 +1,507 @@
+/* 
+    Document   : calendar
+    Created on : 3/05/2011, 11:32:18 AM
+    Description:
+        Purpose of the stylesheet follows.
+*/
+#containerGral {
+    float: left;
+    width: 720px;
+    margin-bottom: 40px;
+    height:auto
+}
+.imgWidth {
+    width:150px;
+}
+.events p {
+    font-family: Tahoma, Geneva, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #FFF;
+    margin: 0px;
+    padding-top: 6px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 10px;
+    _background-color: #F90;
+    display: block;
+    height: 24px;
+    width: 260px;
+}
+.calendar .weekdays p {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    display: block;
+    float: left;
+    width: 100px;
+    text-align: center;
+    margin-right: 1px;
+    margin-left: 1px;
+    background-color: #808080;
+    color: #FFFFFF;
+}
+.calendar {
+    height: auto;
+    width: 720px;
+    margin-bottom: 5px;
+}
+.events a {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #333333;
+    text-decoration: none;
+}
+.events a:hover {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #808080;
+    text-decoration: none
+}
+.tooltip {
+    background-color: #C0C0C0;
+    height: 150px;
+    width: 300px;
+    padding: 10px;
+    overflow: hidden;
+    border: 1px solid #4B4B4B;
+}
+.tooltip h1 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 0px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 5px;
+    margin-left: 0px;
+    color: #FFF;
+}
+.tooltip img {
+    float: left;
+    border: 1px solid #FFF;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+.tooltip p {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #333333;
+    margin: 0px;
+    padding: 0px;
+}
+/*.jevtip-title {
+display:none}*/
+.currentMonth {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #808080;
+    text-align: center;
+    display: block;
+    height: 22px;
+    width: 280px;
+    padding-top: 3px;
+    float: left;
+}
+.containerMonth {
+    clear: both;
+    height: 25px;
+    width: 700px;
+    margin-right: auto;
+    margin-left: auto;
+}
+.selectYear .textSelectYear  {
+    font-family: Tahoma, Geneva, sans-serif;
+    color: #808080;
+    font-size: 12px;
+    font-weight: bold;
+    display: block;
+    width: 645px;
+    float: left;
+    height: 10px;
+    padding-top: 5px;
+    text-align: right;
+    margin-bottom: 10px;
+}
+.selectYear {
+    height: 35px;
+    width: 720px;
+    margin-top: 5px;
+}
+.selectYear #menuSelectYear  {
+    font-family: Tahoma, Geneva, sans-serif;
+    font-weight: bold;
+    color: #808080;
+}
+.calendarBox {
+    float: left;
+    height: 100px;
+    width: 100px;
+    background-color: #DDD;
+    margin-top: 1px;
+    margin-right: 1px;
+    margin-bottom: 1px;
+    margin-left: 1px;
+}
+.calendarBox .day {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    height: 18px;
+    width: 90px;
+    padding-left: 10px;
+    padding-top: 2px;
+}
+.calendarBox .events {
+    height: 70px;
+    width: 90px;
+    margin: 0px;
+    padding: 5px;
+}
+.empty {
+    background-color: #969696;
+}
+.monthTitle a {
+    float: left;
+}
+
+/*Ventana Popup*/
+.dijitTooltip {
+    z-Index: 10010;
+}
+.dijitTooltip h1 {
+    padding-top: 3px;
+    padding-bottom: 7px;
+}
+.dijitTooltip p {
+    line-height: 14px;
+}
+.showPopUp {
+    background-color: #DDD;
+    margin:1px;
+}
+.showPopUpAllEvts {
+    margin: 0;
+    padding-left: 55px;
+    padding-bottom: 25px;
+}
+.showPopUpAllEvts a {
+    color: #333333;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 13px;
+    text-decoration: none;
+    line-height:24px;
+}
+p.moreEvts {
+    width: 56px;
+    background-color: #DDD;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 6px;
+    padding-top: 5px;
+    display: block;
+    height: 16px;
+}
+p.day2 {
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    height: 18px;
+    padding-left: 20px;
+    padding-top: 2px;
+    width: auto;
+}
+#showPopUpEvts {
+    z-Index:10000;
+    position:absolute;
+    top:0%;
+    left:0%;
+    width:100%;
+    height:100%;
+}
+#showPopUpEvts .opBackground {
+    width:100%;
+    height:100%;
+    background-color:#000000;
+    position:fixed;
+    top:0pt;
+    left:0pt;
+    z-Index:10001;
+    opacity: 0.75;
+}
+#showPopUpEvts .containerEvts {
+    position:absolute;
+    top:0%;
+    left:0%;
+    width:100%;
+    height:100%;
+}
+#showPopUpEvts .allPopUpEvts {
+    z-index: 10005;
+    background-color:white;
+    position: relative;
+    bottom:-100%;
+    left: 30%;
+    width: 520px;
+    height: auto;
+    border: 3px double white;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: -5px;
+    margin-bottom:5px;
+}
+#showPopUpEvts .allPopUpEvts span {
+    color: #333333;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 13px;
+    text-decoration: none;
+    position: relative;
+    margin: 0px;
+    width: inherit;
+}
+
+.tooltip1 {
+    background-color: #C0C0C0;
+    height: 150px;
+    width: 300px;
+    padding: 10px;
+    overflow: hidden;
+    border: 1px solid #4B4B4B;
+    position:relative;
+
+}
+.tooltip1 h1 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 0px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 5px;
+    margin-left: 0px;
+    color: #FFF;
+}
+.tooltip1 img {
+    float: left;
+    border: 1px solid #FFF;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+.tooltip1 p {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #333333;
+    margin: 0px;
+    padding: 0px;
+}
+.txtCalendarBox {
+    color: #333333;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 11px;
+    text-decoration: none;
+    width: auto;
+    background-color: #DDD;
+    font-weight: normal;
+    padding: 0px;
+}
+.showPopUp p{
+    padding:0px;
+    margin:0px;
+}
+
+/*CSS para el thumbnailCalendar*/
+.Thumbnailcalendar .weekdays p {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    display: block;
+    float: left;
+    width: 26px;
+    text-align: center;
+    margin-right: 1px;
+    margin-left: 1px;
+    background-color: #808080;
+    color: #FFFFFF;
+}
+.Thumbnailcalendar {
+    height: auto;
+    width: 196px;
+    margin-bottom: 0px;
+}
+.calendarBoxThumb {
+    float: left;
+    height: 35px;
+    width: 26px;
+    background-color: #DDD;
+    margin-top: 1px;
+    margin-right: 1px;
+    margin-bottom: 1px;
+    margin-left: 1px;
+}
+.calendarBoxThumb .day {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    height: 18px;
+    width: 18px;
+}
+.calendarBoxThumb .events {
+    height: 18px;
+    width: 18px;
+    margin: 0px;
+}
+p.moreEvtsThumb {
+    width: 18px;
+    background-color: #DDD;
+    display: block;
+    height: 16px;
+}
+.eventsThumb p {
+    font-family: Tahoma, Geneva, sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    color: #FFF;
+    margin: 0px;
+    _background-color: #F90;
+    display: block;
+    height: 12px;
+    width: 13px;
+}
+.containerMonthTumb {
+    clear: both;
+    height: 16px;
+    width: 196px;/*700px*/
+    margin-right: auto;
+    margin-left: auto;
+}
+.imgWidthTumb {
+    width:30px;
+    height: 16px;
+}
+#containerGralThum .imgWidthTumb img {
+    margin-top: 0px;
+    height: 15px;
+}
+
+.currentMonthTumb {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #808080;
+    text-align: center;
+    display: block;
+    height: 16px;/*22*/
+    width: 140px;/*280*/
+    padding-top: 0px;
+    float: left;
+}
+.selectYearTumb .textSelectYear  {
+    font-family: Tahoma, Geneva, sans-serif;
+    color: #808080;
+    font-size: 12px;
+    font-weight: bold;
+    display: block;
+    width: 120px;
+    float: left;
+    height: 10px;
+    padding-top: 5px;
+    text-align: right;
+    margin-bottom: 10px;
+}
+.selectYearTumb {
+    height: 35px;
+    width: 196px;
+    margin-top: 5px;
+}
+.selectYearTumb #menuSelectYearTumb  {
+    font-family: Tahoma, Geneva, sans-serif;
+    font-weight: bold;
+    color: #808080;
+}
+#containerGralThum {
+    float: left;
+    width: 196px;
+    margin-bottom: 40px;
+    height:auto
+}
+
+/*CSS para detalle del evento*/
+#cabecera-contenido {
+	width: 720px;
+	height: auto;
+	margin-bottom: 5px;
+}
+#cabecera-contenido .cabeceraEvt h1, #cabecera-contenido .cabeceraEvt h1 a {
+	font-family: Tahoma, Geneva, sans-serif;
+	font-size: 25px;
+	color: #0b2c3b;
+	padding: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 15px;
+	margin-left: 0px;
+	text-decoration: none;
+	*padding-top:15px;
+}
+#cabecera-contenido .cabeceraEvt h1 a:hover, #cabecera-contenido .cabeceraEvt h1 a:focus {
+	font-family: Tahoma, Geneva, sans-serif;
+	font-size: 30px;
+	color: #436794;
+	padding: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 5px;
+	margin-left: 0px;
+	text-decoration: none;
+}
+#cabecera-contenido .cabeceraEvt h2, #cabecera-contenido .cabeceraEvt h2 a {
+	font-family: Tahoma, Geneva, sans-serif;
+	font-size: 18px;
+	color: #8494a4;
+	padding: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 20px;
+	margin-left: 0px;
+	text-decoration: none;
+}
+#cabecera-contenido .cabeceraEvt h2 a:hover, #cabecera-contenido .cabeceraEvt h2 a:focus {
+	font-family: Tahoma, Geneva, sans-serif;
+	font-size: 18px;
+	color: #51606F;
+	padding: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 10px;
+	margin-left: 0px;
+	text-decoration: none;
+}
+#cabecera-contenido .cabeceraEvt .top {
+	height: auto;
+}
+#cabecera-contenido .fotoPrincipal {
+	float: left;
+	height: 310px;
+	width: 430px;
+	margin-right:5px;
+}
+#cabecera-contenido .cabeceraEvt .tweet {
+	height: 60px;
+	width: 60px;
+	float: left;
+}
+#cabecera-contenido .cabeceraEvt .face {
+	float: left;
+	width: 220px;
+	height: 60px;
+}
+#cabecera-contenido .cabeceraEvt {
+	width: 280px;
+	float: right;
+	height: auto;
+	margin-bottom:10px;
+	position:relative;
+}
+/* ************************************* */
