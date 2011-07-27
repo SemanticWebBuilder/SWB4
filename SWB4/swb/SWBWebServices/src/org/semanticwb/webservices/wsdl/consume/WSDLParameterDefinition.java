@@ -30,6 +30,7 @@ public class WSDLParameterDefinition implements ParameterDefinition
     private final String namespace;
     private final String classType;
     private final Element definition;
+    private org.jdom.Document jDomDefinition;
     private final boolean isBasic;
     private final boolean isRequired;
     private final boolean isMultiple;
@@ -100,6 +101,7 @@ public class WSDLParameterDefinition implements ParameterDefinition
         String _namespace = null;
         if (definition != null)
         {
+            jDomDefinition=XMLDocumentUtil.toJdom(definition.getOwnerDocument());
             _namespace = XMLDocumentUtil.getTargetNamespace(definition.getOwnerDocument());
             fillProperties(_definition);
 
@@ -223,7 +225,7 @@ public class WSDLParameterDefinition implements ParameterDefinition
             {
                 String _type = element.getAttribute("type");
                 String _nameElement = element.getAttribute("name");
-                if (XMLDocumentUtil.isBasic(_type, XMLDocumentUtil.toJdom(definition.getOwnerDocument())))
+                if (XMLDocumentUtil.isBasic(_type, jDomDefinition))
                 {
                     String _namespace = XMLDocumentUtil.getTargetNamespace(element.getOwnerDocument());
                     WSDLParameterDefinition parameter = new WSDLParameterDefinition(_namespace, element, _type, _nameElement, _isRequired, service);
@@ -310,7 +312,7 @@ public class WSDLParameterDefinition implements ParameterDefinition
             {
                 String _type = element.getAttribute("type");
                 String _nameElement = element.getAttribute("name");
-                if (XMLDocumentUtil.isBasic(_type, XMLDocumentUtil.toJdom(definition.getOwnerDocument())))
+                if (XMLDocumentUtil.isBasic(_type, jDomDefinition))
                 {
                     String _namespace = XMLDocumentUtil.getTargetNamespace(element.getOwnerDocument());
                     WSDLParameterDefinition parameter = new WSDLParameterDefinition(_namespace, element, _type, _nameElement, _isRequired, service);
