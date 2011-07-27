@@ -4,11 +4,7 @@
  */
 package org.semanticwb.test.wsdl;
 
-import com.sun.xml.internal.bind.v2.model.core.PropertyInfo;
-import com.sun.xml.internal.ws.api.model.Parameter;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import junit.framework.Assert;
 import org.json.JSONObject;
 import org.junit.After;
@@ -79,6 +75,7 @@ public class WSDLTest
     }
 
     @Test
+    @Ignore
     public void OrdenWSService()
     {
         try
