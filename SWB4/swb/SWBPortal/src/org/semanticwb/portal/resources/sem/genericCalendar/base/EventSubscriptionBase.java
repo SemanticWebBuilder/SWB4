@@ -13,23 +13,23 @@ public abstract class EventSubscriptionBase extends org.semanticwb.model.SWBClas
    /**
    * Almacena el usuario subscrito a un Evento
    */
-    public static final org.semanticwb.platform.SemanticProperty genCal_userEventSubscription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.resources/GenericCalendar#userEventSubscription");
+    public static final org.semanticwb.platform.SemanticProperty genCal_userEventSubscription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/GenericCalendar#userEventSubscription");
    /**
    * Define la estructura de datos de los eventos a mostrar en el calendario.
    */
-    public static final org.semanticwb.platform.SemanticClass genCal_Event=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.resources/GenericCalendar#Event");
+    public static final org.semanticwb.platform.SemanticClass genCal_Event=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/GenericCalendar#Event");
    /**
    * Almacena el evento al que se subscribió un usuario
    */
-    public static final org.semanticwb.platform.SemanticProperty genCal_eventSubscription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.resources/GenericCalendar#eventSubscription");
+    public static final org.semanticwb.platform.SemanticProperty genCal_eventSubscription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/GenericCalendar#eventSubscription");
    /**
    * Almacena la subscripción de un usuario a un Evento
    */
-    public static final org.semanticwb.platform.SemanticClass genCal_EventSubscription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.resources/GenericCalendar#EventSubscription");
+    public static final org.semanticwb.platform.SemanticClass genCal_EventSubscription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/GenericCalendar#EventSubscription");
    /**
    * The semantic class that represents the currentObject
    */
-    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.resources/GenericCalendar#EventSubscription");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/GenericCalendar#EventSubscription");
 
     public static class ClassMgr
     {
