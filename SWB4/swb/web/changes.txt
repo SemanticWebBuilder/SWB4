@@ -1,3 +1,18 @@
+  4.1.0.0
+    - CONVERSIÓN A JAVA 1.6
+    - Se agregó la posibilidad de cifrar la contraseña con una llave RSA al autenticarse a SWB (Serch)
+    - Identificar la Geolocalización por país de la IP del visitante (Serch)
+    - BUG: se corrigió el problema con el bloqueo de logins al entrar erroneamente una clave inválida (Serch)
+    - BUG: se corrigieron bugs en la autenticación (Serch)
+    - se agregó como comentario en el web.xml la compatibiliad con J2EE 5 (Serch)
+    - incorporación de wraper a hash de GNU crypto library (Serch)
+    - incorporación del Remote Proxy para SWBTS (Serch)
+    - BUG: se corrigió el paso del Principal en autenticación LDAP (Serch)
+    - incorporación del módulo para autenticación vía FaceBook (Serch)
+    - BUG: se corrigió la validación de acceso a la administración en instancias Cliente (Serch)
+    - Se modificó la forma de generar el GoogleSiteMap para Google Analytics (Serch)
+    - BUG: se corrigió el content-type de respuesta a DOJO en la carga de archivos (Serch)
+
   4.0.2.4
     - Se cambio forma de evaluar reglas, roles, grupos, calendarios de and a or (Jei)
     - Se agrego posibilidad de tener filtros inversos de recursos (Jei)
