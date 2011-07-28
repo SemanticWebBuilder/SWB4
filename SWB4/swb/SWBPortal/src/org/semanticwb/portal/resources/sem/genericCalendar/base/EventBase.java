@@ -4,53 +4,53 @@ package org.semanticwb.portal.resources.sem.genericCalendar.base;
    /**
    * Define la estructura de datos de los eventos a mostrar en el calendario. 
    */
-public abstract class EventBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Localeable,org.semanticwb.model.Resourceable,org.semanticwb.model.Searchable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class EventBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Resourceable,org.semanticwb.model.Searchable
 {
    /**
    * Fecha final del Evento
    */
-    public static final org.semanticwb.platform.SemanticProperty genCal_eventEndDate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.resources/GenericCalendar#eventEndDate");
+    public static final org.semanticwb.platform.SemanticProperty genCal_eventEndDate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/GenericCalendar#eventEndDate");
    /**
    * Almacena la url de una página externa para mostrar el detalle del Evento
    */
-    public static final org.semanticwb.platform.SemanticProperty genCal_urlExternal=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.resources/GenericCalendar#urlExternal");
+    public static final org.semanticwb.platform.SemanticProperty genCal_urlExternal=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/GenericCalendar#urlExternal");
    /**
    * Catálogo de Tipos de Eventos
    */
-    public static final org.semanticwb.platform.SemanticClass genCal_EventType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.resources/GenericCalendar#EventType");
-    public static final org.semanticwb.platform.SemanticProperty genCal_evType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.resources/GenericCalendar#evType");
+    public static final org.semanticwb.platform.SemanticClass genCal_EventType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/GenericCalendar#EventType");
+    public static final org.semanticwb.platform.SemanticProperty genCal_evType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/GenericCalendar#evType");
    /**
    * Utilizado para mostrar en una ventana o pestaña distinta a la actual
    */
-    public static final org.semanticwb.platform.SemanticProperty genCal_newWindow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.resources/GenericCalendar#newWindow");
+    public static final org.semanticwb.platform.SemanticProperty genCal_newWindow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/GenericCalendar#newWindow");
    /**
    * Visualiza los eventos en una página interna del sitio
    */
-    public static final org.semanticwb.platform.SemanticProperty genCal_urlInternal=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.resources/GenericCalendar#urlInternal");
+    public static final org.semanticwb.platform.SemanticProperty genCal_urlInternal=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/GenericCalendar#urlInternal");
    /**
    * Fecha de Inicio del Evento
    */
-    public static final org.semanticwb.platform.SemanticProperty genCal_eventInitDate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.resources/GenericCalendar#eventInitDate");
+    public static final org.semanticwb.platform.SemanticProperty genCal_eventInitDate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/GenericCalendar#eventInitDate");
    /**
    * Foto principal, que se visualiza en el detalle del evento
    */
-    public static final org.semanticwb.platform.SemanticProperty genCal_mainImage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.resources/GenericCalendar#mainImage");
+    public static final org.semanticwb.platform.SemanticProperty genCal_mainImage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/GenericCalendar#mainImage");
    /**
    * Almacena la foto relacionada al Evento
    */
-    public static final org.semanticwb.platform.SemanticProperty genCal_tooltipImage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.resources/GenericCalendar#tooltipImage");
+    public static final org.semanticwb.platform.SemanticProperty genCal_tooltipImage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/GenericCalendar#tooltipImage");
    /**
    * Determina si el evento se repite en la misma fecha indicada de inicio y de fin
    */
-    public static final org.semanticwb.platform.SemanticProperty genCal_periodicity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.resources/GenericCalendar#periodicity");
+    public static final org.semanticwb.platform.SemanticProperty genCal_periodicity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/GenericCalendar#periodicity");
    /**
    * Define la estructura de datos de los eventos a mostrar en el calendario.
    */
-    public static final org.semanticwb.platform.SemanticClass genCal_Event=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.resources/GenericCalendar#Event");
+    public static final org.semanticwb.platform.SemanticClass genCal_Event=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/GenericCalendar#Event");
    /**
    * The semantic class that represents the currentObject
    */
-    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.resources/GenericCalendar#Event");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/GenericCalendar#Event");
 
     public static class ClassMgr
     {

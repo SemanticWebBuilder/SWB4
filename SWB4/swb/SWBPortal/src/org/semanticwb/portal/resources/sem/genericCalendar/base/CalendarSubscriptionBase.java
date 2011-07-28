@@ -9,11 +9,11 @@ public abstract class CalendarSubscriptionBase extends org.semanticwb.model.SWBC
    /**
    * Recurso que presenta un calendario de eventos al que se pueden subscribir los usuarios del sistema en base al rol o grupo que tienen asignado.
    */
-    public static final org.semanticwb.platform.SemanticClass genCal_ResourceCalendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.resources/GenericCalendar#ResourceCalendar");
+    public static final org.semanticwb.platform.SemanticClass genCal_ResourceCalendar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/GenericCalendar#ResourceCalendar");
    /**
    * Almacena el calendario al que se subscribe un usuario
    */
-    public static final org.semanticwb.platform.SemanticProperty genCal_calendarSubscription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.resources/GenericCalendar#calendarSubscription");
+    public static final org.semanticwb.platform.SemanticProperty genCal_calendarSubscription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/GenericCalendar#calendarSubscription");
    /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
    */
@@ -21,15 +21,15 @@ public abstract class CalendarSubscriptionBase extends org.semanticwb.model.SWBC
    /**
    * Almacena el usuario subscrito a un Calendario
    */
-    public static final org.semanticwb.platform.SemanticProperty genCal_userCalendarSubscription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.resources/GenericCalendar#userCalendarSubscription");
+    public static final org.semanticwb.platform.SemanticProperty genCal_userCalendarSubscription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/GenericCalendar#userCalendarSubscription");
    /**
    * Almacena la Subscripción de un usuario a un calendario
    */
-    public static final org.semanticwb.platform.SemanticClass genCal_CalendarSubscription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.resources/GenericCalendar#CalendarSubscription");
+    public static final org.semanticwb.platform.SemanticClass genCal_CalendarSubscription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/GenericCalendar#CalendarSubscription");
    /**
    * The semantic class that represents the currentObject
    */
-    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.resources/GenericCalendar#CalendarSubscription");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/GenericCalendar#CalendarSubscription");
 
     public static class ClassMgr
     {
