@@ -79,49 +79,26 @@ public abstract class CallProcessBase extends org.semanticwb.process.model.CallA
             return (getCallProcess(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.process.model.CallProcess with a determined Container
-       * @param value Container of the type org.semanticwb.process.model.Containerable
+       * Gets all org.semanticwb.process.model.CallProcess with a determined CalledElement
+       * @param value CalledElement of the type org.semanticwb.process.model.Callable
        * @param model Model of the org.semanticwb.process.model.CallProcess
        * @return Iterator with all the org.semanticwb.process.model.CallProcess
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByContainer(org.semanticwb.process.model.Containerable value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByCalledElement(org.semanticwb.process.model.Callable value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_container, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_calledElement, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.CallProcess with a determined Container
-       * @param value Container of the type org.semanticwb.process.model.Containerable
+       * Gets all org.semanticwb.process.model.CallProcess with a determined CalledElement
+       * @param value CalledElement of the type org.semanticwb.process.model.Callable
        * @return Iterator with all the org.semanticwb.process.model.CallProcess
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByContainer(org.semanticwb.process.model.Containerable value)
+        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByCalledElement(org.semanticwb.process.model.Callable value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_container,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.CallProcess with a determined FlowObjectInstance
-       * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
-       * @param model Model of the org.semanticwb.process.model.CallProcess
-       * @return Iterator with all the org.semanticwb.process.model.CallProcess
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.CallProcess with a determined FlowObjectInstance
-       * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
-       * @return Iterator with all the org.semanticwb.process.model.CallProcess
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_calledElement,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -148,52 +125,6 @@ public abstract class CallProcessBase extends org.semanticwb.process.model.CallA
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.CallProcess with a determined OutputConnectionObject
-       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
-       * @param model Model of the org.semanticwb.process.model.CallProcess
-       * @return Iterator with all the org.semanticwb.process.model.CallProcess
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.CallProcess with a determined OutputConnectionObject
-       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
-       * @return Iterator with all the org.semanticwb.process.model.CallProcess
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.CallProcess with a determined CalledElement
-       * @param value CalledElement of the type org.semanticwb.process.model.Callable
-       * @param model Model of the org.semanticwb.process.model.CallProcess
-       * @return Iterator with all the org.semanticwb.process.model.CallProcess
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByCalledElement(org.semanticwb.process.model.Callable value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_calledElement, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.CallProcess with a determined CalledElement
-       * @param value CalledElement of the type org.semanticwb.process.model.Callable
-       * @return Iterator with all the org.semanticwb.process.model.CallProcess
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByCalledElement(org.semanticwb.process.model.Callable value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_calledElement,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.CallProcess with a determined InputConnectionObject
        * @param value InputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
        * @param model Model of the org.semanticwb.process.model.CallProcess
@@ -214,29 +145,6 @@ public abstract class CallProcessBase extends org.semanticwb.process.model.CallA
         public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByInputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasInputConnectionObjectInv,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.CallProcess with a determined ResourceAssignment
-       * @param value ResourceAssignment of the type org.semanticwb.process.model.ResourceAssignment
-       * @param model Model of the org.semanticwb.process.model.CallProcess
-       * @return Iterator with all the org.semanticwb.process.model.CallProcess
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByResourceAssignment(org.semanticwb.process.model.ResourceAssignment value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_resourceAssignment, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.CallProcess with a determined ResourceAssignment
-       * @param value ResourceAssignment of the type org.semanticwb.process.model.ResourceAssignment
-       * @return Iterator with all the org.semanticwb.process.model.CallProcess
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByResourceAssignment(org.semanticwb.process.model.ResourceAssignment value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_resourceAssignment,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -263,26 +171,26 @@ public abstract class CallProcessBase extends org.semanticwb.process.model.CallA
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.CallProcess with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
+       * Gets all org.semanticwb.process.model.CallProcess with a determined ResourceAssignment
+       * @param value ResourceAssignment of the type org.semanticwb.process.model.ResourceAssignment
        * @param model Model of the org.semanticwb.process.model.CallProcess
        * @return Iterator with all the org.semanticwb.process.model.CallProcess
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByResourceAssignment(org.semanticwb.process.model.ResourceAssignment value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_resourceAssignment, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.CallProcess with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
+       * Gets all org.semanticwb.process.model.CallProcess with a determined ResourceAssignment
+       * @param value ResourceAssignment of the type org.semanticwb.process.model.ResourceAssignment
        * @return Iterator with all the org.semanticwb.process.model.CallProcess
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByCreator(org.semanticwb.model.User value)
+        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByResourceAssignment(org.semanticwb.process.model.ResourceAssignment value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_resourceAssignment,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -306,6 +214,98 @@ public abstract class CallProcessBase extends org.semanticwb.process.model.CallA
         public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByParent(org.semanticwb.process.model.GraphicalElement value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_parent,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallProcess with a determined Container
+       * @param value Container of the type org.semanticwb.process.model.Containerable
+       * @param model Model of the org.semanticwb.process.model.CallProcess
+       * @return Iterator with all the org.semanticwb.process.model.CallProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByContainer(org.semanticwb.process.model.Containerable value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_container, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallProcess with a determined Container
+       * @param value Container of the type org.semanticwb.process.model.Containerable
+       * @return Iterator with all the org.semanticwb.process.model.CallProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByContainer(org.semanticwb.process.model.Containerable value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_container,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallProcess with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.process.model.CallProcess
+       * @return Iterator with all the org.semanticwb.process.model.CallProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallProcess with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.process.model.CallProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallProcess with a determined OutputConnectionObject
+       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
+       * @param model Model of the org.semanticwb.process.model.CallProcess
+       * @return Iterator with all the org.semanticwb.process.model.CallProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallProcess with a determined OutputConnectionObject
+       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
+       * @return Iterator with all the org.semanticwb.process.model.CallProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallProcess with a determined FlowObjectInstance
+       * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
+       * @param model Model of the org.semanticwb.process.model.CallProcess
+       * @return Iterator with all the org.semanticwb.process.model.CallProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallProcess with a determined FlowObjectInstance
+       * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
+       * @return Iterator with all the org.semanticwb.process.model.CallProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallProcess> listCallProcessByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv,value.getSemanticObject(),sclass));
             return it;
         }
     }

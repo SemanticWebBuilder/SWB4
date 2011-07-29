@@ -3,19 +3,19 @@ package org.semanticwb.process.model.base;
 
 public abstract class GraphicalElementBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
-    public static final org.semanticwb.platform.SemanticProperty swp_width=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#width");
-    public static final org.semanticwb.platform.SemanticClass swp_Containerable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Containerable");
-    public static final org.semanticwb.platform.SemanticProperty swp_container=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#container");
-    public static final org.semanticwb.platform.SemanticProperty swp_y=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#y");
-    public static final org.semanticwb.platform.SemanticProperty swp_x=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#x");
-    public static final org.semanticwb.platform.SemanticProperty swp_height=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#height");
     public static final org.semanticwb.platform.SemanticClass swp_ConnectionObject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ConnectionObject");
-    public static final org.semanticwb.platform.SemanticProperty swp_hasOutputConnectionObjectInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasOutputConnectionObjectInv");
     public static final org.semanticwb.platform.SemanticProperty swp_hasInputConnectionObjectInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasInputConnectionObjectInv");
-    public static final org.semanticwb.platform.SemanticProperty swp_labelSize=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#labelSize");
     public static final org.semanticwb.platform.SemanticClass swp_GraphicalElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#GraphicalElement");
     public static final org.semanticwb.platform.SemanticProperty swp_hasChildInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasChildInv");
+    public static final org.semanticwb.platform.SemanticProperty swp_height=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#height");
+    public static final org.semanticwb.platform.SemanticProperty swp_width=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#width");
     public static final org.semanticwb.platform.SemanticProperty swp_parent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#parent");
+    public static final org.semanticwb.platform.SemanticClass swp_Containerable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Containerable");
+    public static final org.semanticwb.platform.SemanticProperty swp_container=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#container");
+    public static final org.semanticwb.platform.SemanticProperty swp_hasOutputConnectionObjectInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasOutputConnectionObjectInv");
+    public static final org.semanticwb.platform.SemanticProperty swp_labelSize=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#labelSize");
+    public static final org.semanticwb.platform.SemanticProperty swp_y=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#y");
+    public static final org.semanticwb.platform.SemanticProperty swp_x=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#x");
    /**
    * The semantic class that represents the currentObject
    */
@@ -85,29 +85,6 @@ public abstract class GraphicalElementBase extends org.semanticwb.process.model.
             return (getGraphicalElement(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.process.model.GraphicalElement with a determined Container
-       * @param value Container of the type org.semanticwb.process.model.Containerable
-       * @param model Model of the org.semanticwb.process.model.GraphicalElement
-       * @return Iterator with all the org.semanticwb.process.model.GraphicalElement
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.GraphicalElement> listGraphicalElementByContainer(org.semanticwb.process.model.Containerable value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_container, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.GraphicalElement with a determined Container
-       * @param value Container of the type org.semanticwb.process.model.Containerable
-       * @return Iterator with all the org.semanticwb.process.model.GraphicalElement
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.GraphicalElement> listGraphicalElementByContainer(org.semanticwb.process.model.Containerable value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_container,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.GraphicalElement with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.GraphicalElement
@@ -128,29 +105,6 @@ public abstract class GraphicalElementBase extends org.semanticwb.process.model.
         public static java.util.Iterator<org.semanticwb.process.model.GraphicalElement> listGraphicalElementByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.GraphicalElement with a determined OutputConnectionObject
-       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
-       * @param model Model of the org.semanticwb.process.model.GraphicalElement
-       * @return Iterator with all the org.semanticwb.process.model.GraphicalElement
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.GraphicalElement> listGraphicalElementByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.GraphicalElement with a determined OutputConnectionObject
-       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
-       * @return Iterator with all the org.semanticwb.process.model.GraphicalElement
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.GraphicalElement> listGraphicalElementByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -200,6 +154,52 @@ public abstract class GraphicalElementBase extends org.semanticwb.process.model.
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.GraphicalElement with a determined Parent
+       * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
+       * @param model Model of the org.semanticwb.process.model.GraphicalElement
+       * @return Iterator with all the org.semanticwb.process.model.GraphicalElement
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.GraphicalElement> listGraphicalElementByParent(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_parent, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.GraphicalElement with a determined Parent
+       * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
+       * @return Iterator with all the org.semanticwb.process.model.GraphicalElement
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.GraphicalElement> listGraphicalElementByParent(org.semanticwb.process.model.GraphicalElement value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_parent,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.GraphicalElement with a determined Container
+       * @param value Container of the type org.semanticwb.process.model.Containerable
+       * @param model Model of the org.semanticwb.process.model.GraphicalElement
+       * @return Iterator with all the org.semanticwb.process.model.GraphicalElement
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.GraphicalElement> listGraphicalElementByContainer(org.semanticwb.process.model.Containerable value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_container, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.GraphicalElement with a determined Container
+       * @param value Container of the type org.semanticwb.process.model.Containerable
+       * @return Iterator with all the org.semanticwb.process.model.GraphicalElement
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.GraphicalElement> listGraphicalElementByContainer(org.semanticwb.process.model.Containerable value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_container,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.GraphicalElement with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.GraphicalElement
@@ -223,26 +223,26 @@ public abstract class GraphicalElementBase extends org.semanticwb.process.model.
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.GraphicalElement with a determined Parent
-       * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
+       * Gets all org.semanticwb.process.model.GraphicalElement with a determined OutputConnectionObject
+       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
        * @param model Model of the org.semanticwb.process.model.GraphicalElement
        * @return Iterator with all the org.semanticwb.process.model.GraphicalElement
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.GraphicalElement> listGraphicalElementByParent(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.GraphicalElement> listGraphicalElementByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_parent, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.GraphicalElement with a determined Parent
-       * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
+       * Gets all org.semanticwb.process.model.GraphicalElement with a determined OutputConnectionObject
+       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
        * @return Iterator with all the org.semanticwb.process.model.GraphicalElement
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.GraphicalElement> listGraphicalElementByParent(org.semanticwb.process.model.GraphicalElement value)
+        public static java.util.Iterator<org.semanticwb.process.model.GraphicalElement> listGraphicalElementByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_parent,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -254,155 +254,6 @@ public abstract class GraphicalElementBase extends org.semanticwb.process.model.
     public GraphicalElementBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-/**
-* Gets the Width property
-* @return int with the Width
-*/
-    public int getWidth()
-    {
-        return getSemanticObject().getIntProperty(swp_width);
-    }
-
-/**
-* Sets the Width property
-* @param value long with the Width
-*/
-    public void setWidth(int value)
-    {
-        getSemanticObject().setIntProperty(swp_width, value);
-    }
-   /**
-   * Sets the value for the property Container
-   * @param value Container to set
-   */
-
-    public void setContainer(org.semanticwb.process.model.Containerable value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swp_container, value.getSemanticObject());
-        }else
-        {
-            removeContainer();
-        }
-    }
-   /**
-   * Remove the value for Container property
-   */
-
-    public void removeContainer()
-    {
-        getSemanticObject().removeProperty(swp_container);
-    }
-
-   /**
-   * Gets the Container
-   * @return a org.semanticwb.process.model.Containerable
-   */
-    public org.semanticwb.process.model.Containerable getContainer()
-    {
-         org.semanticwb.process.model.Containerable ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_container);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.process.model.Containerable)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-/**
-* Gets the Y property
-* @return int with the Y
-*/
-    public int getY()
-    {
-        return getSemanticObject().getIntProperty(swp_y);
-    }
-
-/**
-* Sets the Y property
-* @param value long with the Y
-*/
-    public void setY(int value)
-    {
-        getSemanticObject().setIntProperty(swp_y, value);
-    }
-
-/**
-* Gets the X property
-* @return int with the X
-*/
-    public int getX()
-    {
-        return getSemanticObject().getIntProperty(swp_x);
-    }
-
-/**
-* Sets the X property
-* @param value long with the X
-*/
-    public void setX(int value)
-    {
-        getSemanticObject().setIntProperty(swp_x, value);
-    }
-
-/**
-* Gets the Height property
-* @return int with the Height
-*/
-    public int getHeight()
-    {
-        return getSemanticObject().getIntProperty(swp_height);
-    }
-
-/**
-* Sets the Height property
-* @param value long with the Height
-*/
-    public void setHeight(int value)
-    {
-        getSemanticObject().setIntProperty(swp_height, value);
-    }
-   /**
-   * Gets all the org.semanticwb.process.model.ConnectionObject
-   * @return A GenericIterator with all the org.semanticwb.process.model.ConnectionObject
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject> listOutputConnectionObjects()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject>(getSemanticObject().listObjectProperties(swp_hasOutputConnectionObjectInv));
-    }
-
-   /**
-   * Gets true if has a OutputConnectionObject
-   * @param value org.semanticwb.process.model.ConnectionObject to verify
-   * @return true if the org.semanticwb.process.model.ConnectionObject exists, false otherwise
-   */
-    public boolean hasOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(swp_hasOutputConnectionObjectInv,value.getSemanticObject());
-        }
-        return ret;
-    }
-
-   /**
-   * Gets the OutputConnectionObject
-   * @return a org.semanticwb.process.model.ConnectionObject
-   */
-    public org.semanticwb.process.model.ConnectionObject getOutputConnectionObject()
-    {
-         org.semanticwb.process.model.ConnectionObject ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasOutputConnectionObjectInv);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.process.model.ConnectionObject)obj.createGenericInstance();
-         }
-         return ret;
     }
    /**
    * Gets all the org.semanticwb.process.model.ConnectionObject
@@ -443,24 +294,6 @@ public abstract class GraphicalElementBase extends org.semanticwb.process.model.
          }
          return ret;
     }
-
-/**
-* Gets the LabelSize property
-* @return int with the LabelSize
-*/
-    public int getLabelSize()
-    {
-        return getSemanticObject().getIntProperty(swp_labelSize);
-    }
-
-/**
-* Sets the LabelSize property
-* @param value long with the LabelSize
-*/
-    public void setLabelSize(int value)
-    {
-        getSemanticObject().setIntProperty(swp_labelSize, value);
-    }
    /**
    * Gets all the org.semanticwb.process.model.GraphicalElement
    * @return A GenericIterator with all the org.semanticwb.process.model.GraphicalElement
@@ -500,6 +333,42 @@ public abstract class GraphicalElementBase extends org.semanticwb.process.model.
          }
          return ret;
     }
+
+/**
+* Gets the Height property
+* @return int with the Height
+*/
+    public int getHeight()
+    {
+        return getSemanticObject().getIntProperty(swp_height);
+    }
+
+/**
+* Sets the Height property
+* @param value long with the Height
+*/
+    public void setHeight(int value)
+    {
+        getSemanticObject().setIntProperty(swp_height, value);
+    }
+
+/**
+* Gets the Width property
+* @return int with the Width
+*/
+    public int getWidth()
+    {
+        return getSemanticObject().getIntProperty(swp_width);
+    }
+
+/**
+* Sets the Width property
+* @param value long with the Width
+*/
+    public void setWidth(int value)
+    {
+        getSemanticObject().setIntProperty(swp_width, value);
+    }
    /**
    * Sets the value for the property Parent
    * @param value Parent to set
@@ -537,6 +406,137 @@ public abstract class GraphicalElementBase extends org.semanticwb.process.model.
              ret=(org.semanticwb.process.model.GraphicalElement)obj.createGenericInstance();
          }
          return ret;
+    }
+   /**
+   * Sets the value for the property Container
+   * @param value Container to set
+   */
+
+    public void setContainer(org.semanticwb.process.model.Containerable value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_container, value.getSemanticObject());
+        }else
+        {
+            removeContainer();
+        }
+    }
+   /**
+   * Remove the value for Container property
+   */
+
+    public void removeContainer()
+    {
+        getSemanticObject().removeProperty(swp_container);
+    }
+
+   /**
+   * Gets the Container
+   * @return a org.semanticwb.process.model.Containerable
+   */
+    public org.semanticwb.process.model.Containerable getContainer()
+    {
+         org.semanticwb.process.model.Containerable ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_container);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.Containerable)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Gets all the org.semanticwb.process.model.ConnectionObject
+   * @return A GenericIterator with all the org.semanticwb.process.model.ConnectionObject
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject> listOutputConnectionObjects()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject>(getSemanticObject().listObjectProperties(swp_hasOutputConnectionObjectInv));
+    }
+
+   /**
+   * Gets true if has a OutputConnectionObject
+   * @param value org.semanticwb.process.model.ConnectionObject to verify
+   * @return true if the org.semanticwb.process.model.ConnectionObject exists, false otherwise
+   */
+    public boolean hasOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swp_hasOutputConnectionObjectInv,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets the OutputConnectionObject
+   * @return a org.semanticwb.process.model.ConnectionObject
+   */
+    public org.semanticwb.process.model.ConnectionObject getOutputConnectionObject()
+    {
+         org.semanticwb.process.model.ConnectionObject ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasOutputConnectionObjectInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.ConnectionObject)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
+* Gets the LabelSize property
+* @return int with the LabelSize
+*/
+    public int getLabelSize()
+    {
+        return getSemanticObject().getIntProperty(swp_labelSize);
+    }
+
+/**
+* Sets the LabelSize property
+* @param value long with the LabelSize
+*/
+    public void setLabelSize(int value)
+    {
+        getSemanticObject().setIntProperty(swp_labelSize, value);
+    }
+
+/**
+* Gets the Y property
+* @return int with the Y
+*/
+    public int getY()
+    {
+        return getSemanticObject().getIntProperty(swp_y);
+    }
+
+/**
+* Sets the Y property
+* @param value long with the Y
+*/
+    public void setY(int value)
+    {
+        getSemanticObject().setIntProperty(swp_y, value);
+    }
+
+/**
+* Gets the X property
+* @return int with the X
+*/
+    public int getX()
+    {
+        return getSemanticObject().getIntProperty(swp_x);
+    }
+
+/**
+* Sets the X property
+* @param value long with the X
+*/
+    public void setX(int value)
+    {
+        getSemanticObject().setIntProperty(swp_x, value);
     }
 
    /**

@@ -110,29 +110,6 @@ public abstract class ProcessGroupBase extends org.semanticwb.process.model.Proc
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.ProcessGroup with a determined Process
-       * @param value Process of the type org.semanticwb.process.model.Process
-       * @param model Model of the org.semanticwb.process.model.ProcessGroup
-       * @return Iterator with all the org.semanticwb.process.model.ProcessGroup
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.ProcessGroup> listProcessGroupByProcess(org.semanticwb.process.model.Process value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessGroup> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasProcessInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.ProcessGroup with a determined Process
-       * @param value Process of the type org.semanticwb.process.model.Process
-       * @return Iterator with all the org.semanticwb.process.model.ProcessGroup
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.ProcessGroup> listProcessGroupByProcess(org.semanticwb.process.model.Process value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessGroup> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasProcessInv,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.ProcessGroup with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.ProcessGroup
@@ -153,6 +130,29 @@ public abstract class ProcessGroupBase extends org.semanticwb.process.model.Proc
         public static java.util.Iterator<org.semanticwb.process.model.ProcessGroup> listProcessGroupByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessGroup> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessGroup with a determined Process
+       * @param value Process of the type org.semanticwb.process.model.Process
+       * @param model Model of the org.semanticwb.process.model.ProcessGroup
+       * @return Iterator with all the org.semanticwb.process.model.ProcessGroup
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessGroup> listProcessGroupByProcess(org.semanticwb.process.model.Process value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessGroup> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasProcessInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessGroup with a determined Process
+       * @param value Process of the type org.semanticwb.process.model.Process
+       * @return Iterator with all the org.semanticwb.process.model.ProcessGroup
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessGroup> listProcessGroupByProcess(org.semanticwb.process.model.Process value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessGroup> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasProcessInv,value.getSemanticObject(),sclass));
             return it;
         }
     }

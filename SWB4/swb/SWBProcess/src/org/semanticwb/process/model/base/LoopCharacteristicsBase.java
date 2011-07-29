@@ -132,44 +132,6 @@ public abstract class LoopCharacteristicsBase extends org.semanticwb.model.base.
     {
         super(base);
     }
-
-/**
-* Gets the Valid property
-* @return boolean with the Valid
-*/
-    public boolean isValid()
-    {
-        //Override this method in LoopCharacteristics object
-        return getSemanticObject().getBooleanProperty(swb_valid,false);
-    }
-
-/**
-* Sets the Valid property
-* @param value long with the Valid
-*/
-    public void setValid(boolean value)
-    {
-        //Override this method in LoopCharacteristics object
-        getSemanticObject().setBooleanProperty(swb_valid, value,false);
-    }
-
-/**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
-    }
    /**
    * Sets the value for the property ModifiedBy
    * @param value ModifiedBy to set
@@ -225,6 +187,44 @@ public abstract class LoopCharacteristicsBase extends org.semanticwb.model.base.
     public void setUpdated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_updated, value);
+    }
+
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+/**
+* Gets the Valid property
+* @return boolean with the Valid
+*/
+    public boolean isValid()
+    {
+        //Override this method in LoopCharacteristics object
+        return getSemanticObject().getBooleanProperty(swb_valid,false);
+    }
+
+/**
+* Sets the Valid property
+* @param value long with the Valid
+*/
+    public void setValid(boolean value)
+    {
+        //Override this method in LoopCharacteristics object
+        getSemanticObject().setBooleanProperty(swb_valid, value,false);
     }
    /**
    * Sets the value for the property Creator

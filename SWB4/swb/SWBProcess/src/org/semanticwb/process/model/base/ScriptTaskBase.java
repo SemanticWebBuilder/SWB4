@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ScriptTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.process.model.Callable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ActivityConfable
+public abstract class ScriptTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.process.model.Callable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty swp_scriptCode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#scriptCode");
     public static final org.semanticwb.platform.SemanticClass swp_ScriptTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ScriptTask");
@@ -80,52 +80,6 @@ public abstract class ScriptTaskBase extends org.semanticwb.process.model.Task i
             return (getScriptTask(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.process.model.ScriptTask with a determined Container
-       * @param value Container of the type org.semanticwb.process.model.Containerable
-       * @param model Model of the org.semanticwb.process.model.ScriptTask
-       * @return Iterator with all the org.semanticwb.process.model.ScriptTask
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByContainer(org.semanticwb.process.model.Containerable value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_container, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.ScriptTask with a determined Container
-       * @param value Container of the type org.semanticwb.process.model.Containerable
-       * @return Iterator with all the org.semanticwb.process.model.ScriptTask
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByContainer(org.semanticwb.process.model.Containerable value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_container,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.ScriptTask with a determined FlowObjectInstance
-       * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
-       * @param model Model of the org.semanticwb.process.model.ScriptTask
-       * @return Iterator with all the org.semanticwb.process.model.ScriptTask
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.ScriptTask with a determined FlowObjectInstance
-       * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
-       * @return Iterator with all the org.semanticwb.process.model.ScriptTask
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.ScriptTask with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.ScriptTask
@@ -146,29 +100,6 @@ public abstract class ScriptTaskBase extends org.semanticwb.process.model.Task i
         public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.ScriptTask with a determined OutputConnectionObject
-       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
-       * @param model Model of the org.semanticwb.process.model.ScriptTask
-       * @return Iterator with all the org.semanticwb.process.model.ScriptTask
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.ScriptTask with a determined OutputConnectionObject
-       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
-       * @return Iterator with all the org.semanticwb.process.model.ScriptTask
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -195,26 +126,26 @@ public abstract class ScriptTaskBase extends org.semanticwb.process.model.Task i
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.ScriptTask with a determined LoopCharacteristics
-       * @param value LoopCharacteristics of the type org.semanticwb.process.model.LoopCharacteristics
+       * Gets all org.semanticwb.process.model.ScriptTask with a determined Child
+       * @param value Child of the type org.semanticwb.process.model.GraphicalElement
        * @param model Model of the org.semanticwb.process.model.ScriptTask
        * @return Iterator with all the org.semanticwb.process.model.ScriptTask
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByLoopCharacteristics(org.semanticwb.process.model.LoopCharacteristics value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByChild(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_loopCharacteristics, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasChildInv, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.ScriptTask with a determined LoopCharacteristics
-       * @param value LoopCharacteristics of the type org.semanticwb.process.model.LoopCharacteristics
+       * Gets all org.semanticwb.process.model.ScriptTask with a determined Child
+       * @param value Child of the type org.semanticwb.process.model.GraphicalElement
        * @return Iterator with all the org.semanticwb.process.model.ScriptTask
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByLoopCharacteristics(org.semanticwb.process.model.LoopCharacteristics value)
+        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByChild(org.semanticwb.process.model.GraphicalElement value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_loopCharacteristics,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasChildInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -241,26 +172,49 @@ public abstract class ScriptTaskBase extends org.semanticwb.process.model.Task i
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.ScriptTask with a determined Child
-       * @param value Child of the type org.semanticwb.process.model.GraphicalElement
+       * Gets all org.semanticwb.process.model.ScriptTask with a determined Parent
+       * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
        * @param model Model of the org.semanticwb.process.model.ScriptTask
        * @return Iterator with all the org.semanticwb.process.model.ScriptTask
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByChild(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByParent(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasChildInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_parent, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.ScriptTask with a determined Child
-       * @param value Child of the type org.semanticwb.process.model.GraphicalElement
+       * Gets all org.semanticwb.process.model.ScriptTask with a determined Parent
+       * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
        * @return Iterator with all the org.semanticwb.process.model.ScriptTask
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByChild(org.semanticwb.process.model.GraphicalElement value)
+        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByParent(org.semanticwb.process.model.GraphicalElement value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasChildInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_parent,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ScriptTask with a determined Container
+       * @param value Container of the type org.semanticwb.process.model.Containerable
+       * @param model Model of the org.semanticwb.process.model.ScriptTask
+       * @return Iterator with all the org.semanticwb.process.model.ScriptTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByContainer(org.semanticwb.process.model.Containerable value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_container, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ScriptTask with a determined Container
+       * @param value Container of the type org.semanticwb.process.model.Containerable
+       * @return Iterator with all the org.semanticwb.process.model.ScriptTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByContainer(org.semanticwb.process.model.Containerable value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_container,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -287,26 +241,72 @@ public abstract class ScriptTaskBase extends org.semanticwb.process.model.Task i
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.ScriptTask with a determined Parent
-       * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
+       * Gets all org.semanticwb.process.model.ScriptTask with a determined OutputConnectionObject
+       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
        * @param model Model of the org.semanticwb.process.model.ScriptTask
        * @return Iterator with all the org.semanticwb.process.model.ScriptTask
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByParent(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_parent, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.ScriptTask with a determined Parent
-       * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
+       * Gets all org.semanticwb.process.model.ScriptTask with a determined OutputConnectionObject
+       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
        * @return Iterator with all the org.semanticwb.process.model.ScriptTask
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByParent(org.semanticwb.process.model.GraphicalElement value)
+        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_parent,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ScriptTask with a determined FlowObjectInstance
+       * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
+       * @param model Model of the org.semanticwb.process.model.ScriptTask
+       * @return Iterator with all the org.semanticwb.process.model.ScriptTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ScriptTask with a determined FlowObjectInstance
+       * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
+       * @return Iterator with all the org.semanticwb.process.model.ScriptTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ScriptTask with a determined LoopCharacteristics
+       * @param value LoopCharacteristics of the type org.semanticwb.process.model.LoopCharacteristics
+       * @param model Model of the org.semanticwb.process.model.ScriptTask
+       * @return Iterator with all the org.semanticwb.process.model.ScriptTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByLoopCharacteristics(org.semanticwb.process.model.LoopCharacteristics value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_loopCharacteristics, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ScriptTask with a determined LoopCharacteristics
+       * @param value LoopCharacteristics of the type org.semanticwb.process.model.LoopCharacteristics
+       * @return Iterator with all the org.semanticwb.process.model.ScriptTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByLoopCharacteristics(org.semanticwb.process.model.LoopCharacteristics value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_loopCharacteristics,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -318,24 +318,6 @@ public abstract class ScriptTaskBase extends org.semanticwb.process.model.Task i
     public ScriptTaskBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-/**
-* Gets the ScriptCode property
-* @return String with the ScriptCode
-*/
-    public String getScriptCode()
-    {
-        return getSemanticObject().getProperty(swp_scriptCode);
-    }
-
-/**
-* Sets the ScriptCode property
-* @param value long with the ScriptCode
-*/
-    public void setScriptCode(String value)
-    {
-        getSemanticObject().setProperty(swp_scriptCode, value);
     }
 
 /**
@@ -354,6 +336,24 @@ public abstract class ScriptTaskBase extends org.semanticwb.process.model.Task i
     public void setCallable(boolean value)
     {
         getSemanticObject().setBooleanProperty(swp_callable, value);
+    }
+
+/**
+* Gets the ScriptCode property
+* @return String with the ScriptCode
+*/
+    public String getScriptCode()
+    {
+        return getSemanticObject().getProperty(swp_scriptCode);
+    }
+
+/**
+* Sets the ScriptCode property
+* @param value long with the ScriptCode
+*/
+    public void setScriptCode(String value)
+    {
+        getSemanticObject().setProperty(swp_scriptCode, value);
     }
 
    /**

@@ -73,52 +73,6 @@ public abstract class EventBasedGatewayBase extends org.semanticwb.process.model
             return (getEventBasedGateway(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.process.model.EventBasedGateway with a determined Container
-       * @param value Container of the type org.semanticwb.process.model.Containerable
-       * @param model Model of the org.semanticwb.process.model.EventBasedGateway
-       * @return Iterator with all the org.semanticwb.process.model.EventBasedGateway
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.EventBasedGateway> listEventBasedGatewayByContainer(org.semanticwb.process.model.Containerable value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.EventBasedGateway> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_container, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.EventBasedGateway with a determined Container
-       * @param value Container of the type org.semanticwb.process.model.Containerable
-       * @return Iterator with all the org.semanticwb.process.model.EventBasedGateway
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.EventBasedGateway> listEventBasedGatewayByContainer(org.semanticwb.process.model.Containerable value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.EventBasedGateway> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_container,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.EventBasedGateway with a determined FlowObjectInstance
-       * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
-       * @param model Model of the org.semanticwb.process.model.EventBasedGateway
-       * @return Iterator with all the org.semanticwb.process.model.EventBasedGateway
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.EventBasedGateway> listEventBasedGatewayByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.EventBasedGateway> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.EventBasedGateway with a determined FlowObjectInstance
-       * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
-       * @return Iterator with all the org.semanticwb.process.model.EventBasedGateway
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.EventBasedGateway> listEventBasedGatewayByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.EventBasedGateway> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.EventBasedGateway with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.EventBasedGateway
@@ -139,29 +93,6 @@ public abstract class EventBasedGatewayBase extends org.semanticwb.process.model
         public static java.util.Iterator<org.semanticwb.process.model.EventBasedGateway> listEventBasedGatewayByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.EventBasedGateway> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.EventBasedGateway with a determined OutputConnectionObject
-       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
-       * @param model Model of the org.semanticwb.process.model.EventBasedGateway
-       * @return Iterator with all the org.semanticwb.process.model.EventBasedGateway
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.EventBasedGateway> listEventBasedGatewayByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.EventBasedGateway> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.EventBasedGateway with a determined OutputConnectionObject
-       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
-       * @return Iterator with all the org.semanticwb.process.model.EventBasedGateway
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.EventBasedGateway> listEventBasedGatewayByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.EventBasedGateway> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -211,6 +142,52 @@ public abstract class EventBasedGatewayBase extends org.semanticwb.process.model
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.EventBasedGateway with a determined Parent
+       * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
+       * @param model Model of the org.semanticwb.process.model.EventBasedGateway
+       * @return Iterator with all the org.semanticwb.process.model.EventBasedGateway
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.EventBasedGateway> listEventBasedGatewayByParent(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.EventBasedGateway> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_parent, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.EventBasedGateway with a determined Parent
+       * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
+       * @return Iterator with all the org.semanticwb.process.model.EventBasedGateway
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.EventBasedGateway> listEventBasedGatewayByParent(org.semanticwb.process.model.GraphicalElement value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.EventBasedGateway> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_parent,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.EventBasedGateway with a determined Container
+       * @param value Container of the type org.semanticwb.process.model.Containerable
+       * @param model Model of the org.semanticwb.process.model.EventBasedGateway
+       * @return Iterator with all the org.semanticwb.process.model.EventBasedGateway
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.EventBasedGateway> listEventBasedGatewayByContainer(org.semanticwb.process.model.Containerable value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.EventBasedGateway> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_container, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.EventBasedGateway with a determined Container
+       * @param value Container of the type org.semanticwb.process.model.Containerable
+       * @return Iterator with all the org.semanticwb.process.model.EventBasedGateway
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.EventBasedGateway> listEventBasedGatewayByContainer(org.semanticwb.process.model.Containerable value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.EventBasedGateway> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_container,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.EventBasedGateway with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.EventBasedGateway
@@ -234,26 +211,49 @@ public abstract class EventBasedGatewayBase extends org.semanticwb.process.model
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.EventBasedGateway with a determined Parent
-       * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
+       * Gets all org.semanticwb.process.model.EventBasedGateway with a determined OutputConnectionObject
+       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
        * @param model Model of the org.semanticwb.process.model.EventBasedGateway
        * @return Iterator with all the org.semanticwb.process.model.EventBasedGateway
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.EventBasedGateway> listEventBasedGatewayByParent(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.EventBasedGateway> listEventBasedGatewayByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.EventBasedGateway> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_parent, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.EventBasedGateway> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.EventBasedGateway with a determined Parent
-       * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
+       * Gets all org.semanticwb.process.model.EventBasedGateway with a determined OutputConnectionObject
+       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
        * @return Iterator with all the org.semanticwb.process.model.EventBasedGateway
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.EventBasedGateway> listEventBasedGatewayByParent(org.semanticwb.process.model.GraphicalElement value)
+        public static java.util.Iterator<org.semanticwb.process.model.EventBasedGateway> listEventBasedGatewayByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.EventBasedGateway> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_parent,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.EventBasedGateway> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.EventBasedGateway with a determined FlowObjectInstance
+       * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
+       * @param model Model of the org.semanticwb.process.model.EventBasedGateway
+       * @return Iterator with all the org.semanticwb.process.model.EventBasedGateway
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.EventBasedGateway> listEventBasedGatewayByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.EventBasedGateway> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.EventBasedGateway with a determined FlowObjectInstance
+       * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
+       * @return Iterator with all the org.semanticwb.process.model.EventBasedGateway
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.EventBasedGateway> listEventBasedGatewayByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.EventBasedGateway> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv,value.getSemanticObject(),sclass));
             return it;
         }
     }

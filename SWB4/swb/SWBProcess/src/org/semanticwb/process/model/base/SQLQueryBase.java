@@ -3,9 +3,9 @@ package org.semanticwb.process.model.base;
 
 public abstract class SQLQueryBase extends org.semanticwb.process.model.ProcessService 
 {
+    public static final org.semanticwb.platform.SemanticProperty swp_sqlQuery=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#sqlQuery");
     public static final org.semanticwb.platform.SemanticClass swp_DBConnection=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#DBConnection");
     public static final org.semanticwb.platform.SemanticProperty swp_dbConnection=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#dbConnection");
-    public static final org.semanticwb.platform.SemanticProperty swp_sqlQuery=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#sqlQuery");
     public static final org.semanticwb.platform.SemanticProperty swp_sqlCode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#sqlCode");
     public static final org.semanticwb.platform.SemanticClass swp_SQLQuery=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#SQLQuery");
    /**
@@ -115,6 +115,24 @@ public abstract class SQLQueryBase extends org.semanticwb.process.model.ProcessS
     {
         super(base);
     }
+
+/**
+* Gets the Query property
+* @return String with the Query
+*/
+    public String getQuery()
+    {
+        return getSemanticObject().getProperty(swp_sqlQuery);
+    }
+
+/**
+* Sets the Query property
+* @param value long with the Query
+*/
+    public void setQuery(String value)
+    {
+        getSemanticObject().setProperty(swp_sqlQuery, value);
+    }
    /**
    * Sets the value for the property DbConnection
    * @param value DbConnection to set
@@ -152,24 +170,6 @@ public abstract class SQLQueryBase extends org.semanticwb.process.model.ProcessS
              ret=(org.semanticwb.process.model.DBConnection)obj.createGenericInstance();
          }
          return ret;
-    }
-
-/**
-* Gets the Query property
-* @return String with the Query
-*/
-    public String getQuery()
-    {
-        return getSemanticObject().getProperty(swp_sqlQuery);
-    }
-
-/**
-* Sets the Query property
-* @param value long with the Query
-*/
-    public void setQuery(String value)
-    {
-        getSemanticObject().setProperty(swp_sqlQuery, value);
     }
 
 /**

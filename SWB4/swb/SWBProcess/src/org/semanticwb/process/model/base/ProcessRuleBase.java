@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessRuleBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.XMLable,org.semanticwb.model.FilterableClass
+public abstract class ProcessRuleBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.XMLable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass
 {
     public static final org.semanticwb.platform.SemanticProperty swp_ruleCondition=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#ruleCondition");
     public static final org.semanticwb.platform.SemanticClass swp_ProcessRuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessRuleRef");
@@ -110,6 +110,29 @@ public abstract class ProcessRuleBase extends org.semanticwb.process.model.Proce
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.ProcessRule with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.process.model.ProcessRule
+       * @return Iterator with all the org.semanticwb.process.model.ProcessRule
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessRule> listProcessRuleByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessRule> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessRule with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.process.model.ProcessRule
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessRule> listProcessRuleByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessRule> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.ProcessRule with a determined ProcessRuleRefInv
        * @param value ProcessRuleRefInv of the type org.semanticwb.process.model.ProcessRuleRef
        * @param model Model of the org.semanticwb.process.model.ProcessRule
@@ -155,29 +178,6 @@ public abstract class ProcessRuleBase extends org.semanticwb.process.model.Proce
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessRule> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_processRuleGroup,value.getSemanticObject(),sclass));
             return it;
         }
-       /**
-       * Gets all org.semanticwb.process.model.ProcessRule with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.process.model.ProcessRule
-       * @return Iterator with all the org.semanticwb.process.model.ProcessRule
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.ProcessRule> listProcessRuleByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessRule> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.ProcessRule with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.process.model.ProcessRule
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.ProcessRule> listProcessRuleByCreator(org.semanticwb.model.User value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessRule> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
-            return it;
-        }
     }
 
    /**
@@ -187,24 +187,6 @@ public abstract class ProcessRuleBase extends org.semanticwb.process.model.Proce
     public ProcessRuleBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-/**
-* Gets the RuleCondition property
-* @return String with the RuleCondition
-*/
-    public String getRuleCondition()
-    {
-        return getSemanticObject().getProperty(swp_ruleCondition);
-    }
-
-/**
-* Sets the RuleCondition property
-* @param value long with the RuleCondition
-*/
-    public void setRuleCondition(String value)
-    {
-        getSemanticObject().setProperty(swp_ruleCondition, value);
     }
 
 /**
@@ -223,6 +205,24 @@ public abstract class ProcessRuleBase extends org.semanticwb.process.model.Proce
     public void setXml(String value)
     {
         getSemanticObject().setProperty(swb_xml, value);
+    }
+
+/**
+* Gets the RuleCondition property
+* @return String with the RuleCondition
+*/
+    public String getRuleCondition()
+    {
+        return getSemanticObject().getProperty(swp_ruleCondition);
+    }
+
+/**
+* Sets the RuleCondition property
+* @param value long with the RuleCondition
+*/
+    public void setRuleCondition(String value)
+    {
+        getSemanticObject().setProperty(swp_ruleCondition, value);
     }
    /**
    * Gets all the org.semanticwb.process.model.ProcessRuleRef

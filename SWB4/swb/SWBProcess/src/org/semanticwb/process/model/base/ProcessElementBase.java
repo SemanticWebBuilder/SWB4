@@ -128,24 +128,6 @@ public abstract class ProcessElementBase extends org.semanticwb.model.SWBClass i
     {
         super(base);
     }
-
-/**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
-    }
    /**
    * Sets the value for the property ModifiedBy
    * @param value ModifiedBy to set
@@ -186,39 +168,6 @@ public abstract class ProcessElementBase extends org.semanticwb.model.SWBClass i
     }
 
 /**
-* Gets the Title property
-* @return String with the Title
-*/
-    public String getTitle()
-    {
-        return getSemanticObject().getProperty(swb_title);
-    }
-
-/**
-* Sets the Title property
-* @param value long with the Title
-*/
-    public void setTitle(String value)
-    {
-        getSemanticObject().setProperty(swb_title, value);
-    }
-
-    public String getTitle(String lang)
-    {
-        return getSemanticObject().getProperty(swb_title, null, lang);
-    }
-
-    public String getDisplayTitle(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_title, lang);
-    }
-
-    public void setTitle(String title, String lang)
-    {
-        getSemanticObject().setProperty(swb_title, title, lang);
-    }
-
-/**
 * Gets the Updated property
 * @return java.util.Date with the Updated
 */
@@ -234,6 +183,57 @@ public abstract class ProcessElementBase extends org.semanticwb.model.SWBClass i
     public void setUpdated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_updated, value);
+    }
+
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+/**
+* Gets the Description property
+* @return String with the Description
+*/
+    public String getDescription()
+    {
+        return getSemanticObject().getProperty(swb_description);
+    }
+
+/**
+* Sets the Description property
+* @param value long with the Description
+*/
+    public void setDescription(String value)
+    {
+        getSemanticObject().setProperty(swb_description, value);
+    }
+
+    public String getDescription(String lang)
+    {
+        return getSemanticObject().getProperty(swb_description, null, lang);
+    }
+
+    public String getDisplayDescription(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_description, lang);
+    }
+
+    public void setDescription(String description, String lang)
+    {
+        getSemanticObject().setProperty(swb_description, description, lang);
     }
    /**
    * Sets the value for the property Creator
@@ -275,35 +275,35 @@ public abstract class ProcessElementBase extends org.semanticwb.model.SWBClass i
     }
 
 /**
-* Gets the Description property
-* @return String with the Description
+* Gets the Title property
+* @return String with the Title
 */
-    public String getDescription()
+    public String getTitle()
     {
-        return getSemanticObject().getProperty(swb_description);
+        return getSemanticObject().getProperty(swb_title);
     }
 
 /**
-* Sets the Description property
-* @param value long with the Description
+* Sets the Title property
+* @param value long with the Title
 */
-    public void setDescription(String value)
+    public void setTitle(String value)
     {
-        getSemanticObject().setProperty(swb_description, value);
+        getSemanticObject().setProperty(swb_title, value);
     }
 
-    public String getDescription(String lang)
+    public String getTitle(String lang)
     {
-        return getSemanticObject().getProperty(swb_description, null, lang);
+        return getSemanticObject().getProperty(swb_title, null, lang);
     }
 
-    public String getDisplayDescription(String lang)
+    public String getDisplayTitle(String lang)
     {
-        return getSemanticObject().getLocaleProperty(swb_description, lang);
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
     }
 
-    public void setDescription(String description, String lang)
+    public void setTitle(String title, String lang)
     {
-        getSemanticObject().setProperty(swb_description, description, lang);
+        getSemanticObject().setProperty(swb_title, title, lang);
     }
 }

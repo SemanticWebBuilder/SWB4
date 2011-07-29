@@ -80,29 +80,6 @@ public abstract class DirectionalAssociationBase extends org.semanticwb.process.
             return (getDirectionalAssociation(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.process.model.DirectionalAssociation with a determined Source
-       * @param value Source of the type org.semanticwb.process.model.GraphicalElement
-       * @param model Model of the org.semanticwb.process.model.DirectionalAssociation
-       * @return Iterator with all the org.semanticwb.process.model.DirectionalAssociation
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.DirectionalAssociation> listDirectionalAssociationBySource(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DirectionalAssociation> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_source, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.DirectionalAssociation with a determined Source
-       * @param value Source of the type org.semanticwb.process.model.GraphicalElement
-       * @return Iterator with all the org.semanticwb.process.model.DirectionalAssociation
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.DirectionalAssociation> listDirectionalAssociationBySource(org.semanticwb.process.model.GraphicalElement value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DirectionalAssociation> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_source,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.DirectionalAssociation with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.DirectionalAssociation
@@ -126,29 +103,6 @@ public abstract class DirectionalAssociationBase extends org.semanticwb.process.
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.DirectionalAssociation with a determined Target
-       * @param value Target of the type org.semanticwb.process.model.GraphicalElement
-       * @param model Model of the org.semanticwb.process.model.DirectionalAssociation
-       * @return Iterator with all the org.semanticwb.process.model.DirectionalAssociation
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.DirectionalAssociation> listDirectionalAssociationByTarget(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DirectionalAssociation> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_target, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.DirectionalAssociation with a determined Target
-       * @param value Target of the type org.semanticwb.process.model.GraphicalElement
-       * @return Iterator with all the org.semanticwb.process.model.DirectionalAssociation
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.DirectionalAssociation> listDirectionalAssociationByTarget(org.semanticwb.process.model.GraphicalElement value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DirectionalAssociation> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_target,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.DirectionalAssociation with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.DirectionalAssociation
@@ -169,6 +123,52 @@ public abstract class DirectionalAssociationBase extends org.semanticwb.process.
         public static java.util.Iterator<org.semanticwb.process.model.DirectionalAssociation> listDirectionalAssociationByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DirectionalAssociation> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.DirectionalAssociation with a determined Source
+       * @param value Source of the type org.semanticwb.process.model.GraphicalElement
+       * @param model Model of the org.semanticwb.process.model.DirectionalAssociation
+       * @return Iterator with all the org.semanticwb.process.model.DirectionalAssociation
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.DirectionalAssociation> listDirectionalAssociationBySource(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DirectionalAssociation> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_source, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.DirectionalAssociation with a determined Source
+       * @param value Source of the type org.semanticwb.process.model.GraphicalElement
+       * @return Iterator with all the org.semanticwb.process.model.DirectionalAssociation
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.DirectionalAssociation> listDirectionalAssociationBySource(org.semanticwb.process.model.GraphicalElement value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DirectionalAssociation> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_source,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.DirectionalAssociation with a determined Target
+       * @param value Target of the type org.semanticwb.process.model.GraphicalElement
+       * @param model Model of the org.semanticwb.process.model.DirectionalAssociation
+       * @return Iterator with all the org.semanticwb.process.model.DirectionalAssociation
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.DirectionalAssociation> listDirectionalAssociationByTarget(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DirectionalAssociation> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_target, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.DirectionalAssociation with a determined Target
+       * @param value Target of the type org.semanticwb.process.model.GraphicalElement
+       * @return Iterator with all the org.semanticwb.process.model.DirectionalAssociation
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.DirectionalAssociation> listDirectionalAssociationByTarget(org.semanticwb.process.model.GraphicalElement value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DirectionalAssociation> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_target,value.getSemanticObject(),sclass));
             return it;
         }
     }

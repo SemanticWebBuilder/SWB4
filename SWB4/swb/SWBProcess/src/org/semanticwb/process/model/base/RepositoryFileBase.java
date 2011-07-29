@@ -1,14 +1,14 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class RepositoryFileBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Versionable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Hitable,org.semanticwb.model.Expirable,org.semanticwb.model.Referensable
+public abstract class RepositoryFileBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Versionable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Expirable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Hitable
 {
+    public static final org.semanticwb.platform.SemanticClass swp_RepositoryDirectory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#RepositoryDirectory");
+    public static final org.semanticwb.platform.SemanticProperty swp_repositoryDirectory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#repositoryDirectory");
    /**
    * Indica si el elemento es válido
    */
     public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
-    public static final org.semanticwb.platform.SemanticClass swp_RepositoryDirectory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#RepositoryDirectory");
-    public static final org.semanticwb.platform.SemanticProperty swp_repositoryDirectory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#repositoryDirectory");
     public static final org.semanticwb.platform.SemanticClass swp_RepositoryFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#RepositoryFile");
    /**
    * The semantic class that represents the currentObject
@@ -85,52 +85,6 @@ public abstract class RepositoryFileBase extends org.semanticwb.model.base.Gener
             return (getRepositoryFile(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.process.model.RepositoryFile with a determined UserGroupRef
-       * @param value UserGroupRef of the type org.semanticwb.model.UserGroupRef
-       * @param model Model of the org.semanticwb.process.model.RepositoryFile
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryFile
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByUserGroupRef(org.semanticwb.model.UserGroupRef value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.RepositoryFile with a determined UserGroupRef
-       * @param value UserGroupRef of the type org.semanticwb.model.UserGroupRef
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryFile
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByUserGroupRef(org.semanticwb.model.UserGroupRef value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.RepositoryFile with a determined LastVersion
-       * @param value LastVersion of the type org.semanticwb.model.VersionInfo
-       * @param model Model of the org.semanticwb.process.model.RepositoryFile
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryFile
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByLastVersion(org.semanticwb.model.VersionInfo value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_lastVersion, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.RepositoryFile with a determined LastVersion
-       * @param value LastVersion of the type org.semanticwb.model.VersionInfo
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryFile
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByLastVersion(org.semanticwb.model.VersionInfo value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_lastVersion,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.RepositoryFile with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.RepositoryFile
@@ -200,29 +154,6 @@ public abstract class RepositoryFileBase extends org.semanticwb.model.base.Gener
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.RepositoryFile with a determined RoleRef
-       * @param value RoleRef of the type org.semanticwb.model.RoleRef
-       * @param model Model of the org.semanticwb.process.model.RepositoryFile
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryFile
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByRoleRef(org.semanticwb.model.RoleRef value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.RepositoryFile with a determined RoleRef
-       * @param value RoleRef of the type org.semanticwb.model.RoleRef
-       * @return Iterator with all the org.semanticwb.process.model.RepositoryFile
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByRoleRef(org.semanticwb.model.RoleRef value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.RepositoryFile with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.RepositoryFile
@@ -268,6 +199,75 @@ public abstract class RepositoryFileBase extends org.semanticwb.model.base.Gener
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryFile with a determined UserGroupRef
+       * @param value UserGroupRef of the type org.semanticwb.model.UserGroupRef
+       * @param model Model of the org.semanticwb.process.model.RepositoryFile
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryFile
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByUserGroupRef(org.semanticwb.model.UserGroupRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryFile with a determined UserGroupRef
+       * @param value UserGroupRef of the type org.semanticwb.model.UserGroupRef
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryFile
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByUserGroupRef(org.semanticwb.model.UserGroupRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryFile with a determined LastVersion
+       * @param value LastVersion of the type org.semanticwb.model.VersionInfo
+       * @param model Model of the org.semanticwb.process.model.RepositoryFile
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryFile
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByLastVersion(org.semanticwb.model.VersionInfo value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_lastVersion, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryFile with a determined LastVersion
+       * @param value LastVersion of the type org.semanticwb.model.VersionInfo
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryFile
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByLastVersion(org.semanticwb.model.VersionInfo value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_lastVersion,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryFile with a determined RoleRef
+       * @param value RoleRef of the type org.semanticwb.model.RoleRef
+       * @param model Model of the org.semanticwb.process.model.RepositoryFile
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryFile
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByRoleRef(org.semanticwb.model.RoleRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryFile with a determined RoleRef
+       * @param value RoleRef of the type org.semanticwb.model.RoleRef
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryFile
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByRoleRef(org.semanticwb.model.RoleRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**
@@ -277,194 +277,6 @@ public abstract class RepositoryFileBase extends org.semanticwb.model.base.Gener
     public RepositoryFileBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-   /**
-   * Gets all the org.semanticwb.model.UserGroupRef
-   * @return A GenericIterator with all the org.semanticwb.model.UserGroupRef
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> listUserGroupRefs()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef>(getSemanticObject().listObjectProperties(swb_hasUserGroupRef));
-    }
-
-   /**
-   * Gets true if has a UserGroupRef
-   * @param value org.semanticwb.model.UserGroupRef to verify
-   * @return true if the org.semanticwb.model.UserGroupRef exists, false otherwise
-   */
-    public boolean hasUserGroupRef(org.semanticwb.model.UserGroupRef value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(swb_hasUserGroupRef,value.getSemanticObject());
-        }
-        return ret;
-    }
-
-   /**
-   * Gets all the UserGroupRefs inherits
-   * @return A GenericIterator with all the org.semanticwb.model.UserGroupRef
-   */
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> listInheritUserGroupRefs()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef>(getSemanticObject().listInheritProperties(swb_hasUserGroupRef));
-    }
-   /**
-   * Adds a UserGroupRef
-   * @param value org.semanticwb.model.UserGroupRef to add
-   */
-
-    public void addUserGroupRef(org.semanticwb.model.UserGroupRef value)
-    {
-        getSemanticObject().addObjectProperty(swb_hasUserGroupRef, value.getSemanticObject());
-    }
-   /**
-   * Removes all the UserGroupRef
-   */
-
-    public void removeAllUserGroupRef()
-    {
-        getSemanticObject().removeProperty(swb_hasUserGroupRef);
-    }
-   /**
-   * Removes a UserGroupRef
-   * @param value org.semanticwb.model.UserGroupRef to remove
-   */
-
-    public void removeUserGroupRef(org.semanticwb.model.UserGroupRef value)
-    {
-        getSemanticObject().removeObjectProperty(swb_hasUserGroupRef,value.getSemanticObject());
-    }
-
-   /**
-   * Gets the UserGroupRef
-   * @return a org.semanticwb.model.UserGroupRef
-   */
-    public org.semanticwb.model.UserGroupRef getUserGroupRef()
-    {
-         org.semanticwb.model.UserGroupRef ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasUserGroupRef);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.UserGroupRef)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-/**
-* Gets the Hits property
-* @return long with the Hits
-*/
-    public long getHits()
-    {
-        //Override this method in RepositoryFile object
-        return getSemanticObject().getLongProperty(swb_hits,false);
-    }
-
-/**
-* Sets the Hits property
-* @param value long with the Hits
-*/
-    public void setHits(long value)
-    {
-        //Override this method in RepositoryFile object
-        getSemanticObject().setLongProperty(swb_hits, value,false);
-    }
-   /**
-   * Sets the value for the property LastVersion
-   * @param value LastVersion to set
-   */
-
-    public void setLastVersion(org.semanticwb.model.VersionInfo value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_lastVersion, value.getSemanticObject());
-        }else
-        {
-            removeLastVersion();
-        }
-    }
-   /**
-   * Remove the value for LastVersion property
-   */
-
-    public void removeLastVersion()
-    {
-        getSemanticObject().removeProperty(swb_lastVersion);
-    }
-
-   /**
-   * Gets the LastVersion
-   * @return a org.semanticwb.model.VersionInfo
-   */
-    public org.semanticwb.model.VersionInfo getLastVersion()
-    {
-         org.semanticwb.model.VersionInfo ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_lastVersion);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.VersionInfo)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-/**
-* Gets the Active property
-* @return boolean with the Active
-*/
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(swb_active);
-    }
-
-/**
-* Sets the Active property
-* @param value long with the Active
-*/
-    public void setActive(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swb_active, value);
-    }
-
-/**
-* Gets the Valid property
-* @return boolean with the Valid
-*/
-    public boolean isValid()
-    {
-        //Override this method in RepositoryFile object
-        return getSemanticObject().getBooleanProperty(swb_valid,false);
-    }
-
-/**
-* Sets the Valid property
-* @param value long with the Valid
-*/
-    public void setValid(boolean value)
-    {
-        //Override this method in RepositoryFile object
-        getSemanticObject().setBooleanProperty(swb_valid, value,false);
-    }
-
-/**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
     }
    /**
    * Sets the value for the property ModifiedBy
@@ -504,57 +316,6 @@ public abstract class RepositoryFileBase extends org.semanticwb.model.base.Gener
          }
          return ret;
     }
-
-/**
-* Gets the Expiration property
-* @return java.util.Date with the Expiration
-*/
-    public java.util.Date getExpiration()
-    {
-        return getSemanticObject().getDateProperty(swb_expiration);
-    }
-
-/**
-* Sets the Expiration property
-* @param value long with the Expiration
-*/
-    public void setExpiration(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_expiration, value);
-    }
-
-/**
-* Gets the Title property
-* @return String with the Title
-*/
-    public String getTitle()
-    {
-        return getSemanticObject().getProperty(swb_title);
-    }
-
-/**
-* Sets the Title property
-* @param value long with the Title
-*/
-    public void setTitle(String value)
-    {
-        getSemanticObject().setProperty(swb_title, value);
-    }
-
-    public String getTitle(String lang)
-    {
-        return getSemanticObject().getProperty(swb_title, null, lang);
-    }
-
-    public String getDisplayTitle(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_title, lang);
-    }
-
-    public void setTitle(String title, String lang)
-    {
-        getSemanticObject().setProperty(swb_title, title, lang);
-    }
    /**
    * Sets the value for the property RepositoryDirectory
    * @param value RepositoryDirectory to set
@@ -592,6 +353,42 @@ public abstract class RepositoryFileBase extends org.semanticwb.model.base.Gener
              ret=(org.semanticwb.process.model.RepositoryDirectory)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
+    }
+
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
     }
    /**
    * Sets the value for the property ActualVersion
@@ -633,113 +430,112 @@ public abstract class RepositoryFileBase extends org.semanticwb.model.base.Gener
     }
 
 /**
-* Gets the MaxHits property
-* @return long with the MaxHits
+* Gets the Description property
+* @return String with the Description
 */
-    public long getMaxHits()
+    public String getDescription()
     {
-        return getSemanticObject().getLongProperty(swb_maxHits);
+        return getSemanticObject().getProperty(swb_description);
     }
 
 /**
-* Sets the MaxHits property
-* @param value long with the MaxHits
+* Sets the Description property
+* @param value long with the Description
 */
-    public void setMaxHits(long value)
+    public void setDescription(String value)
     {
-        getSemanticObject().setLongProperty(swb_maxHits, value);
+        getSemanticObject().setProperty(swb_description, value);
+    }
+
+    public String getDescription(String lang)
+    {
+        return getSemanticObject().getProperty(swb_description, null, lang);
+    }
+
+    public String getDisplayDescription(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_description, lang);
+    }
+
+    public void setDescription(String description, String lang)
+    {
+        getSemanticObject().setProperty(swb_description, description, lang);
     }
 
 /**
-* Gets the Updated property
-* @return java.util.Date with the Updated
+* Gets the Expiration property
+* @return java.util.Date with the Expiration
 */
-    public java.util.Date getUpdated()
+    public java.util.Date getExpiration()
     {
-        return getSemanticObject().getDateProperty(swb_updated);
+        return getSemanticObject().getDateProperty(swb_expiration);
     }
 
 /**
-* Sets the Updated property
-* @param value long with the Updated
+* Sets the Expiration property
+* @param value long with the Expiration
 */
-    public void setUpdated(java.util.Date value)
+    public void setExpiration(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swb_updated, value);
-    }
-   /**
-   * Gets all the org.semanticwb.model.RoleRef
-   * @return A GenericIterator with all the org.semanticwb.model.RoleRef
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listRoleRefs()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(getSemanticObject().listObjectProperties(swb_hasRoleRef));
+        getSemanticObject().setDateProperty(swb_expiration, value);
     }
 
-   /**
-   * Gets true if has a RoleRef
-   * @param value org.semanticwb.model.RoleRef to verify
-   * @return true if the org.semanticwb.model.RoleRef exists, false otherwise
-   */
-    public boolean hasRoleRef(org.semanticwb.model.RoleRef value)
+/**
+* Gets the Hits property
+* @return long with the Hits
+*/
+    public long getHits()
     {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(swb_hasRoleRef,value.getSemanticObject());
-        }
-        return ret;
+        //Override this method in RepositoryFile object
+        return getSemanticObject().getLongProperty(swb_hits,false);
     }
 
-   /**
-   * Gets all the RoleRefs inherits
-   * @return A GenericIterator with all the org.semanticwb.model.RoleRef
-   */
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listInheritRoleRefs()
+/**
+* Sets the Hits property
+* @param value long with the Hits
+*/
+    public void setHits(long value)
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(getSemanticObject().listInheritProperties(swb_hasRoleRef));
-    }
-   /**
-   * Adds a RoleRef
-   * @param value org.semanticwb.model.RoleRef to add
-   */
-
-    public void addRoleRef(org.semanticwb.model.RoleRef value)
-    {
-        getSemanticObject().addObjectProperty(swb_hasRoleRef, value.getSemanticObject());
-    }
-   /**
-   * Removes all the RoleRef
-   */
-
-    public void removeAllRoleRef()
-    {
-        getSemanticObject().removeProperty(swb_hasRoleRef);
-    }
-   /**
-   * Removes a RoleRef
-   * @param value org.semanticwb.model.RoleRef to remove
-   */
-
-    public void removeRoleRef(org.semanticwb.model.RoleRef value)
-    {
-        getSemanticObject().removeObjectProperty(swb_hasRoleRef,value.getSemanticObject());
+        //Override this method in RepositoryFile object
+        getSemanticObject().setLongProperty(swb_hits, value,false);
     }
 
-   /**
-   * Gets the RoleRef
-   * @return a org.semanticwb.model.RoleRef
-   */
-    public org.semanticwb.model.RoleRef getRoleRef()
+/**
+* Gets the Active property
+* @return boolean with the Active
+*/
+    public boolean isActive()
     {
-         org.semanticwb.model.RoleRef ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRoleRef);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.RoleRef)obj.createGenericInstance();
-         }
-         return ret;
+        return getSemanticObject().getBooleanProperty(swb_active);
+    }
+
+/**
+* Sets the Active property
+* @param value long with the Active
+*/
+    public void setActive(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_active, value);
+    }
+
+/**
+* Gets the Valid property
+* @return boolean with the Valid
+*/
+    public boolean isValid()
+    {
+        //Override this method in RepositoryFile object
+        return getSemanticObject().getBooleanProperty(swb_valid,false);
+    }
+
+/**
+* Sets the Valid property
+* @param value long with the Valid
+*/
+    public void setValid(boolean value)
+    {
+        //Override this method in RepositoryFile object
+        getSemanticObject().setBooleanProperty(swb_valid, value,false);
     }
    /**
    * Sets the value for the property Creator
@@ -778,6 +574,39 @@ public abstract class RepositoryFileBase extends org.semanticwb.model.base.Gener
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Title property
+* @return String with the Title
+*/
+    public String getTitle()
+    {
+        return getSemanticObject().getProperty(swb_title);
+    }
+
+/**
+* Sets the Title property
+* @param value long with the Title
+*/
+    public void setTitle(String value)
+    {
+        getSemanticObject().setProperty(swb_title, value);
+    }
+
+    public String getTitle(String lang)
+    {
+        return getSemanticObject().getProperty(swb_title, null, lang);
+    }
+
+    public String getDisplayTitle(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
+    }
+
+    public void setTitle(String title, String lang)
+    {
+        getSemanticObject().setProperty(swb_title, title, lang);
     }
    /**
    * Gets all the org.semanticwb.model.RuleRef
@@ -855,36 +684,207 @@ public abstract class RepositoryFileBase extends org.semanticwb.model.base.Gener
     }
 
 /**
-* Gets the Description property
-* @return String with the Description
+* Gets the MaxHits property
+* @return long with the MaxHits
 */
-    public String getDescription()
+    public long getMaxHits()
     {
-        return getSemanticObject().getProperty(swb_description);
+        return getSemanticObject().getLongProperty(swb_maxHits);
     }
 
 /**
-* Sets the Description property
-* @param value long with the Description
+* Sets the MaxHits property
+* @param value long with the MaxHits
 */
-    public void setDescription(String value)
+    public void setMaxHits(long value)
     {
-        getSemanticObject().setProperty(swb_description, value);
+        getSemanticObject().setLongProperty(swb_maxHits, value);
+    }
+   /**
+   * Gets all the org.semanticwb.model.UserGroupRef
+   * @return A GenericIterator with all the org.semanticwb.model.UserGroupRef
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> listUserGroupRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef>(getSemanticObject().listObjectProperties(swb_hasUserGroupRef));
     }
 
-    public String getDescription(String lang)
+   /**
+   * Gets true if has a UserGroupRef
+   * @param value org.semanticwb.model.UserGroupRef to verify
+   * @return true if the org.semanticwb.model.UserGroupRef exists, false otherwise
+   */
+    public boolean hasUserGroupRef(org.semanticwb.model.UserGroupRef value)
     {
-        return getSemanticObject().getProperty(swb_description, null, lang);
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasUserGroupRef,value.getSemanticObject());
+        }
+        return ret;
     }
 
-    public String getDisplayDescription(String lang)
+   /**
+   * Gets all the UserGroupRefs inherits
+   * @return A GenericIterator with all the org.semanticwb.model.UserGroupRef
+   */
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> listInheritUserGroupRefs()
     {
-        return getSemanticObject().getLocaleProperty(swb_description, lang);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef>(getSemanticObject().listInheritProperties(swb_hasUserGroupRef));
+    }
+   /**
+   * Adds a UserGroupRef
+   * @param value org.semanticwb.model.UserGroupRef to add
+   */
+
+    public void addUserGroupRef(org.semanticwb.model.UserGroupRef value)
+    {
+        getSemanticObject().addObjectProperty(swb_hasUserGroupRef, value.getSemanticObject());
+    }
+   /**
+   * Removes all the UserGroupRef
+   */
+
+    public void removeAllUserGroupRef()
+    {
+        getSemanticObject().removeProperty(swb_hasUserGroupRef);
+    }
+   /**
+   * Removes a UserGroupRef
+   * @param value org.semanticwb.model.UserGroupRef to remove
+   */
+
+    public void removeUserGroupRef(org.semanticwb.model.UserGroupRef value)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasUserGroupRef,value.getSemanticObject());
     }
 
-    public void setDescription(String description, String lang)
+   /**
+   * Gets the UserGroupRef
+   * @return a org.semanticwb.model.UserGroupRef
+   */
+    public org.semanticwb.model.UserGroupRef getUserGroupRef()
     {
-        getSemanticObject().setProperty(swb_description, description, lang);
+         org.semanticwb.model.UserGroupRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasUserGroupRef);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.UserGroupRef)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property LastVersion
+   * @param value LastVersion to set
+   */
+
+    public void setLastVersion(org.semanticwb.model.VersionInfo value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_lastVersion, value.getSemanticObject());
+        }else
+        {
+            removeLastVersion();
+        }
+    }
+   /**
+   * Remove the value for LastVersion property
+   */
+
+    public void removeLastVersion()
+    {
+        getSemanticObject().removeProperty(swb_lastVersion);
+    }
+
+   /**
+   * Gets the LastVersion
+   * @return a org.semanticwb.model.VersionInfo
+   */
+    public org.semanticwb.model.VersionInfo getLastVersion()
+    {
+         org.semanticwb.model.VersionInfo ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_lastVersion);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.VersionInfo)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Gets all the org.semanticwb.model.RoleRef
+   * @return A GenericIterator with all the org.semanticwb.model.RoleRef
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listRoleRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(getSemanticObject().listObjectProperties(swb_hasRoleRef));
+    }
+
+   /**
+   * Gets true if has a RoleRef
+   * @param value org.semanticwb.model.RoleRef to verify
+   * @return true if the org.semanticwb.model.RoleRef exists, false otherwise
+   */
+    public boolean hasRoleRef(org.semanticwb.model.RoleRef value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasRoleRef,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets all the RoleRefs inherits
+   * @return A GenericIterator with all the org.semanticwb.model.RoleRef
+   */
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listInheritRoleRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(getSemanticObject().listInheritProperties(swb_hasRoleRef));
+    }
+   /**
+   * Adds a RoleRef
+   * @param value org.semanticwb.model.RoleRef to add
+   */
+
+    public void addRoleRef(org.semanticwb.model.RoleRef value)
+    {
+        getSemanticObject().addObjectProperty(swb_hasRoleRef, value.getSemanticObject());
+    }
+   /**
+   * Removes all the RoleRef
+   */
+
+    public void removeAllRoleRef()
+    {
+        getSemanticObject().removeProperty(swb_hasRoleRef);
+    }
+   /**
+   * Removes a RoleRef
+   * @param value org.semanticwb.model.RoleRef to remove
+   */
+
+    public void removeRoleRef(org.semanticwb.model.RoleRef value)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasRoleRef,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the RoleRef
+   * @return a org.semanticwb.model.RoleRef
+   */
+    public org.semanticwb.model.RoleRef getRoleRef()
+    {
+         org.semanticwb.model.RoleRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRoleRef);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.RoleRef)obj.createGenericInstance();
+         }
+         return ret;
     }
 
     public void remove()
