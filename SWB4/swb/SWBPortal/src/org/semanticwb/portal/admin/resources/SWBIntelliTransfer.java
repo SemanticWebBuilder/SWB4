@@ -63,6 +63,8 @@ public class SWBIntelliTransfer extends GenericResource {
     /** The ZIPDIRECTORY. */
     String ZIPDIRECTORY = PATH + "sitetemplates/";
 
+
+
     /* (non-Javadoc)
      * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
      */
@@ -397,7 +399,7 @@ public class SWBIntelliTransfer extends GenericResource {
                     out.println("<button dojoType='dijit.form.Button' type=\"submit\" onClick=\"if(!dijit.byId('frmImport1').isValid()) return false;\">" + paramRequest.getLocaleString("send") + "</button>");
                     out.println("<button id=\"send\" dojoType=\"dijit.form.Button\" onClick=\"javascript:history.go(-1);\">" + paramRequest.getLocaleString("return") + "</button>");
                     out.println("</span></fieldset>");
-                    out.println("<input type=\"hidden\" name=\"zipName\" value=\"" + request.getParameter("zipName") + "\"");
+                    out.println("<input type=\"hidden\" name=\"zipName\" value=\"" + request.getParameter("zipName") + "\" />");
                     out.println("</form>");
                 } catch (Exception e) {
                     log.debug(e);
