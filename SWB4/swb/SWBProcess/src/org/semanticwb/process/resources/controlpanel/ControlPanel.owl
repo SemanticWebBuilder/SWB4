@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+    xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:cpanel="http://www.semanticwebbuilder.org/process/resources/ControlPanel#"
+  xml:base="http://www.semanticwebbuilder.org/process/resources/ControlPanel">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+  </owl:Ontology>
+  <owl:DatatypeProperty rdf:ID="groupFilter">
+    <rdfs:label xml:lang="en">Fiter by group</rdfs:label>
+    <rdfs:label xml:lang="es">Filtrar por grupo</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain>
+      <swb:SemanticResource rdf:ID="ControlPanelResource">
+        <rdfs:label xml:lang="en">Control Panel</rdfs:label>
+        <rdfs:label xml:lang="es">Panel de Control</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:SemanticResource>
+    </rdfs:domain>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="statusFilter">
+    <rdfs:label xml:lang="en">Filter by status</rdfs:label>
+    <rdfs:label xml:lang="es">Filtrar por estado</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ControlPanelResource"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="itemsPerPage">
+    <rdfs:label xml:lang="en">Items per page</rdfs:label>
+    <rdfs:label xml:lang="es">Elementos por página</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#ControlPanelResource"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="sortType">
+    <rdfs:label xml:lang="en">Sort by</rdfs:label>
+    <rdfs:label xml:lang="es">Ordenar por</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#ControlPanelResource"/>
+  </owl:DatatypeProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_ItemsPerPage">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >1</swb:index>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_statusFilter"/>
+  <swb:CodePackage rdf:ID="pkg">
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >cpanel</swb:prefix>
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.process.resources.controlpanel</swb:package>
+  </swb:CodePackage>
+</rdf:RDF>
+
+<!-- Created with TopBraid -->
