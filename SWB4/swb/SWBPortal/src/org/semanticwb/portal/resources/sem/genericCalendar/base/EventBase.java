@@ -4,7 +4,7 @@ package org.semanticwb.portal.resources.sem.genericCalendar.base;
    /**
    * Define la estructura de datos de los eventos a mostrar en el calendario. 
    */
-public abstract class EventBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Resourceable,org.semanticwb.model.Searchable
+public abstract class EventBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Resourceable,org.semanticwb.model.Searchable
 {
    /**
    * Fecha final del Evento
@@ -462,24 +462,6 @@ public abstract class EventBase extends org.semanticwb.model.SWBClass implements
     public void setUrlInternal(boolean value)
     {
         getSemanticObject().setBooleanProperty(genCal_urlInternal, value);
-    }
-
-/**
-* Gets the Active property
-* @return boolean with the Active
-*/
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(swb_active);
-    }
-
-/**
-* Sets the Active property
-* @param value long with the Active
-*/
-    public void setActive(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swb_active, value);
     }
    /**
    * Sets the value for the property Language
