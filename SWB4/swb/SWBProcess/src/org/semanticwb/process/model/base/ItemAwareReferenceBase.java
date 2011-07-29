@@ -5,17 +5,17 @@ public abstract class ItemAwareReferenceBase extends org.semanticwb.model.base.G
 {
     public static final org.semanticwb.platform.SemanticProperty swp_itemAwareTemporal=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#itemAwareTemporal");
    /**
-   * Indica si el elemento es válido
-   */
-    public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
-   /**
    * Superclase de todos los objetos con persistencia en SemanticWebBuilder
    */
     public static final org.semanticwb.platform.SemanticClass swb_SWBClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBClass");
     public static final org.semanticwb.platform.SemanticProperty swp_processObject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processObject");
+    public static final org.semanticwb.platform.SemanticProperty swp_processObjectReused=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processObjectReused");
+   /**
+   * Indica si el elemento es válido
+   */
+    public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
     public static final org.semanticwb.platform.SemanticClass swp_ItemAware=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ItemAware");
     public static final org.semanticwb.platform.SemanticProperty swp_itemAware=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#itemAware");
-    public static final org.semanticwb.platform.SemanticProperty swp_processObjectReused=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processObjectReused");
     public static final org.semanticwb.platform.SemanticClass swp_ItemAwareReference=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ItemAwareReference");
    /**
    * The semantic class that represents the currentObject
@@ -165,26 +165,6 @@ public abstract class ItemAwareReferenceBase extends org.semanticwb.model.base.G
     {
         getSemanticObject().setBooleanProperty(swp_itemAwareTemporal, value);
     }
-
-/**
-* Gets the Valid property
-* @return boolean with the Valid
-*/
-    public boolean isValid()
-    {
-        //Override this method in ItemAwareReference object
-        return getSemanticObject().getBooleanProperty(swb_valid,false);
-    }
-
-/**
-* Sets the Valid property
-* @param value long with the Valid
-*/
-    public void setValid(boolean value)
-    {
-        //Override this method in ItemAwareReference object
-        getSemanticObject().setBooleanProperty(swb_valid, value,false);
-    }
    /**
    * Sets the value for the property ProcessObject
    * @param value ProcessObject to set
@@ -223,6 +203,44 @@ public abstract class ItemAwareReferenceBase extends org.semanticwb.model.base.G
          }
          return ret;
     }
+
+/**
+* Gets the ProcessObjectReused property
+* @return boolean with the ProcessObjectReused
+*/
+    public boolean isProcessObjectReused()
+    {
+        return getSemanticObject().getBooleanProperty(swp_processObjectReused);
+    }
+
+/**
+* Sets the ProcessObjectReused property
+* @param value long with the ProcessObjectReused
+*/
+    public void setProcessObjectReused(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swp_processObjectReused, value);
+    }
+
+/**
+* Gets the Valid property
+* @return boolean with the Valid
+*/
+    public boolean isValid()
+    {
+        //Override this method in ItemAwareReference object
+        return getSemanticObject().getBooleanProperty(swb_valid,false);
+    }
+
+/**
+* Sets the Valid property
+* @param value long with the Valid
+*/
+    public void setValid(boolean value)
+    {
+        //Override this method in ItemAwareReference object
+        getSemanticObject().setBooleanProperty(swb_valid, value,false);
+    }
    /**
    * Sets the value for the property ItemAware
    * @param value ItemAware to set
@@ -260,24 +278,6 @@ public abstract class ItemAwareReferenceBase extends org.semanticwb.model.base.G
              ret=(org.semanticwb.process.model.ItemAware)obj.createGenericInstance();
          }
          return ret;
-    }
-
-/**
-* Gets the ProcessObjectReused property
-* @return boolean with the ProcessObjectReused
-*/
-    public boolean isProcessObjectReused()
-    {
-        return getSemanticObject().getBooleanProperty(swp_processObjectReused);
-    }
-
-/**
-* Sets the ProcessObjectReused property
-* @param value long with the ProcessObjectReused
-*/
-    public void setProcessObjectReused(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swp_processObjectReused, value);
     }
 
     public void remove()

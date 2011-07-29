@@ -1,15 +1,15 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class DBConnectionBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class DBConnectionBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
+    public static final org.semanticwb.platform.SemanticProperty swp_dbconUser=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#dbconUser");
+    public static final org.semanticwb.platform.SemanticProperty swp_dbconPassword=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#dbconPassword");
+    public static final org.semanticwb.platform.SemanticProperty swp_dbconUrl=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#dbconUrl");
    /**
    * Indica si el elemento es válido
    */
     public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
-    public static final org.semanticwb.platform.SemanticProperty swp_dbconPassword=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#dbconPassword");
-    public static final org.semanticwb.platform.SemanticProperty swp_dbconUser=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#dbconUser");
-    public static final org.semanticwb.platform.SemanticProperty swp_dbconUrl=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#dbconUrl");
     public static final org.semanticwb.platform.SemanticClass swp_DBConnection=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#DBConnection");
    /**
    * The semantic class that represents the currentObject
@@ -135,44 +135,6 @@ public abstract class DBConnectionBase extends org.semanticwb.model.base.Generic
     {
         super(base);
     }
-
-/**
-* Gets the Valid property
-* @return boolean with the Valid
-*/
-    public boolean isValid()
-    {
-        //Override this method in DBConnection object
-        return getSemanticObject().getBooleanProperty(swb_valid,false);
-    }
-
-/**
-* Sets the Valid property
-* @param value long with the Valid
-*/
-    public void setValid(boolean value)
-    {
-        //Override this method in DBConnection object
-        getSemanticObject().setBooleanProperty(swb_valid, value,false);
-    }
-
-/**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
-    }
    /**
    * Sets the value for the property ModifiedBy
    * @param value ModifiedBy to set
@@ -213,39 +175,6 @@ public abstract class DBConnectionBase extends org.semanticwb.model.base.Generic
     }
 
 /**
-* Gets the Title property
-* @return String with the Title
-*/
-    public String getTitle()
-    {
-        return getSemanticObject().getProperty(swb_title);
-    }
-
-/**
-* Sets the Title property
-* @param value long with the Title
-*/
-    public void setTitle(String value)
-    {
-        getSemanticObject().setProperty(swb_title, value);
-    }
-
-    public String getTitle(String lang)
-    {
-        return getSemanticObject().getProperty(swb_title, null, lang);
-    }
-
-    public String getDisplayTitle(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_title, lang);
-    }
-
-    public void setTitle(String title, String lang)
-    {
-        getSemanticObject().setProperty(swb_title, title, lang);
-    }
-
-/**
 * Gets the Updated property
 * @return java.util.Date with the Updated
 */
@@ -264,21 +193,54 @@ public abstract class DBConnectionBase extends org.semanticwb.model.base.Generic
     }
 
 /**
-* Gets the Password property
-* @return String with the Password
+* Gets the Created property
+* @return java.util.Date with the Created
 */
-    public String getPassword()
+    public java.util.Date getCreated()
     {
-        return getSemanticObject().getProperty(swp_dbconPassword);
+        return getSemanticObject().getDateProperty(swb_created);
     }
 
 /**
-* Sets the Password property
-* @param value long with the Password
+* Sets the Created property
+* @param value long with the Created
 */
-    public void setPassword(String value)
+    public void setCreated(java.util.Date value)
     {
-        getSemanticObject().setProperty(swp_dbconPassword, value);
+        getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+/**
+* Gets the Description property
+* @return String with the Description
+*/
+    public String getDescription()
+    {
+        return getSemanticObject().getProperty(swb_description);
+    }
+
+/**
+* Sets the Description property
+* @param value long with the Description
+*/
+    public void setDescription(String value)
+    {
+        getSemanticObject().setProperty(swb_description, value);
+    }
+
+    public String getDescription(String lang)
+    {
+        return getSemanticObject().getProperty(swb_description, null, lang);
+    }
+
+    public String getDisplayDescription(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_description, lang);
+    }
+
+    public void setDescription(String description, String lang)
+    {
+        getSemanticObject().setProperty(swb_description, description, lang);
     }
 
 /**
@@ -300,6 +262,24 @@ public abstract class DBConnectionBase extends org.semanticwb.model.base.Generic
     }
 
 /**
+* Gets the Password property
+* @return String with the Password
+*/
+    public String getPassword()
+    {
+        return getSemanticObject().getProperty(swp_dbconPassword);
+    }
+
+/**
+* Sets the Password property
+* @param value long with the Password
+*/
+    public void setPassword(String value)
+    {
+        getSemanticObject().setProperty(swp_dbconPassword, value);
+    }
+
+/**
 * Gets the Url property
 * @return String with the Url
 */
@@ -315,6 +295,26 @@ public abstract class DBConnectionBase extends org.semanticwb.model.base.Generic
     public void setUrl(String value)
     {
         getSemanticObject().setProperty(swp_dbconUrl, value);
+    }
+
+/**
+* Gets the Valid property
+* @return boolean with the Valid
+*/
+    public boolean isValid()
+    {
+        //Override this method in DBConnection object
+        return getSemanticObject().getBooleanProperty(swb_valid,false);
+    }
+
+/**
+* Sets the Valid property
+* @param value long with the Valid
+*/
+    public void setValid(boolean value)
+    {
+        //Override this method in DBConnection object
+        getSemanticObject().setBooleanProperty(swb_valid, value,false);
     }
    /**
    * Sets the value for the property Creator
@@ -356,36 +356,36 @@ public abstract class DBConnectionBase extends org.semanticwb.model.base.Generic
     }
 
 /**
-* Gets the Description property
-* @return String with the Description
+* Gets the Title property
+* @return String with the Title
 */
-    public String getDescription()
+    public String getTitle()
     {
-        return getSemanticObject().getProperty(swb_description);
+        return getSemanticObject().getProperty(swb_title);
     }
 
 /**
-* Sets the Description property
-* @param value long with the Description
+* Sets the Title property
+* @param value long with the Title
 */
-    public void setDescription(String value)
+    public void setTitle(String value)
     {
-        getSemanticObject().setProperty(swb_description, value);
+        getSemanticObject().setProperty(swb_title, value);
     }
 
-    public String getDescription(String lang)
+    public String getTitle(String lang)
     {
-        return getSemanticObject().getProperty(swb_description, null, lang);
+        return getSemanticObject().getProperty(swb_title, null, lang);
     }
 
-    public String getDisplayDescription(String lang)
+    public String getDisplayTitle(String lang)
     {
-        return getSemanticObject().getLocaleProperty(swb_description, lang);
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
     }
 
-    public void setDescription(String description, String lang)
+    public void setTitle(String title, String lang)
     {
-        getSemanticObject().setProperty(swb_description, description, lang);
+        getSemanticObject().setProperty(swb_title, title, lang);
     }
 
     public void remove()

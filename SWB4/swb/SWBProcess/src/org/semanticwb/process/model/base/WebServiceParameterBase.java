@@ -3,12 +3,12 @@ package org.semanticwb.process.model.base;
 
 public abstract class WebServiceParameterBase extends org.semanticwb.model.base.GenericObjectBase 
 {
-    public static final org.semanticwb.platform.SemanticProperty swp_wspName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#wspName");
+    public static final org.semanticwb.platform.SemanticProperty swp_wspValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#wspValue");
    /**
    * Indica si el elemento es válido
    */
     public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
-    public static final org.semanticwb.platform.SemanticProperty swp_wspValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#wspValue");
+    public static final org.semanticwb.platform.SemanticProperty swp_wspName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#wspName");
     public static final org.semanticwb.platform.SemanticClass swp_WebServiceParameter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#WebServiceParameter");
    /**
    * The semantic class that represents the currentObject
@@ -96,21 +96,21 @@ public abstract class WebServiceParameterBase extends org.semanticwb.model.base.
     }
 
 /**
-* Gets the ParameterName property
-* @return String with the ParameterName
+* Gets the ParameterValue property
+* @return String with the ParameterValue
 */
-    public String getParameterName()
+    public String getParameterValue()
     {
-        return getSemanticObject().getProperty(swp_wspName);
+        return getSemanticObject().getProperty(swp_wspValue);
     }
 
 /**
-* Sets the ParameterName property
-* @param value long with the ParameterName
+* Sets the ParameterValue property
+* @param value long with the ParameterValue
 */
-    public void setParameterName(String value)
+    public void setParameterValue(String value)
     {
-        getSemanticObject().setProperty(swp_wspName, value);
+        getSemanticObject().setProperty(swp_wspValue, value);
     }
 
 /**
@@ -134,21 +134,21 @@ public abstract class WebServiceParameterBase extends org.semanticwb.model.base.
     }
 
 /**
-* Gets the ParameterValue property
-* @return String with the ParameterValue
+* Gets the ParameterName property
+* @return String with the ParameterName
 */
-    public String getParameterValue()
+    public String getParameterName()
     {
-        return getSemanticObject().getProperty(swp_wspValue);
+        return getSemanticObject().getProperty(swp_wspName);
     }
 
 /**
-* Sets the ParameterValue property
-* @param value long with the ParameterValue
+* Sets the ParameterName property
+* @param value long with the ParameterName
 */
-    public void setParameterValue(String value)
+    public void setParameterName(String value)
     {
-        getSemanticObject().setProperty(swp_wspValue, value);
+        getSemanticObject().setProperty(swp_wspName, value);
     }
 
     public void remove()

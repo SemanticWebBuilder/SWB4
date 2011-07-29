@@ -1,17 +1,17 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Iconable,org.semanticwb.process.model.Callable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Activeable,org.semanticwb.process.model.Containerable,org.semanticwb.model.Hitable,org.semanticwb.model.Expirable,org.semanticwb.model.Referensable
+public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Iconable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Expirable,org.semanticwb.process.model.Callable,org.semanticwb.model.Referensable,org.semanticwb.process.model.Containerable,org.semanticwb.model.Hitable
 {
-    public static final org.semanticwb.platform.SemanticClass swp_ProcessWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessWebPage");
-    public static final org.semanticwb.platform.SemanticProperty swp_processWebPageInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processWebPageInv");
-    public static final org.semanticwb.platform.SemanticClass swp_ProcessInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessInstance");
-    public static final org.semanticwb.platform.SemanticProperty swp_hasProcessInstanceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasProcessInstanceInv");
    /**
    * Grupo de Procesos
    */
     public static final org.semanticwb.platform.SemanticClass swp_ProcessGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessGroup");
     public static final org.semanticwb.platform.SemanticProperty swp_processGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processGroup");
+    public static final org.semanticwb.platform.SemanticClass swp_ProcessInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessInstance");
+    public static final org.semanticwb.platform.SemanticProperty swp_hasProcessInstanceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasProcessInstanceInv");
+    public static final org.semanticwb.platform.SemanticClass swp_ProcessWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessWebPage");
+    public static final org.semanticwb.platform.SemanticProperty swp_processWebPageInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processWebPageInv");
     public static final org.semanticwb.platform.SemanticClass swp_Process=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Process");
    /**
    * The semantic class that represents the currentObject
@@ -88,49 +88,26 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
             return (getProcess(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.process.model.Process with a determined ProcessWebPage
-       * @param value ProcessWebPage of the type org.semanticwb.process.model.ProcessWebPage
+       * Gets all org.semanticwb.process.model.Process with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.Process
        * @return Iterator with all the org.semanticwb.process.model.Process
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByProcessWebPage(org.semanticwb.process.model.ProcessWebPage value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_processWebPageInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.Process with a determined ProcessWebPage
-       * @param value ProcessWebPage of the type org.semanticwb.process.model.ProcessWebPage
+       * Gets all org.semanticwb.process.model.Process with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
        * @return Iterator with all the org.semanticwb.process.model.Process
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByProcessWebPage(org.semanticwb.process.model.ProcessWebPage value)
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByModifiedBy(org.semanticwb.model.User value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_processWebPageInv,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.Process with a determined ProcessInstance
-       * @param value ProcessInstance of the type org.semanticwb.process.model.ProcessInstance
-       * @param model Model of the org.semanticwb.process.model.Process
-       * @return Iterator with all the org.semanticwb.process.model.Process
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByProcessInstance(org.semanticwb.process.model.ProcessInstance value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasProcessInstanceInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.Process with a determined ProcessInstance
-       * @param value ProcessInstance of the type org.semanticwb.process.model.ProcessInstance
-       * @return Iterator with all the org.semanticwb.process.model.Process
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByProcessInstance(org.semanticwb.process.model.ProcessInstance value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasProcessInstanceInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -157,6 +134,52 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.Process with a determined ProcessInstance
+       * @param value ProcessInstance of the type org.semanticwb.process.model.ProcessInstance
+       * @param model Model of the org.semanticwb.process.model.Process
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByProcessInstance(org.semanticwb.process.model.ProcessInstance value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasProcessInstanceInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Process with a determined ProcessInstance
+       * @param value ProcessInstance of the type org.semanticwb.process.model.ProcessInstance
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByProcessInstance(org.semanticwb.process.model.ProcessInstance value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasProcessInstanceInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Process with a determined ProcessWebPage
+       * @param value ProcessWebPage of the type org.semanticwb.process.model.ProcessWebPage
+       * @param model Model of the org.semanticwb.process.model.Process
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByProcessWebPage(org.semanticwb.process.model.ProcessWebPage value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_processWebPageInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Process with a determined ProcessWebPage
+       * @param value ProcessWebPage of the type org.semanticwb.process.model.ProcessWebPage
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByProcessWebPage(org.semanticwb.process.model.ProcessWebPage value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_processWebPageInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.Process with a determined TemplateRef
        * @param value TemplateRef of the type org.semanticwb.model.TemplateRef
        * @param model Model of the org.semanticwb.process.model.Process
@@ -180,26 +203,26 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.Process with a determined CalendarRef
-       * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
+       * Gets all org.semanticwb.process.model.Process with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.Process
        * @return Iterator with all the org.semanticwb.process.model.Process
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByCalendarRef(org.semanticwb.model.CalendarRef value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.Process with a determined CalendarRef
-       * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
+       * Gets all org.semanticwb.process.model.Process with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
        * @return Iterator with all the org.semanticwb.process.model.Process
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByCalendarRef(org.semanticwb.model.CalendarRef value)
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByCreator(org.semanticwb.model.User value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -226,49 +249,26 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.Process with a determined ModifiedBy
-       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * Gets all org.semanticwb.process.model.Process with a determined CalendarRef
+       * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
        * @param model Model of the org.semanticwb.process.model.Process
        * @return Iterator with all the org.semanticwb.process.model.Process
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByCalendarRef(org.semanticwb.model.CalendarRef value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.Process with a determined ModifiedBy
-       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * Gets all org.semanticwb.process.model.Process with a determined CalendarRef
+       * @param value CalendarRef of the type org.semanticwb.model.CalendarRef
        * @return Iterator with all the org.semanticwb.process.model.Process
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByModifiedBy(org.semanticwb.model.User value)
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByCalendarRef(org.semanticwb.model.CalendarRef value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.Process with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.process.model.Process
-       * @return Iterator with all the org.semanticwb.process.model.Process
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.Process with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.process.model.Process
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByCreator(org.semanticwb.model.User value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -282,40 +282,40 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
         super(base);
     }
    /**
-   * Sets the value for the property ProcessWebPage
-   * @param value ProcessWebPage to set
+   * Sets the value for the property ProcessGroup
+   * @param value ProcessGroup to set
    */
 
-    public void setProcessWebPage(org.semanticwb.process.model.ProcessWebPage value)
+    public void setProcessGroup(org.semanticwb.process.model.ProcessGroup value)
     {
         if(value!=null)
         {
-            getSemanticObject().setObjectProperty(swp_processWebPageInv, value.getSemanticObject());
+            getSemanticObject().setObjectProperty(swp_processGroup, value.getSemanticObject());
         }else
         {
-            removeProcessWebPage();
+            removeProcessGroup();
         }
     }
    /**
-   * Remove the value for ProcessWebPage property
+   * Remove the value for ProcessGroup property
    */
 
-    public void removeProcessWebPage()
+    public void removeProcessGroup()
     {
-        getSemanticObject().removeProperty(swp_processWebPageInv);
+        getSemanticObject().removeProperty(swp_processGroup);
     }
 
    /**
-   * Gets the ProcessWebPage
-   * @return a org.semanticwb.process.model.ProcessWebPage
+   * Gets the ProcessGroup
+   * @return a org.semanticwb.process.model.ProcessGroup
    */
-    public org.semanticwb.process.model.ProcessWebPage getProcessWebPage()
+    public org.semanticwb.process.model.ProcessGroup getProcessGroup()
     {
-         org.semanticwb.process.model.ProcessWebPage ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_processWebPageInv);
+         org.semanticwb.process.model.ProcessGroup ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_processGroup);
          if(obj!=null)
          {
-             ret=(org.semanticwb.process.model.ProcessWebPage)obj.createGenericInstance();
+             ret=(org.semanticwb.process.model.ProcessGroup)obj.createGenericInstance();
          }
          return ret;
     }
@@ -360,97 +360,59 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
     }
 
 /**
-* Gets the Hits property
-* @return long with the Hits
+* Gets the Expiration property
+* @return java.util.Date with the Expiration
 */
-    public long getHits()
+    public java.util.Date getExpiration()
     {
-        //Override this method in Process object
-        return getSemanticObject().getLongProperty(swb_hits,false);
+        return getSemanticObject().getDateProperty(swb_expiration);
     }
 
 /**
-* Sets the Hits property
-* @param value long with the Hits
+* Sets the Expiration property
+* @param value long with the Expiration
 */
-    public void setHits(long value)
+    public void setExpiration(java.util.Date value)
     {
-        //Override this method in Process object
-        getSemanticObject().setLongProperty(swb_hits, value,false);
+        getSemanticObject().setDateProperty(swb_expiration, value);
     }
    /**
-   * Sets the value for the property ProcessGroup
-   * @param value ProcessGroup to set
+   * Sets the value for the property ProcessWebPage
+   * @param value ProcessWebPage to set
    */
 
-    public void setProcessGroup(org.semanticwb.process.model.ProcessGroup value)
+    public void setProcessWebPage(org.semanticwb.process.model.ProcessWebPage value)
     {
         if(value!=null)
         {
-            getSemanticObject().setObjectProperty(swp_processGroup, value.getSemanticObject());
+            getSemanticObject().setObjectProperty(swp_processWebPageInv, value.getSemanticObject());
         }else
         {
-            removeProcessGroup();
+            removeProcessWebPage();
         }
     }
    /**
-   * Remove the value for ProcessGroup property
+   * Remove the value for ProcessWebPage property
    */
 
-    public void removeProcessGroup()
+    public void removeProcessWebPage()
     {
-        getSemanticObject().removeProperty(swp_processGroup);
+        getSemanticObject().removeProperty(swp_processWebPageInv);
     }
 
    /**
-   * Gets the ProcessGroup
-   * @return a org.semanticwb.process.model.ProcessGroup
+   * Gets the ProcessWebPage
+   * @return a org.semanticwb.process.model.ProcessWebPage
    */
-    public org.semanticwb.process.model.ProcessGroup getProcessGroup()
+    public org.semanticwb.process.model.ProcessWebPage getProcessWebPage()
     {
-         org.semanticwb.process.model.ProcessGroup ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_processGroup);
+         org.semanticwb.process.model.ProcessWebPage ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_processWebPageInv);
          if(obj!=null)
          {
-             ret=(org.semanticwb.process.model.ProcessGroup)obj.createGenericInstance();
+             ret=(org.semanticwb.process.model.ProcessWebPage)obj.createGenericInstance();
          }
          return ret;
-    }
-
-/**
-* Gets the Callable property
-* @return boolean with the Callable
-*/
-    public boolean isCallable()
-    {
-        return getSemanticObject().getBooleanProperty(swp_callable);
-    }
-
-/**
-* Sets the Callable property
-* @param value long with the Callable
-*/
-    public void setCallable(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swp_callable, value);
-    }
-
-/**
-* Gets the Active property
-* @return boolean with the Active
-*/
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(swb_active);
-    }
-
-/**
-* Sets the Active property
-* @param value long with the Active
-*/
-    public void setActive(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swb_active, value);
     }
    /**
    * Gets all the org.semanticwb.model.TemplateRef
@@ -526,6 +488,137 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
          }
          return ret;
     }
+
+/**
+* Gets the Hits property
+* @return long with the Hits
+*/
+    public long getHits()
+    {
+        //Override this method in Process object
+        return getSemanticObject().getLongProperty(swb_hits,false);
+    }
+
+/**
+* Sets the Hits property
+* @param value long with the Hits
+*/
+    public void setHits(long value)
+    {
+        //Override this method in Process object
+        getSemanticObject().setLongProperty(swb_hits, value,false);
+    }
+
+/**
+* Gets the Active property
+* @return boolean with the Active
+*/
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(swb_active);
+    }
+
+/**
+* Sets the Active property
+* @param value long with the Active
+*/
+    public void setActive(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_active, value);
+    }
+
+/**
+* Gets the IconClass property
+* @return String with the IconClass
+*/
+    public String getIconClass()
+    {
+        return getSemanticObject().getProperty(swb_iconClass);
+    }
+
+/**
+* Sets the IconClass property
+* @param value long with the IconClass
+*/
+    public void setIconClass(String value)
+    {
+        getSemanticObject().setProperty(swb_iconClass, value);
+    }
+
+/**
+* Gets the Callable property
+* @return boolean with the Callable
+*/
+    public boolean isCallable()
+    {
+        return getSemanticObject().getBooleanProperty(swp_callable);
+    }
+
+/**
+* Sets the Callable property
+* @param value long with the Callable
+*/
+    public void setCallable(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swp_callable, value);
+    }
+
+/**
+* Gets the MaxHits property
+* @return long with the MaxHits
+*/
+    public long getMaxHits()
+    {
+        return getSemanticObject().getLongProperty(swb_maxHits);
+    }
+
+/**
+* Sets the MaxHits property
+* @param value long with the MaxHits
+*/
+    public void setMaxHits(long value)
+    {
+        getSemanticObject().setLongProperty(swb_maxHits, value);
+    }
+   /**
+   * Gets all the org.semanticwb.process.model.GraphicalElement
+   * @return A GenericIterator with all the org.semanticwb.process.model.GraphicalElement
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> listContaineds()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement>(getSemanticObject().listObjectProperties(swp_hasContainedInv));
+    }
+
+   /**
+   * Gets true if has a Contained
+   * @param value org.semanticwb.process.model.GraphicalElement to verify
+   * @return true if the org.semanticwb.process.model.GraphicalElement exists, false otherwise
+   */
+    public boolean hasContained(org.semanticwb.process.model.GraphicalElement value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swp_hasContainedInv,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets the Contained
+   * @return a org.semanticwb.process.model.GraphicalElement
+   */
+    public org.semanticwb.process.model.GraphicalElement getContained()
+    {
+         org.semanticwb.process.model.GraphicalElement ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasContainedInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.GraphicalElement)obj.createGenericInstance();
+         }
+         return ret;
+    }
    /**
    * Gets all the org.semanticwb.model.CalendarRef
    * @return A GenericIterator with all the org.semanticwb.model.CalendarRef
@@ -590,99 +683,6 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
              ret=(org.semanticwb.model.CalendarRef)obj.createGenericInstance();
          }
          return ret;
-    }
-   /**
-   * Gets all the org.semanticwb.process.model.GraphicalElement
-   * @return A GenericIterator with all the org.semanticwb.process.model.GraphicalElement
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> listContaineds()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement>(getSemanticObject().listObjectProperties(swp_hasContainedInv));
-    }
-
-   /**
-   * Gets true if has a Contained
-   * @param value org.semanticwb.process.model.GraphicalElement to verify
-   * @return true if the org.semanticwb.process.model.GraphicalElement exists, false otherwise
-   */
-    public boolean hasContained(org.semanticwb.process.model.GraphicalElement value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(swp_hasContainedInv,value.getSemanticObject());
-        }
-        return ret;
-    }
-
-   /**
-   * Gets the Contained
-   * @return a org.semanticwb.process.model.GraphicalElement
-   */
-    public org.semanticwb.process.model.GraphicalElement getContained()
-    {
-         org.semanticwb.process.model.GraphicalElement ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasContainedInv);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.process.model.GraphicalElement)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-/**
-* Gets the Expiration property
-* @return java.util.Date with the Expiration
-*/
-    public java.util.Date getExpiration()
-    {
-        return getSemanticObject().getDateProperty(swb_expiration);
-    }
-
-/**
-* Sets the Expiration property
-* @param value long with the Expiration
-*/
-    public void setExpiration(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_expiration, value);
-    }
-
-/**
-* Gets the IconClass property
-* @return String with the IconClass
-*/
-    public String getIconClass()
-    {
-        return getSemanticObject().getProperty(swb_iconClass);
-    }
-
-/**
-* Sets the IconClass property
-* @param value long with the IconClass
-*/
-    public void setIconClass(String value)
-    {
-        getSemanticObject().setProperty(swb_iconClass, value);
-    }
-
-/**
-* Gets the MaxHits property
-* @return long with the MaxHits
-*/
-    public long getMaxHits()
-    {
-        return getSemanticObject().getLongProperty(swb_maxHits);
-    }
-
-/**
-* Sets the MaxHits property
-* @param value long with the MaxHits
-*/
-    public void setMaxHits(long value)
-    {
-        getSemanticObject().setLongProperty(swb_maxHits, value);
     }
 
    /**

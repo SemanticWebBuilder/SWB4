@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessPeriodBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.XMLable,org.semanticwb.model.FilterableClass
+public abstract class ProcessPeriodBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.XMLable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass
 {
     public static final org.semanticwb.platform.SemanticClass swp_ProcessPeriodRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessPeriodRef");
     public static final org.semanticwb.platform.SemanticProperty swp_hasProcessPeriodRefInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasProcessPeriodRefInv");
@@ -81,29 +81,6 @@ public abstract class ProcessPeriodBase extends org.semanticwb.process.model.Pro
             return (getProcessPeriod(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.process.model.ProcessPeriod with a determined ProcessPeriodRefInv
-       * @param value ProcessPeriodRefInv of the type org.semanticwb.process.model.ProcessPeriodRef
-       * @param model Model of the org.semanticwb.process.model.ProcessPeriod
-       * @return Iterator with all the org.semanticwb.process.model.ProcessPeriod
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.ProcessPeriod> listProcessPeriodByProcessPeriodRefInv(org.semanticwb.process.model.ProcessPeriodRef value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessPeriod> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasProcessPeriodRefInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.ProcessPeriod with a determined ProcessPeriodRefInv
-       * @param value ProcessPeriodRefInv of the type org.semanticwb.process.model.ProcessPeriodRef
-       * @return Iterator with all the org.semanticwb.process.model.ProcessPeriod
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.ProcessPeriod> listProcessPeriodByProcessPeriodRefInv(org.semanticwb.process.model.ProcessPeriodRef value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessPeriod> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasProcessPeriodRefInv,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.ProcessPeriod with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.ProcessPeriod
@@ -124,6 +101,29 @@ public abstract class ProcessPeriodBase extends org.semanticwb.process.model.Pro
         public static java.util.Iterator<org.semanticwb.process.model.ProcessPeriod> listProcessPeriodByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessPeriod> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessPeriod with a determined ProcessPeriodRefInv
+       * @param value ProcessPeriodRefInv of the type org.semanticwb.process.model.ProcessPeriodRef
+       * @param model Model of the org.semanticwb.process.model.ProcessPeriod
+       * @return Iterator with all the org.semanticwb.process.model.ProcessPeriod
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessPeriod> listProcessPeriodByProcessPeriodRefInv(org.semanticwb.process.model.ProcessPeriodRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessPeriod> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasProcessPeriodRefInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ProcessPeriod with a determined ProcessPeriodRefInv
+       * @param value ProcessPeriodRefInv of the type org.semanticwb.process.model.ProcessPeriodRef
+       * @return Iterator with all the org.semanticwb.process.model.ProcessPeriod
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessPeriod> listProcessPeriodByProcessPeriodRefInv(org.semanticwb.process.model.ProcessPeriodRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessPeriod> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasProcessPeriodRefInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -158,24 +158,6 @@ public abstract class ProcessPeriodBase extends org.semanticwb.process.model.Pro
     public ProcessPeriodBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-/**
-* Gets the Xml property
-* @return String with the Xml
-*/
-    public String getXml()
-    {
-        return getSemanticObject().getProperty(swb_xml);
-    }
-
-/**
-* Sets the Xml property
-* @param value long with the Xml
-*/
-    public void setXml(String value)
-    {
-        getSemanticObject().setProperty(swb_xml, value);
     }
    /**
    * Gets all the org.semanticwb.process.model.ProcessPeriodRef
@@ -215,6 +197,24 @@ public abstract class ProcessPeriodBase extends org.semanticwb.process.model.Pro
              ret=(org.semanticwb.process.model.ProcessPeriodRef)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Xml property
+* @return String with the Xml
+*/
+    public String getXml()
+    {
+        return getSemanticObject().getProperty(swb_xml);
+    }
+
+/**
+* Sets the Xml property
+* @param value long with the Xml
+*/
+    public void setXml(String value)
+    {
+        getSemanticObject().setProperty(swb_xml, value);
     }
 
    /**

@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class TimerIntermediateCatchEventBase extends org.semanticwb.process.model.IntermediateCatchEvent implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ActionCodeable,org.semanticwb.process.model.ProcessPeriodRefable,org.semanticwb.model.Referensable
+public abstract class TimerIntermediateCatchEventBase extends org.semanticwb.process.model.IntermediateCatchEvent implements org.semanticwb.process.model.ActionCodeable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ProcessPeriodRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable
 {
     public static final org.semanticwb.platform.SemanticClass swp_TimerIntermediateCatchEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#TimerIntermediateCatchEvent");
    /**
@@ -79,52 +79,6 @@ public abstract class TimerIntermediateCatchEventBase extends org.semanticwb.pro
             return (getTimerIntermediateCatchEvent(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.process.model.TimerIntermediateCatchEvent with a determined Container
-       * @param value Container of the type org.semanticwb.process.model.Containerable
-       * @param model Model of the org.semanticwb.process.model.TimerIntermediateCatchEvent
-       * @return Iterator with all the org.semanticwb.process.model.TimerIntermediateCatchEvent
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> listTimerIntermediateCatchEventByContainer(org.semanticwb.process.model.Containerable value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_container, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.TimerIntermediateCatchEvent with a determined Container
-       * @param value Container of the type org.semanticwb.process.model.Containerable
-       * @return Iterator with all the org.semanticwb.process.model.TimerIntermediateCatchEvent
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> listTimerIntermediateCatchEventByContainer(org.semanticwb.process.model.Containerable value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_container,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.TimerIntermediateCatchEvent with a determined FlowObjectInstance
-       * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
-       * @param model Model of the org.semanticwb.process.model.TimerIntermediateCatchEvent
-       * @return Iterator with all the org.semanticwb.process.model.TimerIntermediateCatchEvent
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> listTimerIntermediateCatchEventByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.TimerIntermediateCatchEvent with a determined FlowObjectInstance
-       * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
-       * @return Iterator with all the org.semanticwb.process.model.TimerIntermediateCatchEvent
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> listTimerIntermediateCatchEventByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.TimerIntermediateCatchEvent with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.TimerIntermediateCatchEvent
@@ -145,29 +99,6 @@ public abstract class TimerIntermediateCatchEventBase extends org.semanticwb.pro
         public static java.util.Iterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> listTimerIntermediateCatchEventByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.TimerIntermediateCatchEvent with a determined OutputConnectionObject
-       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
-       * @param model Model of the org.semanticwb.process.model.TimerIntermediateCatchEvent
-       * @return Iterator with all the org.semanticwb.process.model.TimerIntermediateCatchEvent
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> listTimerIntermediateCatchEventByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.TimerIntermediateCatchEvent with a determined OutputConnectionObject
-       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
-       * @return Iterator with all the org.semanticwb.process.model.TimerIntermediateCatchEvent
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> listTimerIntermediateCatchEventByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -217,6 +148,52 @@ public abstract class TimerIntermediateCatchEventBase extends org.semanticwb.pro
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.TimerIntermediateCatchEvent with a determined Parent
+       * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
+       * @param model Model of the org.semanticwb.process.model.TimerIntermediateCatchEvent
+       * @return Iterator with all the org.semanticwb.process.model.TimerIntermediateCatchEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> listTimerIntermediateCatchEventByParent(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_parent, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.TimerIntermediateCatchEvent with a determined Parent
+       * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
+       * @return Iterator with all the org.semanticwb.process.model.TimerIntermediateCatchEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> listTimerIntermediateCatchEventByParent(org.semanticwb.process.model.GraphicalElement value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_parent,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.TimerIntermediateCatchEvent with a determined Container
+       * @param value Container of the type org.semanticwb.process.model.Containerable
+       * @param model Model of the org.semanticwb.process.model.TimerIntermediateCatchEvent
+       * @return Iterator with all the org.semanticwb.process.model.TimerIntermediateCatchEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> listTimerIntermediateCatchEventByContainer(org.semanticwb.process.model.Containerable value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_container, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.TimerIntermediateCatchEvent with a determined Container
+       * @param value Container of the type org.semanticwb.process.model.Containerable
+       * @return Iterator with all the org.semanticwb.process.model.TimerIntermediateCatchEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> listTimerIntermediateCatchEventByContainer(org.semanticwb.process.model.Containerable value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_container,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.TimerIntermediateCatchEvent with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.TimerIntermediateCatchEvent
@@ -240,6 +217,52 @@ public abstract class TimerIntermediateCatchEventBase extends org.semanticwb.pro
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.TimerIntermediateCatchEvent with a determined OutputConnectionObject
+       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
+       * @param model Model of the org.semanticwb.process.model.TimerIntermediateCatchEvent
+       * @return Iterator with all the org.semanticwb.process.model.TimerIntermediateCatchEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> listTimerIntermediateCatchEventByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.TimerIntermediateCatchEvent with a determined OutputConnectionObject
+       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
+       * @return Iterator with all the org.semanticwb.process.model.TimerIntermediateCatchEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> listTimerIntermediateCatchEventByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.TimerIntermediateCatchEvent with a determined FlowObjectInstance
+       * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
+       * @param model Model of the org.semanticwb.process.model.TimerIntermediateCatchEvent
+       * @return Iterator with all the org.semanticwb.process.model.TimerIntermediateCatchEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> listTimerIntermediateCatchEventByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.TimerIntermediateCatchEvent with a determined FlowObjectInstance
+       * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
+       * @return Iterator with all the org.semanticwb.process.model.TimerIntermediateCatchEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> listTimerIntermediateCatchEventByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.TimerIntermediateCatchEvent with a determined ProcessPeriodRef
        * @param value ProcessPeriodRef of the type org.semanticwb.process.model.ProcessPeriodRef
        * @param model Model of the org.semanticwb.process.model.TimerIntermediateCatchEvent
@@ -260,29 +283,6 @@ public abstract class TimerIntermediateCatchEventBase extends org.semanticwb.pro
         public static java.util.Iterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> listTimerIntermediateCatchEventByProcessPeriodRef(org.semanticwb.process.model.ProcessPeriodRef value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasProcessPeriodRef,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.TimerIntermediateCatchEvent with a determined Parent
-       * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
-       * @param model Model of the org.semanticwb.process.model.TimerIntermediateCatchEvent
-       * @return Iterator with all the org.semanticwb.process.model.TimerIntermediateCatchEvent
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> listTimerIntermediateCatchEventByParent(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_parent, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.TimerIntermediateCatchEvent with a determined Parent
-       * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
-       * @return Iterator with all the org.semanticwb.process.model.TimerIntermediateCatchEvent
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> listTimerIntermediateCatchEventByParent(org.semanticwb.process.model.GraphicalElement value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_parent,value.getSemanticObject(),sclass));
             return it;
         }
     }

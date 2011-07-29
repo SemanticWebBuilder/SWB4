@@ -3,12 +3,12 @@ package org.semanticwb.process.model.base;
 
 public abstract class InstanceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.process.model.ProcessTraceable
 {
+    public static final org.semanticwb.platform.SemanticProperty swp_iteration=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#iteration");
+    public static final org.semanticwb.platform.SemanticProperty swp_action=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#action");
+    public static final org.semanticwb.platform.SemanticProperty swp_status=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#status");
     public static final org.semanticwb.platform.SemanticProperty swp_execution=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#execution");
     public static final org.semanticwb.platform.SemanticClass swp_ItemAwareReference=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ItemAwareReference");
     public static final org.semanticwb.platform.SemanticProperty swp_hasItemAwareReference=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasItemAwareReference");
-    public static final org.semanticwb.platform.SemanticProperty swp_action=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#action");
-    public static final org.semanticwb.platform.SemanticProperty swp_status=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#status");
-    public static final org.semanticwb.platform.SemanticProperty swp_iteration=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#iteration");
     public static final org.semanticwb.platform.SemanticClass swp_Instance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Instance");
    /**
    * The semantic class that represents the currentObject
@@ -79,6 +79,29 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
             return (getInstance(id, model)!=null);
         }
        /**
+       * Gets all org.semanticwb.process.model.Instance with a determined Endedby
+       * @param value Endedby of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.process.model.Instance
+       * @return Iterator with all the org.semanticwb.process.model.Instance
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Instance> listInstanceByEndedby(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Instance> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_endedby, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Instance with a determined Endedby
+       * @param value Endedby of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.process.model.Instance
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Instance> listInstanceByEndedby(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Instance> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_endedby,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.Instance with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.Instance
@@ -99,29 +122,6 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
         public static java.util.Iterator<org.semanticwb.process.model.Instance> listInstanceByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Instance> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.Instance with a determined ItemAwareReference
-       * @param value ItemAwareReference of the type org.semanticwb.process.model.ItemAwareReference
-       * @param model Model of the org.semanticwb.process.model.Instance
-       * @return Iterator with all the org.semanticwb.process.model.Instance
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.Instance> listInstanceByItemAwareReference(org.semanticwb.process.model.ItemAwareReference value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Instance> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasItemAwareReference, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.Instance with a determined ItemAwareReference
-       * @param value ItemAwareReference of the type org.semanticwb.process.model.ItemAwareReference
-       * @return Iterator with all the org.semanticwb.process.model.Instance
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.Instance> listInstanceByItemAwareReference(org.semanticwb.process.model.ItemAwareReference value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Instance> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasItemAwareReference,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -171,26 +171,26 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.Instance with a determined Endedby
-       * @param value Endedby of the type org.semanticwb.model.User
+       * Gets all org.semanticwb.process.model.Instance with a determined ItemAwareReference
+       * @param value ItemAwareReference of the type org.semanticwb.process.model.ItemAwareReference
        * @param model Model of the org.semanticwb.process.model.Instance
        * @return Iterator with all the org.semanticwb.process.model.Instance
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.Instance> listInstanceByEndedby(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.Instance> listInstanceByItemAwareReference(org.semanticwb.process.model.ItemAwareReference value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Instance> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_endedby, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Instance> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasItemAwareReference, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.Instance with a determined Endedby
-       * @param value Endedby of the type org.semanticwb.model.User
+       * Gets all org.semanticwb.process.model.Instance with a determined ItemAwareReference
+       * @param value ItemAwareReference of the type org.semanticwb.process.model.ItemAwareReference
        * @return Iterator with all the org.semanticwb.process.model.Instance
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.Instance> listInstanceByEndedby(org.semanticwb.model.User value)
+        public static java.util.Iterator<org.semanticwb.process.model.Instance> listInstanceByItemAwareReference(org.semanticwb.process.model.ItemAwareReference value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Instance> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_endedby,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Instance> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasItemAwareReference,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -203,59 +203,43 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
     {
         super(base);
     }
+   /**
+   * Sets the value for the property Endedby
+   * @param value Endedby to set
+   */
 
-/**
-* Gets the Ended property
-* @return java.util.Date with the Ended
-*/
-    public java.util.Date getEnded()
+    public void setEndedby(org.semanticwb.model.User value)
     {
-        return getSemanticObject().getDateProperty(swp_ended);
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_endedby, value.getSemanticObject());
+        }else
+        {
+            removeEndedby();
+        }
+    }
+   /**
+   * Remove the value for Endedby property
+   */
+
+    public void removeEndedby()
+    {
+        getSemanticObject().removeProperty(swp_endedby);
     }
 
-/**
-* Sets the Ended property
-* @param value long with the Ended
-*/
-    public void setEnded(java.util.Date value)
+   /**
+   * Gets the Endedby
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getEndedby()
     {
-        getSemanticObject().setDateProperty(swp_ended, value);
-    }
-
-/**
-* Gets the Execution property
-* @return int with the Execution
-*/
-    public int getExecution()
-    {
-        return getSemanticObject().getIntProperty(swp_execution);
-    }
-
-/**
-* Sets the Execution property
-* @param value long with the Execution
-*/
-    public void setExecution(int value)
-    {
-        getSemanticObject().setIntProperty(swp_execution, value);
-    }
-
-/**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_endedby);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Sets the value for the property ModifiedBy
@@ -297,6 +281,80 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
     }
 
 /**
+* Gets the Ended property
+* @return java.util.Date with the Ended
+*/
+    public java.util.Date getEnded()
+    {
+        return getSemanticObject().getDateProperty(swp_ended);
+    }
+
+/**
+* Sets the Ended property
+* @param value long with the Ended
+*/
+    public void setEnded(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swp_ended, value);
+    }
+
+/**
+* Gets the Iteration property
+* @return int with the Iteration
+*/
+    public int getIteration()
+    {
+        return getSemanticObject().getIntProperty(swp_iteration);
+    }
+
+/**
+* Sets the Iteration property
+* @param value long with the Iteration
+*/
+    public void setIteration(int value)
+    {
+        getSemanticObject().setIntProperty(swp_iteration, value);
+    }
+   /**
+   * Sets the value for the property Assignedto
+   * @param value Assignedto to set
+   */
+
+    public void setAssignedto(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_assignedto, value.getSemanticObject());
+        }else
+        {
+            removeAssignedto();
+        }
+    }
+   /**
+   * Remove the value for Assignedto property
+   */
+
+    public void removeAssignedto()
+    {
+        getSemanticObject().removeProperty(swp_assignedto);
+    }
+
+   /**
+   * Gets the Assignedto
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getAssignedto()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_assignedto);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
 * Gets the Updated property
 * @return java.util.Date with the Updated
 */
@@ -312,6 +370,116 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
     public void setUpdated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_updated, value);
+    }
+
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+/**
+* Gets the Action property
+* @return String with the Action
+*/
+    public String getAction()
+    {
+        return getSemanticObject().getProperty(swp_action);
+    }
+
+/**
+* Sets the Action property
+* @param value long with the Action
+*/
+    public void setAction(String value)
+    {
+        getSemanticObject().setProperty(swp_action, value);
+    }
+
+/**
+* Gets the Status property
+* @return int with the Status
+*/
+    public int getStatus()
+    {
+        return getSemanticObject().getIntProperty(swp_status);
+    }
+
+/**
+* Sets the Status property
+* @param value long with the Status
+*/
+    public void setStatus(int value)
+    {
+        getSemanticObject().setIntProperty(swp_status, value);
+    }
+
+/**
+* Gets the Execution property
+* @return int with the Execution
+*/
+    public int getExecution()
+    {
+        return getSemanticObject().getIntProperty(swp_execution);
+    }
+
+/**
+* Sets the Execution property
+* @param value long with the Execution
+*/
+    public void setExecution(int value)
+    {
+        getSemanticObject().setIntProperty(swp_execution, value);
+    }
+   /**
+   * Sets the value for the property Creator
+   * @param value Creator to set
+   */
+
+    public void setCreator(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
+    }
+   /**
+   * Remove the value for Creator property
+   */
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(swb_creator);
+    }
+
+   /**
+   * Gets the Creator
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getCreator()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Gets all the org.semanticwb.process.model.ItemAwareReference
@@ -380,24 +548,6 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
     }
 
 /**
-* Gets the Action property
-* @return String with the Action
-*/
-    public String getAction()
-    {
-        return getSemanticObject().getProperty(swp_action);
-    }
-
-/**
-* Sets the Action property
-* @param value long with the Action
-*/
-    public void setAction(String value)
-    {
-        getSemanticObject().setProperty(swp_action, value);
-    }
-
-/**
 * Gets the Assigned property
 * @return java.util.Date with the Assigned
 */
@@ -413,155 +563,5 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
     public void setAssigned(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swp_assigned, value);
-    }
-
-/**
-* Gets the Status property
-* @return int with the Status
-*/
-    public int getStatus()
-    {
-        return getSemanticObject().getIntProperty(swp_status);
-    }
-
-/**
-* Sets the Status property
-* @param value long with the Status
-*/
-    public void setStatus(int value)
-    {
-        getSemanticObject().setIntProperty(swp_status, value);
-    }
-
-/**
-* Gets the Iteration property
-* @return int with the Iteration
-*/
-    public int getIteration()
-    {
-        return getSemanticObject().getIntProperty(swp_iteration);
-    }
-
-/**
-* Sets the Iteration property
-* @param value long with the Iteration
-*/
-    public void setIteration(int value)
-    {
-        getSemanticObject().setIntProperty(swp_iteration, value);
-    }
-   /**
-   * Sets the value for the property Assignedto
-   * @param value Assignedto to set
-   */
-
-    public void setAssignedto(org.semanticwb.model.User value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swp_assignedto, value.getSemanticObject());
-        }else
-        {
-            removeAssignedto();
-        }
-    }
-   /**
-   * Remove the value for Assignedto property
-   */
-
-    public void removeAssignedto()
-    {
-        getSemanticObject().removeProperty(swp_assignedto);
-    }
-
-   /**
-   * Gets the Assignedto
-   * @return a org.semanticwb.model.User
-   */
-    public org.semanticwb.model.User getAssignedto()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_assignedto);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
-    }
-   /**
-   * Sets the value for the property Creator
-   * @param value Creator to set
-   */
-
-    public void setCreator(org.semanticwb.model.User value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
-        }else
-        {
-            removeCreator();
-        }
-    }
-   /**
-   * Remove the value for Creator property
-   */
-
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(swb_creator);
-    }
-
-   /**
-   * Gets the Creator
-   * @return a org.semanticwb.model.User
-   */
-    public org.semanticwb.model.User getCreator()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
-    }
-   /**
-   * Sets the value for the property Endedby
-   * @param value Endedby to set
-   */
-
-    public void setEndedby(org.semanticwb.model.User value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swp_endedby, value.getSemanticObject());
-        }else
-        {
-            removeEndedby();
-        }
-    }
-   /**
-   * Remove the value for Endedby property
-   */
-
-    public void removeEndedby()
-    {
-        getSemanticObject().removeProperty(swp_endedby);
-    }
-
-   /**
-   * Gets the Endedby
-   * @return a org.semanticwb.model.User
-   */
-    public org.semanticwb.model.User getEndedby()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_endedby);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
     }
 }

@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class TimerStartEventBase extends org.semanticwb.process.model.StartEvent implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ActionCodeable,org.semanticwb.process.model.ProcessPeriodRefable,org.semanticwb.model.Referensable
+public abstract class TimerStartEventBase extends org.semanticwb.process.model.StartEvent implements org.semanticwb.process.model.ActionCodeable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ProcessPeriodRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable
 {
     public static final org.semanticwb.platform.SemanticClass swp_TimerStartEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#TimerStartEvent");
    /**
@@ -79,75 +79,6 @@ public abstract class TimerStartEventBase extends org.semanticwb.process.model.S
             return (getTimerStartEvent(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.process.model.TimerStartEvent with a determined Container
-       * @param value Container of the type org.semanticwb.process.model.Containerable
-       * @param model Model of the org.semanticwb.process.model.TimerStartEvent
-       * @return Iterator with all the org.semanticwb.process.model.TimerStartEvent
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByContainer(org.semanticwb.process.model.Containerable value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_container, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.TimerStartEvent with a determined Container
-       * @param value Container of the type org.semanticwb.process.model.Containerable
-       * @return Iterator with all the org.semanticwb.process.model.TimerStartEvent
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByContainer(org.semanticwb.process.model.Containerable value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_container,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.TimerStartEvent with a determined FlowObjectInstance
-       * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
-       * @param model Model of the org.semanticwb.process.model.TimerStartEvent
-       * @return Iterator with all the org.semanticwb.process.model.TimerStartEvent
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.TimerStartEvent with a determined FlowObjectInstance
-       * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
-       * @return Iterator with all the org.semanticwb.process.model.TimerStartEvent
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.TimerStartEvent with a determined Next
-       * @param value Next of the type org.semanticwb.process.model.FlowNode
-       * @param model Model of the org.semanticwb.process.model.TimerStartEvent
-       * @return Iterator with all the org.semanticwb.process.model.TimerStartEvent
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByNext(org.semanticwb.process.model.FlowNode value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_ie_next, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.TimerStartEvent with a determined Next
-       * @param value Next of the type org.semanticwb.process.model.FlowNode
-       * @return Iterator with all the org.semanticwb.process.model.TimerStartEvent
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByNext(org.semanticwb.process.model.FlowNode value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_ie_next,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.TimerStartEvent with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.TimerStartEvent
@@ -168,29 +99,6 @@ public abstract class TimerStartEventBase extends org.semanticwb.process.model.S
         public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.TimerStartEvent with a determined OutputConnectionObject
-       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
-       * @param model Model of the org.semanticwb.process.model.TimerStartEvent
-       * @return Iterator with all the org.semanticwb.process.model.TimerStartEvent
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.TimerStartEvent with a determined OutputConnectionObject
-       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
-       * @return Iterator with all the org.semanticwb.process.model.TimerStartEvent
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -240,6 +148,52 @@ public abstract class TimerStartEventBase extends org.semanticwb.process.model.S
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.TimerStartEvent with a determined Parent
+       * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
+       * @param model Model of the org.semanticwb.process.model.TimerStartEvent
+       * @return Iterator with all the org.semanticwb.process.model.TimerStartEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByParent(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_parent, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.TimerStartEvent with a determined Parent
+       * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
+       * @return Iterator with all the org.semanticwb.process.model.TimerStartEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByParent(org.semanticwb.process.model.GraphicalElement value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_parent,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.TimerStartEvent with a determined Container
+       * @param value Container of the type org.semanticwb.process.model.Containerable
+       * @param model Model of the org.semanticwb.process.model.TimerStartEvent
+       * @return Iterator with all the org.semanticwb.process.model.TimerStartEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByContainer(org.semanticwb.process.model.Containerable value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_container, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.TimerStartEvent with a determined Container
+       * @param value Container of the type org.semanticwb.process.model.Containerable
+       * @return Iterator with all the org.semanticwb.process.model.TimerStartEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByContainer(org.semanticwb.process.model.Containerable value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_container,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.TimerStartEvent with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.TimerStartEvent
@@ -263,6 +217,75 @@ public abstract class TimerStartEventBase extends org.semanticwb.process.model.S
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.TimerStartEvent with a determined OutputConnectionObject
+       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
+       * @param model Model of the org.semanticwb.process.model.TimerStartEvent
+       * @return Iterator with all the org.semanticwb.process.model.TimerStartEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.TimerStartEvent with a determined OutputConnectionObject
+       * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
+       * @return Iterator with all the org.semanticwb.process.model.TimerStartEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.TimerStartEvent with a determined Next
+       * @param value Next of the type org.semanticwb.process.model.FlowNode
+       * @param model Model of the org.semanticwb.process.model.TimerStartEvent
+       * @return Iterator with all the org.semanticwb.process.model.TimerStartEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByNext(org.semanticwb.process.model.FlowNode value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_ie_next, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.TimerStartEvent with a determined Next
+       * @param value Next of the type org.semanticwb.process.model.FlowNode
+       * @return Iterator with all the org.semanticwb.process.model.TimerStartEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByNext(org.semanticwb.process.model.FlowNode value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_ie_next,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.TimerStartEvent with a determined FlowObjectInstance
+       * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
+       * @param model Model of the org.semanticwb.process.model.TimerStartEvent
+       * @return Iterator with all the org.semanticwb.process.model.TimerStartEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.TimerStartEvent with a determined FlowObjectInstance
+       * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
+       * @return Iterator with all the org.semanticwb.process.model.TimerStartEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.TimerStartEvent with a determined ProcessPeriodRef
        * @param value ProcessPeriodRef of the type org.semanticwb.process.model.ProcessPeriodRef
        * @param model Model of the org.semanticwb.process.model.TimerStartEvent
@@ -283,29 +306,6 @@ public abstract class TimerStartEventBase extends org.semanticwb.process.model.S
         public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByProcessPeriodRef(org.semanticwb.process.model.ProcessPeriodRef value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasProcessPeriodRef,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.TimerStartEvent with a determined Parent
-       * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
-       * @param model Model of the org.semanticwb.process.model.TimerStartEvent
-       * @return Iterator with all the org.semanticwb.process.model.TimerStartEvent
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByParent(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_parent, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.TimerStartEvent with a determined Parent
-       * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
-       * @return Iterator with all the org.semanticwb.process.model.TimerStartEvent
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByParent(org.semanticwb.process.model.GraphicalElement value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_parent,value.getSemanticObject(),sclass));
             return it;
         }
     }
