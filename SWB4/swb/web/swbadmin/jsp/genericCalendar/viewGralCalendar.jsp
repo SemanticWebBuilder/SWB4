@@ -218,6 +218,11 @@
 
         var todaysYear = today.getFullYear();
 
+	function makeArray() {
+            for (i = 0; i < makeArray.arguments.length; i++)
+                    this[i + 1] = makeArray.arguments[i];
+        }
+
         var months = new makeArray("<%=paramRequest.getLocaleString("lb_month1")%>",
                                    "<%=paramRequest.getLocaleString("lb_month2")%>",
                                    "<%=paramRequest.getLocaleString("lb_month3")%>",
