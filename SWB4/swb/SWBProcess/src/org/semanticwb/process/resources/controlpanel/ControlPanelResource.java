@@ -2,6 +2,7 @@ package org.semanticwb.process.resources.controlpanel;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
@@ -84,16 +85,27 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
      * @return Lista de instancias de procesos filtradas y ordenadas.
      */
     private ArrayList<ProcessInstance> getProcessInstances(HttpServletRequest request, SWBParamRequest paramRequest) {
-        ArrayList<ProcessInstance> instances = new ArrayList<ProcessInstance>();
+        ArrayList<ProcessInstance> t_instances = new ArrayList<ProcessInstance>();
         WebSite site = paramRequest.getWebPage().getWebSite();
         ProcessGroup group = null;
         String sortType = request.getParameter("sort");
+        int page = 1;
+        int itemsPerPage = getItemsPerPage();
         int statusFilter = STATUS_ALL;
 
         if (sortType == null || sortType.trim().equals("")) {
             sortType = "date";
         } else {
             sortType = sortType.trim();
+        }
+
+        if (request.getParameter("page") != null && !request.getParameter("page").trim().equals("")) {
+            page = Integer.valueOf(request.getParameter("page"));
+            if (page < 0) page = 1;
+        }
+
+        if (itemsPerPage < 5) {
+            itemsPerPage = 5;
         }
 
         if (request.getParameter("sFilter") != null && !request.getParameter("sFilter").trim().equals("")) {
@@ -108,27 +120,53 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
         if (processes != null && processes.hasNext()) {
             while(processes.hasNext()) {
                 Process process = processes.next();
-                instances.addAll(_getProcessInstances((ProcessSite)site, group, process, statusFilter));
+                t_instances.addAll(_getProcessInstances((ProcessSite)site, group, process, statusFilter));
             }
         }
 
         Iterator<ProcessInstance> it_ins = null;
         if (sortType.equals("date")) {
-            it_ins = SWBComparator.sortByCreated(instances.iterator());
+            it_ins = SWBComparator.sortByCreated(t_instances.iterator());
         } else if (sortType.equals("name")) {
-            it_ins = SWBComparator.sortSermanticObjects(processNameComparator, instances.iterator());
+            it_ins = SWBComparator.sortSermanticObjects(processNameComparator, t_instances.iterator());
         } else if (sortType.equals("priority")) {
-            it_ins = SWBComparator.sortSermanticObjects(processPriorityComparator, instances.iterator());
-        }
+            Collections.sort(t_instances, processPriorityComparator);
+            it_ins = t_instances.iterator();
+        }        
 
         if (it_ins != null) {
-            instances = new ArrayList<ProcessInstance>();
+            t_instances = new ArrayList<ProcessInstance>();
             while (it_ins.hasNext()) {
                 ProcessInstance processInstance = it_ins.next();
-                instances.add(processInstance);
+                t_instances.add(processInstance);
             }
         }
 
+        /******Pginado****/
+        //System.out.println("Paginando " + t_instances.size() + " instancias, itemsPerPage: " + itemsPerPage);
+        //System.out.println("Mostrando página " + page);
+        int maxPages = 1;
+        if (t_instances.size() >= itemsPerPage) {
+            maxPages = (int)Math.ceil((double)t_instances.size() / itemsPerPage);
+        }
+        if (page > maxPages) page = maxPages;
+        //System.out.println("Número máximo de páginas: " + maxPages);
+        
+        int sIndex = (page - 1) * itemsPerPage;
+        if (t_instances.size() > itemsPerPage && sIndex >= t_instances.size() - 1) {
+            sIndex = t_instances.size() - itemsPerPage;
+        }
+
+        int eIndex = sIndex + itemsPerPage;
+        if (eIndex >= t_instances.size()) eIndex = t_instances.size();
+        //System.out.println("sIndex = " + sIndex);
+        //System.out.println("eIndex = " + eIndex);
+        request.setAttribute("maxPages", maxPages);
+        ArrayList<ProcessInstance> instances = new ArrayList<ProcessInstance>();
+        for (int i = sIndex; i < eIndex; i++) {
+            ProcessInstance instance = t_instances.get(i);
+            instances.add(instance);
+        }
         return instances;
     }
 
