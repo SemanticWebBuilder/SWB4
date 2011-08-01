@@ -1550,6 +1550,18 @@ public Document getDomProperty(SemanticProperty prop)
         }
 
         removePropertyValueCache(prop, "list");
+        if(prop.isInverseOf())
+        {
+            SemanticProperty inv=prop.getInverse();
+            if(inv.getCardinality()==1)
+            {
+                object.removePropertyValueCache(prop.getInverse(), NULL);
+            }else
+            {
+                object.removePropertyValueCache(prop.getInverse(), "list");
+            }
+        }                
+        
         return this;
     }
 
