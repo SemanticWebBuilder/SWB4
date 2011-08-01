@@ -36,6 +36,19 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
             return ((ProcessInstance)t).getProcessType().getDisplayTitle(lang).compareTo(((ProcessInstance)t1).getProcessType().getDisplayTitle(lang));
         }
     };
+    private Comparator processPriorityComparator = new Comparator() {
+        String lang = "es";
+        
+        public int compare(Object t, Object t1) {
+            int it1 = ((ProcessInstance)t).getPriority();
+            int it2 = ((ProcessInstance)t1).getPriority();
+            int ret = 0;
+
+            if (it1 > it2) ret = 1;
+            if (it1 < it2) ret = -1;
+            return ret;
+        }
+    };
 
     public ControlPanelResource()
     {
@@ -101,9 +114,11 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
 
         Iterator<ProcessInstance> it_ins = null;
         if (sortType.equals("date")) {
-            it_ins = SWBComparator.sortByCreated(instances.iterator());            
+            it_ins = SWBComparator.sortByCreated(instances.iterator());
         } else if (sortType.equals("name")) {
             it_ins = SWBComparator.sortSermanticObjects(processNameComparator, instances.iterator());
+        } else if (sortType.equals("priority")) {
+            it_ins = SWBComparator.sortSermanticObjects(processPriorityComparator, instances.iterator());
         }
 
         if (it_ins != null) {
