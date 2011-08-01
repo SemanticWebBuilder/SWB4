@@ -60,6 +60,7 @@ public class Viewer extends org.semanticwb.portal.resources.sem.slideshow.base.V
             out.println("    obj = document.getElementById(id)");
             out.println("    if(obj) {");
             out.println("      obj.src=img;");
+            out.println("      if(url || url!='#')");
             out.println("        obj.parentNode.href=url;");
             out.println("    }");
             out.println("    document.getElementById('pic_title').innerHTML=title;");
