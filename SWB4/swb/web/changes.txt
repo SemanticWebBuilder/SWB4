@@ -1,5 +1,10 @@
   4.1.0.0
-    - CONVERSIÓN A JAVA 1.6
+    - CONVERSIÓN A JAVA 1.6 (Jei)
+    - Se creó el Triple Store propio de SemanticWebBuilder, para mayor compatibilidad con las diversas BD (Jei)
+    - Se creó el Triple Store para integracion con Base de Datos Semantica nativa Bigdata (Jei)
+    - Se agregó la posibilidad de definir URL alternos para las páginas web personalizados por idioma y pais(Jei)
+    - BUG: se corrigió bug al activar contenidos en flujo (Jei)
+    - BUG: se corrigió bug al eliminar páginas web virtuales (Jei)
     - Se agregó la posibilidad de cifrar la contraseña con una llave RSA al autenticarse a SWB (Serch)
     - Identificar la Geolocalización por país de la IP del visitante (Serch)
     - BUG: se corrigió el problema con el bloqueo de logins al entrar erroneamente una clave inválida (Serch)
@@ -17,7 +22,7 @@
     - Se cambio forma de evaluar reglas, roles, grupos, calendarios de and a or (Jei)
     - Se agrego posibilidad de tener filtros inversos de recursos (Jei)
     - Se agrego patrones de inicio y termino multiples del RemoteWebApplication (Jei)
-    - Mejoras generales del paquete de compatibilidad con version WB3.
+    - Mejoras generales del paquete de compatibilidad con version WB3. (Jei)
     - Se agrego posibilidad de notificar por correo electrónico el firmado del usuario (Jei)
 
   4.0.2.2
