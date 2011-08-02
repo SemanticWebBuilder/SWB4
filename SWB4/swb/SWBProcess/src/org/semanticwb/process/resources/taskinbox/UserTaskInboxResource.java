@@ -1,6 +1,5 @@
 package org.semanticwb.process.resources.taskinbox;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,6 +22,10 @@ import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.UserTask;
 import org.semanticwb.process.resources.controlpanel.ControlPanelResource;
 
+/***
+ * Recurso Bandeja de Tareas de Usuario.
+ * @author Hasdai Pacheco {haxdai@gmail.com}
+ */
 public class UserTaskInboxResource extends org.semanticwb.process.resources.taskinbox.base.UserTaskInboxResourceBase 
 {
     private static Logger log = SWBUtils.getLogger(ControlPanelResource.class);
@@ -59,8 +62,8 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
     }
 
    /**
-   * Constructs a UserTaskInboxResource with a SemanticObject
-   * @param base The SemanticObject with the properties for the UserTaskInboxResource
+   * Construye una nueva instancia de un UserTaskInboxResource dado un SemanticObject
+   * @param base El SemanticObject con las propiedades para el UserTaskInboxResource
    */
     public UserTaskInboxResource(org.semanticwb.platform.SemanticObject base)
     {
@@ -130,6 +133,13 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         }
     }
 
+    /***
+     * Obtiene las instancias de las tareas de usuario en el sitio de procesos
+     * ordenadas y filtradas de acuerdo a los criterios especificados.
+     * @param request Objeto HttpServletRequest
+     * @param paramRequest Objeto SWBParamRequest
+     * @return Lista de instancias de tareas de usuario filtradas y ordenadas.
+     */
     private ArrayList<FlowNodeInstance> getUserTaskInstances(HttpServletRequest request, SWBParamRequest paramRequest) {
         ArrayList<FlowNodeInstance> t_instances = new ArrayList<FlowNodeInstance>();
         WebSite site = paramRequest.getWebPage().getWebSite();
