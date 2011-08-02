@@ -9,6 +9,7 @@ import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.WebSite;
@@ -100,7 +101,7 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/businessControlPanel.jsp";
+        String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/businessControlPanel.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(jsp);
 
         if (getDisplayCols() == null || getDisplayCols().trim().equals("")) {
@@ -118,7 +119,7 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
     }
     
     public void doConfig(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/businessControlPanelConfig.jsp";
+        String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/businessControlPanelConfig.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(jsp);
         try {
             request.setAttribute("paramRequest", paramRequest);
