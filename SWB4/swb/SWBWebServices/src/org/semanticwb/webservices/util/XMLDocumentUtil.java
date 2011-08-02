@@ -4,8 +4,16 @@
  */
 package org.semanticwb.webservices.util;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
@@ -14,12 +22,26 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import org.jdom.Namespace;
 import org.jdom.input.DOMBuilder;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.DOMOutputter;
-import org.json.JSONObject;
+import net.sf.json.JSONObject;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.webservices.ServiceException;
@@ -431,10 +453,32 @@ public class XMLDocumentUtil
         return jdom;
     }
     
-    public static JSONObject toJSON(org.w3c.dom.Document doc)
+    public static JSONObject toJSON(org.w3c.dom.Document doc) throws TransformerException, TransformerConfigurationException
     {
-        return null;
+        String xml = domToXml(doc,"UTF-8",true);
+        
+        TransformerFactory tfactory = TransformerFactory.newInstance();
+        InputStream is = XMLDocumentUtil.class.getClass().getResourceAsStream("/org/semanticwb/webservices/util/xml-to-json.xsl");
+        Transformer transformer = tfactory.newTransformer(new StreamSource(is));
+        
+        ByteArrayOutputStream dest = new ByteArrayOutputStream();
+        
+        transformer.transform(new StreamSource(getStreamFromString(xml)), new StreamResult(dest));
+        JSONObject json = JSONObject.fromObject(dest.toString());
+        return json;
     }
+    
+    private static InputStream getStreamFromString(String str)
+    {
+        InputStream ret = null;
+        if (str != null)
+        {
+            ret = new ByteArrayInputStream(str.getBytes());
+        }
+        return ret;
+    }
+     
+    
     public static String getPrefix(org.w3c.dom.Document doc, String namespace)
     {
         org.jdom.Document jdom = toJdom(doc);
@@ -665,8 +709,137 @@ public class XMLDocumentUtil
         }
     }
 
-    public static Document getDocument(JSONObject json, Document schema)
+    public static Document getDocument(JSONObject json, Document schema) throws ParserConfigurationException
     {
-        return null;
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document doc = db.newDocument();
+        Element root = doc.createElement("r");
+        doc.appendChild(root);
+        getDocument(json, doc, root);
+        return doc;
+    }
+    
+    public static Document getDocument(JSONObject json, Document schema, String rootname) throws ParserConfigurationException
+    {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document doc = db.newDocument();
+        Element root = doc.createElement(rootname);
+        doc.appendChild(root);
+        getDocument(json, doc, root);
+        return doc;
+    }
+    
+    private static void getDocument(JSONObject json, Document doc, Element node)  {
+        Iterator<String>it = json.keys();
+        while(it.hasNext()) {
+            String k = it.next();
+            
+            try {
+                JSONObject jo = json.getJSONObject(k);
+                Element child = doc.createElement(k);
+                getDocument(jo,doc,child);
+                node.appendChild(child);
+            }catch(Exception jsone1) {
+                try {
+                    JSONArray ja = json.getJSONArray(k);
+                    getDocument(ja,doc,node,k);
+                }catch(Exception jsone2) {
+                    try {
+                        String v = json.getString(k);
+                        Element child = doc.createElement(k);
+                        if(v!=null && !"null".equalsIgnoreCase(v))
+                            child.appendChild(doc.createTextNode(v));
+                        node.appendChild(child);
+                    }catch(Exception e) {
+                        Object v = json.get(k);
+                        Element child = doc.createElement(k);
+                        if(v!=null)
+                            child.appendChild(doc.createTextNode(v.toString()));
+                        node.appendChild(child);
+                    }
+                }
+            }
+        }
+    }
+    
+    private static void getDocument(JSONArray jarr, Document doc, Element node, String nodeName) {
+        if(jarr.isEmpty()) {
+            return;
+        }else {
+            for(int i=0; i<jarr.size(); i++) {
+                try {
+                    JSONObject j = jarr.getJSONObject(i);
+                        Element child = doc.createElement(nodeName);
+                        getDocument(j,doc,child);
+                        node.appendChild(child);
+                }catch(Exception json2) {
+                    try {
+                        JSONArray j = jarr.getJSONArray(i);
+                        getDocument(j,doc,node,nodeName);
+                    }catch(Exception jsone3) {
+                        Element child = doc.createElement(nodeName);
+                        child.appendChild(doc.createTextNode(jarr.getString(i)));
+                        node.appendChild(child);
+                    }
+                }
+            }
+        }
+    }
+    
+    public static String domToXml(Document dom, String encode, boolean indent) {
+        ByteArrayOutputStream sw = new java.io.ByteArrayOutputStream();
+        OutputStreamWriter osw = null;
+        try
+        {
+            osw = new java.io.OutputStreamWriter(sw, encode);
+            StreamResult streamResult = new StreamResult(osw);
+            TransformerFactory tFactory = TransformerFactory.newInstance();
+            Transformer transformer = null;
+            synchronized (tFactory)
+            {
+                transformer = tFactory.newTransformer();
+            }
+            transformer.setOutputProperty(OutputKeys.ENCODING, encode);
+            if (indent)
+            {
+                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                try
+                {
+                    transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+                } catch (Exception noe)
+                {/*No soportado en algunos xerses*/
+
+                }
+            }
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.transform(new DOMSource(dom), streamResult);
+        } catch (Exception e)
+        {
+            e.printStackTrace(System.out);
+        }
+        return sw.toString();
+    }
+    
+    private static String convertStreamToString(InputStream is) throws IOException {
+        if(is != null) {
+            Writer writer = new StringWriter();
+
+            char[] buffer = new char[1024];
+            try {
+                Reader reader = new BufferedReader(
+                new InputStreamReader(is, "UTF-8"));
+                int n;
+                while ((n = reader.read(buffer)) != -1) {
+                    writer.write(buffer, 0, n);
+                }
+            }finally {
+                is.close();
+            }
+            return writer.toString();
+        }else {       
+            return "";
+        }
     }
 }
