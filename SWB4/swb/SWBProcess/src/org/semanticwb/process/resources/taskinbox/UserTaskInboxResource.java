@@ -29,7 +29,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
     public static final int SORT_DATE = 1;
     public static final int SORT_NAME = 2;
     public static final int STATUS_ALL = -1;
-    private static final String paramCatalog = "idCol|nameCol|pNameCol|sdateCol|edateCol|actionsCol";
+    private static final String paramCatalog = "idCol|nameCol|pnameCol|sdateCol|edateCol|actionsCol";
     private Comparator taskNameComparator = new Comparator() {
         String lang = "es";
         public void Comparator (String lng) {
