@@ -141,9 +141,9 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
         WebSite site = paramRequest.getWebPage().getWebSite();
         ProcessGroup group = null;
         String sortType = request.getParameter("sort");
-        int page = 1;
         int itemsPerPage = getItemsPerPage();
         int statusFilter = STATUS_ALL;
+        int page = 1;
 
         if (sortType == null || sortType.trim().equals("")) {
             sortType = "date";
@@ -156,9 +156,7 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
             if (page < 0) page = 1;
         }
 
-        if (itemsPerPage < 5) {
-            itemsPerPage = 5;
-        }
+        if (itemsPerPage < 5) itemsPerPage = 5;
 
         if (request.getParameter("sFilter") != null && !request.getParameter("sFilter").trim().equals("")) {
             statusFilter = Integer.valueOf(request.getParameter("sFilter"));
@@ -180,7 +178,8 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
         if (sortType.equals("date")) {
             it_ins = SWBComparator.sortByCreated(t_instances.iterator());
         } else if (sortType.equals("name")) {
-            it_ins = SWBComparator.sortSermanticObjects(processNameComparator, t_instances.iterator());
+            Collections.sort(t_instances, processNameComparator);
+            it_ins = t_instances.iterator();
         } else if (sortType.equals("priority")) {
             Collections.sort(t_instances, processPriorityComparator);
             it_ins = t_instances.iterator();
@@ -194,15 +193,11 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
             }
         }
 
-        /******Pginado****/
-        //System.out.println("Paginando " + t_instances.size() + " instancias, itemsPerPage: " + itemsPerPage);
-        //System.out.println("Mostrando página " + page);
         int maxPages = 1;
         if (t_instances.size() >= itemsPerPage) {
             maxPages = (int)Math.ceil((double)t_instances.size() / itemsPerPage);
         }
         if (page > maxPages) page = maxPages;
-        //System.out.println("Número máximo de páginas: " + maxPages);
         
         int sIndex = (page - 1) * itemsPerPage;
         if (t_instances.size() > itemsPerPage && sIndex >= t_instances.size() - 1) {
@@ -211,8 +206,7 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
 
         int eIndex = sIndex + itemsPerPage;
         if (eIndex >= t_instances.size()) eIndex = t_instances.size();
-        //System.out.println("sIndex = " + sIndex);
-        //System.out.println("eIndex = " + eIndex);
+
         request.setAttribute("maxPages", maxPages);
         ArrayList<ProcessInstance> instances = new ArrayList<ProcessInstance>();
         for (int i = sIndex; i < eIndex; i++) {
