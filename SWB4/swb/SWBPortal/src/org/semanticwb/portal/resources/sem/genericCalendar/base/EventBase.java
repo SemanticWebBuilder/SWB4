@@ -4,7 +4,7 @@ package org.semanticwb.portal.resources.sem.genericCalendar.base;
    /**
    * Define la estructura de datos de los eventos a mostrar en el calendario. 
    */
-public abstract class EventBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Resourceable,org.semanticwb.model.Searchable
+public abstract class EventBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Localeable,org.semanticwb.model.Resourceable,org.semanticwb.model.Searchable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Fecha final del Evento
