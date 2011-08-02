@@ -1,7 +1,7 @@
 package org.semanticwb.portal.resources.sem.calendar.base;
 
 
-public abstract class CalendarBase extends org.semanticwb.portal.api.GenericSemResource implements org.semanticwb.model.Referensable,org.semanticwb.model.Localeable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable,org.semanticwb.model.RoleRefable
+public abstract class CalendarBase extends org.semanticwb.portal.api.GenericSemResource implements org.semanticwb.model.Localeable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Traceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Referensable
 {
     public static final org.semanticwb.platform.SemanticProperty cal_previousYear=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/calendar#previousYear");
     public static final org.semanticwb.platform.SemanticProperty cal_roleForAdmin=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/calendar#roleForAdmin");
