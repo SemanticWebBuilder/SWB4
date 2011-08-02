@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Enumeration;
 import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
@@ -27,6 +28,7 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
     public static final int SORT_DATE = 1;
     public static final int SORT_NAME = 2;
     public static final int STATUS_ALL = -1;
+    private static final String paramCatalog = "idCol|priorityCol|nameCol|sdateCol|edateCol|pendingCol|rolesCol|actionsCol";
     private Comparator processNameComparator = new Comparator() {
         String lang = "es";
         public void Comparator (String lng) {
@@ -65,15 +67,65 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
     }
 
     @Override
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String mode = paramRequest.getMode();
+        if (mode.equals("config")) {
+            doConfig(request, response, paramRequest);
+        } else {
+            super.processRequest(request, response, paramRequest);
+        }
+    }
+
+    @Override
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        String action = response.getAction();
+        if (action.equals("setDisplay")) {
+            Enumeration params = request.getParameterNames();
+            String dCols = "";
+            while(params.hasMoreElements()) {
+                String param = (String)params.nextElement();
+                if (paramCatalog.contains(param)) {
+                    dCols += param;
+                    if (params.hasMoreElements()) {
+                        dCols += "|";
+                    }
+                }
+            }
+            setDisplayCols(dCols+"|actionsCol");
+            response.setMode(response.Mode_VIEW);
+        } else {
+            super.processAction(request, response);
+        }
+    }
+
+    @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String jsp = "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/businessControlPanel.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(jsp);
+
+        if (getDisplayCols() == null || getDisplayCols().trim().equals("")) {
+            setDisplayCols("idCol|nameCol|sdateCol|edateCol|pendingCol|actionsCol");
+        }
+
         try {
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("instances", getProcessInstances(request, paramRequest));
+            request.setAttribute("displayCols", getDisplayCols());
             rd.include(request, response);
         } catch (Exception e) {
-            log.error(e);
+            log.error("Error including JSP in view mode", e);
+        }
+    }
+    
+    public void doConfig(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String jsp = "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/businessControlPanelConfig.jsp";
+        RequestDispatcher rd = request.getRequestDispatcher(jsp);
+        try {
+            request.setAttribute("paramRequest", paramRequest);
+            request.setAttribute("displayCols", getDisplayCols());
+            rd.include(request, response);
+        } catch (Exception e) {
+            log.error("Error including JSP in config mode", e);
         }
     }
 
