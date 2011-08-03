@@ -715,6 +715,7 @@ public class SimpleNode implements Node
         return existsProperty;
     }
 
+    @Override
     public Property getProperty(String relPath) throws PathNotFoundException, RepositoryException
     {
         SessionImp.checkRelPath(relPath);
@@ -728,11 +729,13 @@ public class SimpleNode implements Node
         }
     }
 
+    @Override
     public PropertyIterator getProperties() throws RepositoryException
     {
         return new PropertyIteratorImp(properties.values().iterator(), this, properties.values().size());
     }
 
+    @Override
     public String getUUID() throws UnsupportedRepositoryOperationException, RepositoryException
     {
         if (properties.get(getName(Referenceable.jcr_uuid)) != null)
@@ -753,16 +756,19 @@ public class SimpleNode implements Node
 
     }
 
+    @Override
     public boolean hasNodes() throws RepositoryException
     {
         return this.childs.size() > 0;
     }
 
+    @Override
     public NodeType getPrimaryNodeType() throws RepositoryException
     {
         return new NodeTypeImp(clazz, session);
     }
 
+    @Override
     public NodeType[] getMixinNodeTypes() throws RepositoryException
     {
         ArrayList<NodeType> mininNodeTypes = new ArrayList<NodeType>();
@@ -885,11 +891,13 @@ public class SimpleNode implements Node
         return this.parent;
     }
 
+    @Override
     public Item getAncestor(int depth) throws ItemNotFoundException, AccessDeniedException, RepositoryException
     {
         throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
     }
 
+    @Override
     public int getDepth() throws RepositoryException
     {
         int depth = 0;
@@ -1142,6 +1150,7 @@ public class SimpleNode implements Node
 
     }
 
+    @Override
     public boolean holdsLock() throws RepositoryException
     {
         throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
@@ -1152,6 +1161,7 @@ public class SimpleNode implements Node
         return session.getLock(this);
     }
 
+    @Override
     public Lock lock(boolean isDeep, boolean isSessionScoped) throws UnsupportedRepositoryOperationException, LockException, AccessDeniedException, InvalidItemStateException, RepositoryException
     {
         if (!isLockable())
@@ -1387,6 +1397,7 @@ public class SimpleNode implements Node
         return setProperty(name, values, 0);
     }
 
+    @Override
     public Node getNode(String relPath) throws PathNotFoundException, RepositoryException
     {
         SessionImp.checkRelPath(relPath);

@@ -192,6 +192,18 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
         {
             throw new VersionException("The version " + versionName + " was not found");
         }
+        
+        Version currentversionLabel= this.getVersionByLabel(label);
+        if(currentversionLabel!=null)
+        {
+            if(!currentversionLabel.getUUID().equals(currentVersion.getUUID()))
+            {
+                if(!moveLabel)
+                {
+                    throw new VersionException("The label "+label+" exists in another version");
+                }
+            }
+        }
         Node versionLabels = null;
         try
         {
@@ -204,6 +216,7 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
             this.save();
         }
         versionLabels.setProperty(label, currentVersion);
+        versionLabels.save();
         this.save();
     }
 
