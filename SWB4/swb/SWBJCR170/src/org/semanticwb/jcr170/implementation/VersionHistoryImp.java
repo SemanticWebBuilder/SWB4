@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
+ * 
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
+ * del SemanticWebBuilder 4.0. 
+ * 
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
+ * de la misma. 
+ * 
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
+ * dirección electrónica: 
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -28,8 +27,10 @@
 package org.semanticwb.jcr170.implementation;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import javax.jcr.AccessDeniedException;
+import javax.jcr.Node;
+import javax.jcr.PathNotFoundException;
+import javax.jcr.Property;
 import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.RepositoryException;
 import javax.jcr.UnsupportedRepositoryOperationException;
@@ -68,16 +69,16 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
         ArrayList<BaseNode> versions = new ArrayList<BaseNode>();
         for (BaseNode version : node.getVersions())
         {
-            boolean isRemoved=false;
+            boolean isRemoved = false;
             for (SimpleNode removed : this.removedchilds)
             {
                 if (removed.node != null && removed.node.equals(version))
                 {
-                    isRemoved=true;
+                    isRemoved = true;
                     break;
                 }
             }
-            if(!isRemoved)
+            if (!isRemoved)
             {
                 versions.add(version);
             }
@@ -123,13 +124,14 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
         }
     }
 
+    @Override
     public Version getVersion(String name) throws VersionException, RepositoryException
     {
         GenericIterator<BaseNode> nodes = this.node.listNodes();
         while (nodes.hasNext())
         {
             BaseNode child = nodes.next();
-            if (child!=null && name!=null && child.getName()!=null && child.getSemanticObject()!=null && child.getSemanticObject().getSemanticClass()!=null && child.getName().equals(name) && child.getSemanticObject().getSemanticClass().equals(org.semanticwb.repository.Version.nt_Version))
+            if (child != null && name != null && child.getName() != null && child.getSemanticObject() != null && child.getSemanticObject().getSemanticClass() != null && child.getName().equals(name) && child.getSemanticObject().getSemanticClass().equals(org.semanticwb.repository.Version.nt_Version))
             {
                 return new VersionImp(child, this, session);
             }
@@ -137,21 +139,69 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
         throw new RepositoryException("The version " + name + " was not found");
     }
 
+    @Override
     public Version getVersionByLabel(String label) throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Node versionLabels=null;
+        try
+        {
+            versionLabels=this.getNode("jcr:versionLabels");
+            Property prop=versionLabels.getProperty(label);
+            Node nodeversion=prop.getNode();
+            if(nodeversion instanceof Version)
+            {
+                return (Version)nodeversion;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        catch(PathNotFoundException pnfe)
+        {
+            return null;
+        } 
     }
 
-    public void addVersionLabel(String arg0, String arg1, boolean arg2) throws VersionException, RepositoryException
+    @Override
+    public void addVersionLabel(String versionName, String label, boolean moveLabel) throws VersionException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Version currentVersion = null;
+        VersionIterator it = this.getAllVersions();
+        while (it.hasNext())
+        {
+            Version version = it.nextVersion();
+            if (version.getName().equals(versionName))
+            {
+                currentVersion = version;
+                break;
+            }
+        }
+        if(currentVersion==null)
+        {
+            throw new VersionException("The version "+versionName+" was not found");
+        }
+        Node versionLabels=null;
+        try
+        {
+            versionLabels=this.getNode("jcr:versionLabels");
+        }
+        catch(PathNotFoundException pnfe)
+        {
+            versionLabels=this.addNode("jcr:versionLabels", "nt:versionLabels");
+            this.save();
+        }        
+        versionLabels.setProperty(label, currentVersion);
+        this.save();
     }
 
+    @Override
     public void removeVersionLabel(String arg0) throws VersionException, RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
     public boolean hasVersionLabel(String arg0) throws RepositoryException
     {
         throw new UnsupportedOperationException("Not supported yet.");
