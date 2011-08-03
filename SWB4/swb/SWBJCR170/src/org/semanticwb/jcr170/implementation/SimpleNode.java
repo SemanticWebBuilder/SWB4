@@ -307,13 +307,15 @@ public class SimpleNode implements Node
             {
                 try
                 {
-                    if (prop.isObjectProperty())
-                    {
-                        addProperty(prop, node, false, clazz, true);
-                    }
-                    else if (prop.isDataTypeProperty())
+                    
+                    if (prop.isDataTypeProperty())
                     {
                         addProperty(prop, node, false, clazz, false);
+                    }
+                    //if (prop.isObjectProperty())
+                    else
+                    {
+                        addProperty(prop, node, false, clazz, true);
                     }
                 }
                 catch (Exception e)
