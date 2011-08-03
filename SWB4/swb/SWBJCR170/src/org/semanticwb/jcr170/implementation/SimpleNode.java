@@ -1,32 +1,32 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
+ * 
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
+ * del SemanticWebBuilder 4.0. 
+ * 
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
+ * de la misma. 
+ * 
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
+ * dirección electrónica: 
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package org.semanticwb.jcr170.implementation;
 
+import com.hp.hpl.jena.reasoner.rulesys.impl.TempNodeCache;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -90,7 +90,8 @@ import org.semanticwb.repository.Versionable;
  */
 public class SimpleNode implements Node
 {
-    private boolean delete=false;
+
+    private boolean delete = false;
     private static final String JCR_FROZENNODE_NAME = "jcr:frozenNode";
     private static Logger log = SWBUtils.getLogger(SimpleNode.class);
     private String id;
@@ -284,7 +285,7 @@ public class SimpleNode implements Node
                 {
                     if (prop.isObjectProperty())
                     {
-                        addProperty(prop, node, false, clazz, true);                        
+                        addProperty(prop, node, false, clazz, true);
                     }
                     else
                     {
@@ -307,7 +308,7 @@ public class SimpleNode implements Node
             {
                 try
                 {
-                    
+
                     if (prop.isDataTypeProperty())
                     {
                         addProperty(prop, node, false, clazz, false);
@@ -372,7 +373,7 @@ public class SimpleNode implements Node
         else
         {
             PropertyDefinitionImp propertyDefinition = new PropertyDefinitionImp(session, property);
-            PropertyImp prop = new PropertyImp(this, clazz, getName(property), propertyDefinition, isNode,session);
+            PropertyImp prop = new PropertyImp(this, clazz, getName(property), propertyDefinition, isNode, session);
             this.properties.put(prop.getName(), prop);
             return prop;
         }
@@ -387,13 +388,23 @@ public class SimpleNode implements Node
             {
                 SemanticProperty property = session.getRootBaseNode().getSemanticProperty(name, clazz);
                 PropertyDefinitionImp propertyDefinition = new PropertyDefinitionImp(session, property);
-                prop = new PropertyImp(this, clazz, name, propertyDefinition, isNode,session);
+                prop = new PropertyImp(this, clazz, name, propertyDefinition, isNode, session);
                 this.properties.put(name, prop);
             }
             else
             {
-                PropertyDefinitionImp propertyDefinition = new PropertyDefinitionImp(name);
-                prop = new PropertyImp(this, clazz, name, propertyDefinition, false,session);
+                PropertyDefinitionImp propertyDefinition = null;
+                if (isNode)
+                {
+                    propertyDefinition = new PropertyDefinitionImp(name);
+
+                }
+                else
+                {
+                    propertyDefinition = new PropertyDefinitionImp(name, PropertyType.REFERENCE);
+                    //new PropertyDefinitionImp(name);
+                }
+                prop = new PropertyImp(this, clazz, name, propertyDefinition, false, session);
                 this.properties.put(name, prop);
             }
         }
@@ -567,6 +578,7 @@ public class SimpleNode implements Node
         return nodeDefinition;
     }
 
+    @Override
     public Property setProperty(String name, Value[] value, int type) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
         session.checksLock(this);
@@ -586,7 +598,9 @@ public class SimpleNode implements Node
             {
                 throw new ConstraintViolationException("The property " + name + " is not defined in this nodeType(" + getPrimaryNodeType().getName() + ")");
             }
-            property = addProperty(name);
+            PropertyImp temp = addProperty(name);
+            temp.setrequiredType(type);
+            property = temp;
             property.setValue(value);
             modified = true;
         }
@@ -784,8 +798,8 @@ public class SimpleNode implements Node
     }
 
     protected boolean isVersionable()
-    {     
-        SemanticClass versionable=Versionable.mix_Versionable;
+    {
+        SemanticClass versionable = Versionable.mix_Versionable;
         return mixins.contains(versionable);
     }
 
@@ -850,11 +864,14 @@ public class SimpleNode implements Node
                 while (nodes.hasNext())
                 {
                     BaseNode child = nodes.next();
-                    if (child.equals(node))
+                    if (child != null)
                     {
-                        return i;
+                        if (child.equals(node))
+                        {
+                            return i;
+                        }
+                        i++;
                     }
-                    i++;
                 }
             }
         }
@@ -982,29 +999,54 @@ public class SimpleNode implements Node
                     }
                     else
                     {
-                        for(Value value : prop.getValues())
+                        for (Value value : prop.getValues())
                         {
-                            if(value.getType()==PropertyType.REFERENCE)
+                            if (value.getType() == PropertyType.REFERENCE)
                             {
-                                ValueImp _value=(ValueImp)value;
-                                Object obvalue=_value.value;
-                                if(obvalue instanceof SimpleNode)
+                                ValueImp _value = (ValueImp) value;
+                                Object obvalue = _value.value;
+                                if (obvalue instanceof SimpleNode)
                                 {
-                                    SimpleNode simpleNode=(SimpleNode)obvalue;
-                                    node.getSemanticObject().setObjectProperty(semanticProperty,simpleNode.node.getSemanticObject());
+                                    SimpleNode simpleNode = (SimpleNode) obvalue;
+                                    node.getSemanticObject().setObjectProperty(semanticProperty, simpleNode.node.getSemanticObject());
                                 }
                             }
-                            
+
                         }
-                        
+
                     }
                 }
                 else
                 {
+
                     log.event("Registring the property " + prop.getName() + " for the class " + prop.getSemanticClass().getURI() + "");
-                    String type = SemanticVocabulary.XMLS_STRING;
-                    SemanticProperty semanticProperty = node.registerCustomProperty(prop.getName(), type, prop.getSemanticClass());
-                    node.setProperty(semanticProperty, prop.getString());
+                    if (prop.getDefinition().getRequiredType() == PropertyType.REFERENCE)
+                    {
+                        String type = BaseNode.nt_BaseNode.getURI();
+                        SemanticProperty semanticProperty = node.registerCustomProperty(prop.getName(), type, prop.getSemanticClass());
+                        for (Value value : prop.getValues())
+                        {
+                            if (value.getType() == PropertyType.REFERENCE)
+                            {
+                                ValueImp _value = (ValueImp) value;
+                                Object obvalue = _value.value;
+                                if (obvalue instanceof SimpleNode)
+                                {
+                                    SimpleNode simpleNode = (SimpleNode) obvalue;
+                                    node.getSemanticObject().setObjectProperty(semanticProperty, simpleNode.node.getSemanticObject());
+                                }
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        String type = SemanticVocabulary.XMLS_STRING;
+                        SemanticProperty semanticProperty = node.registerCustomProperty(prop.getName(), type, prop.getSemanticClass());
+                        node.setProperty(semanticProperty, prop.getString());
+                    }
+
+
                 }
                 prop.setModified(false);
                 prop.setNew(false);
@@ -1023,50 +1065,50 @@ public class SimpleNode implements Node
                 child.node.remove();
             }
         }
-        
-        if(delete)
+
+        if (delete)
         {
-            for(PropertyImp prop :  this.properties.values())
+            for (PropertyImp prop : this.properties.values())
             {
                 prop.remove();
-            }            
-            if(isVersionable())
-            {                
-                VersionHistory vh=this.getVersionHistory();
-                VersionIterator vi=vh.getAllVersions();
-                while(vi.hasNext())
+            }
+            if (isVersionable())
+            {
+                VersionHistory vh = this.getVersionHistory();
+                VersionIterator vi = vh.getAllVersions();
+                while (vi.hasNext())
                 {
-                    Version v=vi.nextVersion();
+                    Version v = vi.nextVersion();
                     v.remove();
                 }
                 vh.save();
             }
             for (SimpleNode child : this.childs.values())
             {
-                for(PropertyImp prop :  child.properties.values())
+                for (PropertyImp prop : child.properties.values())
                 {
                     prop.remove();
                 }
-                if(child.isVersionable())
-                {                    
-                    VersionHistory vh=child.getVersionHistory();
-                    VersionIterator vi=vh.getAllVersions();
-                    while(vi.hasNext())
+                if (child.isVersionable())
+                {
+                    VersionHistory vh = child.getVersionHistory();
+                    VersionIterator vi = vh.getAllVersions();
+                    while (vi.hasNext())
                     {
-                        Version v=vi.nextVersion();
+                        Version v = vi.nextVersion();
                         v.remove();
                     }
                     vh.save();
                 }
-                child.delete=delete;
+                child.delete = delete;
                 child.removeChilds();
                 if (child.node != null)
                 {
                     child.node.remove();
                 }
             }
-            
-        }                
+
+        }
         // delete childNodes
         this.removedchilds.clear();
     }
@@ -1146,6 +1188,7 @@ public class SimpleNode implements Node
         }
     }
 
+    @Override
     public void save() throws AccessDeniedException, ItemExistsException, ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException
     {
         if (isNew())
@@ -1270,7 +1313,7 @@ public class SimpleNode implements Node
             parent.removedchilds.add(this);
         }
         parent.childs.remove(this.id);
-        delete=true;
+        delete = true;
         session.removeSimpleNode(this);
         parent.modified = true;
         this.modified = true;
@@ -1282,7 +1325,7 @@ public class SimpleNode implements Node
             if (base.getName().equals(this.getName()))
             {
                 Version[] versions = ((VersionImp) this).getPredecessors();
-                if(versions.length>0)
+                if (versions.length > 0)
                 {
                     SemanticObject newBase = ((VersionImp) versions[versions.length - 1]).node.getSemanticObject();
                     nodeParent.node.getSemanticObject().setObjectProperty(org.semanticwb.repository.Versionable.jcr_baseVersion, newBase);
@@ -1415,7 +1458,7 @@ public class SimpleNode implements Node
         {
             factory.createValue(value)
         };
-        return setProperty(name, values, 0);
+        return setProperty(name, values, PropertyType.REFERENCE);
     }
 
     @Override
@@ -1442,7 +1485,7 @@ public class SimpleNode implements Node
             while (childsBaseNodes.hasNext())
             {
                 BaseNode child = childsBaseNodes.next();
-                if (child.getName().equals(relPath))
+                if (child != null && child.getName().equals(relPath))
                 {
                     BaseNode nodeChild = child;
                     boolean isDeleted = false;
@@ -1645,8 +1688,8 @@ public class SimpleNode implements Node
             while (it.hasNext())
             {
                 Property prop = it.nextProperty();
-                SemanticProperty semanticProp=node.getSemanticProperty(prop.getName(), clazz);
-                if (this.existsProperty(prop.getName()) && !node.isInternal(semanticProp)  && !prop.getDefinition().isProtected())
+                SemanticProperty semanticProp = node.getSemanticProperty(prop.getName(), clazz);
+                if (this.existsProperty(prop.getName()) && !node.isInternal(semanticProp) && !prop.getDefinition().isProtected())
                 {
                     log.trace("restoring property " + prop.getName());
                     this.setProperty(prop.getName(), prop.getValues());
@@ -1686,7 +1729,14 @@ public class SimpleNode implements Node
 
     private String getName(SemanticProperty prop)
     {
-        return prop.getPrefix() + ":" + prop.getName();
+        if(prop.getPrefix()!=null)
+        {
+            return prop.getPrefix() + ":" + prop.getName();
+        }
+        else
+        {
+            return prop.getName();
+        }
     }
 
     public boolean isCheckedOut() throws RepositoryException
@@ -1764,7 +1814,7 @@ public class SimpleNode implements Node
                     node.getSemanticObject().setBooleanProperty(Versionable.jcr_isCheckedOut, false);
                 }
                 BaseNode version = node.checkin();
-                VersionImp versionImp= new VersionImp(version, this.versionHistory, session);
+                VersionImp versionImp = new VersionImp(version, this.versionHistory, session);
                 session.nodes.put(versionImp.getUUID(), versionImp);
                 return versionImp;
             }
@@ -1920,5 +1970,4 @@ public class SimpleNode implements Node
         hash = 37 * hash + (this.id != null ? this.id.hashCode() : 0);
         return hash;
     }
-}   
-    
+}

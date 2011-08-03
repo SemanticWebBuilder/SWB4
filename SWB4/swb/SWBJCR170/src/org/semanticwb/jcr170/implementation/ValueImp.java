@@ -86,6 +86,7 @@ public class ValueImp implements Value
         }
     }
 
+    @Override
     public String getString() throws ValueFormatException, IllegalStateException, RepositoryException
     {
         if (value == null)

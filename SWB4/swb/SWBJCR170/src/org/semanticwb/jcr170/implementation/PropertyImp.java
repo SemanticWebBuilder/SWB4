@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
+ * 
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
+ * del SemanticWebBuilder 4.0. 
+ * 
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
+ * de la misma. 
+ * 
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
+ * dirección electrónica: 
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -59,6 +58,7 @@ import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.repository.BaseNode;
+import org.semanticwb.repository.Version;
 
 /**
  *
@@ -78,21 +78,21 @@ public final class PropertyImp implements Property
     private String path;
     private final SimpleNode parent;
     private final SemanticClass clazz;
-    private boolean isNode=false;
+    private boolean isNode = false;
     private SessionImp session;
 
-    PropertyImp(SimpleNode parent, SemanticClass clazz, String name, PropertyDefinitionImp propertyDefinition,boolean isNode,SessionImp session)
+    PropertyImp(SimpleNode parent, SemanticClass clazz, String name, PropertyDefinitionImp propertyDefinition, boolean isNode, SessionImp session)
     {
         if (name == null)
         {
             throw new IllegalArgumentException();
         }
-        this.session=session;
+        this.session = session;
         this.name = name;
         this.propertyDefinition = propertyDefinition;
-        if(parent.toString().endsWith("/"))
+        if (parent.toString().endsWith("/"))
         {
-            path = parent.toString()+ name;
+            path = parent.toString() + name;
         }
         else
         {
@@ -100,7 +100,12 @@ public final class PropertyImp implements Property
         }
         this.parent = parent;
         this.clazz = clazz;
-        this.isNode=isNode;
+        this.isNode = isNode;
+    }
+
+    public void setrequiredType(int requiredType)
+    {
+        this.propertyDefinition.setRequiredType(requiredType);
     }
 
     public SemanticClass getSemanticClass()
@@ -130,6 +135,7 @@ public final class PropertyImp implements Property
         this.values.add(factory.createValue(value));
     }
 
+    @Override
     public void setValue(Value[] value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
         if (!getDefinition().isMultiple() && value.length > 1)
@@ -160,7 +166,7 @@ public final class PropertyImp implements Property
             }
             if (errorRequiredType)
             {
-                throw new ValueFormatException("A value is " + PropertyType.nameFromValue(type) + " and the property is defined as " + PropertyType.nameFromValue(requiredType)+" for the property "+this.name);
+                throw new ValueFormatException("A value is " + PropertyType.nameFromValue(type) + " and the property is defined as " + PropertyType.nameFromValue(requiredType) + " for the property " + this.name);
             }
             this.values.clear();
             if (getDefinition().isMultiple())
@@ -249,7 +255,7 @@ public final class PropertyImp implements Property
             SemanticProperty property = node.getSemanticProperty(name, clazz);
             if (property == null)
             {
-                String uri=node.getUri(name);
+                String uri = node.getUri(name);
                 property = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uri);
             }
             if (property != null)
@@ -262,43 +268,43 @@ public final class PropertyImp implements Property
                     }
                     else
                     {
-                        int type=PropertyType.UNDEFINED;
-                        if(property.isBoolean())
+                        int type = PropertyType.UNDEFINED;
+                        if (property.isBoolean())
                         {
-                            type=PropertyType.BOOLEAN;
+                            type = PropertyType.BOOLEAN;
                         }
-                        else if(property.isDate() || property.isDateTime())
+                        else if (property.isDate() || property.isDateTime())
                         {
-                            type=PropertyType.DATE;
+                            type = PropertyType.DATE;
                         }
-                        else if(property.isDouble())
+                        else if (property.isDouble())
                         {
-                            type=PropertyType.DOUBLE;
+                            type = PropertyType.DOUBLE;
                         }
-                        else if(property.isFloat())
+                        else if (property.isFloat())
                         {
-                            type=PropertyType.DOUBLE;
+                            type = PropertyType.DOUBLE;
                         }
-                        else if(property.isInt() || property.isLong())
+                        else if (property.isInt() || property.isLong())
                         {
-                            type=PropertyType.LONG;
+                            type = PropertyType.LONG;
                         }
-                        else if(property.isShort())
+                        else if (property.isShort())
                         {
-                            type=PropertyType.LONG;
+                            type = PropertyType.LONG;
                         }
                         else
                         {
-                            type=PropertyType.STRING;
+                            type = PropertyType.STRING;
                         }
                         Iterator<SemanticLiteral> literals = node.getSemanticObject().listLiteralProperties(property);
                         while (literals.hasNext())
                         {
                             try
                             {
-                                values.add(factory.createValue(literals.next().getString(),type));
+                                values.add(factory.createValue(literals.next().getString(), type));
                             }
-                            catch(ValueFormatException e)
+                            catch (ValueFormatException e)
                             {
                                 log.debug(e);
                                 throw new SWBException("The value can not be converted", e);
@@ -309,29 +315,118 @@ public final class PropertyImp implements Property
                 else
                 {
                     Iterator<SemanticObject> ovalues = node.getSemanticObject().listObjectProperties(property);
-                    while(ovalues.hasNext())
+                    while (ovalues.hasNext())
                     {
-                        SemanticObject obj=ovalues.next();
+                        SemanticObject obj = ovalues.next();
                         try
                         {
                             values.add(factory.createValue(new SimpleNode(node, session)));
                         }
-                        catch(RepositoryException re)
+                        catch (RepositoryException re)
                         {
                             log.debug(re);
-                            throw new SWBException("Error trying to get the Node of the property "+this.name, re);
+                            throw new SWBException("Error trying to get the Node of the property " + this.name, re);
                         }
                     }
-                
+
                 }
             }
 
         }
+        else
+        {
+            Iterator<SemanticProperty> props = parent.node.getSemanticObject().listProperties();
+            while (props.hasNext())
+            {
+                SemanticProperty property = props.next();
+                if (property.getName().equals(name))
+                {
+                    if (property.isDataTypeProperty())
+                    {
+                        if (property.isBinary())
+                        {
+                            values.add(factory.createValue(node.getSemanticObject().getInputStreamProperty(property)));
+                        }
+                        else
+                        {
+                            int type = PropertyType.UNDEFINED;
+                            if (property.isBoolean())
+                            {
+                                type = PropertyType.BOOLEAN;
+                            }
+                            else if (property.isDate() || property.isDateTime())
+                            {
+                                type = PropertyType.DATE;
+                            }
+                            else if (property.isDouble())
+                            {
+                                type = PropertyType.DOUBLE;
+                            }
+                            else if (property.isFloat())
+                            {
+                                type = PropertyType.DOUBLE;
+                            }
+                            else if (property.isInt() || property.isLong())
+                            {
+                                type = PropertyType.LONG;
+                            }
+                            else if (property.isShort())
+                            {
+                                type = PropertyType.LONG;
+                            }
+                            else
+                            {
+                                type = PropertyType.STRING;
+                            }
+                            Iterator<SemanticLiteral> literals = node.getSemanticObject().listLiteralProperties(property);
+                            while (literals.hasNext())
+                            {
+                                try
+                                {
+                                    values.add(factory.createValue(literals.next().getString(), type));
+                                }
+                                catch (ValueFormatException e)
+                                {
+                                    log.debug(e);
+                                    throw new SWBException("The value can not be converted", e);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Iterator<SemanticObject> ovalues = node.getSemanticObject().listObjectProperties(property);
+                        while (ovalues.hasNext())
+                        {
+                            SemanticObject obj = ovalues.next();
+                            if(obj.getURI().indexOf("http://www.semanticwb.org/repository#nt_version")!=-1)
+                            {
+                                obj.addSemanticClass(Version.nt_Version);
+                                
+                            }
+                            BaseNode nodeValue=new BaseNode(obj);
+                            try
+                            {
+                                values.add(factory.createValue(new SimpleNode(nodeValue, session)));
+                            }
+                            catch (RepositoryException re)
+                            {
+                                log.debug(re);
+                                throw new SWBException("Error trying to get the Node of the property " + this.name, re);
+                            }
+                        }
+
+                    }
+                    break;
+                }
+            }
+        }
     }
 
+    @Override
     public Value[] getValues() throws ValueFormatException, RepositoryException
     {
-        if (values.size() == 0 && parent.node != null)
+        if (values.isEmpty() && parent.node != null)
         {
             try
             {
@@ -395,6 +490,7 @@ public final class PropertyImp implements Property
         return value.getDate();
     }
 
+    @Override
     public boolean getBoolean() throws ValueFormatException, RepositoryException
     {
         Value value = getValue();
@@ -408,12 +504,23 @@ public final class PropertyImp implements Property
     @Override
     public Node getNode() throws ValueFormatException, RepositoryException
     {
-        if(!values.isEmpty())
+        if (values.isEmpty())
         {
-            Value value=values.get(0);
-            if(value.getType()==javax.jcr.PropertyType.REFERENCE)
+            try
             {
-                String reference=value.getString();
+                loadPropertiesFromDataBase();
+            }
+            catch (Exception e)
+            {
+                throw new RepositoryException(e);
+            }
+        }
+        if (!values.isEmpty())
+        {
+            Value value = values.get(0);
+            if (value.getType() == javax.jcr.PropertyType.REFERENCE)
+            {
+                String reference = value.getString();
                 return this.session.getNodeByUUID(reference);
             }
             else
@@ -427,46 +534,55 @@ public final class PropertyImp implements Property
         }
     }
 
+    @Override
     public long getLength() throws ValueFormatException, RepositoryException
     {
         return values.size();
     }
 
+    @Override
     public long[] getLengths() throws ValueFormatException, RepositoryException
     {
         throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
     }
 
+    @Override
     public PropertyDefinition getDefinition() throws RepositoryException
     {
         return propertyDefinition;
     }
 
+    @Override
     public int getType() throws RepositoryException
     {
         return getDefinition().getRequiredType();
     }
 
+    @Override
     public String getPath() throws RepositoryException
     {
         return path;
     }
 
+    @Override
     public String getName() throws RepositoryException
     {
         return name;
     }
 
+    @Override
     public Item getAncestor(int arg0) throws ItemNotFoundException, AccessDeniedException, RepositoryException
     {
         throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
     }
 
+    @Override
     public Node getParent() throws ItemNotFoundException, AccessDeniedException, RepositoryException
     {
         return parent;
     }
 
+    @Override
     public int getDepth() throws RepositoryException
     {
         int depth = 0;
@@ -540,8 +656,8 @@ public final class PropertyImp implements Property
 
     public void remove() throws VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        if(parent.getBaseNode()!=null)
-        {            
+        if (parent.getBaseNode() != null)
+        {
             parent.getBaseNode().removeProperty(this.name);
         }
     }

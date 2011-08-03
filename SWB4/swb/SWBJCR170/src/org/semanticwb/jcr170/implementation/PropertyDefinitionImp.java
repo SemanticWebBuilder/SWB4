@@ -54,7 +54,13 @@ public class PropertyDefinitionImp implements PropertyDefinition
     {
         this.name = name;
     }
-
+    
+    PropertyDefinitionImp(String name,int requiredType)
+    {
+        this.name = name;
+        this.requiredType=requiredType;
+    }
+   
     PropertyDefinitionImp(SessionImp session, SemanticProperty property)
     {
         this.name = property.getPrefix() + ":" + property.getName();
@@ -124,46 +130,55 @@ public class PropertyDefinitionImp implements PropertyDefinition
         this.multiple = multiple;
     }
 
+    @Override
     public String[] getValueConstraints()
     {
         return null;
     }
 
+    @Override
     public Value[] getDefaultValues()
     {
         return null;
     }
 
+    @Override
     public boolean isMultiple()
     {
         return multiple;
     }
 
+    @Override
     public NodeType getDeclaringNodeType()
     {
         return null;
     }
 
+    @Override
     public String getName()
     {
         return name;
     }
 
+    @Override
     public boolean isAutoCreated()
     {
         return autocreated;
     }
 
+    @Override
     public boolean isMandatory()
     {
         return mandatory;
     }
 
+    @Override
     public int getOnParentVersion()
     {
         return onParentVersion;
     }
 
+    @Override
     public boolean isProtected()
     {
         return isProtected;
