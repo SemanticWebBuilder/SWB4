@@ -1657,6 +1657,11 @@ public class BaseNode extends BaseNodeBase
         if (property.isObjectProperty())
         {
             SemanticObject versionHistory = getSemanticObject().getObjectProperty(property);
+            if(versionHistory!=null && versionHistory.getSemanticClass()==null)
+            {
+                versionHistory.addSemanticClass(Versionable.nt_VersionHistory);
+                
+            }
             if (versionHistory != null)
             {
                 getHistoryNode = new BaseNode(versionHistory);
@@ -2264,17 +2269,15 @@ public class BaseNode extends BaseNodeBase
         try
         {
             String uri = getUri(propertyName);
-            getSemanticProperty = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uri);
-//            Iterator<SemanticProperty> properties = clazz.listProperties();
-//            while (properties.hasNext())
-//            {
-//                SemanticProperty property = properties.next();
-//                if (property.getURI().equals(uri))
-//                {
-//                    getSemanticProperty = property;
-//                    break;
-//                }
-//            }
+            Iterator<SemanticProperty> props= SWBPlatform.getSemanticMgr().getVocabulary().listSemanticProperties();
+            while(props.hasNext())
+            {
+                SemanticProperty prop=props.next();
+                if(prop.getURI().equals(uri))
+                {
+                    return prop;
+                }
+            }
         }
         catch (SWBException e)
         {
@@ -2458,6 +2461,20 @@ public class BaseNode extends BaseNodeBase
         {
             String uri = this.getURI().replaceAll("#", "/") + "#" + name;
             SemanticProperty prop = getSemanticObject().getModel().createSemanticProperty(uri, this.getSemanticObject().getSemanticClass(), SemanticVocabulary.OWL_DATATYPEPROPERTY, type);
+            return prop;
+        }
+        else
+        {
+            throw new SWBException("the property already exists");
+        }
+    }
+    
+    public SemanticProperty registerCustomObjectProperty(String name, String type, SemanticClass clazz) throws SWBException
+    {
+        if (!existsProperty(name, clazz))
+        {
+            String uri = this.getURI().replaceAll("#", "/") + "#" + name;
+            SemanticProperty prop = getSemanticObject().getModel().createSemanticProperty(uri, this.getSemanticObject().getSemanticClass(), SemanticVocabulary.OWL_OBJECTPROPERTY, type);
             return prop;
         }
         else
