@@ -29,7 +29,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -39,9 +38,10 @@ import org.jdom.Namespace;
 import org.jdom.input.DOMBuilder;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.DOMOutputter;
-import net.sf.json.JSONObject;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.XML;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.webservices.ServiceException;
@@ -453,20 +453,39 @@ public class XMLDocumentUtil
         return jdom;
     }
     
-    public static JSONObject toJSON(org.w3c.dom.Document doc) throws TransformerException, TransformerConfigurationException
+    public static JSONObject toCanonicalJSON(Document doc) throws ServiceException
     {
-        String xml = domToXml(doc,"UTF-8",true);
-        
-        TransformerFactory tfactory = TransformerFactory.newInstance();
-        InputStream is = XMLDocumentUtil.class.getClass().getResourceAsStream("/org/semanticwb/webservices/util/xml-to-json.xsl");
-        Transformer transformer = tfactory.newTransformer(new StreamSource(is));
-        
-        ByteArrayOutputStream dest = new ByteArrayOutputStream();
-        
-        transformer.transform(new StreamSource(getStreamFromString(xml)), new StreamResult(dest));
-        JSONObject json = JSONObject.fromObject(dest.toString());
-        return json;
+        String tfKey = System.getProperty("javax.xml.transform.TransformerFactory");
+        try {
+            System.setProperty("javax.xml.transform.TransformerFactory", "net.sf.saxon.TransformerFactoryImpl");
+            String xml = domToXml(doc,"UTF-8",true);
+            InputStream is = XMLDocumentUtil.class.getClass().getResourceAsStream("/org/semanticwb/webservices/util/xml-to-json.xsl");
+            ByteArrayOutputStream dest = new ByteArrayOutputStream();
+            
+            TransformerFactory tfactory = TransformerFactory.newInstance();
+            Transformer transformer = tfactory.newTransformer(new StreamSource(is));
+            transformer.transform(new StreamSource(getStreamFromString(xml)), new StreamResult(dest));
+            
+            JSONObject json = new JSONObject(dest.toString());
+            return json;
+        }catch(Exception e) {
+            throw new ServiceException(e.getCause());
+        }finally {
+            System.setProperty("javax.xml.transform.TransformerFactory", tfKey);
+        }
     }
+    
+    public static JSONObject toJSON(Document doc) throws ServiceException {
+        try {
+            String xml = domToXml(doc, "UTF-8", true);
+            JSONObject json = XML.toJSONObject(xml);
+            return json;
+        }catch(JSONException jse) {
+            throw new ServiceException(jse.getCause());
+        }
+    }
+    
+    
     
     private static InputStream getStreamFromString(String str)
     {
@@ -720,17 +739,6 @@ public class XMLDocumentUtil
         return doc;
     }
     
-    public static Document getDocument(JSONObject json, Document schema, String rootname) throws ParserConfigurationException
-    {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.newDocument();
-        Element root = doc.createElement(rootname);
-        doc.appendChild(root);
-        getDocument(json, doc, root);
-        return doc;
-    }
-    
     private static void getDocument(JSONObject json, Document doc, Element node)  {
         Iterator<String>it = json.keys();
         while(it.hasNext()) {
@@ -741,23 +749,26 @@ public class XMLDocumentUtil
                 Element child = doc.createElement(k);
                 getDocument(jo,doc,child);
                 node.appendChild(child);
-            }catch(Exception jsone1) {
+            }catch(JSONException jse1) {
                 try {
                     JSONArray ja = json.getJSONArray(k);
                     getDocument(ja,doc,node,k);
-                }catch(Exception jsone2) {
+                }catch(JSONException jse2) {
                     try {
                         String v = json.getString(k);
                         Element child = doc.createElement(k);
                         if(v!=null && !"null".equalsIgnoreCase(v))
                             child.appendChild(doc.createTextNode(v));
                         node.appendChild(child);
-                    }catch(Exception e) {
-                        Object v = json.get(k);
-                        Element child = doc.createElement(k);
-                        if(v!=null)
-                            child.appendChild(doc.createTextNode(v.toString()));
-                        node.appendChild(child);
+                    }catch(JSONException jse3) {
+                        try {
+                            Object v = json.get(k);
+                            Element child = doc.createElement(k);
+                            if(v!=null)
+                                child.appendChild(doc.createTextNode(v.toString()));
+                            node.appendChild(child);
+                        }catch(JSONException jse4) {
+                        }
                     }
                 }
             }
@@ -765,23 +776,26 @@ public class XMLDocumentUtil
     }
     
     private static void getDocument(JSONArray jarr, Document doc, Element node, String nodeName) {
-        if(jarr.isEmpty()) {
+        if(jarr.length()==0) {
             return;
         }else {
-            for(int i=0; i<jarr.size(); i++) {
+            for(int i=0; i<jarr.length(); i++) {
                 try {
                     JSONObject j = jarr.getJSONObject(i);
-                        Element child = doc.createElement(nodeName);
-                        getDocument(j,doc,child);
-                        node.appendChild(child);
-                }catch(Exception json2) {
+                    Element child = doc.createElement(nodeName);
+                    getDocument(j,doc,child);
+                    node.appendChild(child);
+                }catch(JSONException jse1) {
                     try {
                         JSONArray j = jarr.getJSONArray(i);
                         getDocument(j,doc,node,nodeName);
-                    }catch(Exception jsone3) {
-                        Element child = doc.createElement(nodeName);
-                        child.appendChild(doc.createTextNode(jarr.getString(i)));
-                        node.appendChild(child);
+                    }catch(JSONException jse2) {
+                        try {
+                            Element child = doc.createElement(nodeName);
+                            child.appendChild(doc.createTextNode(jarr.getString(i)));
+                            node.appendChild(child);
+                        }catch(JSONException jse3) {
+                        }
                     }
                 }
             }
@@ -842,4 +856,105 @@ public class XMLDocumentUtil
             return "";
         }
     }
+    
+    
+    
+    
+    
+    public static Document xmlToDom(String xml)
+        {
+            if (xml == null || xml.length() == 0)
+            {
+                return null;
+            }
+            Document dom = null;
+            try
+            {
+                ByteArrayInputStream sr = new java.io.ByteArrayInputStream(xml.getBytes());
+                dom = xmlToDom(sr);
+            } catch (Exception e)
+            {
+                
+            }
+            return dom;
+        }
+    public static Document xmlToDom(InputStream xml)
+        {
+            Document dom = null;
+            try
+            {
+                dom = xmlToDom(new InputSource(xml));
+                //xml.close();
+            } catch (Exception e)
+            {
+               
+            }
+            return dom;
+        }
+     public static Document xmlToDom(InputSource xml)
+        {
+            DocumentBuilderFactory dbf = null;
+            DocumentBuilder db = null;
+            Document dom = null;
+            try
+            {
+                dbf = getDocumentBuilderFactory();
+                synchronized (dbf)
+                {
+                    db = dbf.newDocumentBuilder();
+                }
+                if (xml != null)
+                {
+                    dom = db.parse(xml);
+                        dom = copyDom(dom);
+                }
+            } catch (Exception e)
+            {
+                
+            }
+            return dom;
+        }
+      public static Document copyDom(Document dom) throws Exception
+        {
+            Document n = getNewDocument();
+            if (dom != null && dom.hasChildNodes())
+            {
+                Node node = n.importNode(dom.getFirstChild(), true);
+                n.appendChild(node);
+            }
+            return n;
+        }
+       public static Document getNewDocument() //throws SWBException
+        {
+            DocumentBuilderFactory dbf = getDocumentBuilderFactory();
+            DocumentBuilder db = null;
+            Document dom = null;
+            try
+            {
+                synchronized (dbf)
+                {
+                    db = dbf.newDocumentBuilder();
+                }
+                dom = db.newDocument();
+            } catch (Exception e)
+            {
+                
+            }
+            return dom;
+        }
+       public static DocumentBuilderFactory getDocumentBuilderFactory()
+        {
+            return m_dbf.get();
+        }
+       private static final ThreadLocal<DocumentBuilderFactory> m_dbf = new ThreadLocal<DocumentBuilderFactory>()
+        {
+            @Override
+            public DocumentBuilderFactory  initialValue()
+            {
+                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+                dbf.setNamespaceAware(true);
+                dbf.setIgnoringElementContentWhitespace(true);                
+                return  dbf;
+            }
+        };
 }
