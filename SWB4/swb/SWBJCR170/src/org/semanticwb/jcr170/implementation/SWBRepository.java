@@ -245,13 +245,21 @@ public final class SWBRepository implements Repository
     private Principal authenticate(String pUserName, String pPassword)
     {
         boolean trusted = false;
-        try
+        String strusted = System.getProperty("org.semanticwb.jcr170.implementation.repositoryTrusted");
+        if (strusted != null)
         {
-            trusted = Boolean.parseBoolean(SWBPlatform.getEnv("swbrep/repositoryTrusted", "false"));
+            trusted = Boolean.parseBoolean(strusted);
         }
-        catch (Exception e)
+        if (!trusted)
         {
-            log.error(e);
+            try
+            {
+                trusted = Boolean.parseBoolean(SWBPlatform.getEnv("swbrep/repositoryTrusted", "false"));
+            }
+            catch (Exception e)
+            {
+                log.error(e);
+            }
         }
         if (trusted)
         {
