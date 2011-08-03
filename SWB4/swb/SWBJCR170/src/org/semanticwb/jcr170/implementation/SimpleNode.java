@@ -674,6 +674,7 @@ public class SimpleNode implements Node
         return childs.values().toArray(new SimpleNode[childs.size()]);
     }
 
+    @Override
     public NodeIterator getNodes() throws RepositoryException
     {
         return new NodeIteratorImp(session, getSimpleNodes(), childs.size());
@@ -976,6 +977,24 @@ public class SimpleNode implements Node
                         {
                             node.setProperty(semanticProperty, prop.getString());
                         }
+                    }
+                    else
+                    {
+                        for(Value value : prop.getValues())
+                        {
+                            if(value.getType()==PropertyType.REFERENCE)
+                            {
+                                ValueImp _value=(ValueImp)value;
+                                Object obvalue=_value.value;
+                                if(obvalue instanceof SimpleNode)
+                                {
+                                    SimpleNode simpleNode=(SimpleNode)obvalue;
+                                    node.getSemanticObject().setObjectProperty(semanticProperty,simpleNode.node.getSemanticObject());
+                                }
+                            }
+                            
+                        }
+                        
                     }
                 }
                 else
