@@ -31,6 +31,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.AccessControlException;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.StringTokenizer;
@@ -99,10 +100,10 @@ public class SessionImp implements Session
     private final WorkspaceImp workspace;
     private final Principal principal;
     private final String workspaceName;
-    private final Hashtable<Node, LockImp> locksSessions = new Hashtable<Node, LockImp>();
+    private final HashMap<Node, LockImp> locksSessions = new HashMap<Node, LockImp>();
     private SimpleLockUserComparator simpleLockUserComparator = new SimpleLockUserComparator();
-    private final Hashtable<String, SimpleNode> nodesByUUID = new Hashtable<String, SimpleNode>();
-    private final Hashtable<String, SimpleNode> nodes = new Hashtable<String, SimpleNode>();
+    private final HashMap<String, SimpleNode> nodesByUUID = new HashMap<String, SimpleNode>();
+    public final HashMap<String, SimpleNode> nodes = new HashMap<String, SimpleNode>();
     private final SimpleNode root;
 
     SessionImp(SWBRepository repository, String workspaceName, Principal principal) throws RepositoryException
@@ -737,6 +738,7 @@ public class SessionImp implements Session
         }
     }
 
+    @Override
     public Node getNodeByUUID(String uuid) throws ItemNotFoundException, RepositoryException
     {
         SimpleNode nodeToReturn = nodes.get(uuid);
@@ -747,8 +749,9 @@ public class SessionImp implements Session
             while (it.hasNext())
             {
                 SemanticObject obj = it.next();
-                BaseNode node = new BaseNode(obj);
-                return new SimpleNode(node, this);
+                BaseNode node = new BaseNode(obj);                
+                SimpleNode simplenode=new SimpleNode(node, this);
+                return simplenode;
             }
         }
         else
