@@ -775,8 +775,9 @@ public class SimpleNode implements Node
     }
 
     protected boolean isVersionable()
-    {        
-        return mixins.contains(Versionable.mix_Versionable);
+    {     
+        SemanticClass versionable=Versionable.mix_Versionable;
+        return mixins.contains(versionable);
     }
 
     protected boolean isLockable()
@@ -1250,8 +1251,11 @@ public class SimpleNode implements Node
             if (base.getName().equals(this.getName()))
             {
                 Version[] versions = ((VersionImp) this).getPredecessors();
-                SemanticObject newBase = ((VersionImp) versions[versions.length - 1]).node.getSemanticObject();
-                nodeParent.node.getSemanticObject().setObjectProperty(org.semanticwb.repository.Versionable.jcr_baseVersion, newBase);
+                if(versions.length>0)
+                {
+                    SemanticObject newBase = ((VersionImp) versions[versions.length - 1]).node.getSemanticObject();
+                    nodeParent.node.getSemanticObject().setObjectProperty(org.semanticwb.repository.Versionable.jcr_baseVersion, newBase);
+                }
             }
         }
     }
@@ -1373,9 +1377,14 @@ public class SimpleNode implements Node
         return setProperty(name, values, 0);
     }
 
-    public Property setProperty(String name, Node node) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
+    @Override
+    public Property setProperty(String name, Node value) throws ValueFormatException, VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
+        Value[] values =
+        {
+            factory.createValue(value)
+        };
+        return setProperty(name, values, 0);
     }
 
     public Node getNode(String relPath) throws PathNotFoundException, RepositoryException
@@ -1426,6 +1435,7 @@ public class SimpleNode implements Node
         throw new PathNotFoundException("The node " + relPath + " was not found");
     }
 
+    @Override
     public Node addNode(String relPath) throws ItemExistsException, PathNotFoundException, VersionException, ConstraintViolationException, LockException, RepositoryException
     {
         return addNode(relPath, null);
@@ -1722,7 +1732,9 @@ public class SimpleNode implements Node
                     node.getSemanticObject().setBooleanProperty(Versionable.jcr_isCheckedOut, false);
                 }
                 BaseNode version = node.checkin();
-                return new VersionImp(version, this.versionHistory, session);
+                VersionImp versionImp= new VersionImp(version, this.versionHistory, session);
+                session.nodes.put(versionImp.getUUID(), versionImp);
+                return versionImp;
             }
             catch (SWBException e)
             {
