@@ -32,7 +32,6 @@ import java.io.OutputStream;
 import java.security.AccessControlException;
 import java.security.Principal;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import javax.jcr.AccessDeniedException;
@@ -749,7 +748,9 @@ public class SessionImp implements Session
             while (it.hasNext())
             {
                 SemanticObject obj = it.next();
-                BaseNode node = new BaseNode(obj);                
+                BaseNode node = new BaseNode(obj); 
+                //node.getSemanticObject().getSemanticClass()
+                //VersionImp version=new VersionImp(node, null, this)
                 SimpleNode simplenode=new SimpleNode(node, this);
                 return simplenode;
             }
