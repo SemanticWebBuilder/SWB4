@@ -134,6 +134,37 @@ public class TestRepository
 
     @Test
     //@Ignore
+    public void loadNode()
+    {
+        String id = "8bcb4ab0-9aa3-42cd-83d7-399f459216b5";
+        Session session = null;
+        try
+        {
+            System.setProperty("org.semanticwb.jcr170.implementation.repositoryTrusted", "true");
+            SWBRepository repository = new SWBRepository();
+            SimpleCredentials credentials = new SimpleCredentials("admin", "webbuilder".toCharArray());
+            session = repository.login(credentials);
+            Node node = session.getNodeByUUID(id);
+            Version version=node.getVersionHistory().getVersionByLabel("version1");
+            Assert.assertNotNull(version);            
+            System.out.println("name: "+version.getName());
+        }
+        catch (Throwable e)
+        {
+            e.printStackTrace(System.out);
+            fail(e.getMessage());
+        } finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+
+        }
+    }
+
+    @Test
+    @Ignore
     public void addNode()
     {
         String UUID = "";
@@ -181,10 +212,12 @@ public class TestRepository
             root.save();
             Version version = newNode.checkin();
             newNode.getVersionHistory().addVersionLabel(version.getName(), "version1", true);
-            Version versionByLabel=newNode.getVersionHistory().getVersionByLabel("version1");
+            newNode.save();
+            Version versionByLabel = newNode.getVersionHistory().getVersionByLabel("version1");
             Assert.assertNotNull(versionByLabel);
             String id = newNode.getUUID();
             UUID = newNode.getUUID();
+            System.out.println("uuid : " + UUID);
 //            session.getNodeByUUID(id);
 //            Node content = newNode.addNode("Contenido1", "cm:Content");
 //            content.setProperty("cm:title", "Contenido 1");
