@@ -27,10 +27,12 @@
 package org.semanticwb.jcr170.implementation;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import javax.jcr.AccessDeniedException;
 import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.Property;
+import javax.jcr.PropertyIterator;
 import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.RepositoryException;
 import javax.jcr.UnsupportedRepositoryOperationException;
@@ -38,8 +40,11 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
+import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.repository.BaseNode;
 
 /**
@@ -48,6 +53,8 @@ import org.semanticwb.repository.BaseNode;
  */
 public class VersionHistoryImp extends SimpleNode implements VersionHistory
 {
+
+    private static Logger log = SWBUtils.getLogger(VersionHistoryImp.class);
 
     VersionHistoryImp(BaseNode versionHistory, SessionImp session, SimpleNode parent) throws RepositoryException
     {
@@ -86,6 +93,7 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
         return versions.toArray(new BaseNode[versions.size()]);
     }
 
+    @Override
     public String getVersionableUUID() throws RepositoryException
     {
         try
@@ -98,6 +106,7 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
         }
     }
 
+    @Override
     public Version getRootVersion() throws RepositoryException
     {
         GenericIterator<BaseNode> nodes = this.node.listNodes();
@@ -112,6 +121,7 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
         throw new RepositoryException("The root version was not found");
     }
 
+    @Override
     public VersionIterator getAllVersions() throws RepositoryException
     {
         try
@@ -142,25 +152,26 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
     @Override
     public Version getVersionByLabel(String label) throws RepositoryException
     {
-        Node versionLabels=null;
+        Node versionLabels = null;
         try
         {
-            versionLabels=this.getNode("jcr:versionLabels");
-            Property prop=versionLabels.getProperty(label);
-            Node nodeversion=prop.getNode();
-            if(nodeversion instanceof Version)
+            versionLabels = this.getNode("jcr:versionLabels");
+            Property prop = versionLabels.getProperty(label);
+            Node nodeversion = prop.getNode();
+            if (nodeversion instanceof Version)
             {
-                return (Version)nodeversion;
+                return (Version) nodeversion;
             }
             else
             {
                 return null;
             }
         }
-        catch(PathNotFoundException pnfe)
+        catch (PathNotFoundException pnfe)
         {
+            log.trace(pnfe);
             return null;
-        } 
+        }
     }
 
     @Override
@@ -177,53 +188,213 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
                 break;
             }
         }
-        if(currentVersion==null)
+        if (currentVersion == null)
         {
-            throw new VersionException("The version "+versionName+" was not found");
+            throw new VersionException("The version " + versionName + " was not found");
         }
-        Node versionLabels=null;
+        Node versionLabels = null;
         try
         {
-            versionLabels=this.getNode("jcr:versionLabels");
+            versionLabels = this.getNode("jcr:versionLabels");
         }
-        catch(PathNotFoundException pnfe)
+        catch (PathNotFoundException pnfe)
         {
-            versionLabels=this.addNode("jcr:versionLabels", "nt:versionLabels");
+            log.trace(pnfe);
+            versionLabels = this.addNode("jcr:versionLabels", "nt:versionLabels");
             this.save();
-        }        
+        }
         versionLabels.setProperty(label, currentVersion);
         this.save();
     }
 
     @Override
-    public void removeVersionLabel(String arg0) throws VersionException, RepositoryException
+    public void removeVersionLabel(String label) throws VersionException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Node versionLabels = null;
+        try
+        {
+            versionLabels = this.getNode("jcr:versionLabels");
+            Property prop = versionLabels.getProperty(label);
+            prop.remove();
+        }
+        catch (PathNotFoundException pnfe)
+        {
+            log.trace(pnfe);
+        }
     }
 
     @Override
-    public boolean hasVersionLabel(String arg0) throws RepositoryException
+    public boolean hasVersionLabel(String label) throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String[] labels = getVersionLabels();
+        for (String _label : labels)
+        {
+            if (_label.equals(label))
+            {
+                return true;
+            }
+        }
+        return false;
+
     }
 
-    public boolean hasVersionLabel(Version arg0, String arg1) throws VersionException, RepositoryException
+    @Override
+    public boolean hasVersionLabel(Version version, String label) throws VersionException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String[] labels = getVersionLabels(version);
+        for (String _label : labels)
+        {
+            if (_label.equals(label))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
+    @Override
     public String[] getVersionLabels() throws RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        HashSet<String> getVersionLabels = new HashSet<String>();
+        Node versionLabels = null;
+        try
+        {
+            versionLabels = this.getNode("jcr:versionLabels");
+            PropertyIterator props = versionLabels.getProperties();
+            while (props.hasNext())
+            {
+                Property prop = props.nextProperty();
+                getVersionLabels.add(prop.getString());
+            }
+        }
+        catch (PathNotFoundException pnfe)
+        {
+            log.trace(pnfe);
+        }
+        return getVersionLabels.toArray(new String[getVersionLabels.size()]);
+
     }
 
-    public String[] getVersionLabels(Version arg0) throws VersionException, RepositoryException
+    @Override
+    public String[] getVersionLabels(Version version) throws VersionException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        HashSet<String> getVersionLabels = new HashSet<String>();
+        Node versionLabels = null;
+        try
+        {
+            versionLabels = this.getNode("jcr:versionLabels");
+            PropertyIterator props = versionLabels.getProperties();
+            while (props.hasNext())
+            {
+                Property prop = props.nextProperty();
+                Node _node = prop.getNode();
+                if (_node.getUUID().equals(version.getUUID()))
+                {
+                    getVersionLabels.add(prop.getString());
+                }
+            }
+        }
+        catch (PathNotFoundException pnfe)
+        {
+            log.trace(pnfe);
+        }
+
+        return getVersionLabels.toArray(new String[getVersionLabels.size()]);
     }
 
-    public void removeVersion(String arg0) throws ReferentialIntegrityException, AccessDeniedException, UnsupportedRepositoryOperationException, VersionException, RepositoryException
+    @Override
+    public void removeVersion(String versionName) throws ReferentialIntegrityException, AccessDeniedException, UnsupportedRepositoryOperationException, VersionException, RepositoryException
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Version currentVersion = null;
+        VersionIterator it = this.getAllVersions();
+        while (it.hasNext())
+        {
+            Version version = it.nextVersion();
+            if (version.getName().equals(versionName))
+            {
+                currentVersion = version;
+                break;
+            }
+        }
+        if (currentVersion == null)
+        {
+            throw new VersionException("The version " + versionName + " was not found");
+        }
+        if (currentVersion.getUUID().equals(this.getBaseVersion().getUUID()))
+        {
+            throw new AccessDeniedException("The base versión can not be deleted");
+        }
+        else
+        {
+            {
+                Version[] predecessors = currentVersion.getPredecessors();
+
+                for (Version version : predecessors)
+                {
+                    HashSet<Version> successors = new HashSet<Version>();
+                    boolean found = false;
+                    for (Version suc : version.getSuccessors())
+                    {
+                        if (suc.getUUID().equals(currentVersion.getUUID()))
+                        {
+                            // borra la relación
+                            found = true;
+                            break;
+                        }
+                        else
+                        {
+                            successors.add(suc);
+                        }
+                    }
+                    if (found)
+                    {
+                        VersionImp imp = (VersionImp) version;
+                        imp.node.getSemanticObject().removeProperty(org.semanticwb.repository.Version.jcr_successors);
+                        for (Version successor : successors)
+                        {
+                            imp.node.getSemanticObject().addObjectProperty(org.semanticwb.repository.Version.jcr_successors, ((VersionImp) successor).node.getSemanticObject());
+                        }
+
+                    }
+                }
+            }
+            
+            {
+                Version[] successors = currentVersion.getSuccessors();
+
+                for (Version version : successors)
+                {
+                    HashSet<Version> predecessors = new HashSet<Version>();
+                    boolean found = false;
+                    for (Version prec : version.getPredecessors())
+                    {
+                        if (prec.getUUID().equals(currentVersion.getUUID()))
+                        {
+                            // borra la relación
+                            found = true;
+                            break;
+                        }
+                        else
+                        {
+                            predecessors.add(prec);
+                        }
+                    }
+                    if (found)
+                    {
+                        VersionImp imp = (VersionImp) version;
+                        imp.node.getSemanticObject().removeProperty(org.semanticwb.repository.Version.jcr_predecessors);
+                        for (Version successor : successors)
+                        {
+                            imp.node.getSemanticObject().addObjectProperty(org.semanticwb.repository.Version.jcr_predecessors, ((VersionImp) successor).node.getSemanticObject());
+                        }
+
+                    }
+                }
+            }
+            
+            currentVersion.remove();
+
+            this.save();
+        }
     }
 }
