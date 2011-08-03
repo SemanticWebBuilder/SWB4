@@ -162,6 +162,20 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
             {
                 return (Version) nodeversion;
             }
+            if (nodeversion instanceof SimpleNode)
+            {
+                SimpleNode simple=(SimpleNode)nodeversion;
+                if(simple.node.getSemanticObject().getSemanticClass().equals(org.semanticwb.repository.Version.nt_Version))
+                {
+                    VersionImp version=new VersionImp(simple.node, this, session);
+                    session.nodes.put(version.getUUID(), version);
+                    return version;
+                }
+                else
+                {
+                    return null;
+                }
+            }
             else
             {
                 return null;
@@ -192,15 +206,15 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
         {
             throw new VersionException("The version " + versionName + " was not found");
         }
-        
-        Version currentversionLabel= this.getVersionByLabel(label);
-        if(currentversionLabel!=null)
+
+        Version currentversionLabel = this.getVersionByLabel(label);
+        if (currentversionLabel != null)
         {
-            if(!currentversionLabel.getUUID().equals(currentVersion.getUUID()))
+            if (!currentversionLabel.getUUID().equals(currentVersion.getUUID()))
             {
-                if(!moveLabel)
+                if (!moveLabel)
                 {
-                    throw new VersionException("The label "+label+" exists in another version");
+                    throw new VersionException("The label " + label + " exists in another version");
                 }
             }
         }
@@ -371,7 +385,6 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
                     }
                 }
             }
-            
             {
                 Version[] successors = currentVersion.getSuccessors();
 
@@ -404,7 +417,7 @@ public class VersionHistoryImp extends SimpleNode implements VersionHistory
                     }
                 }
             }
-            
+
             currentVersion.remove();
 
             this.save();
