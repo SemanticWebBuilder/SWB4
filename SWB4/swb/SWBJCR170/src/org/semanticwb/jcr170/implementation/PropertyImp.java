@@ -405,9 +405,26 @@ public final class PropertyImp implements Property
         return value.getBoolean();
     }
 
+    @Override
     public Node getNode() throws ValueFormatException, RepositoryException
     {
-        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
+        if(!values.isEmpty())
+        {
+            Value value=values.get(0);
+            if(value.getType()==javax.jcr.PropertyType.REFERENCE)
+            {
+                String reference=value.getString();
+                return this.session.getNodeByUUID(reference);
+            }
+            else
+            {
+                throw new ValueFormatException("The value is not a reference");
+            }
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public long getLength() throws ValueFormatException, RepositoryException
