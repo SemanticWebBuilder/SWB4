@@ -63,11 +63,13 @@ public class VersionImp extends SimpleNode implements Version
 
     }
 
+    @Override
     public VersionHistory getContainingHistory() throws RepositoryException
     {
         return historyNode;
     }
 
+    @Override
     public Calendar getCreated() throws RepositoryException
     {
         org.semanticwb.repository.Version version = new org.semanticwb.repository.Version(node.getSemanticObject());
@@ -77,6 +79,7 @@ public class VersionImp extends SimpleNode implements Version
         return cal;
     }
 
+    @Override
     public Version[] getSuccessors() throws RepositoryException
     {
         org.semanticwb.repository.Version versionNode = new org.semanticwb.repository.Version(node.getSemanticObject());
@@ -97,6 +100,7 @@ public class VersionImp extends SimpleNode implements Version
         }
     }
 
+    @Override
     public Version[] getPredecessors() throws RepositoryException
     {
         org.semanticwb.repository.Version versionNode = new org.semanticwb.repository.Version(node.getSemanticObject());
