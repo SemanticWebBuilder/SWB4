@@ -739,36 +739,31 @@ public class XMLDocumentUtil
         return doc;
     }
     
-    private static void getDocument(JSONObject json, Document doc, Element node)  {
+    private static void getDocument(JSONObject json, Document doc, Element node) {
+        if(json==null) {
+            return;
+        }
         Iterator<String>it = json.keys();
         while(it.hasNext()) {
             String k = it.next();
-            
             try {
-                JSONObject jo = json.getJSONObject(k);
+                JSONObject jo = json.getJSONObject(k);            
                 Element child = doc.createElement(k);
                 getDocument(jo,doc,child);
                 node.appendChild(child);
-            }catch(JSONException jse1) {
-                try {
+            }catch(JSONException jsone1) {
+               try {
                     JSONArray ja = json.getJSONArray(k);
                     getDocument(ja,doc,node,k);
-                }catch(JSONException jse2) {
+                }catch(JSONException jsone2) {
                     try {
-                        String v = json.getString(k);
                         Element child = doc.createElement(k);
-                        if(v!=null && !"null".equalsIgnoreCase(v))
-                            child.appendChild(doc.createTextNode(v));
-                        node.appendChild(child);
-                    }catch(JSONException jse3) {
-                        try {
-                            Object v = json.get(k);
-                            Element child = doc.createElement(k);
-                            if(v!=null)
-                                child.appendChild(doc.createTextNode(v.toString()));
-                            node.appendChild(child);
-                        }catch(JSONException jse4) {
+                        if(!json.isNull(k)) {
+                            child.appendChild(doc.createTextNode(String.valueOf(json.get(k))));
                         }
+                        node.appendChild(child);
+                    }catch(JSONException jsone3) {
+                        jsone3.printStackTrace(System.out);
                     }
                 }
             }
@@ -781,20 +776,22 @@ public class XMLDocumentUtil
         }else {
             for(int i=0; i<jarr.length(); i++) {
                 try {
-                    JSONObject j = jarr.getJSONObject(i);
+                    JSONObject o = jarr.getJSONObject(i);
                     Element child = doc.createElement(nodeName);
-                    getDocument(j,doc,child);
+                    getDocument(o,doc,child);
                     node.appendChild(child);
-                }catch(JSONException jse1) {
+                }catch(JSONException json1) {
                     try {
                         JSONArray j = jarr.getJSONArray(i);
                         getDocument(j,doc,node,nodeName);
-                    }catch(JSONException jse2) {
+                    }catch(JSONException jsone2) {
                         try {
                             Element child = doc.createElement(nodeName);
-                            child.appendChild(doc.createTextNode(jarr.getString(i)));
+                            if(!jarr.isNull(i))
+                                child.appendChild(doc.createTextNode(String.valueOf(jarr.get(i))));
                             node.appendChild(child);
-                        }catch(JSONException jse3) {
+                        }catch(JSONException jsone3) {
+                            jsone3.printStackTrace(System.out);
                         }
                     }
                 }
