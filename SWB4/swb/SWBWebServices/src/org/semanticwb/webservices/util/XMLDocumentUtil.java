@@ -455,14 +455,12 @@ public class XMLDocumentUtil
     
     public static JSONObject toCanonicalJSON(Document doc) throws ServiceException
     {
-        String tfKey = System.getProperty("javax.xml.transform.TransformerFactory");
         try {
-            System.setProperty("javax.xml.transform.TransformerFactory", "net.sf.saxon.TransformerFactoryImpl");
             String xml = domToXml(doc,"UTF-8",true);
             InputStream is = XMLDocumentUtil.class.getClass().getResourceAsStream("/org/semanticwb/webservices/util/xml-to-json.xsl");
             ByteArrayOutputStream dest = new ByteArrayOutputStream();
             
-            TransformerFactory tfactory = TransformerFactory.newInstance();
+            TransformerFactory tfactory = TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl",null);
             Transformer transformer = tfactory.newTransformer(new StreamSource(is));
             transformer.transform(new StreamSource(getStreamFromString(xml)), new StreamResult(dest));
             
@@ -470,8 +468,6 @@ public class XMLDocumentUtil
             return json;
         }catch(Exception e) {
             throw new ServiceException(e.getCause());
-        }finally {
-            System.setProperty("javax.xml.transform.TransformerFactory", tfKey);
         }
     }
     
