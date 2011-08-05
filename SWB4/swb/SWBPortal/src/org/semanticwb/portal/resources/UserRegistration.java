@@ -48,6 +48,7 @@ import org.semanticwb.model.FormElement;
 import org.semanticwb.model.GenericFormElement;
 import org.semanticwb.model.PropertyGroup;
 import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.platform.SemanticObject;
@@ -366,6 +367,7 @@ public class UserRegistration extends GenericAdmResource
         Subject subject = SWBPortal.getUserMgr().getSubject(request, response.getWebPage().getWebSiteId());
         UserRepository userRep = response.getWebPage().getWebSite().getUserRepository();
         String usrLogin = request.getParameter("usrLogin");
+        boolean newflg = false;
 
         if ("first".equals(request.getParameter("type")))
         {
@@ -393,6 +395,8 @@ public class UserRegistration extends GenericAdmResource
                 newUser.setDevice(user.getDevice());
 //                System.out.println("*************** "+newUser.isActive());
                 user = newUser;
+                newflg = true;
+                SWBContext.setSessionUser(newUser);
 //                System.out.println("*************** "+user.isActive());
             } else
             {
@@ -503,6 +507,11 @@ public class UserRegistration extends GenericAdmResource
             {
                 response.setMode(SWBResourceURL.Mode_VIEW);
             }
+        }
+        if (newflg) {
+            try {
+                user.checkCredential(request.getParameter(User.swb_usrPassword.getName()).toCharArray());
+            } catch (Exception se) {log.error("can't Autolog new user", se); }
         }
 //        System.out.println("*************** "+user.isActive());
     }
