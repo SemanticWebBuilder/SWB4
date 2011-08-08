@@ -1015,6 +1015,8 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                 SemanticObject sobj = itso.next();
                 String stitle = getDisplaySemObj(sobj, user.getLanguage());
 
+                if(sobj.getProperty(Template.swb_deleted)!=null&&sobj.getBooleanProperty(Template.swb_deleted)) continue;
+                
                 log.debug(sobj.getURI() + "choose");
                 if (hmSO.get(sobj.getURI()) == null) {
                     numrols++;
