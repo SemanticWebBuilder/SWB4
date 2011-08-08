@@ -127,7 +127,7 @@ public class SWBAEditor extends GenericResource
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
-//        System.out.println("Mode:"+paramsRequest.getMode());
+        //System.out.println("Mode:"+paramsRequest.getMode());
         if (paramsRequest.getMode().equals("gateway"))
         {
             doGateway(request, response, paramsRequest);
@@ -976,13 +976,13 @@ public class SWBAEditor extends GenericResource
             String webWork = null;
             //FileOutputStream fout = null;
 
-//            System.out.println("TM:"+tm);
-//            System.out.println("ID:"+id);
-//            System.out.println("TP:"+tp);
-//            System.out.println("VER:"+ver);
-//            System.out.println("TYPE:"+type);
-//            System.out.println("PATHFILEWB:"+name);
-//            System.out.println("DOCUMENT:"+doc);
+            //System.out.println("TM:"+tm);
+            //System.out.println("ID:"+id);
+            //System.out.println("TP:"+tp);
+            //System.out.println("VER:"+ver);
+            //System.out.println("TYPE:"+type);
+            //System.out.println("PATHFILEWB:"+name);
+            //System.out.println("DOCUMENT:"+doc);
 
             if (type.equalsIgnoreCase("Template"))
             {
@@ -1002,6 +1002,9 @@ public class SWBAEditor extends GenericResource
                     //System.out.println("file:"+file);
                     ret = writeFile(in, file);
                     //System.out.println("ret:"+ret);
+                }else
+                {
+                    ret = SWBUtils.IO.readInputStream(in);
                 }
 
                 if (doc != null)
@@ -1133,10 +1136,14 @@ public class SWBAEditor extends GenericResource
         try
         {
             str=SWBUtils.IO.readInputStream(in);
-            FileOutputStream fout=new FileOutputStream(file);
-            fout.write(str.getBytes());
-            fout.flush();
-            fout.close();
+            //System.out.println("str:"+str);
+            if(str!=null && str.length()>0)
+            {
+                FileOutputStream fout=new FileOutputStream(file);
+                fout.write(str.getBytes());
+                fout.flush();
+                fout.close();
+            }
         }
         catch (Exception e)
         {
