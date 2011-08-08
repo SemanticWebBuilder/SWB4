@@ -227,15 +227,24 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
 
                 while (it.hasNext()) {
                     SemanticObject sob = it.next();
+                    boolean deleted=false;
+                    if(sob.instanceOf(Trashable.swb_Trashable))
+                    {
+                        deleted=sob.getBooleanProperty(Trashable.swb_deleted);
+                    }
 
-                    if (sob.getURI() != null) {
-                        ret.append("<option value=\"" + sob.getURI() + "\" ");
+                    if(!deleted)
+                    {                    
 
-                        if (vals.contains(sob.getURI())) {
-                            ret.append("selected=\"selected\"");
+                        if (sob.getURI() != null) {
+                            ret.append("<option value=\"" + sob.getURI() + "\" ");
+
+                            if (vals.contains(sob.getURI())) {
+                                ret.append("selected=\"selected\"");
+                            }
+
+                            ret.append(">" + sob.getDisplayName(lang) + "</option>");
                         }
-
-                        ret.append(">" + sob.getDisplayName(lang) + "</option>");
                     }
                 }
 

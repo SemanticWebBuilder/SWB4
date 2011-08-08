@@ -213,16 +213,24 @@ public class SelectOne extends SelectOneBase {
                 if (it != null) {
                     while (it.hasNext()) {
                         SemanticObject sob = it.next();
+                        boolean deleted=false;
+                        if(sob.instanceOf(Trashable.swb_Trashable))
+                        {
+                            deleted=sob.getBooleanProperty(Trashable.swb_deleted);
+                        }
 
-                        // System.out.println("display:"+sob.getDisplayName(lang));
-                        if (sob.getURI() != null) {
-                            ret.append("<option value=\"" + sob.getURI() + "\" ");
+                        if(!deleted)
+                        {
+                            // System.out.println("display:"+sob.getDisplayName(lang));
+                            if (sob.getURI() != null) {
+                                ret.append("<option value=\"" + sob.getURI() + "\" ");
 
-                            if (sob.getURI().equals(uri)) {
-                                ret.append("selected");
+                                if (sob.getURI().equals(uri)) {
+                                    ret.append("selected");
+                                }
+
+                                ret.append(">" + sob.getDisplayName(lang) + "</option>");
                             }
-
-                            ret.append(">" + sob.getDisplayName(lang) + "</option>");
                         }
                     }
                 }

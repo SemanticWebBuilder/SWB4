@@ -233,19 +233,29 @@ private String addObject(SemanticObject obj, String selected, String lang, Strin
                     // System.out.println("cls:"+cls+" hp:"+hp+" "+cls.hasHerarquicalProperties()+" "+cls.hasInverseHerarquicalProperties());
                     while (it.hasNext()) {
                         SemanticObject sob = it.next();
+                        
+                        boolean deleted=false;
+                        if(sob.instanceOf(Trashable.swb_Trashable))
+                        {
+                            deleted=sob.getBooleanProperty(Trashable.swb_deleted);
+                        }
 
-                        if (hp) {
-                            if (!sob.hasHerarquicalParents()) {
-                                ret.append(addObject(sob, uri, lang, ""));
+                        if(!deleted)
+                        {                        
+
+                            if (hp) {
+                                if (!sob.hasHerarquicalParents()) {
+                                    ret.append(addObject(sob, uri, lang, ""));
+                                }
+                            } else {
+                                ret.append("<option value=\"" + sob.getURI() + "\" ");
+
+                                if (sob.getURI().equals(uri)) {
+                                    ret.append("selected");
+                                }
+
+                                ret.append(">" + sob.getDisplayName(lang) + "</option>");
                             }
-                        } else {
-                            ret.append("<option value=\"" + sob.getURI() + "\" ");
-
-                            if (sob.getURI().equals(uri)) {
-                                ret.append("selected");
-                            }
-
-                            ret.append(">" + sob.getDisplayName(lang) + "</option>");
                         }
                     }
                 } else {
