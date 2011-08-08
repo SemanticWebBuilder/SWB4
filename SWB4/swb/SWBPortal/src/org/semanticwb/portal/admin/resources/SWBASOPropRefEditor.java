@@ -1015,36 +1015,42 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                 SemanticObject sobj = itso.next();
                 String stitle = getDisplaySemObj(sobj, user.getLanguage());
 
-                if(sobj.getProperty(Template.swb_deleted)!=null&&sobj.getBooleanProperty(Template.swb_deleted)) continue;
+                boolean deleted = Boolean.FALSE;
+                if(sobj.instanceOf(Trashable.swb_Trashable)){
+                    deleted = sobj.getBooleanProperty(Trashable.swb_deleted);
+                }
                 
-                log.debug(sobj.getURI() + "choose");
-                if (hmSO.get(sobj.getURI()) == null) {
-                    numrols++;
-                    out.println("<tr>");
-                    out.println("<td>" + stitle + "</td> ");
-                    SWBResourceURL urlchoose = paramRequest.getActionUrl();
-                    if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role)) || (idp.endsWith("hasUserGroup") && clsprop.equals(UserGroup.swb_UserGroup)) || (idp.endsWith("hasProcessActivity"))|| (idp.endsWith("hasAdminFilter"))|| (idp.endsWith("hasOntology"))) {
-                        urlchoose.setAction("choose");
-                        urlchoose.setParameter("suri", id);
-                    } else {
-                        urlchoose.setAction("new");
-                        urlchoose.setParameter("suri", id); //obj.getURI()
-                    } //choose
+                if(!deleted)
+                {
+                    log.debug(sobj.getURI() + "choose");
+                    if (hmSO.get(sobj.getURI()) == null) {
+                        numrols++;
+                        out.println("<tr>");
+                        out.println("<td>" + stitle + "</td> ");
+                        SWBResourceURL urlchoose = paramRequest.getActionUrl();
+                        if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role)) || (idp.endsWith("hasUserGroup") && clsprop.equals(UserGroup.swb_UserGroup)) || (idp.endsWith("hasProcessActivity"))|| (idp.endsWith("hasAdminFilter"))|| (idp.endsWith("hasOntology"))) {
+                            urlchoose.setAction("choose");
+                            urlchoose.setParameter("suri", id);
+                        } else {
+                            urlchoose.setAction("new");
+                            urlchoose.setParameter("suri", id); //obj.getURI()
+                        } //choose
 
-                    urlchoose.setParameter("sprop", idp);
-                    if (idpref != null) {
-                        urlchoose.setParameter("spropref", idpref);
+                        urlchoose.setParameter("sprop", idp);
+                        if (idpref != null) {
+                            urlchoose.setParameter("spropref", idpref);
+                        }
+                        urlchoose.setParameter("sobj", sobj.getURI());
+                        out.println("<td>");
+                        out.println("<a href=\"#\" onclick=\"submitUrl('" + urlchoose + "',this); return false;\">" + stitle + "</a>");
+                        out.println("</td> ");
+                        //if (clsprop.equals(Role.swb_Role) || clsprop.equals(Rule.swb_Rule) || clsprop.equals(UserGroup.swb_UserGroup) || clsprop.equals(Calendar.swb_Calendar)) {
+                        out.println("<td>");
+                        out.println("<input type=\"checkbox\" value=\"" + sobj.getURI() + "\" name=\"sobj\">");
+                        out.println("</td>");
+                        //}
+                        out.println("</tr>");
                     }
-                    urlchoose.setParameter("sobj", sobj.getURI());
-                    out.println("<td>");
-                    out.println("<a href=\"#\" onclick=\"submitUrl('" + urlchoose + "',this); return false;\">" + stitle + "</a>");
-                    out.println("</td> ");
-                    //if (clsprop.equals(Role.swb_Role) || clsprop.equals(Rule.swb_Rule) || clsprop.equals(UserGroup.swb_UserGroup) || clsprop.equals(Calendar.swb_Calendar)) {
-                    out.println("<td>");
-                    out.println("<input type=\"checkbox\" value=\"" + sobj.getURI() + "\" name=\"sobj\">");
-                    out.println("</td>");
-                    //}
-                    out.println("</tr>");
                 }
             }
             out.println("	</table>");
