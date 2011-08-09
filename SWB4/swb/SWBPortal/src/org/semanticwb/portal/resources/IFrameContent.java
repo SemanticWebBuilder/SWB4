@@ -99,7 +99,10 @@ public class IFrameContent extends GenericAdmResource
             String url = base.getAttribute("url","#");
             String script = base.getAttribute("script");
             
-            out.print("<iframe id=\"iframecontentswb\" name=\"iframecontentswb\" ");
+            String scrolling = base.getAttribute("scrolling");
+System.out.println("scrolling="+scrolling);
+            
+            out.print("<iframe id=\"ifc_"+base.getId()+"\" name=\"ifc_"+base.getId()+"\" ");
             String passparams = base.getAttribute("passparam", "0");
             if ("1".equals(passparams))
             {
@@ -136,6 +139,9 @@ public class IFrameContent extends GenericAdmResource
             
             if(script != null && !script.isEmpty())
                 out.print(" onload=\""+script+"\"");
+            
+            if(scrolling != null)
+                out.print(" scrolling=\""+scrolling+"\"");
             
             out.println(" class=\"swb-ifc\">");
             out.println("</iframe>");

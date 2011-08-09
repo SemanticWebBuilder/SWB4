@@ -12,6 +12,11 @@
             <input type="text" name="width"  label="Ancho" value="640" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Ancho inválido" promptMessage="Ancho. Ejemplos: 90%, 350px, 854" jsrequired="true" />
             <input type="text" name="height" label="Alto" value="480"  maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválida" promptMessage="Altura. Ejemplos: 90%, 350px, 854" jsrequired="true" />
             <input type="checkbox" name="fb" label="Borde" value="true" promptMessage="Mostrar borde en IE"/>
+            <select name="scrolling" label="Barras de desplazamiento" promptMessage="Especifica si se muestran o no las barras de desplazamiento">
+                <option value="no"/>
+                <option value="yes"/>
+                <option value="auto"/>
+            </select>
         </fieldset>
         </div>
         
