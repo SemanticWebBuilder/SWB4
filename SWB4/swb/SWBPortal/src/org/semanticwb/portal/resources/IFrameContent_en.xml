@@ -12,6 +12,11 @@
             <input type="text" name="width"  label="Width" value="640" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Invalid width" promptMessage="Width. Examples: 90%, 350px, 854" jsrequired="true" />
             <input type="text" name="height" label="Height" value="480"  maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Invalid height" promptMessage="Altura. Examples: 90%, 350px, 854" jsrequired="true" />
             <input type="checkbox" name="fb" label="Border" value="true" promptMessage="Display border in IE"/>
+            <select name="scrolling" label="Scrollbars" promptMessage="Specifies whether or not to display scrollbars in the iframe">
+                <option value="no"/>
+                <option value="yes"/>
+                <option value="auto"/>
+            </select>
         </fieldset>
         </div>
         
