@@ -183,6 +183,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             while (ite_sp.hasNext()) {
                 SemanticProperty sp = ite_sp.next();
                 log.debug("propiedad:" + sp.getDisplayName() + "---" + sp.getName());
+                //System.out.println("propiedad:" + sp.getDisplayName() + "---" + sp.getName());
                 hmprop.put(sp, sp);
             }
 
@@ -391,6 +392,9 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             while (itso.hasNext()) {
                 hasAsoc = true;
                 SemanticObject sobj = itso.next();
+                
+                             
+                                
                 SemanticClass clsobj = sobj.getSemanticClass();
                 //log.debug("Clase: " + clsobj.getName()+" -- "+sobj.getObjectProperty(UserGroupRef.swb_userGroup).getProperty(UserGroup.swb_title));
                 //String stitle = getDisplaySemObj(sobj, user.getLanguage());
@@ -408,6 +412,21 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                     semobj = sobj;
                 }
 
+                //System.out.println("Evaluando si está eliminado....");
+                boolean deleted = Boolean.FALSE;
+                
+                GenericObject gobj = semobj.createGenericInstance();
+                
+                if(gobj instanceof Trashable){
+                    
+                    Template template = (Template)gobj;
+                    //System.out.println("Instance of Template...");
+                    
+                    deleted = template.isDeleted();;
+                    if(deleted) continue;
+                } 
+                
+                
                 out.println("<tr>");
                 out.println("<td>");
                 SWBResourceURL urlr = paramRequest.getActionUrl();
@@ -705,12 +724,18 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                     out.println(inheritHeader.toString());
                     while (itso.hasNext()) {
                         SemanticObject sobj = itso.next();
+                        
+                        
+                        
+                        
+
+                        
                         SemanticClass clsobj = sobj.getSemanticClass();
                         log.debug("Clase:" + clsobj.getName() + ", SO: " + sobj.getDisplayName(user.getLanguage()));
                         String stitle = getDisplaySemObj(sobj, user.getLanguage());
 
-                        out.println("<tr>");
-                        out.println("<td>");
+//                        out.println("<tr>");
+//                        out.println("<td>");
 
                         // Edición del elemento, abre un nuevo tab
                         SWBResourceURL urlchoose = paramRequest.getRenderUrl();
@@ -736,6 +761,22 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                         if (semobj == null) {
                             semobj = sobj;
                         }
+                        
+                        boolean deleted = Boolean.FALSE;
+                
+                        GenericObject gobj = semobj.createGenericInstance();
+
+                        if(gobj instanceof Trashable){
+
+                            Template template = (Template)gobj;
+                            //System.out.println("Instance of Template...");
+
+                            deleted = template.isDeleted();;
+                            if(deleted) continue;
+                        } 
+                        
+                        out.println("<tr>");
+                        out.println("<td>");
                         out.println("<a href=\"#\"  onclick=\"addNewTab('" + semobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "');return false;\" >" + stitle + "</a>"); //onclick=\"submitUrl('"+urlchoose+"',this); return false;\"
                         out.println("</td>");
                         if (hmprop.get(Template.swb_language) != null) {
