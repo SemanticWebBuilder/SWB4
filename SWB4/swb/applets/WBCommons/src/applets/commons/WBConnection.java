@@ -124,7 +124,7 @@ public class WBConnection
             pout.println(xml);
             pout.close();
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(urlconn.getInputStream(),"utf8"));
+            BufferedReader in = new BufferedReader(new InputStreamReader(urlconn.getInputStream()));
             String inputLine;
             while ((inputLine = in.readLine()) != null)
             {
