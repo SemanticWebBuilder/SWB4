@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessInstanceBase extends org.semanticwb.process.model.Instance implements org.semanticwb.process.model.ContainerInstanceable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ProcessTraceable
+public abstract class ProcessInstanceBase extends org.semanticwb.process.model.Instance implements org.semanticwb.model.Traceable,org.semanticwb.process.model.ProcessTraceable,org.semanticwb.process.model.ContainerInstanceable
 {
     public static final org.semanticwb.platform.SemanticClass swp_Process=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Process");
     public static final org.semanticwb.platform.SemanticProperty swp_processType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processType");

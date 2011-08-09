@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessPeriodBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.XMLable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass
+public abstract class ProcessPeriodBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.XMLable
 {
     public static final org.semanticwb.platform.SemanticClass swp_ProcessPeriodRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessPeriodRef");
     public static final org.semanticwb.platform.SemanticProperty swp_hasProcessPeriodRefInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasProcessPeriodRefInv");
@@ -215,6 +215,24 @@ public abstract class ProcessPeriodBase extends org.semanticwb.process.model.Pro
     public void setXml(String value)
     {
         getSemanticObject().setProperty(swb_xml, value);
+    }
+
+/**
+* Gets the Active property
+* @return boolean with the Active
+*/
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(swb_active);
+    }
+
+/**
+* Sets the Active property
+* @param value long with the Active
+*/
+    public void setActive(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_active, value);
     }
 
    /**
