@@ -84,6 +84,11 @@ public class VideoContent extends org.semanticwb.portal.resources.sem.videolibra
                     {
                         ret = ret.substring(0, a);
                     }
+                    a = ret.indexOf('?');
+                    if (a > 0)
+                    {
+                        ret = ret.substring(0, a);
+                    }
                 }
             }
             if (ret != null)
