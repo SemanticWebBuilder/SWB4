@@ -1,13 +1,9 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class WebServiceBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class WebServiceBase extends org.semanticwb.process.model.BaseElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swp_wsUrl=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#wsUrl");
-   /**
-   * Indica si el elemento es válido
-   */
-    public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
     public static final org.semanticwb.platform.SemanticClass swp_WebService=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#WebService");
    /**
    * The semantic class that represents the currentObject
@@ -264,26 +260,6 @@ public abstract class WebServiceBase extends org.semanticwb.model.base.GenericOb
     {
         getSemanticObject().setProperty(swp_wsUrl, value);
     }
-
-/**
-* Gets the Valid property
-* @return boolean with the Valid
-*/
-    public boolean isValid()
-    {
-        //Override this method in WebService object
-        return getSemanticObject().getBooleanProperty(swb_valid,false);
-    }
-
-/**
-* Sets the Valid property
-* @param value long with the Valid
-*/
-    public void setValid(boolean value)
-    {
-        //Override this method in WebService object
-        getSemanticObject().setBooleanProperty(swb_valid, value,false);
-    }
    /**
    * Sets the value for the property Creator
    * @param value Creator to set
@@ -354,15 +330,5 @@ public abstract class WebServiceBase extends org.semanticwb.model.base.GenericOb
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(swb_title, title, lang);
-    }
-
-    public void remove()
-    {
-        getSemanticObject().remove();
-    }
-
-    public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
-    {
-        return new org.semanticwb.model.GenericIterator(getSemanticObject().listRelatedObjects(),true);
     }
 }

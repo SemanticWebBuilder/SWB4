@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Iconable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Expirable,org.semanticwb.process.model.Callable,org.semanticwb.model.Referensable,org.semanticwb.process.model.Containerable,org.semanticwb.model.Hitable
+public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Iconable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Expirable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Hitable,org.semanticwb.process.model.Containerable,org.semanticwb.model.Activeable,org.semanticwb.process.model.Callable,org.semanticwb.model.Referensable
 {
    /**
    * Grupo de Procesos
