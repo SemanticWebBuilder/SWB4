@@ -105,7 +105,7 @@ public class FrmProcess implements InternalServlet
         } 
         else if (request.getRequestURI().endsWith("validCaptcha"))
         {
-            if (((String) request.getSession(true).getAttribute("captchaCad")).equalsIgnoreCase(request.getParameter("frmCaptchaValue")))
+            if (null!=request.getSession(true).getAttribute("captchaCad") && ((String) request.getSession(true).getAttribute("captchaCad")).equalsIgnoreCase(request.getParameter("frmCaptchaValue")))
             {
                 response.getWriter().println("true");
             } 
