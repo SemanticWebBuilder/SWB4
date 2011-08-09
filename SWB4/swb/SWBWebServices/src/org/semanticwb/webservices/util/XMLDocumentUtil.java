@@ -7,6 +7,7 @@ package org.semanticwb.webservices.util;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -24,16 +25,20 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import javax.xml.transform.Source;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.validation.Validator;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+
 import org.jdom.Namespace;
 import org.jdom.input.DOMBuilder;
 import org.jdom.input.SAXBuilder;
@@ -724,7 +729,7 @@ public class XMLDocumentUtil
         }
     }
 
-    public static Document getDocument(JSONObject json, Document schema) throws ParserConfigurationException
+    public static Document getDocument(JSONObject json, Document schema) throws Exception
     {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
@@ -735,7 +740,7 @@ public class XMLDocumentUtil
         return doc;
     }
     
-    private static void getDocument(JSONObject json, Document doc, Element node) {
+    private static void getDocument(JSONObject json, Document doc, Element node) throws Exception {
         if(json==null) {
             return;
         }
@@ -760,13 +765,14 @@ public class XMLDocumentUtil
                         node.appendChild(child);
                     }catch(JSONException jsone3) {
                         jsone3.printStackTrace(System.out);
+                        throw new Exception(jsone3);
                     }
                 }
             }
         }
     }
     
-    private static void getDocument(JSONArray jarr, Document doc, Element node, String nodeName) {
+    private static void getDocument(JSONArray jarr, Document doc, Element node, String nodeName) throws Exception {
         if(jarr.length()==0) {
             return;
         }else {
@@ -788,11 +794,27 @@ public class XMLDocumentUtil
                             node.appendChild(child);
                         }catch(JSONException jsone3) {
                             jsone3.printStackTrace(System.out);
+                            throw new Exception(jsone3);
                         }
                     }
                 }
             }
         }
+    }
+    
+    public static Document getValidDocument(JSONObject json, String schemaPath) throws Exception
+    {
+        Document doc = getDocument(json, null);
+        DocumentBuilder parser = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        Document document = parser.parse(new File("instance.xml"));
+
+        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        Source schemaFile = new StreamSource(new File(schemaPath));
+        Schema schema = factory.newSchema(schemaFile);
+        Validator validator = schema.newValidator();
+        validator.validate(new DOMSource(document));
+        
+        return doc;
     }
     
     public static String domToXml(Document dom, String encode, boolean indent) {
