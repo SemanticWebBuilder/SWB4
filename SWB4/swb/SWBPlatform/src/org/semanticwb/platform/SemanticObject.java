@@ -3246,8 +3246,11 @@ public Document getDomProperty(SemanticProperty prop)
             ret = getLabel(lang);
             if(ret==null)
             {
+                ret=cls.getName()+":"+getId();
+                /*
                 if(getURI()!=null)
                 {
+                    
                     int x=getURI().indexOf('#');
                     if(x>0)
                     {
@@ -3268,6 +3271,7 @@ public Document getDomProperty(SemanticProperty prop)
                 {
                     ret=getResId();
                 }
+                */
             }
         }
         return ret;
