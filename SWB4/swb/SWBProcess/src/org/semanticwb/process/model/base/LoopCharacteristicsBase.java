@@ -1,12 +1,8 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class LoopCharacteristicsBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.model.Traceable
+public abstract class LoopCharacteristicsBase extends org.semanticwb.process.model.BaseElement implements org.semanticwb.model.Traceable
 {
-   /**
-   * Indica si el elemento es válido
-   */
-    public static final org.semanticwb.platform.SemanticProperty swb_valid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#valid");
     public static final org.semanticwb.platform.SemanticClass swp_LoopCharacteristics=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#LoopCharacteristics");
    /**
    * The semantic class that represents the currentObject
@@ -206,26 +202,6 @@ public abstract class LoopCharacteristicsBase extends org.semanticwb.model.base.
     {
         getSemanticObject().setDateProperty(swb_created, value);
     }
-
-/**
-* Gets the Valid property
-* @return boolean with the Valid
-*/
-    public boolean isValid()
-    {
-        //Override this method in LoopCharacteristics object
-        return getSemanticObject().getBooleanProperty(swb_valid,false);
-    }
-
-/**
-* Sets the Valid property
-* @param value long with the Valid
-*/
-    public void setValid(boolean value)
-    {
-        //Override this method in LoopCharacteristics object
-        getSemanticObject().setBooleanProperty(swb_valid, value,false);
-    }
    /**
    * Sets the value for the property Creator
    * @param value Creator to set
@@ -263,15 +239,5 @@ public abstract class LoopCharacteristicsBase extends org.semanticwb.model.base.
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
-    }
-
-    public void remove()
-    {
-        getSemanticObject().remove();
-    }
-
-    public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
-    {
-        return new org.semanticwb.model.GenericIterator(getSemanticObject().listRelatedObjects(),true);
     }
 }
