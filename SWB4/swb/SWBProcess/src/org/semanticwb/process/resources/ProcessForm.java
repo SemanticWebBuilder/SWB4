@@ -851,7 +851,9 @@ public class ProcessForm extends GenericResource {
             SWBResourceURL urladd = paramRequest.getActionUrl();
             urladd.setAction("addprops");
 
-            out.println("<form action=\"" + urladd + "\" id=\"" + suri + "/forma\" method=\"post\" onsubmit=\"if(enviatodos('existentes')) { this.form.submit(); return false; } else { return false;}\">");
+            long idform = System.currentTimeMillis();
+            
+            out.println("<form action=\"" + urladd + "\" id=\"" + idform + "/forma\" method=\"post\" onsubmit=\"if(enviatodos('"+idform+"/existentes')) { this.form.submit(); return false; } else { return false;}\">");
             out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\">");
             out.println("<fieldset>");
             out.println("<legend>" + "Configuración" + "</legend>");
@@ -866,10 +868,25 @@ public class ProcessForm extends GenericResource {
             out.println("</tr>");
             out.println("<tr>");
             out.println("<td>");
+            
+            ArrayList list = new ArrayList(hmprops.keySet());
+            Collections.sort(list);
+            
+            
+            
+            
+            
+            
+            
             // select con la lista de propiedades existentes
-            out.println("<select size=\"10\" name=\"propiedades\" id=\"" + suri + "/propiedades\" multiple style=\"width: 100%;\">");
-            Iterator<String> its = hmprops.keySet().iterator();
+            out.println("<select size=\"10\" name=\"propiedades\" id=\"" + idform + "/propiedades\" multiple style=\"width: 100%;\">");
+            //Iterator<String> its = hmprops.keySet().iterator();
+            Iterator<String> its = list.iterator();
             while (its.hasNext()) {
+                
+                //String key = its.next();
+                
+                
                 String str = its.next();
                 String varName="";
                 String propid="";
@@ -889,12 +906,12 @@ public class ProcessForm extends GenericResource {
             out.println("</td>");
             out.println("<td valign=\"middle\" width=\"25px\">");
             // botones
-            out.println("<button dojoType=\"dijit.form.Button\" type = \"button\" style=\"width: 25px;\" id = \"" + suri + "btnMoveLeft\" onclick = \"MoveItems('" + suri + "/existentes','" + suri + "/propiedades');\"><-</button><br>");
-            out.println("<button dojoType=\"dijit.form.Button\" type = \"button\" style=\"width: 25px;\" id = \"" + suri + "btnMoveRight\" onclick = \"MoveItems('" + suri + "/propiedades','" + suri + "/existentes');\">-></button>");
+            out.println("<button dojoType=\"dijit.form.Button\" type = \"button\" style=\"width: 25px;\" id = \"" + idform + "btnMoveLeft\" onclick = \"MoveItems('" + idform + "/existentes','" + idform + "/propiedades');\"><-</button><br>");
+            out.println("<button dojoType=\"dijit.form.Button\" type = \"button\" style=\"width: 25px;\" id = \"" + idform + "btnMoveRight\" onclick = \"MoveItems('" + idform + "/propiedades','" + idform + "/existentes');\">-></button>");
             out.println("</td>");
             out.println("<td>");
             // select con la lista de propiedades seleccionadas
-            out.println("<select size=\"10\" name=\"existentes\" id=\"" + suri + "/existentes\" multiple style=\"width: 100%;\">");
+            out.println("<select size=\"10\" name=\"existentes\" id=\"" + idform + "/existentes\" multiple style=\"width: 100%;\">");
             its = hmselected.keySet().iterator();
             while (its.hasNext()) {
                 String str = its.next();
@@ -920,22 +937,22 @@ public class ProcessForm extends GenericResource {
 
             out.println("<tr>");
             out.println("<td>");
-            out.println("<input type=\"checkbox\" name=\"btnAccept\" id=\"" + suri + "_btnAccept\" value=\"use\" "+(base.getAttribute("btnAccept","").equals("use")?"checked":"")+"><label for=\"" + suri + "_btnAccept\">Utilizar botón aceptar</label>");
+            out.println("<input type=\"checkbox\" name=\"btnAccept\" id=\"" + idform + "_btnAccept\" value=\"use\" "+(base.getAttribute("btnAccept","").equals("use")?"checked":"")+"><label for=\"" + idform + "_btnAccept\">Utilizar botón aceptar</label>");
             out.println("</td>");
             out.println("</tr>");
             out.println("<tr>");
             out.println("<td>");
-            out.println("<input type=\"checkbox\" name=\"btnReject\" id=\"" + suri + "_btnReject\" value=\"use\" "+(base.getAttribute("btnReject","").equals("use")?"checked":"")+"><label for=\"" + suri + "_btnReject\">Utilizar botón rechazar</label>");
+            out.println("<input type=\"checkbox\" name=\"btnReject\" id=\"" + idform + "_btnReject\" value=\"use\" "+(base.getAttribute("btnReject","").equals("use")?"checked":"")+"><label for=\"" + idform + "_btnReject\">Utilizar botón rechazar</label>");
             out.println("</td>");
             out.println("</tr>");
             out.println("<tr>");
             out.println("<td>");
-            out.println("<input type=\"checkbox\" name=\"btnCancel\" id=\"" + suri + "_btnCancel\" value=\"use\" "+(base.getAttribute("btnCancel","").equals("use")?"checked":"")+"><label for=\"" + suri + "_btnCancel\">Utilizar boton cancelar</label>");
+            out.println("<input type=\"checkbox\" name=\"btnCancel\" id=\"" + idform + "_btnCancel\" value=\"use\" "+(base.getAttribute("btnCancel","").equals("use")?"checked":"")+"><label for=\"" + idform + "_btnCancel\">Utilizar boton cancelar</label>");
             out.println("</td>");
             out.println("</tr>");
             out.println("<tr>");
             out.println("<td>");
-            out.println("<input type=\"checkbox\" name=\"btnSave\" id=\"" + suri + "_btnSave\" value=\"use\" "+(base.getAttribute("btnSave","").equals("use")?"checked":"")+"><label for=\"" + suri + "_btnSave\">Utilizar botón guardar</label>");
+            out.println("<input type=\"checkbox\" name=\"btnSave\" id=\"" + idform + "_btnSave\" value=\"use\" "+(base.getAttribute("btnSave","").equals("use")?"checked":"")+"><label for=\"" + idform + "_btnSave\">Utilizar botón guardar</label>");
             out.println("</td>");
             out.println("</tr>");
 
