@@ -111,7 +111,7 @@ public class Modeler extends GenericResource {
                     process = (org.semanticwb.process.model.Process) go;
                     String json = getProcessJSON(process).toString();
                     out.print(json);
-                    System.out.println("json:"+json);
+                    //System.out.println("json:"+json);
                 } else {
                     log.error("Error to create JSON: Process not found");
                     out.print("ERROR: Process not found");
@@ -165,7 +165,7 @@ public class Modeler extends GenericResource {
             JSONObject jsobj = null;
             try {
 
-                System.out.println("json recibido: "+node.getTextContent());
+                //System.out.println("json recibido: "+node.getTextContent());
 
 
                 jsobj = new JSONObject(node.getTextContent());
