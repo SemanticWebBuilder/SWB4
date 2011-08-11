@@ -422,7 +422,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         String fileName = null;
         String action = paramRequest.getAction();
         StringBuilder pathToRead = new StringBuilder(64);
-        StringBuilder pathToWrite = new StringBuilder(64);
+        //StringBuilder pathToWrite = new StringBuilder(64);
         String content = "";
         //Para mostrar el contenido de una versión temporal
         String tmpPath = request.getParameter("tmpPath");
@@ -432,7 +432,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         fileName = vio.getVersionFile();
 
         pathToRead.append(resource.getWorkPath() + "/");
-        pathToWrite.append("/work" + resource.getWorkPath() + "/");
+        //pathToWrite.append("/work" + resource.getWorkPath() + "/");
 
         if (action.equalsIgnoreCase(SWBParamRequest.Action_EDIT)
                 && versionNumber == 0 && tmpPath == null) {
@@ -441,8 +441,8 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
 
         pathToRead.append(versionNumber + "/");
         pathToRead.append(fileName);
-        pathToWrite.append("" + (versionNumber));
-        session.setAttribute("directory", pathToWrite.toString());
+        //pathToWrite.append("" + (versionNumber));
+        //session.setAttribute("directory", pathToWrite.toString());
 
         if (action.equals(SWBParamRequest.Action_EDIT)) {
             try {
@@ -518,16 +518,28 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
     public void saveContent(HttpServletRequest request,
             HttpServletResponse response, SWBParamRequest paramRequest)
             throws SWBResourceException, IOException {
+        
 
         Resource resource = paramRequest.getResourceBase();
-        String contentPath = (String) request.getSession().getAttribute("directory");
+        String contentPath = SWBPortal.getWebWorkPath()+ resource.getWorkPath() + "/";
+        //String contentPath = (String) request.getSession().getAttribute("directory");
         String textToSave = request.getParameter("EditorDefault");
         boolean deleteTmp = (request.getParameter("operation") != null
                              && !"".equals(request.getParameter("operation")))
                             ? true : false;
+        
+        //System.out.println("suri:"+request.getParameter("suri"));
+        //System.out.println("resource:"+resource);
+        //System.out.println("textToSave:"+textToSave);
+        //System.out.println("deleteTmp:"+deleteTmp);
+        
         String filename = null;
         boolean textSaved = false;
         int versionNumber = Integer.parseInt(request.getParameter("numversion"));   //version.getVersionNumber();
+        
+        contentPath+=versionNumber;
+        //System.out.println("contentPath:"+contentPath);
+        
         int versionToDelete = versionNumber;
         String directoryToRemove = SWBPortal.getWorkPath()
                 + resource.getWorkPath() + "/"
@@ -566,6 +578,8 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                         + contentPath + "/" + filename);
                 filename = file.getName();
                 FileWriter writer = new FileWriter(file);
+                
+                //System.out.println("file:"+file);
 
                 if (deleteTmp) {
                     //modifica las rutas de los archivos asociados si se acaba de cargar un archivo HTML antes de guardar
@@ -601,6 +615,8 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                     }
                     i = textToSave.indexOf("<workpath/>", i + 11);
                 }
+                
+                //System.out.println("textToSave2:"+textToSave);
 
                 writer.write(textToSave);
                 writer.flush();
