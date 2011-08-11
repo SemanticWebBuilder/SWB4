@@ -130,6 +130,29 @@ public abstract class StoreArtifactBase extends org.semanticwb.process.model.Pro
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StoreArtifact> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_processFileTemplate,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.StoreArtifact with a determined ServiceTask
+       * @param value ServiceTask of the type org.semanticwb.process.model.ServiceTask
+       * @param model Model of the org.semanticwb.process.model.StoreArtifact
+       * @return Iterator with all the org.semanticwb.process.model.StoreArtifact
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.StoreArtifact> listStoreArtifactByServiceTask(org.semanticwb.process.model.ServiceTask value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StoreArtifact> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_serviceTaskInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.StoreArtifact with a determined ServiceTask
+       * @param value ServiceTask of the type org.semanticwb.process.model.ServiceTask
+       * @return Iterator with all the org.semanticwb.process.model.StoreArtifact
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.StoreArtifact> listStoreArtifactByServiceTask(org.semanticwb.process.model.ServiceTask value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StoreArtifact> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_serviceTaskInv,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**

@@ -153,6 +153,29 @@ public abstract class WebServiceInvokerBase extends org.semanticwb.process.model
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.WebServiceInvoker> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasWebServiceOutputParameter,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.process.model.WebServiceInvoker with a determined ServiceTask
+       * @param value ServiceTask of the type org.semanticwb.process.model.ServiceTask
+       * @param model Model of the org.semanticwb.process.model.WebServiceInvoker
+       * @return Iterator with all the org.semanticwb.process.model.WebServiceInvoker
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.WebServiceInvoker> listWebServiceInvokerByServiceTask(org.semanticwb.process.model.ServiceTask value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.WebServiceInvoker> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_serviceTaskInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.WebServiceInvoker with a determined ServiceTask
+       * @param value ServiceTask of the type org.semanticwb.process.model.ServiceTask
+       * @return Iterator with all the org.semanticwb.process.model.WebServiceInvoker
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.WebServiceInvoker> listWebServiceInvokerByServiceTask(org.semanticwb.process.model.ServiceTask value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.WebServiceInvoker> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_serviceTaskInv,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**

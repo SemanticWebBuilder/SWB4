@@ -82,6 +82,29 @@ public abstract class SendMailBase extends org.semanticwb.process.model.ProcessS
         {
             return (getSendMail(id, model)!=null);
         }
+       /**
+       * Gets all org.semanticwb.process.model.SendMail with a determined ServiceTask
+       * @param value ServiceTask of the type org.semanticwb.process.model.ServiceTask
+       * @param model Model of the org.semanticwb.process.model.SendMail
+       * @return Iterator with all the org.semanticwb.process.model.SendMail
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.SendMail> listSendMailByServiceTask(org.semanticwb.process.model.ServiceTask value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SendMail> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_serviceTaskInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.SendMail with a determined ServiceTask
+       * @param value ServiceTask of the type org.semanticwb.process.model.ServiceTask
+       * @return Iterator with all the org.semanticwb.process.model.SendMail
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.SendMail> listSendMailByServiceTask(org.semanticwb.process.model.ServiceTask value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SendMail> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_serviceTaskInv,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**
