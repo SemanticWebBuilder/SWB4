@@ -375,6 +375,7 @@ public class ToolBar extends CustomNode
             if(ge!=null and not (ge instanceof Lane))
             {
                 var title=js.getString("title");
+                println("título recuperado del json: {title}");
                 var description=js.optString("description", "");
                 var isLoop=js.optBoolean("isLoop", false);
                 var isMultiInstance=js.optBoolean("isMultiInstance", false);
@@ -400,6 +401,7 @@ public class ToolBar extends CustomNode
                 ge.isInterrupting = isInterrupting;
                 //println("uri:{ge.uri}");
                 ge.title=title;
+                println("título establecido al objeto: {ge.title}");
                 ge.text.setSize(labelSize);
                 ge.description=description;
                 //ge.setType(type);
