@@ -209,6 +209,9 @@ public class ToolBar extends CustomNode
         {
             var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getProcessJSON</cmd></req>";
             var json=conn.getData(comando);
+            println("::::obtenido del comando:::");
+            println(conn.getData(comando));
+            println("//::::obtenido del comando::://");
             //println("json:{json}");
             delete modeler.contents;
             modeler.containerElement=null;
