@@ -872,12 +872,6 @@ public class ProcessForm extends GenericResource {
             ArrayList list = new ArrayList(hmprops.keySet());
             Collections.sort(list);
             
-            
-            
-            
-            
-            
-            
             // select con la lista de propiedades existentes
             out.println("<select size=\"10\" name=\"propiedades\" id=\"" + idform + "/propiedades\" multiple style=\"width: 100%;\">");
             //Iterator<String> its = hmprops.keySet().iterator();
