@@ -109,18 +109,25 @@ public class ResourceCalendar extends org.semanticwb.portal.resources.sem.generi
         } catch(NumberFormatException e) {
             log.error("Error while convert year in Calendar: " + e);
         }
-        //boolean EventType.ClassMgr.listEventTypes(paramRequest.getWebPage().getWebSite());
-        boolean isOnlyType = getEvtType() != null ? true : false;
 
         if(mont > 0 && year > 0) {
-            Iterator ist=null;
-            if(isOnlyType && getEvtType().toString().trim().length() > 1) {
-                EventType type = (EventType) getEvtType();
-                ist = Event.ClassMgr.listEventByEvType(type, paramRequest.getWebPage().getWebSite());
+            Iterator istEvts = listEvtTypes();
+            Iterator ist = null;
+            ArrayList allEvts = new ArrayList();
+            if(istEvts.hasNext()) {
+                while(istEvts.hasNext()) {
+                    EventType type =  (EventType)istEvts.next();
+                    ist = Event.ClassMgr.listEventByEvType(type, paramRequest.getWebPage().getWebSite());
+                    while(ist.hasNext()) {
+                        allEvts.add(ist.next());
+                    }
+                }
+                if(!allEvts.isEmpty()) {
+                    ist = allEvts.iterator();
+                }
             } else {
                 ist = Event.ClassMgr.listEvents(paramRequest.getWebPage().getWebSite());
             }
-            //ist = cal.listEventses();
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             while(ist.hasNext()) {
