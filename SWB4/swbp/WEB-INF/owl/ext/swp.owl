@@ -779,8 +779,6 @@
     <rdfs:label xml:lang="es">Proceso</rdfs:label>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Hitable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Iconable"/>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_Process">
         <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
