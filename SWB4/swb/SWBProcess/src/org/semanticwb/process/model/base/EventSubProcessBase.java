@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class EventSubProcessBase extends org.semanticwb.process.model.SubProcess implements org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.process.model.Containerable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable
+public abstract class EventSubProcessBase extends org.semanticwb.process.model.SubProcess implements org.semanticwb.model.TemplateRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.process.model.Containerable,org.semanticwb.model.Referensable
 {
     public static final org.semanticwb.platform.SemanticClass swp_EventSubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#EventSubProcess");
    /**
