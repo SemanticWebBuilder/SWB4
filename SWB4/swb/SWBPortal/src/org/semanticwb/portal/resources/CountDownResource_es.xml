@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmAdmin" action="true" method="POST" enctype="multipart/form-data">
+        <admdbconnmgr defconn="true"/>     
+
+        <fieldset legend="">
+            <input type="text" name="endtime" label="Fecha crítica (dd/MM/aaaa)"/>
+        </fieldset>
+        
+        <div title="Estilo" open="true">
+        <fieldset legend="Apariencia">
+            <input type="text" name="width" label="Ancho" maxlength="5" jsvaltype="js_numbers"/>
+            <input type="text" name="height" label="Alto" maxlength="5" jsvaltype="js_numbers"/>
+            
+            <statictext name="viewer">
+                <![CDATA[
+                <table border="0" width="99%">
+                    <tr>
+                      <td align="right">Color de fondo (hexadecimal)</td>
+                      <td class="valores">
+                        <input type="text" id="backgrownd" name="backgrownd" value="{@db_backgrownd}" size="7" maxlength="7" />
+                        <span id="plt_viewer" style="border:solid 1px #000;background-color:{@db_backgrownd};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="datos" width="200px" align="right">Otro color:</td>
+                      <td class="valores">
+                        <div id="cp_viewer"></div>
+                      </td>
+                    </tr>
+                </table>
+                <script type="text/javascript">
+                    dojo.addOnLoad(function(){
+                        var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("backgrownd").value=val; dojo.byId("plt_viewer").style.backgroundColor=val; }}, "cp_viewer" );
+                    });
+                </script>
+                ]]>
+            </statictext>
+        </fieldset>    
+        </div>
+
+        <fieldset>
+            <input type="submit" value="Guardar" />
+            <input type="reset"  value="Restablecer" />
+        </fieldset>
+    </form>
+    <script type="text/javascript">
+        <![CDATA[
+        dojo.require("dijit.ColorPalette");
+        function jsValida(frm) {
+            return true;
+        }
+        ]]>
+    </script>
+</admresource>
