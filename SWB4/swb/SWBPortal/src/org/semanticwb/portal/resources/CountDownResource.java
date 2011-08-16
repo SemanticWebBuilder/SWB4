@@ -34,49 +34,60 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import org.semanticwb.SWBPlatform;
+import java.util.GregorianCalendar;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBParamRequest;
 
-
-// TODO: Auto-generated Javadoc
-/**
- * The Class CountDownResource.
- * 
- * @author Javier Solis Gonzalez
- */
 public class CountDownResource extends GenericAdmResource
 {
+    private static Logger log = SWBUtils.getLogger(CountDownResource.class);
+    private static final long MILLISECS_PER_DAY = (1000*60*60*24);
     
-    /**
-     * Creates a new instance of CountDownResource.
-     */
-    public CountDownResource()
-    {
-    }
-    
-    
-    
-    /* (non-Javadoc)
-     * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
-     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
-        PrintWriter out=response.getWriter();
-        String width=getResourceBase().getAttribute("width","120");
-        String height=getResourceBase().getAttribute("height","25");
-        String date=getResourceBase().getAttribute("endtime","12/12/2012");
-        String backgrownd=getResourceBase().getAttribute("backgrownd","FFFFFF");
-        Date d=new Date(date);
+        Resource base = getResourceBase();
         
-        out.println("<APPLET code=\"applets/clocks/CountDown.class\" codebase=\""+SWBPlatform.getContextPath()+"/\" ARCHIVE=\"swbadmin/lib/SWBAplClock.jar, swbadmin/lib/SWBAplCommons.jar\" width="+width+" height="+height+">");
-        out.println("<param name=\"actualTime\" value=\""+(new Date()).getTime()+"\">");
-        out.println("<param name=\"endTime\" value=\""+d.getTime()+"\">");
-        out.println("<param name=\"backgrownd\" value=\""+backgrownd+"\">");
-        out.println("</APPLET>");
+//        int width;
+//        try {
+//            width = Integer.parseInt(base.getAttribute("width","120"));
+//        }catch(NumberFormatException nfe) {
+//            width = 120;
+//        }
+//        int height;
+//        try {
+//            height = Integer.parseInt(base.getAttribute("height","25"));
+//        }catch(NumberFormatException nfe) {
+//            height = 25;
+//        }
+//        String backgrownd = base.getAttribute("backgrownd","FFFFFF");       
+        
+        String date = base.getAttribute("endtime");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        GregorianCalendar latDate, curDate = new GregorianCalendar();
+        try {
+            Date dt = sdf.parse(date);
+            latDate = new GregorianCalendar();
+            latDate.setTime(dt);
+        }catch(ParseException pe) {
+            latDate = new GregorianCalendar();
+        }
+        long end = latDate.getTimeInMillis()+latDate.getTimeZone().getOffset(latDate.getTimeInMillis());
+        long start = curDate.getTimeInMillis()+curDate.getTimeZone().getOffset(curDate.getTimeInMillis());
+        long diff = end-start;
+        long res = diff/MILLISECS_PER_DAY;
+        
+        if(diff%MILLISECS_PER_DAY>0)
+           res += 1;
+        
+        PrintWriter out=response.getWriter();
+        out.println("<div class=\"swb-cntdwn\">"+res+"</div>");
     }
-    
 }
