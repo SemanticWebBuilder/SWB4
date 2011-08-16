@@ -320,6 +320,8 @@
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
+            <xs:attribute name="showmsg" type="xs:string"/>
+            <xs:attribute name="editmsg" type="xs:string"/>
             <xs:attribute name="removemsg" type="xs:string"/>
             <xs:attribute name="bydefault" type="xs:string"/>
             <xs:attribute name="msgbydefault" type="xs:string"/>
