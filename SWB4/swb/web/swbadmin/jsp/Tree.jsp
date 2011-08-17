@@ -609,7 +609,7 @@
         //System.out.println("obj:"+obj+" virtual:"+virparent);
 
         //TODO:Comentaresto cuando liberemos rep. docs.
-        if(cls.equals(org.semanticwb.repository.Workspace.sclass) || cls.getClassId().equals("ProcessDataInstanceModel"))
+        if(cls.equals(org.semanticwb.repository.Workspace.sclass) || cls.getClassId().equals("swp:ProcessDataInstanceModel"))
         {
             return;
         }
