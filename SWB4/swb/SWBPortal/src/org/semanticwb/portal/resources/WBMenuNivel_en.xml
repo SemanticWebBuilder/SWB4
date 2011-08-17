@@ -5,7 +5,7 @@
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
         <admdbconnmgr defconn="true"/>
         <fieldset legend="Look and Feel">
-            <input type="file" name="template" label="Template (xsl, xslt): " showfile="true" filetype="xsl|xslt" isshowfiletype="true" isremovefile="true" removemsg="Remove template: " msg="Current template: " bydefault="{@webpath}swbadmin/xsl/WBMenuNivel/WBMenuNivel.xslt" msgbydefault="Default Template: " jsrequired="false" />
+            <input type="file" name="template" label="Template (xsl, xslt): " filetype="xsl|xslt" jsrequired="false" showfile="true" isshowfiletype="true" isremovefile="true" showmsg="Show template..." editmsg="Edit template..." removemsg="Remove template" msg="Current template: " bydefault="{@webpath}/swbadmin/xsl/WBMenuNivel/WBMenuNivel.xslt" msgbydefault="Default template: " />
         </fieldset>
 
         <fieldset legend="Configuración de estrategia">
@@ -14,8 +14,8 @@
         </fieldset>
 
         <fieldset>
-            <input type="submit" name="btnSave"  value="Save" />
-            <input type="reset"  name="btnReset" value="Reset"/>
+            <input type="submit" value="Save" />
+            <input type="reset"  value="Reset"/>
         </fieldset>
     </form>
 </admresource>
