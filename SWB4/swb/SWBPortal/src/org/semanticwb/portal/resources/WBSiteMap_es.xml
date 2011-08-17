@@ -4,7 +4,7 @@
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
         <admdbconnmgr defconn="true"/>
         <fieldset legend="Aspecto">
-            <input type="file" name="template" label="Plantilla (xsl, xslt): " showfile="true" filetype="xsl|xslt" isshowfiletype="true" isremovefile="true" removemsg="Quitar plantilla de transformación: " msg="Plantilla actual: " bydefault="{@webpath}swbadmin/xsl/WBMenu/WBMenu.xslt" msgbydefault="Plantilla por defecto: " jsrequired="false" />
+            <input type="file" name="template" label="Plantilla (xsl, xslt)" filetype="xsl|xslt" jsrequired="false" showfile="true" isshowfiletype="true" isremovefile="true" showmsg="Ver plantilla..." editmsg="Editar plantilla..." removemsg="Quitar plantilla" msg="Plantilla actual: " bydefault="{@webpath}/swbadmin/xsl/WBMenu/WBMenu.xslt" msgbydefault="Plantilla por defecto: " />
             <input type="text" name="title" label="Título:" maxlength="60" promptMessage="Título" />
             <input type="text" name="level" label="Nivel de despliegue:" value="1" maxlength="3" jsvaltype="js_numbers" invalidMessage="Nivel debe ser un valor numérico" promptMessage="Nivel de despliegue" />
         </fieldset>
@@ -13,7 +13,7 @@
             <statictext name="txtTarget">¿Cómo desea acceder al recurso de mapa de sitio?:</statictext>
             <input type="text" name="lnktexto" label="Texto de la liga:" maxlength="50" promptMessage="Texto de la liga" />
             <input type="text" name="btntexto" label="Etiqueta del botón:" maxlength="50" promptMessage="Etiqueta del botón" />
-            <input type="file" name="img" label="Imagen (gif, jpg, jpeg, png):" showfile="true" filetype="jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" />
+            <input type="file" name="img" label="Imagen (gif, jpg, jpeg, png):" filetype="jpg|jpeg|gif|png" showfile="true" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" />
             <input type="text" name="alt" label="Texto alterno:" maxlength="50" promptMessage="Texto alterno para la imagen. Pauta de accesibilidad" />
 
             <statictext name="note">
@@ -26,8 +26,8 @@
         </fieldset>
 
         <fieldset>
-            <input type="submit" name="btnSave" value="Guardar" onclick="jsValida(this.form)" />
-            <input type="reset"  name="btnReset" value="Restablecer"/>
+            <input type="submit" value="Guardar" onclick="jsValida(this.form)" />
+            <input type="reset"  value="Restablecer"/>
         </fieldset>
     </form>
 
