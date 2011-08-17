@@ -3,8 +3,8 @@
     <xslfile>admresource.xslt</xslfile>
     <form name="frmAdmRes" action="true" method="POST" enctype="multipart/form-data" jsframework="dojo" >
         <admdbconnmgr defconn="true"/>
-        <fieldset legend="Look and Feel">
-            <input type="file" name="template" label="Template (xsl, xslt): " showfile="true" filetype="xsl|xslt" isshowfiletype="true" isremovefile="true" removemsg="Remove template: " msg="Current template: " bydefault="{@webpath}swbadmin/xsl/WBMenu/WBMenu.xslt" msgbydefault="Default Template: " jsrequired="false" />
+        <fieldset legend="Look & Feel">
+            <input type="file" name="template" label="Template (xsl, xslt)" filetype="xsl|xslt" jsrequired="false" showfile="true" isshowfiletype="true" isremovefile="true" showmsg="Show template..." editmsg="Edit template..." removemsg="Remove template" msg="Current template: " bydefault="{@webpath}/swbadmin/xsl/WBMenu/WBMenu.xslt" msgbydefault="Default template: " />
             <input type="text" name="title" label="Title:" maxlength="60" promptMessage="Title" />
             <input type="text" name="level" label="Level of deployment:" value="1" maxlength="3" jsvaltype="js_numbers" invalidMessage="Level must be a numeric value" promptMessage="Level of deployment" />
         </fieldset>
@@ -13,7 +13,7 @@
             <statictext name="txtTarget">¿How do you want to access the resource site map?:</statictext>
             <input type="text" name="lnktexto" label="Text link:" maxlength="50" promptMessage="Text link" />
             <input type="text" name="btntexto" label="Button label:" maxlength="50" promptMessage="Button label" />
-            <input type="file" name="img" label="Image (gif, jpg, jpeg, png):" showfile="true" filetype="jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Remove image" />
+            <input type="file" name="img" label="Image (gif, jpg, jpeg, png):" filetype="jpg|jpeg|gif|png" showfile="true" isshowfiletype="true" isremovefile="true" removemsg="Remove image" />
             <input type="text" name="alt" label="Alternate Text:" maxlength="50" promptMessage="Image alternate text. Accessibility Guideline" />
 
             <statictext name="note">
@@ -26,8 +26,8 @@
         </fieldset>
 
         <fieldset>
-            <input type="submit" name="btnSave" value="Save" onclick="jsValida(this.form)" />
-            <input type="reset"  name="btnReset" value="Reset"/>
+            <input type="submit" value="Save" onclick="jsValida(this.form)" />
+            <input type="reset"  value="Reset"/>
         </fieldset>
     </form>
 
