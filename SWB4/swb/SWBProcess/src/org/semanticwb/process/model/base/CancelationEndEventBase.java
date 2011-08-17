@@ -273,6 +273,24 @@ public abstract class CancelationEndEventBase extends org.semanticwb.process.mod
         super(base);
     }
 
+/**
+* Gets the ActionCode property
+* @return String with the ActionCode
+*/
+    public String getActionCode()
+    {
+        return getSemanticObject().getProperty(swp_actionCode);
+    }
+
+/**
+* Sets the ActionCode property
+* @param value long with the ActionCode
+*/
+    public void setActionCode(String value)
+    {
+        getSemanticObject().setProperty(swp_actionCode, value);
+    }
+
    /**
    * Gets the ProcessSite
    * @return a instance of org.semanticwb.process.model.ProcessSite

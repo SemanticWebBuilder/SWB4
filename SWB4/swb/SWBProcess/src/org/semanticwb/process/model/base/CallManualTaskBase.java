@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class CallManualTaskBase extends org.semanticwb.process.model.CallTask implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Traceable
+public abstract class CallManualTaskBase extends org.semanticwb.process.model.CallTask implements org.semanticwb.model.RoleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Referensable
 {
     public static final org.semanticwb.platform.SemanticClass swp_CallManualTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#CallManualTask");
    /**
@@ -171,29 +171,6 @@ public abstract class CallManualTaskBase extends org.semanticwb.process.model.Ca
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.CallManualTask with a determined ResourceAssignment
-       * @param value ResourceAssignment of the type org.semanticwb.process.model.ResourceAssignment
-       * @param model Model of the org.semanticwb.process.model.CallManualTask
-       * @return Iterator with all the org.semanticwb.process.model.CallManualTask
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.CallManualTask> listCallManualTaskByResourceAssignment(org.semanticwb.process.model.ResourceAssignment value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallManualTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_resourceAssignment, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.CallManualTask with a determined ResourceAssignment
-       * @param value ResourceAssignment of the type org.semanticwb.process.model.ResourceAssignment
-       * @return Iterator with all the org.semanticwb.process.model.CallManualTask
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.CallManualTask> listCallManualTaskByResourceAssignment(org.semanticwb.process.model.ResourceAssignment value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallManualTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_resourceAssignment,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.CallManualTask with a determined Parent
        * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
        * @param model Model of the org.semanticwb.process.model.CallManualTask
@@ -263,6 +240,29 @@ public abstract class CallManualTaskBase extends org.semanticwb.process.model.Ca
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.CallManualTask with a determined RuleRef
+       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * @param model Model of the org.semanticwb.process.model.CallManualTask
+       * @return Iterator with all the org.semanticwb.process.model.CallManualTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallManualTask> listCallManualTaskByRuleRef(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallManualTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallManualTask with a determined RuleRef
+       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * @return Iterator with all the org.semanticwb.process.model.CallManualTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallManualTask> listCallManualTaskByRuleRef(org.semanticwb.model.RuleRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallManualTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.CallManualTask with a determined OutputConnectionObject
        * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
        * @param model Model of the org.semanticwb.process.model.CallManualTask
@@ -306,6 +306,52 @@ public abstract class CallManualTaskBase extends org.semanticwb.process.model.Ca
         public static java.util.Iterator<org.semanticwb.process.model.CallManualTask> listCallManualTaskByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallManualTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallManualTask with a determined UserGroupRef
+       * @param value UserGroupRef of the type org.semanticwb.model.UserGroupRef
+       * @param model Model of the org.semanticwb.process.model.CallManualTask
+       * @return Iterator with all the org.semanticwb.process.model.CallManualTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallManualTask> listCallManualTaskByUserGroupRef(org.semanticwb.model.UserGroupRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallManualTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallManualTask with a determined UserGroupRef
+       * @param value UserGroupRef of the type org.semanticwb.model.UserGroupRef
+       * @return Iterator with all the org.semanticwb.process.model.CallManualTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallManualTask> listCallManualTaskByUserGroupRef(org.semanticwb.model.UserGroupRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallManualTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallManualTask with a determined RoleRef
+       * @param value RoleRef of the type org.semanticwb.model.RoleRef
+       * @param model Model of the org.semanticwb.process.model.CallManualTask
+       * @return Iterator with all the org.semanticwb.process.model.CallManualTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallManualTask> listCallManualTaskByRoleRef(org.semanticwb.model.RoleRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallManualTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.CallManualTask with a determined RoleRef
+       * @param value RoleRef of the type org.semanticwb.model.RoleRef
+       * @return Iterator with all the org.semanticwb.process.model.CallManualTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.CallManualTask> listCallManualTaskByRoleRef(org.semanticwb.model.RoleRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CallManualTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef,value.getSemanticObject(),sclass));
             return it;
         }
     }
