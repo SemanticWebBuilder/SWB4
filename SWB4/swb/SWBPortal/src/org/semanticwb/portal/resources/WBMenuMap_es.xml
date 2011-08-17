@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
-    
+
     <form name="frmMenuMap" action="true" method="post" enctype="multipart/form-data" jsframework="dojo">
         <admdbconnmgr defconn="true"/>
         <fieldset legend="Aspecto">
-            <input type="file" name="template" label="Plantilla (xsl, xslt):" showfile="true" filetype="xsl|xslt" isshowfiletype="true" isremovefile="true" removemsg="Quitar plantilla de transformación"  msg="Plantilla de transformación actual: " bydefault="{@webpath}swbadmin/xsl/WBMenuMap/WBMenuMap.xslt" msgbydefault="Plantilla de transformación por defecto: " jsrequired="false"/>
+            <input type="file" name="template" label="Plantilla (xsl, xslt):" filetype="xsl|xslt" jsrequired="false" showfile="true" isshowfiletype="true" isremovefile="true" showmsg="Ver plantilla..." editmsg="Editar plantilla..." removemsg="Quitar plantilla de transformación"  msg="Plantilla actual: " bydefault="{@webpath}/swbadmin/xsl/WBMenuMap/WBMenuMap.xslt" msgbydefault="Plantilla por defecto: " />
         </fieldset>
 
-        <fieldset legend="Configuración de estrategia">            
+        <fieldset legend="Configuración de estrategia">
             <input type="text" id="basetopic" name="basetopic" label="Sección inicial:" promptMessage="Id de la sección que sirve como inicio o base" />
             <input type="text" id="nini" name="nini" label="Mostrar el menu hasta estar en este nivel:" promptMessage="Mostrar menú mapa a partir de este nivel. Por ejemplo, home se halla en el nivel 1" />
             <input type="checkbox" name="bro" label="Ocultar hermanos" value="false" promptMessage="Marque esta opción para ocultar las secciones del mismo nivel" />
@@ -18,8 +18,8 @@
         </fieldset>
 
         <fieldset>
-            <input type="submit" name="btnSave" value="Guardar" />
-            <input type="reset"  name="btnReset" value="Restablecer"/>
+            <input type="submit" value="Guardar" />
+            <input type="reset"  value="Restablecer"/>
         </fieldset>
     </form>
 </admresource>
