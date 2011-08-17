@@ -5,7 +5,7 @@
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
         <admdbconnmgr defconn="true"/>
         <fieldset legend="Aparência">
-            <input type="file" name="template" label="Modelo (xsl, xslt): " showfile="true" filetype="xsl|xslt" isshowfiletype="true" isremovefile="true" removemsg="Remover modelo de processamento: " msg="Pessoal atual: " bydefault="{@webpath}swbadmin/xsl/WBSiteMap/WBSiteMap.xsl" msgbydefault="Modelo padrão de processamento: " jsrequired="false"/>
+            <input type="file" name="template" label="Modelo (xsl, xslt)" filetype="xsl|xslt" jsrequired="false" showfile="true" isshowfiletype="true" isremovefile="true" showmsg="Ver modelo..." editmsg="Editar modelo..." removemsg="Remover modelo" msg="Modelo atual: " bydefault="{@webpath}/swbadmin/xsl/WBMenu/WBMenu.xslt" msgbydefault="Modelo padrão: " />
             <input type="text" name="title" label="Título:" maxlength="60" promptMessage="Título" />
             <input type="text" name="level" label="Nível de implantação:" value="1" maxlength="3" jsvaltype="js_numbers" invalidMessage="Nível deve ser um valor numérico" promptMessage="Nivel de despliegue" />
         </fieldset>
@@ -14,7 +14,7 @@
             <statictext name="txtTarget">¿Como você quiser acessar o site de recursos mapa?:</statictext>
             <input type="text" name="lnktexto" label="Texto da Liga:" maxlength="50" promptMessage="Text link" />
             <input type="text" name="btntexto" label="Button label:" maxlength="50" promptMessage="Button label" />
-            <input type="file" name="img" label="Imagem (gif, jpg, jpeg, png):" showfile="true" filetype="jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Remover imagem" />
+            <input type="file" name="img" label="Imagem (gif, jpg, jpeg, png):" filetype="jpg|jpeg|gif|png" showfile="true" isshowfiletype="true" isremovefile="true" removemsg="Remover imagem" />
             <input type="text" name="alt" label="Texto alternativo:" maxlength="50" promptMessage="Texto alternativo. Acessibilidade Orientação" />
 
             <statictext name="note">
@@ -27,8 +27,8 @@
         </fieldset>
 
         <fieldset>
-            <input type="submit" name="btnSave" value="Salvar" onclick="jsValida(this.form)" />
-            <input type="reset"  name="btnReset" value="Restabelecer"/>
+            <input type="submit" value="Salvar" onclick="jsValida(this.form)" />
+            <input type="reset"  value="Restabelecer"/>
         </fieldset>
     </form>
 
