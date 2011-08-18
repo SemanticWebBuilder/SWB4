@@ -14,6 +14,20 @@
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
   </owl:Ontology>
+  <owl:Class rdf:ID="ScalationIntermediateThrowEvent">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="IntermediateThrowEvent"/>
+    </rdfs:subClassOf>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_ScalationIntermediateThrowEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconScalationIntermediateThrowEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
   <owl:Class rdf:ID="Task">
     <rdfs:subClassOf>
       <swb:Interface rdf:ID="ActivityConfable">
@@ -29,20 +43,6 @@
     </swb:displayObject>
     <rdfs:subClassOf>
       <owl:Class rdf:ID="Activity"/>
-    </rdfs:subClassOf>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="ScalationIntermediateThrowEvent">
-    <swb:displayObject>
-      <swbxf:DisplayObject rdf:ID="do_IntermediateThrowEvent">
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconIntermediateThrowEvent</swb:iconClass>
-      </swbxf:DisplayObject>
-    </swb:displayObject>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="IntermediateThrowEvent"/>
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
@@ -64,20 +64,6 @@
     >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="MessageIntermediateCatchEvent">
-    <swb:displayObject>
-      <swbxf:DisplayObject rdf:ID="do_IntermediateCatchEvent">
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconIntermediateCatchEvent</swb:iconClass>
-      </swbxf:DisplayObject>
-    </swb:displayObject>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="IntermediateCatchEvent"/>
-    </rdfs:subClassOf>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
   <owl:Class rdf:ID="ExclusiveStartEventGateway">
     <rdfs:subClassOf>
       <owl:Class rdf:ID="EventBasedGateway"/>
@@ -85,25 +71,39 @@
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <swb:displayObject>
-      <swbxf:DisplayObject rdf:ID="do_Gateway">
+      <swbxf:DisplayObject rdf:ID="do_ExclusiveStartEventGateway">
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconGateway</swb:iconClass>
+        >swbIconExclusiveStartEventGateway</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="MessageIntermediateCatchEvent">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="IntermediateCatchEvent"/>
+    </rdfs:subClassOf>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_MessageIntermediateCatchEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconMessageIntermediateCatchEvent</swb:iconClass>
       </swbxf:DisplayObject>
     </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="MessageStartEvent">
-    <swb:displayObject>
-      <swbxf:DisplayObject rdf:ID="do_StartEvent">
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconStartEvent</swb:iconClass>
-      </swbxf:DisplayObject>
-    </swb:displayObject>
     <rdfs:subClassOf>
       <owl:Class rdf:ID="StartEvent"/>
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_MessageStartEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconMessageStartEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="SubProcessInstance">
@@ -138,33 +138,35 @@
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="GroupArtifact">
     <swb:displayObject>
-      <swbxf:DisplayObject rdf:ID="do_Artifact">
+      <swbxf:DisplayObject rdf:ID="do_Pool">
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconArtifact</swb:iconClass>
+        >swbIconPool</swb:iconClass>
       </swbxf:DisplayObject>
     </swb:displayObject>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Artifact"/>
-    </rdfs:subClassOf>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="MultipleIntermediateCatchEvent">
-    <swb:displayObject rdf:resource="#do_IntermediateCatchEvent"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#IntermediateCatchEvent"/>
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_MultileIntermediateCatchEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconMultipleIntermediateCatchEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#IntermediateThrowEvent">
-    <swb:displayObject rdf:resource="#do_IntermediateThrowEvent"/>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_IntermediateThrowEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconIntermediateThrowEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdfs:subClassOf>
       <owl:Class rdf:ID="ThrowEvent"/>
     </rdfs:subClassOf>
@@ -172,6 +174,20 @@
     >true</swb:autogenId>
     <rdfs:label xml:lang="es">Evento Intermedio Disparador</rdfs:label>
     <rdfs:label xml:lang="en">Intermediate Throw Event</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="GroupArtifact">
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_GroupArtifact">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconGroupArtifact</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Artifact"/>
+    </rdfs:subClassOf>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="CatchEvent">
@@ -192,13 +208,22 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="LinkIntermediateThrowEvent">
-    <swb:displayObject rdf:resource="#do_IntermediateThrowEvent"/>
     <rdfs:subClassOf rdf:resource="#IntermediateThrowEvent"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_LinkIntermediateThrowEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconLinkIntermediateThrowEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="ProcessRule">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#XMLable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:label xml:lang="en">Business Rule</rdfs:label>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_ProcessRule">
         <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
@@ -209,15 +234,10 @@
         >swbIconRule</swb:iconClass>
       </swbxf:DisplayObject>
     </swb:displayObject>
-    <rdfs:label xml:lang="es">Regla de negocio</rdfs:label>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#XMLable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableClass"/>
-    <rdfs:label xml:lang="en">Business Rule</rdfs:label>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <rdfs:subClassOf>
       <swb:Class rdf:ID="ProcessElement">
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
@@ -226,20 +246,20 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:subClassOf>
+    <rdfs:label xml:lang="es">Regla de negocio</rdfs:label>
   </owl:Class>
   <owl:Class rdf:ID="SignalEndEvent">
-    <swb:displayObject>
-      <swbxf:DisplayObject rdf:ID="do_EndEvent">
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconEndEvent</swb:iconClass>
-      </swbxf:DisplayObject>
-    </swb:displayObject>
     <rdfs:subClassOf>
       <swb:Class rdf:ID="EndEvent">
         <rdfs:subClassOf>
           <owl:Class rdf:about="#ThrowEvent"/>
         </rdfs:subClassOf>
-        <swb:displayObject rdf:resource="#do_EndEvent"/>
+        <swb:displayObject>
+          <swbxf:DisplayObject rdf:ID="do_EndEvent">
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconEndEvent</swb:iconClass>
+          </swbxf:DisplayObject>
+        </swb:displayObject>
         <rdfs:label xml:lang="en">End Event</rdfs:label>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
@@ -249,13 +269,24 @@
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_SignalEndEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconSignalEndEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="ReceiveTask">
-    <swb:displayObject rdf:resource="#do_Task"/>
     <rdfs:subClassOf rdf:resource="#Task"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_ReceiveTask">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconReceiveTask</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="Lane">
@@ -264,29 +295,50 @@
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_Lane">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconLane</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="MultipleEndEvent">
-    <swb:displayObject rdf:resource="#do_EndEvent"/>
     <rdfs:subClassOf rdf:resource="#EndEvent"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_MultipleEndEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconMultipleEndEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="SignalIntermediateCatchEvent">
-    <swb:displayObject rdf:resource="#do_IntermediateCatchEvent"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#IntermediateCatchEvent"/>
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_SignalIntermediateCatchEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconSignalIntermediateCatchEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="MessageIntermediateThrowEvent">
-    <swb:displayObject rdf:resource="#do_IntermediateThrowEvent"/>
     <rdfs:subClassOf rdf:resource="#IntermediateThrowEvent"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_MessageIntermediateThrowEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconMessageIntermediateThrowEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="ItemAware">
@@ -302,12 +354,17 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:subClassOf>
-    <swb:displayObject rdf:resource="#do_StartEvent"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#StartEvent"/>
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_TimerStartEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconTimerStartEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="CalledFlowNodeInstance">
@@ -317,19 +374,15 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="CompensationIntermediateThrowEvent">
-    <swb:displayObject rdf:resource="#do_IntermediateThrowEvent"/>
     <rdfs:subClassOf rdf:resource="#IntermediateThrowEvent"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="AnnotationArtifact">
-    <swb:displayObject rdf:resource="#do_Artifact"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Artifact"/>
-    </rdfs:subClassOf>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_CompensationIntermediateThrowEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconCompensationIntermediateThrowEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="LoopCharacteristics">
@@ -347,29 +400,53 @@
     </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
+  <owl:Class rdf:ID="AnnotationArtifact">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Artifact"/>
+    </rdfs:subClassOf>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_AnnotationArtifact">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconAnnotationArtifact</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
   <owl:Class rdf:ID="MultipleIntermediateThrowEvent">
-    <swb:displayObject rdf:resource="#do_IntermediateThrowEvent"/>
     <rdfs:subClassOf rdf:resource="#IntermediateThrowEvent"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_MultipleIntermediateThrowEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconMultipleIntermediateThrowEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="ParallelIntermediateCatchEvent">
-    <swb:displayObject rdf:resource="#do_IntermediateCatchEvent"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#IntermediateCatchEvent"/>
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_ParallelIntermediateCatchEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconParallelIntermediateCatchEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#Artifact">
-    <swb:displayObject rdf:resource="#do_Artifact"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#GraphicalElement"/>
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject rdf:resource="#do_AnnotationArtifact"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#BaseElement">
@@ -390,21 +467,31 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="CancelationIntermediateCatchEvent">
-    <swb:displayObject rdf:resource="#do_IntermediateCatchEvent"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#IntermediateCatchEvent"/>
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_CancelIntermediateCatchEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconCancelationIntermediateCatchEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="ErrorStartEvent">
-    <swb:displayObject rdf:resource="#do_StartEvent"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#StartEvent"/>
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_ErrorStartEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconErrorStartEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#ResourceAssignmentable">
@@ -417,10 +504,21 @@
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_InclusiveGateway">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconInclusiveGateway</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#IntermediateCatchEvent">
-    <swb:displayObject rdf:resource="#do_IntermediateCatchEvent"/>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_IntermediateCatchEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconIntermediateCatchEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdfs:label xml:lang="es">Evento Intermedio Receptor</rdfs:label>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
@@ -429,14 +527,18 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="ServiceTask">
-    <swb:displayObject rdf:resource="#do_Task"/>
     <rdfs:subClassOf rdf:resource="#Task"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_ServiceTask">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconServiceTask</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="RuleIntermediateCatchEvent">
-    <swb:displayObject rdf:resource="#do_IntermediateCatchEvent"/>
     <rdfs:subClassOf rdf:resource="#IntermediateCatchEvent"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
@@ -446,6 +548,12 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:subClassOf>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_RuleIntermediateCatchEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconRuleIntermediateCatchEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#GraphicalElement">
@@ -453,20 +561,30 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="CompensationStartEvent">
-    <swb:displayObject rdf:resource="#do_StartEvent"/>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#StartEvent"/>
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_CompensationStartEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconCompensationStartEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="TimerIntermediateCatchEvent">
     <rdfs:subClassOf rdf:resource="#ProcessPeriodRefable"/>
-    <swb:displayObject rdf:resource="#do_IntermediateCatchEvent"/>
     <rdfs:subClassOf rdf:resource="#IntermediateCatchEvent"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_TimerIntermediateCatchEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconTimerIntermediateCatchEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="ManualTask">
@@ -476,23 +594,28 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:subClassOf>
-    <swb:displayObject rdf:resource="#do_Task"/>
     <rdfs:subClassOf rdf:resource="#Task"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_ManualTask">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconManualTask</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="ResourceAssignment">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRefable"/>
+    <rdfs:label xml:lang="en">Resource Assignation</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRefable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#RuleRefable"/>
-    <rdfs:label xml:lang="es">Asignación de Recursos</rdfs:label>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#RoleRefable"/>
-    <rdfs:label xml:lang="en">Resource Assignation</rdfs:label>
     <rdfs:subClassOf rdf:resource="#BaseElement"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:label xml:lang="es">Asignación de Recursos</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#RoleRefable"/>
   </owl:Class>
   <owl:Class rdf:about="#EventBasedGateway">
     <rdfs:subClassOf>
@@ -501,33 +624,38 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="AdhocSubProcess">
-    <swb:displayObject>
-      <swbxf:DisplayObject rdf:ID="do_SubProcess">
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconSubProcess</swb:iconClass>
-      </swbxf:DisplayObject>
-    </swb:displayObject>
     <rdfs:subClassOf>
       <swb:Class rdf:ID="SubProcess">
-        <rdfs:subClassOf rdf:resource="#ActivityConfable"/>
+        <rdfs:subClassOf rdf:resource="#Activity"/>
         <rdfs:label xml:lang="es">Proceso</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#TemplateRefable"/>
-        <rdfs:label xml:lang="en">Process</rdfs:label>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-        <swb:displayObject rdf:resource="#do_SubProcess"/>
-        <rdfs:subClassOf rdf:resource="#Activity"/>
         <rdfs:subClassOf>
           <swb:Interface rdf:ID="Containerable">
             <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
             <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
           </swb:Interface>
         </rdfs:subClassOf>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#TemplateRefable"/>
+        <rdfs:label xml:lang="en">Process</rdfs:label>
+        <swb:displayObject>
+          <swbxf:DisplayObject rdf:ID="do_SubProcess">
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconSubProcess</swb:iconClass>
+          </swbxf:DisplayObject>
+        </swb:displayObject>
+        <rdfs:subClassOf rdf:resource="#ActivityConfable"/>
       </swb:Class>
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_AdhocSubProcess">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconAdhocSubProcess</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="CalledSubProcessInstance">
@@ -536,13 +664,17 @@
     >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="ScalationStartEvent">
-    <swb:displayObject rdf:resource="#do_StartEvent"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#StartEvent"/>
-    </rdfs:subClassOf>
+  <owl:Class rdf:ID="ScriptTask">
+    <rdfs:subClassOf rdf:resource="#Callable"/>
+    <rdfs:subClassOf rdf:resource="#Task"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_ScriptTask">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconScriptTask</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/process/schema#URL">
@@ -554,16 +686,41 @@
     </rdfs:subClassOf>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="ScriptTask">
-    <rdfs:subClassOf rdf:resource="#Callable"/>
-    <swb:displayObject rdf:resource="#do_Task"/>
-    <rdfs:subClassOf rdf:resource="#Task"/>
+  <owl:Class rdf:ID="ScalationStartEvent">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#StartEvent"/>
+    </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_ScalationStartEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconScalationStartEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="MultipleStartEvent">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#StartEvent"/>
+    </rdfs:subClassOf>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_MultipleStartEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconMultipleStartEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="ComplexGateway">
-    <swb:displayObject rdf:resource="#do_Gateway"/>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_ComplexGateway">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconComplexGateway</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Gateway"/>
     </rdfs:subClassOf>
@@ -573,15 +730,6 @@
   </owl:Class>
   <owl:Class rdf:ID="WebServiceParameter">
     <rdfs:subClassOf rdf:resource="#BaseElement"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="MultipleStartEvent">
-    <swb:displayObject rdf:resource="#do_StartEvent"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#StartEvent"/>
-    </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
@@ -597,7 +745,12 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#StartEvent">
-    <swb:displayObject rdf:resource="#do_StartEvent"/>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_StartEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconStartEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdfs:label xml:lang="en">Init Event</rdfs:label>
     <rdfs:label xml:lang="es">Evento Inicial</rdfs:label>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -611,35 +764,39 @@
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_ExclusiveGateway">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconExclusiveGateway</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="RepositoryFile">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#RoleRefable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Versionable"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#RuleRefable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Expirable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
     <rdfs:subClassOf rdf:resource="#BaseElement"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Hitable"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRefable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Expirable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Versionable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRefable"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#RoleRefable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#RuleRefable"/>
   </owl:Class>
   <owl:Class rdf:ID="ScalationIntermediateCatchEvent">
-    <swb:displayObject rdf:resource="#do_IntermediateCatchEvent"/>
     <rdfs:subClassOf rdf:resource="#IntermediateCatchEvent"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="SignalIntermediateThrowEvent">
-    <swb:displayObject rdf:resource="#do_IntermediateThrowEvent"/>
-    <rdfs:subClassOf rdf:resource="#IntermediateThrowEvent"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_ScalationIntermediateCatchEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconScalationIntermediateCatchEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="DirectionalAssociation">
@@ -653,11 +810,51 @@
         </rdfs:subClassOf>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
+        <swb:displayObject>
+          <swbxf:DisplayObject rdf:ID="do_AssociationFlow">
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconAssociationFlow</swb:iconClass>
+          </swbxf:DisplayObject>
+        </swb:displayObject>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_DirectionalAssociation">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconDirectionalAssociation</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="SignalIntermediateThrowEvent">
+    <rdfs:subClassOf rdf:resource="#IntermediateThrowEvent"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_SignalIntermediateThrowEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconSignalIntermediateThrowEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ProcessObserver">
+    <rdfs:subClassOf rdf:resource="#ProcessElement"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ParallelStartEvent">
+    <rdfs:subClassOf rdf:resource="#StartEvent"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_ParallelStartEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconParallelStartEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="DefaultFlow">
@@ -668,31 +865,49 @@
         <rdfs:subClassOf rdf:resource="#ConnectionObject"/>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
+        <swb:displayObject>
+          <swbxf:DisplayObject rdf:ID="do_SequenceFlow">
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconSequenceFlow</swb:iconClass>
+          </swbxf:DisplayObject>
+        </swb:displayObject>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:subClassOf>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="ProcessObserver">
-    <rdfs:subClassOf rdf:resource="#ProcessElement"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="ParallelStartEvent">
-    <swb:displayObject rdf:resource="#do_StartEvent"/>
-    <rdfs:subClassOf rdf:resource="#StartEvent"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_DefaultFlow">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconDefaultFlow</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="ScalationEndEvent">
-    <swb:displayObject rdf:resource="#do_EndEvent"/>
     <rdfs:subClassOf rdf:resource="#EndEvent"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_ScalationEndEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconScalationEndEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#ThrowEvent">
     <rdfs:subClassOf rdf:resource="#Event"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="CompensationEndEvent">
+    <rdfs:subClassOf rdf:resource="#EndEvent"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_CompensationEndEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconCompensationEndEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="ConditionalFlow">
@@ -700,58 +915,48 @@
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="#SequenceFlow"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="CompensationEndEvent">
-    <swb:displayObject rdf:resource="#do_EndEvent"/>
-    <rdfs:subClassOf rdf:resource="#EndEvent"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="ErrorIntermediateCatchEvent">
-    <swb:displayObject rdf:resource="#do_IntermediateCatchEvent"/>
-    <rdfs:subClassOf rdf:resource="#IntermediateCatchEvent"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_ConditionalFlow">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconConditionalFlow</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="SignalStartEvent">
-    <swb:displayObject rdf:resource="#do_StartEvent"/>
     <rdfs:subClassOf rdf:resource="#StartEvent"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="ProcessPeriod">
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:label xml:lang="es">Intervalo de Ejecución</rdfs:label>
-    <rdfs:label xml:lang="en">Execution Interval</rdfs:label>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableClass"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#XMLable"/>
-    <rdfs:subClassOf rdf:resource="#ProcessElement"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
     <swb:displayObject>
-      <swbxf:DisplayObject rdf:ID="do_ProcessPeriod">
+      <swbxf:DisplayObject rdf:ID="do_SignalStartEvent">
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconCalendar</swb:iconClass>
+        >swbIconSignalStartEvent</swb:iconClass>
       </swbxf:DisplayObject>
     </swb:displayObject>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ErrorIntermediateCatchEvent">
+    <rdfs:subClassOf rdf:resource="#IntermediateCatchEvent"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_ErrorIntermediateCatchEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconErrorIntermediateCatchEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="ErrorEndEvent">
-    <swb:displayObject rdf:resource="#do_EndEvent"/>
     <rdfs:subClassOf rdf:resource="#EndEvent"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="SendTask">
-    <swb:displayObject rdf:resource="#do_Task"/>
-    <rdfs:subClassOf rdf:resource="#Task"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_ErrorEndEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconErrorEndEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="ProcessInstance">
@@ -763,11 +968,23 @@
     >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="Process">
-    <rdfs:subClassOf rdf:resource="#ProcessElement"/>
+  <owl:Class rdf:ID="SendTask">
+    <rdfs:subClassOf rdf:resource="#Task"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#CalendarRefable"/>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_SendTask">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconSendTask</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Process">
+    <rdfs:subClassOf rdf:resource="#ProcessElement"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Expirable"/>
+    <rdfs:subClassOf rdf:resource="#Containerable"/>
+    <rdfs:label xml:lang="en">Process</rdfs:label>
     <rdfs:subClassOf>
       <owl:Restriction>
         <owl:allValuesFrom rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
@@ -776,28 +993,35 @@
         </owl:onProperty>
       </owl:Restriction>
     </rdfs:subClassOf>
-    <rdfs:label xml:lang="es">Proceso</rdfs:label>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_Process">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconProcess</swb:iconClass>
         <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >2</swbxf:dropMatchLevel>
         <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swbxf:dragSupport>
       </swbxf:DisplayObject>
     </swb:displayObject>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#TemplateRefable"/>
-    <rdfs:label xml:lang="en">Process</rdfs:label>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Expirable"/>
-    <rdfs:subClassOf rdf:resource="#Containerable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#CalendarRefable"/>
     <rdfs:subClassOf rdf:resource="#Callable"/>
+    <rdfs:label xml:lang="es">Proceso</rdfs:label>
   </owl:Class>
   <owl:Class rdf:ID="TerminationEndEvent">
-    <swb:displayObject rdf:resource="#do_EndEvent"/>
     <rdfs:subClassOf rdf:resource="#EndEvent"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_TerminateEndEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconTerminationEndEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="SendMail">
@@ -808,97 +1032,49 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="ProcessSite">
-    <swb:hasClass rdf:resource="#ExclusiveStartEventGateway"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Dnss"/>
+    <swb:hasClass rdf:resource="#AdhocSubProcess"/>
     <swb:hasClass>
-      <owl:Class rdf:about="#FlowNode"/>
-    </swb:hasClass>
-    <swb:hasClass>
-      <swb:Class rdf:ID="ParallelGateway">
-        <rdfs:subClassOf>
-          <owl:Class rdf:about="#Gateway"/>
-        </rdfs:subClassOf>
+      <swb:Class rdf:ID="ProcessPeriod">
+        <rdfs:label xml:lang="es">Intervalo de Ejecución</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#ProcessElement"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#XMLable"/>
+        <swb:displayObject>
+          <swbxf:DisplayObject rdf:ID="do_ProcessPeriod">
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconCalendar</swb:iconClass>
+          </swbxf:DisplayObject>
+        </swb:displayObject>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableClass"/>
+        <rdfs:label xml:lang="en">Execution Interval</rdfs:label>
       </swb:Class>
     </swb:hasClass>
-    <swb:hasClass rdf:resource="#MultipleIntermediateThrowEvent"/>
-    <swb:hasClass rdf:resource="#StartEvent"/>
-    <rdfs:label xml:lang="es">Sitio de Procesos</rdfs:label>
-    <swb:hasClass rdf:resource="#EndEvent"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Rules"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Templates"/>
-    <swb:hasClass rdf:resource="#TimerStartEvent"/>
-    <swb:hasClass>
-      <swb:Class rdf:ID="CompensationIntermediateCatchEvent">
-        <swb:displayObject rdf:resource="#do_IntermediateCatchEvent"/>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="#IntermediateCatchEvent"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </swb:hasClass>
-    <swb:hasClass>
-      <owl:Class rdf:ID="LinkIntermediateCatchEvent"/>
-    </swb:hasClass>
-    <swb:hasClass rdf:resource="#ErrorIntermediateCatchEvent"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Collections"/>
-    <swb:hasClass rdf:resource="#ScalationEndEvent"/>
-    <swb:hasClass rdf:resource="#Event"/>
-    <swb:hasClass rdf:resource="#ProcessService"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTContents"/>
-    <swb:hasClass rdf:resource="#SignalStartEvent"/>
-    <swb:displayObject>
-      <swbxf:DisplayObject rdf:ID="do_ProcessSite">
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconWebSite</swb:iconClass>
-      </swbxf:DisplayObject>
-    </swb:displayObject>
-    <swb:hasClass rdf:resource="#ManualTask"/>
-    <swb:hasClass rdf:resource="#ReceiveTask"/>
-    <swb:hasClass rdf:resource="#TimerIntermediateCatchEvent"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebSite"/>
-    <swb:hasClass rdf:resource="#ProcessRule"/>
-    <swb:hasClass rdf:resource="#FlowNodeInstance"/>
-    <swb:hasClass>
-      <owl:Class rdf:about="#Gateway"/>
-    </swb:hasClass>
-    <swb:hasClass>
-      <owl:Class rdf:ID="CancelationEndEvent"/>
-    </swb:hasClass>
-    <swb:hasClass rdf:resource="#Artifact"/>
-    <swb:hasClass rdf:resource="#CompensationIntermediateThrowEvent"/>
-    <swb:hasClass rdf:resource="#ProcessPeriod"/>
-    <swb:hasClass rdf:resource="#LinkIntermediateThrowEvent"/>
-    <swb:hasClass rdf:resource="#ScalationIntermediateCatchEvent"/>
-    <swb:hasClass rdf:resource="#EventBasedGateway"/>
     <swb:hasClass>
       <swb:Class rdf:ID="ParallelStartEventGateway">
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
         <rdfs:subClassOf rdf:resource="#EventBasedGateway"/>
-        <swb:displayObject rdf:resource="#do_Gateway"/>
+        <swb:displayObject>
+          <swbxf:DisplayObject rdf:ID="do_ParallelStartEventGaeway">
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconParallelStartEventGateway</swb:iconClass>
+          </swbxf:DisplayObject>
+        </swb:displayObject>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </swb:hasClass>
-    <swb:hasClass rdf:resource="#MessageStartEvent"/>
-    <swb:hasClass rdf:resource="#ProcessInstance"/>
-    <swb:hasClass rdf:resource="#MultipleStartEvent"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Rules"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebSite"/>
+    <swb:hasClass rdf:resource="#ExclusiveStartEventGateway"/>
+    <swb:hasClass rdf:resource="#RuleIntermediateCatchEvent"/>
     <swb:hasClass>
-      <swb:Class rdf:ID="TransactionSubProcess">
-        <swb:displayObject rdf:resource="#do_SubProcess"/>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="#SubProcess"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
+      <owl:Class rdf:ID="RuleStartEvent"/>
     </swb:hasClass>
-    <swb:hasClass rdf:resource="#IntermediateCatchEvent"/>
-    <swb:hasClass rdf:resource="#CompensationEndEvent"/>
-    <swb:hasClass rdf:resource="#Process"/>
-    <swb:hasClass>
-      <owl:Class rdf:ID="MessageEndEvent"/>
-    </swb:hasClass>
+    <swb:hasClass rdf:resource="#AssociationFlow"/>
     <swb:hasClass>
       <swb:Class rdf:ID="RepositoryDirectory">
         <rdfs:label xml:lang="en">File Repository</rdfs:label>
@@ -917,68 +1093,26 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </swb:hasClass>
-    <swb:hasClass rdf:resource="#ConditionalFlow"/>
+    <swb:hasClass rdf:resource="#ScalationEndEvent"/>
+    <swb:hasClass rdf:resource="#ScalationIntermediateThrowEvent"/>
     <swb:hasClass rdf:resource="#SignalEndEvent"/>
-    <swb:hasClass rdf:resource="#SubProcess"/>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_ProcessSite">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconWebSite</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <swb:hasClass rdf:resource="#StartEvent"/>
+    <swb:hasClass rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView"/>
+    <swb:hasClass rdf:resource="#Task"/>
+    <swb:hasClass rdf:resource="#EventBasedGateway"/>
+    <swb:hasClass rdf:resource="#ServiceTask"/>
+    <swb:hasClass rdf:resource="#MultipleIntermediateThrowEvent"/>
+    <swb:hasClass rdf:resource="#CompensationStartEvent"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Devices"/>
+    <swb:hasClass rdf:resource="#SignalIntermediateThrowEvent"/>
     <swb:hasClass rdf:resource="#ConnectionObject"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Languages"/>
-    <swb:hasClass rdf:resource="#GroupArtifact"/>
-    <swb:hasClass rdf:resource="#SequenceFlow"/>
-    <swb:hasClass rdf:resource="#SubProcessInstance"/>
-    <swb:hasClass rdf:resource="#SignalIntermediateThrowEvent"/>
-    <swb:hasClass rdf:resource="#DirectionalAssociation"/>
-    <swb:hasClass rdf:resource="#InclusiveGateway"/>
-    <swb:hasClass rdf:resource="#SignalIntermediateCatchEvent"/>
-    <swb:hasClass rdf:resource="#RuleIntermediateCatchEvent"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Countries"/>
-    <swb:hasClass rdf:resource="#ServiceTask"/>
-    <swb:hasClass rdf:resource="#CatchEvent"/>
-    <swb:hasClass>
-      <swb:Class rdf:ID="DataStore">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="#ItemAware"/>
-        <swb:displayObject rdf:resource="#do_Artifact"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </swb:hasClass>
-    <swb:hasClass rdf:resource="#Task"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTSystems"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Calendars"/>
-    <swb:hasClass rdf:resource="#ScriptTask"/>
-    <swb:hasClass rdf:resource="#ScalationIntermediateThrowEvent"/>
-    <swb:hasClass rdf:resource="#ErrorStartEvent"/>
-    <swb:hasClass>
-      <swb:Class rdf:ID="UserTask">
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#TemplateRefable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#CalendarRefable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Trashable"/>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:label xml:lang="es">Tarea de Usuario</rdfs:label>
-        <rdfs:subClassOf rdf:resource="#Callable"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-        <swb:displayObject rdf:resource="#do_Task"/>
-        <rdfs:label xml:lang="en">User Task</rdfs:label>
-        <rdfs:subClassOf rdf:resource="#Task"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Undeleteable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resourceable"/>
-      </swb:Class>
-    </swb:hasClass>
-    <swb:hasClass rdf:resource="#MessageIntermediateCatchEvent"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PFlows"/>
-    <swb:hasClass rdf:resource="#AdhocSubProcess"/>
-    <swb:hasClass rdf:resource="#CompensationStartEvent"/>
-    <swb:hasClass rdf:resource="#DefaultFlow"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTStrategies"/>
-    <swb:hasClass rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView"/>
-    <swb:hasClass rdf:resource="#AnnotationArtifact"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Dnss"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Model"/>
-    <swb:hasClass rdf:resource="#SendTask"/>
-    <swb:hasClass rdf:resource="#ParallelIntermediateCatchEvent"/>
-    <swb:hasClass rdf:resource="#MessageIntermediateThrowEvent"/>
-    <swb:hasClass rdf:resource="#ErrorEndEvent"/>
     <swb:hasClass>
       <swb:Class rdf:ID="ProcessWebPage">
         <swb:displayObject rdf:resource="#do_ProcessWebPage"/>
@@ -988,22 +1122,138 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </swb:hasClass>
-    <swb:hasClass rdf:resource="#MultipleIntermediateCatchEvent"/>
-    <swb:hasClass rdf:resource="#ComplexGateway"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTContents"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Templates"/>
+    <swb:hasClass>
+      <swb:Class rdf:ID="UserTask">
+        <rdfs:subClassOf rdf:resource="#Task"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Undeleteable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Trashable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#TemplateRefable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#CalendarRefable"/>
+        <rdfs:label xml:lang="es">Tarea de Usuario</rdfs:label>
+        <rdfs:label xml:lang="en">User Task</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#Callable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Resourceable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <swb:displayObject>
+          <swbxf:DisplayObject rdf:ID="do_UserTask">
+            <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:dragSupport>
+            <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >2</swbxf:dropMatchLevel>
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconUserTask</swb:iconClass>
+          </swbxf:DisplayObject>
+        </swb:displayObject>
+      </swb:Class>
+    </swb:hasClass>
     <swb:hasClass rdf:resource="#ScalationStartEvent"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Devices"/>
-    <swb:hasClass rdf:resource="#TerminationEndEvent"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Collections"/>
+    <swb:hasClass rdf:resource="#MultipleStartEvent"/>
+    <swb:hasClass rdf:resource="#MessageIntermediateCatchEvent"/>
+    <swb:hasClass rdf:resource="#ProcessRule"/>
+    <swb:hasClass rdf:resource="#ReceiveTask"/>
+    <swb:hasClass rdf:resource="#Lane"/>
+    <swb:hasClass rdf:resource="#ConditionalFlow"/>
+    <swb:hasClass>
+      <swb:Class rdf:ID="TransactionSubProcess">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="#SubProcess"/>
+        <swb:displayObject>
+          <swbxf:DisplayObject rdf:ID="do_Transaction">
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconTransactionSubProcess</swb:iconClass>
+          </swbxf:DisplayObject>
+        </swb:displayObject>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </swb:hasClass>
+    <swb:hasClass>
+      <owl:Class rdf:ID="MessageEndEvent"/>
+    </swb:hasClass>
+    <rdfs:label xml:lang="es">Sitio de Procesos</rdfs:label>
+    <swb:hasClass rdf:resource="#LinkIntermediateThrowEvent"/>
+    <swb:hasClass rdf:resource="#ErrorIntermediateCatchEvent"/>
+    <swb:hasClass rdf:resource="#SubProcessInstance"/>
     <swb:hasClass>
       <swb:Class rdf:ID="MessageFlow">
         <rdfs:subClassOf rdf:resource="#ConnectionObject"/>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
+        <swb:displayObject>
+          <swbxf:DisplayObject rdf:ID="do_MessageFlow">
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconMessageFlow</swb:iconClass>
+          </swbxf:DisplayObject>
+        </swb:displayObject>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </swb:hasClass>
-    <swb:hasClass rdf:resource="#GraphicalElement"/>
+    <swb:hasClass rdf:resource="#IntermediateCatchEvent"/>
+    <swb:hasClass rdf:resource="#MultipleEndEvent"/>
+    <swb:hasClass rdf:resource="#ManualTask"/>
+    <swb:hasClass rdf:resource="#AnnotationArtifact"/>
+    <swb:hasClass rdf:resource="#ProcessService"/>
     <swb:hasHerarquicalNode>
       <swbxf:HerarquicalNode rdf:ID="hn_BusinessProcess">
+        <swb:title xml:lang="es">Procesos de Negocio</swb:title>
+        <swb:title xml:lang="en">Business Process</swb:title>
+        <swb:hasHerarquicalNode>
+          <swbxf:HerarquicalNode rdf:ID="hn_ProcessFileTemplate">
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >10</swb:index>
+            <swb:title xml:lang="es">Plantillas de Archivos</swb:title>
+            <swbxf:heClass>
+              <swb:Class rdf:ID="ProcessFileTemplate">
+                <swb:displayObject>
+                  <swbxf:DisplayObject rdf:ID="dp_ProcessFileTemplate">
+                    <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                    >swbIconTemplate</swb:iconClass>
+                  </swbxf:DisplayObject>
+                </swb:displayObject>
+                <rdfs:label xml:lang="en">Process File Template</rdfs:label>
+                <rdfs:label xml:lang="es">Plantilla de Archivo de Proceso</rdfs:label>
+                <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+                >true</swb:autogenId>
+                <rdfs:subClassOf rdf:resource="#ProcessElement"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </swb:Class>
+            </swbxf:heClass>
+            <swb:title xml:lang="en">File Templates</swb:title>
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconTemplateGroup</swb:iconClass>
+          </swbxf:HerarquicalNode>
+        </swb:hasHerarquicalNode>
+        <swb:hasHerarquicalNode>
+          <swbxf:HerarquicalNode rdf:ID="hn_DBConnections">
+            <swbxf:heClass>
+              <swb:Class rdf:ID="DBConnection">
+                <rdfs:label xml:lang="es">Conexión a BD</rdfs:label>
+                <rdfs:label xml:lang="en">DB Connection</rdfs:label>
+                <swb:displayObject>
+                  <swbxf:DisplayObject rdf:ID="dp_DBConnection">
+                    <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                    >swbIconWebPage</swb:iconClass>
+                  </swbxf:DisplayObject>
+                </swb:displayObject>
+                <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+                <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+                <rdfs:subClassOf rdf:resource="#BaseElement"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </swb:Class>
+            </swbxf:heClass>
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconTemplateGroup</swb:iconClass>
+            <swb:title xml:lang="es">Conexiones a BD</swb:title>
+            <swb:title xml:lang="en">DB Connections</swb:title>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >40</swb:index>
+          </swbxf:HerarquicalNode>
+        </swb:hasHerarquicalNode>
         <swb:hasHerarquicalNode>
           <swbxf:HerarquicalNode rdf:ID="hn_BusinessRules">
             <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
@@ -1032,6 +1282,17 @@
           </swbxf:HerarquicalNode>
         </swb:hasHerarquicalNode>
         <swb:hasHerarquicalNode>
+          <swbxf:HerarquicalNode rdf:ID="hn_Periods">
+            <swb:title xml:lang="en">Execution Intervals</swb:title>
+            <swbxf:heClass rdf:resource="#ProcessPeriod"/>
+            <swb:title xml:lang="es">Intervalos de Ejecución</swb:title>
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconCalendars</swb:iconClass>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >20</swb:index>
+          </swbxf:HerarquicalNode>
+        </swb:hasHerarquicalNode>
+        <swb:hasHerarquicalNode>
           <swbxf:HerarquicalNode rdf:ID="hn_Processes">
             <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
             >90</swb:index>
@@ -1056,47 +1317,6 @@
             >swbIconResources</swb:iconClass>
             <swb:title xml:lang="en">Processes</swb:title>
             <swb:title xml:lang="es">Procesos</swb:title>
-          </swbxf:HerarquicalNode>
-        </swb:hasHerarquicalNode>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >80</swb:index>
-        <swb:hasHerarquicalNode>
-          <swbxf:HerarquicalNode rdf:ID="hn_Periods">
-            <swb:title xml:lang="en">Execution Intervals</swb:title>
-            <swbxf:heClass rdf:resource="#ProcessPeriod"/>
-            <swb:title xml:lang="es">Intervalos de Ejecución</swb:title>
-            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >swbIconCalendars</swb:iconClass>
-            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >20</swb:index>
-          </swbxf:HerarquicalNode>
-        </swb:hasHerarquicalNode>
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconCamps</swb:iconClass>
-        <swb:hasHerarquicalNode>
-          <swbxf:HerarquicalNode rdf:ID="hn_DBConnections">
-            <swbxf:heClass>
-              <swb:Class rdf:ID="DBConnection">
-                <rdfs:label xml:lang="es">Conexión a BD</rdfs:label>
-                <rdfs:label xml:lang="en">DB Connection</rdfs:label>
-                <swb:displayObject>
-                  <swbxf:DisplayObject rdf:ID="dp_DBConnection">
-                    <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-                    >swbIconWebPage</swb:iconClass>
-                  </swbxf:DisplayObject>
-                </swb:displayObject>
-                <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-                <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-                <rdfs:subClassOf rdf:resource="#BaseElement"/>
-                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-              </swb:Class>
-            </swbxf:heClass>
-            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >swbIconTemplateGroup</swb:iconClass>
-            <swb:title xml:lang="es">Conexiones a BD</swb:title>
-            <swb:title xml:lang="en">DB Connections</swb:title>
-            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >40</swb:index>
           </swbxf:HerarquicalNode>
         </swb:hasHerarquicalNode>
         <swb:hasHerarquicalNode>
@@ -1127,75 +1347,158 @@
             >50</swb:index>
           </swbxf:HerarquicalNode>
         </swb:hasHerarquicalNode>
-        <swb:hasHerarquicalNode>
-          <swbxf:HerarquicalNode rdf:ID="hn_ProcessFileTemplate">
-            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >10</swb:index>
-            <swb:title xml:lang="es">Plantillas de Archivos</swb:title>
-            <swbxf:heClass>
-              <swb:Class rdf:ID="ProcessFileTemplate">
-                <swb:displayObject>
-                  <swbxf:DisplayObject rdf:ID="dp_ProcessFileTemplate">
-                    <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-                    >swbIconTemplate</swb:iconClass>
-                  </swbxf:DisplayObject>
-                </swb:displayObject>
-                <rdfs:label xml:lang="en">Process File Template</rdfs:label>
-                <rdfs:label xml:lang="es">Plantilla de Archivo de Proceso</rdfs:label>
-                <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-                >true</swb:autogenId>
-                <rdfs:subClassOf rdf:resource="#ProcessElement"/>
-                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-              </swb:Class>
-            </swbxf:heClass>
-            <swb:title xml:lang="en">File Templates</swb:title>
-            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >swbIconTemplateGroup</swb:iconClass>
-          </swbxf:HerarquicalNode>
-        </swb:hasHerarquicalNode>
-        <swb:title xml:lang="es">Procesos de Negocio</swb:title>
-        <swb:title xml:lang="en">Business Process</swb:title>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >80</swb:index>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconCamps</swb:iconClass>
       </swbxf:HerarquicalNode>
     </swb:hasHerarquicalNode>
-    <swb:hasClass rdf:resource="#ExclusiveGateway"/>
-    <swb:hasClass rdf:resource="#Lane"/>
-    <swb:hasClass rdf:resource="#CancelationIntermediateCatchEvent"/>
+    <swb:hasClass rdf:resource="#SubProcess"/>
+    <swb:hasClass rdf:resource="#ComplexGateway"/>
+    <swb:hasClass rdf:resource="#ErrorEndEvent"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Calendars"/>
+    <swb:hasClass rdf:resource="#TimerIntermediateCatchEvent"/>
+    <swb:hasClass rdf:resource="#TerminationEndEvent"/>
+    <swb:hasClass rdf:resource="#Event"/>
+    <swb:hasClass rdf:resource="#Process"/>
     <swb:hasClass>
-      <owl:Class rdf:ID="RuleStartEvent"/>
+      <swb:Class rdf:ID="ParallelGateway">
+        <rdfs:subClassOf>
+          <owl:Class rdf:about="#Gateway"/>
+        </rdfs:subClassOf>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <swb:displayObject>
+          <swbxf:DisplayObject rdf:ID="do_ParallelGateway">
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconParallelGateway</swb:iconClass>
+          </swbxf:DisplayObject>
+        </swb:displayObject>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
     </swb:hasClass>
-    <swb:hasClass rdf:resource="#MultipleEndEvent"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_ResourceCollections"/>
     <swb:hasClass rdf:resource="#ParallelStartEvent"/>
+    <swb:hasClass rdf:resource="#DirectionalAssociation"/>
+    <swb:hasClass rdf:resource="#RepositoryFile"/>
+    <swb:hasClass rdf:resource="#MessageStartEvent"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Countries"/>
+    <swb:hasClass rdf:resource="#ScriptTask"/>
+    <swb:hasClass rdf:resource="#MessageIntermediateThrowEvent"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTStrategies"/>
+    <swb:hasClass rdf:resource="#Pool"/>
+    <swb:hasClass>
+      <owl:Class rdf:ID="LinkIntermediateCatchEvent"/>
+    </swb:hasClass>
+    <swb:hasClass>
+      <owl:Class rdf:about="#Gateway"/>
+    </swb:hasClass>
+    <swb:hasClass rdf:resource="#ScalationIntermediateCatchEvent"/>
+    <swb:hasClass>
+      <swb:Class rdf:ID="CompensationIntermediateCatchEvent">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="#IntermediateCatchEvent"/>
+        <swb:displayObject>
+          <swbxf:DisplayObject rdf:ID="do_CompensationIntermediateCatchEvent">
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconCompensationIntermediateCatchEvent</swb:iconClass>
+          </swbxf:DisplayObject>
+        </swb:displayObject>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </swb:hasClass>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PFlows"/>
+    <swb:hasClass rdf:resource="#EndEvent"/>
+    <swb:hasClass>
+      <swb:Class rdf:ID="DataStore">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="#ItemAware"/>
+        <swb:displayObject>
+          <swbxf:DisplayObject rdf:ID="do_DataStore">
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconDataStore</swb:iconClass>
+          </swbxf:DisplayObject>
+        </swb:displayObject>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </swb:hasClass>
+    <swb:hasClass>
+      <owl:Class rdf:about="#FlowNode"/>
+    </swb:hasClass>
+    <swb:hasClass rdf:resource="#GroupArtifact"/>
+    <swb:hasClass rdf:resource="#ParallelIntermediateCatchEvent"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Model"/>
+    <swb:hasClass rdf:resource="#InclusiveGateway"/>
+    <swb:hasClass>
+      <owl:Class rdf:ID="CancelationEndEvent"/>
+    </swb:hasClass>
+    <swb:hasClass rdf:resource="#SignalIntermediateCatchEvent"/>
+    <swb:hasClass rdf:resource="#ErrorStartEvent"/>
+    <swb:hasClass rdf:resource="#DefaultFlow"/>
     <swb:hasClass>
       <swb:Class rdf:ID="ExclusiveIntermediateEventGateway">
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
         <rdfs:subClassOf rdf:resource="#EventBasedGateway"/>
-        <swb:displayObject rdf:resource="#do_Gateway"/>
+        <swb:displayObject>
+          <swbxf:DisplayObject rdf:ID="do_ExclusiveIntermediateEventGateway">
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconExclusiveIntermediateEventGateway</swb:iconClass>
+          </swbxf:DisplayObject>
+        </swb:displayObject>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </swb:hasClass>
-    <swb:hasClass rdf:resource="#RepositoryFile"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_ResourceCollections"/>
-    <swb:hasClass rdf:resource="#Pool"/>
+    <swb:hasClass rdf:resource="#SequenceFlow"/>
+    <swb:hasClass rdf:resource="#CompensationIntermediateThrowEvent"/>
+    <swb:hasClass rdf:resource="#CancelationIntermediateCatchEvent"/>
+    <swb:hasClass rdf:resource="#CatchEvent"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTSystems"/>
+    <swb:hasClass rdf:resource="#ProcessInstance"/>
+    <swb:hasClass rdf:resource="#SendTask"/>
+    <swb:hasClass rdf:resource="#CompensationEndEvent"/>
+    <swb:hasClass rdf:resource="#ExclusiveGateway"/>
+    <swb:hasClass rdf:resource="#TimerStartEvent"/>
+    <swb:hasClass rdf:resource="#SignalStartEvent"/>
+    <swb:hasClass rdf:resource="#GraphicalElement"/>
     <rdfs:label xml:lang="en">Process Site</rdfs:label>
-    <swb:hasClass rdf:resource="#AssociationFlow"/>
+    <swb:hasClass rdf:resource="#Artifact"/>
+    <swb:hasClass rdf:resource="#FlowNodeInstance"/>
+    <swb:hasClass rdf:resource="#MultipleIntermediateCatchEvent"/>
   </owl:Class>
   <owl:Class rdf:about="#CancelationEndEvent">
-    <swb:displayObject rdf:resource="#do_EndEvent"/>
     <rdfs:subClassOf rdf:resource="#EndEvent"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_CancelationEndEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconCancelationEndEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#LinkIntermediateCatchEvent">
-    <swb:displayObject rdf:resource="#do_IntermediateCatchEvent"/>
     <rdfs:subClassOf rdf:resource="#IntermediateCatchEvent"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_LinkIntermediateCatchEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconLinkIntermediateCatchEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#Gateway">
-    <swb:displayObject rdf:resource="#do_Gateway"/>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_Gateway">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconGateway</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#FlowNode"/>
     </rdfs:subClassOf>
@@ -1204,10 +1507,15 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#MessageEndEvent">
-    <swb:displayObject rdf:resource="#do_EndEvent"/>
     <rdfs:subClassOf rdf:resource="#EndEvent"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_MessageEndEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconMessageEndEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#FlowNode">
@@ -1216,10 +1524,15 @@
   </owl:Class>
   <owl:Class rdf:about="#RuleStartEvent">
     <rdfs:subClassOf rdf:resource="#ProcessRuleRefable"/>
-    <swb:displayObject rdf:resource="#do_StartEvent"/>
     <rdfs:subClassOf rdf:resource="#StartEvent"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_RuleStartEvent">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconRuleStartEvent</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:ObjectProperty rdf:ID="target">
@@ -1363,6 +1676,12 @@
     <rdfs:domain>
       <swb:Class rdf:ID="CallActivity">
         <rdfs:subClassOf rdf:resource="#Activity"/>
+        <swb:displayObject>
+          <swbxf:DisplayObject rdf:ID="do_CallActivity">
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconCallActivity</swb:iconClass>
+          </swbxf:DisplayObject>
+        </swb:displayObject>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:domain>
@@ -1406,6 +1725,10 @@
     <rdfs:domain rdf:resource="#ProcessObserver"/>
     <rdfs:range rdf:resource="#StartEvent"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="assignedto">
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+    <rdfs:domain rdf:resource="#ProcessTraceable"/>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="dataObjectClass">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
@@ -1421,10 +1744,6 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:domain rdf:resource="#ItemAware"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="assignedto">
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
-    <rdfs:domain rdf:resource="#ProcessTraceable"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasChildInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -1540,6 +1859,17 @@
     <rdfs:domain rdf:resource="#ProcessObserver"/>
     <rdfs:range rdf:resource="#FlowNodeInstance"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="fromConnection">
+    <rdfs:range rdf:resource="#ConnectionObject"/>
+    <rdfs:domain rdf:resource="#FlowNodeInstance"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="flowNodeType">
+    <rdfs:range rdf:resource="#FlowNode"/>
+    <rdfs:domain rdf:resource="#FlowNodeInstance"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasFlowNodeInstanceInv"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="processDataInstanceModel">
     <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:cloneDependency>
@@ -1553,17 +1883,6 @@
       </swb:Model>
     </rdfs:range>
     <rdfs:domain rdf:resource="#ProcessSite"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="flowNodeType">
-    <rdfs:range rdf:resource="#FlowNode"/>
-    <rdfs:domain rdf:resource="#FlowNodeInstance"/>
-    <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="hasFlowNodeInstanceInv"/>
-    </owl:inverseOf>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="fromConnection">
-    <rdfs:range rdf:resource="#ConnectionObject"/>
-    <rdfs:domain rdf:resource="#FlowNodeInstance"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasFlowNodeInstancesInv">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -1589,12 +1908,6 @@
     <rdfs:range rdf:resource="#ProcessGroup"/>
     <rdfs:domain rdf:resource="#Process"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasItemAwareReference">
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
-    <rdfs:range rdf:resource="#ItemAwareReference"/>
-    <rdfs:domain rdf:resource="#Instance"/>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="webService">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_webService">
@@ -1607,6 +1920,12 @@
     <rdfs:label xml:lang="es">Servicio Web</rdfs:label>
     <rdfs:range rdf:resource="#WebService"/>
     <rdfs:domain rdf:resource="#WebServiceInvoker"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasItemAwareReference">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <rdfs:range rdf:resource="#ItemAwareReference"/>
+    <rdfs:domain rdf:resource="#Instance"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="processType">
     <rdfs:range rdf:resource="#Process"/>
@@ -1639,13 +1958,13 @@
     >next</swb:propertyCodeName>
     <rdfs:domain rdf:resource="#StartEvent"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasFromConnectionObjectInv">
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >hasFromConnectionObject</swb:propertyCodeName>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#userTaskInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >userTask</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasFromConnectionObjectInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasFromConnectionObject</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="itemAware">
     <rdfs:range rdf:resource="#ItemAware"/>
@@ -1694,11 +2013,13 @@
     <rdfs:range rdf:resource="#GraphicalElement"/>
     <rdfs:domain rdf:resource="#GraphicalElement"/>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="processWebPageInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >processWebPage</swb:propertyCodeName>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="process">
     <rdfs:range rdf:resource="#Process"/>
-    <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="processWebPageInv"/>
-    </owl:inverseOf>
+    <owl:inverseOf rdf:resource="#processWebPageInv"/>
     <rdfs:domain rdf:resource="#ProcessWebPage"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_process">
@@ -1710,10 +2031,6 @@
         <rdfs:label xml:lang="en">Process</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#processWebPageInv">
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >processWebPage</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasWebServiceInputParameter">
     <rdfs:range rdf:resource="#WebServiceParameter"/>
@@ -1887,10 +2204,6 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#DBConnection"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="x">
-    <rdfs:domain rdf:resource="#GraphicalElement"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/process/schema#intValue">
     <swb:displayProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/process/schema#dp_DataType"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
@@ -1902,6 +2215,10 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:domain>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="x">
+    <rdfs:domain rdf:resource="#GraphicalElement"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="sendMailTo">
     <rdfs:label xml:lang="en">To</rdfs:label>
@@ -1932,6 +2249,18 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/process/schema#longValue">
+    <swb:displayProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/process/schema#dp_DataType"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >value</swb:propertyCodeName>
+    <rdfs:domain>
+      <swb:Class rdf:about="http://www.semanticwebbuilder.org/swb4/process/schema#Long">
+        <rdfs:subClassOf rdf:resource="#DataTypes"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="associationScriptCode">
     <rdfs:domain rdf:resource="#DirectionalAssociation"/>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -1946,18 +2275,6 @@
         <swbxf:propGroup rdf:resource="#grp_Process"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/process/schema#longValue">
-    <swb:displayProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/process/schema#dp_DataType"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#long"/>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >value</swb:propertyCodeName>
-    <rdfs:domain>
-      <swb:Class rdf:about="http://www.semanticwebbuilder.org/swb4/process/schema#Long">
-        <rdfs:subClassOf rdf:resource="#DataTypes"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:domain>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="dbconUser">
     <swb:displayProperty>
@@ -2056,23 +2373,6 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="actionCode">
-    <rdfs:label xml:lang="en">Action Code</rdfs:label>
-    <rdfs:label xml:lang="es">Código de la acción</rdfs:label>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_actionCode">
-        <swbxf:propGroup rdf:resource="#grp_Process"/>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >45</swb:index>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#ActionCodeable"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="action">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Instance"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="name">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
@@ -2088,6 +2388,23 @@
     <rdfs:label xml:lang="es">Nombre de la Variable</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#ItemAware"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="action">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Instance"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="actionCode">
+    <rdfs:label xml:lang="en">Action Code</rdfs:label>
+    <rdfs:label xml:lang="es">Código de la acción</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_actionCode">
+        <swbxf:propGroup rdf:resource="#grp_Process"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >45</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ActionCodeable"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="y">
     <rdfs:domain rdf:resource="#GraphicalElement"/>
@@ -2246,6 +2563,12 @@
     <rdfs:label xml:lang="es">Numero de tokens para inicio</rdfs:label>
     <rdfs:label xml:lang="en">Start tokens number</rdfs:label>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="wspName">
+    <rdfs:domain rdf:resource="#WebServiceParameter"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >parameterName</swb:propertyCodeName>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="sqlCode">
     <rdfs:domain rdf:resource="#SQLQuery"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -2254,12 +2577,6 @@
     <rdfs:label xml:lang="es">Código de transformación</rdfs:label>
     <rdfs:label xml:lang="en">Transformation Code</rdfs:label>
     <swb:displayProperty rdf:resource="#dp_sqlCode"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="wspName">
-    <rdfs:domain rdf:resource="#WebServiceParameter"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >parameterName</swb:propertyCodeName>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="interruptor">
     <rdfs:domain rdf:resource="#CatchEvent"/>
@@ -2284,6 +2601,19 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="forCompensation">
+    <rdfs:domain rdf:resource="#ActivityConfable"/>
+    <rdfs:label xml:lang="en">For compensation</rdfs:label>
+    <rdfs:label xml:lang="es">Para compensación</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_forCompensation">
+        <swbxf:propGroup rdf:resource="#grp_Process"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="gatewayMode">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:comment>{Converging|Diverging|Mixed} Indica el modo en que la compuerta se usa.</rdfs:comment>
@@ -2303,19 +2633,6 @@
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >value</swb:propertyCodeName>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="forCompensation">
-    <rdfs:domain rdf:resource="#ActivityConfable"/>
-    <rdfs:label xml:lang="en">For compensation</rdfs:label>
-    <rdfs:label xml:lang="es">Para compensación</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_forCompensation">
-        <swbxf:propGroup rdf:resource="#grp_Process"/>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >100</swb:index>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="sendMailFrom">
     <rdfs:label xml:lang="en">From</rdfs:label>
     <rdfs:label xml:lang="es">De</rdfs:label>
@@ -2330,6 +2647,133 @@
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
+  <swb:Class rdf:ID="DataInput">
+    <rdfs:subClassOf rdf:resource="#ItemAware"/>
+    <rdfs:subClassOf rdf:resource="#Collectionable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_DataInput">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconDataInput</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Class rdf:ID="DataOutput">
+    <rdfs:subClassOf rdf:resource="#ItemAware"/>
+    <rdfs:subClassOf rdf:resource="#Collectionable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_DataOutput">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconDataOutput</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Class rdf:ID="StandarLoopCharacteristics">
+    <rdfs:subClassOf rdf:resource="#LoopCharacteristics"/>
+    <rdfs:label xml:lang="es">Ciclo</rdfs:label>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:label xml:lang="en">Loop</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Class rdf:ID="CallProcess">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="#Process"/>
+        <owl:onProperty rdf:resource="#calledElement"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_CallProcess">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconCallProcess</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#CallActivity"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:CodePackage rdf:about="http://www.semanticwebbuilder.org/swb4/process/schema#pkg">
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.process.schema</swb:package>
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swps</swb:prefix>
+  </swb:CodePackage>
+  <swb:Class rdf:ID="EventSubProcess">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="#SubProcess"/>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_EventSubProcess">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconEventSubProcess</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:Class rdf:ID="CallBusinessRuleTask">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <swb:Class rdf:ID="BusinessRuleTask">
+            <rdfs:subClassOf rdf:resource="#Callable"/>
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
+            <rdfs:subClassOf rdf:resource="#Task"/>
+            <swb:displayObject>
+              <swbxf:DisplayObject rdf:ID="do_BusinessRuleTask">
+                <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >swbIconBusinessRuleTask</swb:iconClass>
+              </swbxf:DisplayObject>
+            </swb:displayObject>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="#calledElement"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_CallBusinessRuleTask">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconCallBusinessRuleTask</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf>
+      <swb:Class rdf:ID="CallTask">
+        <rdfs:subClassOf>
+          <owl:Restriction>
+            <owl:allValuesFrom rdf:resource="#Task"/>
+            <owl:onProperty rdf:resource="#calledElement"/>
+          </owl:Restriction>
+        </rdfs:subClassOf>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="#CallActivity"/>
+        <swb:displayObject>
+          <swbxf:DisplayObject rdf:ID="do_CallTask">
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconCallTask</swb:iconClass>
+          </swbxf:DisplayObject>
+        </swb:displayObject>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:Class>
+  <swb:CodePackage rdf:ID="pkg">
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.process.model</swb:package>
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swp</swb:prefix>
+  </swb:CodePackage>
   <swbxf:DisplayProperty rdf:ID="dp_dataObjectProperty">
     <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectClass_1"/>
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
@@ -2357,37 +2801,15 @@
         <owl:onProperty rdf:resource="#calledElement"/>
       </owl:Restriction>
     </rdfs:subClassOf>
-    <swb:displayObject rdf:resource="#do_Task"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdfs:subClassOf>
-      <swb:Class rdf:ID="CallTask">
-        <rdfs:subClassOf>
-          <owl:Restriction>
-            <owl:allValuesFrom rdf:resource="#Task"/>
-            <owl:onProperty rdf:resource="#calledElement"/>
-          </owl:Restriction>
-        </rdfs:subClassOf>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="#CallActivity"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:subClassOf>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swbxf:DisplayObject rdf:ID="do_UserTask">
-    <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swbxf:dragSupport>
-    <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >2</swbxf:dropMatchLevel>
-  </swbxf:DisplayObject>
-  <swb:Class rdf:ID="DataInput">
-    <rdfs:subClassOf rdf:resource="#ItemAware"/>
-    <rdfs:subClassOf rdf:resource="#Collectionable"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <swb:displayObject rdf:resource="#do_Artifact"/>
+    <rdfs:subClassOf rdf:resource="#CallTask"/>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_CallManualTask">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconCallManualTask</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
   <swb:Class rdf:ID="CallUserTask">
@@ -2397,85 +2819,28 @@
         <owl:onProperty rdf:resource="#calledElement"/>
       </owl:Restriction>
     </rdfs:subClassOf>
-    <swb:displayObject rdf:resource="#do_Task"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="#CallTask"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swb:Class rdf:ID="DataOutput">
-    <rdfs:subClassOf rdf:resource="#ItemAware"/>
-    <rdfs:subClassOf rdf:resource="#Collectionable"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <swb:displayObject rdf:resource="#do_Artifact"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swb:Class rdf:ID="BusinessRuleTask">
-    <rdfs:subClassOf rdf:resource="#Callable"/>
-    <swb:displayObject rdf:resource="#do_Task"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#Task"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swb:Class rdf:ID="StandarLoopCharacteristics">
-    <rdfs:subClassOf rdf:resource="#LoopCharacteristics"/>
-    <rdfs:label xml:lang="es">Ciclo</rdfs:label>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:label xml:lang="en">Loop</rdfs:label>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swb:Class rdf:ID="CallProcess">
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:allValuesFrom rdf:resource="#Process"/>
-        <owl:onProperty rdf:resource="#calledElement"/>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <swb:displayObject rdf:resource="#do_SubProcess"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#CallActivity"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swb:FormElement rdf:ID="CallProcessElement">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:FormElement>
-  <swb:CodePackage rdf:about="http://www.semanticwebbuilder.org/swb4/process/schema#pkg">
-    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.process.schema</swb:package>
-    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >swps</swb:prefix>
-  </swb:CodePackage>
-  <swb:Class rdf:ID="EventSubProcess">
-    <swb:displayObject rdf:resource="#do_SubProcess"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#SubProcess"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </swb:Class>
-  <swb:Class rdf:ID="CallBusinessRuleTask">
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:allValuesFrom rdf:resource="#BusinessRuleTask"/>
-        <owl:onProperty rdf:resource="#calledElement"/>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <swb:displayObject rdf:resource="#do_Task"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#CallTask"/>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_CallUserTask">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconCallUserTask</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
   <swb:Class rdf:ID="DataObject">
     <rdfs:subClassOf rdf:resource="#ItemAware"/>
-    <swb:displayObject rdf:resource="#do_Artifact"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="#Collectionable"/>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_DataObject">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconDataObject</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
   <swb:Class rdf:ID="CallScriptTask">
@@ -2485,18 +2850,21 @@
         <owl:onProperty rdf:resource="#calledElement"/>
       </owl:Restriction>
     </rdfs:subClassOf>
-    <swb:displayObject rdf:resource="#do_Task"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="#CallTask"/>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:ID="do_CallScriptTask">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconCallScriptTask</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
-  <swb:CodePackage rdf:ID="pkg">
-    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.process.model</swb:package>
-    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >swp</swb:prefix>
-  </swb:CodePackage>
+  <swb:FormElement rdf:ID="CallProcessElement">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:FormElement>
 </rdf:RDF>
 
-<!-- Created with TopBraid Composer -->
+<!-- Created with TopBraid -->
