@@ -128,7 +128,7 @@ html, body, #main {
 .swbIconManualTask,
 .swbIconSendTask,
 .swbIconReceiveTask,
-.swbIconCallActivity,
+.swbIconCallTask,
 .swbIconCallManualTask,
 .swbIconCallBusinessRuleTask,
 .swbIconCallScriptTask,
@@ -281,7 +281,7 @@ html, body, #main {
 .swbIconManualTask   { background-position: -160px -305px; }
 .swbIconSendTask   { background-position: -200px -305px; }
 .swbIconReceiveTask   { background-position: -220px -305px; }
-.swbIconCallActivity   { background-position: -20px -305px; }
+.swbIconCallTask   { background-position: -20px -305px; }
 .swbIconCallManualTask   { background-position: -180px -305px; }
 .swbIconCallBusinessRuleTask   { background-position: -260px -305px; }
 .swbIconCallScriptTask   { background-position: -100px -305px; }
