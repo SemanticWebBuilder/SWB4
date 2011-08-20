@@ -53,7 +53,7 @@ public class SemanticProperty
 {
 
     /** The log. */
-    private static Logger log=SWBUtils.getLogger(SemanticClass.class);
+    private static Logger log=SWBUtils.getLogger(SemanticProperty.class);
 
     /** The m_prop. */
     private Property m_prop;
@@ -93,6 +93,9 @@ public class SemanticProperty
     
     /** The is heraquical relation. */
     private Boolean isHeraquicalRelation = null;
+    
+    private Boolean hasHerarquicalFilterClass=null;
+    private SemanticClass herarquicalFilterClass =null;
     
     /** The is required. */
     private Boolean isRequired = null;
@@ -455,7 +458,32 @@ public class SemanticProperty
         }
         return isHeraquicalRelation;
     }
-
+    
+    /**
+     * Si esta propiedad se utiliza para definir la relacio padre-hijo en el arbol de navegacion.
+     * 
+     * @return true, if is heraquical relation
+     * @return
+     */
+    public SemanticClass getHerarquicalRelationFilterClass()
+    {
+        if (hasHerarquicalFilterClass == null)
+        {
+            hasHerarquicalFilterClass = false;
+            Statement st = m_prop.getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(SemanticVocabulary.SWB_PROP_HERARQUICALRELATIONFILTERCLASS));
+            if (st != null)
+            {
+                Resource res=st.getResource();       
+                if(res!=null)
+                {
+                    herarquicalFilterClass=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(res.getURI());
+                }
+                hasHerarquicalFilterClass=true;
+            }
+        }
+        return herarquicalFilterClass;
+    }    
+    
     /**
      * Esta propiedad se utiliza para eliminar el objeto relacionado, si el objeto de dominio se elimina.
      * 
