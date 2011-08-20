@@ -61,8 +61,7 @@ public class SWBProcessMgr
             {
                 if(actins.getStatus()==Instance.STATUS_PROCESSING || actins.getStatus()==Instance.STATUS_OPEN)
                 {
-                    ResourceAssignment asig=((Task)type).getResourceAssignment();
-                    if(asig==null || user.haveAccess(asig))
+                    if(user.haveAccess(type))
                         ret.add(actins);
                 }
             }

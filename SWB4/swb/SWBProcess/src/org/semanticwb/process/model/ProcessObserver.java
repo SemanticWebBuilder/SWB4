@@ -58,15 +58,18 @@ public class ProcessObserver extends org.semanticwb.process.model.base.ProcessOb
         while (it.hasNext())
         {
             FlowNodeInstance flowNodeInstance = it.next();
-            String c1=((Event)flowNodeInstance.getFlowNodeType()).getActionCode();
-            String c2=((Event)instance.getFlowNodeType()).getActionCode();
-            //System.out.println(flowNodeInstance+" "+c1+"=="+c2);
-            if((c1!=null && c1.equals(c2)) || c1==null && c2==null)
+            if(flowNodeInstance.getFlowNodeType() instanceof ActionCodeable && instance.getFlowNodeType() instanceof ActionCodeable)
             {
-                try
+                String c1=((ActionCodeable)flowNodeInstance.getFlowNodeType()).getActionCode();
+                String c2=((ActionCodeable)instance.getFlowNodeType()).getActionCode();
+                //System.out.println(flowNodeInstance+" "+c1+"=="+c2);
+                if((c1!=null && c1.equals(c2)) || c1==null && c2==null)
                 {
-                    flowNodeInstance.notifyEvent(instance);
-                }catch(Exception e){log.error(e);}
+                    try
+                    {
+                        flowNodeInstance.notifyEvent(instance);
+                    }catch(Exception e){log.error(e);}
+                }
             }
         }
 
@@ -78,17 +81,20 @@ public class ProcessObserver extends org.semanticwb.process.model.base.ProcessOb
             Containerable cont=startEvent.getContainer();
             if(cont!=null && cont instanceof Process && ((Process)cont).isActive())
             {
-                String c1=startEvent.getActionCode();
-                String c2=((Event)instance.getFlowNodeType()).getActionCode();
-                //System.out.println(startEvent+" "+c1+"=="+c2);
-                if((c1!=null && c1.equals(c2)) || c1==null && c2==null)
+                if(startEvent instanceof ActionCodeable && instance.getFlowNodeType() instanceof ActionCodeable)
                 {
-                    try
+                    String c1=((ActionCodeable)startEvent).getActionCode();
+                    String c2=((ActionCodeable)instance.getFlowNodeType()).getActionCode();
+                    //System.out.println(startEvent+" "+c1+"=="+c2);
+                    if((c1!=null && c1.equals(c2)) || c1==null && c2==null)
                     {
-                        //System.out.println("ok...");
-                        ProcessInstance inst=((Process)cont).createInstance();
-                        inst.start(null,startEvent);
-                    }catch(Exception e){log.error(e);}
+                        try
+                        {
+                            //System.out.println("ok...");
+                            ProcessInstance inst=((Process)cont).createInstance();
+                            inst.start(null,startEvent);
+                        }catch(Exception e){log.error(e);}
+                    }
                 }
             }
         }

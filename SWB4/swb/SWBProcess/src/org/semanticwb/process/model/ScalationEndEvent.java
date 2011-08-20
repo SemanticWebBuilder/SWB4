@@ -27,20 +27,23 @@ public class ScalationEndEvent extends org.semanticwb.process.model.base.Scalati
                 if(graphicalElement instanceof ScalationIntermediateCatchEvent)
                 {
                     ScalationIntermediateCatchEvent event=(ScalationIntermediateCatchEvent)graphicalElement;
-                    String c1=event.getActionCode();
-                    String c2=((Event)instance.getFlowNodeType()).getActionCode();
-                    if((c1!=null && c1.equals(c2)) || c1==null && c2==null)
-                    {
-                        FlowNodeInstance source=(FlowNodeInstance)parent;
-                        source.setStatus(Instance.STATUS_CLOSED);
-                        source.setAction(Instance.ACTION_EVENT);
-                        source.setEnded(new Date());
-                        source.setEndedby(user);
-                        source.abortDependencies(user);
+                    if(event instanceof ActionCodeable && instance.getFlowNodeType() instanceof ActionCodeable)
+                    {                    
+                        String c1=((ActionCodeable)event).getActionCode();
+                        String c2=((ActionCodeable)instance.getFlowNodeType()).getActionCode();
+                        if((c1!=null && c1.equals(c2)) || c1==null && c2==null)
+                        {
+                            FlowNodeInstance source=(FlowNodeInstance)parent;
+                            source.setStatus(Instance.STATUS_CLOSED);
+                            source.setAction(Instance.ACTION_EVENT);
+                            source.setEnded(new Date());
+                            source.setEndedby(user);
+                            source.abortDependencies(user);
 
-                        FlowNodeInstance fn=((FlowNodeInstance)parent).getRelatedFlowNodeInstance(event);
-                        fn.setSourceInstance(instance);
-                        event.notifyEvent(fn, instance);
+                            FlowNodeInstance fn=((FlowNodeInstance)parent).getRelatedFlowNodeInstance(event);
+                            fn.setSourceInstance(instance);
+                            event.notifyEvent(fn, instance);
+                        }
                     }
                 }
             }

@@ -26,16 +26,20 @@ public class CancelationEndEvent extends org.semanticwb.process.model.base.Cance
                 if(graphicalElement instanceof CancelationIntermediateCatchEvent)
                 {
                     CancelationIntermediateCatchEvent event=(CancelationIntermediateCatchEvent)graphicalElement;
-                    String c1=event.getActionCode();
-                    String c2=((Event)instance.getFlowNodeType()).getActionCode();
-                    if((c1!=null && c1.equals(c2)) || c1==null && c2==null)
+                    
+                    if(event instanceof ActionCodeable && instance.getFlowNodeType() instanceof ActionCodeable)
                     {
-                        FlowNodeInstance source=(FlowNodeInstance)parent;
-                        source.close(user, Instance.STATUS_ABORTED, Instance.ACTION_EVENT, false);
+                        String c1=((ActionCodeable)event).getActionCode();
+                        String c2=((ActionCodeable)instance.getFlowNodeType()).getActionCode();
+                        if((c1!=null && c1.equals(c2)) || c1==null && c2==null)
+                        {
+                            FlowNodeInstance source=(FlowNodeInstance)parent;
+                            source.close(user, Instance.STATUS_ABORTED, Instance.ACTION_EVENT, false);
 
-                        FlowNodeInstance fn=((FlowNodeInstance)parent).getRelatedFlowNodeInstance(event);
-                        fn.setSourceInstance(instance);
-                        event.notifyEvent(fn, instance);
+                            FlowNodeInstance fn=((FlowNodeInstance)parent).getRelatedFlowNodeInstance(event);
+                            fn.setSourceInstance(instance);
+                            event.notifyEvent(fn, instance);
+                        }
                     }
                 }
             }
