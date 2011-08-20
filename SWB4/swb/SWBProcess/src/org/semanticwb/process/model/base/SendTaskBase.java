@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class SendTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Descriptiveable
+public abstract class SendTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.UserGroupRefable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swp_SendTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#SendTask");
    /**
@@ -148,29 +148,6 @@ public abstract class SendTaskBase extends org.semanticwb.process.model.Task imp
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.SendTask with a determined ResourceAssignment
-       * @param value ResourceAssignment of the type org.semanticwb.process.model.ResourceAssignment
-       * @param model Model of the org.semanticwb.process.model.SendTask
-       * @return Iterator with all the org.semanticwb.process.model.SendTask
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.SendTask> listSendTaskByResourceAssignment(org.semanticwb.process.model.ResourceAssignment value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SendTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_resourceAssignment, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.SendTask with a determined ResourceAssignment
-       * @param value ResourceAssignment of the type org.semanticwb.process.model.ResourceAssignment
-       * @return Iterator with all the org.semanticwb.process.model.SendTask
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.SendTask> listSendTaskByResourceAssignment(org.semanticwb.process.model.ResourceAssignment value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SendTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_resourceAssignment,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.SendTask with a determined Parent
        * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
        * @param model Model of the org.semanticwb.process.model.SendTask
@@ -240,6 +217,29 @@ public abstract class SendTaskBase extends org.semanticwb.process.model.Task imp
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.SendTask with a determined RuleRef
+       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * @param model Model of the org.semanticwb.process.model.SendTask
+       * @return Iterator with all the org.semanticwb.process.model.SendTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.SendTask> listSendTaskByRuleRef(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SendTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.SendTask with a determined RuleRef
+       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * @return Iterator with all the org.semanticwb.process.model.SendTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.SendTask> listSendTaskByRuleRef(org.semanticwb.model.RuleRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SendTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.SendTask with a determined OutputConnectionObject
        * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
        * @param model Model of the org.semanticwb.process.model.SendTask
@@ -306,6 +306,52 @@ public abstract class SendTaskBase extends org.semanticwb.process.model.Task imp
         public static java.util.Iterator<org.semanticwb.process.model.SendTask> listSendTaskByLoopCharacteristics(org.semanticwb.process.model.LoopCharacteristics value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SendTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_loopCharacteristics,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.SendTask with a determined UserGroupRef
+       * @param value UserGroupRef of the type org.semanticwb.model.UserGroupRef
+       * @param model Model of the org.semanticwb.process.model.SendTask
+       * @return Iterator with all the org.semanticwb.process.model.SendTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.SendTask> listSendTaskByUserGroupRef(org.semanticwb.model.UserGroupRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SendTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.SendTask with a determined UserGroupRef
+       * @param value UserGroupRef of the type org.semanticwb.model.UserGroupRef
+       * @return Iterator with all the org.semanticwb.process.model.SendTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.SendTask> listSendTaskByUserGroupRef(org.semanticwb.model.UserGroupRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SendTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.SendTask with a determined RoleRef
+       * @param value RoleRef of the type org.semanticwb.model.RoleRef
+       * @param model Model of the org.semanticwb.process.model.SendTask
+       * @return Iterator with all the org.semanticwb.process.model.SendTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.SendTask> listSendTaskByRoleRef(org.semanticwb.model.RoleRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SendTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.SendTask with a determined RoleRef
+       * @param value RoleRef of the type org.semanticwb.model.RoleRef
+       * @return Iterator with all the org.semanticwb.process.model.SendTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.SendTask> listSendTaskByRoleRef(org.semanticwb.model.RoleRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SendTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef,value.getSemanticObject(),sclass));
             return it;
         }
     }

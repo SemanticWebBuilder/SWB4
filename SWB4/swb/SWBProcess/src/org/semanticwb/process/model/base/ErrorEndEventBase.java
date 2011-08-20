@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ErrorEndEventBase extends org.semanticwb.process.model.EndEvent implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ActionCodeable
+public abstract class ErrorEndEventBase extends org.semanticwb.process.model.EndEvent implements org.semanticwb.model.Traceable,org.semanticwb.process.model.ActionCodeable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swp_ErrorEndEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ErrorEndEvent");
    /**
@@ -271,6 +271,24 @@ public abstract class ErrorEndEventBase extends org.semanticwb.process.model.End
     public ErrorEndEventBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the ActionCode property
+* @return String with the ActionCode
+*/
+    public String getActionCode()
+    {
+        return getSemanticObject().getProperty(swp_actionCode);
+    }
+
+/**
+* Sets the ActionCode property
+* @param value long with the ActionCode
+*/
+    public void setActionCode(String value)
+    {
+        getSemanticObject().setProperty(swp_actionCode, value);
     }
 
    /**

@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ScriptTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.process.model.Callable,org.semanticwb.model.Descriptiveable
+public abstract class ScriptTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.UserGroupRefable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Traceable,org.semanticwb.process.model.Callable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty swp_scriptCode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#scriptCode");
     public static final org.semanticwb.platform.SemanticClass swp_ScriptTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ScriptTask");
@@ -149,29 +149,6 @@ public abstract class ScriptTaskBase extends org.semanticwb.process.model.Task i
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.ScriptTask with a determined ResourceAssignment
-       * @param value ResourceAssignment of the type org.semanticwb.process.model.ResourceAssignment
-       * @param model Model of the org.semanticwb.process.model.ScriptTask
-       * @return Iterator with all the org.semanticwb.process.model.ScriptTask
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByResourceAssignment(org.semanticwb.process.model.ResourceAssignment value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_resourceAssignment, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.ScriptTask with a determined ResourceAssignment
-       * @param value ResourceAssignment of the type org.semanticwb.process.model.ResourceAssignment
-       * @return Iterator with all the org.semanticwb.process.model.ScriptTask
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByResourceAssignment(org.semanticwb.process.model.ResourceAssignment value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_resourceAssignment,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.ScriptTask with a determined Parent
        * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
        * @param model Model of the org.semanticwb.process.model.ScriptTask
@@ -241,6 +218,29 @@ public abstract class ScriptTaskBase extends org.semanticwb.process.model.Task i
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.ScriptTask with a determined RuleRef
+       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * @param model Model of the org.semanticwb.process.model.ScriptTask
+       * @return Iterator with all the org.semanticwb.process.model.ScriptTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByRuleRef(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ScriptTask with a determined RuleRef
+       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * @return Iterator with all the org.semanticwb.process.model.ScriptTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByRuleRef(org.semanticwb.model.RuleRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.ScriptTask with a determined OutputConnectionObject
        * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
        * @param model Model of the org.semanticwb.process.model.ScriptTask
@@ -307,6 +307,52 @@ public abstract class ScriptTaskBase extends org.semanticwb.process.model.Task i
         public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByLoopCharacteristics(org.semanticwb.process.model.LoopCharacteristics value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_loopCharacteristics,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ScriptTask with a determined UserGroupRef
+       * @param value UserGroupRef of the type org.semanticwb.model.UserGroupRef
+       * @param model Model of the org.semanticwb.process.model.ScriptTask
+       * @return Iterator with all the org.semanticwb.process.model.ScriptTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByUserGroupRef(org.semanticwb.model.UserGroupRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ScriptTask with a determined UserGroupRef
+       * @param value UserGroupRef of the type org.semanticwb.model.UserGroupRef
+       * @return Iterator with all the org.semanticwb.process.model.ScriptTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByUserGroupRef(org.semanticwb.model.UserGroupRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ScriptTask with a determined RoleRef
+       * @param value RoleRef of the type org.semanticwb.model.RoleRef
+       * @param model Model of the org.semanticwb.process.model.ScriptTask
+       * @return Iterator with all the org.semanticwb.process.model.ScriptTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByRoleRef(org.semanticwb.model.RoleRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.ScriptTask with a determined RoleRef
+       * @param value RoleRef of the type org.semanticwb.model.RoleRef
+       * @return Iterator with all the org.semanticwb.process.model.ScriptTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.ScriptTask> listScriptTaskByRoleRef(org.semanticwb.model.RoleRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ScriptTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef,value.getSemanticObject(),sclass));
             return it;
         }
     }
