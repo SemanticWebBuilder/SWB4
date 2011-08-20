@@ -14,6 +14,10 @@ public abstract class DisplayObjectBase extends org.semanticwb.model.SWBClass im
     public static final org.semanticwb.platform.SemanticProperty swbxf_doTreeController=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#doTreeController");
     public static final org.semanticwb.platform.SemanticProperty swbxf_doDispatcher=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#doDispatcher");
    /**
+   * Define el modo de desplieque del objeto en el arbol de administracion de SWB, valores (full_access (default), edit_only, herarquical_edit_only)
+   */
+    public static final org.semanticwb.platform.SemanticProperty swb_displayMode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#displayMode");
+   /**
    * Define que no se puedan crear instancias de la clase en el arbol de administracion de SWB
    */
     public static final org.semanticwb.platform.SemanticProperty swbxf_doNotInstanceable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#doNotInstanceable");
@@ -188,6 +192,24 @@ public abstract class DisplayObjectBase extends org.semanticwb.model.SWBClass im
     public void setDoDispatcher(String value)
     {
         getSemanticObject().setProperty(swbxf_doDispatcher, value);
+    }
+
+/**
+* Gets the DisplayMode property
+* @return String with the DisplayMode
+*/
+    public String getDisplayMode()
+    {
+        return getSemanticObject().getProperty(swb_displayMode);
+    }
+
+/**
+* Sets the DisplayMode property
+* @param value long with the DisplayMode
+*/
+    public void setDisplayMode(String value)
+    {
+        getSemanticObject().setProperty(swb_displayMode, value);
     }
 
 /**
