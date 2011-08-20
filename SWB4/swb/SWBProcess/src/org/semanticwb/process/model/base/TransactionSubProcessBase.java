@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class TransactionSubProcessBase extends org.semanticwb.process.model.SubProcess implements org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.process.model.Containerable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable
+public abstract class TransactionSubProcessBase extends org.semanticwb.process.model.SubProcess implements org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.UserGroupRefable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.process.model.Containerable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swp_TransactionSubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#TransactionSubProcess");
    /**
@@ -148,29 +148,6 @@ public abstract class TransactionSubProcessBase extends org.semanticwb.process.m
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.TransactionSubProcess with a determined ResourceAssignment
-       * @param value ResourceAssignment of the type org.semanticwb.process.model.ResourceAssignment
-       * @param model Model of the org.semanticwb.process.model.TransactionSubProcess
-       * @return Iterator with all the org.semanticwb.process.model.TransactionSubProcess
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.TransactionSubProcess> listTransactionSubProcessByResourceAssignment(org.semanticwb.process.model.ResourceAssignment value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransactionSubProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_resourceAssignment, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.process.model.TransactionSubProcess with a determined ResourceAssignment
-       * @param value ResourceAssignment of the type org.semanticwb.process.model.ResourceAssignment
-       * @return Iterator with all the org.semanticwb.process.model.TransactionSubProcess
-       */
-
-        public static java.util.Iterator<org.semanticwb.process.model.TransactionSubProcess> listTransactionSubProcessByResourceAssignment(org.semanticwb.process.model.ResourceAssignment value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransactionSubProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_resourceAssignment,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.process.model.TransactionSubProcess with a determined Parent
        * @param value Parent of the type org.semanticwb.process.model.GraphicalElement
        * @param model Model of the org.semanticwb.process.model.TransactionSubProcess
@@ -263,6 +240,29 @@ public abstract class TransactionSubProcessBase extends org.semanticwb.process.m
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.TransactionSubProcess with a determined RuleRef
+       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * @param model Model of the org.semanticwb.process.model.TransactionSubProcess
+       * @return Iterator with all the org.semanticwb.process.model.TransactionSubProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TransactionSubProcess> listTransactionSubProcessByRuleRef(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransactionSubProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.TransactionSubProcess with a determined RuleRef
+       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * @return Iterator with all the org.semanticwb.process.model.TransactionSubProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TransactionSubProcess> listTransactionSubProcessByRuleRef(org.semanticwb.model.RuleRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransactionSubProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.TransactionSubProcess with a determined OutputConnectionObject
        * @param value OutputConnectionObject of the type org.semanticwb.process.model.ConnectionObject
        * @param model Model of the org.semanticwb.process.model.TransactionSubProcess
@@ -352,6 +352,52 @@ public abstract class TransactionSubProcessBase extends org.semanticwb.process.m
         public static java.util.Iterator<org.semanticwb.process.model.TransactionSubProcess> listTransactionSubProcessByLoopCharacteristics(org.semanticwb.process.model.LoopCharacteristics value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransactionSubProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_loopCharacteristics,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.TransactionSubProcess with a determined UserGroupRef
+       * @param value UserGroupRef of the type org.semanticwb.model.UserGroupRef
+       * @param model Model of the org.semanticwb.process.model.TransactionSubProcess
+       * @return Iterator with all the org.semanticwb.process.model.TransactionSubProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TransactionSubProcess> listTransactionSubProcessByUserGroupRef(org.semanticwb.model.UserGroupRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransactionSubProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.TransactionSubProcess with a determined UserGroupRef
+       * @param value UserGroupRef of the type org.semanticwb.model.UserGroupRef
+       * @return Iterator with all the org.semanticwb.process.model.TransactionSubProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TransactionSubProcess> listTransactionSubProcessByUserGroupRef(org.semanticwb.model.UserGroupRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransactionSubProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.TransactionSubProcess with a determined RoleRef
+       * @param value RoleRef of the type org.semanticwb.model.RoleRef
+       * @param model Model of the org.semanticwb.process.model.TransactionSubProcess
+       * @return Iterator with all the org.semanticwb.process.model.TransactionSubProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TransactionSubProcess> listTransactionSubProcessByRoleRef(org.semanticwb.model.RoleRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransactionSubProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.TransactionSubProcess with a determined RoleRef
+       * @param value RoleRef of the type org.semanticwb.model.RoleRef
+       * @return Iterator with all the org.semanticwb.process.model.TransactionSubProcess
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TransactionSubProcess> listTransactionSubProcessByRoleRef(org.semanticwb.model.RoleRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransactionSubProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef,value.getSemanticObject(),sclass));
             return it;
         }
     }

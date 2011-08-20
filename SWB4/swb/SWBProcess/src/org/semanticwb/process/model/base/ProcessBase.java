@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Expirable,org.semanticwb.process.model.Containerable,org.semanticwb.model.Hitable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Iconable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Traceable,org.semanticwb.process.model.Callable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable
+public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Traceable,org.semanticwb.model.Expirable,org.semanticwb.model.CalendarRefable,org.semanticwb.process.model.Callable,org.semanticwb.process.model.Containerable,org.semanticwb.model.Referensable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Grupo de Procesos
@@ -490,26 +490,6 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
     }
 
 /**
-* Gets the Hits property
-* @return long with the Hits
-*/
-    public long getHits()
-    {
-        //Override this method in Process object
-        return getSemanticObject().getLongProperty(swb_hits,false);
-    }
-
-/**
-* Sets the Hits property
-* @param value long with the Hits
-*/
-    public void setHits(long value)
-    {
-        //Override this method in Process object
-        getSemanticObject().setLongProperty(swb_hits, value,false);
-    }
-
-/**
 * Gets the Active property
 * @return boolean with the Active
 */
@@ -528,24 +508,6 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
     }
 
 /**
-* Gets the IconClass property
-* @return String with the IconClass
-*/
-    public String getIconClass()
-    {
-        return getSemanticObject().getProperty(swb_iconClass);
-    }
-
-/**
-* Sets the IconClass property
-* @param value long with the IconClass
-*/
-    public void setIconClass(String value)
-    {
-        getSemanticObject().setProperty(swb_iconClass, value);
-    }
-
-/**
 * Gets the Callable property
 * @return boolean with the Callable
 */
@@ -561,24 +523,6 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
     public void setCallable(boolean value)
     {
         getSemanticObject().setBooleanProperty(swp_callable, value);
-    }
-
-/**
-* Gets the MaxHits property
-* @return long with the MaxHits
-*/
-    public long getMaxHits()
-    {
-        return getSemanticObject().getLongProperty(swb_maxHits);
-    }
-
-/**
-* Sets the MaxHits property
-* @param value long with the MaxHits
-*/
-    public void setMaxHits(long value)
-    {
-        getSemanticObject().setLongProperty(swb_maxHits, value);
     }
    /**
    * Gets all the org.semanticwb.process.model.GraphicalElement

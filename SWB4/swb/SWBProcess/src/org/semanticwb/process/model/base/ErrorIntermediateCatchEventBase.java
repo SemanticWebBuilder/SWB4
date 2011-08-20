@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ErrorIntermediateCatchEventBase extends org.semanticwb.process.model.IntermediateCatchEvent implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ActionCodeable
+public abstract class ErrorIntermediateCatchEventBase extends org.semanticwb.process.model.IntermediateCatchEvent implements org.semanticwb.model.Traceable,org.semanticwb.process.model.ActionCodeable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swp_ErrorIntermediateCatchEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ErrorIntermediateCatchEvent");
    /**
@@ -271,6 +271,24 @@ public abstract class ErrorIntermediateCatchEventBase extends org.semanticwb.pro
     public ErrorIntermediateCatchEventBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the ActionCode property
+* @return String with the ActionCode
+*/
+    public String getActionCode()
+    {
+        return getSemanticObject().getProperty(swp_actionCode);
+    }
+
+/**
+* Sets the ActionCode property
+* @param value long with the ActionCode
+*/
+    public void setActionCode(String value)
+    {
+        getSemanticObject().setProperty(swp_actionCode, value);
     }
 
    /**
