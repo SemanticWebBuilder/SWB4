@@ -44,9 +44,14 @@
 
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
     SemanticObject obj=ont.getSemanticObject(suri);
+    
+    SemanticClass cls=obj.getSemanticClass();
 
     boolean fullaccess=SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(user, obj);
-    if(!fullaccess || !SWBPortal.getAdminFilterMgr().haveClassAction(user, obj.getSemanticClass(), AdminFilter.ACTION_DELETE))
+    boolean classFullAccess=DisplayObject.getDisplayMode(cls).equals(DisplayObject.DISPLAYMODE_FULL_ACCESS);        //Nivel de acceso definido por clase en la ontologia   
+    
+    
+    if(!classFullAccess || !fullaccess || !SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_DELETE))
     {
         response.sendError(403);
         return;

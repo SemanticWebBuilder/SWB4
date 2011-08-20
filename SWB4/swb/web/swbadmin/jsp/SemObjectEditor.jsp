@@ -177,7 +177,10 @@ try
         SemanticClass cls=obj.getSemanticClass();
 
         boolean canEdit=SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_EDIT) && SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(user, obj);
-
+        
+        boolean classFullAccess=DisplayObject.getDisplayMode(cls).equals(DisplayObject.DISPLAYMODE_FULL_ACCESS);        //Nivel de acceso definido por clase en la ontologia
+        
+        
         //out.println("<fieldset>");
         //out.println("<div class=\"swbIcon2"+cls.getName()+"\"></div>");
         //out.println("</fieldset>");
@@ -246,7 +249,7 @@ try
             }
         }
 
-        if(canEdit && SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_DELETE))
+        if(canEdit && classFullAccess && SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_DELETE))
         {
             if(obj.getBooleanProperty(Undeleteable.swb_undeleteable)==false)
             {
