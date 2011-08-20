@@ -195,6 +195,8 @@ public class SemanticVocabulary
     /** The Constant SWB_PROP_HERARQUICALRELATION. */
     public static final String SWB_PROP_HERARQUICALRELATION = URI + "herarquicalRelation";
     
+    public static final String SWB_PROP_HERARQUICALRELATIONFILTERCLASS = URI + "herarquicalRelationFilterClass";
+    
     /** The Constant SWB_PROP_REMOVEDEPENDENCY. */
     public static final String SWB_PROP_REMOVEDEPENDENCY = URI + "removeDependency";
     

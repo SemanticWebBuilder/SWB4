@@ -3342,10 +3342,16 @@ public Document getDomProperty(SemanticProperty prop)
             while(it.hasNext())
             {
                 SemanticProperty prop=it.next();
+                SemanticClass hfcls=prop.getHerarquicalRelationFilterClass();
                 Iterator<SemanticObject> it2=listObjectProperties(prop);
                 while(it2.hasNext())
                 {
                     SemanticObject ch=it2.next();
+                    if(hfcls!=null)
+                    {
+                        //System.out.println(this+" "+cls+" "+ch+" "+hfcls);
+                        if(!ch.instanceOf(hfcls))continue;
+                    }
                     list.add(ch);
                 }
             }
