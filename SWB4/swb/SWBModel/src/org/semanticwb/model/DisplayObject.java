@@ -25,13 +25,19 @@ package org.semanticwb.model;
 
 // TODO: Auto-generated Javadoc
 
+import java.util.Iterator;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 
 /**
  * The Class DisplayObject.
  */
-public class DisplayObject extends org.semanticwb.model.base.DisplayObjectBase {
+public class DisplayObject extends org.semanticwb.model.base.DisplayObjectBase 
+{
+    public static final String DISPLAYMODE_FULL_ACCESS="full_access";
+    public static final String DISPLAYMODE_EDIT_ONLY="edit_only";
+    public static final String DISPLAYMODE_HERARQUICAL_EDIT_ONLY="herarquical_edit_only";
+    
     
     /**
      * Instantiates a new display object.
@@ -51,5 +57,26 @@ public class DisplayObject extends org.semanticwb.model.base.DisplayObjectBase {
         }
         return null;
     }
+    
+    public static String getDisplayMode(SemanticClass cls)
+    {
+        String ret=DISPLAYMODE_FULL_ACCESS;
+        DisplayObject dp=getDisplayObject(cls);
+        String mode=null;
+        if(dp!=null)mode=dp.getDisplayMode();
+        if(mode==null)
+        {
+            Iterator<SemanticClass> it=cls.listSuperClasses(true);
+            while (it.hasNext()) {
+                SemanticClass semanticClass = it.next();
+                if(semanticClass.isSWBClass())return getDisplayMode(semanticClass);
+            }
+        }
+        //else if(mode.equals(DISPLAYMODE_FULL_ACCESS))return true;
+        else if(mode.equals(DISPLAYMODE_EDIT_ONLY))return DISPLAYMODE_EDIT_ONLY;
+        else if(mode.equals(DISPLAYMODE_HERARQUICAL_EDIT_ONLY))return DISPLAYMODE_HERARQUICAL_EDIT_ONLY;
+        return ret;
+    }      
+    
 }
 
