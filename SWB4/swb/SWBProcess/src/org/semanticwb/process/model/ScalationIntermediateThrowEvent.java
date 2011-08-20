@@ -27,13 +27,16 @@ public class ScalationIntermediateThrowEvent extends org.semanticwb.process.mode
                 if(graphicalElement instanceof ScalationIntermediateCatchEvent)
                 {
                     ScalationIntermediateCatchEvent event=(ScalationIntermediateCatchEvent)graphicalElement;
-                    String c1=event.getActionCode();
-                    String c2=((Event)instance.getFlowNodeType()).getActionCode();
-                    if((c1!=null && c1.equals(c2)) || c1==null && c2==null)
-                    {
-                        FlowNodeInstance fn=((FlowNodeInstance)parent).getRelatedFlowNodeInstance(event);
-                        fn.setSourceInstance(instance);
-                        event.notifyEvent(fn, instance);
+                    if(event instanceof ActionCodeable && instance.getFlowNodeType() instanceof ActionCodeable)
+                    {                    
+                        String c1=((ActionCodeable)event).getActionCode();
+                        String c2=((ActionCodeable)instance.getFlowNodeType()).getActionCode();
+                        if((c1!=null && c1.equals(c2)) || c1==null && c2==null)
+                        {
+                            FlowNodeInstance fn=((FlowNodeInstance)parent).getRelatedFlowNodeInstance(event);
+                            fn.setSourceInstance(instance);
+                            event.notifyEvent(fn, instance);
+                        }
                     }
                 }
             }

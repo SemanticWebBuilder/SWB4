@@ -27,16 +27,20 @@ public class ErrorEndEvent extends org.semanticwb.process.model.base.ErrorEndEve
                 if(graphicalElement instanceof ErrorIntermediateCatchEvent)
                 {
                     ErrorIntermediateCatchEvent event=(ErrorIntermediateCatchEvent)graphicalElement;
-                    String c1=event.getActionCode();
-                    String c2=((Event)instance.getFlowNodeType()).getActionCode();
-                    if((c1!=null && c1.equals(c2)) || c1==null && c2==null)
-                    {
-                        FlowNodeInstance source=(FlowNodeInstance)parent;
-                        source.close(user, Instance.STATUS_ABORTED, Instance.ACTION_EVENT, false);
+                    
+                    if(event instanceof ActionCodeable && instance.getFlowNodeType() instanceof ActionCodeable)
+                    {                    
+                        String c1=((ActionCodeable)event).getActionCode();
+                        String c2=((ActionCodeable)instance.getFlowNodeType()).getActionCode();
+                        if((c1!=null && c1.equals(c2)) || c1==null && c2==null)
+                        {
+                            FlowNodeInstance source=(FlowNodeInstance)parent;
+                            source.close(user, Instance.STATUS_ABORTED, Instance.ACTION_EVENT, false);
 
-                        FlowNodeInstance fn=((FlowNodeInstance)parent).getRelatedFlowNodeInstance(event);
-                        fn.setSourceInstance(instance);
-                        event.notifyEvent(fn, instance);
+                            FlowNodeInstance fn=((FlowNodeInstance)parent).getRelatedFlowNodeInstance(event);
+                            fn.setSourceInstance(instance);
+                            event.notifyEvent(fn, instance);
+                        }
                     }
                 }
             }

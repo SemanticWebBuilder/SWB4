@@ -30,18 +30,21 @@ public class LinkIntermediateThrowEvent extends org.semanticwb.process.model.bas
             if(graphicalElement instanceof LinkIntermediateCatchEvent)
             {
                 LinkIntermediateCatchEvent event=(LinkIntermediateCatchEvent)graphicalElement;
-                String c1=event.getActionCode();
-                String c2=((Event)instance.getFlowNodeType()).getActionCode();
-                if((c1!=null && c1.equals(c2)) || c1==null && c2==null)
-                {
-                    FlowNodeInstance fn=instance.getRelatedFlowNodeInstance(event);
-                    if(fn==null)
+                if(event instanceof ActionCodeable && instance.getFlowNodeType() instanceof ActionCodeable)
+                {                    
+                    String c1=((ActionCodeable)event).getActionCode();
+                    String c2=((ActionCodeable)instance.getFlowNodeType()).getActionCode();
+                    if((c1!=null && c1.equals(c2)) || c1==null && c2==null)
                     {
-                        fn=event.createInstance(parent);
-                        fn.start(user);
+                        FlowNodeInstance fn=instance.getRelatedFlowNodeInstance(event);
+                        if(fn==null)
+                        {
+                            fn=event.createInstance(parent);
+                            fn.start(user);
+                        }
+                        fn.setSourceInstance(instance);
+                        event.notifyEvent(fn, instance);
                     }
-                    fn.setSourceInstance(instance);
-                    event.notifyEvent(fn, instance);
                 }
             }
         }
