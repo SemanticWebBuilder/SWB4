@@ -407,8 +407,18 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
 
         String uri = request.getParameter("uri");
 
+        if(uri!=null && !uri.startsWith("http:"))
+        {
+            String uriSite=paramRequest.getWebPage().getWebSite().getSemanticObject().getURI();
+            int pos=uriSite.indexOf("#");
+            if(pos!=-1)
+            {
+                uriSite=uriSite.substring(0,pos);
+            }
+            uri=uriSite+"/Resource"+uri;
+        }
 
-
+        //http://www.infotec.swb/Resource#3166
         if (uri != null)
         {
             uri = uri.trim();
@@ -417,14 +427,14 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
                 uri = null;
             }
         }
-        if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY)
+        if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY)
         {
             path = basePath+"strategy.jsp";
             uri = null;
         }
 
         List<SWBNewContent> news=getNews(uri,paramRequest.getUser());
-        if (uri != null && paramRequest.getCallMethod() == paramRequest.Call_CONTENT)
+        if (uri != null && paramRequest.getCallMethod() == SWBParamRequest.Call_CONTENT)
         {            
             // busca el objeto
             for (SWBNewContent content : news)
@@ -476,6 +486,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
 class SortNews implements java.util.Comparator<SWBNewContent>
 {
 
+    @Override
     public int compare(SWBNewContent o1, SWBNewContent o2)
     {
         if(o1.getPublishDate()!=null && o2.getPublishDate()!=null)
