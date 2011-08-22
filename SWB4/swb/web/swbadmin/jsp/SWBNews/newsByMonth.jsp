@@ -35,7 +35,8 @@
         {
             
             SWBResourceURL url=paramRequest.getRenderUrl();
-            url.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());
+            //url.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());
+            url.setParameter("uri",content.getResourceBase().getSemanticObject().getId());
             url.setMode(paramRequest.Mode_VIEW);
             url.setCallMethod(paramRequest.Call_CONTENT);
             String urlcontent=url.toString().replace("&", "&amp;");
@@ -63,11 +64,12 @@
                 originalTitle=SWBUtils.TEXT.encodeExtendedCharacters(content.getOriginalTitle());
             }
             String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/sinfoto.png";
+            pathPhoto=SWBPortal.getContextPath()+"/work/models/"+paramRequest.getWebPage().getWebSiteId()+"/css/noticias_infotec.gif";
             String image="";
             if(content.getImage()!=null)
             {
                 image=content.getImage();
-                pathPhoto=SWBPortal.getWebWorkPath()+content.getSemanticObject().getWorkPath()+"/thmb_image_"+content.getId()+"_"+image;
+                pathPhoto=SWBPortal.getWebWorkPath()+content.getSemanticObject().getWorkPath()+"/thmb_image_"+image;
             }            
             if(content.getPublishDate()!=null)
             {
@@ -102,6 +104,7 @@
                     continue;
                 }
                 date=sdf.format(content.getPublishDate());
+                
 
             }
             %>
