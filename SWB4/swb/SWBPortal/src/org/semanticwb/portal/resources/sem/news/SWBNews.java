@@ -439,7 +439,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
             // busca el objeto
             for (SWBNewContent content : news)
             {                
-                if (content.getResourceBase().getURI().equals(uri))
+                if (content.getResourceBase().getURI().equals(uri) || content.getResourceBase().getId().equals(uri))
                 {
                     if (content.getResourceBase().isValid() && paramRequest.getUser().haveAccess(content.getResourceBase()))
                     {
