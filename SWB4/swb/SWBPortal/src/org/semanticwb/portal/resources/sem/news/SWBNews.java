@@ -415,7 +415,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
             {
                 uriSite=uriSite.substring(0,pos);
             }
-            uri=uriSite+"/Resource"+uri;
+            uri=uriSite+"/Resource#"+uri;
         }
 
         //http://www.infotec.swb/Resource#3166
