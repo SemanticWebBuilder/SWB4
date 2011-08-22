@@ -1,5 +1,50 @@
 <%@page import="org.semanticwb.portal.api.*,org.semanticwb.portal.resources.sem.news.*,org.w3c.dom.*,org.semanticwb.portal.community.*,java.util.*,org.semanticwb.model.WebPage,org.semanticwb.platform.SemanticObject"%><%@page import="org.semanticwb.model.*,org.semanticwb.SWBUtils,org.semanticwb.SWBPortal,org.semanticwb.SWBPlatform,org.semanticwb.platform.*,org.semanticwb.portal.api.SWBResourceURL"%><%!    private static String idNoticias = "Noticias";
 
+    class SWBEventComparator implements Comparator<WebPage>
+    {
+
+        public int compare(WebPage o1, WebPage o2)
+        {
+            Date d1 = o1.getExpiration();
+            Date d2 = o2.getExpiration();
+            if (d1 == null)
+            {
+                d1 = o1.getCreated();
+            }
+            if (d2 == null)
+            {
+                d2 = o2.getCreated();
+            }
+            return d1.compareTo(d2);
+        }
+    }
+
+    class SWBNewContentComparator implements Comparator<SWBNewContent>
+    {
+
+        public int compare(SWBNewContent o1, SWBNewContent o2)
+        {
+            Date d1 = o1.getPublishDate();
+            Date d2 = o2.getPublishDate();
+            if (d1 == null)
+            {
+                d1 = o1.getResource().getCreated();
+            }
+            if (d2 == null)
+            {
+                d2 = o2.getResource().getCreated();
+            }
+            if (d1 != null && d2 != null)
+            {
+                return d2.compareTo(d1);
+            }
+            else
+            {
+                return o1.getResourceBase().getIndex() >= o2.getResourceBase().getIndex() ? 1 : -1;
+            }
+        }
+    }
+
     private Element addAtribute(Element ele, String name, String value)
     {
         Document doc = ele.getOwnerDocument();
@@ -9,44 +54,18 @@
         return n;
     }
 
-    class SWBNewContentComparator implements Comparator<SWBNewContent>
-    {
-
-        public int compare(SWBNewContent o1, SWBNewContent o2)
-        {
-            Date date1 = o1.getPublishDate();
-            Date date2 = o2.getPublishDate();
-            if (date1 == null)
-            {
-                date1 = new Date();
-            }
-            if (date2 == null)
-            {
-                date2 = new Date();
-            }
-            return date2.compareTo(date1);
-        }
-    }
-
 %><%    int limit = 15;
             if (request.getAttribute("paramRequest") != null)
             {
+                String port = "";
+                if (request.getServerPort() != 80)
+                {
+                    port = ":" + request.getServerPort();
+                }
+                String host = request.getServerName();
+                String baserequest = request.getScheme() + "://" + host + port;
                 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
                 List<SWBNewContent> news = (List<SWBNewContent>) request.getAttribute("news");
-                ArrayList<SWBNewContent> delete = new ArrayList<SWBNewContent>();
-                for (SWBNewContent element : news)
-                {
-                    if (element.getPublishDate() == null)
-                    {
-                        delete.add(element);
-                    }
-                }
-                for (SWBNewContent element : delete)
-                {
-                    news.remove(element);
-                    
-                }
-
                 Collections.sort(news, new SWBNewContentComparator());
                 //SWBResourceURL url=(SWBResourceURL) request.getAttribute("url");
                 String url = (String) request.getAttribute("url");
@@ -58,9 +77,9 @@
 
                 Element channel = doc.createElement("channel");
                 rss.appendChild(channel);
-                addAtribute(channel, "title", "Noticias");
-                addAtribute(channel, "link", paramRequest.getWebPage().getUrl());
-                addAtribute(channel, "description", "Canal de noticias en formato RSS");
+                addAtribute(channel, "title", "Noticias y Eventos");
+                addAtribute(channel, "link", baserequest+paramRequest.getWebPage().getUrl());
+                addAtribute(channel, "description", "Canal de noticias y eventos en formato RSS");
                 int inew = 0;
                 for (SWBNewContent element : news)
                 {
@@ -78,7 +97,11 @@
                         title = title.replace('"', '\'');
                     }
                     addAtribute(item, "title", title);
-                    addAtribute(item, "link", url + "?uri=" + element.getResourceBase().getEncodedURI());
+                    //addAtribute(item, "link",  baserequest+url + "?uri=" + element.getResourceBase().getEncodedURI());
+                    addAtribute(item, "link",  baserequest+url + "?uri=" + element.getResourceBase().getId());
+                    Element category = doc.createElement("category");
+                    item.appendChild(category);
+                    category.appendChild(doc.createTextNode("Noticias"));
                     addAtribute(item, "description", element.getResourceBase().getDescription());
                     if (element.getPublishDate() != null)
                     {
@@ -92,6 +115,57 @@
                     if (inew >= limit)
                     {
                         break;
+                    }
+                }
+                
+                String id = "Eventos_relevantes";
+                WebPage eventoWebPage = paramRequest.getWebPage().getWebSite().getWebPage(id);
+                if (eventoWebPage != null)
+                {
+                    Iterator<WebPage> eventos = eventoWebPage.listChilds(paramRequest.getUser().getLanguage(), true, false, false, true);
+                    
+                    ArrayList<WebPage> pages=new ArrayList<WebPage>();
+                    while (eventos.hasNext())
+                    {
+                        WebPage event = eventos.next();
+                        pages.add(event);
+                    }
+                    Collections.sort(pages, new SWBEventComparator());
+                    
+                    for(WebPage event : pages)
+                    {                      
+                        
+                        Element item = doc.createElement("item");
+                        channel.appendChild(item);
+                        String title = event.getTitle(paramRequest.getUser().getLanguage());
+                        if (title == null || title.trim().equals(""))
+                        {
+                            title = event.getTitle();
+
+                        }
+                        if (title != null)
+                        {
+                            title = title.replace('"', '\'');
+                        }
+                        String description = "";
+                        if (event.getDescription() != null)
+                        {
+                            description = event.getDescription();
+                        }
+                         Element category = doc.createElement("category");
+                    item.appendChild(category);
+                    category.appendChild(doc.createTextNode("Eventos"));
+                        addAtribute(item, "title", title);
+                        addAtribute(item, "link",  baserequest+event.getUrl());
+                        addAtribute(item, "description", description);
+                        if (event.getExpiration() != null)
+                        {
+                            addAtribute(item, "pubDate", event.getExpiration().toGMTString());
+                        }
+                        else
+                        {
+                            addAtribute(item, "pubDate", new Date().toGMTString());
+                        }
                     }
                 }
                 out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
@@ -117,16 +191,28 @@
                                     SWBResourceURLImp url = new SWBResourceURLImp(request, resource, resourcewp, SWBResourceURLImp.UrlType_RENDER);
                                     url.setCallMethod(url.Call_DIRECT);
                                     url.setMode("rss");
-                                    //String url="#";
 
+                                    HashMap params = (HashMap) request.getAttribute("params");
+                                    if ("link".equals(params.get("view")))
+                                    {
 %>
-| <a href="<%=url%>">RSS </a>
+<link rel="alternate" type="application/rss+xml" title="Fondo de Información y Documentacion para la industria (INFOTEC)" href="<%=url%>" />
 <%
+                                    }
+                                    else
+                                    {
+%>
+<a id="rss" href="<%=url%>" >RSS</a>
+<%
+                                    }
+
+
                                     break;
                                 }
                             }
                         }
                     }
                 }
+
             }
 %>
