@@ -392,12 +392,13 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
     {
         String basePath="/work/models/"+paramRequest.getWebPage().getWebSite().getId()+"/jsp/"+ this.getClass().getSimpleName() +"/";
         String path = basePath+"content.jsp";
-        if (this.getResourceBase().getProperty("mode") != null && "rss".equals(this.getResourceBase().getProperty("mode")))
+
+        if (paramRequest.getArgument("mode") != null && "rss".equals(paramRequest.getArgument("mode")))
         {
             doRss(request, response, paramRequest);
             return;
         }
-        if (this.getResourceBase().getProperty("mode") != null && "title".equals(this.getResourceBase().getProperty("mode")))
+        if (paramRequest.getArgument("mode") != null && "title".equals(paramRequest.getArgument("mode")))
         {
             doTitle(request, response, paramRequest);
             return;
