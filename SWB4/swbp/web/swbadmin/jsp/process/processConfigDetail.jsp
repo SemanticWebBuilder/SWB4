@@ -255,7 +255,7 @@ if (!pFilter.equals("filter_all")) {
                 </p>
                 <ul>
                     <%
-                    Iterator<RoleRef> roles = utask.getResourceAssignment().listRoleRefs();
+                    Iterator<RoleRef> roles = utask.listRoleRefs();
                     while(roles.hasNext()) {
                         RoleRef role = roles.next();
                         %><li><%=role.getRole().getDisplayTitle(lang)%></li><%
