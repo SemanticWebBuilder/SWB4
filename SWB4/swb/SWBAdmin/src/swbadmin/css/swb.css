@@ -124,6 +124,9 @@ html, body, #main {
 .swbIconTransactionSubProcess,
 .swbIconTask,
 .swbIconUserTask,
+.swbIconUserTaskU,
+.swbIconUserTaskW,
+.swbIconUserTaskF,
 .swbIconServiceTask,
 .swbIconScriptTask,
 .swbIconBusinessRuleTask,
@@ -279,6 +282,9 @@ html, body, #main {
 .swbIconTransactionSubProcess   { background-position: -60px -377px; }
 .swbIconTask   { background-position: -0px -305px; }
 .swbIconUserTask   { background-position: -40px -305px; }
+.swbIconUserTaskU   { background-position: -40px -305px; }
+.swbIconUserTaskW   { background-position: -40px -305px; }
+.swbIconUserTaskF   { background-position: -40px -305px; }
 .swbIconServiceTask   { background-position: -120px -305px; }
 .swbIconScriptTask   { background-position: -80px -305px; }
 .swbIconBusinessRuleTask   { background-position: -240px -305px; }
