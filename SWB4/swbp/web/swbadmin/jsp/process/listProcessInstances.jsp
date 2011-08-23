@@ -53,7 +53,7 @@
 
         if (ai.getFlowNodeType() instanceof UserTask) {
             UserTask tsk = (UserTask) ai.getFlowNodeType();
-            tOwner = tsk.getRoleRef().getRole().getDisplayTitle("es");
+            //tOwner = tsk.getRole().getDisplayTitle("es");
         }
 
         if (ai.getStatus() == Instance.STATUS_INIT) {
@@ -152,7 +152,6 @@ org.semanticwb.process.model.Process process = SWBProcessMgr.getProcess(topic);
 String baseimg = SWBPortal.getWebWorkPath() + "/models/" + topic.getWebSiteId() + "/css/images/";
 WebPage statusWp = site.getWebPage("Diagrama_de_Estado");
 %>
-
 <div class="post">
     <h2>Seguimiento del proceso (<%=process.getDisplayTitle(lang)%>)<!--a style="text-decoration: none" onclick="javascript:expande('tracking')"><img style="text-decoration:none" src="<%=baseimg + "icon_show.gif"%>"></a> <a style="text-decoration: none" onclick="javascript:colapsa('tracking')"><img src="<%=baseimg + "icon_hide.gif"%>"></a--></h2>
     <div id="tracking">
