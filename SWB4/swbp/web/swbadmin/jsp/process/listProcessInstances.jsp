@@ -53,6 +53,8 @@
 
         if (ai.getFlowNodeType() instanceof UserTask) {
             UserTask tsk = (UserTask) ai.getFlowNodeType();
+            Iterator<RoleRef> roles = tsk.listRoleRefs();
+            if (roles.hasNext()) tOwner = roles.next().getRole().getDisplayTitle("lang");
             //tOwner = tsk.getRole().getDisplayTitle("es");
         }
 
