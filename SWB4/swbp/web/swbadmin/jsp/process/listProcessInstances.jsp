@@ -49,6 +49,13 @@
         String stat = "";
         String color = "";
         String actions="";
+        String tOwner = "--";
+
+        if (ai.getFlowNodeType() instanceof UserTask) {
+            UserTask tsk = (UserTask) ai.getFlowNodeType();
+            tOwner = tsk.getRoleRef().getRole().getDisplayTitle("es");
+        }
+
         if (ai.getStatus() == Instance.STATUS_INIT) {
             stat = "Iniciada";
         }
@@ -59,11 +66,13 @@
             stat = "<img title=\"Completada\" src=\"" + baseimg + "icon_completed.png\">";
             color = "color=\"#50b050\"";
             if (ai.getFlowNodeType() instanceof UserTask) {
-                actions="<a href=\"\"><img alt=\"Detalle\" src=\""+baseimg+"detail_icon.gif\"/></a>";
+                //actions="<a href=\"\"><img alt=\"Detalle\" src=\""+baseimg+"detail_icon.gif\"/></a>";
+                actions="--";
             } else {
                 actions="-";
             }
         }
+
         if (ai.getStatus() == Instance.STATUS_OPEN) {
             stat = "Abierta";
         }
@@ -71,8 +80,9 @@
             stat = "<img src=\"" + baseimg + "icon_pending.png\">";
             color = "color=\"red\"";
             if (ai.getFlowNodeType() instanceof UserTask) {
-                actions="<a target=\"_new\" href=\"\"><img alt=\"Detalle\" src=\""+baseimg+"detail_icon.gif\"/></a>" +
-                        " <a target=\"_new\" href=\"/swb/process/Diagrama_de_estado/_rid/196/_mto/3/_mod/applet?suri="+ ai.getProcessInstance().getProcessType().getEncodedURI() +"&mode=view&pending="+URLEncoder.encode(getStatusInstances(ai.getProcessInstance(), Instance.STATUS_PROCESSING))+"\"><img src=\""+baseimg + "diagram_icon.jpg\"></a>";
+                actions = "<a href=\"" + ((UserTask)ai.getFlowNodeType()).getTaskWebPage().getUrl() + "?suri=" + ai.getEncodedURI()+ "\">Atender</a>";
+                //actions="<a target=\"_new\" href=\"\"><img alt=\"Detalle\" src=\""+baseimg+"detail_icon.gif\"/></a>" +
+                //        " <a target=\"_new\" href=\"/swb/process/Diagrama_de_estado/_rid/196/_mto/3/_mod/applet?suri="+ ai.getProcessInstance().getProcessType().getEncodedURI() +"&mode=view&pending="+URLEncoder.encode(getStatusInstances(ai.getProcessInstance(), Instance.STATUS_PROCESSING))+"\"><img src=\""+baseimg + "diagram_icon.jpg\"></a>";
             } else {
                 actions="-";
             }
@@ -97,7 +107,8 @@
                 } else {
                     out.println("<td align=\"center\">-</td>");
                 }
-                //out.println("<td align=\"center\">" + actions + "</td>"
+                out.println("<td align=\"center\">" + tOwner + "</td>");
+                out.println("<td align=\"center\">" + actions + "</td>");
                 out.println("</tr>");
         if (ai instanceof SubProcessInstance) {
             SubProcessInstance pi = (SubProcessInstance) ai;
@@ -139,11 +150,11 @@ ProcessSite site = (ProcessSite) paramRequest.getWebPage().getWebSite();
 String lang = user.getLanguage();
 org.semanticwb.process.model.Process process = SWBProcessMgr.getProcess(topic);
 String baseimg = SWBPortal.getWebWorkPath() + "/models/" + topic.getWebSiteId() + "/css/images/";
+WebPage statusWp = site.getWebPage("Diagrama_de_Estado");
 %>
 
 <div class="post">
-    <h2>Seguimiento del proceso <a style="text-decoration: none" onclick="javascript:expande('tracking')"><img style="text-decoration:none" src="<%=baseimg + "icon_show.gif"%>"></a> <a style="text-decoration: none" onclick="javascript:colapsa('tracking')"><img src="<%=baseimg + "icon_hide.gif"%>"></a></h2>
-    <br>
+    <h2>Seguimiento del proceso (<%=process.getDisplayTitle(lang)%>)<!--a style="text-decoration: none" onclick="javascript:expande('tracking')"><img style="text-decoration:none" src="<%=baseimg + "icon_show.gif"%>"></a> <a style="text-decoration: none" onclick="javascript:colapsa('tracking')"><img src="<%=baseimg + "icon_hide.gif"%>"></a--></h2>
     <div id="tracking">
         <%
         Iterator<ProcessInstance> it = SWBProcessMgr.getActiveProcessInstance(site, process).iterator();
@@ -152,16 +163,17 @@ String baseimg = SWBPortal.getWebWorkPath() + "/models/" + topic.getWebSiteId() 
                 ProcessInstance pi = it.next();
                 %>
                 <div id="detail<%=pi.getId()%>">
-                    <a target="_new" href="/swb/<%=topic.getWebSiteId()%>/Diagrama_de_estado?suri=<%=pi.getProcessType().getEncodedURI()%>&mode=view&pending=<%=URLEncoder.encode(getStatusInstances(pi, Instance.STATUS_PROCESSING))%>">Ver mapa del proceso</a>
+                    <br/>
                     <!--a target="_new" href="/swb/process/Diagrama_de_estado/_rid/196/_mto/3/_mod/applet?suri=<%=pi.getProcessType().getEncodedURI()%>&mode=view&pending=<%=URLEncoder.encode(getStatusInstances(pi, Instance.STATUS_PROCESSING))%>">Ver mapa del proceso</a><br-->
                     <table>
                         <thead>
-                            <th>Estado</th>
-                            <th>Factor Cr&iacute;tico / actividad</th>
-                            <th>Creador</th>
-                            <th>Iniciado</th>
-                            <th>Terminado</th>
-                            <!--th>Acciones</th-->
+                            <th align="center">Estado</th>
+                            <th align="center">Factor Cr&iacute;tico</th>
+                            <th align="center">Creador</th>
+                            <th align="center">Inicio</th>
+                            <th align="center">T&eacute;rmino</th>
+                            <th align="center">Rol responsable</th>
+                            <th align="center">Acciones</th>
                         </thead>
                         <tbody>
                             <%
@@ -173,9 +185,11 @@ String baseimg = SWBPortal.getWebWorkPath() + "/models/" + topic.getWebSiteId() 
                             %>
                         </tbody>
                     </table>
+                        <br />
+                        <img width="20" height="20" src="<%=baseimg + "Process-Info.png"%>"> <a target="_new" href="<%=statusWp.getUrl()%>?suri=<%=pi.getProcessType().getEncodedURI()%>&mode=view&currentActivities=<%=URLEncoder.encode(getStatusInstances(pi, Instance.STATUS_PROCESSING))%>">Mapa de proceso</a>
                 </div>
                 <br/>
-                <h3>Tareas del usuario (<%=user.getFullName()%>) <a style="text-decoration: none" onclick="javascript:expande('tasks<%=process.getId()%>')"><img style="text-decoration:none" src="<%=baseimg + "icon_show.gif"%>"> </a><a style="text-decoration: none" onclick="javascript:colapsa('tasks<%=process.getId()%>')"><img src="<%=baseimg + "icon_hide.gif"%>"></a></h3>
+                <!--h3>Tareas del usuario (<%=user.getFullName()%>) <a style="text-decoration: none" onclick="javascript:expande('tasks<%=process.getId()%>')"><img style="text-decoration:none" src="<%=baseimg + "icon_show.gif"%>"> </a><a style="text-decoration: none" onclick="javascript:colapsa('tasks<%=process.getId()%>')"><img src="<%=baseimg + "icon_hide.gif"%>"></a></h3>
                 <div id="tasks<%=process.getId()%>">
                     <table>
                         <thead>
@@ -196,19 +210,19 @@ String baseimg = SWBPortal.getWebWorkPath() + "/models/" + topic.getWebSiteId() 
                             if (utkit.hasNext()) {
                                 while (utkit.hasNext()) {
                                     FlowNodeInstance tkinst = utkit.next();
-                                    Task _task = (UserTask) tkinst.getFlowNodeType();
+                                    FlowNode _task = tkinst.getFlowNodeType();
                                     if (_task instanceof UserTask) {
                                         UserTask task = (UserTask) _task;
                                         %>
                                         <tr>
-                                            <td><%=pi.getId()%></td>
-                                            <td><%=task.getDisplayTitle(lang)%></td>
-                                            <td><%=tkinst.getStatus()%></td>
-                                            <td><%=SWBUtils.TEXT.getStrDate(pi.getCreated(), lang, "dd/mm/yyyy")%></td>
-                                            <td><%=pi.getCreator().getFullName()%></td>
-                                            <td><%=SWBUtils.TEXT.getStrDate(tkinst.getCreated(), lang, "dd/mm/yyyy")%></td>
-                                            <td><%=tkinst.getCreator().getFullName()%></td>
-                                            <td><a href="<%=task.getTaskWebPage().getUrl()%>?suri=<%=tkinst.getEncodedURI()%>">Ver</a></td>
+                                            <td align="center"><%=pi.getId()%></td>
+                                            <td align="center"><%=task.getDisplayTitle(lang)%></td>
+                                            <td align="center"><%=tkinst.getStatus()%></td>
+                                            <td align="center"><%=SWBUtils.TEXT.getStrDate(pi.getCreated(), lang, "dd/mm/yyyy")%></td>
+                                            <td align="center"><%=pi.getCreator().getFullName()%></td>
+                                            <td align="center"><%=SWBUtils.TEXT.getStrDate(tkinst.getCreated(), lang, "dd/mm/yyyy")%></td>
+                                            <td align="center"><%=tkinst.getCreator().getFullName()%></td>
+                                            <td align="center"><a href="<%=task.getTaskWebPage().getUrl()%>?suri=<%=tkinst.getEncodedURI()%>">Ver</a></td>
                                         </tr>
                                         <%
                                     }
@@ -217,24 +231,31 @@ String baseimg = SWBPortal.getWebWorkPath() + "/models/" + topic.getWebSiteId() 
                             %>
                         </tbody>
                     </table>
-                </div>
-                <script type="text/javascript">
+                </div -->
+                <!--script type="text/javascript">
                     colapsa('tasks<%=process.getId()%>');
-                </script>
+                </script-->
                 <%
             }
         } else {
-            %><h3>No hay instancias del proceso</h3><%
+            %>
+            <br />
+            <img width="20" height="20" src="<%=baseimg + "Process-Info.png"%>"> <a target="_new" href="<%=statusWp.getUrl()%>?suri=<%=process.getEncodedURI()%>&mode=view">Mapa de proceso</a>
+            <br />
+            <br />
+            <%
         }
         %>
     </div>
 </div>
 
-<script type="text/javascript">
+<!--script type="text/javascript">
     colapsa('objetivos');
     colapsa('insumos');
     colapsa('proposito');
     colapsa('dap');
     colapsa('productos');
     colapsa('tracking');
-</script>
+</script-->
+
+<meta http-equiv="refresh" content="20"/>
