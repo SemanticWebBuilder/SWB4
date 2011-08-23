@@ -101,7 +101,7 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/businessControlPanel.jsp";
+        String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/controlPanel/businessControlPanel.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(jsp);
 
         if (getDisplayCols() == null || getDisplayCols().trim().equals("")) {
@@ -114,19 +114,19 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
             request.setAttribute("displayCols", getDisplayCols());
             rd.include(request, response);
         } catch (Exception e) {
-            log.error("Error including JSP in view mode", e);
+            log.error("Error including view JSP", e);
         }
     }
     
     public void doConfig(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/businessControlPanelConfig.jsp";
+        String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/controlPanel/businessControlPanelConfig.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(jsp);
         try {
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("displayCols", getDisplayCols());
             rd.include(request, response);
         } catch (Exception e) {
-            log.error("Error including JSP in config mode", e);
+            log.error("Error including config JSP", e);
         }
     }
 
