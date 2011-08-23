@@ -4,7 +4,7 @@
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
     <admdbconnmgr defconn="true"/>
     <fieldset legend="Configuración de contenido">
-        <input type="file" id="video" name="video" label="Video (flv, swf, avi, wmv, mov, rm, mp1, mp2, mp4)" showfile="true" filetype="flv|swf|avi|wmv|mov|rm|mp1|mp2|mp4" isshowfiletype="true" isremovefile="true" removemsg="Quitar video" size="40" />
+        <input type="file" id="video" name="video" label="Video (flv, swf, avi, wmv, mov, rm, mp1, mp2, mp4, mpg)" showfile="true" filetype="flv|swf|avi|wmv|mov|rm|mp1|mp2|mp4|mpg" isshowfiletype="true" isremovefile="true" removemsg="Quitar video" size="40" />
         <input type="file" id="preview" name="preview" label="Imagen de previsualización" showfile="true" filetype="gif|jpg|bmp|png" isshowfiletype="true" isremovefile="true" removemsg="Quitar Imagen" size="40" />
         <statictext name="auto">Iniciar automáticamente</statictext>
         <input type="radio" id="automatic0" name="automatic" label="Si" value="true" checked="true" />
