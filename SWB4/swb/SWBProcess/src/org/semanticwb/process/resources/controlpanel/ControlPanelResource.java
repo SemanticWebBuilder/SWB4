@@ -114,7 +114,7 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
             request.setAttribute("displayCols", getDisplayCols());
             rd.include(request, response);
         } catch (Exception e) {
-            log.error("Error including view JSP", e);
+            log.error("ControlPanelResource: Error including view JSP", e);
         }
     }
     
@@ -126,7 +126,7 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
             request.setAttribute("displayCols", getDisplayCols());
             rd.include(request, response);
         } catch (Exception e) {
-            log.error("Error including config JSP", e);
+            log.error("ControlPanelResource: Error including config JSP", e);
         }
     }
 
