@@ -7,23 +7,32 @@ package org.semanticwb.process.resources;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticOntology;
+import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.process.model.ItemAware;
+import org.semanticwb.process.model.ProcessService;
+import org.semanticwb.process.model.ServiceTask;
 import org.semanticwb.process.model.WebService;
 import org.semanticwb.process.model.WebServiceInvoker;
 import org.semanticwb.process.model.WebServiceParameter;
@@ -46,6 +55,8 @@ public class WSOperationParameterConfig extends GenericResource {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
+
+        Resource base = getResourceBase();
 
         User usr = paramRequest.getUser();
 
@@ -70,6 +81,11 @@ public class WSOperationParameterConfig extends GenericResource {
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         GenericObject gobj = ont.getGenericObject(suri);
 
+        HashMap<String, String> hmsc = new HashMap();
+        HashMap<String, SemanticProperty> hmprops = new HashMap();
+        //HashMap<String, SemanticProperty> hmselected = new HashMap();
+
+        ServiceTask pser = null;
         WebServiceInvoker wsrvin = null;
 
         if (gobj instanceof WebServiceInvoker) {
@@ -79,6 +95,23 @@ public class WSOperationParameterConfig extends GenericResource {
                 method = "";
             }
 
+            pser = wsrvin.getServiceTask();
+            if (pser != null) {
+                Iterator<ItemAware> it = pser.listHerarquicalRelatedItemAwarePlusNullOutputs().iterator(); //listHerarquicalRelatedItemAwarePlusNullOutputs()
+                while (it.hasNext()) {
+                    ItemAware item = it.next();
+                    SemanticClass cls = item.getItemSemanticClass();
+                    if (cls != null) {
+                        Iterator<SemanticProperty> itp = cls.listProperties();
+                        while (itp.hasNext()) {
+                            SemanticProperty prop = itp.next();
+                            String name = item.getName() + "|" + prop.getPropId();
+                            hmsc.put(name, prop.getPropertyCodeName());
+                            hmprops.put(name, prop);
+                        }
+                    }
+                }
+            }
             Operation opersel = null;
 
             WebService wsrv = wsrvin.getWebService();
@@ -165,7 +198,7 @@ public class WSOperationParameterConfig extends GenericResource {
                 if (null != request.getParameter("nivel")) {
                     nivel = Integer.parseInt(request.getParameter("nivel"));
                 }
-                
+
                 int nivel_out = 0;
                 if (null != request.getParameter("nivel_out")) {
                     nivel_out = Integer.parseInt(request.getParameter("nivel_out"));
@@ -193,6 +226,67 @@ public class WSOperationParameterConfig extends GenericResource {
                     }
                     String urlwsrv = wsrv.getUrl();
                     if (urlwsrv != null) {
+
+                        out.println("<script type=\"text/javascript\">");
+                        out.println("function MoveItems(lstbxFrom,lstbxTo) ");
+                        out.println("{ ");
+                        out.println("	var varFromBox = document.getElementById(lstbxFrom); ");
+                        out.println("	var varToBox = document.getElementById(lstbxTo); ");
+                        out.println("	if ((varFromBox != null) && (varToBox != null))  ");
+                        out.println("	{  ");
+                        out.println("		if(varFromBox.length < 1)  ");
+                        out.println("		{ ");
+                        out.println("			alert('No hay propiedades en la lista.'); ");
+                        out.println("			return false; ");
+                        out.println("		} ");
+                        out.println("		if(varFromBox.options.selectedIndex == -1) // no hay elementos seleccionados");
+                        out.println("		{ ");
+                        out.println("			alert('Selecciona una propiedad de la lista.'); ");
+                        out.println("			return false; ");
+                        out.println("		} ");
+                        out.println("		while ( varFromBox.options.selectedIndex >= 0 )  ");
+                        out.println("		{  ");
+                        out.println("			var newOption = new Option(); // crea una opcion en el select  ");
+                        out.println("			newOption.text = varFromBox.options[varFromBox.options.selectedIndex].text;  ");
+                        out.println("			newOption.value = varFromBox.options[varFromBox.options.selectedIndex].value;  ");
+                        out.println("			varToBox.options[varToBox.length] = newOption; //agrega la opción al final del select destino");
+                        out.println("			varFromBox.remove(varFromBox.options.selectedIndex); //quita la opción del select origen ");
+                        out.println("		}  ");
+                        out.println("	} ");
+                        out.println("	return false;  ");
+                        out.println("} ");
+
+                        out.println("function enviatodos(lstbox)");
+                        out.println("{");
+                        out.println("	var list = document.getElementById(lstbox);");
+                        out.println("	for (var i=0; i<list.options.length; i++){");
+                        out.println("	 list.options[i].selected=true;");
+                        out.println("	}");
+                        out.println("	return true;");
+                        out.println("}");
+                        out.println("   function updItem(uri,param,sel) {");
+                        out.println("       var valor = sel.options[sel.options.selectedIndex].value;");
+                        out.println("       var url = uri+'&'+param+'='+escape(valor);");
+                        out.println("       window.location=url;");
+                        out.println("}");
+                        
+                        out.println("function reviewProp(sel,txtBox)");
+                        out.println("{");
+                        out.println("	var inputBox = document.getElementById(txtBox); ");
+                        out.println("	if(sel.value!='0') {");
+                        out.println("	inputBox.readonly = 'readonly';");
+                        out.println("	inputBox.value = sel.value; ");
+                        out.println("	} else {");
+                        out.println("	inputBox.readOnly = false; ");
+                        out.println("	inputBox.value = ''; ");
+                        out.println("	}");
+                        out.println("	return true;");
+                        out.println("}");
+                        
+                        
+                        out.println("</script>");
+
+
 
                         // parámetros de entrada
 
@@ -298,8 +392,6 @@ public class WSOperationParameterConfig extends GenericResource {
                                     out.println("<td>");
                                     if (!allparam.isBasic()) {
 
-                                        //todo: falta considerar nivel como parámetro
-
                                         SWBResourceURL urldetail = paramRequest.getRenderUrl();
                                         urldetail.setParameter("suri", suri);
                                         urldetail.setParameter("idmethod", method);
@@ -322,9 +414,63 @@ public class WSOperationParameterConfig extends GenericResource {
                                     String tmpClick = pnames.replace(" ", "");
                                     tmpClick = tmpClick.replaceAll(",", ".");
 
-
                                     if (allparam.isBasic()) {
-                                        out.println("<input dojoType=\"dijit.form.TextBox\" name=\"p_in_" + (tmpClick != null && tmpClick.length() > 0 ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "\" type=\"text\" " + (allparam.isRequired() ? "required=\"true\" invalidMessage=\"Valor del parámetro requerido.\" " : "") + " value=\"" + pvalue + "\">");
+
+                                        ArrayList list = new ArrayList(hmprops.keySet());
+                                        Collections.sort(list);
+
+                                        // select con la lista de propiedades existentes
+                                        out.println("<select dojoType=\"dijit.form.FilteringSelect\" name=\"sel_p_in_" + (tmpClick != null && tmpClick.length() > 0 ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "\" id=\"" + idform + "/sel_p_in_" + (tmpClick != null && tmpClick.length() > 0 ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "\" >");
+                                        //Iterator<String> its = hmprops.keySet().iterator();
+                                        boolean isSelected = false;
+                                        String selected = "";
+                                        Iterator<String> its = list.iterator();
+                                        while (its.hasNext()) {
+
+                                            String str = its.next();
+                                            String varName = "";
+                                            String propid = "";
+                                            StringTokenizer stoken = new StringTokenizer(str, "|");
+                                            if (stoken.hasMoreTokens()) {
+                                                varName = stoken.nextToken();
+                                                propid = stoken.nextToken();
+                                            }
+                                            selected = "";
+
+                                            SemanticProperty sp = hmprops.get(str);
+                                            if (pvalue.equals(varName + "." + sp.getPropertyCodeName())) {
+                                                selected = "selected";
+                                                isSelected = true;
+                                            }
+                                            out.println("<option value=\"" + varName + "." + sp.getPropertyCodeName() + "\" " + selected + ">");
+                                            out.println(varName + "." + sp.getPropertyCodeName());
+                                            out.println("</option>");
+
+                                        }
+                                        out.println("<option value=\"0\" " + (!isSelected ? "selected" : "") + " >Otro</option>");
+                                        
+                                        out.println("<script type=\"dojo/connect\" event=\"onChange\">");
+                                        out.println(" var sel=this;   ");
+                                        
+                                        out.println("	var inputBox = dijit.byId('p_in_" + (tmpClick != null && tmpClick.length() > 0 ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "'); ");
+                                        out.println("	if(sel.getValue()!='0') {");
+                                        
+                                        out.println("	   inputBox.setValue(sel.getValue()); ");
+                                        out.println("	   inputBox.readOnly=true;");
+                                        out.println("	} else {");
+                                        out.println("	   inputBox.readOnly=false; ");
+                                        out.println("	   inputBox.setValue(''); ");
+                                        out.println("	}");
+                                        out.println("	return true;");
+                                        
+                                        out.println("</script>");
+                                        
+                                        
+                                        out.println("</select>");
+
+
+
+                                        out.println("<input dojoType=\"dijit.form.TextBox\" id=\"p_in_" + (tmpClick != null && tmpClick.length() > 0 ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "\" name=\"p_in_" + (tmpClick != null && tmpClick.length() > 0 ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "\" type=\"text\" " + (allparam.isRequired() ? "required=\"true\" invalidMessage=\"Valor del parámetro requerido.\" " : "") + " value=\"" + pvalue + "\">");
                                     } else {
                                         out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
                                     }
@@ -478,7 +624,59 @@ public class WSOperationParameterConfig extends GenericResource {
 
 
                                     if (allparam.isBasic()) {
-                                        out.println("<input dojoType=\"dijit.form.TextBox\" name=\"p_out_" + (tmpClick != null && tmpClick.length() > 0 ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "\" type=\"text\" " + (allparam.isRequired() ? "required=\"true\" invalidMessage=\"Valor del parámetro requerido.\" " : "") + " value=\"" + pvalue + "\">");
+
+                                        ArrayList list = new ArrayList(hmprops.keySet());
+                                        Collections.sort(list);
+
+                                        // select con la lista de propiedades existentes
+                                        out.println("<select dojoType=\"dijit.form.FilteringSelect\" name=\"sel_p_out_" + (tmpClick != null && tmpClick.length() > 0 ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "\" id=\"" + idform + "/sel_p_out_" + (tmpClick != null && tmpClick.length() > 0 ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "\" >");
+                                        //Iterator<String> its = hmprops.keySet().iterator();
+                                        boolean isSelected = false;
+                                        String selected = "";
+                                        Iterator<String> its = list.iterator();
+                                        while (its.hasNext()) {
+
+                                            String str = its.next();
+                                            String varName = "";
+                                            String propid = "";
+                                            StringTokenizer stoken = new StringTokenizer(str, "|");
+                                            if (stoken.hasMoreTokens()) {
+                                                varName = stoken.nextToken();
+                                                propid = stoken.nextToken();
+                                            }
+                                            selected = "";
+
+                                            SemanticProperty sp = hmprops.get(str);
+                                            if (pvalue.equals(varName + "." + sp.getPropertyCodeName())) {
+                                                selected = "selected";
+                                                isSelected = true;
+                                            }
+                                            out.println("<option value=\"" + varName + "." + sp.getPropertyCodeName() + "\" " + selected + ">");
+                                            out.println(varName + "." + sp.getPropertyCodeName());
+                                            out.println("</option>");
+
+                                        }
+                                        out.println("<option value=\"0\" " + (!isSelected ? "selected" : "") + " >Otro</option>");
+                                        
+                                        out.println("<script type=\"dojo/connect\" event=\"onChange\">");
+                                        out.println(" var selo=this;   ");
+                                        
+                                        out.println("	var outBox = dijit.byId('p_out_" + (tmpClick != null && tmpClick.length() > 0 ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "'); ");
+                                        out.println("	if(selo.getValue()!='0') {");
+                                        
+                                        out.println("	   outBox.setValue(selo.getValue()); ");
+                                        out.println("	   outBox.readOnly=true;");
+                                        out.println("	} else {");
+                                        out.println("	   outBox.readOnly=false; ");
+                                        out.println("	   outBox.setValue(''); ");
+                                        out.println("	}");
+                                        out.println("	return true;");
+                                        
+                                        out.println("</script>");
+                                        
+                                        out.println("</select>");
+
+                                        out.println("<input dojoType=\"dijit.form.TextBox\" id=\"p_out_" + (tmpClick != null && tmpClick.length() > 0 ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "\" name=\"p_out_" + (tmpClick != null && tmpClick.length() > 0 ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "\" type=\"text\" " + (allparam.isRequired() ? "required=\"true\" invalidMessage=\"Valor del parámetro requerido.\" " : "") + " value=\"" + pvalue + "\">");
                                     } else {
                                         out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
                                     }
