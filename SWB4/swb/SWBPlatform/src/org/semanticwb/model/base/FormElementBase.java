@@ -28,6 +28,7 @@
 
 package org.semanticwb.model.base;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
@@ -66,6 +67,8 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
     private boolean filterHTMLTags=true;
 
     private String label=null;
+    
+    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");    
 
     /**
      * Instantiates a new form element base.
@@ -94,7 +97,8 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
         String smode=request.getParameter("smode");
         //System.out.println("process...:"+obj.getURI()+" "+prop.getURI()+" "+smode);
         //if(smode!=null && smode.equals("create") && !prop.isRequired())return;
-        if(prop.getDisplayProperty()==null)return;
+        boolean needDP=!(propName.indexOf('.')>0);
+        if(needDP && prop.getDisplayProperty()==null)return;
         if(prop.isDataTypeProperty())
         {
             String value=request.getParameter(propName);
@@ -122,7 +126,12 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
                         if(prop.isDouble())obj.setDoubleProperty(prop, Double.parseDouble(value));
                         if(prop.isInt() || prop.isShort() || prop.isByte())obj.setIntProperty(prop, Integer.parseInt(value));
                         if(prop.isLong())obj.setLongProperty(prop, Long.parseLong(value));
-                        if(prop.isDate())obj.setDateProperty(prop, new java.util.Date(value));
+                        try
+                        {
+                            if(prop.isDate())obj.setDateProperty(prop, format.parse(value));
+                        }catch(Exception e){
+                            log.error(e);
+                        }
                         if(prop.isString())
                         {
                             if(isFilterHTMLTags())
