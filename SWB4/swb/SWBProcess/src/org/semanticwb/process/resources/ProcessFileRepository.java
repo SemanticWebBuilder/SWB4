@@ -878,6 +878,10 @@ public class ProcessFileRepository extends GenericResource {
 
             repoFile.setTitle(ftitle);
             repoFile.setDescription(fdescription);
+            //System.out.println("fname: "+fname);
+            if(fname.indexOf("\\")!=-1) fname = fname.substring(fname.lastIndexOf("\\")+1);
+            else if(fname.indexOf("/")!=-1) fname = fname.substring(fname.lastIndexOf("/")+1);
+            //System.out.println("fname: "+fname);
             repoFile.storeFile(fname, new ByteArrayInputStream(bcont), fcomment, incremento);
 
         } else if ("removefile".equals(action)) {
