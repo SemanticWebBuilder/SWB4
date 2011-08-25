@@ -66,6 +66,7 @@ public class Modeler extends GenericResource {
     private static final String PROP_CONTAINER = "container";
     private static final String PROCESS_PREFIX = "http://www.semanticwebbuilder.org/swb4/process";
     private static final String PROP_isMultiInstance = "isMultiInstance";
+    private static final String PROP_isSeqMultiInstance = "isSequentialMultiInstance";
     private static final String PROP_isCollection = "isCollection";
     private static final String PROP_isLoop = "isLoop";
     private static final String PROP_isForCompensation = "isForCompensation";
@@ -615,6 +616,8 @@ public class Modeler extends GenericResource {
 
     public void createProcessElements(org.semanticwb.process.model.Process process, HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest, HashMap<String, JSONObject> hmjson) {
 
+        //System.out.println("CreateProcessElements");
+        
         HashMap<String, String> hmori = loadProcessElements(process);
         HashMap<String, String> hmnew = new HashMap();
 
@@ -622,7 +625,7 @@ public class Modeler extends GenericResource {
         GenericObject go = null;
         String uri = null, sclass = null, title = null, description = null, container = null, parent = null, start = null, end = null;
         int x = 0, y = 0, w = 0, h = 0, labelSize = 10;
-        Boolean isMultiInstance = null, isLoop = null, isForCompensation = null, isCollection = null, isAdHoc = null, isTransaction = null, isInterrupting = null;
+        Boolean isMultiInstance = null,isSeqMultiInstance = null, isLoop = null, isForCompensation = null, isCollection = null, isAdHoc = null, isTransaction = null, isInterrupting = null;
 
         boolean tmpBoolean = false;
 
@@ -636,6 +639,7 @@ public class Modeler extends GenericResource {
             while (it.hasNext()) {
                 String key = it.next();
                 JSONObject json = (JSONObject) hmjson.get(key);
+                //System.out.println("json element: "+json.toString());
                 uri = json.getString(PROP_URI);
                 sclass = json.getString(PROP_CLASS);
                 semclass = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(PROCESS_PREFIX + "#" + sclass);
@@ -653,43 +657,51 @@ public class Modeler extends GenericResource {
                     }
 
                     try {
-                        isMultiInstance = Boolean.parseBoolean(json.getString(PROP_isMultiInstance));
+                        isMultiInstance = new Boolean(json.getBoolean(PROP_isMultiInstance));
                         //System.out.println("MultiInstancia: " + isMultiInstance.booleanValue());
 
                     } catch (Exception e) {
                         isMultiInstance = null;
                     }
                     try {
-                        isLoop = Boolean.parseBoolean(json.getString(PROP_isLoop));
+                        isSeqMultiInstance = new Boolean(json.getBoolean(PROP_isSeqMultiInstance));
+                        //System.out.println("SeqMultiInstancia: " + isMultiInstance.booleanValue());
+
+                    } catch (Exception e) {
+                        isMultiInstance = null;
+                    }
+                    try {
+                        isLoop = new Boolean(json.getBoolean(PROP_isLoop));
                         //System.out.println("Ciclo: " + isLoop.booleanValue());
                     } catch (Exception e) {
                         isLoop = null;
+                        //System.out.println("Ciclo: null");
                     }
                     try {
-                        isForCompensation = Boolean.parseBoolean(json.getString(PROP_isForCompensation));
+                        isForCompensation = new Boolean(json.getBoolean(PROP_isForCompensation));
                         //System.out.println("Compensacion");
 
                     } catch (Exception e) {
                         isForCompensation = null;
                     }
                     try {
-                        isAdHoc = Boolean.parseBoolean(json.getString(PROP_isAdHoc));
+                        isAdHoc = new Boolean(json.getBoolean(PROP_isAdHoc));
                     } catch (Exception e) {
                         isAdHoc = null;
                     }
                     try {
-                        isTransaction = Boolean.parseBoolean(json.getString(PROP_isTransaction));
+                        isTransaction = new Boolean(json.getBoolean(PROP_isTransaction));
                     } catch (Exception e) {
                         isTransaction = null;
                     }
                     try {
-                        isInterrupting = Boolean.parseBoolean(json.getString(PROP_isInterrupting));
+                        isInterrupting = new Boolean(json.getBoolean(PROP_isInterrupting));
                     } catch (Exception e) {
                         isInterrupting = null;
                     }
 
                     try {
-                        isCollection = Boolean.parseBoolean(json.getString(PROP_isCollection));
+                        isCollection = new Boolean(json.getBoolean(PROP_isCollection));
                         //System.out.println("Viene isCollecion:"+isCollection.booleanValue());
                     } catch (Exception e) {
                         isCollection = null;
@@ -708,6 +720,7 @@ public class Modeler extends GenericResource {
 
                     // revisando si el elemento existe
                     if (hmori.get(uri) != null) {
+                        //System.out.println("revisando si el elemento existe");
                         go = ont.getGenericObject(uri);
 
                         if (go instanceof GraphicalElement) {
@@ -769,17 +782,20 @@ public class Modeler extends GenericResource {
                                 }
 
                                 if (null != isLoop) {
+                                    //System.out.println("LoopCharacteristic....");
                                     if (isLoop.booleanValue()) {
                                         // si existe no se hace nada se deja el LoopCharacteristics
                                         LoopCharacteristics loopchar = tsk.getLoopCharacteristics();
                                         if (loopchar == null) // si no existe lo crea
                                         {
                                             // si no existe se crea uno nuevo y se asigna al task
+                                            //System.out.println("creando LoopCharacteristic....");
                                             loopchar = StandarLoopCharacteristics.ClassMgr.createStandarLoopCharacteristics(procsite);
                                             tsk.setLoopCharacteristics(loopchar);
                                         } else if (!(loopchar instanceof StandarLoopCharacteristics)) {
                                             loopchar.getSemanticObject().remove();
                                             // si no existe se crea uno nuevo y se asigna al task
+                                            //System.out.println("eliminando y creando LoopCharacteristic....");
                                             loopchar = StandarLoopCharacteristics.ClassMgr.createStandarLoopCharacteristics(procsite);
                                             tsk.setLoopCharacteristics(loopchar);
                                         }
@@ -788,6 +804,7 @@ public class Modeler extends GenericResource {
                                         // si existe y cambio y ya no es Loop se elimina el StandarLoopCharacteristics asociado
                                         LoopCharacteristics loopchar = tsk.getLoopCharacteristics();
                                         if (null != loopchar && loopchar instanceof StandarLoopCharacteristics) {
+                                            //System.out.println("eliminando LoopCharacteristic....");
                                             loopchar.getSemanticObject().remove();
                                         }
                                     }
