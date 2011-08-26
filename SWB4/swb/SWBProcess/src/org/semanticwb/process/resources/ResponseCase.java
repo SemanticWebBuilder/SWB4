@@ -23,48 +23,44 @@
 
 package org.semanticwb.process.resources;
 
-import java.util.Iterator;
 import java.io.PrintWriter;
 import java.io.IOException;
-import java.util.Enumeration;
+import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.process.model.Process;
-import org.semanticwb.process.model.ProcessSite;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.SWBException;
-import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBPortal;
-import org.semanticwb.model.GenericObject;
-import org.semanticwb.model.SWBContext;
-import org.semanticwb.platform.SemanticOntology;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.GenericResource;
 
 //import org.semanticwb.process.utils.Ajax;
-import org.semanticwb.process.kpi.CaseResponseTime;
 import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.process.model.ProcessInstance;
 
 /**
  *
  * @author Sergio Téllez
  */
 public class ResponseCase extends GenericResource {
-
+    public static final String TIMEUNIT_SECONDS="1";
+    public static final String TIMEUNIT_MINUTES="2";
+    public static final String TIMEUNIT_HOURS="3";
     private static Logger log = SWBUtils.getLogger(ResponseCase.class);
 
+    String theme = "dojox.charting.themes.PlotKit.blue";
     String opacity = "0.4";
     String colour = "#3090C7";
-    String[] colours = {"#3090C7", "#1589FF", "#0760F9", "#157DEC", "#6698FF", "#5CB3FF", "#87AFC7", "#659EC7", "#8BB381", "#348781"};
     String[] highColours = {"#EB8EBF", "#AB91BC", "#637CB0", "#92C2DF", "#BDDDE4", "#69BF8E", "#B0D990", "#F7FA7B", "#F9DF82", "#E46F6A"};
 
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
 
-        if (paramRequest.Action_EDIT.equals(paramRequest.getAction()))
+        if (SWBParamRequest.Action_EDIT.equals(paramRequest.getAction()))
             doAdminCase(request, response, paramRequest);
         else
             doAdminResume(request, response, paramRequest);
@@ -72,31 +68,27 @@ public class ResponseCase extends GenericResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
-
         PrintWriter out = response.getWriter();
-        SWBResourceURL edit = paramRequest.getRenderUrl();
-        edit.setMode(SWBResourceURL.Mode_EDIT);
         String suri = request.getParameter("suri");
-        Enumeration enuparam = request.getParameterNames();
-        while (enuparam.hasMoreElements()) {
-            String sparam = (String)enuparam.nextElement();
-            System.out.println("param: "+sparam+" ("+request.getParameter(sparam)+")");
-        }
-
+        SWBResourceURL edit = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_EDIT);
         edit.setParameter("suri",suri );
+//        Enumeration enuparam = request.getParameterNames();
+//        while (enuparam.hasMoreElements()) {
+//            String sparam = (String)enuparam.nextElement();
+//            System.out.println("param: "+sparam+" ("+request.getParameter(sparam)+")");
+//        }
         out.println("<div id=\"properties\" class=\"swbform\">");
-        out.println("  <fieldset>\n");
-        out.println("    <button  dojoType=\"dijit.form.Button\" onClick=\"submitUrl('"+edit.toString()+"',this.domNode);return false;\">" + paramRequest.getLocaleString("config") + "</button>");
-        out.println("  </fieldset>");
         out.println("  <fieldset>");
         out.println("    <legend>" + paramRequest.getLocaleString("title") + "</legend>");
         if (null != suri)
             doGraph(request, response, paramRequest, suri);
+        out.println("  </fieldset>");
+        out.println("  <fieldset>\n");
+        out.println("    <button  dojoType=\"dijit.form.Button\" onClick=\"submitUrl('"+edit.toString()+"',this.domNode);return false;\">" + paramRequest.getLocaleString("config") + "</button>");
         out.println("  </fieldset>");
         out.println("</div>");
     }
@@ -368,7 +360,6 @@ public class ResponseCase extends GenericResource {
     private void updateAttributes(HttpServletRequest request) {
         String suri = request.getParameter("suri");
         Process process = getProcess(suri);
-        System.out.println("UpdateAttributes suri: "+suri);
         try {
             getResourceBase().setAttribute("process_"+process.getId(),getConfig(request.getParameter("plot"), request.getParameter("plot_theme"), request.getParameter("time_unit"), request.getParameter("display_totals")));
             /*getResourceBase().setAttribute("process", request.getParameter("process"));
@@ -384,66 +375,34 @@ public class ResponseCase extends GenericResource {
 
     public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String suri) throws SWBResourceException, IOException {
         Process process = getProcess(suri);
-        System.out.println("doGraph..");
-        String pid = process.getId();
-
-        String sconf = getAttribute(pid,"plot");
-
-        PrintWriter out = response.getWriter();
-
-        if(sconf.equals("1")||sconf.equals("2"))
-        {
-            out.println("<script type=\"text/javascript\">");
-            out.println("var dojoConfig = { afterOnLoad:true };");
-            out.println("window.onload = function(){");
-            out.println("var d = document.getElementsByTagName(\"head\")[0].appendChild(document.createElement('script'));");
-            out.println("d.src = \"" + SWBPortal.getContextPath() + "/swbadmin/jsp/process/charts/coregraph.js\";");
-            out.println("d.type = \"text/javascript\";");
-            out.println("}");
-            out.println("</script>");
+        if (process != null) {
+            String pid = process.getId();
+            String sconf = getAttribute(pid,"plot");
+            if ("1".equalsIgnoreCase(sconf))
+                doBars(request, response, paramRequest, process);
+            else if ("3".equalsIgnoreCase(sconf))
+                doArea(request, response, paramRequest, process);
+            else
+                doPie(request, response, paramRequest, process);
         }
-
-        if ("1".equalsIgnoreCase(sconf))
-            doBars(request, response, paramRequest, process);
-        else if ("3".equalsIgnoreCase(sconf))
-            doArea(request, response, paramRequest, process);
-        else
-            doPie(request, response, paramRequest, process);
     }
-
-    /*public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        Iterator isites = ProcessSite.ClassMgr.listProcessSites();
-        while (isites.hasNext()) {
-            ProcessSite site = (ProcessSite)isites.next();
-            Iterator<Process> it = site.listProcesses();
-            while (it.hasNext()) {
-                Process process = it.next();
-                if (process.getId().equals(getResourceBase().getAttribute("process",""))) {
-                    if ("1".equalsIgnoreCase(getResourceBase().getAttribute("plot","")))
-                        doBars(request, response, paramRequest, process);
-                    else if ("3".equalsIgnoreCase(getResourceBase().getAttribute("plot","")))
-                        doArea(request, response, paramRequest, process);
-                    else
-                        doPie(request, response, paramRequest, process);
-                }
-            }
-        }
-    }*/
 
     public void doPie(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, Process process) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         setPlotTheme(getAttribute(process.getId(), "plot_theme"));
-        System.out.println("doPie");
         long lid = System.currentTimeMillis();
+        
         out.println("<script type=\"text/javascript\">");
         out.println("   dojo.require(\"dojox.charting.Chart2D\");");
         out.println("   dojo.require(\"dojox.charting.themes.PlotKit.blue\");");
+        out.println("   dojo.require(\"dojox.charting.themes.PlotKit.green\");");
+        out.println("   dojo.require(\"dojox.charting.themes.PlotKit.red\");");
         out.println("   dojo.require(\"dojox.charting.action2d.MoveSlice\");");
         out.println("   dojo.require(\"dojox.charting.action2d.Tooltip\");");
         out.println("   dojo.require(\"dojox.charting.action2d.Highlight\");");
         out.println("   makeObjects = function(){");
         out.println("       var chart = new dojox.charting.Chart2D(\""+lid+"_instances\");");
-        out.println("       chart.setTheme(dojox.charting.themes.PlotKit.blue);");
+        out.println("       chart.setTheme(" + theme + ");");
         out.println("       chart.addPlot(\"default\", {");
         out.println("           type: \"Pie\",");
         out.println("           font: \"normal normal bold 10pt Tahoma\",");
@@ -467,273 +426,174 @@ public class ResponseCase extends GenericResource {
     
     public void doBars(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, Process process) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        setPlotTheme(getAttribute(process.getId(), "plot_theme"));
-        String data = getData(process);
         long lid = System.currentTimeMillis();
-        System.out.println("doBars.");
-//        out.println("<script type=\"text/javascript\">\n");
-//        out.println(" djConfig = {afterOnLoad : true, require:['dojo.date']}; "); //,'dojo.cookie'
-//        out.println(" var e = document.createElement('script'); ");
-//        out.println(" e.type = 'text/javascript'; ");
-//        out.println(" e.src= '" + SWBPortal.getContextPath() + "/swbadmin/jsp/process/charts/coregraph.js'; ");
-//        out.println(" document.getElementsByTagName('head')[0].appendChild(e); ");
-//        out.println("</script>\n");
-//
-//
-//
-//        out.println("<script type=\"dojo/connect\">\n");
-//        out.println("    include_dom('" + SWBPortal.getContextPath() + "/swbadmin/jsp/process/charts/coregraph.js');");
-//        out.println("</script>\n");
-        out.println("<div id=\""+lid+"_title\" style=\"width:400px; height:25px; text-align:center;\"><label>" + process.getTitle() + "</label></div>\n");
-
-        out.println("<div id='"+lid+"_instances' style='width:400px; height:300px;'></div>\n");
-        if (data.length() > 2) {
-
-//            out.println("<script type=\"text/javascript\">");
-//            out.println("var dojoConfig = { afterOnLoad:true };");
-//            out.println("window.onload = function(){");
-//            out.println("var d = document.getElementsByTagName(\"head\")[0].appendChild(document.createElement('script'));");
-//            out.println("d.src = \"" + SWBPortal.getContextPath() + "/swbadmin/jsp/process/charts/coregraph.js\";");
-//            out.println("d.type = \"text/javascript\";");
-//            out.println("}");
-//            out.println("</script>");
-
-
-
-            //out.println(Ajax.getChartScript());
-            out.println("<script type=\"text/javascript\">\n");
-            
-            out.println("    var bargraph = new Grafico.BarGraph($('"+lid+"_instances'), " + data + ",\n");
-            out.println("        {\n");
-            out.println("           labels :			  " + getTitles(paramRequest) + ",\n");
-            out.println("           color :				  '" + colour + "',\n");
-            //out.println("           background_color :	  '#EFF5FB',\n");
-            out.println("           meanline :		      false,\n");
-            out.println("           grid :                false,\n");
-            out.println("           draw_axis :           false,\n");
-            out.println("           label_rotation :	  -30,\n");
-            //out.println("           vertical_label_unit : \"%\",\n");
-            //out.println("           bargraph_lastcolor :  \"#666666\",\n");
-            out.println("           label_color :         \"#348781\",\n");
-            out.println("           hover_color :         \"#6698FF\",\n");
-            out.println("           datalabels :          {one: " + getLabels(process, paramRequest) + "}\n");
-            out.println("        }\n");
-            out.println("    );\n");
-            out.println("</script>\n");
+        setPlotTheme(getAttribute(process.getId(), "plot_theme"));
+        String time_unit = getAttribute(process.getId(), "time_unit");
+        String unit = paramRequest.getLocaleString("days");
+        if (time_unit.equalsIgnoreCase("1")) unit = paramRequest.getLocaleString("seconds");
+        if (time_unit.equalsIgnoreCase("2")) unit = paramRequest.getLocaleString("minutes");
+        if (time_unit.equalsIgnoreCase("3")) unit = paramRequest.getLocaleString("hours");
+        
+        Long [] _data = getResponseTimeData(process, time_unit);
+        if (_data != null) {
+            out.println("<script type=\"text/javascript\">");
+            out.println("   dojo.require(\"dojox.charting.Chart2D\");");
+            out.println("   dojo.require(\"dojox.charting.themes.PlotKit.blue\");");
+            out.println("   dojo.require(\"dojox.charting.themes.PlotKit.green\");");
+            out.println("   dojo.require(\"dojox.charting.themes.PlotKit.red\");");
+            out.println("   dojo.require(\"dojox.charting.action2d.Tooltip\");");
+            out.println("   makeObjects = function(){");
+            out.println("       var chartData = [" + _data[0] +"," + _data[1] + "," + _data[2] + "];");
+            out.println("       var chart = new dojox.charting.Chart2D(\""+lid+"_instances\");");
+            out.println("       chart.setTheme(" + theme + ");");
+            out.println("       chart.addPlot(\"default\", {");
+            out.println("           type: \"Columns\",");
+            out.println("           fontColor: \"white\",");
+            out.println("           markers: true,");
+            out.println("       });");
+            out.println("       chart.addAxis(\"x\", {");
+            out.println("           labels:[");
+            out.println("               {value:1, text:\""+ paramRequest.getLocaleString("minimum") +"\"},");
+            out.println("               {value:2, text:\"" + paramRequest.getLocaleString("average") + "\"},");
+            out.println("               {value:3, text:\"" + paramRequest.getLocaleString("maximum") + "\"}");
+            out.println("           ],");
+            out.println("           majorTicks: true,");
+            out.println("           majorLabels: true,");
+            out.println("           minorTicks: true,");
+            out.println("           minorLabels: true,");
+            out.println("       });");
+            out.println("       chart.addAxis(\"y\", {vertical:true, min:0});");
+            out.println("       chart.addSeries(\"CaseResponseTime\", chartData);");
+            out.println("       var c = new dojox.charting.action2d.Tooltip(chart, \"default\");");
+            out.println("       chart.render();");
+            out.println("   };");
+            out.println("   dojo.addOnLoad(makeObjects);");
+            out.println("</script>");
+            out.println("<div id=\""+lid+"_instances\" style=\"width: 400px; height: 300px;\"></div>");
+            out.println("<div id=\"stage\" style=\"width:400px; height:50px; text-align:center;\"><label>" + paramRequest.getLocaleString("title") + "("+ unit +")</label></div>\n");
         }
-        out.println("<div id=\"stage\" style=\"width:400px; height:50px; text-align:center;\"><label>" + paramRequest.getLocaleString("title") + "</label></div>\n");
     }
 
     public void doArea(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, Process process) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        System.out.println("doArea.");
-        setPlotTheme(getAttribute(process.getId(), "plot_theme"));
-//        out.println("<script type=\"text/javascript\">\n");
-//        out.println(" djConfig = {afterOnLoad : true, require:['dojo.date']}; "); //,'dojo.cookie'
-//        out.println(" var e = document.createElement('script'); ");
-//        out.println(" e.type = 'text/javascript'; ");
-//        out.println(" e.src= '" + SWBPortal.getContextPath() + "/swbadmin/jsp/process/charts/coregraph.js'; ");
-//        out.println(" document.getElementsByTagName('head')[0].appendChild(e); ");
-//        out.println("</script>\n");
         long lid = System.currentTimeMillis();
-        //out.println(Ajax.getChartScript());
-        out.println("<div id='"+lid+"_instances' style='width:400px; height:300px;'></div>\n");
-        out.println("<script type=\"text/javascript\">\n");
-        out.println("    var areagraph = new Grafico.AreaGraph($('"+lid+"_instances'), { workload: " + getData(process) + " },");
-        out.println("        {");
-        out.println("           grid :                false,");
-        out.println("           area_opacity :        " + opacity + ",");
-        out.println("           plot_padding :        10,");
-        out.println("           font_size :           10,");
-        out.println("           colors :              { workload: '" + colour + "' },");
-        //out.println("           background_color :	  '#EFF5FB',");
-        out.println("           label_color :         \"#348781\",");
-        if ("1".equalsIgnoreCase(getAttribute(process.getId(), "display_totals")))
-            out.println("           markers :             \"value\",");
-        out.println("           meanline :            false,");
-        out.println("           draw_axis :           false,\n");
-        out.println("           labels :			  " + getTitles(paramRequest) + ",\n");
-        out.println("           datalabels :          {workload: '" + paramRequest.getLocaleString("time") + "'}\n");
-        out.println("        }\n");
-        out.println("    );\n");
-        out.println("</script>\n");
-        out.println("<div id=\""+lid+"_title\" style=\"width:400px; height:50px; text-align:center;\"><label>" + paramRequest.getLocaleString("title") + "</label></div>\n");
-    }
-
-    /*private String getTheme() {
-        StringBuilder theme = new StringBuilder();
-        theme.append("           colorArray:[");
-        for (int i=0; i<3; i++)
-            theme.append("'" + colours[i] + "',");
-        theme.delete(theme.length()-1, theme.length());
-        theme.append("],\n");
-        return theme.toString();
-    }
-
-    private String getHighLight() {
-        StringBuilder theme = new StringBuilder();
-        theme.append("           highlightColorArray:[");
-        for (int i=0; i<3; i++)
-            theme.append("'" + highColours[i] + "',");
-        theme.delete(theme.length()-1, theme.length());
-        theme.append("],\n");
-        return theme.toString();
-    }*/
-    
-    private void setPlotTheme(String plot_theme) {
-        String[] blueTheme = {"#3090C7", "#1589FF", "#0760F9", "#157DEC", "#6698FF", "#5CB3FF", "#87AFC7", "#659EC7", "#8BB381", "#348781"};
-        String[] redTheme = {"#FF0000","#E42217","#E41B17","#F62817","#F62217","#E42217","#F80000","#C80000","#B80000","#900000"};
-        String[] greenTheme = {"#4AA02C","#57E964","#59E817","#4CC552","#4CC417","#52D017","#41A317","#3EA99F","#348781","#387C44"};
-        if ("1".equalsIgnoreCase(plot_theme)) {
-            opacity = "0.4";
-            colour = "#3090C7";
-            colours = blueTheme;
-        }else if ("2".equalsIgnoreCase(plot_theme)) {
-            opacity = "0.4";
-            colour = "#4CC552";
-            colours = greenTheme;
-        }else if ("3".equalsIgnoreCase(plot_theme)) {
-            opacity = "0.7";
-            colour = "#FF0000";
-            colours = redTheme;
+        setPlotTheme(getAttribute(process.getId(), "plot_theme"));
+        String time_unit = getAttribute(process.getId(), "time_unit");
+        String unit = paramRequest.getLocaleString("days");
+        if (time_unit.equalsIgnoreCase("1")) unit = paramRequest.getLocaleString("seconds");
+        if (time_unit.equalsIgnoreCase("2")) unit = paramRequest.getLocaleString("minutes");
+        if (time_unit.equalsIgnoreCase("3")) unit = paramRequest.getLocaleString("hours");
+        
+        Long [] _data = getResponseTimeData(process, time_unit);
+        if (_data != null) {
+            out.println("<script type=\"text/javascript\">");
+            out.println("   dojo.require(\"dojox.charting.Chart2D\");");
+            out.println("   dojo.require(\"dojox.charting.themes.PlotKit.blue\");");
+            out.println("   dojo.require(\"dojox.charting.themes.PlotKit.green\");");
+            out.println("   dojo.require(\"dojox.charting.themes.PlotKit.red\");");
+            out.println("   dojo.require(\"dojox.charting.action2d.Tooltip\");");
+            out.println("   makeObjects = function(){");
+            out.println("       var chartData = [" + _data[0] +"," + _data[1] + "," + _data[2] + "];");
+            out.println("       var chart = new dojox.charting.Chart2D(\""+lid+"_instances\");");
+            out.println("       chart.setTheme(" + theme + ");");
+            out.println("       chart.addPlot(\"default\", {");
+            out.println("           type: \"StackedAreas\",");
+            out.println("           markers: true,");
+            out.println("           font: \"normal normal bold 10pt Tahoma\",");
+            out.println("           fontColor: \"white\",");
+            out.println("       });");
+            out.println("       chart.addAxis(\"x\", {");
+            out.println("           labels:[");
+            out.println("               {value:1, text:\""+ paramRequest.getLocaleString("minimum") +"\"},");
+            out.println("               {value:2, text:\"" + paramRequest.getLocaleString("average") + "\"},");
+            out.println("               {value:3, text:\"" + paramRequest.getLocaleString("maximum") + "\"}");
+            out.println("           ],");
+            out.println("           majorTicks: true,");
+            out.println("           majorLabels: true,");
+            out.println("           minorTicks: true,");
+            out.println("           minorLabels: true,");
+            out.println("       });");
+            out.println("       chart.addAxis(\"y\", {vertical:true, min:0, max:" + _data[2] + "});");
+            out.println("       chart.addSeries(\"CaseResponseTime\", chartData);");
+            out.println("       var c = new dojox.charting.action2d.Tooltip(chart, \"default\");");
+            out.println("       chart.render();");
+            out.println("   };");
+            out.println("   dojo.addOnLoad(makeObjects);");
+            out.println("</script>");
+            out.println("<div id=\""+lid+"_instances\" style=\"width: 400px; height: 300px;\"></div>");
+            out.println("<div id=\"stage\" style=\"width:400px; height:50px; text-align:center;\"><label>" + paramRequest.getLocaleString("title") + "(" + unit + ")</label></div>\n");
         }
     }
 
-    private String getData(Process process) {
-        StringBuilder data = new StringBuilder();
-        CaseResponseTime crt = new CaseResponseTime();
-        String time_unit = getAttribute(process.getId(), "time_unit");
-        data.append("[");
-        if ("1".equalsIgnoreCase(time_unit))
-            data.append(crt.getMinimumProcessInstance(process)/1000 + "," + crt.getAverageProcessInstances(process)/1000 + "," + crt.getMaximumProcessInstance(process)/1000);
-        else if ("2".equalsIgnoreCase(time_unit))
-            data.append(crt.getMinimumProcessInstance(process)/60000 + "," + crt.getAverageProcessInstances(process)/60000 + "," + crt.getMaximumProcessInstance(process)/60000);
-        else if ("3".equalsIgnoreCase(time_unit))
-            data.append(crt.getMinimumProcessInstance(process)/3600000 + "," + crt.getAverageProcessInstances(process)/3600000 + "," + crt.getMaximumProcessInstance(process)/3600000);
-        else 
-            data.append(crt.getMinimumProcessInstance(process)/86400000 + "," + crt.getAverageProcessInstances(process)/86400000 + "," + crt.getMaximumProcessInstance(process)/86400000);
-        data.append("]");
-        return data.toString();
+    private void setPlotTheme(String plot_theme) {
+        if ("1".equalsIgnoreCase(plot_theme)) {
+            theme = "dojox.charting.themes.PlotKit.blue";
+        }else if ("2".equalsIgnoreCase(plot_theme)) {
+            theme = "dojox.charting.themes.PlotKit.green";
+        }else if ("3".equalsIgnoreCase(plot_theme)) {
+            theme = "dojox.charting.themes.PlotKit.red";
+        }
+    }
+
+    private Long[] getResponseTimeDataByStatus(Process p, int status, String timeunit) {
+        Long[] ret = null;
+        int divisor = 86400000;
+        long max_time = 0;
+        long min_time = 0;
+        long sum_time = 0;
+        
+        Iterator<ProcessInstance> instances = p.listProcessInstances();
+        if (instances.hasNext()) {
+            int c_instances = 0;
+            while(instances.hasNext()) {
+                ProcessInstance instance = instances.next();
+                if (instance.getStatus() == status) {
+                    c_instances++;
+                    long instanceTime = instance.getEnded().getTime() - instance.getCreated().getTime();
+                    sum_time += instanceTime;
+                    if (instanceTime > max_time) max_time = instanceTime;
+                    if (c_instances == 1 || instanceTime < min_time) min_time = instanceTime;
+                }
+            }
+            if (c_instances != 0) {
+                if (timeunit.equals(TIMEUNIT_SECONDS)) divisor = 1000;
+                if (timeunit.equals(TIMEUNIT_MINUTES)) divisor = 60000;
+                if (timeunit.equals(TIMEUNIT_HOURS)) divisor = 3600000;
+                sum_time = (sum_time / c_instances);
+            }
+        }
+        ret = new Long[3];
+        ret[0] = min_time / divisor;
+        ret[1] = sum_time / divisor;
+        ret[2] = max_time / divisor;
+        return ret;
+    }
+    
+    private Long[] getResponseTimeData(Process p, String timeunit) {
+        return getResponseTimeDataByStatus(p, ProcessInstance.STATUS_CLOSED, timeunit);
     }
 
     private String getDataPie(Process process, SWBParamRequest paramRequest) throws SWBResourceException {
         StringBuilder data = new StringBuilder();
-        CaseResponseTime crt = new CaseResponseTime();
         String time_unit = getAttribute(process.getId(), "time_unit");
-        String display_totals = getAttribute(process.getId(), "display_totals");
-        data.append("{y: ");
-        if ("1".equalsIgnoreCase(time_unit))
-            data.append(crt.getMinimumProcessInstance(process)/1000);
-        else if ("2".equalsIgnoreCase(time_unit))
-            data.append(crt.getMinimumProcessInstance(process)/60000);
-        else if ("3".equalsIgnoreCase(time_unit))
-            data.append(crt.getMinimumProcessInstance(process)/3600000);
-        else
-            data.append(crt.getMinimumProcessInstance(process)/86400000);
-        data.append(", text: \"" + paramRequest.getLocaleString("minimum") + "\", color: \"" + colours[0] + "\"" + (!"".equalsIgnoreCase(display_totals) ? ", tooltip: " + getToolTips(process, paramRequest, time_unit, "minimum") : "") + "},");
-        data.append("{y: ");
-        if ("1".equalsIgnoreCase(time_unit))
-            data.append(crt.getAverageProcessInstances(process)/1000);
-        else if ("2".equalsIgnoreCase(time_unit))
-            data.append(crt.getAverageProcessInstances(process)/60000);
-        else if ("3".equalsIgnoreCase(time_unit))
-            data.append(crt.getAverageProcessInstances(process)/3600000);
-        else
-            data.append(crt.getAverageProcessInstances(process)/86400000);
-        data.append(", text: \"" + paramRequest.getLocaleString("average") + "\", color: \"" + colours[1] + "\"" + (!"".equalsIgnoreCase(display_totals) ? ", tooltip: " + getToolTips(process, paramRequest, time_unit, "average") : "") + "},");
-        data.append("{y: ");
-        if ("1".equalsIgnoreCase(time_unit))
-            data.append(crt.getMaximumProcessInstance(process)/1000);
-        else if ("2".equalsIgnoreCase(time_unit))
-            data.append(crt.getMaximumProcessInstance(process)/60000);
-        else if ("3".equalsIgnoreCase(time_unit))
-            data.append(crt.getMaximumProcessInstance(process)/3600000);
-        else
-            data.append(crt.getMaximumProcessInstance(process)/86400000);
-        data.append(", text: \"" + paramRequest.getLocaleString("maximum") + "\", color: \"" + colours[2] + "\"" + (!"".equalsIgnoreCase(display_totals) ? ", tooltip: " + getToolTips(process, paramRequest, time_unit, "maximum") : "") + "}");
+        Long [] _data = getResponseTimeData(process, time_unit);
+        
+        if (_data != null) {
+            String unit = paramRequest.getLocaleString("days");
+            if (time_unit.equalsIgnoreCase("1")) unit = paramRequest.getLocaleString("seconds");
+            if (time_unit.equalsIgnoreCase("2")) unit = paramRequest.getLocaleString("minutes");
+            if (time_unit.equalsIgnoreCase("3")) unit = paramRequest.getLocaleString("hours");
+            String display_totals = getAttribute(process.getId(), "display_totals");
+            data.append("{y: "+_data[0]);
+            data.append(", text: \"" + paramRequest.getLocaleString("minimum") + "\"" + (!"".equalsIgnoreCase(display_totals) ? ", tooltip: \""+ paramRequest.getLocaleString("minTime") + " " + _data[0] + " " + unit + "\"": "") + "},");
+            data.append("{y: "+_data[1]);
+            data.append(", text: \"" + paramRequest.getLocaleString("average") + "\"" + (!"".equalsIgnoreCase(display_totals) ? ", tooltip: \""+ paramRequest.getLocaleString("avgTime") + " " + _data[1] + " " + unit + "\"": "") + "},");
+            data.append("{y: "+_data[2]);
+            data.append(", text: \"" + paramRequest.getLocaleString("maximum") + "\"" + (!"".equalsIgnoreCase(display_totals) ? ", tooltip: \""+ paramRequest.getLocaleString("maxTime") + " " + _data[2] + " " +unit + "\"": "") + "}");
+        }
         return data.toString();
     }
-
-    private String getLabels(Process process, SWBParamRequest paramRequest) throws SWBResourceException {
-        StringBuilder labels = new StringBuilder();
-        StringBuilder minimum = new StringBuilder();
-        StringBuilder average = new StringBuilder();
-        StringBuilder maximum = new StringBuilder();
-        CaseResponseTime crt = new CaseResponseTime();
-        String time_unit = getAttribute(process.getId(), "time_unit");
-        String display_totals = getAttribute(process.getId(), "display_totals");
-        if ("1".equalsIgnoreCase(time_unit)) {
-            minimum.append("" + crt.getMinimumProcessInstance(process)/1000 + " " + paramRequest.getLocaleString("seconds"));
-            average.append("" + crt.getAverageProcessInstances(process)/1000 + " " + paramRequest.getLocaleString("seconds"));
-            maximum.append("" + crt.getMaximumProcessInstance(process)/1000 + " " + paramRequest.getLocaleString("seconds"));
-        }else if ("2".equalsIgnoreCase(time_unit)) {
-            minimum.append("" + crt.getMinimumProcessInstance(process)/60000 + " " + paramRequest.getLocaleString("minutes"));
-            average.append("" + crt.getAverageProcessInstances(process)/60000 + " " + paramRequest.getLocaleString("minutes"));
-            maximum.append("" + crt.getMaximumProcessInstance(process)/60000 + " " + paramRequest.getLocaleString("minutes"));
-        }else if ("3".equalsIgnoreCase(time_unit)) {
-            minimum.append("" + crt.getMinimumProcessInstance(process)/3600000 + " " + paramRequest.getLocaleString("hours"));
-            average.append("" + crt.getAverageProcessInstances(process)/3600000 + " " + paramRequest.getLocaleString("hours"));
-            maximum.append("" + crt.getMaximumProcessInstance(process)/3600000 + " " + paramRequest.getLocaleString("hours"));
-        }else {
-            minimum.append("" + crt.getMinimumProcessInstance(process)/86400000 + " " + paramRequest.getLocaleString("days"));
-            average.append("" + crt.getAverageProcessInstances(process)/86400000 + " " + paramRequest.getLocaleString("days"));
-            maximum.append("" + crt.getMaximumProcessInstance(process)/86400000 + " " + paramRequest.getLocaleString("days"));
-        }
-        labels.append("[");
-        labels.append("'" + paramRequest.getLocaleString("minimum") + " " + ("1".equalsIgnoreCase(display_totals) ? minimum : "") + "', '" + paramRequest.getLocaleString("average") + " " + ("1".equalsIgnoreCase(display_totals) ? average : "") + "','" + paramRequest.getLocaleString("maximum") + " " + ("1".equalsIgnoreCase(display_totals) ? maximum : "") + "'");
-        labels.append("]");
-        return labels.toString();
-    }
-
-    private String getToolTips(Process process, SWBParamRequest paramRequest, String timeUnit, String function) throws SWBResourceException {
-        StringBuilder labels = new StringBuilder();
-        StringBuilder total = new StringBuilder();
-        CaseResponseTime crt = new CaseResponseTime();
-        if ("1".equalsIgnoreCase(timeUnit)) {
-            if ("minimum".equalsIgnoreCase(function))
-                total.append(" " + crt.getMinimumProcessInstance(process)/1000);
-            else if ("average".equalsIgnoreCase(function))
-                total.append(" " + crt.getAverageProcessInstances(process)/1000);
-            else
-                total.append(" " + crt.getMaximumProcessInstance(process)/1000);
-            total.append(" " + paramRequest.getLocaleString("seconds"));
-        }else if ("2".equalsIgnoreCase(timeUnit)) {
-            if ("minimum".equalsIgnoreCase(function))
-                total.append(" " + crt.getMinimumProcessInstance(process)/60000);
-            else if ("average".equalsIgnoreCase(function))
-                total.append(" " + crt.getAverageProcessInstances(process)/60000);
-            else
-                total.append(" " + crt.getMaximumProcessInstance(process)/60000);
-            total.append(" " + paramRequest.getLocaleString("minutes"));
-        }else if ("3".equalsIgnoreCase(timeUnit)) {
-            if ("minimum".equalsIgnoreCase(function))
-                total.append(" " + crt.getMinimumProcessInstance(process)/3600000);
-            else if ("average".equalsIgnoreCase(function))
-                total.append(" " + crt.getAverageProcessInstances(process)/3600000);
-            else
-                total.append(" " + crt.getMaximumProcessInstance(process)/3600000);
-            total.append(" " + paramRequest.getLocaleString("hours"));
-        }else {
-            if ("minimum".equalsIgnoreCase(function))
-                total.append(" " + crt.getMinimumProcessInstance(process)/86400000);
-            else if ("average".equalsIgnoreCase(function))
-                total.append(" " + crt.getAverageProcessInstances(process)/86400000);
-            else
-                total.append(" " + crt.getMaximumProcessInstance(process)/86400000);
-            total.append(" " + paramRequest.getLocaleString("days"));
-        }
-        labels.append("\"" + paramRequest.getLocaleString("time") + " " + paramRequest.getLocaleString(function) + total.toString() + "\"");
-        return labels.toString();
-    }
-
-    private String getTitles(SWBParamRequest paramRequest) throws SWBResourceException {
-        StringBuilder labels = new StringBuilder();
-        labels.append("[");
-        labels.append("'" + paramRequest.getLocaleString("minimum") + "', '" + paramRequest.getLocaleString("average") + "','" + paramRequest.getLocaleString("maximum") + "'");
-        labels.append("]");
-        return labels.toString();
-    }
-
+    
     private String getProcessTitle(String suri) {
         String title = "";
         if (null != suri) {
@@ -744,35 +604,18 @@ public class ResponseCase extends GenericResource {
         return title;
     }
 
+    /***
+     * Recupera un proceso a partir de la URI proporcionada.
+     * @param suri URI del proceso a recuperar.
+     * @return Proceso al que corresponde la URI o null.
+     */
     private Process getProcess(String suri) {
-
-        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-        GenericObject gobj = ont.getGenericObject(suri);
-        Process process = null;
-        if (gobj instanceof org.semanticwb.process.model.Process) {
-            process = (org.semanticwb.process.model.Process) gobj;
+        Process ret = null;
+        SemanticObject sobj = SemanticObject.createSemanticObject(suri);
+        if (sobj != null && sobj.instanceOf(Process.sclass)) {
+            ret = (Process)sobj.createGenericInstance();
         }
-
-
-//        Iterator isites = ProcessSite.ClassMgr.listProcessSites();
-//        while (isites.hasNext()) {
-//            ProcessSite site = (ProcessSite)isites.next();
-//
-//            
-//            
-//            Iterator<Process> itprocess = site.listProcesses();
-//
-//
-//
-//            while (itprocess.hasNext()) {
-//                Process process = itprocess.next();
-//                System.out.println("suri: "+suri);
-//                System.out.println("Process uri: "+process.getURI());
-//                if (suri.equalsIgnoreCase(process.getURI()))
-//                    return process;
-//            }
-//        }
-        return process;
+        return ret;
     }
 
     private String getConfig(String plot, String colours, String time, String totals) {
@@ -782,10 +625,10 @@ public class ResponseCase extends GenericResource {
         return config.toString();
     }
 
-    private String getAttribute(String suri, String title) {
+    private String getAttribute(String pid, String title) {
         String attribute = "";
 
-        String config = getResourceBase().getAttribute("process_"+suri, "");
+        String config = getResourceBase().getAttribute("process_"+pid, "");
         if ("plot".equals(title)) {
             if (config.length() > 0) attribute = config.substring(0, 1); else attribute = "2";
         }else if ("plot_theme".equals(title)) {
@@ -795,10 +638,5 @@ public class ResponseCase extends GenericResource {
         }else if ("display_totals".equals(title) && config.length() > 3)
             attribute = config.substring(3, 4);
         return attribute;
-    }
-
-    private String encode(String suri) {
-        return java.net.URLEncoder.encode(suri).replaceAll("%", "100");
-        //return suri;
     }
 }
