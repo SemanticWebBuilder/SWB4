@@ -59,11 +59,13 @@ public class ResponseCase extends GenericResource {
 
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-
-        if (SWBParamRequest.Action_EDIT.equals(paramRequest.getAction()))
+        if (SWBParamRequest.Action_EDIT.equals(paramRequest.getAction())) {
+            System.out.println("action: " + paramRequest.getAction() + "LLendose a admin");
             doAdminCase(request, response, paramRequest);
-        else
+        } else {
+            System.out.println("action: " + paramRequest.getAction() + "LLendose a adminResume");
             doAdminResume(request, response, paramRequest);
+        }
     }
 
     @Override
@@ -414,7 +416,7 @@ public class ResponseCase extends GenericResource {
         out.println("           " + getDataPie(process, paramRequest));
         out.println("       ]);");
         out.println("       var a = new dojox.charting.action2d.MoveSlice(chart, \"default\")");
-        out.println("       var b = new dojox.charting.action2d.Highlight(chart, \"default\", {highlight: \"#6698FF\"});");
+        //out.println("       var b = new dojox.charting.action2d.Highlight(chart, \"default\", {highlight: \"#6698FF\"});");
         out.println("       var c = new dojox.charting.action2d.Tooltip(chart, \"default\");");
         out.println("       chart.render();");
         out.println("   };");
@@ -442,6 +444,7 @@ public class ResponseCase extends GenericResource {
             out.println("   dojo.require(\"dojox.charting.themes.PlotKit.green\");");
             out.println("   dojo.require(\"dojox.charting.themes.PlotKit.red\");");
             out.println("   dojo.require(\"dojox.charting.action2d.Tooltip\");");
+            out.println("   dojo.require(\"dojox.charting.action2d.Shake\");");
             out.println("   makeObjects = function(){");
             out.println("       var chartData = [" + _data[0] +"," + _data[1] + "," + _data[2] + "];");
             out.println("       var chart = new dojox.charting.Chart2D(\""+lid+"_instances\");");
@@ -450,6 +453,7 @@ public class ResponseCase extends GenericResource {
             out.println("           type: \"Columns\",");
             out.println("           fontColor: \"white\",");
             out.println("           markers: true,");
+            out.println("           gap: 5,");
             out.println("       });");
             out.println("       chart.addAxis(\"x\", {");
             out.println("           labels:[");
@@ -465,6 +469,7 @@ public class ResponseCase extends GenericResource {
             out.println("       chart.addAxis(\"y\", {vertical:true, min:0});");
             out.println("       chart.addSeries(\"CaseResponseTime\", chartData);");
             out.println("       var c = new dojox.charting.action2d.Tooltip(chart, \"default\");");
+            out.println("       var b = new dojox.charting.action2d.Shake(chart, \"default\");");
             out.println("       chart.render();");
             out.println("   };");
             out.println("   dojo.addOnLoad(makeObjects);");
@@ -492,6 +497,7 @@ public class ResponseCase extends GenericResource {
             out.println("   dojo.require(\"dojox.charting.themes.PlotKit.green\");");
             out.println("   dojo.require(\"dojox.charting.themes.PlotKit.red\");");
             out.println("   dojo.require(\"dojox.charting.action2d.Tooltip\");");
+            out.println("   dojo.require(\"dojox.charting.action2d.Magnify\");");
             out.println("   makeObjects = function(){");
             out.println("       var chartData = [" + _data[0] +"," + _data[1] + "," + _data[2] + "];");
             out.println("       var chart = new dojox.charting.Chart2D(\""+lid+"_instances\");");
@@ -515,6 +521,7 @@ public class ResponseCase extends GenericResource {
             out.println("       });");
             out.println("       chart.addAxis(\"y\", {vertical:true, min:0, max:" + _data[2] + "});");
             out.println("       chart.addSeries(\"CaseResponseTime\", chartData);");
+            out.println("       var b = new dojox.charting.action2d.Magnify(chart, \"default\");");
             out.println("       var c = new dojox.charting.action2d.Tooltip(chart, \"default\");");
             out.println("       chart.render();");
             out.println("   };");
