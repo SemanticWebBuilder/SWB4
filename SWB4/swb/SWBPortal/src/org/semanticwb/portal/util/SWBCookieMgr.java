@@ -72,7 +72,7 @@ public class SWBCookieMgr
      * @return true, if successful
      * @return
      */
-    public boolean setCookie(String cadenaCookie, String host, long resid)
+    public boolean setCookie(String cadenaCookie, String host, String resid)
     {
         //System.out.println("setCookie:"+cadenaCookie+" "+host+" "+resid);
         boolean regresa = false,bexistcookie = false;
@@ -92,7 +92,7 @@ public class SWBCookieMgr
             while (itcookies.hasNext())
             {
                 cookie = (SWBCookie) itcookies.next();
-                if (cookie.getName().equalsIgnoreCase(CookName) && cookie.getResID() == resid && (host==null || host.equalsIgnoreCase(cookie.getHost())))
+                if (cookie.getName().equalsIgnoreCase(CookName) && cookie.getResID().equals(resid) && (host==null || host.equalsIgnoreCase(cookie.getHost())))
                 {
                     //System.out.println("Ya existe el objeto Cookie");
                     bexistcookie = true;
@@ -162,7 +162,7 @@ public class SWBCookieMgr
      * @param host the host
      * @param resid the resid
      */
-    public void addCookies(String headercookies, String host, long resid)
+    public void addCookies(String headercookies, String host, String resid)
     {
         StringTokenizer st=new StringTokenizer(headercookies,";");
         while(st.hasMoreTokens())
@@ -223,7 +223,7 @@ public class SWBCookieMgr
      * @return the cookie
      * @return
      */
-    public String getCookie(String host, String path, Date dfecha, long resid)
+    public String getCookie(String host, String path, Date dfecha, String resid)
     {
         StringBuffer SBcookie = new StringBuffer();
         boolean entry = false;
@@ -236,10 +236,10 @@ public class SWBCookieMgr
             {    //Checa si el objeto WBCookie coincide con los datos enviados
                 String WBChost = WBC.getHost();
                 String WBCpath = WBC.getPath();
-                long rid = WBC.getResID();
+                String rid = WBC.getResID();
                 //Date dWBCexpires=new Date(WBC.getExpires());
                 boolean bpath = false,bpath1 = false;
-                if ((host.endsWith(WBChost) && resid==rid )|| (WBChost.equals("[*]") && rid==0) )
+                if ((host.endsWith(WBChost) && resid.equals(rid) )|| (WBChost.equals("[*]") && rid.equals("")) )
                 {
                     if (!WBCpath.equals("/"))
                     {
@@ -268,7 +268,7 @@ public class SWBCookieMgr
      * @param resid the resid
      * @return true, if successful
      */
-    public boolean haveInstanceCookies(long resid)
+    public boolean haveInstanceCookies(String resid)
     {
         Iterator itkeycokie = cookies.iterator();
         while (itkeycokie.hasNext())
@@ -276,7 +276,7 @@ public class SWBCookieMgr
             SWBCookie WBC = (SWBCookie) itkeycokie.next();
             if (WBC != null)
             {
-                if(resid==WBC.getResID())
+                if(resid.equals(WBC.getResID()))
                 {
                     return true;
                 }
@@ -290,7 +290,7 @@ public class SWBCookieMgr
      * 
      * @param resid the resid
      */
-    public void removeInstanceCookies(long resid)
+    public void removeInstanceCookies(String resid)
     {
         Iterator itkeycokie = cookies.iterator();
         while (itkeycokie.hasNext())
@@ -298,7 +298,7 @@ public class SWBCookieMgr
             SWBCookie WBC = (SWBCookie) itkeycokie.next();
             if (WBC != null)
             {
-                if(resid==WBC.getResID())
+                if(resid.equals(WBC.getResID()))
                 {
                     itkeycokie.remove();
                 }

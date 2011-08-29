@@ -130,7 +130,7 @@ public class SWBBridge
      * @throws IOException Signals that an I/O exception has occurred.
      * @return
      */
-    public SWBBridgeResponse bridge(String remoteURL,  HttpServletRequest request, HttpServletResponse response, long instance) throws java.net.MalformedURLException, java.io.IOException
+    public SWBBridgeResponse bridge(String remoteURL,  HttpServletRequest request, HttpServletResponse response, String instance) throws java.net.MalformedURLException, java.io.IOException
     {
         return bridge(remoteURL, null, request, response, response.getOutputStream(), true, instance);
     }
@@ -147,7 +147,7 @@ public class SWBBridge
      * @throws IOException Signals that an I/O exception has occurred.
      * @return
      */
-    public SWBBridgeResponse bridge(String remoteURL, HttpServletRequest request, OutputStream out, long instance) throws java.net.MalformedURLException, java.io.IOException
+    public SWBBridgeResponse bridge(String remoteURL, HttpServletRequest request, OutputStream out, String instance) throws java.net.MalformedURLException, java.io.IOException
     {
         return bridge(remoteURL, null, request, null, out, false, instance);
     }    
@@ -166,7 +166,7 @@ public class SWBBridge
      * @throws IOException Signals that an I/O exception has occurred.
      * @return
      */
-    public SWBBridgeResponse bridge(String remoteURL,String ssoURL,  HttpServletRequest request, HttpServletResponse response, long instance) throws java.net.MalformedURLException, java.io.IOException
+    public SWBBridgeResponse bridge(String remoteURL,String ssoURL,  HttpServletRequest request, HttpServletResponse response, String instance) throws java.net.MalformedURLException, java.io.IOException
     {
         return bridge(remoteURL, ssoURL, request, response, response.getOutputStream(), true, instance);
     }
@@ -184,7 +184,7 @@ public class SWBBridge
      * @throws IOException Signals that an I/O exception has occurred.
      * @return
      */
-    public SWBBridgeResponse bridge(String remoteURL, String ssoURL, HttpServletRequest request, OutputStream out, long instance) throws java.net.MalformedURLException, java.io.IOException
+    public SWBBridgeResponse bridge(String remoteURL, String ssoURL, HttpServletRequest request, OutputStream out, String instance) throws java.net.MalformedURLException, java.io.IOException
     {
         return bridge(remoteURL, ssoURL, request, null, out, false, instance);
     }
@@ -203,7 +203,7 @@ public class SWBBridge
      * @throws MalformedURLException the malformed url exception
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    private SWBBridgeResponse bridge(String remoteURL, String ssoURL, HttpServletRequest request, HttpServletResponse response, OutputStream out, boolean usedResponse, long instance) throws java.net.MalformedURLException, java.io.IOException
+    public SWBBridgeResponse bridge(String remoteURL, String ssoURL, HttpServletRequest request, HttpServletResponse response, OutputStream out, boolean usedResponse, String instance) throws java.net.MalformedURLException, java.io.IOException
     {
         //System.out.println(""+System.currentTimeMillis()+": "+"EnterBridge:"+remoteURL);
         SWBBridgeResponse ret = new SWBBridgeResponse();
@@ -301,7 +301,7 @@ public class SWBBridge
                     String wbcookie=request.getHeader(cookieTag);
                     //System.out.println("wbcookie:"+wbcookie);
                     SWBCookieMgr aux=new SWBCookieMgr();
-                    aux.addCookies(wbcookie,"[*]",0);
+                    aux.addCookies(wbcookie,"[*]","");
                     Iterator it=aux.getWBSSOCookies();
                     while(it.hasNext())
                     {
@@ -397,12 +397,13 @@ public class SWBBridge
         ret.setResponseCode(resc);
         ret.setResponseMessage(resm);
 
-        if (resc == 302)
+        if (con.getHeaderField("Location")!=null)//resc == 302)
         {
             InputStream st=con.getErrorStream();
             if(st!=null)ret.setErrorMessage(SWBUtils.IO.readInputStream(st));            
             //System.out.println("*************** redirect *********************************");
-            if (usedResponse) response.sendRedirect(con.getHeaderField("Location"));
+            //System.out.println(con.getHeaderField("Location"));
+            if (usedResponse && out!=null) response.sendRedirect(con.getHeaderField("Location"));
             //ret="302:"+con.getHeaderField("Location");
         } else if (resc == 200)
         {
@@ -420,12 +421,18 @@ public class SWBBridge
                 }
             }
             InputStream in = con.getInputStream();
-            byte buff[] = new byte[8192];
-            int r = 0;
-            while ((r = in.read(buff)) != -1)
+            if(out!=null)
             {
-                out.write(buff, 0, r);
-                //System.out.print(new String(buff,0,r));
+                byte buff[] = new byte[8192];
+                int r = 0;
+                while ((r = in.read(buff)) != -1)
+                {
+                    out.write(buff, 0, r);
+                    //System.out.print(new String(buff,0,r));
+                }
+            }else
+            {
+                ret.setInputStream(in);
             }
             //ret="200:"+con.getContentType();
         } else

@@ -53,7 +53,7 @@ public class SWBCookie
     private String host;
     
     /** The resid. */
-    private long resid;
+    private String resid;
 
     /**
      * Instantiates a new sWB cookie.
@@ -65,7 +65,7 @@ public class SWBCookie
         expires = null;
         path = "/";
         host = null;
-        resid = 0;
+        resid = "";
     }
 
     /**
@@ -78,7 +78,7 @@ public class SWBCookie
      * @param host the host
      * @param resid the resid
      */    
-    public SWBCookie(String name, String value, String expires, String path, String host, long resid)
+    public SWBCookie(String name, String value, String expires, String path, String host, String resid)
     {
         this.name = name;
         this.value = value;
@@ -150,7 +150,7 @@ public class SWBCookie
      * @return the res id
      * @return
      */    
-    public long getResID()
+    public String getResID()
     {
         return resid;
     }
@@ -210,7 +210,7 @@ public class SWBCookie
      * 
      * @param resid the new res id
      */    
-    public void setResID(long resid)
+    public void setResID(String resid)
     {
         this.resid = resid;
     }

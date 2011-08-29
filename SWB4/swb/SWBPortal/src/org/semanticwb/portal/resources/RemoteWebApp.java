@@ -149,7 +149,7 @@ public class RemoteWebApp extends GenericAdmResource
             String headers=base.getAttribute("headers");
             //String removePath=base.getAttribute("removePath","http://200.33.31.6;http://172.20.174.55");
             String cookies=base.getAttribute("cookies");
-            long instance=Long.parseLong(base.getAttribute("instance",""+base.getId()));
+            String instance=base.getAttribute("instance",""+base.getId());
             
             String uri = request.getRequestURI();
             
