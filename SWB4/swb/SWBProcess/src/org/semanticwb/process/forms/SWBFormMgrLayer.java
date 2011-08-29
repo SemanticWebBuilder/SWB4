@@ -224,6 +224,9 @@ public class SWBFormMgrLayer {
             } else if (request.getParameter("reject") != null) {
                 foi.close(response.getUser(), Instance.ACTION_REJECT);
                 response.sendRedirect(foi.getProcessWebPage().getUrl());
+            } else if(request.getParameter("swp_action") != null) {            
+                foi.close(response.getUser(), request.getParameter("swp_action"));
+                response.sendRedirect(foi.getProcessWebPage().getUrl());
             }
             response.setRenderParameter("suri", suri);
         } catch (Exception e) {
