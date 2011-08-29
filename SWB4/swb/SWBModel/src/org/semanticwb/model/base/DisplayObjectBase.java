@@ -14,7 +14,7 @@ public abstract class DisplayObjectBase extends org.semanticwb.model.SWBClass im
     public static final org.semanticwb.platform.SemanticProperty swbxf_doTreeController=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#doTreeController");
     public static final org.semanticwb.platform.SemanticProperty swbxf_doDispatcher=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#doDispatcher");
    /**
-   * Define el modo de desplieque del objeto en el arbol de administracion de SWB, valores (full_access (default), edit_only, herarquical_edit_only)
+   * Define el modo de desplieque del objeto en el arbol de administracion de SWB, valores (null (Valor heredado o full_access en caso de no herencia ), full_access, edit_only, herarquical_edit_only),
    */
     public static final org.semanticwb.platform.SemanticProperty swb_displayMode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#displayMode");
    /**
