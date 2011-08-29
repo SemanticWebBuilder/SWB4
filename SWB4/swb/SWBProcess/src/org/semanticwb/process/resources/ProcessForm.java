@@ -427,8 +427,8 @@ public class ProcessForm extends GenericResource {
                     foi.close(response.getUser(), Instance.ACTION_REJECT);
                     response.sendRedirect(foi.getProcessWebPage().getUrl());
                 }
-
             } catch (Exception e) {
+                log.error(e);
                 response.setRenderParameter("err", "invalidForm");
             }
 
