@@ -47,23 +47,20 @@ import org.semanticwb.process.model.ProcessInstance;
  * @author Sergio Téllez
  */
 public class ResponseCase extends GenericResource {
+    private static Logger log = SWBUtils.getLogger(ResponseCase.class);
     public static final String TIMEUNIT_SECONDS="1";
     public static final String TIMEUNIT_MINUTES="2";
     public static final String TIMEUNIT_HOURS="3";
-    private static Logger log = SWBUtils.getLogger(ResponseCase.class);
-
+    
     String theme = "dojox.charting.themes.PlotKit.blue";
-    String opacity = "0.4";
-    String colour = "#3090C7";
-    String[] highColours = {"#EB8EBF", "#AB91BC", "#637CB0", "#92C2DF", "#BDDDE4", "#69BF8E", "#B0D990", "#F7FA7B", "#F9DF82", "#E46F6A"};
 
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (SWBParamRequest.Action_EDIT.equals(paramRequest.getAction())) {
-            System.out.println("action: " + paramRequest.getAction() + "LLendose a admin");
+//            System.out.println("action: " + paramRequest.getAction() + "LLendose a admin");
             doAdminCase(request, response, paramRequest);
         } else {
-            System.out.println("action: " + paramRequest.getAction() + "LLendose a adminResume");
+//          System.out.println("action: " + paramRequest.getAction() + "LLendose a adminResume");
             doAdminResume(request, response, paramRequest);
         }
     }
@@ -183,6 +180,25 @@ public class ResponseCase extends GenericResource {
         out.print("              </tr>\n");
         out.print("         </table>\n");
         out.print("     </fieldset>\n");
+        
+//        out.print("      <fieldset>\n");
+//        out.print("          <legend>" + paramRequest.getLocaleString("LOG") + "</legend>\n");
+//        out.print("          <table border=\"0\" width=\"70%\" align=\"center\">\n");
+//        out.print("              <tr>\n");
+//        out.print("                  <td><input id=\"show_log\" type=\"checkbox\" name=\"show_log\" value=\"1\"" + ("1".equalsIgnoreCase(getAttribute(pid,"show_log")) ? " checked" : "") + "> " + paramRequest.getLocaleString("showLog") + "</td>\n");
+//        out.print("              </tr>\n");
+//        out.print("              <tr>\n");
+//        out.print("                  <td><input id=\"last_date\" type=\"radio\" name=\"last_date\" value=\"1\"" + ("1".equalsIgnoreCase(getAttribute(pid,"last_date")) ? " checked" : "") + "> " + paramRequest.getLocaleString("lastWeek") + "</td>\n");
+//        out.print("              </tr>\n");
+//        out.print("              <tr>\n");
+//        out.print("                  <td><input id=\"last_date\" type=\"radio\" name=\"last_date\" value=\"2\"" + ("2".equalsIgnoreCase(getAttribute(pid,"last_date")) ? " checked" : "") + "> " + paramRequest.getLocaleString("lastMonth") + "</td>\n");
+//        out.print("              </tr>\n");
+//        out.print("              <tr>\n");
+//        out.print("                  <td><input id=\"last_date\" type=\"radio\" name=\"last_date\" value=\"3\"" + ("3".equalsIgnoreCase(getAttribute(pid,"last_date")) ? " checked" : "") + "> " + paramRequest.getLocaleString("lastYear") + "</td>\n");
+//        out.print("              </tr>\n");
+//        out.print("         </table>\n");
+//        out.print("     </fieldset>\n");
+        
         out.print("     <fieldset>\n");
         out.print("         <button  dojoType=\"dijit.form.Button\" type=\"submit\" >"+paramRequest.getLocaleString("apply")+"</button>");
         url = paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW);
@@ -269,6 +285,22 @@ public class ResponseCase extends GenericResource {
         out.print("              </tr>\n");
         out.print("         </table>\n");
         out.print("     </fieldset>\n");
+        
+//        out.print("      <fieldset>\n");
+//        out.print("          <legend>" + paramRequest.getLocaleString("LOG") + "</legend>\n");
+//        out.print("          <table border=\"0\" width=\"70%\" align=\"center\">\n");
+//        out.print("              <tr>\n");
+//        out.print("                  <td>" + ("1".equalsIgnoreCase(getAttribute(suri,"last_date")) ? paramRequest.getLocaleString("lastWeek") : "") + "</td>\n");
+//        out.print("              </tr>\n");
+//        out.print("              <tr>\n");
+//        out.print("                  <td>" + ("2".equalsIgnoreCase(getAttribute(suri,"last_date")) ? paramRequest.getLocaleString("lastMonth") : "") + "</td>\n");
+//        out.print("              </tr>\n");
+//        out.print("              <tr>\n");
+//        out.print("                  <td>" + ("3".equalsIgnoreCase(getAttribute(suri,"last_date")) ? paramRequest.getLocaleString("lastYear") : "") + "</td>\n");
+//        out.print("              </tr>\n");
+//        out.print("         </table>\n");
+//        out.print("     </fieldset>\n");
+        
         out.print("     <fieldset>\n");
         out.print("         <button dojoType=\"dijit.form.Button\" onClick=\"submitUrl('" + url + "',this.domNode); return false;\">"+paramRequest.getLocaleString("config")+"</button>");
         url = paramRequest.getRenderUrl();
@@ -363,7 +395,7 @@ public class ResponseCase extends GenericResource {
         String suri = request.getParameter("suri");
         Process process = getProcess(suri);
         try {
-            getResourceBase().setAttribute("process_"+process.getId(),getConfig(request.getParameter("plot"), request.getParameter("plot_theme"), request.getParameter("time_unit"), request.getParameter("display_totals")));
+            getResourceBase().setAttribute("process_"+process.getId(),getConfig(request.getParameter("plot"), request.getParameter("plot_theme"), request.getParameter("time_unit"), request.getParameter("display_totals"), request.getParameter("show_log"), request.getParameter("last_date")));
             /*getResourceBase().setAttribute("process", request.getParameter("process"));
             getResourceBase().setAttribute("plot", request.getParameter("plot"));
             getResourceBase().setAttribute("plot_theme", request.getParameter("plot_theme"));
@@ -396,9 +428,7 @@ public class ResponseCase extends GenericResource {
         
         out.println("<script type=\"text/javascript\">");
         out.println("   dojo.require(\"dojox.charting.Chart2D\");");
-        out.println("   dojo.require(\"dojox.charting.themes.PlotKit.blue\");");
-        out.println("   dojo.require(\"dojox.charting.themes.PlotKit.green\");");
-        out.println("   dojo.require(\"dojox.charting.themes.PlotKit.red\");");
+        out.println("   dojo.require(\"" + theme + "\");");
         out.println("   dojo.require(\"dojox.charting.action2d.MoveSlice\");");
         out.println("   dojo.require(\"dojox.charting.action2d.Tooltip\");");
         out.println("   dojo.require(\"dojox.charting.action2d.Highlight\");");
@@ -440,11 +470,8 @@ public class ResponseCase extends GenericResource {
         if (_data != null) {
             out.println("<script type=\"text/javascript\">");
             out.println("   dojo.require(\"dojox.charting.Chart2D\");");
-            out.println("   dojo.require(\"dojox.charting.themes.PlotKit.blue\");");
-            out.println("   dojo.require(\"dojox.charting.themes.PlotKit.green\");");
-            out.println("   dojo.require(\"dojox.charting.themes.PlotKit.red\");");
+            out.println("   dojo.require(\"" + theme + "\");");
             out.println("   dojo.require(\"dojox.charting.action2d.Tooltip\");");
-            out.println("   dojo.require(\"dojox.charting.action2d.Shake\");");
             out.println("   makeObjects = function(){");
             out.println("       var chartData = [" + _data[0] +"," + _data[1] + "," + _data[2] + "];");
             out.println("       var chart = new dojox.charting.Chart2D(\""+lid+"_instances\");");
@@ -453,7 +480,6 @@ public class ResponseCase extends GenericResource {
             out.println("           type: \"Columns\",");
             out.println("           fontColor: \"white\",");
             out.println("           markers: true,");
-            out.println("           gap: 5,");
             out.println("       });");
             out.println("       chart.addAxis(\"x\", {");
             out.println("           labels:[");
@@ -469,7 +495,6 @@ public class ResponseCase extends GenericResource {
             out.println("       chart.addAxis(\"y\", {vertical:true, min:0});");
             out.println("       chart.addSeries(\"CaseResponseTime\", chartData);");
             out.println("       var c = new dojox.charting.action2d.Tooltip(chart, \"default\");");
-            out.println("       var b = new dojox.charting.action2d.Shake(chart, \"default\");");
             out.println("       chart.render();");
             out.println("   };");
             out.println("   dojo.addOnLoad(makeObjects);");
@@ -493,11 +518,8 @@ public class ResponseCase extends GenericResource {
         if (_data != null) {
             out.println("<script type=\"text/javascript\">");
             out.println("   dojo.require(\"dojox.charting.Chart2D\");");
-            out.println("   dojo.require(\"dojox.charting.themes.PlotKit.blue\");");
-            out.println("   dojo.require(\"dojox.charting.themes.PlotKit.green\");");
-            out.println("   dojo.require(\"dojox.charting.themes.PlotKit.red\");");
+            out.println("   dojo.require(\"" + theme + "\");");
             out.println("   dojo.require(\"dojox.charting.action2d.Tooltip\");");
-            out.println("   dojo.require(\"dojox.charting.action2d.Magnify\");");
             out.println("   makeObjects = function(){");
             out.println("       var chartData = [" + _data[0] +"," + _data[1] + "," + _data[2] + "];");
             out.println("       var chart = new dojox.charting.Chart2D(\""+lid+"_instances\");");
@@ -521,7 +543,6 @@ public class ResponseCase extends GenericResource {
             out.println("       });");
             out.println("       chart.addAxis(\"y\", {vertical:true, min:0, max:" + _data[2] + "});");
             out.println("       chart.addSeries(\"CaseResponseTime\", chartData);");
-            out.println("       var b = new dojox.charting.action2d.Magnify(chart, \"default\");");
             out.println("       var c = new dojox.charting.action2d.Tooltip(chart, \"default\");");
             out.println("       chart.render();");
             out.println("   };");
@@ -625,10 +646,12 @@ public class ResponseCase extends GenericResource {
         return ret;
     }
 
-    private String getConfig(String plot, String colours, String time, String totals) {
+    private String getConfig(String plot, String colours, String time, String totals, String log, String lowerDate) {
         StringBuilder config = new StringBuilder();
         config.append(plot).append(colours).append(time);
         if ("1".equals(totals)) config.append(totals); else config.append("0");
+        if ("1".equals(log)) config.append(log); else config.append("0");
+        config.append(lowerDate);
         return config.toString();
     }
 
@@ -642,8 +665,13 @@ public class ResponseCase extends GenericResource {
             if (config.length() > 1) attribute = config.substring(1, 2); else attribute = "1";
         }else if ("time_unit".equals(title)) {
             if (config.length() > 2) attribute = config.substring(2, 3); else attribute = "1";
-        }else if ("display_totals".equals(title) && config.length() > 3)
-            attribute = config.substring(3, 4);
+        }else if ("display_totals".equals(title)) {
+            if (config.length() > 3) attribute = config.substring(3, 4); else attribute = "1";
+        }else if ("show_log".equals(title)) {
+            if (config.length() > 4) attribute = config.substring(4, 5); else attribute = "0";
+        } else if ("last_date".equals(title)) {
+            if (config.length() > 5) attribute = config.substring(5, 6); else attribute = "1";
+        }
         return attribute;
     }
 }
