@@ -30,6 +30,7 @@
 
 package org.semanticwb.portal.lib;
 
+import java.io.InputStream;
 import java.util.*;
 
 // TODO: Auto-generated Javadoc
@@ -58,7 +59,8 @@ public class SWBBridgeResponse
     
     /** The headervalue. */
     private ArrayList headervalue = new ArrayList();
-
+    
+    private InputStream inputStream=null;
 
     /**
      * Creates a new instance of WBBridgeResponse.
@@ -191,5 +193,14 @@ public class SWBBridgeResponse
     {
         this.errorMessage = errorMessage;
     }
+
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    public void setInputStream(InputStream inputStream) {
+        this.inputStream = inputStream;
+    }
+    
     
 }

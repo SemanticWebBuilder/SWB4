@@ -39,15 +39,21 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.FriendlyURL;
+import org.semanticwb.model.Proxy;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.SWBIPValidationExeption;
+import org.semanticwb.portal.lib.SWBBridgeResponse;
+import org.semanticwb.portal.util.SWBBridge;
 import org.semanticwb.servlet.internal.Admin;
 import org.semanticwb.servlet.internal.Distributor;
 import org.semanticwb.servlet.internal.DistributorParams;
 import org.semanticwb.servlet.internal.EditFile;
 import org.semanticwb.servlet.internal.FrmProcess;
 import org.semanticwb.servlet.internal.GoogleSiteMap;
+import org.semanticwb.servlet.internal.InternalProxy;
 import org.semanticwb.servlet.internal.InternalServlet;
 import org.semanticwb.servlet.internal.Login;
 import org.semanticwb.servlet.internal.Monitor;
@@ -127,6 +133,25 @@ public class SWBVirtualHostFilter implements Filter
         String host = _request.getServerName();
         String iserv = "";
         String iservnext=null;
+        
+        Proxy proxy=Proxy.getProxy(host); 
+        if(proxy!=null)
+        {
+            User user=SWBPortal.getUserMgr().getUser(_request, (WebSite)proxy.getSemanticObject().getModel().getModelObject().createGenericInstance());
+            if(user.haveAccess(proxy))
+            {
+                InternalProxy p=new InternalProxy(proxy);
+                if(p.doProcess(_request, _response))
+                {
+                    return;
+                }
+            }else
+            {
+                _response.sendError(403, "No tiene permiso para accesar a la página " + _request.getRequestURI() + "... ");
+                log.debug("Distributor: SendError 403");                
+                return;
+            }
+        }
 
         if (path == null || path.length() == 0)
         {
