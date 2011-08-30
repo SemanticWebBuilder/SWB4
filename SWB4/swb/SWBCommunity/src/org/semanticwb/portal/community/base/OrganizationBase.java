@@ -331,4 +331,19 @@ public abstract class OrganizationBase extends org.semanticwb.portal.community.D
          }
          return ret;
     }
+    
+    public String getTags(String lang)
+    {
+        return getSemanticObject().getProperty(swb_tags, null, lang);
+    }
+
+    public String getDisplayTags(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_tags, lang);
+    }
+
+    public void setTags(String tags, String lang)
+    {
+        getSemanticObject().setProperty(swb_tags, tags, lang);
+    }    
 }

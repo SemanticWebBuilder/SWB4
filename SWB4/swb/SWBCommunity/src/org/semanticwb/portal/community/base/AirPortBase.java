@@ -141,11 +141,26 @@ public abstract class AirPortBase extends org.semanticwb.portal.community.Organi
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.AirPort> it=new org.semanticwb.model.GenericIterator(claimer.getSemanticObject().getModel().listSubjects(swbcomm_claimer,claimer.getSemanticObject()));
             return it;
-        }
+        }        
     }
 
     public AirPortBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
+    
+    public String getTags(String lang)
+    {
+        return getSemanticObject().getProperty(swb_tags, null, lang);
+    }
+
+    public String getDisplayTags(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_tags, lang);
+    }
+
+    public void setTags(String tags, String lang)
+    {
+        getSemanticObject().setProperty(swb_tags, tags, lang);
+    }    
 }

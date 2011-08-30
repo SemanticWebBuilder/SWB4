@@ -502,4 +502,19 @@ public abstract class DirectoryObjectBase extends org.semanticwb.model.base.Gene
     {
         return new org.semanticwb.model.GenericIterator(getSemanticObject().listRelatedObjects(),true);
     }
+    
+    public String getTags(String lang)
+    {
+        return getSemanticObject().getProperty(swb_tags, null, lang);
+    }
+
+    public String getDisplayTags(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_tags, lang);
+    }
+
+    public void setTags(String tags, String lang)
+    {
+        getSemanticObject().setProperty(swb_tags, tags, lang);
+    }    
 }
