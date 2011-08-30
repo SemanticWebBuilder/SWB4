@@ -345,6 +345,30 @@ public class SWBVirtualHostFilter implements Filter
                     {
                         if(resp!=null && resp.getContentType()!=null)
                             _response.setContentType(resp.getContentType());
+
+                        if(resp instanceof SWBHttpServletResponseWrapper)
+                        {
+                            SWBHttpServletResponseWrapper _resp=(SWBHttpServletResponseWrapper)resp;
+                            for(String key : _resp.getHeaders().keySet())
+                            {
+                                Object value=_resp.getHeaders().get(key);
+                                if(value!=null)
+                                {
+                                    if(value instanceof Long)
+                                    {
+                                        _response.setDateHeader(key, ((Long)value).longValue());
+                                    }
+                                    else if(value instanceof Integer)
+                                    {
+                                        _response.setIntHeader(key, ((Integer)value).intValue());
+                                    }
+                                    else
+                                    {
+                                        _response.setHeader(key,value.toString());
+                                    }
+                                }
+                            }
+                        }
                     }
                     catch(Exception e)
                     {
