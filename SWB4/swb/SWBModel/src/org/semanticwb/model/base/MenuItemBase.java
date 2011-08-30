@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Es una pagina web utilizada para mostrar opciones del menu dentro de la administración de SWB 
    */
-public abstract class MenuItemBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Undeleteable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.model.Indexable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Filterable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Countryable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Searchable,org.semanticwb.model.Expirable,org.semanticwb.model.Traceable,org.semanticwb.model.Tagable,org.semanticwb.model.Viewable,org.semanticwb.model.RuleRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Resourceable,org.semanticwb.model.Rankable
+public abstract class MenuItemBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Indexable,org.semanticwb.model.Rankable,org.semanticwb.model.FilterableClass,org.semanticwb.model.TemplateRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Tagable,org.semanticwb.model.Countryable,org.semanticwb.model.Referensable,org.semanticwb.model.FilterableNode,org.semanticwb.model.RuleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Searchable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.NSPrefixFilterable,org.semanticwb.model.Localeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Resourceable,org.semanticwb.model.Viewable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Expirable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_mnuItemShowIFrame=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#mnuItemShowIFrame");
    /**
@@ -525,6 +525,24 @@ public abstract class MenuItemBase extends org.semanticwb.model.WebPage implemen
     public MenuItemBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the NsPrefixFilter property
+* @return String with the NsPrefixFilter
+*/
+    public String getNsPrefixFilter()
+    {
+        return getSemanticObject().getProperty(swb_nsPrefixFilter);
+    }
+
+/**
+* Sets the NsPrefixFilter property
+* @param value long with the NsPrefixFilter
+*/
+    public void setNsPrefixFilter(String value)
+    {
+        getSemanticObject().setProperty(swb_nsPrefixFilter, value);
     }
 
 /**
