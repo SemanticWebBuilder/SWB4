@@ -437,9 +437,8 @@ public class ResponseCase extends GenericResource {
         out.println("       chart.setTheme(" + theme + ");");
         out.println("       chart.addPlot(\"default\", {");
         out.println("           type: \"Pie\",");
-        out.println("           font: \"normal normal bold 10pt Tahoma\",");
-        out.println("           fontColor: \"white\",");
         out.println("           labelOffset: 40,");
+        out.println("           fontColor: \"white\",");
         out.println("           radius: 120");
         out.println("       });");
         out.println("       chart.addSeries(\"CaseResponseTime\", [");
@@ -478,8 +477,8 @@ public class ResponseCase extends GenericResource {
             out.println("       chart.setTheme(" + theme + ");");
             out.println("       chart.addPlot(\"default\", {");
             out.println("           type: \"Columns\",");
-            out.println("           fontColor: \"white\",");
             out.println("           markers: true,");
+            out.println("           gap: 5");
             out.println("       });");
             out.println("       chart.addAxis(\"x\", {");
             out.println("           labels:[");
@@ -499,8 +498,8 @@ public class ResponseCase extends GenericResource {
             out.println("   };");
             out.println("   dojo.addOnLoad(makeObjects);");
             out.println("</script>");
-            out.println("<div id=\""+lid+"_instances\" style=\"width: 400px; height: 300px;\"></div>");
-            out.println("<div id=\"stage\" style=\"width:400px; height:50px; text-align:center;\"><label>" + paramRequest.getLocaleString("title") + "("+ unit +")</label></div>\n");
+            out.println("<div id=\""+lid+"_instances\" style=\"width: 700px; height: 300px;\"></div>");
+            out.println("<div id=\"stage\" style=\"width:700px; height:50px; text-align:center;\"><label>" + paramRequest.getLocaleString("title") + "("+ unit +")</label></div>\n");
         }
     }
 
@@ -527,8 +526,6 @@ public class ResponseCase extends GenericResource {
             out.println("       chart.addPlot(\"default\", {");
             out.println("           type: \"StackedAreas\",");
             out.println("           markers: true,");
-            out.println("           font: \"normal normal bold 10pt Tahoma\",");
-            out.println("           fontColor: \"white\",");
             out.println("       });");
             out.println("       chart.addAxis(\"x\", {");
             out.println("           labels:[");
@@ -548,8 +545,8 @@ public class ResponseCase extends GenericResource {
             out.println("   };");
             out.println("   dojo.addOnLoad(makeObjects);");
             out.println("</script>");
-            out.println("<div id=\""+lid+"_instances\" style=\"width: 400px; height: 300px;\"></div>");
-            out.println("<div id=\"stage\" style=\"width:400px; height:50px; text-align:center;\"><label>" + paramRequest.getLocaleString("title") + "(" + unit + ")</label></div>\n");
+            out.println("<div id=\""+lid+"_instances\" style=\"width: 700px; height: 300px;\"></div>");
+            out.println("<div id=\"stage\" style=\"width:700px; height:50px; text-align:center;\"><label>" + paramRequest.getLocaleString("title") + "(" + unit + ")</label></div>\n");
         }
     }
 
