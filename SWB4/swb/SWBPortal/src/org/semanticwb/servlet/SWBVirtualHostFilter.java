@@ -380,9 +380,13 @@ public class SWBVirtualHostFilter implements Filter
                 swbPlatform = SWBPlatform.createInstance();
             }
 
-            InternalServlet monitor = new Monitor();
-            intServlets.put("swbmonitor.ssl", monitor);
-            monitor.init(filterConfig.getServletContext());
+            try
+            {
+                InternalServlet monitor = new Monitor();
+                intServlets.put("swbmonitor.ssl", monitor);
+                monitor.init(filterConfig.getServletContext());
+            }catch(Exception e){log.error(e);}
+            
 
             InternalServlet serv = new Distributor();
             intServlets.put("swb", serv);
