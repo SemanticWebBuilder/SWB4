@@ -6,6 +6,20 @@
     {
         return SWBUtils.TEXT.getLocaleString("locale_swb_admin", key, new Locale(lang));
     }
+    
+    public boolean validateNSPrefix(WebPage webpage)
+    {
+        boolean ret=true;
+        if(webpage instanceof MenuItem)
+        {
+            if(((MenuItem)webpage).getNsPrefixFilter()!=null)
+            {
+                String pf=((MenuItem)webpage).getNsPrefixFilter();
+                if(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getNsPrefixURI(pf)==null)ret=false;            
+            }         
+        }
+        return ret;
+    }
 
    void addChild(WebPage page, JspWriter out, User user) throws IOException
    {
@@ -14,6 +28,9 @@
         while(it.hasNext())
         {
             WebPage child=it.next();
+            
+            if(!validateNSPrefix(child))continue;
+            
             if(SWBPortal.getAdminFilterMgr().haveAccessToWebPage(user, child))
             {
                 if(user.haveAccess(child))
@@ -30,7 +47,8 @@
                     {
                         //System.out.println("mnu:"+child.getClass());
                         if(child.getSemanticObject().instanceOf(MenuItem.sclass))
-                        {
+                        {                            
+                            
                             String show=((MenuItem)child.getSemanticObject().createGenericInstance()).getShowAs();
                             if(show!=null && show.equals("DIALOG"))
                             {
@@ -62,7 +80,6 @@
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache");
 %>
-
 <div id="semwblogo" class="dijitReset dijitInline swbLogo"></div>
 <!--    <span dojoType="dijit.Tooltip" connectId="semwblogo">Semantic WebBuilder</span>-->
 
@@ -79,6 +96,9 @@
     while(it.hasNext())
     {
         WebPage child=it.next();
+        
+        if(!validateNSPrefix(child))continue;
+        
         if(SWBPortal.getAdminFilterMgr().haveAccessToWebPage(user, child))
         {
         //System.out.println(child);
