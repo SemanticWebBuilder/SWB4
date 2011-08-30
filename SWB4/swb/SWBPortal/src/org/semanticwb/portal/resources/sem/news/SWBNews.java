@@ -355,6 +355,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         String url=paramRequest.getWebPage().getUrl();
         try
         {
+            response.setContentType("application/rss+xml");
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("news", news);
             request.setAttribute("url", url);
