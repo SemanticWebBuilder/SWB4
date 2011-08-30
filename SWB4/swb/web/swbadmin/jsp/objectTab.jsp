@@ -45,6 +45,12 @@
     while(obit.hasNext())
     {
         ObjectBehavior ob=obit.next();
+        
+        if(ob.getNsPrefixFilter()!=null)
+        {
+            String pf=ob.getNsPrefixFilter();
+            if(SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getNsPrefixURI(pf)==null)continue;            
+        }
         //System.out.println("ob:"+ob);
         if(!ob.isVisible())continue;
 
