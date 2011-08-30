@@ -341,6 +341,16 @@ public class SWBVirtualHostFilter implements Filter
                 }
                 else
                 {
+                    try
+                    {
+                        if(resp!=null && resp.getContentType()!=null)
+                            _response.setContentType(resp.getContentType());
+                    }
+                    catch(Exception e)
+                    {
+                        log.error(e);
+
+                    }
                     _response.getOutputStream().write(resp.toByteArray());
                 }
             }
