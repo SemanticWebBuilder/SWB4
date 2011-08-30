@@ -78,7 +78,7 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     /** The content type. */
     private String contentType=null;
 
-    private HashMap<String, Object> headers=new HashMap<String, Object>();
+    
 
     /**
      * Creates a new instance of WBHttpServletResponseWrapper.
@@ -444,30 +444,7 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
         return this.trapContentType;
     }
 
-    @Override
-    public void setHeader(String name, String value)
-    {
-        headers.put(name, value);        
-    }
-
-    @Override
-    public void setDateHeader(String name, long date)
-    {
-        headers.put(name, new Long(date));
-    }
-
-    @Override
-    public void setIntHeader(String name, int value)
-    {
-        headers.put(name, new Integer(value));
-
-    }
-
-
-    public HashMap<String,Object> getHeaders()
-    {
-        return headers;
-    }
+   
 
 
 }
