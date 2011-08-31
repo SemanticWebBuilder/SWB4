@@ -900,8 +900,6 @@ public class WSOperationParameterConfig extends GenericResource {
 
                 JSONObject request_ws = new JSONObject();
 
-                boolean isAdded = false;
-
                 // para parametros de entrada
                 System.out.println("========================================================= Parametros de entrada: ");
                 HashMap<String,JSONObject> hmJSON = new HashMap();
@@ -924,7 +922,6 @@ public class WSOperationParameterConfig extends GenericResource {
                                 // se crea el JSON
                                 JSONObject parameters_ws = null;
                                 JSONObject pJSON = null;
-                                String tmpName = "";
                                 for (int i = 0; i < pParts.length; i++) {
                                     System.out.println("Ppart[" + i + "]:" + pParts[i]);
                                     
@@ -948,7 +945,6 @@ public class WSOperationParameterConfig extends GenericResource {
 
                                 }
                             } else {
-                                request_ws = new JSONObject();
                                 request_ws.accumulate(pParts[0], wsp.getParameterValue());
                             }
                         }
@@ -962,6 +958,7 @@ public class WSOperationParameterConfig extends GenericResource {
                 //JSONObject getResponse_ws = op.execute(request_ws);
                 //System.out.println("Retrned JSON answer:" + getResponse_ws.toString());
 
+                //Falta alinear el JSON de respuesta del WebService a las variables
 
                 // para parametros de salida
                 System.out.println("Parámetros de salida: ===================================================");
@@ -988,7 +985,6 @@ public class WSOperationParameterConfig extends GenericResource {
                                 // se crea el JSON
                                 JSONObject parameters_ws = null;
                                 JSONObject pJSON = null;
-                                String tmpName = "";
                                 for (int i = 0; i < pParts.length; i++) {
                                     System.out.println("Ppart[" + i + "]:" + pParts[i]);
                                     
@@ -1012,7 +1008,6 @@ public class WSOperationParameterConfig extends GenericResource {
 
                                 }
                             } else {
-                                response_ws = new JSONObject();
                                 response_ws.accumulate(pParts[0], wsp.getParameterValue());
                             }
                         }
