@@ -1715,7 +1715,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
             Iterator<UserGroup> iugroups = wsite.getUserRepository().listUserGroups();
             while (iugroups.hasNext()) {
                 UserGroup oUG = iugroups.next();
-                strRules.append("\n<option value=\"" + oUG.getURI() + "\">" + oUG.getDisplayTitle(user.getLanguage()) + "</option>");
+                strRules.append("\n<option value=\"" + oUG.getURI() + "\" " + (selectedItem.equals(oUG.getURI()) ? "selected" : "") + ">" + oUG.getDisplayTitle(user.getLanguage()) + "</option>");
             }
             strRules.append("\n</optgroup>");
             if (strRules.toString().length() > 0) {
