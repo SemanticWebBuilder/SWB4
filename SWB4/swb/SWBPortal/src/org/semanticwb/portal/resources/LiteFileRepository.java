@@ -810,8 +810,11 @@ public class LiteFileRepository extends GenericResource {
         }
         User user = paramRequest.getUser();
 
+        
+        
         WebPage wpage = paramRequest.getWebPage();
-        WebSite wsite = wpage.getWebSite();
+        
+        WebSite wsite = getResourceBase().getWebSite(); //wpage.getWebSite();
 
         out.println("<div class=\"swbform\">");
 
@@ -889,7 +892,7 @@ public class LiteFileRepository extends GenericResource {
             Iterator<UserGroup> iugroups = wsite.getUserRepository().listUserGroups();
             while (iugroups.hasNext()) {
                 UserGroup oUG = iugroups.next();
-                strRules.append("\n<option value=\"" + oUG.getURI() + "\">" + oUG.getDisplayTitle(user.getLanguage()) + "</option>");
+                strRules.append("\n<option value=\"" + oUG.getURI() + "\" " + (selectedItem.equals(oUG.getURI()) ? "selected" : "") + ">" + oUG.getDisplayTitle(user.getLanguage()) + "</option>");
             }
             strRules.append("\n</optgroup>");
             if (strRules.toString().length() > 0) {
@@ -1058,6 +1061,8 @@ public class LiteFileRepository extends GenericResource {
             String viewrole = request.getParameter("ver");
             String modifyrole = request.getParameter("modificar");
             String adminrole = request.getParameter("administrar");
+            
+            System.out.println("admin---=>"+adminrole);
 
             try {
                 getResourceBase().setAttribute(LVL_VIEW, viewrole);
