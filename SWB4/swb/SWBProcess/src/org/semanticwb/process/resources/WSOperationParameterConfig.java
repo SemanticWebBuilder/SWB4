@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONObject;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
@@ -228,48 +229,7 @@ public class WSOperationParameterConfig extends GenericResource {
                     if (urlwsrv != null) {
 
                         out.println("<script type=\"text/javascript\">");
-                        out.println("function MoveItems(lstbxFrom,lstbxTo) ");
-                        out.println("{ ");
-                        out.println("	var varFromBox = document.getElementById(lstbxFrom); ");
-                        out.println("	var varToBox = document.getElementById(lstbxTo); ");
-                        out.println("	if ((varFromBox != null) && (varToBox != null))  ");
-                        out.println("	{  ");
-                        out.println("		if(varFromBox.length < 1)  ");
-                        out.println("		{ ");
-                        out.println("			alert('No hay propiedades en la lista.'); ");
-                        out.println("			return false; ");
-                        out.println("		} ");
-                        out.println("		if(varFromBox.options.selectedIndex == -1) // no hay elementos seleccionados");
-                        out.println("		{ ");
-                        out.println("			alert('Selecciona una propiedad de la lista.'); ");
-                        out.println("			return false; ");
-                        out.println("		} ");
-                        out.println("		while ( varFromBox.options.selectedIndex >= 0 )  ");
-                        out.println("		{  ");
-                        out.println("			var newOption = new Option(); // crea una opcion en el select  ");
-                        out.println("			newOption.text = varFromBox.options[varFromBox.options.selectedIndex].text;  ");
-                        out.println("			newOption.value = varFromBox.options[varFromBox.options.selectedIndex].value;  ");
-                        out.println("			varToBox.options[varToBox.length] = newOption; //agrega la opción al final del select destino");
-                        out.println("			varFromBox.remove(varFromBox.options.selectedIndex); //quita la opción del select origen ");
-                        out.println("		}  ");
-                        out.println("	} ");
-                        out.println("	return false;  ");
-                        out.println("} ");
 
-                        out.println("function enviatodos(lstbox)");
-                        out.println("{");
-                        out.println("	var list = document.getElementById(lstbox);");
-                        out.println("	for (var i=0; i<list.options.length; i++){");
-                        out.println("	 list.options[i].selected=true;");
-                        out.println("	}");
-                        out.println("	return true;");
-                        out.println("}");
-                        out.println("   function updItem(uri,param,sel) {");
-                        out.println("       var valor = sel.options[sel.options.selectedIndex].value;");
-                        out.println("       var url = uri+'&'+param+'='+escape(valor);");
-                        out.println("       window.location=url;");
-                        out.println("}");
-                        
                         out.println("function reviewProp(sel,txtBox)");
                         out.println("{");
                         out.println("	var inputBox = document.getElementById(txtBox); ");
@@ -282,8 +242,7 @@ public class WSOperationParameterConfig extends GenericResource {
                         out.println("	}");
                         out.println("	return true;");
                         out.println("}");
-                        
-                        
+
                         out.println("</script>");
 
 
@@ -448,13 +407,13 @@ public class WSOperationParameterConfig extends GenericResource {
 
                                         }
                                         out.println("<option value=\"0\" " + (!isSelected ? "selected" : "") + " >Otro</option>");
-                                        
+
                                         out.println("<script type=\"dojo/connect\" event=\"onChange\">");
                                         out.println(" var sel=this;   ");
-                                        
+
                                         out.println("	var inputBox = dijit.byId('p_in_" + (tmpClick != null && tmpClick.length() > 0 ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "'); ");
                                         out.println("	if(sel.getValue()!='0') {");
-                                        
+
                                         out.println("	   inputBox.setValue(sel.getValue()); ");
                                         out.println("	   inputBox.readOnly=true;");
                                         out.println("	} else {");
@@ -462,15 +421,15 @@ public class WSOperationParameterConfig extends GenericResource {
                                         out.println("	   inputBox.setValue(''); ");
                                         out.println("	}");
                                         out.println("	return true;");
-                                        
+
                                         out.println("</script>");
-                                        
-                                        
+
+
                                         out.println("</select>");
 
 
 
-                                        out.println("<input dojoType=\"dijit.form.TextBox\" id=\"p_in_" + (tmpClick != null && tmpClick.length() > 0 ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "\" name=\"p_in_" + (tmpClick != null && tmpClick.length() > 0 ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "\" type=\"text\" " + (allparam.isRequired() ? "required=\"true\" invalidMessage=\"Valor del parámetro requerido.\" " : "") + " "+(isSelected?"readonly=\"readonly\"":"")+" value=\"" + pvalue + "\">");
+                                        out.println("<input dojoType=\"dijit.form.TextBox\" id=\"p_in_" + (tmpClick != null && tmpClick.length() > 0 ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "\" name=\"p_in_" + (tmpClick != null && tmpClick.length() > 0 ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "\" type=\"text\" " + (allparam.isRequired() ? "required=\"true\" invalidMessage=\"Valor del parámetro requerido.\" " : "") + " " + (isSelected ? "readonly=\"readonly\"" : "") + " value=\"" + pvalue + "\">");
                                     } else {
                                         out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
                                     }
@@ -657,13 +616,13 @@ public class WSOperationParameterConfig extends GenericResource {
 
                                         }
                                         out.println("<option value=\"0\" " + (!isSelected ? "selected" : "") + " >Otro</option>");
-                                        
+
                                         out.println("<script type=\"dojo/connect\" event=\"onChange\">");
                                         out.println(" var selo=this;   ");
-                                        
+
                                         out.println("	var outBox = dijit.byId('p_out_" + (tmpClick != null && tmpClick.length() > 0 ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "'); ");
                                         out.println("	if(selo.getValue()!='0') {");
-                                        
+
                                         out.println("	   outBox.setValue(selo.getValue()); ");
                                         out.println("	   outBox.readOnly=true;");
                                         out.println("	} else {");
@@ -671,12 +630,12 @@ public class WSOperationParameterConfig extends GenericResource {
                                         out.println("	   outBox.setValue(''); ");
                                         out.println("	}");
                                         out.println("	return true;");
-                                        
+
                                         out.println("</script>");
-                                        
+
                                         out.println("</select>");
 
-                                        out.println("<input dojoType=\"dijit.form.TextBox\" id=\"p_out_" + (tmpClick != null && tmpClick.length() > 0 ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "\" name=\"p_out_" + (tmpClick != null && tmpClick.length() > 0 ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "\" type=\"text\" " + (allparam.isRequired() ? "required=\"true\" invalidMessage=\"Valor del parámetro requerido.\" " : "") + " "+(isSelected?"readonly=\"readonly\"":"")+" value=\"" + pvalue + "\">");
+                                        out.println("<input dojoType=\"dijit.form.TextBox\" id=\"p_out_" + (tmpClick != null && tmpClick.length() > 0 ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "\" name=\"p_out_" + (tmpClick != null && tmpClick.length() > 0 ? tmpClick + "." : "") + allparam.getName() + "_" + allparam.getDefinitionType() + "\" type=\"text\" " + (allparam.isRequired() ? "required=\"true\" invalidMessage=\"Valor del parámetro requerido.\" " : "") + " " + (isSelected ? "readonly=\"readonly\"" : "") + " value=\"" + pvalue + "\">");
                                     } else {
                                         out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
                                     }
@@ -694,6 +653,12 @@ public class WSOperationParameterConfig extends GenericResource {
                             out.println("<fieldset>");
                             out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" >Guardar</button>");
                             out.println("</fieldset>");
+                            out.println("<fieldset>");
+                            SWBResourceURL urlexec = paramRequest.getRenderUrl();
+                            urlexec.setMode("exec");
+                            urlexec.setParameter("suri", suri);
+                            out.println("<a onclick=\"submitUrl('" + urlexec + "',this); return false;\" href=\"#\" >Ejemplo ejecucion</button>");
+                            out.println("</fieldset>");
                             out.println("</form>");
                             out.println("</div>");
 
@@ -708,6 +673,16 @@ public class WSOperationParameterConfig extends GenericResource {
                     out.println("</fieldset>");
                 }
             }
+        }
+    }
+
+    @Override
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+
+        if (paramRequest.getMode().equals("exec")) {
+            execute(request, response, paramRequest);
+        } else {
+            super.processRequest(request, response, paramRequest);
         }
     }
 
@@ -895,4 +870,163 @@ public class WSOperationParameterConfig extends GenericResource {
         response.setAction("");
         response.setMode(SWBResourceURL.Mode_VIEW);
     }
+
+    public void execute(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String suri = request.getParameter("suri");
+
+        if (suri == null) {
+            return;
+        }
+
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        GenericObject gobj = ont.getGenericObject(suri);
+
+        ServiceTask pser = null;
+        WebServiceInvoker wsrvin = null;
+
+        if (gobj instanceof WebServiceInvoker) {
+            wsrvin = (WebServiceInvoker) gobj;
+            String method = wsrvin.getMethod();
+            if (method == null) {
+                method = "";
+            }
+
+            Operation opersel = null;
+
+            WebService wsrv = wsrvin.getWebService();
+            try {
+                ServiceInfo info = org.semanticwb.webservices.WebService.getServiceinfo(new URL(wsrv.getUrl()));
+                Operation op = info.getServices()[0].getOperationByName(wsrvin.getMethod());
+
+                JSONObject request_ws = new JSONObject();
+
+                boolean isAdded = false;
+
+                // para parametros de entrada
+                System.out.println("========================================================= Parametros de entrada: ");
+                HashMap<String,JSONObject> hmJSON = new HashMap();
+                
+                Iterator<WebServiceParameter> itwsin = wsrvin.listWebServiceInputParameters();
+                while (itwsin.hasNext()) {
+                    WebServiceParameter wsp = itwsin.next();
+
+                    String pName = wsp.getParameterName();
+                    System.out.println("paramName: " + pName);
+
+                    String[] pParts = null;
+                    if (pName != null) {
+                        if (pName.indexOf(".") > -1) {
+                            pName = pName.substring(0, pName.lastIndexOf("."));
+                            System.out.println("pName: " + pName);
+                            pParts = pName.split("\\.");
+                            System.out.println("pparts.length==" + pParts.length);
+                            if (pParts != null && pParts.length > 1) {
+                                // se crea el JSON
+                                JSONObject parameters_ws = null;
+                                JSONObject pJSON = null;
+                                String tmpName = "";
+                                for (int i = 0; i < pParts.length; i++) {
+                                    System.out.println("Ppart[" + i + "]:" + pParts[i]);
+                                    
+                                    if(hmJSON.get(pParts[i])==null){
+                                        if(i==0)
+                                        {
+                                            hmJSON.put(pParts[i], request_ws);
+                                        } else {
+                                           parameters_ws = new JSONObject();
+                                           hmJSON.put(pParts[i], parameters_ws);
+                                        }
+                                    }
+                                        
+                                    if(i>0)
+                                    {
+                                        pJSON = hmJSON.get(pParts[i-1]);
+                                        parameters_ws = hmJSON.get(pParts[i]);
+                                        pJSON.accumulate(pParts[i-1], parameters_ws);
+                                        if((i+1==pParts.length)) parameters_ws.accumulate(pParts[i], wsp.getParameterValue());
+                                    }
+
+                                }
+                            } else {
+                                request_ws = new JSONObject();
+                                request_ws.accumulate(pParts[0], wsp.getParameterValue());
+                            }
+                        }
+
+                    }
+
+                }
+
+
+                System.out.println("JSON:" + request_ws.toString());
+                //JSONObject getResponse_ws = op.execute(request_ws);
+                //System.out.println("Retrned JSON answer:" + getResponse_ws.toString());
+
+
+                // para parametros de salida
+                System.out.println("Parámetros de salida: ===================================================");
+
+                HashMap<String, JSONObject> hmOut = new HashMap<String, JSONObject>();
+                //HashMap<String, String> hmVals= new HashMap<String, String>();
+                JSONObject response_ws = new JSONObject();
+                Iterator<WebServiceParameter> itwsout = wsrvin.listWebServiceOutputParameters();
+                while (itwsout.hasNext()) {
+                    
+                    WebServiceParameter wsp = itwsout.next();
+
+                    String pName = wsp.getParameterName();
+                    System.out.println("paramName: " + pName);
+
+                    String[] pParts = null;
+                    if (pName != null) {
+                        if (pName.indexOf(".") > -1) {
+                            pName = pName.substring(0, pName.lastIndexOf("."));
+                            System.out.println("pName: " + pName);
+                            pParts = pName.split("\\.");
+                            System.out.println("pparts.length==" + pParts.length);
+                            if (pParts != null && pParts.length > 1) {
+                                // se crea el JSON
+                                JSONObject parameters_ws = null;
+                                JSONObject pJSON = null;
+                                String tmpName = "";
+                                for (int i = 0; i < pParts.length; i++) {
+                                    System.out.println("Ppart[" + i + "]:" + pParts[i]);
+                                    
+                                    if(hmOut.get(pParts[i])==null){
+                                        if(i==0)
+                                        {
+                                            hmOut.put(pParts[i], response_ws);
+                                        } else {
+                                           parameters_ws = new JSONObject();
+                                           hmOut.put(pParts[i], parameters_ws);
+                                        }
+                                    }
+                                        
+                                    if(i>0)
+                                    {
+                                        pJSON = hmOut.get(pParts[i-1]);
+                                        parameters_ws = hmOut.get(pParts[i]);
+                                        pJSON.accumulate(pParts[i-1], parameters_ws);
+                                        if((i+1==pParts.length)) parameters_ws.accumulate(pParts[i], wsp.getParameterValue());
+                                    }
+
+                                }
+                            } else {
+                                response_ws = new JSONObject();
+                                response_ws.accumulate(pParts[0], wsp.getParameterValue());
+                            }
+                        }
+
+                    }
+                }
+                System.out.println("JSON:" + response_ws.toString());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            doView(request, response, paramRequest);
+        }
+    }
+
 }
