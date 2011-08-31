@@ -656,7 +656,7 @@ public class ProcessFileRepository extends GenericResource {
         User user = paramRequest.getUser();
 
         WebPage wpage = paramRequest.getWebPage();
-        WebSite wsite = wpage.getWebSite();
+        WebSite wsite = getResourceBase().getWebSite(); //wpage.getWebSite();
 
         out.println("<div class=\"swbform\">");
 
@@ -735,7 +735,7 @@ public class ProcessFileRepository extends GenericResource {
             Iterator<UserGroup> iugroups = wsite.getUserRepository().listUserGroups();
             while (iugroups.hasNext()) {
                 UserGroup oUG = iugroups.next();
-                strRules.append("\n<option value=\"" + oUG.getURI() + "\">" + oUG.getDisplayTitle(user.getLanguage()) + "</option>");
+                strRules.append("\n<option value=\"" + oUG.getURI() + "\" " + (selectedItem.equals(oUG.getURI()) ? "selected" : "") + ">" + oUG.getDisplayTitle(user.getLanguage()) + "</option>");
             }
             strRules.append("\n</optgroup>");
             if (strRules.toString().length() > 0) {
