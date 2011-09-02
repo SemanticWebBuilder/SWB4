@@ -92,21 +92,6 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Calendarable"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="WorkSpace">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Topicable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Tileable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Calendarable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <rdfs:label xml:lang="en">Work space</rdfs:label>
-    <rdfs:label xml:lang="es">Espacio de trabajo</rdfs:label>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
   <owl:Class rdf:ID="Mosaic">
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Tileable"/>
@@ -237,18 +222,18 @@
     <rdfs:label xml:lang="es">Libro</rdfs:label>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="AccessLevel">
-    <rdfs:label xml:lang="es">Nivel de acceso</rdfs:label>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <rdfs:label xml:lang="en">Access level</rdfs:label>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
   <owl:Class rdf:ID="Report">
     <rdfs:subClassOf rdf:resource="#Document"/>
     <rdfs:label xml:lang="en">Report</rdfs:label>
     <rdfs:label xml:lang="es">Reporte</rdfs:label>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="AccessLevel">
+    <rdfs:label xml:lang="es">Nivel de acceso</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:label xml:lang="en">Access level</rdfs:label>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
@@ -295,7 +280,21 @@
     <rdfs:label xml:lang="es">Espacio de trabajo</rdfs:label>
     <rdfs:label xml:lang="en">Work space</rdfs:label>
     <rdfs:domain rdf:resource="#MemberPermission"/>
-    <rdfs:range rdf:resource="#WorkSpace"/>
+    <rdfs:range>
+      <swb:Class rdf:ID="WorkSpace">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="#Tileable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Calendarable"/>
+        <rdfs:subClassOf rdf:resource="#Topicable"/>
+        <rdfs:label xml:lang="en">Work space</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdfs:label xml:lang="es">Espacio de trabajo</rdfs:label>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+      </swb:Class>
+    </rdfs:range>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_memberWorkSpace">
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectElement_1"/>
