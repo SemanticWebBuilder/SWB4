@@ -550,8 +550,8 @@ public class SWBADBNatural extends GenericResource {
             //Create SparQl translator
             tr = new SWBSparqlTranslator(lex);
             queryString = lex.getLexicon(lang).getPrefixString() + "\n" + tr.translateSentence(query, false);
-            System.out.println("--->Query String:");
-            System.out.println(queryString);
+            //System.out.println("--->Query String:");
+            //System.out.println(queryString);
             //dym = tr.didYouMean(query);
 
             //If no different suggestion
@@ -593,7 +593,7 @@ public class SWBADBNatural extends GenericResource {
         boolean rPar = false;
         int idCounter = 0;
 
-        System.out.println("--Suggesting " + (props?" properties":"") + " for word " + word);
+        //System.out.println("--Suggesting " + (props?" properties":"") + " for word " + word);
         word = URLDecoder.decode(word, "iso-8859-1");
 
         response.setContentType("text/html; charset=iso-8859-1");
