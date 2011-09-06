@@ -15,9 +15,27 @@
 <%!
     class SWBNewContentComparator implements Comparator<SWBNewContent>
     {
-        public int compare(SWBNewContent o1,SWBNewContent o2)
+
+        public int compare(SWBNewContent o1, SWBNewContent o2)
         {
-            return o1.getResourceBase().getIndex()>=o2.getResourceBase().getIndex()?1:-1;
+            Date d1 = o1.getPublishDate();
+            Date d2 = o2.getPublishDate();
+            if (d1 == null)
+            {
+                d1 = o1.getResource().getCreated();
+            }
+            if (d2 == null)
+            {
+                d2 = o2.getResource().getCreated();
+            }
+            if (d1 != null && d2 != null)
+            {
+                return d2.compareTo(d1);
+            }
+            else
+            {
+                return o1.getResourceBase().getIndex() >= o2.getResourceBase().getIndex() ? 1 : -1;
+            }
         }
     }
 %>
