@@ -173,13 +173,15 @@ public class ResponseCase extends GenericResource {
         out.print("         </table>\n");
         out.print("     </fieldset>\n");
         out.print("      <fieldset>\n");
-        out.print("          <legend>" + paramRequest.getLocaleString("labels") + "</legend>\n");
-        out.print("          <table border=\"0\" width=\"70%\" align=\"center\">\n");
-        out.print("              <tr>\n");
-        out.print("                  <td><input id=\"display_totals\" type=\"checkbox\" name=\"display_totals\" value=\"1\"" + ("1".equalsIgnoreCase(getAttribute(pid,"display_totals")) ? " checked" : "") + "> " + paramRequest.getLocaleString("DISPLAY_TOTALS") + "</td>\n");
-        out.print("              </tr>\n");
-        out.print("         </table>\n");
-        out.print("     </fieldset>\n");
+        out.print("      </fieldset>\n");
+//        out.print("      <fieldset>\n");
+//        out.print("          <legend>" + paramRequest.getLocaleString("labels") + "</legend>\n");
+//        out.print("          <table border=\"0\" width=\"70%\" align=\"center\">\n");
+//        out.print("              <tr>\n");
+//        out.print("                  <td><input id=\"display_totals\" type=\"checkbox\" name=\"display_totals\" value=\"1\"" + ("1".equalsIgnoreCase(getAttribute(pid,"display_totals")) ? " checked" : "") + "> " + paramRequest.getLocaleString("DISPLAY_TOTALS") + "</td>\n");
+//        out.print("              </tr>\n");
+//        out.print("         </table>\n");
+//        out.print("     </fieldset>\n");
         
 //        out.print("      <fieldset>\n");
 //        out.print("          <legend>" + paramRequest.getLocaleString("LOG") + "</legend>\n");
@@ -274,17 +276,17 @@ public class ResponseCase extends GenericResource {
         out.print("              </tr>\n");
         out.print("         </table>\n");
         out.print("     </fieldset>\n");
-        out.print("      <fieldset>\n");
-        out.print("          <legend>" + paramRequest.getLocaleString("labels") + "</legend>\n");
-        out.print("          <table border=\"0\" width=\"70%\" align=\"center\">\n");
-        out.print("              <tr>\n");
-        if ("1".equalsIgnoreCase(getAttribute(suri,"display_totals")))
-            out.print("                  <td>" + paramRequest.getLocaleString("DISPLAY_TOTALS") + "</td>\n");
-        else
-            out.print("                  <td>" + paramRequest.getLocaleString("DEFAULT_VIEW") + "</td>\n");
-        out.print("              </tr>\n");
-        out.print("         </table>\n");
-        out.print("     </fieldset>\n");
+//        out.print("      <fieldset>\n");
+//        out.print("          <legend>" + paramRequest.getLocaleString("labels") + "</legend>\n");
+//        out.print("          <table border=\"0\" width=\"70%\" align=\"center\">\n");
+//        out.print("              <tr>\n");
+//        if ("1".equalsIgnoreCase(getAttribute(suri,"display_totals")))
+//            out.print("                  <td>" + paramRequest.getLocaleString("DISPLAY_TOTALS") + "</td>\n");
+//        else
+//            out.print("                  <td>" + paramRequest.getLocaleString("DEFAULT_VIEW") + "</td>\n");
+//        out.print("              </tr>\n");
+//        out.print("         </table>\n");
+//        out.print("     </fieldset>\n");
         
 //        out.print("      <fieldset>\n");
 //        out.print("          <legend>" + paramRequest.getLocaleString("LOG") + "</legend>\n");
@@ -395,7 +397,7 @@ public class ResponseCase extends GenericResource {
         String suri = request.getParameter("suri");
         Process process = getProcess(suri);
         try {
-            getResourceBase().setAttribute("process_"+process.getId(),getConfig(request.getParameter("plot"), request.getParameter("plot_theme"), request.getParameter("time_unit"), request.getParameter("display_totals"), request.getParameter("show_log"), request.getParameter("last_date")));
+            getResourceBase().setAttribute("process_"+process.getId(),getConfig(request.getParameter("plot"), request.getParameter("plot_theme"), request.getParameter("time_unit"), request.getParameter("show_log"), request.getParameter("last_date")));
             /*getResourceBase().setAttribute("process", request.getParameter("process"));
             getResourceBase().setAttribute("plot", request.getParameter("plot"));
             getResourceBase().setAttribute("plot_theme", request.getParameter("plot_theme"));
@@ -444,7 +446,7 @@ public class ResponseCase extends GenericResource {
         out.println("       chart.addSeries(\"CaseResponseTime\", [");
         out.println("           " + getDataPie(process, paramRequest));
         out.println("       ]);");
-        out.println("       var a = new dojox.charting.action2d.MoveSlice(chart, \"default\")");
+        out.println("       var a = new dojox.charting.action2d.MoveSlice(chart, \"default\");");
         //out.println("       var b = new dojox.charting.action2d.Highlight(chart, \"default\", {highlight: \"#6698FF\"});");
         out.println("       var c = new dojox.charting.action2d.Tooltip(chart, \"default\");");
         out.println("       chart.render();");
@@ -608,13 +610,12 @@ public class ResponseCase extends GenericResource {
             if (time_unit.equalsIgnoreCase("1")) unit = paramRequest.getLocaleString("seconds");
             if (time_unit.equalsIgnoreCase("2")) unit = paramRequest.getLocaleString("minutes");
             if (time_unit.equalsIgnoreCase("3")) unit = paramRequest.getLocaleString("hours");
-            String display_totals = getAttribute(process.getId(), "display_totals");
             data.append("{y: "+_data[0]);
-            data.append(", text: \"" + paramRequest.getLocaleString("minimum") + "\"" + (!"".equalsIgnoreCase(display_totals) ? ", tooltip: \""+ paramRequest.getLocaleString("minTime") + " " + _data[0] + " " + unit + "\"": "") + "},");
+            data.append(", text: \"" + paramRequest.getLocaleString("minimum") + "\", tooltip: \"" + paramRequest.getLocaleString("minTime") + " " + _data[0] + " " + unit + "\"},");
             data.append("{y: "+_data[1]);
-            data.append(", text: \"" + paramRequest.getLocaleString("average") + "\"" + (!"".equalsIgnoreCase(display_totals) ? ", tooltip: \""+ paramRequest.getLocaleString("avgTime") + " " + _data[1] + " " + unit + "\"": "") + "},");
+            data.append(", text: \"" + paramRequest.getLocaleString("average") + "\", tooltip: \""+ paramRequest.getLocaleString("avgTime") + " " + _data[1] + " " + unit + "\"},");
             data.append("{y: "+_data[2]);
-            data.append(", text: \"" + paramRequest.getLocaleString("maximum") + "\"" + (!"".equalsIgnoreCase(display_totals) ? ", tooltip: \""+ paramRequest.getLocaleString("maxTime") + " " + _data[2] + " " +unit + "\"": "") + "}");
+            data.append(", text: \"" + paramRequest.getLocaleString("maximum") + "\", tooltip: \""+ paramRequest.getLocaleString("maxTime") + " " + _data[2] + " " +unit + "\"}");
         }
         return data.toString();
     }
@@ -643,10 +644,9 @@ public class ResponseCase extends GenericResource {
         return ret;
     }
 
-    private String getConfig(String plot, String colours, String time, String totals, String log, String lowerDate) {
+    private String getConfig(String plot, String colours, String time, String log, String lowerDate) {
         StringBuilder config = new StringBuilder();
         config.append(plot).append(colours).append(time);
-        if ("1".equals(totals)) config.append(totals); else config.append("0");
         if ("1".equals(log)) config.append(log); else config.append("0");
         config.append(lowerDate);
         return config.toString();
@@ -662,13 +662,12 @@ public class ResponseCase extends GenericResource {
             if (config.length() > 1) attribute = config.substring(1, 2); else attribute = "1";
         }else if ("time_unit".equals(title)) {
             if (config.length() > 2) attribute = config.substring(2, 3); else attribute = "1";
-        }else if ("display_totals".equals(title)) {
-            if (config.length() > 3) attribute = config.substring(3, 4); else attribute = "1";
-        }else if ("show_log".equals(title)) {
-            if (config.length() > 4) attribute = config.substring(4, 5); else attribute = "0";
-        } else if ("last_date".equals(title)) {
-            if (config.length() > 5) attribute = config.substring(5, 6); else attribute = "1";
         }
+//        else if ("show_log".equals(title)) {
+//            if (config.length() > 4) attribute = config.substring(3, 4); else attribute = "0";
+//        } else if ("last_date".equals(title)) {
+//            if (config.length() > 5) attribute = config.substring(4, 5); else attribute = "1";
+//        }
         return attribute;
     }
 }
