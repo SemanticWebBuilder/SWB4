@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto que define un Sitio Web 
    */
-public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Localeable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Undeleteable,org.semanticwb.model.Trashable,org.semanticwb.model.Traceable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Countryable,org.semanticwb.model.Filterable
+public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Countryable,org.semanticwb.model.Traceable,org.semanticwb.model.Indexable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.Trashable,org.semanticwb.model.Localeable,org.semanticwb.model.OntologyDepable
 {
    /**
    * Superclase de todos los tipos de Modelos de SemanticWebBuilder
@@ -26,6 +26,7 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
    */
     public static final org.semanticwb.platform.SemanticClass swb_UserRepository=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserRepository");
     public static final org.semanticwb.platform.SemanticProperty swb_userRepository=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepository");
+    public static final org.semanticwb.platform.SemanticClass swb_MetaTagGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#MetaTagGroup");
    /**
    * Objeto que define una agripacion de componentes o recursos de un mismo tipo
    */
@@ -1053,6 +1054,30 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
         getSemanticObject().setBooleanProperty(swb_undeleteable, value);
     }
 
+    public org.semanticwb.model.MetaTagGroup getMetaTagGroup(String id)
+    {
+        return org.semanticwb.model.MetaTagGroup.ClassMgr.getMetaTagGroup(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.MetaTagGroup> listMetaTagGroups()
+    {
+        return org.semanticwb.model.MetaTagGroup.ClassMgr.listMetaTagGroups(this);
+    }
+
+    public org.semanticwb.model.MetaTagGroup createMetaTagGroup(String id)
+    {
+        return org.semanticwb.model.MetaTagGroup.ClassMgr.createMetaTagGroup(id,this);
+    }
+
+    public void removeMetaTagGroup(String id)
+    {
+        org.semanticwb.model.MetaTagGroup.ClassMgr.removeMetaTagGroup(id, this);
+    }
+    public boolean hasMetaTagGroup(String id)
+    {
+        return org.semanticwb.model.MetaTagGroup.ClassMgr.hasMetaTagGroup(id, this);
+    }
+
     public org.semanticwb.model.ResourceSubType getResourceSubType(String id)
     {
         return org.semanticwb.model.ResourceSubType.ClassMgr.getResourceSubType(id, this);
@@ -1583,12 +1608,6 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
     {
         return org.semanticwb.model.Template.ClassMgr.createTemplate(id,this);
     }
-
-    public org.semanticwb.model.Template createTemplate()
-    {
-        long id=getSemanticObject().getModel().getCounter(swb_Template);
-        return org.semanticwb.model.Template.ClassMgr.createTemplate(String.valueOf(id),this);
-    } 
 
     public void removeTemplate(String id)
     {

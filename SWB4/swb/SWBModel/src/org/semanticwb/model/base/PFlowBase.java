@@ -4,18 +4,18 @@ package org.semanticwb.model.base;
    /**
    * Un Flujo de Publicación es una serie de autorizaciones por las que pasa un contenido antes de publicarse en un Sitio Web 
    */
-public abstract class PFlowBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.XMLable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable
+public abstract class PFlowBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.XMLable,org.semanticwb.model.Traceable
 {
-   /**
-   * Instancia de un recurso asociado a un flujo de publicación.
-   */
-    public static final org.semanticwb.platform.SemanticClass swb_PFlowInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlowInstance");
-    public static final org.semanticwb.platform.SemanticProperty swb_hasPFlowInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPFlowInstance");
    /**
    * Referencia a un objeto de tipo PFlow
    */
     public static final org.semanticwb.platform.SemanticClass swb_PFlowRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlowRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasPFlowRefInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPFlowRefInv");
+   /**
+   * Instancia de un recurso asociado a un flujo de publicación.
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_PFlowInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlowInstance");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasPFlowInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPFlowInstance");
    /**
    * Un Flujo de Publicación es una serie de autorizaciones por las que pasa un contenido antes de publicarse en un Sitio Web
    */
@@ -118,6 +118,29 @@ public abstract class PFlowBase extends org.semanticwb.model.SWBClass implements
             return it;
         }
        /**
+       * Gets all org.semanticwb.model.PFlow with a determined PFlowRefInv
+       * @param value PFlowRefInv of the type org.semanticwb.model.PFlowRef
+       * @param model Model of the org.semanticwb.model.PFlow
+       * @return Iterator with all the org.semanticwb.model.PFlow
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.PFlow> listPFlowByPFlowRefInv(org.semanticwb.model.PFlowRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlow> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasPFlowRefInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.PFlow with a determined PFlowRefInv
+       * @param value PFlowRefInv of the type org.semanticwb.model.PFlowRef
+       * @return Iterator with all the org.semanticwb.model.PFlow
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.PFlow> listPFlowByPFlowRefInv(org.semanticwb.model.PFlowRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlow> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasPFlowRefInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.model.PFlow with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.model.PFlow
@@ -161,29 +184,6 @@ public abstract class PFlowBase extends org.semanticwb.model.SWBClass implements
         public static java.util.Iterator<org.semanticwb.model.PFlow> listPFlowByPFlowInstance(org.semanticwb.model.PFlowInstance value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlow> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasPFlowInstance,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.PFlow with a determined PFlowRefInv
-       * @param value PFlowRefInv of the type org.semanticwb.model.PFlowRef
-       * @param model Model of the org.semanticwb.model.PFlow
-       * @return Iterator with all the org.semanticwb.model.PFlow
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.PFlow> listPFlowByPFlowRefInv(org.semanticwb.model.PFlowRef value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlow> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasPFlowRefInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.PFlow with a determined PFlowRefInv
-       * @param value PFlowRefInv of the type org.semanticwb.model.PFlowRef
-       * @return Iterator with all the org.semanticwb.model.PFlow
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.PFlow> listPFlowByPFlowRefInv(org.semanticwb.model.PFlowRef value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlow> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasPFlowRefInv,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -234,76 +234,23 @@ public abstract class PFlowBase extends org.semanticwb.model.SWBClass implements
          }
          return ret;
     }
-   /**
-   * Sets the value for the property Creator
-   * @param value Creator to set
-   */
 
-    public void setCreator(org.semanticwb.model.User value)
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
     {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
-        }else
-        {
-            removeCreator();
-        }
-    }
-   /**
-   * Remove the value for Creator property
-   */
-
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(swb_creator);
-    }
-
-   /**
-   * Gets the Creator
-   * @return a org.semanticwb.model.User
-   */
-    public org.semanticwb.model.User getCreator()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
+        return getSemanticObject().getDateProperty(swb_created);
     }
 
 /**
-* Gets the Title property
-* @return String with the Title
+* Sets the Created property
+* @param value long with the Created
 */
-    public String getTitle()
+    public void setCreated(java.util.Date value)
     {
-        return getSemanticObject().getProperty(swb_title);
-    }
-
-/**
-* Sets the Title property
-* @param value long with the Title
-*/
-    public void setTitle(String value)
-    {
-        getSemanticObject().setProperty(swb_title, value);
-    }
-
-    public String getTitle(String lang)
-    {
-        return getSemanticObject().getProperty(swb_title, null, lang);
-    }
-
-    public String getDisplayTitle(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_title, lang);
-    }
-
-    public void setTitle(String title, String lang)
-    {
-        getSemanticObject().setProperty(swb_title, title, lang);
+        getSemanticObject().setDateProperty(swb_created, value);
     }
 
 /**
@@ -322,24 +269,6 @@ public abstract class PFlowBase extends org.semanticwb.model.SWBClass implements
     public void setUpdated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-/**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
     }
 
 /**
@@ -373,45 +302,6 @@ public abstract class PFlowBase extends org.semanticwb.model.SWBClass implements
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
-    }
-   /**
-   * Gets all the org.semanticwb.model.PFlowInstance
-   * @return A GenericIterator with all the org.semanticwb.model.PFlowInstance
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowInstance> listPFlowInstances()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowInstance>(getSemanticObject().listObjectProperties(swb_hasPFlowInstance));
-    }
-
-   /**
-   * Gets true if has a PFlowInstance
-   * @param value org.semanticwb.model.PFlowInstance to verify
-   * @return true if the org.semanticwb.model.PFlowInstance exists, false otherwise
-   */
-    public boolean hasPFlowInstance(org.semanticwb.model.PFlowInstance value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(swb_hasPFlowInstance,value.getSemanticObject());
-        }
-        return ret;
-    }
-
-   /**
-   * Gets the PFlowInstance
-   * @return a org.semanticwb.model.PFlowInstance
-   */
-    public org.semanticwb.model.PFlowInstance getPFlowInstance()
-    {
-         org.semanticwb.model.PFlowInstance ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasPFlowInstance);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.PFlowInstance)obj.createGenericInstance();
-         }
-         return ret;
     }
 
 /**
@@ -487,6 +377,116 @@ public abstract class PFlowBase extends org.semanticwb.model.SWBClass implements
     public void setActive(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb_active, value);
+    }
+   /**
+   * Sets the value for the property Creator
+   * @param value Creator to set
+   */
+
+    public void setCreator(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
+    }
+   /**
+   * Remove the value for Creator property
+   */
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(swb_creator);
+    }
+
+   /**
+   * Gets the Creator
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getCreator()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
+* Gets the Title property
+* @return String with the Title
+*/
+    public String getTitle()
+    {
+        return getSemanticObject().getProperty(swb_title);
+    }
+
+/**
+* Sets the Title property
+* @param value long with the Title
+*/
+    public void setTitle(String value)
+    {
+        getSemanticObject().setProperty(swb_title, value);
+    }
+
+    public String getTitle(String lang)
+    {
+        return getSemanticObject().getProperty(swb_title, null, lang);
+    }
+
+    public String getDisplayTitle(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
+    }
+
+    public void setTitle(String title, String lang)
+    {
+        getSemanticObject().setProperty(swb_title, title, lang);
+    }
+   /**
+   * Gets all the org.semanticwb.model.PFlowInstance
+   * @return A GenericIterator with all the org.semanticwb.model.PFlowInstance
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowInstance> listPFlowInstances()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowInstance>(getSemanticObject().listObjectProperties(swb_hasPFlowInstance));
+    }
+
+   /**
+   * Gets true if has a PFlowInstance
+   * @param value org.semanticwb.model.PFlowInstance to verify
+   * @return true if the org.semanticwb.model.PFlowInstance exists, false otherwise
+   */
+    public boolean hasPFlowInstance(org.semanticwb.model.PFlowInstance value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasPFlowInstance,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets the PFlowInstance
+   * @return a org.semanticwb.model.PFlowInstance
+   */
+    public org.semanticwb.model.PFlowInstance getPFlowInstance()
+    {
+         org.semanticwb.model.PFlowInstance ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasPFlowInstance);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.PFlowInstance)obj.createGenericInstance();
+         }
+         return ret;
     }
 
    /**

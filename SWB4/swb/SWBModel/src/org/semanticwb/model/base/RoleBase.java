@@ -4,19 +4,19 @@ package org.semanticwb.model.base;
    /**
    * Objeto que define un Role dentro de un repositorio de usuarios aplicable a un Usuario para filtrar componente, seccion, plantillas, etc. 
    */
-public abstract class RoleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable
+public abstract class RoleBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable
 {
-   /**
-   * Objeto que define un Role dentro de un repositorio de usuarios aplicable a un Usuario para filtrar componente, seccion, plantillas, etc.
-   */
-    public static final org.semanticwb.platform.SemanticClass swb_Role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Role");
-    public static final org.semanticwb.platform.SemanticProperty swb_hasRoleChild=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRoleChild");
    /**
    * Referencia a un objeto de tipo Role
    */
     public static final org.semanticwb.platform.SemanticClass swb_RoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RoleRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasRoleRefInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRoleRefInv");
+   /**
+   * Objeto que define un Role dentro de un repositorio de usuarios aplicable a un Usuario para filtrar componente, seccion, plantillas, etc.
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_Role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Role");
     public static final org.semanticwb.platform.SemanticProperty swb_roleParent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#roleParent");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasRoleChild=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasRoleChild");
    /**
    * The semantic class that represents the currentObject
    */
@@ -109,52 +109,6 @@ public abstract class RoleBase extends org.semanticwb.model.SWBClass implements 
             return it;
         }
        /**
-       * Gets all org.semanticwb.model.Role with a determined Child
-       * @param value Child of the type org.semanticwb.model.Role
-       * @param model Model of the org.semanticwb.model.Role
-       * @return Iterator with all the org.semanticwb.model.Role
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.Role> listRoleByChild(org.semanticwb.model.Role value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleChild, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.Role with a determined Child
-       * @param value Child of the type org.semanticwb.model.Role
-       * @return Iterator with all the org.semanticwb.model.Role
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.Role> listRoleByChild(org.semanticwb.model.Role value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleChild,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.Role with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.model.Role
-       * @return Iterator with all the org.semanticwb.model.Role
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.Role> listRoleByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.Role with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.model.Role
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.Role> listRoleByCreator(org.semanticwb.model.User value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.model.Role with a determined RoleRefInv
        * @param value RoleRefInv of the type org.semanticwb.model.RoleRef
        * @param model Model of the org.semanticwb.model.Role
@@ -198,6 +152,52 @@ public abstract class RoleBase extends org.semanticwb.model.SWBClass implements 
         public static java.util.Iterator<org.semanticwb.model.Role> listRoleByParent(org.semanticwb.model.Role value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_roleParent,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.Role with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.model.Role
+       * @return Iterator with all the org.semanticwb.model.Role
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.Role> listRoleByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.Role with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.model.Role
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.Role> listRoleByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.Role with a determined Child
+       * @param value Child of the type org.semanticwb.model.Role
+       * @param model Model of the org.semanticwb.model.Role
+       * @return Iterator with all the org.semanticwb.model.Role
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.Role> listRoleByChild(org.semanticwb.model.Role value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleChild, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.Role with a determined Child
+       * @param value Child of the type org.semanticwb.model.Role
+       * @return Iterator with all the org.semanticwb.model.Role
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.Role> listRoleByChild(org.semanticwb.model.Role value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleChild,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -249,38 +249,145 @@ public abstract class RoleBase extends org.semanticwb.model.SWBClass implements 
          return ret;
     }
    /**
-   * Gets all the org.semanticwb.model.Role
-   * @return A GenericIterator with all the org.semanticwb.model.Role
+   * Gets all the org.semanticwb.model.RoleRef
+   * @return A GenericIterator with all the org.semanticwb.model.RoleRef
    */
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> listChilds()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listRoleRefInvs()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Role>(getSemanticObject().listObjectProperties(swb_hasRoleChild));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(getSemanticObject().listObjectProperties(swb_hasRoleRefInv));
     }
 
    /**
-   * Gets true if has a Child
-   * @param value org.semanticwb.model.Role to verify
-   * @return true if the org.semanticwb.model.Role exists, false otherwise
+   * Gets true if has a RoleRefInv
+   * @param value org.semanticwb.model.RoleRef to verify
+   * @return true if the org.semanticwb.model.RoleRef exists, false otherwise
    */
-    public boolean hasChild(org.semanticwb.model.Role value)
+    public boolean hasRoleRefInv(org.semanticwb.model.RoleRef value)
     {
         boolean ret=false;
         if(value!=null)
         {
-           ret=getSemanticObject().hasObjectProperty(swb_hasRoleChild,value.getSemanticObject());
+           ret=getSemanticObject().hasObjectProperty(swb_hasRoleRefInv,value.getSemanticObject());
         }
         return ret;
     }
 
    /**
-   * Gets the Child
+   * Gets the RoleRefInv
+   * @return a org.semanticwb.model.RoleRef
+   */
+    public org.semanticwb.model.RoleRef getRoleRefInv()
+    {
+         org.semanticwb.model.RoleRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRoleRefInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.RoleRef)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+/**
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
+    }
+
+/**
+* Gets the Description property
+* @return String with the Description
+*/
+    public String getDescription()
+    {
+        return getSemanticObject().getProperty(swb_description);
+    }
+
+/**
+* Sets the Description property
+* @param value long with the Description
+*/
+    public void setDescription(String value)
+    {
+        getSemanticObject().setProperty(swb_description, value);
+    }
+
+    public String getDescription(String lang)
+    {
+        return getSemanticObject().getProperty(swb_description, null, lang);
+    }
+
+    public String getDisplayDescription(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_description, lang);
+    }
+
+    public void setDescription(String description, String lang)
+    {
+        getSemanticObject().setProperty(swb_description, description, lang);
+    }
+   /**
+   * Sets the value for the property Parent
+   * @param value Parent to set
+   */
+
+    public void setParent(org.semanticwb.model.Role value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_roleParent, value.getSemanticObject());
+        }else
+        {
+            removeParent();
+        }
+    }
+   /**
+   * Remove the value for Parent property
+   */
+
+    public void removeParent()
+    {
+        getSemanticObject().removeProperty(swb_roleParent);
+    }
+
+   /**
+   * Gets the Parent
    * @return a org.semanticwb.model.Role
    */
-    public org.semanticwb.model.Role getChild()
+    public org.semanticwb.model.Role getParent()
     {
          org.semanticwb.model.Role ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRoleChild);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_roleParent);
          if(obj!=null)
          {
              ret=(org.semanticwb.model.Role)obj.createGenericInstance();
@@ -325,6 +432,45 @@ public abstract class RoleBase extends org.semanticwb.model.SWBClass implements 
          }
          return ret;
     }
+   /**
+   * Gets all the org.semanticwb.model.Role
+   * @return A GenericIterator with all the org.semanticwb.model.Role
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Role> listChilds()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Role>(getSemanticObject().listObjectProperties(swb_hasRoleChild));
+    }
+
+   /**
+   * Gets true if has a Child
+   * @param value org.semanticwb.model.Role to verify
+   * @return true if the org.semanticwb.model.Role exists, false otherwise
+   */
+    public boolean hasChild(org.semanticwb.model.Role value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasRoleChild,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets the Child
+   * @return a org.semanticwb.model.Role
+   */
+    public org.semanticwb.model.Role getChild()
+    {
+         org.semanticwb.model.Role ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRoleChild);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Role)obj.createGenericInstance();
+         }
+         return ret;
+    }
 
 /**
 * Gets the Title property
@@ -358,114 +504,6 @@ public abstract class RoleBase extends org.semanticwb.model.SWBClass implements 
     {
         getSemanticObject().setProperty(swb_title, title, lang);
     }
-   /**
-   * Gets all the org.semanticwb.model.RoleRef
-   * @return A GenericIterator with all the org.semanticwb.model.RoleRef
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listRoleRefInvs()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(getSemanticObject().listObjectProperties(swb_hasRoleRefInv));
-    }
-
-   /**
-   * Gets true if has a RoleRefInv
-   * @param value org.semanticwb.model.RoleRef to verify
-   * @return true if the org.semanticwb.model.RoleRef exists, false otherwise
-   */
-    public boolean hasRoleRefInv(org.semanticwb.model.RoleRef value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(swb_hasRoleRefInv,value.getSemanticObject());
-        }
-        return ret;
-    }
-
-   /**
-   * Gets the RoleRefInv
-   * @return a org.semanticwb.model.RoleRef
-   */
-    public org.semanticwb.model.RoleRef getRoleRefInv()
-    {
-         org.semanticwb.model.RoleRef ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRoleRefInv);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.RoleRef)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-/**
-* Gets the Updated property
-* @return java.util.Date with the Updated
-*/
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-/**
-* Sets the Updated property
-* @param value long with the Updated
-*/
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-/**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
-    }
-
-/**
-* Gets the Description property
-* @return String with the Description
-*/
-    public String getDescription()
-    {
-        return getSemanticObject().getProperty(swb_description);
-    }
-
-/**
-* Sets the Description property
-* @param value long with the Description
-*/
-    public void setDescription(String value)
-    {
-        getSemanticObject().setProperty(swb_description, value);
-    }
-
-    public String getDescription(String lang)
-    {
-        return getSemanticObject().getProperty(swb_description, null, lang);
-    }
-
-    public String getDisplayDescription(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_description, lang);
-    }
-
-    public void setDescription(String description, String lang)
-    {
-        getSemanticObject().setProperty(swb_description, description, lang);
-    }
 
 /**
 * Gets the Undeleteable property
@@ -483,44 +521,6 @@ public abstract class RoleBase extends org.semanticwb.model.SWBClass implements 
     public void setUndeleteable(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb_undeleteable, value);
-    }
-   /**
-   * Sets the value for the property Parent
-   * @param value Parent to set
-   */
-
-    public void setParent(org.semanticwb.model.Role value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_roleParent, value.getSemanticObject());
-        }else
-        {
-            removeParent();
-        }
-    }
-   /**
-   * Remove the value for Parent property
-   */
-
-    public void removeParent()
-    {
-        getSemanticObject().removeProperty(swb_roleParent);
-    }
-
-   /**
-   * Gets the Parent
-   * @return a org.semanticwb.model.Role
-   */
-    public org.semanticwb.model.Role getParent()
-    {
-         org.semanticwb.model.Role ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_roleParent);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.Role)obj.createGenericInstance();
-         }
-         return ret;
     }
 
    /**

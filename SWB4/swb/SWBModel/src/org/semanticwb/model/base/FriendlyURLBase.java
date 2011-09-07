@@ -1,15 +1,15 @@
 package org.semanticwb.model.base;
 
 
-public abstract class FriendlyURLBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Localeable,org.semanticwb.model.Countryable
+public abstract class FriendlyURLBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Countryable,org.semanticwb.model.Traceable,org.semanticwb.model.Localeable
 {
-    public static final org.semanticwb.platform.SemanticProperty swb_friendlyURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#friendlyURL");
    /**
    * Una Página Web es el elemento de SemanticWebBuilder a través del cual se estructura la información del portal.
    */
     public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
     public static final org.semanticwb.platform.SemanticProperty swb_friendlyURLWebPageInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#friendlyURLWebPageInv");
     public static final org.semanticwb.platform.SemanticProperty swb_frindlyOldURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#frindlyOldURL");
+    public static final org.semanticwb.platform.SemanticProperty swb_friendlyURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#friendlyURL");
     public static final org.semanticwb.platform.SemanticProperty swb_friendlyURLDescription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#friendlyURLDescription");
     public static final org.semanticwb.platform.SemanticClass swb_FriendlyURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#FriendlyURL");
    /**
@@ -110,29 +110,6 @@ public abstract class FriendlyURLBase extends org.semanticwb.model.SWBClass impl
             return it;
         }
        /**
-       * Gets all org.semanticwb.model.FriendlyURL with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.model.FriendlyURL
-       * @return Iterator with all the org.semanticwb.model.FriendlyURL
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.FriendlyURL> listFriendlyURLByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.FriendlyURL> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.FriendlyURL with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.model.FriendlyURL
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.FriendlyURL> listFriendlyURLByCreator(org.semanticwb.model.User value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.FriendlyURL> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.model.FriendlyURL with a determined WebPage
        * @param value WebPage of the type org.semanticwb.model.WebPage
        * @param model Model of the org.semanticwb.model.FriendlyURL
@@ -201,6 +178,29 @@ public abstract class FriendlyURLBase extends org.semanticwb.model.SWBClass impl
             org.semanticwb.model.GenericIterator<org.semanticwb.model.FriendlyURL> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_language,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.model.FriendlyURL with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.model.FriendlyURL
+       * @return Iterator with all the org.semanticwb.model.FriendlyURL
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.FriendlyURL> listFriendlyURLByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.FriendlyURL> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.FriendlyURL with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.model.FriendlyURL
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.FriendlyURL> listFriendlyURLByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.FriendlyURL> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**
@@ -251,59 +251,21 @@ public abstract class FriendlyURLBase extends org.semanticwb.model.SWBClass impl
     }
 
 /**
-* Gets the URL property
-* @return String with the URL
+* Gets the Created property
+* @return java.util.Date with the Created
 */
-    public String getURL()
+    public java.util.Date getCreated()
     {
-        return getSemanticObject().getProperty(swb_friendlyURL);
+        return getSemanticObject().getDateProperty(swb_created);
     }
 
 /**
-* Sets the URL property
-* @param value long with the URL
+* Sets the Created property
+* @param value long with the Created
 */
-    public void setURL(String value)
+    public void setCreated(java.util.Date value)
     {
-        getSemanticObject().setProperty(swb_friendlyURL, value);
-    }
-   /**
-   * Sets the value for the property Creator
-   * @param value Creator to set
-   */
-
-    public void setCreator(org.semanticwb.model.User value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
-        }else
-        {
-            removeCreator();
-        }
-    }
-   /**
-   * Remove the value for Creator property
-   */
-
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(swb_creator);
-    }
-
-   /**
-   * Gets the Creator
-   * @return a org.semanticwb.model.User
-   */
-    public org.semanticwb.model.User getCreator()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
+        getSemanticObject().setDateProperty(swb_created, value);
     }
 
 /**
@@ -322,24 +284,6 @@ public abstract class FriendlyURLBase extends org.semanticwb.model.SWBClass impl
     public void setUpdated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-/**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
     }
    /**
    * Sets the value for the property WebPage
@@ -435,24 +379,6 @@ public abstract class FriendlyURLBase extends org.semanticwb.model.SWBClass impl
          }
          return ret;
     }
-
-/**
-* Gets the FriendlyURLDescription property
-* @return String with the FriendlyURLDescription
-*/
-    public String getFriendlyURLDescription()
-    {
-        return getSemanticObject().getProperty(swb_friendlyURLDescription);
-    }
-
-/**
-* Sets the FriendlyURLDescription property
-* @param value long with the FriendlyURLDescription
-*/
-    public void setFriendlyURLDescription(String value)
-    {
-        getSemanticObject().setProperty(swb_friendlyURLDescription, value);
-    }
    /**
    * Sets the value for the property Language
    * @param value Language to set
@@ -490,5 +416,79 @@ public abstract class FriendlyURLBase extends org.semanticwb.model.SWBClass impl
              ret=(org.semanticwb.model.Language)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the URL property
+* @return String with the URL
+*/
+    public String getURL()
+    {
+        return getSemanticObject().getProperty(swb_friendlyURL);
+    }
+
+/**
+* Sets the URL property
+* @param value long with the URL
+*/
+    public void setURL(String value)
+    {
+        getSemanticObject().setProperty(swb_friendlyURL, value);
+    }
+   /**
+   * Sets the value for the property Creator
+   * @param value Creator to set
+   */
+
+    public void setCreator(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
+    }
+   /**
+   * Remove the value for Creator property
+   */
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(swb_creator);
+    }
+
+   /**
+   * Gets the Creator
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getCreator()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
+* Gets the FriendlyURLDescription property
+* @return String with the FriendlyURLDescription
+*/
+    public String getFriendlyURLDescription()
+    {
+        return getSemanticObject().getProperty(swb_friendlyURLDescription);
+    }
+
+/**
+* Sets the FriendlyURLDescription property
+* @param value long with the FriendlyURLDescription
+*/
+    public void setFriendlyURLDescription(String value)
+    {
+        getSemanticObject().setProperty(swb_friendlyURLDescription, value);
     }
 }
