@@ -24,6 +24,7 @@
             {
 %>
 <script type="text/javascript">
+    
     function addFav(url,divid)
     {
         //<%=mode%>
