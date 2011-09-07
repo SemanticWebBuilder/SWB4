@@ -1,5 +1,8 @@
 package org.semanticwb.remotetriplestore;
 
+import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.Triple;
+import com.hp.hpl.jena.rdf.model.Model;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -13,12 +16,14 @@ import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.rdf.AbstractStore;
 import org.semanticwb.remotetriplestore.protocol.EOT;
 import org.semanticwb.remotetriplestore.protocol.OOK;
 import org.semanticwb.remotetriplestore.protocol.Response;
 import org.semanticwb.remotetriplestore.protocol.SWBRTSCmd;
 import org.semanticwb.remotetriplestore.protocol.TripleString;
 import org.semanticwb.triplestore.SWBTSModelMaker;
+import org.semanticwb.triplestore.SWBTSUtil;
 import org.semanticwb.triplestore.SWBTripleStore;
 
 /**
@@ -71,19 +76,28 @@ public class SWBRTSConn implements Runnable
     {
         try
         {
+            System.out.print(cmd.cmd);
+            if(params!=null)
+            {
+                for(int x=0;x<params.length;x++)
+                {
+                    System.out.print(" "+params[x]);                
+                }
+            }
+            System.out.println();                
+            
             ObjectOutputStream objDataOut = new ObjectOutputStream(sock.getOutputStream());
-            SWBTripleStore store = (SWBTripleStore) SWBPlatform.getSemanticMgr().getSWBStore();
-            SWBTSModelMaker maker = store.getMaker();
-            Integer id = null;
+            AbstractStore store = SWBPlatform.getSemanticMgr().getSWBStore();
+            String name;
             String subj;
             String prop;
             String obj;
-            String ext;
             Response resp = new Response();
+            Model model;
             switch (cmd.cmd)
             {
                 case LIST_MODEL_NAMES:
-                    Iterator<String> it = maker.listModelNames();
+                    Iterator<String> it = store.listModelNames();
                     ArrayList<String> objData = new ArrayList<String>();
                     while (it.hasNext())
                     {
@@ -94,67 +108,78 @@ public class SWBRTSConn implements Runnable
                     break;
 
                 case GET_MODEL:
-                    id = maker.getMap().get(params[0]);
-                    resp.data  = id;
+                    name=params[0];
+                    if(store.getModel(name)!=null)
+                    {
+                        resp.data = new OOK();
+                    }
                     objDataOut.writeObject(resp);
                     break;
                 case CREATE_MODEL:
-                    maker.createModel(params[0]);
-                    id = maker.getMap().get(params[0]);
-                    resp.data  = id;
-                    maker.listModelNames();
-                    SWBPlatform.getSemanticMgr().loadDBModels();
+                    name=params[0];
+                    if(store.loadModel(name)!=null)
+                    {
+                        resp.data  = new OOK();
+                        SWBPlatform.getSemanticMgr().loadDBModels();
+                    }
                     objDataOut.writeObject(resp);
                     break;
                 case REMOVE_MODEL:
-                    maker.removeModel(params[0]);
-                    maker.listModelNames();
+                    name=params[0];
+                    store.removeModel(name);
                     SWBPlatform.getSemanticMgr().loadDBModels();
                     resp.data  = new OOK();
                     objDataOut.writeObject(resp);
                     break;
                 case GRAPH_BASE_FIND:
-                    id = maker.getMap().get(params[0]);
+                    name = params[0];
                     subj = params[1];
                     prop = params[2];
                     obj = params[3];
-                    resp.data=getFind(id, subj, prop, obj);
+                    resp.data=getFind(name, subj, prop, obj);
                     objDataOut.writeObject(resp);
                     break;
                 case GET_NS_PREFIX_MAP:
-                    resp.data=maker.getModel(params[0]).getNsPrefixMap();
+                    name = params[0];
+                    model=SWBPlatform.getSemanticMgr().getModel(name).getRDFModel();
+                    resp.data=model.getNsPrefixMap();
                     objDataOut.writeObject(resp);
                     break;
                 case GET_NS_PREFIX_URI:
-                    resp.data=maker.getModel(params[0]).getNsPrefixURI(params[1]);
+                    name = params[0];
+                    model=SWBPlatform.getSemanticMgr().getModel(name).getRDFModel();                    
+                    resp.data=model.getNsPrefixURI(params[1]);
                     objDataOut.writeObject(resp);
                     break;
                 case SET_NS_PREFIX:
-                    maker.getModel(params[0]).setNsPrefix(params[1], params[2]);
+                    name = params[0];
+                    model=SWBPlatform.getSemanticMgr().getModel(name).getRDFModel();                    
+                    model.setNsPrefix(params[1], params[2]);
                     resp.data=new OOK();
                     objDataOut.writeObject(resp);
                     break;
                 case REMOVE_NS_PREFIX:
-                    maker.getModel(params[0]).removeNsPrefix(params[1]);
+                    name = params[0];
+                    model=SWBPlatform.getSemanticMgr().getModel(name).getRDFModel();                    
+                    model.removeNsPrefix(params[1]);
                     resp.data=new OOK();
                     objDataOut.writeObject(resp);
                     break;
                 case GRAPH_ADD:
-                    id = maker.getMap().get(params[0]);
+                    name = params[0];
                     subj = params[1];
                     prop = params[2];
                     obj = params[3];
-                    ext = params[4];
-                    doAdd(id, subj, prop, obj, ext);
+                    doAdd(name, subj, prop, obj);
                     resp.data=new OOK();
                     objDataOut.writeObject(resp);
                     break;
                 case GRAPH_REMOVE:
-                    id = maker.getMap().get(params[0]);
+                    name = params[0];
                     subj = params[1];
                     prop = params[2];
                     obj = params[3];
-                    doRemove(id, subj, prop, obj);
+                    doRemove(name, subj, prop, obj);
                     resp.data=new OOK();
                     objDataOut.writeObject(resp);
                     break;
@@ -167,125 +192,36 @@ public class SWBRTSConn implements Runnable
         }
     }
 
-    private ArrayList<TripleString> getFind(Integer id, String subj, String prop, String obj)
+    private ArrayList<TripleString> getFind(String name, String subj, String prop, String obj)
     {
-        Connection con;
-        PreparedStatement ps;
-        ResultSet rs;
         ArrayList<TripleString> list = new ArrayList<TripleString> ();
 
-        try
-        {
-            con=SWBUtils.DB.getDefaultConnection();
+        Model model=SWBPlatform.getSemanticMgr().getModel(name).getRDFModel();
 
-            String query="select * from swb_graph_ts"+id;
-            String query2="";
-            if(subj!=null)query2+=" subj=?";
-            if(prop!=null)
-            {
-                if(query2.length()>0)query2 +=" and";
-                query2 += " prop=?";
-            }
-            if(obj!=null)
-            {
-                if(query2.length()>0)query2 +=" and";
-                query2 += " obj=?";
-            }
+        System.out.println("getFind:"+subj+":"+prop+":"+obj);
+        
+        Iterator<Triple> it=model.getGraph().find(SWBTSUtil.string2Node(subj,null), SWBTSUtil.string2Node(prop,null), SWBTSUtil.string2Node(obj,null));
+        while (it.hasNext()) {
+            Triple triple = it.next();
+            TripleString  next = new TripleString();
+            next.subj=SWBTSUtil.node2String(triple.getSubject());
+            next.prop=SWBTSUtil.node2String(triple.getPredicate());
+            next.obj=SWBTSUtil.node2String(triple.getObject());
+            list.add(next);
 
-            if(query2.length()>0)query+=" where"+query2;
-
-            ps=con.prepareStatement(query);
-            int i=1;
-            if(subj!=null)ps.setString(i++, subj);
-            if(prop!=null)ps.setString(i++, prop);
-            if(obj!=null)ps.setString(i++, obj);
-            rs=ps.executeQuery();
-
-            while(rs.next())
-            {
-                TripleString  next = new TripleString();
-                InputStream sext=rs.getAsciiStream("ext");
-                try
-                {
-                    if(sext!=null)next.ext=SWBUtils.IO.readInputStream(sext);
-                }catch(Exception e){log.error(e);}
-
-                next.subj=rs.getString("subj");
-                next.prop=rs.getString("prop");
-                next.obj=rs.getString("obj");
-                list.add(next);
-            }
-            rs.close();
-            ps.close();
-            con.close();
-        }catch(SQLException e)
-        {
-            log.error(e);
         }
         return list;
     }
 
-    private void doAdd(Integer id, String subj, String prop, String obj, String sext)
+    private void doAdd(String name, String subj, String prop, String obj)
     {
-        Connection con;
-        PreparedStatement ps;
-        try
-        {
-            con=SWBUtils.DB.getDefaultConnection();
-            if(sext.length()==0)
-            {
-                ps=con.prepareStatement("INSERT INTO swb_graph_ts"+id+" (subj, prop, obj) VALUES (?, ?, ?)");
-            }else
-            {
-                ps=con.prepareStatement("INSERT INTO swb_graph_ts"+id+" (subj, prop, obj, ext) VALUES (?, ?, ?, ?)");
-            }
-
-            ps.setString(1, subj);
-            ps.setString(2, prop);
-            ps.setString(3, obj);
-            if(sext.length()>0)ps.setAsciiStream(4, SWBUtils.IO.getStreamFromString(sext),sext.length());
-
-            ps.executeUpdate();
-            ps.close();
-            con.close();
-        } catch (Exception e2)
-        {
-            log.error(e2);
-        }
+        Model model=SWBPlatform.getSemanticMgr().getModel(name).getRDFModel();
+        model.getGraph().add(new Triple(SWBTSUtil.string2Node(subj,null), SWBTSUtil.string2Node(prop,null), SWBTSUtil.string2Node(obj,null)));
     }
 
-    private void doRemove(Integer id, String subj, String prop, String obj)
+    private void doRemove(String name, String subj, String prop, String obj)
     {
-        try
-        {
-            Connection con = SWBUtils.DB.getDefaultConnection();
-            String query="delete from swb_graph_ts"+id;
-            String query2="";
-            if(subj!=null)query2+=" subj=?";
-            if(prop!=null)
-            {
-                if(query2.length()>0)query2 +=" and";
-                query2 += " prop=?";
-            }
-            if(obj!=null)
-            {
-                if(query2.length()>0)query2 +=" and";
-                query2 += " obj=?";
-            }
-
-            if(query2.length()>0)query+=" where"+query2;
-
-            PreparedStatement ps=con.prepareStatement(query);
-            int i=1;
-            if(subj!=null)ps.setString(i++, subj);
-            if(prop!=null)ps.setString(i++, prop);
-            if(obj!=null)ps.setString(i++, obj);
-            ps.executeUpdate();
-            ps.close();
-            con.close();
-        } catch (Exception e2)
-        {
-            log.error(e2);
-        }
+        Model model=SWBPlatform.getSemanticMgr().getModel(name).getRDFModel();
+        model.getGraph().delete(new Triple(SWBTSUtil.string2Node(subj,null), SWBTSUtil.string2Node(prop,null), SWBTSUtil.string2Node(obj,null)));
     }
 }

@@ -37,6 +37,11 @@ public class SWBTripleStore implements AbstractStore
     {
         return maker.listModelNames();
     }
+    
+    public Model getModel(String name) 
+    {
+        return maker.getModel(name);
+    }    
 
     public void close()
     {
