@@ -2494,6 +2494,8 @@
     <rdfs:domain rdf:resource="#WebSite"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="metadataDef">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
     <owl:inverseOf rdf:resource="#hasMetaTagsValueInv"/>
     <rdfs:domain rdf:resource="#MetaTagValue"/>
     <rdfs:range rdf:resource="#MetaTagDef"/>
