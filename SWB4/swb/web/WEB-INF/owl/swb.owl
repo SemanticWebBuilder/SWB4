@@ -888,9 +888,9 @@
   </owl:Class>
   <owl:Class rdf:ID="MetaTagGroup">
     <rdfs:subClassOf rdf:resource="#FilterableNode"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >false</swb:autogenId>
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="#Traceable"/>
     <rdf:type rdf:resource="#Class"/>
     <rdfs:subClassOf rdf:resource="#FilterableClass"/>
@@ -1509,6 +1509,8 @@
         </swb:hasHerarquicalNode>
         <swb:hasClass>
           <swb:Class rdf:ID="Template">
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
             <swb:displayObject>
               <swbxf:DisplayObject rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_Template">
                 <swbxf:dropMatchLevel rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
@@ -1520,8 +1522,6 @@
             <rdfs:subClassOf rdf:resource="#UserGroupRefable"/>
             <rdfs:label xml:lang="es">Plantilla</rdfs:label>
             <rdfs:label xml:lang="en">Template</rdfs:label>
-            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >false</swb:autogenId>
             <rdfs:subClassOf rdf:resource="#RuleRefable"/>
             <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >Las Plantillas son documentos HTML que sirven de base a SemanticWebBuilder para poder mostrar el "look &amp; feel" del sitio, así como la distribución de todos los elementos en la pagina.</rdfs:comment>
