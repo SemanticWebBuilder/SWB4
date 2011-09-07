@@ -20,6 +20,8 @@ public interface AbstractStore
 
     public Model loadModel(String name);
 
+    public Model getModel(String name);
+    
     public Iterator<String> listModelNames();
 
     public void close();
