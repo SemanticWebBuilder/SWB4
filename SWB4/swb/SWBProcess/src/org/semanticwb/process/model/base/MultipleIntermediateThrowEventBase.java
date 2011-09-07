@@ -3,6 +3,8 @@ package org.semanticwb.process.model.base;
 
 public abstract class MultipleIntermediateThrowEventBase extends org.semanticwb.process.model.IntermediateThrowEvent implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
+    public static final org.semanticwb.platform.SemanticClass swp_IntermediateThrowEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#IntermediateThrowEvent");
+    public static final org.semanticwb.platform.SemanticProperty swp_hasThrowEvents=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasThrowEvents");
     public static final org.semanticwb.platform.SemanticClass swp_MultipleIntermediateThrowEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#MultipleIntermediateThrowEvent");
    /**
    * The semantic class that represents the currentObject
@@ -240,6 +242,29 @@ public abstract class MultipleIntermediateThrowEventBase extends org.semanticwb.
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.MultipleIntermediateThrowEvent with a determined ThrowEvents
+       * @param value ThrowEvents of the type org.semanticwb.process.model.IntermediateThrowEvent
+       * @param model Model of the org.semanticwb.process.model.MultipleIntermediateThrowEvent
+       * @return Iterator with all the org.semanticwb.process.model.MultipleIntermediateThrowEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.MultipleIntermediateThrowEvent> listMultipleIntermediateThrowEventByThrowEvents(org.semanticwb.process.model.IntermediateThrowEvent value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MultipleIntermediateThrowEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasThrowEvents, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.MultipleIntermediateThrowEvent with a determined ThrowEvents
+       * @param value ThrowEvents of the type org.semanticwb.process.model.IntermediateThrowEvent
+       * @return Iterator with all the org.semanticwb.process.model.MultipleIntermediateThrowEvent
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.MultipleIntermediateThrowEvent> listMultipleIntermediateThrowEventByThrowEvents(org.semanticwb.process.model.IntermediateThrowEvent value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MultipleIntermediateThrowEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasThrowEvents,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.MultipleIntermediateThrowEvent with a determined FlowObjectInstance
        * @param value FlowObjectInstance of the type org.semanticwb.process.model.FlowNodeInstance
        * @param model Model of the org.semanticwb.process.model.MultipleIntermediateThrowEvent
@@ -271,6 +296,71 @@ public abstract class MultipleIntermediateThrowEventBase extends org.semanticwb.
     public MultipleIntermediateThrowEventBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+   /**
+   * Gets all the org.semanticwb.process.model.IntermediateThrowEvent
+   * @return A GenericIterator with all the org.semanticwb.process.model.IntermediateThrowEvent
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.IntermediateThrowEvent> listThrowEventses()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.IntermediateThrowEvent>(getSemanticObject().listObjectProperties(swp_hasThrowEvents));
+    }
+
+   /**
+   * Gets true if has a ThrowEvents
+   * @param value org.semanticwb.process.model.IntermediateThrowEvent to verify
+   * @return true if the org.semanticwb.process.model.IntermediateThrowEvent exists, false otherwise
+   */
+    public boolean hasThrowEvents(org.semanticwb.process.model.IntermediateThrowEvent value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swp_hasThrowEvents,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a ThrowEvents
+   * @param value org.semanticwb.process.model.IntermediateThrowEvent to add
+   */
+
+    public void addThrowEvents(org.semanticwb.process.model.IntermediateThrowEvent value)
+    {
+        getSemanticObject().addObjectProperty(swp_hasThrowEvents, value.getSemanticObject());
+    }
+   /**
+   * Removes all the ThrowEvents
+   */
+
+    public void removeAllThrowEvents()
+    {
+        getSemanticObject().removeProperty(swp_hasThrowEvents);
+    }
+   /**
+   * Removes a ThrowEvents
+   * @param value org.semanticwb.process.model.IntermediateThrowEvent to remove
+   */
+
+    public void removeThrowEvents(org.semanticwb.process.model.IntermediateThrowEvent value)
+    {
+        getSemanticObject().removeObjectProperty(swp_hasThrowEvents,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the ThrowEvents
+   * @return a org.semanticwb.process.model.IntermediateThrowEvent
+   */
+    public org.semanticwb.process.model.IntermediateThrowEvent getThrowEvents()
+    {
+         org.semanticwb.process.model.IntermediateThrowEvent ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasThrowEvents);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.IntermediateThrowEvent)obj.createGenericInstance();
+         }
+         return ret;
     }
 
    /**
