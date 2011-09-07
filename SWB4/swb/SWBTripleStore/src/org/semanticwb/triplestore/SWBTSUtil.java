@@ -101,6 +101,7 @@ public class SWBTSUtil
 
     public static Node string2Node(String value, String ext)
     {
+        //log.debug("string2Node:"+value+":"+ext);
         if(value==null)return null;
 
         //Long literal
@@ -128,7 +129,11 @@ public class SWBTSUtil
             tk4 = value.substring(tk1.length()+tk2.length()+tk3.length()+3);
         }
 
-        if(tk1.equals("uri"))return Node.createURI(tk2);
+        if(tk1.equals("uri"))
+        {
+            if(tk2==null)tk2="";
+            return Node.createURI(tk2);
+        }
         if(tk1.equals("nid"))return Node.createAnon(new AnonId(tk2));
         //System.out.println("valueClass:"+value.getClass()+" "+value);
         if(tk1.equals("lit"))
@@ -233,6 +238,7 @@ public class SWBTSUtil
         if(node.isBlank())return "nid|"+node.getBlankNodeId().toString();
         if(node.isURI())
         {
+            //if(node.getURI().length()==0)new Exception().printStackTrace();
             //if(node.getURI().length()==0)return null;
             //System.out.println(node.getURI());
             return "uri|"+node.getURI();

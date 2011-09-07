@@ -11,5 +11,4 @@ public class TripleString implements Serializable{
     public String subj;
     public String prop;
     public String obj;
-    public String ext;
 }

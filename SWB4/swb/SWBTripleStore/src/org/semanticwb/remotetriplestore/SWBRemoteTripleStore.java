@@ -48,4 +48,8 @@ public class SWBRemoteTripleStore implements AbstractStore {
         return null;
     }
 
+    public Model getModel(String name) {
+        return maker.getModel(name);
+    }
+
 }

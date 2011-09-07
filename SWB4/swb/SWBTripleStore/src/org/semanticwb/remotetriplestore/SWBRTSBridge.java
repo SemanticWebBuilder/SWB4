@@ -12,7 +12,7 @@ import org.semanticwb.SWBUtils;
  *
  * @author serch
  */
-class SWBRTSBridge extends Thread{
+public class SWBRTSBridge extends Thread{
 
     private static Logger log = SWBUtils.getLogger(SWBRTSBridge.class);
     private int port;
@@ -21,7 +21,7 @@ class SWBRTSBridge extends Thread{
     private ExecutorService pool = Executors.newCachedThreadPool();
 
 
-    void setPort(int port)
+    public void setPort(int port)
     {
         this.port=port;
     }

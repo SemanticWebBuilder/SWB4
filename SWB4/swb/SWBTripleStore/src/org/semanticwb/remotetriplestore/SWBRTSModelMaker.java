@@ -36,39 +36,6 @@ public class SWBRTSModelMaker {
         } catch (Exception e) {
             log.error(e);
         }
-        
-//        map=new HashMap();
-//
-//        try
-//        {
-//            Connection con=SWBUtils.DB.getDefaultConnection();
-//            Statement st=con.createStatement();
-//            ResultSet rs=st.executeQuery("Select * from swb_graph");
-//            while(rs.next())
-//            {
-//                int id=rs.getInt("id");
-//                String name=rs.getString("name");
-//                map.put(name, id);
-//            }
-//            rs.close();
-//            st.close();
-//            con.close();
-//        }catch(SQLException e)
-//        {
-//            GenericDB db = new GenericDB();
-//            try
-//            {
-//                String xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/swb_graph.xml");
-//                db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), null);
-//                //xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/swb_longs.xml");
-//                //db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), null);
-//                xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/swb_prefix.xml");
-//                db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), null);
-//            }catch(Exception e2)
-//            {
-//                log.error(e2);
-//            }
-//        }
     }
 
     public synchronized Iterator<String> listModelNames()
@@ -97,7 +64,6 @@ public class SWBRTSModelMaker {
     {
         Model ret = null;
         try {
-
             SWBRTSCmd cmd = new SWBRTSCmd();
             cmd.cmd = Command.GET_MODEL;
             cmd.paramNumber=1;
@@ -107,10 +73,9 @@ public class SWBRTSModelMaker {
             util.setParams(params);
             Future<Response> future = pool.getPool().submit(util);
             Response resp = future.get();
-            Integer id = (Integer) resp.data;
-            if (null!=id)
+            if (null!=resp.data)
             {
-                ret = new ModelCom(new SWBRTSGraph(id,name, pool));
+                ret = new ModelCom(new SWBRTSGraph(name, pool));
             }
             
         } catch (Exception e)
@@ -136,10 +101,9 @@ public class SWBRTSModelMaker {
             util.setParams(params);
             Future<Response> future = pool.getPool().submit(util);
             Response resp = future.get();
-            Integer id = (Integer) resp.data;
-            if (null!=id)
+            if (null!=resp.data)
             {
-                model = new ModelCom(new SWBRTSGraph(id,name, pool));
+                model = new ModelCom(new SWBRTSGraph(name, pool));
             }
 
         } catch (Exception e)
@@ -153,7 +117,6 @@ public class SWBRTSModelMaker {
     public synchronized void removeModel(String name)
     {
         try {
-
             SWBRTSCmd cmd = new SWBRTSCmd();
             cmd.cmd = Command.REMOVE_MODEL;
             cmd.paramNumber=1;

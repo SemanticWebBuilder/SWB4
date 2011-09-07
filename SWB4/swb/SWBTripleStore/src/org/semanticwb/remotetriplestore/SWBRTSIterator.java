@@ -30,10 +30,6 @@ class SWBRTSIterator implements ExtendedIterator<Triple>
     private SWBRTSGraph graph=null;
     private TripleMatch tm=null;
 
-//    private Connection con;
-//    private PreparedStatement ps;
-//    private ResultSet rs;
-
     private Triple actual=null;
     private Triple next=null;
 
@@ -50,9 +46,9 @@ class SWBRTSIterator implements ExtendedIterator<Triple>
         this.graph=graph;
         this.tm=tm;
 
-        String subj=SWBTSUtil.node2HashString(tm.getMatchSubject(),"lgs");
-        String prop=SWBTSUtil.node2HashString(tm.getMatchPredicate(),"lgp");
-        String obj=SWBTSUtil.node2HashString(tm.getMatchObject(),"lgo");
+        String subj=SWBTSUtil.node2String(tm.getMatchSubject());
+        String prop=SWBTSUtil.node2String(tm.getMatchPredicate());
+        String obj=SWBTSUtil.node2String(tm.getMatchObject());        
     //    System.out.println("subj:"+subj+" prop:"+prop+" obj:"+obj);
 
         try {
@@ -67,58 +63,12 @@ class SWBRTSIterator implements ExtendedIterator<Triple>
             Future<Response> future = pool.getPool().submit(util);
             Response resp = future.get();
             ArrayList<TripleString> list = (ArrayList<TripleString>) resp.data;
+            //log.debug(""+list);
             iterData = list.iterator();
         } catch (Exception e)
         {
             log.error(e);
         }
-
-//        try
-//        {
-//            con=SWBUtils.DB.getDefaultConnection();
-
-//            String query="select * from swb_graph_ts"+graph.getId();
-//            String query2="";
-//            if(subj!=null)query2+=" subj=?";
-//            if(prop!=null)
-//            {
-//                if(query2.length()>0)query2 +=" and";
-//                query2 += " prop=?";
-//            }
-//            if(obj!=null)
-//            {
-//                if(query2.length()>0)query2 +=" and";
-//                query2 += " obj=?";
-//            }
-//
-//            if(query2.length()>0)query+=" where"+query2;
-//
-//            ps=con.prepareStatement(query);
-//            int i=1;
-//            if(subj!=null)ps.setString(i++, subj);
-//            if(prop!=null)ps.setString(i++, prop);
-//            if(obj!=null)ps.setString(i++, obj);
-//            rs=ps.executeQuery();
-
-//            if(rs.next())
-//            {
-//                String ext=null;
-//                InputStream sext=rs.getAsciiStream("ext");
-//                try
-//                {
-//                    if(sext!=null)ext=SWBUtils.IO.readInputStream(sext);
-//                }catch(Exception e){log.error(e);}
-//                next = new Triple(SWBTSUtil.string2Node(rs.getString("subj"),ext), SWBTSUtil.string2Node(rs.getString("prop"),ext), SWBTSUtil.string2Node(rs.getString("obj"),ext));
-//            }else
-//            {
-//                close();
-//            }
-//        }catch(SQLException e)
-//        {
-//            log.error(e);
-//        }
-
-        //Thread.currentThread().dumpStack();
 
     }
 
@@ -167,10 +117,6 @@ class SWBRTSIterator implements ExtendedIterator<Triple>
             try
             {
                 counter--;
-                //System.out.println("SWBTSIterator Closed:"+counter+" tm:"+tm+" "+graph.getName());
-//                if(rs!=null)rs.close();
-//                if(ps!=null)ps.close();
-//                if(con!=null)con.close();
             } catch (Exception ex)
             {
                 log.error(ex);
@@ -186,28 +132,7 @@ class SWBRTSIterator implements ExtendedIterator<Triple>
     public Triple next()
     {
         TripleString mpt = iterData.next();
-        actual= new Triple(SWBTSUtil.string2Node(mpt.subj,mpt.ext), SWBTSUtil.string2Node(mpt.prop,mpt.ext), SWBTSUtil.string2Node(mpt.obj,mpt.ext));
-//        next=null;
-    //        try
-    //        {
-    //            if(rs.next())
-    //            {
-    //                String ext=null;
-    //                InputStream sext=rs.getAsciiStream("ext");
-    //                try
-    //                {
-    //                    if(sext!=null)ext=SWBUtils.IO.readInputStream(sext);
-    //                }catch(Exception e){log.error(e);}
-    //                next = new Triple(SWBTSUtil.string2Node(rs.getString("subj"),ext), SWBTSUtil.string2Node(rs.getString("prop"),ext), SWBTSUtil.string2Node(rs.getString("obj"),ext));
-    //            }else
-    //            {
-    //                close();
-    //            }
-    //
-    //        }catch(SQLException e)
-    //        {
-    //            log.error(e);
-    //        }
+        actual= new Triple(SWBTSUtil.string2Node(mpt.subj,null), SWBTSUtil.string2Node(mpt.prop,null), SWBTSUtil.string2Node(mpt.obj,null));
         return actual;
     }
 
