@@ -62,6 +62,19 @@ public class TDBStore implements AbstractStore
     {
         return set.listNames();
     }
+    
+    public Model getModel(String name) 
+    {
+        Iterator<String> it=listModelNames();
+        while (it.hasNext()) {
+            String mname = it.next();
+            if(mname.equals(name))
+            {
+                return loadModel(name);
+            }
+        }
+        return null;
+    }    
 
     /**
      * Commit all models.

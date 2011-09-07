@@ -959,8 +959,6 @@ public class SemanticMgr implements SWBInstanceObject
         if(prop!=null && prop.isInverseOf() && obj==null)obj=SemanticObject.createSemanticObject(uri);
         if (obj != null)
         {
-            //TODO:
-/*            
             if(prop!=null)           //Is a property
             {
                 if(prop.isObjectProperty())
@@ -1020,7 +1018,6 @@ public class SemanticMgr implements SWBInstanceObject
                     }
                 }
             }
-*/            
         }
     }
 

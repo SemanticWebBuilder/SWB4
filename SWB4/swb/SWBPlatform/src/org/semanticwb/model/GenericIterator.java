@@ -103,6 +103,7 @@ public class GenericIterator<T extends GenericObject> implements Iterator
         if(obj instanceof Statement)
         {
             Resource res=null;
+            //System.out.println("GenericIterator:"+res);
             if(invert)
             {
                 res=((Statement)obj).getSubject();

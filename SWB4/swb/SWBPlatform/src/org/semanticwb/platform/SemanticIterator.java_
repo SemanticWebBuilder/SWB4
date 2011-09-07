@@ -123,27 +123,9 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
                 {
                     if(invert)
                     {
-                        Resource res=((Statement)obj).getSubject();
-                        String uri=res.getURI();
-                        if(model!=null && uri.startsWith(model.getNameSpace()))
-                        {
-                            return (T)SemanticObject.createSemanticObject(res, model, cls);
-                        }else
-                        {
-                            return (T)SemanticObject.createSemanticObject(res, null, cls);
-                        }
-                    }else
-                    {
-                        Resource res=((Statement)obj).getResource();
-                        String uri=res.getURI();
-                        if(model!=null && uri.startsWith(model.getNameSpace()))
-                        {
-                            return (T)SemanticObject.createSemanticObject(res, model, cls);
-                        }else
-                        {
-                            return (T)SemanticObject.createSemanticObject(res, null, cls);
-                        }
+                        return (T)SemanticObject.createSemanticObject(((Statement)obj).getSubject(), model, cls);
                     }
+                    return (T)SemanticObject.createSemanticObject(((Statement)obj).getResource(), model, cls);
                 }catch(SWBRuntimeException re)
                 {
                     log.error(re);
@@ -166,15 +148,7 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
             {
                 try
                 {
-                    Resource res=(Resource)obj;
-                    String uri=res.getURI();
-                    if(model!=null && uri.startsWith(model.getNameSpace()))
-                    {
-                        return (T)SemanticObject.createSemanticObject(res,model,cls);
-                    }else
-                    {
-                        return (T)SemanticObject.createSemanticObject(res,null,cls);
-                    }
+                    return (T)SemanticObject.createSemanticObject((Resource)obj);
                 }
                 catch(Exception ie)
                 {
@@ -185,15 +159,7 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
             {
                 try
                 {
-                    String uri=(String)obj;
-                    if(model!=null && uri.startsWith(model.getNameSpace()))
-                    {
-                        Resource res=model.getRDFModel().getResource(uri);
-                        return (T)SemanticObject.createSemanticObject(res,model,cls);
-                    }else
-                    {
-                        return (T)SemanticObject.createSemanticObject((String)obj);
-                    }
+                    return (T)SemanticObject.createSemanticObject((String)obj);
                 }
                 catch(Exception ie)
                 {

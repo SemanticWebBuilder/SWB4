@@ -279,18 +279,7 @@ public class SemanticModel
      */
     public SemanticObject getSemanticObject(String uri)
     {
-        Property type=RDF.type;//m_model.getProperty(SemanticVocabulary.RDF_TYPE);
-        SemanticObject ret=SemanticObject.getSemanticObject(uri);
-        if(ret==null)
-        {
-            Resource res=m_model.createResource(uri);
-            //System.out.println("getSemanticObject:"+res+" "+type);
-            if(m_model.contains(res,type))
-            {
-                ret=SemanticObject.createSemanticObject(res);
-            }
-        }
-        return ret;
+        return SemanticObject.createSemanticObject(uri);
     }
 
     /**
@@ -348,10 +337,9 @@ public class SemanticModel
     {
         GenericObject ret=null;
         SemanticObject obj=getSemanticObject(uri);
-        SemanticClass cl=obj.getSemanticClass();
-        if(cl!=null && obj!=null)
+        if(obj!=null)
         {
-            ret=cl.newGenericInstance(obj);
+            ret=obj.createGenericInstance();
         }
         return ret;
     }    
@@ -369,7 +357,7 @@ public class SemanticModel
         SemanticObject obj=getSemanticObject(uri);
         if(obj!=null)
         {
-            ret=cls.newGenericInstance(obj);
+            ret=obj.createGenericInstance();
         }
         return ret;
     }
@@ -387,7 +375,7 @@ public class SemanticModel
         SemanticObject obj=createSemanticObject(uri,cls);
         if(obj!=null)
         {
-            ret=cls.newGenericInstance(obj);
+            ret=obj.createGenericInstance();
         }
         return ret;
     }    

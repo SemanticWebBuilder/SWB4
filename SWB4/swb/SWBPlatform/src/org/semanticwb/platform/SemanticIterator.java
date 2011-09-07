@@ -123,9 +123,9 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
                 {
                     if(invert)
                     {
-                        return (T)SemanticObject.createSemanticObject(((Statement)obj).getSubject(), model, cls);
+                        return (T)SemanticObject.createSemanticObject(((Statement)obj).getSubject());
                     }
-                    return (T)SemanticObject.createSemanticObject(((Statement)obj).getResource(), model, cls);
+                    return (T)SemanticObject.createSemanticObject(((Statement)obj).getResource());
                 }catch(SWBRuntimeException re)
                 {
                     log.error(re);

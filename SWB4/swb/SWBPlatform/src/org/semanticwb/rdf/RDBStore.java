@@ -119,4 +119,12 @@ public class RDBStore implements AbstractStore
         return null;
     }
 
+    public Model getModel(String name) 
+    {
+        if(maker.hasModel(name))
+        {
+            return loadModel(name);
+        }
+        return null;
+    }
 }
