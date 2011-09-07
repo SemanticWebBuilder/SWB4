@@ -33,7 +33,11 @@ public class SesameUtil {
         if(node.isBlank())return new ValueFactoryImpl().createBNode(node.getBlankNodeId().toString());
         if(node.isURI())
         {
-            if(node.getURI().length()==0)return null;
+            if(node.getURI().length()==0)
+            {
+                //return null;
+                return new ValueFactoryImpl().createBNode();
+            }
             //System.out.println(node.getURI());
             return new ValueFactoryImpl().createURI(node.getURI());
         }
