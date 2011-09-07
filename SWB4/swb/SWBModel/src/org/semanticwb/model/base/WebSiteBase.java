@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto que define un Sitio Web 
    */
-public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Countryable,org.semanticwb.model.Traceable,org.semanticwb.model.Indexable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.Trashable,org.semanticwb.model.Localeable,org.semanticwb.model.OntologyDepable
+public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.OntologyDepable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.model.Localeable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Indexable,org.semanticwb.model.Countryable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable
 {
    /**
    * Superclase de todos los tipos de Modelos de SemanticWebBuilder
@@ -1069,6 +1069,12 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
         return org.semanticwb.model.MetaTagGroup.ClassMgr.createMetaTagGroup(id,this);
     }
 
+    public org.semanticwb.model.MetaTagGroup createMetaTagGroup()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_MetaTagGroup);
+        return org.semanticwb.model.MetaTagGroup.ClassMgr.createMetaTagGroup(String.valueOf(id),this);
+    } 
+
     public void removeMetaTagGroup(String id)
     {
         org.semanticwb.model.MetaTagGroup.ClassMgr.removeMetaTagGroup(id, this);
@@ -1608,6 +1614,12 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
     {
         return org.semanticwb.model.Template.ClassMgr.createTemplate(id,this);
     }
+
+    public org.semanticwb.model.Template createTemplate()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_Template);
+        return org.semanticwb.model.Template.ClassMgr.createTemplate(String.valueOf(id),this);
+    } 
 
     public void removeTemplate(String id)
     {
