@@ -10,14 +10,14 @@ public abstract class DisplayPropertyBase extends org.semanticwb.model.SWBClass 
    * Valores posibles a seleccionar ejemplo: 1:baja|2:media|3:alta
    */
     public static final org.semanticwb.platform.SemanticProperty swbxf_propSelectValues=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propSelectValues");
-    public static final org.semanticwb.platform.SemanticProperty swbxf_propPromptMessage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propPromptMessage");
     public static final org.semanticwb.platform.SemanticProperty swbxf_propDisabled=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propDisabled");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_propInvalidMessage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propInvalidMessage");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_propPromptMessage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propPromptMessage");
    /**
    * Objeto utiizado para definir un grupo de propiedades dentro de la administración de SWB (fieldset)
    */
     public static final org.semanticwb.platform.SemanticClass swbxf_PropertyGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#PropertyGroup");
     public static final org.semanticwb.platform.SemanticProperty swbxf_propGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propGroup");
-    public static final org.semanticwb.platform.SemanticProperty swbxf_propInvalidMessage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#propInvalidMessage");
    /**
    * Superclase de los elementos de formulario usados en la creación de formularios de vistas para las propiedades de los objetos en SemanticWebBuilder
    */
@@ -164,39 +164,6 @@ public abstract class DisplayPropertyBase extends org.semanticwb.model.SWBClass 
     }
 
 /**
-* Gets the PromptMessage property
-* @return String with the PromptMessage
-*/
-    public String getPromptMessage()
-    {
-        return getSemanticObject().getProperty(swbxf_propPromptMessage);
-    }
-
-/**
-* Sets the PromptMessage property
-* @param value long with the PromptMessage
-*/
-    public void setPromptMessage(String value)
-    {
-        getSemanticObject().setProperty(swbxf_propPromptMessage, value);
-    }
-
-    public String getPromptMessage(String lang)
-    {
-        return getSemanticObject().getProperty(swbxf_propPromptMessage, null, lang);
-    }
-
-    public String getDisplayPromptMessage(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swbxf_propPromptMessage, lang);
-    }
-
-    public void setPromptMessage(String propPromptMessage, String lang)
-    {
-        getSemanticObject().setProperty(swbxf_propPromptMessage, propPromptMessage, lang);
-    }
-
-/**
 * Gets the Disabled property
 * @return boolean with the Disabled
 */
@@ -230,6 +197,72 @@ public abstract class DisplayPropertyBase extends org.semanticwb.model.SWBClass 
     public void setIndex(int value)
     {
         getSemanticObject().setIntProperty(swb_index, value);
+    }
+
+/**
+* Gets the InvalidMessage property
+* @return String with the InvalidMessage
+*/
+    public String getInvalidMessage()
+    {
+        return getSemanticObject().getProperty(swbxf_propInvalidMessage);
+    }
+
+/**
+* Sets the InvalidMessage property
+* @param value long with the InvalidMessage
+*/
+    public void setInvalidMessage(String value)
+    {
+        getSemanticObject().setProperty(swbxf_propInvalidMessage, value);
+    }
+
+    public String getInvalidMessage(String lang)
+    {
+        return getSemanticObject().getProperty(swbxf_propInvalidMessage, null, lang);
+    }
+
+    public String getDisplayInvalidMessage(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swbxf_propInvalidMessage, lang);
+    }
+
+    public void setInvalidMessage(String propInvalidMessage, String lang)
+    {
+        getSemanticObject().setProperty(swbxf_propInvalidMessage, propInvalidMessage, lang);
+    }
+
+/**
+* Gets the PromptMessage property
+* @return String with the PromptMessage
+*/
+    public String getPromptMessage()
+    {
+        return getSemanticObject().getProperty(swbxf_propPromptMessage);
+    }
+
+/**
+* Sets the PromptMessage property
+* @param value long with the PromptMessage
+*/
+    public void setPromptMessage(String value)
+    {
+        getSemanticObject().setProperty(swbxf_propPromptMessage, value);
+    }
+
+    public String getPromptMessage(String lang)
+    {
+        return getSemanticObject().getProperty(swbxf_propPromptMessage, null, lang);
+    }
+
+    public String getDisplayPromptMessage(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swbxf_propPromptMessage, lang);
+    }
+
+    public void setPromptMessage(String propPromptMessage, String lang)
+    {
+        getSemanticObject().setProperty(swbxf_propPromptMessage, propPromptMessage, lang);
     }
    /**
    * Sets the value for the property Group
@@ -268,39 +301,6 @@ public abstract class DisplayPropertyBase extends org.semanticwb.model.SWBClass 
              ret=(org.semanticwb.model.PropertyGroup)obj.createGenericInstance();
          }
          return ret;
-    }
-
-/**
-* Gets the InvalidMessage property
-* @return String with the InvalidMessage
-*/
-    public String getInvalidMessage()
-    {
-        return getSemanticObject().getProperty(swbxf_propInvalidMessage);
-    }
-
-/**
-* Sets the InvalidMessage property
-* @param value long with the InvalidMessage
-*/
-    public void setInvalidMessage(String value)
-    {
-        getSemanticObject().setProperty(swbxf_propInvalidMessage, value);
-    }
-
-    public String getInvalidMessage(String lang)
-    {
-        return getSemanticObject().getProperty(swbxf_propInvalidMessage, null, lang);
-    }
-
-    public String getDisplayInvalidMessage(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swbxf_propInvalidMessage, lang);
-    }
-
-    public void setInvalidMessage(String propInvalidMessage, String lang)
-    {
-        getSemanticObject().setProperty(swbxf_propInvalidMessage, propInvalidMessage, lang);
     }
 
     public void setFormElement(org.semanticwb.platform.SemanticObject value)

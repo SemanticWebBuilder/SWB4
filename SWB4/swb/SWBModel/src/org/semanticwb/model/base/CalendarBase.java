@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto de calendarización que permite configurar una página o un recurso para desplegarse en cierta fecha, entre un rango de fechas o incluso en periodos de tiempo definidos. 
    */
-public abstract class CalendarBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.XMLable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable
+public abstract class CalendarBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.XMLable,org.semanticwb.model.Traceable
 {
    /**
    * Referencia a un objeto de tipo Calendar
@@ -206,6 +206,111 @@ public abstract class CalendarBase extends org.semanticwb.model.SWBClass impleme
          }
          return ret;
     }
+
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+/**
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
+    }
+
+/**
+* Gets the Description property
+* @return String with the Description
+*/
+    public String getDescription()
+    {
+        return getSemanticObject().getProperty(swb_description);
+    }
+
+/**
+* Sets the Description property
+* @param value long with the Description
+*/
+    public void setDescription(String value)
+    {
+        getSemanticObject().setProperty(swb_description, value);
+    }
+
+    public String getDescription(String lang)
+    {
+        return getSemanticObject().getProperty(swb_description, null, lang);
+    }
+
+    public String getDisplayDescription(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_description, lang);
+    }
+
+    public void setDescription(String description, String lang)
+    {
+        getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+/**
+* Gets the Xml property
+* @return String with the Xml
+*/
+    public String getXml()
+    {
+        return getSemanticObject().getProperty(swb_xml);
+    }
+
+/**
+* Sets the Xml property
+* @param value long with the Xml
+*/
+    public void setXml(String value)
+    {
+        getSemanticObject().setProperty(swb_xml, value);
+    }
+
+/**
+* Gets the Active property
+* @return boolean with the Active
+*/
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(swb_active);
+    }
+
+/**
+* Sets the Active property
+* @param value long with the Active
+*/
+    public void setActive(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_active, value);
+    }
    /**
    * Gets all the org.semanticwb.model.CalendarRef
    * @return A GenericIterator with all the org.semanticwb.model.CalendarRef
@@ -315,111 +420,6 @@ public abstract class CalendarBase extends org.semanticwb.model.SWBClass impleme
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(swb_title, title, lang);
-    }
-
-/**
-* Gets the Updated property
-* @return java.util.Date with the Updated
-*/
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-/**
-* Sets the Updated property
-* @param value long with the Updated
-*/
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-/**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
-    }
-
-/**
-* Gets the Description property
-* @return String with the Description
-*/
-    public String getDescription()
-    {
-        return getSemanticObject().getProperty(swb_description);
-    }
-
-/**
-* Sets the Description property
-* @param value long with the Description
-*/
-    public void setDescription(String value)
-    {
-        getSemanticObject().setProperty(swb_description, value);
-    }
-
-    public String getDescription(String lang)
-    {
-        return getSemanticObject().getProperty(swb_description, null, lang);
-    }
-
-    public String getDisplayDescription(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_description, lang);
-    }
-
-    public void setDescription(String description, String lang)
-    {
-        getSemanticObject().setProperty(swb_description, description, lang);
-    }
-
-/**
-* Gets the Xml property
-* @return String with the Xml
-*/
-    public String getXml()
-    {
-        return getSemanticObject().getProperty(swb_xml);
-    }
-
-/**
-* Sets the Xml property
-* @param value long with the Xml
-*/
-    public void setXml(String value)
-    {
-        getSemanticObject().setProperty(swb_xml, value);
-    }
-
-/**
-* Gets the Active property
-* @return boolean with the Active
-*/
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(swb_active);
-    }
-
-/**
-* Sets the Active property
-* @param value long with the Active
-*/
-    public void setActive(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swb_active, value);
     }
 
    /**

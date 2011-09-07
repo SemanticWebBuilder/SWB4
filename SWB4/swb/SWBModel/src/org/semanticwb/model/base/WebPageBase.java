@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Una Página Web es el elemento de SemanticWebBuilder a través del cual se estructura la información del portal. 
    */
-public abstract class WebPageBase extends org.semanticwb.model.Topic implements org.semanticwb.model.Referensable,org.semanticwb.model.Searchable,org.semanticwb.model.FilterableNode,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Tagable,org.semanticwb.model.Rankable,org.semanticwb.model.Undeleteable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Viewable,org.semanticwb.model.Traceable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.Localeable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Expirable,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Trashable,org.semanticwb.model.RoleRefable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Countryable,org.semanticwb.model.Filterable
+public abstract class WebPageBase extends org.semanticwb.model.Topic implements org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.CalendarRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Expirable,org.semanticwb.model.Activeable,org.semanticwb.model.Rankable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Viewable,org.semanticwb.model.Countryable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.Indexable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Filterable,org.semanticwb.model.MetaTagable,org.semanticwb.model.Trashable,org.semanticwb.model.Tagable,org.semanticwb.model.Hiddenable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Searchable,org.semanticwb.model.Localeable,org.semanticwb.model.Resourceable
 {
    /**
    * Una Página Web es el elemento de SemanticWebBuilder a través del cual se estructura la información del portal.
@@ -202,6 +202,29 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
         public static java.util.Iterator<org.semanticwb.model.WebPage> listWebPageByThisTypeAssociation(org.semanticwb.model.Association value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasThisTypeAssociationInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.WebPage with a determined MetaTagsValue
+       * @param value MetaTagsValue of the type org.semanticwb.model.MetaTagValue
+       * @param model Model of the org.semanticwb.model.WebPage
+       * @return Iterator with all the org.semanticwb.model.WebPage
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.WebPage> listWebPageByMetaTagsValue(org.semanticwb.model.MetaTagValue value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasMetaTagsValue, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.WebPage with a determined MetaTagsValue
+       * @param value MetaTagsValue of the type org.semanticwb.model.MetaTagValue
+       * @return Iterator with all the org.semanticwb.model.WebPage
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.WebPage> listWebPageByMetaTagsValue(org.semanticwb.model.MetaTagValue value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasMetaTagsValue,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -684,6 +707,71 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     public void setExpiration(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_expiration, value);
+    }
+   /**
+   * Gets all the org.semanticwb.model.MetaTagValue
+   * @return A GenericIterator with all the org.semanticwb.model.MetaTagValue
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.MetaTagValue> listMetaTagsValues()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.MetaTagValue>(getSemanticObject().listObjectProperties(swb_hasMetaTagsValue));
+    }
+
+   /**
+   * Gets true if has a MetaTagsValue
+   * @param value org.semanticwb.model.MetaTagValue to verify
+   * @return true if the org.semanticwb.model.MetaTagValue exists, false otherwise
+   */
+    public boolean hasMetaTagsValue(org.semanticwb.model.MetaTagValue value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasMetaTagsValue,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a MetaTagsValue
+   * @param value org.semanticwb.model.MetaTagValue to add
+   */
+
+    public void addMetaTagsValue(org.semanticwb.model.MetaTagValue value)
+    {
+        getSemanticObject().addObjectProperty(swb_hasMetaTagsValue, value.getSemanticObject());
+    }
+   /**
+   * Removes all the MetaTagsValue
+   */
+
+    public void removeAllMetaTagsValue()
+    {
+        getSemanticObject().removeProperty(swb_hasMetaTagsValue);
+    }
+   /**
+   * Removes a MetaTagsValue
+   * @param value org.semanticwb.model.MetaTagValue to remove
+   */
+
+    public void removeMetaTagsValue(org.semanticwb.model.MetaTagValue value)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasMetaTagsValue,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the MetaTagsValue
+   * @return a org.semanticwb.model.MetaTagValue
+   */
+    public org.semanticwb.model.MetaTagValue getMetaTagsValue()
+    {
+         org.semanticwb.model.MetaTagValue ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasMetaTagsValue);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.MetaTagValue)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Gets all the org.semanticwb.model.TemplateRef

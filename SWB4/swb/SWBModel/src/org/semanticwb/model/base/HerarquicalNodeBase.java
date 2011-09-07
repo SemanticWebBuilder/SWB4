@@ -4,9 +4,8 @@ package org.semanticwb.model.base;
    /**
    * Objeto utilizado para definir un node del arbol de navegacion dentro de la administración de SWB, que contiene elemento de una clase definida. 
    */
-public abstract class HerarquicalNodeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Sortable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Iconable,org.semanticwb.model.HerarquicalNodeable,org.semanticwb.model.Filterable
+public abstract class HerarquicalNodeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Iconable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.HerarquicalNodeable,org.semanticwb.model.Sortable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable
 {
-    public static final org.semanticwb.platform.SemanticProperty swbxf_hePropertyFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#hePropertyFilter");
     public static final org.semanticwb.platform.SemanticClass swb_Class=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Class");
    /**
    * Tipo de clase hija del nodo
@@ -18,6 +17,7 @@ public abstract class HerarquicalNodeBase extends org.semanticwb.model.SWBClass 
    */
     public static final org.semanticwb.platform.SemanticClass swb_SWBModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBModel");
     public static final org.semanticwb.platform.SemanticProperty swbxf_heModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#heModel");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_hePropertyFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#hePropertyFilter");
    /**
    * Objeto utilizado para definir un node del arbol de navegacion dentro de la administración de SWB, que contiene elemento de una clase definida.
    */
@@ -145,75 +145,6 @@ public abstract class HerarquicalNodeBase extends org.semanticwb.model.SWBClass 
     public HerarquicalNodeBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-/**
-* Gets the PropertyFilter property
-* @return String with the PropertyFilter
-*/
-    public String getPropertyFilter()
-    {
-        return getSemanticObject().getProperty(swbxf_hePropertyFilter);
-    }
-
-/**
-* Sets the PropertyFilter property
-* @param value long with the PropertyFilter
-*/
-    public void setPropertyFilter(String value)
-    {
-        getSemanticObject().setProperty(swbxf_hePropertyFilter, value);
-    }
-
-/**
-* Gets the IconClass property
-* @return String with the IconClass
-*/
-    public String getIconClass()
-    {
-        return getSemanticObject().getProperty(swb_iconClass);
-    }
-
-/**
-* Sets the IconClass property
-* @param value long with the IconClass
-*/
-    public void setIconClass(String value)
-    {
-        getSemanticObject().setProperty(swb_iconClass, value);
-    }
-
-/**
-* Gets the Title property
-* @return String with the Title
-*/
-    public String getTitle()
-    {
-        return getSemanticObject().getProperty(swb_title);
-    }
-
-/**
-* Sets the Title property
-* @param value long with the Title
-*/
-    public void setTitle(String value)
-    {
-        getSemanticObject().setProperty(swb_title, value);
-    }
-
-    public String getTitle(String lang)
-    {
-        return getSemanticObject().getProperty(swb_title, null, lang);
-    }
-
-    public String getDisplayTitle(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_title, lang);
-    }
-
-    public void setTitle(String title, String lang)
-    {
-        getSemanticObject().setProperty(swb_title, title, lang);
     }
    /**
    * Gets all the org.semanticwb.model.HerarquicalNode
@@ -407,5 +338,74 @@ public abstract class HerarquicalNodeBase extends org.semanticwb.model.SWBClass 
              ret=(org.semanticwb.model.SWBModel)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the PropertyFilter property
+* @return String with the PropertyFilter
+*/
+    public String getPropertyFilter()
+    {
+        return getSemanticObject().getProperty(swbxf_hePropertyFilter);
+    }
+
+/**
+* Sets the PropertyFilter property
+* @param value long with the PropertyFilter
+*/
+    public void setPropertyFilter(String value)
+    {
+        getSemanticObject().setProperty(swbxf_hePropertyFilter, value);
+    }
+
+/**
+* Gets the IconClass property
+* @return String with the IconClass
+*/
+    public String getIconClass()
+    {
+        return getSemanticObject().getProperty(swb_iconClass);
+    }
+
+/**
+* Sets the IconClass property
+* @param value long with the IconClass
+*/
+    public void setIconClass(String value)
+    {
+        getSemanticObject().setProperty(swb_iconClass, value);
+    }
+
+/**
+* Gets the Title property
+* @return String with the Title
+*/
+    public String getTitle()
+    {
+        return getSemanticObject().getProperty(swb_title);
+    }
+
+/**
+* Sets the Title property
+* @param value long with the Title
+*/
+    public void setTitle(String value)
+    {
+        getSemanticObject().setProperty(swb_title, value);
+    }
+
+    public String getTitle(String lang)
+    {
+        return getSemanticObject().getProperty(swb_title, null, lang);
+    }
+
+    public String getDisplayTitle(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
+    }
+
+    public void setTitle(String title, String lang)
+    {
+        getSemanticObject().setProperty(swb_title, title, lang);
     }
 }

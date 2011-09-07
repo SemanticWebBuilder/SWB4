@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Las Plantillas son documentos HTML que sirven de base a SemanticWebBuilder para poder mostrar el "look & feel" del sitio, así como la distribución de todos los elementos en la pagina. 
    */
-public abstract class TemplateBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Localeable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Versionable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Expirable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Deviceable,org.semanticwb.model.Trashable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Countryable,org.semanticwb.model.Filterable
+public abstract class TemplateBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Countryable,org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Expirable,org.semanticwb.model.Activeable,org.semanticwb.model.Deviceable,org.semanticwb.model.Versionable,org.semanticwb.model.Filterable,org.semanticwb.model.Trashable,org.semanticwb.model.Localeable
 {
    /**
    * Referencia a un objeto de tipo Template
@@ -47,12 +47,6 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Template>(it, true);
-        }
-
-        public static org.semanticwb.model.Template createTemplate(org.semanticwb.model.SWBModel model)
-        {
-            long id=model.getSemanticObject().getModel().getCounter(sclass);
-            return org.semanticwb.model.Template.ClassMgr.createTemplate(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.model.Template

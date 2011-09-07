@@ -84,6 +84,42 @@ public abstract class DojoImageUploadBase extends org.semanticwb.model.DojoFileU
     }
 
 /**
+* Gets the ImgThumbnail property
+* @return boolean with the ImgThumbnail
+*/
+    public boolean isImgThumbnail()
+    {
+        return getSemanticObject().getBooleanProperty(swbxf_imgThumbnail);
+    }
+
+/**
+* Sets the ImgThumbnail property
+* @param value long with the ImgThumbnail
+*/
+    public void setImgThumbnail(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swbxf_imgThumbnail, value);
+    }
+
+/**
+* Gets the ImgMaxHeight property
+* @return int with the ImgMaxHeight
+*/
+    public int getImgMaxHeight()
+    {
+        return getSemanticObject().getIntProperty(swbxf_imgMaxHeight);
+    }
+
+/**
+* Sets the ImgMaxHeight property
+* @param value long with the ImgMaxHeight
+*/
+    public void setImgMaxHeight(int value)
+    {
+        getSemanticObject().setIntProperty(swbxf_imgMaxHeight, value);
+    }
+
+/**
 * Gets the ImgThumbnailHeight property
 * @return int with the ImgThumbnailHeight
 */
@@ -120,24 +156,6 @@ public abstract class DojoImageUploadBase extends org.semanticwb.model.DojoFileU
     }
 
 /**
-* Gets the ImgThumbnail property
-* @return boolean with the ImgThumbnail
-*/
-    public boolean isImgThumbnail()
-    {
-        return getSemanticObject().getBooleanProperty(swbxf_imgThumbnail);
-    }
-
-/**
-* Sets the ImgThumbnail property
-* @param value long with the ImgThumbnail
-*/
-    public void setImgThumbnail(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swbxf_imgThumbnail, value);
-    }
-
-/**
 * Gets the ImgThumbnailList property
 * @return String with the ImgThumbnailList
 */
@@ -171,24 +189,6 @@ public abstract class DojoImageUploadBase extends org.semanticwb.model.DojoFileU
     public void setImgCrop(boolean value)
     {
         getSemanticObject().setBooleanProperty(swbxf_imgCrop, value);
-    }
-
-/**
-* Gets the ImgMaxHeight property
-* @return int with the ImgMaxHeight
-*/
-    public int getImgMaxHeight()
-    {
-        return getSemanticObject().getIntProperty(swbxf_imgMaxHeight);
-    }
-
-/**
-* Sets the ImgMaxHeight property
-* @param value long with the ImgMaxHeight
-*/
-    public void setImgMaxHeight(int value)
-    {
-        getSemanticObject().setIntProperty(swbxf_imgMaxHeight, value);
     }
 
 /**

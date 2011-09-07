@@ -146,7 +146,7 @@ public class SelectOne extends SelectOneBase {
 
         if (prop.isObjectProperty()) {
             SemanticObject val = null;
-            String         aux = request.getParameter(propName);
+            String aux = request.getParameter(propName);
 
             if (aux != null) {
                 val = SemanticObject.createSemanticObject(aux);

@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Es una pagina web utilizada para mostrar comportamientos (tabs) dentro de la administración de SWB 
    */
-public abstract class ObjectBehaviorBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Referensable,org.semanticwb.model.Searchable,org.semanticwb.model.FilterableNode,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Tagable,org.semanticwb.model.Rankable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Viewable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.NSPrefixFilterable,org.semanticwb.model.Resourceable,org.semanticwb.model.Localeable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Expirable,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Trashable,org.semanticwb.model.RoleRefable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Countryable,org.semanticwb.model.Filterable
+public abstract class ObjectBehaviorBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.CalendarRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Expirable,org.semanticwb.model.Activeable,org.semanticwb.model.Rankable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Viewable,org.semanticwb.model.Countryable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.Indexable,org.semanticwb.model.RoleRefable,org.semanticwb.model.MetaTagable,org.semanticwb.model.Filterable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Trashable,org.semanticwb.model.Tagable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Searchable,org.semanticwb.model.Localeable,org.semanticwb.model.NSPrefixFilterable,org.semanticwb.model.Resourceable
 {
     public static final org.semanticwb.platform.SemanticProperty swbxf_behaviorParams=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#behaviorParams");
    /**
@@ -200,6 +200,29 @@ public abstract class ObjectBehaviorBase extends org.semanticwb.model.WebPage im
         public static java.util.Iterator<org.semanticwb.model.ObjectBehavior> listObjectBehaviorByThisTypeAssociation(org.semanticwb.model.Association value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.ObjectBehavior> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasThisTypeAssociationInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.ObjectBehavior with a determined MetaTagsValue
+       * @param value MetaTagsValue of the type org.semanticwb.model.MetaTagValue
+       * @param model Model of the org.semanticwb.model.ObjectBehavior
+       * @return Iterator with all the org.semanticwb.model.ObjectBehavior
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.ObjectBehavior> listObjectBehaviorByMetaTagsValue(org.semanticwb.model.MetaTagValue value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.ObjectBehavior> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasMetaTagsValue, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.ObjectBehavior with a determined MetaTagsValue
+       * @param value MetaTagsValue of the type org.semanticwb.model.MetaTagValue
+       * @return Iterator with all the org.semanticwb.model.ObjectBehavior
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.ObjectBehavior> listObjectBehaviorByMetaTagsValue(org.semanticwb.model.MetaTagValue value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.ObjectBehavior> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasMetaTagsValue,value.getSemanticObject(),sclass));
             return it;
         }
        /**
