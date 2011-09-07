@@ -47,6 +47,7 @@ public class BigdataStore implements AbstractStore
     {
         return maker.listModelNames();
     }
+    
 
     public void close()
     {
@@ -58,4 +59,8 @@ public class BigdataStore implements AbstractStore
         return null;
     }
 
+    public Model getModel(String name) 
+    {
+        return maker.getModel(name, false);
+    }    
 }
