@@ -76,6 +76,7 @@ public class SWBRTSConn implements Runnable
     {
         try
         {
+            /*
             System.out.print(cmd.cmd);
             if(params!=null)
             {
@@ -85,7 +86,7 @@ public class SWBRTSConn implements Runnable
                 }
             }
             System.out.println();                
-            
+            */
             ObjectOutputStream objDataOut = new ObjectOutputStream(sock.getOutputStream());
             AbstractStore store = SWBPlatform.getSemanticMgr().getSWBStore();
             String name;
@@ -198,7 +199,7 @@ public class SWBRTSConn implements Runnable
 
         Model model=SWBPlatform.getSemanticMgr().getModel(name).getRDFModel();
 
-        System.out.println("getFind:"+subj+":"+prop+":"+obj);
+        //System.out.println("getFind:"+subj+":"+prop+":"+obj);
         
         Iterator<Triple> it=model.getGraph().find(SWBTSUtil.string2Node(subj,null), SWBTSUtil.string2Node(prop,null), SWBTSUtil.string2Node(obj,null));
         while (it.hasNext()) {
