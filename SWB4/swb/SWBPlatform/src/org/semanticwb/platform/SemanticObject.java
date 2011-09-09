@@ -272,6 +272,7 @@ public class SemanticObject
      */
     public static SemanticObject createSemanticObject(String uri, SemanticModel smodel)
     {
+        if(null==uri)return null;
         //if(null==uri || uri.length()>0)return null;
         SemanticObject ret=getSemanticObject(uri);
         if(ret==null)
