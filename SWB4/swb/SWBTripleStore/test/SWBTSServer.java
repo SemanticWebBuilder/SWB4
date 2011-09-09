@@ -1,4 +1,5 @@
 
+import java.io.File;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
@@ -22,12 +23,19 @@ public class SWBTSServer {
      */
     public static void main(String[] args) 
     {
-        SWBUtils.createInstance("/temp");
+        if(args.length>2)
+        {
+            SWBUtils.createInstance(args[2]);
+        }else
+        {
+            SWBUtils.createInstance(new File("").getAbsolutePath());
+        }
         String base=SWBUtils.getApplicationPath();
-        System.err.println(base);
+        System.out.println("Path:"+base);
         Logger log=SWBUtils.getLogger(SWBTSServer.class);
         
         SWBPlatform platform = SWBPlatform.createInstance();
+        platform.setPlatformWorkPath(base);
         platform.setProperties(SWBUtils.TEXT.getPropertyFile("/web.properties"));
         //platform.setPlatformWorkPath(workPath);
         String persistType = platform.getEnv("swb/triplepersist", SWBPlatform.PRESIST_TYPE_DEFAULT);
