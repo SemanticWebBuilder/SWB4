@@ -782,6 +782,7 @@ public class SemanticObject
                 it.remove();
             }
         }
+        m_cachepropsrel.remove(prop.getURI());
     }    
     
     private boolean remove(Statement stmt)
