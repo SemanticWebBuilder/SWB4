@@ -1135,6 +1135,21 @@ public class SemanticObject
 
             Property iprop = prop.getRDFProperty();
             remove(iprop);
+            
+            //Eliminar cache inversos
+            if(prop.isObjectProperty() && prop.isInverseOf())
+            {
+               Statement st=getProperty(prop.getRDFProperty());
+               if(st!=null)
+               {
+                   Resource res=st.getResource();
+                   if(res!=null && res.getURI()!=null)
+                   {
+                       SemanticObject sobj=getSemanticObject(res.getURI());
+                       if(sobj!=null)sobj.removeInv(st);
+                   }
+               }
+            }              
         }
         return this;
     }
