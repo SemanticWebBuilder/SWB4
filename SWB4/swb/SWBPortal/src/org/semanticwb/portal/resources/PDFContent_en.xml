@@ -7,7 +7,7 @@
             <input type="file" name="archive" label="PDF Document" showfile="true" filetype="pdf" isshowfiletype="true" isremovefile="true" removemsg="Remove PDF document" size="40" />
         </fieldset>
 
-        <div title="Look & Feel" open="true">
+        <div title="Look &amp; Feel" open="true">
         <fieldset legend="Dimensions">
             <input type="text" name="width"  label="Width" value="640" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Ancho inválido" promptMessage="Ancho. Ejemplos: 90%, 350px, 854" jsrequired="true" />
             <input type="text" name="height" label="Height" value="480"  maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválida" promptMessage="Altura. Ejemplos: 90%, 350px, 854" jsrequired="true" />
