@@ -422,7 +422,8 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         String fileName = null;
         String action = paramRequest.getAction();
         StringBuilder pathToRead = new StringBuilder(64);
-        //StringBuilder pathToWrite = new StringBuilder(64);
+        //comentar siguiente linea
+        StringBuilder pathToWrite = new StringBuilder(64);
         String content = "";
         //Para mostrar el contenido de una versión temporal
         String tmpPath = request.getParameter("tmpPath");
@@ -432,7 +433,8 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         fileName = vio.getVersionFile();
 
         pathToRead.append(resource.getWorkPath() + "/");
-        //pathToWrite.append("/work" + resource.getWorkPath() + "/");
+        //comentar siguiente linea
+        pathToWrite.append("/work" + resource.getWorkPath() + "/");
 
         if (action.equalsIgnoreCase(SWBParamRequest.Action_EDIT)
                 && versionNumber == 0 && tmpPath == null) {
@@ -441,8 +443,9 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
 
         pathToRead.append(versionNumber + "/");
         pathToRead.append(fileName);
-        //pathToWrite.append("" + (versionNumber));
-        //session.setAttribute("directory", pathToWrite.toString());
+        //comentar siguientes 2 lineas
+        pathToWrite.append("" + (versionNumber) + "/");
+        request.setAttribute("directory", pathToWrite.toString());
 
         if (action.equals(SWBParamRequest.Action_EDIT)) {
             try {
