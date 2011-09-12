@@ -3,7 +3,7 @@
     <xslfile>admresource.xslt</xslfile>
     <form name="frmAdmRes" action="true" method="POST" enctype="multipart/form-data" jsframework="dojo" >
         <admdbconnmgr defconn="true"/>
-        <fieldset legend="Look & Feel">
+        <fieldset legend="Look &amp; Feel">
             <input type="file" name="template" label="Template (xsl, xslt)" filetype="xsl|xslt" jsrequired="false" showfile="true" isshowfiletype="true" isremovefile="true" showmsg="Show template..." editmsg="Edit template..." removemsg="Remove template" msg="Current template: " bydefault="{@webpath}/swbadmin/xsl/WBMenu/WBMenu.xslt" msgbydefault="Default template: " />
             <input type="text" name="title" label="Title:" maxlength="60" promptMessage="Title" />
             <input type="text" name="level" label="Level of deployment:" value="1" maxlength="3" jsvaltype="js_numbers" invalidMessage="Level must be a numeric value" promptMessage="Level of deployment" />
