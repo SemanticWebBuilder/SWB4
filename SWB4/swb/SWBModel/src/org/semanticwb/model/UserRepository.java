@@ -228,7 +228,7 @@ public class UserRepository extends UserRepositoryBase {
             queryString += "?x swb:hasRole <" + _Role + ">.\n";
         }
         if (null != _Group) {
-            queryString += "?x swb:userGroup <" + _Group + ">.\n";
+            queryString += "?x swb:hasUserGroup <" + _Group + ">.\n";
         }
         if (null != Active) {
             queryString += "?x swb:active " + Active + ".\n";
