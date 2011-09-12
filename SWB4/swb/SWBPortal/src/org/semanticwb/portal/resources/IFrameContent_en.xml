@@ -7,7 +7,7 @@
             <input type="text" name="url" label="Web Address" promptMessage="Web address" jsrequired="true"/>
         </fieldset>
 
-        <div title="Look & Feel" open="true">
+        <div title="Look &amp; Feel" open="true">
         <fieldset legend="Dimensions">
             <input type="text" name="width"  label="Width" value="640" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Invalid width" promptMessage="Width. Examples: 90%, 350px, 854" jsrequired="true" />
             <input type="text" name="height" label="Height" value="480"  maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Invalid height" promptMessage="Altura. Examples: 90%, 350px, 854" jsrequired="true" />
