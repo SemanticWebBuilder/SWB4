@@ -4,7 +4,7 @@
 
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo">
         <admdbconnmgr defconn="true"/>
-        <fieldset legend="Look & Feel">
+        <fieldset legend="Look &amp; Feel">
             <input type="file" name="template" label="Template (xsl, xslt)" filetype="xsl|xslt" jsrequired="false" showfile="true" isshowfiletype="true" isremovefile="true" showmsg="Show template..." editmsg="Edit template..." removemsg="Remove template" msg="Current template: " bydefault="{@webpath}/swbadmin/xsl/WBMenu/WBMenu.xslt" msgbydefault="Default template: " />
             <input type="checkbox" name="justsons" id="justsons" label="Show only children" value="true"/>
         </fieldset>
