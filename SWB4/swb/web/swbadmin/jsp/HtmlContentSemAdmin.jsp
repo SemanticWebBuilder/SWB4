@@ -25,6 +25,7 @@
     net.fckeditor.FCKeditor fckEditor = new net.fckeditor.FCKeditor(request, "EditorDefault");
     fckEditor.setHeight("450");
     String content = (String) request.getAttribute("fileContent");
+    String resourceDirectory = (String) request.getAttribute("directory");
     fckEditor.setValue(content);
     SWBResourceURLImp urlNewVersion = (SWBResourceURLImp) paramRequest.getRenderUrl();
     urlNewVersion.setCallMethod(SWBResourceURLImp.Call_DIRECT);
@@ -61,6 +62,21 @@
     <script type="text/javascript">
       function FCKeditor_OnComplete(editorInstance) {
         window.status = editorInstance.Description;
+
+        var f = document.frames ? document.frames["EditorDefault___Frame"] : document.getElementById("EditorDefault___Frame");
+        var p = f.contentWindow || f.document;
+        var fue = false;
+        if (p.FCK != undefined) {
+            //alert(p.FCK.Description);
+            p.FCK.SWBDirectory = "<%=resourceDirectory%>";
+            fue = true;
+/*        } else {
+            alert("Sin valor de FCK");
+        }
+        if (fue) {
+            alert(p.FCK.SWBDirectory); */
+        }
+
       }
       var urlFileSelection = "<%=urlNewVersion.toString()%>";
       var actualContext = "<%=SWBPlatform.getContextPath()%>";
@@ -81,7 +97,7 @@
             var allowedExt = ".html,.htm,.xhtml";
             var name = document.mainFile.filePath.value;
             var ext = name.substring(name.lastIndexOf("."), name.length);
-            alert(ext);
+            //alert(ext);
             if (allowedExt.indexOf(ext) == -1) {
                 alert("Solo se aceptan archivos con extension: " + allowedExt);
                 document.mainFile.filePath.value = "";
