@@ -9,7 +9,7 @@
         </fieldset>
         
         <div title="Style" open="true">
-        <fieldset legend="Look & Feel">
+        <fieldset legend="Look &amp; Feel">
             <input type="text" name="width" label="Width" maxlength="5" jsvaltype="js_numbers"/>
             <input type="text" name="height" label="Height" maxlength="5" jsvaltype="js_numbers"/>
             
