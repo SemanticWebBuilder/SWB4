@@ -57,7 +57,8 @@ public class SWBFavoriteWebPagesResource extends org.semanticwb.portal.resources
             while (pages.hasNext())
             {
                 WebPage page = pages.next();
-                _pages.add(page);
+                if(page.isValid())
+                    _pages.add(page);
             }
         }
 
