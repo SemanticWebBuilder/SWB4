@@ -110,8 +110,15 @@ window.onload = function()
 	UpdateOriginal() ;
 
 	// Set the actual uploader URL.
-	if ( FCKConfig.ImageUpload )
+	if ( FCKConfig.ImageUpload ) {
+            if (FCK.SWBDirectory != undefined) {
+                //Se realiza aqui y no en el fckconfig.js, debido al momento en que
+                //se asigna el valor a FCK.SWBDirectory, que debe ser individual para cada editor
+                GetE('frmUpload').action = FCKConfig.ImageUploadURL + "&Command=FileUpload&CurrentFolder=" + FCK.SWBDirectory ;
+            } else {
 		GetE('frmUpload').action = FCKConfig.ImageUploadURL ;
+            }
+        }
 
 	dialog.SetAutoSize( true ) ;
 
@@ -398,9 +405,11 @@ function ResetSizes()
 
 function BrowseServer()
 {
+        //Se realiza la concatenacion del URL aqui y no en el fckconfig.js, por el momento en que
+        //se asigna el valor a FCK.SWBDirectory, que debe ser individual para cada editor
 	OpenServerBrowser(
 		'Image',
-		FCKConfig.ImageBrowserURL,
+		FCKConfig.ImageBrowserURL + "&CurrentFolder=" + FCK.SWBDirectory + "images/",
 		FCKConfig.ImageBrowserWindowWidth,
 		FCKConfig.ImageBrowserWindowHeight ) ;
 }
@@ -409,7 +418,7 @@ function LnkBrowseServer()
 {
 	OpenServerBrowser(
 		'Link',
-		FCKConfig.LinkBrowserURL,
+		FCKConfig.LinkBrowserURL + "&CurrentFolder=" + FCK.SWBDirectory + "images/",
 		FCKConfig.LinkBrowserWindowWidth,
 		FCKConfig.LinkBrowserWindowHeight ) ;
 }

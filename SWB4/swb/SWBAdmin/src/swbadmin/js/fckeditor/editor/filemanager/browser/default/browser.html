@@ -74,7 +74,15 @@ function GetUrlParam( paramName )
 }
 
 var oConnector = new Object() ;
+
 oConnector.CurrentFolder	= '/' ;
+
+//Se agrego el parametro CurrentFolder a la URL para poder manejarlo dinamicamente sin atributo de sesion
+var sParamCurrentFolder = GetUrlParam( 'CurrentFolder' ) ;
+if (sParamCurrentFolder != '') {
+    oConnector.CurrentFolder	= sParamCurrentFolder ;
+}
+//alert("oConnector.CurrentFolder = " + oConnector.CurrentFolder);
 
 var sConnUrl = GetUrlParam( 'Connector' ) ;
 
@@ -99,6 +107,8 @@ oConnector.SendCommand = function( command, params, callBackFunction )
 	var sUrl = this.ConnectorUrl + 'Command=' + command ;
 	sUrl += '&Type=' + this.ResourceType ;
 	sUrl += '&CurrentFolder=' + encodeURIComponent( this.CurrentFolder ) ;
+
+        //alert("Antes de enviar peticion this.CurrentFolder = " + this.CurrentFolder) ;
 
 	if ( params ) sUrl += '&' + params ;
 

@@ -71,8 +71,15 @@ window.onload = function()
 	GetE('tdBrowse').style.display = FCKConfig.FlashBrowser	? '' : 'none' ;
 
 	// Set the actual uploader URL.
-	if ( FCKConfig.FlashUpload )
+	if ( FCKConfig.FlashUpload ) {
+            if (FCK.SWBDirectory != undefined) {
+                //Se realiza aqui y no en el fckconfig.js, por el momento en que
+                //se asigna el valor a FCK.SWBDirectory, que debe ser individual para cada editor
+                GetE('frmUpload').action = FCKConfig.FlashUploadURL + "&Command=FileUpload&CurrentFolder=" + FCK.SWBDirectory ;
+            } else {
 		GetE('frmUpload').action = FCKConfig.FlashUploadURL ;
+            }
+        }
 
 	dialog.SetAutoSize( true ) ;
 
@@ -216,7 +223,10 @@ function UpdatePreview()
 
 function BrowseServer()
 {
-	OpenFileBrowser( FCKConfig.FlashBrowserURL, FCKConfig.FlashBrowserWindowWidth, FCKConfig.FlashBrowserWindowHeight ) ;
+        //Se realiza la concatenacion del URL aqui y no en el fckconfig.js, debido al momento en que
+        //se asigna el valor a FCK.SWBDirectory, que debe ser individual para cada editor
+	OpenFileBrowser( FCKConfig.FlashBrowserURL + "&CurrentFolder=" + FCK.SWBDirectory + "images/",
+                         FCKConfig.FlashBrowserWindowWidth, FCKConfig.FlashBrowserWindowHeight ) ;
 }
 
 function SetUrl( url, width, height )
