@@ -302,8 +302,15 @@ window.onload = function()
 	GetE('divInfo').style.display = '' ;
 
 	// Set the actual uploader URL.
-	if ( FCKConfig.LinkUpload )
+	if ( FCKConfig.LinkUpload ) {
+            if (FCK.SWBDirectory != undefined) {
+                //Se realiza aqui y no en el fckconfig.js, por el momento en que
+                //se asigna el valor a FCK.SWBDirectory, que debe ser individual para cada editor
+                GetE('frmUpload').action = FCKConfig.LinkUploadURL + "?Command=FileUpload&CurrentFolder=" + FCK.SWBDirectory ;
+            } else {
 		GetE('frmUpload').action = FCKConfig.LinkUploadURL ;
+            }
+        }
 
 	// Set the default target (from configuration).
 	SetDefaultTarget() ;
@@ -794,7 +801,10 @@ function Ok()
 
 function BrowseServer()
 {
-	OpenFileBrowser( FCKConfig.LinkBrowserURL, FCKConfig.LinkBrowserWindowWidth, FCKConfig.LinkBrowserWindowHeight ) ;
+        //Se realiza la concatenacion del URL aqui y no en el fckconfig.js, debido al momento en que
+        //se asigna el valor a FCK.SWBDirectory, que debe ser individual para cada editor
+	OpenFileBrowser( FCKConfig.LinkBrowserURL + "&CurrentFolder=" + FCK.SWBDirectory + "images/",
+                         FCKConfig.LinkBrowserWindowWidth, FCKConfig.LinkBrowserWindowHeight ) ;
 }
 
 function SetUrl( url )

@@ -125,7 +125,11 @@ function OpenFolder( folderPath )
 	// Set the current folder in all frames.
 	window.parent.frames['frmActualFolder'].SetCurrentFolder( oConnector.ResourceType, folderPath ) ;
 	window.parent.frames['frmCreateFolder'].SetCurrentFolder( oConnector.ResourceType, folderPath ) ;
-	window.parent.frames['frmUpload'].SetCurrentFolder( oConnector.ResourceType, folderPath ) ;
+        var folderForUpload = folderPath;
+        if (folderPath.lastIndexOf("/images") > -1) {
+            folderForUpload = folderPath.substring(0, folderPath.lastIndexOf("/images") + 1) ;
+        }
+	window.parent.frames['frmUpload'].SetCurrentFolder( oConnector.ResourceType, folderForUpload ) ;
 
 	// Load the resources list for this folder.
 	window.parent.frames['frmResourcesList'].LoadResources( oConnector.ResourceType, folderPath ) ;
@@ -142,12 +146,13 @@ function LoadFolders( folderPath )
 		sParentFolderPath = folderPath.substring( 0, folderPath.lastIndexOf( '/', folderPath.length - 2 ) + 1 ) ;
 
 	// Show/Hide the Up Folder.
-	oListManager.ShowUpFolder( sParentFolderPath ) ;
+	//oListManager.ShowUpFolder( sParentFolderPath ) ;
 
 	if ( folderPath != '/' )
 	{
 		sActiveFolder = folderPath ;
-		oConnector.CurrentFolder = sParentFolderPath ;
+		//oConnector.CurrentFolder = sParentFolderPath ;
+                oConnector.CurrentFolder = folderPath;
 		oConnector.SendCommand( 'GetFolders', null, GetFoldersCallBack ) ;
 	}
 	else
@@ -183,7 +188,11 @@ function SetResourceType( type )
 window.onload = function()
 {
 	oListManager.Init() ;
-	LoadFolders( '/' ) ;
+        if ( oConnector.CurrentFolder != '/' ) {
+            LoadFolders( oConnector.CurrentFolder ) ;
+        } else {
+            LoadFolders( '/' ) ;
+        }
 }
 		</script>
 	</head>
