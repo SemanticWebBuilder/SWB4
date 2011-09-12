@@ -4,7 +4,7 @@
 
     <form name="frmMenuMap" action="true" method="post" enctype="multipart/form-data" jsframework="dojo">
         <admdbconnmgr defconn="true"/>
-        <fieldset legend="Look & Feel">
+        <fieldset legend="Look &amp; Feel">
             <input type="file" name="template" label="Template (xsl, xslt):" filetype="xsl|xslt" jsrequired="false" showfile="true" isshowfiletype="true" isremovefile="true" showmsg="Show template..." editmsg="Edit template..." removemsg="Remove template"  msg="Current template: " bydefault="{@webpath}/swbadmin/xsl/WBMenuMap/WBMenuMap.xslt" msgbydefault="Default template: " />
         </fieldset>
 
