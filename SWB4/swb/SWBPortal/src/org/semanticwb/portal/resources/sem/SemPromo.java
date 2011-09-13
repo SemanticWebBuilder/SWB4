@@ -10,6 +10,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -154,7 +155,14 @@ public class SemPromo extends org.semanticwb.portal.resources.sem.base.SemPromoB
         img.setAttribute("src", pathWeb + "/" + promo.swbres_promImage.getName() + "_" + promo.getId() + "_" + promo.getPromImage());
         String footer = promo.getPromFooter() == null ? (promo.getPromTitle() == null ? "image promo" : promo.getPromTitle()) : promo.getPromFooter();
         img.setAttribute("alt", footer);
-        String link = promo.getPromLink() == null ? (promo.getPromInternalUrl() == null ? "" : promo.getPromInternalUrl()) : promo.getPromLink();
+        String internalLink = null;
+        if (promo.getPromInternalUrl() != null) {
+            WebPage wp = paramRequest.getWebPage().getWebSite().getWebPage(promo.getPromInternalUrl());
+            if (wp != null) {
+                internalLink = wp.getUrl(paramRequest.getUser().getLanguage());
+            }
+        }
+        String link = promo.getPromLink() == null ? (internalLink == null ? "" : internalLink) : promo.getPromLink();
         img.setAttribute("url", link);
         root.appendChild(img);
 
@@ -225,7 +233,14 @@ public class SemPromo extends org.semanticwb.portal.resources.sem.base.SemPromoB
         String textStyle = promo.getPromTextStyle();
         String more = promo.getPromLinkText() == null ? "" : promo.getPromLinkText();
         String moreStyle = promo.getPromLinkStyle();
-        String url = promo.getPromLink() == null ? promo.getPromInternalUrl() : promo.getPromLink();
+        String internalLink = null;
+        if (promo.getPromInternalUrl() != null) {
+            WebPage wp = paramRequest.getWebPage().getWebSite().getWebPage(promo.getPromInternalUrl());
+            if (wp != null) {
+                internalLink = wp.getUrl(paramRequest.getUser().getLanguage());
+            }
+        }
+        String url = promo.getPromLink() == null ? (internalLink == null ? "" : internalLink) : promo.getPromLink();
         String uline = promo.isPromUnderlineLink() ? "1" : "0";
         boolean target = promo.isPromOpenNewWindow();
 
@@ -496,7 +511,14 @@ public class SemPromo extends org.semanticwb.portal.resources.sem.base.SemPromoB
         }
         String text = promo.getPromText() == null ? "" : promo.getPromText();
         String more = promo.getPromLinkText() == null ? "" : promo.getPromLinkText();
-        String url = promo.getPromLink() == null ? promo.getPromInternalUrl() : promo.getPromLink();
+        String internalLink = null;
+        if (promo.getPromInternalUrl() != null) {
+            WebPage wp = paramRequest.getWebPage().getWebSite().getWebPage(promo.getPromInternalUrl());
+            if (wp != null) {
+                internalLink = wp.getUrl(paramRequest.getUser().getLanguage());
+            }
+        }
+        String url = promo.getPromLink() == null ? (internalLink == null ? "" : internalLink) : promo.getPromLink();
         String uline = promo.isPromUnderlineLink() ? "1" : "0";
         boolean target = promo.isPromOpenNewWindow();
         String cssClass = promo.getPromCssClass() == null ? "" : promo.getPromCssClass();
