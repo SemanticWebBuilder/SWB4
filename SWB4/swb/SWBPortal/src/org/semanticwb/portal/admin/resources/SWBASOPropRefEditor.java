@@ -230,6 +230,21 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             inheritHeader.append(strTitleProp);
             out.println("</th>");
             inheritHeader.append("</th>");
+            if (hmprop.get(MetaTagValue.swb_metadataDef) != null) {
+                sptemp = (SemanticProperty) hmprop.get(MetaTagValue.swb_metadataDef);
+                String propname = sptemp.getName();
+                try {
+                    propname = sptemp.getDisplayName(user.getLanguage());
+                } catch (Exception e) {
+                }
+                out.println("<th>");
+                inheritHeader.append("<th>");
+                numcols++;
+                out.println(propname);
+                inheritHeader.append(propname);
+                out.println("</th>");
+                inheritHeader.append("</th>");
+            }
             if (hmprop.get(Localeable.swb_language) != null) {
                 sptemp = (SemanticProperty) hmprop.get(Localeable.swb_language);
                 String propname = sptemp.getName();
@@ -460,6 +475,15 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                 //out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "');return false;\" >" + stitle + "</a>"); //onclick=\"submitUrl('"+urlchoose+"',this); return false;\"
                 out.println("<a href=\"#\"  onclick=\"addNewTab('" + semobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName().replaceAll("'", "") + "');return false;\" >" + semobj.getDisplayName(user.getLanguage()).replaceAll("'", "") + "</a>"); //onclick=\"submitUrl('"+urlchoose+"',this); return false;\"
                 out.println("</td>");
+                if (hmprop.get(MetaTagValue.swb_metadataDef) != null) {
+                    semprop = (SemanticProperty) hmprop.get(MetaTagValue.swb_metadataDef);
+                    semobj = sobj.getObjectProperty(spref);
+                    out.println("<td>");
+                    if(semobj==null) semobj = sobj;
+                    SemanticObject solang = semobj.getObjectProperty(semprop);
+                    out.println(getValueSemProp(solang, Descriptiveable.swb_title));
+                    out.println("</td>");
+                }
                 if (hmprop.get(Localeable.swb_language) != null) {
                     semprop = (SemanticProperty) hmprop.get(Localeable.swb_language);
                     semobj = sobj.getObjectProperty(spref);
