@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -77,8 +78,8 @@ public class SemanticObject
     /** The m_virtual. */
     private boolean m_virtual = false;
         
-    private ArrayList<Statement> m_props=new ArrayList();
-    private ArrayList<Statement> m_propsInv=null;
+    private List<Statement> m_props=Collections.synchronizedList(new ArrayList());
+    private List<Statement> m_propsInv=null;
     
     /** The lastaccess. */
     private long lastaccess=System.currentTimeMillis();
@@ -174,7 +175,7 @@ public class SemanticObject
     
     public void reloadInvProps()
     {
-        if(m_propsInv==null)m_propsInv=new ArrayList();
+        if(m_propsInv==null)m_propsInv=Collections.synchronizedList(new ArrayList());
         else m_propsInv.clear();
         if(m_res!=null)
         {
@@ -752,10 +753,11 @@ public class SemanticObject
     
     private Iterator<Statement> listProperties(Property prop)
     {
-        ArrayList ret=new ArrayList();
-        Iterator<Statement> it=getProps().iterator();
-        while (it.hasNext()) {
-            Statement statement = it.next();
+        ArrayList ret=new ArrayList();        
+        List stmts=getProps();
+        for(int x=0;x<stmts.size();x++)
+        {
+            Statement statement=(Statement)stmts.get(x);
             if(statement.getPredicate().equals(prop))
             {
                 ret.add(statement);
@@ -774,16 +776,17 @@ public class SemanticObject
     private void remove(Property prop)
     {
         if(!m_virtual)m_res.removeAll(prop);
-        Iterator<Statement> it=getProps().iterator();
-        while (it.hasNext()) {
-            Statement statement = it.next();
+        Object stmts[]=getProps().toArray();
+        for(int x=0;x<stmts.length;x++)
+        {
+            Statement statement=(Statement)stmts[x];
             if(statement.getPredicate().equals(prop))
             {
-                it.remove();
-            }
+                getProps().remove(statement);
+            }       
         }
         m_cachepropsrel.remove(prop.getURI());
-    }    
+    }
     
     private boolean remove(Statement stmt)
     {
@@ -837,14 +840,15 @@ public class SemanticObject
     private Iterator<Statement> listInvProperties(Property prop)
     {
         ArrayList ret=new ArrayList();
-        Iterator<Statement> it=getPropsInv().iterator();
-        while (it.hasNext()) {
-            Statement statement = it.next();
+        List stmts=getPropsInv();
+        for(int x=0;x<stmts.size();x++)
+        {
+            Statement statement=(Statement)stmts.get(x);
             if(statement.getPredicate().equals(prop))
             {
                 ret.add(statement);
             }
-        }
+        }       
         return ret.iterator();
     }    
     
@@ -867,14 +871,15 @@ public class SemanticObject
     
     private void removeInv(Property prop)
     {
-        Iterator<Statement> it=getPropsInv().iterator();
-        while (it.hasNext()) {
-            Statement statement = it.next();
+        Object stmts[]=getPropsInv().toArray();
+        for(int x=0;x<stmts.length;x++)
+        {
+            Statement statement=(Statement)stmts[x];
             if(statement.getPredicate().equals(prop))
             {
-                it.remove();
-            }
-        }
+                getPropsInv().remove(statement);
+            }       
+        }        
     }    
     
     private void addInvStatement(Statement stmt)

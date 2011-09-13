@@ -961,6 +961,7 @@ public class SemanticMgr implements SWBInstanceObject
         {
             //TODO:
 /*            
+            
             if(prop!=null)           //Is a property
             {
                 if(prop.isObjectProperty())
@@ -1020,7 +1021,9 @@ public class SemanticMgr implements SWBInstanceObject
                     }
                 }
             }
-*/            
+              
+*/
+           
         }
     }
 
