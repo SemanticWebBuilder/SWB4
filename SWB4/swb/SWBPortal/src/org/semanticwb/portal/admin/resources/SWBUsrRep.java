@@ -164,7 +164,8 @@ public class SWBUsrRep extends GenericResource {
                 out.println("</fieldset>");
                 out.println("<fieldset><span align=\"center\">");
                 out.println("" + paramRequest.getLocaleLogString("upload") + "<input type=\"file\" name=\"zipmodel\" value=\"" + paramRequest.getLocaleLogString("new") + "\"/><br/>");
-                out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id=\"send\" dojoType=\"dijit.form.Button\" type=\"submit\">"+paramRequest.getLocaleLogString("up")+"</button>");
+                //out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id=\"send\" dojoType=\"dijit.form.Button\" type=\"submit\">"+paramRequest.getLocaleLogString("up")+"</button>");
+                out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"submit\" id=\"send\" value=\"" + paramRequest.getLocaleString("up") + "\"/>");
                 out.println("</fieldset>");
                 out.println("</form>");
                 out.println("</div>");
