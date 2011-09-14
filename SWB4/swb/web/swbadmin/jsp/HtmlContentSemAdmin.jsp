@@ -62,21 +62,13 @@
     <script type="text/javascript">
       function FCKeditor_OnComplete(editorInstance) {
         window.status = editorInstance.Description;
-
         var f = document.frames ? document.frames["EditorDefault___Frame"] : document.getElementById("EditorDefault___Frame");
         var p = f.contentWindow || f.document;
-        var fue = false;
-        if (p.FCK != undefined) {
+        var theObject = p.FCK || f.FCK;
+        if (theObject != undefined) {
             //alert(p.FCK.Description);
-            p.FCK.SWBDirectory = "<%=resourceDirectory%>";
-            fue = true;
-/*        } else {
-            alert("Sin valor de FCK");
+            theObject.SWBDirectory="<%=resourceDirectory%>";
         }
-        if (fue) {
-            alert(p.FCK.SWBDirectory); */
-        }
-
       }
       var urlFileSelection = "<%=urlNewVersion.toString()%>";
       var actualContext = "<%=SWBPlatform.getContextPath()%>";
