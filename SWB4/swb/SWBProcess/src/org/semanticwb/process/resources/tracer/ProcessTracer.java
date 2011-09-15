@@ -32,7 +32,7 @@ public class ProcessTracer extends org.semanticwb.process.resources.tracer.base.
         
         try {
             request.setAttribute("paramRequest", paramRequest);
-            //request.setAttribute("statusWP", getDisplayMapPage());
+            request.setAttribute("statusWP", getDisplayMapPage());
             rd.include(request, response);
         } catch (Exception e) {
             log.error("ProcessTracer: Error including view JSP " + jsp, e);
