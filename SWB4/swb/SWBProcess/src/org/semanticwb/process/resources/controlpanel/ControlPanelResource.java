@@ -12,12 +12,14 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.ProcessGroup;
 import org.semanticwb.process.model.ProcessSite;
+import org.semanticwb.process.model.SWBProcessMgr;
 
 /***
  * Recurso Panel de Control para monitoreo de instancias de procesos.
@@ -94,6 +96,14 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
             }
             setDisplayCols(dCols+"|actionsCol");
             response.setMode(response.Mode_VIEW);
+        } else if (action.equals("create")) {
+            User user = response.getUser();
+            String pid = request.getParameter("pid");
+            if (pid != null && !pid.trim().equals("")) {
+                Process p = Process.ClassMgr.getProcess(pid, response.getWebPage().getWebSite());
+                SWBProcessMgr.createProcessInstance(p, user);
+            }
+            response.setMode(SWBParamRequest.Mode_VIEW);
         } else {
             super.processAction(request, response);
         }
