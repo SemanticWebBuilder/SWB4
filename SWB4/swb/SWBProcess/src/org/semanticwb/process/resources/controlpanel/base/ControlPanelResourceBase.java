@@ -9,6 +9,8 @@ public abstract class ControlPanelResourceBase extends org.semanticwb.portal.api
     public static final org.semanticwb.platform.SemanticProperty swb_semanticResourceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#semanticResourceInv");
     public static final org.semanticwb.platform.SemanticProperty cpanel_displayCols=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/ControlPanel#displayCols");
     public static final org.semanticwb.platform.SemanticProperty cpanel_statusFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/ControlPanel#statusFilter");
+    public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
+    public static final org.semanticwb.platform.SemanticProperty cpanel_displayMapWp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/ControlPanel#displayMapWp");
     public static final org.semanticwb.platform.SemanticClass cpanel_ControlPanelResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/process/resources/ControlPanel#ControlPanelResource");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/process/resources/ControlPanel#ControlPanelResource");
 
@@ -152,5 +154,43 @@ public abstract class ControlPanelResourceBase extends org.semanticwb.portal.api
     public void setStatusFilter(boolean value)
     {
         getSemanticObject().setBooleanProperty(cpanel_statusFilter, value);
+    }
+   /**
+   * Sets the value for the property DisplayMapWp
+   * @param value DisplayMapWp to set
+   */
+
+    public void setDisplayMapWp(org.semanticwb.model.WebPage value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(cpanel_displayMapWp, value.getSemanticObject());
+        }else
+        {
+            removeDisplayMapWp();
+        }
+    }
+   /**
+   * Remove the value for DisplayMapWp property
+   */
+
+    public void removeDisplayMapWp()
+    {
+        getSemanticObject().removeProperty(cpanel_displayMapWp);
+    }
+
+   /**
+   * Gets the DisplayMapWp
+   * @return a org.semanticwb.model.WebPage
+   */
+    public org.semanticwb.model.WebPage getDisplayMapWp()
+    {
+         org.semanticwb.model.WebPage ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(cpanel_displayMapWp);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
+         }
+         return ret;
     }
 }
