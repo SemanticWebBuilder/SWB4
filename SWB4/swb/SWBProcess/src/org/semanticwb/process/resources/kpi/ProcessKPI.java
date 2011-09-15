@@ -86,81 +86,85 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out=response.getWriter();
         Process process = getProcess(request, paramRequest);
-        SWBResourceURL adminUrl = paramRequest.getRenderUrl().setMode("adminCase");
         
-        adminUrl.setParameter("pid", request.getParameter("pid"));
-        String timeTitle = paramRequest.getLocaleString("timeTitle") + " (" + getTimeUnit(paramRequest) + ")";
-        ArrayList<DataSerie> logSeries = null;
-        ArrayList<DataSerie> taskSeries = null;
-        ArrayList<DataSerie> overviewSeries = null;
-        int timeType = getResponseGraphType();
-        int insType = getInstancesGraphType();
-        int period = getResponsePeriodicity();
+        Iterator<ProcessInstance> pi = process.listProcessInstances();
+            if (pi.hasNext()) {
+            SWBResourceURL adminUrl = paramRequest.getRenderUrl().setMode("adminCase");
 
-        //Obtener datos para gráficas de desempeño general
-        overviewSeries = getOverviewTimeData(process, paramRequest);
-        
-        //Obtener datos para histórico de tiempos de respuesta
-        if (isResponseShowLog()) {
-            if (period == PERIOD_LASTWEEK) {
-                logSeries = getLogDaylyData(process, 7, paramRequest);
-            } else if (period == PERIOD_LASTMONTH) {
-                logSeries = getLogDaylyData(process, 30, paramRequest);
-            } else if (period == PERIOD_LASTYEAR) {
-                logSeries = getLogMonthlyData(process, 12, paramRequest);
+            adminUrl.setParameter("pid", request.getParameter("pid"));
+            String timeTitle = paramRequest.getLocaleString("timeTitle") + " (" + getTimeUnit(paramRequest) + ")";
+            ArrayList<DataSerie> logSeries = null;
+            ArrayList<DataSerie> taskSeries = null;
+            ArrayList<DataSerie> overviewSeries = null;
+            int timeType = getResponseGraphType();
+            int insType = getInstancesGraphType();
+            int period = getResponsePeriodicity();
+
+            //Obtener datos para gráficas de desempeño general
+            overviewSeries = getOverviewTimeData(process, paramRequest);
+
+            //Obtener datos para histórico de tiempos de respuesta
+            if (isResponseShowLog()) {
+                if (period == PERIOD_LASTWEEK) {
+                    logSeries = getLogDaylyData(process, 7, paramRequest);
+                } else if (period == PERIOD_LASTMONTH) {
+                    logSeries = getLogDaylyData(process, 30, paramRequest);
+                } else if (period == PERIOD_LASTYEAR) {
+                    logSeries = getLogMonthlyData(process, 12, paramRequest);
+                }
             }
+
+            //Obtener datos para gráficas de desempeño por tarea
+            if (isPerformanceShowTaskData()) {
+                taskSeries = getLogTaskData(process, paramRequest);
+            }
+
+            //Establecer el tema de las gráficas
+            setTheme();
+
+            out.println("<div id=\"properties\" class=\"swbform\">");
+            out.println("  <fieldset>");
+            out.println("    <table>");
+            out.println("      <tbody>");
+            if (process != null && isResponseShowLog()) {
+                out.println("        <tr>");
+                out.println("          <td>");
+                out.println(plotLog(logSeries, "timeLog", timeTitle));
+                out.println("          </td>");
+                out.println("        </tr>");
+            }
+
+            if (process != null && isPerformanceShowTaskData()) {
+                out.println("        <tr>");
+                out.println("          <td>");
+                out.println(plotTaskGraph(taskSeries, "taskTime", paramRequest.getLocaleString("taskTimeTitle")));
+                out.println("          </td>");
+                out.println("        </tr>");
+            }
+
+            if (process != null) {
+                out.println("        <tr>");
+                out.println("          <td>");
+                out.println(plotGraph(overviewSeries.get(0), "oTime", timeTitle, timeType));
+                out.println("          </td>");
+                out.println("        </tr>");
+            }
+
+            if (process != null) {
+                out.println("        <tr>");
+                out.println("          <td>");
+                out.println(plotGraph(overviewSeries.get(1), "oInstances", paramRequest.getLocaleString("instanceTitle"), insType));
+                out.println("          </td>");
+                out.println("        </tr>");
+            }
+            out.println("      </tbody>");
+            out.println("    </table>");
+            out.println("  </fieldset>");
+            //out.println("  <fieldset>\n");
+            out.println("    <a href=\"" + adminUrl + "\">" + paramRequest.getLocaleString("configGraphs") + "</a>");
+            //out.println("  </fieldset>");
+            out.println("</div>");
         }
-        
-        //Obtener datos para gráficas de desempeño por tarea
-        if (isPerformanceShowTaskData()) {
-            taskSeries = getLogTaskData(process, paramRequest);
-        }
-        
-        //Establecer el tema de las gráficas
-        setTheme();
-        
-        out.println("<div id=\"properties\" class=\"swbform\">");
-        out.println("  <fieldset>");
-        out.println("    <table>");
-        out.println("      <tbody>");
-        if (process != null && isResponseShowLog()) {
-            out.println("        <tr>");
-            out.println("          <td>");
-            out.println(plotLog(logSeries, "timeLog", timeTitle));
-            out.println("          </td>");
-            out.println("        </tr>");
-        }
-        
-        if (process != null && isPerformanceShowTaskData()) {
-            out.println("        <tr>");
-            out.println("          <td>");
-            out.println(plotTaskGraph(taskSeries, "taskTime", paramRequest.getLocaleString("taskTimeTitle")));
-            out.println("          </td>");
-            out.println("        </tr>");
-        }
-        
-        if (process != null) {
-            out.println("        <tr>");
-            out.println("          <td>");
-            out.println(plotGraph(overviewSeries.get(0), "oTime", timeTitle, timeType));
-            out.println("          </td>");
-            out.println("        </tr>");
-        }
-        
-        if (process != null) {
-            out.println("        <tr>");
-            out.println("          <td>");
-            out.println(plotGraph(overviewSeries.get(1), "oInstances", paramRequest.getLocaleString("instanceTitle"), insType));
-            out.println("          </td>");
-            out.println("        </tr>");
-        }
-        out.println("      </tbody>");
-        out.println("    </table>");
-        out.println("  </fieldset>");
-        //out.println("  <fieldset>\n");
-        out.println("    <a href=\"" + adminUrl + "\">" + paramRequest.getLocaleString("configGraphs") + "</a>");
-        //out.println("  </fieldset>");
-        out.println("</div>");
     }
     
     private String plotTaskGraph(ArrayList<DataSerie> series, String id, String title) {
