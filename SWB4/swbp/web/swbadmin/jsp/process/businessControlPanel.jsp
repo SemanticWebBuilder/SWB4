@@ -151,7 +151,28 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3"><a href="<%=configUrl%>">Configurar despliegue</a></td>
+                    <td><a href="<%=configUrl%>">Configurar despliegue</a></td>
+                    <td colspan="2">
+                        <%
+                        Iterator<Process> p_it = Process.ClassMgr.listProcesses(ws);
+                        if (p_it.hasNext()) {
+                            SWBResourceURL createUrl = paramRequest.getActionUrl().setAction("create");
+                            %>
+                            <form action="<%=createUrl%>" method="post">
+                                <select name="pid">
+                                    <%
+                                    while(p_it.hasNext()) {
+                                        Process ip = p_it.next();
+                                        %><option value="<%=ip.getId()%>"><%=ip.getDisplayTitle(lang)%></option><%
+                                    }
+                                    %>
+                                </select>
+                                <input type="submit" value="Crear caso">
+                            </form>
+                            <%
+                        }
+                        %>
+                    </td>
                 </tr>
             </tbody>
         </table>
