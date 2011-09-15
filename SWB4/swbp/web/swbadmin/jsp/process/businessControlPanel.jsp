@@ -63,10 +63,10 @@
 
 <%
 SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramRequest");
+WebPage statusWp = (WebPage)request.getAttribute("statusWp");
 User user = paramRequest.getUser();
 WebSite ws = paramRequest.getWebPage().getWebSite();
 String baseimg = SWBPortal.getWebWorkPath() + "/models/" + ws.getId() + "/css/images/";
-WebPage statusWp = ws.getWebPage("Diagrama_de_Estado");
 String sortType = request.getParameter("sort");
 String gFilter = request.getParameter("gFilter");
 String sFilter = request.getParameter("sFilter");
@@ -315,8 +315,11 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                 if (instance.getStatus() == ProcessInstance.STATUS_PROCESSING) {
                                     %><a target="_new" href="<%=instance.getProcessType().getProcessWebPage().getUrl()%>"> <img alt="Estado del proceso" title="Estado" width="20" height="20" src="<%=baseimg + "process_next.png"%>"></a><%
                                 }
+                                
+                                if (statusWp != null) {
                                 %>
-                                <a target="_new" href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessType().getEncodedURI()%>&mode=view<%=acts%>"><img alt="Mapa de proceso" title="Mapa de proceso" width="20" height="20" src="<%=baseimg + "Process-Info.png"%>"></a>
+                                    <a target="_new" href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessType().getEncodedURI()%>&mode=view<%=acts%>"><img alt="Mapa de proceso" title="Mapa de proceso" width="20" height="20" src="<%=baseimg + "Process-Info.png"%>"></a>
+                                <%}%>
                             </td>
                             <%
                         }
