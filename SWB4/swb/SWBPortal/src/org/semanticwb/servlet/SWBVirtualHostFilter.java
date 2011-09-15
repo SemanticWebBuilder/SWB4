@@ -198,7 +198,7 @@ public class SWBVirtualHostFilter implements Filter
         }
 
         //Friendly URLs
-        if(serv==null && !isjsp)
+        if((serv==null || iserv.equals("wb")) && !isjsp)
         {
             FriendlyURL url=FriendlyURL.getFriendlyURL(path, host);
             if(url!=null)
