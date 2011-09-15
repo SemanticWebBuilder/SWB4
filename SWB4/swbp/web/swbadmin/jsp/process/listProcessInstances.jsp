@@ -146,13 +146,13 @@
 
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+WebPage statusWp = (WebPage) request.getAttribute("statusWP");
 User user = paramRequest.getUser();
 WebPage topic = paramRequest.getWebPage();
 ProcessSite site = (ProcessSite) paramRequest.getWebPage().getWebSite();
 String lang = user.getLanguage();
 org.semanticwb.process.model.Process process = SWBProcessMgr.getProcess(topic);
 String baseimg = SWBPortal.getWebWorkPath() + "/models/" + topic.getWebSiteId() + "/css/images/";
-WebPage statusWp = site.getWebPage("Diagrama_de_Estado");
 %>
 <div class="post">
     <h2>Seguimiento del proceso (<%=process.getDisplayTitle(lang)%>)<!--a style="text-decoration: none" onclick="javascript:expande('tracking')"><img style="text-decoration:none" src="<%=baseimg + "icon_show.gif"%>"></a> <a style="text-decoration: none" onclick="javascript:colapsa('tracking')"><img src="<%=baseimg + "icon_hide.gif"%>"></a--></h2>
@@ -187,7 +187,9 @@ WebPage statusWp = site.getWebPage("Diagrama_de_Estado");
                         </tbody>
                     </table>
                         <br />
-                        <img width="20" height="20" src="<%=baseimg + "Process-Info.png"%>"> <a target="_new" href="<%=statusWp.getUrl()%>?suri=<%=pi.getProcessType().getEncodedURI()%>&mode=view&currentActivities=<%=URLEncoder.encode(getStatusInstances(pi, Instance.STATUS_PROCESSING))%>">Mapa de proceso</a>
+                        <%if (statusWp != null) {%>
+                            <img width="20" height="20" src="<%=baseimg + "Process-Info.png"%>"> <a target="_new" href="<%=statusWp.getUrl()%>?suri=<%=pi.getProcessType().getEncodedURI()%>&mode=view&currentActivities=<%=URLEncoder.encode(getStatusInstances(pi, Instance.STATUS_PROCESSING))%>">Mapa de proceso</a>
+                        <%}%>
                 </div>
                 <br/>
                 <!--h3>Tareas del usuario (<%=user.getFullName()%>) <a style="text-decoration: none" onclick="javascript:expande('tasks<%=process.getId()%>')"><img style="text-decoration:none" src="<%=baseimg + "icon_show.gif"%>"> </a><a style="text-decoration: none" onclick="javascript:colapsa('tasks<%=process.getId()%>')"><img src="<%=baseimg + "icon_hide.gif"%>"></a></h3>
@@ -241,7 +243,9 @@ WebPage statusWp = site.getWebPage("Diagrama_de_Estado");
         } else {
             %>
             <br />
-            <img width="20" height="20" src="<%=baseimg + "Process-Info.png"%>"> <a target="_new" href="<%=statusWp.getUrl()%>?suri=<%=process.getEncodedURI()%>&mode=view">Mapa de proceso</a>
+            <%if (statusWp != null) {%>
+                <img width="20" height="20" src="<%=baseimg + "Process-Info.png"%>"> <a target="_new" href="<%=statusWp.getUrl()%>?suri=<%=process.getEncodedURI()%>&mode=view">Mapa de proceso</a>
+            <%}%>
             <br />
             <br />
             <%
