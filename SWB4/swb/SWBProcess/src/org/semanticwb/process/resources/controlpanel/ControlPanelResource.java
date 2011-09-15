@@ -112,6 +112,7 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("instances", getProcessInstances(request, paramRequest));
             request.setAttribute("displayCols", getDisplayCols());
+            request.setAttribute("statusWp", getDisplayMapWp());
             rd.include(request, response);
         } catch (Exception e) {
             log.error("ControlPanelResource: Error including view JSP", e);
