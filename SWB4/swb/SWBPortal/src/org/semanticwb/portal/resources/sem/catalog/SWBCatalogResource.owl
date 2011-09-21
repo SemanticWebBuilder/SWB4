@@ -71,10 +71,10 @@
     <rdfs:domain rdf:resource="#Catalog"/>
   </owl:DatatypeProperty>
   <swb:CodePackage rdf:ID="pkg">
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.portal.resources.sem.catalog</swb:package>
     <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >catalog</swb:prefix>
-    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.sematicwb.portal.resources.sem.catalog</swb:package>
   </swb:CodePackage>
 </rdf:RDF>
 
