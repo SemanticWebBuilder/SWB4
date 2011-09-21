@@ -135,7 +135,14 @@ public class GoogleSiteMap implements InternalServlet {
 //            } else {
 //                urlcnt = page.getRealUrl();
 //            }
-            ret.append("<url><loc>" + hn +urlcnt + "</loc>");
+            if(page.getWebPageURL()!=null)
+            {
+                ret.append("<url><loc>" + hn +urlcnt + "</loc>");
+            }else
+            {
+                ret.append("<url><loc>" + urlcnt + "</loc>");
+            }
+            
             if (!"".equals(page.getContentsLastUpdate(lang, "yyyy-mm-dd")))
                     ret.append("<lastmod>"+page.getContentsLastUpdate(lang, "yyyy-mm-dd")+"</lastmod>");
             ret.append("<priority>0."+scoregap+"</priority></url>");
