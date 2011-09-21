@@ -150,6 +150,7 @@ public class SWBMessageProcesor extends TimerTask
 //                break;
 //            }
 //        }
+          SWBPlatform.createInstance().endThreadRequest();
     }
 
 }
