@@ -279,6 +279,8 @@ public class UserRepository extends UserRepositoryBase {
 
             }
             ret = lista.iterator();
+        } catch (Exception e) {
+            log.error("SPARQL: "+e.getMessage(), e);
         } finally {
             // QueryExecution objects should be closed to free any system resources
             qexec.close();
