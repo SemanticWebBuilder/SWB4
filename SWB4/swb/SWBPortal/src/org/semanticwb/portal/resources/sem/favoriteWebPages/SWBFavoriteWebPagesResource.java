@@ -3,13 +3,16 @@ package org.semanticwb.portal.resources.sem.favoriteWebPages;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.TreeSet;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
@@ -18,6 +21,7 @@ import org.semanticwb.portal.api.*;
 
 public class SWBFavoriteWebPagesResource extends org.semanticwb.portal.resources.sem.favoriteWebPages.base.SWBFavoriteWebPagesResourceBase
 {
+    public static final String Mode_DETAIL = "dtl";
 
     private static final Logger log = SWBUtils.getLogger(SWBFavoriteWebPagesResource.class);
 
@@ -44,6 +48,8 @@ public class SWBFavoriteWebPagesResource extends org.semanticwb.portal.resources
             doAdd(request, response, paramRequest);
         }else if(SWBResourceURL.Action_REMOVE.equals(mode)) {
             doRemove(request, response, paramRequest);
+        }else if(Mode_DETAIL.equals(mode)) {
+            doDetail(request, response, paramRequest);
         }
         
         else
@@ -59,17 +65,33 @@ public class SWBFavoriteWebPagesResource extends org.semanticwb.portal.resources
         while (favs.hasNext())
         {
             SWBFavoriteWebPage swbfav = favs.next();
-            GenericIterator<WebPage> pages = swbfav.listWebPages();
-            while (pages.hasNext())
-            {
-                WebPage page = pages.next();
-                _pages.add(page);
-            }
+            _pages.add(swbfav.getFavorite());
+//            GenericIterator<WebPage> pages = swbfav.getFavorite();
+//            while (pages.hasNext())
+//            {
+//                WebPage page = pages.next();
+//                _pages.add(page);
+//            }
         }
 
         ArrayList<WebPage> favpages = new ArrayList<WebPage>();
         favpages.addAll(_pages);
         return favpages;
+    }
+    
+    public static List<WebPage> getFavorites(User user, WebSite site) {
+        TreeSet<SWBFavoriteWebPage> favpages = new TreeSet<SWBFavoriteWebPage>();
+        Iterator<SWBFavoriteWebPage> favs = SWBFavoriteWebPage.ClassMgr.listSWBFavoriteWebPageByUser(user, site);
+        while (favs.hasNext()) {
+            favpages.add(favs.next());
+        }
+        
+        ArrayList<WebPage> _pages = new ArrayList<WebPage>();
+        favs = favpages.descendingIterator();
+        while(favs.hasNext()) {
+            _pages.add(favs.next().getFavorite());
+        }
+        return _pages;
     }
 
     public void doEditWebPage(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -103,7 +125,7 @@ public class SWBFavoriteWebPagesResource extends org.semanticwb.portal.resources
                 while (favs.hasNext())
                 {
                     SWBFavoriteWebPage fav = favs.next();
-                    fav.addWebPage(page);
+                    fav.setFavorite(page);
                     add=true;
 
                 }
@@ -111,7 +133,7 @@ public class SWBFavoriteWebPagesResource extends org.semanticwb.portal.resources
                 {
                     SWBFavoriteWebPage fav=SWBFavoriteWebPage.ClassMgr.createSWBFavoriteWebPage(paramRequest.getWebPage().getWebSite());
                     fav.setUser(user);
-                    fav.addWebPage(page);
+                    fav.setFavorite(page);
                 }
             }
 
@@ -144,12 +166,10 @@ public class SWBFavoriteWebPagesResource extends org.semanticwb.portal.resources
         
         String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/jsp/" + this.getClass().getSimpleName() + "/";
         String path = basePath + "view.jsp";
-        String mode = paramRequest.getArgument("mode")==null?paramRequest.getAction():paramRequest.getArgument("mode");
-//System.out.println("paramRequest.getArgument(\"mode\")="+paramRequest.getArgument("mode"));
-//System.out.println("paramRequest.getAction()="+paramRequest.getAction());
-//System.out.println("mode="+mode);
-        //if (mode != null && "edit".equalsIgnoreCase(mode))
-        if(base.getWebSite().getHomePage()!=paramRequest.getWebPage())
+        String mode = paramRequest.getArgument("mode");
+        
+        //if(base.getWebSite().getHomePage()!=paramRequest.getWebPage())
+        if(mode != null && SWBResourceURL.Action_EDIT.equalsIgnoreCase(mode))
         {
             path = basePath + "edit.jsp";
         }        
@@ -159,38 +179,28 @@ public class SWBFavoriteWebPagesResource extends org.semanticwb.portal.resources
             request.setAttribute("mode", mode);            
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("this", this);
-            request.setAttribute("pages", getFavWebPages(user, base.getWebSite()));
+            request.setAttribute("pages", getFavWebPages(user, paramRequest.getWebPage().getWebSite()));
             dis.include(request, response);
         }
         catch (Exception e)
         {
             log.error(e);
-        }    
-    }
-
-    /*@Override
-    public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/html; charset=ISO-8859-1");
-        response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache");
+        }
         
-System.out.println("doHelp.........................");
-        PrintWriter out = response.getWriter();
-        String msg = request.getParameter("msg");
-        out.println("<script type=\"text/javascript\">");
-        //out.println("<!--");
-        out.println("  alert('"+msg+"');");
-        out.println("  window.location.href='"+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW).setAction(SWBResourceURL.Action_EDIT) +"';");
-        //out.println("-->");
-        out.println("</script>");
-    }*/
+/*User user = paramRequest.getUser();
+Iterator<SWBFavoriteWebPage> it = SWBFavoriteWebPage.ClassMgr.listSWBFavoriteWebPageByUser(user, paramRequest.getWebPage().getWebSite());
+List<SWBFavoriteWebPage> list = SWBUtils.Collections.copyIterator(it);
+Collections.sort(list, new RecentFavorites());
+Collections.reverse(list);*/        
+        
+    }
     
     public void doAdd(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
-        out.println("<input type=\"button\" value=\"agregar\" onClick=\"postHtml('<%=url%>','bm')\" />");
+        out.println("<input type=\"button\" value=\"agregar\" title=\"Agregar a Favoritos - Se desplegará en la página principal según tu perfil\" onClick=\"postHtml('<%=url%>','bm')\" />");
         out.close();
         out.flush();
     }
@@ -200,82 +210,65 @@ System.out.println("doHelp.........................");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
-        out.println("<input type=\"button\" value=\"quitar\" onClick=\"postHtml('<%=url%>','bm')\" />");
+        out.println("<input type=\"button\" value=\"quitar\" title=\"Eliminar de Favoritos\" onClick=\"postHtml('<%=url%>','bm')\" />");
         out.close();
         out.flush();
     }
     
-    /*public void doRemove(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
-        String id = request.getParameter("id");
-        WebPage page = paramRequest.getWebPage().getWebSite().getWebPage(id);
-        if (page != null)
+    public void doDetail(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        
+        final String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/jsp/" + this.getClass().getSimpleName() + "/";
+        final String path = basePath + "detail.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        try
         {
-            boolean exists = false;
-            User user = paramRequest.getUser();
-            ArrayList<WebPage> pages = getFavWebPages(user, paramRequest.getWebPage().getWebSite());
-            if (pages.contains(page))
-            {
-                Iterator<SWBFavoriteWebPage> favs = SWBFavoriteWebPage.ClassMgr.listSWBFavoriteWebPageByUser(user, paramRequest.getWebPage().getWebSite());
-                while (favs.hasNext())
-                {
-                    SWBFavoriteWebPage fav = favs.next();
-                    fav.removeWebPage(page);
-                }
-            }
-
-            String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/jsp/" + this.getClass().getSimpleName() + "/";
-            String path = basePath + "edit.jsp";
-            RequestDispatcher dis = request.getRequestDispatcher(path);
-            try
-            {
-                request.setAttribute("paramRequest", paramRequest);
-                request.setAttribute("this", this);
-                request.setAttribute("pages", getFavWebPages(user, paramRequest.getWebPage().getWebSite()));
-                dis.include(request, response);
-            }
-            catch (Exception e)
-            {
-                log.error(e);
-            }
+            request.setAttribute("paramRequest", paramRequest);
+            dis.include(request, response);
         }
-    }*/
+        catch (Exception e)
+        {
+            log.error(e);
+        }
+    }
     
-
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         Resource base = getResourceBase();
         final String act = response.getAction();
         final User user = response.getUser();
         final WebPage thisPage = response.getWebPage();
-System.out.println("processAction.....................");
-System.out.println("act="+act);
-        //String msg = response.getLocaleString("msgErrBookmarkResource"); 
         
         response.setCallMethod(SWBResourceURL.Call_DIRECT);
         if(SWBResourceURL.Action_ADD.equals(act) && user.isSigned()) {
             ArrayList<WebPage> myFavorites = getFavWebPages(user, base.getWebSite());
             if(!myFavorites.contains(thisPage)) {
                 SWBFavoriteWebPage fav = SWBFavoriteWebPage.ClassMgr.createSWBFavoriteWebPage(response.getWebPage().getId(), base.getWebSite());
+                fav.setFavorite(thisPage);
+                fav.setSubscription(new Date());
                 fav.setUser(user);
-                fav.addWebPage(thisPage);
-                //msg = response.getLocaleString("msgOkBookmarkResource");
             }else {
-                //msg = response.getLocaleString("msgAlreadyBookmarkResource");
             }
-            //response.setRenderParameter("msg", msg);
             response.setMode(SWBResourceURL.Action_REMOVE);
         }else if(SWBResourceURL.Action_REMOVE.equals(act) && user.isSigned()) {
             final String id = response.getWebPage().getId();
-System.out.println("eliminando marca con id="+id+".............");
             ArrayList myFavorites = getFavWebPages(user, base.getWebSite());
             if(myFavorites.contains(thisPage)) {
                 SWBFavoriteWebPage.ClassMgr.removeSWBFavoriteWebPage(id, base.getWebSite());
-System.out.println("marca elimanada.");
-                //msg = response.getLocaleString("msgOkUncheckResource");
             }
-            //response.setRenderParameter("msg", msg);
             response.setMode(SWBResourceURL.Action_ADD);
         }
     }
+
+
+
+static class RecentFavorites implements Comparator<SWBFavoriteWebPage> {
+    public int compare(SWBFavoriteWebPage fav1, SWBFavoriteWebPage fav2) {
+        return fav1.getSubscription().compareTo( fav2.getSubscription() );
+    }
+}
+    
+
 }
