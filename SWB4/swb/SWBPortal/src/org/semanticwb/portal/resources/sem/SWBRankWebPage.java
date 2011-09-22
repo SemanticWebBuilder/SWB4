@@ -361,25 +361,27 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
             out.println("<!--");
             out.println("dojo.require(\"dijit.dijit\");");
             out.println("function lighton(idx) {");
+            String tmpUrl = url.setMode("on").toString(); tmpUrl=tmpUrl.replace('\'', '-');
             if( obj!=null ) {
                 out.println("  var uri='"+URI+"';");
                 out.println("  uri=escape(uri);");
-                out.println("  var url = '"+url.setMode("on")+"?idx='+idx+'&uri='+uri;");
+                out.println("  var url = '"+tmpUrl+"?idx='+idx+'&uri='+uri;");
                 out.println("  postHtml(url,'rate_"+obj.getId()+"');");
             }else {
-                out.println("  var url = '"+url.setMode("on")+"?idx='+idx;");
+                out.println("  var url = '"+tmpUrl+"?idx='+idx;");
                 out.println("  postHtml(url,'rate_"+wp.getId()+"');");
             }
             out.println("}");
 
             out.println("function lightoff() {");
+            tmpUrl = url.setMode("off").toString(); tmpUrl=tmpUrl.replace('\'', '-');
             if( obj!=null ) {
                 out.println("  var uri='"+URI+"';");
                 out.println("  uri=escape(uri);");
-                out.println("  var url = '"+url.setMode("off")+"?uri='+uri;");
+                out.println("  var url = '"+tmpUrl+"?uri='+uri;");
                 out.println("  postHtml(url,'rate_"+obj.getId()+"');");
             }else {
-                out.println("  var url = '"+url.setMode("off")+"';");
+                out.println("  var url = '"+tmpUrl+"';");
                 out.println("  postHtml(url,'rate_"+wp.getId()+"');");
             }
             out.println("}");
@@ -388,13 +390,14 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
             url = paramRequest.getActionUrl();
             url.setCallMethod(SWBResourceURL.Call_DIRECT);
             out.println("function vote(val) {");
+            tmpUrl = url.setMode("vote").toString(); tmpUrl=tmpUrl.replace('\'', '-');
             if( obj!=null ) {
                 out.println("  var uri='"+URI+"';");
                 out.println("  uri=escape(uri);");
-                out.println("  var url = '"+url.setMode("vote")+"?rating='+val+'&uri='+uri;");
+                out.println("  var url = '"+tmpUrl+"?rating='+val+'&uri='+uri;");
                 out.println("  postHtml(url,'rate_"+obj.getId()+"');");
             }else {
-                out.println("  var url = '"+url.setMode("vote")+"?rating='+val;");
+                out.println("  var url = '"+tmpUrl+"?rating='+val;");
                 out.println("  postHtml(url,'rate_"+wp.getId()+"');");
             }
             out.println("  alert('"+paramRequest.getLocaleString("msg_voteAcepted")+"');");
