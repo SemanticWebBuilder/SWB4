@@ -3,11 +3,12 @@ package org.semanticwb.portal.resources.sem.favoriteWebPages.base;
 
 public abstract class SWBFavoriteWebPageBase extends org.semanticwb.model.SWBClass 
 {
+    public static final org.semanticwb.platform.SemanticProperty fav_subscription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/favwebpages#subscription");
    /**
    * Una Página Web es el elemento de SemanticWebBuilder a través del cual se estructura la información del portal.
    */
     public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
-    public static final org.semanticwb.platform.SemanticProperty fav_hasWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/favwebpages#hasWebPage");
+    public static final org.semanticwb.platform.SemanticProperty fav_favorite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/favwebpages#favorite");
    /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
    */
@@ -89,26 +90,26 @@ public abstract class SWBFavoriteWebPageBase extends org.semanticwb.model.SWBCla
             return (getSWBFavoriteWebPage(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.portal.resources.sem.favoriteWebPages.SWBFavoriteWebPage with a determined WebPage
-       * @param value WebPage of the type org.semanticwb.model.WebPage
+       * Gets all org.semanticwb.portal.resources.sem.favoriteWebPages.SWBFavoriteWebPage with a determined Favorite
+       * @param value Favorite of the type org.semanticwb.model.WebPage
        * @param model Model of the org.semanticwb.portal.resources.sem.favoriteWebPages.SWBFavoriteWebPage
        * @return Iterator with all the org.semanticwb.portal.resources.sem.favoriteWebPages.SWBFavoriteWebPage
        */
 
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.favoriteWebPages.SWBFavoriteWebPage> listSWBFavoriteWebPageByWebPage(org.semanticwb.model.WebPage value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.favoriteWebPages.SWBFavoriteWebPage> listSWBFavoriteWebPageByFavorite(org.semanticwb.model.WebPage value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.favoriteWebPages.SWBFavoriteWebPage> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(fav_hasWebPage, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.favoriteWebPages.SWBFavoriteWebPage> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(fav_favorite, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.portal.resources.sem.favoriteWebPages.SWBFavoriteWebPage with a determined WebPage
-       * @param value WebPage of the type org.semanticwb.model.WebPage
+       * Gets all org.semanticwb.portal.resources.sem.favoriteWebPages.SWBFavoriteWebPage with a determined Favorite
+       * @param value Favorite of the type org.semanticwb.model.WebPage
        * @return Iterator with all the org.semanticwb.portal.resources.sem.favoriteWebPages.SWBFavoriteWebPage
        */
 
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.favoriteWebPages.SWBFavoriteWebPage> listSWBFavoriteWebPageByWebPage(org.semanticwb.model.WebPage value)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.favoriteWebPages.SWBFavoriteWebPage> listSWBFavoriteWebPageByFavorite(org.semanticwb.model.WebPage value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.favoriteWebPages.SWBFavoriteWebPage> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(fav_hasWebPage,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.favoriteWebPages.SWBFavoriteWebPage> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(fav_favorite,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -144,65 +145,56 @@ public abstract class SWBFavoriteWebPageBase extends org.semanticwb.model.SWBCla
     {
         super(base);
     }
-   /**
-   * Gets all the org.semanticwb.model.WebPage
-   * @return A GenericIterator with all the org.semanticwb.model.WebPage
-   */
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage> listWebPages()
+/**
+* Gets the Subscription property
+* @return java.util.Date with the Subscription
+*/
+    public java.util.Date getSubscription()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.WebPage>(getSemanticObject().listObjectProperties(fav_hasWebPage));
+        return getSemanticObject().getDateProperty(fav_subscription);
     }
 
-   /**
-   * Gets true if has a WebPage
-   * @param value org.semanticwb.model.WebPage to verify
-   * @return true if the org.semanticwb.model.WebPage exists, false otherwise
-   */
-    public boolean hasWebPage(org.semanticwb.model.WebPage value)
+/**
+* Sets the Subscription property
+* @param value long with the Subscription
+*/
+    public void setSubscription(java.util.Date value)
     {
-        boolean ret=false;
+        getSemanticObject().setDateProperty(fav_subscription, value);
+    }
+   /**
+   * Sets the value for the property Favorite
+   * @param value Favorite to set
+   */
+
+    public void setFavorite(org.semanticwb.model.WebPage value)
+    {
         if(value!=null)
         {
-           ret=getSemanticObject().hasObjectProperty(fav_hasWebPage,value.getSemanticObject());
+            getSemanticObject().setObjectProperty(fav_favorite, value.getSemanticObject());
+        }else
+        {
+            removeFavorite();
         }
-        return ret;
     }
    /**
-   * Adds a WebPage
-   * @param value org.semanticwb.model.WebPage to add
+   * Remove the value for Favorite property
    */
 
-    public void addWebPage(org.semanticwb.model.WebPage value)
+    public void removeFavorite()
     {
-        getSemanticObject().addObjectProperty(fav_hasWebPage, value.getSemanticObject());
-    }
-   /**
-   * Removes all the WebPage
-   */
-
-    public void removeAllWebPage()
-    {
-        getSemanticObject().removeProperty(fav_hasWebPage);
-    }
-   /**
-   * Removes a WebPage
-   * @param value org.semanticwb.model.WebPage to remove
-   */
-
-    public void removeWebPage(org.semanticwb.model.WebPage value)
-    {
-        getSemanticObject().removeObjectProperty(fav_hasWebPage,value.getSemanticObject());
+        getSemanticObject().removeProperty(fav_favorite);
     }
 
    /**
-   * Gets the WebPage
+   * Gets the Favorite
    * @return a org.semanticwb.model.WebPage
    */
-    public org.semanticwb.model.WebPage getWebPage()
+    public org.semanticwb.model.WebPage getFavorite()
     {
          org.semanticwb.model.WebPage ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(fav_hasWebPage);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(fav_favorite);
          if(obj!=null)
          {
              ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
