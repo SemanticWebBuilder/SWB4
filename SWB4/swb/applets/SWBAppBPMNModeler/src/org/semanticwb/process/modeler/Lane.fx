@@ -19,7 +19,7 @@ import javafx.util.Sequences;
 
 public class Lane extends GraphicalElement
 {
-    public var idx: Number;
+    public var idx: Integer;
     var xh=bind h on replace
     {
         //y=getGraphParent().y-getGraphParent().h/2+boundsInParent.minY+h/2;
