@@ -209,9 +209,6 @@ public class ToolBar extends CustomNode
         {
             var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getProcessJSON</cmd></req>";
             var json=conn.getData(comando);
-            println("::::obtenido del comando:::");
-            println(conn.getData(comando));
-            println("//::::obtenido del comando::://");
             //println("json:{json}");
             delete modeler.contents;
             modeler.containerElement=null;
@@ -285,6 +282,9 @@ public class ToolBar extends CustomNode
            ele.put("isInterrupting", ge.isInterrupting);
            if (ge instanceof DataObject) {
                ele.put("isCollection", (ge as DataObject).isCollection);
+           }
+           if (ge instanceof Lane) {
+               ele.put("index", (ge as Lane).idx);
            }
         }
 
@@ -378,7 +378,6 @@ public class ToolBar extends CustomNode
             if(ge!=null and not (ge instanceof Lane))
             {
                 var title=js.getString("title");
-                println("título recuperado del json: {title}");
                 var description=js.optString("description", "");
                 var isLoop=js.optBoolean("isLoop", false);
                 var isMultiInstance=js.optBoolean("isMultiInstance", false);
@@ -404,7 +403,6 @@ public class ToolBar extends CustomNode
                 ge.isInterrupting = isInterrupting;
                 //println("uri:{ge.uri}");
                 ge.title=title;
-                println("título establecido al objeto: {ge.title}");
                 ge.text.setSize(labelSize);
                 ge.description=description;
                 //ge.setType(type);
@@ -439,9 +437,10 @@ public class ToolBar extends CustomNode
             var node=clss.newInstance() as Node;
 
             if(node instanceof Lane)
-            {
+            {                
                 var parent=js.getString("parent");
                 var title=js.getString("title");
+                var idx = js.optInt("idx", -1);
                 //var type=js.getString("type");
                 var h=js.getInt("h");
                 var p=modeler.getGraphElementByURI(parent);
@@ -453,6 +452,8 @@ public class ToolBar extends CustomNode
                     //lane.type=type;
                     lane.h=h;
                     lane.uri=uri;
+                    lane.idx = idx;
+                    (p as Pool).sortLanes();
                 }
             }
             i++;
