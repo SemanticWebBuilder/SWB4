@@ -24,10 +24,8 @@ import org.semanticwb.process.modeler.AssociationFlow;
  * Clase que representa un Pool en un diagrama BPMN 2.0.
  * @author javier.solis
  */
-
 public class Pool extends GraphicalElement
 {
-
     public override var over on replace {
         if (over and not selected) {
             shape.styleClass = "poolHover";
@@ -47,6 +45,19 @@ public class Pool extends GraphicalElement
     var py=bind y on replace
     {
         updateSize();
+    }
+
+    var c = Comparator {
+       override public function compare (arg0 : Object, arg1 : Object) : Integer {
+           var l1 = arg0 as Lane;
+           var l2 = arg1 as Lane;
+           var ret = 0;
+
+           if (l1.idx == l2.idx) ret = 0;
+           if (l1.idx < l2.idx) ret = -1;
+           if (l1.idx > l2.idx) ret = 1;
+           return ret;
+       }
     }
 
     public var lanes:Lane[];
@@ -180,30 +191,21 @@ public class Pool extends GraphicalElement
     }
 
     public function swapLanes(l1: Integer, l2: Integer) {
-        var c = Comparator {
-           override public function compare (arg0 : Object, arg1 : Object) : Integer {
-               var l1 = arg0 as Lane;
-               var l2 = arg1 as Lane;
-               var ret = 0;
-
-               if (l1.idx == l2.idx) ret = 0;
-               if (l1.idx < l2.idx) ret = -1;
-               if (l1.idx > l2.idx) ret = 1;
-
-               return ret;
-           }
-        }
-
         var t = lanes[l1].idx;
         lanes[l1].idx = lanes[l2].idx;
         lanes[l2].idx = t;
+        sortLanes();
+        updateSize();
+    }
+
+    /*Ordena los lanes del Pool de acuerdo a su índice*/
+    public function sortLanes() {
         var ls = Sequences.sort(lanes, c);
         delete lanes;
         for (ele in ls) {
             var l = ele as Lane;
             insert l into lanes;
         }
-
         updateSize();
     }
     
@@ -322,7 +324,6 @@ public class Pool extends GraphicalElement
     }
 
     public override function copy () : GraphicalElement {
-        //println("Copiando pool {title} - {uri} - w:{w}, h:{h}");
         var t = Pool {
             title: this.title
             description: this.description
@@ -332,10 +333,7 @@ public class Pool extends GraphicalElement
             uri:"new:pool:{modeler.toolBar.counter++}"
         }
 
-        //println("Creado pool {title} - {uri} - w:{w}, h:{h}");
-
         for (lane in lanes) {
-            //println("  Copiando lane {lane.title} - {lane.uri} - w:{lane.w}, h:{lane.h}, idx:{lane.idx}");
             var l = Lane {
                 title: lane.title
                 description: lane.description
@@ -346,16 +344,12 @@ public class Pool extends GraphicalElement
                 idx: lane.idx
             };
 
-            //println("  *Creado lane {l.title} - {l.uri} - w:{l.w}, h:{l.h}, idx:{l.idx}");
             l.setGraphParent(t);
-            //println("  *GraphParent: {l.graphParent}");
             l.setContainer(getContainer());
             insert l into t.lanes;
             
         }
-        //println("-Actualizando tamaño del pool - original w:{t.w}, h:{t.h}");
         t.updateSize();
-        //println("-Nuevo tamaño del pool w:{t.w}, h:{t.h}");
 
         var conObjects: ConnectionObject[];
         var objMap = HashMap {};
