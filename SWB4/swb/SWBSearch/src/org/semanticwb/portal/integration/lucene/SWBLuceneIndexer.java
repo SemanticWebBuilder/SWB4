@@ -53,6 +53,7 @@ import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
 import org.apache.lucene.store.FSDirectory;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Searchable;
@@ -218,49 +219,55 @@ public class SWBLuceneIndexer extends SWBIndexer
     @Override
     protected void _run() 
     {
-        //System.out.println("_run");
-        if(getIndexSize()>0)
+        try
         {
-            //Eliminar elementos
-            try {
-                init_reader();
-                removeRun();                //Eliminar elementos
-                if(removeModel!=null)       //Eliminar modelos
-                {
-                    reader.deleteDocuments(new Term(ATT_MODEL, removeModel));
-                    removeModel=null;
+            //System.out.println("_run");
+            if(getIndexSize()>0)
+            {
+                //Eliminar elementos
+                try {
+                    init_reader();
+                    removeRun();                //Eliminar elementos
+                    if(removeModel!=null)       //Eliminar modelos
+                    {
+                        reader.deleteDocuments(new Term(ATT_MODEL, removeModel));
+                        removeModel=null;
+                    }
+                } catch (Exception e) {
+                    log.error("Error removing objects...",e);
+                } finally {
+                    close_reader();
                 }
-            } catch (Exception e) {
-                log.error("Error removing objects...",e);
-            } finally {
-                close_reader();
+                //Indexar elementos
+                try {
+                    init_writer();
+                    writeRun();
+                    optimize=true;
+                } catch (Exception e) {
+                    log.error("Error indexing objects...",e);
+                } finally {
+                    close_writer();
+                    reset_searcher();
+                }
             }
-            //Indexar elementos
-            try {
-                init_writer();
-                writeRun();
-                optimize=true;
-            } catch (Exception e) {
-                log.error("Error indexing objects...",e);
-            } finally {
-                close_writer();
-                reset_searcher();
-            }
-        }
 
-        //Optimizar
-        if(optimize)
-        {
-            try {
-                init_writer();
-                writer.optimize();
-            } catch (Exception e) {
-                log.error("Error optimizing objects...",e);
-            } finally {
-                close_writer();
-                reset_searcher();
+            //Optimizar
+            if(optimize)
+            {
+                try {
+                    init_writer();
+                    writer.optimize();
+                } catch (Exception e) {
+                    log.error("Error optimizing objects...",e);
+                } finally {
+                    close_writer();
+                    reset_searcher();
+                }
+                optimize=false;
             }
-            optimize=false;
+        }finally
+        {
+            SWBPlatform.createInstance().endThreadRequest();
         }
     }
 
