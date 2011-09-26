@@ -949,7 +949,7 @@ public class Modeler extends GenericResource {
 
                         // si es un Collectionable se revisa si es colección
                         if (ge instanceof Collectionable) {
-                            Collectionable colble = (Collectionable) go;
+                            Collectionable colble = (Collectionable) gi;
                             if (isCollection != null) {
                                 //System.out.println("Save Collection ===>"+isCollection.booleanValue());
                                 colble.setCollection(isCollection.booleanValue());
