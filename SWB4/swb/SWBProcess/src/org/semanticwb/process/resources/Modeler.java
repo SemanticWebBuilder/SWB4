@@ -341,7 +341,7 @@ public class Modeler extends GenericResource {
 
                     //System.out.println("Es coleccion...");
                     Collectionable colble = (Collectionable) obj;
-                    if(colble.isCollection()){
+                    if (colble.isCollection()) {
                         ele.put(PROP_isCollection, true);
                     } else {
                         ele.put(PROP_isCollection, false);
@@ -419,7 +419,7 @@ public class Modeler extends GenericResource {
                     Sortable sorble = (Sortable) obj;
                     ele.put(PROP_index, sorble.getIndex());
                 }
-                
+
                 if (obj instanceof ActivityConfable) {
 
                     ActivityConfable tsk = (ActivityConfable) obj;
@@ -443,7 +443,7 @@ public class Modeler extends GenericResource {
                 if (obj instanceof Collectionable) {
                     //System.out.println("Es coleccion subprocess...");
                     Collectionable colble = (Collectionable) obj;
-                    if(colble.isCollection()){
+                    if (colble.isCollection()) {
                         ele.put(PROP_isCollection, true);
                     } else {
                         ele.put(PROP_isCollection, false);
@@ -495,9 +495,13 @@ public class Modeler extends GenericResource {
     public void doApplet(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         String suri = request.getParameter("suri");
         String current = request.getParameter("currentActivities");
-        if (current==null) current="";
+        if (current == null) {
+            current = "";
+        }
         String mode = request.getParameter("mode");
-        if (mode == null) mode = "edit";
+        if (mode == null) {
+            mode = "edit";
+        }
         PrintWriter out = response.getWriter();
         SWBResourceURL urlapp = paramsRequest.getRenderUrl();
         urlapp.setMode("gateway");
@@ -526,8 +530,8 @@ public class Modeler extends GenericResource {
         out.println("        {");
         out.println("              lang: \"" + paramsRequest.getUser().getLanguage() + "\",");
         out.println("              jsess: \"" + request.getSession().getId() + "\",");
-        out.println("              currentActivities: \""+URLDecoder.decode(current)+"\",");
-        out.println("              mode: \""+mode+"\",");
+        out.println("              currentActivities: \"" + URLDecoder.decode(current) + "\",");
+        out.println("              mode: \"" + mode + "\",");
         out.println("              cgipath: \"" + urlapp + "\"");
         out.println("        }");
         out.println("    );");
@@ -542,9 +546,13 @@ public class Modeler extends GenericResource {
         PrintWriter out = response.getWriter();
         String suri = request.getParameter("suri");
         String current = request.getParameter("currentActivities");
-        if (current == null) current = "";
+        if (current == null) {
+            current = "";
+        }
         String mode = request.getParameter("mode");
-        if (mode == null) mode = "edit";
+        if (mode == null) {
+            mode = "edit";
+        }
 
         SWBResourceURL urlapp = paramsRequest.getRenderUrl();
         urlapp.setMode("applet");
@@ -552,7 +560,7 @@ public class Modeler extends GenericResource {
         urlapp.setParameter("suri", suri);
         urlapp.setParameter("currentActivities", current);
         urlapp.setParameter("mode", mode);
-        
+
         out.println("<div class=\"applet\">");
         out.println("<iframe dojoType_=\"dijit.layout.ContentPane\" src=\"" + urlapp + "\" width=\"100%\" height=\"100%\" frameborder=\"0\" scrolling=\"no\"></iframe>");
         //String idframe = "ifr_" + getResourceBase().getId();
@@ -632,15 +640,15 @@ public class Modeler extends GenericResource {
     public void createProcessElements(org.semanticwb.process.model.Process process, HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest, HashMap<String, JSONObject> hmjson) {
 
         //System.out.println("CreateProcessElements");
-        
+
         HashMap<String, String> hmori = loadProcessElements(process);
         HashMap<String, String> hmnew = new HashMap();
 
         ProcessSite procsite = process.getProcessSite();
         GenericObject go = null;
         String uri = null, sclass = null, title = null, description = null, container = null, parent = null, start = null, end = null;
-        int x = 0, y = 0, w = 0, h = 0, labelSize = 10, index=0;
-        Boolean isMultiInstance = null,isSeqMultiInstance = null, isLoop = null, isForCompensation = null, isCollection = null, isAdHoc = null, isTransaction = null, isInterrupting = null;
+        int x = 0, y = 0, w = 0, h = 0, labelSize = 10, index = 0;
+        Boolean isMultiInstance = null, isSeqMultiInstance = null, isLoop = null, isForCompensation = null, isCollection = null, isAdHoc = null, isTransaction = null, isInterrupting = null;
 
         boolean tmpBoolean = false;
 
@@ -722,7 +730,7 @@ public class Modeler extends GenericResource {
                         isCollection = null;
                         //System.out.println("No viene isCollecion....."+title);
                     }
-                    
+
                     try {
                         index = json.getInt(PROP_index);
                         //System.out.println("Viene isCollecion:"+isCollection.booleanValue());
@@ -777,7 +785,7 @@ public class Modeler extends GenericResource {
                                 Sortable sorble = (Sortable) go;
                                 sorble.setIndex(index);
                             }
-                            
+
                             if (go instanceof ActivityConfable) {  //Task
                                 ActivityConfable tsk = (ActivityConfable) go;
 
@@ -843,8 +851,7 @@ public class Modeler extends GenericResource {
                             // si es un Collectionable se revisa si es colección
                             if (ge instanceof Collectionable) {
                                 Collectionable colble = (Collectionable) go;
-                                if (isCollection != null)
-                                {
+                                if (isCollection != null) {
                                     //System.out.println("Save Collection ===>"+isCollection.booleanValue());
                                     colble.setCollection(isCollection.booleanValue());
                                 }
@@ -872,6 +879,86 @@ public class Modeler extends GenericResource {
 
                         //System.out.println("uri: "+uri+" new uri: "+gi.getURI());
 
+                        // si es un Sortable se revisa si tiene index
+                        if (ge instanceof Sortable) {
+                            Sortable sorble = (Sortable) go;
+                            sorble.setIndex(index);
+                        }
+
+                        if (go instanceof ActivityConfable) {  //Task
+                            ActivityConfable tsk = (ActivityConfable) go;
+
+                            if (null != isForCompensation && isForCompensation.booleanValue()) {
+                                tsk.setForCompensation(isForCompensation.booleanValue());
+                            }
+
+                            if (null != isMultiInstance) {
+
+                                if (isMultiInstance.booleanValue()) {
+                                    // si existe no se hace nada se deja el MultiInstanceLoopCharacteristics
+                                    LoopCharacteristics loopchar = tsk.getLoopCharacteristics();
+                                    if (loopchar == null) // si no existe lo crea
+                                    {
+                                        // si no existe se crea uno nuevo y se asigna al task
+                                        loopchar = MultiInstanceLoopCharacteristics.ClassMgr.createMultiInstanceLoopCharacteristics(procsite);
+                                        tsk.setLoopCharacteristics(loopchar);
+                                    } else if (!(loopchar instanceof MultiInstanceLoopCharacteristics)) {
+                                        loopchar.getSemanticObject().remove();
+                                    }
+                                    // si no existe se crea uno nuevo y se asigna al task
+                                    loopchar = MultiInstanceLoopCharacteristics.ClassMgr.createMultiInstanceLoopCharacteristics(procsite);
+                                    tsk.setLoopCharacteristics(loopchar);
+                                } else {
+                                    // si existe y cambio y ya no es MultiInstance se elimina el MultiInstanceLoopCharacteristics asociado
+                                    LoopCharacteristics loopchar = tsk.getLoopCharacteristics();
+                                    if (null != loopchar && loopchar instanceof MultiInstanceLoopCharacteristics) {
+                                        loopchar.getSemanticObject().remove();
+                                    }
+                                }
+                            }
+
+                            if (null != isLoop) {
+                                //System.out.println("LoopCharacteristic....");
+                                if (isLoop.booleanValue()) {
+                                    // si existe no se hace nada se deja el LoopCharacteristics
+                                    LoopCharacteristics loopchar = tsk.getLoopCharacteristics();
+                                    if (loopchar == null) // si no existe lo crea
+                                    {
+                                        // si no existe se crea uno nuevo y se asigna al task
+                                        //System.out.println("creando LoopCharacteristic....");
+                                        loopchar = StandarLoopCharacteristics.ClassMgr.createStandarLoopCharacteristics(procsite);
+                                        tsk.setLoopCharacteristics(loopchar);
+                                    } else if (!(loopchar instanceof StandarLoopCharacteristics)) {
+                                        loopchar.getSemanticObject().remove();
+                                        // si no existe se crea uno nuevo y se asigna al task
+                                        //System.out.println("eliminando y creando LoopCharacteristic....");
+                                        loopchar = StandarLoopCharacteristics.ClassMgr.createStandarLoopCharacteristics(procsite);
+                                        tsk.setLoopCharacteristics(loopchar);
+                                    }
+
+                                } else {
+                                    // si existe y cambio y ya no es Loop se elimina el StandarLoopCharacteristics asociado
+                                    LoopCharacteristics loopchar = tsk.getLoopCharacteristics();
+                                    if (null != loopchar && loopchar instanceof StandarLoopCharacteristics) {
+                                        //System.out.println("eliminando LoopCharacteristic....");
+                                        loopchar.getSemanticObject().remove();
+                                    }
+                                }
+                            }
+                        }
+
+                        // si es un Collectionable se revisa si es colección
+                        if (ge instanceof Collectionable) {
+                            Collectionable colble = (Collectionable) go;
+                            if (isCollection != null) {
+                                //System.out.println("Save Collection ===>"+isCollection.booleanValue());
+                                colble.setCollection(isCollection.booleanValue());
+                            }
+                        }
+
+
+
+
                         // se agrega nuevo elemento en el hmnew
                         hmnew.put(uri, gi.getURI());
 
@@ -896,17 +983,16 @@ public class Modeler extends GenericResource {
 
                         if (semclass.equals(UserTask.swp_UserTask)) {
 
-                            if(procsite.getResourceType("ProcessForm")==null)
-                            {
+                            if (procsite.getResourceType("ProcessForm") == null) {
                                 ResourceType resType = procsite.createResourceType("ProcessForm");
                                 resType.setTitle("ProcessForm");
-                                resType.setTitle("ProcessForm","en");
+                                resType.setTitle("ProcessForm", "en");
                                 resType.setDescription("ProcessForm");
-                                resType.setDescription("ProcessForm","es");
+                                resType.setDescription("ProcessForm", "es");
                                 resType.setResourceClassName("org.semanticwb.process.resources.ProcessForm");
                                 resType.setResourceBundle("org.semanticwb.process.resources.ProcessForm");
                                 resType.setResourceMode(ResourceType.MODE_SYSTEM);
-                            }                           
+                            }
 
                             if (procsite.getResourceType("ProcessForm") != null) {
                                 Resource res = procsite.createResource();
@@ -1019,7 +1105,7 @@ public class Modeler extends GenericResource {
                         if (!co.getSource().getURI().equals(start)) {
                             if (hmnew.get(start) != null) {
                                 gostart = ont.getGenericObject(hmnew.get(start));
-                                co.setSource((GraphicalElement)gostart);
+                                co.setSource((GraphicalElement) gostart);
                             }
                         }
                         if (!co.getTarget().getURI().equals(end)) {
