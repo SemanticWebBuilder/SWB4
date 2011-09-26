@@ -284,7 +284,8 @@ public class ToolBar extends CustomNode
                ele.put("isCollection", (ge as DataObject).isCollection);
            }
            if (ge instanceof Lane) {
-               ele.put("index", (ge as Lane).idx);
+               var l = ge as Lane;
+               ele.put("index", l.idx);
            }
         }
 
@@ -440,7 +441,8 @@ public class ToolBar extends CustomNode
             {                
                 var parent=js.getString("parent");
                 var title=js.getString("title");
-                var idx = js.optInt("idx", -1);
+                var idx = js.optString("index", "-1");
+                //println("Datos recuperados -> parent: {parent}, title: {title}, index: {idx}");
                 //var type=js.getString("type");
                 var h=js.getInt("h");
                 var p=modeler.getGraphElementByURI(parent);
@@ -452,8 +454,11 @@ public class ToolBar extends CustomNode
                     //lane.type=type;
                     lane.h=h;
                     lane.uri=uri;
-                    lane.idx = idx;
-                    (p as Pool).sortLanes();
+                    if (not idx.equals("-1")) {
+                        var iidx = js.getInt("index");
+                        lane.idx = iidx;
+                        pool.sortLanes();
+                    }
                 }
             }
             i++;
