@@ -5,7 +5,7 @@ public abstract class SWBCatalogResourceBase extends org.semanticwb.portal.api.G
 {
     public static final org.semanticwb.platform.SemanticProperty catalog_hasCatalogDetailProperties=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sem/SWBCatalogResource#hasCatalogDetailProperties");
     public static final org.semanticwb.platform.SemanticProperty catalog_hasCatalogSearchProperties=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sem/SWBCatalogResource#hasCatalogSearchProperties");
-    public static final org.semanticwb.platform.SemanticClass swb_SWBClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBClass");
+    public static final org.semanticwb.platform.SemanticClass swb_Class=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Class");
     public static final org.semanticwb.platform.SemanticProperty catalog_catalogClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sem/SWBCatalogResource#catalogClass");
     public static final org.semanticwb.platform.SemanticProperty catalog_hasCatalogListProperties=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sem/SWBCatalogResource#hasCatalogListProperties");
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
@@ -100,42 +100,25 @@ public abstract class SWBCatalogResourceBase extends org.semanticwb.portal.api.G
     {
         getSemanticObject().removeLiteralProperty(catalog_hasCatalogSearchProperties,new org.semanticwb.platform.SemanticLiteral(value));
     }
-   /**
-   * Sets the value for the property CatalogClass
-   * @param value CatalogClass to set
-   */
 
-    public void setCatalogClass(org.semanticwb.model.SWBClass value)
+    public void setCatalogClass(org.semanticwb.platform.SemanticObject value)
     {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(catalog_catalogClass, value.getSemanticObject());
-        }else
-        {
-            removeCatalogClass();
-        }
+        getSemanticObject().setObjectProperty(catalog_catalogClass, value);
     }
-   /**
-   * Remove the value for CatalogClass property
-   */
 
     public void removeCatalogClass()
     {
         getSemanticObject().removeProperty(catalog_catalogClass);
     }
 
-   /**
-   * Gets the CatalogClass
-   * @return a org.semanticwb.model.SWBClass
-   */
-    public org.semanticwb.model.SWBClass getCatalogClass()
+/**
+* Gets the CatalogClass property
+* @return the value for the property as org.semanticwb.platform.SemanticObject
+*/
+    public org.semanticwb.platform.SemanticObject getCatalogClass()
     {
-         org.semanticwb.model.SWBClass ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(catalog_catalogClass);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.SWBClass)obj.createGenericInstance();
-         }
+         org.semanticwb.platform.SemanticObject ret=null;
+         ret=getSemanticObject().getObjectProperty(catalog_catalogClass);
          return ret;
     }
 

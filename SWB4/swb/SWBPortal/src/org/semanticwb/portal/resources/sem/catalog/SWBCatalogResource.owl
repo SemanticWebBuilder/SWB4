@@ -17,6 +17,9 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SemanticResource"/>
   </owl:Class>
+  <owl:Class rdf:ID="SWBSemanticResource2">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+  </owl:Class>
   <owl:ObjectProperty rdf:ID="catalogClass">
     <rdfs:domain rdf:resource="#SWBCatalogResource"/>
     <swb:displayProperty>
@@ -26,9 +29,9 @@
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectClass_1"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <rdfs:label xml:lang="en">Class</rdfs:label>
     <rdfs:label xml:lang="es">Clase</rdfs:label>
+    <rdfs:label xml:lang="en">Class</rdfs:label>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="catalogModel">
     <rdfs:domain rdf:resource="#SWBCatalogResource"/>
