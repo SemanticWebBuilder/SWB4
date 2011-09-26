@@ -113,186 +113,190 @@ public class SWBVirtualHostFilter implements Filter
             FilterChain chain)
             throws IOException, ServletException
     {
-        HttpServletRequest _request = new SWBBaseHttpServletRequestWrapper((HttpServletRequest) request);
-        HttpServletResponse _response = (HttpServletResponse) response;
-        log.trace("VirtualHostFilter:doFilter()");
-
         boolean processThread = false;
-        String lang=null;
-        String country=null;
-
-        if (fistCall)
-        {
-            swbPortal.setContextPath(_request.getContextPath());
-            fistCall = false;
-        }
-
-        String uri = _request.getRequestURI();
-        String cntx = _request.getContextPath();
-        String path = uri.substring(cntx.length());
-        String host = _request.getServerName();
-        String iserv = "";
-        String iservnext=null;
-        
-        Proxy proxy=Proxy.getProxy(host); 
-        if(proxy!=null)
-        {
-            User user=SWBPortal.getUserMgr().getUser(_request, (WebSite)proxy.getSemanticObject().getModel().getModelObject().createGenericInstance());
-            if(user.haveAccess(proxy))
-            {
-                InternalProxy p=new InternalProxy(proxy);
-                if(p.doProcess(_request, _response))
-                {
-                    return;
-                }
-            }else
-            {
-                _response.sendError(403, "No tiene permiso para accesar a la página " + _request.getRequestURI() + "... ");
-                log.debug("Distributor: SendError 403");                
-                return;
-            }
-        }
-
-        if (path == null || path.length() == 0)
-        {
-            path = "/";
-        }
-        else
-        {
-            int j = path.indexOf('/', 1);
-            if (j > 0)
-            {
-                iserv = path.substring(1, j);
-                iservnext = path.substring(j+1);
-            }
-            else
-            {
-                iserv = path.substring(1);
-            }
-        }
-
-        if(path.equals("/") && swbPlatform.getEnv("swb/overrideRootIndex","true").equals("true"))
-        {
-            path="/swb";
-            iserv="swb";
-        }
-
-//        log.trace("uri:"+uri);
-//        log.trace("cntx:"+cntx);
-//        log.trace("path:"+path);
-//        log.trace("host:"+host);
-//        log.trace("iserv:"+iserv);
-
-        //System.out.println("uri:"+uri);
-        //System.out.println("cntx:"+cntx);
-        //System.out.println("path:"+path);
-        //System.out.println("host:"+host);
-        //System.out.println("iserv:"+iserv);
-
-        boolean isjsp = false;
-        InternalServlet serv = intServlets.get(iserv);
-        if (serv != null && (path.endsWith(".jsp") || path.endsWith(".groovy")))
-        {
-            serv = null;
-            isjsp = true;
-        }
-
-        //Friendly URLs
-        if((serv==null || iserv.equals("wb")) && !isjsp)
-        {
-            FriendlyURL url=FriendlyURL.getFriendlyURL(path, host);
-            if(url!=null)
-            {
-                if(!url.isOldURL())
-                {
-                    path=url.getWebPage().getRealUrl(null,null);
-                    iserv="swb";
-                    serv = intServlets.get(iserv);
-                    lang=url.getLanguage()!=null?url.getLanguage().getId():null;
-                    country=url.getCountry()!=null?url.getCountry().getId():null;
-                }else
-                {
-                    _response.sendRedirect(url.getWebPage().getUrl());
-                    return;
-                }
-            }
-        }
-        
-        //verifica lenguaje en URI
-        if(iserv!=null && (iserv.length()==2 || (iserv.length()==5 && iserv.charAt(2)=='_')))
-        {
-            serv=dist;
-            if(iserv.length()==2 && !iserv.equals("wb"))
-            {
-                lang = iserv;
-            }else if(!iserv.equals("wb"))
-            {
-                lang=iserv.substring(0,2);
-                country=iserv.substring(3);
-            }
-            if(iservnext!=null)serv = intServlets.get(iservnext);
-            if(serv==null)serv=dist;
-        }
-
-//        String real=WBVirtualHostMgr.getInstance().getVirtualHost(path,host);
-//        
-//        if(real!=null)
-//        {
-//            real=real.substring(cntx.length());
-//            AFUtils.debug("Path:"+path+", Real:"+real);
-//            RequestDispatcher rd = filterConfig.getServletContext().getRequestDispatcher(real);
-//            rd.forward(request, response);
-//            return;
-//        }
-
-        Throwable problem = null;
         try
         {
-            if (serv != null)
+            HttpServletRequest _request = new SWBBaseHttpServletRequestWrapper((HttpServletRequest) request);
+            HttpServletResponse _response = (HttpServletResponse) response;
+            log.trace("VirtualHostFilter:doFilter()");
+
+            String lang=null;
+            String country=null;
+
+            if (fistCall)
             {
-                processThread=true;
-                processInternalServlet(serv, _request, _response, path, lang, country, iserv);
+                swbPortal.setContextPath(_request.getContextPath());
+                fistCall = false;
+            }
+
+            String uri = _request.getRequestURI();
+            String cntx = _request.getContextPath();
+            String path = uri.substring(cntx.length());
+            String host = _request.getServerName();
+            String iserv = "";
+            String iservnext=null;
+
+            Proxy proxy=Proxy.getProxy(host); 
+            if(proxy!=null)
+            {
+                User user=SWBPortal.getUserMgr().getUser(_request, (WebSite)proxy.getSemanticObject().getModel().getModelObject().createGenericInstance());
+                if(user.haveAccess(proxy))
+                {
+                    InternalProxy p=new InternalProxy(proxy);
+                    if(p.doProcess(_request, _response))
+                    {
+                        return;
+                    }
+                }else
+                {
+                    _response.sendError(403, "No tiene permiso para accesar a la página " + _request.getRequestURI() + "... ");
+                    log.debug("Distributor: SendError 403");                
+                    return;
+                }
+            }
+
+            if (path == null || path.length() == 0)
+            {
+                path = "/";
             }
             else
             {
-                if (isjsp)
+                int j = path.indexOf('/', 1);
+                if (j > 0)
                 {
-                    processThread=true;
-                    User user=null;
-                    if(path.startsWith("/swbadmin"))
+                    iserv = path.substring(1, j);
+                    iservnext = path.substring(j+1);
+                }
+                else
+                {
+                    iserv = path.substring(1);
+                }
+            }
+
+            if(path.equals("/") && swbPlatform.getEnv("swb/overrideRootIndex","true").equals("true"))
+            {
+                path="/swb";
+                iserv="swb";
+            }
+
+    //        log.trace("uri:"+uri);
+    //        log.trace("cntx:"+cntx);
+    //        log.trace("path:"+path);
+    //        log.trace("host:"+host);
+    //        log.trace("iserv:"+iserv);
+
+            //System.out.println("uri:"+uri);
+            //System.out.println("cntx:"+cntx);
+            //System.out.println("path:"+path);
+            //System.out.println("host:"+host);
+            //System.out.println("iserv:"+iserv);
+
+            boolean isjsp = false;
+            InternalServlet serv = intServlets.get(iserv);
+            if (serv != null && (path.endsWith(".jsp") || path.endsWith(".groovy")))
+            {
+                serv = null;
+                isjsp = true;
+            }
+
+            //Friendly URLs
+            if((serv==null || iserv.equals("wb")) && !isjsp)
+            {
+                FriendlyURL url=FriendlyURL.getFriendlyURL(path, host);
+                if(url!=null)
+                {
+                    if(!url.isOldURL())
                     {
-                        user = SWBPortal.getUserMgr().getUser(_request, SWBContext.getAdminWebSite());
+                        path=url.getWebPage().getRealUrl(null,null);
+                        iserv="swb";
+                        serv = intServlets.get(iserv);
+                        lang=url.getLanguage()!=null?url.getLanguage().getId():null;
+                        country=url.getCountry()!=null?url.getCountry().getId():null;
                     }else
                     {
-                        user = SWBPortal.getUserMgr().getUser(_request, SWBContext.getGlobalWebSite());
+                        _response.sendRedirect(url.getWebPage().getUrl());
+                        return;
                     }
-                    SWBContext.setSessionUser(user);
                 }
-                chain.doFilter(_request, response);
             }
-        }
-        catch (Throwable t)
-        {
-            problem = t;
-        }
-        //
-        // If there was a problem, we want to rethrow it if it is
-        // a known type, otherwise log it.
-        //
-        if (problem != null)
-        {
-            if (problem instanceof ServletException)
+
+            //verifica lenguaje en URI
+            if(iserv!=null && (iserv.length()==2 || (iserv.length()==5 && iserv.charAt(2)=='_')))
             {
-                throw (ServletException) problem;
+                serv=dist;
+                if(iserv.length()==2 && !iserv.equals("wb"))
+                {
+                    lang = iserv;
+                }else if(!iserv.equals("wb"))
+                {
+                    lang=iserv.substring(0,2);
+                    country=iserv.substring(3);
+                }
+                if(iservnext!=null)serv = intServlets.get(iservnext);
+                if(serv==null)serv=dist;
             }
-            if (problem instanceof IOException)
+
+    //        String real=WBVirtualHostMgr.getInstance().getVirtualHost(path,host);
+    //        
+    //        if(real!=null)
+    //        {
+    //            real=real.substring(cntx.length());
+    //            AFUtils.debug("Path:"+path+", Real:"+real);
+    //            RequestDispatcher rd = filterConfig.getServletContext().getRequestDispatcher(real);
+    //            rd.forward(request, response);
+    //            return;
+    //        }
+
+            Throwable problem = null;
+            try
             {
-                throw (IOException) problem;
+                if (serv != null)
+                {
+                    processThread=true;
+                    processInternalServlet(serv, _request, _response, path, lang, country, iserv);
+                }
+                else
+                {
+                    if (isjsp)
+                    {
+                        processThread=true;
+                        User user=null;
+                        if(path.startsWith("/swbadmin"))
+                        {
+                            user = SWBPortal.getUserMgr().getUser(_request, SWBContext.getAdminWebSite());
+                        }else
+                        {
+                            user = SWBPortal.getUserMgr().getUser(_request, SWBContext.getGlobalWebSite());
+                        }
+                        SWBContext.setSessionUser(user);
+                    }
+                    chain.doFilter(_request, response);
+                }
             }
-            log.error(problem);
+            catch (Throwable t)
+            {
+                problem = t;
+            }
+            //
+            // If there was a problem, we want to rethrow it if it is
+            // a known type, otherwise log it.
+            //
+            if (problem != null)
+            {
+                if (problem instanceof ServletException)
+                {
+                    throw (ServletException) problem;
+                }
+                if (problem instanceof IOException)
+                {
+                    throw (IOException) problem;
+                }
+                log.error(problem);
+            }
+        }finally
+        {
+            if(processThread)swbPlatform.endThreadRequest();
         }
-        
-        if(processThread)swbPlatform.endThreadRequest();
     }
 
 

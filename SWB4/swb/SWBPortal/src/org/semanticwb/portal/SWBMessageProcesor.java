@@ -140,6 +140,9 @@ public class SWBMessageProcesor extends TimerTask
             } catch (Exception e)
             {
                 log.error(e);
+            }finally
+            {
+                SWBPlatform.createInstance().endThreadRequest();                
             }
 //            try
 //            {
@@ -150,7 +153,6 @@ public class SWBMessageProcesor extends TimerTask
 //                break;
 //            }
 //        }
-          SWBPlatform.createInstance().endThreadRequest();
     }
 
 }
