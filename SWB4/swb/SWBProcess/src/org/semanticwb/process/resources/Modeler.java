@@ -881,12 +881,12 @@ public class Modeler extends GenericResource {
 
                         // si es un Sortable se revisa si tiene index
                         if (ge instanceof Sortable) {
-                            Sortable sorble = (Sortable) go;
+                            Sortable sorble = (Sortable) gi;
                             sorble.setIndex(index);
                         }
 
-                        if (go instanceof ActivityConfable) {  //Task
-                            ActivityConfable tsk = (ActivityConfable) go;
+                        if (ge instanceof ActivityConfable) {  //Task
+                            ActivityConfable tsk = (ActivityConfable) gi;
 
                             if (null != isForCompensation && isForCompensation.booleanValue()) {
                                 tsk.setForCompensation(isForCompensation.booleanValue());
