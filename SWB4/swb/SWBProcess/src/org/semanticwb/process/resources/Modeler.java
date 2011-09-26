@@ -20,6 +20,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceType;
+import org.semanticwb.model.Sortable;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
@@ -74,6 +75,7 @@ public class Modeler extends GenericResource {
     private static final String PROP_isTransaction = "isTransaction";
     private static final String PROP_isInterrupting = "isInterrupting";
     private static final String PROP_labelSize = "labelSize";
+    private static final String PROP_index = "index";
     private SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
 
     /**
@@ -307,6 +309,12 @@ public class Modeler extends GenericResource {
                     ele.put(PROP_labelSize, 10);
                 }
 
+                if (obj instanceof Sortable) {
+
+                    //System.out.println("Es coleccion...");
+                    Sortable sorble = (Sortable) obj;
+                    ele.put(PROP_index, sorble.getIndex());
+                }
 
                 if (obj instanceof ActivityConfable) {
 
@@ -624,7 +632,7 @@ public class Modeler extends GenericResource {
         ProcessSite procsite = process.getProcessSite();
         GenericObject go = null;
         String uri = null, sclass = null, title = null, description = null, container = null, parent = null, start = null, end = null;
-        int x = 0, y = 0, w = 0, h = 0, labelSize = 10;
+        int x = 0, y = 0, w = 0, h = 0, labelSize = 10, index=0;
         Boolean isMultiInstance = null,isSeqMultiInstance = null, isLoop = null, isForCompensation = null, isCollection = null, isAdHoc = null, isTransaction = null, isInterrupting = null;
 
         boolean tmpBoolean = false;
@@ -707,6 +715,14 @@ public class Modeler extends GenericResource {
                         isCollection = null;
                         //System.out.println("No viene isCollecion....."+title);
                     }
+                    
+                    try {
+                        index = json.getInt(PROP_index);
+                        //System.out.println("Viene isCollecion:"+isCollection.booleanValue());
+                    } catch (Exception e) {
+                        index = 0;
+                        //System.out.println("No viene isCollecion....."+title);
+                    }
 
                     //System.out.println("uri: "+uri);
 
@@ -749,6 +765,12 @@ public class Modeler extends GenericResource {
                                 ge.setLabelSize(labelSize);
                             }
 
+                            // si es un Sortable se revisa si tiene index
+                            if (ge instanceof Sortable) {
+                                Sortable sorble = (Sortable) go;
+                                sorble.setIndex(index);
+                            }
+                            
                             if (go instanceof ActivityConfable) {  //Task
                                 ActivityConfable tsk = (ActivityConfable) go;
 
