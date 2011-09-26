@@ -952,11 +952,17 @@ public class SemanticMgr implements SWBInstanceObject
     {
         //System.out.println("processExternalChange");
         SemanticProperty prop=null;
-        if(puri!=null)prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(puri);
-
-        log.trace("notifyExternalChange: obj:" + uri + " prop:" + prop + " " + action);
         SemanticObject obj=SemanticObject.getSemanticObject(uri);
-        if(prop!=null && prop.isInverseOf() && obj==null)obj=SemanticObject.createSemanticObject(uri);
+        if(puri!=null)prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(puri);
+        log.trace("notifyExternalChange: obj:" + uri + " prop:" + prop + " " + action);
+        
+        if(prop==null && obj!=null)
+        {
+            SemanticObject.removeCache(uri);
+        }
+        
+        
+        if(prop!=null && prop.isObjectProperty() && prop.isInverseOf() && obj==null)obj=SemanticObject.createSemanticObject(uri);
         if (obj != null)
         {
             //TODO:
