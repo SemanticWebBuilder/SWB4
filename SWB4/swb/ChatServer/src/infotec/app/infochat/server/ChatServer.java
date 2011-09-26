@@ -101,7 +101,7 @@ public class ChatServer extends Thread
     {
         msgs.add(msgs.size(), new Message(msg, community));
         
-        //System.out.println(msg);
+        
     }
     
     public String getUsers(String community)

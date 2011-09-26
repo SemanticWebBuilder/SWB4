@@ -10,8 +10,8 @@ import java.io.*;
 import java.lang.*;
 
 import java.net.*;
+import java.nio.charset.Charset;
 
-import java.sql.Timestamp;
 
 import java.text.SimpleDateFormat;
 
@@ -31,7 +31,7 @@ public class SConn extends Thread
     public String name = null;
     private String password = null;
     public String community = null;
-    
+    OutputStreamWriter writer=null;
     /** Creates a new instance of SConn */
     public SConn(Socket sock, ChatServer server)
     {
@@ -113,7 +113,27 @@ public class SConn extends Thread
     public synchronized void sendMsg(String msg) throws IOException
     {
         String aux = msg + "\r";
-        sock.getOutputStream().write(aux.getBytes());
+
+        //PrintWriter out=new PrintWriter(sock.getOutputStream());
+        //out.print(aux);
+        if(writer==null)
+        {
+            try
+            {
+                writer=new OutputStreamWriter(sock.getOutputStream(),Charset.forName("utf-8"));
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+        writer.write(aux);
+        writer.flush();
+        //sock.getOutputStream().write(aux.getBytes());
+//        for(byte b : aux.getBytes())
+//        {
+//            System.out.println("byte: "+b);
+//        }
         
         //System.out.print(name+"-->"+aux);
     }
