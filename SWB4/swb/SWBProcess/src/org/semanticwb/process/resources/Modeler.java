@@ -413,6 +413,13 @@ public class Modeler extends GenericResource {
                 }
 
 
+                if (obj instanceof Sortable) {
+
+                    //System.out.println("Es coleccion...");
+                    Sortable sorble = (Sortable) obj;
+                    ele.put(PROP_index, sorble.getIndex());
+                }
+                
                 if (obj instanceof ActivityConfable) {
 
                     ActivityConfable tsk = (ActivityConfable) obj;
