@@ -67,7 +67,7 @@ public class MessageFlow extends ConnectionObject
             if (handles.isEmpty()) {
                 buildDefaultHandlers();
             } else {
-                addLineHandler(p);
+                addLineHandler(p, true);
             }
         }
     }
@@ -82,7 +82,7 @@ public class MessageFlow extends ConnectionObject
         }
 
         for (handle in handles) {
-            t.addLineHandler(handle.getPoint());
+            t.addLineHandler(handle.getPoint(), false);
         }
         return t;
     }
