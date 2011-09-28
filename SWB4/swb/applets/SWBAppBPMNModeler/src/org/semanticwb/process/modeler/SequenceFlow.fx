@@ -33,7 +33,7 @@ public class SequenceFlow extends ConnectionObject
         }
 
         for (handle in handles) {
-            t.addLineHandler(handle.getPoint());
+            t.addLineHandler(handle.getPoint(), false);
         }
         return t;
     }
