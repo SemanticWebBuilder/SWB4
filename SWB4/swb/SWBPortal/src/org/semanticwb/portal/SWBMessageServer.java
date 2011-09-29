@@ -83,7 +83,7 @@ public class SWBMessageServer extends java.lang.Thread
             s = new DatagramSocket(port, addr);
         else
             s = new DatagramSocket(port);
-        log.event("Message Serrver en:"+"\t"+ s.getLocalAddress().getHostAddress() + ":" + port);
+        log.event("Message Server en:"+"\t"+ s.getLocalAddress().getHostAddress() + ":" + port);
     }
 
     /* (non-Javadoc)
