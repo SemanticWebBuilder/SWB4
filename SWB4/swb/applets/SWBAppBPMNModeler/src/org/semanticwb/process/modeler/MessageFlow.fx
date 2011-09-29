@@ -67,7 +67,7 @@ public class MessageFlow extends ConnectionObject
             if (handles.isEmpty()) {
                 buildDefaultHandlers();
             } else {
-                addLineHandler(p, true);
+                addLineHandler(p, false);
             }
         }
     }
