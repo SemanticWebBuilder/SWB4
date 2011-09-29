@@ -350,7 +350,7 @@ public class ConnectionObject  extends CustomNode
                 if (handles.isEmpty()) {
                     buildDefaultHandlers();
                 } else {
-                    addLineHandler(p);
+                    addLineHandler(p, true);
                 }
             }
         }
@@ -385,7 +385,7 @@ public class ConnectionObject  extends CustomNode
     }
 
     /**Agrega un nodo tirador al trayecto del objeto de conexión en las coordenadas del punto p*/
-    public function addLineHandler(p: Point) : Void {
+    public function addLineHandler(p: Point, order: Boolean) : Void {
         var ha = LineHandle {
             x: p.x
             y: p.y
@@ -396,7 +396,9 @@ public class ConnectionObject  extends CustomNode
         //ha.setGraphParent();
         
         insert ha into handles;
-        handles = Sequences.sort(handles, LineHandle.xAscComparator) as LineHandle[];
+        if (order) {
+            handles = Sequences.sort(handles, LineHandle.xAscComparator) as LineHandle[];
+        }
         createPath();
     }
 
@@ -419,8 +421,8 @@ public class ConnectionObject  extends CustomNode
             x: getInter2ConnectionX(ini, end, pini, pend)
             y: getInter2ConnectionY(ini, end, pini, pend)
         }
-        addLineHandler(p1);
-        addLineHandler(p2);
+        addLineHandler(p1, false);
+        addLineHandler(p2, false);
         labelAnchorStart = handles[0].getPoint();
         labelAnchorEnd = handles[1].getPoint();
     }
@@ -800,7 +802,7 @@ public class ConnectionObject  extends CustomNode
         }
 
         for (handle in handles) {
-            t.addLineHandler(handle.getPoint());
+            t.addLineHandler(handle.getPoint(), false);
         }
         return t;
     }
