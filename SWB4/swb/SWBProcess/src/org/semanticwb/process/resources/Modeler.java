@@ -76,6 +76,8 @@ public class Modeler extends GenericResource {
     private static final String PROP_isInterrupting = "isInterrupting";
     private static final String PROP_labelSize = "labelSize";
     private static final String PROP_index = "index";
+    private static final String JSONSTART = "JSONSTART";
+    private static final String JSONEND = "JSONEND";
     private SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
 
     /**
@@ -170,21 +172,34 @@ public class Modeler extends GenericResource {
 
                 //System.out.println("json recibido: "+node.getTextContent());
 
+                String jsonStr = node.getTextContent();
+                if (jsonStr.startsWith(JSONSTART) && jsonStr.endsWith(JSONEND)) {
+                    jsonStr = jsonStr.replace(JSONSTART, "");
+                    jsonStr = jsonStr.replace(JSONEND, "");
 
-                jsobj = new JSONObject(node.getTextContent());
-                jsarr = jsobj.getJSONArray("nodes");
 
-                //identificando los elementos asociados directamente al proceso
-                for (int i = 0; i < jsarr.length(); i++) {
-                    jsobj = jsarr.getJSONObject(i);
-                    str_uri = jsobj.getString(PROP_URI);
+                    try {
+                        jsobj = new JSONObject(node.getTextContent());
+                        jsarr = jsobj.getJSONArray("nodes");
 
-                    //System.out.println("json uri:"+str_uri);
+                        //identificando los elementos asociados directamente al proceso
+                        for (int i = 0; i < jsarr.length(); i++) {
+                            try {
+                                jsobj = jsarr.getJSONObject(i);
+                                str_uri = jsobj.getString(PROP_URI);
 
-                    hmjson.put(str_uri, jsobj);
+                                //System.out.println("json uri:"+str_uri);
+
+                                hmjson.put(str_uri, jsobj);
+                            } catch (Exception ej) {
+                                log.error("Error en elemento del JSON. ", ej);
+                            }
+                        }
+                        createProcessElements(process, request, response, paramRequest, hmjson);
+                    } catch (Exception ejs) {
+                        log.error("Error en el JSON recibido. ", ejs);
+                    }
                 }
-                createProcessElements(process, request, response, paramRequest, hmjson);
-
             } catch (Exception e) {
                 log.error("Error al leer JSON...", e);
                 return getError(3);
