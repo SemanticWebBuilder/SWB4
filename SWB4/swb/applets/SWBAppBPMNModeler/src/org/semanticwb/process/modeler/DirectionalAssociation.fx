@@ -36,7 +36,7 @@ public class DirectionalAssociation extends AssociationFlow
         }
 
         for (handle in handles) {
-            t.addLineHandler(handle.getPoint());
+            t.addLineHandler(handle.getPoint(), false);
         }
         return t;
     }
