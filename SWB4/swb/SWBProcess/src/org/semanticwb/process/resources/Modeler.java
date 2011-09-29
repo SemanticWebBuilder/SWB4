@@ -179,7 +179,7 @@ public class Modeler extends GenericResource {
 
 
                     try {
-                        jsobj = new JSONObject(node.getTextContent());
+                        jsobj = new JSONObject(jsonStr);
                         jsarr = jsobj.getJSONArray("nodes");
 
                         //identificando los elementos asociados directamente al proceso
