@@ -109,7 +109,7 @@ public class ConditionalFlow extends SequenceFlow
             if (handles.isEmpty()) {
                 buildDefaultHandlers();
             } else {
-                addLineHandler(p);
+                addLineHandler(p, false);
             }
         }
     }
@@ -124,7 +124,7 @@ public class ConditionalFlow extends SequenceFlow
         }
 
         for (handle in handles) {
-            t.addLineHandler(handle.getPoint());
+            t.addLineHandler(handle.getPoint(), false);
         }
         return t;
     }
