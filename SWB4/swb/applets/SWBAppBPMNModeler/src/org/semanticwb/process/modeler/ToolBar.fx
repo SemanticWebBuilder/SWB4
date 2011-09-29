@@ -189,8 +189,9 @@ public class ToolBar extends CustomNode
     public function storeProcess(): Void
     {
         var process=getProcess();
+        var processString = "JSONSTART{process}JSONEND";
 
-        var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>updateModel</cmd><json>{WBXMLParser.encode(process,"UTF8")}</json></req>";
+        var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>updateModel</cmd><json>{WBXMLParser.encode(processString,"UTF8")}</json></req>";
         var data=conn.getData(comando);
         AppletStageExtension.eval("parent.reloadTreeNodeByURI('{conn.getUri()}')");
         if(data.indexOf("OK")>0)
@@ -520,7 +521,7 @@ public class ToolBar extends CustomNode
                     for (_s in s) {
                         var p = Point.fromString(_s);
                         if (p != null) {
-                            co.addLineHandler(p);
+                            co.addLineHandler(p, false);
                         }
                     }
                 }
