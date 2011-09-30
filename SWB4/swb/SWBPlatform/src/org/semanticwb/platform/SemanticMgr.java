@@ -27,15 +27,18 @@
 package org.semanticwb.platform;
 
 import com.hp.hpl.jena.db.ModelRDB;
+import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.NsIterator;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.rdf.model.impl.ModelCom;
+import com.hp.hpl.jena.rdf.model.impl.StatementImpl;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.RDF;
 import java.io.File;
@@ -55,10 +58,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.rdf.AbstractStore;
 import org.semanticwb.rdf.GraphCached;
-import org.semanticwb.rdf.RDBStore;
 import org.semanticwb.rdf.RemoteGraph;
-import org.semanticwb.rdf.SDBStore;
-import org.semanticwb.rdf.TDBStore;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -948,88 +948,29 @@ public class SemanticMgr implements SWBInstanceObject
      * @param lang the lang
      * @param action the action
      */
-    public void processExternalChange(String uri, String puri, String lang, String action)
+    public void processExternalChange(String uri, String puri, Node node, String action)
     {
-        //System.out.println("processExternalChange");
-        SemanticProperty prop=null;
-        SemanticObject obj=SemanticObject.getSemanticObject(uri);
-        if(puri!=null)prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(puri);
-        log.trace("notifyExternalChange: obj:" + uri + " prop:" + prop + " " + action);
-        
-        if(prop==null && obj!=null)
-        {
-            SemanticObject.removeCache(uri);
-        }
-        
-        
-        if(prop!=null && prop.isObjectProperty() && prop.isInverseOf() && obj==null)obj=SemanticObject.createSemanticObject(uri);
-        if (obj != null)
-        {
-            //TODO:
-/*            
-            
-            if(prop!=null)           //Is a property
+        log.trace("processExternalChange: uri:" + uri + " puri:" + puri + " node:;" + node+" "+action);  
+        //System.out.println("processExternalChange:"+uri+" puri:" + puri + " node:;" + node+" "+action);  
+        SemanticObject obj=SemanticObject.createSemanticObject(uri);
+        Model model=obj.getModel().getRDFModel();
+        if(obj!=null)
+        {            
+            SemanticProperty prop=null;
+            if(puri!=null)prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(puri);
+            if(action.equals(SemanticObject.ACT_ADD))
             {
-                if(prop.isObjectProperty())
-                {
-                    if(prop.isInverseOf())
-                    {
-                        SemanticObject object=null;
-                        Object aux=obj.getPropertyValueCache(prop, null);
-                        if(aux!=null && aux!=NULL)object=(SemanticObject)aux;
-                        if(object!=null)
-                        {
-                            SemanticProperty inv=prop.getInverse();
-                            if(inv.getCardinality()==1)
-                            {
-                                object.removePropertyValueCache(prop.getInverse(), NULL);
-                                //if(old!=null && old instanceof SemanticObject)((SemanticObject)old).removePropertyValueCache(prop.getInverse(), NULL);
-                            }else
-                            {
-                                object.removePropertyValueCache(prop.getInverse(), "list");
-                                //if(old!=null && old instanceof SemanticObject)((SemanticObject)old).removePropertyValueCache(prop.getInverse(), "list");
-                            }
-                        }
-                    }
-                }
-                obj.removePropertyValueCache((SemanticProperty)prop, lang);
-                if(prop.isObjectProperty())
-                {
-                    if(prop.isInverseOf())
-                    {
-                        SemanticObject object=obj.getObjectProperty(prop);
-                        if(object!=null)
-                        {
-                            SemanticProperty inv=prop.getInverse();
-                            if(inv.getCardinality()==1)
-                            {
-                                object.removePropertyValueCache(prop.getInverse(), NULL);
-                                //if(old!=null && old instanceof SemanticObject)((SemanticObject)old).removePropertyValueCache(prop.getInverse(), NULL);
-                            }else
-                            {
-                                object.removePropertyValueCache(prop.getInverse(), "list");
-                                //if(old!=null && old instanceof SemanticObject)((SemanticObject)old).removePropertyValueCache(prop.getInverse(), "list");
-                            }
-                        }
-                    }
-                }
-            }else
+                obj.addStatement(model.createStatement(obj.getRDFResource(), prop.getRDFProperty(), model.asRDFNode(node)), true);
+            }else if(action.equals(SemanticObject.ACT_REMOVE))
             {
-                if(puri!=null)                                           //add or remove class
+                if(puri!=null)
                 {
-                    obj.resetCache();
-                }else                                                    //is a object
+                    obj.remove(model.createStatement(obj.getRDFResource(), prop.getRDFProperty(), model.asRDFNode(node)), true);
+                }else
                 {
-                    if(action.equals(SemanticObject.ACT_REMOVE))
-                    {
-                        obj.resetRelatedsCache();
-                        SemanticObject.removeCache(uri);
-                    }
+                    obj.remove(true);
                 }
             }
-              
-*/
-           
         }
     }
 
