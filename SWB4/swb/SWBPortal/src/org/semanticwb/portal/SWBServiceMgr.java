@@ -308,24 +308,25 @@ public class SWBServiceMgr implements SemanticObserver, SWBObserver {
                 }
             }finally
             {
-                if(!SWBPortal.isStandAlone())
-                {
-                    StringBuffer msg=new StringBuffer();
-                    msg.append("tri");
-                    msg.append("|");
-                    msg.append(instanceid);
-                    msg.append("|");
-                    msg.append(obj.getURI());
-                    msg.append("|");
-                    if(prop!=null)msg.append(prop);
-                    else msg.append("_");
-                    msg.append("|");
-                    if(lang!=null)msg.append(lang);
-                    else msg.append("_");
-                    msg.append("|");
-                    msg.append(action);
-                    SWBPortal.getMessageCenter().sendMessage(msg.toString());
-                }
+                //no se envian a otras maquinas
+//                if(!SWBPortal.isStandAlone())
+//                {
+//                    StringBuffer msg=new StringBuffer();
+//                    msg.append("tri");
+//                    msg.append("|");
+//                    msg.append(instanceid);
+//                    msg.append("|");
+//                    msg.append(obj.getURI());
+//                    msg.append("|");
+//                    if(prop!=null)msg.append(prop);
+//                    else msg.append("_");
+//                    msg.append("|");
+//                    if(lang!=null)msg.append(lang);
+//                    else msg.append("_");
+//                    msg.append("|");
+//                    msg.append(action);
+//                    SWBPortal.getMessageCenter().sendMessage(msg.toString());
+//                }
             }
         }else
         {
