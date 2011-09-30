@@ -99,6 +99,8 @@ public class SWBAWebPageContents extends GenericResource {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         log.debug("doEdit()");
+
+
         PrintWriter out = response.getWriter();
         Resource base = getResourceBase();
         User user = paramRequest.getUser();
@@ -126,6 +128,10 @@ public class SWBAWebPageContents extends GenericResource {
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         SemanticObject obj = ont.getSemanticObject(id);
         SemanticClass cls = obj.getSemanticClass();
+
+        boolean canAdd = SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_ADD);
+        boolean canEdit = SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_EDIT);
+        boolean canRemove = SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_DELETE);
 
         boolean isCollection = false;
         GenericObject go = obj.getGenericInstance();
@@ -370,7 +376,7 @@ public class SWBAWebPageContents extends GenericResource {
                 }
             }
 
-            if (busqueda.trim().length()==0) {  //hmfiltro.isEmpty()&&
+            if (busqueda.trim().length() == 0) {  //hmfiltro.isEmpty()&&
                 itso = hmbus.values().iterator(); //obj.listObjectProperties(prop);
             } else {
                 itso = hmfiltro.values().iterator();
@@ -387,6 +393,9 @@ public class SWBAWebPageContents extends GenericResource {
             if (page != null) {
                 p = Integer.parseInt(page);
             }
+
+
+
             int x = 0;
             itso = setso.iterator();
             while (itso.hasNext()) {
@@ -465,7 +474,16 @@ public class SWBAWebPageContents extends GenericResource {
                 urlr.setParameter("search", (busqueda.trim().length() > 0 ? busqueda : ""));
                 urlr.setParameter(prop.getName(), prop.getURI());
                 urlr.setAction("remove");
-                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + SWBUtils.TEXT.scape4Script(sobj.getDisplayName(user.getLanguage())) + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("remove") + "\"></a>");
+
+
+
+
+                if (canRemove) {
+                    out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + SWBUtils.TEXT.scape4Script(sobj.getDisplayName(user.getLanguage())) + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("remove") + "\"></a>");
+                } else {
+                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("remove") + "\">");
+                }
+
 
                 SWBResourceURL urlpre = paramRequest.getRenderUrl();
                 urlpre.setParameter("suri", id);
@@ -479,9 +497,11 @@ public class SWBAWebPageContents extends GenericResource {
                 }
                 urlpre.setParameter("preview", "true");
                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" onclick=\"submitUrl('" + urlpre + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("previewdocument") + "\"></a>");
-
-                out.println("<a href=\"#\"  title=\"" + paramRequest.getLocaleString("documentAdmin") + "\" onclick=\"selectTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.scape4Script(sobj.getDisplayName()) + "','bh_AdminPorltet');return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\"></a>");
-
+                if (canEdit) {
+                    out.println("<a href=\"#\"  title=\"" + paramRequest.getLocaleString("documentAdmin") + "\" onclick=\"selectTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.scape4Script(sobj.getDisplayName()) + "','bh_AdminPorltet');return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\"></a>");
+                } else {
+                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + "documentAdmin" + "\">");
+                }
 
                 if (send2Flow) {
                     boolean canSend2Flow = Boolean.TRUE;
@@ -528,7 +548,12 @@ public class SWBAWebPageContents extends GenericResource {
                 urlchoose.setParameter("sobj", sobj.getURI());
                 urlchoose.setParameter("act", "edit");
                 //out.println("<div class=\"dojoDndItem\"><a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(sobj.getDisplayName()), 25) + "');return false;\">" + stitle + "</a></div>");
-                out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(sobj.getDisplayName()), 25) + "');return false;\" title=\""+getDisplaySemObj(sobj, user.getLanguage())+"\">" + stitle + "</a>");
+                if (canEdit) {
+                    out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(sobj.getDisplayName()), 25) + "');return false;\" title=\"" + getDisplaySemObj(sobj, user.getLanguage()) + "\">" + stitle + "</a>");
+                } else {
+                    out.println(stitle);
+                }
+
                 out.println("</td>");
                 if (hmprop.get(Resource.swb_resourceType) != null) {
                     semprop = (SemanticProperty) hmprop.get(Resource.swb_resourceType);
@@ -562,13 +587,17 @@ public class SWBAWebPageContents extends GenericResource {
                     urlu.setParameter("sval", sobj.getURI());
                     urlu.setParameter("act", "update");
                     urlu.setParameter("search", (busqueda.trim().length() > 0 ? busqueda : ""));
-
-                    out.println("<div dojoType=\"dijit.form.NumberSpinner\" id=\"" + id + "/" + base.getId() + "/" + sobj.getId() + "/NS\" jsId=\"" + id + "/" + base.getId() + "/" + sobj.getId() + "/NS\" intermediateChanges=\"true\" smallDelta=\"1\" constraints=\"{min:0,max:999,places:0}\" style=\"width:50px\"  name=\"" + semprop.getName() + "\" maxlength=\"3\"  value=\"" + getValueSemProp(sobj, semprop) + "\" >");
-                    out.println("<script type=\"dojo/connect\" event=\"onBlur\">");
-                    out.println(" var self=this;   ");
-                    out.println(" showStatusURL('" + urlu + "&'+self.attr(\"name\")+'='+self.attr(\"value\"),true);");
-                    out.println("</script>");
-                    out.println("</div>");
+                    if (canEdit) {
+                        out.println("<div dojoType=\"dijit.form.NumberSpinner\" id=\"" + id + "/" + base.getId() + "/" + sobj.getId() + "/NS\" jsId=\"" + id + "/" + base.getId() + "/" + sobj.getId() + "/NS\" intermediateChanges=\"true\" smallDelta=\"1\" constraints=\"{min:0,max:999,places:0}\" style=\"width:50px\"  name=\"" + semprop.getName() + "\" maxlength=\"3\"  value=\"" + getValueSemProp(sobj, semprop) + "\" >");
+                        out.println("<script type=\"dojo/connect\" event=\"onBlur\">");
+                        out.println(" var self=this;   ");
+                        out.println(" showStatusURL('" + urlu + "&'+self.attr(\"name\")+'='+self.attr(\"value\"),true);");
+                        out.println("</script>");
+                        out.println("</div>");
+                    } else {
+                        out.println("<div dojoType=\"dijit.form.NumberSpinner\" id=\"" + id + "/" + base.getId() + "/" + sobj.getId() + "/NS\" jsId=\"" + id + "/" + base.getId() + "/" + sobj.getId() + "/NS\" intermediateChanges=\"true\" smallDelta=\"1\" constraints=\"{min:0,max:999,places:0}\" style=\"width:50px\"  name=\"" + semprop.getName() + "\" maxlength=\"3\"  value=\"" + getValueSemProp(sobj, semprop) + "\" disabled=\"true\" >");
+                        out.println("</div>");
+                    }
                     out.println("</td>");
                 }
                 if (hmprop.get(Activeable.swb_active) != null) {
@@ -585,7 +614,11 @@ public class SWBAWebPageContents extends GenericResource {
                         urlu.setParameter("sprop", idp);
                         urlu.setParameter("sval", sobj.getURI());
                         urlu.setParameter("act", "updstatus");
-                        out.println("<input name=\"" + prop.getName() + sobj.getURI() + "\" type=\"checkbox\" value=\"1\" id=\"" + prop.getName() + sobj.getURI() + "\" onclick=\"showStatusURL('" + urlu + "&val='+this.checked,true);\"  " + (activo ? "checked='checked'" : "") + " />");
+                        if (canEdit) {
+                            out.println("<input name=\"" + prop.getName() + sobj.getURI() + "\" type=\"checkbox\" value=\"1\" id=\"" + prop.getName() + sobj.getURI() + "\" onclick=\"showStatusURL('" + urlu + "&val='+this.checked,true);\"  " + (activo ? "checked='checked'" : "") + " />");
+                        } else {
+                            out.println("<input name=\"" + prop.getName() + sobj.getURI() + "\" type=\"checkbox\" value=\"1\" id=\"" + prop.getName() + sobj.getURI() + "\" " + (activo ? "checked='checked'" : "") + " disabled=\"true\" />");
+                        }
                     } else {
                         out.println("<input name=\"" + prop.getName() + sobj.getURI() + "\" type=\"checkbox\" value=\"1\" id=\"" + prop.getName() + sobj.getURI() + "\" " + (activo ? "checked='checked'" : "") + " disabled=\"true\">");
                     }
@@ -638,7 +671,9 @@ public class SWBAWebPageContents extends GenericResource {
                 urlNew.setParameter("act", "choose");
             }
 
-            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlNew + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btn_addnew") + "</button>");
+            if (canAdd) {
+                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlNew + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btn_addnew") + "</button>");
+            }
             if (hasAsoc) {
                 if (hasActive) {
                     SWBResourceURL urlAAll = paramRequest.getRenderUrl();
@@ -650,7 +685,9 @@ public class SWBAWebPageContents extends GenericResource {
                     urlAAll.setParameter("sval", "true");
                     urlAAll.setParameter("act", "activeall");
                     urlAAll.setMode(Mode_Action);
-                    out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlAAll + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btn_aallnew") + "</button>");
+                    if (canEdit) {
+                        out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlAAll + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btn_aallnew") + "</button>");
+                    }
                     SWBResourceURL urlUAll = paramRequest.getRenderUrl();
                     urlUAll.setParameter("suri", id);
                     urlUAll.setParameter("sprop", idp);
@@ -660,7 +697,9 @@ public class SWBAWebPageContents extends GenericResource {
                     urlUAll.setParameter("sval", "false");
                     urlUAll.setParameter("act", "activeall");
                     urlUAll.setMode(Mode_Action);
-                    out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlUAll + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btn_uallnew") + "</button>");
+                    if (canEdit) {
+                        out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlUAll + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btn_uallnew") + "</button>");
+                    }
                 }
                 SWBResourceURL urlDAll = paramRequest.getActionUrl();
                 urlDAll.setParameter("suri", id);
@@ -670,7 +709,9 @@ public class SWBAWebPageContents extends GenericResource {
                 }
                 urlDAll.setParameter("sval", "remove");
                 urlDAll.setAction("deleteall");
-                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"if(confirm('" + paramRequest.getLocaleString("qshure2delete") + "?')){submitUrl('" + urlDAll + "',this.domNode);} return false;\">" + paramRequest.getLocaleString("btn_dallnew") + "</button>");
+                if (canRemove) {
+                    out.println("<button dojoType=\"dijit.form.Button\" onclick=\"if(confirm('" + paramRequest.getLocaleString("qshure2delete") + "?')){submitUrl('" + urlDAll + "',this.domNode);} return false;\">" + paramRequest.getLocaleString("btn_dallnew") + "</button>");
+                }
             }
             out.println("</fieldset>");
 
@@ -696,7 +737,11 @@ public class SWBAWebPageContents extends GenericResource {
                         urlchoose.setParameter("sprop", idp);
                         urlchoose.setParameter("sobj", sobj.getURI());
                         urlchoose.setParameter("act", "edit");
-                        out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.scape4Script(sobj.getDisplayName()) + "');return false;\">" + stitle + "</a>");
+                        if (canEdit) {
+                            out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.scape4Script(sobj.getDisplayName()) + "');return false;\">" + stitle + "</a>");
+                        } else {
+                            out.println(stitle);
+                        }
                         out.println("</td>");
                         if (hmprop.get(Traceable.swb_created) != null) {
                             semprop = (SemanticProperty) hmprop.get(Traceable.swb_created);
@@ -818,9 +863,13 @@ public class SWBAWebPageContents extends GenericResource {
                     urladdglobal.setParameter("sproptype", idptype);
                     urladdglobal.setParameter("sobj", "global|" + sobj.getURI());
 
-                    out.println("<a href=\"#\" onclick=\"submitUrl('" + urladdglobal + "',this); return false;\">");
-                    out.println(stitle);
-                    out.println("</a");
+                    if (canEdit) {
+                        out.println("<a href=\"#\" onclick=\"submitUrl('" + urladdglobal + "',this); return false;\">");
+                        out.println(stitle);
+                        out.println("</a");
+                    } else {
+                        out.println(stitle);
+                    }
                     out.println("</td>");
                     out.println("<td>");
                     out.println(sdescription != null ? sdescription : "");
@@ -872,9 +921,13 @@ public class SWBAWebPageContents extends GenericResource {
                     urladdglobal.setParameter("sproptype", idptype);
                     urladdglobal.setParameter("sobj", "global|" + sobj.getURI());
 
-                    out.println("<a href=\"#\" onclick=\"submitUrl('" + urladdglobal + "',this); return false;\">");
-                    out.println(stitle);
-                    out.println("</a");
+                    if (canEdit) {
+                        out.println("<a href=\"#\" onclick=\"submitUrl('" + urladdglobal + "',this); return false;\">");
+                        out.println(stitle);
+                        out.println("</a");
+                    } else {
+                        out.println(stitle);
+                    }
 
                     out.println("</td>");
                     out.println("<td>");
@@ -1016,9 +1069,13 @@ public class SWBAWebPageContents extends GenericResource {
                     urladds.setParameter("sproptype", idptype);
                     urladds.setParameter("sobj", sobj.getURI());
 
-                    out.println("<a href=\"#\" onclick=\"submitUrl('" + urladds + "',this); return false;\">");
-                    out.println(stitle);
-                    out.println("</a");
+                    if (canEdit) {
+                        out.println("<a href=\"#\" onclick=\"submitUrl('" + urladds + "',this); return false;\">");
+                        out.println(stitle);
+                        out.println("</a");
+                    } else {
+                        out.println(stitle);
+                    }
 
                     out.println("</td>");
                     out.println("<td>");
@@ -1046,7 +1103,9 @@ public class SWBAWebPageContents extends GenericResource {
             out.println("<tbody>");
             out.println("<tr>");
             out.println("<td>");
-            out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitForm('" + id + "/WPContent'); return false;\">" + paramRequest.getLocaleString("btn_send") + "</button>");
+            if (canEdit) {
+                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitForm('" + id + "/WPContent'); return false;\">" + paramRequest.getLocaleString("btn_send") + "</button>");
+            }
             if (id != null && idp != null && idptype != null) {
                 out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlBack + "',document.getElementById('" + id + "/WPContent')); return false;\">" + paramRequest.getLocaleString("btn_back") + "</button>");
             }
@@ -1057,7 +1116,7 @@ public class SWBAWebPageContents extends GenericResource {
             out.println("</fieldset>");
             out.println("</form>");
             out.println("</div>");
-        } // Parte en donde se presenta la forma para dar de alta el nuevo portlet de tipo dontenido o de sistema
+        } // Parte en donde se presenta la forma para dar de alta el nuevo portlet de tipo contenido o de sistema
         else if (action.equals("edit")) {
 
             String sobj = request.getParameter("sobj");
