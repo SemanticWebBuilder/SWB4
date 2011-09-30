@@ -1011,7 +1011,7 @@ public class SWBAEditor extends GenericResource
                 {
                     if (doc.equals("RELOAD"))
                     {
-                        template.reload();
+                        template.setActive(template.isActive());
                         out.println("ok");
                     }
                     else if (doc.equals("REPLACE"))
