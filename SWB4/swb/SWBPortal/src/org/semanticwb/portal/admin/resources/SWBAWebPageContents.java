@@ -129,9 +129,9 @@ public class SWBAWebPageContents extends GenericResource {
         SemanticObject obj = ont.getSemanticObject(id);
         SemanticClass cls = obj.getSemanticClass();
 
-        boolean canAdd = SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_ADD);
-        boolean canEdit = SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_EDIT);
-        boolean canRemove = SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_DELETE);
+        boolean canAdd = SWBPortal.getAdminFilterMgr().haveClassAction(user, Resourceable.swb_Resource, AdminFilter.ACTION_ADD);
+        boolean canEdit = SWBPortal.getAdminFilterMgr().haveClassAction(user, Resourceable.swb_Resource, AdminFilter.ACTION_EDIT);
+        boolean canRemove = SWBPortal.getAdminFilterMgr().haveClassAction(user, Resourceable.swb_Resource, AdminFilter.ACTION_DELETE);
 
         boolean isCollection = false;
         GenericObject go = obj.getGenericInstance();
