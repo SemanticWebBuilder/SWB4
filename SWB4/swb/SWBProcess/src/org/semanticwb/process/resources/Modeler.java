@@ -685,124 +685,224 @@ public class Modeler extends GenericResource {
                     continue;
                 }
 
-                // primero se crean los elementos graficos del modelo
-                if (semclass.isSubClass(GraphicalElement.swp_GraphicalElement)) {
-                    title = json.getString(PROP_TITLE);
-                    try {
-                        description = json.getString(PROP_DESCRIPTION);
-                    } catch (Exception e) {
-                        description = "";
-                    }
+                try {
+                    // primero se crean los elementos graficos del modelo
+                    if (semclass.isSubClass(GraphicalElement.swp_GraphicalElement)) {
+                        title = json.getString(PROP_TITLE);
+                        try {
+                            description = json.getString(PROP_DESCRIPTION);
+                        } catch (Exception e) {
+                            description = "";
+                        }
 
-                    try {
-                        isMultiInstance = new Boolean(json.getBoolean(PROP_isMultiInstance));
-                        //System.out.println("MultiInstancia: " + isMultiInstance.booleanValue());
+                        try {
+                            isMultiInstance = new Boolean(json.getBoolean(PROP_isMultiInstance));
+                            //System.out.println("MultiInstancia: " + isMultiInstance.booleanValue());
 
-                    } catch (Exception e) {
-                        isMultiInstance = null;
-                    }
-                    try {
-                        isSeqMultiInstance = new Boolean(json.getBoolean(PROP_isSeqMultiInstance));
-                        //System.out.println("SeqMultiInstancia: " + isMultiInstance.booleanValue());
+                        } catch (Exception e) {
+                            isMultiInstance = null;
+                        }
+                        try {
+                            isSeqMultiInstance = new Boolean(json.getBoolean(PROP_isSeqMultiInstance));
+                            //System.out.println("SeqMultiInstancia: " + isMultiInstance.booleanValue());
 
-                    } catch (Exception e) {
-                        isMultiInstance = null;
-                    }
-                    try {
-                        isLoop = new Boolean(json.getBoolean(PROP_isLoop));
-                        //System.out.println("Ciclo: " + isLoop.booleanValue());
-                    } catch (Exception e) {
-                        isLoop = null;
-                        //System.out.println("Ciclo: null");
-                    }
-                    try {
-                        isForCompensation = new Boolean(json.getBoolean(PROP_isForCompensation));
-                        //System.out.println("Compensacion");
+                        } catch (Exception e) {
+                            isMultiInstance = null;
+                        }
+                        try {
+                            isLoop = new Boolean(json.getBoolean(PROP_isLoop));
+                            //System.out.println("Ciclo: " + isLoop.booleanValue());
+                        } catch (Exception e) {
+                            isLoop = null;
+                            //System.out.println("Ciclo: null");
+                        }
+                        try {
+                            isForCompensation = new Boolean(json.getBoolean(PROP_isForCompensation));
+                            //System.out.println("Compensacion");
 
-                    } catch (Exception e) {
-                        isForCompensation = null;
-                    }
-                    try {
-                        isAdHoc = new Boolean(json.getBoolean(PROP_isAdHoc));
-                    } catch (Exception e) {
-                        isAdHoc = null;
-                    }
-                    try {
-                        isTransaction = new Boolean(json.getBoolean(PROP_isTransaction));
-                    } catch (Exception e) {
-                        isTransaction = null;
-                    }
-                    try {
-                        isInterrupting = new Boolean(json.getBoolean(PROP_isInterrupting));
-                    } catch (Exception e) {
-                        isInterrupting = null;
-                    }
+                        } catch (Exception e) {
+                            isForCompensation = null;
+                        }
+                        try {
+                            isAdHoc = new Boolean(json.getBoolean(PROP_isAdHoc));
+                        } catch (Exception e) {
+                            isAdHoc = null;
+                        }
+                        try {
+                            isTransaction = new Boolean(json.getBoolean(PROP_isTransaction));
+                        } catch (Exception e) {
+                            isTransaction = null;
+                        }
+                        try {
+                            isInterrupting = new Boolean(json.getBoolean(PROP_isInterrupting));
+                        } catch (Exception e) {
+                            isInterrupting = null;
+                        }
 
-                    try {
-                        isCollection = new Boolean(json.getBoolean(PROP_isCollection));
-                        //System.out.println("Viene isCollecion:"+isCollection.booleanValue());
-                    } catch (Exception e) {
-                        isCollection = null;
-                        //System.out.println("No viene isCollecion....."+title);
-                    }
+                        try {
+                            isCollection = new Boolean(json.getBoolean(PROP_isCollection));
+                            //System.out.println("Viene isCollecion:"+isCollection.booleanValue());
+                        } catch (Exception e) {
+                            isCollection = null;
+                            //System.out.println("No viene isCollecion....."+title);
+                        }
 
-                    try {
-                        index = json.getInt(PROP_index);
-                        //System.out.println("Viene isCollecion:"+isCollection.booleanValue());
-                    } catch (Exception e) {
-                        index = 0;
-                        //System.out.println("No viene isCollecion....."+title);
-                    }
+                        try {
+                            index = json.getInt(PROP_index);
+                            //System.out.println("Viene isCollecion:"+isCollection.booleanValue());
+                        } catch (Exception e) {
+                            index = 0;
+                            //System.out.println("No viene isCollecion....."+title);
+                        }
 
-                    //System.out.println("uri: "+uri);
+                        //System.out.println("uri: "+uri);
 
-                    x = json.getInt(PROP_X);
-                    y = json.getInt(PROP_Y);
-                    w = json.getInt(PROP_W);
-                    h = json.getInt(PROP_H);
-                    parent = json.getString(PROP_PARENT);
-                    container = json.getString(PROP_CONTAINER);
-                    labelSize = json.getInt(PROP_labelSize);
+                        x = json.getInt(PROP_X);
+                        y = json.getInt(PROP_Y);
+                        w = json.getInt(PROP_W);
+                        h = json.getInt(PROP_H);
+                        parent = json.getString(PROP_PARENT);
+                        container = json.getString(PROP_CONTAINER);
+                        labelSize = json.getInt(PROP_labelSize);
 
-                    // revisando si el elemento existe
-                    if (hmori.get(uri) != null) {
-                        //System.out.println("revisando si el elemento existe");
-                        go = ont.getGenericObject(uri);
+                        // revisando si el elemento existe
+                        if (hmori.get(uri) != null) {
+                            //System.out.println("revisando si el elemento existe");
+                            go = ont.getGenericObject(uri);
 
-                        if (go instanceof GraphicalElement) {
-                            // actualizando datos en elemento existente
-                            ge = (GraphicalElement) go;
-                            if (!ge.getTitle().equals(title)) {
-                                ge.setTitle(title);
+                            if (go instanceof GraphicalElement) {
+                                // actualizando datos en elemento existente
+                                ge = (GraphicalElement) go;
+                                if (!ge.getTitle().equals(title)) {
+                                    ge.setTitle(title);
+                                }
+                                if ((null != description && ge.getDescription() != null && !ge.getDescription().equals(description)) || (null != description && ge.getDescription() == null)) {
+                                    ge.setDescription(description);
+                                }
+
+                                if (ge.getX() != x) {
+                                    ge.setX(x);
+                                }
+                                if (ge.getY() != y) {
+                                    ge.setY(y);
+                                }
+                                if (ge.getWidth() != w) {
+                                    ge.setWidth(w);
+                                }
+                                if (ge.getHeight() != h) {
+                                    ge.setHeight(h);
+                                }
+                                if (ge.getLabelSize() != labelSize) {
+                                    ge.setLabelSize(labelSize);
+                                }
+
+                                // si es un Sortable se revisa si tiene index
+                                if (ge instanceof Sortable) {
+                                    Sortable sorble = (Sortable) go;
+                                    sorble.setIndex(index);
+                                }
+
+                                if (go instanceof ActivityConfable) {  //Task
+                                    ActivityConfable tsk = (ActivityConfable) go;
+
+                                    if (null != isForCompensation && isForCompensation.booleanValue()) {
+                                        tsk.setForCompensation(isForCompensation.booleanValue());
+                                    }
+
+                                    if (null != isMultiInstance) {
+
+                                        if (isMultiInstance.booleanValue()) {
+                                            // si existe no se hace nada se deja el MultiInstanceLoopCharacteristics
+                                            LoopCharacteristics loopchar = tsk.getLoopCharacteristics();
+                                            if (loopchar == null) // si no existe lo crea
+                                            {
+                                                // si no existe se crea uno nuevo y se asigna al task
+                                                loopchar = MultiInstanceLoopCharacteristics.ClassMgr.createMultiInstanceLoopCharacteristics(procsite);
+                                                tsk.setLoopCharacteristics(loopchar);
+                                            } else if (!(loopchar instanceof MultiInstanceLoopCharacteristics)) {
+                                                loopchar.getSemanticObject().remove();
+                                            }
+                                            // si no existe se crea uno nuevo y se asigna al task
+                                            loopchar = MultiInstanceLoopCharacteristics.ClassMgr.createMultiInstanceLoopCharacteristics(procsite);
+                                            tsk.setLoopCharacteristics(loopchar);
+                                        } else {
+                                            // si existe y cambio y ya no es MultiInstance se elimina el MultiInstanceLoopCharacteristics asociado
+                                            LoopCharacteristics loopchar = tsk.getLoopCharacteristics();
+                                            if (null != loopchar && loopchar instanceof MultiInstanceLoopCharacteristics) {
+                                                loopchar.getSemanticObject().remove();
+                                            }
+                                        }
+                                    }
+
+                                    if (null != isLoop) {
+                                        //System.out.println("LoopCharacteristic....");
+                                        if (isLoop.booleanValue()) {
+                                            // si existe no se hace nada se deja el LoopCharacteristics
+                                            LoopCharacteristics loopchar = tsk.getLoopCharacteristics();
+                                            if (loopchar == null) // si no existe lo crea
+                                            {
+                                                // si no existe se crea uno nuevo y se asigna al task
+                                                //System.out.println("creando LoopCharacteristic....");
+                                                loopchar = StandarLoopCharacteristics.ClassMgr.createStandarLoopCharacteristics(procsite);
+                                                tsk.setLoopCharacteristics(loopchar);
+                                            } else if (!(loopchar instanceof StandarLoopCharacteristics)) {
+                                                loopchar.getSemanticObject().remove();
+                                                // si no existe se crea uno nuevo y se asigna al task
+                                                //System.out.println("eliminando y creando LoopCharacteristic....");
+                                                loopchar = StandarLoopCharacteristics.ClassMgr.createStandarLoopCharacteristics(procsite);
+                                                tsk.setLoopCharacteristics(loopchar);
+                                            }
+
+                                        } else {
+                                            // si existe y cambio y ya no es Loop se elimina el StandarLoopCharacteristics asociado
+                                            LoopCharacteristics loopchar = tsk.getLoopCharacteristics();
+                                            if (null != loopchar && loopchar instanceof StandarLoopCharacteristics) {
+                                                //System.out.println("eliminando LoopCharacteristic....");
+                                                loopchar.getSemanticObject().remove();
+                                            }
+                                        }
+                                    }
+                                }
+
+                                // si es un Collectionable se revisa si es colección
+                                if (ge instanceof Collectionable) {
+                                    Collectionable colble = (Collectionable) go;
+                                    if (isCollection != null) {
+                                        //System.out.println("Save Collection ===>"+isCollection.booleanValue());
+                                        colble.setCollection(isCollection.booleanValue());
+                                    }
+                                }
+                                // se agrega en este hm para la parte de la secuencia del proceso
+                                hmnew.put(uri, go.getURI());
                             }
-                            if ((null != description && ge.getDescription() != null && !ge.getDescription().equals(description)) || (null != description && ge.getDescription() == null)) {
+                            // se quita elemento que ha sido actualizado
+                            hmori.remove(uri);
+
+                        } else {
+                            //Se genera el nuevo elemento
+                            //System.out.println("new element: "+semclass);
+                            long id = model.getCounter(semclass);
+                            GenericObject gi = model.createGenericObject(model.getObjectUri(String.valueOf(id), semclass), semclass);
+                            ge = (GraphicalElement) gi;
+                            ge.setTitle(title);
+                            if (null != description) {
                                 ge.setDescription(description);
                             }
+                            ge.setX(x);
+                            ge.setY(y);
+                            ge.setHeight(h);
+                            ge.setWidth(w);
 
-                            if (ge.getX() != x) {
-                                ge.setX(x);
-                            }
-                            if (ge.getY() != y) {
-                                ge.setY(y);
-                            }
-                            if (ge.getWidth() != w) {
-                                ge.setWidth(w);
-                            }
-                            if (ge.getHeight() != h) {
-                                ge.setHeight(h);
-                            }
-                            if (ge.getLabelSize() != labelSize) {
-                                ge.setLabelSize(labelSize);
-                            }
+                            //System.out.println("uri: "+uri+" new uri: "+gi.getURI());
 
                             // si es un Sortable se revisa si tiene index
                             if (ge instanceof Sortable) {
-                                Sortable sorble = (Sortable) go;
+                                Sortable sorble = (Sortable) gi;
                                 sorble.setIndex(index);
                             }
 
-                            if (go instanceof ActivityConfable) {  //Task
-                                ActivityConfable tsk = (ActivityConfable) go;
+                            if (ge instanceof ActivityConfable) {  //Task
+                                ActivityConfable tsk = (ActivityConfable) gi;
 
                                 if (null != isForCompensation && isForCompensation.booleanValue()) {
                                     tsk.setForCompensation(isForCompensation.booleanValue());
@@ -865,119 +965,20 @@ public class Modeler extends GenericResource {
 
                             // si es un Collectionable se revisa si es colección
                             if (ge instanceof Collectionable) {
-                                Collectionable colble = (Collectionable) go;
+                                Collectionable colble = (Collectionable) gi;
                                 if (isCollection != null) {
                                     //System.out.println("Save Collection ===>"+isCollection.booleanValue());
                                     colble.setCollection(isCollection.booleanValue());
                                 }
                             }
-                            // se agrega en este hm para la parte de la secuencia del proceso
-                            hmnew.put(uri, go.getURI());
-                        }
-                        // se quita elemento que ha sido actualizado
-                        hmori.remove(uri);
-
-                    } else {
-                        //Se genera el nuevo elemento
-                        //System.out.println("new element: "+semclass);
-                        long id = model.getCounter(semclass);
-                        GenericObject gi = model.createGenericObject(model.getObjectUri(String.valueOf(id), semclass), semclass);
-                        ge = (GraphicalElement) gi;
-                        ge.setTitle(title);
-                        if (null != description) {
-                            ge.setDescription(description);
-                        }
-                        ge.setX(x);
-                        ge.setY(y);
-                        ge.setHeight(h);
-                        ge.setWidth(w);
-
-                        //System.out.println("uri: "+uri+" new uri: "+gi.getURI());
-
-                        // si es un Sortable se revisa si tiene index
-                        if (ge instanceof Sortable) {
-                            Sortable sorble = (Sortable) gi;
-                            sorble.setIndex(index);
-                        }
-
-                        if (ge instanceof ActivityConfable) {  //Task
-                            ActivityConfable tsk = (ActivityConfable) gi;
-
-                            if (null != isForCompensation && isForCompensation.booleanValue()) {
-                                tsk.setForCompensation(isForCompensation.booleanValue());
-                            }
-
-                            if (null != isMultiInstance) {
-
-                                if (isMultiInstance.booleanValue()) {
-                                    // si existe no se hace nada se deja el MultiInstanceLoopCharacteristics
-                                    LoopCharacteristics loopchar = tsk.getLoopCharacteristics();
-                                    if (loopchar == null) // si no existe lo crea
-                                    {
-                                        // si no existe se crea uno nuevo y se asigna al task
-                                        loopchar = MultiInstanceLoopCharacteristics.ClassMgr.createMultiInstanceLoopCharacteristics(procsite);
-                                        tsk.setLoopCharacteristics(loopchar);
-                                    } else if (!(loopchar instanceof MultiInstanceLoopCharacteristics)) {
-                                        loopchar.getSemanticObject().remove();
-                                    }
-                                    // si no existe se crea uno nuevo y se asigna al task
-                                    loopchar = MultiInstanceLoopCharacteristics.ClassMgr.createMultiInstanceLoopCharacteristics(procsite);
-                                    tsk.setLoopCharacteristics(loopchar);
-                                } else {
-                                    // si existe y cambio y ya no es MultiInstance se elimina el MultiInstanceLoopCharacteristics asociado
-                                    LoopCharacteristics loopchar = tsk.getLoopCharacteristics();
-                                    if (null != loopchar && loopchar instanceof MultiInstanceLoopCharacteristics) {
-                                        loopchar.getSemanticObject().remove();
-                                    }
-                                }
-                            }
-
-                            if (null != isLoop) {
-                                //System.out.println("LoopCharacteristic....");
-                                if (isLoop.booleanValue()) {
-                                    // si existe no se hace nada se deja el LoopCharacteristics
-                                    LoopCharacteristics loopchar = tsk.getLoopCharacteristics();
-                                    if (loopchar == null) // si no existe lo crea
-                                    {
-                                        // si no existe se crea uno nuevo y se asigna al task
-                                        //System.out.println("creando LoopCharacteristic....");
-                                        loopchar = StandarLoopCharacteristics.ClassMgr.createStandarLoopCharacteristics(procsite);
-                                        tsk.setLoopCharacteristics(loopchar);
-                                    } else if (!(loopchar instanceof StandarLoopCharacteristics)) {
-                                        loopchar.getSemanticObject().remove();
-                                        // si no existe se crea uno nuevo y se asigna al task
-                                        //System.out.println("eliminando y creando LoopCharacteristic....");
-                                        loopchar = StandarLoopCharacteristics.ClassMgr.createStandarLoopCharacteristics(procsite);
-                                        tsk.setLoopCharacteristics(loopchar);
-                                    }
-
-                                } else {
-                                    // si existe y cambio y ya no es Loop se elimina el StandarLoopCharacteristics asociado
-                                    LoopCharacteristics loopchar = tsk.getLoopCharacteristics();
-                                    if (null != loopchar && loopchar instanceof StandarLoopCharacteristics) {
-                                        //System.out.println("eliminando LoopCharacteristic....");
-                                        loopchar.getSemanticObject().remove();
-                                    }
-                                }
-                            }
-                        }
-
-                        // si es un Collectionable se revisa si es colección
-                        if (ge instanceof Collectionable) {
-                            Collectionable colble = (Collectionable) gi;
-                            if (isCollection != null) {
-                                //System.out.println("Save Collection ===>"+isCollection.booleanValue());
-                                colble.setCollection(isCollection.booleanValue());
-                            }
-                        }
 
 
 
 
-                        // se agrega nuevo elemento en el hmnew
-                        hmnew.put(uri, gi.getURI());
+                            // se agrega nuevo elemento en el hmnew
+                            hmnew.put(uri, gi.getURI());
 
-                        ///////////////////////////////////////
+                            ///////////////////////////////////////
 //                        if(semclass.isSubClass(Task.swp_Task))
 //                        {
 //                                Task tsk = (Task) gi;
@@ -996,32 +997,35 @@ public class Modeler extends GenericResource {
 
 
 
-                        if (semclass.equals(UserTask.swp_UserTask)) {
+                            if (semclass.equals(UserTask.swp_UserTask)) {
 
-                            if (procsite.getResourceType("ProcessForm") == null) {
-                                ResourceType resType = procsite.createResourceType("ProcessForm");
-                                resType.setTitle("ProcessForm");
-                                resType.setTitle("ProcessForm", "en");
-                                resType.setDescription("ProcessForm");
-                                resType.setDescription("ProcessForm", "es");
-                                resType.setResourceClassName("org.semanticwb.process.resources.ProcessForm");
-                                resType.setResourceBundle("org.semanticwb.process.resources.ProcessForm");
-                                resType.setResourceMode(ResourceType.MODE_SYSTEM);
+                                if (procsite.getResourceType("ProcessForm") == null) {
+                                    ResourceType resType = procsite.createResourceType("ProcessForm");
+                                    resType.setTitle("ProcessForm");
+                                    resType.setTitle("ProcessForm", "en");
+                                    resType.setDescription("ProcessForm");
+                                    resType.setDescription("ProcessForm", "es");
+                                    resType.setResourceClassName("org.semanticwb.process.resources.ProcessForm");
+                                    resType.setResourceBundle("org.semanticwb.process.resources.ProcessForm");
+                                    resType.setResourceMode(ResourceType.MODE_SYSTEM);
+                                }
+
+                                if (procsite.getResourceType("ProcessForm") != null) {
+                                    Resource res = procsite.createResource();
+                                    res.setResourceType(procsite.getResourceType("ProcessForm"));
+                                    res.setTitle(title);
+                                    res.setActive(Boolean.TRUE);
+                                    ((UserTask) gi).addResource(res);
+                                }
                             }
-
-                            if (procsite.getResourceType("ProcessForm") != null) {
-                                Resource res = procsite.createResource();
-                                res.setResourceType(procsite.getResourceType("ProcessForm"));
-                                res.setTitle(title);
-                                res.setActive(Boolean.TRUE);
-                                ((UserTask) gi).addResource(res);
-                            }
-                        }
-                        ////////////////////////////////////////
+                            ////////////////////////////////////////
 
 
-                    } // termina else
-                } // termina if graphicalElement
+                        } // termina else
+                    } // termina if graphicalElement
+                } catch (Exception e) {
+                    log.error("Error al procesar el JSON Object para la creacion y/o actualizar GraphicalElement... ", e);
+                }
             } //termina while
 
             // Parte para relacionar elementos container y parents
@@ -1157,9 +1161,13 @@ public class Modeler extends GenericResource {
             SemanticObject so = null;
             while (it.hasNext()) {
                 String key = it.next();
-                so = ont.getSemanticObject(hmori.get(key));
-                if (so != null) {
-                    so.remove();
+                try {
+                    so = ont.getSemanticObject(hmori.get(key));
+                    if (so != null) {
+                        so.remove();
+                    }
+                } catch (Exception e) {
+                    log.error("Error al tratar de eliminar elemento del proceso...", e);
                 }
             }
 
