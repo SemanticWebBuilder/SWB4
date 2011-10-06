@@ -886,4 +886,18 @@ public class User extends UserBase implements Principal
         }
     }
 
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if(obj==null)
+            return false;
+        if(obj instanceof User) {
+            return hashCode()==obj.hashCode();
+        }
+        return false;
+    }
 }
