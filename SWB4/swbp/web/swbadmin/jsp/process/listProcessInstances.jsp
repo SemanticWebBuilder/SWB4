@@ -82,7 +82,7 @@
             stat = "<img src=\"" + baseimg + "icon_pending.png\">";
             color = "color=\"red\"";
             if (ai.getFlowNodeType() instanceof UserTask) {
-                actions = "<a href=\"" + ((UserTask)ai.getFlowNodeType()).getTaskWebPage().getUrl() + "?suri=" + ai.getEncodedURI()+ "\">Atender</a>";
+                actions = "<a class=\"acc-atender\" href=\"" + ((UserTask)ai.getFlowNodeType()).getTaskWebPage().getUrl() + "?suri=" + ai.getEncodedURI()+ "\">Atender</a>";
                 //actions="<a target=\"_new\" href=\"\"><img alt=\"Detalle\" src=\""+baseimg+"detail_icon.gif\"/></a>" +
                 //        " <a target=\"_new\" href=\"/swb/process/Diagrama_de_estado/_rid/196/_mto/3/_mod/applet?suri="+ ai.getProcessInstance().getProcessType().getEncodedURI() +"&mode=view&pending="+URLEncoder.encode(getStatusInstances(ai.getProcessInstance(), Instance.STATUS_PROCESSING))+"\"><img src=\""+baseimg + "diagram_icon.jpg\"></a>";
             } else {
@@ -92,8 +92,8 @@
         if (ai.getStatus() == Instance.STATUS_STOPED) {
             stat = "Detenida";
         }
-        out.println("<tr><td align=\"center\">" + stat + "</td>");
-        out.println("<td>");
+        out.println("<tr><td class=\"tban-id\">" + stat + "</td>");
+        out.println("<td class=\"tban-tarea\">");
         if (ai.getStatus() == Instance.STATUS_PROCESSING) {
             out.println("<font " + color + ">");
         }
@@ -102,15 +102,15 @@
             out.println("</font>");
         }
         out.println("</td>"
-                + "<td align=\"center\">" + ai.getCreator().getFullName() + "</td>"
-                + "<td align=\"center\">" + SWBUtils.TEXT.getStrDate(ai.getCreated(), "es", "dd/mm/yyyy - hh:mm:ss") + "</td>");
+                + "<td class=\"tban-tarea\">" + ai.getCreator().getFullName() + "</td>"
+                + "<td class=\"tban-inicia\">" + SWBUtils.TEXT.getStrDate(ai.getCreated(), "es", "dd/mm/yyyy - hh:mm:ss") + "</td>");
                 if (ai.getStatus() == Instance.STATUS_CLOSED) {
-                    out.println("<td align=\"center\">" + SWBUtils.TEXT.getStrDate(ai.getEnded(), "es", "dd/mm/yyyy - hh:mm:ss") + "</td>");
+                    out.println("<td class=\"tban-cerrada\">" + SWBUtils.TEXT.getStrDate(ai.getEnded(), "es", "dd/mm/yyyy - hh:mm:ss") + "</td>");
                 } else {
-                    out.println("<td align=\"center\">-</td>");
+                    out.println("<td class=\"tban-cerrada\">-</td>");
                 }
-                out.println("<td align=\"center\">" + tOwner + "</td>");
-                out.println("<td align=\"center\">" + actions + "</td>");
+                out.println("<td class=\"tban-tarea\">" + tOwner + "</td>");
+                out.println("<td class=\"tban-accion\">" + actions + "</td>");
                 out.println("</tr>");
         if (ai instanceof SubProcessInstance) {
             SubProcessInstance pi = (SubProcessInstance) ai;
@@ -154,27 +154,22 @@ String lang = user.getLanguage();
 org.semanticwb.process.model.Process process = SWBProcessMgr.getProcess(topic);
 String baseimg = SWBPortal.getWebWorkPath() + "/models/" + topic.getWebSiteId() + "/css/images/";
 %>
-<div class="post">
-    <h2>Seguimiento del proceso (<%=process.getDisplayTitle(lang)%>)<!--a style="text-decoration: none" onclick="javascript:expande('tracking')"><img style="text-decoration:none" src="<%=baseimg + "icon_show.gif"%>"></a> <a style="text-decoration: none" onclick="javascript:colapsa('tracking')"><img src="<%=baseimg + "icon_hide.gif"%>"></a--></h2>
-    <div id="tracking">
+    <h2>Seguimiento del proceso (<%=process.getDisplayTitle(lang)%>)</h2>
         <%
         Iterator<ProcessInstance> it = SWBProcessMgr.getActiveProcessInstance(site, process).iterator();
         if (it.hasNext()) {
             while (it.hasNext()) {
                 ProcessInstance pi = it.next();
                 %>
-                <div id="detail<%=pi.getId()%>">
-                    <br/>
-                    <!--a target="_new" href="/swb/process/Diagrama_de_estado/_rid/196/_mto/3/_mod/applet?suri=<%=pi.getProcessType().getEncodedURI()%>&mode=view&pending=<%=URLEncoder.encode(getStatusInstances(pi, Instance.STATUS_PROCESSING))%>">Ver mapa del proceso</a><br-->
-                    <table>
+                    <table class="tabla-bandeja">
                         <thead>
-                            <th align="center">Estado</th>
-                            <th align="center">Factor Cr&iacute;tico</th>
-                            <th align="center">Creador</th>
-                            <th align="center">Inicio</th>
-                            <th align="center">T&eacute;rmino</th>
-                            <th align="center">Rol responsable</th>
-                            <th align="center">Acciones</th>
+                            <th class="tban-id">Estado</th>
+                            <th class="tban-tarea">Factor Cr&iacute;tico</th>
+                            <th class="tban-tarea">Creador</th>
+                            <th class="tban-inicia">Inicio</th>
+                            <th class="tban-cerrada">T&eacute;rmino</th>
+                            <th class="tban-tarea">Rol responsable</th>
+                            <th class="tban-accion">Acciones</th>
                         </thead>
                         <tbody>
                             <%
@@ -186,12 +181,6 @@ String baseimg = SWBPortal.getWebWorkPath() + "/models/" + topic.getWebSiteId() 
                             %>
                         </tbody>
                     </table>
-                        <br />
-                        <%if (statusWp != null) {%>
-                            <img width="20" height="20" src="<%=baseimg + "Process-Info.png"%>"> <a target="_new" href="<%=statusWp.getUrl()%>?suri=<%=pi.getProcessType().getEncodedURI()%>&mode=view&currentActivities=<%=URLEncoder.encode(getStatusInstances(pi, Instance.STATUS_PROCESSING))%>">Mapa de proceso</a>
-                        <%}%>
-                </div>
-                <br/>
                 <!--h3>Tareas del usuario (<%=user.getFullName()%>) <a style="text-decoration: none" onclick="javascript:expande('tasks<%=process.getId()%>')"><img style="text-decoration:none" src="<%=baseimg + "icon_show.gif"%>"> </a><a style="text-decoration: none" onclick="javascript:colapsa('tasks<%=process.getId()%>')"><img src="<%=baseimg + "icon_hide.gif"%>"></a></h3>
                 <div id="tasks<%=process.getId()%>">
                     <table>
@@ -251,8 +240,6 @@ String baseimg = SWBPortal.getWebWorkPath() + "/models/" + topic.getWebSiteId() 
             <%
         }
         %>
-    </div>
-</div>
 
 <!--script type="text/javascript">
     colapsa('objetivos');
