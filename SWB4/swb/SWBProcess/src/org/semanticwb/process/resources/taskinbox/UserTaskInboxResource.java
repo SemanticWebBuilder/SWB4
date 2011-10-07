@@ -115,6 +115,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("instances", getUserTaskInstances(request, paramRequest));
             request.setAttribute("displayCols", getDisplayCols());
+            request.setAttribute("statusWp", getDisplayMapWp());
             rd.include(request, response);
         } catch (Exception e) {
             log.error("Error including jsp in view mode", e);
