@@ -7,6 +7,8 @@ public abstract class UserTaskInboxResourceBase extends org.semanticwb.portal.ap
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_semanticResourceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#semanticResourceInv");
     public static final org.semanticwb.platform.SemanticProperty utinbox_displayCols=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/UserTaskInbox#displayCols");
+    public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
+    public static final org.semanticwb.platform.SemanticProperty utinbox_displayMapWp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/UserTaskInbox#displayMapWp");
     public static final org.semanticwb.platform.SemanticClass utinbox_UserTaskInboxResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/process/resources/UserTaskInbox#UserTaskInboxResource");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/process/resources/UserTaskInbox#UserTaskInboxResource");
 
@@ -114,5 +116,43 @@ public abstract class UserTaskInboxResourceBase extends org.semanticwb.portal.ap
     public void setDisplayCols(String value)
     {
         getSemanticObject().setProperty(utinbox_displayCols, value);
+    }
+   /**
+   * Sets the value for the property DisplayMapWp
+   * @param value DisplayMapWp to set
+   */
+
+    public void setDisplayMapWp(org.semanticwb.model.WebPage value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(utinbox_displayMapWp, value.getSemanticObject());
+        }else
+        {
+            removeDisplayMapWp();
+        }
+    }
+   /**
+   * Remove the value for DisplayMapWp property
+   */
+
+    public void removeDisplayMapWp()
+    {
+        getSemanticObject().removeProperty(utinbox_displayMapWp);
+    }
+
+   /**
+   * Gets the DisplayMapWp
+   * @return a org.semanticwb.model.WebPage
+   */
+    public org.semanticwb.model.WebPage getDisplayMapWp()
+    {
+         org.semanticwb.model.WebPage ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(utinbox_displayMapWp);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
+         }
+         return ret;
     }
 }
