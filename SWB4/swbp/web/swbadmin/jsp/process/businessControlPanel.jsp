@@ -12,6 +12,7 @@
 <%@page import="org.semanticwb.model.WebSite"%>
 <%@page import="org.semanticwb.model.WebPage"%>
 <%@page import="org.semanticwb.process.model.ProcessInstance"%>
+<%@page import="org.semanticwb.process.model.ProcessWebPage"%>
 <%@page import="org.semanticwb.process.model.SubProcessInstance"%>
 <%@page import="org.semanticwb.process.model.Activity"%>
 <%@page import="org.semanticwb.process.model.Instance"%>
@@ -61,6 +62,16 @@
     }
 %>
 
+<script type="text/javascript">
+    function loadPageUrl(url, paramName, paramValue) {
+        var dest = url;
+        if (paramName != null && paramValue != null) {
+            dest+="&"+paramName+"="+paramValue;
+        }
+        window.location = dest;
+    }
+</script>
+
 <%
 SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramRequest");
 WebPage statusWp = (WebPage)request.getAttribute("statusWp");
@@ -97,116 +108,117 @@ if (sFilter == null || sFilter.trim().equals("")) {
 ArrayList<ProcessInstance> pinstances = (ArrayList<ProcessInstance>) request.getAttribute("instances");
 SWBResourceURL configUrl = paramRequest.getRenderUrl().setMode("config");
 if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
+    SWBResourceURL optsUrl = paramRequest.getRenderUrl();
+    optsUrl.setParameter("gFilter", gFilter);
+    optsUrl.setParameter("sFilter", sFilter);
     %>
-    <h2>Tablero de monitoreo de procesos</h2>
-        <table>
-            <tbody>
-                <tr>
-                    <td>
-                        <form action="<%=paramRequest.getRenderUrl()%>" method="get">
-                            <label for="sort">Ordenamiento: </label>
-                            <input type="hidden" name="gFilter" value="<%=gFilter%>">
-                            <input type="hidden" name="sFilter" value="<%=sFilter%>">
-                            <select name="sort" onchange="this.form.submit()">
-                                <option value="date" <%=sortType.equals("date")?"selected":""%>>Por fecha</option>
-                                <option value="name" <%=sortType.equals("name")?"selected":""%>>Por proceso</option>
-                                <option value="priority" <%=sortType.equals("priority")?"selected":""%>>Por prioridad</option>
-                            </select>
-                        </form>
-                    </td>
-                    <td>
-                        <form action="<%=paramRequest.getRenderUrl()%>" method="get">
-                            <label for="gFilter">Grupo: </label>
-                            <input type="hidden" name="sort" value="<%=sortType%>">
-                            <input type="hidden" name="sFilter" value="<%=sFilter%>">
-                            <select name="gFilter" onchange="this.form.submit()">
-                                <option value="" <%=gFilter.equals("")?"selected":""%>>Todos</option>
-                                <%
-                                Iterator<ProcessGroup> groups = ProcessGroup.ClassMgr.listProcessGroups(ws);
-                                groups = SWBComparator.sortByDisplayName(groups, lang);
-                                while (groups.hasNext()) {
-                                    ProcessGroup group = groups.next();
-                                    String selected = "";
-                                    if (gFilter.equals(group.getId())) selected = "selected";
-                                    %>
-                                    <option value="<%=group.getId()%>" <%=selected%>><%=group.getDisplayTitle(lang)%></option>
-                                    <%
-                                }
-                                %>
-                            </select>
-                        </form>
-                    </td>
-                    <td>
-                        <form action="<%=paramRequest.getRenderUrl()%>" method="get">
-                            <label for="sFilter">Estado: </label>
-                            <input type="hidden" name="sort" value="<%=sortType%>">
-                            <input type="hidden" name="gFilter" value="<%=gFilter%>">
-                            <select name="sFilter" onchange="this.form.submit()">
-                                <option value="" <%=sFilter.equals("")?"selected":""%>>Todos</option>
-                                <option value="<%=ProcessInstance.STATUS_PROCESSING%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_PROCESSING))?"selected":""%>>Activos</option>
-                                <option value="<%=ProcessInstance.STATUS_CLOSED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_CLOSED))?"selected":""%>>Cerrados</option>
-                                <option value="<%=ProcessInstance.STATUS_ABORTED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_ABORTED))?"selected":""%>>Abortados</option>
-                            </select>
-                        </form>
-                    </td>
-                </tr>
-                <tr>
-                    <td><a href="<%=configUrl%>">Configurar despliegue</a></td>
-                    <td colspan="2">
-                        <%
-                        Iterator<Process> p_it = Process.ClassMgr.listProcesses(ws);
-                        if (p_it.hasNext()) {
-                            SWBResourceURL createUrl = paramRequest.getActionUrl().setAction("create");
-                            %>
-                            <form action="<%=createUrl%>" method="post">
-                                <select name="pid">
-                                    <%
-                                    while(p_it.hasNext()) {
-                                        Process ip = p_it.next();
-                                        %><option value="<%=ip.getId()%>"><%=ip.getDisplayTitle(lang)%></option><%
-                                    }
-                                    %>
-                                </select>
-                                <input type="submit" value="Crear caso">
-                            </form>
-                            <%
-                        }
+    <h2>Monitor de procesos</h2>
+    <div class="bandeja-combo">
+        <ul>
+            <li>Ordenamiento:
+                    <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'sort', this.options[this.selectedIndex].value)">
+                        <option value="date" <%=sortType.equals("date")?"selected":""%>>Por fecha</option>
+                        <option value="name" <%=sortType.equals("name")?"selected":""%>>Por proceso</option>
+                        <option value="priority" <%=sortType.equals("priority")?"selected":""%>>Por prioridad</option>
+                    <!--option value="priority" <%=sortType.equals("priority")?"selected":""%>>Por prioridad</option-->
+                    </select>
+            </li>
+            <li>
+                <%
+                optsUrl = paramRequest.getRenderUrl();
+                optsUrl.setParameter("sort", sortType);
+                optsUrl.setParameter("sFilter", sFilter);
+                %>
+                Grupo:
+                <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'gFilter', this.options[this.selectedIndex].value)">
+                    <option value="" <%=gFilter.equals("")?"selected":""%>>Todos</option>
+                    <%
+                    Iterator<ProcessGroup> groups = ProcessGroup.ClassMgr.listProcessGroups(ws);
+                    groups = SWBComparator.sortByDisplayName(groups, lang);
+                    while (groups.hasNext()) {
+                        ProcessGroup group = groups.next();
+                        String selected = "";
+                        if (gFilter.equals(group.getId())) selected = "selected";
                         %>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                        <option value="<%=group.getId()%>" <%=selected%>><%=group.getDisplayTitle(lang)%></option>
+                        <%
+                    }
+                    %>
+                </select>
+            </li>
+            <li>
+                <%
+                optsUrl = paramRequest.getRenderUrl();
+                optsUrl.setParameter("sort", sortType);
+                optsUrl.setParameter("gFilter", gFilter);
+                %>
+                Estado:
+                <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'sFilter', this.options[this.selectedIndex].value)">
+                    <option value="" <%=sFilter.equals("")?"selected":""%>>Todos</option>
+                    <option value="<%=ProcessInstance.STATUS_PROCESSING%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_PROCESSING))?"selected":""%>>Pendientes</option>
+                    <option value="<%=ProcessInstance.STATUS_CLOSED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_CLOSED))?"selected":""%>>Terminados</option>
+                    <option value="<%=ProcessInstance.STATUS_ABORTED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_ABORTED))?"selected":""%>>Abortados</option>
+                </select>
+            </li>
+            <li>
+                <a href="<%=configUrl%>">Configurar despliegue</a>
+            </li>
+        </ul>
+    </div>
     <%
+        Iterator<Process> p_it = Process.ClassMgr.listProcesses(ws);
+        if (p_it.hasNext()) {
+            SWBResourceURL createUrl = paramRequest.getActionUrl().setAction("create");
+            %>
+            <div class="bandeja-combo">
+                <ul>
+                    <li>
+                        <select id="processId">
+                            <%
+                            while(p_it.hasNext()) {
+                                Process ip = p_it.next();
+                                %><option value="<%=ip.getId()%>"><%=ip.getDisplayTitle(lang)%></option><%
+                            }
+                            %>
+                        </select>
+                    </li>
+                    <li>
+                        <input type="button" value="Crear caso" onclick="loadPageUrl('<%=createUrl.toString()%>', 'pid', document.getElementById('processId').options[document.getElementById('processId').selectedIndex].value)"/>
+                    </li>
+                </ul>
+            </div>
+            <%
+        }
     if (pinstances != null && pinstances.size() > 0) {
         %>        
         <br>
-        <table>
+        <table class="tabla-bandeja">
             <thead>
                 <tr>
                     <%
                     if (displayCols.contains("idCol")) {
-                        %><th align="center">ID</th><%
+                        %><th class="tban-id">ID</th><%
                     }
                     if (displayCols.contains("priorityCol")) {
-                        %><th align="center">Prioridad</th><%
+                        %><th class="tban-id">Prioridad</th><%
                     }
                     if (displayCols.contains("nameCol")) {
-                        %><th align="center">Proceso</th><%
+                        %><th class="tban-proces">Proceso</th><%
                     }
                     if (displayCols.contains("sdateCol")) {
-                        %><th align="center">Iniciado</th><%
+                        %><th class="tban-inicia">Iniciado</th><%
                     }
                     if (displayCols.contains("edateCol")) {
-                        %><th align="center">Cerrado</th><%
+                        %><th class="tban-cerrada">Cerrado</th><%
                     }
                     if (displayCols.contains("pendingCol")) {
-                        %><th align="center">Actividades pendientes</th><%
+                        %><th class="tban-tarea">Actividades pendientes</th><%
                     }
                     if (displayCols.contains("rolesCol")) {
-                        %><th align="center">Responsables</th><%
+                        %><th class="tban-tarea">Responsables</th><%
                     }
                     if (displayCols.contains("actionsCol")) {
-                        %><th align="center">Acciones</th><%
+                        %><th class="tban-accion">Acciones</th><%
                     }
                     %>
                 </tr>
@@ -232,23 +244,23 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                     <tr>
                         <%
                         if (displayCols.contains("idCol")) {
-                            %><td align="center"><%=Id%></td><%
+                            %><td class="tban-id"><%=Id%></td><%
                         }
                         if (displayCols.contains("priorityCol")) {
-                            %><td align="center"><%=instance.getPriority()%></td><%
+                            %><td class="tban-id"><%=instance.getPriority()%></td><%
                         }
                         if (displayCols.contains("nameCol")) {
-                            %><td align="center"><%=pName%></td><%
+                            %><td class="tban-proces"><%=pName%></td><%
                         }
                         if (displayCols.contains("sdateCol")) {
-                            %><td align="center"><%=pCreated%></td><%
+                            %><td class="tban-inicia"><%=pCreated%></td><%
                         }
                         if (displayCols.contains("edateCol")) {
-                            %><td align="center"><%=pClosed%></td><%
+                            %><td class="tban-cerrada"><%=pClosed%></td><%
                         }
                         if (displayCols.contains("pendingCol")) {
                             %>
-                            <td>
+                            <td class="tban-tarea">
                                 <%
                                 Iterator<FlowNodeInstance> tasks = instance.listFlowNodeInstances();
                                 if (tasks.hasNext() && instance.getStatus() == ProcessInstance.STATUS_PROCESSING) {
@@ -284,7 +296,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                         }
                         if (displayCols.contains("rolesCol")) {
                             %>
-                            <td>
+                            <td class="tban-tarea">
                                 <%
                                 Iterator<FlowNodeInstance> tasks = instance.listFlowNodeInstances();
                                 if (tasks.hasNext() && instance.getStatus() == ProcessInstance.STATUS_PROCESSING) {
@@ -326,7 +338,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                         }
                         if (displayCols.contains("actionsCol")) {
                             %>
-                            <td align="center">
+                            <td class="tban-accion">
                                 <%
                                 String acts = getStatusInstances(instance, ProcessInstance.STATUS_PROCESSING);
                                 if (acts != null && !acts.trim().equals("")) {
@@ -334,13 +346,17 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                 }
 
                                 if (instance.getStatus() == ProcessInstance.STATUS_PROCESSING) {
-                                    %><a target="_new" href="<%=instance.getProcessType().getProcessWebPage().getUrl()%>"> <img alt="Estado del proceso" title="Estado" width="20" height="20" src="<%=baseimg + "process_next.png"%>"></a><%
+                                    ProcessWebPage pwp = instance.getProcessType().getProcessWebPage();
+                                    if (pwp != null) {
+                                        %><a class="acc-atender" target="_new" href="<%=pwp.getUrl()%>">Detalle</a><%
+                                    }
                                 }
                                 
                                 if (statusWp != null) {
                                 %>
-                                    <a target="_new" href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessType().getEncodedURI()%>&mode=view<%=acts%>"><img alt="Mapa de proceso" title="Mapa de proceso" width="20" height="20" src="<%=baseimg + "Process-Info.png"%>"></a>
+                                    <a class="acc-comentar" target="_new" href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessType().getEncodedURI()%>&mode=view<%=acts%>">Ver mapa</a>
                                 <%}%>
+                                <a class="acc-eliminar" href="#">Eliminar</a>
                             </td>
                             <%
                         }
@@ -351,12 +367,12 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                 %>
             </tbody>
         </table>
-        <p>
+        <div class="paginado">
             P&aacute;gina:
         <%
         for (int i = 1; i <= maxPages; i++) {
             if (pageNum == i) {
-                %><%=i%> <%
+                %><strong><%=i%></strong> <%
             } else {
                 SWBResourceURL pUrl = paramRequest.getRenderUrl();
                 pUrl.setParameter("gFilter", gFilter);
@@ -367,7 +383,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
             }
         }
         %>
-        </p>
+        </div>
         <%
     }
 }
