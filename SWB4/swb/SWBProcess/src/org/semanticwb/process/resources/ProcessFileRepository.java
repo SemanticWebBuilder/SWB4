@@ -92,28 +92,28 @@ public class ProcessFileRepository extends GenericResource {
             //urlorder.setParameter("parentUUID", parentUUID);
 
             out.println("<div id=\"ProcessFileRepository\">");
-            out.println("<table width=\"100%\">");
+            out.println("<table class=\"tabla-bandeja\"");
             out.println("<thead>");
             out.println("<tr>");
-            out.println("<th>");
+            out.println("<th class=\"tban-id\">");
             out.println("Id");
             out.println("</th>");
-            out.println("<th>");
-            out.println("<a href=\"" + urlorder + "?orderBy=type\" title=\"Ordenar por tipo\">" + "Tipo" + "</a>");
+            out.println("<th class=\"tban-tarea\">");
+            out.println("<a style=\"color:white; text-decoration:'none';\" href=\"" + urlorder + "?orderBy=type\" title=\"Ordenar por tipo\">" + "Tipo" + "</a>");
             out.println("</th>");
-            out.println("<th>");
-            out.println("<a href=\"" + urlorder + "?orderBy=title\" title=\"Ordenar por nombre\">" + "Nombre" + "</a>");
+            out.println("<th class=\"tban-tarea\">");
+            out.println("<a style=\"color:white; text-decoration:'none';\" href=\"" + urlorder + "?orderBy=title\" title=\"Ordenar por nombre\">" + "Nombre" + "</a>");
             out.println("</th>");
-            out.println("<th>");
+            out.println("<th class=\"tban-tarea\">");
             out.println("Versión");
             out.println("</th>");
-            out.println("<th>");
-            out.println("<a href=\"" + urlorder + "?orderBy=date\" title=\"Ordenar por fecha de modificación\">" + "Modificado" + "</a>");
+            out.println("<th class=\"tban-tarea\">");
+            out.println("<a style=\"color:white; text-decoration:'none';\" href=\"" + urlorder + "?orderBy=date\" title=\"Ordenar por fecha de modificación\">" + "Modificado" + "</a>");
             out.println("</th>");
-            out.println("<th>");
-            out.println("<a href=\"" + urlorder + "?orderBy=usr\" title=\"Ordenar por usuario que lo modificó.\">" + "Modificado por" + "</a>");
+            out.println("<th class=\"tban-tarea\">");
+            out.println("<a style=\"color:white; text-decoration:'none';\" href=\"" + urlorder + "?orderBy=usr\" title=\"Ordenar por usuario que lo modificó.\">" + "Modificado por" + "</a>");
             out.println("</th>");
-            out.println("<th>");
+            out.println("<th class=\"tban-accion\">");
             out.println("Acción");
             out.println("</th>");
             out.println("</tr>");
@@ -178,12 +178,12 @@ public class ProcessFileRepository extends GenericResource {
 
                 RepositoryFile repositoryFile = hmNodes.get(skey);
                 out.println("<tr>");
-                out.println("<td>");
+                out.println("<td class=\"tban-id\">");
                 String fid = repositoryFile.getId();
                 out.println(fid);
                 out.println("</td>");
 
-                out.println("<td>");
+                out.println("<td class=\"tban-tarea\">");
                 SWBResourceURL urldetail = paramRequest.getRenderUrl();
                 urldetail.setParameter("act", "detail");
                 urldetail.setParameter("fid", fid);
@@ -214,20 +214,20 @@ public class ProcessFileRepository extends GenericResource {
                 }
 
                 out.println("</td>");
-                out.println("<td>");
+                out.println("<td class=\"tban-tarea\">");
                 out.println(repositoryFile.getDisplayTitle(usr.getLanguage()));
                 out.println("</td>");
-                out.println("<td>");
+                out.println("<td class=\"tban-tarea\">");
                 out.println(vi.getVersionValue());
                 out.println("</td>");
-                out.println("<td align=\"center\">");
+                out.println("<td class=\"tban-tarea\">");
                 out.println(vi != null && vi.getUpdated() != null ? format.format(vi.getUpdated()) : "--");
                 out.println("</td>");
-                out.println("<td>");
+                out.println("<td class=\"tban-tarea\">");
                 out.println(vi != null && vi.getModifiedBy() != null && vi.getModifiedBy().getFullName() != null ? vi.getModifiedBy().getFullName() : "--");
                 out.println("</td>");
 
-                out.println("<td>");
+                out.println("<td class=\"tban-accion\">");
 
                 out.println("<a href=\"" + urldetail + "\"><img src=\"" + path + "info.gif\" border=\"0\" alt=\"ver detalle\"/>");
 
