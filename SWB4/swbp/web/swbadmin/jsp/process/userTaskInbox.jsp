@@ -113,7 +113,7 @@ if (pFilter == null || pFilter.trim().equals("")) {
     pFilter = "";
 }
 if (sFilter == null || sFilter.trim().equals("")) {
-    sFilter = "";
+    sFilter = String.valueOf(ProcessInstance.STATUS_PROCESSING);
 }
 String [] months = {"ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"};
 
