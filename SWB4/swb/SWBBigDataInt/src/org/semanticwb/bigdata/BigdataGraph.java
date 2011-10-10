@@ -26,12 +26,13 @@ import org.openrdf.sail.SailConnection;
 import org.openrdf.sail.SailException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.remotetriplestore.RGraph;
 
 /**
  *
  * @author jei
  */
-public class BigdataGraph extends GraphBase
+public class BigdataGraph extends GraphBase implements RGraph
 {
     private static Logger log=SWBUtils.getLogger(BigdataGraph.class);
 
@@ -80,14 +81,20 @@ public class BigdataGraph extends GraphBase
 //            throw new RuntimeException("Error finding Triple", ex);
 //        }
     }
-
+    
     @Override
     public void performAdd(Triple t)
+    {
+        performAdd(t,null);
+    }    
+
+    public void performAdd(Triple t, Long id)
     {
         if(debug)System.out.println("performAdd:"+t);
         //if(t.getObject()==null)return;
         //sail.getDatabase().addStatement((Resource)SesameUtil.node2Value(t.getSubject()), (URI)SesameUtil.node2Value(t.getPredicate()), SesameUtil.node2Value(t.getObject()));
-        SailConnection con=trans.getConnection();
+        SailConnection con=trans.getConnection(id);
+        //System.out.println("performAdd:"+id+" "+con);
         if(con==null)  //is not over transaction
         {
             trans.begin();
@@ -115,9 +122,14 @@ public class BigdataGraph extends GraphBase
     @Override
     public void performDelete(Triple t)
     {
+        performDelete(t, null);
+    }
+    
+    public void performDelete(Triple t, Long id)
+    {
         if(debug)System.out.println("performDelete:"+t);
         //sail.getDatabase().removeStatements((Resource)SesameUtil.node2Value(t.getSubject()), (URI)SesameUtil.node2Value(t.getPredicate()), SesameUtil.node2Value(t.getObject()));
-        SailConnection con=trans.getConnection();
+        SailConnection con=trans.getConnection(id);
         if(con==null)  //is not over transaction
         {
             trans.begin();

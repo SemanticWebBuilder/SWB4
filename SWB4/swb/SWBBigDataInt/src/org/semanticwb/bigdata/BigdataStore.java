@@ -13,6 +13,8 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.rdf.AbstractStore;
 import com.hp.hpl.jena.query.Dataset;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -23,6 +25,8 @@ public class BigdataStore implements AbstractStore
     private static Logger log=SWBUtils.getLogger(BigdataStore.class);
 
     BigdataModelMaker maker;
+    
+    HashMap<String,Model> models=new HashMap();
 
     public void init()
     {
@@ -36,11 +40,15 @@ public class BigdataStore implements AbstractStore
         String path=SWBPlatform.createInstance().getPlatformWorkPath() + "/data";
         File journal = new File(path+"/"+name+".jnl");
         journal.delete();
+        models.remove(name);
     }
 
     public Model loadModel(String name)
     {
-        return maker.createModel(name, false);
+        //System.out.println("loadModel:"+name);        
+        Model model=maker.createModel(name, false);
+        models.put(name, model);
+        return model;
     }
 
     public Iterator<String> listModelNames()
@@ -61,6 +69,13 @@ public class BigdataStore implements AbstractStore
 
     public Model getModel(String name) 
     {
-        return maker.getModel(name, false);
+        //System.out.println("getModel:"+name);
+        Model model=models.get(name);
+        if(model==null)
+        {
+            model=maker.getModel(name, false);
+            models.put(name, model);
+        }        
+        return model;
     }    
 }

@@ -102,10 +102,6 @@ public class BigdataBulkUpdateHandler extends SimpleBulkUpdateHandler
         if (notify) manager.notifyDeleteList( graph, triples );
     }
 
-
-
-
-
     @Override
     public void removeAll()
     {
