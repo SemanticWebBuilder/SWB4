@@ -24,8 +24,8 @@ public class SendMail extends org.semanticwb.process.model.base.SendMailBase
         super.execute(instance, user);
         try
         {
-            replaceTags(instance, getContent());
-            //SWBUtils.EMAIL.sendMail(getTo(), getSubject(), replaceTags(instance, getContent()));
+            //replaceTags(instance, getContent());
+            SWBUtils.EMAIL.sendMail(getTo(), getSubject(), replaceTags(instance, getContent()));
         }catch(Exception e)
         {
             log.error(e);
