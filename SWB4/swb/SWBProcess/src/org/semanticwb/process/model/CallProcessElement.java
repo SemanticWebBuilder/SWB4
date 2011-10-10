@@ -1,6 +1,6 @@
 
 /**
-* SemanticWebBuilder Process (SWBP) es una plataforma para la gestión de procesos de negocio mediante el uso de 
+* SemanticWebBuilder Process (SWB Process) es una plataforma para la gestión de procesos de negocio mediante el uso de 
 * tecnología semántica, que permite el modelado, configuración, ejecución y monitoreo de los procesos de negocio
 * de una organización, así como el desarrollo de componentes y aplicaciones orientadas a la gestión de procesos.
 * 
