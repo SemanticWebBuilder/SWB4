@@ -13,12 +13,13 @@ import org.openrdf.sail.SailConnection;
 import org.openrdf.sail.SailException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.remotetriplestore.RTransactionHandler;
 
 /**
  *
  * @author jei
  */
-public class BigdataTransactionHandler extends TransactionHandlerBase
+public class BigdataTransactionHandler extends TransactionHandlerBase implements RTransactionHandler
 {
     public static Logger log=SWBUtils.getLogger(BigdataTransactionHandler.class);
     private BigdataSail sail;
@@ -35,11 +36,21 @@ public class BigdataTransactionHandler extends TransactionHandlerBase
     {
         return true;
     }
-
+    
     public void begin()
     {
-        //System.out.println("begin:"+Thread.currentThread().getId());
-        SailConnection con=conmap.get(Thread.currentThread().getId());
+        begin(null);
+    }
+
+    public void begin(Long id)
+    {
+        //System.out.println("begin:"+id);
+        SailConnection con=null;
+        if(id==null)
+        {
+            id=Thread.currentThread().getId();
+        }
+        con=conmap.get(id);
         if(con!=null)
         {
             try
@@ -54,17 +65,28 @@ public class BigdataTransactionHandler extends TransactionHandlerBase
         try
         {
             con = sail.getConnection();
-            conmap.put(Thread.currentThread().getId(), con);
+            conmap.put(id, con);
         } catch (SailException ex)
         {
             throw new RuntimeException("Error initializing transaction", ex);
         }
     }
-
+    
     public void abort()
     {
-        //System.out.println("abort:"+Thread.currentThread().getId());
-        SailConnection con=conmap.get(Thread.currentThread().getId());
+        abort(null);
+    }
+
+    public void abort(Long id)
+    {
+        //System.out.println("abort:"+id);
+        SailConnection con=null;
+        if(id==null)
+        {
+            id=Thread.currentThread().getId();
+        }
+        con=conmap.get(id);        
+        
         if(con!=null)
         {
             try
@@ -75,7 +97,7 @@ public class BigdataTransactionHandler extends TransactionHandlerBase
                 throw new RuntimeException("Error rollingback transaction", ex);
             }finally
             {
-                conmap.remove(Thread.currentThread().getId());
+                conmap.remove(id);
                 try
                 {
                     con.close();
@@ -86,12 +108,21 @@ public class BigdataTransactionHandler extends TransactionHandlerBase
             }
         }
     }
-
+    
     public void commit()
     {
-        //System.out.println("commit:"+Thread.currentThread().getId());
-        SailConnection con=conmap.get(Thread.currentThread().getId());
-        if(con!=null)
+        commit(null);
+    }
+
+    public void commit(Long id)
+    {
+        //System.out.println("commit:"+id);
+        SailConnection con=null;
+        if(id==null)
+        {
+            id=Thread.currentThread().getId();
+        }
+        con=conmap.get(id);
         {
             try
             {
@@ -101,7 +132,7 @@ public class BigdataTransactionHandler extends TransactionHandlerBase
                 throw new RuntimeException("Error commiting transaction", ex);
             }finally
             {
-                conmap.remove(Thread.currentThread().getId());
+                conmap.remove(id);
                 try
                 {
                     con.close();
@@ -119,7 +150,20 @@ public class BigdataTransactionHandler extends TransactionHandlerBase
      */
     public SailConnection getConnection()
     {
-        return conmap.get(Thread.currentThread().getId());
+        return getConnection(Thread.currentThread().getId());
+    }
+    
+    /**
+     * Return the SailConnection associated to the current transaction and thread
+     * @return SailConnection
+     */
+    public SailConnection getConnection(Long id)
+    {
+        if(id==null)
+        {
+            id=Thread.currentThread().getId();
+        }
+        return conmap.get(id);
     }
 
 }

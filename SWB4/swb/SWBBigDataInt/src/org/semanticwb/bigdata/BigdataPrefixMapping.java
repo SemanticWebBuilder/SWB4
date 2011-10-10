@@ -40,6 +40,7 @@ public class BigdataPrefixMapping implements PrefixMapping
 
     public PrefixMapping setNsPrefix(String prefix, String uri)
     {
+        //System.out.println("setNsPrefix:"+prefix+" "+uri);
         sail.getDatabase().addNamespace(uri, prefix);
         sail.getDatabase().addStatement(new ValueFactoryImpl().createURI("http://prefix.swb.org#"+prefix), new ValueFactoryImpl().createURI("http://www.swb.org#prefix"), new ValueFactoryImpl().createLiteral(uri));
         sail.getDatabase().commit();
@@ -106,7 +107,7 @@ public class BigdataPrefixMapping implements PrefixMapping
             Map.Entry<String, String> entry = it.next();
             m.put(entry.getValue(), entry.getKey());
         }
-        //System.out.println("map:"+sail.getDatabase().getNamespaces());
+        //System.out.println("getNsPrefixMap:"+sail.getDatabase().getNamespaces());
         return m;
     }
 
