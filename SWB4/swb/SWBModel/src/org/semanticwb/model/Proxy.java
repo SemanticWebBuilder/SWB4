@@ -2,7 +2,6 @@ package org.semanticwb.model;
 
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
-import org.openjena.atlas.iterator.Iterator2;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
 
