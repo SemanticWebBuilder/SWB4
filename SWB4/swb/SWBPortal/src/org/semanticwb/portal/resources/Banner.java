@@ -33,6 +33,7 @@ package org.semanticwb.portal.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -96,6 +97,11 @@ public class Banner extends GenericAdmResource {
                     height = null;
                 }
 
+                //Para envío de parametros que traiga la página actual(07/09/2011)
+                String QueryStream="";
+                if(request.getQueryString()!=null) QueryStream="?"+request.getQueryString();
+
+               
                 String wburl = null;
                 if( url!=null && url.toLowerCase().startsWith("mailto:") )
                     wburl = url.replaceAll("\"", "&#34;");
@@ -130,7 +136,7 @@ public class Banner extends GenericAdmResource {
                     if( url!=null ) {                        
                         out.print("<a class=\"swb-banner\"");
                         out.print(" href=\""+url+"\"");
-                        out.print(" onclick=\"window.location.href='"+paramRequest.getActionUrl()+"';return true;\"");
+                        out.print(" onclick=\"window.location.href='"+paramRequest.getActionUrl()+QueryStream+  "';return true;\"");
                         if( Boolean.parseBoolean(base.getAttribute("target")) )
                             out.print(" target=\"_blank\"");
                         out.println(" title=\""+base.getAttribute("title","")+"\">");
@@ -255,6 +261,18 @@ public class Banner extends GenericAdmResource {
     public void processAction(javax.servlet.http.HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         Resource base=getResourceBase();
         base.addHit(request, response.getUser(), response.getWebPage());
+        //Para paso de parametros
+        String params="";
+        int cont=0;
+        Enumeration<String> enParams=request.getParameterNames();
+        while(enParams.hasMoreElements()){
+            String param=enParams.nextElement();
+            cont++;
+            if(cont==1) params+="?"; else params+="&";
+            params+=param+"="+request.getParameter(param);
+        }
+        response.sendRedirect(response.getWebPage().getUrl()+params);
+
 //        String url = base.getAttribute("url");
 //        if( url!=null ) {
 //            url = replaceTags(url, request, response.getUser(), response.getWebPage());
