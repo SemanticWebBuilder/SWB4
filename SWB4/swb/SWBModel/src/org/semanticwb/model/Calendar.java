@@ -159,17 +159,21 @@ public class Calendar extends CalendarBase {
                             break;
                         }
                     } else if (name.equals("enddate")) {
-                        Date enddate = new Date(nl.item(x).getFirstChild().getNodeValue());
+                        try{
+                            Date enddate = new Date(nl.item(x).getFirstChild().getNodeValue());
 
-                        enddate.setHours(23);
-                        enddate.setMinutes(59);
-                        enddate.setSeconds(59);
+                            enddate.setHours(23);
+                            enddate.setMinutes(59);
+                            enddate.setSeconds(59);
 
-                        if (enddate.before(today)) {
-                            ret = false;
+                            if (enddate.before(today)) {
+                                ret = false;
 
-                            break;
-                        }
+                                break;
+                            }
+                       }catch(Exception e){
+                           System.out.println("Nodo Mal en Calendar/Eval:"+nl.item(x).getFirstChild().getNodeValue());
+                       }
                     } else if (name.equals("starthour")) {
                         String          time = nl.item(x).getFirstChild().getNodeValue();
                         StringTokenizer st   = new StringTokenizer(time, ":");
