@@ -1173,6 +1173,7 @@ public class SWBPortal
      */
     public static InputStream getFileFromWorkPath(String path) throws SWBException
     {
+        //System.out.println("getFileFromWorkPath:"+path);
         InputStream ret = null;
         //TOTO:Impementar Replicacion de archivos
         try

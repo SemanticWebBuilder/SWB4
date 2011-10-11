@@ -100,6 +100,9 @@ public class TemplateImp extends Template
     public TemplateImp(Template base)
     {
         super(base.getSemanticObject());
+        
+        //System.out.println("TemplateImp:"+isActive()+" "+isDeleted());
+        
         webPath = SWBPortal.getWebWorkPath()+super.getWorkPath();
         actPath = webPath+ "/" + getActualVersion().getVersionNumber() + "/";
         workPath = SWBPortal.getWorkPath()+super.getWorkPath();
@@ -290,7 +293,7 @@ public class TemplateImp extends Template
             boolean scriptpart = false;
             while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF)
             {
-                //System.out.println("element:"+tok.getStringValue());
+                //System.out.println("parse element:"+tok.getStringValue());
                 int ttype = tok.getTokenType();
                 if (ttype == HtmlStreamTokenizer.TT_TAG)
                 {

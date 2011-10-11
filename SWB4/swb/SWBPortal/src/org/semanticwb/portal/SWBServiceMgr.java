@@ -38,7 +38,6 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBObserver;
-import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.IPFilter;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceSubType;
@@ -50,12 +49,12 @@ import org.semanticwb.model.Template;
 import org.semanticwb.model.Traceable;
 import org.semanticwb.model.User;
 import org.semanticwb.model.VersionInfo;
-import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
 import org.semanticwb.platform.SemanticProperty;
+import org.semanticwb.platform.SemanticTSObserver;
 import org.semanticwb.portal.api.SWBResource;
 import org.semanticwb.portal.indexer.SWBIndexer;
 import org.semanticwb.repository.Unstructured;
@@ -68,7 +67,7 @@ import org.semanticwb.triplestore.SWBTSUtil;
  * 
  * @author javier.solis
  */
-public class SWBServiceMgr implements SemanticObserver, SWBObserver {
+public class SWBServiceMgr implements SemanticObserver, SemanticTSObserver, SWBObserver {
 
     /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBServiceMgr.class);
@@ -100,215 +99,130 @@ public class SWBServiceMgr implements SemanticObserver, SWBObserver {
     {
         User usr = SWBContext.getSessionUser();
         log.trace("obj:" + obj + " prop:" + prop + " action:" + action + " " + usr);
-        if(!"rdf".equals(lang))
+        try
         {
-            try
+            //System.out.println("obj:" + obj + " prop:" + prop + " action:" + action + " " + usr);
+
+            if(obj.getModel().isTraceable())SWBPortal.getDBAdmLog().saveAdmLog(usr, obj, prop, action);
+
+            SemanticClass cls = obj.getSemanticClass();
+            if(cls!=null && cls.isSWB())
             {
-                //System.out.println("obj:" + obj + " prop:" + prop + " action:" + action + " " + usr);
-
-                if(obj.getModel().isTraceable())SWBPortal.getDBAdmLog().saveAdmLog(usr, obj, prop, action);
-
-                SemanticClass cls = obj.getSemanticClass();
-                if(cls!=null && cls.isSWB())
+                if (prop == null) //se modifico un objeto CREATE o REMOVE
                 {
-                    if (prop == null) //se modifico un objeto CREATE o REMOVE
+                    if (action.equals("CREATE")) //CREATE
                     {
-                        if (action.equals("CREATE")) //CREATE
+                        updateTraceable(obj,usr);
+                        if(obj.instanceOf(SWBModel.sclass))
                         {
-                            updateTraceable(obj,usr);
-                            if(obj.instanceOf(SWBModel.sclass))
-                            {
-                                java.io.File dir=new java.io.File(SWBPortal.getWorkPath() + "/models/"+ obj.getId());
-                                dir.mkdirs();
-                            }
-                            if(obj.instanceOf(Workspace.sclass))
-                            {
-                                Workspace ws=(Workspace)obj.createGenericInstance();
-                                if (ws.getRoot() == null)
-                                {
-                                    Unstructured root = Unstructured.ClassMgr.createUnstructured(ws);
-                                    root.setName("jcr:root");
-                                    root.setPath("/");
-                                    ws.setRoot(root);
-                                }
-                            }
-                            if(obj.instanceOf(WebSite.sclass))
-                            {
-        //                        WebSite website=(WebSite)obj.createGenericInstance();
-        //                        //Crea repositorio x defecto
-        //                        website.setUserRepository(SWBContext.getDefaultRepository());
-        //                        WebPage wp=website.createWebPage("home");
-        //                        wp.setTitle("Home");
-        //                        wp.set
-        //                        website.setHomePage(wp);
-        //                        //Crea lenguages x defecto
-        //                        Iterator <Language> itLangs=SWBContext.getGlobalWebSite().listLanguages();
-        //                        while(itLangs.hasNext()){
-        //                            Language langNext=itLangs.next();
-        //                            Language lang=website.createLanguage(langNext.getId());
-        //                            lang.setTitle(langNext.getTitle());
-        //                            lang.setDescription(langNext.getDescription());
-        //                        }
-                                java.io.File dir=new java.io.File(SWBPortal.getWorkPath() + "/models/"+ obj.getId() + "/Template");
-                                dir.mkdirs();
-                                dir=new java.io.File(SWBPortal.getWorkPath() + "/models/" + obj.getId() + "/Resource");
-                                dir.mkdirs();
-                                //
-                            }
-                            if(obj.instanceOf(Template.sclass))
-                            {
-                                String ctx=SWBPlatform.getContextPath();
-                                Template tpl=(Template)obj.createGenericInstance();
-                                VersionInfo vi=VersionInfo.ClassMgr.createVersionInfo(tpl.getWebSite());
-                                vi.setVersionNumber(1);
-                                vi.setVersionFile("template.html");
-                                tpl.setActualVersion(vi);
-                                tpl.setLastVersion(vi);
-                                String txt=Template.DEFAUL_HTML;
-                                try
-                                {
-                                    SWBPortal.writeFileToWorkPath(tpl.getWorkPath()+"/1/"+"template.html", SWBUtils.IO.getStreamFromString(txt), usr);
-                                }catch(Exception e){log.error(e);}
-                            }
-                            if(obj.instanceOf(IPFilter.sclass))
-                            {
-                                WebSite site=SWBContext.getWebSite(obj.getModel().getName());
-                                if(site!=null)
-                                {
-                                    //Limpia cache de filtros
-                                    site.clearCache();
-                                }
-                            }
-                        } else //REMOVES
+                            java.io.File dir=new java.io.File(SWBPortal.getWorkPath() + "/models/"+ obj.getId());
+                            dir.mkdirs();
+                        }
+                        if(obj.instanceOf(Workspace.sclass))
                         {
-                            if (obj.instanceOf(SWBModel.sclass)) //Removes website
+                            Workspace ws=(Workspace)obj.createGenericInstance();
+                            if (ws.getRoot() == null)
                             {
-                                SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + "/models/"+obj.getId());
-                            } else
-                            {
-                                SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + obj.getWorkPath());
-                            }
-                            if(obj.instanceOf(IPFilter.sclass))
-                            {
-                                WebSite site=SWBContext.getWebSite(obj.getModel().getName());
-                                if(site!=null)
-                                {
-                                    //Limpia cache de filtros
-                                    site.clearCache();
-                                }
-                            }
-                            if(obj.instanceOf(WebPage.sclass))
-                            {
-                            //    SWBPortal.getIndexMgr().getDefaultIndexer().removeTopic(obj.getModel().getName(), obj.getId());
-                            }
-                            if(obj.instanceOf(WebSite.sclass))
-                            {
-                            //    SWBPortal.getIndexMgr().getDefaultIndexer().removeWebSite(obj.getId());
-                            }
-                            if(obj.instanceOf(ResourceType.sclass))
-                            {
-                                try
-                                {
-                                    Class cls2=SWBPortal.getResourceMgr().createSWBResourceClass(obj.getProperty(ResourceType.swb_resourceClassName));
-                                    ((SWBResource)cls2.newInstance()).uninstall((ResourceType)obj.createGenericInstance());
-                                }catch(Exception e){log.error(e);}
-                            }
-                            if(obj.instanceOf(Searchable.swb_Searchable))
-                            {
-                                SWBIndexer index=SWBPortal.getIndexMgr().getDefaultIndexer();
-                                if(index!=null)
-                                {
-                                    index.removeSearchable(obj.getURI());
-                                }
-                            }
-                            if(obj.instanceOf(Resource.sclass))
-                            {
-                                SWBPortal.getResourceMgr().removeResource(obj.getURI());
+                                Unstructured root = Unstructured.ClassMgr.createUnstructured(ws);
+                                root.setName("jcr:root");
+                                root.setPath("/");
+                                ws.setRoot(root);
                             }
                         }
-                    } else if (prop instanceof SemanticProperty)
+                        if(obj.instanceOf(WebSite.sclass))
+                        {
+                            java.io.File dir=new java.io.File(SWBPortal.getWorkPath() + "/models/"+ obj.getId() + "/Template");
+                            dir.mkdirs();
+                            dir=new java.io.File(SWBPortal.getWorkPath() + "/models/" + obj.getId() + "/Resource");
+                            dir.mkdirs();
+                        }
+                        if(obj.instanceOf(Template.sclass))
+                        {
+                            String ctx=SWBPlatform.getContextPath();
+                            Template tpl=(Template)obj.createGenericInstance();
+                            VersionInfo vi=VersionInfo.ClassMgr.createVersionInfo(tpl.getWebSite());
+                            vi.setVersionNumber(1);
+                            vi.setVersionFile("template.html");
+                            tpl.setActualVersion(vi);
+                            tpl.setLastVersion(vi);
+                            String txt=Template.DEFAUL_HTML;
+                            try
+                            {
+                                SWBPortal.writeFileToWorkPath(tpl.getWorkPath()+"/1/"+"template.html", SWBUtils.IO.getStreamFromString(txt), usr);
+                            }catch(Exception e){log.error(e);}
+                        }
+                    } else //REMOVES
                     {
-                        //System.out.println("obj2:"+obj+" "+Resource.sclass+"="+Resource.sclass+" prop:"+prop+"="+Resource.swb_resourceSubType);
-                        if(obj.instanceOf(ResourceType.sclass) && prop.equals(ResourceType.swb_resourceClassName))
+                        if (obj.instanceOf(SWBModel.sclass)) //Removes website
+                        {
+                            SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + "/models/"+obj.getId());
+                        } else
+                        {
+                            SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + obj.getWorkPath());
+                        }
+
+                        if(obj.instanceOf(ResourceType.sclass))
                         {
                             try
                             {
-                                String clsname=obj.getProperty(ResourceType.swb_resourceClassName);
-                                if(clsname!=null)
+                                Class cls2=SWBPortal.getResourceMgr().createSWBResourceClass(obj.getProperty(ResourceType.swb_resourceClassName));
+                                ((SWBResource)cls2.newInstance()).uninstall((ResourceType)obj.createGenericInstance());
+                            }catch(Exception e){log.error(e);}
+                        }
+                        if(obj.instanceOf(Searchable.swb_Searchable))
+                        {
+                            SWBIndexer index=SWBPortal.getIndexMgr().getDefaultIndexer();
+                            if(index!=null)
+                            {
+                                index.removeSearchable(obj.getURI());
+                            }
+                        }
+                    }
+                } else if (prop instanceof SemanticProperty)
+                {
+                    //System.out.println("obj2:"+obj+" "+Resource.sclass+"="+Resource.sclass+" prop:"+prop+"="+Resource.swb_resourceSubType);
+                    if(obj.instanceOf(ResourceType.sclass) && prop.equals(ResourceType.swb_resourceClassName))
+                    {
+                        try
+                        {
+                            String clsname=obj.getProperty(ResourceType.swb_resourceClassName);
+                            if(clsname!=null)
+                            {
+                                Class cls2=SWBPortal.getResourceMgr().createSWBResourceClass(clsname);
+                                if(cls2!=null)
                                 {
-                                    Class cls2=SWBPortal.getResourceMgr().createSWBResourceClass(clsname);
-                                    if(cls2!=null)
+                                    SWBResource res=((SWBResource)SWBPortal.getResourceMgr().convertOldWBResource(cls2.newInstance()));
+                                    if(res!=null)
                                     {
-                                        SWBResource res=((SWBResource)SWBPortal.getResourceMgr().convertOldWBResource(cls2.newInstance()));
-                                        if(res!=null)
-                                        {
-                                            res.install((ResourceType)obj.createGenericInstance());
-                                        }
+                                        res.install((ResourceType)obj.createGenericInstance());
                                     }
                                 }
-                            }catch(Exception e){log.error(e);}
-                        }
-
-                        //System.out.println("obj2:"+obj+" "+Resource.sclass+"="+Resource.sclass+" prop:"+prop+"="+Resource.swb_resourceSubType);
-                        if(obj.instanceOf(ResourceType.sclass) && prop.equals(ResourceType.swb_resourceOWL))
-                        {
-                            try
-                            {
-                                SWBPortal.getResourceMgr().loadResourceTypeModel((ResourceType)obj.createGenericInstance());
-                                SWBPlatform.getSemanticMgr().loadBaseVocabulary();
-                            }catch(Exception e){log.error(e);}
-                        }
-
-                        if(obj.instanceOf(Resource.sclass) && prop.equals(Resource.swb_resourceSubType))
-                        {
-                            Resource res=(Resource)obj.createGenericInstance();
-                            if(res.getResourceType()==null)
-                            {
-                                ResourceSubType sub=res.getResourceSubType();
-                                //System.out.println("sub:"+sub);
-                                if(sub!=null)
-                                {
-                                    res.setResourceType(sub.getType());
-                                }
                             }
-                        }
-                        if(obj.instanceOf(Resource.sclass))
-                        {
-                            SWBResource res=SWBPortal.getResourceMgr().getResource(obj.getURI());
-                            //System.out.println("Instanceof SWBResource:"+res);
-                            try
-                            {
-                                if(res!=null)
-                                {
-                                    res.setResourceBase(res.getResourceBase());
-                                    SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(res.getResourceBase());
-                                }
-                            }catch(Exception e){log.error(e);}
-                        }
-                        if(obj.instanceOf(IPFilter.sclass)&& prop.equals(IPFilter.swb_ipFilterNumber))
-                        {
-                            WebSite site=SWBContext.getWebSite(obj.getModel().getName());
-                            if(site!=null)
-                            {
-                                //Limpia cache de filtros
-                                site.clearCache();
-                            }
-                        }
-                        if(obj.instanceOf(Template.sclass)&& prop.equals(Template.swb_active))
-                        {
-                            Template aux=(Template)obj.createGenericInstance();
-                            Template tpl=SWBPortal.getTemplateMgr().getTemplateImp(aux);
-                            if(tpl!=null)tpl.reload();
-                        }
-                        if(obj.getModel().isTraceable())updateObject(obj,usr);
-                    }else
-                    {
-                        //TODO: SemanticClass
+                        }catch(Exception e){log.error(e);}
                     }
+
+                    if(obj.instanceOf(Resource.sclass) && prop.equals(Resource.swb_resourceSubType))
+                    {
+                        Resource res=(Resource)obj.createGenericInstance();
+                        if(res.getResourceType()==null)
+                        {
+                            ResourceSubType sub=res.getResourceSubType();
+                            //System.out.println("sub:"+sub);
+                            if(sub!=null)
+                            {
+                                res.setResourceType(sub.getType());
+                            }
+                        }
+                    }
+                    if(obj.getModel().isTraceable())updateObject(obj,usr);
+                }else
+                {
+                    //TODO: SemanticClass
                 }
-            }finally
-            {
-                //no se envian a otras maquinas
+            }
+        }finally
+        {
+            //no se envian a otras maquinas
 //                if(!SWBPortal.isStandAlone())
 //                {
 //                    StringBuffer msg=new StringBuffer();
@@ -327,42 +241,9 @@ public class SWBServiceMgr implements SemanticObserver, SWBObserver {
 //                    msg.append(action);
 //                    SWBPortal.getMessageCenter().sendMessage(msg.toString());
 //                }
-            }
-        }else
-        {
-            try
-            {
-                //
-            }finally
-            {
-                if(!SWBPortal.isStandAlone())
-                {
-                    StringBuffer msg=new StringBuffer();
-                    msg.append("rdf");
-                    msg.append("|");
-                    msg.append(instanceid);
-                    msg.append("|");
-                    msg.append(obj.getURI());
-                    msg.append("|");
-                    if(prop!=null)
-                    {
-                        Statement stmt=(Statement)prop;
-                        Property p=stmt.getPredicate();
-                        if(p!=null)msg.append(p.getURI());
-                        else msg.append("_");
-                        msg.append("|");
-                        RDFNode n=stmt.getObject();
-                        if(n!=null)msg.append(SWBTSUtil.node2String(n.asNode()).replace("|", "!"));
-                        else msg.append("_");
-                    }
-                    else msg.append("_|_");
-                    msg.append("|");
-                    msg.append(action);
-                    SWBPortal.getMessageCenter().sendMessage(msg.toString());
-                }
-            }            
         }
     }
+    
     
     /**
      * Update object.
@@ -431,6 +312,7 @@ public class SWBServiceMgr implements SemanticObserver, SWBObserver {
     public void init() {
         log.event("Initializing SWBServiceMgr...");
         SWBPlatform.getSemanticMgr().registerObserver(this);
+        SWBPlatform.getSemanticMgr().registerTSObserver(this);
         if(!SWBPortal.isStandAlone())
         {
             instanceid=SWBPortal.getMessageCenter().getAddress()+"."+System.currentTimeMillis();
@@ -451,8 +333,8 @@ public class SWBServiceMgr implements SemanticObserver, SWBObserver {
         StringTokenizer st=new StringTokenizer(obj.toString(),"|");
         String key=st.nextToken();
         String date=st.nextToken();
-        String sid=st.nextToken();
-        if(!sid.equals(instanceid))
+        String sid=st.nextToken();        
+        //
         {
 //            if(key.equals("tri"))
 //            {
@@ -479,9 +361,121 @@ public class SWBServiceMgr implements SemanticObserver, SWBObserver {
                     node=node.replace("!", "|");
                 }
                 String action=st.nextToken();
-                
-                SWBPlatform.getSemanticMgr().processExternalChange(uri, puri, SWBTSUtil.string2Node(node,null), action);
+                Node n=SWBTSUtil.string2Node(node,null);
+                if(!sid.equals(instanceid))
+                {
+                    SWBPlatform.getSemanticMgr().processExternalChange(uri, puri, n, action);
+                }
             }
         }               
     }
+
+    @Override
+    public void notify(SemanticObject obj, Statement stmt, String action, boolean remote) 
+    {
+        if(!SWBPortal.isStandAlone() && !remote)
+        {
+            StringBuffer msg=new StringBuffer();
+            msg.append("rdf");
+            msg.append("|");
+            msg.append(instanceid);
+            msg.append("|");
+            msg.append(obj.getURI());
+            msg.append("|");
+            if(stmt!=null)
+            {
+                Property p=stmt.getPredicate();
+                if(p!=null)msg.append(p.getURI());
+                else msg.append("_");
+                msg.append("|");
+                RDFNode n=stmt.getObject();
+                if(n!=null)msg.append(SWBTSUtil.node2String(n.asNode()).replace("|", "!"));
+                else msg.append("_");
+            }
+            else msg.append("_|_");
+            msg.append("|");
+            msg.append(action);
+            SWBPortal.getMessageCenter().sendMessage(msg.toString());
+        }
+        processCacheService(obj, stmt, action);
+    }
+    
+    
+     /* (non-Javadoc)
+     * @see org.semanticwb.platform.SemanticObserver#notify(org.semanticwb.platform.SemanticObject, java.lang.Object, java.lang.String)
+     */
+    /**
+     * Notify.
+     * 
+     * @param uri the resource uri
+     * @param prop the property uri
+     * @param node the RDF node
+     * @param action the action
+     */
+    public void processCacheService(SemanticObject obj, Statement stmt, String action)            
+    {
+        log.trace("processCacheService: obj:" + obj + " stmt:" + stmt +" "+action);  
+        //System.out.println("processCacheService:"+uri+" puri:" + puri + " node:;" + node+" "+action);  
+        
+        if(obj!=null)
+        {            
+            Property prop=null;
+            if(stmt!=null)prop=stmt.getPredicate();
+
+            
+            if(obj.instanceOf(IPFilter.sclass) && prop!=null && prop.equals(IPFilter.swb_ipFilterNumber.getRDFProperty()))
+            {
+                WebSite site=SWBContext.getWebSite(obj.getModel().getName());
+                if(site!=null)
+                {
+                    site.clearCache();
+                }
+            }                
+            
+            
+            if(action.equals(SemanticObject.ACT_ADD))
+            {
+                if(prop!=null)
+                {
+                    if(obj.instanceOf(ResourceType.sclass) && prop.equals(ResourceType.swb_resourceOWL.getRDFProperty()))
+                    {
+                        try
+                        {
+                            SWBPortal.getResourceMgr().loadResourceTypeModel((ResourceType)obj.createGenericInstance());
+                            SWBPlatform.getSemanticMgr().loadBaseVocabulary();
+                        }catch(Exception e){log.error(e);}
+                    }
+
+                    if(obj.instanceOf(Resource.sclass) && prop.equals(Resource.swb_updated.getRDFProperty()))
+                    {
+                        SWBResource res=SWBPortal.getResourceMgr().getResource(obj.getURI());
+                        //System.out.println("Instanceof SWBResource:"+res);
+                        try
+                        {
+                            if(res!=null)
+                            {
+                                res.setResourceBase(res.getResourceBase());
+                                SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(res.getResourceBase());
+                            }
+                        }catch(Exception e){log.error(e);}
+                    }
+                    if(obj.instanceOf(Template.sclass)&& prop.equals(Template.swb_active.getRDFProperty()))
+                    {
+                        Template aux=(Template)obj.createGenericInstance();
+                        Template tpl=SWBPortal.getTemplateMgr().getTemplateImp(aux);
+                        if(tpl!=null)tpl.reload();
+                    }
+                }
+            }else if(action.equals(SemanticObject.ACT_REMOVE))
+            {
+                //Eliminar cache se resource
+                if(prop==null && obj.instanceOf(Resource.sclass))
+                {
+                    SWBPortal.getResourceMgr().removeResource(obj.getURI());
+                }
+                
+            }
+        }
+    }    
+    
 }
