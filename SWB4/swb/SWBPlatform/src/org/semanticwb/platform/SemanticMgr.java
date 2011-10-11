@@ -139,6 +139,10 @@ public class SemanticMgr implements SWBInstanceObject
     private SemanticVocabulary vocabulary;
     /** The m_observers. */
     private List<SemanticObserver> m_observers = null;
+    
+    private List<SemanticTSObserver> m_tsobservers = null;
+    
+    
     /** The codepkg. */
     private CodePackage codepkg = null;
 
@@ -212,7 +216,9 @@ public class SemanticMgr implements SWBInstanceObject
         m_bmodels = new HashMap();                    //Arreglo de RDFModel
         //m_schemas=new HashMap();
         m_observers = Collections.synchronizedList(new ArrayList());
+        m_tsobservers = Collections.synchronizedList(new ArrayList());
 
+        
         OntModelSpec modelSpec = getModelSpec();
 
         //Create Schema
@@ -893,6 +899,25 @@ public class SemanticMgr implements SWBInstanceObject
     public void removeObserver(SemanticObserver obs) {
         m_observers.remove(obs);
     }
+    
+    /**
+     * Register observer.
+     * 
+     * @param obs the obs
+     */
+    public void registerTSObserver(SemanticTSObserver obs) {
+        m_tsobservers.add(obs);
+    }
+
+    /**
+     * Removes the observer.
+     * 
+     * @param obs the obs
+     */
+    public void removeTSObserver(SemanticTSObserver obs) {
+        m_tsobservers.remove(obs);
+    }    
+    
 
     /**
      * Notify change.
@@ -939,7 +964,45 @@ public class SemanticMgr implements SWBInstanceObject
 
         }
     }
+    
+    
+    /**
+     * Notify change.
+     * 
+     * @param obj the SemanticObject
+     * @param stmt the Statement
+     * @param action the action
+     */
+    public void notifyTSChange(SemanticObject obj, Statement stmt, String action) 
+    {
+        notifyTSChange(obj, stmt, action,false);
+    }    
 
+    /**
+     * Notify change.
+     * 
+     * @param obj the SemanticObject
+     * @param stmt the Statement
+     * @param action the action
+     */
+    public void notifyTSChange(SemanticObject obj, Statement stmt, String action, boolean remote) 
+    {
+        log.trace("notifyChange: obj:" + obj + " stmt:" + stmt + " " + action);
+        if (obj!=null && obj.getURI() != null) 
+        {
+            Iterator it = m_tsobservers.iterator();
+            while (it.hasNext()) 
+            {
+                SemanticTSObserver obs = (SemanticTSObserver) it.next();
+                try {
+                    obs.notify(obj, stmt, action, remote);
+                } catch (Exception e) {
+                    log.error(e);
+                }
+            }
+        }
+    }    
+    
     /**
      * Notify external change.
      * 
@@ -953,24 +1016,28 @@ public class SemanticMgr implements SWBInstanceObject
         log.trace("processExternalChange: uri:" + uri + " puri:" + puri + " node:;" + node+" "+action);  
         //System.out.println("processExternalChange:"+uri+" puri:" + puri + " node:;" + node+" "+action);  
         SemanticObject obj=SemanticObject.createSemanticObject(uri);
-        Model model=obj.getModel().getRDFModel();
         if(obj!=null)
         {            
+            Model model=obj.getModel().getRDFModel();
             SemanticProperty prop=null;
+            Statement stmt=null;
             if(puri!=null)prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(puri);
             if(action.equals(SemanticObject.ACT_ADD))
             {
-                obj.addStatement(model.createStatement(obj.getRDFResource(), prop.getRDFProperty(), model.asRDFNode(node)), true);
+                stmt=model.createStatement(obj.getRDFResource(), prop.getRDFProperty(), model.asRDFNode(node));
+                obj.addStatement(stmt, true);
             }else if(action.equals(SemanticObject.ACT_REMOVE))
             {
                 if(puri!=null)
                 {
-                    obj.remove(model.createStatement(obj.getRDFResource(), prop.getRDFProperty(), model.asRDFNode(node)), true);
+                    stmt=model.createStatement(obj.getRDFResource(), prop.getRDFProperty(), model.asRDFNode(node));
+                    obj.remove(stmt, true);
                 }else
                 {
                     obj.remove(true);
                 }
             }
+            SWBPlatform.getSemanticMgr().notifyTSChange(obj, stmt, action, true);
         }
     }
 
