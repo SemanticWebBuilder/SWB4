@@ -1,30 +1,24 @@
 package org.semanticwb.remotetriplestore;
 
-import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.TransactionHandler;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.rdf.AbstractStore;
+import org.semanticwb.remotetriplestore.protocol.Command;
 import org.semanticwb.remotetriplestore.protocol.EOT;
 import org.semanticwb.remotetriplestore.protocol.OOK;
 import org.semanticwb.remotetriplestore.protocol.Response;
 import org.semanticwb.remotetriplestore.protocol.SWBRTSCmd;
 import org.semanticwb.remotetriplestore.protocol.TripleString;
-import org.semanticwb.triplestore.SWBTSModelMaker;
 import org.semanticwb.triplestore.SWBTSUtil;
-import org.semanticwb.triplestore.SWBTripleStore;
 
 /**
  *
@@ -47,24 +41,35 @@ public class SWBRTSConn implements Runnable
     {
         try
         {
-            ObjectInputStream objDataIn = new ObjectInputStream(sock.getInputStream());
-            SWBRTSCmd cmd = (SWBRTSCmd) objDataIn.readObject();
-            String[] params = null;
-           // System.out.println("SWBRTSConn: cmd "+cmd.cmd+" #"+cmd.paramNumber);
-            if (cmd.paramNumber > 0)
+//            while(true)
             {
-                params = new String[cmd.paramNumber];
-                for (int i = 0; i < cmd.paramNumber; i++)
+                ObjectInputStream objDataIn = new ObjectInputStream(sock.getInputStream());
+                SWBRTSCmd cmd = (SWBRTSCmd) objDataIn.readObject();
+                //System.out.println("Run:"+cmd+" "+sock);
+//                if(!cmd.cmd.equals(Command.CONN_CLOSE))
                 {
-                    params[i] = (String) objDataIn.readObject();
-                //    System.out.println("read param: "+params[i]);
+                    String[] params = null;
+                   //System.out.println("SWBRTSConn: cmd "+cmd.cmd+" #"+cmd.paramNumber);
+                    if (cmd.paramNumber > 0)
+                    {
+                        params = new String[cmd.paramNumber];
+                        for (int i = 0; i < cmd.paramNumber; i++)
+                        {
+                            params[i] = (String) objDataIn.readObject();
+                            //System.out.println("read param: "+params[i]);
+                        }
+                    }
+                    Object obj = objDataIn.readObject();
+                    if (!(obj instanceof EOT)) log.event("not EOT when spected");
+                    action(cmd, params);
+//                }else
+//                {
+                    objDataIn.close();
+                    sock.close();
+                    //System.out.println("sock close:"+sock);
+//                    break;
                 }
             }
-            Object obj = objDataIn.readObject();
-            if (!(obj instanceof EOT)) log.event("not EOT when spected");
-            action(cmd, params);
-            objDataIn.close();
-            sock.close();
 
         } catch (Exception e)
         {
@@ -87,12 +92,14 @@ public class SWBRTSConn implements Runnable
             }
             System.out.println();                
             */
+            
             ObjectOutputStream objDataOut = new ObjectOutputStream(sock.getOutputStream());
             AbstractStore store = SWBPlatform.getSemanticMgr().getSWBStore();
             String name;
             String subj;
             String prop;
             String obj;
+            String id;
             Response resp = new Response();
             Model model;
             switch (cmd.cmd)
@@ -121,14 +128,14 @@ public class SWBRTSConn implements Runnable
                     if(store.loadModel(name)!=null)
                     {
                         resp.data  = new OOK();
-                        SWBPlatform.getSemanticMgr().loadDBModels();
+                        //SWBPlatform.getSemanticMgr().loadDBModels();
                     }
                     objDataOut.writeObject(resp);
                     break;
                 case REMOVE_MODEL:
                     name=params[0];
                     store.removeModel(name);
-                    SWBPlatform.getSemanticMgr().loadDBModels();
+                    //SWBPlatform.getSemanticMgr().loadDBModels();
                     resp.data  = new OOK();
                     objDataOut.writeObject(resp);
                     break;
@@ -142,26 +149,26 @@ public class SWBRTSConn implements Runnable
                     break;
                 case GET_NS_PREFIX_MAP:
                     name = params[0];
-                    model=SWBPlatform.getSemanticMgr().getModel(name).getRDFModel();
+                    model=store.getModel(name);
                     resp.data=model.getNsPrefixMap();
                     objDataOut.writeObject(resp);
                     break;
                 case GET_NS_PREFIX_URI:
                     name = params[0];
-                    model=SWBPlatform.getSemanticMgr().getModel(name).getRDFModel();                    
+                    model=store.getModel(name);
                     resp.data=model.getNsPrefixURI(params[1]);
                     objDataOut.writeObject(resp);
                     break;
                 case SET_NS_PREFIX:
                     name = params[0];
-                    model=SWBPlatform.getSemanticMgr().getModel(name).getRDFModel();                    
+                    model=store.getModel(name);
                     model.setNsPrefix(params[1], params[2]);
                     resp.data=new OOK();
                     objDataOut.writeObject(resp);
                     break;
                 case REMOVE_NS_PREFIX:
                     name = params[0];
-                    model=SWBPlatform.getSemanticMgr().getModel(name).getRDFModel();                    
+                    model=store.getModel(name);
                     model.removeNsPrefix(params[1]);
                     resp.data=new OOK();
                     objDataOut.writeObject(resp);
@@ -171,7 +178,8 @@ public class SWBRTSConn implements Runnable
                     subj = params[1];
                     prop = params[2];
                     obj = params[3];
-                    doAdd(name, subj, prop, obj);
+                    id = params[4];
+                    doAdd(name, subj, prop, obj, id);
                     resp.data=new OOK();
                     objDataOut.writeObject(resp);
                     break;
@@ -180,13 +188,35 @@ public class SWBRTSConn implements Runnable
                     subj = params[1];
                     prop = params[2];
                     obj = params[3];
-                    doRemove(name, subj, prop, obj);
+                    id = params[4];
+                    doRemove(name, subj, prop, obj, id);
                     resp.data=new OOK();
                     objDataOut.writeObject(resp);
                     break;
+                case TRANS_BEGIN:
+                    name = params[0];
+                    id = params[1];                    
+                    begin(name, id);
+                    resp.data=new OOK();
+                    objDataOut.writeObject(resp);
+                    break;                    
+                case TRANS_ABORT:
+                    name = params[0];
+                    id = params[1];                    
+                    abort(name, id);
+                    resp.data=new OOK();
+                    objDataOut.writeObject(resp);
+                    break;                    
+                case TRANS_COMMINT:
+                    name = params[0];
+                    id = params[1];                    
+                    commint(name, id);
+                    resp.data=new OOK();
+                    objDataOut.writeObject(resp);
+                    break;                    
             }
             objDataOut.flush();
-            objDataOut.close();
+            //objDataOut.close();
         } catch (Exception e)
         {
             log.error(e);
@@ -196,8 +226,9 @@ public class SWBRTSConn implements Runnable
     private ArrayList<TripleString> getFind(String name, String subj, String prop, String obj)
     {
         ArrayList<TripleString> list = new ArrayList<TripleString> ();
-
-        Model model=SWBPlatform.getSemanticMgr().getModel(name).getRDFModel();
+        
+        AbstractStore store = SWBPlatform.getSemanticMgr().getSWBStore();
+        Model model=store.getModel(name);
 
         //System.out.println("getFind:"+subj+":"+prop+":"+obj);
         
@@ -213,16 +244,54 @@ public class SWBRTSConn implements Runnable
         }
         return list;
     }
-
-    private void doAdd(String name, String subj, String prop, String obj)
+    
+    private void begin(String name, String sid)
     {
-        Model model=SWBPlatform.getSemanticMgr().getModel(name).getRDFModel();
-        model.getGraph().add(new Triple(SWBTSUtil.string2Node(subj,null), SWBTSUtil.string2Node(prop,null), SWBTSUtil.string2Node(obj,null)));
+        //System.out.println("begin:"+name+" "+sid);
+        Long id=null;
+        if(sid!=null)id=Long.parseLong(sid);
+        AbstractStore store = SWBPlatform.getSemanticMgr().getSWBStore();
+        Model model=store.getModel(name);
+        RTransactionHandler trans=(RTransactionHandler)model.getGraph().getTransactionHandler();
+        trans.begin(id);
+    }
+    
+    private void commint(String name, String sid)
+    {
+        //System.out.println("commint:"+name+" "+sid);
+        Long id=null;
+        if(sid!=null)id=Long.parseLong(sid);
+        AbstractStore store = SWBPlatform.getSemanticMgr().getSWBStore();
+        Model model=store.getModel(name);
+        RTransactionHandler trans=(RTransactionHandler)model.getGraph().getTransactionHandler();
+        trans.commit(id);
+    }
+    
+    private void abort(String name, String sid)
+    {
+        Long id=null;
+        if(sid!=null)id=Long.parseLong(sid);
+        AbstractStore store = SWBPlatform.getSemanticMgr().getSWBStore();
+        Model model=store.getModel(name);
+        RTransactionHandler trans=(RTransactionHandler)model.getGraph().getTransactionHandler();
+        trans.abort(id);
     }
 
-    private void doRemove(String name, String subj, String prop, String obj)
+    private void doAdd(String name, String subj, String prop, String obj, String sid)
     {
-        Model model=SWBPlatform.getSemanticMgr().getModel(name).getRDFModel();
-        model.getGraph().delete(new Triple(SWBTSUtil.string2Node(subj,null), SWBTSUtil.string2Node(prop,null), SWBTSUtil.string2Node(obj,null)));
+        Long id=null;
+        if(sid!=null)id=Long.parseLong(sid);
+        AbstractStore store = SWBPlatform.getSemanticMgr().getSWBStore();
+        Model model=store.getModel(name);
+        ((RGraph)model.getGraph()).performAdd(new Triple(SWBTSUtil.string2Node(subj,null), SWBTSUtil.string2Node(prop,null), SWBTSUtil.string2Node(obj,null)),id);
+    }
+
+    private void doRemove(String name, String subj, String prop, String obj, String sid)
+    {
+        Long id=null;
+        if(sid!=null)id=Long.parseLong(sid);
+        AbstractStore store = SWBPlatform.getSemanticMgr().getSWBStore();
+        Model model=store.getModel(name);
+        ((RGraph)model.getGraph()).performDelete(new Triple(SWBTSUtil.string2Node(subj,null), SWBTSUtil.string2Node(prop,null), SWBTSUtil.string2Node(obj,null)),id);
     }
 }

@@ -1,5 +1,6 @@
 package org.semanticwb.remotetriplestore;
 
+import com.hp.hpl.jena.graph.TransactionHandler;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.graph.TripleMatch;
 import com.hp.hpl.jena.graph.impl.GraphBase;
@@ -26,6 +27,7 @@ class SWBRTSGraph extends GraphBase{
 
     private PrefixMapping pmap;
     //private BigdataTransactionHandler trans;
+    private SWBRTSTransactionHandler trans;
 
 
     public SWBRTSGraph(String name, SWBRTSThreadPool pool)
@@ -33,6 +35,9 @@ class SWBRTSGraph extends GraphBase{
         this.name=name;
         this.pool=pool;
         pmap=new SWBRTSPrefixMapping(this, pool);
+        trans=new SWBRTSTransactionHandler(this, pool);
+        //System.out.println("name:"+name+" "+getTransactionHandler().transactionsSupported());
+        
     }
 
     @Override
@@ -48,27 +53,25 @@ class SWBRTSGraph extends GraphBase{
     {
         try
         {
-
             String subj=SWBTSUtil.node2String(t.getSubject());
             String prop=SWBTSUtil.node2String(t.getPredicate());
             String obj=SWBTSUtil.node2String(t.getObject());
 
             try {
-
                 SWBRTSCmd cmd = new SWBRTSCmd();
                 cmd.cmd = Command.GRAPH_ADD;
-                cmd.paramNumber=4;
-                SWBRTSUtil util =  new SWBRTSUtil(pool.getAddress(), pool.getPort());
+                cmd.paramNumber=5;
+                SWBRTSUtil util =  SWBRTSUtil.getInstance(pool.getAddress(), pool.getPort());
                 util.setCommand(cmd);
-                String[] params = {getName(),subj,prop,obj};
+                String[] params = {getName(),subj,prop,obj,""+Thread.currentThread().getId()};
                 util.setParams(params);
                 Future<Response> future = pool.getPool().submit(util);
-                Response resp = future.get();
+                Response resp = future.get();                
+                //Response resp = util.call();
             } catch (Exception e)
             {
                 log.error(e);
             }
-
         } catch (Exception e2)
         {
             log.error(e2);
@@ -86,13 +89,14 @@ class SWBRTSGraph extends GraphBase{
 
             SWBRTSCmd cmd = new SWBRTSCmd();
             cmd.cmd = Command.GRAPH_REMOVE;
-            cmd.paramNumber=4;
-            SWBRTSUtil util =  new SWBRTSUtil(pool.getAddress(), pool.getPort());
+            cmd.paramNumber=5;
+            SWBRTSUtil util =  SWBRTSUtil.getInstance(pool.getAddress(), pool.getPort());
             util.setCommand(cmd);
-            String[] params = {getName(),subj,prop,obj};
+            String[] params = {getName(),subj,prop,obj,""+Thread.currentThread().getId()};
             util.setParams(params);
             Future<Response> future = pool.getPool().submit(util);
             Response resp = future.get();
+            //Response resp = util.call();
         } catch (Exception e)
         {
             log.error(e);
@@ -107,8 +111,10 @@ class SWBRTSGraph extends GraphBase{
     @Override
     public void close()
     {
+        //System.out.println("Close");
+        //new Exception().printStackTrace();
         //Thread.currentThread().dumpStack();
-        super.close();
+        //super.close();
     }
 
     @Override
@@ -116,5 +122,15 @@ class SWBRTSGraph extends GraphBase{
     {
         return pmap;
     }
+
+    @Override
+    public TransactionHandler getTransactionHandler() 
+    {
+        return trans;
+    }
+    
+    
+    
+    
 
 }

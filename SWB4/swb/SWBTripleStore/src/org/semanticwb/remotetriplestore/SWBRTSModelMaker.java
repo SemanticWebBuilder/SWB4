@@ -4,6 +4,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.impl.ModelCom;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.concurrent.Future;
 import org.semanticwb.Logger;
@@ -21,6 +22,7 @@ public class SWBRTSModelMaker {
 
     private static Logger log=SWBUtils.getLogger(SWBRTSModelMaker.class);
     private SWBRTSThreadPool pool;
+    HashMap<String,Model> models=new HashMap();
     
 
     public SWBRTSModelMaker()
@@ -46,10 +48,11 @@ public class SWBRTSModelMaker {
             SWBRTSCmd cmd = new SWBRTSCmd();
             cmd.cmd = Command.LIST_MODEL_NAMES;
             cmd.paramNumber=0;
-            SWBRTSUtil util =  new SWBRTSUtil(pool.getAddress(), pool.getPort());
+            SWBRTSUtil util =  SWBRTSUtil.getInstance(pool.getAddress(), pool.getPort());
             util.setCommand(cmd);
             Future<Response> future = pool.getPool().submit(util);
             Response resp = future.get();
+            //Response resp = util.call();
             ArrayList<String> list = (ArrayList<String>) resp.data;
             ret = list.iterator();
         } catch (Exception e)
@@ -62,25 +65,30 @@ public class SWBRTSModelMaker {
 
     public Model getModel(String name)
     {
-        Model ret = null;
-        try {
-            SWBRTSCmd cmd = new SWBRTSCmd();
-            cmd.cmd = Command.GET_MODEL;
-            cmd.paramNumber=1;
-            SWBRTSUtil util =  new SWBRTSUtil(pool.getAddress(), pool.getPort());
-            util.setCommand(cmd);
-            String[] params = {name};
-            util.setParams(params);
-            Future<Response> future = pool.getPool().submit(util);
-            Response resp = future.get();
-            if (null!=resp.data)
-            {
-                ret = new ModelCom(new SWBRTSGraph(name, pool));
-            }
-            
-        } catch (Exception e)
+        Model ret=models.get(name);
+        if(ret==null)
         {
-            log.error(e);
+            try {
+                SWBRTSCmd cmd = new SWBRTSCmd();
+                cmd.cmd = Command.GET_MODEL;
+                cmd.paramNumber=1;
+                SWBRTSUtil util =  SWBRTSUtil.getInstance(pool.getAddress(), pool.getPort());
+                util.setCommand(cmd);
+                String[] params = {name};
+                util.setParams(params);
+                Future<Response> future = pool.getPool().submit(util);
+                Response resp = future.get();
+                //Response resp = util.call();
+                if (null!=resp.data)
+                {
+                    ret = new ModelCom(new SWBRTSGraph(name, pool));
+                }
+
+            } catch (Exception e)
+            {
+                log.error(e);
+            }
+            models.put(name, ret);
         }
         return ret;
     }
@@ -95,12 +103,13 @@ public class SWBRTSModelMaker {
             SWBRTSCmd cmd = new SWBRTSCmd();
             cmd.cmd = Command.CREATE_MODEL;
             cmd.paramNumber=1;
-            SWBRTSUtil util =  new SWBRTSUtil(pool.getAddress(), pool.getPort());
+            SWBRTSUtil util =  SWBRTSUtil.getInstance(pool.getAddress(), pool.getPort());
             util.setCommand(cmd);
             String[] params = {name};
             util.setParams(params);
             Future<Response> future = pool.getPool().submit(util);
             Response resp = future.get();
+            //Response resp = util.call();
             if (null!=resp.data)
             {
                 model = new ModelCom(new SWBRTSGraph(name, pool));
@@ -111,6 +120,7 @@ public class SWBRTSModelMaker {
             log.error(e);
         }
         }
+        models.put(name, model);
         return model;
     }
 
@@ -120,16 +130,18 @@ public class SWBRTSModelMaker {
             SWBRTSCmd cmd = new SWBRTSCmd();
             cmd.cmd = Command.REMOVE_MODEL;
             cmd.paramNumber=1;
-            SWBRTSUtil util =  new SWBRTSUtil(pool.getAddress(), pool.getPort());
+            SWBRTSUtil util =  SWBRTSUtil.getInstance(pool.getAddress(), pool.getPort());
             util.setCommand(cmd);
             String[] params = {name};
             util.setParams(params);
             Future<Response> future = pool.getPool().submit(util);
             Response resp = future.get();
+            //Response resp = util.call();
         } catch (Exception e)
         {
             log.error(e);
         }
+        models.remove(name);
     }
 
    

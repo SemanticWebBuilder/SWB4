@@ -49,19 +49,20 @@ class SWBRTSIterator implements ExtendedIterator<Triple>
         String subj=SWBTSUtil.node2String(tm.getMatchSubject());
         String prop=SWBTSUtil.node2String(tm.getMatchPredicate());
         String obj=SWBTSUtil.node2String(tm.getMatchObject());        
-    //    System.out.println("subj:"+subj+" prop:"+prop+" obj:"+obj);
+        //System.out.println("subj:"+subj+" prop:"+prop+" obj:"+obj);
 
         try {
 
             SWBRTSCmd cmd = new SWBRTSCmd();
             cmd.cmd = Command.GRAPH_BASE_FIND;
             cmd.paramNumber=4;
-            SWBRTSUtil util =  new SWBRTSUtil(pool.getAddress(), pool.getPort());
+            SWBRTSUtil util =  SWBRTSUtil.getInstance(pool.getAddress(), pool.getPort());
             util.setCommand(cmd);
             String[] params = {graph.getName(),subj,prop,obj};
             util.setParams(params);
             Future<Response> future = pool.getPool().submit(util);
             Response resp = future.get();
+            //Response resp = util.call();
             ArrayList<TripleString> list = (ArrayList<TripleString>) resp.data;
             //log.debug(""+list);
             iterData = list.iterator();
