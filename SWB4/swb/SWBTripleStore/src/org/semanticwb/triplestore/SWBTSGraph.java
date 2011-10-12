@@ -16,12 +16,13 @@ import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.remotetriplestore.RGraph;
 
 /**
  *
  * @author jei
  */
-public class SWBTSGraph extends GraphBase
+public class SWBTSGraph extends GraphBase implements RGraph
 {
     private static Logger log = SWBUtils.getLogger(SWBTSGraph.class);
 
@@ -48,6 +49,11 @@ public class SWBTSGraph extends GraphBase
 
     @Override
     public void performAdd(Triple t)
+    {
+        performAdd(t,null);
+    }    
+
+    public void performAdd(Triple t, Long id)
     {
         try
         {
@@ -79,6 +85,9 @@ public class SWBTSGraph extends GraphBase
                 sext+="|obj|"+obj.length()+"|"+obj;
                 obj="lgo|"+hobj;
             }
+            
+            //System.out.println("performAdd:"+subj+" "+prop+" "+obj);
+            //new Exception().printStackTrace();
 
             if(sext.length()==0)
             {
@@ -108,6 +117,11 @@ public class SWBTSGraph extends GraphBase
 
     @Override
     public void performDelete(Triple t)
+    {
+        performDelete(t,null);
+    }    
+
+    public void performDelete(Triple t, Long id)
     {
         try
         {
