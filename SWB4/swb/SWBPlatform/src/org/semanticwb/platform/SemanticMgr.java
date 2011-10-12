@@ -987,7 +987,8 @@ public class SemanticMgr implements SWBInstanceObject
      */
     public void notifyTSChange(SemanticObject obj, Statement stmt, String action, boolean remote) 
     {
-        log.trace("notifyChange: obj:" + obj + " stmt:" + stmt + " " + action);
+        //System.out.println("notifyTSChange: obj:" + obj + " stmt:" + stmt + " " + action);
+        log.trace("notifyTSChange: obj:" + obj + " stmt:" + stmt + " " + action);
         if (obj!=null && obj.getURI() != null) 
         {
             Iterator it = m_tsobservers.iterator();
