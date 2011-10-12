@@ -882,7 +882,7 @@ public class WebPage extends WebPageBase
             if(recRes.isActive() && !recRes.isDeleted())
             {
                 Date ts = recRes.getUpdated();
-                if (auxt == null || auxt.before(ts))
+                if (ts!=null && (auxt == null || auxt.before(ts)))
                 {
                     auxt = ts;
                     ret=recRes;
@@ -909,10 +909,12 @@ public class WebPage extends WebPageBase
             }
             if(format==null)
             {
-                ret = SWBUtils.TEXT.getStrDate(resource.getUpdated(), lang);
+                Date d=resource.getUpdated();
+                if(d!=null)ret = SWBUtils.TEXT.getStrDate(d, lang);
             }else
             {
-                ret = SWBUtils.TEXT.getStrDate(resource.getUpdated(), lang, format);
+                Date d=resource.getUpdated();
+                if(d!=null)ret = SWBUtils.TEXT.getStrDate(d, lang, format);
             }
         }
         return ret;
