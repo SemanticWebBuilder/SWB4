@@ -15,5 +15,8 @@ public enum Command {
     SET_NS_PREFIX,
     REMOVE_NS_PREFIX,
     GRAPH_ADD,
-    GRAPH_REMOVE
+    GRAPH_REMOVE,
+    TRANS_BEGIN,
+    TRANS_COMMINT,
+    TRANS_ABORT
 }
