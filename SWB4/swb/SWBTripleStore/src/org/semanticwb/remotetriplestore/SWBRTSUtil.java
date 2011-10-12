@@ -7,6 +7,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.LinkedList;
 import java.util.concurrent.Callable;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -25,17 +26,46 @@ class SWBRTSUtil implements Callable<Response> {
     private InputStream in_connect;
     private SWBRTSCmd command;
     private String[] params=null;
+    
+    
+    public static LinkedList<SWBRTSUtil> list=new LinkedList();
+    
+    public static synchronized SWBRTSUtil getInstance(final InetAddress byName, final int port)
+    {
+//        System.out.println("getInstance:"+list.size());
+        SWBRTSUtil ret=null;
+//        if(!list.isEmpty())ret=list.getFirst();
+//        if(ret==null || !ret.isAlive())
+//        {
+            ret=new SWBRTSUtil(byName, port);   
+//        }
+//        new Thread()
+//        {
+//            @Override
+//            public void run() {
+//                list.add(new SWBRTSUtil(byName, port));
+//            }            
+//        }.start();
+        return ret;        
+    }
+    
 
     SWBRTSUtil(InetAddress byName, int port)
     {
         try
         {
             sock = new Socket(byName, port);
+            sock.setKeepAlive(true);
             os_connect = sock.getOutputStream();
             in_connect = sock.getInputStream();
         }catch (IOException ioe){
             log.error("Can't connect to SWBTS Server",ioe);
         }
+    }
+    
+    public boolean isAlive()
+    {
+        return !sock.isClosed();
     }
 
     public void setCommand(SWBRTSCmd command)
@@ -45,6 +75,7 @@ class SWBRTSUtil implements Callable<Response> {
 
     public Response call() throws Exception
     {
+        //System.out.println("Call:"+sock);
         ObjectOutputStream outData = new ObjectOutputStream(os_connect);
         outData.writeObject(command);
         //System.out.println("SWBRTSUtil: cmd "+command.cmd+" #"+command.paramNumber);
@@ -53,12 +84,12 @@ class SWBRTSUtil implements Callable<Response> {
             for (int i=0; i<params.length; i++)
             {
                 outData.writeObject(params[i]);
-             // System.out.println("wrote param: "+params[i]);
+                //System.out.println("wrote param: "+params[i]);
             }
             
         }
         outData.writeObject(new EOT());
-       // System.out.println("wrote EOT");
+        //System.out.println("wrote EOT");
         outData.flush();
         ObjectInputStream inData = new ObjectInputStream(in_connect);
         Response resp = (Response)inData.readObject();
