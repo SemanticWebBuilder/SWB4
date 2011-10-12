@@ -787,14 +787,14 @@ public class SemanticObject
     
     private void remove(Property prop)
     {
-        //if(!m_virtual)m_res.removeAll(prop);
+        if(!m_virtual)m_res.removeAll(prop);
         Object stmts[]=getProps().toArray();
         for(int x=0;x<stmts.length;x++)
         {
             Statement statement=(Statement)stmts[x];
             if(statement.getPredicate().equals(prop))
             {
-                remove(statement);
+                remove(statement,false,false);
             }
         }
         m_cachepropsrel.remove(prop.getURI());
@@ -802,10 +802,15 @@ public class SemanticObject
     
     private boolean remove(Statement stmt)
     {
-        return remove(stmt,false);
+        return remove(stmt,false,true);
     }
     
     protected boolean remove(Statement stmt, boolean external)
+    {
+        return remove(stmt, external, true);
+    }   
+    
+    protected boolean remove(Statement stmt, boolean external, boolean updateDB)
     {
         //System.out.println("remove:"+stmt+" "+external);
         boolean ret=false;
@@ -827,7 +832,7 @@ public class SemanticObject
         
         if(ret)
         {
-            if(!m_virtual && !external)
+            if(!m_virtual && !external && updateDB)
             {
                 m_model.getRDFModel().remove(stmt);                
                 //Notify external.
