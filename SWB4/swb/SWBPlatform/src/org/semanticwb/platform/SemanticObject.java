@@ -774,8 +774,7 @@ public class SemanticObject
     
     protected void remove(boolean external)
     {
-        //System.out.println("remove:"+external);
-        
+        //System.out.println("remove:"+external);        
         if(!m_virtual && !external)
         {
             getModel().getRDFModel().removeAll(getRDFResource(),null,null);
@@ -787,6 +786,7 @@ public class SemanticObject
     
     private void remove(Property prop)
     {
+        //System.out.println("remove:"+prop);
         if(!m_virtual)m_res.removeAll(prop);
         Object stmts[]=getProps().toArray();
         for(int x=0;x<stmts.length;x++)
@@ -802,17 +802,19 @@ public class SemanticObject
     
     private boolean remove(Statement stmt)
     {
+        //System.out.println("remove:"+stmt);
         return remove(stmt,false,true);
     }
     
     protected boolean remove(Statement stmt, boolean external)
     {
+        //System.out.println("remove:"+stmt+" "+external);
         return remove(stmt, external, true);
     }   
     
     protected boolean remove(Statement stmt, boolean external, boolean updateDB)
     {
-        //System.out.println("remove:"+stmt+" "+external);
+        //System.out.println("remove:"+stmt+" "+external+" "+updateDB);
         boolean ret=false;
         if(external)
         {
@@ -1702,7 +1704,7 @@ public class SemanticObject
      */
     private Object externalInvokerSet(SemanticProperty prop, Object... values)
     {
-//        System.out.println("externalInvokerSet:"+prop+" "+values);
+        //System.out.println("externalInvokerSet:"+prop+" "+values);
         Object ret = null;
         if (!m_virtual)
         {
@@ -1718,7 +1720,7 @@ public class SemanticObject
                     name = prop.getName();
                 }
                 name = "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
-//                System.out.println("name:"+name);
+                //System.out.println("name:"+name);
                 try
                 {
                     Class types[]=null;
@@ -1753,7 +1755,7 @@ public class SemanticObject
                         if(o==null)types[1]=String.class;
                         else types[1]=o.getClass();
                     }
-//                    System.out.println("getMethod:"+name+" "+types);
+                    //System.out.println("getMethod:"+name+" "+types);
                     method = cls.getMethod(name,types);
                     extSetMethods.put(cls.getName()+"-"+prop.getURI()+"-"+values.length, method);
                 }
