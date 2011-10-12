@@ -764,6 +764,16 @@ public class SemanticObject
         return ret.iterator();
     }
     
+    public void printStatements()
+    {
+        System.out.println("printStatements");
+        Iterator<Statement> it=getProps().iterator();
+        while (it.hasNext()) {
+            Statement statement = it.next();
+            System.out.println(statement);
+        }
+    }
+    
     private Statement getProperty(Property prop)
     {
         Iterator<Statement> it=listProperties(prop);
@@ -778,23 +788,28 @@ public class SemanticObject
         if(!m_virtual && !external)
         {
             getModel().getRDFModel().removeAll(getRDFResource(),null,null);
-            //Notify
-            SWBPlatform.getSemanticMgr().notifyChange(this, null, "rdf", ACT_REMOVE);
         }
         removeCache(getRDFResource().getURI());
+        
+        if(!m_virtual && !external)
+        {
+            //Notify
+            SWBPlatform.getSemanticMgr().notifyTSChange(this, null, ACT_REMOVE);
+        }
+        
     }
     
     private void remove(Property prop)
     {
         //System.out.println("remove:"+prop);
-        if(!m_virtual)m_res.removeAll(prop);
+        //if(!m_virtual)m_res.removeAll(prop);
         Object stmts[]=getProps().toArray();
         for(int x=0;x<stmts.length;x++)
         {
             Statement statement=(Statement)stmts[x];
             if(statement.getPredicate().equals(prop))
             {
-                remove(statement,false,false);
+                remove(statement);
             }
         }
         m_cachepropsrel.remove(prop.getURI());
@@ -803,16 +818,10 @@ public class SemanticObject
     private boolean remove(Statement stmt)
     {
         //System.out.println("remove:"+stmt);
-        return remove(stmt,false,true);
+        return remove(stmt,false);
     }
     
     protected boolean remove(Statement stmt, boolean external)
-    {
-        //System.out.println("remove:"+stmt+" "+external);
-        return remove(stmt, external, true);
-    }   
-    
-    protected boolean remove(Statement stmt, boolean external, boolean updateDB)
     {
         //System.out.println("remove:"+stmt+" "+external+" "+updateDB);
         boolean ret=false;
@@ -834,11 +843,11 @@ public class SemanticObject
         
         if(ret)
         {
-            if(!m_virtual && !external && updateDB)
+            if(!m_virtual && !external)
             {
                 m_model.getRDFModel().remove(stmt);                
                 //Notify external.
-                SWBPlatform.getSemanticMgr().notifyChange(this, stmt, "rdf", ACT_REMOVE);
+                SWBPlatform.getSemanticMgr().notifyTSChange(this, stmt, ACT_REMOVE);
             }
                 
             //Eliminar cache inversos
@@ -922,9 +931,13 @@ public class SemanticObject
             Model m=m_model.getRDFModel();
             m.add(stmt);
             //Notify
-            SWBPlatform.getSemanticMgr().notifyChange(this, stmt, "rdf", ACT_ADD);            
         }
         if(!contains)getProps().add(stmt);
+        
+        if(!m_virtual && !external)
+        {
+            SWBPlatform.getSemanticMgr().notifyTSChange(this, stmt, ACT_ADD);            
+        }
         
         //Agrega inversas
         RDFNode node=stmt.getObject();
