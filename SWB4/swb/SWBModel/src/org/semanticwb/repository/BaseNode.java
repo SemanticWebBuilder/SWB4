@@ -1605,7 +1605,8 @@ public class BaseNode extends BaseNodeBase
             SemanticProperty property = Versionable.jcr_versionHistory;
             String path = this.getPath() + "/" + property.getPrefix() + ":" + property.getName();
             BaseNode historyNode = addNodeToProperty(property, VersionHistory.nt_VersionHistory, "jcr:versionHistory", path);
-            historyNode.setPropertyInternal(Referenceable.jcr_uuid, UUID.randomUUID().toString());
+            String uuid=UUID.randomUUID().toString();            
+            historyNode.setPropertyInternal(Referenceable.jcr_uuid, uuid);
             addRootNodeToHistory(historyNode);
         }
     }
