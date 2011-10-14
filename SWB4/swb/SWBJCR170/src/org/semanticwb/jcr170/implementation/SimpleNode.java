@@ -1716,7 +1716,17 @@ public class SimpleNode implements Node
                     {
                         if (!"http://www.w3.org/1999/02/22-rdf-syntax-ns#type".equalsIgnoreCase(node.getUri(prop.getName())))
                         {
-                            this.setProperty(prop.getName(), prop.getValues());
+                            String urins = semanticProp.getURI();
+                            if (urins.indexOf("#") != -1)
+                            {
+                                int pos = urins.indexOf("#");
+                                urins = urins.substring(0, pos);
+                            }
+                            boolean isInternal = node.isInternal(semanticProp);
+                            if (!("http://www.jcp.org/jcr/1.0".equals(urins) || isInternal))
+                            {
+                                this.setProperty(prop.getName(), prop.getValues());
+                            }
                         }
                     }
                     catch (Exception e)
