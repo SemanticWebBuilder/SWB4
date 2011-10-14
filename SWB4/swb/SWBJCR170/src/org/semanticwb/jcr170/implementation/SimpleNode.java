@@ -319,6 +319,7 @@ public class SimpleNode implements Node
                         addProperty(prop, node, false, clazz, true);
                     }
                 }
+
                 catch (Exception e)
                 {
                     log.debug(e);
@@ -327,16 +328,23 @@ public class SimpleNode implements Node
         }
         if (node.isVersionable())
         {
-            if (versionHistory == null)
+            try
             {
-                try
+                if (versionHistory == null && !node.getHistoryNode().getURI().equals(node.getSemanticObject().getURI()))
                 {
-                    versionHistory = new VersionHistoryImp(node.getHistoryNode(), session, this);
+                    try
+                    {                        
+                        versionHistory = new VersionHistoryImp(node.getHistoryNode(), session, this);
+                    }
+                    catch (SWBException e)
+                    {
+                        log.error(e);
+                    }
                 }
-                catch (SWBException e)
-                {
-                    log.error(e);
-                }
+            }
+            catch (Exception e)
+            {
+                log.error(e);
             }
         }
 
@@ -981,75 +989,88 @@ public class SimpleNode implements Node
         }
         for (PropertyImp prop : this.properties.values())
         {
-            if (prop.isNew() || prop.isModified())
+            if (!"http://www.w3.org/1999/02/22-rdf-syntax-ns#type".equalsIgnoreCase(node.getUri(prop.getName())))
             {
-                if (node.existsProperty(prop.getName(), prop.getSemanticClass()))
+                if (prop.isNew() || prop.isModified())
                 {
-                    SemanticProperty semanticProperty = node.getSemanticProperty(prop.getName(), prop.getSemanticClass());
-                    if (semanticProperty.isDataTypeProperty())
+                    if (node.existsProperty(prop.getName(), prop.getSemanticClass()))
                     {
-                        if (semanticProperty.isBinary())
+                        SemanticProperty semanticProperty = node.getSemanticProperty(prop.getName(), prop.getSemanticClass());
+                        if (semanticProperty.isDataTypeProperty())
                         {
-                            node.setProperty(semanticProperty, prop.getStream());
+                            if (semanticProperty.isBinary())
+                            {
+                                node.setProperty(semanticProperty, prop.getStream());
+                            }
+                            else
+                            {
+                                node.setProperty(semanticProperty, prop.getString());
+                            }
                         }
                         else
                         {
+                            String urins=semanticProperty.getURI();
+                            if(urins.indexOf("#")!=-1)
+                            {
+                                int pos=urins.indexOf("#");
+                                urins=urins.substring(0,pos);
+                            }
+                            boolean isInternal=node.isInternal(semanticProperty);
+                            if (!("http://www.jcp.org/jcr/1.0".equals(urins) || isInternal))
+                            {
+                                for (Value value : prop.getValues())
+                                {
+                                    if (value.getType() == PropertyType.REFERENCE)
+                                    {
+                                        ValueImp _value = (ValueImp) value;
+                                        Object obvalue = _value.value;
+                                        if (obvalue instanceof SimpleNode)
+                                        {
+                                            SimpleNode simpleNode = (SimpleNode) obvalue;
+                                            node.getSemanticObject().setObjectProperty(semanticProperty, simpleNode.node.getSemanticObject());
+                                        }
+                                    }
+
+                                }
+                            }
+
+                        }
+                    }
+                    else
+                    {
+
+                        log.event("Registring the property " + prop.getName() + " for the class " + prop.getSemanticClass().getURI() + "");
+                        if (prop.getDefinition().getRequiredType() == PropertyType.REFERENCE)
+                        {
+                            String type = BaseNode.nt_BaseNode.getURI();
+                            SemanticProperty semanticProperty = node.registerCustomProperty(prop.getName(), type, prop.getSemanticClass());
+                            for (Value value : prop.getValues())
+                            {
+                                if (value.getType() == PropertyType.REFERENCE)
+                                {
+                                    ValueImp _value = (ValueImp) value;
+                                    Object obvalue = _value.value;
+                                    if (obvalue instanceof SimpleNode)
+                                    {
+                                        SimpleNode simpleNode = (SimpleNode) obvalue;
+                                        node.getSemanticObject().setObjectProperty(semanticProperty, simpleNode.node.getSemanticObject());
+                                    }
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            String type = SemanticVocabulary.XMLS_STRING;
+                            SemanticProperty semanticProperty = node.registerCustomProperty(prop.getName(), type, prop.getSemanticClass());
                             node.setProperty(semanticProperty, prop.getString());
                         }
-                    }
-                    else
-                    {
-                        for (Value value : prop.getValues())
-                        {
-                            if (value.getType() == PropertyType.REFERENCE)
-                            {
-                                ValueImp _value = (ValueImp) value;
-                                Object obvalue = _value.value;
-                                if (obvalue instanceof SimpleNode)
-                                {
-                                    SimpleNode simpleNode = (SimpleNode) obvalue;
-                                    node.getSemanticObject().setObjectProperty(semanticProperty, simpleNode.node.getSemanticObject());
-                                }
-                            }
 
-                        }
 
                     }
+                    prop.setModified(false);
+                    prop.setNew(false);
                 }
-                else
-                {
-
-                    log.event("Registring the property " + prop.getName() + " for the class " + prop.getSemanticClass().getURI() + "");
-                    if (prop.getDefinition().getRequiredType() == PropertyType.REFERENCE)
-                    {
-                        String type = BaseNode.nt_BaseNode.getURI();
-                        SemanticProperty semanticProperty = node.registerCustomProperty(prop.getName(), type, prop.getSemanticClass());
-                        for (Value value : prop.getValues())
-                        {
-                            if (value.getType() == PropertyType.REFERENCE)
-                            {
-                                ValueImp _value = (ValueImp) value;
-                                Object obvalue = _value.value;
-                                if (obvalue instanceof SimpleNode)
-                                {
-                                    SimpleNode simpleNode = (SimpleNode) obvalue;
-                                    node.getSemanticObject().setObjectProperty(semanticProperty, simpleNode.node.getSemanticObject());
-                                }
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        String type = SemanticVocabulary.XMLS_STRING;
-                        SemanticProperty semanticProperty = node.registerCustomProperty(prop.getName(), type, prop.getSemanticClass());
-                        node.setProperty(semanticProperty, prop.getString());
-                    }
-
-
-                }
-                prop.setModified(false);
-                prop.setNew(false);
             }
         }
         modified = false;
@@ -1582,7 +1603,7 @@ public class SimpleNode implements Node
             }
             catch (SWBException e)
             {
-                throw new NoSuchNodeTypeException("The node type " + primaryNodeTypeName + " was not found");
+                throw new NoSuchNodeTypeException("The node type " + primaryNodeTypeName + " was not found", e);
             }
 
             try
@@ -1729,7 +1750,7 @@ public class SimpleNode implements Node
 
     private String getName(SemanticProperty prop)
     {
-        if(prop.getPrefix()!=null)
+        if (prop.getPrefix() != null)
         {
             return prop.getPrefix() + ":" + prop.getName();
         }
