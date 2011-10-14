@@ -319,7 +319,6 @@ public class SimpleNode implements Node
                         addProperty(prop, node, false, clazz, true);
                     }
                 }
-
                 catch (Exception e)
                 {
                     log.debug(e);
@@ -333,7 +332,7 @@ public class SimpleNode implements Node
                 if (versionHistory == null && !node.getHistoryNode().getURI().equals(node.getSemanticObject().getURI()))
                 {
                     try
-                    {                        
+                    {
                         versionHistory = new VersionHistoryImp(node.getHistoryNode(), session, this);
                     }
                     catch (SWBException e)
@@ -1009,13 +1008,13 @@ public class SimpleNode implements Node
                         }
                         else
                         {
-                            String urins=semanticProperty.getURI();
-                            if(urins.indexOf("#")!=-1)
+                            String urins = semanticProperty.getURI();
+                            if (urins.indexOf("#") != -1)
                             {
-                                int pos=urins.indexOf("#");
-                                urins=urins.substring(0,pos);
+                                int pos = urins.indexOf("#");
+                                urins = urins.substring(0, pos);
                             }
-                            boolean isInternal=node.isInternal(semanticProperty);
+                            boolean isInternal = node.isInternal(semanticProperty);
                             if (!("http://www.jcp.org/jcr/1.0".equals(urins) || isInternal))
                             {
                                 for (Value value : prop.getValues())
@@ -1713,7 +1712,18 @@ public class SimpleNode implements Node
                 if (this.existsProperty(prop.getName()) && !node.isInternal(semanticProp) && !prop.getDefinition().isProtected())
                 {
                     log.trace("restoring property " + prop.getName());
-                    this.setProperty(prop.getName(), prop.getValues());
+                    try
+                    {
+                        if (!"http://www.w3.org/1999/02/22-rdf-syntax-ns#type".equalsIgnoreCase(node.getUri(prop.getName())))
+                        {
+                            this.setProperty(prop.getName(), prop.getValues());
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        log.error(e);
+
+                    }
                 }
             }
             if (removeExisting)
