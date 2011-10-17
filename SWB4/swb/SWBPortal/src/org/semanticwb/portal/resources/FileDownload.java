@@ -67,7 +67,6 @@ public class FileDownload extends GenericAdmResource {
                        SWBParamRequest reqParams) throws SWBResourceException, java.io.IOException {
 
         Resource base = this.getResourceBase();
-        System.out.println("Ruta:\n" + SWBPortal.getWorkPath() + base.getWorkPath());
         try {
             String fileName = base.getAttribute("fileName", "").trim();
             if (reqParams.getAction() == null || !reqParams.getAction().equals("download")) {
@@ -102,12 +101,10 @@ public class FileDownload extends GenericAdmResource {
                     el.setAttribute("tArchitecture", architecture);
                     el.setAttribute("textension", ext);
                     dom.appendChild(el);
-                    System.out.println("DOM: " + SWBUtils.XML.domToXml(dom));
                     /** Por ahora **/
                     if (tpl == null) {
                         try {
                             tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/FileDownLoad/WBFileDownload.xslt"));
-                            System.out.println("template por defecto: " + tpl);
                         }  catch (Exception e) {
                             log.error("Error while loading default resource template: " + base.getId(), e);
                         }
