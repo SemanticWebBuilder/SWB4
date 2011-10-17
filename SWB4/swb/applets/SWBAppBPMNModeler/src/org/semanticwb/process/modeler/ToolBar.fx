@@ -189,6 +189,7 @@ public class ToolBar extends CustomNode
     public function storeProcess(): Void
     {
         var process=getProcess();
+        
         var processString = "JSONSTART{process}JSONEND";
 
         var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>updateModel</cmd><json>{WBXMLParser.encode(processString,"UTF8")}</json></req>";
