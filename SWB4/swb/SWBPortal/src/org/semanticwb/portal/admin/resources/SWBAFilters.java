@@ -1518,7 +1518,11 @@ public class SWBAFilters extends SWBATree {
     public void addHerarquicalNode(User user, HerarquicalNode node, SemanticObject obj, Element ele, boolean addChilds)
     {
         addChilds=true;
-        SemanticClass cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(node.getHClass().getURI());
+        SemanticClass cls=null;
+        if(node.getHClass()!=null)
+        {
+            cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(node.getHClass().getURI());
+        }
         String pf=node.getPropertyFilter();
 
         Element jobj = addNode("node", node.getURI(), node.getDisplayTitle(user.getLanguage()), ele);
@@ -1526,7 +1530,7 @@ public class SWBAFilters extends SWBATree {
         jobj.setAttribute("icon", node.getIconClass());
         //jobj.setAttribute("icon", "homev");
 
-        if(cls.isSubClass(FilterableNode.swb_FilterableNode))
+        if(cls!=null && cls.isSubClass(FilterableNode.swb_FilterableNode))
         {
             Iterator<SemanticObject> it=SWBObjectFilter.filter(SWBComparator.sortSermanticObjects(user.getLanguage(), obj.getModel().listInstancesOfClass(cls)),pf);
             if(addChilds)
@@ -1543,6 +1547,15 @@ public class SWBAFilters extends SWBATree {
                         log.error(e);
                     }
                 }
+            }
+        }
+        
+        if(cls==null)
+        {
+            Iterator<HerarquicalNode> it=node.listHerarquicalNodes();
+            while (it.hasNext()) {
+                HerarquicalNode node2 = it.next();
+                addHerarquicalNode(user,node2,obj,jobj,false);
             }
         }
     }
