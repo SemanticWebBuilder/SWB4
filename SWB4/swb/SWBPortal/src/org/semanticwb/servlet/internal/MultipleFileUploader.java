@@ -22,6 +22,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBRuntimeException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.util.UploadFileRequest;
@@ -97,7 +98,18 @@ public class MultipleFileUploader implements InternalServlet
         //DistributorParams dparam = null;
         String smodel = auri.substring(1, auri.indexOf("/", 2));
         //System.out.println("model:"+smodel);
-        WebSite website=SWBContext.getWebSite(smodel);
+        SWBModel model=SWBContext.getSWBModel(smodel);
+        //System.out.println("model:"+model);
+        WebSite website=null;
+        if(!(model instanceof WebSite))
+        {            
+            website=model.getParentWebSite();
+        }else
+        {
+            website=(WebSite)model;
+        }
+        //System.out.println("website:"+website);
+        
         User user=SWBPortal.getUserMgr().getUser(request, website);
         if (!user.isSigned()){
             website=SWBContext.getWebSite("SWBAdmin");
