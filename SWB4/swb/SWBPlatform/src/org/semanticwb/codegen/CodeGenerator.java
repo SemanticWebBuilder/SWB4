@@ -1124,7 +1124,15 @@ public class CodeGenerator
             javaClassContent.append("                "+SEMANTIC_OBJECT_FULL_NAME+" obj=model.getSemanticObject(model.getObjectUri(id,sclass));" + ENTER);
             javaClassContent.append("                if(obj!=null)" + ENTER);
             javaClassContent.append("                {" + ENTER);
-            javaClassContent.append("                    ret=(" + fullpathClass + ")obj.createGenericInstance();" + ENTER);
+            
+            javaClassContent.append("                    org.semanticwb.model.GenericObject gobj=obj.createGenericInstance();" + ENTER);
+            javaClassContent.append("                    if(gobj instanceof "+fullpathClass+")" + ENTER);
+            javaClassContent.append("                    {" + ENTER);
+            javaClassContent.append("                        ret=("+fullpathClass+")gobj;" + ENTER);
+            javaClassContent.append("                    }" + ENTER);
+            
+            //javaClassContent.append("                    ret=(" + fullpathClass + ")obj.createGenericInstance();" + ENTER);
+            
             javaClassContent.append("                }" + ENTER);
             javaClassContent.append("            }" + ENTER);
             javaClassContent.append("            return ret;" + ENTER);
