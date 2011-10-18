@@ -181,7 +181,7 @@ public class WBMenu extends GenericAdmResource
                             while (hijos.hasNext()) 
                             {
                                 WebPage hijo =  hijos.next();
-                                //if(user.haveAccess(hijo))
+                                if(user.haveAccess(hijo))
                                 {
                                     Element ehijo = dom.createElement("child");
                                     ehijo.setAttribute("id", hijo.getId());
