@@ -213,6 +213,62 @@ public class SWBContext extends SWBContextBase {
         }
         return arr.iterator();
     }
+    
+    /**
+     * List web sites.
+     * 
+     * @param admin the admin
+     * @return the java.util. iterator
+     */
+    public static java.util.Iterator<org.semanticwb.model.SWBModel> listSWBModels(boolean admin)
+    {
+        boolean adminShow = !SWBPlatform.getEnv("swb/adminShow","false").equals("false");
+        ArrayList<org.semanticwb.model.SWBModel> arr = new ArrayList();
+        Iterator<Entry<String, SemanticModel>> it = SWBPlatform.getSemanticMgr().getModels().iterator();
+
+        while (it.hasNext())
+        {
+            Entry<String, SemanticModel> entry = it.next();
+            SemanticModel model = entry.getValue();
+
+            if ((model != null) && (model.getModelObject() != null))
+            {
+                GenericObject gen = model.getModelObject().createGenericInstance();
+                if (adminShow)
+                {
+                    arr.add((SWBModel) gen);
+                } else if ((admin && gen.getId().equals(SWBContext.WEBSITE_ADMIN)) || !filtered.contains(gen.getId()))
+                {
+                    arr.add((SWBModel) gen);
+                }
+            }
+        }
+        return arr.iterator();
+    }   
+    
+    
+   /**
+   * Gets a org.semanticwb.model.WebSite
+   * @param id Identifier for org.semanticwb.model.WebSite
+   * @return A org.semanticwb.model.WebSite
+   */
+    public static org.semanticwb.model.SWBModel getSWBModel(String id)
+    {
+        org.semanticwb.platform.SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();
+        org.semanticwb.model.SWBModel ret=null;
+        org.semanticwb.platform.SemanticModel model=mgr.getModel(id);
+        if(model!=null)
+        {
+            org.semanticwb.platform.SemanticObject obj=model.getSemanticObject(model.getObjectUri(id,WebSite.sclass));
+            if(obj!=null)
+            {
+                org.semanticwb.model.GenericObject gobj=obj.createGenericInstance();
+                ret=(org.semanticwb.model.SWBModel)gobj;
+            }
+        }
+        return ret;
+    }
+    
 
     /**
      * Sets the session user.

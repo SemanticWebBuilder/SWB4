@@ -71,4 +71,19 @@ public class SWBModel extends org.semanticwb.model.base.SWBModelBase {
         model.abort();
     }
 
+    @Override
+    public WebSite getParentWebSite() 
+    {
+        Iterator<WebSite> it=SWBContext.listWebSites();
+        while (it.hasNext()) 
+        {
+            WebSite ws = it.next();
+            if(ws.hasSubModel(this))
+            {
+                return ws;
+            }
+        }        
+        return null;
+    }
+
 }

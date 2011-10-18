@@ -89,13 +89,14 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
         UploadFileRequest ufq = configFileRequest(prop, pname);
         UploaderFileCacheUtils.putRequest(cad, ufq);
         request.getSession(true).setAttribute("fuCad", cad);
-        String page;
-        if (obj.instanceOf(WebPage.sclass)) {
-            page = obj.getId();
-        } else {
-            page = ((WebSite) obj.getModel().getModelObject().getGenericInstance()).getHomePage().getId();
-        }
-        String url = SWBPlatform.getContextPath() + "/multiuploader/" + obj.getModel().getModelObject().getId() + "/" + page + "/" + cad;
+//        String page;
+//        if (obj.instanceOf(WebPage.sclass)) {
+//            page = obj.getId();
+//        } else {
+//            page = ((WebSite) obj.getModel().getModelObject().getGenericInstance()).getHomePage().getId();
+//        }
+        WebSite site;
+        String url = SWBPlatform.getContextPath() + "/multiuploader/" + obj.getModel().getModelObject().getId() + "/home/" + cad;
         String enviar = lang.equals("en") ? "You have to send the selected files first" : "Debe enviar primero los archivos seleccionados";
         String eliminar = lang.equals("en") ? "Chose the files to delete" : "Selecione el(los) archivo(s) a eliminar";
         String agregar = lang.equals("en") ? "Add new file upload" : "Agrega un nuevo archivo a cargar";
