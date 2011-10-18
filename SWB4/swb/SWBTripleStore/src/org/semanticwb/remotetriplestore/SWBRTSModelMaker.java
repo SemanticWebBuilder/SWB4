@@ -50,9 +50,9 @@ public class SWBRTSModelMaker {
             cmd.paramNumber=0;
             SWBRTSUtil util =  SWBRTSUtil.getInstance(pool.getAddress(), pool.getPort());
             util.setCommand(cmd);
-            Future<Response> future = pool.getPool().submit(util);
-            Response resp = future.get();
-            //Response resp = util.call();
+            //Future<Response> future = pool.getPool().submit(util);
+            //Response resp = future.get();
+            Response resp = util.call();
             ArrayList<String> list = (ArrayList<String>) resp.data;
             ret = list.iterator();
         } catch (Exception e)
@@ -76,9 +76,9 @@ public class SWBRTSModelMaker {
                 util.setCommand(cmd);
                 String[] params = {name};
                 util.setParams(params);
-                Future<Response> future = pool.getPool().submit(util);
-                Response resp = future.get();
-                //Response resp = util.call();
+                //Future<Response> future = pool.getPool().submit(util);
+                //Response resp = future.get();
+                Response resp = util.call();
                 if (null!=resp.data)
                 {
                     ret = new ModelCom(new SWBRTSGraph(name, pool));
@@ -107,9 +107,9 @@ public class SWBRTSModelMaker {
             util.setCommand(cmd);
             String[] params = {name};
             util.setParams(params);
-            Future<Response> future = pool.getPool().submit(util);
-            Response resp = future.get();
-            //Response resp = util.call();
+            //Future<Response> future = pool.getPool().submit(util);
+            //Response resp = future.get();
+            Response resp = util.call();
             if (null!=resp.data)
             {
                 model = new ModelCom(new SWBRTSGraph(name, pool));
@@ -134,9 +134,9 @@ public class SWBRTSModelMaker {
             util.setCommand(cmd);
             String[] params = {name};
             util.setParams(params);
-            Future<Response> future = pool.getPool().submit(util);
-            Response resp = future.get();
-            //Response resp = util.call();
+            //Future<Response> future = pool.getPool().submit(util);
+            //Response resp = future.get();
+            Response resp = util.call();
         } catch (Exception e)
         {
             log.error(e);

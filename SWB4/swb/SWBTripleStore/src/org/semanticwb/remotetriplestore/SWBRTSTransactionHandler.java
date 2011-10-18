@@ -51,8 +51,9 @@ public class SWBRTSTransactionHandler extends TransactionHandlerBase
             util.setCommand(cmd);
             String[] params = {graph.getName(), ""+Thread.currentThread().getId()};
             util.setParams(params);
-            Future<Response> future = pool.getPool().submit(util);
-            Response resp = future.get();
+            //Future<Response> future = pool.getPool().submit(util);
+            //Response resp = future.get();
+            Response resp = util.call();
         } catch (Exception e)
         {
             log.error(e);
@@ -71,8 +72,9 @@ public class SWBRTSTransactionHandler extends TransactionHandlerBase
             util.setCommand(cmd);
             String[] params = {graph.getName(), ""+Thread.currentThread().getId()};
             util.setParams(params);
-            Future<Response> future = pool.getPool().submit(util);
-            Response resp = future.get();
+            //Future<Response> future = pool.getPool().submit(util);
+            //Response resp = future.get();
+            Response resp = util.call();
         } catch (Exception e)
         {
             log.error(e);
@@ -90,8 +92,9 @@ public class SWBRTSTransactionHandler extends TransactionHandlerBase
             util.setCommand(cmd);
             String[] params = {graph.getName(), ""+Thread.currentThread().getId()};
             util.setParams(params);
-            Future<Response> future = pool.getPool().submit(util);
-            Response resp = future.get();
+            //Future<Response> future = pool.getPool().submit(util);
+            //Response resp = future.get();
+            Response resp = util.call();
         } catch (Exception e)
         {
             log.error(e);
