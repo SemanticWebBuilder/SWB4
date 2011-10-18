@@ -46,9 +46,9 @@ class SWBRTSPrefixMapping implements PrefixMapping
                 util.setCommand(cmd);
                 String[] params = {graph.getName(), prefix, uri};
                 util.setParams(params);
-                Future<Response> future = pool.getPool().submit(util);
-                Response resp = future.get();
-                //Response resp = util.call();
+                //Future<Response> future = pool.getPool().submit(util);
+                //Response resp = future.get();
+                Response resp = util.call();
                 if (!(resp.data instanceof OOK))
                 {
                     map.put(prefix, uri);
@@ -71,9 +71,9 @@ class SWBRTSPrefixMapping implements PrefixMapping
             util.setCommand(cmd);
             String[] params = {graph.getName(), prefix};
             util.setParams(params);
-            Future<Response> future = pool.getPool().submit(util);
-            Response resp = future.get();
-            //Response resp = util.call();
+            //Future<Response> future = pool.getPool().submit(util);
+            //Response resp = future.get();
+            Response resp = util.call();
             if (!(resp.data instanceof OOK))
             {
                 map.remove(prefix);
@@ -127,9 +127,9 @@ class SWBRTSPrefixMapping implements PrefixMapping
                 util.setCommand(cmd);
                 String[] params = {graph.getName(), prefix};
                 util.setParams(params);
-                Future<Response> future = pool.getPool().submit(util);
-                Response resp = future.get();
-                //Response resp = util.call();
+                //Future<Response> future = pool.getPool().submit(util);
+                //Response resp = future.get();
+                Response resp = util.call();
                 str  = (String) resp.data;
             } catch (Exception e)
             {
@@ -161,9 +161,9 @@ class SWBRTSPrefixMapping implements PrefixMapping
             util.setCommand(cmd);
             String[] params = {graph.getName()};
             util.setParams(params);
-            Future<Response> future = pool.getPool().submit(util);
-            Response resp = future.get();
-            //Response resp = util.call();
+            //Future<Response> future = pool.getPool().submit(util);
+            //Response resp = future.get();
+            Response resp = util.call();
             mapt  = (Map<String,String>) resp.data;
             this.map=mapt;
         } catch (Exception e)

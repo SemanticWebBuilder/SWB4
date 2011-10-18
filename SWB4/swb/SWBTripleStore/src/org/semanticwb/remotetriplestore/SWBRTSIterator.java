@@ -60,9 +60,9 @@ class SWBRTSIterator implements ExtendedIterator<Triple>
             util.setCommand(cmd);
             String[] params = {graph.getName(),subj,prop,obj};
             util.setParams(params);
-            Future<Response> future = pool.getPool().submit(util);
-            Response resp = future.get();
-            //Response resp = util.call();
+            //Future<Response> future = pool.getPool().submit(util);
+            //Response resp = future.get();
+            Response resp = util.call();
             ArrayList<TripleString> list = (ArrayList<TripleString>) resp.data;
             //log.debug(""+list);
             iterData = list.iterator();

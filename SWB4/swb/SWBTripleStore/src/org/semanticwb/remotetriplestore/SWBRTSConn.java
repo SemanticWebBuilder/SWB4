@@ -1,6 +1,5 @@
 package org.semanticwb.remotetriplestore;
 
-import com.hp.hpl.jena.graph.TransactionHandler;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
 import java.io.ObjectInputStream;
@@ -12,7 +11,6 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.rdf.AbstractStore;
-import org.semanticwb.remotetriplestore.protocol.Command;
 import org.semanticwb.remotetriplestore.protocol.EOT;
 import org.semanticwb.remotetriplestore.protocol.OOK;
 import org.semanticwb.remotetriplestore.protocol.Response;
@@ -64,7 +62,7 @@ public class SWBRTSConn implements Runnable
                     action(cmd, params);
 //                }else
 //                {
-                    objDataIn.close();
+                    objDataIn.close();                    
                     sock.close();
                     //System.out.println("sock close:"+sock);
 //                    break;
@@ -216,7 +214,7 @@ public class SWBRTSConn implements Runnable
                     break;                    
             }
             objDataOut.flush();
-            //objDataOut.close();
+            objDataOut.close();
         } catch (Exception e)
         {
             log.error(e);

@@ -6,7 +6,6 @@ import com.hp.hpl.jena.graph.TripleMatch;
 import com.hp.hpl.jena.graph.impl.GraphBase;
 import com.hp.hpl.jena.shared.PrefixMapping;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
-import java.util.concurrent.Future;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.remotetriplestore.protocol.Command;
@@ -65,9 +64,9 @@ class SWBRTSGraph extends GraphBase{
                 util.setCommand(cmd);
                 String[] params = {getName(),subj,prop,obj,""+Thread.currentThread().getId()};
                 util.setParams(params);
-                Future<Response> future = pool.getPool().submit(util);
-                Response resp = future.get();                
-                //Response resp = util.call();
+                //Future<Response> future = pool.getPool().submit(util);
+                //Response resp = future.get();                
+                Response resp = util.call();
             } catch (Exception e)
             {
                 log.error(e);
@@ -94,9 +93,9 @@ class SWBRTSGraph extends GraphBase{
             util.setCommand(cmd);
             String[] params = {getName(),subj,prop,obj,""+Thread.currentThread().getId()};
             util.setParams(params);
-            Future<Response> future = pool.getPool().submit(util);
-            Response resp = future.get();
-            //Response resp = util.call();
+            //Future<Response> future = pool.getPool().submit(util);
+            //Response resp = future.get();
+            Response resp = util.call();
         } catch (Exception e)
         {
             log.error(e);

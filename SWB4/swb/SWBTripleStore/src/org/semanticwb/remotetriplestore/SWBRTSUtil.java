@@ -30,22 +30,44 @@ class SWBRTSUtil implements Callable<Response> {
     
     public static LinkedList<SWBRTSUtil> list=new LinkedList();
     
+    private static int buffer=5;
+    private static boolean loading=false;
+    
     public static synchronized SWBRTSUtil getInstance(final InetAddress byName, final int port)
     {
-//        System.out.println("getInstance:"+list.size());
         SWBRTSUtil ret=null;
-//        if(!list.isEmpty())ret=list.getFirst();
-//        if(ret==null || !ret.isAlive())
-//        {
+        if(buffer>0)
+        {
+            System.out.println("getInstance:"+list.size()+" "+loading);
+            if(!list.isEmpty())ret=list.pollFirst();
+            //System.out.print(" ret:"+ret);
+            if(ret==null || !ret.isAlive())
+            {
+                //System.out.print(" new");
+                ret=new SWBRTSUtil(byName, port);   
+            }
+            if(list.size()<buffer && !loading)
+            {
+                System.out.println("reload start");
+                loading=true;
+                new Thread()
+                {
+                    @Override
+                    public void run() {
+                        for(int x=0;x<buffer;x++)
+                        {
+                            list.add(new SWBRTSUtil(byName, port));
+                        }
+                        System.out.println("reload end");
+                        loading=false;
+                    }            
+                }.start();            
+            }
+            //System.out.println("");
+        }else
+        {
             ret=new SWBRTSUtil(byName, port);   
-//        }
-//        new Thread()
-//        {
-//            @Override
-//            public void run() {
-//                list.add(new SWBRTSUtil(byName, port));
-//            }            
-//        }.start();
+        }
         return ret;        
     }
     
@@ -75,7 +97,7 @@ class SWBRTSUtil implements Callable<Response> {
 
     public Response call() throws Exception
     {
-        //System.out.println("Call:"+sock);
+        System.out.println("Call:"+sock);
         ObjectOutputStream outData = new ObjectOutputStream(os_connect);
         outData.writeObject(command);
         //System.out.println("SWBRTSUtil: cmd "+command.cmd+" #"+command.paramNumber);
@@ -89,11 +111,16 @@ class SWBRTSUtil implements Callable<Response> {
             
         }
         outData.writeObject(new EOT());
-        //System.out.println("wrote EOT");
+        System.out.println("wrote EOT");
         outData.flush();
         ObjectInputStream inData = new ObjectInputStream(in_connect);
+        
         Response resp = (Response)inData.readObject();
-        //System.out.println("Read Response "+resp.data);
+        System.out.println("Read Response "+resp.data);
+        outData.close();;
+        inData.close();
+        sock.close();
+        
         return resp;
 
     }
