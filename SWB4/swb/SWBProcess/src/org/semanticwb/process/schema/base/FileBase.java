@@ -4,6 +4,8 @@ package org.semanticwb.process.schema.base;
 public abstract class FileBase extends org.semanticwb.process.model.DataTypes 
 {
     public static final org.semanticwb.platform.SemanticProperty swp_fileValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#fileValue");
+    public static final org.semanticwb.platform.SemanticClass swp_RepositoryFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#RepositoryFile");
+    public static final org.semanticwb.platform.SemanticProperty swp_repositoryFileRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#repositoryFileRef");
     public static final org.semanticwb.platform.SemanticClass swps_File=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process/schema#File");
    /**
    * The semantic class that represents the currentObject
@@ -73,6 +75,29 @@ public abstract class FileBase extends org.semanticwb.process.model.DataTypes
         {
             return (getFile(id, model)!=null);
         }
+       /**
+       * Gets all org.semanticwb.process.schema.File with a determined RepositoryFile
+       * @param value RepositoryFile of the type org.semanticwb.process.model.RepositoryFile
+       * @param model Model of the org.semanticwb.process.schema.File
+       * @return Iterator with all the org.semanticwb.process.schema.File
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.schema.File> listFileByRepositoryFile(org.semanticwb.process.model.RepositoryFile value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.schema.File> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_repositoryFileRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.schema.File with a determined RepositoryFile
+       * @param value RepositoryFile of the type org.semanticwb.process.model.RepositoryFile
+       * @return Iterator with all the org.semanticwb.process.schema.File
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.schema.File> listFileByRepositoryFile(org.semanticwb.process.model.RepositoryFile value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.schema.File> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_repositoryFileRef,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**
@@ -85,20 +110,58 @@ public abstract class FileBase extends org.semanticwb.process.model.DataTypes
     }
 
 /**
-* Gets the FileValue property
-* @return String with the FileValue
+* Gets the Value property
+* @return String with the Value
 */
-    public String getFileValue()
+    public String getValue()
     {
         return getSemanticObject().getProperty(swp_fileValue);
     }
 
 /**
-* Sets the FileValue property
-* @param value long with the FileValue
+* Sets the Value property
+* @param value long with the Value
 */
-    public void setFileValue(String value)
+    public void setValue(String value)
     {
         getSemanticObject().setProperty(swp_fileValue, value);
+    }
+   /**
+   * Sets the value for the property RepositoryFile
+   * @param value RepositoryFile to set
+   */
+
+    public void setRepositoryFile(org.semanticwb.process.model.RepositoryFile value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_repositoryFileRef, value.getSemanticObject());
+        }else
+        {
+            removeRepositoryFile();
+        }
+    }
+   /**
+   * Remove the value for RepositoryFile property
+   */
+
+    public void removeRepositoryFile()
+    {
+        getSemanticObject().removeProperty(swp_repositoryFileRef);
+    }
+
+   /**
+   * Gets the RepositoryFile
+   * @return a org.semanticwb.process.model.RepositoryFile
+   */
+    public org.semanticwb.process.model.RepositoryFile getRepositoryFile()
+    {
+         org.semanticwb.process.model.RepositoryFile ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_repositoryFileRef);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.RepositoryFile)obj.createGenericInstance();
+         }
+         return ret;
     }
 }
