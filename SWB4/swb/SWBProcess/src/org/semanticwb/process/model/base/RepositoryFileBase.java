@@ -1,10 +1,15 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class RepositoryFileBase extends org.semanticwb.process.model.BaseElement implements org.semanticwb.model.Expirable,org.semanticwb.model.Versionable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.model.RoleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Hitable,org.semanticwb.model.RuleRefable
+public abstract class RepositoryFileBase extends org.semanticwb.process.model.BaseElement implements org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Versionable,org.semanticwb.model.Hitable,org.semanticwb.model.Expirable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable
 {
     public static final org.semanticwb.platform.SemanticClass swp_RepositoryDirectory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#RepositoryDirectory");
     public static final org.semanticwb.platform.SemanticProperty swp_repositoryDirectory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#repositoryDirectory");
+   /**
+   * Objeto que define un grupo de usuarios dentro de un repositorio de usuarios para filtrar componente, seccion, plantillas, etc.
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_UserGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroup");
+    public static final org.semanticwb.platform.SemanticProperty swp_ownerUserGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#ownerUserGroup");
     public static final org.semanticwb.platform.SemanticClass swp_RepositoryFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#RepositoryFile");
    /**
    * The semantic class that represents the currentObject
@@ -147,6 +152,29 @@ public abstract class RepositoryFileBase extends org.semanticwb.process.model.Ba
         public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByActualVersion(org.semanticwb.model.VersionInfo value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_actualVersion,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryFile with a determined OwnerUserGroup
+       * @param value OwnerUserGroup of the type org.semanticwb.model.UserGroup
+       * @param model Model of the org.semanticwb.process.model.RepositoryFile
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryFile
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByOwnerUserGroup(org.semanticwb.model.UserGroup value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_ownerUserGroup, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryFile with a determined OwnerUserGroup
+       * @param value OwnerUserGroup of the type org.semanticwb.model.UserGroup
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryFile
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByOwnerUserGroup(org.semanticwb.model.UserGroup value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_ownerUserGroup,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -512,6 +540,44 @@ public abstract class RepositoryFileBase extends org.semanticwb.process.model.Ba
     public void setActive(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb_active, value);
+    }
+   /**
+   * Sets the value for the property OwnerUserGroup
+   * @param value OwnerUserGroup to set
+   */
+
+    public void setOwnerUserGroup(org.semanticwb.model.UserGroup value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_ownerUserGroup, value.getSemanticObject());
+        }else
+        {
+            removeOwnerUserGroup();
+        }
+    }
+   /**
+   * Remove the value for OwnerUserGroup property
+   */
+
+    public void removeOwnerUserGroup()
+    {
+        getSemanticObject().removeProperty(swp_ownerUserGroup);
+    }
+
+   /**
+   * Gets the OwnerUserGroup
+   * @return a org.semanticwb.model.UserGroup
+   */
+    public org.semanticwb.model.UserGroup getOwnerUserGroup()
+    {
+         org.semanticwb.model.UserGroup ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_ownerUserGroup);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.UserGroup)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Sets the value for the property Creator

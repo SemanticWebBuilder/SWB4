@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Countryable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Filterable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Indexable,org.semanticwb.model.Localeable
+public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Indexable,org.semanticwb.model.Countryable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Undeleteable,org.semanticwb.model.Localeable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable
 {
     public static final org.semanticwb.platform.SemanticClass swp_ProcessDataInstanceModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessDataInstanceModel");
     public static final org.semanticwb.platform.SemanticProperty swp_processDataInstanceModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processDataInstanceModel");
@@ -136,7 +136,11 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
                 org.semanticwb.platform.SemanticObject obj=model.getSemanticObject(model.getObjectUri(id,sclass));
                 if(obj!=null)
                 {
-                    ret=(org.semanticwb.process.model.ProcessSite)obj.createGenericInstance();
+                    org.semanticwb.model.GenericObject gobj=obj.createGenericInstance();
+                    if(gobj instanceof org.semanticwb.process.model.ProcessSite)
+                    {
+                        ret=(org.semanticwb.process.model.ProcessSite)gobj;
+                    }
                 }
             }
             return ret;

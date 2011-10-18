@@ -5,6 +5,7 @@
 package org.semanticwb.process.resources;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -89,15 +90,20 @@ public class Modeler extends GenericResource {
      * @throws IOException
      */
     public void doGateway(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        PrintWriter out = response.getWriter();
+        //PrintWriter out = response.getWriter();
+        OutputStream outs=response.getOutputStream();
         ServletInputStream in = request.getInputStream();
         Document dom = SWBUtils.XML.xmlToDom(in);
+        
+        System.out.println("RequestURI:"+request.getRequestURI());
+        System.out.println("dom:"+dom);
+        System.out.println("xml:"+SWBUtils.XML.domToXml(dom));
 
         if (!dom.getFirstChild().getNodeName().equals("req")) {
             response.sendError(404, request.getRequestURI());
             return;
         }
-
+        
         String cmd = null;
         if (dom.getElementsByTagName("cmd").getLength() > 0) {
             cmd = dom.getElementsByTagName("cmd").item(0).getFirstChild().getNodeValue();
@@ -106,6 +112,7 @@ public class Modeler extends GenericResource {
             response.sendError(404, request.getRequestURI());
             return;
         }
+        System.out.println("cmd:"+cmd);
 
         if (cmd.equals("getProcessJSON")) {
             try {
@@ -115,15 +122,20 @@ public class Modeler extends GenericResource {
                 if (go != null && go instanceof org.semanticwb.process.model.Process) {
                     process = (org.semanticwb.process.model.Process) go;
                     String json = getProcessJSON(process).toString();
-                    out.print(json);
+                    //out.print(json);
+                    outs.write(json.getBytes());
+                    System.out.println(json);
+                    //out.print(SWBUtils.TEXT.decode(json, "UTF8"));
                     //System.out.println("json:"+json);
                 } else {
                     log.error("Error to create JSON: Process not found");
-                    out.print("ERROR: Process not found");
+                    //out.print("ERROR: Process not found");
+                    outs.write("ERROR: Process not found".getBytes());
                 }
             } catch (Exception e) {
                 log.error("Error to create JSON...", e);
-                out.print("ERROR:" + e.getMessage());
+                //out.print("ERROR:" + e.getMessage());
+                outs.write(("ERROR:" + e.getMessage()).getBytes());
             }
         } else {
             String ret;
@@ -133,7 +145,9 @@ public class Modeler extends GenericResource {
             } else {
                 ret = SWBUtils.XML.domToXml(res, true);
             }
-            out.print(new String(ret.getBytes()));
+            //out.print(new String(ret.getBytes()));
+            outs.write(ret.getBytes());
+            System.out.println("out:"+new String(ret.getBytes()));
         }
     }
 

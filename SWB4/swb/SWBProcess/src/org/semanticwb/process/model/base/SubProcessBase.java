@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class SubProcessBase extends org.semanticwb.process.model.Activity implements org.semanticwb.process.model.ActivityConfable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.process.model.Containerable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Traceable,org.semanticwb.model.RuleRefable
+public abstract class SubProcessBase extends org.semanticwb.process.model.Activity implements org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.RoleRefable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.process.model.Containerable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.RuleRefable
 {
     public static final org.semanticwb.platform.SemanticClass swp_SubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#SubProcess");
    /**
