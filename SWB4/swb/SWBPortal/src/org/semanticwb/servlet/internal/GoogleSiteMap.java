@@ -135,17 +135,14 @@ public class GoogleSiteMap implements InternalServlet {
 //            } else {
 //                urlcnt = page.getRealUrl();
 //            }
-            if(page.getWebPageURL()!=null)
+            if(page.getWebPageURL()==null||!page.getWebPageURL().startsWith("http:"))
             {
                 ret.append("<url><loc>" + hn +urlcnt + "</loc>");
-            }else
-            {
-                ret.append("<url><loc>" + urlcnt + "</loc>");
-            }
-            
-            if (!"".equals(page.getContentsLastUpdate(lang, "yyyy-mm-dd")))
+                if (!"".equals(page.getContentsLastUpdate(lang, "yyyy-mm-dd")))
                     ret.append("<lastmod>"+page.getContentsLastUpdate(lang, "yyyy-mm-dd")+"</lastmod>");
-            ret.append("<priority>0."+scoregap+"</priority></url>");
+                ret.append("<priority>0."+scoregap+"</priority></url>");
+            }            
+            
         }
         Iterator<WebPage> childs =page.listChilds(lang, true, false, null, true);
         if (score==5) { tscore = score;}
