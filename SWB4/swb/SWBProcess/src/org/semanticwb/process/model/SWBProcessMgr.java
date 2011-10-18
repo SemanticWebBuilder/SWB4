@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.semanticwb.model.User;
+import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebPage;
 
 /**
@@ -58,6 +59,8 @@ public class SWBProcessMgr
     public static ProcessInstance createProcessInstance(Process process, User user)
     {
         ProcessInstance pinst=process.createInstance();
+        UserGroup usrgrp=user.getUserGroup();
+        if(usrgrp!=null)pinst.setOwnerUserGroup(usrgrp);
         pinst.start(user);
         return pinst;
     }
