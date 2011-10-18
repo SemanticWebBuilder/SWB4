@@ -47,7 +47,11 @@ public abstract class ProcessDataInstanceModelBase extends org.semanticwb.model.
                 org.semanticwb.platform.SemanticObject obj=model.getSemanticObject(model.getObjectUri(id,sclass));
                 if(obj!=null)
                 {
-                    ret=(org.semanticwb.process.model.ProcessDataInstanceModel)obj.createGenericInstance();
+                    org.semanticwb.model.GenericObject gobj=obj.createGenericInstance();
+                    if(gobj instanceof org.semanticwb.process.model.ProcessDataInstanceModel)
+                    {
+                        ret=(org.semanticwb.process.model.ProcessDataInstanceModel)gobj;
+                    }
                 }
             }
             return ret;
