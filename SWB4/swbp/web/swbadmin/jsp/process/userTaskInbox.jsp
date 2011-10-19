@@ -4,6 +4,7 @@
     Author     : Hasdai Pacheco {haxdai@gmail.com}
 --%>
 
+<%@page import="org.semanticwb.process.model.ProcessGroup"%>
 <%@page import="java.util.Date"%>
 <%@page import="org.semanticwb.process.model.Process"%>
 <%@page import="org.semanticwb.process.model.Activity"%>
@@ -13,6 +14,7 @@
 <%@page import="org.semanticwb.process.model.SubProcessInstance"%>
 <%@page import="org.semanticwb.process.model.FlowNodeInstance"%>
 <%@page import="org.semanticwb.*"%>
+<%@page import="org.semanticwb.model.UserGroup"%>
 <%@page import="org.semanticwb.portal.*"%>
 <%@page import="org.semanticwb.platform.*"%>
 <%@page import="org.semanticwb.portal.api.*"%>
@@ -108,6 +110,7 @@ private ArrayList<Integer> getIsntanceYears(Iterator<FlowNodeInstance> instances
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
 User user = paramRequest.getUser();
+UserGroup usrGroup = user.getUserGroup();
 WebPage statusWp = (WebPage) request.getAttribute("statusWp");
 Calendar now = GregorianCalendar.getInstance();
 now.setTime(new Date(System.currentTimeMillis()));
@@ -136,7 +139,7 @@ if (pFilter == null || pFilter.trim().equals("")) {
     pFilter = "";
 }
 if (sFilter == null || sFilter.trim().equals("")) {
-    sFilter = String.valueOf(ProcessInstance.STATUS_PROCESSING);
+    sFilter = "_all_";String.valueOf(ProcessInstance.STATUS_PROCESSING);
 }
 String [] months = {"ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"};
 
@@ -200,6 +203,38 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
             </li-->
         </ul>
     </div>
+            <div class="bandeja-combo">
+                <ul>
+                    <li>
+                        <select id="processId">
+                            <%
+                            Iterator<ProcessGroup> pGroups = SWBComparator.sortByDisplayName(ProcessGroup.ClassMgr.listProcessGroups(paramRequest.getWebPage().getWebSite()),lang);
+                            SWBResourceURL createUrl = paramRequest.getActionUrl().setAction("CREATE");
+                            while(pGroups.hasNext()) {
+                                ProcessGroup pgroup = pGroups.next();
+                                %>
+                                <optgroup label="<%=pgroup.getDisplayTitle(lang)%>">
+                                    <%
+                                    Iterator<Process> it_processes = pgroup.listProcesses();//Process.ClassMgr.listProcesses();//Process.ClassMgr.listProcessByProcessGroup(usrGroup, paramRequest.getWebPage().getWebSite());
+                                    while (it_processes.hasNext()) {
+                                        Process itp = it_processes.next();
+                                        %>
+                                        <option value="<%=itp.getId()%>">  <%=itp.getDisplayTitle(lang)%></option>
+                                        <%
+                                    }
+                                    %>
+                                </optgroup>
+                                <%
+                            }
+                            %>
+                        </select>
+                    </li>
+                    <li>
+                        <input type="button" value="Iniciar" onclick="window.location='<%=createUrl%>?pid='+document.getElementById('processId').value;"/>
+                    </li>
+                </ul>
+                
+            </div>
         <%
         if (tinstances != null && tinstances.size() > 0) {
             %>
@@ -211,19 +246,19 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                             %><th class="tban-id">ID</th><%
                         }
                         if (displayCols.contains("pnameCol")) {
-                            %><th class="tban-id">Proceso</th><%
+                            %><th class="tban-proces">Proceso</th><%
                         }
                         if (displayCols.contains("nameCol")) {
-                            %><th class="tban-id">Tarea</th><%
+                            %><th class="tban-tarea">Tarea</th><%
                         }
                         if (displayCols.contains("sdateCol")) {
-                            %><th class="tban-id">Iniciada</th><%
+                            %><th class="tban-inicia">Iniciada</th><%
                         }
                         if (displayCols.contains("edateCol")) {
-                            %><th class="tban-id">Cerrada</th><%
+                            %><th class="tban-cerrada">Cerrada</th><%
                         }
                         if (displayCols.contains("actionsCol")) {
-                            %><th class="tban-id">Acciones</th><%
+                            %><th class="tban-accion">Acciones</th><%
                         }
                         %>
                     </tr>
