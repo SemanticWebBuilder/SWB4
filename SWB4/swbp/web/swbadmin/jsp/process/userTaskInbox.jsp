@@ -53,7 +53,7 @@ private ArrayList<Integer> getIsntanceYears(Iterator<FlowNodeInstance> instances
         }
         return (ret);
     }
-
+    
     public String _getStatusInstances(FlowNodeInstance fi, int status) {
         String ret = "";
         if (fi instanceof SubProcessInstance) {
@@ -70,6 +70,29 @@ private ArrayList<Integer> getIsntanceYears(Iterator<FlowNodeInstance> instances
         }
         return ret;
     }
+
+    /*public String _getStatusInstances(FlowNodeInstance fi, int status) {
+        String ret = "";
+        if (fi instanceof SubProcessInstance) {
+            SubProcessInstance pi = (SubProcessInstance) fi;
+            Iterator<FlowNodeInstance> acit = pi.listFlowNodeInstances();
+            if (acit.hasNext()) {
+                while (acit.hasNext()) {
+                    FlowNodeInstance actinst = acit.next();
+                    ret += _getStatusInstances(actinst, status);
+                }
+            }
+        } else if (fi.getFlowNodeType() instanceof Activity && fi.getStatus() == status) {
+            Iterator<FlowNodeInstance> fnii = fi.getFlowNodeType().listFlowObjectInstances();
+            int c = 0;
+            while (fnii.hasNext()) {
+                c++;
+                fnii.next();
+            }
+            ret += fi.getFlowNodeType().getURI() + "(" + c + ")|";
+        }
+        return ret;
+    }*/
 %>
 
 <script type="text/javascript">
@@ -172,9 +195,9 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                     <option value="<%=ProcessInstance.STATUS_ABORTED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_ABORTED))?"selected":""%>>Abortadas</option>
                 </select>
             </li>
-            <li>
+            <!--li>
                 <a href="<%=configUrl%>">Configurar despliegue</a>
-            </li>
+            </li-->
         </ul>
     </div>
         <%
@@ -188,19 +211,19 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                             %><th class="tban-id">ID</th><%
                         }
                         if (displayCols.contains("pnameCol")) {
-                            %><th class="tban-proces">Proceso</th><%
+                            %><th class="tban-id">Proceso</th><%
                         }
                         if (displayCols.contains("nameCol")) {
-                            %><th class="tban-tarea">Tarea</th><%
+                            %><th class="tban-id">Tarea</th><%
                         }
                         if (displayCols.contains("sdateCol")) {
-                            %><th class="tban-inicia">Iniciada</th><%
+                            %><th class="tban-id">Iniciada</th><%
                         }
                         if (displayCols.contains("edateCol")) {
-                            %><th class="tban-cerrada">Cerrada</th><%
+                            %><th class="tban-id">Cerrada</th><%
                         }
                         if (displayCols.contains("actionsCol")) {
-                            %><th class="tban-accion">Acciones</th><%
+                            %><th class="tban-id">Acciones</th><%
                         }
                         %>
                     </tr>
@@ -257,7 +280,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                     if (statusWp != null) {
                                         String acts = getStatusInstances(instance.getProcessInstance(), ProcessInstance.STATUS_PROCESSING);
                                         %>
-                                        <a class="acc-comentar" target="_new" href="<%=statusWp.getUrl()%>?suri=<%=instance.getFlowNodeType().getProcess().getEncodedURI()%>&mode=view<%=acts%>">Ver mapa</a>
+                                        <a class="acc-mapa" target="_new" href="<%=statusWp.getUrl()%>?suri=<%=instance.getFlowNodeType().getProcess().getEncodedURI()%>&mode=view<%=acts%>">Ver mapa</a>
                                         <%
                                     }
                                     %>
