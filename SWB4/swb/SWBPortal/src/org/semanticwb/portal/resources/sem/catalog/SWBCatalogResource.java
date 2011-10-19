@@ -1749,7 +1749,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                 urlconf.setParameter("ract", "config");
 
                 out.println("<div class=\"swbform\">");
-                out.println("<form type=\"dijit.form.Form\" id=\"" + id + "/collectionconfig\" name=\"" + id + "/collectionconfig\" action=\"" + urlconf + "\" method=\"post\" onsubmit=\"submitForm('" + id + "/collectionconfig'); return false;\"  >"); //
+                out.println("<form type=\"dijit.form.Form\" id=\"" + id + "/collectionconfig\" name=\"" + id + "/collectionconfig\" action=\"" + urlconf + "\" method=\"post\" _onsubmit=\"submitForm('" + id + "/collectionconfig'); return false;\"  >"); //
                 out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
                 out.println("<input type=\"hidden\" name=\"act\" value=\"\">");
                 out.println("<input type=\"hidden\" id=\"" + id + "_actbutton\" name=\"actbutton\" value=\"\">");
@@ -1845,7 +1845,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
         System.out.println("ProcessAccion:" + action);
 
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-        GenericObject obj = getCatalogClass().getGenericInstance(); //ont.getGenericObject(id);
+        //GenericObject obj = getCatalogClass().getGenericInstance(); //ont.getGenericObject(id);
 
         if ("updconfig".equals(action)) {
 
