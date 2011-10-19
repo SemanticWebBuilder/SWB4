@@ -1834,7 +1834,7 @@ public class SemanticObject
                         //System.out.println(dep);
                         try
                         {
-                            if(stack!=null && !stack.contains(dep))dep.remove(stack);
+                            if(stack!=null && dep!=null && !stack.contains(dep))dep.remove(stack);
                         }catch(Exception e){log.error(e);}
                     }
                 }
