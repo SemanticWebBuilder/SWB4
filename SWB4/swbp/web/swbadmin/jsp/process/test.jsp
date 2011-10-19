@@ -130,10 +130,11 @@
         <h3>Artefactos</h3>
 <%
             out.println("<ul>");
-            Iterator<ProcessObject> objit=pi.listAllProcessObjects();
+            Iterator<ItemAwareReference> objit=pi.listAllItemAwareReferences();
             while(objit.hasNext())
             {
-                ProcessObject obj =  objit.next();
+                ItemAwareReference ref= objit.next();
+                SWBClass obj= ref.getProcessObject();
     %>
                 <li>Object Instance:<%=obj.getURI()%></li>
     <%
@@ -171,11 +172,11 @@
         <h4>SignalObserverNodes</h4>
 <%
         out.println("<ul>");
-        Iterator<StartEvent> sigit=site.getProcessObserver().listSignalObserverNodes();
+        Iterator<StartEventNode> sigit=site.getProcessObserver().listSignalObserverNodes();
         while(sigit.hasNext())
         {
-            StartEvent obj =  sigit.next();
-            out.println("StartEvent:"+obj+"<BR>");
+            StartEventNode obj =  sigit.next();
+            out.println("StartEventNode:"+obj+"<BR>");
         }
         out.println("</ul>");
 %>
@@ -193,11 +194,11 @@
         <h4>TimeObserverNodes</h4>
 <%
         out.println("<ul>");
-        Iterator<StartEvent> timnit=site.getProcessObserver().listTimeObserverNodes();
+        Iterator<StartEventNode> timnit=site.getProcessObserver().listTimeObserverNodes();
         while(timnit.hasNext())
         {
-            StartEvent obj =  timnit.next();
-            out.println("StartEvent:"+obj+"<BR>");
+            StartEventNode obj =  timnit.next();
+            out.println("StartEventNode:"+obj+"<BR>");
         }
         out.println("</ul>");
 %>

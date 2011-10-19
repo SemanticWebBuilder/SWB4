@@ -7,7 +7,7 @@
 <%@page import="org.semanticwb.process.model.ManualTask"%>
 <%@page import="org.semanticwb.process.model.ScriptTask"%>
 <%@page import="org.semanticwb.process.model.SignalEndEvent"%>
-<%@page import="org.semanticwb.process.model.EndEvent"%>
+<%@page import="org.semanticwb.process.model.EndEventNode"%>
 <%@page import="org.semanticwb.process.model.SignalIntermediateThrowEvent"%>
 <%@page import="org.semanticwb.process.model.IntermediateThrowEvent"%>
 <%@page import="org.semanticwb.process.model.TimerIntermediateCatchEvent"%>
@@ -27,7 +27,7 @@
 <%@page import="org.semanticwb.process.model.ProcessInstance"%>
 <%@page import="org.semanticwb.process.model.SubProcessInstance"%>
 <%@page import="org.semanticwb.process.model.Activity"%>
-<%@page import="org.semanticwb.process.model.StartEvent"%>
+<%@page import="org.semanticwb.process.model.StartEventNode"%>
 <%@page import="org.semanticwb.process.model.Lane"%>
 <%@page import="org.semanticwb.process.model.Instance"%>
 <%@page import="org.semanticwb.process.model.ProcessSite"%>
@@ -96,9 +96,9 @@ if (!pFilter.equals("filter_all")) {
     Iterator<GraphicalElement> gElements = process.listContaineds();
     while (gElements.hasNext()) {
         GraphicalElement gElement = gElements.next();
-        if (gElement instanceof StartEvent) {
+        if (gElement instanceof StartEventNode) {
             String type = "Evento de Inicio Normal";
-            StartEvent sevt = (StartEvent)gElement;
+            StartEventNode sevt = (StartEventNode)gElement;
             String desc = sevt.getDescription();
             String actCode = sevt.getActionCode();
 
@@ -152,9 +152,9 @@ if (!pFilter.equals("filter_all")) {
                     <b>C&oacute;digo de acci&oacute;n</b>: <%=actCode%>
                 </p>
             <%
-        } else if (gElement instanceof EndEvent) {
+        } else if (gElement instanceof EndEventNode) {
             String type = "Evento Final Normal";
-            EndEvent sevt = (EndEvent)gElement;
+            EndEventNode sevt = (EndEventNode)gElement;
             String desc = sevt.getDescription();
             String actCode = sevt.getActionCode();
 
