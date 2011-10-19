@@ -107,25 +107,23 @@ public class ProcessFileRepository extends GenericResource {
 
         if ("".equals(action)) {
 
-            SWBResourceURL urlorder = paramRequest.getRenderUrl();
+            
             //urlorder.setParameter("parentUUID", parentUUID);
 
+            String ugpop = "";
             String usrgpo_filter = request.getParameter("usrgpo_filter");
-            out.println("<div id=\"ProcessFileRepository\">");
-            out.println("<table class=\"tabla-bandeja\"");
-            out.println("<thead>");
+            SWBResourceURL urlorder = paramRequest.getRenderUrl();
+            if(usrgpo_filter!=null)ugpop="&usrgpo_filter="+usrgpo_filter;
             if (null != usr) {
 
-                out.println("<tr>");
-                out.println("<th colspan=\"6\" class=\"tban-id\" align=\"right\">");
-                out.println("Filtrar por área: ");
-                out.println("</th>");
-                out.println("<th colspan=\"2\" class=\"tban-tarea\" align=\"center\">");
-
+                out.println("<div class=\"bandeja-combo\">");
+                out.println("<ul>");
+                out.println("<li>");
+                out.println("<form>");
                 SWBResourceURL urlfilter = paramRequest.getRenderUrl();
                 urlfilter.setParameter("suri", suri);
                 
-                out.println("<select name=\"usrgpo_filter\" onchange=\"window.location='"+urlfilter+"?usrgpo_filter='+this.value;;\">");
+                out.println("<select id=\"usrgpo_filter\" name=\"usrgpo_filter\" onchange=\"window.location='"+urlfilter+"?usrgpo_filter='+this.value;;\">");
                 out.println("<option value=\"\"></option>");
                 String strSelected = "";
                 Iterator<UserGroup> itug = usr.getUserRepository().listUserGroups();
@@ -136,33 +134,43 @@ public class ProcessFileRepository extends GenericResource {
                     out.println("<option value=\""+userGroup.getId()+"\" "+strSelected+" >"+userGroup.getDisplayTitle(usr.getLanguage()) +"</option>");
                 }
                 out.println("</select>");
-
-                out.println("</th>");
-                out.println("</tr>");
+                out.println("</li>");
+                out.println("<li>");
+                out.println("<button type=\"button\" onclick=\"window.location='"+urlfilter+"?usrgpo_filter='+document.getElementById('usrgpo_filter').value;\">Filtrar por área</button>");
+                out.println("</li>");
+                out.println("</ul>");
+                out.println("</form>");
+                out.println("</div>");
             }
+            
+            
+            out.println("<div id=\"ProcessFileRepository\">");
+            out.println("<table class=\"tabla-bandeja\"");
+            out.println("<thead>");
+            
             out.println("<tr>");
             out.println("<th class=\"tban-id\">");
             out.println("Id");
             out.println("</th>");
             out.println("<th class=\"tban-tarea\">");
-            out.println("<a style=\"color:white; text-decoration:'none';\" href=\"" + urlorder + "?orderBy=type\" title=\"Ordenar por tipo\">" + "Tipo" + "</a>");
+            out.println("<a style=\"color:white; text-decoration:'none';\" href=\"" + urlorder + "?orderBy=type"+ugpop+"\" title=\"Ordenar por tipo\">" + "Tipo" + "</a>");
             out.println("</th>");
             out.println("<th class=\"tban-tarea\">");
-            out.println("<a style=\"color:white; text-decoration:'none';\" href=\"" + urlorder + "?orderBy=title\" title=\"Ordenar por nombre\">" + "Nombre" + "</a>");
+            out.println("<a style=\"color:white; text-decoration:'none';\" href=\"" + urlorder + "?orderBy=title"+ugpop+"\" title=\"Ordenar por nombre\">" + "Nombre" + "</a>");
             out.println("</th>");
             out.println("<th class=\"tban-tarea\">");
             out.println("Versión");
             out.println("</th>");
             out.println("<th class=\"tban-tarea\">");
-            out.println("<a style=\"color:white; text-decoration:'none';\" href=\"" + urlorder + "?orderBy=date\" title=\"Ordenar por fecha de modificación\">" + "Modificado" + "</a>");
+            out.println("<a style=\"color:white; text-decoration:'none';\" href=\"" + urlorder + "?orderBy=date"+ugpop+"\" title=\"Ordenar por fecha de modificación\">" + "Modificado" + "</a>");
             out.println("</th>");
             out.println("<th class=\"tban-tarea\">");
-            out.println("<a style=\"color:white; text-decoration:'none';\" href=\"" + urlorder + "?orderBy=usr\" title=\"Ordenar por usuario que lo modificó.\">" + "Modificado por" + "</a>");
+            out.println("<a style=\"color:white; text-decoration:'none';\" href=\"" + urlorder + "?orderBy=usr"+ugpop+"\" title=\"Ordenar por usuario que lo modificó.\">" + "Modificado por" + "</a>");
             out.println("</th>");
             out.println("<th class=\"tban-tarea\">");
-            out.println("<a style=\"color:white; text-decoration:'none';\" href=\"" + urlorder + "?orderBy=gpousr\" title=\"Ordenar por área de usuario.\">" + "Área" + "</a>");
+            out.println("<a style=\"color:white; text-decoration:'none';\" href=\"" + urlorder + "?orderBy=gpousr"+ugpop+"\" title=\"Ordenar por área de usuario.\">" + "Área" + "</a>");
             out.println("</th>");
-            out.println("<th class=\"tban-accion\">");
+            out.println("<th class=\"tban-id\">");
             out.println("Acción");
             out.println("</th>");
             out.println("</tr>");
@@ -212,14 +220,15 @@ public class ProcessFileRepository extends GenericResource {
                         skey = usrc.getFullName() + skey;
                     }
                 } else if (orderBy.equals("gpousr")) {
-//                    User usrc = version.getCreator();
 
-                    skey = " - " + repoFile.getOwnerUserGroup().getDisplayTitle(lang) + " - " + repoFile.getId();
+                    if(repoFile.getOwnerUserGroup()==null)
+                    {
+                        skey = " - " + " " + " - " + repoFile.getId();
+                    } else {
+                    
+                        skey = " - " + repoFile.getOwnerUserGroup().getDisplayTitle(lang) + " - " + repoFile.getId();
+                    }
 
-
-//                    if (usrc != null) {
-//                        skey = usrc.getFullName() + skey;
-//                    }
                 }
                 hmNodes.put(skey, repoFile);
             }
@@ -241,11 +250,15 @@ public class ProcessFileRepository extends GenericResource {
                 RepositoryFile repositoryFile = hmNodes.get(skey);
                 if(repositoryFile.getOwnerUserGroup()!=null)
                 {
-                    String ugid = repositoryFile.getOwnerUserGroup().getId();
-                    if(ugid.equals(usrgpo_filter)||usrgpo_filter==null||usrgpo_filter.equals(""))
+                    UserGroup ugpo = repositoryFile.getOwnerUserGroup();
+                    String ugid = null;
+                    if(ugpo!=null) ugid = ugpo.getId();
+                    if(null!=ugid&&ugid.equals(usrgpo_filter)||usrgpo_filter==null||usrgpo_filter.equals(""))
                     {
                         showFile=Boolean.TRUE;
                     }
+                } else if(usrgpo_filter==null||usrgpo_filter.equals("")){
+                    showFile=Boolean.TRUE;
                 }
                 
                 if(!showFile) continue;
