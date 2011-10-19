@@ -45,6 +45,7 @@ import org.semanticwb.portal.api.*;
 import org.semanticwb.process.model.FlowNodeInstance;
 import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.ProcessInstance;
+import org.semanticwb.process.model.SWBProcessMgr;
 import org.semanticwb.process.model.UserTask;
 import org.semanticwb.process.resources.controlpanel.ControlPanelResource;
 
@@ -123,6 +124,15 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             }
             setDisplayCols(dCols+"|actionsCol");
             response.setMode(response.Mode_VIEW);
+        } else if (action.equals("CREATE")) {
+            User user=response.getUser();
+            String pid = request.getParameter("pid");
+            if (pid != null && !pid.trim().equals("")) {
+                Process process = Process.ClassMgr.getProcess(pid, response.getWebPage().getWebSite());
+                if (process != null) {
+                    SWBProcessMgr.createProcessInstance(process, user);
+                }
+            }
         } else {
             super.processAction(request, response);
         }
