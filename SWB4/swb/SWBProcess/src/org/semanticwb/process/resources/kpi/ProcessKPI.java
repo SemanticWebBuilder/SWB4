@@ -295,7 +295,7 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
             + "<div id=\"" + id + "_timelogSeries\"></div>\n"
             + "<div id=\"stageLog\" style=\"width:700px; height:50px; text-align:center;\"><label>" + title + "</label></div>\n";
         }
-        System.out.println(ret);
+        //System.out.println(ret);
         return ret;
     }
     
@@ -839,9 +839,9 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
             min.addData(mit, tskText + ": " + mit + " " + unit);
             max.addData(mat, tskText + ": " + mat + " " + unit);
            
-            avg.addXAxisLabel(paramRequest.getLocaleString(tskText));
-            min.addXAxisLabel(paramRequest.getLocaleString(tskText));
-            max.addXAxisLabel(paramRequest.getLocaleString(tskText));
+            avg.addXAxisLabel(tskText);
+            min.addXAxisLabel(tskText);
+            max.addXAxisLabel(tskText);
         }
         data.add(min);
         data.add(avg);
