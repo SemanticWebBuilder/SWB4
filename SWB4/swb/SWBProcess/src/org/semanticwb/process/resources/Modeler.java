@@ -151,8 +151,8 @@ public class Modeler extends GenericResource {
         }
     }
 
-    private Document getService(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
-
+    private Document getService(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) 
+    {
         GenericObject go = ont.getGenericObject(request.getParameter("suri"));
         SemanticClass sc = go.getSemanticObject().getSemanticClass();
         HashMap<String, JSONObject> hmjson = new HashMap();
