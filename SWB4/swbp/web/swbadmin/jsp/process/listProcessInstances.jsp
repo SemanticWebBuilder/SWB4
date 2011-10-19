@@ -64,6 +64,29 @@
         }
         return ret;
     }
+    
+    /*public String _getStatusInstances(FlowNodeInstance fi, int status) {
+        String ret = "";
+        if (fi instanceof SubProcessInstance) {
+            SubProcessInstance pi = (SubProcessInstance) fi;
+            Iterator<FlowNodeInstance> acit = pi.listFlowNodeInstances();
+            if (acit.hasNext()) {
+                while (acit.hasNext()) {
+                    FlowNodeInstance actinst = acit.next();
+                    ret += _getStatusInstances(actinst, status);
+                }
+            }
+        } else if (fi.getFlowNodeType() instanceof Activity && fi.getStatus() == status) {
+            Iterator<FlowNodeInstance> fnii = fi.getFlowNodeType().listFlowObjectInstances();
+            int c = 0;
+            while (fnii.hasNext()) {
+                c++;
+                fnii.next();
+            }
+            ret += fi.getFlowNodeType().getURI() + "(" + c + ")|";
+        }
+        return ret;
+    }*/
 %>
 
 <%!    public void printActivityInstance(WebPage page, FlowNodeInstance ai, JspWriter out) throws IOException {
@@ -190,12 +213,12 @@ String baseimg = SWBPortal.getWebWorkPath() + "/models/" + topic.getWebSiteId() 
                     <table class="tabla-bandeja">
                         <thead>
                             <th class="tban-id">Estado</th>
-                            <th class="tban-tarea">Factor Cr&iacute;tico</th>
-                            <th class="tban-tarea">Creador</th>
-                            <th class="tban-inicia">Inicio</th>
-                            <th class="tban-cerrada">T&eacute;rmino</th>
-                            <th class="tban-tarea">Rol responsable</th>
-                            <th class="tban-accion">Acciones</th>
+                            <th class="tban-id">Factor Cr&iacute;tico</th>
+                            <th class="tban-id">Creador</th>
+                            <th class="tban-id">Inicio</th>
+                            <th class="tban-id">T&eacute;rmino</th>
+                            <th class="tban-id">Rol responsable</th>
+                            <th class="tban-id">Acciones</th>
                         </thead>
                         <tbody>
                             <%
