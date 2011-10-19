@@ -4,7 +4,9 @@
     Author     : Hasdai Pacheco {haxdai@gmail.com}
 --%>
 
+<%@page import="org.semanticwb.process.model.base.StartEventBase"%>
 <%@page import="org.semanticwb.process.model.ProcessGroup"%>
+<%@page import="org.semanticwb.process.model.StartEvent"%>
 <%@page import="java.util.Date"%>
 <%@page import="org.semanticwb.process.model.Process"%>
 <%@page import="org.semanticwb.process.model.Activity"%>
@@ -203,38 +205,46 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
             </li-->
         </ul>
     </div>
-            <div class="bandeja-combo">
-                <ul>
-                    <li>
-                        <select id="processId">
+    <div class="bandeja-combo">
+        <ul>
+            <li>
+                <select id="processId">
+                    <%
+                    Iterator<StartEvent> sevts = StartEvent.ClassMgr.listStartEvents(paramRequest.getWebPage().getWebSite());
+                    ArrayList<Process> aProcess = new ArrayList<Process>();
+                    while (sevts.hasNext()) {
+                        StartEvent evt = sevts.next();
+                        if (user.haveAccess(evt)) {
+                            aProcess.add(evt.getProcess());
+                        }
+                    }
+                    
+                    Iterator<ProcessGroup> pGroups = SWBComparator.sortByDisplayName(ProcessGroup.ClassMgr.listProcessGroups(paramRequest.getWebPage().getWebSite()),lang);
+                    SWBResourceURL createUrl = paramRequest.getActionUrl().setAction("CREATE");
+                    while(pGroups.hasNext()) {
+                        ProcessGroup pgroup = pGroups.next();
+                        %>
+                        <optgroup label="<%=pgroup.getDisplayTitle(lang)%>">
                             <%
-                            Iterator<ProcessGroup> pGroups = SWBComparator.sortByDisplayName(ProcessGroup.ClassMgr.listProcessGroups(paramRequest.getWebPage().getWebSite()),lang);
-                            SWBResourceURL createUrl = paramRequest.getActionUrl().setAction("CREATE");
-                            while(pGroups.hasNext()) {
-                                ProcessGroup pgroup = pGroups.next();
+                            Iterator<Process> it_processes = pgroup.listProcesses();//Process.ClassMgr.listProcesses();//Process.ClassMgr.listProcessByProcessGroup(usrGroup, paramRequest.getWebPage().getWebSite());
+                            while (it_processes.hasNext()) {
+                                Process itp = it_processes.next();
                                 %>
-                                <optgroup label="<%=pgroup.getDisplayTitle(lang)%>">
-                                    <%
-                                    Iterator<Process> it_processes = pgroup.listProcesses();//Process.ClassMgr.listProcesses();//Process.ClassMgr.listProcessByProcessGroup(usrGroup, paramRequest.getWebPage().getWebSite());
-                                    while (it_processes.hasNext()) {
-                                        Process itp = it_processes.next();
-                                        %>
-                                        <option value="<%=itp.getId()%>">  <%=itp.getDisplayTitle(lang)%></option>
-                                        <%
-                                    }
-                                    %>
-                                </optgroup>
+                                <option value="<%=itp.getId()%>">  <%=itp.getDisplayTitle(lang)%></option>
                                 <%
                             }
                             %>
-                        </select>
-                    </li>
-                    <li>
-                        <input type="button" value="Iniciar" onclick="window.location='<%=createUrl%>?pid='+document.getElementById('processId').value;"/>
-                    </li>
-                </ul>
-                
-            </div>
+                        </optgroup>
+                        <%
+                    }
+                    %>
+                </select>
+            </li>
+            <li>
+                <input type="button" value="Iniciar" onclick="window.location='<%=createUrl%>?pid='+document.getElementById('processId').value;"/>
+            </li>
+        </ul>
+    </div>
         <%
         if (tinstances != null && tinstances.size() > 0) {
             %>
