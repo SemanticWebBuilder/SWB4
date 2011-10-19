@@ -67,7 +67,7 @@
         }
         return (ret);
     }
-
+    
     public String _getStatusInstances(FlowNodeInstance fi, int status) {
         String ret = "";
         if (fi instanceof SubProcessInstance) {
@@ -84,6 +84,29 @@
         }
         return ret;
     }
+
+    /*public String _getStatusInstances(FlowNodeInstance fi, int status) {
+        String ret = "";
+        if (fi instanceof SubProcessInstance) {
+            SubProcessInstance pi = (SubProcessInstance) fi;
+            Iterator<FlowNodeInstance> acit = pi.listFlowNodeInstances();
+            if (acit.hasNext()) {
+                while (acit.hasNext()) {
+                    FlowNodeInstance actinst = acit.next();
+                    ret += _getStatusInstances(actinst, status);
+                }
+            }
+        } else if (fi.getFlowNodeType() instanceof Activity && fi.getStatus() == status) {
+            Iterator<FlowNodeInstance> fnii = fi.getFlowNodeType().listFlowObjectInstances();
+            int c = 0;
+            while (fnii.hasNext()) {
+                c++;
+                fnii.next();
+            }
+            ret += fi.getFlowNodeType().getURI() + "(" + c + ")|";
+        }
+        return ret;
+    }*/
 %>
 
 <script type="text/javascript">
@@ -227,22 +250,22 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                         %><th class="tban-id">Prioridad</th><%
                     }
                     if (displayCols.contains("nameCol")) {
-                        %><th class="tban-proces">Proceso</th><%
+                        %><th class="tban-id">Proceso</th><%
                     }
                     if (displayCols.contains("sdateCol")) {
-                        %><th class="tban-inicia">Iniciado</th><%
+                        %><th class="tban-id">Iniciado</th><%
                     }
                     if (displayCols.contains("edateCol")) {
-                        %><th class="tban-cerrada">Cerrado</th><%
+                        %><th class="tban-id">Cerrado</th><%
                     }
                     if (displayCols.contains("pendingCol")) {
-                        %><th class="tban-tarea">Actividades pendientes</th><%
+                        %><th class="tban-id">Actividades pendientes</th><%
                     }
                     if (displayCols.contains("rolesCol")) {
-                        %><th class="tban-tarea">Responsables</th><%
+                        %><th class="tban-id">Responsables</th><%
                     }
                     if (displayCols.contains("actionsCol")) {
-                        %><th class="tban-accion">Acciones</th><%
+                        %><th class="tban-id">Acciones</th><%
                     }
                     %>
                 </tr>
@@ -372,13 +395,13 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                 if (instance.getStatus() == ProcessInstance.STATUS_PROCESSING) {
                                     ProcessWebPage pwp = instance.getProcessType().getProcessWebPage();
                                     if (pwp != null) {
-                                        %><a class="acc-atender" target="_new" href="<%=pwp.getUrl()%>">Detalle</a><%
+                                        %><a class="acc-detalle" target="_new" href="<%=pwp.getUrl()%>">Detalle</a><%
                                     }
                                 }
                                 
                                 if (statusWp != null) {
                                 %>
-                                    <a class="acc-comentar" target="_new" href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessType().getEncodedURI()%>&mode=view<%=acts%>">Ver mapa</a>
+                                    <a class="acc-mapa" target="_new" href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessType().getEncodedURI()%>&mode=view<%=acts%>">Ver mapa</a>
                                 <%}%>
                                 <a class="acc-eliminar" href="#">Eliminar</a>
                             </td>
