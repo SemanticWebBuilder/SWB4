@@ -213,29 +213,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
         </ul>
     </div>
     <%
-        Iterator<Process> p_it = Process.ClassMgr.listProcesses(ws);
-        if (p_it.hasNext()) {
-            SWBResourceURL createUrl = paramRequest.getActionUrl().setAction("create");
-            %>
-            <div class="bandeja-combo">
-                <ul>
-                    <li>
-                        <select id="processId">
-                            <%
-                            while(p_it.hasNext()) {
-                                Process ip = p_it.next();
-                                %><option value="<%=ip.getId()%>"><%=ip.getDisplayTitle(lang)%></option><%
-                            }
-                            %>
-                        </select>
-                    </li>
-                    <li>
-                        <input type="button" value="Crear caso" onclick="loadPageUrl('<%=createUrl.toString()%>', 'pid', document.getElementById('processId').options[document.getElementById('processId').selectedIndex].value)"/>
-                    </li>
-                </ul>
-            </div>
-            <%
-        }
+        
     if (pinstances != null && pinstances.size() > 0) {
         %>        
         <br>
@@ -250,22 +228,22 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                         %><th class="tban-id">Prioridad</th><%
                     }
                     if (displayCols.contains("nameCol")) {
-                        %><th class="tban-id">Proceso</th><%
+                        %><th class="tban-proces">Proceso</th><%
                     }
                     if (displayCols.contains("sdateCol")) {
-                        %><th class="tban-id">Iniciado</th><%
+                        %><th class="tban-inicia">Iniciado</th><%
                     }
                     if (displayCols.contains("edateCol")) {
-                        %><th class="tban-id">Cerrado</th><%
+                        %><th class="tban-cerrada">Cerrado</th><%
                     }
                     if (displayCols.contains("pendingCol")) {
-                        %><th class="tban-id">Actividades pendientes</th><%
+                        %><th class="tban-tarea">Actividades pendientes</th><%
                     }
                     if (displayCols.contains("rolesCol")) {
-                        %><th class="tban-id">Responsables</th><%
+                        %><th class="tban-tarea">Responsables</th><%
                     }
                     if (displayCols.contains("actionsCol")) {
-                        %><th class="tban-id">Acciones</th><%
+                        %><th class="tban-accion">Acciones</th><%
                     }
                     %>
                 </tr>
