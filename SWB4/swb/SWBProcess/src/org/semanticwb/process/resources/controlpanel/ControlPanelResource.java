@@ -194,7 +194,7 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
             if (page < 0) page = 1;
         }
 
-        if (itemsPerPage < 20) itemsPerPage = 5;
+        if (itemsPerPage < 20) itemsPerPage = 20;
 
         if (request.getParameter("sFilter") != null && !request.getParameter("sFilter").trim().equals("")) {
             statusFilter = Integer.valueOf(request.getParameter("sFilter"));
