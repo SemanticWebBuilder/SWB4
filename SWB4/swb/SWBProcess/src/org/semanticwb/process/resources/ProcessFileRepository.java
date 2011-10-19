@@ -1,29 +1,28 @@
 /**
-* SemanticWebBuilder Process (SWB Process) es una plataforma para la gestión de procesos de negocio mediante el uso de 
-* tecnología semántica, que permite el modelado, configuración, ejecución y monitoreo de los procesos de negocio
-* de una organización, así como el desarrollo de componentes y aplicaciones orientadas a la gestión de procesos.
-* 
-* Mediante el uso de tecnología semántica, SemanticWebBuilder Process puede generar contextos de información
-* alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes fuentes asociadas a
-* un proceso de negocio, donde a la información se le asigna un significado, de forma que pueda ser interpretada
-* y procesada por personas y/o sistemas. SemanticWebBuilder Process es una creación original del Fondo de 
-* Información y Documentación para la Industria INFOTEC.
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder Process a través de su licenciamiento abierto 
-* al público (‘open source’), en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC 
-* lo ha diseñado y puesto a su disposición; aprender de él; distribuirlo a terceros; acceder a su código fuente,
-* modificarlo y combinarlo (o enlazarlo) con otro software. Todo lo anterior de conformidad con los términos y 
-* condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización de SemanticWebBuilder Process. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder Process, de ninguna especie y naturaleza, ni implícita ni 
-* explícita, siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los 
-* riesgos que puedan derivar de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder Process, INFOTEC pone a su disposición la
-* siguiente dirección electrónica: 
-*  http://www.semanticwebbuilder.org.mx
-**/
-
+ * SemanticWebBuilder Process (SWB Process) es una plataforma para la gestión de procesos de negocio mediante el uso de 
+ * tecnología semántica, que permite el modelado, configuración, ejecución y monitoreo de los procesos de negocio
+ * de una organización, así como el desarrollo de componentes y aplicaciones orientadas a la gestión de procesos.
+ * 
+ * Mediante el uso de tecnología semántica, SemanticWebBuilder Process puede generar contextos de información
+ * alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes fuentes asociadas a
+ * un proceso de negocio, donde a la información se le asigna un significado, de forma que pueda ser interpretada
+ * y procesada por personas y/o sistemas. SemanticWebBuilder Process es una creación original del Fondo de 
+ * Información y Documentación para la Industria INFOTEC.
+ * 
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder Process a través de su licenciamiento abierto 
+ * al público (‘open source’), en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC 
+ * lo ha diseñado y puesto a su disposición; aprender de él; distribuirlo a terceros; acceder a su código fuente,
+ * modificarlo y combinarlo (o enlazarlo) con otro software. Todo lo anterior de conformidad con los términos y 
+ * condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización de SemanticWebBuilder Process. 
+ * 
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder Process, de ninguna especie y naturaleza, ni implícita ni 
+ * explícita, siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los 
+ * riesgos que puedan derivar de la misma. 
+ * 
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder Process, INFOTEC pone a su disposición la
+ * siguiente dirección electrónica: 
+ *  http://www.semanticwebbuilder.org.mx
+ **/
 package org.semanticwb.process.resources;
 
 import java.io.ByteArrayInputStream;
@@ -72,6 +71,7 @@ public class ProcessFileRepository extends GenericResource {
     private static final String LVL_VIEW = "prop_view";
     private static final String LVL_MODIFY = "prop_modify";
     private static final String LVL_ADMIN = "prop_admin";
+    private static final String VALID_FILES = "prop_valid_files";
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -110,9 +110,36 @@ public class ProcessFileRepository extends GenericResource {
             SWBResourceURL urlorder = paramRequest.getRenderUrl();
             //urlorder.setParameter("parentUUID", parentUUID);
 
+            String usrgpo_filter = request.getParameter("usrgpo_filter");
             out.println("<div id=\"ProcessFileRepository\">");
             out.println("<table class=\"tabla-bandeja\"");
             out.println("<thead>");
+            if (null != usr) {
+
+                out.println("<tr>");
+                out.println("<th colspan=\"6\" class=\"tban-id\" align=\"right\">");
+                out.println("Filtrar por área: ");
+                out.println("</th>");
+                out.println("<th colspan=\"2\" class=\"tban-tarea\" align=\"center\">");
+
+                SWBResourceURL urlfilter = paramRequest.getRenderUrl();
+                urlfilter.setParameter("suri", suri);
+                
+                out.println("<select name=\"usrgpo_filter\" onchange=\"window.location='"+urlfilter+"?usrgpo_filter='+this.value;;\">");
+                out.println("<option value=\"\"></option>");
+                String strSelected = "";
+                Iterator<UserGroup> itug = usr.getUserRepository().listUserGroups();
+                while (itug.hasNext()) {
+                    UserGroup userGroup = itug.next();
+                    strSelected = "";
+                    if(usrgpo_filter!=null&&usrgpo_filter.equals(userGroup.getId())) strSelected = "selected";
+                    out.println("<option value=\""+userGroup.getId()+"\" "+strSelected+" >"+userGroup.getDisplayTitle(usr.getLanguage()) +"</option>");
+                }
+                out.println("</select>");
+
+                out.println("</th>");
+                out.println("</tr>");
+            }
             out.println("<tr>");
             out.println("<th class=\"tban-id\">");
             out.println("Id");
@@ -131,6 +158,9 @@ public class ProcessFileRepository extends GenericResource {
             out.println("</th>");
             out.println("<th class=\"tban-tarea\">");
             out.println("<a style=\"color:white; text-decoration:'none';\" href=\"" + urlorder + "?orderBy=usr\" title=\"Ordenar por usuario que lo modificó.\">" + "Modificado por" + "</a>");
+            out.println("</th>");
+            out.println("<th class=\"tban-tarea\">");
+            out.println("<a style=\"color:white; text-decoration:'none';\" href=\"" + urlorder + "?orderBy=gpousr\" title=\"Ordenar por área de usuario.\">" + "Área" + "</a>");
             out.println("</th>");
             out.println("<th class=\"tban-accion\">");
             out.println("Acción");
@@ -154,6 +184,9 @@ public class ProcessFileRepository extends GenericResource {
                 RepositoryFile repoFile = itrf.next();
 
                 VersionInfo version = repoFile.getActualVersion();
+                if (version == null) {
+                    continue;
+                }
                 String skey = repoFile.getId();
 
                 if (orderBy.equals("title")) {
@@ -173,11 +206,20 @@ public class ProcessFileRepository extends GenericResource {
                     User usrc = version.getCreator();
 
                     skey = " - " + repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
-                    ;
+
 
                     if (usrc != null) {
                         skey = usrc.getFullName() + skey;
                     }
+                } else if (orderBy.equals("gpousr")) {
+//                    User usrc = version.getCreator();
+
+                    skey = " - " + repoFile.getOwnerUserGroup().getDisplayTitle(lang) + " - " + repoFile.getId();
+
+
+//                    if (usrc != null) {
+//                        skey = usrc.getFullName() + skey;
+//                    }
                 }
                 hmNodes.put(skey, repoFile);
             }
@@ -195,7 +237,18 @@ public class ProcessFileRepository extends GenericResource {
 
                 String skey = lnit.next();
 
+                boolean showFile = Boolean.FALSE;
                 RepositoryFile repositoryFile = hmNodes.get(skey);
+                if(repositoryFile.getOwnerUserGroup()!=null)
+                {
+                    String ugid = repositoryFile.getOwnerUserGroup().getId();
+                    if(ugid.equals(usrgpo_filter)||usrgpo_filter==null||usrgpo_filter.equals(""))
+                    {
+                        showFile=Boolean.TRUE;
+                    }
+                }
+                
+                if(!showFile) continue;
                 out.println("<tr>");
                 out.println("<td class=\"tban-id\">");
                 String fid = repositoryFile.getId();
@@ -209,6 +262,10 @@ public class ProcessFileRepository extends GenericResource {
 
                 VersionInfo vi = repositoryFile.getLastVersion();
 
+                if (vi == null) {
+                    continue;
+                }
+
                 String file = "";
                 String type = "";
 
@@ -217,17 +274,16 @@ public class ProcessFileRepository extends GenericResource {
                     type = getFileName(file);
                 }
 
-                if(luser>0)
-                {
-                SWBResourceURL urlview = paramRequest.getRenderUrl();
-                urlview.setCallMethod(SWBResourceURL.Call_DIRECT);
-                urlview.setParameter("fid", fid);
-                urlview.setMode(MODE_GETFILE);
-                urlview.setParameter("verNum", "" + vi.getVersionNumber());
+                if (luser > 0) {
+                    SWBResourceURL urlview = paramRequest.getRenderUrl();
+                    urlview.setCallMethod(SWBResourceURL.Call_DIRECT);
+                    urlview.setParameter("fid", fid);
+                    urlview.setMode(MODE_GETFILE);
+                    urlview.setParameter("verNum", "" + vi.getVersionNumber());
 
-                out.println("<a href=\"" + urlview + "\">");
-                out.println("<img border=0 src='" + path + "" + type + "' alt=\"" + getFileType(file) + "\" />");
-                out.println("</a>");
+                    out.println("<a href=\"" + urlview + "\">");
+                    out.println("<img border=0 src='" + path + "" + type + "' alt=\"" + getFileType(file) + "\" />");
+                    out.println("</a>");
                 } else {
                     out.println("<img border=0 src='" + path + "" + type + "' alt=\"" + getFileType(file) + "\" />");
                 }
@@ -244,6 +300,9 @@ public class ProcessFileRepository extends GenericResource {
                 out.println("</td>");
                 out.println("<td class=\"tban-tarea\">");
                 out.println(vi != null && vi.getModifiedBy() != null && vi.getModifiedBy().getFullName() != null ? vi.getModifiedBy().getFullName() : "--");
+                out.println("</td>");
+                out.println("<td class=\"tban-tarea\">");
+                out.println(repositoryFile.getOwnerUserGroup() != null ? repositoryFile.getOwnerUserGroup().getDisplayTitle(lang) : "--");
                 out.println("</td>");
 
                 out.println("<td class=\"tban-accion\">");
@@ -307,6 +366,14 @@ public class ProcessFileRepository extends GenericResource {
             out.println("</tr>");
             out.println("<tr>");
             out.println("<td align=\"right\">");
+            out.println("Área:");
+            out.println("</td>");
+            out.println("<td>");
+            out.println(repoFile.getOwnerUserGroup().getDisplayTitle(usr.getLanguage()));
+            out.println("</td>");
+            out.println("</tr>");
+            out.println("<tr>");
+            out.println("<td align=\"right\">");
             out.println("Archivo:");
             out.println("</td>");
             out.println("<td>");
@@ -329,7 +396,7 @@ public class ProcessFileRepository extends GenericResource {
             out.println("</td>");
             out.println("</tr>");
 
-            if (luser==3 || (vl.getCreator() != null && vl.getCreator().equals(usr) && luser > 1)) {
+            if (luser == 3 || (vl.getCreator() != null && vl.getCreator().equals(usr) && luser > 1)) {
                 out.println("<tr>");
                 out.println("<td align=\"right\">");
                 out.println("Agregar nueva Versión:");
@@ -430,12 +497,21 @@ public class ProcessFileRepository extends GenericResource {
                 out.println("</tr>");
                 out.println("<tr>");
                 out.println("<td align=\"right\">");
+                out.println("Área:");
+                out.println("</td>");
+                out.println("<td>");
+                out.println(repoFile.getOwnerUserGroup().getDisplayTitle(usr.getLanguage()));
+                out.println("</td>");
+                out.println("</tr>");
+                out.println("<tr>");
+                out.println("<td align=\"right\">");
                 out.println("Archivo:");
                 out.println("</td>");
                 out.println("<td>");
                 out.println(ver.getVersionFile());
                 out.println("</td>");
                 out.println("</tr>");
+
                 out.println("<tr>");
                 out.println("<th>");
                 out.println("&nbsp;");// espacio para liga ver archivo
@@ -461,8 +537,7 @@ public class ProcessFileRepository extends GenericResource {
                     out.println("<tr>");
                     out.println("<td align=\"center\" >");
 
-                    if(luser>0)
-                    {
+                    if (luser > 0) {
                         SWBResourceURL urlview = paramRequest.getRenderUrl();
                         urlview.setCallMethod(SWBResourceURL.Call_DIRECT);
                         urlview.setParameter("fid", fid);
@@ -545,8 +620,77 @@ public class ProcessFileRepository extends GenericResource {
                 }
             }
 
+            String validFiles = getResourceBase().getAttribute(VALID_FILES, "");
+
+            out.println("<script type=\"text/javascript\" >");
+
+            out.println("function Checkfiles(pExt) ");
+            out.println("{ ");
+            out.println("    var ftit = document.getElementById('ftitle'); ");
+            out.println("    var ftval = ftit.value; ");
+            out.println("    ftval = ftval.replace(' ' , ''); ");
+            out.println("    if(ftval.length==0) { ");
+            out.println("        alert('Falta poner el titulo del archivo.'); ");
+            out.println("        ftit.focus(); ");
+            out.println("        return false; ");
+            out.println("    } ");
+            out.println("     ");
+            out.println("    var fdesc = document.getElementById('fdescription'); ");
+            out.println("    ftval = fdesc.value; ");
+            out.println("    ftval = ftval.replace(' ' , ''); ");
+            out.println("    if(ftval.length==0) { ");
+            out.println("        alert('Falta poner la descripcion del archivo.'); ");
+            out.println("        fdesc.focus(); ");
+            out.println("        return false; ");
+            out.println("    } ");
+            out.println("     ");
+            out.println("    var fup = document.getElementById('ffile'); ");
+            out.println("    var fileName = fup.value; ");
+            out.println("     ");
+            out.println("    if(fileName.length == 0)  ");
+            out.println("    { ");
+            out.println("        alert('Falta seleccionar el archivo.'); ");
+            out.println("        fup.focus(); ");
+            out.println("        return false; ");
+            out.println("    }  ");
+            out.println("     ");
+            out.println("    if(isFileType(fileName, pExt)) ");
+            out.println("    { ");
+            out.println("        return true; ");
+            out.println("    }  ");
+            out.println("    else ");
+            out.println("    { ");
+            out.println("        var ptemp = pExt; ");
+            out.println("        ptemp = ptemp.replace('|',','); ");
+            out.println("        alert('Selecciona archivos de tipo '+ptemp+' unicamente.'); ");
+            out.println("        fup.focus(); ");
+            out.println("        return false; ");
+            out.println("    } ");
+            out.println("} ");
+            out.println(" ");
+            out.println("function isFileType(pFile, pExt)  ");
+            out.println("{  ");
+            out.println("    if(pFile.length > 0 && pExt.length > 0)  ");
+            out.println("    {  ");
+            out.println("        var swFormat=pExt + '|';  ");
+            out.println("        sExt=pFile.substring(pFile.indexOf('.')).toLowerCase();  ");
+            out.println("        var sType='';  ");
+            out.println("        while(swFormat.length > 0 )  ");
+            out.println("        {  ");
+            out.println("            sType= swFormat.substring(0, swFormat.indexOf('|'));  ");
+            out.println("            if(sExt.indexOf(sType)!=-1) return true;  ");
+            out.println("            swFormat=swFormat.substring(swFormat.indexOf('|')+1);  ");
+            out.println("        }  ");
+            out.println("        while(pExt.indexOf('|')!=-1) pExt=pExt.replace('|',',');  ");
+            out.println("        return false;  ");
+            out.println("    }  ");
+            out.println("    else return true;  ");
+            out.println("} ");
+
+            out.println("</script>"); //        
+
             out.println("<div id=\"ProcessFileRepository\">");
-            out.println("<form method=\"post\" action=\"" + urlnew + "\"  enctype=\"multipart/form-data\">");
+            out.println("<form method=\"post\" action=\"" + urlnew + "\"  enctype=\"multipart/form-data\" >");
 
             if (null != fid && null != newVersion) {
                 out.println("<input type=\"hidden\" name=\"newVersion\" value=\"" + newVersion + "\">");
@@ -560,7 +704,7 @@ public class ProcessFileRepository extends GenericResource {
             out.println("Título:");
             out.println("</td>");
             out.println("<td>");
-            out.println("<input type=\"text\" name=\"ftitle\" value=\"" + stitle + "\">");
+            out.println("<input type=\"text\" name=\"ftitle\" id=\"ftitle\" value=\"" + stitle + "\">");
             out.println("</td>");
             out.println("</tr>");
             out.println("<tr>");
@@ -568,7 +712,7 @@ public class ProcessFileRepository extends GenericResource {
             out.println("Descripción:");
             out.println("</td>");
             out.println("<td>");
-            out.println("<textarea name=\"fdescription\">" + sdescription + "</textarea>");
+            out.println("<textarea name=\"fdescription\" id=\"fdescription\">" + sdescription + "</textarea>");
             out.println("</td>");
             out.println("</tr>");
             out.println("<tr>");
@@ -598,7 +742,10 @@ public class ProcessFileRepository extends GenericResource {
             out.println("</td>");
             out.println("<td>");
 
-            out.println("<input type=\"file\" name=\"ffile\">");
+
+
+            out.println("<input id=\"ffile\" type=\"file\" name=\"ffile\" value=\"\">");
+
             out.println("</td>");
             out.println("</tr>");
 
@@ -606,7 +753,7 @@ public class ProcessFileRepository extends GenericResource {
             out.println("<tfoot>");
             out.println("<tr>");
             out.println("<td colspan=\"2\" align=\"right\">");
-            out.println("<button type=\"submit\" >Agregar</button>");
+            out.println("<button  type=\"button\" onclick=\"if(Checkfiles('" + validFiles + "')){this.form.submit();}else {return false;};\">Agregar</button>");
             SWBResourceURL urlbck = paramRequest.getRenderUrl();
             urlbck.setParameter("act", "");
             out.println("<button type=\"button\" onclick=\"window.location='" + urlbck + "';\">Regresar</button>");
@@ -696,6 +843,9 @@ public class ProcessFileRepository extends GenericResource {
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+            String validFiles = getResourceBase().getAttribute(VALID_FILES, "");
+
+
             out.println("<tr><td colspan=\"2\"><B>" + paramRequest.getLocaleString("msgRolesDefinitionLevel") + "</B></td></tr>");
             out.println("<tr><td align=\"right\" width=150>" + paramRequest.getLocaleString("msgView") + ":</td>");
             out.println("<td><select name=\"ver\">" + getSelectOptions("ver", wsite, paramRequest) + "</select></td></tr>");
@@ -703,6 +853,10 @@ public class ProcessFileRepository extends GenericResource {
             out.println("<td><select name=\"modificar\">" + getSelectOptions("modificar", wsite, paramRequest) + "</select></td></tr>");
             out.println("<tr><td align=\"right\"  width=150>" + paramRequest.getLocaleString("msgAdministrate") + ":</td>");
             out.println("<td><select name=\"administrar\">" + getSelectOptions("administrar", wsite, paramRequest) + "</select></td></tr>");
+
+            out.println("<tr><td align=\"right\"  width=150>" + paramRequest.getLocaleString("msgValidFiles") + ":</td>");
+            out.println("<td><input type=\"text\" name=\"validfiles\"  value=\"" + validFiles + "\"></td></tr>");
+
 
             out.println("</table>");
             out.println("</fieldset>");
@@ -897,9 +1051,17 @@ public class ProcessFileRepository extends GenericResource {
 
             repoFile.setTitle(ftitle);
             repoFile.setDescription(fdescription);
+
+            User usr = response.getUser();
+
+            repoFile.setOwnerUserGroup(usr.getUserGroup());
+
             //System.out.println("fname: "+fname);
-            if(fname.indexOf("\\")!=-1) fname = fname.substring(fname.lastIndexOf("\\")+1);
-            else if(fname.indexOf("/")!=-1) fname = fname.substring(fname.lastIndexOf("/")+1);
+            if (fname.indexOf("\\") != -1) {
+                fname = fname.substring(fname.lastIndexOf("\\") + 1);
+            } else if (fname.indexOf("/") != -1) {
+                fname = fname.substring(fname.lastIndexOf("/") + 1);
+            }
             //System.out.println("fname: "+fname);
             repoFile.storeFile(fname, new ByteArrayInputStream(bcont), fcomment, incremento);
 
@@ -912,11 +1074,13 @@ public class ProcessFileRepository extends GenericResource {
             String viewrole = request.getParameter("ver");
             String modifyrole = request.getParameter("modificar");
             String adminrole = request.getParameter("administrar");
+            String validfiles = request.getParameter("validfiles");
 
             try {
                 getResourceBase().setAttribute(LVL_VIEW, viewrole);
                 getResourceBase().setAttribute(LVL_MODIFY, modifyrole);
                 getResourceBase().setAttribute(LVL_ADMIN, adminrole);
+                getResourceBase().setAttribute(VALID_FILES, validfiles);
                 getResourceBase().updateAttributesToDB();
 
             } catch (Exception e) {
