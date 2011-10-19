@@ -99,10 +99,10 @@ public class ProcessObserver extends org.semanticwb.process.model.base.ProcessOb
             }
         }
 
-        Iterator<StartEvent> nit=listSignalObserverNodes();
+        Iterator<StartEventNode> nit=listSignalObserverNodes();
         while (nit.hasNext())
         {
-            StartEvent startEvent = nit.next();
+            StartEventNode startEvent = nit.next();
             //System.out.println(startEvent);
             Containerable cont=startEvent.getContainer();
             if(cont!=null && cont instanceof Process && ((Process)cont).isActive())
@@ -160,10 +160,10 @@ public class ProcessObserver extends org.semanticwb.process.model.base.ProcessOb
                 }
             }
 
-            Iterator<StartEvent> sit=listTimeObserverNodes();
+            Iterator<StartEventNode> sit=listTimeObserverNodes();
             while (sit.hasNext())
             {
-                StartEvent startEvent = sit.next();
+                StartEventNode startEvent = sit.next();
                 Containerable cont=startEvent.getContainer();
                 if(cont!=null && cont instanceof Process && ((Process)cont).isActive())
                 {
@@ -214,10 +214,10 @@ public class ProcessObserver extends org.semanticwb.process.model.base.ProcessOb
                 }
             }
 
-            Iterator<StartEvent> sit=listRuleObserverNodes();
+            Iterator<StartEventNode> sit=listRuleObserverNodes();
             while (sit.hasNext())
             {
-                StartEvent startEvent = sit.next();
+                StartEventNode startEvent = sit.next();
                 Containerable cont=startEvent.getContainer();
                 if(cont!=null && cont instanceof Process && ((Process)cont).isActive())
                 {
@@ -252,13 +252,13 @@ public class ProcessObserver extends org.semanticwb.process.model.base.ProcessOb
         {
             if(obj.instanceOf(TimerStartEvent.sclass))
             {
-                addTimeObserverNode((StartEvent)obj.createGenericInstance());
+                addTimeObserverNode((StartEventNode)obj.createGenericInstance());
             }else if(obj.instanceOf(SignalStartEvent.sclass))
             {
-                addSignalObserverNode((StartEvent)obj.createGenericInstance());
+                addSignalObserverNode((StartEventNode)obj.createGenericInstance());
             }else if(obj.instanceOf(RuleStartEvent.sclass))
             {
-                addRuleObserverNode((StartEvent)obj.createGenericInstance());
+                addRuleObserverNode((StartEventNode)obj.createGenericInstance());
             }
         }
     }

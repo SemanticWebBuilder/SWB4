@@ -36,10 +36,4 @@ public class EndEvent extends org.semanticwb.process.model.base.EndEventBase
         super(base);
     }
 
-    @Override
-    public void execute(FlowNodeInstance instance, User user)
-    {
-        instance.close(user);
-        instance.getParentInstance().close(user);
-    }
 }

@@ -36,10 +36,4 @@ public class StartEvent extends org.semanticwb.process.model.base.StartEventBase
         super(base);
     }
 
-    @Override
-    public void execute(FlowNodeInstance instance, User user)
-    {
-        instance.close(user);
-    }
-
 }

@@ -54,7 +54,7 @@ public class SubProcessInstance extends org.semanticwb.process.model.base.SubPro
             if(ele instanceof FlowNode)
             {
                 FlowNode flownode = (FlowNode)ele;
-                if(flownode.getClass().equals(StartEvent.class))
+                if(flownode instanceof StartEvent)
                 {
                     StartEvent init=(StartEvent)flownode;
                     start(user, init);
@@ -67,7 +67,7 @@ public class SubProcessInstance extends org.semanticwb.process.model.base.SubPro
      * Se ejecuta cada que se crea la intancia del objeto de flujo
      * @param user
      */
-    public void start(User user, StartEvent event)
+    public void start(User user, StartEventNode event)
     {
         FlowNodeInstance eventins=event.createInstance(this);
         eventins.start(user);
