@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class UserTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.process.model.Callable,org.semanticwb.model.Resourceable,org.semanticwb.model.Referensable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.RoleRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Undeleteable
+public abstract class UserTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.TemplateRefable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.RoleRefable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Resourceable,org.semanticwb.model.Trashable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable,org.semanticwb.process.model.Callable,org.semanticwb.model.CalendarRefable
 {
     public static final org.semanticwb.platform.SemanticClass swp_WrapperTaskWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#WrapperTaskWebPage");
     public static final org.semanticwb.platform.SemanticProperty swp_taskWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#taskWebPage");

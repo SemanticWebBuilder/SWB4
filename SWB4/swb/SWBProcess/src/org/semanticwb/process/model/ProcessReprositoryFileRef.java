@@ -1,6 +1,5 @@
 package org.semanticwb.process.model;
 
-import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.platform.SemanticObject;

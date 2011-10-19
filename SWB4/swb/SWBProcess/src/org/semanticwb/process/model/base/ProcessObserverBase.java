@@ -1,11 +1,14 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessObserverBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class ProcessObserverBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass swp_FlowNodeInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#FlowNodeInstance");
     public static final org.semanticwb.platform.SemanticProperty swp_hasSignalObserverInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasSignalObserverInstance");
-    public static final org.semanticwb.platform.SemanticClass swp_StartEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#StartEvent");
+   /**
+   * Nodo Raiz de Eventos Iniciales
+   */
+    public static final org.semanticwb.platform.SemanticClass swp_StartEventNode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#StartEventNode");
     public static final org.semanticwb.platform.SemanticProperty swp_hasMessageObserverNode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasMessageObserverNode");
     public static final org.semanticwb.platform.SemanticProperty swp_hasTimeObserverNode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasTimeObserverNode");
     public static final org.semanticwb.platform.SemanticProperty swp_hasRuleObserverInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasRuleObserverInstance");
@@ -130,46 +133,46 @@ public abstract class ProcessObserverBase extends org.semanticwb.process.model.P
         }
        /**
        * Gets all org.semanticwb.process.model.ProcessObserver with a determined MessageObserverNode
-       * @param value MessageObserverNode of the type org.semanticwb.process.model.StartEvent
+       * @param value MessageObserverNode of the type org.semanticwb.process.model.StartEventNode
        * @param model Model of the org.semanticwb.process.model.ProcessObserver
        * @return Iterator with all the org.semanticwb.process.model.ProcessObserver
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.ProcessObserver> listProcessObserverByMessageObserverNode(org.semanticwb.process.model.StartEvent value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessObserver> listProcessObserverByMessageObserverNode(org.semanticwb.process.model.StartEventNode value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessObserver> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasMessageObserverNode, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.process.model.ProcessObserver with a determined MessageObserverNode
-       * @param value MessageObserverNode of the type org.semanticwb.process.model.StartEvent
+       * @param value MessageObserverNode of the type org.semanticwb.process.model.StartEventNode
        * @return Iterator with all the org.semanticwb.process.model.ProcessObserver
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.ProcessObserver> listProcessObserverByMessageObserverNode(org.semanticwb.process.model.StartEvent value)
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessObserver> listProcessObserverByMessageObserverNode(org.semanticwb.process.model.StartEventNode value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessObserver> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasMessageObserverNode,value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.process.model.ProcessObserver with a determined TimeObserverNode
-       * @param value TimeObserverNode of the type org.semanticwb.process.model.StartEvent
+       * @param value TimeObserverNode of the type org.semanticwb.process.model.StartEventNode
        * @param model Model of the org.semanticwb.process.model.ProcessObserver
        * @return Iterator with all the org.semanticwb.process.model.ProcessObserver
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.ProcessObserver> listProcessObserverByTimeObserverNode(org.semanticwb.process.model.StartEvent value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessObserver> listProcessObserverByTimeObserverNode(org.semanticwb.process.model.StartEventNode value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessObserver> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasTimeObserverNode, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.process.model.ProcessObserver with a determined TimeObserverNode
-       * @param value TimeObserverNode of the type org.semanticwb.process.model.StartEvent
+       * @param value TimeObserverNode of the type org.semanticwb.process.model.StartEventNode
        * @return Iterator with all the org.semanticwb.process.model.ProcessObserver
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.ProcessObserver> listProcessObserverByTimeObserverNode(org.semanticwb.process.model.StartEvent value)
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessObserver> listProcessObserverByTimeObserverNode(org.semanticwb.process.model.StartEventNode value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessObserver> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasTimeObserverNode,value.getSemanticObject(),sclass));
             return it;
@@ -199,23 +202,23 @@ public abstract class ProcessObserverBase extends org.semanticwb.process.model.P
         }
        /**
        * Gets all org.semanticwb.process.model.ProcessObserver with a determined SignalObserverNode
-       * @param value SignalObserverNode of the type org.semanticwb.process.model.StartEvent
+       * @param value SignalObserverNode of the type org.semanticwb.process.model.StartEventNode
        * @param model Model of the org.semanticwb.process.model.ProcessObserver
        * @return Iterator with all the org.semanticwb.process.model.ProcessObserver
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.ProcessObserver> listProcessObserverBySignalObserverNode(org.semanticwb.process.model.StartEvent value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessObserver> listProcessObserverBySignalObserverNode(org.semanticwb.process.model.StartEventNode value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessObserver> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasSignalObserverNode, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.process.model.ProcessObserver with a determined SignalObserverNode
-       * @param value SignalObserverNode of the type org.semanticwb.process.model.StartEvent
+       * @param value SignalObserverNode of the type org.semanticwb.process.model.StartEventNode
        * @return Iterator with all the org.semanticwb.process.model.ProcessObserver
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.ProcessObserver> listProcessObserverBySignalObserverNode(org.semanticwb.process.model.StartEvent value)
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessObserver> listProcessObserverBySignalObserverNode(org.semanticwb.process.model.StartEventNode value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessObserver> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasSignalObserverNode,value.getSemanticObject(),sclass));
             return it;
@@ -291,23 +294,23 @@ public abstract class ProcessObserverBase extends org.semanticwb.process.model.P
         }
        /**
        * Gets all org.semanticwb.process.model.ProcessObserver with a determined RuleObserverNode
-       * @param value RuleObserverNode of the type org.semanticwb.process.model.StartEvent
+       * @param value RuleObserverNode of the type org.semanticwb.process.model.StartEventNode
        * @param model Model of the org.semanticwb.process.model.ProcessObserver
        * @return Iterator with all the org.semanticwb.process.model.ProcessObserver
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.ProcessObserver> listProcessObserverByRuleObserverNode(org.semanticwb.process.model.StartEvent value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessObserver> listProcessObserverByRuleObserverNode(org.semanticwb.process.model.StartEventNode value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessObserver> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasRuleObserverNode, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.process.model.ProcessObserver with a determined RuleObserverNode
-       * @param value RuleObserverNode of the type org.semanticwb.process.model.StartEvent
+       * @param value RuleObserverNode of the type org.semanticwb.process.model.StartEventNode
        * @return Iterator with all the org.semanticwb.process.model.ProcessObserver
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.ProcessObserver> listProcessObserverByRuleObserverNode(org.semanticwb.process.model.StartEvent value)
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessObserver> listProcessObserverByRuleObserverNode(org.semanticwb.process.model.StartEventNode value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessObserver> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasRuleObserverNode,value.getSemanticObject(),sclass));
             return it;
@@ -388,21 +391,21 @@ public abstract class ProcessObserverBase extends org.semanticwb.process.model.P
          return ret;
     }
    /**
-   * Gets all the org.semanticwb.process.model.StartEvent
-   * @return A GenericIterator with all the org.semanticwb.process.model.StartEvent
+   * Gets all the org.semanticwb.process.model.StartEventNode
+   * @return A GenericIterator with all the org.semanticwb.process.model.StartEventNode
    */
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEvent> listMessageObserverNodes()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEventNode> listMessageObserverNodes()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEvent>(getSemanticObject().listObjectProperties(swp_hasMessageObserverNode));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEventNode>(getSemanticObject().listObjectProperties(swp_hasMessageObserverNode));
     }
 
    /**
    * Gets true if has a MessageObserverNode
-   * @param value org.semanticwb.process.model.StartEvent to verify
-   * @return true if the org.semanticwb.process.model.StartEvent exists, false otherwise
+   * @param value org.semanticwb.process.model.StartEventNode to verify
+   * @return true if the org.semanticwb.process.model.StartEventNode exists, false otherwise
    */
-    public boolean hasMessageObserverNode(org.semanticwb.process.model.StartEvent value)
+    public boolean hasMessageObserverNode(org.semanticwb.process.model.StartEventNode value)
     {
         boolean ret=false;
         if(value!=null)
@@ -413,10 +416,10 @@ public abstract class ProcessObserverBase extends org.semanticwb.process.model.P
     }
    /**
    * Adds a MessageObserverNode
-   * @param value org.semanticwb.process.model.StartEvent to add
+   * @param value org.semanticwb.process.model.StartEventNode to add
    */
 
-    public void addMessageObserverNode(org.semanticwb.process.model.StartEvent value)
+    public void addMessageObserverNode(org.semanticwb.process.model.StartEventNode value)
     {
         getSemanticObject().addObjectProperty(swp_hasMessageObserverNode, value.getSemanticObject());
     }
@@ -430,44 +433,44 @@ public abstract class ProcessObserverBase extends org.semanticwb.process.model.P
     }
    /**
    * Removes a MessageObserverNode
-   * @param value org.semanticwb.process.model.StartEvent to remove
+   * @param value org.semanticwb.process.model.StartEventNode to remove
    */
 
-    public void removeMessageObserverNode(org.semanticwb.process.model.StartEvent value)
+    public void removeMessageObserverNode(org.semanticwb.process.model.StartEventNode value)
     {
         getSemanticObject().removeObjectProperty(swp_hasMessageObserverNode,value.getSemanticObject());
     }
 
    /**
    * Gets the MessageObserverNode
-   * @return a org.semanticwb.process.model.StartEvent
+   * @return a org.semanticwb.process.model.StartEventNode
    */
-    public org.semanticwb.process.model.StartEvent getMessageObserverNode()
+    public org.semanticwb.process.model.StartEventNode getMessageObserverNode()
     {
-         org.semanticwb.process.model.StartEvent ret=null;
+         org.semanticwb.process.model.StartEventNode ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasMessageObserverNode);
          if(obj!=null)
          {
-             ret=(org.semanticwb.process.model.StartEvent)obj.createGenericInstance();
+             ret=(org.semanticwb.process.model.StartEventNode)obj.createGenericInstance();
          }
          return ret;
     }
    /**
-   * Gets all the org.semanticwb.process.model.StartEvent
-   * @return A GenericIterator with all the org.semanticwb.process.model.StartEvent
+   * Gets all the org.semanticwb.process.model.StartEventNode
+   * @return A GenericIterator with all the org.semanticwb.process.model.StartEventNode
    */
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEvent> listTimeObserverNodes()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEventNode> listTimeObserverNodes()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEvent>(getSemanticObject().listObjectProperties(swp_hasTimeObserverNode));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEventNode>(getSemanticObject().listObjectProperties(swp_hasTimeObserverNode));
     }
 
    /**
    * Gets true if has a TimeObserverNode
-   * @param value org.semanticwb.process.model.StartEvent to verify
-   * @return true if the org.semanticwb.process.model.StartEvent exists, false otherwise
+   * @param value org.semanticwb.process.model.StartEventNode to verify
+   * @return true if the org.semanticwb.process.model.StartEventNode exists, false otherwise
    */
-    public boolean hasTimeObserverNode(org.semanticwb.process.model.StartEvent value)
+    public boolean hasTimeObserverNode(org.semanticwb.process.model.StartEventNode value)
     {
         boolean ret=false;
         if(value!=null)
@@ -478,10 +481,10 @@ public abstract class ProcessObserverBase extends org.semanticwb.process.model.P
     }
    /**
    * Adds a TimeObserverNode
-   * @param value org.semanticwb.process.model.StartEvent to add
+   * @param value org.semanticwb.process.model.StartEventNode to add
    */
 
-    public void addTimeObserverNode(org.semanticwb.process.model.StartEvent value)
+    public void addTimeObserverNode(org.semanticwb.process.model.StartEventNode value)
     {
         getSemanticObject().addObjectProperty(swp_hasTimeObserverNode, value.getSemanticObject());
     }
@@ -495,25 +498,25 @@ public abstract class ProcessObserverBase extends org.semanticwb.process.model.P
     }
    /**
    * Removes a TimeObserverNode
-   * @param value org.semanticwb.process.model.StartEvent to remove
+   * @param value org.semanticwb.process.model.StartEventNode to remove
    */
 
-    public void removeTimeObserverNode(org.semanticwb.process.model.StartEvent value)
+    public void removeTimeObserverNode(org.semanticwb.process.model.StartEventNode value)
     {
         getSemanticObject().removeObjectProperty(swp_hasTimeObserverNode,value.getSemanticObject());
     }
 
    /**
    * Gets the TimeObserverNode
-   * @return a org.semanticwb.process.model.StartEvent
+   * @return a org.semanticwb.process.model.StartEventNode
    */
-    public org.semanticwb.process.model.StartEvent getTimeObserverNode()
+    public org.semanticwb.process.model.StartEventNode getTimeObserverNode()
     {
-         org.semanticwb.process.model.StartEvent ret=null;
+         org.semanticwb.process.model.StartEventNode ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasTimeObserverNode);
          if(obj!=null)
          {
-             ret=(org.semanticwb.process.model.StartEvent)obj.createGenericInstance();
+             ret=(org.semanticwb.process.model.StartEventNode)obj.createGenericInstance();
          }
          return ret;
     }
@@ -583,21 +586,21 @@ public abstract class ProcessObserverBase extends org.semanticwb.process.model.P
          return ret;
     }
    /**
-   * Gets all the org.semanticwb.process.model.StartEvent
-   * @return A GenericIterator with all the org.semanticwb.process.model.StartEvent
+   * Gets all the org.semanticwb.process.model.StartEventNode
+   * @return A GenericIterator with all the org.semanticwb.process.model.StartEventNode
    */
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEvent> listSignalObserverNodes()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEventNode> listSignalObserverNodes()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEvent>(getSemanticObject().listObjectProperties(swp_hasSignalObserverNode));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEventNode>(getSemanticObject().listObjectProperties(swp_hasSignalObserverNode));
     }
 
    /**
    * Gets true if has a SignalObserverNode
-   * @param value org.semanticwb.process.model.StartEvent to verify
-   * @return true if the org.semanticwb.process.model.StartEvent exists, false otherwise
+   * @param value org.semanticwb.process.model.StartEventNode to verify
+   * @return true if the org.semanticwb.process.model.StartEventNode exists, false otherwise
    */
-    public boolean hasSignalObserverNode(org.semanticwb.process.model.StartEvent value)
+    public boolean hasSignalObserverNode(org.semanticwb.process.model.StartEventNode value)
     {
         boolean ret=false;
         if(value!=null)
@@ -608,10 +611,10 @@ public abstract class ProcessObserverBase extends org.semanticwb.process.model.P
     }
    /**
    * Adds a SignalObserverNode
-   * @param value org.semanticwb.process.model.StartEvent to add
+   * @param value org.semanticwb.process.model.StartEventNode to add
    */
 
-    public void addSignalObserverNode(org.semanticwb.process.model.StartEvent value)
+    public void addSignalObserverNode(org.semanticwb.process.model.StartEventNode value)
     {
         getSemanticObject().addObjectProperty(swp_hasSignalObserverNode, value.getSemanticObject());
     }
@@ -625,25 +628,25 @@ public abstract class ProcessObserverBase extends org.semanticwb.process.model.P
     }
    /**
    * Removes a SignalObserverNode
-   * @param value org.semanticwb.process.model.StartEvent to remove
+   * @param value org.semanticwb.process.model.StartEventNode to remove
    */
 
-    public void removeSignalObserverNode(org.semanticwb.process.model.StartEvent value)
+    public void removeSignalObserverNode(org.semanticwb.process.model.StartEventNode value)
     {
         getSemanticObject().removeObjectProperty(swp_hasSignalObserverNode,value.getSemanticObject());
     }
 
    /**
    * Gets the SignalObserverNode
-   * @return a org.semanticwb.process.model.StartEvent
+   * @return a org.semanticwb.process.model.StartEventNode
    */
-    public org.semanticwb.process.model.StartEvent getSignalObserverNode()
+    public org.semanticwb.process.model.StartEventNode getSignalObserverNode()
     {
-         org.semanticwb.process.model.StartEvent ret=null;
+         org.semanticwb.process.model.StartEventNode ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasSignalObserverNode);
          if(obj!=null)
          {
-             ret=(org.semanticwb.process.model.StartEvent)obj.createGenericInstance();
+             ret=(org.semanticwb.process.model.StartEventNode)obj.createGenericInstance();
          }
          return ret;
     }
@@ -778,21 +781,21 @@ public abstract class ProcessObserverBase extends org.semanticwb.process.model.P
          return ret;
     }
    /**
-   * Gets all the org.semanticwb.process.model.StartEvent
-   * @return A GenericIterator with all the org.semanticwb.process.model.StartEvent
+   * Gets all the org.semanticwb.process.model.StartEventNode
+   * @return A GenericIterator with all the org.semanticwb.process.model.StartEventNode
    */
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEvent> listRuleObserverNodes()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEventNode> listRuleObserverNodes()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEvent>(getSemanticObject().listObjectProperties(swp_hasRuleObserverNode));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.StartEventNode>(getSemanticObject().listObjectProperties(swp_hasRuleObserverNode));
     }
 
    /**
    * Gets true if has a RuleObserverNode
-   * @param value org.semanticwb.process.model.StartEvent to verify
-   * @return true if the org.semanticwb.process.model.StartEvent exists, false otherwise
+   * @param value org.semanticwb.process.model.StartEventNode to verify
+   * @return true if the org.semanticwb.process.model.StartEventNode exists, false otherwise
    */
-    public boolean hasRuleObserverNode(org.semanticwb.process.model.StartEvent value)
+    public boolean hasRuleObserverNode(org.semanticwb.process.model.StartEventNode value)
     {
         boolean ret=false;
         if(value!=null)
@@ -803,10 +806,10 @@ public abstract class ProcessObserverBase extends org.semanticwb.process.model.P
     }
    /**
    * Adds a RuleObserverNode
-   * @param value org.semanticwb.process.model.StartEvent to add
+   * @param value org.semanticwb.process.model.StartEventNode to add
    */
 
-    public void addRuleObserverNode(org.semanticwb.process.model.StartEvent value)
+    public void addRuleObserverNode(org.semanticwb.process.model.StartEventNode value)
     {
         getSemanticObject().addObjectProperty(swp_hasRuleObserverNode, value.getSemanticObject());
     }
@@ -820,25 +823,25 @@ public abstract class ProcessObserverBase extends org.semanticwb.process.model.P
     }
    /**
    * Removes a RuleObserverNode
-   * @param value org.semanticwb.process.model.StartEvent to remove
+   * @param value org.semanticwb.process.model.StartEventNode to remove
    */
 
-    public void removeRuleObserverNode(org.semanticwb.process.model.StartEvent value)
+    public void removeRuleObserverNode(org.semanticwb.process.model.StartEventNode value)
     {
         getSemanticObject().removeObjectProperty(swp_hasRuleObserverNode,value.getSemanticObject());
     }
 
    /**
    * Gets the RuleObserverNode
-   * @return a org.semanticwb.process.model.StartEvent
+   * @return a org.semanticwb.process.model.StartEventNode
    */
-    public org.semanticwb.process.model.StartEvent getRuleObserverNode()
+    public org.semanticwb.process.model.StartEventNode getRuleObserverNode()
     {
-         org.semanticwb.process.model.StartEvent ret=null;
+         org.semanticwb.process.model.StartEventNode ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasRuleObserverNode);
          if(obj!=null)
          {
-             ret=(org.semanticwb.process.model.StartEvent)obj.createGenericInstance();
+             ret=(org.semanticwb.process.model.StartEventNode)obj.createGenericInstance();
          }
          return ret;
     }
