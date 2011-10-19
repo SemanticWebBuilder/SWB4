@@ -119,7 +119,7 @@ public class ProcessFileRepository extends GenericResource {
                 out.println("<div class=\"bandeja-combo\">");
                 out.println("<ul>");
                 out.println("<li>");
-                out.println("<form>");
+                //out.println("<form>");
                 SWBResourceURL urlfilter = paramRequest.getRenderUrl();
                 urlfilter.setParameter("suri", suri);
                 
@@ -139,7 +139,7 @@ public class ProcessFileRepository extends GenericResource {
                 out.println("<button type=\"button\" onclick=\"window.location='"+urlfilter+"?usrgpo_filter='+document.getElementById('usrgpo_filter').value;\">Filtrar por área</button>");
                 out.println("</li>");
                 out.println("</ul>");
-                out.println("</form>");
+                //out.println("</form>");
                 out.println("</div>");
             }
             
