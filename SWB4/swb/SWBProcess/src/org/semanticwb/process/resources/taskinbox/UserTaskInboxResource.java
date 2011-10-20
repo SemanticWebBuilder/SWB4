@@ -37,9 +37,9 @@ import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.RoleRef;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.User;
+import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.process.model.FlowNodeInstance;
@@ -198,7 +198,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             if (page < 0) page = 1;
         }
 
-        if (itemsPerPage < 20) itemsPerPage = 20;
+        if (itemsPerPage < 5) itemsPerPage = 5;
 
         if (request.getParameter("sFilter") != null && !request.getParameter("sFilter").trim().equals("")) {
             statusFilter = Integer.valueOf(request.getParameter("sFilter"));
@@ -214,55 +214,48 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             Iterator<ProcessInstance> processInstances = process.listProcessInstances();
             while (processInstances.hasNext()) {
                 ProcessInstance processInstance = processInstances.next();
-                Iterator<FlowNodeInstance> nodeInstances = processInstance.listAllFlowNodeInstance();
-                while (nodeInstances.hasNext()) {
-                    FlowNodeInstance flowNodeInstance = nodeInstances.next();
-                    if (flowNodeInstance.getFlowNodeType() instanceof UserTask) {
-                        UserTask utask = (UserTask) flowNodeInstance.getFlowNodeType();
-                        if (user.haveAccess(utask)) {
-                            if (statusFilter > 0) {
-                                if (p != null) {
-                                    if (flowNodeInstance.getStatus() == statusFilter && utask.getProcess().getURI().equals(p.getURI())) {
+                Iterator<FlowNodeInstance> nodeInstances = null;
+                
+                if (isFilterByGroup()) { //Si hay que filtrar por grupo de usuarios
+                    UserGroup iug = processInstance.getOwnerUserGroup();
+                    UserGroup uug = user.getUserGroup();
+                    
+                    if (iug != null && uug != null) { //Si la instancia y el usuario tienen grupo
+                        if (user.getUserGroup().getURI().equals(processInstance.getOwnerUserGroup().getURI())) { //Si tienen el mismo grupo
+                            nodeInstances = processInstance.listAllFlowNodeInstance();
+                        }
+                    } else if (iug == null && uug == null) { //Si el proceso y el usuario no tienen grupo
+                        nodeInstances = processInstance.listAllFlowNodeInstance();
+                    }
+                } else { //Si no hay que filtrar por grupo de usuarios
+                    nodeInstances = processInstance.listAllFlowNodeInstance();
+                }
+                
+                if (nodeInstances != null) {
+                    while (nodeInstances.hasNext()) {
+                        FlowNodeInstance flowNodeInstance = nodeInstances.next();
+                        if (flowNodeInstance.getFlowNodeType() instanceof UserTask) {
+                            UserTask utask = (UserTask) flowNodeInstance.getFlowNodeType();
+                            if (user.haveAccess(utask)) {
+                                if (statusFilter > 0) {
+                                    if (p != null) {
+                                        if (flowNodeInstance.getStatus() == statusFilter && utask.getProcess().getURI().equals(p.getURI())) {
+                                            t_instances.add(flowNodeInstance);
+                                        }
+                                    } else {
+                                        if (flowNodeInstance.getStatus() == statusFilter) {
+                                            t_instances.add(flowNodeInstance);
+                                        }
+                                    }
+                                } else if (p != null) {
+                                    if (utask.getProcess().getURI().equals(p.getURI())) {
                                         t_instances.add(flowNodeInstance);
                                     }
                                 } else {
-                                    if (flowNodeInstance.getStatus() == statusFilter) {
-                                        t_instances.add(flowNodeInstance);
-                                    }
-                                }
-                            } else if (p != null) {
-                                if (utask.getProcess().getURI().equals(p.getURI())) {
                                     t_instances.add(flowNodeInstance);
                                 }
-                            } else {
-                                t_instances.add(flowNodeInstance);
                             }
                         }
-                        
-//                        Iterator<RoleRef> roles = utask.listRoleRefs();
-//                        while (roles.hasNext()) {
-//                            RoleRef roleRef = roles.next();
-//                            if (user.hasRole(roleRef.getRole())) {
-//                                if (statusFilter > 0) {
-//                                    if (p != null) {
-//                                        if (flowNodeInstance.getStatus() == statusFilter && utask.getProcess().getURI().equals(p.getURI())) {
-//                                            t_instances.add(flowNodeInstance);
-//                                        }
-//                                    } else {
-//                                        if (flowNodeInstance.getStatus() == statusFilter) {
-//                                            t_instances.add(flowNodeInstance);
-//                                        }
-//                                    }
-//                                } else if (p != null) {
-//                                    if (utask.getProcess().getURI().equals(p.getURI())) {
-//                                        t_instances.add(flowNodeInstance);
-//                                    }
-//                                } else {
-//                                    t_instances.add(flowNodeInstance);
-//                                }
-//                                break;
-//                            }
-//                        }
                     }
                 }
             }
