@@ -141,7 +141,7 @@ if (pFilter == null || pFilter.trim().equals("")) {
     pFilter = "";
 }
 if (sFilter == null || sFilter.trim().equals("")) {
-    sFilter = "_all_";String.valueOf(ProcessInstance.STATUS_PROCESSING);
+    sFilter = String.valueOf(ProcessInstance.STATUS_PROCESSING);
 }
 String [] months = {"ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"};
 
@@ -194,7 +194,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                 %>
                 Estado:
                 <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'sFilter', this.options[this.selectedIndex].value)">
-                    <option value="" <%=sFilter.equals("")?"selected":""%>>Todos</option>
+                    <option value="-1" <%=sFilter.equals("-1")?"selected":""%>>Todos</option>
                     <option value="<%=ProcessInstance.STATUS_PROCESSING%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_PROCESSING))?"selected":""%>>Pendientes</option>
                     <option value="<%=ProcessInstance.STATUS_CLOSED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_CLOSED))?"selected":""%>>Terminadas</option>
                     <option value="<%=ProcessInstance.STATUS_ABORTED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_ABORTED))?"selected":""%>>Abortadas</option>
@@ -223,6 +223,10 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                     SWBResourceURL createUrl = paramRequest.getActionUrl().setAction("CREATE");
                     while(pGroups.hasNext()) {
                         ProcessGroup pgroup = pGroups.next();
+                        Iterator<StartEvent> it_evts = StartEvent.ClassMgr.listStartEvents();
+                        while(it_evts.hasNext()) {
+                            StartEvent sevt = it_evts.next();
+                        }
                         %>
                         <optgroup label="<%=pgroup.getDisplayTitle(lang)%>">
                             <%
