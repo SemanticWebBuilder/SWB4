@@ -136,7 +136,7 @@ public class SWBVirtualHostFilter implements Filter
             String iserv = "";
             String iservnext=null;
 
-            Proxy proxy=Proxy.getProxy(host); 
+            Proxy proxy=Proxy.getProxy(host);
             if(proxy!=null)
             {
                 User user=SWBPortal.getUserMgr().getUser(_request, (WebSite)proxy.getSemanticObject().getModel().getModelObject().createGenericInstance());
@@ -153,6 +153,40 @@ public class SWBVirtualHostFilter implements Filter
                     log.debug("Distributor: SendError 403");                
                     return;
                 }
+            }
+            
+            //Filtros
+            boolean filter=false;
+            if(SWBPortal.isClient())
+            {
+                boolean adminShow = !SWBPlatform.getEnv("swb/administration","true").equals("false");
+                if(!adminShow)
+                {
+                    if(path.startsWith("/swbadmin"))
+                    {
+                        if(path.endsWith(".jsp"))
+                        {
+                            filter=true;
+                        }
+                        if(path.endsWith(".xslt"))
+                        {
+                            filter=true;
+                        }
+                        if(path.endsWith(".nt"))
+                        {
+                            filter=true;
+                        }
+                    }
+                    if(path.endsWith("/config/login.html"))
+                    {
+                        filter=true;
+                    }
+                }
+            }
+            if(filter)
+            {
+                _response.sendError(404);
+                return;
             }
 
             if (path == null || path.length() == 0)

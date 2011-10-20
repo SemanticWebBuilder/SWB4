@@ -589,6 +589,13 @@ public class SemanticMgr implements SWBInstanceObject
             log.trace("LoadingModel:" + name);
             SemanticModel model = loadDBModel(name);
             model.setDataset(store.getDataset());
+            
+            if (useCache && !(model.getRDFModel().getGraph() instanceof GraphCached)) {
+                //Se cambia cache de grafo por cache de semanticObjects
+                log.event("LoadingModel:"+name+" FullCache");
+                SemanticObject.loadFullCache(model);
+            }
+            
         }
     }
 
@@ -614,10 +621,12 @@ public class SemanticMgr implements SWBInstanceObject
     private SemanticModel loadDBModel(String name, boolean cached) {
         //new Exception().printStackTrace();
         Model model = loadRDFDBModel(name);
-        if (cached) {
+        
+        //if (cached) {
             //System.out.println("Cache:"+name);
-            model = new ModelCom(new GraphCached((model.getGraph())));
-        }
+            //model = new ModelCom(new GraphCached((model.getGraph())));
+        //}
+        
         if (name.equals(SWBAdmin) && !SWBPlatform.createInstance().isAdminDev()) {
             //System.out.println(model);
             log.info("Loading SWBAdmin...");

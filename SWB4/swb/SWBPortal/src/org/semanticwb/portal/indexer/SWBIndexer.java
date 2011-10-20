@@ -217,7 +217,7 @@ public abstract class SWBIndexer
     public SWBIndexer()
     {
     }
-
+    
     /**
      * Inits the.
      * 
@@ -243,6 +243,31 @@ public abstract class SWBIndexer
         };
         timer = new Timer();
         timer.schedule(t, delays*1000, delays*1000);
+
+        init();
+
+        /*Add here the required default not-analyzed fields, for example,
+        /to store a term for the uri field without being indexed see the
+         following line.*/
+        //terms.put(ATT_URI, new IndexTerm(ATT_URI,true,IndexTerm.INDEXED_NO_ANALYZED));
+
+        /*Register the required Searchable parsers. Add here the required
+         registerParser sentences for new default parsers.*/
+        registerParser(Resource.class, new ResourceParser());
+        registerParser(WebPage.class, new WebPageParser());
+        registerParser(User.class, new UserParser());
+    }
+    
+
+    /**
+     * Inits the.
+     * 
+     * @param name the name
+     * @param props the props
+     */
+    public void init(String name) {
+        this.name = name;
+        m_parsers=new HashMap();
 
         init();
 
