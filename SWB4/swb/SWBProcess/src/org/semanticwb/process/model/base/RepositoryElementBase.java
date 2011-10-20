@@ -1,10 +1,12 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class RepositoryElementBase extends org.semanticwb.process.model.BaseElement implements org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Expirable,org.semanticwb.model.Traceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Hitable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Versionable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable
+public abstract class RepositoryElementBase extends org.semanticwb.process.model.BaseElement implements org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Hitable,org.semanticwb.model.Versionable,org.semanticwb.model.Referensable,org.semanticwb.model.Expirable,org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass swp_RepositoryDirectory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#RepositoryDirectory");
     public static final org.semanticwb.platform.SemanticProperty swp_repositoryDirectory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#repositoryDirectory");
+    public static final org.semanticwb.platform.SemanticClass swp_ItemAwareStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ItemAwareStatus");
+    public static final org.semanticwb.platform.SemanticProperty swp_reStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#reStatus");
    /**
    * Objeto que define un grupo de usuarios dentro de un repositorio de usuarios para filtrar componente, seccion, plantillas, etc.
    */
@@ -146,6 +148,29 @@ public abstract class RepositoryElementBase extends org.semanticwb.process.model
         public static java.util.Iterator<org.semanticwb.process.model.RepositoryElement> listRepositoryElementByActualVersion(org.semanticwb.model.VersionInfo value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryElement> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_actualVersion,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryElement with a determined Status
+       * @param value Status of the type org.semanticwb.process.model.ItemAwareStatus
+       * @param model Model of the org.semanticwb.process.model.RepositoryElement
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryElement
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryElement> listRepositoryElementByStatus(org.semanticwb.process.model.ItemAwareStatus value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_reStatus, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryElement with a determined Status
+       * @param value Status of the type org.semanticwb.process.model.ItemAwareStatus
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryElement
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryElement> listRepositoryElementByStatus(org.semanticwb.process.model.ItemAwareStatus value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryElement> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_reStatus,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -534,6 +559,44 @@ public abstract class RepositoryElementBase extends org.semanticwb.process.model
     public void setActive(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb_active, value);
+    }
+   /**
+   * Sets the value for the property Status
+   * @param value Status to set
+   */
+
+    public void setStatus(org.semanticwb.process.model.ItemAwareStatus value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_reStatus, value.getSemanticObject());
+        }else
+        {
+            removeStatus();
+        }
+    }
+   /**
+   * Remove the value for Status property
+   */
+
+    public void removeStatus()
+    {
+        getSemanticObject().removeProperty(swp_reStatus);
+    }
+
+   /**
+   * Gets the Status
+   * @return a org.semanticwb.process.model.ItemAwareStatus
+   */
+    public org.semanticwb.process.model.ItemAwareStatus getStatus()
+    {
+         org.semanticwb.process.model.ItemAwareStatus ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_reStatus);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.ItemAwareStatus)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Sets the value for the property Creator

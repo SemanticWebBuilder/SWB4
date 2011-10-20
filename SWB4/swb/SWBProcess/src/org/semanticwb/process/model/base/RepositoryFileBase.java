@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class RepositoryFileBase extends org.semanticwb.process.model.RepositoryElement implements org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Expirable,org.semanticwb.model.Traceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Hitable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Versionable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable
+public abstract class RepositoryFileBase extends org.semanticwb.process.model.RepositoryElement implements org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Hitable,org.semanticwb.model.Versionable,org.semanticwb.model.Referensable,org.semanticwb.model.Expirable,org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass swp_RepositoryFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#RepositoryFile");
    /**
@@ -145,6 +145,29 @@ public abstract class RepositoryFileBase extends org.semanticwb.process.model.Re
         public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByActualVersion(org.semanticwb.model.VersionInfo value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_actualVersion,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryFile with a determined Status
+       * @param value Status of the type org.semanticwb.process.model.ItemAwareStatus
+       * @param model Model of the org.semanticwb.process.model.RepositoryFile
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryFile
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByStatus(org.semanticwb.process.model.ItemAwareStatus value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_reStatus, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.RepositoryFile with a determined Status
+       * @param value Status of the type org.semanticwb.process.model.ItemAwareStatus
+       * @return Iterator with all the org.semanticwb.process.model.RepositoryFile
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.RepositoryFile> listRepositoryFileByStatus(org.semanticwb.process.model.ItemAwareStatus value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RepositoryFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_reStatus,value.getSemanticObject(),sclass));
             return it;
         }
        /**
