@@ -219,30 +219,50 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                     FlowNodeInstance flowNodeInstance = nodeInstances.next();
                     if (flowNodeInstance.getFlowNodeType() instanceof UserTask) {
                         UserTask utask = (UserTask) flowNodeInstance.getFlowNodeType();
-                        Iterator<RoleRef> roles = utask.listRoleRefs();
-                        while (roles.hasNext()) {
-                            RoleRef roleRef = roles.next();
-                            if (user.hasRole(roleRef.getRole())) {
-                                if (statusFilter > 0) {
-                                    if (p != null) {
-                                        if (flowNodeInstance.getStatus() == statusFilter && utask.getProcess().getURI().equals(p.getURI())) {
-                                            t_instances.add(flowNodeInstance);
-                                        }
-                                    } else {
-                                        if (flowNodeInstance.getStatus() == statusFilter) {
-                                            t_instances.add(flowNodeInstance);
-                                        }
-                                    }
-                                } else if (p != null) {
-                                    if (utask.getProcess().getURI().equals(p.getURI())) {
+                        if (user.haveAccess(utask)) {
+                            if (statusFilter > 0) {
+                                if (p != null) {
+                                    if (flowNodeInstance.getStatus() == statusFilter && utask.getProcess().getURI().equals(p.getURI())) {
                                         t_instances.add(flowNodeInstance);
                                     }
                                 } else {
+                                    if (flowNodeInstance.getStatus() == statusFilter) {
+                                        t_instances.add(flowNodeInstance);
+                                    }
+                                }
+                            } else if (p != null) {
+                                if (utask.getProcess().getURI().equals(p.getURI())) {
                                     t_instances.add(flowNodeInstance);
                                 }
-                                break;
+                            } else {
+                                t_instances.add(flowNodeInstance);
                             }
                         }
+                        
+//                        Iterator<RoleRef> roles = utask.listRoleRefs();
+//                        while (roles.hasNext()) {
+//                            RoleRef roleRef = roles.next();
+//                            if (user.hasRole(roleRef.getRole())) {
+//                                if (statusFilter > 0) {
+//                                    if (p != null) {
+//                                        if (flowNodeInstance.getStatus() == statusFilter && utask.getProcess().getURI().equals(p.getURI())) {
+//                                            t_instances.add(flowNodeInstance);
+//                                        }
+//                                    } else {
+//                                        if (flowNodeInstance.getStatus() == statusFilter) {
+//                                            t_instances.add(flowNodeInstance);
+//                                        }
+//                                    }
+//                                } else if (p != null) {
+//                                    if (utask.getProcess().getURI().equals(p.getURI())) {
+//                                        t_instances.add(flowNodeInstance);
+//                                    }
+//                                } else {
+//                                    t_instances.add(flowNodeInstance);
+//                                }
+//                                break;
+//                            }
+//                        }
                     }
                 }
             }
