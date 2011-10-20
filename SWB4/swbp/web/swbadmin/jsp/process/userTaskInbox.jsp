@@ -310,6 +310,9 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                     }
                                     if (statusWp != null) {
                                         String acts = getStatusInstances(instance.getProcessInstance(), ProcessInstance.STATUS_PROCESSING);
+                                        if (acts != null && !acts.trim().equals("")) {
+                                            acts = "&currentActivities=" + URLEncoder.encode(acts);
+                                        }
                                         %>
                                         <a class="acc-mapa" target="_new" href="<%=statusWp.getUrl()%>?suri=<%=instance.getFlowNodeType().getProcess().getEncodedURI()%>&mode=view<%=acts%>">Ver mapa</a>
                                         <%
