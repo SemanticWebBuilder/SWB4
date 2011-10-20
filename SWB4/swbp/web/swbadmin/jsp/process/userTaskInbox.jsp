@@ -146,7 +146,7 @@ if (sFilter == null || sFilter.trim().equals("")) {
 String [] months = {"ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"};
 
 ArrayList<FlowNodeInstance> tinstances = (ArrayList<FlowNodeInstance>) request.getAttribute("instances");
-ArrayList<Integer> years = getIsntanceYears(tinstances.iterator());
+//ArrayList<Integer> years = getIsntanceYears(tinstances.iterator());
 SWBResourceURL configUrl = paramRequest.getRenderUrl().setMode("config");
 if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
     SWBResourceURL optsUrl = paramRequest.getRenderUrl();
@@ -157,11 +157,11 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
     <div class="bandeja-combo">
         <ul>
             <li>Ordenar:
-                    <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'sort', this.options[this.selectedIndex].value)">
-                        <option value="date" <%=sortType.equals("date")?"selected":""%>>Por fecha</option>
-                        <option value="name" <%=sortType.equals("name")?"selected":""%>>Por proceso</option>
-                    <!--option value="priority" <%=sortType.equals("priority")?"selected":""%>>Por prioridad</option-->
-                    </select>
+                <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'sort', this.options[this.selectedIndex].value)">
+                    <option value="date" <%=sortType.equals("date")?"selected":""%>>Por fecha</option>
+                    <option value="name" <%=sortType.equals("name")?"selected":""%>>Por proceso</option>
+                <!--option value="priority" <%=sortType.equals("priority")?"selected":""%>>Por prioridad</option-->
+                </select>
             </li>
             <li>
                 <%
@@ -210,36 +210,18 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
             <li>
                 <select id="processId">
                     <%
-                    Iterator<StartEvent> sevts = StartEvent.ClassMgr.listStartEvents(paramRequest.getWebPage().getWebSite());
-                    ArrayList<Process> aProcess = new ArrayList<Process>();
-                    while (sevts.hasNext()) {
-                        StartEvent evt = sevts.next();
-                        if (user.haveAccess(evt)) {
-                            aProcess.add(evt.getProcess());
-                        }
-                    }
-                    
-                    Iterator<ProcessGroup> pGroups = SWBComparator.sortByDisplayName(ProcessGroup.ClassMgr.listProcessGroups(paramRequest.getWebPage().getWebSite()),lang);
+                    Iterator<StartEvent> startEvents = StartEvent.ClassMgr.listStartEvents(paramRequest.getWebPage().getWebSite());
                     SWBResourceURL createUrl = paramRequest.getActionUrl().setAction("CREATE");
-                    while(pGroups.hasNext()) {
-                        ProcessGroup pgroup = pGroups.next();
-                        Iterator<StartEvent> it_evts = StartEvent.ClassMgr.listStartEvents();
-                        while(it_evts.hasNext()) {
-                            StartEvent sevt = it_evts.next();
-                        }
-                        %>
-                        <optgroup label="<%=pgroup.getDisplayTitle(lang)%>">
-                            <%
-                            Iterator<Process> it_processes = pgroup.listProcesses();//Process.ClassMgr.listProcesses();//Process.ClassMgr.listProcessByProcessGroup(usrGroup, paramRequest.getWebPage().getWebSite());
-                            while (it_processes.hasNext()) {
-                                Process itp = it_processes.next();
+                    while(startEvents.hasNext()) {
+                        StartEvent sevt = startEvents.next();
+                        if (user.haveAccess(sevt)) {
+                            Process itp = sevt.getProcess();
+                            if (itp != null) {
                                 %>
-                                <option value="<%=itp.getId()%>">  <%=itp.getDisplayTitle(lang)%></option>
+                                <option value="<%=itp.getId()%>"><%=itp.getTitle()%></option>
                                 <%
                             }
-                            %>
-                        </optgroup>
-                        <%
+                        }
                     }
                     %>
                 </select>
