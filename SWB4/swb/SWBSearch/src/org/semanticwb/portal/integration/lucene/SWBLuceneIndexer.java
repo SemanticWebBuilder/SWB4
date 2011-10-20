@@ -398,6 +398,15 @@ public class SWBLuceneIndexer extends SWBIndexer
     {
         return indexPath;
     }
+    
+    /**
+     * Sets the index path.
+     * 
+     */
+    public void setIndexPath(String indexPath)
+    {
+        this.indexPath=indexPath;
+    }    
 
     /**
      * Removes the model.

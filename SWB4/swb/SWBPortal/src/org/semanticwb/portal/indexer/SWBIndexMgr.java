@@ -81,13 +81,13 @@ public class SWBIndexMgr implements SWBAppObject
     public SWBIndexMgr()
     {
         this.lastupdate = new Timestamp(new java.util.Date().getTime());
-        if(!SWBPortal.isClient())
-        {
+//        if(!SWBPortal.isClient())
+//        {
             log.event("Initializing SWBIndexMgr");
-        }else
-        {
-            log.info("WBIndexMgr can not be Initialized (isClient)...");
-        }
+//        }else
+//        {
+//            log.info("WBIndexMgr can not be Initialized (isClient)...");
+//        }
         //init();
     }
     
@@ -111,7 +111,7 @@ public class SWBIndexMgr implements SWBAppObject
      */
     public void init()
     {
-        if(SWBPortal.isClient())return;
+//        if(SWBPortal.isClient())return;
         
         prop=SWBUtils.TEXT.getPropertyFile("/indexer.properties");
         Enumeration propNames = prop.propertyNames();
@@ -132,7 +132,13 @@ public class SWBIndexMgr implements SWBAppObject
                     if(ind!=null)
                     {
                         indexers.put(pname,ind);
-                        ind.init(pname, prop);
+                        if(SWBPortal.isClient())
+                        {
+                            ind.init(pname);
+                        }else
+                        {
+                            ind.init(pname, prop);
+                        }
                     }
                 }catch(Exception e)
                 {

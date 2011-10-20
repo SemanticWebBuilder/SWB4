@@ -80,7 +80,7 @@ public class ProcessReprositoryFileRef extends org.semanticwb.process.model.base
                     value = obj.getObjectProperty(prop);
                 }
                 
-                if(value.instanceOf(RepositoryFile.sclass))
+                if(value!=null && value.instanceOf(RepositoryFile.sclass))
                 {
                     RepositoryFile file=(RepositoryFile)value.createGenericInstance();
                     
@@ -100,6 +100,11 @@ public class ProcessReprositoryFileRef extends org.semanticwb.process.model.base
                                    + value.getDisplayName(lang) + "</a>");
                     }
                     ret.append("</span>");
+                }else
+                {
+                    ret.append("<span>");
+                    ret.append("-");
+                    ret.append("</span>");                    
                 }
             }
         }
