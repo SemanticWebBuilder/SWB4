@@ -127,6 +127,29 @@ public abstract class TransformRepositoryFileBase extends org.semanticwb.process
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.TransformRepositoryFile with a determined Status
+       * @param value Status of the type org.semanticwb.process.model.ItemAwareStatus
+       * @param model Model of the org.semanticwb.process.model.TransformRepositoryFile
+       * @return Iterator with all the org.semanticwb.process.model.TransformRepositoryFile
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TransformRepositoryFile> listTransformRepositoryFileByStatus(org.semanticwb.process.model.ItemAwareStatus value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransformRepositoryFile> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_srfStatus, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.TransformRepositoryFile with a determined Status
+       * @param value Status of the type org.semanticwb.process.model.ItemAwareStatus
+       * @return Iterator with all the org.semanticwb.process.model.TransformRepositoryFile
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.TransformRepositoryFile> listTransformRepositoryFileByStatus(org.semanticwb.process.model.ItemAwareStatus value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransformRepositoryFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_srfStatus,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.TransformRepositoryFile with a determined ServiceTask
        * @param value ServiceTask of the type org.semanticwb.process.model.ServiceTask
        * @param model Model of the org.semanticwb.process.model.TransformRepositoryFile
@@ -232,6 +255,44 @@ public abstract class TransformRepositoryFileBase extends org.semanticwb.process
          if(obj!=null)
          {
              ret=(org.semanticwb.process.model.ProcessFileTemplate)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property Status
+   * @param value Status to set
+   */
+
+    public void setStatus(org.semanticwb.process.model.ItemAwareStatus value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_srfStatus, value.getSemanticObject());
+        }else
+        {
+            removeStatus();
+        }
+    }
+   /**
+   * Remove the value for Status property
+   */
+
+    public void removeStatus()
+    {
+        getSemanticObject().removeProperty(swp_srfStatus);
+    }
+
+   /**
+   * Gets the Status
+   * @return a org.semanticwb.process.model.ItemAwareStatus
+   */
+    public org.semanticwb.process.model.ItemAwareStatus getStatus()
+    {
+         org.semanticwb.process.model.ItemAwareStatus ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_srfStatus);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.ItemAwareStatus)obj.createGenericInstance();
          }
          return ret;
     }
