@@ -150,7 +150,7 @@ if (gFilter == null || gFilter.trim().equals("")) {
 }
 
 if (sFilter == null || sFilter.trim().equals("")) {
-    sFilter = "";
+    sFilter = String.valueOf(ProcessInstance.STATUS_PROCESSING);
 }
 ArrayList<ProcessInstance> pinstances = (ArrayList<ProcessInstance>) request.getAttribute("instances");
 SWBResourceURL configUrl = paramRequest.getRenderUrl().setMode("config");
@@ -201,15 +201,15 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                 %>
                 Estado:
                 <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'sFilter', this.options[this.selectedIndex].value)">
-                    <option value="" <%=sFilter.equals("")?"selected":""%>>Todos</option>
+                    <option value="-1" <%=sFilter.equals("-1")?"selected":""%>>Todos</option>
                     <option value="<%=ProcessInstance.STATUS_PROCESSING%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_PROCESSING))?"selected":""%>>Pendientes</option>
                     <option value="<%=ProcessInstance.STATUS_CLOSED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_CLOSED))?"selected":""%>>Terminados</option>
                     <option value="<%=ProcessInstance.STATUS_ABORTED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_ABORTED))?"selected":""%>>Abortados</option>
                 </select>
             </li>
-            <li>
+            <!--li>
                 <a href="<%=configUrl%>">Configurar despliegue</a>
-            </li>
+            </li-->
         </ul>
     </div>
     <%
