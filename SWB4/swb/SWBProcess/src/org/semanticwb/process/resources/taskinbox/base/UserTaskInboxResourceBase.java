@@ -3,6 +3,7 @@ package org.semanticwb.process.resources.taskinbox.base;
 
 public abstract class UserTaskInboxResourceBase extends org.semanticwb.portal.api.GenericSemResource 
 {
+    public static final org.semanticwb.platform.SemanticProperty utinbox_filterByGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/UserTaskInbox#filterByGroup");
     public static final org.semanticwb.platform.SemanticProperty utinbox_itemsPerPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/UserTaskInbox#itemsPerPage");
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_semanticResourceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#semanticResourceInv");
@@ -42,6 +43,24 @@ public abstract class UserTaskInboxResourceBase extends org.semanticwb.portal.ap
     {
         if(obj==null)return false;
         return hashCode()==obj.hashCode();
+    }
+
+/**
+* Gets the FilterByGroup property
+* @return boolean with the FilterByGroup
+*/
+    public boolean isFilterByGroup()
+    {
+        return getSemanticObject().getBooleanProperty(utinbox_filterByGroup);
+    }
+
+/**
+* Sets the FilterByGroup property
+* @param value long with the FilterByGroup
+*/
+    public void setFilterByGroup(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(utinbox_filterByGroup, value);
     }
 
 /**
