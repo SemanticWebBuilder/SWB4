@@ -49,6 +49,7 @@ import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.VersionInfo;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.GenericResource;
@@ -56,7 +57,9 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.process.model.RepositoryDirectory;
+import org.semanticwb.process.model.RepositoryElement;
 import org.semanticwb.process.model.RepositoryFile;
+import org.semanticwb.process.model.RepositoryURL;
 
 /**
  *
@@ -98,6 +101,7 @@ public class ProcessFileRepository extends GenericResource {
         int luser = getLevelUser(usr);
 
 
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         RepositoryDirectory repoDir = (RepositoryDirectory) paramRequest.getWebPage();
 
         String action = request.getParameter("act");
@@ -181,7 +185,7 @@ public class ProcessFileRepository extends GenericResource {
             out.println("</thead>");
 
             out.println("<tbody>");
-            Iterator<RepositoryFile> itrf = repoDir.listRepositoryFiles();
+            Iterator<RepositoryFile> itrf = repoDir.listRepositoryElements();
 
             ///// ORDENADO DE ARCHIVOS SEGUN OPCIÓN
 
@@ -190,10 +194,10 @@ public class ProcessFileRepository extends GenericResource {
                 orderBy = "title";
             }
 
-            HashMap<String, RepositoryFile> hmNodes = new HashMap<String, RepositoryFile>();
+            HashMap<String, RepositoryElement> hmNodes = new HashMap<String, RepositoryElement>();
 
             while (itrf.hasNext()) {
-                RepositoryFile repoFile = itrf.next();
+                RepositoryElement repoFile = itrf.next();
 
                 VersionInfo version = repoFile.getActualVersion();
                 if (version == null) {
@@ -250,7 +254,7 @@ public class ProcessFileRepository extends GenericResource {
                 String skey = lnit.next();
 
                 boolean showFile = Boolean.FALSE;
-                RepositoryFile repositoryFile = hmNodes.get(skey);
+                RepositoryElement repositoryFile = hmNodes.get(skey);
                 if (repositoryFile.getOwnerUserGroup() != null) {
                     UserGroup ugpo = repositoryFile.getOwnerUserGroup();
                     String ugid = null;
@@ -276,7 +280,7 @@ public class ProcessFileRepository extends GenericResource {
                 out.println("<td class=\"tban-tarea\">");
                 SWBResourceURL urldetail = paramRequest.getRenderUrl();
                 urldetail.setParameter("act", "detail");
-                urldetail.setParameter("fid", fid);
+                urldetail.setParameter("fid", repositoryFile.getURI());
 
                 VersionInfo vi = repositoryFile.getLastVersion();
 
@@ -293,17 +297,27 @@ public class ProcessFileRepository extends GenericResource {
                 }
 
                 if (luser > 0) {
-                    SWBResourceURL urlview = paramRequest.getRenderUrl();
-                    urlview.setCallMethod(SWBResourceURL.Call_DIRECT);
-                    urlview.setParameter("fid", fid);
-                    urlview.setMode(MODE_GETFILE);
-                    urlview.setParameter("verNum", "" + vi.getVersionNumber());
+                    if (repositoryFile instanceof RepositoryFile) {
+                        SWBResourceURL urlview = paramRequest.getRenderUrl();
+                        urlview.setCallMethod(SWBResourceURL.Call_DIRECT);
+                        urlview.setParameter("fid", fid);
+                        urlview.setMode(MODE_GETFILE);
+                        urlview.setParameter("verNum", "" + vi.getVersionNumber());
 
-                    out.println("<a href=\"" + urlview + "\">");
-                    out.println("<img border=0 src='" + path + "" + type + "' alt=\"" + getFileType(file) + "\" />");
-                    out.println("</a>");
+                        out.println("<a href=\"" + urlview + "\">");
+                        out.println("<img border=0 src='" + path + "" + type + "' alt=\"" + getFileType(file) + "\" />");
+                        out.println("</a>");
+                    } else if (repositoryFile instanceof RepositoryURL) {
+                        out.println("<a target=\"_blank\" href=\"" + vi.getVersionFile() + "\">");
+                        out.println("<img border=0 src='" + path + "" + type + "' alt=\"" + "Liga a archivo externo" + "\" />");
+                        out.println("</a>");
+                    }
                 } else {
-                    out.println("<img border=0 src='" + path + "" + type + "' alt=\"" + getFileType(file) + "\" />");
+                    if (repositoryFile instanceof RepositoryFile) {
+                        out.println("<img border=0 src='" + path + "" + type + "' alt=\"" + getFileType(file) + "\" />");
+                    } else if (repositoryFile instanceof RepositoryURL) {
+                        out.println("<img border=0 src='" + path + "" + type + "' alt=\"" + getFileType(vi.getVersionFile()) + "\" />");
+                    }
                 }
 
                 out.println("</td>");
@@ -333,7 +347,7 @@ public class ProcessFileRepository extends GenericResource {
                     SWBResourceURL urlremove = paramRequest.getActionUrl();
                     urlremove.setAction("removefile");
                     urlremove.setParameter("act", "remove");
-                    urlremove.setParameter("fid", fid);
+                    urlremove.setParameter("fid", repositoryFile.getURI());
                     out.println("<a href=\"" + urlremove + "\">");
                     out.println("<img src=\"" + path + "delete.gif\" border=\"0\" alt=\"eliminar\"/>");
                     out.println("</a>");
@@ -362,7 +376,16 @@ public class ProcessFileRepository extends GenericResource {
 
         } else if ("detail".equals(action)) {
             String fid = request.getParameter("fid");
-            RepositoryFile repoFile = RepositoryFile.ClassMgr.getRepositoryFile(fid, repoDir.getProcessSite());
+
+            RepositoryElement repoFile = null;//RepositoryElement.ClassMgr.getRepositoryElement(fid, repoDir.getProcessSite());
+            GenericObject go = ont.getGenericObject(fid);
+
+            if (go instanceof RepositoryFile) {
+                repoFile = (RepositoryFile) go;
+            } else {
+                repoFile = (RepositoryURL) go;
+            }
+
             out.println("<div id=\"ProcessFileRepository\">");
             out.println("<table>");
             out.println("<tbody>");
@@ -412,7 +435,7 @@ public class ProcessFileRepository extends GenericResource {
 
             SWBResourceURL urlverhistoy = paramRequest.getRenderUrl();
             urlverhistoy.setParameter("act", "history");
-            urlverhistoy.setParameter("fid", fid);
+            urlverhistoy.setParameter("fid", repoFile.getURI());
 
             out.println("(<a href=\"" + urlverhistoy + "\">versiones</a>)");
             out.println("</td>");
@@ -488,7 +511,15 @@ public class ProcessFileRepository extends GenericResource {
             out.println("</div>");
         } else if ("history".equals(action)) {
             String fid = request.getParameter("fid");
-            RepositoryFile repoFile = RepositoryFile.ClassMgr.getRepositoryFile(fid, repoDir.getProcessSite());
+            RepositoryElement repoFile = null;
+            GenericObject go = ont.getGenericObject(fid);
+
+            if (go instanceof RepositoryFile) {
+                repoFile = (RepositoryFile) go;
+            } else {
+                repoFile = (RepositoryURL) go;
+            }
+
             VersionInfo ver = null;
             VersionInfo vl = repoFile.getLastVersion();
             if (null != vl) {
@@ -564,13 +595,17 @@ public class ProcessFileRepository extends GenericResource {
                     out.println("<td align=\"center\" >");
 
                     if (luser > 0) {
-                        SWBResourceURL urlview = paramRequest.getRenderUrl();
-                        urlview.setCallMethod(SWBResourceURL.Call_DIRECT);
-                        urlview.setParameter("fid", fid);
-                        urlview.setMode(MODE_GETFILE);
-                        urlview.setParameter("verNum", "" + ver.getVersionNumber());
+                        if (repoFile instanceof RepositoryFile) {
+                            SWBResourceURL urlview = paramRequest.getRenderUrl();
+                            urlview.setCallMethod(SWBResourceURL.Call_DIRECT);
+                            urlview.setParameter("fid", fid);
+                            urlview.setMode(MODE_GETFILE);
+                            urlview.setParameter("verNum", "" + ver.getVersionNumber());
 
-                        out.println("<a href=\"" + urlview + "\">ver</a>");
+                            out.println("<a href=\"" + urlview + "\">ver</a>");
+                        } else if (repoFile instanceof RepositoryURL) {
+                            out.println("<a target=\"_blank\" href=\"" + ver.getVersionFile() + "\">ver</a>");
+                        }
                     } else {
                         out.println("---");
                     }
@@ -618,21 +653,32 @@ public class ProcessFileRepository extends GenericResource {
             String fid = request.getParameter("fid");
             String newVersion = request.getParameter("newVersion");
             String sNxtVersion = "";
-            RepositoryFile repoFile = null;
+            RepositoryElement repoFile = null;
             String stitle = "";
             String sdescription = "";
+            String slink = "";
+            boolean isFile = false;
             if (null != fid && null != newVersion) {
                 boolean incremento = Boolean.FALSE;
                 if (newVersion.equals("nextInt")) {
                     incremento = Boolean.TRUE;
                 }
 
-                repoFile = RepositoryFile.ClassMgr.getRepositoryFile(fid, repoDir.getProcessSite());
+                GenericObject go = ont.getGenericObject(fid);
+                if (go instanceof RepositoryFile) {
+                    repoFile = (RepositoryFile) go;
+                    isFile = true;
+                } else {
+                    repoFile = (RepositoryURL) go;
+                }
 
                 stitle = repoFile.getDisplayTitle(usr.getLanguage());
                 sdescription = repoFile.getDisplayDescription(usr.getLanguage());
 
                 VersionInfo vl = repoFile.getLastVersion();
+
+                slink = vl.getVersionFile();
+
                 float fver = Float.parseFloat(vl.getVersionValue());
                 fver = fver + 0.1F;
 
@@ -669,7 +715,17 @@ public class ProcessFileRepository extends GenericResource {
             out.println("        fdesc.focus(); ");
             out.println("        return false; ");
             out.println("    } ");
-            out.println("     ");
+            out.println("    var ftype = document.getElementById('hftype'); ");
+            out.println("    if(ftype.value=='url') {");
+            out.println("        var urlfilec = document.getElementById('extfile');");
+            out.println("        var urlfile = urlfilec.value;");
+            out.println("        urlfile = urlfile.replace(' ' , ''); ");
+            out.println("        if(urlfile.length==0) { ");
+            out.println("            alert('Falta poner la liga del archivo externo.'); ");
+            out.println("            urlfilec.focus(); ");
+            out.println("            return false; ");
+            out.println("        } else { return true; } ");
+            out.println("    } else {");
             out.println("    var fup = document.getElementById('ffile'); ");
             out.println("    var fileName = fup.value; ");
             out.println("     ");
@@ -692,6 +748,7 @@ public class ProcessFileRepository extends GenericResource {
             out.println("        fup.focus(); ");
             out.println("        return false; ");
             out.println("    } ");
+            out.println("  } ");
             out.println("} ");
             out.println(" ");
             out.println("function isFileType(pFile, pExt)  ");
@@ -712,6 +769,23 @@ public class ProcessFileRepository extends GenericResource {
             out.println("    }  ");
             out.println("    else return true;  ");
             out.println("} ");
+
+            out.println("function selectType(forma,val)  ");
+            out.println("{  ");
+            out.println("    if(val=='url')  ");
+            out.println("    {  ");
+            out.println("        forma.hftype.value=val;  ");
+            out.println("        forma.extfile.disabled=false;  ");
+            out.println("        forma.ffile.disabled=true;  ");
+            out.println("    }  ");
+            out.println("    else  ");
+            out.println("    {  ");
+            out.println("        forma.hftype.value=val;  ");
+            out.println("        forma.extfile.disabled=true;  ");
+            out.println("        forma.ffile.disabled=false;  ");
+            out.println("    }  ");
+            out.println("} ");
+
 
             out.println("</script>"); //        
 
@@ -762,19 +836,63 @@ public class ProcessFileRepository extends GenericResource {
                 out.println("</tr>");
             }
 
-            out.println("<tr>");
-            out.println("<td align=\"right\">");
-            out.println("Archivo:");
-            out.println("</td>");
-            out.println("<td>");
+            if (null == fid && null == newVersion) {
+                out.println("<tr>");
+                out.println("<td align=\"right\">");
+                out.println("Tipo de Archivo a utilizar:");
+                out.println("</td>");
+                out.println("<td>");
+                out.println("<input id=\"hftype\" type=\"hidden\" name=\"hftype\" value=\"url\">");
+                out.println("<label for=\"urlkind\">URL</label>");
+                out.println("<input id=\"urlkind\" type=\"radio\" name=\"filetype\" value=\"urlkind\" onclick=\"selectType(this.form,'url');\" checked>");
 
+                out.println("<label for=\"filekind\">Archivo</label>");
+                out.println("<input id=\"filekind\" type=\"radio\" name=\"filetype\" value=\"filekind\" onclick=\"selectType(this.form,'file');\">");
 
+                out.println("</td>");
+                out.println("</tr>");
+            }
 
-            out.println("<input id=\"ffile\" type=\"file\" name=\"ffile\" value=\"\">");
+            if (null != fid && null != newVersion && !isFile) {
+                out.println("<tr>");
+                out.println("<td align=\"right\">");
+                out.println("Archivo externo URL:");
+                out.println("</td>");
+                out.println("<td>");
 
-            out.println("</td>");
-            out.println("</tr>");
+                out.println("<input id=\"hftype\" type=\"hidden\" name=\"hftype\" value=\"url\">");
+                out.println("<input id=\"extfile\" type=\"text\" name=\"extfile\" value=\"" + slink + "\" >");
 
+                out.println("</td>");
+                out.println("</tr>");
+            } else if (null != fid && null != newVersion && isFile) {
+                out.println("<tr>");
+                out.println("<td align=\"right\">");
+                out.println("Archivo:");
+                out.println("</td>");
+                out.println("<td>");
+                out.println("<input id=\"hftype\" type=\"hidden\" name=\"hftype\" value=\"file\">");
+                out.println("<input id=\"ffile\" type=\"file\" name=\"ffile\" value=\"\" >");
+                out.println("</td>");
+                out.println("</tr>");
+            } else {
+                out.println("<tr>");
+                out.println("<td align=\"right\">");
+                out.println("Archivo externo URL:");
+                out.println("</td>");
+                out.println("<td>");
+                out.println("<input id=\"extfile\" type=\"text\" name=\"extfile\" value=\"" + slink + "\" >");
+                out.println("</td>");
+                out.println("</tr>");
+                out.println("<tr>");
+                out.println("<td align=\"right\">");
+                out.println("Archivo:");
+                out.println("</td>");
+                out.println("<td>");
+                out.println("<input id=\"ffile\" type=\"file\" name=\"ffile\" value=\"\" disabled>");
+                out.println("</td>");
+                out.println("</tr>");
+            }
             out.println("</tbody>");
             out.println("<tfoot>");
             out.println("<tr>");
@@ -1049,6 +1167,7 @@ public class ProcessFileRepository extends GenericResource {
             action = "";
         }
 
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         if ("newfile".equals(action)) {
             org.semanticwb.portal.util.FileUpload fup = new org.semanticwb.portal.util.FileUpload();
             fup.getFiles(request, null);
@@ -1056,46 +1175,73 @@ public class ProcessFileRepository extends GenericResource {
             String ftitle = fup.getValue("ftitle");
             String fdescription = fup.getValue("fdescription");
             String fcomment = fup.getValue("fcomment");
+            String hftype = fup.getValue("hftype");
+            String extfile = fup.getValue("extfile");
 
             String fid = fup.getValue("fid");
             String newVersion = fup.getValue("newVersion");
 
-            byte[] bcont = fup.getFileData("ffile");
-
+            GenericObject go = null;
             RepositoryDirectory repoDir = (RepositoryDirectory) response.getWebPage();
-            RepositoryFile repoFile = null;
-            boolean incremento = Boolean.FALSE;
-            if (fid != null) {
-                repoFile = RepositoryFile.ClassMgr.getRepositoryFile(fid, repoDir.getProcessSite());
-                if (newVersion != null && newVersion.equals("nextInt")) {
-                    incremento = Boolean.TRUE;
+            if (hftype != null && hftype.equals("file")) {
+                byte[] bcont = fup.getFileData("ffile");
+
+                RepositoryFile repoFile = null;
+                boolean incremento = Boolean.FALSE;
+                if (fid != null) {
+                    go = ont.getGenericObject(fid);
+                    repoFile = (RepositoryFile) go; //RepositoryFile.ClassMgr.getRepositoryFile(fid, repoDir.getProcessSite());
+                    if (newVersion != null && newVersion.equals("nextInt")) {
+                        incremento = Boolean.TRUE;
+                    }
+                } else {
+                    repoFile = RepositoryFile.ClassMgr.createRepositoryFile(repoDir.getProcessSite());
+                    repoFile.setRepositoryDirectory(repoDir);
                 }
+                repoFile.setTitle(ftitle);
+                repoFile.setDescription(fdescription);
+
+                User usr = response.getUser();
+
+                repoFile.setOwnerUserGroup(usr.getUserGroup());
+
+                //System.out.println("fname: "+fname);
+                if (fname.indexOf("\\") != -1) {
+                    fname = fname.substring(fname.lastIndexOf("\\") + 1);
+                } else if (fname.indexOf("/") != -1) {
+                    fname = fname.substring(fname.lastIndexOf("/") + 1);
+                }
+                //System.out.println("fname: "+fname);
+                repoFile.storeFile(fname, new ByteArrayInputStream(bcont), fcomment, incremento);
             } else {
-                repoFile = RepositoryFile.ClassMgr.createRepositoryFile(repoDir.getProcessSite());
-                repoFile.setRepositoryDirectory(repoDir);
+
+                RepositoryURL repoUrl = null;
+                boolean incremento = Boolean.FALSE;
+                if (fid != null) {
+                    go = ont.getGenericObject(fid);
+                    repoUrl = (RepositoryURL) go;
+                    if (newVersion != null && newVersion.equals("nextInt")) {
+                        incremento = Boolean.TRUE;
+                    }
+                } else {
+                    repoUrl = RepositoryURL.ClassMgr.createRepositoryURL(repoDir.getProcessSite());
+                    repoUrl.setRepositoryDirectory(repoDir);
+                }
+                repoUrl.setTitle(ftitle);
+                repoUrl.setDescription(fdescription);
+
+                User usr = response.getUser();
+
+                repoUrl.setOwnerUserGroup(usr.getUserGroup());
+                repoUrl.storeFile(extfile, fcomment, incremento);
             }
-
-            repoFile.setTitle(ftitle);
-            repoFile.setDescription(fdescription);
-
-            User usr = response.getUser();
-
-            repoFile.setOwnerUserGroup(usr.getUserGroup());
-
-            //System.out.println("fname: "+fname);
-            if (fname.indexOf("\\") != -1) {
-                fname = fname.substring(fname.lastIndexOf("\\") + 1);
-            } else if (fname.indexOf("/") != -1) {
-                fname = fname.substring(fname.lastIndexOf("/") + 1);
-            }
-            //System.out.println("fname: "+fname);
-            repoFile.storeFile(fname, new ByteArrayInputStream(bcont), fcomment, incremento);
 
         } else if ("removefile".equals(action)) {
             String fid = request.getParameter("fid");
-            RepositoryDirectory repoDir = (RepositoryDirectory) response.getWebPage();
-            RepositoryFile repoFile = RepositoryFile.ClassMgr.getRepositoryFile(fid, repoDir.getProcessSite());
-            repoFile.remove();
+
+            SemanticObject so = ont.getSemanticObject(fid);
+            so.remove();
+
         } else if ("admin_update".equals(action)) {
             String viewrole = request.getParameter("ver");
             String modifyrole = request.getParameter("modificar");
@@ -1158,6 +1304,8 @@ public class ProcessFileRepository extends GenericResource {
             file = "Audio file";
         } else if (type.indexOf(".xsl") != -1) {
             file = "XSLT file";
+        } else {
+            file = "URL file";
         }
         return file;
     }
@@ -1195,6 +1343,8 @@ public class ProcessFileRepository extends GenericResource {
             file = "ico_audio.gif";
         } else if (type.indexOf(".wav") != -1) {
             file = "ico_audio.gif";
+        } else {
+            file = "ico_default2.gif";
         }
         return file;
     }
