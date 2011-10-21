@@ -133,6 +133,22 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                     SWBProcessMgr.createProcessInstance(process, user);
                 }
             }
+            response.setMode(response.Mode_VIEW);
+        } else if (action.equals("setPageItems")) {
+            String ipp = request.getParameter("ipp");
+            int itemsPerPage = 0;
+            
+            if (ipp == null || ipp.trim().equals("")) {
+                ipp = "5";
+            }
+            
+            try {
+                itemsPerPage = Integer.parseInt(ipp);
+            } catch (NumberFormatException e) {
+                log.error("UserTaskInboxResource",e);
+            }
+            setItemsPerPage(itemsPerPage);
+            response.setMode(response.Mode_VIEW);
         } else {
             super.processAction(request, response);
         }
@@ -152,6 +168,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
             request.setAttribute("instances", getUserTaskInstances(request, paramRequest));
             request.setAttribute("displayCols", getDisplayCols());
             request.setAttribute("statusWp", getDisplayMapWp());
+            request.setAttribute("itemsPerPage", getItemsPerPage());
             rd.include(request, response);
         } catch (Exception e) {
             log.error("Error including jsp in view mode", e);
