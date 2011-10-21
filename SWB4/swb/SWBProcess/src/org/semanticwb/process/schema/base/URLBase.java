@@ -3,6 +3,8 @@ package org.semanticwb.process.schema.base;
 
 public abstract class URLBase extends org.semanticwb.process.model.DataTypes 
 {
+    public static final org.semanticwb.platform.SemanticClass swp_RepositoryURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#RepositoryURL");
+    public static final org.semanticwb.platform.SemanticProperty swp_repositoryURLRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#repositoryURLRef");
     public static final org.semanticwb.platform.SemanticProperty swp_urlValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#urlValue");
     public static final org.semanticwb.platform.SemanticClass swps_URL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process/schema#URL");
    /**
@@ -73,6 +75,29 @@ public abstract class URLBase extends org.semanticwb.process.model.DataTypes
         {
             return (getURL(id, model)!=null);
         }
+       /**
+       * Gets all org.semanticwb.process.schema.URL with a determined RepositoryURL
+       * @param value RepositoryURL of the type org.semanticwb.process.model.RepositoryURL
+       * @param model Model of the org.semanticwb.process.schema.URL
+       * @return Iterator with all the org.semanticwb.process.schema.URL
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.schema.URL> listURLByRepositoryURL(org.semanticwb.process.model.RepositoryURL value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.schema.URL> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_repositoryURLRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.schema.URL with a determined RepositoryURL
+       * @param value RepositoryURL of the type org.semanticwb.process.model.RepositoryURL
+       * @return Iterator with all the org.semanticwb.process.schema.URL
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.schema.URL> listURLByRepositoryURL(org.semanticwb.process.model.RepositoryURL value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.schema.URL> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_repositoryURLRef,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**
@@ -82,6 +107,44 @@ public abstract class URLBase extends org.semanticwb.process.model.DataTypes
     public URLBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+   /**
+   * Sets the value for the property RepositoryURL
+   * @param value RepositoryURL to set
+   */
+
+    public void setRepositoryURL(org.semanticwb.process.model.RepositoryURL value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_repositoryURLRef, value.getSemanticObject());
+        }else
+        {
+            removeRepositoryURL();
+        }
+    }
+   /**
+   * Remove the value for RepositoryURL property
+   */
+
+    public void removeRepositoryURL()
+    {
+        getSemanticObject().removeProperty(swp_repositoryURLRef);
+    }
+
+   /**
+   * Gets the RepositoryURL
+   * @return a org.semanticwb.process.model.RepositoryURL
+   */
+    public org.semanticwb.process.model.RepositoryURL getRepositoryURL()
+    {
+         org.semanticwb.process.model.RepositoryURL ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_repositoryURLRef);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.RepositoryURL)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**
