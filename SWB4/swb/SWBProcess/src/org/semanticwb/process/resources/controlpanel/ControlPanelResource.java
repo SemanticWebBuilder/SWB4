@@ -131,6 +131,20 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
                 SWBProcessMgr.createProcessInstance(p, user);
             }
             response.setMode(SWBParamRequest.Mode_VIEW);
+        } else if (action.equals("setPageItems")) {
+            String ipp = request.getParameter("ipp");
+            int itemsPerPage = 0;
+            
+            if (ipp == null || ipp.trim().equals("")) {
+                ipp = "5";
+            }
+            
+            try {
+                itemsPerPage = Integer.parseInt(ipp);
+            } catch (NumberFormatException e) {
+                log.error("UserTaskInboxResource",e);
+            }
+            setItemsPerPage(itemsPerPage);
         } else {
             super.processAction(request, response);
         }
