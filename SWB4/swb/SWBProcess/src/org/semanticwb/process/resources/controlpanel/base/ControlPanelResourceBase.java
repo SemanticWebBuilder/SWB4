@@ -3,12 +3,11 @@ package org.semanticwb.process.resources.controlpanel.base;
 
 public abstract class ControlPanelResourceBase extends org.semanticwb.portal.api.GenericSemResource 
 {
-    public static final org.semanticwb.platform.SemanticProperty cpanel_groupFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/ControlPanel#groupFilter");
-    public static final org.semanticwb.platform.SemanticProperty cpanel_itemsPerPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/ControlPanel#itemsPerPage");
+    public static final org.semanticwb.platform.SemanticProperty cpanel_filterByGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/ControlPanel#filterByGroup");
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_semanticResourceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#semanticResourceInv");
+    public static final org.semanticwb.platform.SemanticProperty cpanel_itemsPerPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/ControlPanel#itemsPerPage");
     public static final org.semanticwb.platform.SemanticProperty cpanel_displayCols=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/ControlPanel#displayCols");
-    public static final org.semanticwb.platform.SemanticProperty cpanel_statusFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/ControlPanel#statusFilter");
     public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
     public static final org.semanticwb.platform.SemanticProperty cpanel_displayMapWp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/ControlPanel#displayMapWp");
     public static final org.semanticwb.platform.SemanticClass cpanel_ControlPanelResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/process/resources/ControlPanel#ControlPanelResource");
@@ -47,39 +46,21 @@ public abstract class ControlPanelResourceBase extends org.semanticwb.portal.api
     }
 
 /**
-* Gets the GroupFilter property
-* @return boolean with the GroupFilter
+* Gets the FilterByGroup property
+* @return boolean with the FilterByGroup
 */
-    public boolean isGroupFilter()
+    public boolean isFilterByGroup()
     {
-        return getSemanticObject().getBooleanProperty(cpanel_groupFilter);
+        return getSemanticObject().getBooleanProperty(cpanel_filterByGroup);
     }
 
 /**
-* Sets the GroupFilter property
-* @param value long with the GroupFilter
+* Sets the FilterByGroup property
+* @param value long with the FilterByGroup
 */
-    public void setGroupFilter(boolean value)
+    public void setFilterByGroup(boolean value)
     {
-        getSemanticObject().setBooleanProperty(cpanel_groupFilter, value);
-    }
-
-/**
-* Gets the ItemsPerPage property
-* @return int with the ItemsPerPage
-*/
-    public int getItemsPerPage()
-    {
-        return getSemanticObject().getIntProperty(cpanel_itemsPerPage);
-    }
-
-/**
-* Sets the ItemsPerPage property
-* @param value long with the ItemsPerPage
-*/
-    public void setItemsPerPage(int value)
-    {
-        getSemanticObject().setIntProperty(cpanel_itemsPerPage, value);
+        getSemanticObject().setBooleanProperty(cpanel_filterByGroup, value);
     }
    /**
    * Sets the value for the property Resource
@@ -121,6 +102,24 @@ public abstract class ControlPanelResourceBase extends org.semanticwb.portal.api
     }
 
 /**
+* Gets the ItemsPerPage property
+* @return int with the ItemsPerPage
+*/
+    public int getItemsPerPage()
+    {
+        return getSemanticObject().getIntProperty(cpanel_itemsPerPage);
+    }
+
+/**
+* Sets the ItemsPerPage property
+* @param value long with the ItemsPerPage
+*/
+    public void setItemsPerPage(int value)
+    {
+        getSemanticObject().setIntProperty(cpanel_itemsPerPage, value);
+    }
+
+/**
 * Gets the DisplayCols property
 * @return String with the DisplayCols
 */
@@ -136,24 +135,6 @@ public abstract class ControlPanelResourceBase extends org.semanticwb.portal.api
     public void setDisplayCols(String value)
     {
         getSemanticObject().setProperty(cpanel_displayCols, value);
-    }
-
-/**
-* Gets the StatusFilter property
-* @return boolean with the StatusFilter
-*/
-    public boolean isStatusFilter()
-    {
-        return getSemanticObject().getBooleanProperty(cpanel_statusFilter);
-    }
-
-/**
-* Sets the StatusFilter property
-* @param value long with the StatusFilter
-*/
-    public void setStatusFilter(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(cpanel_statusFilter, value);
     }
    /**
    * Sets the value for the property DisplayMapWp
