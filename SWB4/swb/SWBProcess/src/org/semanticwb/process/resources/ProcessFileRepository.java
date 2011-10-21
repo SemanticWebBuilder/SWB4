@@ -56,6 +56,7 @@ import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.process.model.ItemAwareStatus;
 import org.semanticwb.process.model.RepositoryDirectory;
 import org.semanticwb.process.model.RepositoryElement;
 import org.semanticwb.process.model.RepositoryFile;
@@ -100,6 +101,9 @@ public class ProcessFileRepository extends GenericResource {
 
         int luser = getLevelUser(usr);
 
+
+        WebPage wp = paramRequest.getWebPage();
+        WebSite wsite = wp.getWebSite();
 
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         RepositoryDirectory repoDir = (RepositoryDirectory) paramRequest.getWebPage();
@@ -178,6 +182,9 @@ public class ProcessFileRepository extends GenericResource {
             out.println("<th class=\"tban-tarea\">");
             out.println("<a style=\"color:white; text-decoration:'none';\" href=\"" + urlorder + "?orderBy=gpousr" + ugpop + "\" title=\"Ordenar por área de usuario.\">" + "Área" + "</a>");
             out.println("</th>");
+            out.println("<th class=\"tban-tarea\">");
+            out.println("<a style=\"color:white; text-decoration:'none';\" href=\"" + urlorder + "?orderBy=status" + ugpop + "\" title=\"Ordenar por estatus.\">" + "Estatus" + "</a>");
+            out.println("</th>");
             out.println("<th class=\"tban-id\">");
             out.println("Acción");
             out.println("</th>");
@@ -234,6 +241,15 @@ public class ProcessFileRepository extends GenericResource {
                     } else {
 
                         skey = " - " + repoFile.getOwnerUserGroup().getDisplayTitle(lang) + " - " + repoFile.getId();
+                    }
+
+                } else if (orderBy.equals("status")) {
+
+                    if (repoFile.getStatus() == null) {
+                        skey = " - " + " " + " - " + repoFile.getId();
+                    } else {
+
+                        skey = " - " + repoFile.getStatus().getDisplayTitle(lang) + " - " + repoFile.getId();
                     }
 
                 }
@@ -336,6 +352,9 @@ public class ProcessFileRepository extends GenericResource {
                 out.println("<td class=\"tban-tarea\">");
                 out.println(repositoryFile.getOwnerUserGroup() != null ? repositoryFile.getOwnerUserGroup().getDisplayTitle(lang) : "--");
                 out.println("</td>");
+                out.println("<td class=\"tban-tarea\">");
+                out.println(repositoryFile.getStatus() != null ? repositoryFile.getStatus().getDisplayTitle(lang) : "--");
+                out.println("</td>");
 
                 out.println("<td class=\"tban-accion\">");
 
@@ -412,6 +431,18 @@ public class ProcessFileRepository extends GenericResource {
             out.println("<td>");
             if (repoFile.getOwnerUserGroup() != null) {
                 out.println(repoFile.getOwnerUserGroup().getDisplayTitle(usr.getLanguage()));
+            } else {
+                out.println("--");
+            }
+            out.println("</td>");
+            out.println("</tr>");
+            out.println("<tr>");
+            out.println("<td align=\"right\">");
+            out.println("Estatus:");
+            out.println("</td>");
+            out.println("<td>");
+            if (repoFile.getStatus() != null) {
+                out.println(repoFile.getStatus().getDisplayTitle(usr.getLanguage()));
             } else {
                 out.println("--");
             }
@@ -562,6 +593,18 @@ public class ProcessFileRepository extends GenericResource {
                 out.println("</tr>");
                 out.println("<tr>");
                 out.println("<td align=\"right\">");
+                out.println("Estatus:");
+                out.println("</td>");
+                out.println("<td>");
+                if (repoFile.getStatus() != null) {
+                    out.println(repoFile.getStatus().getDisplayTitle(usr.getLanguage()));
+                } else {
+                    out.println("--");
+                }
+                out.println("</td>");
+                out.println("</tr>");
+                out.println("<tr>");
+                out.println("<td align=\"right\">");
                 out.println("Archivo:");
                 out.println("</td>");
                 out.println("<td>");
@@ -585,7 +628,11 @@ public class ProcessFileRepository extends GenericResource {
                 out.println("<th>");
                 out.println("Comentario");
                 out.println("</th>");
+                out.println("<th>");
+                out.println("Estatus");
+                out.println("</th>");
                 out.println("</tr>");
+
                 out.println("</thead>");
                 out.println("<tbody>");
                 while (ver != null) {
@@ -621,8 +668,14 @@ public class ProcessFileRepository extends GenericResource {
 
                     out.println("</td>");
                     out.println("<td>");
+
                     out.println(ver.getVersionComment() != null ? ver.getVersionComment() : "--");
 
+                    out.println("</td>");
+                    out.println("<td>");
+                    String propStatus = ver.getProperty("status", "--");
+                    ItemAwareStatus itemStat = ItemAwareStatus.ClassMgr.getItemAwareStatus(propStatus, wsite);
+                    out.println(itemStat!=null?itemStat.getDisplayTitle(lang):"--");
                     out.println("</td>");
                     out.println("</tr>");
 
@@ -657,6 +710,7 @@ public class ProcessFileRepository extends GenericResource {
             String stitle = "";
             String sdescription = "";
             String slink = "";
+            String actualStatus = "";
             boolean isFile = false;
             if (null != fid && null != newVersion) {
                 boolean incremento = Boolean.FALSE;
@@ -675,6 +729,8 @@ public class ProcessFileRepository extends GenericResource {
                 stitle = repoFile.getDisplayTitle(usr.getLanguage());
                 sdescription = repoFile.getDisplayDescription(usr.getLanguage());
 
+                actualStatus=repoFile.getStatus()!=null?repoFile.getStatus().getDisplayTitle(lang):"";
+                
                 VersionInfo vl = repoFile.getLastVersion();
 
                 slink = vl.getVersionFile();
@@ -821,6 +877,24 @@ public class ProcessFileRepository extends GenericResource {
             out.println("</td>");
             out.println("<td>");
             out.println("<textarea name=\"fcomment\"></textarea>");
+            out.println("</td>");
+            out.println("</tr>");
+
+            out.println("<tr>");
+            out.println("<td align=\"right\">");
+            out.println("Estatus:");
+            out.println("</td>");
+            out.println("<td>");
+
+            out.println("<select name=\"itemAwStatus\" >");
+            out.println("<option value=\"\" "+(actualStatus.equals("")?"selected":"") +">&nbsp;</option>");
+            Iterator<ItemAwareStatus> ititwstst = ItemAwareStatus.ClassMgr.listItemAwareStatuses(wsite);
+            while (ititwstst.hasNext()) {
+                ItemAwareStatus itemAwareStatus = ititwstst.next();
+                out.println("<option value=\""+itemAwareStatus.getId()+"\" "+(actualStatus.equals(itemAwareStatus.getId())?"selected":"") +">"+itemAwareStatus.getDisplayTitle(lang) +"</option>");
+            }
+
+            out.println("</select>");
             out.println("</td>");
             out.println("</tr>");
 
@@ -1167,6 +1241,7 @@ public class ProcessFileRepository extends GenericResource {
             action = "";
         }
 
+        WebSite wsite = response.getWebPage().getWebSite();
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         if ("newfile".equals(action)) {
             org.semanticwb.portal.util.FileUpload fup = new org.semanticwb.portal.util.FileUpload();
@@ -1180,6 +1255,8 @@ public class ProcessFileRepository extends GenericResource {
 
             String fid = fup.getValue("fid");
             String newVersion = fup.getValue("newVersion");
+            String repoEleStat = fup.getValue("itemAwStatus");
+            
 
             GenericObject go = null;
             RepositoryDirectory repoDir = (RepositoryDirectory) response.getWebPage();
@@ -1213,6 +1290,13 @@ public class ProcessFileRepository extends GenericResource {
                 }
                 //System.out.println("fname: "+fname);
                 repoFile.storeFile(fname, new ByteArrayInputStream(bcont), fcomment, incremento);
+                
+                ItemAwareStatus iawStat = ItemAwareStatus.ClassMgr.getItemAwareStatus(repoEleStat, wsite);
+                repoFile.setStatus(iawStat);
+                
+                VersionInfo vi = repoFile.getActualVersion();
+                vi.setProperty("status", repoEleStat);
+                
             } else {
 
                 RepositoryURL repoUrl = null;
@@ -1234,6 +1318,12 @@ public class ProcessFileRepository extends GenericResource {
 
                 repoUrl.setOwnerUserGroup(usr.getUserGroup());
                 repoUrl.storeFile(extfile, fcomment, incremento);
+                
+                ItemAwareStatus iawStat = ItemAwareStatus.ClassMgr.getItemAwareStatus(repoEleStat, wsite);
+                repoUrl.setStatus(iawStat);
+                
+                VersionInfo vi = repoUrl.getActualVersion();
+                vi.setProperty("status", repoEleStat);
             }
 
         } else if ("removefile".equals(action)) {
