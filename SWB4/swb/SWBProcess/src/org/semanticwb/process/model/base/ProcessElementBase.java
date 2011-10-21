@@ -306,4 +306,13 @@ public abstract class ProcessElementBase extends org.semanticwb.model.SWBClass i
     {
         getSemanticObject().setProperty(swb_title, title, lang);
     }
+
+   /**
+   * Gets the ProcessSite
+   * @return a instance of org.semanticwb.process.model.ProcessSite
+   */
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

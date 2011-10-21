@@ -212,4 +212,13 @@ public abstract class SQLQueryBase extends org.semanticwb.process.model.ProcessS
     {
         getSemanticObject().setProperty(swp_sqlCode, value);
     }
+
+   /**
+   * Gets the ProcessSite
+   * @return a instance of org.semanticwb.process.model.ProcessSite
+   */
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }
