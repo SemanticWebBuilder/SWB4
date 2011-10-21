@@ -55,7 +55,7 @@ public class RepositoryFile extends org.semanticwb.process.model.base.Repository
      * @param comment
      * @param bigVersionInc
      */
-    public OutputStream storeFile(String name, String comment, boolean bigVersionInc) throws FileNotFoundException
+    public OutputStream storeFile(String name, String comment, boolean bigVersionInc, String status) throws FileNotFoundException
     {
         VersionInfo v=VersionInfo.ClassMgr.createVersionInfo(getProcessSite());
         v.setVersionFile(name);
@@ -81,6 +81,12 @@ public class RepositoryFile extends org.semanticwb.process.model.base.Repository
         }
         v.setVersionNumber(ver);
         v.setVersionValue(sver);
+        
+        ItemAwareStatus iawStat = ItemAwareStatus.ClassMgr.getItemAwareStatus(status, getProcessSite());
+        setStatus(iawStat);
+
+        v.setProperty("status", status);
+        
         setActualVersion(v);
         setLastVersion(v);
 
@@ -98,11 +104,11 @@ public class RepositoryFile extends org.semanticwb.process.model.base.Repository
      * @param comment
      * @param bigVersionInc
      */
-    public void storeFile(String name, InputStream in, String comment, boolean bigVersionInc)
+    public void storeFile(String name, InputStream in, String comment, boolean bigVersionInc, String status)
     {
         try
         {
-            OutputStream out=storeFile(name, comment, bigVersionInc);
+            OutputStream out=storeFile(name, comment, bigVersionInc,status);
             SWBUtils.IO.copyStream(in, out);
         }catch(Exception e)
         {
