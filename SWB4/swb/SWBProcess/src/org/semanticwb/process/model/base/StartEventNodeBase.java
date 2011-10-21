@@ -335,4 +335,13 @@ public abstract class StartEventNodeBase extends org.semanticwb.process.model.Ca
          }
          return ret;
     }
+
+   /**
+   * Gets the ProcessSite
+   * @return a instance of org.semanticwb.process.model.ProcessSite
+   */
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

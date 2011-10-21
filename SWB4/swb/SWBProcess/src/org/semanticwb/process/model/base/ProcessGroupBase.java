@@ -4,7 +4,7 @@ package org.semanticwb.process.model.base;
    /**
    * Grupo de Procesos 
    */
-public abstract class ProcessGroupBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable
+public abstract class ProcessGroupBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode
 {
     public static final org.semanticwb.platform.SemanticClass swp_Process=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Process");
     public static final org.semanticwb.platform.SemanticProperty swp_hasProcessInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasProcessInv");
@@ -203,5 +203,14 @@ public abstract class ProcessGroupBase extends org.semanticwb.process.model.Proc
              ret=(org.semanticwb.process.model.Process)obj.createGenericInstance();
          }
          return ret;
+    }
+
+   /**
+   * Gets the ProcessSite
+   * @return a instance of org.semanticwb.process.model.ProcessSite
+   */
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }
