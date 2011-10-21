@@ -39,6 +39,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.User;
+import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.process.model.ProcessInstance;
@@ -178,6 +179,7 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
         ArrayList<ProcessInstance> t_instances = new ArrayList<ProcessInstance>();
         WebSite site = paramRequest.getWebPage().getWebSite();
         ProcessGroup group = null;
+        User user = paramRequest.getUser();
         String sortType = request.getParameter("sort");
         int itemsPerPage = getItemsPerPage();
         int statusFilter = STATUS_ALL;
@@ -194,7 +196,7 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
             if (page < 0) page = 1;
         }
 
-        if (itemsPerPage < 20) itemsPerPage = 20;
+        if (itemsPerPage < 5) itemsPerPage = 5;
 
         if (request.getParameter("sFilter") != null && !request.getParameter("sFilter").trim().equals("")) {
             statusFilter = Integer.valueOf(request.getParameter("sFilter"));
@@ -225,9 +227,24 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
 
         if (it_ins != null) {
             t_instances = new ArrayList<ProcessInstance>();
+            
             while (it_ins.hasNext()) {
                 ProcessInstance processInstance = it_ins.next();
-                t_instances.add(processInstance);
+                
+                if (isFilterByGroup()) { //Si hay que filtrar por grupo de usuarios
+                    UserGroup iug = processInstance.getOwnerUserGroup();
+                    UserGroup uug = user.getUserGroup();
+                    
+                    if (iug != null && uug != null) { //Si la instancia y el usuario tienen grupo
+                        if (user.getUserGroup().getURI().equals(processInstance.getOwnerUserGroup().getURI())) { //Si tienen el mismo grupo
+                            t_instances.add(processInstance);
+                        }
+                    } else if (iug == null && uug == null) { //Si el proceso y el usuario no tienen grupo
+                        t_instances.add(processInstance);
+                    }
+                } else { //Si no hay que filtrar por grupo de usuarios
+                    t_instances.add(processInstance);
+                }
             }
         }
 
