@@ -492,7 +492,7 @@ public class ProcessFileRepository extends GenericResource {
                 out.println("<form method=\"post\" action=\"" + urlnewVer + "\">");
                 out.println("<input type=\"hidden\" name=\"act\" value=\"new\">");
                 out.println("<input type=\"hidden\" name=\"fid\" value=\"" + fid + "\">");
-                out.println("<select name=\"newVersion\" onsubmit=\"validaVersion(this);\">");
+                out.println("<select name=\"newVersion\" onsubmit=\"validaVersion(this.form);\">");
                 out.println("<option value=\"0\">--</option>");
 
                 float fver = Float.parseFloat(vl.getVersionValue());
@@ -846,7 +846,7 @@ public class ProcessFileRepository extends GenericResource {
             out.println("</script>"); //        
 
             out.println("<div id=\"ProcessFileRepository\">");
-            out.println("<form method=\"post\" action=\"" + urlnew + "\"  enctype=\"multipart/form-data\" >");
+            out.println("<form dojoType=\"dijit.form.Form\" method=\"post\" action=\"" + urlnew + "\"  enctype=\"multipart/form-data\" >");
 
             if (null != fid && null != newVersion) {
                 out.println("<input type=\"hidden\" name=\"newVersion\" value=\"" + newVersion + "\">");
@@ -860,7 +860,10 @@ public class ProcessFileRepository extends GenericResource {
             out.println("Título:");
             out.println("</td>");
             out.println("<td>");
-            out.println("<input type=\"text\" name=\"ftitle\" id=\"ftitle\" value=\"" + stitle + "\">");
+            
+            out.println("<input name=\"ftitle\" id=\"ftitle\" size=\"30\" value=\"" + stitle + "\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura el título.\"  trim=\"true\"  style=\"width:300px;\" />");
+
+            //out.println("<input type=\"text\" name=\"ftitle\" id=\"ftitle\" value=\"" + stitle + "\">");
             out.println("</td>");
             out.println("</tr>");
             out.println("<tr>");
@@ -868,7 +871,8 @@ public class ProcessFileRepository extends GenericResource {
             out.println("Descripción:");
             out.println("</td>");
             out.println("<td>");
-            out.println("<textarea name=\"fdescription\" id=\"fdescription\">" + sdescription + "</textarea>");
+            out.println("<input name=\"fdescription\" id=\"fdescription\" size=\"30\" value=\"" + sdescription + "\" dojoType=\"dijit.form.ValidationTextBox\" editor=\"dijit.form.Textarea\"  required=\"true\" promptMessage=\"Captura la descripción.\"  trim=\"true\"  style=\"width:300px;\" />");
+            //out.println("<textarea name=\"fdescription\" id=\"fdescription\" dojoType=\"dijit.form.SimpleTextarea\" required=\"true\" promptMessage=\"Captura la descripción.\" trim=\"true\" style=\"width:300px;\">" + sdescription + "</textarea>");
             out.println("</td>");
             out.println("</tr>");
             out.println("<tr>");
@@ -876,7 +880,8 @@ public class ProcessFileRepository extends GenericResource {
             out.println("Comentario:");
             out.println("</td>");
             out.println("<td>");
-            out.println("<textarea name=\"fcomment\"></textarea>");
+            out.println("<input name=\"fcomment\" id=\"fcomment\" size=\"30\" value=\"\" dojoType=\"dijit.form.ValidationTextBox\" editor=\"dijit.form.Textarea\" promptMessage=\"Captura el comentario.\"  style=\"width:300px;\" />");
+            //out.println("<textarea name=\"fcomment\" dojoType=\"dijit.form.Textarea\" style=\"width:300px;\" promptMessage=\"Captura el comentario.\"></textarea>");
             out.println("</td>");
             out.println("</tr>");
 
@@ -886,7 +891,7 @@ public class ProcessFileRepository extends GenericResource {
             out.println("</td>");
             out.println("<td>");
 
-            out.println("<select name=\"itemAwStatus\" >");
+            out.println("<select name=\"itemAwStatus\" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" style=\"width:300px;\" promptMessage=\"Selecciona estatus\" >");
             out.println("<option value=\"\" "+(actualStatus.equals("")?"selected":"") +">&nbsp;</option>");
             Iterator<ItemAwareStatus> ititwstst = ItemAwareStatus.ClassMgr.listItemAwareStatuses(wsite);
             while (ititwstst.hasNext()) {
@@ -935,7 +940,8 @@ public class ProcessFileRepository extends GenericResource {
                 out.println("<td>");
 
                 out.println("<input id=\"hftype\" type=\"hidden\" name=\"hftype\" value=\"url\">");
-                out.println("<input id=\"extfile\" type=\"text\" name=\"extfile\" value=\"" + slink + "\" >");
+                out.println("<input name=\"extfile\" id=\"extfile\" size=\"30\" value=\"" + slink + "\" dojoType=\"dijit.form.ValidationTextBox\" editor=\"dijit.form.Textarea\" promptMessage=\"Captura la liga al archivo.\" required=\"true\" style=\"width:300px;\" />");
+                //out.println("<input id=\"extfile\" type=\"text\" name=\"extfile\" value=\"" + slink + "\" >");
 
                 out.println("</td>");
                 out.println("</tr>");
@@ -946,7 +952,7 @@ public class ProcessFileRepository extends GenericResource {
                 out.println("</td>");
                 out.println("<td>");
                 out.println("<input id=\"hftype\" type=\"hidden\" name=\"hftype\" value=\"file\">");
-                out.println("<input id=\"ffile\" type=\"file\" name=\"ffile\" value=\"\" >");
+                out.println("<input id=\"ffile\" type=\"file\" name=\"ffile\" value=\"\" style=\"width:300px;\">");
                 out.println("</td>");
                 out.println("</tr>");
             } else {
@@ -955,7 +961,8 @@ public class ProcessFileRepository extends GenericResource {
                 out.println("Archivo externo URL:");
                 out.println("</td>");
                 out.println("<td>");
-                out.println("<input id=\"extfile\" type=\"text\" name=\"extfile\" value=\"" + slink + "\" >");
+                out.println("<input name=\"extfile\" id=\"extfile\" size=\"30\" value=\"" + slink + "\" dojoType=\"dijit.form.ValidationTextBox\" editor=\"dijit.form.Textarea\" required=\"true\" promptMessage=\"Captura la liga al archivo.\"  style=\"width:300px;\" />");
+                //out.println("<input id=\"extfile\" type=\"text\" name=\"extfile\" style=\"width:300px;\" value=\"" + slink + "\" >");
                 out.println("</td>");
                 out.println("</tr>");
                 out.println("<tr>");
@@ -963,7 +970,7 @@ public class ProcessFileRepository extends GenericResource {
                 out.println("Archivo:");
                 out.println("</td>");
                 out.println("<td>");
-                out.println("<input id=\"ffile\" type=\"file\" name=\"ffile\" value=\"\" disabled>");
+                out.println("<input id=\"ffile\" type=\"file\" name=\"ffile\" value=\"\" disabled style=\"width:300px;\">");
                 out.println("</td>");
                 out.println("</tr>");
             }
@@ -1289,13 +1296,7 @@ public class ProcessFileRepository extends GenericResource {
                     fname = fname.substring(fname.lastIndexOf("/") + 1);
                 }
                 //System.out.println("fname: "+fname);
-                repoFile.storeFile(fname, new ByteArrayInputStream(bcont), fcomment, incremento);
-                
-                ItemAwareStatus iawStat = ItemAwareStatus.ClassMgr.getItemAwareStatus(repoEleStat, wsite);
-                repoFile.setStatus(iawStat);
-                
-                VersionInfo vi = repoFile.getActualVersion();
-                vi.setProperty("status", repoEleStat);
+                repoFile.storeFile(fname, new ByteArrayInputStream(bcont), fcomment, incremento, repoEleStat);
                 
             } else {
 
@@ -1317,13 +1318,8 @@ public class ProcessFileRepository extends GenericResource {
                 User usr = response.getUser();
 
                 repoUrl.setOwnerUserGroup(usr.getUserGroup());
-                repoUrl.storeFile(extfile, fcomment, incremento);
+                repoUrl.storeFile(extfile, fcomment, incremento, repoEleStat);
                 
-                ItemAwareStatus iawStat = ItemAwareStatus.ClassMgr.getItemAwareStatus(repoEleStat, wsite);
-                repoUrl.setStatus(iawStat);
-                
-                VersionInfo vi = repoUrl.getActualVersion();
-                vi.setProperty("status", repoEleStat);
             }
 
         } else if ("removefile".equals(action)) {
