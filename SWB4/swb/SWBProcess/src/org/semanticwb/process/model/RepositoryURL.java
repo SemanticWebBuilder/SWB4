@@ -19,7 +19,7 @@ public class RepositoryURL extends org.semanticwb.process.model.base.RepositoryU
      * @param comment
      * @param bigVersionInc
      */
-    public void storeFile(String name, String comment, boolean bigVersionInc) 
+    public void storeFile(String name, String comment, boolean bigVersionInc, String status) 
     {
         VersionInfo v=VersionInfo.ClassMgr.createVersionInfo(getProcessSite());
         v.setVersionFile(name);
@@ -45,6 +45,12 @@ public class RepositoryURL extends org.semanticwb.process.model.base.RepositoryU
         }
         v.setVersionNumber(ver);
         v.setVersionValue(sver);
+        
+        ItemAwareStatus iawStat = ItemAwareStatus.ClassMgr.getItemAwareStatus(status, getProcessSite());
+        setStatus(iawStat);
+
+        v.setProperty("status", status);
+        
         setActualVersion(v);
         setLastVersion(v);
 
