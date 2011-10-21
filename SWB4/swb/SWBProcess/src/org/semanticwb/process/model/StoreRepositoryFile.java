@@ -28,7 +28,7 @@ public class StoreRepositoryFile extends org.semanticwb.process.model.base.Store
         while (it.hasNext()) {
             ItemAwareReference ref = it.next();
             String n1=ref.getItemAware().getName();
-            String n2=getVarname();
+            String n2=getNodeVarName();
             if(n1!=null && n2!=null)
             {
                 obj=ref.getProcessObject();
@@ -43,18 +43,18 @@ public class StoreRepositoryFile extends org.semanticwb.process.model.base.Store
         if(obj!=null && obj instanceof org.semanticwb.process.schema.File)
         {
             org.semanticwb.process.schema.File f=(org.semanticwb.process.schema.File)obj;
-            System.out.println("value:"+f.getValue());
-            System.out.println("file:"+f.getRepositoryFile());
+            //System.out.println("value:"+f.getValue());
+            //System.out.println("file:"+f.getRepositoryFile());
             
             
             String filePath=SWBPortal.getWorkPath()+f.getWorkPath()+"/"+f.getValue();
-            System.out.println("filePath:"+filePath);
+            //System.out.println("filePath:"+filePath);
 
             
             RepositoryFile file=f.getRepositoryFile();
             if(file==null)
             {
-                String id=this.getRepositoryFileId();
+                String id=this.getNodeId();
                 if(id!=null)
                 {
                     file=RepositoryFile.ClassMgr.getRepositoryFile(id, this.getProcessSite());
@@ -65,14 +65,51 @@ public class StoreRepositoryFile extends org.semanticwb.process.model.base.Store
                     file=RepositoryFile.ClassMgr.createRepositoryFile(this.getProcessSite());
                 }
                 f.setRepositoryFile(file);
-                file.setRepositoryDirectory(this.getProcessDirectory());
-                file.setTitle(this.getProcessFileName());
+                file.setRepositoryDirectory(this.getNodeDirectory());
+                file.setTitle(this.getNodeName());
                 file.setOwnerUserGroup(user.getUserGroup());
             }
             
             try
             {
-                file.storeFile(f.getValue(), new FileInputStream(filePath), "Created by process:"+instance.getProcessInstance().getProcessType().getId()+", processInstance:"+instance.getProcessInstance().getId(), false);
+                file.storeFile(f.getValue(), new FileInputStream(filePath), "Created by process:"+instance.getProcessInstance().getProcessType().getId()+", processInstance:"+instance.getProcessInstance().getId(), false,getNodeStatus().getId());
+            }catch(Exception e)
+            {
+                log.error(e);
+            }
+            
+        }else if(obj!=null && obj instanceof org.semanticwb.process.schema.URL)
+        {
+            org.semanticwb.process.schema.URL f=(org.semanticwb.process.schema.URL)obj;
+            //System.out.println("value:"+f.getValue());
+            //System.out.println("file:"+f.getRepositoryURL());
+            
+            
+            String url=f.getValue();
+            //System.out.println("filePath:"+filePath);
+            
+            RepositoryURL rurl=f.getRepositoryURL();
+            if(rurl==null)
+            {
+                String id=this.getNodeId();
+                if(id!=null)
+                {
+                    rurl=RepositoryURL.ClassMgr.getRepositoryURL(id, this.getProcessSite());
+                }
+
+                if(rurl==null)
+                {
+                    rurl=RepositoryURL.ClassMgr.createRepositoryURL(this.getProcessSite());
+                }
+                f.setRepositoryURL(rurl);
+                rurl.setRepositoryDirectory(this.getNodeDirectory());
+                rurl.setTitle(this.getNodeName());
+                rurl.setOwnerUserGroup(user.getUserGroup());
+            }
+            
+            try
+            {
+                rurl.storeFile(f.getValue(), "Created by process:"+instance.getProcessInstance().getProcessType().getId()+", processInstance:"+instance.getProcessInstance().getId(), false,getNodeStatus().getId());
             }catch(Exception e)
             {
                 log.error(e);
@@ -80,40 +117,6 @@ public class StoreRepositoryFile extends org.semanticwb.process.model.base.Store
             
         }
         
-//        XDocReport rep=new XDocReport(this.getProcessFileName(), filePath);
-//
-//        //rep.addContextList("", null, null);
-//
-//        rep.addContextObject("instance", instance);
-//        rep.addContextObject("user", user);
-//
-//        List<ItemAwareReference> list=instance.listHeraquicalItemAwareReference();
-//        for(ItemAwareReference item : list)
-//        {
-//            String varname=item.getItemAware().getName();
-//            SemanticObject object=item.getProcessObject().getSemanticObject();
-//            try
-//            {
-//                //System.out.println("Cargando clase "+className+" ...");
-//                Class clazz=SWBPClassMgr.getClassDefinition(object.getSemanticClass());
-//                //System.out.println("Obteniendo constructor...");
-//                Constructor c=clazz.getConstructor(SemanticObject.class);
-//                //System.out.println("Instanciando objeto...");
-//                Object instanceObject=c.newInstance(object);
-//                //System.out.println("Agregando variable "+varname+"="+instanceObject+" de tipo "+instanceObject.getClass());
-//                rep.addContextObject(varname, instanceObject);
-//                //System.out.println("Variable "+ varname +" agregada");
-//            }
-//            catch(Exception cnfe)
-//            {
-//                log.error("No se agrego variable "+varname+" a script relacionada con el objeto "+object.getURI()+" en la instancia de proceso "+instance.getURI(),cnfe);
-//            }
-//        }
-//            try
-//            {
-//                rep.generateReport(file.storeFile(this.getProcessFileName(), null, false));
-//            }catch(Exception e){log.error(e);}   
-
     }        
     
 }

@@ -24,8 +24,8 @@ public class TransformRepositoryFile extends org.semanticwb.process.model.base.T
     {
         super.execute(instance, user);
 
-        String filePath=SWBPortal.getWorkPath()+this.getProcessFileTemplate().getWorkPath()+"/"+this.getProcessFileTemplate().getFileName();
-        XDocReport rep=new XDocReport(this.getProcessFileName(), filePath);
+        String filePath=SWBPortal.getWorkPath()+this.getFileTemplate().getWorkPath()+"/"+this.getFileTemplate().getFileName();
+        XDocReport rep=new XDocReport(this.getNodeName(), filePath);
 
         //rep.addContextList("", null, null);
 
@@ -56,7 +56,7 @@ public class TransformRepositoryFile extends org.semanticwb.process.model.base.T
         }
 
         RepositoryFile file=null;
-        String id=this.getRepositoryFileId();
+        String id=this.getNodeId();
         if(id!=null)
         {
             file=RepositoryFile.ClassMgr.getRepositoryFile(id, this.getProcessSite());
@@ -66,13 +66,13 @@ public class TransformRepositoryFile extends org.semanticwb.process.model.base.T
         {
             file=RepositoryFile.ClassMgr.createRepositoryFile(this.getProcessSite());
         }
-        file.setRepositoryDirectory(this.getProcessDirectory());
-        file.setTitle(this.getProcessFileName());
+        file.setRepositoryDirectory(this.getNodeDirectory());
+        file.setTitle(this.getNodeName());
         file.setOwnerUserGroup(user.getUserGroup());
 
         try
         {
-            rep.generateReport(file.storeFile(this.getProcessFileName(), null, false));
+            rep.generateReport(file.storeFile(this.getNodeName(), null, false,getNodeStatus().getId()));
         }catch(Exception e){log.error(e);}
 
     }    

@@ -1,10 +1,10 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class TransformRepositoryFileBase extends org.semanticwb.process.model.ProcessService implements org.semanticwb.process.model.StoreRepositoryFileable
+public abstract class TransformRepositoryFileBase extends org.semanticwb.process.model.ProcessService implements org.semanticwb.process.model.StoreRepositoryNodeable
 {
     public static final org.semanticwb.platform.SemanticClass swp_ProcessFileTemplate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessFileTemplate");
-    public static final org.semanticwb.platform.SemanticProperty swp_processFileTemplate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processFileTemplate");
+    public static final org.semanticwb.platform.SemanticProperty swp_transformRepFileTemplate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#transformRepFileTemplate");
     public static final org.semanticwb.platform.SemanticClass swp_TransformRepositoryFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#TransformRepositoryFile");
    /**
    * The semantic class that represents the currentObject
@@ -81,72 +81,72 @@ public abstract class TransformRepositoryFileBase extends org.semanticwb.process
             return (getTransformRepositoryFile(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.process.model.TransformRepositoryFile with a determined ProcessDirectory
-       * @param value ProcessDirectory of the type org.semanticwb.process.model.RepositoryDirectory
+       * Gets all org.semanticwb.process.model.TransformRepositoryFile with a determined NodeDirectory
+       * @param value NodeDirectory of the type org.semanticwb.process.model.RepositoryDirectory
        * @param model Model of the org.semanticwb.process.model.TransformRepositoryFile
        * @return Iterator with all the org.semanticwb.process.model.TransformRepositoryFile
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.TransformRepositoryFile> listTransformRepositoryFileByProcessDirectory(org.semanticwb.process.model.RepositoryDirectory value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.TransformRepositoryFile> listTransformRepositoryFileByNodeDirectory(org.semanticwb.process.model.RepositoryDirectory value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransformRepositoryFile> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_processDirectory, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransformRepositoryFile> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_storeRepNodeDirectory, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.TransformRepositoryFile with a determined ProcessDirectory
-       * @param value ProcessDirectory of the type org.semanticwb.process.model.RepositoryDirectory
+       * Gets all org.semanticwb.process.model.TransformRepositoryFile with a determined NodeDirectory
+       * @param value NodeDirectory of the type org.semanticwb.process.model.RepositoryDirectory
        * @return Iterator with all the org.semanticwb.process.model.TransformRepositoryFile
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.TransformRepositoryFile> listTransformRepositoryFileByProcessDirectory(org.semanticwb.process.model.RepositoryDirectory value)
+        public static java.util.Iterator<org.semanticwb.process.model.TransformRepositoryFile> listTransformRepositoryFileByNodeDirectory(org.semanticwb.process.model.RepositoryDirectory value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransformRepositoryFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_processDirectory,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransformRepositoryFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_storeRepNodeDirectory,value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.TransformRepositoryFile with a determined ProcessFileTemplate
-       * @param value ProcessFileTemplate of the type org.semanticwb.process.model.ProcessFileTemplate
+       * Gets all org.semanticwb.process.model.TransformRepositoryFile with a determined NodeStatus
+       * @param value NodeStatus of the type org.semanticwb.process.model.ItemAwareStatus
        * @param model Model of the org.semanticwb.process.model.TransformRepositoryFile
        * @return Iterator with all the org.semanticwb.process.model.TransformRepositoryFile
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.TransformRepositoryFile> listTransformRepositoryFileByProcessFileTemplate(org.semanticwb.process.model.ProcessFileTemplate value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.TransformRepositoryFile> listTransformRepositoryFileByNodeStatus(org.semanticwb.process.model.ItemAwareStatus value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransformRepositoryFile> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_processFileTemplate, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransformRepositoryFile> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_storeRepNodeStatus, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.TransformRepositoryFile with a determined ProcessFileTemplate
-       * @param value ProcessFileTemplate of the type org.semanticwb.process.model.ProcessFileTemplate
+       * Gets all org.semanticwb.process.model.TransformRepositoryFile with a determined NodeStatus
+       * @param value NodeStatus of the type org.semanticwb.process.model.ItemAwareStatus
        * @return Iterator with all the org.semanticwb.process.model.TransformRepositoryFile
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.TransformRepositoryFile> listTransformRepositoryFileByProcessFileTemplate(org.semanticwb.process.model.ProcessFileTemplate value)
+        public static java.util.Iterator<org.semanticwb.process.model.TransformRepositoryFile> listTransformRepositoryFileByNodeStatus(org.semanticwb.process.model.ItemAwareStatus value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransformRepositoryFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_processFileTemplate,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransformRepositoryFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_storeRepNodeStatus,value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.TransformRepositoryFile with a determined Status
-       * @param value Status of the type org.semanticwb.process.model.ItemAwareStatus
+       * Gets all org.semanticwb.process.model.TransformRepositoryFile with a determined FileTemplate
+       * @param value FileTemplate of the type org.semanticwb.process.model.ProcessFileTemplate
        * @param model Model of the org.semanticwb.process.model.TransformRepositoryFile
        * @return Iterator with all the org.semanticwb.process.model.TransformRepositoryFile
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.TransformRepositoryFile> listTransformRepositoryFileByStatus(org.semanticwb.process.model.ItemAwareStatus value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.TransformRepositoryFile> listTransformRepositoryFileByFileTemplate(org.semanticwb.process.model.ProcessFileTemplate value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransformRepositoryFile> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_srfStatus, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransformRepositoryFile> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_transformRepFileTemplate, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.TransformRepositoryFile with a determined Status
-       * @param value Status of the type org.semanticwb.process.model.ItemAwareStatus
+       * Gets all org.semanticwb.process.model.TransformRepositoryFile with a determined FileTemplate
+       * @param value FileTemplate of the type org.semanticwb.process.model.ProcessFileTemplate
        * @return Iterator with all the org.semanticwb.process.model.TransformRepositoryFile
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.TransformRepositoryFile> listTransformRepositoryFileByStatus(org.semanticwb.process.model.ItemAwareStatus value)
+        public static java.util.Iterator<org.semanticwb.process.model.TransformRepositoryFile> listTransformRepositoryFileByFileTemplate(org.semanticwb.process.model.ProcessFileTemplate value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransformRepositoryFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_srfStatus,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TransformRepositoryFile> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_transformRepFileTemplate,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -182,154 +182,154 @@ public abstract class TransformRepositoryFileBase extends org.semanticwb.process
     {
         super(base);
     }
+
+/**
+* Gets the NodeId property
+* @return String with the NodeId
+*/
+    public String getNodeId()
+    {
+        return getSemanticObject().getProperty(swp_storeRepNodeId);
+    }
+
+/**
+* Sets the NodeId property
+* @param value long with the NodeId
+*/
+    public void setNodeId(String value)
+    {
+        getSemanticObject().setProperty(swp_storeRepNodeId, value);
+    }
    /**
-   * Sets the value for the property ProcessDirectory
-   * @param value ProcessDirectory to set
+   * Sets the value for the property NodeDirectory
+   * @param value NodeDirectory to set
    */
 
-    public void setProcessDirectory(org.semanticwb.process.model.RepositoryDirectory value)
+    public void setNodeDirectory(org.semanticwb.process.model.RepositoryDirectory value)
     {
         if(value!=null)
         {
-            getSemanticObject().setObjectProperty(swp_processDirectory, value.getSemanticObject());
+            getSemanticObject().setObjectProperty(swp_storeRepNodeDirectory, value.getSemanticObject());
         }else
         {
-            removeProcessDirectory();
+            removeNodeDirectory();
         }
     }
    /**
-   * Remove the value for ProcessDirectory property
+   * Remove the value for NodeDirectory property
    */
 
-    public void removeProcessDirectory()
+    public void removeNodeDirectory()
     {
-        getSemanticObject().removeProperty(swp_processDirectory);
+        getSemanticObject().removeProperty(swp_storeRepNodeDirectory);
     }
 
    /**
-   * Gets the ProcessDirectory
+   * Gets the NodeDirectory
    * @return a org.semanticwb.process.model.RepositoryDirectory
    */
-    public org.semanticwb.process.model.RepositoryDirectory getProcessDirectory()
+    public org.semanticwb.process.model.RepositoryDirectory getNodeDirectory()
     {
          org.semanticwb.process.model.RepositoryDirectory ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_processDirectory);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_storeRepNodeDirectory);
          if(obj!=null)
          {
              ret=(org.semanticwb.process.model.RepositoryDirectory)obj.createGenericInstance();
          }
          return ret;
     }
+
+/**
+* Gets the NodeName property
+* @return String with the NodeName
+*/
+    public String getNodeName()
+    {
+        return getSemanticObject().getProperty(swp_storeRepNodeName);
+    }
+
+/**
+* Sets the NodeName property
+* @param value long with the NodeName
+*/
+    public void setNodeName(String value)
+    {
+        getSemanticObject().setProperty(swp_storeRepNodeName, value);
+    }
    /**
-   * Sets the value for the property ProcessFileTemplate
-   * @param value ProcessFileTemplate to set
+   * Sets the value for the property NodeStatus
+   * @param value NodeStatus to set
    */
 
-    public void setProcessFileTemplate(org.semanticwb.process.model.ProcessFileTemplate value)
+    public void setNodeStatus(org.semanticwb.process.model.ItemAwareStatus value)
     {
         if(value!=null)
         {
-            getSemanticObject().setObjectProperty(swp_processFileTemplate, value.getSemanticObject());
+            getSemanticObject().setObjectProperty(swp_storeRepNodeStatus, value.getSemanticObject());
         }else
         {
-            removeProcessFileTemplate();
+            removeNodeStatus();
         }
     }
    /**
-   * Remove the value for ProcessFileTemplate property
+   * Remove the value for NodeStatus property
    */
 
-    public void removeProcessFileTemplate()
+    public void removeNodeStatus()
     {
-        getSemanticObject().removeProperty(swp_processFileTemplate);
+        getSemanticObject().removeProperty(swp_storeRepNodeStatus);
     }
 
    /**
-   * Gets the ProcessFileTemplate
-   * @return a org.semanticwb.process.model.ProcessFileTemplate
-   */
-    public org.semanticwb.process.model.ProcessFileTemplate getProcessFileTemplate()
-    {
-         org.semanticwb.process.model.ProcessFileTemplate ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_processFileTemplate);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.process.model.ProcessFileTemplate)obj.createGenericInstance();
-         }
-         return ret;
-    }
-   /**
-   * Sets the value for the property Status
-   * @param value Status to set
-   */
-
-    public void setStatus(org.semanticwb.process.model.ItemAwareStatus value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swp_srfStatus, value.getSemanticObject());
-        }else
-        {
-            removeStatus();
-        }
-    }
-   /**
-   * Remove the value for Status property
-   */
-
-    public void removeStatus()
-    {
-        getSemanticObject().removeProperty(swp_srfStatus);
-    }
-
-   /**
-   * Gets the Status
+   * Gets the NodeStatus
    * @return a org.semanticwb.process.model.ItemAwareStatus
    */
-    public org.semanticwb.process.model.ItemAwareStatus getStatus()
+    public org.semanticwb.process.model.ItemAwareStatus getNodeStatus()
     {
          org.semanticwb.process.model.ItemAwareStatus ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_srfStatus);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_storeRepNodeStatus);
          if(obj!=null)
          {
              ret=(org.semanticwb.process.model.ItemAwareStatus)obj.createGenericInstance();
          }
          return ret;
     }
+   /**
+   * Sets the value for the property FileTemplate
+   * @param value FileTemplate to set
+   */
 
-/**
-* Gets the ProcessFileName property
-* @return String with the ProcessFileName
-*/
-    public String getProcessFileName()
+    public void setFileTemplate(org.semanticwb.process.model.ProcessFileTemplate value)
     {
-        return getSemanticObject().getProperty(swp_processFileName);
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_transformRepFileTemplate, value.getSemanticObject());
+        }else
+        {
+            removeFileTemplate();
+        }
+    }
+   /**
+   * Remove the value for FileTemplate property
+   */
+
+    public void removeFileTemplate()
+    {
+        getSemanticObject().removeProperty(swp_transformRepFileTemplate);
     }
 
-/**
-* Sets the ProcessFileName property
-* @param value long with the ProcessFileName
-*/
-    public void setProcessFileName(String value)
+   /**
+   * Gets the FileTemplate
+   * @return a org.semanticwb.process.model.ProcessFileTemplate
+   */
+    public org.semanticwb.process.model.ProcessFileTemplate getFileTemplate()
     {
-        getSemanticObject().setProperty(swp_processFileName, value);
-    }
-
-/**
-* Gets the RepositoryFileId property
-* @return String with the RepositoryFileId
-*/
-    public String getRepositoryFileId()
-    {
-        return getSemanticObject().getProperty(swp_repositoryFileId);
-    }
-
-/**
-* Sets the RepositoryFileId property
-* @param value long with the RepositoryFileId
-*/
-    public void setRepositoryFileId(String value)
-    {
-        getSemanticObject().setProperty(swp_repositoryFileId, value);
+         org.semanticwb.process.model.ProcessFileTemplate ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_transformRepFileTemplate);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.ProcessFileTemplate)obj.createGenericInstance();
+         }
+         return ret;
     }
 }
