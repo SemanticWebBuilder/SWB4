@@ -529,11 +529,11 @@ public class SemanticObject
     
     public String getShortURI()
     {
-        String getShortURI=getModel().getModelObject().getId();
         if(getURI()==null)
         {
             throw new IllegalArgumentException();
         }
+        String getShortURI=getModel().getModelObject().getId();
         int pos=getURI().indexOf("#");
         if(pos!=-1)
         {
@@ -3313,7 +3313,7 @@ public class SemanticObject
      */
     public String getLabel(String lang)
     {
-        return getLocaleProperty(getModel().getSemanticProperty(SemanticVocabulary.RDFS_LABEL), lang);
+        return getLocaleProperty(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDFS_LABEL), lang);
     }
 
     /**
@@ -3334,7 +3334,7 @@ public class SemanticObject
      */
     public String getComment(String lang)
     {
-        return getLocaleProperty(getModel().getSemanticProperty(SemanticVocabulary.RDFS_COMMENT), lang);
+        return getLocaleProperty(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDFS_COMMENT), lang);
     }    
     
     
