@@ -85,6 +85,10 @@ public class LoginElement extends org.semanticwb.model.base.LoginElementBase {
     public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName)
             throws FormValidateException
     {
+        if (obj == null) {
+            obj = new SemanticObject();
+        }        
+        
         super.validate(request, obj, prop, propName);
 
         String login = request.getParameter("usrLogin");
