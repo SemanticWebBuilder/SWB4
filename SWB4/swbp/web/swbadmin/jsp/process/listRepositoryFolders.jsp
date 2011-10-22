@@ -67,48 +67,56 @@ private String printNodes(SWBParamRequest paramRequest, String frameId, Reposito
     return ret;
 }
 
-private String printDojoNodes(SWBParamRequest paramRequest, String frameId, RepositoryDirectory root, boolean includeRoot, int maxTitleLength) {
+private String printDojoNode(SWBParamRequest paramRequest, String frameId, RepositoryDirectory root, int maxTitleLength) {
     String ret = "";
     User user = paramRequest.getUser();
     String lang = "es";
     
     if (user.getLanguage() != null) {
         lang = user.getLanguage();
-    }    
-
-    if (root != null && user.haveAccess(root) && root.isActive()) {
-        if (includeRoot) {
-            boolean hasContent = false;
-            Iterator<Resource> resources = root.listResources();
-            while (resources.hasNext() && !hasContent) {
-                Resource res = resources.next();
-                if (res.getResourceType().getTitle().equals("ProcessFileRepository")) {
-                    hasContent=true;
-                }
-            }
-            
-            ret += "{\n";
-            if (hasContent) {
-                ret += "  label: '<a href=\"#\" onclick=\"setFrameSrc('"+ frameId +"','"+ root.getUrl() +"');\">" + trimToLength(root.getTitle(), maxTitleLength) + "</a>'\n";
-            } else {
-                ret += "  label: '" + trimToLength(root.getTitle(), maxTitleLength) + "'\n";
-            }
-            ret += "  id: '" + root.getId() + "'";
-        }
+    }
+    
+    if (root != null /*&& user.haveAccess(root)*/) {
+        System.out.println("  Hijo: "+root.getTitle());
+        ret += "{\n"
+            + "label:'" + root.getDisplayTitle(lang) + "',\n"
+            + "id:'" + root.getURI() + "',\n";
         
-        if (root.listChilds().hasNext() && includeRoot) {
-            ret += "  children: [\n";
-            Iterator<WebPage> childs = SWBComparator.sortByDisplayName(root.listChilds(), lang);
-            while (childs.hasNext()) {
-                WebPage child = childs.next();
-                if (child instanceof RepositoryDirectory) {
-                    RepositoryDirectory repChild = (RepositoryDirectory) child;
-                    ret += printNodes(paramRequest, frameId, repChild, true, maxTitleLength);
+        Iterator<WebPage> childs = root.listChilds();
+        if (childs.hasNext()) {
+            WebPage wp = childs.next();
+            ret += "childs: [\n";
+            if (wp instanceof RepositoryDirectory) {
+                RepositoryDirectory dir = (RepositoryDirectory)wp;
+                ret += printDojoNode(paramRequest, frameId, dir, maxTitleLength);
+                if (childs.hasNext()) {
+                    ret += ",\n";
+                }
+           }
+           ret += "]\n";
+        }
+        ret+= "}\n";
+    }
+    return ret;
+}
+
+private String printDojoNodes(SWBParamRequest paramRequest, String frameId, RepositoryDirectory root, int maxTitleLength) {
+    String ret = "";
+    User user = paramRequest.getUser();
+    
+    if (root != null /*&& user.haveAccess(root)*/) {
+        System.out.println("Raiz: " + root.getTitle());
+        Iterator<WebPage> childs = root.listChilds();
+        while(childs.hasNext()) {
+            WebPage wp = childs.next();
+            if (wp instanceof RepositoryDirectory) {
+                RepositoryDirectory dir = (RepositoryDirectory)wp;
+                ret += printDojoNode(paramRequest, frameId, dir, maxTitleLength);
+                if (childs.hasNext()) {
+                    ret += ",";
                 }
             }
-            ret += "  ]\n";
         }
-        ret += "},\n";
     }
     
     return ret;
@@ -167,7 +175,7 @@ if (startWp != null && user != null && startWp instanceof RepositoryDirectory) {
     if (root.listChilds().hasNext()) {
         String d = printNodes(paramRequest, iFrameId, root, false, maxLength);
         out.println(d);
-        d = printDojoNodes(paramRequest, iFrameId, root, false, maxLength);
+        d = printDojoNodes(paramRequest, iFrameId, root, maxLength);
         System.out.println(":::\n"+d);
     }
     
