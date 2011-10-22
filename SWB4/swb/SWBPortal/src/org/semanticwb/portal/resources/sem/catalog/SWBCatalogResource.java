@@ -1999,13 +1999,19 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                 }
 
                 response.setRenderParameter("nsuri", nso.getURI());
+                
+                response.setMode(MODE_FORM);
+                response.setRenderParameter("suri", id);
+                response.setRenderParameter("clsuri", getCatalogClass().transformToSemanticClass().getURI());
+                response.setRenderParameter("sval", nso.getURI());
+
+                response.setRenderParameter("act", "edit");
 
             } catch (FormValidateException e) {
                 throw new SWBResourceException("Error to process form...", e);
             }
 
-            //response.setRenderParameter("statmsg", response.getLocaleString("statmsg1"));
-            response.setMode(response.Mode_VIEW);
+            //response.setMode(response.Mode_VIEW);
 
         } else if ("updateform".equals(action)) {
 
