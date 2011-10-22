@@ -58,7 +58,7 @@ private ArrayList<Integer> getIsntanceYears(Iterator<FlowNodeInstance> instances
         return (ret);
     }
     
-    public String _getStatusInstances(FlowNodeInstance fi, int status) {
+    /*public String _getStatusInstances(FlowNodeInstance fi, int status) {
         String ret = "";
         if (fi instanceof SubProcessInstance) {
             SubProcessInstance pi = (SubProcessInstance) fi;
@@ -73,9 +73,9 @@ private ArrayList<Integer> getIsntanceYears(Iterator<FlowNodeInstance> instances
             ret += fi.getFlowNodeType().getURI() + "|";
         }
         return ret;
-    }
+    }*/
 
-    /*public String _getStatusInstances(FlowNodeInstance fi, int status) {
+    public String _getStatusInstances(FlowNodeInstance fi, int status) {
         String ret = "";
         if (fi instanceof SubProcessInstance) {
             SubProcessInstance pi = (SubProcessInstance) fi;
@@ -96,7 +96,7 @@ private ArrayList<Integer> getIsntanceYears(Iterator<FlowNodeInstance> instances
             ret += fi.getFlowNodeType().getURI() + "(" + c + ")|";
         }
         return ret;
-    }*/
+    }
 %>
 
 <script type="text/javascript">
@@ -112,24 +112,26 @@ private ArrayList<Integer> getIsntanceYears(Iterator<FlowNodeInstance> instances
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
 User user = paramRequest.getUser();
-UserGroup usrGroup = user.getUserGroup();
+//UserGroup usrGroup = user.getUserGroup();
 WebPage statusWp = (WebPage) request.getAttribute("statusWp");
-Calendar now = GregorianCalendar.getInstance();
-now.setTime(new Date(System.currentTimeMillis()));
+//Calendar now = GregorianCalendar.getInstance();
+//now.setTime(new Date(System.currentTimeMillis()));
 String lang = user.getLanguage();
 String sortType = request.getParameter("sort");
 String pFilter = request.getParameter("pFilter");
 String sFilter = request.getParameter("sFilter");
+String pNum = request.getParameter("page");
+String itemsPerPage = (String) String.valueOf(request.getAttribute("itemsPerPage"));
 String displayCols = (String) request.getAttribute("displayCols");
 String baseimg = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
 int maxPages = (Integer) request.getAttribute("maxPages");
 int pageNum = 1;
-int sYear = now.get(Calendar.YEAR);
+//int sYear = now.get(Calendar.YEAR);
 
 if (user.getLanguage() != null) {
     lang = user.getLanguage();
 }
-if (request.getParameter("page") != null && !request.getParameter("page").trim().equals("")) {
+if (pNum != null && !pNum.trim().equals("")) {
     pageNum = Integer.valueOf(request.getParameter("page"));
 }
 if (sortType != null && !sortType.trim().equals("")) {
@@ -142,6 +144,9 @@ if (pFilter == null || pFilter.trim().equals("")) {
 }
 if (sFilter == null || sFilter.trim().equals("")) {
     sFilter = String.valueOf(ProcessInstance.STATUS_PROCESSING);
+}
+if (itemsPerPage == null || itemsPerPage.trim().equals("")) {
+    itemsPerPage = "5";
 }
 String [] months = {"ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"};
 
@@ -200,6 +205,21 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                     <option value="<%=ProcessInstance.STATUS_ABORTED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_ABORTED))?"selected":""%>>Abortadas</option>
                 </select>
             </li>
+            <!--li>
+                <%
+                optsUrl = paramRequest.getActionUrl().setAction("setPageItems");
+                optsUrl.setParameter("sort", sortType);
+                optsUrl.setParameter("pFilter", pFilter);
+                optsUrl.setParameter("sFilter", sFilter);
+                %>
+                Mostrar:
+                <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'ipp', this.options[this.selectedIndex].value)">
+                    <option value="5" <%=itemsPerPage.equals("5")?"selected":""%>>5</option>
+                    <option value="10" <%=itemsPerPage.equals("10")?"selected":""%>>10</option>
+                    <option value="15" <%=itemsPerPage.equals("15")?"selected":""%>>15</option>
+                    <option value="20" <%=itemsPerPage.equals("20")?"selected":""%>>20</option>
+                </select>
+            </li-->
             <!--li>
                 <a href="<%=configUrl%>">Configurar despliegue</a>
             </li-->
