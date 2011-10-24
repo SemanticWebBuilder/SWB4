@@ -260,7 +260,7 @@ public class SWBAIndexer extends GenericResource {
             hmtmind = loadHMINDTM(indexName);
             StringBuffer status_msg = new StringBuffer();
             status_msg.append(ind.getIndexSize());
-            System.out.println("size indx:"+ind.getIndexSize());
+            //System.out.println("size indx:"+ind.getIndexSize()); //MAPS74- 24/Oct/2011
             out.println(status_msg.toString());
         }
 
