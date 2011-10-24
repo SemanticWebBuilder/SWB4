@@ -2,12 +2,12 @@ package org.semanticwb.model.base;
 
 
    /**
-   * Elemento que muestra texto plano 
+   * Elemento para mostrar, crear y reacionar otros Objectos 
    */
 public abstract class LabelBase extends org.semanticwb.model.base.FormElementBase 
 {
    /**
-   * Elemento que muestra texto plano
+   * Elemento para mostrar, crear y reacionar otros Objectos
    */
     public static final org.semanticwb.platform.SemanticClass swbxf_Label=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#Label");
    /**

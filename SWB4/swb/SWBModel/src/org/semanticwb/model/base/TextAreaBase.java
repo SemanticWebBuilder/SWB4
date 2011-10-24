@@ -2,14 +2,14 @@ package org.semanticwb.model.base;
 
 
    /**
-   * Elemento que muestra un componente grafico para editar texto (Textarea) 
+   * Elemento que muestra un componente gráfico para editar texto (Textarea) 
    */
 public abstract class TextAreaBase extends org.semanticwb.model.base.FormElementBase 
 {
     public static final org.semanticwb.platform.SemanticProperty swbxf_textAreaRows=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#textAreaRows");
     public static final org.semanticwb.platform.SemanticProperty swbxf_textAreaCols=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#textAreaCols");
    /**
-   * Elemento que muestra un componente grafico para editar texto (Textarea)
+   * Elemento que muestra un componente gráfico para editar texto (Textarea)
    */
     public static final org.semanticwb.platform.SemanticClass swbxf_TextArea=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea");
    /**

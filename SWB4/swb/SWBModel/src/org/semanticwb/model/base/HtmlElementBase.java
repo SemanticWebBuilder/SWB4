@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Elemento que muestra un componente grafico para editar HTML 
    */
-public abstract class HtmlElementBase extends org.semanticwb.model.base.FormElementBase 
+public abstract class HtmlElementBase extends org.semanticwb.model.TextArea 
 {
    /**
    * Elemento que muestra un componente grafico para editar HTML
@@ -87,15 +87,5 @@ public abstract class HtmlElementBase extends org.semanticwb.model.base.FormElem
     public HtmlElementBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-    public void remove()
-    {
-        getSemanticObject().remove();
-    }
-
-    public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
-    {
-        return new org.semanticwb.model.GenericIterator(getSemanticObject().listRelatedObjects(),true);
     }
 }
