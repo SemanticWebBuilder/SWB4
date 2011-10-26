@@ -247,6 +247,10 @@ public class SemanticVocabulary
     
     /** The Constant SWB_PROP_PACKAGE. */
     public static final String SWB_PROP_PACKAGE = URI + "package";
+    
+    /** The Constant SWB_ANNOT_FORMELEMENTRANGE. */
+    public static final String SWB_ANNOT_FORMELEMENTRANGE = URI + "formElementRange";
+    
     //public static final String SWB_NS="swbns";
     /** The classes. */
     public HashMap<String, SemanticClass> classes;

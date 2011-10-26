@@ -3030,7 +3030,13 @@ public class SemanticObject
             ret = getLabel(lang);
             if(ret==null)
             {
-                ret=cls.getName()+":"+getId();
+                if(cls!=null)
+                {
+                    ret=cls.getName()+":"+getId();
+                }else
+                {
+                    ret=getId();
+                }
                 /*
                 if(getURI()!=null)
                 {
