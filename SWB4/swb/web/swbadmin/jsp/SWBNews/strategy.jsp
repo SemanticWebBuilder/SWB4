@@ -104,97 +104,98 @@
 %><%
             if (paramRequest.getArgument("mode") != null && "title".equals(paramRequest.getArgument("mode")))
             {
-                
+
 %><jsp:include page="title.jsp" flush="true" /><%
-                                return;
-                            }
-                            String div = paramRequest.getArgument("div", "noticiasinfotec");
-                            String mainTitle = paramRequest.getArgument("title", "Últimas noticias");
+                return;
+            }
+            String div = paramRequest.getArgument("div", "noticiasinfotec");
+            String mainTitle = paramRequest.getArgument("title", "Últimas noticias");
 
-                            if (request.getParameter("div") != null)
-                            {
-                                div = request.getParameter("div");
-                            }
+            if (request.getParameter("div") != null)
+            {
+                div = request.getParameter("div");
+            }
 
-                            if (request.getParameter("mainTitle") != null)
-                            {
-                                mainTitle = request.getParameter("mainTitle");
-                            }
-                            mainTitle = mainTitle;
+            if (request.getParameter("mainTitle") != null)
+            {
+                mainTitle = request.getParameter("mainTitle");
+            }
+            mainTitle = mainTitle;
 
 
-                            WebPage noticias = paramRequest.getWebPage();
-                            Iterator<Resourceable> resourceables = paramRequest.getResourceBase().listResourceables();
-                            while (resourceables.hasNext())
-                            {
-                                Resourceable resourceable = resourceables.next();
-                                if (resourceable instanceof WebPage)
-                                {
-                                    noticias = (WebPage) resourceable;
-                                    break;
-                                }
-                            }
-                            String usrlanguage = paramRequest.getUser().getLanguage();
-                            if (true)
-                            {
-                                List<SWBNewContent> contents = (List<SWBNewContent>) request.getAttribute("news");
-                                Collections.sort(contents, new SWBNewContentComparator());
-                                ArrayList<SWBNewContent> contentstoshow = new ArrayList<SWBNewContent>();
-                                for (SWBNewContent content : contents)
-                                {
-                                    if (content.isHomeShow())
-                                    {
-                                        contentstoshow.add(content);
-                                    }
-                                }
+            WebPage noticias = paramRequest.getWebPage();
+            Iterator<Resourceable> resourceables = paramRequest.getResourceBase().listResourceables();
+            while (resourceables.hasNext())
+            {
+                Resourceable resourceable = resourceables.next();
+                if (resourceable instanceof WebPage)
+                {
+                    noticias = (WebPage) resourceable;
+                    break;
+                }
+            }
+            String usrlanguage = paramRequest.getUser().getLanguage();
+            if (true)
+            {
+                List<SWBNewContent> contents = (List<SWBNewContent>) request.getAttribute("news");
+                Collections.sort(contents, new SWBNewContentComparator());
+                ArrayList<SWBNewContent> contentstoshow = new ArrayList<SWBNewContent>();
+                for (SWBNewContent content : contents)
+                {
+                    if (content.isHomeShow())
+                    {
+                        contentstoshow.add(content);
+                    }
+                }
 %>
 
 <%
-                int npages = contentstoshow.size() / 3;
-                if (contentstoshow.size() % 3 != 0)
-                {
-                    npages++;
-                }
-                if (npages > 3)
-                {
-                    npages = 3;
-                }
-                int npage = 1;
-                if (request.getParameter("page") != null)
-                {
-                    try
-                    {
-                        npage = Integer.parseInt(request.getParameter("page"));
-                    }
-                    catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-                int max = npage * 3;
-                int min = max - 2;
+                                int npages = contentstoshow.size() / 3;
+                                if (contentstoshow.size() % 3 != 0)
+                                {
+                                    npages++;
+                                }
+                                if (npages > 3)
+                                {
+                                    npages = 3;
+                                }
+                                int npage = 1;
+                                if (request.getParameter("page") != null)
+                                {
+                                    try
+                                    {
+                                        npage = Integer.parseInt(request.getParameter("page"));
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                int max = npage * 3;
+                                int min = max - 2;
 
 
 
 %>
 <h3><%=decode(mainTitle)%></h3>
 <%                //if (npages > 1)
-                {
-                    int prepage = npage;
-                    if (prepage > 1)
-                    {
-                        prepage--;
-                    }
-                    SWBResourceURL anterior = paramRequest.getRenderUrl();
-                    anterior.setCallMethod(SWBResourceURL.Call_DIRECT);
-                    anterior.setParameter("page", String.valueOf(prepage));
-                    anterior.setParameter("mode", "strategy");
-                    anterior.setParameter("div", div);
-                    anterior.setParameter("mainTitle", mainTitle);
+                                {
+                                    int prepage = npage;
+                                    if (prepage > 1)
+                                    {
+                                        prepage--;
+                                    }
+                                    SWBResourceURL anterior = paramRequest.getRenderUrl();
+                                    anterior.setCallMethod(SWBResourceURL.Call_DIRECT);
+                                    anterior.setParameter("page", String.valueOf(prepage));
+                                    anterior.setParameter("mode", "strategy");
+                                    anterior.setParameter("div", div);
+                                    anterior.setParameter("mainTitle", mainTitle);
+
 %>
 
-<div id="bloque_noticias_recientes" class="navegador noticias">
-    <a class="anterior" href="javascript:changePage('<%=anterior%>','<%=div%>')" >anterior</a>
+<div id="bloque_noticias_recientes<%=div%>" class="navegador noticias">
+    <a class="anterior" href="javascript:changePage('<%=anterior.toString(true)%>','<%=div%>')" >anterior</a>
     <ul class="selector">
 
         <%
@@ -208,7 +209,7 @@
                                 urlpage.setParameter("div", div);
                                 urlpage.setParameter("mainTitle", mainTitle);
         %>
-        <li><a href="javascript:changePage('<%=urlpage%>','<%=div%>')" ><%=ipage%></a></li>
+        <li><a href="javascript:changePage('<%=urlpage.toString(true)%>','<%=div%>')" ><%=ipage%></a></li>
         <%
                             }
                             for (int ipage = 1; ipage <= dif; ipage++)
@@ -220,7 +221,7 @@
                                 urlpage.setParameter("div", div);
                                 urlpage.setParameter("mainTitle", mainTitle);
         %>
-        <li><a href="javascript:changePage('<%=urlpage%>','<%=div%>')" ><%=npages%></a></li>
+        <li><a href="javascript:changePage('<%=urlpage.toString(true)%>','<%=div%>')" ><%=npages%></a></li>
         <%
                             }
         %>
@@ -240,19 +241,20 @@
                         siguiente.setParameter("div", div);
                         siguiente.setParameter("mainTitle", mainTitle);
 
+
     %>
-    <a class="siguiente" href="javascript:changePage('<%=siguiente%>','<%=div%>')" >siguiente</a>
+    <a class="siguiente" href="javascript:changePage('<%=siguiente.toString(true)%>','<%=div%>')" >siguiente</a>
     <div style="clear: both; "></div>
 </div>
 <%
-                }
+                                }
 
-                SimpleDateFormat df = new SimpleDateFormat("dd '.' MM '.' yyyy");
+                                SimpleDateFormat df = new SimpleDateFormat("dd '.' MM '.' yyyy");
 
-                if (contentstoshow.size() > 0)
-                {
+                                if (contentstoshow.size() > 0)
+                                {
 %>
-<ul id="noticias">
+<ul id="noticias<%=div%>">
     <%
                         int i = 0;
                         for (SWBNewContent content : contentstoshow)
@@ -285,6 +287,10 @@
                                 {
                                     image = SWBPortal.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/noticias_infotec.gif";
                                 }
+                                else
+                                {
+                                    image = SWBPortal.getWebWorkPath() + content.getSemanticObject().getWorkPath() + "/image_" + content.getId() + "_" + image;
+                                }
                                 //url = noticias.getUrl() + "?uri=" + content.getResourceBase().getSemanticObject().getEncodedURI();
                                 url = noticias.getUrl() + "?uri=" + content.getResourceBase().getSemanticObject().getId();
 
@@ -303,14 +309,26 @@
                                     fuente = content.getSource();
                                 }
     %>
-    <li><a href="<%=url%>" ><img width="68" height="51" src="<%=image%>" />
+    <%-- <li><a href="<%=url%>" ><img width="68" height="51" alt="<%=title%>" src="<%=image%>" />
             <span class="fecha"><%=date%></span>
-            <h4><%=title%></h4>        <%
+            <b><%=title%></b>
+            <%
                                             if (fuente != null)
                                             {
             %>        <span class="fuente"><%=decode(fuente)%></span>        <%
                                             }
-            %><p><%=description%></p></a>
+            %><span><%=description%></span></a>
+    </li> --%>
+    <li><a href="<%=url%>"><img width="68" height="51" alt="imagen_noticia" src="<%=image%>"/></a>
+        <span class="fecha"><%=date%></span>
+        <h4><a href="<%=url%>"><%=title%></a></h4>                <%
+                                        if (fuente != null)
+                                        {
+        %>        <span class="fuente"><%=decode(fuente)%></span>        <%
+                                        }
+        %>
+
+        <p><%=description%></p>
     </li>
     <%
                             }
@@ -319,8 +337,8 @@
     %>
 </ul>
 <%
-                }
-                String urlNews = noticias.getUrl();
+                                }
+                                String urlNews = noticias.getUrl();
 %>
 <a class="ver_mas" href="<%=urlNews%>" >Ver m&aacute;s</a>
 <%
