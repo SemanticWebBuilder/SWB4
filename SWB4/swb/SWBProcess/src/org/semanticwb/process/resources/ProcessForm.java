@@ -1,31 +1,31 @@
 /**
-* SemanticWebBuilder Process (SWB Process) es una plataforma para la gestión de procesos de negocio mediante el uso de 
-* tecnología semántica, que permite el modelado, configuración, ejecución y monitoreo de los procesos de negocio
-* de una organización, así como el desarrollo de componentes y aplicaciones orientadas a la gestión de procesos.
-* 
-* Mediante el uso de tecnología semántica, SemanticWebBuilder Process puede generar contextos de información
-* alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes fuentes asociadas a
-* un proceso de negocio, donde a la información se le asigna un significado, de forma que pueda ser interpretada
-* y procesada por personas y/o sistemas. SemanticWebBuilder Process es una creación original del Fondo de 
-* Información y Documentación para la Industria INFOTEC.
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder Process a través de su licenciamiento abierto 
-* al público (‘open source’), en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC 
-* lo ha diseñado y puesto a su disposición; aprender de él; distribuirlo a terceros; acceder a su código fuente,
-* modificarlo y combinarlo (o enlazarlo) con otro software. Todo lo anterior de conformidad con los términos y 
-* condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización de SemanticWebBuilder Process. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder Process, de ninguna especie y naturaleza, ni implícita ni 
-* explícita, siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los 
-* riesgos que puedan derivar de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder Process, INFOTEC pone a su disposición la
-* siguiente dirección electrónica: 
-*  http://www.semanticwebbuilder.org.mx
-**/
-
+ * SemanticWebBuilder Process (SWB Process) es una plataforma para la gestión de procesos de negocio mediante el uso de 
+ * tecnología semántica, que permite el modelado, configuración, ejecución y monitoreo de los procesos de negocio
+ * de una organización, así como el desarrollo de componentes y aplicaciones orientadas a la gestión de procesos.
+ * 
+ * Mediante el uso de tecnología semántica, SemanticWebBuilder Process puede generar contextos de información
+ * alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes fuentes asociadas a
+ * un proceso de negocio, donde a la información se le asigna un significado, de forma que pueda ser interpretada
+ * y procesada por personas y/o sistemas. SemanticWebBuilder Process es una creación original del Fondo de 
+ * Información y Documentación para la Industria INFOTEC.
+ * 
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder Process a través de su licenciamiento abierto 
+ * al público (‘open source’), en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC 
+ * lo ha diseñado y puesto a su disposición; aprender de él; distribuirlo a terceros; acceder a su código fuente,
+ * modificarlo y combinarlo (o enlazarlo) con otro software. Todo lo anterior de conformidad con los términos y 
+ * condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización de SemanticWebBuilder Process. 
+ * 
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder Process, de ninguna especie y naturaleza, ni implícita ni 
+ * explícita, siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los 
+ * riesgos que puedan derivar de la misma. 
+ * 
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder Process, INFOTEC pone a su disposición la
+ * siguiente dirección electrónica: 
+ *  http://www.semanticwebbuilder.org.mx
+ **/
 package org.semanticwb.process.resources;
 
+import com.hp.hpl.jena.rdf.model.Property;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -44,6 +44,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.FormElement;
+import org.semanticwb.model.GenericFormElement;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.User;
@@ -83,7 +84,6 @@ public class ProcessForm extends GenericResource {
     static final String FE_MODE_EDIT = "edit";
     static final String FE_DEFAULT = "generico";
 
-
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
@@ -115,9 +115,9 @@ public class ProcessForm extends GenericResource {
         HashMap<String, SemanticProperty> hmprops = new HashMap<String, SemanticProperty>();
         Iterator<ItemAwareReference> it = foi.listHeraquicalItemAwareReference().iterator();
         while (it.hasNext()) {
-            ItemAwareReference item=it.next();
+            ItemAwareReference item = it.next();
             SWBClass obj = item.getProcessObject();
-            
+
             SemanticClass cls = obj.getSemanticObject().getSemanticClass();
 
             hmclass.put(item.getItemAware().getName(), cls);
@@ -125,7 +125,7 @@ public class ProcessForm extends GenericResource {
             Iterator<SemanticProperty> itp = cls.listProperties();
             while (itp.hasNext()) {
                 SemanticProperty prop = itp.next();
-                hmprops.put(item.getItemAware().getName()+"|"+prop.getPropId(), prop);
+                hmprops.put(item.getItemAware().getName() + "|" + prop.getPropId(), prop);
             }
         }
 
@@ -140,7 +140,7 @@ public class ProcessForm extends GenericResource {
             out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\"/>");
             out.println("<input type=\"hidden\" name=\"smode\" value=\"edit\"/>");
 
-            boolean printHeaders=false;
+            boolean printHeaders = false;
 
             int max = 1;
             while (!base.getAttribute("prop" + max, "").equals("")) {
@@ -158,14 +158,13 @@ public class ProcessForm extends GenericResource {
                     fe = stoken.nextToken();
                 }
 
-                SemanticProperty semprop = hmprops.get(varName+"|"+propid);
+                SemanticProperty semprop = hmprops.get(varName + "|" + propid);
 
                 String strMode = "";
 
                 SemanticClass semclass = hmclass.get(varName);
 
-                if (semclass != null && semprop != null)
-                {
+                if (semclass != null && semprop != null) {
                     if (modo.equals(FE_MODE_VIEW)) {
                         mgr.addProperty(semprop, varName, SWBFormMgr.MODE_VIEW);
                         strMode = SWBFormMgr.MODE_VIEW;
@@ -178,12 +177,11 @@ public class ProcessForm extends GenericResource {
 
                     SWBProcessFormMgr fmgr = new SWBProcessFormMgr(foi);
 
-                    if(!printHeaders)
-                    {
+                    if (!printHeaders) {
                         out.println("<fieldset>");
                         out.println("<legend>Datos Generales</legend>");
                         out.println("<table>");
-                        printHeaders=true;
+                        printHeaders = true;
                     }
 
                     out.println("<tr><td width=\"200px\" align=\"right\"><label for=\"title\">" + fmgr.renderLabel(request, semprop, varName, modo) + "</label></td>");
@@ -199,26 +197,33 @@ public class ProcessForm extends GenericResource {
                 max++;
             }
 
-            if(printHeaders)
-            {
+            if (printHeaders) {
                 out.println("    </table>");
                 out.println("</fieldset>");
             }
 
             out.println("<fieldset><span align=\"center\">");
-            
-            if(base.getAttribute("btnSave","").equals("use")) out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">Guardar</button>");
-            if(base.getAttribute("btnAccept","").equals("use")) out.println("<button dojoType=\"dijit.form.Button\" name=\"accept\" type=\"submit\">Concluir Tarea</button>");
-            if(base.getAttribute("btnReject","").equals("use")) out.println("<button dojoType=\"dijit.form.Button\" name=\"reject\" type=\"submit\">Rechazar Tarea</button>");
-            if(base.getAttribute("btnCancel","").equals("use")) out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getProcessWebPage().getUrl() + "?suri=" + suri + "'\">Regresar</button>");
-            
+
+            if (base.getAttribute("btnSave", "").equals("use")) {
+                out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">Guardar</button>");
+            }
+            if (base.getAttribute("btnAccept", "").equals("use")) {
+                out.println("<button dojoType=\"dijit.form.Button\" name=\"accept\" type=\"submit\">Concluir Tarea</button>");
+            }
+            if (base.getAttribute("btnReject", "").equals("use")) {
+                out.println("<button dojoType=\"dijit.form.Button\" name=\"reject\" type=\"submit\">Rechazar Tarea</button>");
+            }
+            if (base.getAttribute("btnCancel", "").equals("use")) {
+                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"window.location='" + foi.getProcessWebPage().getUrl() + "?suri=" + suri + "'\">Regresar</button>");
+            }
+
             out.println("</span></fieldset>");
             out.println("</form>");
 
         } else if (ADMINMODE_ADVANCE.equals(adminMode)) {
             if (action.equals("add") || action.equals("edit")) {
                 String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/";
-                String xml = SWBUtils.IO.getFileFromPath(basepath+"code.xml");
+                String xml = SWBUtils.IO.getFileFromPath(basepath + "code.xml");
 //                if(null==xml)  xml=base.getXmlConf();
                 if (xml != null && xml.trim().length() > 0) {
                     SWBFormMgrLayer swbFormMgrLayer = new SWBFormMgrLayer(xml, paramRequest, request);
@@ -241,13 +246,11 @@ public class ProcessForm extends GenericResource {
         HashMap<String, SemanticProperty> hmprops = new HashMap<String, SemanticProperty>();
 
         Iterator<ItemAware> it = ut.listHerarquicalRelatedItemAwarePlusNullOutputs().iterator();
-        while (it.hasNext()) 
-        {
-            ItemAware item=it.next();
+        while (it.hasNext()) {
+            ItemAware item = it.next();
 
             SemanticClass cls = item.getItemSemanticClass();
-            if(cls!=null)
-            {
+            if (cls != null) {
                 hmclass.put(item.getName(), cls);
 
                 Iterator<SemanticProperty> itp = cls.listProperties();
@@ -262,12 +265,11 @@ public class ProcessForm extends GenericResource {
 
         ret.append("<form");
 
-        if(request.getParameter("useDojo")!=null&&request.getParameter("useDojo").equals("dojo"))
-        {
+        if (request.getParameter("useDojo") != null && request.getParameter("useDojo").equals("dojo")) {
             ret.append(" htmlType=\"dojo\" ");
         }
         ret.append(" class=\"swbform\">");
-        
+
         ret.append("\n    <fieldset>");
         ret.append("\n      <legend>Datos Generales</legend>");
         ret.append("\n      <table>");
@@ -301,15 +303,15 @@ public class ProcessForm extends GenericResource {
                     strMode = SWBFormMgr.MODE_EDIT;
                 }
                 SemanticObject sofe = ont.getSemanticObject(fe);
-                String strFE ="";
+                String strFE = "";
 
                 if (null != sofe) {
-                    strFE="formElement=\"" + sofe.getDisplayName(response.getUser().getLanguage()) + "\"";
+                    strFE = "formElement=\"" + sofe.getDisplayName(response.getUser().getLanguage()) + "\"";
                 }
 
                 ret.append("\n     <tr>");
-                ret.append("\n       <td width=\"200px\" align=\"right\"><label name=\"" + varName+"."+semprop.getName() + "\" /></td>");
-                ret.append("\n       <td><property name=\"" + varName+"."+semprop.getName() + "\" " + strFE + " mode=\"" + strMode + "\" /></td>");
+                ret.append("\n       <td width=\"200px\" align=\"right\"><label name=\"" + varName + "." + semprop.getName() + "\" /></td>");
+                ret.append("\n       <td><property name=\"" + varName + "." + semprop.getName() + "\" " + strFE + " mode=\"" + strMode + "\" /></td>");
                 ret.append("\n    </tr>");
             }
             max++;
@@ -320,10 +322,18 @@ public class ProcessForm extends GenericResource {
         ret.append("\n      <fieldset>");
 
         // validar que botones seleccionaron
-        if(request.getParameter("btnSave") != null) ret.append("\n          <Button type=\"savebtn\"/>");
-        if(request.getParameter("btnAccept")!=null) ret.append("\n          <Button type=\"submit\" name=\"accept\" title=\"Concluir Tarea\" isBusyButton=\"true\" />");
-        if(request.getParameter("btnReject")!=null) ret.append("\n          <Button isBusyButton=\"true\" name=\"reject\" title=\"Rechazar Tarea\" type=\"submit\" />");
-        if(request.getParameter("btnCancel")!=null) ret.append("\n          <Button type=\"cancelbtn\"/>");
+        if (request.getParameter("btnSave") != null) {
+            ret.append("\n          <Button type=\"savebtn\"/>");
+        }
+        if (request.getParameter("btnAccept") != null) {
+            ret.append("\n          <Button type=\"submit\" name=\"accept\" title=\"Concluir Tarea\" isBusyButton=\"true\" />");
+        }
+        if (request.getParameter("btnReject") != null) {
+            ret.append("\n          <Button isBusyButton=\"true\" name=\"reject\" title=\"Rechazar Tarea\" type=\"submit\" />");
+        }
+        if (request.getParameter("btnCancel") != null) {
+            ret.append("\n          <Button type=\"cancelbtn\"/>");
+        }
 
         ret.append("\n      </fieldset>");
         ret.append("\n</form>");
@@ -352,7 +362,7 @@ public class ProcessForm extends GenericResource {
                 response.setRenderParameter("suri", suri);
             }
 
-        } else if( "updXMLConfig".equals(response.getAction())) {
+        } else if ("updXMLConfig".equals(response.getAction())) {
 
             String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/";
             File xmlFile = new File(basepath);
@@ -372,14 +382,13 @@ public class ProcessForm extends GenericResource {
                 }
             }
 
-        }  else if("saveXMLFile".equals(response.getAction()))
-        {
+        } else if ("saveXMLFile".equals(response.getAction())) {
             String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/";
             File xmlFile = new File(basepath);
             if (xmlFile.exists()) {
                 try {
                     String value = null;
-                    if (request.getParameter("hiddencode") != null &&request.getParameter("hiddencode").trim().length()>0) {
+                    if (request.getParameter("hiddencode") != null && request.getParameter("hiddencode").trim().length() > 0) {
                         value = request.getParameter("hiddencode");
                     } else {
                         value = request.getParameter("resource" + base.getId());
@@ -394,8 +403,7 @@ public class ProcessForm extends GenericResource {
             }
 
             response.setMode(SWBActionResponse.Mode_ADMIN);
-        }
-        else if ("process".equals(response.getAction())) {
+        } else if ("process".equals(response.getAction())) {
             if (suri == null) {
                 return;
             }
@@ -425,9 +433,9 @@ public class ProcessForm extends GenericResource {
 
             Iterator<ItemAwareReference> it = foi.listHeraquicalItemAwareReference().iterator();
             while (it.hasNext()) {
-                ItemAwareReference item=it.next();
+                ItemAwareReference item = it.next();
                 SWBClass obj = item.getProcessObject();
-                String varName=item.getItemAware().getName();
+                String varName = item.getItemAware().getName();
                 SemanticClass cls = obj.getSemanticObject().getSemanticClass();
                 Iterator<SemanticProperty> itp = cls.listProperties();
                 while (itp.hasNext()) {
@@ -453,8 +461,7 @@ public class ProcessForm extends GenericResource {
                 response.setRenderParameter("err", "invalidForm");
             }
 
-        }
-        else if ("removeprop".equals(response.getAction())) {
+        } else if ("removeprop".equals(response.getAction())) {
             String prop = request.getParameter("prop");
 
             HashMap<Integer, String> hmprops = new HashMap();
@@ -481,19 +488,32 @@ public class ProcessForm extends GenericResource {
             }
             try {
                 base.updateAttributesToDB();
-            } catch (Exception e) { log.error("Error al guardar las propiedades del recurso en la DB.",e);
+            } catch (Exception e) {
+                log.error("Error al guardar las propiedades del recurso en la DB.", e);
             }
         } else if ("addprops".equals(response.getAction())) {
 
             //configuración de botones
-            if(request.getParameter("btnSave") != null) base.setAttribute("btnSave", request.getParameter("btnSave"));
-            else base.removeAttribute("btnSave");
-            if(request.getParameter("btnAccept")!=null) base.setAttribute("btnAccept", request.getParameter("btnAccept"));
-            else base.removeAttribute("btnAccept");
-            if(request.getParameter("btnReject")!=null) base.setAttribute("btnReject", request.getParameter("btnReject"));
-            else base.removeAttribute("btnReject");
-            if(request.getParameter("btnCancel")!=null) base.setAttribute("btnCancel", request.getParameter("btnCancel"));
-            else base.removeAttribute("btnCancel");
+            if (request.getParameter("btnSave") != null) {
+                base.setAttribute("btnSave", request.getParameter("btnSave"));
+            } else {
+                base.removeAttribute("btnSave");
+            }
+            if (request.getParameter("btnAccept") != null) {
+                base.setAttribute("btnAccept", request.getParameter("btnAccept"));
+            } else {
+                base.removeAttribute("btnAccept");
+            }
+            if (request.getParameter("btnReject") != null) {
+                base.setAttribute("btnReject", request.getParameter("btnReject"));
+            } else {
+                base.removeAttribute("btnReject");
+            }
+            if (request.getParameter("btnCancel") != null) {
+                base.setAttribute("btnCancel", request.getParameter("btnCancel"));
+            } else {
+                base.removeAttribute("btnCancel");
+            }
 
 
             String[] props = request.getParameterValues("existentes");
@@ -553,13 +573,13 @@ public class ProcessForm extends GenericResource {
             String defaultFE = FE_DEFAULT;
             String defaultMode = FE_MODE_EDIT;
 
-            HashMap<Integer,String> hmclsprop = new HashMap<Integer,String>();
+            HashMap<Integer, String> hmclsprop = new HashMap<Integer, String>();
 
             int nodp = 10000;
             // agregando al hmprops las propiedades nuevas
             Iterator<String> itpar = hmparam.keySet().iterator();
             while (itpar.hasNext()) {
-                
+
                 String strnew = itpar.next();
 
                 StringTokenizer stoken = new StringTokenizer(strnew, "|");
@@ -575,8 +595,7 @@ public class ProcessForm extends GenericResource {
                 SemanticProperty sempro = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(propid);
                 //System.out.println("sempro: "+sempro);
                 Integer intKey = null;
-                if(sempro!=null)
-                {
+                if (sempro != null) {
                     SemanticObject dp = sempro.getDisplayProperty();
 
                     if (dp != null) {
@@ -598,12 +617,12 @@ public class ProcessForm extends GenericResource {
                     defaultFE = FE_DEFAULT;
                     intKey = new Integer(nodp);
                     nodp++;
-                 }
+                }
 
                 String value = strnew + "|" + defaultMode + "|" + defaultFE;
                 hmclsprop.put(intKey, value);
             }
-            
+
             // ordenando las propiedades
             ArrayList list = new ArrayList(hmprops.keySet());
             Collections.sort(list);
@@ -617,9 +636,9 @@ public class ProcessForm extends GenericResource {
                 base.setAttribute("prop" + i, thisprop);
                 i++;
             }
-            
+
             // guardando las propiedades de acuerdo al index del display property
-            
+
             list = new ArrayList(hmclsprop.keySet());
             //Collections.sort(list);
 
@@ -711,7 +730,8 @@ public class ProcessForm extends GenericResource {
                         base.setAttribute("prop" + pid, newvalue);
                         base.updateAttributesToDB();
 
-                    } catch (Exception e) { log.error("Error al cambiar el orden de las propiedades.",e);
+                    } catch (Exception e) {
+                        log.error("Error al cambiar el orden de las propiedades.", e);
                     }
                 }
             }
@@ -727,7 +747,7 @@ public class ProcessForm extends GenericResource {
             } catch (Exception e) {
                 log.error(e);
             }
-        } 
+        }
 
         response.setRenderParameter("suri", suri);
     }
@@ -783,12 +803,10 @@ public class ProcessForm extends GenericResource {
         }
 
         Iterator<ItemAware> it = ut.listHerarquicalRelatedItemAwarePlusNullOutputs().iterator();
-        while (it.hasNext()) 
-        {
+        while (it.hasNext()) {
             ItemAware item = it.next();
             SemanticClass cls = item.getItemSemanticClass();
-            if(cls!=null)
-            {
+            if (cls != null) {
                 Iterator<SemanticProperty> itp = cls.listProperties();
                 while (itp.hasNext()) {
                     SemanticProperty prop = itp.next();
@@ -873,8 +891,8 @@ public class ProcessForm extends GenericResource {
             urladd.setAction("addprops");
 
             long idform = System.currentTimeMillis();
-            
-            out.println("<form action=\"" + urladd + "\" id=\"" + idform + "/forma\" method=\"post\" onsubmit=\"if(enviatodos('"+idform+"/existentes')) { this.form.submit(); return false; } else { return false;}\">");
+
+            out.println("<form action=\"" + urladd + "\" id=\"" + idform + "/forma\" method=\"post\" onsubmit=\"if(enviatodos('" + idform + "/existentes')) { this.form.submit(); return false; } else { return false;}\">");
             out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\">");
             out.println("<fieldset>");
             out.println("<legend>" + "Configuración" + "</legend>");
@@ -889,31 +907,28 @@ public class ProcessForm extends GenericResource {
             out.println("</tr>");
             out.println("<tr>");
             out.println("<td>");
-            
+
             ArrayList list = new ArrayList(hmprops.keySet());
             Collections.sort(list);
-            
+
             // select con la lista de propiedades existentes
             out.println("<select size=\"10\" name=\"propiedades\" id=\"" + idform + "/propiedades\" multiple style=\"width: 100%;\">");
             //Iterator<String> its = hmprops.keySet().iterator();
             Iterator<String> its = list.iterator();
             while (its.hasNext()) {
-                
-                //String key = its.next();
-                
-                
+
                 String str = its.next();
-                String varName="";
-                String propid="";
+                String varName = "";
+                String propid = "";
                 StringTokenizer stoken = new StringTokenizer(str, "|");
                 if (stoken.hasMoreTokens()) {
                     varName = stoken.nextToken();
                     propid = stoken.nextToken();
-                 }
+                }
                 if (hmselected.get(str) == null) {
                     SemanticProperty sp = hmprops.get(str);
                     out.println("<option value=\"" + str + "\">");
-                    out.println(varName+"."+sp.getPropertyCodeName());
+                    out.println(varName + "." + sp.getPropertyCodeName());
                     out.println("</option>");
                 }
             }
@@ -930,18 +945,18 @@ public class ProcessForm extends GenericResource {
             its = hmselected.keySet().iterator();
             while (its.hasNext()) {
                 String str = its.next();
-                String varName="";
-                String propid="";
+                String varName = "";
+                String propid = "";
                 StringTokenizer stoken = new StringTokenizer(str, "|");
                 if (stoken.hasMoreTokens()) {
                     varName = stoken.nextToken();
                     propid = stoken.nextToken();
-                 }
+                }
 
 
                 SemanticProperty sp = hmprops.get(str);
                 out.println("<option value=\"" + str + "\">");
-                out.println(varName+"."+sp.getPropertyCodeName());
+                out.println(varName + "." + sp.getPropertyCodeName());
                 out.println("</option>");
             }
             out.println("</select>");
@@ -952,22 +967,22 @@ public class ProcessForm extends GenericResource {
 
             out.println("<tr>");
             out.println("<td>");
-            out.println("<input type=\"checkbox\" name=\"btnAccept\" id=\"" + idform + "_btnAccept\" value=\"use\" "+(base.getAttribute("btnAccept","").equals("use")?"checked":"")+"><label for=\"" + idform + "_btnAccept\">Utilizar botón aceptar</label>");
+            out.println("<input type=\"checkbox\" name=\"btnAccept\" id=\"" + idform + "_btnAccept\" value=\"use\" " + (base.getAttribute("btnAccept", "").equals("use") ? "checked" : "") + "><label for=\"" + idform + "_btnAccept\">Utilizar botón aceptar</label>");
             out.println("</td>");
             out.println("</tr>");
             out.println("<tr>");
             out.println("<td>");
-            out.println("<input type=\"checkbox\" name=\"btnReject\" id=\"" + idform + "_btnReject\" value=\"use\" "+(base.getAttribute("btnReject","").equals("use")?"checked":"")+"><label for=\"" + idform + "_btnReject\">Utilizar botón rechazar</label>");
+            out.println("<input type=\"checkbox\" name=\"btnReject\" id=\"" + idform + "_btnReject\" value=\"use\" " + (base.getAttribute("btnReject", "").equals("use") ? "checked" : "") + "><label for=\"" + idform + "_btnReject\">Utilizar botón rechazar</label>");
             out.println("</td>");
             out.println("</tr>");
             out.println("<tr>");
             out.println("<td>");
-            out.println("<input type=\"checkbox\" name=\"btnCancel\" id=\"" + idform + "_btnCancel\" value=\"use\" "+(base.getAttribute("btnCancel","").equals("use")?"checked":"")+"><label for=\"" + idform + "_btnCancel\">Utilizar boton cancelar</label>");
+            out.println("<input type=\"checkbox\" name=\"btnCancel\" id=\"" + idform + "_btnCancel\" value=\"use\" " + (base.getAttribute("btnCancel", "").equals("use") ? "checked" : "") + "><label for=\"" + idform + "_btnCancel\">Utilizar boton cancelar</label>");
             out.println("</td>");
             out.println("</tr>");
             out.println("<tr>");
             out.println("<td>");
-            out.println("<input type=\"checkbox\" name=\"btnSave\" id=\"" + idform + "_btnSave\" value=\"use\" "+(base.getAttribute("btnSave","").equals("use")?"checked":"")+"><label for=\"" + idform + "_btnSave\">Utilizar botón guardar</label>");
+            out.println("<input type=\"checkbox\" name=\"btnSave\" id=\"" + idform + "_btnSave\" value=\"use\" " + (base.getAttribute("btnSave", "").equals("use") ? "checked" : "") + "><label for=\"" + idform + "_btnSave\">Utilizar botón guardar</label>");
             out.println("</td>");
             out.println("</tr>");
 
@@ -1050,7 +1065,7 @@ public class ProcessForm extends GenericResource {
                 urlupd.setParameter("suri", suri);
 
                 out.println("<select id=\"" + suri + "/" + i + "/sfe\" name=\"formElement\" style=\"width:300px;\" onchange=\"updItem('" + urlupd + "','feuri',this);\" >"); //
-                out.println(getFESelect(fe, paramRequest));
+                out.println(getFESelect(fe, paramRequest, hmprops.get(varName + "|" + propid)));
                 out.println("</select>");
                 out.println("</td>");
                 out.println("<td>");
@@ -1086,7 +1101,7 @@ public class ProcessForm extends GenericResource {
 
             out.println("<tr>");
             out.println("<td>");
-            out.println("<input type=\"checkbox\" name=\"adminMode\" id=\"" + suri + "_adminmode\"  "+(adminMode.equals(ADMINMODE_ADVANCE)?"checked":"")+" value=\""+ADMINMODE_ADVANCE+"\"><label for=\"" + suri + "_adminmode\">Utilizar modo avanzado</label>");
+            out.println("<input type=\"checkbox\" name=\"adminMode\" id=\"" + suri + "_adminmode\"  " + (adminMode.equals(ADMINMODE_ADVANCE) ? "checked" : "") + " value=\"" + ADMINMODE_ADVANCE + "\"><label for=\"" + suri + "_adminmode\">Utilizar modo avanzado</label>");
             out.println("</td>");
             out.println("</tr>");
             out.println("</table>");
@@ -1162,10 +1177,9 @@ public class ProcessForm extends GenericResource {
                 out.println("</form>");
 
                 String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/";
-                String value = SWBUtils.IO.getFileFromPath(basepath+"code.xml");
+                String value = SWBUtils.IO.getFileFromPath(basepath + "code.xml");
 
-                if(null!=value&&value.trim().length()>0)
-                {
+                if (null != value && value.trim().length() > 0) {
 
                     StringBuilder ret = new StringBuilder(400);
                     SWBResourceURL url = paramRequest.getActionUrl().setAction("saveXMLFile");
@@ -1216,23 +1230,62 @@ public class ProcessForm extends GenericResource {
         out.println("</div>");
     }
 
-    public String getFESelect(String FEsel, SWBParamRequest paramRequest) {
+    public String getFESelect(String FEsel, SWBParamRequest paramRequest, SemanticProperty sprop) {
 
+        User usr = paramRequest.getUser();
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         SemanticVocabulary sv = SWBPlatform.getSemanticMgr().getVocabulary();
         StringBuilder ret = new StringBuilder();
         ret.append("\n<optgroup label=\"Genérico\">");
         ret.append("\n<option value=\"generico\" selected >GenericFormElement</option>");
         ret.append("\n</optgroup>");
 
+        HashMap<String, SemanticClass> hmscfe = new HashMap<String, SemanticClass>();
+        HashMap<String, SemanticObject> hmso = null;
+        
+        //Property prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_ANNOT_FORMELEMENTRANGE).getRDFProperty();
+        SemanticProperty pro=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_ANNOT_FORMELEMENTRANGE);
+        System.out.println("prop:" + pro.getName());
+        
+        
         Iterator<SemanticClass> itsub = sv.getSemanticClass(sv.SWB_SWBFORMELEMENT).listSubClasses();
         while (itsub.hasNext()) {
-            SemanticClass scfe = itsub.next();
+            SemanticClass scobj = itsub.next();
+            SemanticProperty spropval = scobj.getProperty(pro.getName());
+            if(null!=spropval) System.out.println("Tiene la propiedad..."+spropval); 
+            
+//            String strval = scobj.getSemanticObject().getProperty(pro);
+//            System.out.println("prop val:" + strval);
+            if(scobj!=null)hmscfe.put(scobj.getDisplayName(usr.getLanguage()), scobj);
+        }
+
+        ArrayList list = new ArrayList(hmscfe.keySet());
+        Collections.sort(list);
+
+        Iterator<String> itsc = list.iterator();
+        while (itsc.hasNext()) {
+
+            String key = itsc.next();
+            SemanticClass scfe = hmscfe.get(key);
+
             ret.append("\n<optgroup label=\"");
             ret.append(scfe.getDisplayName(paramRequest.getUser().getLanguage()));
             ret.append("\">");
+            hmso = new HashMap<String, SemanticObject>();
+
             Iterator<SemanticObject> itsco = scfe.listInstances(true);
             while (itsco.hasNext()) {
-                SemanticObject sofe = itsco.next();
+                SemanticObject semObj = itsco.next();
+                hmso.put(semObj.getDisplayName(usr.getLanguage()), semObj);
+            }
+
+            list = new ArrayList(hmso.keySet());
+            Collections.sort(list);
+            
+            Iterator<String> itsoo = list.iterator();
+            while (itsoo.hasNext()) {
+                key = itsoo.next();
+                SemanticObject sofe = hmso.get(key);
                 ret.append("\n<option value=\"");
                 ret.append(sofe.getURI());
                 ret.append("\"");
