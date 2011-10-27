@@ -61,100 +61,106 @@
 %><jsp:include page="strategy.jsp" flush="true" /><%
                 return;
             }
-            if(request.getParameter("uri")!=null)
-                {
-                %><jsp:include page="shownew.jsp" flush="true" /><%
-                return;
-                }
-
-            // muestra lista de noticias en listado
-            String usrlanguage = paramRequest.getUser().getLanguage();
-            Locale locale = new Locale(usrlanguage);
-            Calendar calendar = Calendar.getInstance(locale);
-
-            int currentMonth = calendar.get(Calendar.MONTH);
-
-            DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
-            int limit = 15;
-            List<SWBNewContent> contents = (List<SWBNewContent>) request.getAttribute("news");
-            Collections.sort(contents, new SWBNewContentComparator());
-            if (contents != null && contents.size() > 0)
+            if (request.getParameter("uri") != null)
             {
+%><jsp:include page="shownew.jsp" flush="true" /><%
+                                return;
+                            }
 
-                // muestra las 15 primeras noticias
-                int inew = 0;
-                for (SWBNewContent content : contents)
-                {
-                    inew++;
-                    //SWBResourceURL url = paramRequest.getRenderUrl();
-                    //url.setMode(paramRequest.Mode_VIEW);
-                    //url.setParameter("uri", content.getResourceBase().getSemanticObject().getURI());
-                    
-                    //String url = paramRequest.getWebPage().getUrl() + "?uri=" + content.getResourceBase().getSemanticObject().getEncodedURI();
-                    String url = paramRequest.getWebPage().getUrl() + "?uri=" + content.getResourceBase().getSemanticObject().getId();
-                    String title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle(usrlanguage));
-                    if (title != null && title.trim().equals(""))
-                    {
-                        title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle());
-                    }
-                    String date = "";
-                    if (content.getPublishDate() != null)
-                    {
-                        date = sdf.format(content.getPublishDate());
-                    }
-                    String country = "";
-                    if (content.getCountry() != null && content.getCountry().getDisplayTitle(usrlanguage) != null && !content.getCountry().getDisplayTitle(usrlanguage).equals(""))
-                    {
-                        country = "(" + SWBUtils.TEXT.encodeExtendedCharacters(content.getCountry().getDisplayTitle(usrlanguage)) + ")";
-                    }
-                    String originalTitle = "";
-                    if (content.getOriginalTitle() != null)
-                    {
-                        originalTitle = SWBUtils.TEXT.encodeExtendedCharacters(content.getOriginalTitle());
-                    }
-                    String urlcontent = url.toString().replace("&", "&amp;");
-                    String ago = "";
-                    String source = content.getSource();
-                    if (date != null && !date.trim().equals(""))
-                    {
-                        ago = SWBUtils.TEXT.getTimeAgo(content.getPublishDate(), usrlanguage);
-                    }
-                    User user = paramRequest.getUser();
-                    String description = "";
-                    if (content.getResourceBase().getDisplayDescription(user.getLanguage()) != null)
-                    {
-                        description = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayDescription(user.getLanguage()));
-                        if (description != null && description.trim().equals(""))
-                        {
-                            description = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayDescription(user.getLanguage()));
-                        }
-                    }
-                    String pathPhoto="/work/models/"+paramRequest.getWebPage().getWebSite().getId()+"/css/noticias_infotec.gif";
-                    /*String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/sinfoto.png";
-                    String image = "";
-                    if (content.getImage() != null)
-                    {
-                    image = content.getImage();
-                    pathPhoto = SWBPortal.getWebWorkPath() + content.getSemanticObject().getWorkPath() + "/thmb_image_" + image;
-                    }
-                    else
-                    {
-                    pathPhoto=SWBPortal.getContextPath()+"/work/models/"+paramRequest.getWebPage().getWebSiteId()+"/css/noticias_infotec.gif";
-                    }
-                    String titleImage = title.replace('"', '\'');*/
-                    String id=paramRequest.getWebPage().getId();
+                            // muestra lista de noticias en listado
+                            String usrlanguage = paramRequest.getUser().getLanguage();
+                            Locale locale = new Locale(usrlanguage);
+                            Calendar calendar = Calendar.getInstance(locale);
+
+                            int currentMonth = calendar.get(Calendar.MONTH);
+
+                            DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
+                            int limit = 15;
+                            List<SWBNewContent> contents = (List<SWBNewContent>) request.getAttribute("news");
+                            Collections.sort(contents, new SWBNewContentComparator());
+                            if (contents != null && contents.size() > 0)
+                            {
+
+                                // muestra las 15 primeras noticias
+                                int inew = 0;
+                                for (SWBNewContent content : contents)
+                                {
+                                    inew++;
+                                    //SWBResourceURL url = paramRequest.getRenderUrl();
+                                    //url.setMode(paramRequest.Mode_VIEW);
+                                    //url.setParameter("uri", content.getResourceBase().getSemanticObject().getURI());
+
+                                    //String url = paramRequest.getWebPage().getUrl() + "?uri=" + content.getResourceBase().getSemanticObject().getEncodedURI();
+                                    String url = paramRequest.getWebPage().getUrl() + "?uri=" + content.getResourceBase().getSemanticObject().getId();
+                                    String title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle(usrlanguage));
+                                    if (title != null && title.trim().equals(""))
+                                    {
+                                        title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle());
+                                    }
+                                    String date = "";
+                                    if (content.getPublishDate() != null)
+                                    {
+                                        date = sdf.format(content.getPublishDate());
+                                    }
+                                    String country = "";
+                                    if (content.getCountry() != null && content.getCountry().getDisplayTitle(usrlanguage) != null && !content.getCountry().getDisplayTitle(usrlanguage).equals(""))
+                                    {
+                                        country = "(" + SWBUtils.TEXT.encodeExtendedCharacters(content.getCountry().getDisplayTitle(usrlanguage)) + ")";
+                                    }
+                                    String originalTitle = "";
+                                    if (content.getOriginalTitle() != null)
+                                    {
+                                        originalTitle = SWBUtils.TEXT.encodeExtendedCharacters(content.getOriginalTitle());
+                                    }
+                                    String urlcontent = url.toString().replace("&", "&amp;");
+                                    String ago = "";
+                                    String source = content.getSource();
+                                    if (date != null && !date.trim().equals(""))
+                                    {
+                                        ago = SWBUtils.TEXT.getTimeAgo(content.getPublishDate(), usrlanguage);
+                                    }
+                                    User user = paramRequest.getUser();
+                                    String description = "";
+                                    if (content.getResourceBase().getDisplayDescription(user.getLanguage()) != null)
+                                    {
+                                        description = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayDescription(user.getLanguage()));
+                                        if (description != null && description.trim().equals(""))
+                                        {
+                                            description = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayDescription(user.getLanguage()));
+                                        }
+                                    }
+                                    String pathPhoto = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/css/noticias_infotec.gif";
+                                    /*String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/sinfoto.png";
+                                    String image = "";
+                                    if (content.getImage() != null)
+                                    {
+                                    image = content.getImage();
+                                    pathPhoto = SWBPortal.getWebWorkPath() + content.getSemanticObject().getWorkPath() + "/thmb_image_" + image;
+                                    }
+                                    else
+                                    {
+                                    pathPhoto=SWBPortal.getContextPath()+"/work/models/"+paramRequest.getWebPage().getWebSiteId()+"/css/noticias_infotec.gif";
+                                    }
+                                    String titleImage = title.replace('"', '\'');*/
+
+                                    if (content.getImage() != null)
+                                    {
+                                        String image = content.getImage();
+                                        pathPhoto = SWBPortal.getWebWorkPath() + content.getSemanticObject().getWorkPath() + "/thmb_image_" + image;
+                                    }
+                                    String id = paramRequest.getWebPage().getId();
 %>
 <div class="entradaVideos">
     <div class="thumbVideo">
         <%
-                   if (pathPhoto != null && !"Prensa".equals(id))
-                    {
+                            if (pathPhoto != null && !"Prensa".equals(id))
+                            {
 
 
         %>
-       <img width="120" height="120" alt="<%=title%>" src="<%=pathPhoto%>" />
+        <img width="120" height="120" alt="<%=title%>" src="<%=pathPhoto%>" />
         <%
-                    }
+                            }
         %>
 
     </div>
@@ -216,7 +222,7 @@
                         break;
                     }
                 }
-                int icolumna=1;
+                int icolumna = 1;
 
 %>
 <ul id="col<%=icolumna%>">
@@ -242,7 +248,7 @@
                     {
                         elementInColumn++;
                     }
-                    
+
                     int ielement = 0;
                     years = SWBNews.getYears(contents);
                     ArrayList<String> ayears = new ArrayList<String>();
@@ -256,7 +262,7 @@
                             if (SWBNews.hasNews(contents, month, iyear))
                             {
                                 ielement++;
-                                if (ielement > elementInColumn && icolumna!=3)
+                                if (ielement > elementInColumn && icolumna != 3)
                                 {
                                     icolumna++;
                                     ielement = 1;
@@ -264,8 +270,8 @@
 </ul>
 <ul id="col<%=icolumna%>">
     <%
-                                }
-                                    
+                                    }
+
                                     String titleMonth = " " + getMonth(month, paramRequest.getUser()) + " " + iyear;
                                     SWBResourceURL url = paramRequest.getRenderUrl();
                                     url.setMode("month");
@@ -278,9 +284,9 @@
     %>
     <li class="listaLinksMes"><a href="<%=urlcontent%>"><%=ultmsg%></a></li>
     <%
-                                    }
-                                    else
-                                    {
+                                        }
+                                        else
+                                        {
     %>
     <li class="listaLinksMes"><a href="<%=urlcontent%>"><%=mensaje%><%=titleMonth%></a></li>
     <%
