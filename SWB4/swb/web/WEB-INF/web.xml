@@ -121,4 +121,8 @@
         <error-code>404</error-code>
         <location>/work/config/Base404.html</location>
     </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/work/config/500.html</location>
+    </error-page>
 </web-app>

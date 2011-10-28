@@ -1,3 +1,9 @@
+  4.2.0.0
+    - Rediseño de la capa interna de SWBPlatform (SemanticObject) para incrementar rendimiento (Jei)
+    - Mejoras en el Soporte a Balanceo de Instancias (Jei)
+    - Soporte a FullCache de triples En ambientes de Balanceo (Jei)
+    - Mejoras de desempeño en Triple Store Nativo de SWB (Jei)
+    - Mejoras de desempeño en Trople Store Remoto de SWB (Jei)
   4.1.0.0
     - CONVERSIÓN A JAVA 1.6 (Jei)
     - Se creó el Triple Store propio de SemanticWebBuilder, para mayor compatibilidad con las diversas BD (Jei)
@@ -17,7 +23,6 @@
     - BUG: se corrigió la validación de acceso a la administración en instancias Cliente (Serch)
     - Se modificó la forma de generar el GoogleSiteMap para Google Analytics (Serch)
     - BUG: se corrigió el content-type de respuesta a DOJO en la carga de archivos (Serch)
-
   4.0.2.4
     - Se cambio forma de evaluar reglas, roles, grupos, calendarios de and a or (Jei)
     - Se agrego posibilidad de tener filtros inversos de recursos (Jei)
