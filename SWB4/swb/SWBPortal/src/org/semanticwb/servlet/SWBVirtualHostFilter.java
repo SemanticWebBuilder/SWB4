@@ -168,13 +168,17 @@ public class SWBVirtualHostFilter implements Filter
                         {
                             filter=true;
                         }
-                        if(path.endsWith(".xslt"))
+                        else if(path.endsWith(".xslt"))
                         {
                             filter=true;
                         }
-                        if(path.endsWith(".nt"))
+                        else if(path.endsWith(".nt"))
                         {
                             filter=true;
+                        }
+                        if(path.endsWith("securecode.jsp"))
+                        {
+                            filter=false;
                         }
                     }
                     if(path.endsWith("/config/login.html"))
