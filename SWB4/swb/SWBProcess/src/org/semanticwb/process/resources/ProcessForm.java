@@ -26,6 +26,7 @@
 package org.semanticwb.process.resources;
 
 import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.RDFNode;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -1251,12 +1252,29 @@ public class ProcessForm extends GenericResource {
         Iterator<SemanticClass> itsub = sv.getSemanticClass(sv.SWB_SWBFORMELEMENT).listSubClasses();
         while (itsub.hasNext()) {
             SemanticClass scobj = itsub.next();
-            SemanticProperty spropval = scobj.getProperty(pro.getName());
-            if(null!=spropval) System.out.println("Tiene la propiedad..."+spropval); 
             
-//            String strval = scobj.getSemanticObject().getProperty(pro);
-//            System.out.println("prop val:" + strval);
-            if(scobj!=null)hmscfe.put(scobj.getDisplayName(usr.getLanguage()), scobj);
+            RDFNode node=scobj.getOntClass().getPropertyValue(pro.getRDFProperty());
+            
+            System.out.println("node:" + node+" "+sprop.getRange());            
+            if(node!=null)
+            {
+                if(sprop.getRange().getURI().equals(node.asResource().getURI()))
+                {
+                    hmscfe.put(scobj.getDisplayName(usr.getLanguage()), scobj);
+                }else if(sprop.getRangeClass()!=null && node.isResource())
+                {
+                    SemanticClass cls=sv.getSemanticClass(node.asResource().getURI());
+                    if(cls!=null)
+                    {
+                        if(sprop.getRangeClass().isSubClass(cls))
+                        {
+                            hmscfe.put(scobj.getDisplayName(usr.getLanguage()), scobj);
+                        }
+                    }
+                }
+            }
+
+            
         }
 
         ArrayList list = new ArrayList(hmscfe.keySet());
