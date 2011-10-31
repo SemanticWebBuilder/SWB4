@@ -1101,7 +1101,7 @@ public class LiteFileRepository extends GenericResource {
                     wp.setParent(wpage);
 
                     Resource res = wsite.createResource();
-                    res.setResourceType(wsite.getResourceType("LiteFileRepository"));
+                    res.setResourceType(getResourceBase().getResourceType());
                     res.setTitle("Repositorio de documentos");
                     res.setActive(Boolean.TRUE);
 
