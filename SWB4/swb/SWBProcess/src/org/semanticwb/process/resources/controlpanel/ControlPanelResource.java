@@ -122,7 +122,6 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
                 }
             }
             setDisplayCols(dCols+"|actionsCol");
-            response.setMode(response.Mode_VIEW);
         } else if (action.equals("create")) {
             User user = response.getUser();
             String pid = request.getParameter("pid");
@@ -130,7 +129,6 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
                 Process p = Process.ClassMgr.getProcess(pid, response.getWebPage().getWebSite());
                 SWBProcessMgr.createProcessInstance(p, user);
             }
-            response.setMode(SWBParamRequest.Mode_VIEW);
         } else if (action.equals("setPageItems")) {
             String ipp = request.getParameter("ipp");
             int itemsPerPage = 0;
@@ -220,12 +218,16 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
         if (request.getParameter("gFilter") != null && !request.getParameter("gFilter").trim().equals("")) {
             group = ProcessGroup.ClassMgr.getProcessGroup(request.getParameter("gFilter"), site);
         }
-
+        
         Iterator<Process> processes = Process.ClassMgr.listProcesses(site);
+        if (group != null) {
+            processes = group.listProcesses();
+        }
+        
         if (processes != null && processes.hasNext()) {
             while(processes.hasNext()) {
                 Process process = processes.next();
-                t_instances.addAll(_getProcessInstances((ProcessSite)site, group, process, statusFilter));
+                t_instances.addAll(_getProcessInstances((ProcessSite)site, process, statusFilter));
             }
         }
 
@@ -295,23 +297,14 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
      * @param status Estado de las instancias que serán listadas.
      * @return Lista de instancias de procesos filtradas por grupo y/o estado.
      */
-    ArrayList<ProcessInstance> _getProcessInstances(ProcessSite site, ProcessGroup group, Process process, int status) {
+    ArrayList<ProcessInstance> _getProcessInstances(ProcessSite site, Process process, int status) {
         ArrayList<ProcessInstance> instances = new ArrayList<ProcessInstance>();
         Iterator<ProcessInstance> it=process.listProcessInstances();
+        
         while (it.hasNext()) {
-            ProcessInstance processInstance = (ProcessInstance)it.next();
+            ProcessInstance processInstance = it.next();
             if (status >= 0) {
-                if (group != null) {
-                    if (processInstance.getStatus() == status && process.getProcessGroup().getURI().equals(group.getURI())) {
-                        instances.add(processInstance);
-                    }
-                } else {
-                    if (processInstance.getStatus() == status) {
-                        instances.add(processInstance);
-                    }
-                }
-            } else if (group != null) {
-                if (process.getProcessGroup().getURI().equals(group.getURI())) {
+                if (processInstance.getStatus() == status) {
                     instances.add(processInstance);
                 }
             } else {
