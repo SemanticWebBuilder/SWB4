@@ -40,6 +40,7 @@ import java.io.OutputStream;
 public class SWBServletOutputStreamImp extends javax.servlet.ServletOutputStream
 {
     
+    
     /** The out. */
     OutputStream out=null;
     

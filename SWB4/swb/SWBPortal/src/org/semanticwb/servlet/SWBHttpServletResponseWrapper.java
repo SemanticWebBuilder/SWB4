@@ -29,10 +29,9 @@
 package org.semanticwb.servlet;
 
 import java.io.ByteArrayOutputStream;
+import java.io.CharArrayWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.util.HashMap;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.ServletOutputStream;
@@ -57,6 +56,8 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     /** The sout. */
     ServletOutputStream sout = new SWBServletOutputStreamImp(bout);
     
+    CharArrayWriter cout=null;
+    
     /** The pout. */
     PrintWriter pout = null;
     
@@ -74,10 +75,14 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     
     /** The trap content type. */
     private boolean trapContentType = true;
+        
+    private boolean trapResponse = true;
 
     /** The content type. */
     private String contentType=null;
 
+    /** The charset. */
+    private String charset=null;
     
 
     /**
@@ -102,17 +107,20 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     @Override
     public javax.servlet.ServletOutputStream getOutputStream() throws java.io.IOException
     {
-        //return response.getOutputStream();
-        log.debug("WBResponse:getOutputStream");
-        if(pout!=null)
+        if(trapResponse)
         {
-            pout.flush();
-            String dec=new String(bout.toByteArray(),SWBUtils.TEXT.CHARSET_UTF8);
-            bout.reset();
-            sout.write(dec.getBytes());
-            pout=null;
+            log.debug("WBResponse:getOutputStream");
+            if(pout!=null)
+            {
+                cout.flush();
+                bout.write(cout.toString().getBytes());
+                pout=null;
+            }
+            return sout;
+        }else
+        {
+            return super.getOutputStream();
         }
-        return sout;
     }
 
     /* (non-Javadoc)
@@ -127,17 +135,22 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     @Override
     public java.io.PrintWriter getWriter() throws java.io.IOException
     {
-        //return response.getWriter();
-        log.debug("WBResponse:getWriter");
-        if(pout==null)
-        {
-            try
+        if(trapResponse)
+        {        
+            log.debug("WBResponse:getWriter");
+            if(pout==null)
             {
-                pout = new PrintWriter(new OutputStreamWriter(sout,SWBUtils.TEXT.CHARSET_UTF8));
-                //pout = new PrintWriter(new OutputStreamWriter(sout));
-            }catch(Exception e){log.error(e);}
+                try
+                {
+                    cout=new CharArrayWriter();
+                    pout = new PrintWriter(cout);
+                }catch(Exception e){log.error(e);}
+            }
+            return pout;
+        }else
+        {
+            return super.getWriter();
         }
-        return pout;
     }
 
     /* (non-Javadoc)
@@ -151,9 +164,14 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     @Override
     public void flushBuffer() throws java.io.IOException
     {
-        //response.flushBuffer();
-        log.debug("WBResponse:flushBuffer");
-        bout.flush();
+        if(trapResponse)
+        {        
+            log.debug("WBResponse:flushBuffer");
+            bout.flush();
+        }else
+        {
+            super.flushBuffer();
+        }
     }
 
     /* (non-Javadoc)
@@ -167,9 +185,14 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     @Override
     public int getBufferSize()
     {
-        //return response.getBufferSize();
-        log.debug("WBResponse:getBufferSize");
-        return bout.size();
+        if(trapResponse)
+        {        
+            log.debug("WBResponse:getBufferSize");
+            return bout.size();
+        }else
+        {
+            return super.getBufferSize();
+        }
     }
 
     /* (non-Javadoc)
@@ -181,8 +204,14 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     @Override
     public void resetBuffer()
     {
-        log.debug("WBResponse:resetBuffer");
-        bout.reset();
+        if(trapResponse)
+        {        
+            log.debug("WBResponse:resetBuffer");
+            bout.reset();
+        }else
+        {
+            super.resetBuffer();
+        }
     }
 
     /* (non-Javadoc)
@@ -196,8 +225,14 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     @Override
     public void setBufferSize(int param)
     {
-        log.debug("WBResponse:setBufferSize:" + param);
-    //bout = new ByteArrayOutputStream(param);
+        if(trapResponse)
+        {        
+            log.debug("WBResponse:setBufferSize:" + param);
+            //bout = new ByteArrayOutputStream(param);
+        }else
+        {
+            super.setBufferSize(param);
+        }
     }
 
     /* (non-Javadoc)
@@ -211,32 +246,19 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     @Override
     public String toString()
     {
-        try
-        {
+        if(trapResponse)
+        {        
             if(pout!=null)
             {
-                pout.flush();
-                pout.close();
-            }
-            bout.flush();
-        } catch (Exception e)
-        {
-            log.error(e);
-        }
-        String ret="";
-        try
-        {
-            if(pout!=null)
-            {
-                ret=new String(bout.toByteArray(),SWBUtils.TEXT.CHARSET_UTF8);
-                //ret=SWBUtils.TEXT.decode(ret,SWBUtils.TEXT.CHARSET_UTF8);
+                return cout.toString();
             }else
             {
-                ret=bout.toString();
+                return bout.toString();
             }
-        }catch(Exception e){log.error(e);}
-        //log.trace("WBResponse:out:" + ret);
-        return ret;
+        }else
+        {
+            return super.toString();
+        }        
     }
 
     /**
@@ -246,29 +268,13 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
      */
     public byte[] toByteArray()
     {
-        try
+        if(pout!=null)
         {
-            if(pout!=null)
-            {
-                pout.flush();
-                pout.close();
-            }
-            bout.flush();
-        } catch (Exception e)
+            return cout.toString().getBytes();
+        }else
         {
-            log.error(e);
-        }
-        byte arr[]=bout.toByteArray();
-        try
-        {
-            if(pout!=null)
-            {
-                arr=new String(arr, SWBUtils.TEXT.CHARSET_UTF8).getBytes();
-                //ret=SWBUtils.TEXT.decode(ret,SWBUtils.TEXT.CHARSET_UTF8);
-            }
-        }catch(Exception e){log.error(e);}
-
-        return arr;
+            return bout.toByteArray();
+        }        
     }
 
     /* (non-Javadoc)
@@ -414,6 +420,29 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
         }
     }
 
+    @Override
+    public void setCharacterEncoding(String charset) 
+    {
+        log.debug("charset:"+charset);
+        charset=charset;
+        if(!trapContentType)
+        {
+            super.setCharacterEncoding(charset);
+        }        
+    }
+
+    @Override
+    public String getCharacterEncoding() 
+    {
+        if(!trapContentType)
+        {
+            return super.getCharacterEncoding();
+        }else
+        {
+            return charset;
+        }
+    }
+
     /**
      * Gets the content type.
      * 
@@ -444,7 +473,12 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
         return this.trapContentType;
     }
 
-   
+    public void setTrapResponse(boolean trapResponse) {
+        this.trapResponse = trapResponse;
+    }
 
+    public boolean isTrapResponse() {
+        return trapResponse;
+    }
 
 }

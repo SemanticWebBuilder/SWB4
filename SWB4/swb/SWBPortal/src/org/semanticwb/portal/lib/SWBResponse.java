@@ -92,6 +92,7 @@ public class SWBResponse implements HttpServletResponse
      * 
      * @param cookie the cookie
      */
+    @Override
     public void addCookie(javax.servlet.http.Cookie cookie)
     {
         log.debug("WBResponse:addCookie");
@@ -108,6 +109,7 @@ public class SWBResponse implements HttpServletResponse
      * @param str the str
      * @param param the param
      */
+    @Override
     public void addDateHeader(String str, long param)
     {
         log.debug("WBResponse:addDateHeader");
@@ -124,6 +126,7 @@ public class SWBResponse implements HttpServletResponse
      * @param str the str
      * @param str1 the str1
      */
+    @Override
     public void addHeader(String str, String str1)
     {
         log.debug("WBResponse:addHeader");
@@ -140,6 +143,7 @@ public class SWBResponse implements HttpServletResponse
      * @param str the str
      * @param param the param
      */
+    @Override
     public void addIntHeader(String str, int param)
     {
         log.debug("WBResponse:setStatus");
@@ -156,6 +160,7 @@ public class SWBResponse implements HttpServletResponse
      * @param str the str
      * @return true, if successful
      */
+    @Override
     public boolean containsHeader(String str)
     {
         log.debug("WBResponse:setStatus");
@@ -174,6 +179,7 @@ public class SWBResponse implements HttpServletResponse
      * @param str the str
      * @return the string
      */
+    @Override
     public String encodeRedirectURL(String str)
     {
         log.debug("WBResponse:encodeRedirectURL");
@@ -191,6 +197,7 @@ public class SWBResponse implements HttpServletResponse
      * @param str the str
      * @return the string
      */
+    @Override
     public String encodeRedirectUrl(String str)
     {
         log.debug("WBResponse:encodeRedirectUrl");
@@ -208,6 +215,7 @@ public class SWBResponse implements HttpServletResponse
      * @param str the str
      * @return the string
      */
+    @Override
     public String encodeURL(String str)
     {
         log.debug("WBResponse:encodeURL");
@@ -225,6 +233,7 @@ public class SWBResponse implements HttpServletResponse
      * @param str the str
      * @return the string
      */
+    @Override
     public String encodeUrl(String str)
     {
         log.debug("WBResponse:encodeUrl");
@@ -241,6 +250,7 @@ public class SWBResponse implements HttpServletResponse
      * 
      * @throws IOException Signals that an I/O exception has occurred.
      */
+    @Override
     public void flushBuffer() throws java.io.IOException
     {
         log.debug("WBResponse:flushBuffer");
@@ -255,6 +265,7 @@ public class SWBResponse implements HttpServletResponse
      * 
      * @return the buffer size
      */
+    @Override
     public int getBufferSize()
     {
         log.debug("WBResponse:getBufferSize");
@@ -269,6 +280,7 @@ public class SWBResponse implements HttpServletResponse
      * 
      * @return the character encoding
      */
+    @Override
     public String getCharacterEncoding()
     {
         log.debug("WBResponse:getCharacterEncoding");
@@ -285,6 +297,7 @@ public class SWBResponse implements HttpServletResponse
      * 
      * @return the locale
      */
+    @Override
     public java.util.Locale getLocale()
     {
         log.debug("WBResponse:getLocale");
@@ -302,6 +315,7 @@ public class SWBResponse implements HttpServletResponse
      * @return the output stream
      * @throws IOException Signals that an I/O exception has occurred.
      */
+    @Override
     public javax.servlet.ServletOutputStream getOutputStream() throws java.io.IOException
     {
         log.debug("WBResponse:getOutputStream");
@@ -318,6 +332,7 @@ public class SWBResponse implements HttpServletResponse
      * @return the writer
      * @throws IOException Signals that an I/O exception has occurred.
      */
+    @Override
     public java.io.PrintWriter getWriter() throws java.io.IOException
     {
         log.debug("WBResponse:getWriter");
@@ -332,6 +347,7 @@ public class SWBResponse implements HttpServletResponse
      * 
      * @return true, if is committed
      */
+    @Override
     public boolean isCommitted()
     {
         log.debug("WBResponse:isCommitted");
@@ -344,6 +360,7 @@ public class SWBResponse implements HttpServletResponse
     /**
      * Reset.
      */
+    @Override
     public void reset()
     {
         log.debug("WBResponse:reset");
@@ -356,6 +373,7 @@ public class SWBResponse implements HttpServletResponse
     /**
      * Reset buffer.
      */
+    @Override
     public void resetBuffer()
     {
         log.debug("WBResponse:resetBuffer");
@@ -371,6 +389,7 @@ public class SWBResponse implements HttpServletResponse
      * @param param the param
      * @throws IOException Signals that an I/O exception has occurred.
      */
+    @Override
     public void sendError(int param) throws java.io.IOException
     {
         log.debug("WBResponse:sendError");
@@ -388,6 +407,7 @@ public class SWBResponse implements HttpServletResponse
      * @param str the str
      * @throws IOException Signals that an I/O exception has occurred.
      */
+    @Override
     public void sendError(int param, String str) throws java.io.IOException
     {
         log.debug("WBResponse:sendError");
@@ -404,6 +424,7 @@ public class SWBResponse implements HttpServletResponse
      * @param str the str
      * @throws IOException Signals that an I/O exception has occurred.
      */
+    @Override
     public void sendRedirect(String str) throws java.io.IOException
     {
         sendRedirect=str;
@@ -440,6 +461,7 @@ public class SWBResponse implements HttpServletResponse
      * 
      * @param param the new buffer size
      */
+    @Override
     public void setBufferSize(int param)
     {
         log.debug("WBResponse:setBufferSize:" + param);
@@ -453,6 +475,7 @@ public class SWBResponse implements HttpServletResponse
      * 
      * @param param the new content length
      */
+    @Override
     public void setContentLength(int param)
     {
         log.debug("WBResponse:setContentLength");
@@ -468,6 +491,7 @@ public class SWBResponse implements HttpServletResponse
      * 
      * @param str the new content type
      */
+    @Override
     public void setContentType(String str)
     {
         log.debug("WBResponse:setContentType");
@@ -484,6 +508,7 @@ public class SWBResponse implements HttpServletResponse
      * @param str the str
      * @param param the param
      */
+    @Override
     public void setDateHeader(String str, long param)
     {
         log.debug("WBResponse:setDateHeader");
@@ -500,6 +525,7 @@ public class SWBResponse implements HttpServletResponse
      * @param str the str
      * @param str1 the str1
      */
+    @Override
     public void setHeader(String str, String str1)
     {
         log.debug("WBResponse:setHeader");
@@ -516,6 +542,7 @@ public class SWBResponse implements HttpServletResponse
      * @param str the str
      * @param param the param
      */
+    @Override
     public void setIntHeader(String str, int param)
     {
         log.debug("WBResponse:setIntHeader");
@@ -531,6 +558,7 @@ public class SWBResponse implements HttpServletResponse
      * 
      * @param locale the new locale
      */
+    @Override
     public void setLocale(java.util.Locale locale)
     {
         log.debug("WBResponse:setLocale");
@@ -546,6 +574,7 @@ public class SWBResponse implements HttpServletResponse
      * 
      * @param param the new status
      */
+    @Override
     public void setStatus(int param)
     {
         log.debug("WBResponse:setStatus");
@@ -562,6 +591,7 @@ public class SWBResponse implements HttpServletResponse
      * @param param the param
      * @param str the str
      */
+    @Override
     public void setStatus(int param, String str)
     {
         log.debug("WBResponse:setStatus");
@@ -572,6 +602,7 @@ public class SWBResponse implements HttpServletResponse
     /* (non-Javadoc)
      * @see java.lang.Object#toString()
      */
+    @Override
     public String toString()
     {
         try
@@ -585,6 +616,24 @@ public class SWBResponse implements HttpServletResponse
         }
         log.debug("WBResponse:out:" + bout.toString());
         return bout.toString();//new String(bout.toByteArray());
+    }
+
+    @Override
+    public String getContentType() {
+        if(response!=null)
+        {
+            return response.getContentType();
+        }
+        return null;
+    }
+
+    @Override
+    public void setCharacterEncoding(String string) 
+    {
+        if(response!=null)
+        {
+            response.setCharacterEncoding(string);
+        }        
     }
 
 }

@@ -74,6 +74,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * @param str the str
      * @return the attribute
      */
+    @Override
     public Object getAttribute(String str)
     {
         if (request == null)
@@ -91,6 +92,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the attribute names
      */
+    @Override
     public java.util.Enumeration getAttributeNames()
     {
         if (request == null)
@@ -108,6 +110,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the auth type
      */
+    @Override
     public String getAuthType()
     {
         if (request == null)
@@ -123,6 +126,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the character encoding
      */
+    @Override
     public String getCharacterEncoding()
     {
         if (request == null)
@@ -138,6 +142,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the content length
      */
+    @Override
     public int getContentLength()
     {
         return 0;
@@ -151,6 +156,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the content type
      */
+    @Override
     public String getContentType()
     {
         if (request == null)
@@ -166,6 +172,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the context path
      */
+    @Override
     public String getContextPath()
     {
         if (request == null)
@@ -181,6 +188,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the cookies
      */
+    @Override
     public javax.servlet.http.Cookie[] getCookies()
     {
         if (request == null)
@@ -197,6 +205,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * @param str the str
      * @return the date header
      */
+    @Override
     public long getDateHeader(String str)
     {
         return new Date().getTime();//request.getDateHeader(str);
@@ -211,6 +220,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * @param str the str
      * @return the header
      */
+    @Override
     public String getHeader(String str)
     {
         return null;
@@ -224,6 +234,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the header names
      */
+    @Override
     public java.util.Enumeration getHeaderNames()
     {
         return new Vector().elements();
@@ -238,6 +249,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * @param str the str
      * @return the headers
      */
+    @Override
     public java.util.Enumeration getHeaders(String str)
     {
         return new Vector().elements();
@@ -252,6 +264,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * @return the input stream
      * @throws IOException Signals that an I/O exception has occurred.
      */
+    @Override
     public javax.servlet.ServletInputStream getInputStream() throws java.io.IOException
     {
         return null;
@@ -266,6 +279,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * @param str the str
      * @return the int header
      */
+    @Override
     public int getIntHeader(String str)
     {
         if (request == null)
@@ -282,6 +296,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the locale
      */
+    @Override
     public java.util.Locale getLocale()
     {
         if (request == null)
@@ -297,6 +312,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the locales
      */
+    @Override
     public java.util.Enumeration getLocales()
     {
         if (request == null)
@@ -312,6 +328,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the method
      */
+    @Override
     public String getMethod()
     {
         if (request == null)
@@ -328,6 +345,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * @param str the str
      * @return the parameter
      */
+    @Override
     public String getParameter(String str)
     {
         String ret = null;
@@ -345,6 +363,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the parameter map
      */
+    @Override
     public java.util.Map getParameterMap()
     {
         return parms;
@@ -358,6 +377,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the parameter names
      */
+    @Override
     public java.util.Enumeration getParameterNames()
     {
         return parms.keys();
@@ -372,6 +392,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * @param str the str
      * @return the parameter values
      */
+    @Override
     public String[] getParameterValues(String str)
     {
         return (String[]) parms.get(str);
@@ -385,6 +406,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the path info
      */
+    @Override
     public String getPathInfo()
     {
         if (request == null)
@@ -400,6 +422,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the path translated
      */
+    @Override
     public String getPathTranslated()
     {
         if (request == null)
@@ -415,6 +438,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the protocol
      */
+    @Override
     public String getProtocol()
     {
         if (request == null)
@@ -430,6 +454,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the query string
      */
+    @Override
     public String getQueryString()
     {
         return null;
@@ -444,6 +469,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * @return the reader
      * @throws IOException Signals that an I/O exception has occurred.
      */
+    @Override
     public java.io.BufferedReader getReader() throws java.io.IOException
     {
         return null;
@@ -458,6 +484,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * @param str the str
      * @return the real path
      */
+    @Override
     public String getRealPath(String str)
     {
         if (request == null)
@@ -473,6 +500,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the remote addr
      */
+    @Override
     public String getRemoteAddr()
     {
         if (request == null)
@@ -488,6 +516,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the remote host
      */
+    @Override
     public String getRemoteHost()
     {
         if (request == null)
@@ -503,6 +532,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the remote user
      */
+    @Override
     public String getRemoteUser()
     {
         if (request == null)
@@ -519,6 +549,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * @param str the str
      * @return the request dispatcher
      */
+    @Override
     public javax.servlet.RequestDispatcher getRequestDispatcher(String str)
     {
         if (request == null)
@@ -534,6 +565,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the request uri
      */
+    @Override
     public String getRequestURI()
     {
         if (request == null)
@@ -549,6 +581,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the request url
      */
+    @Override
     public StringBuffer getRequestURL()
     {
         if (request == null)
@@ -564,6 +597,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the requested session id
      */
+    @Override
     public String getRequestedSessionId()
     {
         if (request == null)
@@ -579,6 +613,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the scheme
      */
+    @Override
     public String getScheme()
     {
         if (request == null)
@@ -594,6 +629,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the server name
      */
+    @Override
     public String getServerName()
     {
         if (request == null)
@@ -609,6 +645,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the server port
      */
+    @Override
     public int getServerPort()
     {
         if (request == null)
@@ -624,6 +661,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the servlet path
      */
+    @Override
     public String getServletPath()
     {
         if (request == null)
@@ -639,6 +677,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the session
      */
+    @Override
     public javax.servlet.http.HttpSession getSession()
     {
         if (request == null)
@@ -655,6 +694,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * @param param the param
      * @return the session
      */
+    @Override
     public javax.servlet.http.HttpSession getSession(boolean param)
     {
         if (request == null)
@@ -670,6 +710,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return the user principal
      */
+    @Override
     public java.security.Principal getUserPrincipal()
     {
         if (request == null)
@@ -685,6 +726,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return true, if is requested session id from cookie
      */
+    @Override
     public boolean isRequestedSessionIdFromCookie()
     {
         if (request == null)
@@ -700,6 +742,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return true, if is requested session id from url
      */
+    @Override
     public boolean isRequestedSessionIdFromURL()
     {
         if (request == null)
@@ -715,6 +758,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return true, if is requested session id from url
      */
+    @Override
     public boolean isRequestedSessionIdFromUrl()
     {
         if (request == null)
@@ -730,6 +774,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return true, if is requested session id valid
      */
+    @Override
     public boolean isRequestedSessionIdValid()
     {
         if (request == null)
@@ -745,6 +790,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @return true, if is secure
      */
+    @Override
     public boolean isSecure()
     {
         if (request == null)
@@ -761,6 +807,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * @param str the str
      * @return true, if is user in role
      */
+    @Override
     public boolean isUserInRole(String str)
     {
         if (request == null)
@@ -776,6 +823,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * 
      * @param str the str
      */
+    @Override
     public void removeAttribute(String str)
     {
         if (request == null)
@@ -797,6 +845,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * @param str the str
      * @param obj the obj
      */
+    @Override
     public void setAttribute(String str, Object obj)
     {
         if (request == null)
@@ -818,6 +867,7 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
      * @param str the new character encoding
      * @throws UnsupportedEncodingException the unsupported encoding exception
      */
+    @Override
     public void setCharacterEncoding(String str) throws java.io.UnsupportedEncodingException
     {
         if (request == null)
@@ -853,5 +903,25 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
             fin[x] = value;
             parms.put(name, fin);
         }
+    }
+
+    @Override
+    public int getRemotePort() {
+        return request.getRemotePort();
+    }
+
+    @Override
+    public String getLocalName() {
+        return request.getLocalName();
+    }
+
+    @Override
+    public String getLocalAddr() {
+        return request.getLocalAddr();
+    }
+
+    @Override
+    public int getLocalPort() {
+        return request.getLocalPort();
     }
 }
