@@ -33,6 +33,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -60,26 +61,29 @@ public class Distributor implements InternalServlet
 {
     
     /** The log. */
-    static Logger log=SWBUtils.getLogger(Distributor.class);
+    private static Logger log=SWBUtils.getLogger(Distributor.class);
     
     /** The name. */
-    String name = "swb";
+    private String name = "swb";
     
     /** The agzip. */
-    boolean agzip = true;
+    private boolean agzip = true;
     
     /** The admin. */
-    boolean admin = true;
+    private boolean admin = true;
     
     /** The secure. */
-    boolean secure = false;
+    private boolean secure = false;
     
     /** The adm map. */
-    String admMap=null;
+    private String admMap=null;
+    
+    private static boolean supportSetCharEncoding=true;
     
     /* (non-Javadoc)
      * @see org.semanticwb.servlet.internal.InternalServlet#init(javax.servlet.ServletContext)
      */
+    @Override
     public void init(ServletContext scontext) 
     {
         log.event("Initializing InternalServlet Distributor...");
@@ -93,6 +97,7 @@ public class Distributor implements InternalServlet
     /* (non-Javadoc)
      * @see org.semanticwb.servlet.internal.InternalServlet#doProcess(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.servlet.internal.DistributorParams)
      */
+    @Override
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams)throws IOException 
     {
         long time=System.currentTimeMillis();
@@ -387,13 +392,13 @@ public class Distributor implements InternalServlet
                     //out.println("Muestra Plantilla:"+currTemplate);
                     if (ipfilter == -1) {
                         if (onlyContent) {
-                            currTemplate.buildContents(request, res, out, dparams, true, content);
+                            TemplateImp.buildContents(request, res, out, dparams, true, content);
                         } else {
                             currTemplate.build(request, res, out, user, webpage, true, content, dparams);
                         }
                     } else {
                         if (onlyContent) {
-                            currTemplate.buildContents(request, res, out, dparams, false, content);
+                            TemplateImp.buildContents(request, res, out, dparams, false, content);
                         } else {
                             currTemplate.build(request, res, out, user, webpage, false, content, dparams);
                         }
@@ -423,10 +428,32 @@ public class Distributor implements InternalServlet
                     contentType=resContentType;
                 }
                 response.setContentType(contentType);
+                //System.out.println("setContentType:"+contentType);
+
                 log.debug("dist: contentType:"+contentType);
 
+                String rescharset=SWBUtils.TEXT.getHomCharSet(response.getCharacterEncoding());
+                String defcharset=SWBUtils.TEXT.getHomCharSet(SWBUtils.TEXT.getDafaultEncoding());
+                log.debug("rescharset:"+rescharset+" default:"+defcharset);
+                //System.out.println("rescharset:"+rescharset+" default:"+defcharset);
+
+                if(!gzip && supportSetCharEncoding)
+                {
+                    if(!rescharset.equals(defcharset))
+                    {
+                        try
+                        {
+                            //System.out.println("setCharacterEncoding:"+rescharset);
+                            response.setCharacterEncoding(rescharset);
+                        }catch(NoSuchMethodError e)
+                        {
+                            supportSetCharEncoding=false;
+                        }
+                    }
+                }
+                
                 java.util.zip.GZIPOutputStream garr = null;
-                PrintWriter out = null;
+                PrintWriter out = null;                
                 
                 if (gzip) {
                     response.setHeader("Content-Encoding", "gzip");
@@ -437,27 +464,21 @@ public class Distributor implements InternalServlet
                 }                
                 //System.out.println("gzip:"+gzip);
 
-                String rescharset=SWBUtils.TEXT.getHomCharSet(response.getCharacterEncoding());
-                String defcharset=SWBUtils.TEXT.getHomCharSet(SWBUtils.TEXT.getDafaultEncoding());
-                log.debug("rescharset:"+rescharset+" default:"+defcharset);
                 String resp=res.toString();
-                //System.out.println("resp:"+resp);
-                if(rescharset.equals(defcharset))
-                {
-                    out.print(resp);
-                }else
+                
+                if((!supportSetCharEncoding || gzip)  && !rescharset.equals(defcharset))
                 {
                     out.print(SWBUtils.TEXT.encode(resp, rescharset));
+                }else
+                {
+                    out.print(resp);
                 }
+                
                 user.addVisitedWebPage(webpage);
-                long tfin = System.currentTimeMillis() - tini;
+                long tfin=System.currentTimeMillis() - tini;
                 out.println("\n<!--Time: " + tfin + "ms - SemanticWebBuilder: " + webpage + "--> ");  //TODO: encontrar una forma de configurar esto...
 
-                //if (gzip)
-                {
-                    //garr.close();
-                    out.close();
-                }
+                out.close();
             } catch (Exception e) {
                 log.error("Get template and compress output...",e);
                 return false;

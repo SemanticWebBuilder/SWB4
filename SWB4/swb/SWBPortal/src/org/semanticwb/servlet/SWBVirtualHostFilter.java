@@ -361,8 +361,9 @@ public class SWBVirtualHostFilter implements Filter
             if (catchErrors && serv instanceof Distributor)
             {
                 SWBHttpServletResponseWrapper resp = new SWBHttpServletResponseWrapper(_response);
-                resp.setTrapSendError(true);
+                resp.setTrapResponse(false);
                 resp.setTrapContentType(false);
+                resp.setTrapSendError(true);
                 serv.doProcess(_request, resp, dparams);
                 if (resp.isSendError())
                 {
@@ -381,10 +382,10 @@ public class SWBVirtualHostFilter implements Filter
                             _response.sendError(resp.getError(), resp.getErrorMsg());
                     }
                 }
-                else
-                {                    
-                    _response.getOutputStream().write(resp.toByteArray());
-                }
+//                else
+//                {                    
+//                    _response.getOutputStream().write(resp.toByteArray());
+//                }
             }
             else
             {
