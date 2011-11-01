@@ -100,7 +100,7 @@ public class IFrameContent extends GenericAdmResource
             String script = base.getAttribute("script");
             
             String scrolling = base.getAttribute("scrolling");
-System.out.println("scrolling="+scrolling);
+//System.out.println("scrolling="+scrolling);
             
             //out.print("<iframe id=\"ifc_"+base.getId()+"\" name=\"ifc_"+base.getId()+"\" ");
             out.print("<iframe id=\"iframecontentswb\" name=\"iframecontentswb\" ");
