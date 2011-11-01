@@ -128,7 +128,7 @@ if (paramRequest.getCallMethod() == paramRequest.Call_DIRECT) {
             query="{type:'directory'}" rootId="directoryRoot" rootLabel="Repositorio"
             childrenAttrs="children">
             </div>
-            <div dojoType="dijit.Tree" id="mytree" model="directoryModel" openOnClick="false">
+            <div dojoType="dijit.Tree" id="mytree" model="directoryModel" openOnClick="false" showRoot="false>
                 <script type="dojo/method" event="onClick" args="item">
                     setFrameSrc(directoryStore.getValue(item, "url"));
                 </script>
