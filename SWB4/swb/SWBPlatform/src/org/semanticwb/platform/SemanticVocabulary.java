@@ -400,6 +400,8 @@ public class SemanticVocabulary
                 log.warn(uri, e);
             }
         }
+        //System.out.println("getSemanticClass:"+uri+" "+cls);
+        //new Exception().printStackTrace();
         return cls;
     }
 
