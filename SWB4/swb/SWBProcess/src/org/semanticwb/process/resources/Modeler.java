@@ -95,9 +95,9 @@ public class Modeler extends GenericResource {
         ServletInputStream in = request.getInputStream();
         Document dom = SWBUtils.XML.xmlToDom(in);
         
-        System.out.println("RequestURI:"+request.getRequestURI());
-        System.out.println("dom:"+dom);
-        System.out.println("xml:"+SWBUtils.XML.domToXml(dom));
+        //System.out.println("RequestURI:"+request.getRequestURI());
+        //System.out.println("dom:"+dom);
+        //System.out.println("xml:"+SWBUtils.XML.domToXml(dom));
 
         if (!dom.getFirstChild().getNodeName().equals("req")) {
             response.sendError(404, request.getRequestURI());
@@ -112,7 +112,7 @@ public class Modeler extends GenericResource {
             response.sendError(404, request.getRequestURI());
             return;
         }
-        System.out.println("cmd:"+cmd);
+        //System.out.println("cmd:"+cmd);
 
         if (cmd.equals("getProcessJSON")) {
             try {
@@ -124,7 +124,7 @@ public class Modeler extends GenericResource {
                     String json = getProcessJSON(process).toString();
                     //out.print(json);
                     outs.write(json.getBytes());
-                    System.out.println(json);
+                    //System.out.println(json);
                     //out.print(SWBUtils.TEXT.decode(json, "UTF8"));
                     //System.out.println("json:"+json);
                 } else {
@@ -147,7 +147,7 @@ public class Modeler extends GenericResource {
             }
             //out.print(new String(ret.getBytes()));
             outs.write(ret.getBytes());
-            System.out.println("out:"+new String(ret.getBytes()));
+            //System.out.println("out:"+new String(ret.getBytes()));
         }
     }
 
@@ -209,9 +209,11 @@ public class Modeler extends GenericResource {
                                 log.error("Error en elemento del JSON. ", ej);
                             }
                         }
-                        createProcessElements(process, request, response, paramRequest, hmjson);
+                        boolean endsGood = createProcessElements(process, request, response, paramRequest, hmjson);
+                        if(!endsGood) return getError(3);
                     } catch (Exception ejs) {
                         log.error("Error en el JSON recibido. ", ejs);
+                        return getError(3);
                     }
                 }
             } catch (Exception e) {
@@ -666,10 +668,22 @@ public class Modeler extends GenericResource {
         return dom;
     }
 
-    public void createProcessElements(org.semanticwb.process.model.Process process, HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest, HashMap<String, JSONObject> hmjson) {
+    public boolean createProcessElements(org.semanticwb.process.model.Process process, HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest, HashMap<String, JSONObject> hmjson) {
 
-        //System.out.println("CreateProcessElements");
+        //Revisando si existen problemas
 
+        boolean ret = false;
+        if(reviewJSON(process,request,response,paramsRequest,hmjson,false))
+        {
+            // no se encontraron problemas en el proceso, actualiza
+            ret = reviewJSON(process,request,response,paramsRequest,hmjson,true);
+        }
+        return ret;
+    }
+    
+    public boolean reviewJSON(org.semanticwb.process.model.Process process, HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest, HashMap<String, JSONObject> hmjson, boolean bupdate){
+        
+        boolean ret = Boolean.TRUE;
         HashMap<String, String> hmori = loadProcessElements(process);
         HashMap<String, String> hmnew = new HashMap();
 
@@ -698,7 +712,6 @@ public class Modeler extends GenericResource {
                 if (semclass == null) {
                     continue;
                 }
-
                 try {
                     // primero se crean los elementos graficos del modelo
                     if (semclass.isSubClass(GraphicalElement.swp_GraphicalElement)) {
@@ -710,51 +723,51 @@ public class Modeler extends GenericResource {
                         }
 
                         try {
-                            isMultiInstance = new Boolean(json.getBoolean(PROP_isMultiInstance));
+                            isMultiInstance = json.getBoolean(PROP_isMultiInstance);
                             //System.out.println("MultiInstancia: " + isMultiInstance.booleanValue());
 
                         } catch (Exception e) {
                             isMultiInstance = null;
                         }
                         try {
-                            isSeqMultiInstance = new Boolean(json.getBoolean(PROP_isSeqMultiInstance));
+                            isSeqMultiInstance = json.getBoolean(PROP_isSeqMultiInstance);
                             //System.out.println("SeqMultiInstancia: " + isMultiInstance.booleanValue());
 
                         } catch (Exception e) {
                             isMultiInstance = null;
                         }
                         try {
-                            isLoop = new Boolean(json.getBoolean(PROP_isLoop));
+                            isLoop = json.getBoolean(PROP_isLoop);
                             //System.out.println("Ciclo: " + isLoop.booleanValue());
                         } catch (Exception e) {
                             isLoop = null;
                             //System.out.println("Ciclo: null");
                         }
                         try {
-                            isForCompensation = new Boolean(json.getBoolean(PROP_isForCompensation));
+                            isForCompensation = json.getBoolean(PROP_isForCompensation);
                             //System.out.println("Compensacion");
 
                         } catch (Exception e) {
                             isForCompensation = null;
                         }
                         try {
-                            isAdHoc = new Boolean(json.getBoolean(PROP_isAdHoc));
+                            isAdHoc = json.getBoolean(PROP_isAdHoc);
                         } catch (Exception e) {
                             isAdHoc = null;
                         }
                         try {
-                            isTransaction = new Boolean(json.getBoolean(PROP_isTransaction));
+                            isTransaction = json.getBoolean(PROP_isTransaction);
                         } catch (Exception e) {
                             isTransaction = null;
                         }
                         try {
-                            isInterrupting = new Boolean(json.getBoolean(PROP_isInterrupting));
+                            isInterrupting = json.getBoolean(PROP_isInterrupting);
                         } catch (Exception e) {
                             isInterrupting = null;
                         }
 
                         try {
-                            isCollection = new Boolean(json.getBoolean(PROP_isCollection));
+                            isCollection = json.getBoolean(PROP_isCollection);
                             //System.out.println("Viene isCollecion:"+isCollection.booleanValue());
                         } catch (Exception e) {
                             isCollection = null;
@@ -788,39 +801,39 @@ public class Modeler extends GenericResource {
                                 // actualizando datos en elemento existente
                                 ge = (GraphicalElement) go;
                                 if (!ge.getTitle().equals(title)) {
-                                    ge.setTitle(title);
+                                    if(bupdate) ge.setTitle(title);
                                 }
                                 if ((null != description && ge.getDescription() != null && !ge.getDescription().equals(description)) || (null != description && ge.getDescription() == null)) {
-                                    ge.setDescription(description);
+                                    if(bupdate)  ge.setDescription(description);
                                 }
 
                                 if (ge.getX() != x) {
-                                    ge.setX(x);
+                                    if(bupdate) ge.setX(x);
                                 }
                                 if (ge.getY() != y) {
-                                    ge.setY(y);
+                                    if(bupdate) ge.setY(y);
                                 }
                                 if (ge.getWidth() != w) {
-                                    ge.setWidth(w);
+                                    if(bupdate) ge.setWidth(w);
                                 }
                                 if (ge.getHeight() != h) {
-                                    ge.setHeight(h);
+                                    if(bupdate) ge.setHeight(h);
                                 }
                                 if (ge.getLabelSize() != labelSize) {
-                                    ge.setLabelSize(labelSize);
+                                    if(bupdate) ge.setLabelSize(labelSize);
                                 }
 
                                 // si es un Sortable se revisa si tiene index
                                 if (ge instanceof Sortable) {
                                     Sortable sorble = (Sortable) go;
-                                    sorble.setIndex(index);
+                                    if(bupdate) sorble.setIndex(index);
                                 }
 
                                 if (go instanceof ActivityConfable) {  //Task
                                     ActivityConfable tsk = (ActivityConfable) go;
 
                                     if (null != isForCompensation && isForCompensation.booleanValue()) {
-                                        tsk.setForCompensation(isForCompensation.booleanValue());
+                                        if(bupdate) tsk.setForCompensation(isForCompensation.booleanValue());
                                     }
 
                                     if (null != isMultiInstance) {
@@ -831,19 +844,23 @@ public class Modeler extends GenericResource {
                                             if (loopchar == null) // si no existe lo crea
                                             {
                                                 // si no existe se crea uno nuevo y se asigna al task
-                                                loopchar = MultiInstanceLoopCharacteristics.ClassMgr.createMultiInstanceLoopCharacteristics(procsite);
-                                                tsk.setLoopCharacteristics(loopchar);
+                                                if(bupdate) {
+                                                    loopchar = MultiInstanceLoopCharacteristics.ClassMgr.createMultiInstanceLoopCharacteristics(procsite);
+                                                    tsk.setLoopCharacteristics(loopchar);
+                                                }
                                             } else if (!(loopchar instanceof MultiInstanceLoopCharacteristics)) {
-                                                loopchar.getSemanticObject().remove();
+                                                if(bupdate) loopchar.getSemanticObject().remove();
                                             }
                                             // si no existe se crea uno nuevo y se asigna al task
-                                            loopchar = MultiInstanceLoopCharacteristics.ClassMgr.createMultiInstanceLoopCharacteristics(procsite);
-                                            tsk.setLoopCharacteristics(loopchar);
+                                            if(bupdate) {
+                                                loopchar = MultiInstanceLoopCharacteristics.ClassMgr.createMultiInstanceLoopCharacteristics(procsite);
+                                                tsk.setLoopCharacteristics(loopchar);
+                                            }
                                         } else {
                                             // si existe y cambio y ya no es MultiInstance se elimina el MultiInstanceLoopCharacteristics asociado
                                             LoopCharacteristics loopchar = tsk.getLoopCharacteristics();
                                             if (null != loopchar && loopchar instanceof MultiInstanceLoopCharacteristics) {
-                                                loopchar.getSemanticObject().remove();
+                                                if(bupdate) loopchar.getSemanticObject().remove();
                                             }
                                         }
                                     }
@@ -857,14 +874,18 @@ public class Modeler extends GenericResource {
                                             {
                                                 // si no existe se crea uno nuevo y se asigna al task
                                                 //System.out.println("creando LoopCharacteristic....");
-                                                loopchar = StandarLoopCharacteristics.ClassMgr.createStandarLoopCharacteristics(procsite);
-                                                tsk.setLoopCharacteristics(loopchar);
+                                                if(bupdate) {
+                                                    loopchar = StandarLoopCharacteristics.ClassMgr.createStandarLoopCharacteristics(procsite);
+                                                    tsk.setLoopCharacteristics(loopchar);
+                                                }
                                             } else if (!(loopchar instanceof StandarLoopCharacteristics)) {
-                                                loopchar.getSemanticObject().remove();
+                                                if(bupdate) loopchar.getSemanticObject().remove();
                                                 // si no existe se crea uno nuevo y se asigna al task
                                                 //System.out.println("eliminando y creando LoopCharacteristic....");
-                                                loopchar = StandarLoopCharacteristics.ClassMgr.createStandarLoopCharacteristics(procsite);
-                                                tsk.setLoopCharacteristics(loopchar);
+                                                if(bupdate) {
+                                                    loopchar = StandarLoopCharacteristics.ClassMgr.createStandarLoopCharacteristics(procsite);
+                                                    tsk.setLoopCharacteristics(loopchar);
+                                                }
                                             }
 
                                         } else {
@@ -872,7 +893,7 @@ public class Modeler extends GenericResource {
                                             LoopCharacteristics loopchar = tsk.getLoopCharacteristics();
                                             if (null != loopchar && loopchar instanceof StandarLoopCharacteristics) {
                                                 //System.out.println("eliminando LoopCharacteristic....");
-                                                loopchar.getSemanticObject().remove();
+                                                if(bupdate) loopchar.getSemanticObject().remove();
                                             }
                                         }
                                     }
@@ -883,30 +904,33 @@ public class Modeler extends GenericResource {
                                     Collectionable colble = (Collectionable) go;
                                     if (isCollection != null) {
                                         //System.out.println("Save Collection ===>"+isCollection.booleanValue());
-                                        colble.setCollection(isCollection.booleanValue());
+                                        if(bupdate) colble.setCollection(isCollection.booleanValue());
                                     }
                                 }
                                 // se agrega en este hm para la parte de la secuencia del proceso
-                                hmnew.put(uri, go.getURI());
+                                if(bupdate) hmnew.put(uri, go.getURI());
                             }
                             // se quita elemento que ha sido actualizado
-                            hmori.remove(uri);
+                            if(bupdate) hmori.remove(uri);
 
                         } else {
                             //Se genera el nuevo elemento
                             //System.out.println("new element: "+semclass);
                             long id = model.getCounter(semclass);
-                            GenericObject gi = model.createGenericObject(model.getObjectUri(String.valueOf(id), semclass), semclass);
-                            ge = (GraphicalElement) gi;
-                            ge.setTitle(title);
-                            if (null != description) {
-                                ge.setDescription(description);
-                            }
-                            ge.setX(x);
-                            ge.setY(y);
-                            ge.setHeight(h);
-                            ge.setWidth(w);
-
+                            GenericObject gi = null;
+                            if(bupdate){
+                                gi = model.createGenericObject(model.getObjectUri(String.valueOf(id), semclass), semclass);
+                            
+                                ge = (GraphicalElement) gi;
+                                ge.setTitle(title);
+                                if (null != description) {
+                                    ge.setDescription(description);
+                                }
+                                ge.setX(x);
+                                ge.setY(y);
+                                ge.setHeight(h);
+                                ge.setWidth(w);
+                            
                             //System.out.println("uri: "+uri+" new uri: "+gi.getURI());
 
                             // si es un Sortable se revisa si tiene index
@@ -986,11 +1010,11 @@ public class Modeler extends GenericResource {
                                 }
                             }
 
-
+                            }
 
 
                             // se agrega nuevo elemento en el hmnew
-                            hmnew.put(uri, gi.getURI());
+                            if(bupdate) hmnew.put(uri, gi.getURI());
 
                             ///////////////////////////////////////
 //                        if(semclass.isSubClass(Task.swp_Task))
@@ -1013,7 +1037,7 @@ public class Modeler extends GenericResource {
 
                             if (semclass.equals(UserTask.swp_UserTask)) {
 
-                                if (procsite.getResourceType("ProcessForm") == null) {
+                                if (procsite.getResourceType("ProcessForm") == null && bupdate) {
                                     ResourceType resType = procsite.createResourceType("ProcessForm");
                                     resType.setTitle("ProcessForm");
                                     resType.setTitle("ProcessForm", "en");
@@ -1024,7 +1048,7 @@ public class Modeler extends GenericResource {
                                     resType.setResourceMode(ResourceType.MODE_SYSTEM);
                                 }
 
-                                if (procsite.getResourceType("ProcessForm") != null) {
+                                if (procsite.getResourceType("ProcessForm") != null && bupdate) {
                                     Resource res = procsite.createResource();
                                     res.setResourceType(procsite.getResourceType("ProcessForm"));
                                     res.setTitle(title);
@@ -1039,6 +1063,8 @@ public class Modeler extends GenericResource {
                     } // termina if graphicalElement
                 } catch (Exception e) {
                     log.error("Error al procesar el JSON Object para la creacion y/o actualizar GraphicalElement... ", e);
+                    ret = false;
+                    break;
                 }
             } //termina while
 
@@ -1063,7 +1089,7 @@ public class Modeler extends GenericResource {
                     if (go instanceof GraphicalElement) {
                         ge = (GraphicalElement) go;
                     }
-                    if (ge != null) {
+                    if (ge != null && bupdate) {
                         if (container != null && container.trim().length() == 0) {
                             ge.setContainer(process);
                         } else {
@@ -1124,46 +1150,46 @@ public class Modeler extends GenericResource {
                         go = ont.getGenericObject(hmori.get(uri));
                         co = (ConnectionObject) go;
                         if (!co.getTitle().equals(title)) {
-                            co.setTitle(title);
+                            if(bupdate) co.setTitle(title);
                         }
 
                         if ((null != description && co.getDescription() != null && !co.getDescription().equals(description)) || (null != description && co.getDescription() == null)) {
-                            co.setDescription(description);
+                            if(bupdate) co.setDescription(description);
                         }
 
                         if ((null != sconnpoints && co.getConnectionPoints() != null && !co.getConnectionPoints().equals(sconnpoints)) || (null != sconnpoints && co.getConnectionPoints() == null)) {
-                            co.setConnectionPoints(sconnpoints);
+                            if(bupdate) co.setConnectionPoints(sconnpoints);
                         }
 
                         if (!co.getSource().getURI().equals(start)) {
                             if (hmnew.get(start) != null) {
                                 gostart = ont.getGenericObject(hmnew.get(start));
-                                co.setSource((GraphicalElement) gostart);
+                                if(bupdate) co.setSource((GraphicalElement) gostart);
                             }
                         }
                         if (!co.getTarget().getURI().equals(end)) {
                             if (hmnew.get(end) != null) {
                                 goend = ont.getGenericObject(hmnew.get(end));
-                                co.setTarget((GraphicalElement) goend);
+                                if(bupdate) co.setTarget((GraphicalElement) goend);
                             }
                         }
-                        hmori.remove(uri);
+                        if(bupdate) hmori.remove(uri);
                     } else {
                         if (hmnew.get(start) != null && hmnew.get(end) != null) {
                             long id = model.getCounter(semclass);
                             go = model.createGenericObject(model.getObjectUri(String.valueOf(id), semclass), semclass);
                             co = (ConnectionObject) go;
-                            co.setTitle(title);
+                            if(bupdate) co.setTitle(title);
                             if (null != description) {
-                                co.setDescription(description);
+                                if(bupdate) co.setDescription(description);
                             }
                             if (null != sconnpoints) {
-                                co.setConnectionPoints(sconnpoints);
+                                if(bupdate) co.setConnectionPoints(sconnpoints);
                             }
                             gostart = ont.getGenericObject(hmnew.get(start));
                             goend = ont.getGenericObject(hmnew.get(end));
-                            co.setSource((GraphicalElement) gostart);
-                            co.setTarget((GraphicalElement) goend);
+                            if(bupdate) co.setSource((GraphicalElement) gostart);
+                            if(bupdate) co.setTarget((GraphicalElement) goend);
                         }
                     }
                 }
@@ -1178,15 +1204,19 @@ public class Modeler extends GenericResource {
                 try {
                     so = ont.getSemanticObject(hmori.get(key));
                     if (so != null) {
-                        so.remove();
+                        if(bupdate) so.remove();
                     }
                 } catch (Exception e) {
                     log.error("Error al tratar de eliminar elemento del proceso...", e);
+                    ret=false;
+                    break;
                 }
             }
 
         } catch (Exception e) {
             log.error("Error al actualizar el modelo del proceso. Modeler.crreateProcessElements()", e);
+            ret=false;
         }
+        return ret;
     }
 }
