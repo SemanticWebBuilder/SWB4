@@ -246,7 +246,7 @@ public class SWBAProcessInstanceList extends GenericResource {
             } else if ("pidetail".equals(action)) {
 
                 String pinsturi = request.getParameter("suripi");
-
+                System.out.println(pinsturi);
                 GenericObject pigobj = ont.getGenericObject(pinsturi);
 
                 ProcessInstance pi = null;
@@ -281,6 +281,8 @@ public class SWBAProcessInstanceList extends GenericResource {
                 out.print("<th>&nbsp;</th>");
                 out.println("</tr>");
 
+                //pi.getSemanticObject().printStatements();
+                
                 Iterator<FlowNodeInstance> actit = SWBComparator.sortByCreated(pi.listFlowNodeInstances());
                 while (actit.hasNext()) {
                     FlowNodeInstance obj = actit.next();
