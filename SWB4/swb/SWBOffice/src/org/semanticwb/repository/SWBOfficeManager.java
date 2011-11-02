@@ -83,10 +83,10 @@ public class SWBOfficeManager implements OfficeManager
         log.event("Initializing SWBOfficeManager ...");
         this.manager = manager;
         HashMap<String, String> types = getContentTypes();
-        for (String type : types.keySet())
-        {
-            log.event("Type of office content " + type + " " + types.get(type));
-        }
+//        for (String type : types.keySet())
+//        {
+//            log.event("Type of office content " + type + " " + types.get(type));
+//        }
     }
 
     /**
