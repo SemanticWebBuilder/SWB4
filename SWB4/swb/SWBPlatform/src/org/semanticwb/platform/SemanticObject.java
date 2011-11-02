@@ -148,9 +148,12 @@ public class SemanticObject
         
     private void initInverse(StmtIterator stit)
     {
+        //System.out.println("initInverse");
+        //new Exception().printStackTrace();
         while (stit.hasNext()) 
         {            
             Statement st = stit.next();
+            //System.out.println("-->"+st);
             m_propsInv.add(st);
         }
         stit.close();
@@ -174,7 +177,7 @@ public class SemanticObject
         {
             initInverse(m_model.getRDFModel().listStatements(null, null, m_res));
         }
-    }  
+    }
     
     public void clearInvProps()
     {
@@ -874,6 +877,11 @@ public class SemanticObject
             Statement statement = it.next();
             System.out.println(statement);
         }
+        it=getPropsInv().iterator();
+        while (it.hasNext()) {
+            Statement statement = it.next();
+            System.out.println(statement);
+        }        
     }
     
     private Statement getProperty(Property prop)
@@ -1056,13 +1064,7 @@ public class SemanticObject
                     SemanticObject sobj=getSemanticObject(res.getURI());
                     if(sobj!=null)
                     {
-                        if(contains)
-                        {
-                            if(!sobj.getPropsInv().contains(stmt))
-                            {
-                                sobj.addInvStatement(stmt);
-                            }
-                        }else
+                        if(!sobj.getPropsInv().contains(stmt))
                         {
                             sobj.addInvStatement(stmt);
                         }
@@ -1121,6 +1123,8 @@ public class SemanticObject
     
     private void addInvStatement(Statement stmt)
     {
+        //System.out.println(stmt);
+        //new Exception().printStackTrace();
         getPropsInv().add(stmt);        
     }    
     
