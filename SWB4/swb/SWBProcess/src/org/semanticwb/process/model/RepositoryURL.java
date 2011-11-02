@@ -46,10 +46,13 @@ public class RepositoryURL extends org.semanticwb.process.model.base.RepositoryU
         v.setVersionNumber(ver);
         v.setVersionValue(sver);
         
-        ItemAwareStatus iawStat = ItemAwareStatus.ClassMgr.getItemAwareStatus(status, getProcessSite());
-        setStatus(iawStat);
+        if(status!=null)
+        {
+            ItemAwareStatus iawStat = ItemAwareStatus.ClassMgr.getItemAwareStatus(status, getProcessSite());
+            setStatus(iawStat);
 
-        v.setProperty("status", status);
+            v.setProperty("status", status);
+        }
         
         setActualVersion(v);
         setLastVersion(v);

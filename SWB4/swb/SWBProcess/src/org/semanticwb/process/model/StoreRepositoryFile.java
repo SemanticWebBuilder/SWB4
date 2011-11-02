@@ -31,8 +31,11 @@ public class StoreRepositoryFile extends org.semanticwb.process.model.base.Store
             String n2=getNodeVarName();
             if(n1!=null && n2!=null)
             {
-                obj=ref.getProcessObject();
-                break;
+                if(n1.equals(n2))
+                {
+                    obj=ref.getProcessObject();
+                    break;
+                }
             }
             System.out.println("n1:"+n1);
             System.out.println("n2:"+n2);
@@ -72,7 +75,7 @@ public class StoreRepositoryFile extends org.semanticwb.process.model.base.Store
             
             try
             {
-                file.storeFile(f.getValue(), new FileInputStream(filePath), "Created by process:"+instance.getProcessInstance().getProcessType().getId()+", processInstance:"+instance.getProcessInstance().getId(), false,getNodeStatus().getId());
+                file.storeFile(f.getValue(), new FileInputStream(filePath), "Created by process:"+instance.getProcessInstance().getProcessType().getId()+", processInstance:"+instance.getProcessInstance().getId(), false,getNodeStatus()!=null?getNodeStatus().getId():null);
             }catch(Exception e)
             {
                 log.error(e);
@@ -109,7 +112,7 @@ public class StoreRepositoryFile extends org.semanticwb.process.model.base.Store
             
             try
             {
-                rurl.storeFile(f.getValue(), "Created by process:"+instance.getProcessInstance().getProcessType().getId()+", processInstance:"+instance.getProcessInstance().getId(), false,getNodeStatus().getId());
+                rurl.storeFile(f.getValue(), "Created by process:"+instance.getProcessInstance().getProcessType().getId()+", processInstance:"+instance.getProcessInstance().getId(), false,getNodeStatus()!=null?getNodeStatus().getId():null);
             }catch(Exception e)
             {
                 log.error(e);
