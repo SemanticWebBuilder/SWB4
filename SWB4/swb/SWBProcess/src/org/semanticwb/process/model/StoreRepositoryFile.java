@@ -37,11 +37,11 @@ public class StoreRepositoryFile extends org.semanticwb.process.model.base.Store
                     break;
                 }
             }
-            System.out.println("n1:"+n1);
-            System.out.println("n2:"+n2);
+            //System.out.println("n1:"+n1);
+            //System.out.println("n2:"+n2);
         }
         
-        System.out.println("obj:"+obj);
+        //System.out.println("obj:"+obj);
         
         if(obj!=null && obj instanceof org.semanticwb.process.schema.File)
         {
