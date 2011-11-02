@@ -691,7 +691,6 @@ public class SWBPortal
                 urep.setCallBackHandlerClassName("org.semanticwb.security.auth.SWB4CallbackHandlerLoginPasswordImp");
                 site.setUserRepository(urep);
             }
-
         }
         catch (Exception e)
         {
