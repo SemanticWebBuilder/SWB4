@@ -1959,7 +1959,7 @@ public class SemanticObject
                     if(obj!=null && stack!=null && !stack.contains(obj))obj.remove(stack);
                 }else
                 {
-                    obj.remove(st);
+                    if(obj!=null)obj.remove(st);
                 }
             }
         }        
