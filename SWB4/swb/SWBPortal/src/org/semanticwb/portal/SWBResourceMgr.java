@@ -167,6 +167,7 @@ private SWBResourceCachedMgr cache;
                     if(!resourceOWLS.contains(path))
                     {
                         resourceOWLS.add(path);
+                        //System.out.println("path:"+path);
                         InputStream in=getClass().getResourceAsStream(path);
                         if(in!=null)
                         {
@@ -176,7 +177,7 @@ private SWBResourceCachedMgr cache;
                             SemanticModel model=new SemanticModel(cls,m);
                             SWBPlatform.getSemanticMgr().getSchema().addSubModel(model,false);
                             //SWBPlatform.getSemanticMgr().loadBaseVocabulary();
-                            System.out.println(cls);
+                            //System.out.println(cls);
                         }
                     }
                 }catch(Exception e){log.error("Error loading OWL File:"+cls,e);}
