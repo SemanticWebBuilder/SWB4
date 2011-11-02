@@ -128,7 +128,6 @@ public class SemanticObject
     
     private void init(StmtIterator stit)
     {
-        boolean classfound=false;
         while (stit.hasNext()) 
         {            
             Statement st = stit.next();
@@ -136,21 +135,17 @@ public class SemanticObject
             
             if(st.getPredicate().equals(RDF.type))
             {
-                if(!classfound)
+                if(m_cls==null || !m_cls.isSWBClass())
                 {
                     m_cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(st.getResource().getURI());
-                    if(m_cls!=null && m_cls.isSWBClass())
-                    {
-                        classfound=true;
-                        //System.out.println("ClassFound");
-                    }
-                    //System.out.println("Class:"+m_cls);
-                }            
+                    //System.out.println("ClassFound:"+this+" "+m_cls);
+                }
+                //System.out.println("Class:"+m_cls);
             }
         }
         stit.close();
     }
-    
+        
     private void initInverse(StmtIterator stit)
     {
         while (stit.hasNext()) 
@@ -237,12 +232,14 @@ public class SemanticObject
                 
                 if(prop.equals(RDF.type))
                 {
-                    //if(model.getName().equals("uradm"))                    
+                    //if(model.getName().equals("uradm"))   
+                    //if(sobj.getURI().endsWith(":45"))
                     //System.out.println("obj:"+sobj+" "+sobj.m_cls+" "+prop);
                     if(sobj.m_cls==null || !sobj.m_cls.isSWBClass())
                     {
                         sobj.m_cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(obj.asResource().getURI());
                         //if(model.getName().equals("uradm"))                        
+                        //if(sobj.getURI().endsWith(":45"))
                         //System.out.println("cls:"+sobj.m_cls+" "+subj);
                     }            
                 }
@@ -667,6 +664,21 @@ public class SemanticObject
      */
     public SemanticClass getSemanticClass()
     {
+        if(m_cls==null)
+        {
+            List stmts=getProps();
+            for(int x=0;x<stmts.size();x++)
+            {
+                Statement st=(Statement)stmts.get(x);
+                if(st.getPredicate().equals(RDF.type))
+                {
+                    if(m_cls==null || !m_cls.isSWBClass())
+                    {
+                        m_cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(st.getResource().getURI());
+                    }
+                }
+            }            
+        }
         return m_cls;
     }   
     
@@ -1991,6 +2003,8 @@ public class SemanticObject
         }else                                           //es un objeto
         {
             SWBPlatform.getSemanticMgr().notifyChange(this, null, null, ACT_REMOVE);
+            
+            if(this.getSemanticClass()==null)printStatements();
             
             //TODO:revisar esto de vic
             Iterator<SemanticProperty> properties = this.getSemanticClass().listProperties();
