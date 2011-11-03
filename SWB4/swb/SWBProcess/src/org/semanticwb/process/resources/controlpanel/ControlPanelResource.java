@@ -195,7 +195,7 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
         User user = paramRequest.getUser();
         String sortType = request.getParameter("sort");
         int itemsPerPage = getItemsPerPage();
-        int statusFilter = STATUS_ALL;
+        int statusFilter = ProcessInstance.STATUS_PROCESSING;
         int page = 1;
 
         if (sortType == null || sortType.trim().equals("")) {
@@ -289,7 +289,7 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
     }
 
     /***
-     * Obtiene la lista de instancias de procesos de un sitio filtradas por
+     * Obtiene la lista de instancias de procesos de un sitio filtradas por 
      * grupo y/o estado.
      * @param site Sitio Web de Procesos del cual se listarán los procesos.
      * @param group Grupo al que deberán pertenecer los procesos.
