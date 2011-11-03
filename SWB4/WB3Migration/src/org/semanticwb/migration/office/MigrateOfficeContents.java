@@ -31,7 +31,6 @@ import com.infotec.wb.core.db.RecResourceType;
 import com.infotec.wb.lib.WBResource;
 import com.infotec.wb.util.WBUtils;
 import java.io.File;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import org.semanticwb.Logger;

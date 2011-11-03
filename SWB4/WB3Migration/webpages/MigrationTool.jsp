@@ -1274,7 +1274,7 @@
                                             {
                                                 try
                                                 {
-                                                    res = MigrateOfficeContents.migrateResourceFrom32(rres, siteid, new File(path2));
+                                                    res = MigrateOfficeContents.migrateResourceFrom32(rres, siteid, new java.io.File(path2));
                                                 }
                                                 catch(Exception e)
                                                 {
@@ -2039,7 +2039,7 @@
 <%!
 
     // revisa estructura de los tópicos utilizados para las asociaciones
-    void parentReview(com.infotec.topicmaps.Topic tpTipo,WebPage wpage)
+    void parentReview(com.infotec.topicmaps.Topic tpTipo,org.semanticwb.model.WebPage wpage)
     {
         System.out.println("Parent Review..."+tpTipo.getId()+", "+wpage.getId());
         WebPage wp = null;
@@ -2061,7 +2061,7 @@
         }
     }
 
-    void setWebPageAssociation(com.infotec.topicmaps.Topic tp, WebSite ws, String occType, String UserRepId, boolean reviewActUnact)
+    void setWebPageAssociation(com.infotec.topicmaps.Topic tp, org.semanticwb.model.WebSite ws, String occType, String UserRepId, boolean reviewActUnact)
     {
         WebPage wp = ws.getWebPage(tp.getId()); // obtiene el WebPage home
         if(wp!=null)
