@@ -31,7 +31,9 @@ String iStatus = "STATUS_UNDEFINED";
 String pgId = "";
 String label = "";
 String lang = "es";
-String statusClass = ""; 
+String statusClass = "";
+int wdays = 15;
+int adays = 30;
 ProcessGroup pGroup = null;
 int activeInstances = 0;
 int closedInstances = 0;
@@ -47,6 +49,9 @@ if (args != null) {
     if (pgId != null && !pgId.trim().equals("")) {
         pGroup = ProcessGroup.ClassMgr.getProcessGroup(pgId, paramRequest.getWebPage().getWebSite());
     }
+    String _adays = (String) args.get("adays");
+    String _wdays = (String) args.get("wdays");
+    System.out.println("adays:"+ _adays+", wdays"+_wdays);
     
     label = (String) args.get("label");
 }
