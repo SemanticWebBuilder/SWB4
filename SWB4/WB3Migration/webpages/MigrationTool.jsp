@@ -2370,14 +2370,19 @@
                 {
                     if(redirectUrl.startsWith("furl:"))
                     {
+                        //Revisar Friendly URL
+                        FriendlyURL furl = FriendlyURL.ClassMgr.createFriendlyURL(ws);
                         redirectUrl = redirectUrl.substring(redirectUrl.indexOf("furl:")+5);
-                        wp.setWebPageURL(redirectUrl);
-                        wp.setWebPageURLType(2); // ruta amigable
+                        //wp.setWebPageURL(redirectUrl);
+                        furl.setURL(redirectUrl);
+                        furl.setWebPage(wp);
+                        wp.addFriendlyURL(furl);
+                        //wp.setWebPageURLType(2); // ruta amigable
                     }
                     else
                     {
                         wp.setWebPageURL(redirectUrl);
-                        wp.setWebPageURLType(1); // ruta redireccion
+                        //wp.setWebPageURLType(1); // ruta redireccion
                     }
                 }
             }
