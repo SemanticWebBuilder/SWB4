@@ -1,4 +1,55 @@
 <%@page import="org.semanticwb.model.Resourceable"%><%@page import="java.text.SimpleDateFormat"%><%@page import="org.semanticwb.model.GenericObject"%><%@page import="org.semanticwb.model.Country"%><%@page import="org.semanticwb.model.User"%><%@page import="org.semanticwb.SWBUtils"%><%@page import="org.semanticwb.platform.SemanticObject"%><%@page import="org.semanticwb.servlet.SWBHttpServletResponseWrapper"%><%@page import="org.semanticwb.portal.api.SWBResource"%><%@page import="org.semanticwb.portal.api.SWBResourceURL"%><%@page import="org.semanticwb.SWBPortal"%><%@page import="java.text.DateFormat"%><%@page import="java.util.Locale"%><%@page import="org.semanticwb.portal.resources.sem.news.*"%><%@page import="org.semanticwb.model.Resource"%><%@page import="java.util.*"%><%@page import="org.semanticwb.model.GenericIterator"%><%@page import="org.semanticwb.model.WebPage"%><jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/><%!
+    public String getTitleURL(String title)
+    {
+        title = title.toLowerCase();
+        StringBuilder sb = new StringBuilder();
+
+        for (char s : title.toCharArray())
+        {
+            if (Character.isWhitespace(s))
+            {
+                sb.append('-');
+            }
+            else if (s == '&')
+            {
+                sb.append('-');
+            }
+            else if (s == 'á')
+            {
+                sb.append('a');
+            }
+            else if (s == 'é')
+            {
+                sb.append('e');
+            }
+            else if (s == 'í')
+            {
+                sb.append('i');
+            }
+            else if (s == 'ó')
+            {
+                sb.append('o');
+            }
+            else if (s == 'ú')
+            {
+                sb.append('u');
+            }
+            else if (s == '?')
+            {
+                sb.append('-');
+            }
+            else if (Character.isLetterOrDigit(s))
+            {
+                sb.append(s);
+            }
+            else
+            {
+                sb.append('-');
+            }
+        }
+        return sb.toString();
+    }
+
     class SWBNewContentComparator implements Comparator<SWBNewContent>
     {
 
@@ -150,47 +201,47 @@
 %>
 
 <%
-                                int npages = contentstoshow.size() / 3;
-                                if (contentstoshow.size() % 3 != 0)
-                                {
-                                    npages++;
-                                }
-                                if (npages > 3)
-                                {
-                                    npages = 3;
-                                }
-                                int npage = 1;
-                                if (request.getParameter("page") != null)
-                                {
-                                    try
-                                    {
-                                        npage = Integer.parseInt(request.getParameter("page"));
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        e.printStackTrace();
-                                    }
-                                }
-                                int max = npage * 3;
-                                int min = max - 2;
+                int npages = contentstoshow.size() / 3;
+                if (contentstoshow.size() % 3 != 0)
+                {
+                    npages++;
+                }
+                if (npages > 3)
+                {
+                    npages = 3;
+                }
+                int npage = 1;
+                if (request.getParameter("page") != null)
+                {
+                    try
+                    {
+                        npage = Integer.parseInt(request.getParameter("page"));
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                int max = npage * 3;
+                int min = max - 2;
 
 
 
 %>
 <h3><%=decode(mainTitle)%></h3>
 <%                //if (npages > 1)
-                                {
-                                    int prepage = npage;
-                                    if (prepage > 1)
-                                    {
-                                        prepage--;
-                                    }
-                                    SWBResourceURL anterior = paramRequest.getRenderUrl();
-                                    anterior.setCallMethod(SWBResourceURL.Call_DIRECT);
-                                    anterior.setParameter("page", String.valueOf(prepage));
-                                    anterior.setParameter("mode", "strategy");
-                                    anterior.setParameter("div", div);
-                                    anterior.setParameter("mainTitle", mainTitle);
+                {
+                    int prepage = npage;
+                    if (prepage > 1)
+                    {
+                        prepage--;
+                    }
+                    SWBResourceURL anterior = paramRequest.getRenderUrl();
+                    anterior.setCallMethod(SWBResourceURL.Call_DIRECT);
+                    anterior.setParameter("page", String.valueOf(prepage));
+                    anterior.setParameter("mode", "strategy");
+                    anterior.setParameter("div", div);
+                    anterior.setParameter("mainTitle", mainTitle);
 
 %>
 
@@ -247,12 +298,12 @@
     <div style="clear: both; "></div>
 </div>
 <%
-                                }
+                }
 
-                                SimpleDateFormat df = new SimpleDateFormat("dd '.' MM '.' yyyy");
+                SimpleDateFormat df = new SimpleDateFormat("dd '.' MM '.' yyyy");
 
-                                if (contentstoshow.size() > 0)
-                                {
+                if (contentstoshow.size() > 0)
+                {
 %>
 <ul id="noticias<%=div%>">
     <%
@@ -283,7 +334,7 @@
                                 }
                                 String url = "#";
                                 String image = content.getImage();
-                                
+
                                 if (image == null)
                                 {
                                     image = SWBPortal.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/noticias_infotec.gif";
@@ -294,7 +345,8 @@
                                 }
                                 //url = noticias.getUrl() + "?uri=" + content.getResourceBase().getSemanticObject().getEncodedURI();
                                 url = noticias.getUrl() + "?uri=" + content.getResourceBase().getSemanticObject().getId();
-
+                                String titleURL = getTitleURL(title);
+                                url = noticias.getUrl() + "/" + content.getResourceBase().getSemanticObject().getId() + "/" + titleURL;
                                 String date = "24 . 02 . 2011";
                                 if (content.getPublishDate() != null)
                                 {
@@ -338,8 +390,8 @@
     %>
 </ul>
 <%
-                                }
-                                String urlNews = noticias.getUrl();
+                }
+                String urlNews = noticias.getUrl();
 %>
 <a class="ver_mas" href="<%=urlNews%>" >Ver m&aacute;s</a>
 <%
