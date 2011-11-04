@@ -1755,7 +1755,7 @@ public class SemanticObject
             String lg = null;
             try
             {
-                staux.getLanguage();
+                lg=staux.getLanguage();
             }catch(Exception noe){}
             if(lg!=null && lg.length()==0)lg=null;
             //System.out.println("-->"+lang+" "+lg+" "+staux);
