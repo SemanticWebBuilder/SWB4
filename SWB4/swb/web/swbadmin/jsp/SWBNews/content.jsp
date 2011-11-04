@@ -146,7 +146,7 @@
                                     if (content.getImage() != null)
                                     {
                                         String image = content.getImage();
-                                        pathPhoto = SWBPortal.getWebWorkPath() + content.getSemanticObject().getWorkPath() + "/thmb_image_"+content.getId() + image;
+                                        pathPhoto = SWBPortal.getWebWorkPath() + content.getSemanticObject().getWorkPath() + "/thmb_image_"+content.getId()  +"_"+image;
                                     }
                                     String id = paramRequest.getWebPage().getId();
 %>
