@@ -110,9 +110,34 @@
             // muestra el recurso
             SWBNewContent content = (SWBNewContent) request.getAttribute("content");
             SWBNews news = (SWBNews) request.getAttribute("this");
+
+
             if (content == null && request.getParameter("uri") != null)
             {
                 String uri = request.getParameter("uri");
+                for (SWBNewContent _content : getNews(uri, user, news))
+                {
+                    if (_content.getResourceBase().getURI().equals(uri) || _content.getResourceBase().getId().equals(uri))
+                    {
+                        if (_content.getResourceBase().isValid() && paramRequest.getUser().haveAccess(_content.getResourceBase()))
+                        {
+                            content = _content;
+
+                        }
+
+                    }
+                }
+            }
+
+            StringTokenizer st = new StringTokenizer(request.getRequestURI(), "/");
+            if (st.countTokens() >= 4)
+            {
+                ArrayList<String> values = new ArrayList<String>();
+                while (st.hasMoreTokens())
+                {
+                    values.add(st.nextToken());
+                }
+                String uri = values.get(3);
                 for (SWBNewContent _content : getNews(uri, user, news))
                 {
                     if (_content.getResourceBase().getURI().equals(uri) || _content.getResourceBase().getId().equals(uri))
@@ -220,13 +245,13 @@
 %>
 <img alt="Imagen noticia" src="<%=pathPhoto%>" />
 <%
-                    }
-                    else
-                    {
+                }
+                else
+                {
 %>
 <img alt="Imagen noticia" width="368" height="230" src="<%=pathPhoto%>" />
 <%
-                    }
+                }
 %>             
 <!--br/-->
 <%
@@ -249,9 +274,9 @@
 %>
 <a target="_blank" href="<%=content.getSourceURL()%>"><%=source%></a>
 <%
-                    }
-                    else
-                    {
+                }
+                else
+                {
 %>
 <%=source%>
 <%
