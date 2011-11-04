@@ -1,4 +1,13 @@
-<%@page import="org.semanticwb.portal.api.*,org.semanticwb.portal.resources.sem.news.*,org.w3c.dom.*,org.semanticwb.portal.community.*,java.util.*,org.semanticwb.model.WebPage,org.semanticwb.platform.SemanticObject"%><%@page import="org.semanticwb.model.*,org.semanticwb.SWBUtils,org.semanticwb.SWBPortal,org.semanticwb.SWBPlatform,org.semanticwb.platform.*,org.semanticwb.portal.api.SWBResourceURL"%><%!    private static String idNoticias = "Noticias";
+<%@page import="com.infotec.swb.resources.eventcalendar.Event"%><%@page import="org.semanticwb.portal.api.*,org.semanticwb.portal.resources.sem.news.*,org.w3c.dom.*,java.util.*,org.semanticwb.model.WebPage,org.semanticwb.platform.SemanticObject"%><%@page import="org.semanticwb.model.*,org.semanticwb.SWBUtils,org.semanticwb.SWBPortal,org.semanticwb.SWBPlatform,org.semanticwb.platform.*,org.semanticwb.portal.api.SWBResourceURL"%><%!    private static String idNoticias = "Noticias";
+
+    public static class EventSortByStartDate implements Comparator<Event>
+    {
+
+        public int compare(Event event1, Event event2)
+        {
+            return event1.getStart().compareTo(event2.getStart());
+        }
+    }
 
     class SWBEventComparator implements Comparator<WebPage>
     {
@@ -78,7 +87,7 @@
                 Element channel = doc.createElement("channel");
                 rss.appendChild(channel);
                 addAtribute(channel, "title", "Noticias y Eventos");
-                addAtribute(channel, "link", baserequest+paramRequest.getWebPage().getUrl());
+                addAtribute(channel, "link", baserequest + paramRequest.getWebPage().getUrl());
                 addAtribute(channel, "description", "Canal de noticias y eventos en formato RSS");
                 int inew = 0;
                 for (SWBNewContent element : news)
@@ -98,7 +107,7 @@
                     }
                     addAtribute(item, "title", title);
                     //addAtribute(item, "link",  baserequest+url + "?uri=" + element.getResourceBase().getEncodedURI());
-                    addAtribute(item, "link",  baserequest+url + "?uri=" + element.getResourceBase().getId());
+                    addAtribute(item, "link", baserequest + url + "?uri=" + element.getResourceBase().getId());
                     Element category = doc.createElement("category");
                     item.appendChild(category);
                     category.appendChild(doc.createTextNode("Noticias"));
@@ -117,25 +126,50 @@
                         break;
                     }
                 }
-                
+
                 String id = "Eventos_relevantes";
                 WebPage eventoWebPage = paramRequest.getWebPage().getWebSite().getWebPage(id);
                 if (eventoWebPage != null)
                 {
-                    Iterator<WebPage> eventos = eventoWebPage.listChilds(paramRequest.getUser().getLanguage(), true, false, false, true);
-                    
-                    ArrayList<WebPage> pages=new ArrayList<WebPage>();
+
+
+                    /*Iterator<WebPage> eventos = eventoWebPage.listChilds(paramRequest.getUser().getLanguage(), true, false, false, true);
+
+                    ArrayList<WebPage> pages = new ArrayList<WebPage>();
                     while (eventos.hasNext())
                     {
-                        WebPage event = eventos.next();
-                        pages.add(event);
+                    WebPage event = eventos.next();
+                    pages.add(event);
                     }
-                    Collections.sort(pages, new SWBEventComparator());
-                    
-                    for(WebPage event : pages)
-                    {                      
-                        
+                    Collections.sort(pages, new SWBEventComparator());*/
+
+
+                    int currentYear = java.util.Calendar.getInstance().getTime().getYear();
+                    int currentMonth = java.util.Calendar.getInstance().getTime().getMonth();
+                    int currentDay = java.util.Calendar.getInstance().getTime().getDay();
+                    Iterator<Event> itevents = Event.ClassMgr.listEvents(paramRequest.getWebPage().getWebSite());
+                    //List<Event> events = SWBUtils.Collections.copyIterator(itevents);
+                    List<Event> events = new ArrayList<Event>();
+                    while (itevents.hasNext())
+                    {
+                        Event event = itevents.next();
+
+
+                        if (event.getParent().equals(eventoWebPage) && event.isActive() && event.isValid() && event.getStart() != null && event.getStart().getYear() == currentYear && event.getStart().getMonth() >= currentMonth && event.getStart().getDay() >= currentDay)
+                        {
+                            events.add(event);
+                        }
+
+                    }
+                    //events.clear();
+                    //events.addAll(temp);
+                    Collections.sort(events, new EventSortByStartDate());
+
+                    for (Event event : events)
+                    {
+
                         Element item = doc.createElement("item");
+
                         channel.appendChild(item);
                         String title = event.getTitle(paramRequest.getUser().getLanguage());
                         if (title == null || title.trim().equals(""))
@@ -146,7 +180,8 @@
                         if (title != null)
                         {
                             title = title.replace('"', '\'');
-                            title=SWBUtils.TEXT.decodeExtendedCharacters(title);
+                            title = SWBUtils.TEXT.decodeExtendedCharacters(title);
+
                         }
 
                         String description = "";
@@ -154,20 +189,14 @@
                         {
                             description = event.getDescription();
                         }
-                         Element category = doc.createElement("category");
-                    item.appendChild(category);
-                    category.appendChild(doc.createTextNode("Eventos"));
+                        Element category = doc.createElement("category");
+                        item.appendChild(category);
+                        category.appendChild(doc.createTextNode("Eventos"));
                         addAtribute(item, "title", title);
-                        addAtribute(item, "link",  baserequest+event.getUrl());
+                        addAtribute(item, "link", baserequest + event.getUrl());
                         addAtribute(item, "description", description);
-                        if (event.getExpiration() != null)
-                        {
-                            addAtribute(item, "pubDate", event.getExpiration().toGMTString());
-                        }
-                        else
-                        {
-                            addAtribute(item, "pubDate", new Date().toGMTString());
-                        }
+                        addAtribute(item, "pubDate", event.getStart().toGMTString());
+
                     }
                 }
                 out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
