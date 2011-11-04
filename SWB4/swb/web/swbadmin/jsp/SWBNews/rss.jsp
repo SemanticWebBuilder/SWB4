@@ -146,7 +146,9 @@
                         if (title != null)
                         {
                             title = title.replace('"', '\'');
+                            title=SWBUtils.TEXT.decodeExtendedCharacters(title);
                         }
+
                         String description = "";
                         if (event.getDescription() != null)
                         {
