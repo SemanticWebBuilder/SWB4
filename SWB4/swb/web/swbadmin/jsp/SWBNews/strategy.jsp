@@ -283,6 +283,7 @@
                                 }
                                 String url = "#";
                                 String image = content.getImage();
+                                
                                 if (image == null)
                                 {
                                     image = SWBPortal.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/noticias_infotec.gif";
