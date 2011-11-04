@@ -1,4 +1,55 @@
 <%@page import="org.semanticwb.model.Country"%><%@page import="org.semanticwb.platform.SemanticObject"%><%@page import="org.semanticwb.servlet.SWBHttpServletResponseWrapper"%><%@page import="org.semanticwb.portal.api.SWBResource"%><%@page import="org.semanticwb.portal.api.SWBResourceURL"%><%@page import="org.semanticwb.SWBPortal"%><%@page import="org.semanticwb.*"%><%@page import="java.text.DateFormat"%><%@page import="java.util.Locale"%><%@page import="org.semanticwb.portal.resources.sem.news.*"%><%@page import="org.semanticwb.model.Resource"%><%@page import="java.util.*"%><%@page import="org.semanticwb.model.WebPage"%><%@page import="org.semanticwb.model.User"%><jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/><%!    private static String mensaje = "Noticias de ";
+
+    public String getTitleURL(String title)
+    {
+        title = title.toLowerCase();
+        StringBuilder sb = new StringBuilder();
+
+        for (char s : title.toCharArray())
+        {
+            if (Character.isWhitespace(s))
+            {
+                sb.append('-');
+            }
+            else if (s == '&')
+            {
+                sb.append('-');
+            }
+            else if (s == 'á')
+            {
+                sb.append('a');
+            }
+            else if (s == 'é')
+            {
+                sb.append('e');
+            }
+            else if (s == 'í')
+            {
+                sb.append('i');
+            }
+            else if (s == 'ó')
+            {
+                sb.append('o');
+            }
+            else if (s == 'ú')
+            {
+                sb.append('u');
+            }
+            else if (s == '?')
+            {
+                sb.append('-');
+            }
+            else if (Character.isLetterOrDigit(s))
+            {
+                sb.append(s);
+            }
+            else
+            {
+                sb.append('-');
+            }
+        }
+        return sb.toString();
+    }
     private static String mesage = "News of ";
     private static String ultmsg = "Noticias del mes";
     private static String lastmsg = "Previous news";
@@ -61,94 +112,125 @@
 %><jsp:include page="strategy.jsp" flush="true" /><%
                 return;
             }
+
+            StringTokenizer st = new StringTokenizer(request.getRequestURI(), "/");
+            if (st.countTokens() >= 4)
+            {
+                ArrayList<String> values = new ArrayList<String>();
+                while (st.hasMoreTokens())
+                {
+                    values.add(st.nextToken());
+                }
+                String id = values.get(3);
+                try
+                {
+                    Integer.parseInt(id);
+%><jsp:include page="shownew.jsp" flush="true" /><%
+                    return;
+
+                }
+                catch (Exception e)
+                {
+                }
+
+            }
+
+
+
             if (request.getParameter("uri") != null)
             {
 %><jsp:include page="shownew.jsp" flush="true" /><%
-                                return;
-                            }
+                return;
+            }
 
-                            // muestra lista de noticias en listado
-                            String usrlanguage = paramRequest.getUser().getLanguage();
-                            Locale locale = new Locale(usrlanguage);
-                            Calendar calendar = Calendar.getInstance(locale);
+            // muestra lista de noticias en listado
+            String usrlanguage = paramRequest.getUser().getLanguage();
+            Locale locale = new Locale(usrlanguage);
+            Calendar calendar = Calendar.getInstance(locale);
 
-                            int currentMonth = calendar.get(Calendar.MONTH);
+            int currentMonth = calendar.get(Calendar.MONTH);
 
-                            DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
-                            int limit = 15;
-                            List<SWBNewContent> contents = (List<SWBNewContent>) request.getAttribute("news");
-                            Collections.sort(contents, new SWBNewContentComparator());
-                            if (contents != null && contents.size() > 0)
-                            {
+            DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
+            int limit = 15;
+            List<SWBNewContent> contents = (List<SWBNewContent>) request.getAttribute("news");
+            Collections.sort(contents, new SWBNewContentComparator());
+            if (contents != null && contents.size() > 0)
+            {
 
-                                // muestra las 15 primeras noticias
-                                int inew = 0;
-                                for (SWBNewContent content : contents)
-                                {
-                                    inew++;
-                                    //SWBResourceURL url = paramRequest.getRenderUrl();
-                                    //url.setMode(paramRequest.Mode_VIEW);
-                                    //url.setParameter("uri", content.getResourceBase().getSemanticObject().getURI());
+                // muestra las 15 primeras noticias
+                int inew = 0;
+                for (SWBNewContent content : contents)
+                {
+                    inew++;
+                    //SWBResourceURL url = paramRequest.getRenderUrl();
+                    //url.setMode(paramRequest.Mode_VIEW);
+                    //url.setParameter("uri", content.getResourceBase().getSemanticObject().getURI());
 
-                                    //String url = paramRequest.getWebPage().getUrl() + "?uri=" + content.getResourceBase().getSemanticObject().getEncodedURI();
-                                    String url = paramRequest.getWebPage().getUrl() + "?uri=" + content.getResourceBase().getSemanticObject().getId();
-                                    String title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle(usrlanguage));
-                                    if (title != null && title.trim().equals(""))
-                                    {
-                                        title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle());
-                                    }
-                                    String date = "";
-                                    if (content.getPublishDate() != null)
-                                    {
-                                        date = sdf.format(content.getPublishDate());
-                                    }
-                                    String country = "";
-                                    if (content.getCountry() != null && content.getCountry().getDisplayTitle(usrlanguage) != null && !content.getCountry().getDisplayTitle(usrlanguage).equals(""))
-                                    {
-                                        country = "(" + SWBUtils.TEXT.encodeExtendedCharacters(content.getCountry().getDisplayTitle(usrlanguage)) + ")";
-                                    }
-                                    String originalTitle = "";
-                                    if (content.getOriginalTitle() != null)
-                                    {
-                                        originalTitle = SWBUtils.TEXT.encodeExtendedCharacters(content.getOriginalTitle());
-                                    }
-                                    String urlcontent = url.toString().replace("&", "&amp;");
-                                    String ago = "";
-                                    String source = content.getSource();
-                                    if (date != null && !date.trim().equals(""))
-                                    {
-                                        ago = SWBUtils.TEXT.getTimeAgo(content.getPublishDate(), usrlanguage);
-                                    }
-                                    User user = paramRequest.getUser();
-                                    String description = "";
-                                    if (content.getResourceBase().getDisplayDescription(user.getLanguage()) != null)
-                                    {
-                                        description = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayDescription(user.getLanguage()));
-                                        if (description != null && description.trim().equals(""))
-                                        {
-                                            description = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayDescription(user.getLanguage()));
-                                        }
-                                    }
-                                    String pathPhoto = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/css/noticias_infotec.gif";
-                                    /*String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/sinfoto.png";
-                                    String image = "";
-                                    if (content.getImage() != null)
-                                    {
-                                    image = content.getImage();
-                                    pathPhoto = SWBPortal.getWebWorkPath() + content.getSemanticObject().getWorkPath() + "/thmb_image_" + image;
-                                    }
-                                    else
-                                    {
-                                    pathPhoto=SWBPortal.getContextPath()+"/work/models/"+paramRequest.getWebPage().getWebSiteId()+"/css/noticias_infotec.gif";
-                                    }
-                                    String titleImage = title.replace('"', '\'');*/
+                    //String url = paramRequest.getWebPage().getUrl() + "?uri=" + content.getResourceBase().getSemanticObject().getEncodedURI();
 
-                                    if (content.getImage() != null)
-                                    {
-                                        String image = content.getImage();
-                                        pathPhoto = SWBPortal.getWebWorkPath() + content.getSemanticObject().getWorkPath() + "/thmb_image_"+content.getId()  +"_"+image;
-                                    }
-                                    String id = paramRequest.getWebPage().getId();
+                    String title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle(usrlanguage));
+                    if (title != null && title.trim().equals(""))
+                    {
+                        title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle());
+                    }
+                    String date = "";
+                    if (content.getPublishDate() != null)
+                    {
+                        date = sdf.format(content.getPublishDate());
+                    }
+                    String country = "";
+                    if (content.getCountry() != null && content.getCountry().getDisplayTitle(usrlanguage) != null && !content.getCountry().getDisplayTitle(usrlanguage).equals(""))
+                    {
+                        country = "(" + SWBUtils.TEXT.encodeExtendedCharacters(content.getCountry().getDisplayTitle(usrlanguage)) + ")";
+                    }
+                    String originalTitle = "";
+                    if (content.getOriginalTitle() != null)
+                    {
+                        originalTitle = SWBUtils.TEXT.encodeExtendedCharacters(content.getOriginalTitle());
+                    }
+                    SWBResourceURL url = paramRequest.getRenderUrl();
+                    url.setMode(paramRequest.Mode_VIEW);
+                    String titleURL = getTitleURL(title);
+                    String urlcontent = url.toString().replace("&", "&amp;") + "/" + content.getResourceBase().getSemanticObject().getId() + "/" + titleURL;
+
+                    //String url = paramRequest.getWebPage().getUrl() + "?uri=" + content.getResourceBase().getSemanticObject().getId();
+                    //String urlcontent = url.toString().replace("&", "&amp;");
+                    String ago = "";
+                    String source = content.getSource();
+                    if (date != null && !date.trim().equals(""))
+                    {
+                        ago = SWBUtils.TEXT.getTimeAgo(content.getPublishDate(), usrlanguage);
+                    }
+                    User user = paramRequest.getUser();
+                    String description = "";
+                    if (content.getResourceBase().getDisplayDescription(user.getLanguage()) != null)
+                    {
+                        description = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayDescription(user.getLanguage()));
+                        if (description != null && description.trim().equals(""))
+                        {
+                            description = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayDescription(user.getLanguage()));
+                        }
+                    }
+                    String pathPhoto = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/css/noticias_infotec.gif";
+                    /*String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/sinfoto.png";
+                    String image = "";
+                    if (content.getImage() != null)
+                    {
+                    image = content.getImage();
+                    pathPhoto = SWBPortal.getWebWorkPath() + content.getSemanticObject().getWorkPath() + "/thmb_image_" + image;
+                    }
+                    else
+                    {
+                    pathPhoto=SWBPortal.getContextPath()+"/work/models/"+paramRequest.getWebPage().getWebSiteId()+"/css/noticias_infotec.gif";
+                    }
+                    String titleImage = title.replace('"', '\'');*/
+
+                    if (content.getImage() != null)
+                    {
+                        String image = content.getImage();
+                        pathPhoto = SWBPortal.getWebWorkPath() + content.getSemanticObject().getWorkPath() + "/thmb_image_" + content.getId() + "_" + image;
+                    }
+                    String id = paramRequest.getWebPage().getId();
 %>
 <div class="entradaVideos">
     <div class="thumbVideo">
