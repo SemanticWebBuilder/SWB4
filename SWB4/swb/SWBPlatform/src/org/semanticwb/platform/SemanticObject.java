@@ -1745,15 +1745,18 @@ public class SemanticObject
      */
     private Statement getLocaleStatement(SemanticProperty prop, String lang)
     {
-        //System.out.println(m_res+" "+prop+" "+lang);
-        
+        //System.out.println(m_res+" "+prop+" "+lang);        
         Iterator<Statement> stit = listProperties(prop.getRDFProperty());
         //System.out.println("->"+m_res.getProperty(prop.getRDFProperty()));
         Statement st = null;
         while (stit.hasNext())
         {
             Statement staux = stit.next();
-            String lg = staux.getLanguage();
+            String lg = null;
+            try
+            {
+                staux.getLanguage();
+            }catch(Exception noe){}
             if(lg!=null && lg.length()==0)lg=null;
             //System.out.println("-->"+lang+" "+lg+" "+staux);
             if ((lang==null && lg==null) || (lg != null && lg.equals(lang)))
