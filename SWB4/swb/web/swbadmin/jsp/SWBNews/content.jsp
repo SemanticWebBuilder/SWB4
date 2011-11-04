@@ -1,41 +1,83 @@
 <%@page import="org.semanticwb.model.Country"%><%@page import="org.semanticwb.platform.SemanticObject"%><%@page import="org.semanticwb.servlet.SWBHttpServletResponseWrapper"%><%@page import="org.semanticwb.portal.api.SWBResource"%><%@page import="org.semanticwb.portal.api.SWBResourceURL"%><%@page import="org.semanticwb.SWBPortal"%><%@page import="org.semanticwb.*"%><%@page import="java.text.DateFormat"%><%@page import="java.util.Locale"%><%@page import="org.semanticwb.portal.resources.sem.news.*"%><%@page import="org.semanticwb.model.Resource"%><%@page import="java.util.*"%><%@page import="org.semanticwb.model.WebPage"%><%@page import="org.semanticwb.model.User"%><jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/><%!    private static String mensaje = "Noticias de ";
 
+
+public static String changeCharacters(String data)
+    {
+        if (data == null || data.trim().equals(""))
+        {
+            return data;
+        }
+        String changeCharacters = data.toLowerCase().trim();
+        if (changeCharacters.indexOf("[") != -1)
+        {
+            changeCharacters = changeCharacters.replace('[', ' ');
+        }
+        if (changeCharacters.indexOf("]") != -1)
+        {
+            changeCharacters = changeCharacters.replace(']', ' ');
+        }
+        if (changeCharacters.indexOf("/") != -1)
+        {
+            changeCharacters = changeCharacters.replace('/', ' ');
+        }
+        if (changeCharacters.indexOf(";") != -1)
+        {
+            changeCharacters = changeCharacters.replace(';', ' ');
+        }
+        if (changeCharacters.indexOf(":") != -1)
+        {
+            changeCharacters = changeCharacters.replace(':', ' ');
+        }
+        if (changeCharacters.indexOf("-") != -1)
+        {
+            changeCharacters = changeCharacters.replace('-', ' ');
+        }
+        if (changeCharacters.indexOf(",") != -1)
+        {
+            changeCharacters = changeCharacters.replace(',', ' ');
+        }
+        changeCharacters = changeCharacters.replace('á', 'a');
+        changeCharacters = changeCharacters.replace('é', 'e');
+        changeCharacters = changeCharacters.replace('í', 'i');
+        changeCharacters = changeCharacters.replace('ó', 'o');
+        changeCharacters = changeCharacters.replace('ú', 'u');
+        changeCharacters = changeCharacters.replace('à', 'a');
+        changeCharacters = changeCharacters.replace('è', 'e');
+        changeCharacters = changeCharacters.replace('ì', 'i');
+        changeCharacters = changeCharacters.replace('ò', 'o');
+        changeCharacters = changeCharacters.replace('ù', 'u');
+        changeCharacters = changeCharacters.replace('ü', 'u');
+
+        StringBuilder sb = new StringBuilder();
+        boolean addSpace = true;
+        for (char schar : changeCharacters.toCharArray())
+        {
+            if (schar == ' ')
+            {
+                if (addSpace)
+                {
+                    sb.append(schar);
+                    addSpace = false;
+                }
+            }
+            else
+            {
+                sb.append(schar);
+                addSpace = true;
+            }
+
+        }
+        return sb.toString().trim();
+    }
     public String getTitleURL(String title)
     {
-        title = title.toLowerCase();
+        title = changeCharacters(title);
+
         StringBuilder sb = new StringBuilder();
 
         for (char s : title.toCharArray())
         {
-            if (Character.isWhitespace(s))
-            {
-                sb.append('-');
-            }
-            else if (s == '&')
-            {
-                sb.append('-');
-            }
-            else if (s == 'á')
-            {
-                sb.append('a');
-            }
-            else if (s == 'é')
-            {
-                sb.append('e');
-            }
-            else if (s == 'í')
-            {
-                sb.append('i');
-            }
-            else if (s == 'ó')
-            {
-                sb.append('o');
-            }
-            else if (s == 'ú')
-            {
-                sb.append('u');
-            }
-            else if (s == '?')
+            if (s==' ')
             {
                 sb.append('-');
             }
@@ -168,10 +210,10 @@
 
                     //String url = paramRequest.getWebPage().getUrl() + "?uri=" + content.getResourceBase().getSemanticObject().getEncodedURI();
 
-                    String title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle(usrlanguage));
+                    String title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayTitle(usrlanguage));
                     if (title != null && title.trim().equals(""))
                     {
-                        title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle());
+                        title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayTitle());
                     }
                     String date = "";
                     if (content.getPublishDate() != null)
@@ -190,7 +232,7 @@
                     }
                     SWBResourceURL url = paramRequest.getRenderUrl();
                     url.setMode(paramRequest.Mode_VIEW);
-                    String titleURL = getTitleURL(title);
+                    String titleURL = getTitleURL(content.getResourceBase().getDisplayTitle(usrlanguage));
                     String urlcontent = url.toString().replace("&", "&amp;") + "/" + content.getResourceBase().getSemanticObject().getId() + "/" + titleURL;
 
                     //String url = paramRequest.getWebPage().getUrl() + "?uri=" + content.getResourceBase().getSemanticObject().getId();
