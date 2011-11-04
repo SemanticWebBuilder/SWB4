@@ -77,16 +77,16 @@ public class GoogleSiteMap implements InternalServlet {
 //                continue;
 //            }
 
-            Iterator<Dns> ht =  map.listDnses();
+//            Iterator<Dns> ht =  map.listDnses();
             String hn = host;
-            if (ht.hasNext()) {
-                Dns dns = ht.next();
-                String tmp = dns.getDns();
-                if (!"localhost".equals(tmp)){
-                    if (req.getServerPort()!=80) tmp += ":"+req.getServerPort();
-                    if (!tmp.startsWith("http:")) hn = "http://"+tmp;
-                }
-            }
+//            if (ht.hasNext()) {
+//                Dns dns = ht.next();
+//                String tmp = dns.getDns();
+//                if (!"localhost".equals(tmp)){
+//                    if (req.getServerPort()!=80) tmp += ":"+req.getServerPort();
+//                    if (!tmp.startsWith("http:")) hn = "http://"+tmp;
+//                }
+//            }
             WebPage topicH = map.getHomePage();
             processWebPage(ret, hn, topicH, 95, lang);
 
