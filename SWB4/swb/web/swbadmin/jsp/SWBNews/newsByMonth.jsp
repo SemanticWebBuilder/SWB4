@@ -13,6 +13,103 @@
 <%@page import="java.util.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%!
+    public static String changeCharacters(String data)
+    {
+        if (data == null || data.trim().equals(""))
+        {
+            return data;
+        }
+        public static String changeCharacters(String data)
+    {
+        if (data == null || data.trim().equals(""))
+        {
+            return data;
+        }
+        String changeCharacters = data.toLowerCase().trim();
+        if (changeCharacters.indexOf("[") != -1)
+        {
+            changeCharacters = changeCharacters.replace('[', ' ');
+        }
+        if (changeCharacters.indexOf("]") != -1)
+        {
+            changeCharacters = changeCharacters.replace(']', ' ');
+        }
+        if (changeCharacters.indexOf("/") != -1)
+        {
+            changeCharacters = changeCharacters.replace('/', ' ');
+        }
+        if (changeCharacters.indexOf(";") != -1)
+        {
+            changeCharacters = changeCharacters.replace(';', ' ');
+        }
+        if (changeCharacters.indexOf(":") != -1)
+        {
+            changeCharacters = changeCharacters.replace(':', ' ');
+        }
+        if (changeCharacters.indexOf("-") != -1)
+        {
+            changeCharacters = changeCharacters.replace('-', ' ');
+        }
+        if (changeCharacters.indexOf(",") != -1)
+        {
+            changeCharacters = changeCharacters.replace(',', ' ');
+        }
+        changeCharacters = changeCharacters.replace('á', 'a');
+        changeCharacters = changeCharacters.replace('é', 'e');
+        changeCharacters = changeCharacters.replace('í', 'i');
+        changeCharacters = changeCharacters.replace('ó', 'o');
+        changeCharacters = changeCharacters.replace('ú', 'u');
+        changeCharacters = changeCharacters.replace('à', 'a');
+        changeCharacters = changeCharacters.replace('è', 'e');
+        changeCharacters = changeCharacters.replace('ì', 'i');
+        changeCharacters = changeCharacters.replace('ò', 'o');
+        changeCharacters = changeCharacters.replace('ù', 'u');
+        changeCharacters = changeCharacters.replace('ü', 'u');
+
+        StringBuilder sb = new StringBuilder();
+        boolean addSpace = true;
+        for (char schar : changeCharacters.toCharArray())
+        {
+            if (schar == ' ')
+            {
+                if (addSpace)
+                {
+                    sb.append(schar);
+                    addSpace = false;
+                }
+            }
+            else
+            {
+                sb.append(schar);
+                addSpace = true;
+            }
+
+        }
+        return sb.toString().trim();
+    }
+    public String getTitleURL(String title)
+    {
+        title = changeCharacters(title);
+
+        StringBuilder sb = new StringBuilder();
+
+        for (char s : title.toCharArray())
+        {
+            if (s==' ')
+            {
+                sb.append('-');
+            }
+            else if (Character.isLetterOrDigit(s))
+            {
+                sb.append(s);
+            }
+            else
+            {
+                sb.append('-');
+            }
+        }
+        return sb.toString();
+    }
     class SWBNewContentComparator implements Comparator<SWBNewContent>
     {
 
@@ -40,168 +137,171 @@
     }
 %>
 <%
-    String usrlanguage = paramRequest.getUser().getLanguage();
-    Locale locale=new Locale(usrlanguage);    
-    DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
-    
-    List<SWBNewContent> contents=(List<SWBNewContent>)request.getAttribute("news");
-    Collections.sort(contents, new SWBNewContentComparator());
-    if(contents!=null && contents.size()>0)
-    {
-        
-        for(SWBNewContent content : contents)
-        {
-            
-            SWBResourceURL url=paramRequest.getRenderUrl();
-            //url.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());
-            url.setParameter("uri",content.getResourceBase().getSemanticObject().getId());
-            url.setMode(paramRequest.Mode_VIEW);
-            url.setCallMethod(paramRequest.Call_CONTENT);
-            String urlcontent=url.toString().replace("&", "&amp;");
-            String title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle(usrlanguage));
-            if(title!=null && title.trim().equals(""))
-            {
-                title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle());
-            }
-            String titleImage=title.replace('"', '\'');
-            String ago="";
-            String source=content.getSource();
-            String date="";
-            if(date!=null && !date.trim().equals(""))
-            {
-                ago=SWBUtils.TEXT.getTimeAgo(content.getPublishDate(), usrlanguage);
-            }
-            String country="";
-            if(content.getCountry()!=null)
-            {
-                country="("+SWBUtils.TEXT.encodeExtendedCharacters(content.getCountry().getTitle(usrlanguage))+")";
-            }
-            String originalTitle="";
-            if(content.getOriginalTitle()!=null)
-            {
-                originalTitle=SWBUtils.TEXT.encodeExtendedCharacters(content.getOriginalTitle());
-            }
-            String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/sinfoto.png";
-            pathPhoto=SWBPortal.getContextPath()+"/work/models/"+paramRequest.getWebPage().getWebSiteId()+"/css/noticias_infotec.gif";
-            String image="";
-            if(content.getImage()!=null)
-            {
-                image=content.getImage();
-                pathPhoto=SWBPortal.getWebWorkPath()+content.getSemanticObject().getWorkPath()+"/thmb_image_"+image;
-            }            
-            if(content.getPublishDate()!=null)
-            {
-                int month=-1;
-                if(request.getParameter("month")!=null)
-                {
-                    try
-                    {
-                        month=Integer.parseInt(request.getParameter("month"));
-                    }
-                    catch(NumberFormatException e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-                Calendar cal=Calendar.getInstance();
-                cal.setTime(content.getPublishDate());
-                int year=Calendar.getInstance().get(Calendar.YEAR);
-                if(request.getParameter("year")!=null)
-                {
-                    try
-                    {
-                        year=Integer.parseInt(request.getParameter("year"));
-                    }
-                    catch(NumberFormatException e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-                if(!(month==cal.get(Calendar.MONTH) && year==cal.get(Calendar.YEAR)))
-                {
-                    continue;
-                }
-                date=sdf.format(content.getPublishDate());
-                
+            String usrlanguage = paramRequest.getUser().getLanguage();
+            Locale locale = new Locale(usrlanguage);
+            DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
 
-            }
+            List<SWBNewContent> contents = (List<SWBNewContent>) request.getAttribute("news");
+            Collections.sort(contents, new SWBNewContentComparator());
+            if (contents != null && contents.size() > 0)
+            {
+
+                for (SWBNewContent content : contents)
+                {
+
+                    SWBResourceURL url = paramRequest.getRenderUrl();
+                    //url.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());
+                    url.setParameter("uri", content.getResourceBase().getSemanticObject().getId());
+                    url.setMode(paramRequest.Mode_VIEW);
+                    url.setCallMethod(paramRequest.Call_CONTENT);
+                    String title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayTitle(usrlanguage));
+                    if (title != null && title.trim().equals(""))
+                    {
+                        title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayTitle(usrlanguage));
+                    }
+                    String titleURL = getTitleURL(content.getResourceBase().getDisplayTitle(usrlanguage));
+                    String urlcontent = url.toString().replace("&", "&amp;") + "/" + content.getResourceBase().getSemanticObject().getId() + "/" + titleURL;
+                    //String urlcontent=url.toString().replace("&", "&amp;");
+
+                    String titleImage = title.replace('"', '\'');
+                    String ago = "";
+                    String source = content.getSource();
+                    String date = "";
+                    if (date != null && !date.trim().equals(""))
+                    {
+                        ago = SWBUtils.TEXT.getTimeAgo(content.getPublishDate(), usrlanguage);
+                    }
+                    String country = "";
+                    if (content.getCountry() != null)
+                    {
+                        country = "(" + SWBUtils.TEXT.encodeExtendedCharacters(content.getCountry().getTitle(usrlanguage)) + ")";
+                    }
+                    String originalTitle = "";
+                    if (content.getOriginalTitle() != null)
+                    {
+                        originalTitle = SWBUtils.TEXT.encodeExtendedCharacters(content.getOriginalTitle());
+                    }
+                    String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/sinfoto.png";
+                    pathPhoto = SWBPortal.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/noticias_infotec.gif";
+                    String image = "";
+                    if (content.getImage() != null)
+                    {
+                        image = content.getImage();
+                        pathPhoto = SWBPortal.getWebWorkPath() + content.getSemanticObject().getWorkPath() + "/thmb_image_" + image;
+                    }
+                    if (content.getPublishDate() != null)
+                    {
+                        int month = -1;
+                        if (request.getParameter("month") != null)
+                        {
+                            try
+                            {
+                                month = Integer.parseInt(request.getParameter("month"));
+                            }
+                            catch (NumberFormatException e)
+                            {
+                                e.printStackTrace();
+                            }
+                        }
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(content.getPublishDate());
+                        int year = Calendar.getInstance().get(Calendar.YEAR);
+                        if (request.getParameter("year") != null)
+                        {
+                            try
+                            {
+                                year = Integer.parseInt(request.getParameter("year"));
+                            }
+                            catch (NumberFormatException e)
+                            {
+                                e.printStackTrace();
+                            }
+                        }
+                        if (!(month == cal.get(Calendar.MONTH) && year == cal.get(Calendar.YEAR)))
+                        {
+                            continue;
+                        }
+                        date = sdf.format(content.getPublishDate());
+
+
+                    }
+%>
+<div class="entradaVideos">
+    <div class="thumbVideo">
+        <%
+                    if (pathPhoto != null)
+                    {
+        %>
+        <img width="120" height="120" alt="<%=titleImage%>" src="<%=pathPhoto%>" />
+        <%
+                    }
+        %>
+
+    </div>
+    <div class="infoVideo">
+        <h3><%=title%><%
+                    if (country != null && !country.equals(""))
+                    {
+            %>&nbsp;<%=country%><%
+                                           }
             %>
-            <div class="entradaVideos">
-        <div class="thumbVideo">
+        </h3>
+        <%
+                    if (originalTitle != null && !originalTitle.trim().equals(""))
+                    {
+        %>
+        <p><%=originalTitle%></p>
+        <%
+                    }
+        %>
+        <p class="fechaVideo">
             <%
-                if(pathPhoto!=null)
-                {
-                    %>
-                    <img width="120" height="120" alt="<%=titleImage%>" src="<%=pathPhoto%>" />
-                    <%
-                }
+                        if (date != null && !date.trim().equals(""))
+                        {
+            %>
+            <%=date%> - <%=ago%>
+            <%
+                        }
             %>
 
-        </div>
-        <div class="infoVideo">
-            <h3><%=title%><%
-                    if(country!=null && !country.equals(""))
+        </p>
+        <%
+                    if (source != null)
                     {
-                                   %>&nbsp;<%=country%><%
-                    }
-                %>
-            </h3>
-                <%
-                    if(originalTitle!=null && !originalTitle.trim().equals(""))
-                        {
-                        %>
-                        <p><%=originalTitle%></p>
-                        <%
-                        }
-                %>
-            <p class="fechaVideo">
-                <%
-                    if(date!=null && !date.trim().equals(""))
-                    {
-                        %>
-                        <%=date%> - <%=ago%>
-                        <%
-                    }
-                %>
-
-            </p>
-            <%
-                    if(source!=null)
-                    {
-                        if(content.getSourceURL()==null)
+                        if (content.getSourceURL() == null)
                         {
 
-                            %>
-                            <p>Fuente: <%=source%></p>
-                            <%
-                        }
-                        else
-                        {
-                            String urlsource=content.getSourceURL();
-                            urlsource=urlsource.replace("&", "&amp;");
-                            %>
-                            <p>Fuente: <a href="<%=urlsource%>"><%=source%></a></p>
-                            <%
+        %>
+        <p>Fuente: <%=source%></p>
+        <%
+                                }
+                                else
+                                {
+                                    String urlsource = content.getSourceURL();
+                                    urlsource = urlsource.replace("&", "&amp;");
+        %>
+        <p>Fuente: <a href="<%=urlsource%>"><%=source%></a></p>
+        <%
                         }
                     }
-                %>
-            <p class="vermas"><a href="<%=urlcontent%>">Ver Más</a></p>
-        </div>
-        <div class="clear">&nbsp;</div>
-        </div>
-            <% 
+        %>
+        <p class="vermas"><a href="<%=urlcontent%>">Ver Más</a></p>
+    </div>
+    <div class="clear">&nbsp;</div>
+</div>
+<%
         }
-        
-        SWBResourceURL urlall=paramRequest.getRenderUrl();
+
+        SWBResourceURL urlall = paramRequest.getRenderUrl();
         urlall.setMode(urlall.Mode_VIEW);
         urlall.setCallMethod(urlall.Call_CONTENT);
-        String viewAll="[Ver todas las noticias]";
-        if(paramRequest.getUser().getLanguage()!=null && !paramRequest.getUser().getLanguage().equalsIgnoreCase("en"))
+        String viewAll = "[Ver todas las noticias]";
+        if (paramRequest.getUser().getLanguage() != null && !paramRequest.getUser().getLanguage().equalsIgnoreCase("en"))
         {
-            viewAll="[View all news]";
+            viewAll = "[View all news]";
         }
-        %>
-        <p><a href="<%=urlall%>"><%=viewAll%></a></p>
-        <%
-    }
+%>
+<p><a href="<%=urlall%>"><%=viewAll%></a></p>
+<%
+            }
 %>
