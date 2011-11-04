@@ -191,6 +191,9 @@ html, body, #main {
 .swbIconCallProcessW,
 .swbIconCallProcessF,
 .swbIconStartEvent,
+.swbIconStartEventU,
+.swbIconStartEventW,
+.swbIconStartEventF,
 .swbIconMessageStartEvent,
 .swbIconTimerStartEvent,
 .swbIconRuleStartEvent,
@@ -402,6 +405,9 @@ html, body, #main {
 .swbIconInclusiveGateway   { background-position: -400px -145px; }
 .swbIconParallelGateway    { background-position: -420px -145px; }
 .swbIconStartEvent   { background-position: -0px -234px; }
+.swbIconStartEventU   { background-position: -0px -234px; }
+.swbIconStartEventW   { background-position: -0px -234px; }
+.swbIconStartEventF   { background-position: -0px -234px; }
 .swbIconMessageStartEvent   { background-position: -20px -234px; }
 .swbIconTimerStartEvent   { background-position: -40px -234px; }
 .swbIconRuleStartEvent   { background-position: -60px -234px; }
