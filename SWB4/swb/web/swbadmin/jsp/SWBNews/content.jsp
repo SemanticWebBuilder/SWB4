@@ -1,7 +1,6 @@
 <%@page import="org.semanticwb.model.Country"%><%@page import="org.semanticwb.platform.SemanticObject"%><%@page import="org.semanticwb.servlet.SWBHttpServletResponseWrapper"%><%@page import="org.semanticwb.portal.api.SWBResource"%><%@page import="org.semanticwb.portal.api.SWBResourceURL"%><%@page import="org.semanticwb.SWBPortal"%><%@page import="org.semanticwb.*"%><%@page import="java.text.DateFormat"%><%@page import="java.util.Locale"%><%@page import="org.semanticwb.portal.resources.sem.news.*"%><%@page import="org.semanticwb.model.Resource"%><%@page import="java.util.*"%><%@page import="org.semanticwb.model.WebPage"%><%@page import="org.semanticwb.model.User"%><jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/><%!    private static String mensaje = "Noticias de ";
 
-
-public static String changeCharacters(String data)
+    public static String changeCharacters(String data)
     {
         if (data == null || data.trim().equals(""))
         {
@@ -69,6 +68,7 @@ public static String changeCharacters(String data)
         }
         return sb.toString().trim();
     }
+
     public String getTitleURL(String title)
     {
         title = changeCharacters(title);
@@ -77,7 +77,7 @@ public static String changeCharacters(String data)
 
         for (char s : title.toCharArray())
         {
-            if (s==' ')
+            if (s == ' ')
             {
                 sb.append('-');
             }
@@ -162,8 +162,12 @@ public static String changeCharacters(String data)
                 while (st.hasMoreTokens())
                 {
                     values.add(st.nextToken());
-                }
+                }                
                 String id = values.get(3);
+                if ("_rid".equals(id) && values.size()>=6)
+                {
+                    id = values.get(5);
+                }
                 try
                 {
                     Integer.parseInt(id);
@@ -213,7 +217,7 @@ public static String changeCharacters(String data)
                     String title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayTitle(usrlanguage));
                     if (title != null && title.trim().equals(""))
                     {
-                        title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayTitle());
+                        title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayTitle(usrlanguage));
                     }
                     String date = "";
                     if (content.getPublishDate() != null)
