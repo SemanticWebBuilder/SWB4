@@ -1,6 +1,98 @@
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%><%@page import="org.semanticwb.model.GenericIterator"%><%@page import="org.semanticwb.model.Country"%><%@page import="org.semanticwb.model.User"%><%@page import="org.semanticwb.SWBUtils"%><%@page import="org.semanticwb.platform.SemanticObject"%><%@page import="org.semanticwb.servlet.SWBHttpServletResponseWrapper"%><%@page import="org.semanticwb.portal.api.SWBResource"%><%@page import="org.semanticwb.SWBPortal"%><%@page import="java.text.DateFormat"%><%@page import="java.util.Locale"%><%@page import="org.semanticwb.portal.resources.sem.news.*"%><%@page import="org.semanticwb.model.Resource"%><%@page import="java.util.*"%><%@page import="org.semanticwb.model.ResourceCollectionCategory"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%!
+public static String changeCharacters(String data)
+    {
+        if (data == null || data.trim().equals(""))
+        {
+            return data;
+        }
+        String changeCharacters = data.toLowerCase().trim();
+        if (changeCharacters.indexOf("[") != -1)
+        {
+            changeCharacters = changeCharacters.replace('[', ' ');
+        }
+        if (changeCharacters.indexOf("]") != -1)
+        {
+            changeCharacters = changeCharacters.replace(']', ' ');
+        }
+        if (changeCharacters.indexOf("/") != -1)
+        {
+            changeCharacters = changeCharacters.replace('/', ' ');
+        }
+        if (changeCharacters.indexOf(";") != -1)
+        {
+            changeCharacters = changeCharacters.replace(';', ' ');
+        }
+        if (changeCharacters.indexOf(":") != -1)
+        {
+            changeCharacters = changeCharacters.replace(':', ' ');
+        }
+        if (changeCharacters.indexOf("-") != -1)
+        {
+            changeCharacters = changeCharacters.replace('-', ' ');
+        }
+        if (changeCharacters.indexOf(",") != -1)
+        {
+            changeCharacters = changeCharacters.replace(',', ' ');
+        }
+        changeCharacters = changeCharacters.replace('á', 'a');
+        changeCharacters = changeCharacters.replace('é', 'e');
+        changeCharacters = changeCharacters.replace('í', 'i');
+        changeCharacters = changeCharacters.replace('ó', 'o');
+        changeCharacters = changeCharacters.replace('ú', 'u');
+        changeCharacters = changeCharacters.replace('à', 'a');
+        changeCharacters = changeCharacters.replace('è', 'e');
+        changeCharacters = changeCharacters.replace('ì', 'i');
+        changeCharacters = changeCharacters.replace('ò', 'o');
+        changeCharacters = changeCharacters.replace('ù', 'u');
+        changeCharacters = changeCharacters.replace('ü', 'u');
+
+        StringBuilder sb = new StringBuilder();
+        boolean addSpace = true;
+        for (char schar : changeCharacters.toCharArray())
+        {
+            if (schar == ' ')
+            {
+                if (addSpace)
+                {
+                    sb.append(schar);
+                    addSpace = false;
+                }
+            }
+            else
+            {
+                sb.append(schar);
+                addSpace = true;
+            }
+
+        }
+        return sb.toString().trim();
+    }
+
+    public String getTitleURL(String title)
+    {
+        title = changeCharacters(title);
+
+        StringBuilder sb = new StringBuilder();
+
+        for (char s : title.toCharArray())
+        {
+            if (s == ' ')
+            {
+                sb.append('-');
+            }
+            else if (Character.isLetterOrDigit(s))
+            {
+                sb.append(s);
+            }
+            else
+            {
+                sb.append('-');
+            }
+        }
+        return sb.toString();
+    }
     class SWBNewContentComparator implements Comparator<SWBNewContent>
     {
 
@@ -138,6 +230,10 @@
                     values.add(st.nextToken());
                 }
                 String uri = values.get(3);
+                if ("_rid".equals(uri) && values.size()>=6)
+                {
+                    uri = values.get(5);
+                }
                 for (SWBNewContent _content : getNews(uri, user, news))
                 {
                     if (_content.getResourceBase().getURI().equals(uri) || _content.getResourceBase().getId().equals(uri))
@@ -193,9 +289,10 @@
             if (before != null)
             {
                 //String url = paramRequest.getWebPage().getUrl() + "?uri=" + before.getResourceBase().getSemanticObject().getEncodedURI();
-                String url = paramRequest.getWebPage().getUrl() + "?uri=" + before.getResourceBase().getSemanticObject().getId();
-
-                String urlcontent = url.toString().replace("&", "&amp;");
+                String url = paramRequest.getWebPage().getUrl();// + "?uri=" + before.getResourceBase().getSemanticObject().getId();
+                String beforettitle=before.getResourceBase().getDisplayTitle(user.getLanguage());
+                beforettitle=getTitleURL(beforettitle);
+                String urlcontent = url.toString().replace("&", "&amp;")+"/"+before.getResourceBase().getSemanticObject().getId()+"/"+beforettitle;
 %>
 <a href="<%=urlcontent%>">Noticia anterior</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <%                        }
@@ -203,8 +300,10 @@
             if (next != null)
             {
                 //String url = paramRequest.getWebPage().getUrl() + "?uri=" + next.getResourceBase().getSemanticObject().getEncodedURI();
-                String url = paramRequest.getWebPage().getUrl() + "?uri=" + next.getResourceBase().getSemanticObject().getId();
-                String urlcontent = url.toString().replace("&", "&amp;");
+                String url = paramRequest.getWebPage().getUrl();//+ "?uri=" + next.getResourceBase().getSemanticObject().getId();
+                String nexttitle=before.getResourceBase().getDisplayTitle(user.getLanguage());
+                nexttitle=getTitleURL(nexttitle);
+                String urlcontent = url.toString().replace("&", "&amp;")+"/"+next.getResourceBase().getSemanticObject().getId()+"/"+nexttitle;
 %>
 <a href="<%=urlcontent%>">Noticia siguiente</a>
 <%
