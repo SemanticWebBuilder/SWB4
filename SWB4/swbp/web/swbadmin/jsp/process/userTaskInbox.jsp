@@ -235,7 +235,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                         StartEvent sevt = startEvents.next();
                         if (user.haveAccess(sevt)) {
                             Process itp = sevt.getProcess();
-                            if (itp != null) {
+                            if (itp != null && itp.isActive()) {
                                 %>
                                 <option value="<%=itp.getId()%>"><%=itp.getTitle()%></option>
                                 <%
