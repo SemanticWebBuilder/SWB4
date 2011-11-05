@@ -301,7 +301,7 @@ public static String changeCharacters(String data)
             {
                 //String url = paramRequest.getWebPage().getUrl() + "?uri=" + next.getResourceBase().getSemanticObject().getEncodedURI();
                 String url = paramRequest.getWebPage().getUrl();//+ "?uri=" + next.getResourceBase().getSemanticObject().getId();
-                String nexttitle=before.getResourceBase().getDisplayTitle(user.getLanguage());
+                String nexttitle=next.getResourceBase().getDisplayTitle(user.getLanguage());
                 nexttitle=getTitleURL(nexttitle);
                 String urlcontent = url.toString().replace("&", "&amp;")+"/"+next.getResourceBase().getSemanticObject().getId()+"/"+nexttitle;
 %>
