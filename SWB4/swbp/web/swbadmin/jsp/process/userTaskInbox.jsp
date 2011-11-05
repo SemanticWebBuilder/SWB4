@@ -10,7 +10,6 @@
 <%@page import="java.util.Date"%>
 <%@page import="org.semanticwb.process.model.Process"%>
 <%@page import="org.semanticwb.process.model.Activity"%>
-<%@page import="org.semanticwb.process.model.ProcessWebPage"%>
 <%@page import="org.semanticwb.process.model.UserTask"%>
 <%@page import="org.semanticwb.process.model.ProcessInstance"%>
 <%@page import="org.semanticwb.process.model.SubProcessInstance"%>
@@ -284,7 +283,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                     Iterator<FlowNodeInstance> instances = tinstances.iterator();
                     while(instances.hasNext()) {
                         FlowNodeInstance instance = instances.next();
-                        ProcessWebPage pwp = instance.getProcessWebPage();
+                        WebPage pwp = instance.getProcessWebPage();
                         String status = "<img src=\""+baseimg;
                         String Id = instance.getId();
                         String pName = instance.getFlowNodeType().getProcess().getDisplayTitle(lang);
