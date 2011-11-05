@@ -19,12 +19,6 @@
         {
             return data;
         }
-        public static String changeCharacters(String data)
-    {
-        if (data == null || data.trim().equals(""))
-        {
-            return data;
-        }
         String changeCharacters = data.toLowerCase().trim();
         if (changeCharacters.indexOf("[") != -1)
         {
@@ -87,6 +81,7 @@
         }
         return sb.toString().trim();
     }
+
     public String getTitleURL(String title)
     {
         title = changeCharacters(title);
@@ -95,7 +90,7 @@
 
         for (char s : title.toCharArray())
         {
-            if (s==' ')
+            if (s == ' ')
             {
                 sb.append('-');
             }
@@ -110,6 +105,7 @@
         }
         return sb.toString();
     }
+
     class SWBNewContentComparator implements Comparator<SWBNewContent>
     {
 
@@ -151,7 +147,7 @@
 
                     SWBResourceURL url = paramRequest.getRenderUrl();
                     //url.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());
-                    url.setParameter("uri", content.getResourceBase().getSemanticObject().getId());
+                    //url.setParameter("uri", content.getResourceBase().getSemanticObject().getId());
                     url.setMode(paramRequest.Mode_VIEW);
                     url.setCallMethod(paramRequest.Call_CONTENT);
                     String title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayTitle(usrlanguage));
@@ -160,6 +156,7 @@
                         title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayTitle(usrlanguage));
                     }
                     String titleURL = getTitleURL(content.getResourceBase().getDisplayTitle(usrlanguage));
+                    
                     String urlcontent = url.toString().replace("&", "&amp;") + "/" + content.getResourceBase().getSemanticObject().getId() + "/" + titleURL;
                     //String urlcontent=url.toString().replace("&", "&amp;");
 
@@ -229,47 +226,47 @@
 <div class="entradaVideos">
     <div class="thumbVideo">
         <%
-                    if (pathPhoto != null)
-                    {
+                            if (pathPhoto != null)
+                            {
         %>
         <img width="120" height="120" alt="<%=titleImage%>" src="<%=pathPhoto%>" />
         <%
-                    }
+                            }
         %>
 
     </div>
     <div class="infoVideo">
         <h3><%=title%><%
-                    if (country != null && !country.equals(""))
-                    {
+                            if (country != null && !country.equals(""))
+                            {
             %>&nbsp;<%=country%><%
-                                           }
+                                }
             %>
         </h3>
         <%
-                    if (originalTitle != null && !originalTitle.trim().equals(""))
-                    {
+                            if (originalTitle != null && !originalTitle.trim().equals(""))
+                            {
         %>
         <p><%=originalTitle%></p>
         <%
-                    }
+                            }
         %>
         <p class="fechaVideo">
             <%
-                        if (date != null && !date.trim().equals(""))
-                        {
+                                if (date != null && !date.trim().equals(""))
+                                {
             %>
             <%=date%> - <%=ago%>
             <%
-                        }
+                                }
             %>
 
         </p>
         <%
-                    if (source != null)
-                    {
-                        if (content.getSourceURL() == null)
-                        {
+                            if (source != null)
+                            {
+                                if (content.getSourceURL() == null)
+                                {
 
         %>
         <p>Fuente: <%=source%></p>
@@ -282,24 +279,24 @@
         %>
         <p>Fuente: <a href="<%=urlsource%>"><%=source%></a></p>
         <%
-                        }
-                    }
+                                }
+                            }
         %>
         <p class="vermas"><a href="<%=urlcontent%>">Ver Más</a></p>
     </div>
     <div class="clear">&nbsp;</div>
 </div>
 <%
-        }
+                }
 
-        SWBResourceURL urlall = paramRequest.getRenderUrl();
-        urlall.setMode(urlall.Mode_VIEW);
-        urlall.setCallMethod(urlall.Call_CONTENT);
-        String viewAll = "[Ver todas las noticias]";
-        if (paramRequest.getUser().getLanguage() != null && !paramRequest.getUser().getLanguage().equalsIgnoreCase("en"))
-        {
-            viewAll = "[View all news]";
-        }
+                SWBResourceURL urlall = paramRequest.getRenderUrl();
+                urlall.setMode(urlall.Mode_VIEW);
+                urlall.setCallMethod(urlall.Call_CONTENT);
+                String viewAll = "[Ver todas las noticias]";
+                if (paramRequest.getUser().getLanguage() != null && !paramRequest.getUser().getLanguage().equalsIgnoreCase("en"))
+                {
+                    viewAll = "[View all news]";
+                }
 %>
 <p><a href="<%=urlall%>"><%=viewAll%></a></p>
 <%
