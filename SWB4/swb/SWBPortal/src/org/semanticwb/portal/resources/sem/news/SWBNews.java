@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
@@ -420,13 +421,31 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
             uri=uriSite+"/Resource#"+uri;
         }
 
-        //http://www.infotec.swb/Resource#3166
+        
         if (uri != null)
         {
             uri = uri.trim();
             if (uri.equals(""))
             {
                 uri = null;
+            }
+        }
+
+        if(uri==null)
+        {
+            StringTokenizer st = new StringTokenizer(request.getRequestURI(), "/");
+            if (st.countTokens() >= 4)
+            {
+                ArrayList<String> values = new ArrayList<String>();
+                while (st.hasMoreTokens())
+                {
+                    values.add(st.nextToken());
+                }
+                uri = values.get(3);
+                if ("_rid".equals(uri) && values.size()>=6)
+                {
+                    uri = values.get(5);
+                }                
             }
         }
         if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY)
