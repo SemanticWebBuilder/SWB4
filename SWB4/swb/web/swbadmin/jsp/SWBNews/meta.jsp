@@ -78,7 +78,7 @@
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             SWBNews news = (SWBNews) request.getAttribute("this");
             List<SWBNewContent> newslist = getNews(null, paramRequest.getUser(), news);
-            
+
             String uri = request.getParameter("uri");
 
             StringTokenizer st = new StringTokenizer(request.getRequestURI(), "/");
@@ -106,11 +106,31 @@
 
                         description = SWBUtils.TEXT.encodeExtendedCharacters(temp.getResourceBase().getDisplayDescription(paramRequest.getUser().getLanguage()));
                         keywords = SWBUtils.TEXT.encodeExtendedCharacters(temp.getResourceBase().getDisplayTags(paramRequest.getUser().getLanguage()));
-                        %>
-<meta name="description" content="<%=description%>"/>
-<meta name="keywords" content="<%=keywords%>"/>
-                        <%
-                    }
-                }
-            }%>
+%>
 
+<%
+                                            }
+                                        }
+                                    }%>
+
+<%
+            if (!description.equals(""))
+            {
+%>
+<meta name="description" content="<%=description%>"/>
+
+<%
+            }
+            else
+            {
+            }
+            if (keywords.equals(""))
+            {
+%>
+<meta name="keywords" content="<%=keywords%>"/>
+<%
+            }
+            else
+            {
+            }
+%>
