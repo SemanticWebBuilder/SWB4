@@ -106,9 +106,11 @@
 
                         description = SWBUtils.TEXT.encodeExtendedCharacters(temp.getResourceBase().getDisplayDescription(paramRequest.getUser().getLanguage()));
                         keywords = SWBUtils.TEXT.encodeExtendedCharacters(temp.getResourceBase().getDisplayTags(paramRequest.getUser().getLanguage()));
+                        %>
+<meta name="description" content="<%=description%>"/>
+<meta name="keywords" content="<%=keywords%>"/>
+                        <%
                     }
                 }
             }%>
 
-<meta name="description" content="<%=description%>"/>
-<meta name="keywords" content="<%=keywords%>"/>
