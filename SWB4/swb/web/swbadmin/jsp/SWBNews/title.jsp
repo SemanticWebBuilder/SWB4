@@ -77,9 +77,24 @@
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             SWBNews news = (SWBNews) request.getAttribute("this");
             List<SWBNewContent> newslist = getNews(null, paramRequest.getUser(), news);
-            
+            User user=paramRequest.getUser();
             String uri = request.getParameter("uri");
-            
+
+            StringTokenizer st = new StringTokenizer(request.getRequestURI(), "/");
+            if (st.countTokens() >= 4)
+            {
+                ArrayList<String> values = new ArrayList<String>();
+                while (st.hasMoreTokens())
+                {
+                    values.add(st.nextToken());
+                }
+                uri = values.get(3);
+                if ("_rid".equals(uri) && values.size()>=6)
+                {
+                    uri = values.get(5);
+                }                
+            }
+
             if (uri != null)
             {
                 for (int icontent = 0; icontent < newslist.size(); icontent++)
