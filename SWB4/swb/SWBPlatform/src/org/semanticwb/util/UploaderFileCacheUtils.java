@@ -125,6 +125,7 @@ public class UploaderFileCacheUtils
         synchronized (psr)
         {
             mks = Math.abs(psr.nextInt());
+            if (mks == Integer.MIN_VALUE) mks =1;
         }
         mks = mks - (mks / 10) * 10;
         long base = Math.abs(System.nanoTime() / 1000);
