@@ -72,7 +72,7 @@ public class NgramWordTokenizer {
             ts += chunks.get(i).getText() + " ";
             tokenEnd = chunks.get(i).getEnd();
         }
-        ts.trim();
+        ts = ts.trim();
         pos++;
 
         return reusableToken.reinit(ts, tokenStart , tokenEnd);
