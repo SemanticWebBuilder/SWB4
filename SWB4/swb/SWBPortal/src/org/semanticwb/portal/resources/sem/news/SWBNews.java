@@ -163,6 +163,10 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         {
             doTitle(request, response, paramRequest);
         }
+        else if(paramRequest.getMode().equals("meta"))
+        {
+            doMeta(request, response, paramRequest);
+        }
         else if(paramRequest.getMode().equals("rss"))
         {
             doRss(request, response, paramRequest);
@@ -321,6 +325,27 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         List<SWBNewContent> news=getNews(null,paramRequest.getUser());
         String path = basePath+"title.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);        
+        String url=paramRequest.getWebPage().getUrl();
+        try
+        {
+            request.setAttribute("paramRequest", paramRequest);
+            request.setAttribute("news", news);
+            request.setAttribute("url", url);
+            request.setAttribute("this", this);
+            dis.include(request, response);
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+        }
+    }
+
+    public void doMeta(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        String basePath="/work/models/"+paramRequest.getWebPage().getWebSite().getId()+"/jsp/"+ this.getClass().getSimpleName() +"/";
+        List<SWBNewContent> news=getNews(null,paramRequest.getUser());
+        String path = basePath+"meta.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
         String url=paramRequest.getWebPage().getUrl();
         try
         {
