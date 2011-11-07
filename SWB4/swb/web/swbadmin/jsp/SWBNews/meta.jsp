@@ -73,11 +73,12 @@
         return news;
     }
 %><%
-       String title = "";
+            String description = "";
+            String keywords = "";
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             SWBNews news = (SWBNews) request.getAttribute("this");
             List<SWBNewContent> newslist = getNews(null, paramRequest.getUser(), news);
-            User user=paramRequest.getUser();
+            
             String uri = request.getParameter("uri");
 
             StringTokenizer st = new StringTokenizer(request.getRequestURI(), "/");
@@ -89,7 +90,7 @@
                     values.add(st.nextToken());
                 }
                 uri = values.get(3);
-                if ("_rid".equals(uri) && values.size()>=6)
+                if ("_rid".equals(uri) && values.size() >= 6)
                 {
                     uri = values.get(5);
                 }
@@ -103,7 +104,11 @@
                     if (temp.getResourceBase().getURI().equals(uri) || temp.getResourceBase().getId().equals(uri))
                     {
 
-                        title = "::: "+SWBUtils.TEXT.encodeExtendedCharacters(temp.getResourceBase().getDisplayTitle(paramRequest.getUser().getLanguage()));
+                        description = SWBUtils.TEXT.encodeExtendedCharacters(temp.getResourceBase().getDisplayDescription(paramRequest.getUser().getLanguage()));
+                        keywords = SWBUtils.TEXT.encodeExtendedCharacters(temp.getResourceBase().getDisplayTags(paramRequest.getUser().getLanguage()));
                     }
                 }
-            }%><%=title%>
+            }%>
+
+<meta name="description" content="<%=description%>"/>
+<meta name="keywords" content="<%=keywords%>"/>
