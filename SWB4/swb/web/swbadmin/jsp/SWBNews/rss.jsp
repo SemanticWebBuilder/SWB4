@@ -82,9 +82,21 @@
                 Document doc = org.semanticwb.SWBUtils.XML.getNewDocument();
                 Element rss = doc.createElement("rss");
                 rss.setAttribute("version", "2.0");
+
+                rss.setAttribute("xmlns:atom", "http://www.w3.org/2005/Atom");
+
                 doc.appendChild(rss);
 
                 Element channel = doc.createElement("channel");
+
+                
+                Element atom_link=doc.createElement("atom:link");
+                channel.appendChild(atom_link);
+                atom_link.setAttribute("href", baserequest + request.getRequestURI());
+                atom_link.setAttribute("rel", "self");
+                atom_link.setAttribute("type", "application/rss+xml");
+
+
                 rss.appendChild(channel);
                 addAtribute(channel, "title", "Noticias y Eventos");
                 addAtribute(channel, "link", baserequest + paramRequest.getWebPage().getUrl());
@@ -94,6 +106,9 @@
                 {
                     inew++;
                     Element item = doc.createElement("item");
+                    Element guid = doc.createElement("guid");
+                    item.appendChild(guid);
+                    guid.appendChild(doc.createTextNode(element.getResourceBase().getURI()));
                     channel.appendChild(item);
                     String title = element.getResourceBase().getTitle(paramRequest.getUser().getLanguage());
                     if (title == null || title.trim().equals(""))
@@ -169,7 +184,9 @@
                     {
 
                         Element item = doc.createElement("item");
-
+                        Element guid = doc.createElement("guid");
+                        item.appendChild(guid);
+                        guid.appendChild(doc.createTextNode(event.getURI()));
                         channel.appendChild(item);
                         String title = event.getTitle(paramRequest.getUser().getLanguage());
                         if (title == null || title.trim().equals(""))
@@ -195,7 +212,13 @@
                         addAtribute(item, "title", title);
                         addAtribute(item, "link", baserequest + event.getUrl());
                         addAtribute(item, "description", description);
-                        addAtribute(item, "pubDate", event.getStart().toGMTString());
+
+                        java.util.Calendar cal= java.util.Calendar.getInstance();
+                        cal.setTime(event.getUpdated());
+                        cal.set(cal.HOUR_OF_DAY, 0);
+                        cal.set(cal.MINUTE, 0);
+                        cal.set(cal.SECOND, 1);
+                        addAtribute(item, "pubDate", cal.getTime().toGMTString());
 
                     }
                 }
