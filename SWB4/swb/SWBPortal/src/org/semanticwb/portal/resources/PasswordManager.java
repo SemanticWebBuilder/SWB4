@@ -85,9 +85,10 @@ public class PasswordManager extends GenericResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {
-            if (null != request.getParameter("message")) {
-                String message = (String) request.getParameter("message");
+            if (null != request.getSession(true).getAttribute("message")) {
+                String message = (String) request.getSession(true).getAttribute("message");
                 response.getWriter().println(message);
+                request.getSession(true).removeAttribute("message");
             } else if (null != gotValidTokenLogin(request)) {
                 showNewPassword(request, response, paramRequest, gotValidTokenLogin(request));
             } else if (paramRequest.getUser().isSigned()) {
@@ -119,9 +120,9 @@ public class PasswordManager extends GenericResource {
                 String pwd2 = request.getParameter("swb_newPassword2");
                 if (pwd2.equals(pwd1)) {
                     response.getUser().setPassword(pwd2);
-                    response.setRenderParameter("message", "<p>Contrase&ntilde;a actualizada</p>");
+                    request.getSession(true).setAttribute("message", "<p>Contrase&ntilde;a actualizada</p>");
                 } else {
-                    response.setRenderParameter("message", "<p>Contrase&ntilde;s no corresponden.</p>");
+                    request.getSession(true).setAttribute("message", "<p>Contrase&ntilde;as no corresponden.</p>");
                 }
             }
             if (response.getAction().equals("ADD")) {
@@ -133,10 +134,10 @@ public class PasswordManager extends GenericResource {
                     String pwd2 = request.getParameter("swb_newPassword2");
                     if (pwd2.equals(pwd1)) {
                         usr.setPassword(pwd2);
-                        response.setRenderParameter("message", "<p>Contrase&ntilde;a actualizada</p>");
+                        request.getSession(true).setAttribute("message", "<p>Contrase&ntilde;a actualizada</p>");
                     }
                 } else {
-                    response.setRenderParameter("message", "<p>Contrase&ntilde;s no corresponden.</p>");
+                    request.getSession(true).setAttribute("message", "<p>Contrase&ntilde;as no corresponden.</p>");
                 }
             }
             if (response.getAction().equals("SML")) {
@@ -159,17 +160,17 @@ public class PasswordManager extends GenericResource {
                             String texto = replaceTags(frmmailms, request, paramRequest, token);
                             //System.out.println("URL:" + texto);
                             SWBUtils.EMAIL.sendBGEmail(email, "Recuperar password", texto);
-                            response.setRenderParameter("message", "<br /><p>Te llegar&aacute; un correo electr&oacute;nico a tu cuenta, indic&aacute;ndote c&oacute;mo recuperarla.</p>");
+                            request.getSession(true).setAttribute("message", "<br /><p>Te llegar&aacute; un correo electr&oacute;nico a tu cuenta, indic&aacute;ndote c&oacute;mo recuperarla.</p>");
                         } catch (GeneralSecurityException ex) {
                             log.error(ex);
-                            response.setRenderParameter("message", "Error procesando informaci&oacute;n");
+                            request.getSession(true).setAttribute("message", "Error procesando informaci&oacute;n");
                         }
                     }
                 }
             //Send Mail
             }
         } else {
-            response.setRenderParameter("message", "session inv&aacute;lida!");
+            request.getSession(true).setAttribute("message", "session inv&aacute;lida!");
         }
 
     }
