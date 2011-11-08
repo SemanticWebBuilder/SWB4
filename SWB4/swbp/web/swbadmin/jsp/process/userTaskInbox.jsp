@@ -4,45 +4,29 @@
     Author     : Hasdai Pacheco {haxdai@gmail.com}
 --%>
 
-<%@page import="org.semanticwb.process.model.base.StartEventBase"%>
+<%@page import="org.semanticwb.SWBPortal"%>
+<%@page import="org.semanticwb.SWBUtils"%>
+<%@page import="org.semanticwb.model.SWBComparator"%>
+<%@page import="org.semanticwb.model.UserGroup"%>
+<%@page import="org.semanticwb.model.WebPage"%>
+<%@page import="org.semanticwb.model.User"%>
+<%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
+<%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.process.model.ProcessGroup"%>
 <%@page import="org.semanticwb.process.model.StartEvent"%>
-<%@page import="java.util.Date"%>
 <%@page import="org.semanticwb.process.model.Process"%>
 <%@page import="org.semanticwb.process.model.Activity"%>
+<%@page import="org.semanticwb.process.model.ProcessWebPage"%>
 <%@page import="org.semanticwb.process.model.UserTask"%>
 <%@page import="org.semanticwb.process.model.ProcessInstance"%>
 <%@page import="org.semanticwb.process.model.SubProcessInstance"%>
 <%@page import="org.semanticwb.process.model.FlowNodeInstance"%>
-<%@page import="org.semanticwb.*"%>
-<%@page import="org.semanticwb.model.UserGroup"%>
-<%@page import="org.semanticwb.portal.*"%>
-<%@page import="org.semanticwb.platform.*"%>
-<%@page import="org.semanticwb.portal.api.*"%>
-<%@page import="java.util.Calendar"%>
-<%@page import="java.util.GregorianCalendar"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="java.util.TreeMap"%>
+<%@page import="java.util.Map"%>
 <%@page import="java.net.URLEncoder"%>
-<%@page import="java.io.*"%>
-<%@page import="org.semanticwb.model.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
-<%!
-private ArrayList<Integer> getIsntanceYears(Iterator<FlowNodeInstance> instances) {
-    ArrayList<Integer> years = new ArrayList<Integer>();
-    while(instances.hasNext()) {
-        FlowNodeInstance instance = instances.next();
-        Calendar cal = GregorianCalendar.getInstance();
-        cal.setTime(instance.getCreated());
-        if (!years.contains(cal.get(Calendar.YEAR))) {
-            years.add(cal.get(Calendar.YEAR));
-        }
-    }
-    
-    return years;
-}
-%>
 
 <%!
     public String getStatusInstances(ProcessInstance pi, int status) {
@@ -111,10 +95,7 @@ private ArrayList<Integer> getIsntanceYears(Iterator<FlowNodeInstance> instances
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
 User user = paramRequest.getUser();
-//UserGroup usrGroup = user.getUserGroup();
 WebPage statusWp = (WebPage) request.getAttribute("statusWp");
-//Calendar now = GregorianCalendar.getInstance();
-//now.setTime(new Date(System.currentTimeMillis()));
 String lang = user.getLanguage();
 String sortType = request.getParameter("sort");
 String pFilter = request.getParameter("pFilter");
@@ -125,7 +106,6 @@ String displayCols = (String) request.getAttribute("displayCols");
 String baseimg = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
 int maxPages = (Integer) request.getAttribute("maxPages");
 int pageNum = 1;
-//int sYear = now.get(Calendar.YEAR);
 
 if (user.getLanguage() != null) {
     lang = user.getLanguage();
@@ -147,10 +127,8 @@ if (sFilter == null || sFilter.trim().equals("")) {
 if (itemsPerPage == null || itemsPerPage.trim().equals("")) {
     itemsPerPage = "5";
 }
-String [] months = {"ENE","FEB","MAR","ABR","MAY","JUN","JUL","AGO","SEP","OCT","NOV","DIC"};
 
 ArrayList<FlowNodeInstance> tinstances = (ArrayList<FlowNodeInstance>) request.getAttribute("instances");
-//ArrayList<Integer> years = getIsntanceYears(tinstances.iterator());
 SWBResourceURL configUrl = paramRequest.getRenderUrl().setMode("config");
 if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
     SWBResourceURL optsUrl = paramRequest.getRenderUrl();
@@ -177,15 +155,36 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                 <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'pFilter', this.options[this.selectedIndex].value)">
                     <option value="" <%=pFilter.equals("")?"selected":""%>>Todos</option>
                     <%
-                    Iterator<Process> processes = Process.ClassMgr.listProcesses(paramRequest.getWebPage().getWebSite());
-                    processes = SWBComparator.sortByDisplayName(processes, lang);
-                    while (processes.hasNext()) {
-                        Process process = processes.next();
-                        String selected = "";
-                        if (pFilter.equals(process.getId())) selected = "selected";
-                        %>
-                        <option value="<%=process.getId()%>" <%=selected%>><%=process.getDisplayTitle(lang)%></option>
-                        <%
+                    Iterator<ProcessGroup> itgroups = SWBComparator.sortByDisplayName(ProcessGroup.ClassMgr.listProcessGroups(paramRequest.getWebPage().getWebSite()), lang);
+                    while (itgroups.hasNext()) {
+                        ProcessGroup pgroup = itgroups.next();
+                        Iterator<Process> processes = SWBComparator.sortByDisplayName(pgroup.listProcesses(), lang);
+                        ArrayList<Process> alProcesses = new ArrayList<Process>();
+                        
+                        while (processes.hasNext()) {
+                            Process process = processes.next();
+                            if (process.isValid()) {
+                                alProcesses.add(process);
+                            }
+                        }
+                        
+                        if (!alProcesses.isEmpty()) {
+                            processes = alProcesses.iterator();
+                            %>
+                            <optgroup label="<%=pgroup.getDisplayTitle(lang)%>">
+                            <%
+                            while (processes.hasNext()) {
+                                Process process = processes.next();
+                                String selected = "";
+                                if (pFilter.equals(process.getId())) selected = "selected";
+                                %>
+                                <option value="<%=process.getId()%>" <%=selected%>><%=process.getDisplayTitle(lang)%></option>
+                                <%
+                            }
+                            %>
+                            </optgroup>
+                            <%
+                        }
                     }
                     %>
                 </select>
@@ -229,18 +228,54 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
             <li>
                 <select id="processId">
                     <%
+                    Map<String, ArrayList<Process>> groups = new TreeMap<String, ArrayList<Process>>();
+                    
+                    ArrayList<Process> pccs = null;
+                    //Obtener los eventos de inicio
                     Iterator<StartEvent> startEvents = StartEvent.ClassMgr.listStartEvents(paramRequest.getWebPage().getWebSite());
                     SWBResourceURL createUrl = paramRequest.getActionUrl().setAction("CREATE");
                     while(startEvents.hasNext()) {
                         StartEvent sevt = startEvents.next();
+                        //Si el usuario tiene permisos en el evento
                         if (user.haveAccess(sevt)) {
                             Process itp = sevt.getProcess();
-                            if (itp != null && itp.isActive()) {
-                                %>
-                                <option value="<%=itp.getId()%>"><%=itp.getTitle()%></option>
-                                <%
+                            //Si el proceso al que pertenece el evento y es válido
+                            if (itp != null && itp.isValid()) {
+                                if(itp.getProcessGroup() != null) {
+                                    String pg = itp.getProcessGroup().getDisplayTitle(lang);
+                                    //Si ya existe el grupo de procesos en el treemap
+                                    if(groups.get(pg) != null) {
+                                        pccs = groups.get(pg);
+                                        if (!pccs.contains(itp)) {
+                                            pccs.add(itp);
+                                        }
+                                        groups.put(pg, pccs);
+                                    } else { //Si no existe el grupo de procesos en el treemap
+                                        pccs = new ArrayList<Process>();
+                                        pccs.add(itp);
+                                        groups.put(pg, pccs);
+                                    }
+                                }
                             }
                         }
+                    }
+
+                    Iterator<String> keys = groups.keySet().iterator();
+                    while(keys.hasNext()) {
+                        String key = keys.next();
+                        %>
+                        <optgroup label="<%=key%>">
+                            <%
+                            Iterator<Process> it_pccs = SWBComparator.sortByDisplayName(groups.get(key).iterator(), lang);
+                            while(it_pccs.hasNext()) {
+                                Process pcc = it_pccs.next();
+                                %>
+                                <option value="<%=pcc.getId()%>"><%=pcc.getDisplayTitle(lang)%></option>
+                                <%
+                            }
+                            %>
+                        </optgroup>
+                        <%
                     }
                     %>
                 </select>
@@ -283,7 +318,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                     Iterator<FlowNodeInstance> instances = tinstances.iterator();
                     while(instances.hasNext()) {
                         FlowNodeInstance instance = instances.next();
-                        WebPage pwp = instance.getProcessWebPage();
+                        ProcessWebPage pwp = instance.getProcessWebPage();
                         String status = "<img src=\""+baseimg;
                         String Id = instance.getId();
                         String pName = instance.getFlowNodeType().getProcess().getDisplayTitle(lang);
