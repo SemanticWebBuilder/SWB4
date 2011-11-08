@@ -139,11 +139,13 @@ public class Banner extends GenericAdmResource {
                         out.print(" onclick=\"window.location.href='"+paramRequest.getActionUrl()+QueryStream+  "';return true;\"");
                         if( Boolean.parseBoolean(base.getAttribute("target")) )
                             out.print(" target=\"_blank\"");
-                        out.println(" title=\""+base.getAttribute("title","")+"\">");
+                        //out.println(" title=\""+base.getAttribute("title","")+"\">");
+                        out.println(" title=\""+base.getDisplayTitle(paramRequest.getUser().getLanguage())+"\">");
+                        
                     }
                     out.print("<img src=\"");
                     out.print(SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\"");
-                    out.print(" alt=\""+base.getAttribute("alt", paramRequest.getLocaleString("goto")+" "+base.getAttribute("title",""))+"\"");
+                    out.print(" alt=\""+base.getAttribute("alt", paramRequest.getLocaleString("goto")+" "+base.getDisplayTitle(paramRequest.getUser().getLanguage()))+"\"");
                     if(width!=null)
                         out.print(" width=\""+width+"\"");
                     if(height!=null)
