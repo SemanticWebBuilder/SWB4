@@ -524,24 +524,22 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         
 
         Resource resource = paramRequest.getResourceBase();
-        String contentPath = SWBPortal.getWebWorkPath()+ resource.getWorkPath() + "/";
-        //String contentPath = (String) request.getSession().getAttribute("directory");
+        String contentPath = resource.getWorkPath() + "/";
         String textToSave = request.getParameter("EditorDefault");
         boolean deleteTmp = (request.getParameter("operation") != null
                              && !"".equals(request.getParameter("operation")))
                             ? true : false;
         
-        //System.out.println("suri:"+request.getParameter("suri"));
-        //System.out.println("resource:"+resource);
-        //System.out.println("textToSave:"+textToSave);
-        //System.out.println("deleteTmp:"+deleteTmp);
+//        System.out.println("suri:"+request.getParameter("suri"));
+//        System.out.println("resource:"+resource);
+//        System.out.println("textToSave:"+textToSave);
+//        System.out.println("deleteTmp:"+deleteTmp);
         
         String filename = null;
         boolean textSaved = false;
-        int versionNumber = Integer.parseInt(request.getParameter("numversion"));   //version.getVersionNumber();
+        int versionNumber = Integer.parseInt(request.getParameter("numversion"));
         
         contentPath+=versionNumber;
-        //System.out.println("contentPath:"+contentPath);
         
         int versionToDelete = versionNumber;
         String directoryToRemove = SWBPortal.getWorkPath()
@@ -564,11 +562,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
 
         if (textToSave != null) {
             try {
-                //Quito de una de las dos rutas el directorio -work-, ya que
-                //las dos lo tienen.
-                File filePath = new File(SWBPortal.getWorkPath().substring(0,
-                        SWBPortal.getWorkPath().lastIndexOf("/") + 1)
-                        + contentPath);
+                File filePath = new File(SWBPortal.getWorkPath() + contentPath);
                 if (!filePath.exists()) {
                     filePath.mkdirs();
                 }
@@ -576,13 +570,10 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                 if (!filePath.exists()) {
                     filePath.mkdirs();
                 }
-                File file = new File(SWBPortal.getWorkPath().substring(0,
-                        SWBPortal.getWorkPath().lastIndexOf("/") + 1)
-                        + contentPath + "/" + filename);
+                File file = new File(SWBPortal.getWorkPath() + contentPath + "/" + filename);
                 filename = file.getName();
                 FileWriter writer = new FileWriter(file);
                 
-                //System.out.println("file:"+file);
 
                 if (deleteTmp) {
                     //modifica las rutas de los archivos asociados si se acaba de cargar un archivo HTML antes de guardar
@@ -619,7 +610,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                     i = textToSave.indexOf("<workpath/>", i + 11);
                 }
                 
-                //System.out.println("textToSave2:"+textToSave);
+//                System.out.println("textToSave2:"+textToSave);
 
                 writer.write(textToSave);
                 writer.flush();
