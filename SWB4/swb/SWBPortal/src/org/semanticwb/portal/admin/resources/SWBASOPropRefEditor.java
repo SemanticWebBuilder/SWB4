@@ -514,7 +514,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                             out.println(sem_o.getProperty(User.swb_usrLogin));
                             out.println("</a>");
                         } else {
-                            out.print(so.getProperty(semprop));
+                            out.println("-");
                         }
                     //out.println(getValueSemProp(so.getObjectProperty(User.swb_usrLogin), Descriptiveable.swb_title)); //getValueSemProp(semobj.getObjectProperty(semprop), Descriptiveable.swb_title));
                     } else {
@@ -525,7 +525,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                             out.println(sem_o.getProperty(User.swb_usrLogin));
                             out.println("</a>");
                         } else if (so != null) {
-                            out.print(so.getProperty(semprop));
+                            out.println("-");
                         }
                     }
                     out.println("</td>");
