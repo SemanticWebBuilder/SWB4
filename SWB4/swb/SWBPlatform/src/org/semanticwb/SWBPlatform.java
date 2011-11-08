@@ -109,6 +109,8 @@ public class SWBPlatform
 
     /** The Constant PRESIST_TYPE_TDB. */
     public final static String PRESIST_TYPE_SWBTRIPLESTORE="swbts";
+    
+    public final static String PRESIST_TYPE_SWBTSMONGO="swbtsmongo";
 
     /** The persistence type. */
     private static String persistenceType=PRESIST_TYPE_DEFAULT;
@@ -363,6 +365,9 @@ public class SWBPlatform
         }else if(PRESIST_TYPE_SWBTRIPLESTORE.equalsIgnoreCase(persistenceType))
         {
             SWBPlatform.persistenceType = PRESIST_TYPE_SWBTRIPLESTORE;
+        }else if(PRESIST_TYPE_SWBTSMONGO.equalsIgnoreCase(persistenceType))
+        {
+            SWBPlatform.persistenceType = PRESIST_TYPE_SWBTSMONGO;
         }else
         {
             SWBPlatform.persistenceType=persistenceType;
@@ -872,6 +877,11 @@ public class SWBPlatform
     {
         return persistenceType==PRESIST_TYPE_SWBTRIPLESTORE;
     }
+    
+    public static boolean isSWBTSMongo()
+    {
+        return persistenceType==PRESIST_TYPE_SWBTSMONGO;
+    }    
 
     /**
      * Checks if is sDB.

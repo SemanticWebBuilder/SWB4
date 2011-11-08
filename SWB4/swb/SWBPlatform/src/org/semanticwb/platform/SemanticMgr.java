@@ -33,12 +33,10 @@ import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.NsIterator;
-import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.rdf.model.impl.ModelCom;
-import com.hp.hpl.jena.rdf.model.impl.StatementImpl;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.RDF;
 import java.io.File;
@@ -266,7 +264,12 @@ public class SemanticMgr implements SWBInstanceObject
         } else if (SWBPlatform.isSWBTripleStore())
         {
             clsname="org.semanticwb.triplestore.SWBTripleStore";
+        } else if (SWBPlatform.isSWBTSMongo())
+        {
+            clsname="org.semanticwb.triplestore.mongo.SWBTSMongo";
         }
+        
+        log.event("TripleStoreClass:"+clsname);
 
         try
         {
