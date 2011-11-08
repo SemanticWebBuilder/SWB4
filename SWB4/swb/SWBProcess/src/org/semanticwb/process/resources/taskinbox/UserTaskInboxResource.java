@@ -200,7 +200,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         User user = paramRequest.getUser();
         String sortType = request.getParameter("sort");
         int itemsPerPage = getItemsPerPage();
-        int statusFilter = STATUS_ALL;
+        int statusFilter = ProcessInstance.STATUS_PROCESSING;
         Process p = null;
         int page = 1;
 
@@ -228,48 +228,50 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         Iterator<Process> processes = Process.ClassMgr.listProcesses(site);
         while (processes.hasNext()) {
             Process process = processes.next();
-            Iterator<ProcessInstance> processInstances = process.listProcessInstances();
-            while (processInstances.hasNext()) {
-                ProcessInstance processInstance = processInstances.next();
-                Iterator<FlowNodeInstance> nodeInstances = null;
-                
-                if (isFilterByGroup()) { //Si hay que filtrar por grupo de usuarios
-                    UserGroup iug = processInstance.getOwnerUserGroup();
-                    UserGroup uug = user.getUserGroup();
-                    
-                    if (iug != null && uug != null) { //Si la instancia y el usuario tienen grupo
-                        if (user.getUserGroup().getURI().equals(processInstance.getOwnerUserGroup().getURI())) { //Si tienen el mismo grupo
+            if (process.isActive()) {
+                Iterator<ProcessInstance> processInstances = process.listProcessInstances();
+                while (processInstances.hasNext()) {
+                    ProcessInstance processInstance = processInstances.next();
+                    Iterator<FlowNodeInstance> nodeInstances = null;
+
+                    if (isFilterByGroup()) { //Si hay que filtrar por grupo de usuarios
+                        UserGroup iug = processInstance.getOwnerUserGroup();
+                        UserGroup uug = user.getUserGroup();
+
+                        if (iug != null && uug != null) { //Si la instancia y el usuario tienen grupo
+                            if (user.getUserGroup().getURI().equals(processInstance.getOwnerUserGroup().getURI())) { //Si tienen el mismo grupo
+                                nodeInstances = processInstance.listAllFlowNodeInstance();
+                            }
+                        } else if (iug == null && uug == null) { //Si el proceso y el usuario no tienen grupo
                             nodeInstances = processInstance.listAllFlowNodeInstance();
                         }
-                    } else if (iug == null && uug == null) { //Si el proceso y el usuario no tienen grupo
+                    } else { //Si no hay que filtrar por grupo de usuarios
                         nodeInstances = processInstance.listAllFlowNodeInstance();
                     }
-                } else { //Si no hay que filtrar por grupo de usuarios
-                    nodeInstances = processInstance.listAllFlowNodeInstance();
-                }
-                
-                if (nodeInstances != null) {
-                    while (nodeInstances.hasNext()) {
-                        FlowNodeInstance flowNodeInstance = nodeInstances.next();
-                        if (flowNodeInstance.getFlowNodeType() instanceof UserTask) {
-                            UserTask utask = (UserTask) flowNodeInstance.getFlowNodeType();
-                            if (user.haveAccess(utask)) {
-                                if (statusFilter > 0) {
-                                    if (p != null) {
-                                        if (flowNodeInstance.getStatus() == statusFilter && utask.getProcess().getURI().equals(p.getURI())) {
+
+                    if (nodeInstances != null) {
+                        while (nodeInstances.hasNext()) {
+                            FlowNodeInstance flowNodeInstance = nodeInstances.next();
+                            if (flowNodeInstance.getFlowNodeType() instanceof UserTask) {
+                                UserTask utask = (UserTask) flowNodeInstance.getFlowNodeType();
+                                if (user.haveAccess(utask)) {
+                                    if (statusFilter > 0) {
+                                        if (p != null) {
+                                            if (flowNodeInstance.getStatus() == statusFilter && utask.getProcess().getURI().equals(p.getURI())) {
+                                                t_instances.add(flowNodeInstance);
+                                            }
+                                        } else {
+                                            if (flowNodeInstance.getStatus() == statusFilter) {
+                                                t_instances.add(flowNodeInstance);
+                                            }
+                                        }
+                                    } else if (p != null) {
+                                        if (utask.getProcess().getURI().equals(p.getURI())) {
                                             t_instances.add(flowNodeInstance);
                                         }
                                     } else {
-                                        if (flowNodeInstance.getStatus() == statusFilter) {
-                                            t_instances.add(flowNodeInstance);
-                                        }
-                                    }
-                                } else if (p != null) {
-                                    if (utask.getProcess().getURI().equals(p.getURI())) {
                                         t_instances.add(flowNodeInstance);
                                     }
-                                } else {
-                                    t_instances.add(flowNodeInstance);
                                 }
                             }
                         }
