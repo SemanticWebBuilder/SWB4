@@ -227,7 +227,9 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
         if (processes != null && processes.hasNext()) {
             while(processes.hasNext()) {
                 Process process = processes.next();
-                t_instances.addAll(_getProcessInstances((ProcessSite)site, process, statusFilter));
+                if (process.isValid()) {
+                    t_instances.addAll(_getProcessInstances((ProcessSite)site, process, statusFilter));
+                }
             }
         }
 
