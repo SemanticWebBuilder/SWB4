@@ -59,41 +59,50 @@ public class EditFile implements InternalServlet {
     /* (non-Javadoc)
      * @see org.semanticwb.servlet.internal.InternalServlet#doProcess(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.servlet.internal.DistributorParams)
      */
+    @Override
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException {
+System.out.println("\n\nEditFile.........\n");
         try {
             String lang=dparams.getUser().getLanguage();
             String path = request.getParameter("file");
+            String f = request.getParameter("file");
+System.out.println("file="+f);    
             String fileName=null;
-            int posfileName=path.lastIndexOf("/");
-            if(posfileName>-1){
-                fileName=path.substring(posfileName+1);
-            }
-            String path2Save=path;
+//            int posfileName=path.lastIndexOf("/");
+//            if(posfileName>-1){
+//                fileName=path.substring(posfileName+1);
+//            }
+//System.out.println("fileName="+fileName);    
+//            String path2Save=path;
             Resource base=null;
-            String resUri=request.getParameter("resUri");
-            if(resUri!=null){
-                base=SWBPortal.getResourceMgr().getResource(resUri).getResourceBase();
-                path2Save=base.getWorkPath()+"/"+fileName;
-            }
+//            String resUri=request.getParameter("resUri");
+//System.out.println("resUri="+resUri);    
+//            if(resUri!=null){
+//                base=SWBPortal.getResourceMgr().getResource(resUri).getResourceBase();
+//                path2Save=base.getWorkPath()+"/"+fileName;
+//            }
+//System.out.println("path2Save="+path2Save);    
             String newcontent = request.getParameter("content");
             PrintWriter out = response.getWriter();
-            if (newcontent == null) {
-                String ext=null;
-                int pos=path.lastIndexOf(".");
-                if(pos>-1){
-                    ext=path.substring(pos+1);
-                }
-                String pathType=request.getParameter("pathType");
-                String content = "";
-                if(pathType.equals("def")){
-                        content=SWBUtils.IO.readInputStream(SWBPortal.getAdminFileStream(path));
-                }else if(pathType.equals("res")){
-                        content=SWBUtils.IO.readInputStream(SWBPortal.getFileFromWorkPath(path));
-                }else {
-                    FileInputStream fileInput=new FileInputStream(path);
-                    content=SWBUtils.IO.readInputStream(fileInput);
-                }
-                long time = new Date().getTime();
+//            if (newcontent == null) {
+              if (Boolean.TRUE) {
+//                String ext=null;
+//                int pos=path.lastIndexOf(".");
+//                if(pos>-1){
+//                    ext=path.substring(pos+1);
+//                }
+//                String pathType=request.getParameter("pathType");
+//System.out.println("pathType="+pathType);    
+//                String content = "";
+//                if(pathType.equals("def")){
+//                        content=SWBUtils.IO.readInputStream(SWBPortal.getAdminFileStream(path));
+//                }else if(pathType.equals("res")){
+//                        content=SWBUtils.IO.readInputStream(SWBPortal.getFileFromWorkPath(path));
+//                }else {
+//                    FileInputStream fileInput=new FileInputStream(path);
+//                    content=SWBUtils.IO.readInputStream(fileInput);
+//                }
+//                long time = new Date().getTime();
 
                 out.println("<html>");
                 out.println("<head>");
@@ -101,7 +110,27 @@ public class EditFile implements InternalServlet {
                 out.println("<script language=\"javascript\" type=\"text/javascript\" src=\"/swb/swbadmin/js/editarea/edit_area/edit_area_full.js\"></script>");
                 out.println("</head>");
                 out.println("<body>");
-                out.println("<form method=\"post\" name=\"editor_"+time+"\" action=\""+SWBPlatform.getContextPath()+"/editfile"+"\"> \n" +
+                out.println("<applet alt=\"editar xsl\" codebase=\""+SWBPlatform.getContextPath()+"/\" code=\"applets.edit.XSLEditorApplet\" archive=\"swbadmin/lib/SWBAplXSLEditor.jar, swbadmin/lib/rsyntaxtextarea.jar\" width=\"100%\" height=\"100%\">");
+                out.println("  <param name=\"file\" value=\""+f+"\" />");
+                out.println("</applet>");
+//out.println("<APPLET  WIDTH=100% HEIGHT=50% CODE=\"applets.dragdrop.DragDrop.class\" codebase=\"/\" archive=\"swbadmin/lib/SWBAplDragDrop.jar, swbadmin/lib/SWBAplCommons.jar\" border=0>");
+//out.println("<PARAM NAME=\"webpath\" VALUE=\"/\"/>");
+//out.println("<PARAM NAME=\"foreground\" VALUE=\"000000\"/>");
+//out.println("<PARAM NAME=\"background\" VALUE=\"979FC3\"/>");
+//out.println("<PARAM NAME=\"foregroundSelection\" VALUE=\"ffffff\"/>");
+//out.println("<PARAM NAME=\"backgroundSelection\" VALUE=\"666699\"/>");
+//out.println("<PARAM NAME=\"path\" value=\"C:/Users/carlos.ramos/desarrollo/SWB4/swb/build/web/work/models/C/Resource/14/images/\"/>");
+//out.println("<PARAM NAME=\"clientpath\" value=\"/\"/>");
+//out.println("<PARAM NAME=\"files\" value=\";images/WBMenuMap.css;\"/>");
+//out.println("<PARAM NAME=\"locale\" value=\"en\"/>");
+//out.println("</APPLET>");
+                
+                
+                
+                
+                
+                
+                /*out.println("<form method=\"post\" name=\"editor_"+time+"\" action=\""+SWBPlatform.getContextPath()+"/editfile"+"\"> \n" +
                         "<script language=\"javascript\" type=\"text/javascript\"> editAreaLoader.init({ \n" +
                         "id : \"textarea_" + time + "\" \n" + // id of the textarea to transform
                         ",start_highlight: true	\n" +
@@ -129,7 +158,7 @@ public class EditFile implements InternalServlet {
                         "<input type=\"hidden\" name=\"file\" value=\""+path2Save+"\">"+
                         "<input type=\"hidden\" name=\"attr\" value=\""+request.getParameter("attr")+"\">"+
                         "<br/><input type=\"button\" name=\"return\" onclick=\"history.go(-1);\" value=\"Regresar\">"+
-                        "</form> \n");
+                        "</form> \n");*/
                 out.println("</body> \n");
                 out.println("</html> \n");
             } else {
