@@ -24,10 +24,14 @@ var lang : String = FX.getArgument("lang") as String;
 var donePath : String = FX.getArgument("done") as String;
 var currentActivities : String = FX.getArgument("currentActivities") as String;
 var mode: String = FX.getArgument("mode") as String;
+var taskPage: String = FX.getArgument("tp") as String;
+var repPage: String = FX.getArgument("rp") as String;
 
 if (mode == null) mode= "edit";
 if (donePath == null) donePath="";
 if (currentActivities == null) currentActivities="";
+if (taskPage == null) taskPage = "";
+if (repPage == null) repPage = "";
 //var lang : String = "es";
 println("Lang:{lang} {Locale.getDefault()}");
 if(lang!=null)Locale.setDefault(new Locale(lang));
@@ -74,6 +78,8 @@ if (mode.equals("view")) {
     }
     toolbar.loadProcess();
     modeler.setCurrentProcessActivities(currentActivities);
+    modeler.taskInboxUrl = taskPage;
+    modeler.repositUrl = repPage;
 }
 /**********************************************/
 
