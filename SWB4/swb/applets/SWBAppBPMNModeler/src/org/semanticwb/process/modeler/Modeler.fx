@@ -237,7 +237,8 @@ public class Modeler extends CustomNode
         var uris: String[] = urilist.trim().split("\\|");
         for (uri in uris) {
             if (uri != null and not uri.trim().equals("")){
-                var ge = getGraphElementByURI(uri);
+                var _uri = uri.substring(0, uri.indexOf("("));
+                var ge = getGraphElementByURI(_uri);
                 if (ge != null) {
                     ge.setStatus(GraphicalElement.STATUS_ACTIVE);
                     var parent = ge.container;
