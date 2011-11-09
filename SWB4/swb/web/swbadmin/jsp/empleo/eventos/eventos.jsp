@@ -17,15 +17,108 @@
 <%@page import="org.semanticwb.model.WebSite"%>
 <%@page import="org.semanticwb.model.WebPage"%>
 <%@page import="org.semanticwb.model.Resourceable"%>
-<%@page import="mx.gob.stps.portalempleo.swb.*"%>
+<%@page import="com.infotec.swb.resources.eventcalendar.*"%>
 <%!
+    public static String changeCharacters(String data)
+    {
+        if (data == null || data.trim().equals(""))
+        {
+            return data;
+        }
+        String changeCharacters = data.toLowerCase().trim();
+        if (changeCharacters.indexOf("[") != -1)
+        {
+            changeCharacters = changeCharacters.replace('[', ' ');
+        }
+        if (changeCharacters.indexOf("]") != -1)
+        {
+            changeCharacters = changeCharacters.replace(']', ' ');
+        }
+        if (changeCharacters.indexOf("/") != -1)
+        {
+            changeCharacters = changeCharacters.replace('/', ' ');
+        }
+        if (changeCharacters.indexOf(";") != -1)
+        {
+            changeCharacters = changeCharacters.replace(';', ' ');
+        }
+        if (changeCharacters.indexOf(":") != -1)
+        {
+            changeCharacters = changeCharacters.replace(':', ' ');
+        }
+        if (changeCharacters.indexOf("-") != -1)
+        {
+            changeCharacters = changeCharacters.replace('-', ' ');
+        }
+        if (changeCharacters.indexOf(",") != -1)
+        {
+            changeCharacters = changeCharacters.replace(',', ' ');
+        }
+        changeCharacters = changeCharacters.replace('á', 'a');
+        changeCharacters = changeCharacters.replace('é', 'e');
+        changeCharacters = changeCharacters.replace('í', 'i');
+        changeCharacters = changeCharacters.replace('ó', 'o');
+        changeCharacters = changeCharacters.replace('ú', 'u');
+        changeCharacters = changeCharacters.replace('à', 'a');
+        changeCharacters = changeCharacters.replace('è', 'e');
+        changeCharacters = changeCharacters.replace('ì', 'i');
+        changeCharacters = changeCharacters.replace('ò', 'o');
+        changeCharacters = changeCharacters.replace('ù', 'u');
+        changeCharacters = changeCharacters.replace('ü', 'u');
+
+        StringBuilder sb = new StringBuilder();
+        boolean addSpace = true;
+        for (char schar : changeCharacters.toCharArray())
+        {
+            if (schar == ' ')
+            {
+                if (addSpace)
+                {
+                    sb.append(schar);
+                    addSpace = false;
+                }
+            }
+            else
+            {
+                sb.append(schar);
+                addSpace = true;
+            }
+
+        }
+        return sb.toString().trim();
+    }
+
+    public String getTitleURL(String title)
+    {
+        title = changeCharacters(title);
+
+        StringBuilder sb = new StringBuilder();
+
+        for (char s : title.toCharArray())
+        {
+            if (s == ' ')
+            {
+                sb.append('-');
+            }
+            else if (Character.isLetterOrDigit(s))
+            {
+                sb.append(s);
+            }
+            else
+            {
+                sb.append('-');
+            }
+        }
+        return sb.toString();
+    }
+
     public Set<Integer> getYears(List<Event> eventos)
     {
 
         HashSet<Integer> getYears = new HashSet<Integer>();
         for (Event event : eventos)
         {
-            if(event.isValid() &&  event.getStart()!=null && event.isActive())
+            if (event.getStart() != null && event.isActive())
             {
                 getYears.add(event.getStart().getYear());
             }
@@ -42,7 +135,7 @@
         for (Event event : eventos)
         {
             date = event.getStart();
-            if (date != null && date.getYear() == year && event.isActive() && event.isValid())
+            if (date != null && date.getYear() == year && event.isActive())
             {
                 getYears.add(date.getMonth());
             }
@@ -59,7 +152,7 @@
         for (Event event : eventos)
         {
             date = event.getStart();
-            if (date != null && date.getYear() == year && date.getMonth() == month && event.isActive() && event.isValid())
+            if (date != null && date.getYear() == year && date.getMonth() == month && event.isActive())
             {
                 getYears.add(event);
             }
@@ -68,14 +161,18 @@
 
     }
 
-    /*class EventSortByExpiration implements Comparator<Event>
+    class EventSortByStartDate implements Comparator<Event>
     {
 
         public int compare(Event event1, Event event2)
         {
-            return event1.getExpiration().compareTo(event2.getExpiration());
+            if (event1.getStart() == null || event2.getStart() == null)
+            {
+                return 0;
+            }
+            return event1.getStart().compareTo(event2.getStart());
         }
-    }*/
+    }
 %>
 <%
             String defaultFormat = "dd 'de' MMMM 'del' yyyy";
@@ -91,7 +188,10 @@
             Iterator<Event> itevents = Event.ClassMgr.listEvents(paramRequest.getWebPage().getWebSite());
             List<Event> events = SWBUtils.Collections.copyIterator(itevents);
             HashSet<Event> finalEvents = new HashSet<Event>();
-            Collections.sort(events, new Event.EventSortByStartDate());
+            /*for(Event event:events){
+            out.println("evento="+event+"------------<br/>");
+            }*/
+            Collections.sort(events, new EventSortByStartDate());
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DAY_OF_MONTH, -1);
             Date now = cal.getTime();
@@ -192,9 +292,11 @@
 
                                                                 String dateToShow = df.format(date);
                                                                 String url = event.getUrl();
+                                                                String titleURL = getTitleURL(event.getDisplayTitle(paramRequest.getUser().getLanguage()));
+                                                                url += "/" + titleURL;
                 %>
                 <div class="noticia">
-                    <img src="/work/models/empleo/foro/ico_conversacion.gif" alt="Noticia INFOTEC" >
+                    <img src="/work/models/infotec/foro/ico_conversacion.gif" alt="Noticia INFOTEC" >
                     <h4><a href="<%=url%>"><%=text%></a></h4>
                     <p>
                         <span class="resaltado"><%=dateToShow%>.&nbsp;</span> <%=description%>
@@ -220,7 +322,7 @@
 
 
 </div>
-    <script type="text/javascript">
+<script type="text/javascript">
     <!--
     var Accordion1 = new Spry.Widget.Accordion("Accordion1");
     //-->
@@ -252,7 +354,8 @@
                     {
     %>
     <p>No hay eventos recientes</p>
-    <%                                        }
+    <%              }
+
                     events.clear();
                     events.addAll(finalEvents);
                     Collections.sort(events, new Event.EventSortByStartDate());
@@ -273,9 +376,11 @@
                             Date date = event.getStart();
                             String dateToShow = df.format(date);
                             String url = event.getUrl();
+                            String titleURL = getTitleURL(event.getDisplayTitle(paramRequest.getUser().getLanguage()));
+                            url += "/" + titleURL;
     %>
     <div class="noticia">
-        <img src="/work/models/empleo/foro/ico_conversacion.gif" alt="Noticia de TICs" >
+        <img src="/work/models/infotec/foro/ico_conversacion.gif" alt="Noticia de TICs" >
         <h4><%=text%></h4>
         <p><%=dateToShow%>.&nbsp;<%=description%>
         </p>
@@ -286,6 +391,7 @@
                     }
                     SWBResourceURL urlHist = paramRequest.getRenderUrl();
                     urlHist.setAction("hist");
+
     %>
     <br/><a href="<%=urlHist%>" id="noticiasAnteriores">Ver Eventos Anteriores</a>
 </div>
