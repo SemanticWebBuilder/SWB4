@@ -42,6 +42,8 @@ public class Modeler extends CustomNode
     public var containerElement: GraphicalElement;
     public var toolBar:ToolBar;
     public var zoomFactor:Number = 1;
+    public var taskInboxUrl: String;
+    public var repositUrl: String;
     public var copyNodes: GraphicalElement[];
     var actions: MenuItem[];
     var focusedNode: Node;                       //Nodo con el foco
