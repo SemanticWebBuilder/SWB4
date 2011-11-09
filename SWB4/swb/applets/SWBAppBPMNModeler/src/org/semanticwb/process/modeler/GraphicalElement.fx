@@ -23,6 +23,8 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.animation.Interpolator;
 import javafx.animation.Timeline;
+import org.semanticwb.process.modeler.UserTask;
+import org.semanticwb.process.modeler.DataObject;
 
 /**
  * Clase que representa un elemento gráfico en un diagrama BPMN 2.0. Es la
@@ -278,6 +280,19 @@ public class GraphicalElement extends CustomNode
                 mouseClicked(e);
             }
             modeler.mouseClicked(e);
+        } else {
+            if(e.clickCount >= 2)
+            {
+                var url = "";
+                if (this instanceof UserTask) {
+                    url = modeler.taskInboxUrl;
+                } else if (this instanceof DataObject) {
+                    url = modeler.repositUrl;
+                }
+                if (not url.equals("")) {
+                    javafx.stage.AppletStageExtension.showDocument(url,"_new");
+                }
+            }
         }
     }
 
