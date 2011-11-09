@@ -547,6 +547,11 @@ public class Modeler extends GenericResource {
     public void doApplet(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         String suri = request.getParameter("suri");
         String current = request.getParameter("currentActivities");
+        String tp = request.getParameter("tp");
+        String rp = request.getParameter("rp");
+        if (tp == null) tp = "";
+        if (rp == null) rp = "";
+        
         if (current == null) {
             current = "";
         }
@@ -583,6 +588,8 @@ public class Modeler extends GenericResource {
         out.println("              lang: \"" + paramsRequest.getUser().getLanguage() + "\",");
         out.println("              jsess: \"" + request.getSession().getId() + "\",");
         out.println("              currentActivities: \"" + URLDecoder.decode(current) + "\",");
+        out.println("              tp: \"" + URLDecoder.decode(tp) + "\",");
+        out.println("              rp: \"" + URLDecoder.decode(rp) + "\",");
         out.println("              mode: \"" + mode + "\",");
         out.println("              cgipath: \"" + urlapp + "\"");
         out.println("        }");
@@ -598,6 +605,11 @@ public class Modeler extends GenericResource {
         PrintWriter out = response.getWriter();
         String suri = request.getParameter("suri");
         String current = request.getParameter("currentActivities");
+        String tp = request.getParameter("tp");
+        String rp = request.getParameter("rp");
+        if (tp == null) tp = "";
+        if (rp == null) rp = "";
+        
         if (current == null) {
             current = "";
         }
@@ -611,6 +623,8 @@ public class Modeler extends GenericResource {
         urlapp.setCallMethod(urlapp.Call_DIRECT);
         urlapp.setParameter("suri", suri);
         urlapp.setParameter("currentActivities", current);
+        urlapp.setParameter("tp", tp);
+        urlapp.setParameter("rp", rp);
         urlapp.setParameter("mode", mode);
 
         out.println("<div class=\"applet\">");
