@@ -194,8 +194,8 @@ public class ToolBar extends CustomNode
 
         //var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>updateModel</cmd><json>{WBXMLParser.encode(processString,"UTF8")}</json></req>";
         var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>updateModel</cmd><json>{processString}</json></req>";
-        println("applet updateModel - JSON ENVIADO:");
-        println(processString);
+        //println("applet updateModel - JSON ENVIADO:");
+        //println(processString);
         var data=conn.getData(comando);
         AppletStageExtension.eval("parent.reloadTreeNodeByURI('{conn.getUri()}')");
         if(data.indexOf("OK")>0)
@@ -214,8 +214,8 @@ public class ToolBar extends CustomNode
         {
             var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getProcessJSON</cmd></req>";
             var json=conn.getData(comando);
-            println("applet getProcessJSON - JSON RECIBIDO:");
-            println(json);
+            //println("applet getProcessJSON - JSON RECIBIDO:");
+            //println(json);
             //println("json:{json}");
             delete modeler.contents;
             modeler.containerElement=null;
