@@ -17,9 +17,101 @@
 <%@page import="org.semanticwb.model.WebSite"%>
 <%@page import="org.semanticwb.model.WebPage"%>
 <%@page import="org.semanticwb.model.Resourceable"%>
-<%@page import="mx.gob.stps.portalempleo.swb.*"%>
+<%@page import="com.infotec.swb.resources.eventcalendar.*"%>
 <%!
 
+public static String changeCharacters(String data)
+    {
+        if (data == null || data.trim().equals(""))
+        {
+            return data;
+        }
+        String changeCharacters = data.toLowerCase().trim();
+        if (changeCharacters.indexOf("[") != -1)
+        {
+            changeCharacters = changeCharacters.replace('[', ' ');
+        }
+        if (changeCharacters.indexOf("]") != -1)
+        {
+            changeCharacters = changeCharacters.replace(']', ' ');
+        }
+        if (changeCharacters.indexOf("/") != -1)
+        {
+            changeCharacters = changeCharacters.replace('/', ' ');
+        }
+        if (changeCharacters.indexOf(";") != -1)
+        {
+            changeCharacters = changeCharacters.replace(';', ' ');
+        }
+        if (changeCharacters.indexOf(":") != -1)
+        {
+            changeCharacters = changeCharacters.replace(':', ' ');
+        }
+        if (changeCharacters.indexOf("-") != -1)
+        {
+            changeCharacters = changeCharacters.replace('-', ' ');
+        }
+        if (changeCharacters.indexOf(",") != -1)
+        {
+            changeCharacters = changeCharacters.replace(',', ' ');
+        }
+        changeCharacters = changeCharacters.replace('á', 'a');
+        changeCharacters = changeCharacters.replace('é', 'e');
+        changeCharacters = changeCharacters.replace('í', 'i');
+        changeCharacters = changeCharacters.replace('ó', 'o');
+        changeCharacters = changeCharacters.replace('ú', 'u');
+        changeCharacters = changeCharacters.replace('à', 'a');
+        changeCharacters = changeCharacters.replace('è', 'e');
+        changeCharacters = changeCharacters.replace('ì', 'i');
+        changeCharacters = changeCharacters.replace('ò', 'o');
+        changeCharacters = changeCharacters.replace('ù', 'u');
+        changeCharacters = changeCharacters.replace('ü', 'u');
+
+        StringBuilder sb = new StringBuilder();
+        boolean addSpace = true;
+        for (char schar : changeCharacters.toCharArray())
+        {
+            if (schar == ' ')
+            {
+                if (addSpace)
+                {
+                    sb.append(schar);
+                    addSpace = false;
+                }
+            }
+            else
+            {
+                sb.append(schar);
+                addSpace = true;
+            }
+
+        }
+        return sb.toString().trim();
+    }
+
+    public String getTitleURL(String title)
+    {
+        title = changeCharacters(title);
+
+        StringBuilder sb = new StringBuilder();
+
+        for (char s : title.toCharArray())
+        {
+            if (s == ' ')
+            {
+                sb.append('-');
+            }
+            else if (Character.isLetterOrDigit(s))
+            {
+                sb.append(s);
+            }
+            else
+            {
+                sb.append('-');
+            }
+        }
+        return sb.toString();
+    }
     public Set<Integer> getDays(Set<Event> eventos, int year, int month)
     {
 
@@ -36,7 +128,7 @@
 
     }
 
-    public Set<Integer> getMonths(List<mx.gob.stps.portalempleo.swb.Event> eventos, int year)
+    public Set<Integer> getMonths(List<com.infotec.swb.resources.eventcalendar.Event> eventos, int year)
     {
 
         HashSet<Integer> getYears = new HashSet<Integer>();
@@ -237,7 +329,7 @@
         if( event.isValid() && event.getStart()!=null && event.getStart().getYear()==currentYear )
             temp.add(event);
 
-    }    
+    }
     events.clear();
     events.addAll(temp);
     Collections.sort(events, new Event.EventSortByStartDate());
@@ -359,13 +451,9 @@
         {
             hasBehind = false;
         }
-        
-        sdf = new SimpleDateFormat("dd 'de' MMMM 'de' yyyy", locale);
-        
-        SimpleDateFormat md = new SimpleDateFormat("MMM dd", locale);
-        DateFormatSymbols simbols=md.getDateFormatSymbols();
-        simbols.setShortMonths(new String[]{"Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"});
 
+        sdf = new SimpleDateFormat("dd 'de' '<span class=\"cap\">'MMMM'</span>' 'de' yyyy", locale);
+        SimpleDateFormat md = new SimpleDateFormat("'<span class=\"cap\">'MMM'</span>' dd", locale);
         SimpleDateFormat dd = new SimpleDateFormat("dd", locale);
         out.println(" <div id=\"mes\">");
         if (hasBehind)
@@ -387,21 +475,17 @@
         for (Event event : events)
         {
             out.println("<div>");
+            out.println("<div class=\"range\">");
             if(event.getEnd()==null) {
-            
                 out.println("<span class=\"dia_calendario\">"+md.format(event.getStart())+"</span>");
-                
             }else if(event.getEnd()!=null && event.getStart().getMonth()==event.getEnd().getMonth()) {
-            
-                out.println("<span class=\"dia_calendario\">"+md.format(event.getStart())+" al "+  dd.format(event.getEnd()) +" </span>");
-                //out.println("<span class=\"dia_calendario\">" + dd.format(event.getEnd()) + "</span>");
-                
+                out.println("<span class=\"dia_calendario\">"+md.format(event.getStart())+"</span> <span class=\"art\">al</span> <span class=\"dia_calendario\">"+dd.format(event.getEnd())+"</span>");
             }else if(event.getEnd()!=null && event.getStart().getMonth()!=event.getEnd().getMonth()){
-            
-                out.println("<span class=\"dia_calendario\">"+md.format(event.getStart())+" al "+  md.format(event.getEnd())  +"</span> a");
-                //out.println("<span class=\"dia_calendario\">" + md.format(event.getEnd()) + "</span>");
+                out.println("<span class=\"dia_calendario\">"+md.format(event.getStart())+"</span> <span class=\"art\">a</span> <span class=\"dia_calendario\">"+md.format(event.getEnd())+"</span>");
             }
-            out.println("<p><a href=\"" + event.getUrl() + "\">" + event.getTitle() + "</a></p>");
+            String titleURL=getTitleURL(event.getDisplayTitle(paramRequest.getUser().getLanguage()));
+            out.println("</div>");
+            out.println("<p><a href=\"" + event.getUrl()+"/"+titleURL + "\">" + event.getTitle() + "</a></p>");
             out.println("<p>"+sdf.format(event.getStart())+"</p>");
             out.println("<p>"+(event.getSchedule()==null?"":event.getSchedule())+"</p>");
             out.println(" </div>");
