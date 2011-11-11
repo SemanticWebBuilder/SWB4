@@ -42,7 +42,6 @@ import org.junit.*;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-import org.semanticwb.model.WebSite;
 import org.semanticwb.rdf.RemoteGraph;
 
 /**
@@ -88,7 +87,7 @@ public class TestDBPedia2 {
         model.write(System.out);
     }
 
-    @Test
+    //@Test
     public void QueryDBPediaConstruct() {
        	String queryString =
             "PREFIX dbpedia:      <http://dbpedia.org/resource/> " +

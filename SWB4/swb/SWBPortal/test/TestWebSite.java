@@ -93,7 +93,7 @@ public class TestWebSite {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-    @Test
+    //@Test
     public void Test1()
     {
         if(SWBContext.getWebSite("sep")==null)
@@ -184,7 +184,7 @@ public class TestWebSite {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-    @Test
+    //@Test
     public void Test2()
     {
         WebSite site=SWBContext.getWebSite("sep");
@@ -222,7 +222,7 @@ public class TestWebSite {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-    @Test
+    //@Test
     public void Test3()
     {
         WebSite site=SWBContext.getWebSite("sep");

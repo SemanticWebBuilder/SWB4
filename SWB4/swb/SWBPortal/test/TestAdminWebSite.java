@@ -23,7 +23,6 @@
  
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Iterator;
 import org.junit.*;
 
 /*
@@ -470,7 +469,7 @@ public class TestAdminWebSite {
         }catch(Exception e){e.printStackTrace();}
     }
 
-    @Test
+    //@Test
     public void writeAdminNT()
     {
         WebSite site=SWBContext.getAdminWebSite();
