@@ -315,18 +315,28 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
             return null;
         }else
         {
+            //resource
+            //webpage
+            //user
+            //language
+            //user_webpage
+                                    
             Resource base=paramRequest.getResourceBase();
-//            if(base.getResourceType().getResourceCacheType()==null)
-//            {
-//
-//            }else if("webpage".equals(base.getResourceType().getResourceCacheType()==null))
-//            {
-//
-//            }else if("user".equals(base.getResourceType().getResourceCacheType()==null))
-//            {
-//
-//            }
-            return SWBResourceCachedMgr.getKey(base);
+            String key = SWBResourceCachedMgr.getKey(base);
+            if("webpage".equals(base.getResourceType().getResourceCacheType()==null))
+            {
+                key=paramRequest.getWebPage().getId()+"_"+key;
+            }else if("user".equals(base.getResourceType().getResourceCacheType()==null))
+            {
+                key=paramRequest.getUser().getId()+"_"+key;
+            }else if("language".equals(base.getResourceType().getResourceCacheType()==null))
+            {
+                key=paramRequest.getUser().getLanguage()+"_"+key;
+            }else if("user_webpage".equals(base.getResourceType().getResourceCacheType()==null))
+            {
+                key=paramRequest.getUser().getId()+"_"+paramRequest.getWebPage().getId()+"_"+key;
+            }
+            return key;
         }
     }
    
