@@ -336,9 +336,9 @@
 <%
                 }
 
-                SWBResourceURL urlall = paramRequest.getRenderUrl();
-                urlall.setMode(urlall.Mode_VIEW);
-                urlall.setCallMethod(urlall.Call_CONTENT);
+                String urlall = paramRequest.getWebPage().getUrl();
+                //urlall.setMode(urlall.Mode_VIEW);
+                //urlall.setCallMethod(urlall.Call_CONTENT);
                 String viewAll = "[Ver todas las noticias]";
                 if (paramRequest.getUser().getLanguage() != null && !paramRequest.getUser().getLanguage().equalsIgnoreCase("en"))
                 {
