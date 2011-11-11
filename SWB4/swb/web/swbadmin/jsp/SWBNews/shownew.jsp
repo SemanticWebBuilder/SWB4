@@ -203,7 +203,7 @@ public static String changeCharacters(String data)
             SWBNewContent content = (SWBNewContent) request.getAttribute("content");
             SWBNews news = (SWBNews) request.getAttribute("this");
 
-
+            
             if (content == null && request.getParameter("uri") != null)
             {
                 String uri = request.getParameter("uri");
