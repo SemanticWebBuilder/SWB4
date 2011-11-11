@@ -542,10 +542,10 @@ public boolean execute(String str, String[] str1) throws java.sql.SQLException
             System.out.println("--> execute():" + query);
             System.out.println("--> args:" + args);
             args = "";
-            if (query.contains("Delete"))
-            {
-                new Exception().printStackTrace();
-            }
+//            if (query.contains("Delete"))
+//            {
+//                new Exception().printStackTrace();
+//            }
         }
         checkStatement();
         return st.executeUpdate();
@@ -816,7 +816,7 @@ public boolean execute(String str, String[] str1) throws java.sql.SQLException
             System.out.println("--> execute():" + query);
             System.out.println("--> args:" + args);
             args = "";
-            new Exception().printStackTrace();
+            //new Exception().printStackTrace();
         }
 
         try
