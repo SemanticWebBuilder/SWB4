@@ -1,5 +1,97 @@
 <%@page import="com.infotec.swb.resources.eventcalendar.Event"%><%@page import="org.semanticwb.portal.api.*,org.semanticwb.portal.resources.sem.news.*,org.w3c.dom.*,java.util.*,org.semanticwb.model.WebPage,org.semanticwb.platform.SemanticObject"%><%@page import="org.semanticwb.model.*,org.semanticwb.SWBUtils,org.semanticwb.SWBPortal,org.semanticwb.SWBPlatform,org.semanticwb.platform.*,org.semanticwb.portal.api.SWBResourceURL"%><%!    private static String idNoticias = "Noticias";
 
+public static String changeCharacters(String data)
+    {
+        if (data == null || data.trim().equals(""))
+        {
+            return data;
+        }
+        String changeCharacters = data.toLowerCase().trim();
+        if (changeCharacters.indexOf("[") != -1)
+        {
+            changeCharacters = changeCharacters.replace('[', ' ');
+        }
+        if (changeCharacters.indexOf("]") != -1)
+        {
+            changeCharacters = changeCharacters.replace(']', ' ');
+        }
+        if (changeCharacters.indexOf("/") != -1)
+        {
+            changeCharacters = changeCharacters.replace('/', ' ');
+        }
+        if (changeCharacters.indexOf(";") != -1)
+        {
+            changeCharacters = changeCharacters.replace(';', ' ');
+        }
+        if (changeCharacters.indexOf(":") != -1)
+        {
+            changeCharacters = changeCharacters.replace(':', ' ');
+        }
+        if (changeCharacters.indexOf("-") != -1)
+        {
+            changeCharacters = changeCharacters.replace('-', ' ');
+        }
+        if (changeCharacters.indexOf(",") != -1)
+        {
+            changeCharacters = changeCharacters.replace(',', ' ');
+        }
+        changeCharacters = changeCharacters.replace('á', 'a');
+        changeCharacters = changeCharacters.replace('é', 'e');
+        changeCharacters = changeCharacters.replace('í', 'i');
+        changeCharacters = changeCharacters.replace('ó', 'o');
+        changeCharacters = changeCharacters.replace('ú', 'u');
+        changeCharacters = changeCharacters.replace('à', 'a');
+        changeCharacters = changeCharacters.replace('è', 'e');
+        changeCharacters = changeCharacters.replace('ì', 'i');
+        changeCharacters = changeCharacters.replace('ò', 'o');
+        changeCharacters = changeCharacters.replace('ù', 'u');
+        changeCharacters = changeCharacters.replace('ü', 'u');
+        changeCharacters = changeCharacters.replace('ñ', 'n');
+        StringBuilder sb = new StringBuilder();
+        boolean addSpace = true;
+        for (char schar : changeCharacters.toCharArray())
+        {
+            if (schar == ' ')
+            {
+                if (addSpace)
+                {
+                    sb.append(schar);
+                    addSpace = false;
+                }
+            }
+            else
+            {
+                sb.append(schar);
+                addSpace = true;
+            }
+
+        }
+        return sb.toString().trim();
+    }
+
+    public String getTitleURL(String title)
+    {
+        title = changeCharacters(title);
+
+        StringBuilder sb = new StringBuilder();
+
+        for (char s : title.toCharArray())
+        {
+            if (s == ' ')
+            {
+                sb.append('-');
+            }
+            else if (Character.isLetterOrDigit(s))
+            {
+                sb.append(s);
+            }
+            else
+            {
+                sb.append('-');
+            }
+        }
+        return sb.toString();
+    }
     public static class EventSortByStartDate implements Comparator<Event>
     {
 
@@ -110,6 +202,7 @@
                     item.appendChild(guid);
                     guid.appendChild(doc.createTextNode(element.getResourceBase().getURI()));
                     channel.appendChild(item);
+                    
                     String title = element.getResourceBase().getTitle(paramRequest.getUser().getLanguage());
                     if (title == null || title.trim().equals(""))
                     {
@@ -121,8 +214,9 @@
                         title = title.replace('"', '\'');
                     }
                     addAtribute(item, "title", title);
+                    String titleURL = getTitleURL(element.getResourceBase().getDisplayTitle(paramRequest.getUser().getLanguage()));
                     //addAtribute(item, "link",  baserequest+url + "?uri=" + element.getResourceBase().getEncodedURI());
-                    addAtribute(item, "link", baserequest + url + "?uri=" + element.getResourceBase().getId());
+                    addAtribute(item, "link", baserequest + url + "/" + element.getResourceBase().getId()+"/"+titleURL);
                     Element category = doc.createElement("category");
                     item.appendChild(category);
                     category.appendChild(doc.createTextNode("Noticias"));
@@ -210,7 +304,8 @@
                         item.appendChild(category);
                         category.appendChild(doc.createTextNode("Eventos"));
                         addAtribute(item, "title", title);
-                        addAtribute(item, "link", baserequest + event.getUrl());
+                        String titleURL = getTitleURL(event.getDisplayTitle(paramRequest.getUser().getLanguage()));
+                        addAtribute(item, "link", baserequest + event.getUrl()+"/"+titleURL);
                         addAtribute(item, "description", description);
 
                         java.util.Calendar cal= java.util.Calendar.getInstance();
