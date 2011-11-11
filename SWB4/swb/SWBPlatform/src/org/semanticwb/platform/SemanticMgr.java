@@ -71,7 +71,9 @@ public class SemanticMgr implements SWBInstanceObject
     private static String NULL="__NULL__";
 
     /** The use cache. */
-    private boolean useCache=false;
+    private boolean tripleCache=false;
+    
+    private boolean semobjCache=false;
 
     /**
      * The Enum ModelSchema.
@@ -243,10 +245,12 @@ public class SemanticMgr implements SWBInstanceObject
     /**
      * Initialize db.
      */
-    public void initializeDB() {
-
-        useCache=Boolean.parseBoolean(SWBPlatform.getEnv("swb/tripleFullCache","false"));
-        log.event("TripleFullCache:"+useCache);
+    public void initializeDB() 
+    {
+        tripleCache=Boolean.parseBoolean(SWBPlatform.getEnv("swb/tripleFullCache","false"));
+        semobjCache=Boolean.parseBoolean(SWBPlatform.getEnv("swb/semanticObjectFullCache","true"));
+        log.event("TripleFullCache:"+tripleCache);
+        log.event("SemanticObjectFullCache:"+semobjCache);
 
         String clsname="org.semanticwb.rdf.RDBStore";
         if (SWBPlatform.isSDB()) 
@@ -593,12 +597,12 @@ public class SemanticMgr implements SWBInstanceObject
             SemanticModel model = loadDBModel(name);
             model.setDataset(store.getDataset());
             
-            if (useCache && !(model.getRDFModel().getGraph() instanceof GraphCached)) {
+            if (semobjCache && !(model.getRDFModel().getGraph() instanceof GraphCached)) 
+            {
                 //Se cambia cache de grafo por cache de semanticObjects
                 log.event("LoadingModel:"+name+" FullCache");
                 SemanticObject.loadFullCache(model);
-            }
-            
+            }            
         }
     }
 
@@ -610,7 +614,7 @@ public class SemanticMgr implements SWBInstanceObject
      * @return
      */
     private SemanticModel loadDBModel(String name) {
-        return loadDBModel(name, useCache);
+        return loadDBModel(name, tripleCache);
     }
 
     /**
@@ -625,10 +629,10 @@ public class SemanticMgr implements SWBInstanceObject
         //new Exception().printStackTrace();
         Model model = loadRDFDBModel(name);
         
-        //if (cached) {
+        if (cached) {
             //System.out.println("Cache:"+name);
-            //model = new ModelCom(new GraphCached((model.getGraph())));
-        //}
+            model = new ModelCom(new GraphCached((model.getGraph())));
+        }
         
         if (name.equals(SWBAdmin) && !SWBPlatform.createInstance().isAdminDev()) {
             //System.out.println(model);
@@ -763,7 +767,7 @@ public class SemanticMgr implements SWBInstanceObject
      * @return the semantic model
      */
     public SemanticModel createModel(String name, String nameSpace) {
-        return createDBModel(name, nameSpace, useCache);
+        return createDBModel(name, nameSpace, tripleCache);
     }
 
     /**
