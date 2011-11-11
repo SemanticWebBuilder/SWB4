@@ -30,6 +30,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import javax.servlet.http.*;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.platform.SemanticObject;
@@ -69,22 +70,21 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
-        System.out.println("processAction....");
+System.out.println("processAction....");
         if(action.equals(response.Action_ADD)) {
-            System.out.println("adding...");
+System.out.println("adding...");
             String securCodeSent = request.getParameter("cmnt_seccode");
             String securCodeCreated = (String)request.getSession(true).getAttribute("cs");
-            if( securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent)) {
+            if( securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent) ) {
                 String uri = request.getParameter("uri");
-                System.out.println("uri="+uri);
+System.out.println("uri="+uri);
                 SWBClass element = (SWBClass)SemanticObject.createSemanticObject(uri).createGenericInstance();
-
-                if( element!=null) {
+                if(element!=null) {
                     CommentToElement comment = CommentToElement.ClassMgr.createCommentToElement(response.getWebPage().getWebSite());
-                    comment.setCommentToElement(request.getParameter("cmnt_comment"));
+                    comment.setCommentToElement(SWBUtils.XML.replaceXMLChars(request.getParameter("cmnt_comment")));
                     comment.setElement(element);
                     addComment(comment);
-                    System.out.println("comentario="+request.getParameter("cmnt_comment"));
+System.out.println("comentario="+request.getParameter("cmnt_comment"));
                 }
                 response.setRenderParameter("uri", uri);                
             }else {
@@ -115,11 +115,17 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         
-        String comment = request.getParameter("cmnt_comment")==null ? "" : request.getParameter("cmnt_comment");
         String uri = request.getParameter("uri");
+        SWBClass element = (SWBClass)SemanticObject.createSemanticObject(uri).createGenericInstance();
+        if(element!=null) {
+            out.println("no existe un elemento para comentar");
+            out.flush();
+            out.close();
+            return;
+        }
 
-        //System.out.println("\n\ndoView.......");
-        //System.out.println("uri="+uri);
+System.out.println("\n\nSWBCommentToElement   doView.......");
+System.out.println("uri="+uri);
 
         SWBResourceURL rUrl = paramRequest.getActionUrl();
         rUrl.setAction(paramRequest.Action_ADD);
@@ -170,8 +176,11 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         out.println("} ");
         out.println("-->");
         out.println("</script> ");
-
-        out.println(renderListComments(paramRequest, uri));
+        
+        String comment = request.getParameter("cmnt_comment")==null?"":request.getParameter("cmnt_comment");
+        String name = request.getParameter("name")==null?"":request.getParameter("name");
+        String email = request.getParameter("email")==null?"":request.getParameter("email");
+        
         out.println("<div class=\"swb-comentario-sem\">");
         out.println("<h2>"+paramRequest.getLocaleString("add")+"</h2>");
         out.println("<form name=\"cmnt\" id=\"cmnt\" action=\""+rUrl+"\" method=\"post\">\n");
@@ -192,6 +201,8 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         out.println("</div>");
         out.println("</form>");
         out.println("</div>");
+        
+        out.println(renderListComments(paramRequest, uri));
         
         out.flush();
         out.close();
