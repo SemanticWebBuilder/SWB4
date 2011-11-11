@@ -23,11 +23,13 @@
 package org.semanticwb.portal.resources.sem.news;
 
 import java.io.IOException;
+import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
@@ -52,7 +54,6 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
     /** The Constant log. */
     private static final Logger log = SWBUtils.getLogger(SWBNews.class);
 
-
     /**
      * Instantiates a new sWB news.
      */
@@ -69,7 +70,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
     {
         super(base);
     }
-    
+
     /**
      * Gets the news by month.
      * 
@@ -82,16 +83,16 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         TreeMap<String, List<SWBNewContent>> getNewsByMonth = new TreeMap<String, List<SWBNewContent>>();
         for (SWBNewContent content : contents)
         {
-            if(content.getPublishDate()!=null)
+            if (content.getPublishDate() != null)
             {
                 calendar.setTime(content.getPublishDate());
                 int newmonth = calendar.get(Calendar.MONTH);
                 int year = calendar.get(Calendar.YEAR);
-                String key=newmonth+"_"+year;
-                List<SWBNewContent> contentsMonth=getNewsByMonth.get(key);
-                if(contentsMonth==null)
+                String key = newmonth + "_" + year;
+                List<SWBNewContent> contentsMonth = getNewsByMonth.get(key);
+                if (contentsMonth == null)
                 {
-                    contentsMonth=new ArrayList<SWBNewContent>();
+                    contentsMonth = new ArrayList<SWBNewContent>();
                     getNewsByMonth.put(key, contentsMonth);
                 }
                 contentsMonth.add(content);
@@ -99,7 +100,6 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         }
         return getNewsByMonth;
     }
-
 
     /**
      * Gets the years.
@@ -109,11 +109,11 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
      */
     public static String[] getYears(List<SWBNewContent> contents)
     {
-        HashSet<String> getyears=new HashSet<String>();
+        HashSet<String> getyears = new HashSet<String>();
         Calendar calendar = Calendar.getInstance();
         for (SWBNewContent content : contents)
         {
-            if(content.getPublishDate()!=null)
+            if (content.getPublishDate() != null)
             {
                 calendar.setTime(content.getPublishDate());
                 int new_year = calendar.get(Calendar.YEAR);
@@ -131,15 +131,15 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
      * @param year the year
      * @return true, if successful
      */
-    public static boolean hasNews(List<SWBNewContent> contents, int month,int year)
+    public static boolean hasNews(List<SWBNewContent> contents, int month, int year)
     {
         Calendar calendar = Calendar.getInstance();
         for (SWBNewContent content : contents)
         {
-            if(content.getPublishDate()!=null)
+            if (content.getPublishDate() != null)
             {
-                calendar.setTime(content.getPublishDate());                
-                if (month == calendar.get(Calendar.MONTH) && year==calendar.get(Calendar.YEAR))
+                calendar.setTime(content.getPublishDate());
+                if (month == calendar.get(Calendar.MONTH) && year == calendar.get(Calendar.YEAR))
                 {
                     return true;
                 }
@@ -159,19 +159,19 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         {
             doShowNewsByMoth(request, response, paramRequest);
         }
-        else if(paramRequest.getMode().equals("title"))
+        else if (paramRequest.getMode().equals("title"))
         {
             doTitle(request, response, paramRequest);
         }
-        else if(paramRequest.getMode().equals("meta"))
+        else if (paramRequest.getMode().equals("meta"))
         {
             doMeta(request, response, paramRequest);
         }
-        else if(paramRequest.getMode().equals("rss"))
+        else if (paramRequest.getMode().equals("rss"))
         {
             doRss(request, response, paramRequest);
         }
-        else if(paramRequest.getMode().equals("strategy"))
+        else if (paramRequest.getMode().equals("strategy"))
         {
             doStategy(request, response, paramRequest);
         }
@@ -180,7 +180,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
             super.processRequest(request, response, paramRequest);
         }
     }
-    
+
     /**
      * Gets the news.
      * 
@@ -188,7 +188,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
      * @param user the user
      * @return the news
      */
-    private List<SWBNewContent> getNews(String uri,User user)
+    private List<SWBNewContent> getNews(String uri, User user)
     {
         List<SWBNewContent> news = new ArrayList<SWBNewContent>();
         GenericIterator<Resource> resources = null;
@@ -229,7 +229,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
                 Resource resource = resources.next();
                 if (resource.isActive() && !resource.isDeleted() && user.haveAccess(resource))
                 {
-                    SWBNewContent object = (SWBNewContent)resource.getResourceData().createGenericInstance();
+                    SWBNewContent object = (SWBNewContent) resource.getResourceData().createGenericInstance();
                     if (uri == null)
                     {
                         try
@@ -237,7 +237,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
                             object.setResourceBase(resource);
                             news.add(object);
                         }
-                        catch(Exception e)
+                        catch (Exception e)
                         {
                             log.error(e);
 
@@ -247,13 +247,13 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
                     {
                         if (uri.equals(resource.getURI()) || uri.equals(resource.getId()))
                         {
-                            
+
                             try
                             {
                                 object.setResourceBase(resource);
                                 news.add(object);
                             }
-                            catch(Exception e)
+                            catch (Exception e)
                             {
                                 log.error(e);
 
@@ -266,7 +266,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         }
         return news;
     }
-    
+
     /**
      * Do show news by moth.
      * 
@@ -278,24 +278,27 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
      */
     public void doShowNewsByMoth(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        String basePath="/work/models/"+paramRequest.getWebPage().getWebSite().getId()+"/jsp/"+ this.getClass().getSimpleName() +"/";
-        if(request.getParameter("month")!=null )
+
+
+
+        String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/jsp/" + this.getClass().getSimpleName() + "/";
+        if (request.getParameter("month") != null)
         {
-            int month=-1;
-            int year=Calendar.getInstance().get(Calendar.YEAR);
-            if(request.getParameter("year")!=null)
+            int month = -1;
+            int year = Calendar.getInstance().get(Calendar.YEAR);
+            if (request.getParameter("year") != null)
             {
-                year=Integer.parseInt(request.getParameter("year"));
+                year = Integer.parseInt(request.getParameter("year"));
             }
             try
             {
-                month=Integer.parseInt(request.getParameter("month"));                
-                String key=month+"_"+year;
-                if(month>=0 && month<=12)
+                month = Integer.parseInt(request.getParameter("month"));
+                String key = month + "_" + year;
+                if (month >= 0 && month <= 12)
                 {
-                    List<SWBNewContent> news = getNews(null,paramRequest.getUser());
-                    news=getNewsByMonth(news).get(key);
-                    String path = basePath+"newsByMonth.jsp";
+                    List<SWBNewContent> news = getNews(null, paramRequest.getUser());
+                    news = getNewsByMonth(news).get(key);
+                    String path = basePath + "newsByMonth.jsp";
                     RequestDispatcher dis = request.getRequestDispatcher(path);
                     try
                     {
@@ -311,21 +314,78 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
                     return;
                 }
             }
-            catch(NumberFormatException nfe)
+            catch (NumberFormatException nfe)
             {
                 log.error(nfe);
-            }            
+            }
+        }
+        String languser = "es";
+        if (paramRequest.getUser().getLanguage() != null)
+        {
+            languser = paramRequest.getUser().getLanguage();
+        }
+        Locale userlocale = new Locale(languser);
+        DateFormatSymbols ds = new DateFormatSymbols(userlocale);
+        String uri = request.getRequestURI();
+        StringTokenizer st = new StringTokenizer(uri, "/");
+        if (st.countTokens() == 9)
+        {
+            ArrayList<String> values = new ArrayList<String>();
+            while (st.hasMoreTokens())
+            {
+                String data = st.nextToken();
+                values.add(data);
+            }
+            String s_month = values.get(7);
+            String s_year = values.get(8);
+            try
+            {
+                int iYear = Integer.parseInt(s_year);
+                int iMonth = -1;
+                for (String month : ds.getMonths())
+                {
+                    iMonth++;
+                    if (month.equalsIgnoreCase(s_month))
+                    {
+                        String key = iMonth + "_" + iYear;
+                        if (iMonth >= 0 && iMonth <= 12)
+                        {
+                            List<SWBNewContent> news = getNews(null, paramRequest.getUser());
+                            news = getNewsByMonth(news).get(key);
+                            String path = basePath + "newsByMonth.jsp";
+                            RequestDispatcher dis = request.getRequestDispatcher(path);
+                            try
+                            {
+                                request.setAttribute("paramRequest", paramRequest);
+                                request.setAttribute("news", news);
+                                request.setAttribute("this", this);
+                                dis.include(request, response);
+                            }
+                            catch (Exception e)
+                            {
+                                log.error(e);
+                            }
+                            return;
+                        }
+                        break;
+                    }
+                }
+
+            }
+            catch (NumberFormatException nfe)
+            {
+            }
         }
         doView(request, response, paramRequest);
     }
 
     public void doTitle(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        String basePath="/work/models/"+paramRequest.getWebPage().getWebSite().getId()+"/jsp/"+ this.getClass().getSimpleName() +"/";
-        List<SWBNewContent> news=getNews(null,paramRequest.getUser());
-        String path = basePath+"title.jsp";
-        RequestDispatcher dis = request.getRequestDispatcher(path);        
-        String url=paramRequest.getWebPage().getUrl();
+        String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/jsp/" + this.getClass().getSimpleName() + "/";
+        List<SWBNewContent> news = getNews(null, paramRequest.getUser());
+        String path = basePath + "title.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        String url = paramRequest.getWebPage().getUrl();
         try
         {
             request.setAttribute("paramRequest", paramRequest);
@@ -342,11 +402,11 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
 
     public void doMeta(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        String basePath="/work/models/"+paramRequest.getWebPage().getWebSite().getId()+"/jsp/"+ this.getClass().getSimpleName() +"/";
-        List<SWBNewContent> news=getNews(null,paramRequest.getUser());
-        String path = basePath+"meta.jsp";
+        String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/jsp/" + this.getClass().getSimpleName() + "/";
+        List<SWBNewContent> news = getNews(null, paramRequest.getUser());
+        String path = basePath + "meta.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
-        String url=paramRequest.getWebPage().getUrl();
+        String url = paramRequest.getWebPage().getUrl();
         try
         {
             request.setAttribute("paramRequest", paramRequest);
@@ -360,6 +420,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
             log.error(e);
         }
     }
+
     /**
      * Do rss.
      * 
@@ -371,14 +432,14 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
      */
     public void doRss(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        String basePath="/work/models/"+paramRequest.getWebPage().getWebSite().getId()+"/jsp/"+ this.getClass().getSimpleName() +"/";
-        List<SWBNewContent> news=getNews(null,paramRequest.getUser());
-        String path = basePath+"rss.jsp";
+        String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/jsp/" + this.getClass().getSimpleName() + "/";
+        List<SWBNewContent> news = getNews(null, paramRequest.getUser());
+        String path = basePath + "rss.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         /*SWBResourceURL url=paramRequest.getRenderUrl();
         url.setCallMethod(url.Call_CONTENT);
         url.setMode(url.Mode_VIEW);*/
-        String url=paramRequest.getWebPage().getUrl();
+        String url = paramRequest.getWebPage().getUrl();
         try
         {
             response.setContentType("application/rss+xml");
@@ -394,15 +455,14 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         }
     }
 
-    
     public void doStategy(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        String basePath="/work/models/"+paramRequest.getWebPage().getWebSite().getId()+"/jsp/"+ this.getClass().getSimpleName() +"/";
-        String path = basePath+"strategy.jsp";
+        String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/jsp/" + this.getClass().getSimpleName() + "/";
+        String path = basePath + "strategy.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
         {
-            request.setAttribute("paramRequest", paramRequest);            
+            request.setAttribute("paramRequest", paramRequest);
             dis.include(request, response);
         }
         catch (Exception e)
@@ -417,8 +477,8 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        String basePath="/work/models/"+paramRequest.getWebPage().getWebSite().getId()+"/jsp/"+ this.getClass().getSimpleName() +"/";
-        String path = basePath+"content.jsp";
+        String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/jsp/" + this.getClass().getSimpleName() + "/";
+        String path = basePath + "content.jsp";
 
         if (paramRequest.getArgument("mode") != null && "rss".equals(paramRequest.getArgument("mode")))
         {
@@ -435,18 +495,18 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
 
         String uri = request.getParameter("uri");
 
-        if(uri!=null && !uri.startsWith("http:"))
+        if (uri != null && !uri.startsWith("http:"))
         {
-            String uriSite=paramRequest.getWebPage().getWebSite().getSemanticObject().getURI();
-            int pos=uriSite.indexOf("#");
-            if(pos!=-1)
+            String uriSite = paramRequest.getWebPage().getWebSite().getSemanticObject().getURI();
+            int pos = uriSite.indexOf("#");
+            if (pos != -1)
             {
-                uriSite=uriSite.substring(0,pos);
+                uriSite = uriSite.substring(0, pos);
             }
-            uri=uriSite+"/Resource#"+uri;
+            uri = uriSite + "/Resource#" + uri;
         }
 
-        
+
         if (uri != null)
         {
             uri = uri.trim();
@@ -456,7 +516,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
             }
         }
 
-        if(uri==null)
+        if (uri == null)
         {
             StringTokenizer st = new StringTokenizer(request.getRequestURI(), "/");
             if (st.countTokens() >= 4)
@@ -467,29 +527,29 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
                     values.add(st.nextToken());
                 }
                 uri = values.get(3);
-                if ("_rid".equals(uri) && values.size()>=6)
+                if ("_rid".equals(uri) && values.size() >= 6)
                 {
                     uri = values.get(5);
-                }                
+                }
             }
         }
         if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY)
         {
-            path = basePath+"strategy.jsp";
+            path = basePath + "strategy.jsp";
             uri = null;
         }
 
-        List<SWBNewContent> news=getNews(uri,paramRequest.getUser());
+        List<SWBNewContent> news = getNews(uri, paramRequest.getUser());
         if (uri != null && paramRequest.getCallMethod() == SWBParamRequest.Call_CONTENT)
-        {            
+        {
             // busca el objeto
             for (SWBNewContent content : news)
-            {                
+            {
                 if (content.getResourceBase().getURI().equals(uri) || content.getResourceBase().getId().equals(uri))
                 {
                     if (content.getResourceBase().isValid() && paramRequest.getUser().haveAccess(content.getResourceBase()))
                     {
-                        path = basePath+"shownew.jsp";
+                        path = basePath + "shownew.jsp";
                         RequestDispatcher dis = request.getRequestDispatcher(path);
                         try
                         {
@@ -525,8 +585,6 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
             log.error(e);
         }
     }
-
-    
 }
 
 class SortNews implements java.util.Comparator<SWBNewContent>
@@ -535,7 +593,7 @@ class SortNews implements java.util.Comparator<SWBNewContent>
     @Override
     public int compare(SWBNewContent o1, SWBNewContent o2)
     {
-        if(o1.getPublishDate()!=null && o2.getPublishDate()!=null)
+        if (o1.getPublishDate() != null && o2.getPublishDate() != null)
         {
             return o2.getPublishDate().compareTo(o1.getPublishDate());
         }
