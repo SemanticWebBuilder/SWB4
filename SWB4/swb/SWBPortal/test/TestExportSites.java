@@ -70,7 +70,7 @@ public class TestExportSites {
     public void tearDown() {
     }
 
-    @Test
+    //@Test
     public void exportWebSite() {
         try {
             //Substituir x uri dinamica
@@ -110,7 +110,7 @@ public class TestExportSites {
         }
     }
 
-    @Test
+    //@Test
     public void importWebSite() {
         try {
              //Substituir x uri dinamica
