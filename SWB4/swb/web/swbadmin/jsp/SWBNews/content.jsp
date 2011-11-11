@@ -46,7 +46,7 @@
         changeCharacters = changeCharacters.replace('ò', 'o');
         changeCharacters = changeCharacters.replace('ù', 'u');
         changeCharacters = changeCharacters.replace('ü', 'u');
-
+        changeCharacters = changeCharacters.replace('ñ', 'n');
         StringBuilder sb = new StringBuilder();
         boolean addSpace = true;
         for (char schar : changeCharacters.toCharArray())
