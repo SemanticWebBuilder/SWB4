@@ -1,3 +1,4 @@
+<%@page import="java.text.DateFormatSymbols"%>
 <%@page import="org.semanticwb.model.Country"%>
 <%@page import="org.semanticwb.model.User"%>
 <%@page import="org.semanticwb.SWBUtils"%>
@@ -132,12 +133,15 @@
         }
     }
 %>
+
+
 <%
             String usrlanguage = paramRequest.getUser().getLanguage();
             Locale locale = new Locale(usrlanguage);
             DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
 
             List<SWBNewContent> contents = (List<SWBNewContent>) request.getAttribute("news");
+
             Collections.sort(contents, new SWBNewContentComparator());
             if (contents != null && contents.size() > 0)
             {
@@ -156,7 +160,7 @@
                         title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayTitle(usrlanguage));
                     }
                     String titleURL = getTitleURL(content.getResourceBase().getDisplayTitle(usrlanguage));
-                    
+
                     String urlcontent = url.toString().replace("&", "&amp;") + "/" + content.getResourceBase().getSemanticObject().getId() + "/" + titleURL;
                     //String urlcontent=url.toString().replace("&", "&amp;");
 
@@ -189,6 +193,7 @@
                     if (content.getPublishDate() != null)
                     {
                         int month = -1;
+
                         if (request.getParameter("month") != null)
                         {
                             try
@@ -200,6 +205,14 @@
                                 e.printStackTrace();
                             }
                         }
+                        String languser = "es";
+                        if (paramRequest.getUser().getLanguage() != null)
+                        {
+                            languser = paramRequest.getUser().getLanguage();
+                        }
+
+
+
                         Calendar cal = Calendar.getInstance();
                         cal.setTime(content.getPublishDate());
                         int year = Calendar.getInstance().get(Calendar.YEAR);
@@ -214,6 +227,40 @@
                                 e.printStackTrace();
                             }
                         }
+                        Locale userlocale = new Locale(languser);
+                        DateFormatSymbols ds = new DateFormatSymbols(userlocale);
+                        String uri = request.getRequestURI();
+                        StringTokenizer st = new StringTokenizer(uri, "/");
+                        if (st.countTokens() == 9)
+                        {
+                            ArrayList<String> values = new ArrayList<String>();
+                            while (st.hasMoreTokens())
+                            {
+                                String data = st.nextToken();
+                                values.add(data);
+                            }
+                            String s_month = values.get(7);
+                            String s_year = values.get(8);
+                            try
+                            {
+                                year = Integer.parseInt(s_year);
+                            }
+                            catch (NumberFormatException nfe)
+                            {
+                            }
+                            int iMonth = -1;
+                            for (String dsmonth : ds.getMonths())
+                            {
+                                iMonth++;
+                                if (dsmonth.equalsIgnoreCase(s_month))
+                                {
+                                    month=iMonth;
+                                    break;
+                                }
+                            }
+                        }
+
+
                         if (!(month == cal.get(Calendar.MONTH) && year == cal.get(Calendar.YEAR)))
                         {
                             continue;
@@ -271,11 +318,11 @@
         %>
         <p>Fuente: <%=source%></p>
         <%
-                                }
-                                else
-                                {
-                                    String urlsource = content.getSourceURL();
-                                    urlsource = urlsource.replace("&", "&amp;");
+                                        }
+                                        else
+                                        {
+                                            String urlsource = content.getSourceURL();
+                                            urlsource = urlsource.replace("&", "&amp;");
         %>
         <p>Fuente: <a href="<%=urlsource%>"><%=source%></a></p>
         <%
