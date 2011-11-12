@@ -1052,8 +1052,13 @@ public class SWBFormMgr implements SWBForms
      */
     public void validateElement(HttpServletRequest request, SemanticProperty prop, String propName) throws FormValidateException
     {
+        SemanticObject obj=m_obj;
+        if(obj==null)
+        {
+            obj=new SemanticObject(m_ref.getModel(), m_cls);
+        }
         FormElement ele=getFormElement(prop);
-        ele.validate(request, m_obj, prop, propName);
+        ele.validate(request, obj, prop, propName);
     }
 
     /**

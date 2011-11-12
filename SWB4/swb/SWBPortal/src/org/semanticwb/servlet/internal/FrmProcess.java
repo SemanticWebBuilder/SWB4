@@ -192,6 +192,8 @@ public class FrmProcess implements InternalServlet
         {
             String _frmele = request.getParameter("_swb_frmele");
             String _obj = request.getParameter("_swb_obj");
+            String _model = request.getParameter("_swb_model");
+            String _cls = request.getParameter("_swb_cls");
             String _prop = request.getParameter("_swb_prop");
             String _urltp = request.getParameter("_swb_urltp");
             String _codetp = request.getParameter("_swb_codetp");
@@ -201,8 +203,12 @@ public class FrmProcess implements InternalServlet
 
             log.debug("frmele:" + _frmele);
             log.debug("obj:" + _obj);
+            log.debug("model:" + _model);
+            log.debug("cls:" + _cls);
             log.debug("prop:" + _prop);
             log.debug("urltp:" + _urltp);
+            
+            //System.out.println(_obj+" "+_model);
 
             if (_frmele != null && _prop != null && _urltp != null)
             {
@@ -214,6 +220,11 @@ public class FrmProcess implements InternalServlet
                     if (_obj != null)
                     {
                         obj = SemanticObject.createSemanticObject(_obj);
+                    }else if (_model != null)
+                    {
+                        SemanticClass cls=null;
+                        if(_cls!=null)cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(_cls);
+                        obj=new SemanticObject(SWBPlatform.getSemanticMgr().getModel(_model),cls);
                     }
                     SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(_prop);
                     if (_urltp.equals(FormElementURL.URLTYPE_PROCESS))
