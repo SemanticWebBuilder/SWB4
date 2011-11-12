@@ -58,7 +58,11 @@ public class LoginElement extends org.semanticwb.model.base.LoginElementBase {
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type,
                                 String mode, String lang) {
         log.debug("Type: " + type);
-
+        
+        //System.out.println("obj:"+obj.getId()+" "+obj.getURI()+" "+obj.getModel()+" prop:"+obj+" propName:"+propName+" type:"+type+" mode:"+mode+" lang:"+lang);
+        
+        //System.out.println(getValidateURL(obj, prop));
+        
         if (type.equals("dojo")) {
             setAttribute("isValid",
                          "return validateElement('" + propName + "','" + getValidateURL(obj, prop)
@@ -109,32 +113,30 @@ public class LoginElement extends org.semanticwb.model.base.LoginElementBase {
             model = ur.getId();
         }
 
-        // String model=request.getParameter("model");
-        // System.out.println("login:"+login+" model:"+model);
+        //String model=request.getParameter("model");
+        //System.out.println("login:"+login+" model:"+model);
         if ((login == null) || (login.length() == 0) || (login.indexOf(' ') > -1) || (model == null))
         {
+            //System.out.println("false1");
             throw new FormValidateException(getLocaleString("errEmpty", "Login vacío o con espacios"));
-
-            // System.out.println("false");
         } else
         {
             if (isValidId(login))
             {
-                if (!((cu != null) && cu.getLogin().equalsIgnoreCase(login)))
+                if (!((cu != null) && login.equalsIgnoreCase(cu.getLogin())))
                 {
                     User tmpobj = SWBContext.getUserRepository(model).getUserByLogin(login);
 
                     if (tmpobj != null)
                     {
+                        //System.out.println("false2");
                         throw new FormValidateException(getLocaleString("errBusy", "Login ya ocupado"));
-
-                        // System.out.println("false");
                     }
                 }
             } else
             {
+                //System.out.println("false3");
                 throw new FormValidateException(getLocaleString("errInvalid", "Login con caracteres inválidos"));
-                // System.out.println("false");
             }
         }
     }
