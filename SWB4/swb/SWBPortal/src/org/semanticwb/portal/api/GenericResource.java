@@ -336,6 +336,7 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
             {
                 key=paramRequest.getUser().getId()+"_"+paramRequest.getWebPage().getId()+"_"+key;
             }
+            //System.out.println(base.getResourceType().getResourceCacheType() +" "+ key);
             return key;
         }
     }
