@@ -134,6 +134,11 @@ public class FormElementURL
         ret.append(SWBPlatform.getContextPath()+"/frmprocess");
         ret.append("?_swb_frmele="+frmele.getSemanticObject().getEncodedURI());
         if(obj!=null && obj.getURI()!=null)ret.append("&_swb_obj="+obj.getEncodedURI());
+        else if(obj !=null && obj.getModel()!=null)
+        {
+            ret.append("&_swb_model="+obj.getModel().getName());
+            if(obj.getSemanticClass()!=null)ret.append("&_swb_cls="+obj.getSemanticClass().getEncodedURI());
+        }
         ret.append("&_swb_prop="+prop.getEncodedURI());
         ret.append("&_swb_urltp="+URLEncoder.encode(urltype));
         if(codetype!=null)ret.append("&_swb_codetp="+URLEncoder.encode(codetype));
