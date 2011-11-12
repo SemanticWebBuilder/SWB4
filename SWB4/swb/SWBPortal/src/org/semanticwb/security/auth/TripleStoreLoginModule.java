@@ -24,8 +24,6 @@
 package org.semanticwb.security.auth;
 
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import javax.security.auth.Subject;
@@ -38,7 +36,6 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBSessionUser;
@@ -130,12 +127,14 @@ public class TripleStoreLoginModule implements LoginModule
         WebSite ws = SWBContext.getWebSite(website);
         UserRepository ur = ws.getUserRepository();
         principal = ur.getUserByLogin(login);
+        log.debug("principal:"+principal);
         //TODO Checar lo del repositorio de usuarios
         if (null == principal)
         {
             throw new LoginException("User inexistent");
         }
 
+        log.debug("isvalid:"+principal.isValid());
         //System.out.println(principal.getClass().getName());
         if (!principal.isValid())
         {
