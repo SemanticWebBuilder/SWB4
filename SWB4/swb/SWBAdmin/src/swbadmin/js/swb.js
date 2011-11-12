@@ -1572,4 +1572,46 @@ function replaceChars4Id(value, lowercase)
         return re.test(strValue);
     }
 
+function MoveItems(lstbxFrom,lstbxTo)
+{
+    var varFromBox = document.getElementById(lstbxFrom);
+    var varToBox = document.getElementById(lstbxTo);
+    if ((varFromBox != null) && (varToBox != null))
+    {
+        if(varFromBox.length < 1)
+        {
+            alert('No hay propiedades en la lista.');
+            return false;
+        }
+        if(varFromBox.options.selectedIndex == -1) // no hay elementos seleccionados
+        {
+            alert('Selecciona una propiedad de la lista.');
+            return false;
+        }
+        while ( varFromBox.options.selectedIndex >= 0 )
+        {
+            var newOption = new Option(); // crea una opcion en el select
+            newOption.text = varFromBox.options[varFromBox.options.selectedIndex].text;
+            newOption.value = varFromBox.options[varFromBox.options.selectedIndex].value;
+            varToBox.options[varToBox.length] = newOption; //agrega la opción al final del select destino
+            varFromBox.remove(varFromBox.options.selectedIndex); //quita la opción del select origen
+        }
+    }
+    return false;
+}
 
+function enviatodos(lstbox)
+{
+    var list = document.getElementById(lstbox);
+    for (var i=0; i<list.options.length; i++){
+        list.options[i].selected=true;
+    }
+    return true;
+}
+
+function updItem(uri,param,sel) {
+    var valor = sel.options[sel.options.selectedIndex].value;
+    var url = uri+'&'+param+'='+escape(valor);
+    submitUrl(url, sel);
+    //window.location=url;
+} 
