@@ -1,10 +1,10 @@
 
 import java.io.File;
+import org.hsqldb.server.Server;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.remotetriplestore.SWBRTSBridge;
-import org.semanticwb.remotetriplestore.SWBRTSServer;
 
 /*
  * To change this template, choose Tools | Templates
@@ -57,6 +57,14 @@ public class SWBTSServer {
         server.setPort(port);
         server.start();
         //server.run();
+        
+        Server serv=new Server();
+        serv.setSilent(true);
+        serv.setPort(port+1);
+        serv.setDatabaseName(0, "swb");
+        serv.setDatabasePath(0, base+"/data/swb");
+        serv.start();        
+        
     }    
     
 }
