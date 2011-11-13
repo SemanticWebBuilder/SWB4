@@ -124,7 +124,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
         HashMap<String, SemanticObject> hmfiltro = new HashMap();
         HashMap<String, SemanticObject> hmSearchParam = new HashMap();
         HashMap<String, String> hmSearchParamBoo = new HashMap();
-        
+
         if (semobj != null) {
             SemanticClass sccol = getCatalogClass().transformToSemanticClass();
             SWBModel colmodel = getCatalogModel();
@@ -202,27 +202,27 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                     String bpropName = semanticProperty.getName();
                     String paramsearch = null;
                     if (request.getParameter("search_" + bpropName) != null && request.getParameter("search_" + bpropName).trim().length() > 0) {
-                            paramsearch = request.getParameter("search_" + bpropName);
-                            
-                            if(semanticProperty.isDataTypeProperty()&&semanticProperty.isBoolean()){
-                                hmSearchParamBoo.put("search_" + bpropName, paramsearch);
-                            } 
-                                hmSearchParam.put("search_" + bpropName, ont.getSemanticObject(paramsearch));
-                            
-                        }
+                        paramsearch = request.getParameter("search_" + bpropName);
 
-                        if (request.getParameter(semanticProperty.getName()) != null && request.getParameter(semanticProperty.getName()).trim().length() > 0) {
-                            hmSearchParam.put("search_" + semanticProperty.getName(), ont.getSemanticObject(request.getParameter(semanticProperty.getName())));
+                        if (semanticProperty.isDataTypeProperty() && semanticProperty.isBoolean()) {
+                            hmSearchParamBoo.put("search_" + bpropName, paramsearch);
                         }
+                        hmSearchParam.put("search_" + bpropName, ont.getSemanticObject(paramsearch));
+
+                    }
+
+                    if (request.getParameter(semanticProperty.getName()) != null && request.getParameter(semanticProperty.getName()).trim().length() > 0) {
+                        hmSearchParam.put("search_" + semanticProperty.getName(), ont.getSemanticObject(request.getParameter(semanticProperty.getName())));
+                    }
                     if (semanticProperty.isDataTypeProperty()) {
 
                         if (semanticProperty.isBoolean()) {
                             out.println("<tr><td align=\"right\" width=\"200\">");
                             out.println("<label>" + semanticProperty.getDisplayName(user.getLanguage()) + ": </label>");
                             out.println("</td><td>");
-                            out.println("<label for=\"" + idform + "_" + bpropName + "_si\">"+paramsRequest.getLocaleString("booleanYes")+" </label><input type=\"radio\" name=\"search_" + bpropName + "\" id=\"" + idform + "_" + bpropName + "_si\" value=\""+paramsRequest.getLocaleString("booleanYes")+"\" "+(paramsearch != null && paramsearch.equals(paramsRequest.getLocaleString("booleanYes")) ? "checked" : "") +">");
-                            out.println("<label for=\"" + idform + "_" + bpropName + "_no\">"+paramsRequest.getLocaleString("booleanNo")+" </label><input type=\"radio\" name=\"search_" + bpropName + "\" id=\"" + idform + "_" + bpropName + "_no\" value=\""+paramsRequest.getLocaleString("booleanNo")+"\" "+(paramsearch != null && paramsearch.equals(paramsRequest.getLocaleString("booleanNo")) ? "checked" : "") +">");
-                            out.println("<label for=\"" + idform + "_" + bpropName + "_todos\">"+paramsRequest.getLocaleString("booleanAll")+"</label><input type=\"radio\" name=\"search_" + bpropName + "\" id=\"" + idform + "_" + bpropName + "_todos\" value=\"\" "+(paramsearch == null ? "checked" : "") +">");
+                            out.println("<label for=\"" + idform + "_" + bpropName + "_si\">" + paramsRequest.getLocaleString("booleanYes") + " </label><input type=\"radio\" name=\"search_" + bpropName + "\" id=\"" + idform + "_" + bpropName + "_si\" value=\"" + paramsRequest.getLocaleString("booleanYes") + "\" " + (paramsearch != null && paramsearch.equals(paramsRequest.getLocaleString("booleanYes")) ? "checked" : "") + ">");
+                            out.println("<label for=\"" + idform + "_" + bpropName + "_no\">" + paramsRequest.getLocaleString("booleanNo") + " </label><input type=\"radio\" name=\"search_" + bpropName + "\" id=\"" + idform + "_" + bpropName + "_no\" value=\"" + paramsRequest.getLocaleString("booleanNo") + "\" " + (paramsearch != null && paramsearch.equals(paramsRequest.getLocaleString("booleanNo")) ? "checked" : "") + ">");
+                            out.println("<label for=\"" + idform + "_" + bpropName + "_todos\">" + paramsRequest.getLocaleString("booleanAll") + "</label><input type=\"radio\" name=\"search_" + bpropName + "\" id=\"" + idform + "_" + bpropName + "_todos\" value=\"\" " + (paramsearch == null ? "checked" : "") + ">");
                             out.println("</td><tr>");
                         }
                     } else if (semanticProperty.isObjectProperty()) {
@@ -235,9 +235,9 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                         Iterator<SemanticObject> sobj = semmodel.listInstancesOfClass(sc); //sc.listInstances();
                         sobj = sc.listInstances();
 
-                        
-                        
-                        
+
+
+
                         while (sobj.hasNext()) {
                             SemanticObject semanticObject = sobj.next();
                             out.println("<option value=\"" + semanticObject.getURI() + "\"  " + (paramsearch != null && paramsearch.equals(semanticObject.getURI()) ? "selected" : "") + " >"); // " + (paramsearch != null && paramsearch.equals(semanticObject.getURI()) ? "selected" : "
@@ -398,14 +398,14 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
 //                                if(semOProp.isBoolean()){
 //                                    // revisar tipo booleano
 //                                } else {
-                                    urikey = semOProp.getURI();
-                                    System.out.println("URI:"+urikey);
-                                    if (hmConfbus.get(urikey) != null) {
-                                        occ = occ + reviewSemProp(hmConfbus.get(urikey), semO, paramsRequest);
-                                        System.out.println("Occ: "+occ);
-                                    }
-                                //}
-                           // }
+                            urikey = semOProp.getURI();
+                            //System.out.println("URI:" + urikey);
+                            if (hmConfbus.get(urikey) != null) {
+                                occ = occ + reviewSemProp(hmConfbus.get(urikey), semO, paramsRequest);
+                                //System.out.println("Occ: " + occ);
+                            }
+                            //}
+                            // }
                         }
                         occ = occ.toLowerCase();
                         if (occ.indexOf(busqueda.toLowerCase()) > -1) {
@@ -461,16 +461,16 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                                             }
                                         }
                                     }
-                                } else if(semanticProp.isDataTypeProperty()&&semanticProp.isBoolean()){
+                                } else if (semanticProp.isDataTypeProperty() && semanticProp.isBoolean()) {
                                     if (hmSearchParamBoo.get("search_" + semanticProp.getName()) != null) {
-                                            String strfilter = hmSearchParamBoo.get("search_" + semanticProp.getName());
-                                            String strActualValue = reviewSemProp(semanticProp, sofil, paramsRequest);
-                                            if (strActualValue != null && strActualValue.equals(strfilter)) {
-                                                hmResults.put(sofil.getURI(), sofil);
-                                            } else {
-                                                hmRemove.put(sofil.getURI(), sofil);
-                                            }
+                                        String strfilter = hmSearchParamBoo.get("search_" + semanticProp.getName());
+                                        String strActualValue = reviewSemProp(semanticProp, sofil, paramsRequest);
+                                        if (strActualValue != null && strActualValue.equals(strfilter)) {
+                                            hmResults.put(sofil.getURI(), sofil);
+                                        } else {
+                                            hmRemove.put(sofil.getURI(), sofil);
                                         }
+                                    }
                                 }
                             }
                         }
@@ -642,7 +642,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
-        
+
 
         PrintWriter out = response.getWriter();
         User user = paramRequest.getUser();
@@ -660,8 +660,8 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             obj = getCatalogClass();
         }
 
-        System.out.println("doForm --- "+act);
-        
+        //System.out.println("doForm --- " + act);
+
         SemanticClass sclass = obj.transformToSemanticClass();
 
         SWBResourceURL urlPA = paramRequest.getActionUrl();
@@ -825,14 +825,14 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                     GenericObject sofe = ont.getGenericObject(feuri);
 
                     FormElement fe = (FormElement) sofe;
-                    if (null != fe&&sPro!=null) {
+                    if (null != fe && sPro != null) {
                         try {
                             fmgr.renderProp(request, sbForm, sPro, fe, modo);
                         } catch (Exception e) {
-                            log.error("Error al procesat lapropiedad con el formelement seleccionado. ---- "+sPro.getName()+" ----- "+feuri);
+                            log.error("Error al procesat lapropiedad con el formelement seleccionado. ---- " + sPro.getName() + " ----- " + feuri);
                         }
-                        
-                    } else if(sPro!=null) {
+
+                    } else if (sPro != null) {
                         fe = fmgr.getFormElement(sPro);
                         fmgr.renderProp(request, sbForm, sPro, fe, modo);
                     }
@@ -937,12 +937,12 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
 
             //System.out.println("node:" + node + " " + sprop.getRange());
             if (node != null) {
-                if (sprop.getRange()!=null&&sprop.getRange().getURI().equals(node.asResource().getURI())) {
+                if (sprop.getRange() != null && sprop.getRange().getURI().equals(node.asResource().getURI())) {
                     hmscfe.put(scobj.getDisplayName(usr.getLanguage()), scobj);
                 } else if (sprop.getRangeClass() != null && node.isResource()) {
                     SemanticClass cls = sv.getSemanticClass(node.asResource().getURI());
                     if (cls != null) {
-                        if (sprop.getRangeClass()!=null&&sprop.getRangeClass().isSubClass(cls)) {
+                        if (sprop.getRangeClass() != null && sprop.getRangeClass().isSubClass(cls)) {
                             hmscfe.put(scobj.getDisplayName(usr.getLanguage()), scobj);
                         }
                     }
@@ -2541,6 +2541,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             if (props != null && props.length > 0) {
                 int j = 0;
                 for (j = 0; j < props.length; j++) {
+                    //System.out.println("Prop:"+props[j]);
                     hmparam.put(props[j], props[j]);
                 }
             }
@@ -2584,12 +2585,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                     String femode = "";
                     String useInCreate = "";
                     StringTokenizer stoken = new StringTokenizer(propstr, "|");
-                    try {
-                        if (Integer.parseInt(order) > i) {
-                            i = Integer.parseInt(order);
-                        }
-                    } catch (Exception e) {
-                    }
+
                     if (stoken.hasMoreTokens()) {
                         propuri = stoken.nextToken();
                         feuri = stoken.nextToken();
@@ -2601,10 +2597,17 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                     if (stoken.hasMoreTokens()) {
                         useInCreate = stoken.nextToken();
                     }
-
+                    try {
+                        if (Integer.parseInt(order) > i) {
+                            i = Integer.parseInt(order);
+                        }
+                    } catch (Exception e) {
+                    }
+                    
                     // si no esta en parámetro no se agrega a las existentes
-                    if (hmparam.get(propuri) == null) {
+                    if (hmparam.get(propuri) != null) {
                         hmprops.put(new Integer(order), propstr);
+                        hmparam.remove(propuri);
                     }
 
                     // se elimina propiedad existente de configuración para despues actualizar el orden
