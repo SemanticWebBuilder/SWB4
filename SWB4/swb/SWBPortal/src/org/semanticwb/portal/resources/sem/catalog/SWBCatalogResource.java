@@ -116,11 +116,10 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             busqueda = "";
         }
         busqueda = busqueda.trim();
-        HashMap<String, String> hmhasprop = new HashMap(); // uri property, uri form element asociado
-        HashMap<String, SemanticProperty> hmhasproporder = new HashMap(); // indice filtro, PROPIEDAD
         HashMap<String, SemanticProperty> hmConfcol = new HashMap();
         HashMap<String, String> hmConfcolFE = new HashMap();
         HashMap<String, SemanticProperty> hmConfbus = new HashMap();
+        HashMap<String, SemanticProperty> hmConfbusOrder = new HashMap();
         HashMap<String, SemanticObject> hmfiltro = new HashMap();
         HashMap<String, SemanticObject> hmSearchParam = new HashMap();
         HashMap<String, String> hmSearchParamBoo = new HashMap();
@@ -165,11 +164,8 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                     String suriorder = stoken.nextToken();
                     semProphm = ont.getSemanticProperty(suri);
                     if (semProphm != null) {
-                        hmConfbus.put(suri, semProphm);
-                    }
-                    if (semProphm.isObjectProperty()) {
-                        hmhasprop.put(suri, surife);
-                        hmhasproporder.put(suriorder, semProphm);
+                        hmConfbus.put(suri, semProphm);  //suri
+                        hmConfbusOrder.put(suriorder, semProphm);
                     }
                 }
             }
@@ -195,10 +191,22 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                 out.println("<input type=\"text\" name=\"search\" id=\"" + idform + "_search\" value=\"" + busqueda + "\">");
                 out.println("</td><tr>");
 
+                ////////////////////////////////////////////////////////////////////////////////////
+                //////////////
+                //////////////     GENERACION DE CONTROLES PARA FILTRADO
+                //////////////
+                ////////////////////////////////////////////////////////////////////////////////////
+                
+                ArrayList<String> listfilters = new ArrayList(hmConfbusOrder.keySet());
+                Collections.sort(listfilters);
 
-                Iterator<SemanticProperty> itsprops = hmConfbus.values().iterator();
+                Iterator<String> itsprops = null; //hmConfbus.values().iterator();
+                itsprops = listfilters.iterator();
+                
+                
                 while (itsprops.hasNext()) {
-                    SemanticProperty semanticProperty = itsprops.next();
+                    String strOrderKey = itsprops.next();
+                    SemanticProperty semanticProperty = hmConfbusOrder.get(strOrderKey); //itsprops.next();
                     String bpropName = semanticProperty.getName();
                     String paramsearch = null;
                     if (request.getParameter("search_" + bpropName) != null && request.getParameter("search_" + bpropName).trim().length() > 0) {
@@ -216,6 +224,13 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                     }
                     if (semanticProperty.isDataTypeProperty()) {
 
+                        /////////////////////////////////////////////////////
+                        ////////////
+                        ////////////   GENERACION DE CONTROL BOOLEAN PROPERTY
+                        ////////////
+                        /////////////////////////////////////////////////////
+                        
+                        
                         if (semanticProperty.isBoolean()) {
                             out.println("<tr><td align=\"right\" width=\"200\">");
                             out.println("<label>" + semanticProperty.getDisplayName(user.getLanguage()) + ": </label>");
@@ -225,102 +240,30 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                             out.println("<label for=\"" + idform + "_" + bpropName + "_todos\">" + paramsRequest.getLocaleString("booleanAll") + "</label><input type=\"radio\" name=\"search_" + bpropName + "\" id=\"" + idform + "_" + bpropName + "_todos\" value=\"\" " + (paramsearch == null ? "checked" : "") + ">");
                             out.println("</td><tr>");
                         }
+                        
+                        ////////////////////////////////////////////////////////
+                        
                     } else if (semanticProperty.isObjectProperty()) {
                         SemanticClass sc = semanticProperty.getRangeClass();
-                        out.println("<tr><td align=\"right\" width=\"200\">");
-                        out.println("<label for=\"" + idform + "_" + bpropName + "\">" + semanticProperty.getDisplayName(user.getLanguage()) + ": </label>");
-                        out.println("</td><td>");
-                        out.println("<select name=\"search_" + bpropName + "\" id=\"" + idform + "_" + bpropName + "\" >");
-                        out.println("<option value=\"\">Selecciona filtro</option>");
-                        Iterator<SemanticObject> sobj = semmodel.listInstancesOfClass(sc); //sc.listInstances();
-                        sobj = sc.listInstances();
+                        
+                        /////////////////////////////////////////////////////
+                        ////////////
+                        ////////////   GENERACION DE CONTROL OBJECT PROPERTY
+                        ////////////
+                        /////////////////////////////////////////////////////
+                        
+                        out.println(objectPropertyControl(semanticProperty, idform,paramsearch,user,sc,semmodel));
+                        
+                        ///////////////////////////////////////////////////////
 
-
-
-
-                        while (sobj.hasNext()) {
-                            SemanticObject semanticObject = sobj.next();
-                            out.println("<option value=\"" + semanticObject.getURI() + "\"  " + (paramsearch != null && paramsearch.equals(semanticObject.getURI()) ? "selected" : "") + " >"); // " + (paramsearch != null && paramsearch.equals(semanticObject.getURI()) ? "selected" : "
-                            out.println(semanticObject.getDisplayName(user.getLanguage()));
-                            out.println("</option>");
-                        }
-
-                        out.println("<option value=\"\"></option>");
-                        out.println("</select>");
-                        out.println("</td><tr>");
                     }
 
                 }
-
-                HashMap<String, SemanticObject> hmFilterSearch = new HashMap();
 
                 //
                 // REVISION DE OBJECT-PROPERTIES PARA OPCIONES DE FILTRADO
                 //
 
-                ArrayList listfilters = new ArrayList(hmhasproporder.keySet());
-                Collections.sort(listfilters);
-
-//                Iterator<String> itsprop = listfilters.iterator();
-//                while (itsprop.hasNext()) {
-//                    String urikey = itsprop.next();
-//                    SemanticProperty semanticProp = hmhasproporder.get(urikey);
-//                    SemanticClass sc = semanticProp.getRangeClass();
-//                    if (sc != null) {
-//
-//                        out.println("<tr>");
-//                        String paramsearch = null;
-////                        if (request.getParameter("search_" + sc.getClassId()) != null && request.getParameter("search_" + sc.getClassId()).trim().length() > 0) {
-////                            paramsearch = request.getParameter("search_" + sc.getClassId());
-////                            hmSearchParam.put("search_" + sc.getClassId(), ont.getSemanticObject(paramsearch));
-////                        }
-////
-////                        if (request.getParameter(semanticProp.getName()) != null && request.getParameter(semanticProp.getName()).trim().length() > 0) {
-////                            hmSearchParam.put("search_" + semanticProp.getName(), ont.getSemanticObject(request.getParameter(semanticProp.getName())));
-////                        }
-//
-//                        out.println("<td align=\"right\">");
-//                        out.println("<label for=\"" + idform + sc.getURI() + "_search\">" + sc.getDisplayName(user.getLanguage()) + ": </label></td><td><select name=\"search_" + sc.getClassId() + "\" id=\"" + idform + sc.getURI() + "_search\" >");
-//                        out.println("<option value=\"\" selected >Selecciona filtro");
-//                        out.println("</option>");
-//
-//
-//                        Iterator<SemanticObject> sobj = semmodel.listInstancesOfClass(sc); //sc.listInstances();
-//                        sobj = sc.listInstances();
-//
-//                        while (sobj.hasNext()) {
-//                            SemanticObject semanticObject = sobj.next();
-//                            out.println("<option value=\"" + semanticObject.getURI() + "\" " + (paramsearch != null && paramsearch.equals(semanticObject.getURI()) ? "selected" : "") + ">");
-//                            out.println(semanticObject.getDisplayName(user.getLanguage()));
-//                            out.println("</option>");
-//                            if (paramsearch != null && paramsearch.equals(semanticObject.getURI())) {
-//                                hmFilterSearch.put(semanticObject.getURI(), semanticObject);
-//                            }
-//                        }
-//                        out.println("</select>");
-//
-//                        SWBFormMgr fmgr = new SWBFormMgr(semobj, SWBFormMgr.MODE_EDIT, SWBFormMgr.MODE_EDIT);
-//
-//                        //TODO: Hacer el render de la propiedad y el FormElement configurado
-//                        SemanticObject sofe = ont.getSemanticObject(hmhasprop.get(semanticProp.getURI()));
-//
-//                        FormElement fe = null;
-//
-////                        if (null != sofe) {
-////
-////                            if (sofe.transformToSemanticClass().isSWBFormElement()) {
-////                                fe = fmgr.getFormElement(semanticProp);
-//////                                    StringBuffer renderFE = new StringBuffer("");
-//////                                    fmgr.renderProp(request, renderFE, semanticProp, fe, SWBFormMgr.MODE_EDIT);
-//////                                    out.println(renderFE.toString());
-////                                out.println(fe.renderElement(request, semobj, semanticProp, semanticProp.getName(), SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_EDIT, user.getLanguage()));
-////                            }
-////                        }
-//
-//                        out.println("</td>");
-//                        out.println("</tr>");
-//                    }
-//                }
                 out.println("<tr><td colspn=\"2\">&nbsp;</td></tr>");
                 out.println("</table>");
                 out.println("</fieldset>");
@@ -380,6 +323,14 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                 out.println("</tr>");
                 out.println("</thead>");
                 out.println("<tbody>");
+                
+                
+                ///////////////////////////////////////////////////////////////////////
+                //////
+                //////    FILTRADO DE RESULTADOS
+                //////
+                ///////////////////////////////////////////////////////////////////////
+                
                 SemanticObject semO = null;
                 Iterator<SemanticObject> itso = semmodel.listInstancesOfClass(sccol); //gobj.getSemanticObject().getModel().listInstancesOfClass(sccol); //sccol.listInstances();
 
@@ -389,26 +340,17 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                     while (itso.hasNext()) {
                         semO = itso.next();
                         itcol = hmConfcol.keySet().iterator();
-
                         String occ = "";
                         while (itcol.hasNext()) {
                             String sprop = itcol.next();
                             semOProp = hmConfcol.get(sprop);
-                            //if(semOProp.isDataTypeProperty()){
-//                                if(semOProp.isBoolean()){
-//                                    // revisar tipo booleano
-//                                } else {
                             urikey = semOProp.getURI();
-                            //System.out.println("URI:" + urikey);
                             if (hmConfbus.get(urikey) != null) {
                                 occ = occ + reviewSemProp(hmConfbus.get(urikey), semO, paramsRequest);
-                                //System.out.println("Occ: " + occ);
                             }
-                            //}
-                            // }
                         }
                         occ = occ.toLowerCase();
-                        if (occ.indexOf(busqueda.toLowerCase()) > -1) {
+                        if (occ.indexOf(busqueda.trim().toLowerCase()) > -1) {
                             hmfiltro.put(semO.getURI(), semO);
                         }
                     }
@@ -491,6 +433,8 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                     itso = semmodel.listInstancesOfClass(sccol); //gobj.getSemanticObject().getModel().listInstancesOfClass(sccol); //sccol.listInstances();
                 }
 
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                
                 //PAGINACION
 
                 List<SemanticObject> cplist = SWBUtils.Collections.copyIterator(itso);
@@ -2813,4 +2757,34 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
 
         return defaultFE;
     }
+    
+    public String objectPropertyControl(SemanticProperty semanticProperty, String idform, String paramsearch, User user, SemanticClass sc, SemanticModel semmodel ){
+        
+        StringBuffer ret = new StringBuffer("");
+        
+        String bpropName = semanticProperty.getName();
+        
+        ret.append("\n<tr><td align=\"right\" width=\"200\">");
+        ret.append("\n<label for=\"" + idform + "_" + bpropName + "\">" + semanticProperty.getDisplayName(user.getLanguage()) + ": </label>");
+        ret.append("\n</td><td>");
+        ret.append("\n<select name=\"search_" + bpropName + "\" id=\"" + idform + "_" + bpropName + "\" >");
+        ret.append("\n<option value=\"\">Selecciona filtro</option>");
+        Iterator<SemanticObject> sobj = semmodel.listInstancesOfClass(sc); //sc.listInstances();
+        sobj = sc.listInstances();
+
+        while (sobj.hasNext()) {
+            SemanticObject semanticObject = sobj.next();
+            ret.append("\n<option value=\"" + semanticObject.getURI() + "\"  " + (paramsearch != null && paramsearch.equals(semanticObject.getURI()) ? "selected" : "") + " >"); // " + (paramsearch != null && paramsearch.equals(semanticObject.getURI()) ? "selected" : "
+            ret.append(semanticObject.getDisplayName(user.getLanguage()));
+            ret.append("\n</option>");
+        }
+
+        ret.append("\n<option value=\"\"></option>");
+        ret.append("\n</select>");
+        ret.append("\n</td><tr>");
+        
+        return ret.toString();
+}
+    
+    
 }
