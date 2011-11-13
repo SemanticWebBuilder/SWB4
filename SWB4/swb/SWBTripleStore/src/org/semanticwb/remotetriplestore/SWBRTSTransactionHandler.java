@@ -5,15 +5,10 @@
 
 package org.semanticwb.remotetriplestore;
 
-import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.graph.impl.TransactionHandlerBase;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Future;
-import java.util.logging.Level;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.remotetriplestore.protocol.Command;
-import org.semanticwb.remotetriplestore.protocol.OOK;
 import org.semanticwb.remotetriplestore.protocol.Response;
 import org.semanticwb.remotetriplestore.protocol.SWBRTSCmd;
 

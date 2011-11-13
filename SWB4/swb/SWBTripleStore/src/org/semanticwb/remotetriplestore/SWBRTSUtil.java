@@ -30,7 +30,7 @@ class SWBRTSUtil implements Callable<Response> {
     
     public static LinkedList<SWBRTSUtil> list=new LinkedList();
     
-    private static int buffer=5;
+    private static int buffer=0;
     private static boolean loading=false;
     
     public static synchronized SWBRTSUtil getInstance(final InetAddress byName, final int port)
@@ -38,7 +38,7 @@ class SWBRTSUtil implements Callable<Response> {
         SWBRTSUtil ret=null;
         if(buffer>0)
         {
-            System.out.println("getInstance:"+list.size()+" "+loading);
+            //System.out.println("getInstance:"+list.size()+" "+loading);
             if(!list.isEmpty())ret=list.pollFirst();
             //System.out.print(" ret:"+ret);
             if(ret==null || !ret.isAlive())
@@ -48,7 +48,7 @@ class SWBRTSUtil implements Callable<Response> {
             }
             if(list.size()<buffer && !loading)
             {
-                System.out.println("reload start");
+                //System.out.println("reload start");
                 loading=true;
                 new Thread()
                 {
@@ -58,7 +58,7 @@ class SWBRTSUtil implements Callable<Response> {
                         {
                             list.add(new SWBRTSUtil(byName, port));
                         }
-                        System.out.println("reload end");
+                        //System.out.println("reload end");
                         loading=false;
                     }            
                 }.start();            
@@ -97,7 +97,7 @@ class SWBRTSUtil implements Callable<Response> {
 
     public Response call() throws Exception
     {
-        System.out.println("Call:"+sock);
+        //System.out.println("Call:"+sock);
         ObjectOutputStream outData = new ObjectOutputStream(os_connect);
         outData.writeObject(command);
         //System.out.println("SWBRTSUtil: cmd "+command.cmd+" #"+command.paramNumber);
@@ -111,12 +111,12 @@ class SWBRTSUtil implements Callable<Response> {
             
         }
         outData.writeObject(new EOT());
-        System.out.println("wrote EOT");
+        //System.out.println("wrote EOT");
         outData.flush();
         ObjectInputStream inData = new ObjectInputStream(in_connect);
         
         Response resp = (Response)inData.readObject();
-        System.out.println("Read Response "+resp.data);
+        //System.out.println("Read Response "+resp.data);
         outData.close();;
         inData.close();
         sock.close();
