@@ -1,9 +1,8 @@
 package org.semanticwb.portal.resources;
 
-import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
@@ -24,26 +23,19 @@ public class FileDownload extends GenericAdmResource {
 
     javax.xml.transform.Templates tpl;
 
-    String webWorkPath = SWBPortal.getWebWorkPath();
-
-    String path = SWBPlatform.getContextPath() + "swbadmin/xsl/filedownload/";
-
     private static Logger log = SWBUtils.getLogger(FileDownload.class);
 
-/*
+    
+    @Override
     public void setResourceBase(Resource base) {
         try {
             super.setResourceBase(base);
-            webWorkPath = base.getWorkPath();
-                    //(String) WBUtils.getInstance().getWebWorkPath() +  base.getResourceWorkPath();
         } catch (Exception e) {
             log.error("Error while setting resource base: " + base.getId() + "-" + base.getTitle(), e);
         }
         if (!"".equals(base.getAttribute("template", "").trim())) {
             try {
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() + "/" + base.getAttribute("template").trim()));
-                        //com.infotec.appfw.util.AFUtils.getInstance().loadTemplateXSLT(WBUtils.getInstance().getFileFromWorkPath(base.getResourceWorkPath() +"/"+ base.getAttribute("template").trim()));
-                path = webWorkPath + "/";
             } catch (Exception e) {
                 log.error("Error while loading resource template: " + base.getId(), e);
             }
@@ -51,17 +43,15 @@ public class FileDownload extends GenericAdmResource {
         System.out.println("template: " + tpl);
         if (tpl == null) {
             try {
-                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/FileDownLoad/WBFileDownload.xslt"));
-//                tpl = SWBUtils.XML.loadTemplateXSLT(new FileInputStream(new File(SWBPortal.getWorkPath()+"/xsl/FileDownLoad/WBFileDownload.xslt")));
-                System.out.println("Ruta: " + SWBPortal.getWorkPath()+"/xsl/FileDownLoad/WBFileDownload.xslt");
+                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/FileDownload/WBFileDownload.xslt"));
                 System.out.println("template por defecto: " + tpl);
-                        //com.infotec.appfw.util.AFUtils.getInstance().loadTemplateXSLT(WBUtils.getInstance().getAdminFileStream("/wbadmin/xsl/FileDownLoad/WBFileDownload.xslt")); }
             }  catch (Exception e) {
                 log.error("Error while loading default resource template: " + base.getId(), e);
             }
         }
-    }*/
+    }
 
+    //@Override
     public void doView(javax.servlet.http.HttpServletRequest request,
                        javax.servlet.http.HttpServletResponse response,
                        SWBParamRequest reqParams) throws SWBResourceException, java.io.IOException {
@@ -101,15 +91,30 @@ public class FileDownload extends GenericAdmResource {
                     el.setAttribute("tArchitecture", architecture);
                     el.setAttribute("textension", ext);
                     dom.appendChild(el);
+                    System.out.println("El DOM a utilizar: " + SWBUtils.XML.domToXml(dom));
                     /** Por ahora **/
                     if (tpl == null) {
-                        try {
-                            tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/FileDownLoad/WBFileDownload.xslt"));
-                        }  catch (Exception e) {
-                            log.error("Error while loading default resource template: " + base.getId(), e);
+
+                        if (!"".equals(base.getAttribute("template", "").trim())) {
+                            try {
+                                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() + "/" + base.getAttribute("template").trim()));
+                            } catch (Exception e) {
+                                log.error("Error while loading resource template: " + base.getId(), e);
+                            }
+                        } else {
+                            System.out.println("template: " + tpl);
+                            try {
+                                InputStream input = SWBPortal.getAdminFileStream("/swbadmin/xsl/FileDownload/WBFileDownload.xslt");
+                                if (input != null) {
+                                    tpl = SWBUtils.XML.loadTemplateXSLT(input);
+                                } else {
+                                    System.out.println("\nInputStream NULO!, no encuentra: /swbadmin/xsl/FileDownload/WBFileDownload.xslt");
+                                }
+                            }  catch (Exception e) {
+                                log.error("Error while loading default resource template: " + base.getId(), e);
+                            }
                         }
                     }
-
 
                     response.getWriter().print(SWBUtils.XML.transformDom(tpl, dom));
                 }
