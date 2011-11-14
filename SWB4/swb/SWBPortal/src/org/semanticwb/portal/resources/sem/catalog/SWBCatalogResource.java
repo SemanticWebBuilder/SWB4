@@ -196,14 +196,14 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                 //////////////     GENERACION DE CONTROLES PARA FILTRADO
                 //////////////
                 ////////////////////////////////////////////////////////////////////////////////////
-                
+
                 ArrayList<String> listfilters = new ArrayList(hmConfbusOrder.keySet());
                 Collections.sort(listfilters);
 
                 Iterator<String> itsprops = null; //hmConfbus.values().iterator();
                 itsprops = listfilters.iterator();
-                
-                
+
+
                 while (itsprops.hasNext()) {
                     String strOrderKey = itsprops.next();
                     SemanticProperty semanticProperty = hmConfbusOrder.get(strOrderKey); //itsprops.next();
@@ -229,8 +229,8 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                         ////////////   GENERACION DE CONTROL BOOLEAN PROPERTY
                         ////////////
                         /////////////////////////////////////////////////////
-                        
-                        
+
+
                         if (semanticProperty.isBoolean()) {
                             out.println("<tr><td align=\"right\" width=\"200\">");
                             out.println("<label>" + semanticProperty.getDisplayName(user.getLanguage()) + ": </label>");
@@ -240,20 +240,20 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                             out.println("<label for=\"" + idform + "_" + bpropName + "_todos\">" + paramsRequest.getLocaleString("booleanAll") + "</label><input type=\"radio\" name=\"search_" + bpropName + "\" id=\"" + idform + "_" + bpropName + "_todos\" value=\"\" " + (paramsearch == null ? "checked" : "") + ">");
                             out.println("</td><tr>");
                         }
-                        
+
                         ////////////////////////////////////////////////////////
-                        
+
                     } else if (semanticProperty.isObjectProperty()) {
                         SemanticClass sc = semanticProperty.getRangeClass();
-                        
+
                         /////////////////////////////////////////////////////
                         ////////////
                         ////////////   GENERACION DE CONTROL OBJECT PROPERTY
                         ////////////
                         /////////////////////////////////////////////////////
-                        
-                        out.println(objectPropertyControl(semanticProperty, idform,paramsearch,user,sc,semmodel));
-                        
+
+                        out.println(objectPropertyControl(semanticProperty, idform, paramsearch, user, sc, semmodel));
+
                         ///////////////////////////////////////////////////////
 
                     }
@@ -323,118 +323,21 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                 out.println("</tr>");
                 out.println("</thead>");
                 out.println("<tbody>");
-                
-                
+
+
                 ///////////////////////////////////////////////////////////////////////
                 //////
                 //////    FILTRADO DE RESULTADOS
                 //////
                 ///////////////////////////////////////////////////////////////////////
-                
+
                 SemanticObject semO = null;
                 Iterator<SemanticObject> itso = semmodel.listInstancesOfClass(sccol); //gobj.getSemanticObject().getModel().listInstancesOfClass(sccol); //sccol.listInstances();
-
-                String urikey = null;
-                SemanticProperty semOProp = null;
-                if (!busqueda.trim().equals("")) {
-                    while (itso.hasNext()) {
-                        semO = itso.next();
-                        itcol = hmConfcol.keySet().iterator();
-                        String occ = "";
-                        while (itcol.hasNext()) {
-                            String sprop = itcol.next();
-                            semOProp = hmConfcol.get(sprop);
-                            urikey = semOProp.getURI();
-                            if (hmConfbus.get(urikey) != null) {
-                                occ = occ + reviewSemProp(hmConfbus.get(urikey), semO, paramsRequest);
-                            }
-                        }
-                        occ = occ.toLowerCase();
-                        if (occ.indexOf(busqueda.trim().toLowerCase()) > -1) {
-                            hmfiltro.put(semO.getURI(), semO);
-                        }
-                    }
-                }
-
-                //Llenado de la tabla
-
-                if (!busqueda.equals("") || !hmSearchParam.isEmpty()) {
-
-                    HashMap<String, SemanticObject> hmResults = new HashMap();
-                    HashMap<String, SemanticObject> hmRemove = new HashMap();
-                    Iterator<SemanticObject> itsprop2 = null;
-                    if (!busqueda.equals("") || (!busqueda.equals("") && !hmSearchParam.isEmpty())) {
-                        itsprop2 = hmfiltro.values().iterator();
-                    } else if (busqueda.equals("") && !hmSearchParam.isEmpty()) {
-                        itsprop2 = semmodel.listInstancesOfClass(sccol);
-                    }
-
-                    if (!hmSearchParam.isEmpty()) {
-                        while (itsprop2.hasNext()) {
-
-                            SemanticObject sofil = itsprop2.next();
-
-                            Iterator<SemanticProperty> sempropit = hmConfbus.values().iterator();
-                            while (sempropit.hasNext()) {
-
-                                SemanticProperty semanticProp = sempropit.next();
-                                if (semanticProp.isObjectProperty()) {
-                                    SemanticClass semclass = semanticProp.getRangeClass();
-                                    if (semclass != null) {
-                                        if (hmSearchParam.get("search_" + semclass.getClassId()) != null) {
-                                            SemanticObject so = hmSearchParam.get("search_" + semclass.getClassId());
-                                            String URIfilter = so.getURI();
-
-                                            SemanticObject sotmp = sofil.getObjectProperty(semanticProp);
-                                            if (sotmp != null && sotmp.getURI().equals(URIfilter)) {
-                                                hmResults.put(sofil.getURI(), sofil);
-                                            } else {
-                                                hmRemove.put(sofil.getURI(), sofil);
-                                            }
-                                        }
-                                        if (hmSearchParam.get("search_" + semanticProp.getName()) != null) {
-                                            SemanticObject so = hmSearchParam.get("search_" + semanticProp.getName());
-                                            String URIfilter = so.getURI();
-                                            SemanticObject sotmp = sofil.getObjectProperty(semanticProp);
-                                            if (sotmp != null && sotmp.getURI().equals(URIfilter)) {
-                                                hmResults.put(sofil.getURI(), sofil);
-                                            } else {
-                                                hmRemove.put(sofil.getURI(), sofil);
-                                            }
-                                        }
-                                    }
-                                } else if (semanticProp.isDataTypeProperty() && semanticProp.isBoolean()) {
-                                    if (hmSearchParamBoo.get("search_" + semanticProp.getName()) != null) {
-                                        String strfilter = hmSearchParamBoo.get("search_" + semanticProp.getName());
-                                        String strActualValue = reviewSemProp(semanticProp, sofil, paramsRequest);
-                                        if (strActualValue != null && strActualValue.equals(strfilter)) {
-                                            hmResults.put(sofil.getURI(), sofil);
-                                        } else {
-                                            hmRemove.put(sofil.getURI(), sofil);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        //limpiando el filtro
-                        hmfiltro = new HashMap();
-                        Iterator<SemanticObject> itresults = hmResults.values().iterator();
-                        while (itresults.hasNext()) {
-                            SemanticObject semObject = itresults.next();
-                            if (hmRemove.get(semObject.getURI()) == null) {
-                                hmfiltro.put(semObject.getURI(), semObject);
-                            }
-                        }
-                    }
-
-                    itso = hmfiltro.values().iterator();
-
-                } else {
-                    itso = semmodel.listInstancesOfClass(sccol); //gobj.getSemanticObject().getModel().listInstancesOfClass(sccol); //sccol.listInstances();
-                }
+                
+                itso = getResultFilter(hmSearchParam, hmSearchParamBoo, hmConfcol, hmConfbus, busqueda, semmodel,paramsRequest);
 
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                
+
                 //PAGINACION
 
                 List<SemanticObject> cplist = SWBUtils.Collections.copyIterator(itso);
@@ -569,6 +472,121 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
 
         }
 
+    }
+
+    public Iterator<SemanticObject> getResultFilter(HashMap<String, SemanticObject> hmSearchParam, HashMap<String, String> hmSearchParamBoo, HashMap<String, SemanticProperty> hmConfcol, HashMap<String, SemanticProperty> hmConfbus, String busqueda, SemanticModel semmodel, SWBParamRequest paramsRequest) {
+
+
+        SemanticObject semO = null;
+        Iterator<String> itcol = null;
+
+        HashMap<String, SemanticObject> hmfiltro = new HashMap();
+
+        SemanticClass sccol = getCatalogClass().transformToSemanticClass();
+        Iterator<SemanticObject> itso = semmodel.listInstancesOfClass(sccol);;
+
+
+
+        String urikey = null;
+        SemanticProperty semOProp = null;
+        if (!busqueda.trim().equals("")) {
+            while (itso.hasNext()) {
+                semO = itso.next();
+                itcol = hmConfcol.keySet().iterator();
+                String occ = "";
+                while (itcol.hasNext()) {
+                    String sprop = itcol.next();
+                    semOProp = hmConfcol.get(sprop);
+                    urikey = semOProp.getURI();
+                    if (hmConfbus.get(urikey) != null) {
+                        occ = occ + reviewSemProp(hmConfbus.get(urikey), semO, paramsRequest);
+                    }
+                }
+                occ = occ.toLowerCase();
+                if (occ.indexOf(busqueda.trim().toLowerCase()) > -1) {
+                    hmfiltro.put(semO.getURI(), semO);
+                }
+            }
+        }
+
+        //Llenado de la tabla
+
+        if (!busqueda.equals("") || !hmSearchParam.isEmpty()) {
+
+            HashMap<String, SemanticObject> hmResults = new HashMap();
+            HashMap<String, SemanticObject> hmRemove = new HashMap();
+            Iterator<SemanticObject> itsprop2 = null;
+            if (!busqueda.equals("") || (!busqueda.equals("") && !hmSearchParam.isEmpty())) {
+                itsprop2 = hmfiltro.values().iterator();
+            } else if (busqueda.equals("") && !hmSearchParam.isEmpty()) {
+                itsprop2 = semmodel.listInstancesOfClass(sccol);
+            }
+
+            if (!hmSearchParam.isEmpty()) {
+                while (itsprop2.hasNext()) {
+
+                    SemanticObject sofil = itsprop2.next();
+
+                    Iterator<SemanticProperty> sempropit = hmConfbus.values().iterator();
+                    while (sempropit.hasNext()) {
+
+                        SemanticProperty semanticProp = sempropit.next();
+                        if (semanticProp.isObjectProperty()) {
+                            SemanticClass semclass = semanticProp.getRangeClass();
+                            if (semclass != null) {
+                                if (hmSearchParam.get("search_" + semclass.getClassId()) != null) {
+                                    SemanticObject so = hmSearchParam.get("search_" + semclass.getClassId());
+                                    String URIfilter = so.getURI();
+
+                                    SemanticObject sotmp = sofil.getObjectProperty(semanticProp);
+                                    if (sotmp != null && sotmp.getURI().equals(URIfilter)) {
+                                        hmResults.put(sofil.getURI(), sofil);
+                                    } else {
+                                        hmRemove.put(sofil.getURI(), sofil);
+                                    }
+                                }
+                                if (hmSearchParam.get("search_" + semanticProp.getName()) != null) {
+                                    SemanticObject so = hmSearchParam.get("search_" + semanticProp.getName());
+                                    String URIfilter = so.getURI();
+                                    SemanticObject sotmp = sofil.getObjectProperty(semanticProp);
+                                    if (sotmp != null && sotmp.getURI().equals(URIfilter)) {
+                                        hmResults.put(sofil.getURI(), sofil);
+                                    } else {
+                                        hmRemove.put(sofil.getURI(), sofil);
+                                    }
+                                }
+                            }
+                        } else if (semanticProp.isDataTypeProperty() && semanticProp.isBoolean()) {
+                            if (hmSearchParamBoo.get("search_" + semanticProp.getName()) != null) {
+                                String strfilter = hmSearchParamBoo.get("search_" + semanticProp.getName());
+                                String strActualValue = reviewSemProp(semanticProp, sofil, paramsRequest);
+                                if (strActualValue != null && strActualValue.equals(strfilter)) {
+                                    hmResults.put(sofil.getURI(), sofil);
+                                } else {
+                                    hmRemove.put(sofil.getURI(), sofil);
+                                }
+                            }
+                        }
+                    }
+                }
+                //limpiando el filtro
+                hmfiltro = new HashMap();
+                Iterator<SemanticObject> itresults = hmResults.values().iterator();
+                while (itresults.hasNext()) {
+                    SemanticObject semObject = itresults.next();
+                    if (hmRemove.get(semObject.getURI()) == null) {
+                        hmfiltro.put(semObject.getURI(), semObject);
+                    }
+                }
+            }
+
+            itso = hmfiltro.values().iterator();
+
+        } else {
+            itso = semmodel.listInstancesOfClass(sccol); //gobj.getSemanticObject().getModel().listInstancesOfClass(sccol); //sccol.listInstances();
+        }
+
+        return itso;
     }
 
     /**
@@ -2547,7 +2565,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                         }
                     } catch (Exception e) {
                     }
-                    
+
                     // si no esta en parámetro no se agrega a las existentes
                     if (hmparam.get(propuri) != null) {
                         hmprops.put(new Integer(order), propstr);
@@ -2757,13 +2775,13 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
 
         return defaultFE;
     }
-    
-    public String objectPropertyControl(SemanticProperty semanticProperty, String idform, String paramsearch, User user, SemanticClass sc, SemanticModel semmodel ){
-        
+
+    public String objectPropertyControl(SemanticProperty semanticProperty, String idform, String paramsearch, User user, SemanticClass sc, SemanticModel semmodel) {
+
         StringBuffer ret = new StringBuffer("");
-        
+
         String bpropName = semanticProperty.getName();
-        
+
         ret.append("\n<tr><td align=\"right\" width=\"200\">");
         ret.append("\n<label for=\"" + idform + "_" + bpropName + "\">" + semanticProperty.getDisplayName(user.getLanguage()) + ": </label>");
         ret.append("\n</td><td>");
@@ -2782,9 +2800,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
         ret.append("\n<option value=\"\"></option>");
         ret.append("\n</select>");
         ret.append("\n</td><tr>");
-        
+
         return ret.toString();
-}
-    
-    
+    }
 }
