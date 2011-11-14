@@ -55,6 +55,31 @@ public class SubProcess extends org.semanticwb.process.model.base.SubProcessBase
         SubProcessInstance inst=(SubProcessInstance)super.createInstance(pinst);
         return inst;
     }
+    
+    /**
+     * Obtiene una lista de todos los nodos contenidos en un subproceso.
+     * @return 
+     */
+    public Iterator<GraphicalElement> listAllContaineds()
+    {
+        ArrayList<GraphicalElement> arr=new ArrayList();
+        Iterator<GraphicalElement> it=listContaineds();
+        while (it.hasNext())
+        {
+            GraphicalElement gElement = it.next();
+            arr.add(gElement);
+            if(gElement instanceof SubProcess)
+            {
+                Iterator<GraphicalElement> it2=((SubProcess)(gElement)).listAllContaineds();
+                while (it2.hasNext())
+                {
+                    GraphicalElement gElement2 = it2.next();
+                    arr.add(gElement2);
+                }
+            }
+        }
+        return arr.iterator();
+    }
 
 
 }
