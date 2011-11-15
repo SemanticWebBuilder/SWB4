@@ -13,8 +13,6 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.remotetriplestore.protocol.Command;
 import org.semanticwb.remotetriplestore.protocol.TripleString;
-import org.semanticwb.remotetriplestore.protocol.Response;
-import org.semanticwb.remotetriplestore.protocol.SWBRTSCmd;
 import org.semanticwb.triplestore.SWBTSUtil;
 
 /**
@@ -35,9 +33,10 @@ class SWBRTSIterator implements ExtendedIterator<Triple>
     private boolean closed=false;
 
     private static int counter=0;
+    
     private Iterator<TripleString> iterData;
 
-    public SWBRTSIterator(SWBRTSGraph graph, TripleMatch tm, SWBRTSThreadPool pool)
+    public SWBRTSIterator(SWBRTSGraph graph, TripleMatch tm)
     {
         counter++;
         //System.out.println("SWBTSIterator:"+counter+" tm:"+tm+" "+graph.getName());
@@ -51,25 +50,23 @@ class SWBRTSIterator implements ExtendedIterator<Triple>
         //System.out.println("subj:"+subj+" prop:"+prop+" obj:"+obj);
 
         try {
-
-            SWBRTSCmd cmd = new SWBRTSCmd();
-            cmd.cmd = Command.GRAPH_BASE_FIND;
-            cmd.paramNumber=4;
-            SWBRTSUtil util =  SWBRTSUtil.getInstance(pool.getAddress(), pool.getPort());
-            util.setCommand(cmd);
-            String[] params = {graph.getName(),subj,prop,obj};
-            util.setParams(params);
-            //Future<Response> future = pool.getPool().submit(util);
-            //Response resp = future.get();
-            Response resp = util.call();
-            ArrayList<TripleString> list = (ArrayList<TripleString>) resp.data;
-            //log.debug(""+list);
+            String params[]={Command.GRAPH_BASE_FIND,graph.getName(),subj,prop,obj};
+            SWBRTSUtil util = new SWBRTSUtil(params);
+            List<String> l=util.call();
+            ArrayList<TripleString> list = new ArrayList();
+            for(int x=0;x<l.size();x+=3)
+            {
+                TripleString ts=new TripleString();
+                ts.subj=l.get(x);
+                ts.prop=l.get(x+1);
+                ts.obj=l.get(x+2);
+                list.add(ts);
+            }
             iterData = list.iterator();
         } catch (Exception e)
         {
             log.error(e);
         }
-
     }
 
     public Triple removeNext()

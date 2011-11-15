@@ -16,10 +16,9 @@ public class SWBRTSBridge extends Thread{
 
     private static Logger log = SWBUtils.getLogger(SWBRTSBridge.class);
     private int port;
-    private ServerSocket sserv = null;
     private boolean running = false;
     private ExecutorService pool = Executors.newCachedThreadPool();
-
+    private ServerSocket serverSocket;
 
     public void setPort(int port)
     {
@@ -31,14 +30,17 @@ public class SWBRTSBridge extends Thread{
     {
         try
         {
-            sserv = new ServerSocket(port);
-            while (running)
+            serverSocket = new ServerSocket(port);            
+            try
             {
-                Socket sock = sserv.accept();
-              // System.out.println("**************** Receive Socket...");
-                pool.submit(new SWBRTSConn(sock));
+                while (running)
+                {
+                    pool.execute(new SWBRTSConn(serverSocket.accept()));
+                }                
+            } catch (IOException ex)
+            {
+                pool.shutdown();
             }
-
         } catch (IOException ex)
         {
             log.error("SWBRTSBridge: error receiving remote request",ex);

@@ -23,15 +23,15 @@ public class SWBTSServer {
      */
     public static void main(String[] args) 
     {
-        if(args.length>2)
+        if(args.length>3)
         {
-            SWBUtils.createInstance(args[2]);
+            SWBUtils.createInstance(args[3]);
         }else
         {
             SWBUtils.createInstance(new File("").getAbsolutePath());
         }
         String base=SWBUtils.getApplicationPath();
-        System.out.println("Path:"+base);
+        //System.out.println("Path:"+base);
         Logger log=SWBUtils.getLogger(SWBTSServer.class);
         
         SWBPlatform platform = SWBPlatform.createInstance();
@@ -51,7 +51,9 @@ public class SWBTSServer {
         //SWBPlatform.getSemanticMgr().loadDBModels();
         //SWBPlatform.getSemanticMgr().getOntology().rebind();
         int port=6666;
+        int port2=27016;
         if(args.length>1)port=Integer.parseInt(args[1]);
+        if(args.length>2)port2=Integer.parseInt(args[2]);
         log.event("Initializing SWBRemoteTripleStoreServer on port:"+port);
         SWBRTSBridge server = new SWBRTSBridge();       
         server.setPort(port);
@@ -60,7 +62,7 @@ public class SWBTSServer {
         
         Server serv=new Server();
         serv.setSilent(true);
-        serv.setPort(port+1);
+        serv.setPort(port2);
         serv.setDatabaseName(0, "swb");
         serv.setDatabasePath(0, base+"/data/swb");
         serv.start();        
