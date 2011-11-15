@@ -2,15 +2,14 @@ package org.semanticwb.remotetriplestore;
 
 import com.hp.hpl.jena.shared.PrefixMapping;
 import com.hp.hpl.jena.rdf.model.impl.Util;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.remotetriplestore.protocol.Command;
-import org.semanticwb.remotetriplestore.protocol.OOK;
-import org.semanticwb.remotetriplestore.protocol.Response;
-import org.semanticwb.remotetriplestore.protocol.SWBRTSCmd;
 
 
 /**
@@ -21,14 +20,12 @@ class SWBRTSPrefixMapping implements PrefixMapping
 {
     private static Logger log = SWBUtils.getLogger(SWBRTSPrefixMapping.class);
     private SWBRTSGraph graph;
-    private SWBRTSThreadPool pool;
 
     private Map<String,String> map=new ConcurrentHashMap<String, String>();
 
-    public SWBRTSPrefixMapping(SWBRTSGraph graph, SWBRTSThreadPool pool)
+    public SWBRTSPrefixMapping(SWBRTSGraph graph)
     {
         this.graph = graph;
-        this.pool = pool;
         getNsPrefixMap();
     }
 
@@ -37,21 +34,11 @@ class SWBRTSPrefixMapping implements PrefixMapping
         //System.out.println("getNsPrefixMap:"+prefix+" "+uri);
         if(!map.containsKey(prefix) || map.get(prefix)==null || !map.get(prefix).equals(uri))
         {
-            try {
-                SWBRTSCmd cmd = new SWBRTSCmd();
-                cmd.cmd = Command.SET_NS_PREFIX;
-                cmd.paramNumber=3;
-                SWBRTSUtil util =  SWBRTSUtil.getInstance(pool.getAddress(), pool.getPort());
-                util.setCommand(cmd);
-                String[] params = {graph.getName(), prefix, uri};
-                util.setParams(params);
-                //Future<Response> future = pool.getPool().submit(util);
-                //Response resp = future.get();
-                Response resp = util.call();
-                if (!(resp.data instanceof OOK))
-                {
-                    map.put(prefix, uri);
-                }
+            try {                
+                String params[]={Command.SET_NS_PREFIX,graph.getName(), prefix, uri};
+                SWBRTSUtil util = new SWBRTSUtil(params);
+                List<String> l=util.call();
+                map.put(prefix, uri);
             } catch (Exception e)
             {
                 log.error(e);
@@ -63,20 +50,10 @@ class SWBRTSPrefixMapping implements PrefixMapping
     public PrefixMapping removeNsPrefix(String prefix)
     {
         try {
-            SWBRTSCmd cmd = new SWBRTSCmd();
-            cmd.cmd = Command.REMOVE_NS_PREFIX;
-            cmd.paramNumber=2;
-            SWBRTSUtil util =  SWBRTSUtil.getInstance(pool.getAddress(), pool.getPort());
-            util.setCommand(cmd);
-            String[] params = {graph.getName(), prefix};
-            util.setParams(params);
-            //Future<Response> future = pool.getPool().submit(util);
-            //Response resp = future.get();
-            Response resp = util.call();
-            if (!(resp.data instanceof OOK))
-            {
-                map.remove(prefix);
-            }
+            String params[]={Command.REMOVE_NS_PREFIX,graph.getName(), prefix};
+            SWBRTSUtil util = new SWBRTSUtil(params);
+            List<String> l=util.call();
+            map.remove(prefix);
         } catch (Exception e)
         {
             log.error(e);
@@ -119,17 +96,10 @@ class SWBRTSPrefixMapping implements PrefixMapping
         if(str==null)
         {
             try {
-                SWBRTSCmd cmd = new SWBRTSCmd();
-                cmd.cmd = Command.GET_NS_PREFIX_URI;
-                cmd.paramNumber=2;
-                SWBRTSUtil util =  SWBRTSUtil.getInstance(pool.getAddress(), pool.getPort());
-                util.setCommand(cmd);
-                String[] params = {graph.getName(), prefix};
-                util.setParams(params);
-                //Future<Response> future = pool.getPool().submit(util);
-                //Response resp = future.get();
-                Response resp = util.call();
-                str  = (String) resp.data;
+                String params[]={Command.GET_NS_PREFIX_URI,graph.getName(), prefix};
+                SWBRTSUtil util = new SWBRTSUtil(params);
+                List<String> l=util.call();
+                str = l.get(0);
             } catch (Exception e)
             {
                 log.error(e);
@@ -151,19 +121,15 @@ class SWBRTSPrefixMapping implements PrefixMapping
 
     public Map<String, String> getNsPrefixMap()
     {
-        Map<String,String> mapt;
+        Map<String,String> mapt=new HashMap<String, String>();
         try {
-            SWBRTSCmd cmd = new SWBRTSCmd();
-            cmd.cmd = Command.GET_NS_PREFIX_MAP;
-            cmd.paramNumber=1;
-            SWBRTSUtil util =  SWBRTSUtil.getInstance(pool.getAddress(), pool.getPort());
-            util.setCommand(cmd);
-            String[] params = {graph.getName()};
-            util.setParams(params);
-            //Future<Response> future = pool.getPool().submit(util);
-            //Response resp = future.get();
-            Response resp = util.call();
-            mapt  = (Map<String,String>) resp.data;
+            String params[]={Command.GET_NS_PREFIX_MAP,graph.getName()};
+            SWBRTSUtil util = new SWBRTSUtil(params);
+            List<String> l=util.call();
+            for(int x=0;x<l.size();x+=2)
+            {
+                mapt.put(l.get(x), l.get(x+1));
+            }            
             this.map=mapt;
         } catch (Exception e)
         {

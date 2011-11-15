@@ -6,11 +6,10 @@
 package org.semanticwb.remotetriplestore;
 
 import com.hp.hpl.jena.graph.impl.TransactionHandlerBase;
+import java.util.List;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.remotetriplestore.protocol.Command;
-import org.semanticwb.remotetriplestore.protocol.Response;
-import org.semanticwb.remotetriplestore.protocol.SWBRTSCmd;
 
 /**
  *
@@ -19,14 +18,12 @@ import org.semanticwb.remotetriplestore.protocol.SWBRTSCmd;
 public class SWBRTSTransactionHandler extends TransactionHandlerBase
 {
     public static Logger log=SWBUtils.getLogger(SWBRTSTransactionHandler.class);
-    private SWBRTSThreadPool pool;
     private SWBRTSGraph graph;
     
     
 
-    public SWBRTSTransactionHandler(SWBRTSGraph graph, SWBRTSThreadPool pool)
+    public SWBRTSTransactionHandler(SWBRTSGraph graph)
     {
-        this.pool=pool;
         this.graph=graph;
     }
 
@@ -39,16 +36,9 @@ public class SWBRTSTransactionHandler extends TransactionHandlerBase
     {
         //System.out.println("begin:"+Thread.currentThread().getId());
         try {
-            SWBRTSCmd cmd = new SWBRTSCmd();
-            cmd.cmd = Command.TRANS_BEGIN;
-            cmd.paramNumber=2;
-            SWBRTSUtil util =  SWBRTSUtil.getInstance(pool.getAddress(), pool.getPort());
-            util.setCommand(cmd);
-            String[] params = {graph.getName(), ""+Thread.currentThread().getId()};
-            util.setParams(params);
-            //Future<Response> future = pool.getPool().submit(util);
-            //Response resp = future.get();
-            Response resp = util.call();
+            String params[]={Command.TRANS_BEGIN, graph.getName(), ""+Thread.currentThread().getId()};
+            SWBRTSUtil util = new SWBRTSUtil(params);
+            List<String> l=util.call();
         } catch (Exception e)
         {
             log.error(e);
@@ -60,16 +50,9 @@ public class SWBRTSTransactionHandler extends TransactionHandlerBase
         //System.out.println("abort:"+Thread.currentThread().getId());
         
         try {
-            SWBRTSCmd cmd = new SWBRTSCmd();
-            cmd.cmd = Command.TRANS_ABORT;
-            cmd.paramNumber=2;
-            SWBRTSUtil util =  SWBRTSUtil.getInstance(pool.getAddress(), pool.getPort());
-            util.setCommand(cmd);
-            String[] params = {graph.getName(), ""+Thread.currentThread().getId()};
-            util.setParams(params);
-            //Future<Response> future = pool.getPool().submit(util);
-            //Response resp = future.get();
-            Response resp = util.call();
+            String params[]={Command.TRANS_ABORT, graph.getName(), ""+Thread.currentThread().getId()};
+            SWBRTSUtil util = new SWBRTSUtil(params);
+            List<String> l=util.call();
         } catch (Exception e)
         {
             log.error(e);
@@ -80,16 +63,9 @@ public class SWBRTSTransactionHandler extends TransactionHandlerBase
     {
         //System.out.println("commit:"+Thread.currentThread().getId());        
         try {
-            SWBRTSCmd cmd = new SWBRTSCmd();
-            cmd.cmd = Command.TRANS_COMMINT;
-            cmd.paramNumber=2;
-            SWBRTSUtil util =  SWBRTSUtil.getInstance(pool.getAddress(), pool.getPort());
-            util.setCommand(cmd);
-            String[] params = {graph.getName(), ""+Thread.currentThread().getId()};
-            util.setParams(params);
-            //Future<Response> future = pool.getPool().submit(util);
-            //Response resp = future.get();
-            Response resp = util.call();
+            String params[]={Command.TRANS_COMMINT, graph.getName(), ""+Thread.currentThread().getId()};
+            SWBRTSUtil util = new SWBRTSUtil(params);
+            List<String> l=util.call();
         } catch (Exception e)
         {
             log.error(e);

@@ -2,20 +2,19 @@ package org.semanticwb.remotetriplestore;
 
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.rdf.model.Model;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.rdf.AbstractStore;
-import org.semanticwb.remotetriplestore.protocol.EOT;
-import org.semanticwb.remotetriplestore.protocol.OOK;
-import org.semanticwb.remotetriplestore.protocol.Response;
-import org.semanticwb.remotetriplestore.protocol.SWBRTSCmd;
-import org.semanticwb.remotetriplestore.protocol.TripleString;
+import org.semanticwb.remotetriplestore.protocol.Command;
 import org.semanticwb.triplestore.SWBTSUtil;
 
 /**
@@ -24,206 +23,221 @@ import org.semanticwb.triplestore.SWBTSUtil;
  */
 public class SWBRTSConn implements Runnable
 {
+    private static Logger log = SWBUtils.getLogger(SWBRTSConn.class);    
+    
+    private final Socket socket;
+    private DataInputStream in;
+    private DataOutputStream out;
 
-    private Socket sock = null;
-    private boolean running = false;
-    private static Logger log = SWBUtils.getLogger(SWBRTSConn.class);
-
-    SWBRTSConn(Socket sock)
+    SWBRTSConn(Socket socket)
     {
-        this.sock = sock;
+        System.out.println("Handler...");
+        this.socket = socket;
     }
 
-    @Override
     public void run()
     {
+        long time=System.currentTimeMillis();
+        System.out.println("Connection inited...,"+time);
         try
         {
-//            while(true)
-            {
-                ObjectInputStream objDataIn = new ObjectInputStream(sock.getInputStream());
-                SWBRTSCmd cmd = (SWBRTSCmd) objDataIn.readObject();
-                //System.out.println("Run:"+cmd+" "+sock);
-//                if(!cmd.cmd.equals(Command.CONN_CLOSE))
-                {
-                    String[] params = null;
-                   //System.out.println("SWBRTSConn: cmd "+cmd.cmd+" #"+cmd.paramNumber);
-                    if (cmd.paramNumber > 0)
-                    {
-                        params = new String[cmd.paramNumber];
-                        for (int i = 0; i < cmd.paramNumber; i++)
-                        {
-                            params[i] = (String) objDataIn.readObject();
-                            //System.out.println("read param: "+params[i]);
-                        }
-                    }
-                    Object obj = objDataIn.readObject();
-                    if (!(obj instanceof EOT)) log.event("not EOT when spected");
-                    action(cmd, params);
-//                }else
-//                {
-                    objDataIn.close();                    
-                    sock.close();
-                    //System.out.println("sock close:"+sock);
-//                    break;
-                }
+            this.in=new DataInputStream(socket.getInputStream());
+            this.out=new DataOutputStream(socket.getOutputStream());
+        }catch(Exception e)
+        {
+            log.error(e);
+        }        
+        
+        try
+        {
+            List list;
+            while(true)
+            {   
+                list=readCommands();
+                if(list.size()==1 && list.get(0).equals(Command.CLOSE))break;
+                //time=System.currentTimeMillis();
+                processCommand(list);
+                //System.out.println("process:"+(System.currentTimeMillis()-time)+" "+list);
             }
-
-        } catch (Exception e)
+        }catch(Exception e)
         {
             log.error(e);
         }
-    }
 
-    private void action(SWBRTSCmd cmd, String[] params)
-    {
+        //Close Connection
         try
         {
-            /*
-            System.out.print(cmd.cmd);
-            if(params!=null)
-            {
-                for(int x=0;x<params.length;x++)
-                {
-                    System.out.print(" "+params[x]);                
-                }
-            }
-            System.out.println();                
-            */
-            
-            ObjectOutputStream objDataOut = new ObjectOutputStream(sock.getOutputStream());
+            out.close();
+            socket.close();
+        }catch(Exception e)
+        {
+            log.error(e);
+        }
+        System.out.println("Connection closed...,"+time);
+    }
+    
+    public List<String> readCommands() throws IOException
+    {
+        ArrayList arr=new ArrayList();
+        int n=Integer.parseInt(in.readUTF());
+        for(int x=0;x<n;x++)
+        {
+            String s=in.readUTF();
+            if(s.equals(Command.NULL))s=null;
+            arr.add(s);
+        }
+        return arr;           
+    }
+    
+    public void writeCommands(List<String> list) throws IOException
+    {
+        out.writeUTF(String.valueOf(list.size()));
+        Iterator<String> it=list.iterator();
+        while (it.hasNext())
+        {
+            String string = it.next();
+            if(string==null)string=Command.NULL;
+            out.writeUTF(string);
+        }
+    }  
+    
+    public void processCommand(List<String> list) throws IOException
+    {
+        List<String> ret=action(list);        
+        writeCommands(ret);
+    }        
+    
+    private List<String> action(List<String> params)
+    {
+        String cmd=params.get(0);
+        ArrayList<String> arr = new ArrayList<String>();
+        try
+        {
             AbstractStore store = SWBPlatform.getSemanticMgr().getSWBStore();
             String name;
             String subj;
             String prop;
             String obj;
             String id;
-            Response resp = new Response();
             Model model;
-            switch (cmd.cmd)
+            
+            if(cmd.equals(Command.LIST_MODEL_NAMES))
             {
-                case LIST_MODEL_NAMES:
-                    Iterator<String> it = store.listModelNames();
-                    ArrayList<String> objData = new ArrayList<String>();
-                    while (it.hasNext())
-                    {
-                        objData.add(it.next());
-                    }
-                    resp.data = objData;
-                    objDataOut.writeObject(resp);
-                    break;
-
-                case GET_MODEL:
-                    name=params[0];
-                    if(store.getModel(name)!=null)
-                    {
-                        resp.data = new OOK();
-                    }
-                    objDataOut.writeObject(resp);
-                    break;
-                case CREATE_MODEL:
-                    name=params[0];
-                    if(store.loadModel(name)!=null)
-                    {
-                        resp.data  = new OOK();
-                        //SWBPlatform.getSemanticMgr().loadDBModels();
-                    }
-                    objDataOut.writeObject(resp);
-                    break;
-                case REMOVE_MODEL:
-                    name=params[0];
-                    store.removeModel(name);
-                    //SWBPlatform.getSemanticMgr().loadDBModels();
-                    resp.data  = new OOK();
-                    objDataOut.writeObject(resp);
-                    break;
-                case GRAPH_BASE_FIND:
-                    name = params[0];
-                    subj = params[1];
-                    prop = params[2];
-                    obj = params[3];
-                    resp.data=getFind(name, subj, prop, obj);
-                    objDataOut.writeObject(resp);
-                    break;
-                case GET_NS_PREFIX_MAP:
-                    name = params[0];
-                    model=store.getModel(name);
-                    resp.data=model.getNsPrefixMap();
-                    objDataOut.writeObject(resp);
-                    break;
-                case GET_NS_PREFIX_URI:
-                    name = params[0];
-                    model=store.getModel(name);
-                    resp.data=model.getNsPrefixURI(params[1]);
-                    objDataOut.writeObject(resp);
-                    break;
-                case SET_NS_PREFIX:
-                    name = params[0];
-                    model=store.getModel(name);
-                    model.setNsPrefix(params[1], params[2]);
-                    resp.data=new OOK();
-                    objDataOut.writeObject(resp);
-                    break;
-                case REMOVE_NS_PREFIX:
-                    name = params[0];
-                    model=store.getModel(name);
-                    model.removeNsPrefix(params[1]);
-                    resp.data=new OOK();
-                    objDataOut.writeObject(resp);
-                    break;
-                case GRAPH_ADD:
-                    name = params[0];
-                    subj = params[1];
-                    prop = params[2];
-                    obj = params[3];
-                    id = params[4];
-                    doAdd(name, subj, prop, obj, id);
-                    resp.data=new OOK();
-                    objDataOut.writeObject(resp);
-                    break;
-                case GRAPH_REMOVE:
-                    name = params[0];
-                    subj = params[1];
-                    prop = params[2];
-                    obj = params[3];
-                    id = params[4];
-                    doRemove(name, subj, prop, obj, id);
-                    resp.data=new OOK();
-                    objDataOut.writeObject(resp);
-                    break;
-                case TRANS_BEGIN:
-                    name = params[0];
-                    id = params[1];                    
-                    begin(name, id);
-                    resp.data=new OOK();
-                    objDataOut.writeObject(resp);
-                    break;                    
-                case TRANS_ABORT:
-                    name = params[0];
-                    id = params[1];                    
-                    abort(name, id);
-                    resp.data=new OOK();
-                    objDataOut.writeObject(resp);
-                    break;                    
-                case TRANS_COMMINT:
-                    name = params[0];
-                    id = params[1];                    
-                    commint(name, id);
-                    resp.data=new OOK();
-                    objDataOut.writeObject(resp);
-                    break;                    
-            }
-            objDataOut.flush();
-            objDataOut.close();
+                Iterator<String> it = store.listModelNames();
+                while (it.hasNext())
+                {
+                    arr.add(it.next());
+                }
+            }else if(cmd.equals(Command.GET_MODEL))
+            {
+                name=params.get(1);
+                if(store.getModel(name)!=null)
+                {
+                    arr.add(Command.OOK);
+                }
+            }else if(cmd.equals(Command.CREATE_MODEL))
+            {
+                name=params.get(1);
+                if(store.loadModel(name)!=null)
+                {
+                    arr.add(Command.OOK);
+                }
+            }else if(cmd.equals(Command.REMOVE_MODEL))
+            {
+                name=params.get(1);
+                store.removeModel(name);
+                //SWBPlatform.getSemanticMgr().loadDBModels();
+                arr.add(Command.OOK);
+            }else if(cmd.equals(Command.GRAPH_BASE_FIND))
+            {
+                name = params.get(1);
+                subj = params.get(2);
+                prop = params.get(3);
+                obj = params.get(4);                    
+                arr.addAll(getFind(name, subj, prop, obj));
+            }else if(cmd.equals(Command.GET_NS_PREFIX_MAP))
+            {
+                name = params.get(1);
+                model = store.getModel(name);
+                Map<String,String> map=model.getNsPrefixMap();
+                
+                Iterator<Map.Entry<String,String>> it=map.entrySet().iterator();
+                while (it.hasNext())
+                {
+                    Map.Entry<String, String> entry = it.next();
+                    arr.add(entry.getKey());
+                    arr.add(entry.getValue());
+                }
+            }else if(cmd.equals(Command.GET_NS_PREFIX_URI))
+            {
+                name = params.get(1);
+                model=store.getModel(name);
+                arr.add(model.getNsPrefixURI(params.get(2)));
+            }else if(cmd.equals(Command.SET_NS_PREFIX))
+            {
+                name = params.get(1);
+                model=store.getModel(name);
+                model.setNsPrefix(params.get(2), params.get(3));
+                arr.add(Command.OOK);
+            }else if(cmd.equals(Command.REMOVE_NS_PREFIX))
+            {
+                name = params.get(1);
+                model=store.getModel(name);
+                model.removeNsPrefix(params.get(2));
+                arr.add(Command.OOK);
+            }else if(cmd.equals(Command.GRAPH_ADD))
+            {
+                name = params.get(1);
+                subj = params.get(2);
+                prop = params.get(3);
+                obj = params.get(4);
+                id = params.get(5);
+                doAdd(name, subj, prop, obj, id);
+                arr.add(Command.OOK);
+            }else if(cmd.equals(Command.GRAPH_REMOVE))
+            {
+                name = params.get(1);
+                subj = params.get(2);
+                prop = params.get(3);
+                obj = params.get(4);
+                id = params.get(5);
+                doRemove(name, subj, prop, obj, id);
+                arr.add(Command.OOK);
+            }else if(cmd.equals(Command.TRANS_BEGIN))
+            {
+                System.out.println("Begin");
+                name = params.get(1);
+                id = params.get(2);                    
+                begin(name, id);
+                arr.add(Command.OOK);
+            }else if(cmd.equals(Command.TRANS_ABORT))
+            {
+                System.out.println("Abort");
+                name = params.get(1);
+                id = params.get(2);                    
+                abort(name, id);
+                arr.add(Command.OOK);
+            }else if(cmd.equals(Command.TRANS_COMMINT))
+            {
+                System.out.println("Commit");
+                name = params.get(1);
+                id = params.get(2);                    
+                commint(name, id);
+                arr.add(Command.OOK);
+            }            
         } catch (Exception e)
         {
             log.error(e);
         }
+        
+        return arr;
     }
+     
 
-    private ArrayList<TripleString> getFind(String name, String subj, String prop, String obj)
+
+    private ArrayList<String> getFind(String name, String subj, String prop, String obj)
     {
-        ArrayList<TripleString> list = new ArrayList<TripleString> ();
+        ArrayList<String> list = new ArrayList<String> ();
         
         AbstractStore store = SWBPlatform.getSemanticMgr().getSWBStore();
         Model model=store.getModel(name);
@@ -233,12 +247,9 @@ public class SWBRTSConn implements Runnable
         Iterator<Triple> it=model.getGraph().find(SWBTSUtil.string2Node(subj,null), SWBTSUtil.string2Node(prop,null), SWBTSUtil.string2Node(obj,null));
         while (it.hasNext()) {
             Triple triple = it.next();
-            TripleString  next = new TripleString();
-            next.subj=SWBTSUtil.node2String(triple.getSubject());
-            next.prop=SWBTSUtil.node2String(triple.getPredicate());
-            next.obj=SWBTSUtil.node2String(triple.getObject());
-            list.add(next);
-
+            list.add(SWBTSUtil.node2String(triple.getSubject()));
+            list.add(SWBTSUtil.node2String(triple.getPredicate()));
+            list.add(SWBTSUtil.node2String(triple.getObject()));
         }
         return list;
     }
