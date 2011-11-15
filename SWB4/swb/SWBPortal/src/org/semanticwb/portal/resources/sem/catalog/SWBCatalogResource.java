@@ -2788,7 +2788,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
         ret.append("\n<select name=\"search_" + bpropName + "\" id=\"" + idform + "_" + bpropName + "\" >");
         ret.append("\n<option value=\"\">Selecciona filtro</option>");
         Iterator<SemanticObject> sobj = semmodel.listInstancesOfClass(sc); //sc.listInstances();
-        sobj = sc.listInstances();
+        //sobj = sc.listInstances();
 
         while (sobj.hasNext()) {
             SemanticObject semanticObject = sobj.next();
