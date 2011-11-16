@@ -5,7 +5,7 @@
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
         <admdbconnmgr defconn="true"/>
         <fieldset legend="Aparência">
-            <input type="file" name="template" label="Modelo (xsl, xslt)" filetype="xsl|xslt" jsrequired="false" showfile="true" isshowfiletype="true" isremovefile="true" showmsg="Ver modelo..." editmsg="Editar modelo..." removemsg="Remover modelo" msg="Modelo atual: " bydefault="{@webpath}/swbadmin/xsl/WBMenu/WBMenu.xslt" msgbydefault="Modelo padrão: " />
+            <input type="file" name="template" label="Modelo (xsl, xslt)" filetype="xsl|xslt" jsrequired="false" showfile="true" isshowfiletype="true" isremovefile="true" showmsg="Ver modelo..." editmsg="Editar modelo..." removemsg="Remover modelo" msg="Modelo atual: " bydefault="{@webpath}/swbadmin/xsl/WBSiteMap/WBSiteMap.xsl" msgbydefault="Modelo padrão: " />
             <input type="text" name="title" label="Título:" maxlength="60" promptMessage="Título" />
             <input type="text" name="level" label="Nível de implantação:" value="1" maxlength="3" jsvaltype="js_numbers" invalidMessage="Nível deve ser um valor numérico" promptMessage="Nivel de despliegue" />
         </fieldset>

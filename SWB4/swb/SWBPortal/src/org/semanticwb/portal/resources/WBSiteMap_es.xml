@@ -4,7 +4,7 @@
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
         <admdbconnmgr defconn="true"/>
         <fieldset legend="Aspecto">
-            <input type="file" name="template" label="Plantilla (xsl, xslt)" filetype="xsl|xslt" jsrequired="false" showfile="true" isshowfiletype="true" isremovefile="true" showmsg="Ver plantilla..." editmsg="Editar plantilla..." removemsg="Quitar plantilla" msg="Plantilla actual: " bydefault="{@webpath}/swbadmin/xsl/WBMenu/WBMenu.xslt" msgbydefault="Plantilla por defecto: " />
+            <input type="file" name="template" label="Plantilla (xsl, xslt)" filetype="xsl|xslt" jsrequired="false" showfile="true" isshowfiletype="true" isremovefile="true" showmsg="Ver plantilla..." editmsg="Editar plantilla..." removemsg="Quitar plantilla" msg="Plantilla actual: " bydefault="{@webpath}/swbadmin/xsl/WBSiteMap/WBSiteMap.xsl" msgbydefault="Plantilla por defecto: " />
             <input type="text" name="title" label="Título:" maxlength="60" promptMessage="Título" />
             <input type="text" name="level" label="Nivel de despliegue:" value="1" maxlength="3" jsvaltype="js_numbers" invalidMessage="Nivel debe ser un valor numérico" promptMessage="Nivel de despliegue" />
         </fieldset>
