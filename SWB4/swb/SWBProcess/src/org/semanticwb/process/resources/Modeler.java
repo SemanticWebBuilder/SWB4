@@ -167,7 +167,8 @@ public class Modeler extends GenericResource {
                 ret = SWBUtils.XML.domToXml(res, true);
             }
             //out.print(new String(ret.getBytes()));
-            outs.write(ret.getBytes());
+            String utf8ret = new String(ret.getBytes("UTF-8"), "ISO-8859-1");
+            outs.write(utf8ret.getBytes());
             //System.out.println("out:"+new String(ret.getBytes()));
         }
     }
