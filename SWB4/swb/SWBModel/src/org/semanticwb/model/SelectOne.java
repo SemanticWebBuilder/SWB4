@@ -207,7 +207,17 @@ public class SelectOne extends SelectOneBase {
 
                     it = SWBComparator.sortSermanticObjects(lang, model.listInstancesOfClass(cls));
                 } else {
-                    it = SWBComparator.sortSermanticObjects(lang, getModel().listInstancesOfClass(cls));
+                    SemanticModel model = getModel();
+                    SWBModel      m     = (SWBModel) model.getModelObject().createGenericInstance();
+                    
+                    if (m instanceof UserRepository) 
+                    {                    
+                        SWBModel p=m.getParentWebSite();
+                        if(p!=null)m=p;
+                        model = m.getSemanticObject().getModel();
+                    }
+                    
+                    it = SWBComparator.sortSermanticObjects(lang, model.listInstancesOfClass(cls));
                 }
 
                 if (it != null) {
