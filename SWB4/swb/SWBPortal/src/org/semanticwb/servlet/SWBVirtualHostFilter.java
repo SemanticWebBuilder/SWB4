@@ -615,9 +615,10 @@ public class SWBVirtualHostFilter implements Filter
      * @param map the map
      * @param iServlet the i servlet
      */
-    public void addMapping(String map, InternalServlet iServlet)
+    public void addMapping(String map, InternalServlet iServlet) throws ServletException
     {
         if (!intServlets.containsKey(map) && iServlet!=null)
         intServlets.put(map, iServlet);
+        iServlet.init(filterConfig.getServletContext());
     }
 }

@@ -39,7 +39,7 @@ public class FBLoginModule implements LoginModule
 {
 
     /** The log. */
-    static Logger log = SWBUtils.getLogger(TripleStoreLoginModule.class);
+    static Logger log = SWBUtils.getLogger(FBLoginModule.class);
     
     /** The subject. */
     protected Subject subject;
