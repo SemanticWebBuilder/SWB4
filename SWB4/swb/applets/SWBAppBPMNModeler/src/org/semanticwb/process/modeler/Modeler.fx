@@ -235,9 +235,12 @@ public class Modeler extends CustomNode
 
     public function setCurrentProcessActivities(urilist: String) {
         var uris: String[] = urilist.trim().split("\\|");
-        for (uri in uris) {
+        for (uri:String in uris) {
             if (uri != null and not uri.trim().equals("")){
-                var _uri = uri.substring(0, uri.indexOf("("));
+                var _uri = uri;
+                if (uri.indexOf("(") != -1) {
+                    _uri = uri.substring(0, uri.indexOf("("));
+                }
                 var ge = getGraphElementByURI(_uri);
                 if (ge != null) {
                     ge.setStatus(GraphicalElement.STATUS_ACTIVE);
