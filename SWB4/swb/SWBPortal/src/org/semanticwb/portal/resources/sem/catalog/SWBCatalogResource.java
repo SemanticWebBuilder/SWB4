@@ -1,5 +1,6 @@
 package org.semanticwb.portal.resources.sem.catalog;
 
+import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import org.semanticwb.model.User;
 import java.io.IOException;
@@ -28,6 +29,7 @@ import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.Traceable;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.model.base.FormElementBase;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
@@ -637,7 +639,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
         HashMap<SemanticProperty, String> hmDetailFEMode = new HashMap<SemanticProperty, String>();
         if (act != null && act.equals("new")) {
 
-            fmgr = new SWBFormMgr(sclass, getCatalogModel().getSemanticObject().getModel().getModelObject(), SWBFormMgr.MODE_CREATE);
+            fmgr = new SWBFormMgr(sclass, getCatalogModel().getSemanticObject(), SWBFormMgr.MODE_CREATE);
 
             //Agregando las propiedades requeridas para la creación del elemento
             Iterator<SemanticProperty> itsempro = fmgr.getProperties().iterator();
@@ -787,6 +789,9 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                     FormElement fe = (FormElement) sofe;
                     if (null != fe && sPro != null) {
                         try {
+                            fe.setModel(getCatalogModel().getSemanticModel());
+                            ((FormElementBase)fe).setFilterHTMLTags(fmgr.isFilterHTMLTags());                            
+                            
                             fmgr.renderProp(request, sbForm, sPro, fe, modo);
                         } catch (Exception e) {
                             log.error("Error al procesat lapropiedad con el formelement seleccionado. ---- " + sPro.getName() + " ----- " + feuri);
@@ -893,23 +898,25 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             if (pro == null || sprop == null) {
                 continue;
             }
-            RDFNode node = scobj.getOntClass().getPropertyValue(pro.getRDFProperty());
-
-            //System.out.println("node:" + node + " " + sprop.getRange());
-            if (node != null) {
-                if (sprop.getRange() != null && sprop.getRange().getURI().equals(node.asResource().getURI())) {
-                    hmscfe.put(scobj.getDisplayName(usr.getLanguage()), scobj);
-                } else if (sprop.getRangeClass() != null && node.isResource()) {
-                    SemanticClass cls = sv.getSemanticClass(node.asResource().getURI());
-                    if (cls != null) {
-                        if (sprop.getRangeClass() != null && sprop.getRangeClass().isSubClass(cls)) {
-                            hmscfe.put(scobj.getDisplayName(usr.getLanguage()), scobj);
+            NodeIterator it=scobj.getOntClass().listPropertyValues(pro.getRDFProperty());
+            
+            while (it.hasNext())
+            {
+                RDFNode node = it.next();
+                //System.out.println("node:" + node + " " + sprop.getRange());
+                if (node != null) {
+                    if (sprop.getRange() != null && sprop.getRange().getURI().equals(node.asResource().getURI())) {
+                        hmscfe.put(scobj.getDisplayName(usr.getLanguage()), scobj);
+                    } else if (sprop.getRangeClass() != null && node.isResource()) {
+                        SemanticClass cls = sv.getSemanticClass(node.asResource().getURI());
+                        if (cls != null) {
+                            if (sprop.getRangeClass() != null && sprop.getRangeClass().isSubClass(cls)) {
+                                hmscfe.put(scobj.getDisplayName(usr.getLanguage()), scobj);
+                            }
                         }
                     }
-                }
+                }                
             }
-
-
         }
 
         ArrayList list = new ArrayList(hmscfe.keySet());
