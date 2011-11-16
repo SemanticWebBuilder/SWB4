@@ -191,12 +191,13 @@ public class ToolBar extends CustomNode
         var process=getProcess();
         var processString = WBXMLParser.encode("JSONSTART{process}JSONEND","UTF8");
         //var processString = "JSONSTART{process}JSONEND";
-
+        
         //var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>updateModel</cmd><json>{WBXMLParser.encode(processString,"UTF8")}</json></req>";
         var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>updateModel</cmd><json>{processString}</json></req>";
         //println("applet updateModel - JSON ENVIADO:");
         //println(processString);
-        var data=conn.getData(comando);
+        var _comando = new String(comando.getBytes("UTF-8"), "ISO-8859-1");
+        var data=conn.getData(_comando);
         AppletStageExtension.eval("parent.reloadTreeNodeByURI('{conn.getUri()}')");
         if(data.indexOf("OK")>0)
         {
