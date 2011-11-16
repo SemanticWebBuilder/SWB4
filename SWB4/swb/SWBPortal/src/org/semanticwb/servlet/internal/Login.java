@@ -733,6 +733,8 @@ public class Login implements InternalServlet
             formChallenge(request, response, distributorParams, alert);
         } else
         {
+            altURL = SWBUtils.TEXT.replaceAll(altURL, "<website>", distributorParams.getWebPage().getWebSiteId());
+            altURL = SWBUtils.TEXT.replaceAll(altURL, "<webpage>", distributorParams.getWebPage().getId());
             sendRedirect(response, altURL);
         }
     }
