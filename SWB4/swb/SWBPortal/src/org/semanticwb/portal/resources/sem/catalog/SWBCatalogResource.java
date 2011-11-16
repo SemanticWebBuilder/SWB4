@@ -708,19 +708,13 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                     String propCreate = stoken.nextToken();
 
                     SemanticProperty semProphm = ont.getSemanticProperty(suri);
+                    fmgr.addProperty(semProphm);
                     hmDetail.put(suri, spropname);
                     hmDetailOrder.put(suriorder, semProphm);
                     hmDetailFEMode.put(semProphm, surife + "|" + modo);
                 }
             }
-            ArrayList list = new ArrayList(hmDetailOrder.keySet());
-            Collections.sort(list);
-
-            Iterator<String> itdis = list.iterator();
-            while (itdis.hasNext()) {
-                String key = itdis.next();
-                fmgr.addProperty(hmDetailOrder.get(key));
-            }
+            
             urlPA.setAction("updateform");
         }
 
@@ -771,10 +765,14 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             sbForm.append("\n<input type=\"hidden\" name=\"clsuri\" value=\"" + cid + "\"/>");
             sbForm.append("\n<fieldset><legend>Detalle " + getCatalogClass().transformToSemanticClass().getName() + "</legend><table>");
 
+            ArrayList list = new ArrayList(hmDetailOrder.keySet());
+            Collections.sort(list);
 
-            Iterator<SemanticProperty> itsempro = fmgr.getProperties().iterator();
-            while (itsempro.hasNext()) {
-                SemanticProperty sPro = itsempro.next();
+            //Iterator<SemanticProperty> itsempro = fmgr.getProperties().iterator();
+            Iterator<String> itdis = list.iterator();
+            while (itdis.hasNext()) {
+                String key = itdis.next();
+                SemanticProperty sPro = hmDetailOrder.get(key);
                 String feMode = hmDetailFEMode.get(sPro);
                 String feuri = null;
                 String modo = null;
