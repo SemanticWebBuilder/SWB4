@@ -72,13 +72,11 @@ public class ShowFile implements InternalServlet {
             htm.append("<title>SemanticWebBuilder - Show file</title>\n");
             htm.append("</head>\n");
             htm.append("<body class=\"soria\">\n");
-            htm.append("  <input type=\"button\" onclick=\"location.href='"+path+"'\" value=\"Guardar\">");
-            htm.append("  <input type=\"button\" onclick=\"history.go(-1);\" value=\"Regresar\">");
-            htm.append("  <textarea cols=\"100\" rows=\"45\">");
+            htm.append("  <p><input type=\"button\" onclick=\"history.go(-1);\" value=\"Regresar\"/></p>");
+            htm.append("  <p><textarea cols=\"100\" rows=\"45\">");
             htm.append(content);
-            htm.append("  </textarea>\n");
-            htm.append("  <input type=\"button\" onclick=\"location.href='"+path+"'\" value=\"Guardar\">");
-            htm.append("  <input type=\"button\" onclick=\"history.go(-1);\" value=\"Regresar\">\n");
+            htm.append("  </textarea></p>\n");
+            htm.append("  <p><input type=\"button\" onclick=\"history.go(-1);\" value=\"Regresar\"/></p>\n");
             htm.append("</body>\n");
             htm.append("</html>");
             PrintWriter out = response.getWriter();
