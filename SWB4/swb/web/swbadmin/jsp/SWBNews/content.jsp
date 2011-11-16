@@ -397,8 +397,8 @@
                         }
                     }
                     String pathPhoto = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/css/noticias_infotec.gif";
-                    /*String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/sinfoto.png";
-                    String image = "";
+                    //String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/sinfoto.png";
+                    /*String image = "";
                     if (content.getImage() != null)
                     {
                     image = content.getImage();
