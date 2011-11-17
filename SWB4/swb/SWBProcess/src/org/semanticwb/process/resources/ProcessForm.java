@@ -25,6 +25,7 @@
  **/
 package org.semanticwb.process.resources;
 
+import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import java.io.BufferedWriter;
@@ -1252,23 +1253,31 @@ public class ProcessForm extends GenericResource {
         Iterator<SemanticClass> itsub = sv.getSemanticClass(sv.SWB_SWBFORMELEMENT).listSubClasses();
         while (itsub.hasNext()) {
             SemanticClass scobj = itsub.next();
+
+            if (pro == null || sprop == null) {
+                continue;
+            }
+            NodeIterator it=scobj.getOntClass().listPropertyValues(pro.getRDFProperty());
             
-            RDFNode node=scobj.getOntClass().getPropertyValue(pro.getRDFProperty());
-            
-            System.out.println("node:" + node+" "+sprop.getRange());            
-            if(node!=null)
+            while (it.hasNext())
             {
-                if(sprop.getRange().getURI().equals(node.asResource().getURI()))
+                RDFNode node = it.next();
+            
+                //System.out.println("node:" + node+" "+sprop.getRange());            
+                if(node!=null)
                 {
-                    hmscfe.put(scobj.getDisplayName(usr.getLanguage()), scobj);
-                }else if(sprop.getRangeClass()!=null && node.isResource())
-                {
-                    SemanticClass cls=sv.getSemanticClass(node.asResource().getURI());
-                    if(cls!=null)
+                    if(sprop.getRange().getURI().equals(node.asResource().getURI()))
                     {
-                        if(sprop.getRangeClass().isSubClass(cls))
+                        hmscfe.put(scobj.getDisplayName(usr.getLanguage()), scobj);
+                    }else if(sprop.getRangeClass()!=null && node.isResource())
+                    {
+                        SemanticClass cls=sv.getSemanticClass(node.asResource().getURI());
+                        if(cls!=null)
                         {
-                            hmscfe.put(scobj.getDisplayName(usr.getLanguage()), scobj);
+                            if(sprop.getRangeClass().isSubClass(cls))
+                            {
+                                hmscfe.put(scobj.getDisplayName(usr.getLanguage()), scobj);
+                            }
                         }
                     }
                 }
