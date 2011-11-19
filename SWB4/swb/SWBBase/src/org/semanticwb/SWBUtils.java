@@ -2137,7 +2137,7 @@ public class SWBUtils {
             {
                 throw new IOException("Input Stream null");
             }
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             byte[] bfile = new byte[SWBUtils.bufferSize];
             int x;
             while ((x = in.read(bfile, 0, SWBUtils.bufferSize)) > -1)
