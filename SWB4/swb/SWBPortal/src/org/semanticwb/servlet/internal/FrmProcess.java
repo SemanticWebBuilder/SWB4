@@ -95,6 +95,20 @@ public class FrmProcess implements InternalServlet
      */
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
     {
+        String _contentType = request.getParameter("_swb_contentType");
+        String _characterEncoding = request.getParameter("_swb_characterEncoding");
+        
+        //System.out.print(response.getClass());
+        //System.out.print(_contentType);
+        //System.out.print(_characterEncoding);
+        
+        if(_contentType!=null)response.setContentType(_contentType);
+        try
+        {
+            if(_characterEncoding!=null)response.setCharacterEncoding(_characterEncoding);
+        }catch(NoSuchMethodError noe){}
+        
+        
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
@@ -199,8 +213,7 @@ public class FrmProcess implements InternalServlet
             String _codetp = request.getParameter("_swb_codetp");
             String _mode = request.getParameter("_swb_mode");
             String _lang = request.getParameter("_swb_lang");
-
-
+            
             log.debug("frmele:" + _frmele);
             log.debug("obj:" + _obj);
             log.debug("model:" + _model);
