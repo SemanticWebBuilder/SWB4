@@ -254,7 +254,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                         ////////////
                         /////////////////////////////////////////////////////
 
-                        out.println(objectPropertyControl(semanticProperty, idform, paramsearch, user, sc, semmodel));
+                        out.println(objectPropertyControl(request, semanticProperty, idform, paramsearch, user, sc, semmodel));
 
                         ///////////////////////////////////////////////////////
 
@@ -2783,7 +2783,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
         return defaultFE;
     }
 
-    public String objectPropertyControl(SemanticProperty semanticProperty, String idform, String paramsearch, User user, SemanticClass sc, SemanticModel semmodel) {
+    public String objectPropertyControl(HttpServletRequest request, SemanticProperty semanticProperty, String idform, String paramsearch, User user, SemanticClass sc, SemanticModel semmodel) {
 
         StringBuffer ret = new StringBuffer("");
 
@@ -2851,7 +2851,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                     fe.setModel(getCatalogModel().getSemanticModel());
                     ((FormElementBase) fe).setFilterHTMLTags(fmgr.isFilterHTMLTags());
 
-                    fmgr.renderProp(null, ret, semanticProperty, fe, feMode);
+                    fmgr.renderProp(request, ret, semanticProperty, fe, feMode);
                 } catch (Exception e) {
                     log.error("Error al procesat lapropiedad con el formelement seleccionado. ---- " + semanticProperty.getName() + " ----- " + feURI);
                 }
