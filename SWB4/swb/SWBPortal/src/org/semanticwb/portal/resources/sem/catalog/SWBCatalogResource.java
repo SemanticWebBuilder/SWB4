@@ -2184,6 +2184,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                 response.setAction("edit");
 
             } catch (FormValidateException e) {
+                log.error(e);
                 throw new SWBResourceException("Error to process form...", e);
             }
 
@@ -2227,6 +2228,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                 response.setRenderParameter("nsuri", so.getURI());
 
             } catch (Exception e) {
+                log.error(e);
                 throw new SWBResourceException("Error to process form...", e);
             }
             //response.setRenderParameter("statmsg", response.getLocaleString("statmsg1"));
