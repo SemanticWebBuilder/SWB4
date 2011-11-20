@@ -2838,7 +2838,8 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             String feURI = stoken.nextToken();
             String feMode = stoken.nextToken();
 
-            SWBFormMgr fmgr = new SWBFormMgr(sc, getCatalogModel().getSemanticObject(), SWBFormMgr.MODE_CREATE);
+
+            SWBFormMgr fmgr = new SWBFormMgr(getCatalogClass().transformToSemanticClass(), getCatalogModel().getSemanticObject(), SWBFormMgr.MODE_CREATE);
             fmgr.clearProperties();
             fmgr.addProperty(semanticProperty);
 
