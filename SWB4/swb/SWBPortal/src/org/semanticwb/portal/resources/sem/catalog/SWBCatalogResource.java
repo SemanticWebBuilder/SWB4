@@ -335,8 +335,8 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
 
                 SemanticObject semO = null;
                 Iterator<SemanticObject> itso = semmodel.listInstancesOfClass(sccol); //gobj.getSemanticObject().getModel().listInstancesOfClass(sccol); //sccol.listInstances();
-                
-                itso = getResultFilter(hmSearchParam, hmSearchParamBoo, hmConfcol, hmConfbus, busqueda, semmodel,paramsRequest);
+
+                itso = getResultFilter(hmSearchParam, hmSearchParamBoo, hmConfcol, hmConfbus, busqueda, semmodel, paramsRequest);
 
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -485,7 +485,8 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
         HashMap<String, SemanticObject> hmfiltro = new HashMap();
 
         SemanticClass sccol = getCatalogClass().transformToSemanticClass();
-        Iterator<SemanticObject> itso = semmodel.listInstancesOfClass(sccol);;
+        Iterator<SemanticObject> itso = semmodel.listInstancesOfClass(sccol);
+        ;
 
 
 
@@ -716,7 +717,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                     hmDetailFEMode.put(semProphm, surife + "|" + modo);
                 }
             }
-            
+
             urlPA.setAction("updateform");
         }
 
@@ -790,8 +791,8 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                     if (null != fe && sPro != null) {
                         try {
                             fe.setModel(getCatalogModel().getSemanticModel());
-                            ((FormElementBase)fe).setFilterHTMLTags(fmgr.isFilterHTMLTags());                            
-                            
+                            ((FormElementBase) fe).setFilterHTMLTags(fmgr.isFilterHTMLTags());
+
                             fmgr.renderProp(request, sbForm, sPro, fe, modo);
                         } catch (Exception e) {
                             log.error("Error al procesat lapropiedad con el formelement seleccionado. ---- " + sPro.getName() + " ----- " + feuri);
@@ -898,10 +899,9 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             if (pro == null || sprop == null) {
                 continue;
             }
-            NodeIterator it=scobj.getOntClass().listPropertyValues(pro.getRDFProperty());
-            
-            while (it.hasNext())
-            {
+            NodeIterator it = scobj.getOntClass().listPropertyValues(pro.getRDFProperty());
+
+            while (it.hasNext()) {
                 RDFNode node = it.next();
                 //System.out.println("node:" + node + " " + sprop.getRange());
                 if (node != null) {
@@ -915,7 +915,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                             }
                         }
                     }
-                }                
+                }
             }
         }
 
@@ -2787,27 +2787,79 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
 
         StringBuffer ret = new StringBuffer("");
 
-        String bpropName = semanticProperty.getName();
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
 
-        ret.append("\n<tr><td align=\"right\" width=\"200\">");
-        ret.append("\n<label for=\"" + idform + "_" + bpropName + "\">" + semanticProperty.getDisplayName(user.getLanguage()) + ": </label>");
-        ret.append("\n</td><td>");
-        ret.append("\n<select name=\"search_" + bpropName + "\" id=\"" + idform + "_" + bpropName + "\" >");
-        ret.append("\n<option value=\"\">Selecciona filtro</option>");
-        Iterator<SemanticObject> sobj = semmodel.listInstancesOfClass(sc); //sc.listInstances();
-        //sobj = sc.listInstances();
+        HashMap<SemanticProperty, String> hmDetailFEMode = new HashMap<SemanticProperty, String>();
+        //Agregando las propiedades seleccionadas para la edición
+        Iterator<String> itdetProp = listDetailPropertieses();
+        while (itdetProp.hasNext()) {
+            String spropname = itdetProp.next();
 
-        while (sobj.hasNext()) {
-            SemanticObject semanticObject = sobj.next();
-            ret.append("\n<option value=\"" + semanticObject.getURI() + "\"  " + (paramsearch != null && paramsearch.equals(semanticObject.getURI()) ? "selected" : "") + " >"); // " + (paramsearch != null && paramsearch.equals(semanticObject.getURI()) ? "selected" : "
-            ret.append(semanticObject.getDisplayName(user.getLanguage()));
-            ret.append("\n</option>");
+            StringTokenizer stoken = new StringTokenizer(spropname, "|");
+            if (stoken != null) {
+                String suri = stoken.nextToken();
+                String surife = stoken.nextToken();
+                String suriorder = stoken.nextToken();
+                String modo = stoken.nextToken();
+                String propCreate = stoken.nextToken();
+
+                SemanticProperty semProphm = ont.getSemanticProperty(suri);
+                hmDetailFEMode.put(semProphm, surife+"|"+modo);
+            }
         }
 
-        ret.append("\n<option value=\"\"></option>");
-        ret.append("\n</select>");
-        ret.append("\n</td><tr>");
+        String uriFE = hmDetailFEMode.get(semanticProperty);
 
+        String bpropName = semanticProperty.getName();
+        if (uriFE == null) {
+            ret.append("\n<tr><td align=\"right\" width=\"200\">");
+            ret.append("\n<label for=\"" + idform + "_" + bpropName + "\">" + semanticProperty.getDisplayName(user.getLanguage()) + ": </label>");
+            ret.append("\n</td><td>");
+
+            ret.append("\n<select name=\"search_" + bpropName + "\" id=\"" + idform + "_" + bpropName + "\" >");
+            ret.append("\n<option value=\"\">Selecciona filtro</option>");
+            Iterator<SemanticObject> sobj = semmodel.listInstancesOfClass(sc); //sc.listInstances();
+            //sobj = sc.listInstances();
+
+            while (sobj.hasNext()) {
+                SemanticObject semanticObject = sobj.next();
+                ret.append("\n<option value=\"" + semanticObject.getURI() + "\"  " + (paramsearch != null && paramsearch.equals(semanticObject.getURI()) ? "selected" : "") + " >"); // " + (paramsearch != null && paramsearch.equals(semanticObject.getURI()) ? "selected" : "
+                ret.append(semanticObject.getDisplayName(user.getLanguage()));
+                ret.append("\n</option>");
+            }
+
+            ret.append("\n<option value=\"\"></option>");
+            ret.append("\n</select>");
+
+            ret.append("\n</td><tr>");
+        } else {
+
+            StringTokenizer stoken = new StringTokenizer(uriFE,"|");
+            String feURI = stoken.nextToken();
+            String feMode = stoken.nextToken();
+
+            SWBFormMgr fmgr = new SWBFormMgr(sc, getCatalogModel().getSemanticObject(), SWBFormMgr.MODE_CREATE);
+            fmgr.clearProperties();
+            fmgr.addProperty(semanticProperty);
+
+            GenericObject sofe = ont.getGenericObject(feURI);
+
+            FormElement fe = (FormElement) sofe;
+            if (null != fe && semanticProperty != null) {
+                try {
+                    fe.setModel(getCatalogModel().getSemanticModel());
+                    ((FormElementBase) fe).setFilterHTMLTags(fmgr.isFilterHTMLTags());
+
+                    fmgr.renderProp(null, ret, semanticProperty, fe, feMode);
+                } catch (Exception e) {
+                    log.error("Error al procesat lapropiedad con el formelement seleccionado. ---- " + semanticProperty.getName() + " ----- " + feURI);
+                }
+
+            } else if (semanticProperty != null) {
+                fe = fmgr.getFormElement(semanticProperty);
+                fmgr.renderProp(null, ret, semanticProperty, fe, feMode);
+            }
+        }
         return ret.toString();
     }
 }
