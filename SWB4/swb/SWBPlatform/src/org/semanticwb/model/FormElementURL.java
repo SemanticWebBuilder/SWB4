@@ -76,7 +76,11 @@ public class FormElementURL
 
     /** The params. */
     private HashMap<String,String> params;
-
+    
+    private String contentType=null;
+    
+    private String characterEncoding=null;
+    
     /**
      * Instantiates a new form element url.
      * 
@@ -90,6 +94,22 @@ public class FormElementURL
      */
     public FormElementURL(FormElement frmele, SemanticObject obj, SemanticProperty prop, String urltype, String codetype, String mode, String lang)
     {
+        this(frmele, obj, prop, urltype, codetype, mode, lang, null, null);
+    }
+
+    /**
+     * Instantiates a new form element url.
+     * 
+     * @param frmele the frmele
+     * @param obj the obj
+     * @param prop the prop
+     * @param urltype the urltype
+     * @param codetype the codetype
+     * @param mode the mode
+     * @param lang the lang
+     */
+    public FormElementURL(FormElement frmele, SemanticObject obj, SemanticProperty prop, String urltype, String codetype, String mode, String lang, String contentType, String characterEncoding)
+    {
         params=new HashMap();
         this.frmele=frmele;
         this.obj=obj;
@@ -98,6 +118,8 @@ public class FormElementURL
         this.codetype=codetype;
         this.mode=mode;
         this.lang=lang;
+        this.contentType=contentType;
+        this.characterEncoding=characterEncoding;
     }
 
     /**
@@ -144,6 +166,8 @@ public class FormElementURL
         if(codetype!=null)ret.append("&_swb_codetp="+URLEncoder.encode(codetype));
         if(mode!=null)ret.append("&_swb_mode="+URLEncoder.encode(mode));
         if(lang!=null)ret.append("&_swb_lang="+URLEncoder.encode(lang));
+        if(contentType!=null)ret.append("&_swb_contentType="+URLEncoder.encode(contentType));
+        if(characterEncoding!=null)ret.append("&_swb_characterEncoding="+URLEncoder.encode(characterEncoding));
 
         Iterator<String> it=params.keySet().iterator();
         while(it.hasNext())
@@ -155,5 +179,26 @@ public class FormElementURL
         return ret.toString();
     }
 
+    public FormElementURL setContentType(String contentType)
+    {
+        this.contentType = contentType;
+        return this;
+    }
 
+    public String getContentType()
+    {
+        return contentType;
+    }
+
+    public FormElementURL setCharacterEncoding(String characterEncoding)
+    {
+        this.characterEncoding = characterEncoding;
+        return this;
+    }
+
+    public String getCharacterEncoding()
+    {
+        return characterEncoding;
+    }
+    
 }
