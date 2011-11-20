@@ -6,11 +6,9 @@ package org.semanticwb.model.base;
    */
 public abstract class SelectOneBase extends org.semanticwb.model.base.FormElementBase 
 {
-    public static final org.semanticwb.platform.SemanticProperty swbxf_so_filterPropertyName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_filterPropertyName");
     public static final org.semanticwb.platform.SemanticProperty swbxf_so_nullSuport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_nullSuport");
     public static final org.semanticwb.platform.SemanticProperty swbxf_so_globalScope=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_globalScope");
     public static final org.semanticwb.platform.SemanticProperty swbxf_so_userRepository=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_userRepository");
-    public static final org.semanticwb.platform.SemanticProperty swbxf_so_filterSupport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#so_filterSupport");
    /**
    * Elemento que muestra un componente grafico para seleccionar una opcion
    */
@@ -95,24 +93,6 @@ public abstract class SelectOneBase extends org.semanticwb.model.base.FormElemen
     }
 
 /**
-* Gets the FilterPropertyName property
-* @return String with the FilterPropertyName
-*/
-    public String getFilterPropertyName()
-    {
-        return getSemanticObject().getProperty(swbxf_so_filterPropertyName);
-    }
-
-/**
-* Sets the FilterPropertyName property
-* @param value long with the FilterPropertyName
-*/
-    public void setFilterPropertyName(String value)
-    {
-        getSemanticObject().setProperty(swbxf_so_filterPropertyName, value);
-    }
-
-/**
 * Gets the BlankSuport property
 * @return boolean with the BlankSuport
 */
@@ -164,24 +144,6 @@ public abstract class SelectOneBase extends org.semanticwb.model.base.FormElemen
     public void setUserRepository(boolean value)
     {
         getSemanticObject().setBooleanProperty(swbxf_so_userRepository, value);
-    }
-
-/**
-* Gets the FilterSupport property
-* @return boolean with the FilterSupport
-*/
-    public boolean isFilterSupport()
-    {
-        return getSemanticObject().getBooleanProperty(swbxf_so_filterSupport);
-    }
-
-/**
-* Sets the FilterSupport property
-* @param value long with the FilterSupport
-*/
-    public void setFilterSupport(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swbxf_so_filterSupport, value);
     }
 
     public void remove()
