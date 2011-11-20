@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Las Plantillas son documentos HTML que sirven de base a SemanticWebBuilder para poder mostrar el "look & feel" del sitio, así como la distribución de todos los elementos en la pagina. 
    */
-public abstract class TemplateBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.CalendarRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Localeable,org.semanticwb.model.Filterable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Versionable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Expirable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Countryable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Deviceable,org.semanticwb.model.Referensable,org.semanticwb.model.Trashable
+public abstract class TemplateBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Localeable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RuleRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Deviceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Countryable,org.semanticwb.model.Activeable,org.semanticwb.model.Versionable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Expirable
 {
    /**
    * Referencia a un objeto de tipo Template
