@@ -246,14 +246,71 @@ public class WBXMLParser {
         return node;
     }
     
-    static public String encode(String data,String enc) throws java.io.UnsupportedEncodingException, java.io.IOException
-    {
-        ByteArrayOutputStream sw=new java.io.ByteArrayOutputStream();
-        OutputStreamWriter out=new OutputStreamWriter(sw,enc);
-        out.write(data);
-        out.flush();
-        return new String(sw.toByteArray());
-    }
+        /**
+         * Applies the charset specified in {@code enc} to the {@code data} received.
+         * <p>Aplica el conjunto de caracteres especificado en {@code enc} a la
+         * informaci&oacute;n recibida en {@code data}.</p>
+         *
+         * @param data a string with the information to apply the charset
+         * @param enc the charset to apply
+         * @return the string containing the {@code data} received with the charset applied.
+         * el objeto string que contiene la informaci&oacute;n recibida
+         * con el conjunto de caracteres aplicado.
+         * @throws java.io.UnsupportedEncodingException If the specified charset's
+         * name is not supported. <p>Si el nombre del conjunto de caracteres
+         * especificado no es soportado.</p>
+         * @throws java.io.IOException If there is a problem when applying the charset.
+         * <p>Si ocurre un problema al aplicar el conjunto de caracteres.</p>
+         * @throws UnsupportedEncodingException the unsupported encoding exception
+         * @throws IOException Signals that an I/O exception has occurred.
+         */
+        public static String encode(String data, String enc)
+                throws java.io.UnsupportedEncodingException, java.io.IOException
+        {
+
+            ByteArrayOutputStream sw = new java.io.ByteArrayOutputStream();
+            OutputStreamWriter out = new OutputStreamWriter(sw, enc);
+            out.write(data);
+            out.flush();
+            return new String(sw.toByteArray());
+        }
+
+        /**
+         * Decodes a string applying the specified charset in {@code enc}.
+         * <p>Decodifica el contenido de {@code data} aplicando el conjunto de caracteres
+         * especificado en {@code enc}.</p>
+         *
+         * @param data the string to decode
+         * @param enc the charset to apply
+         * @return a string resulting from applying the charset specified on {@code data}.
+         * el objeto string que contiene la informaci&oacute;n recibida
+         * con el conjunto de caracteres aplicado.
+         * @throws java.io.UnsupportedEncodingException If the specified charset's
+         * name is not supported. <p>Si el nombre del conjunto de caracteres
+         * especificado no es soportado.</p>
+         * @throws java.io.IOException If there is a problem when applying the charset.
+         * <p>Si ocurre un problema al aplicar el conjunto de caracteres.</p>
+         * @throws UnsupportedEncodingException the unsupported encoding exception
+         * @throws IOException Signals that an I/O exception has occurred.
+         */
+        public static String decode(String data, String enc)
+                throws java.io.UnsupportedEncodingException, java.io.IOException
+        {
+
+            ByteArrayInputStream sw = new ByteArrayInputStream(data.getBytes());
+            InputStreamReader in = new InputStreamReader(sw, enc);
+
+            StringBuilder ret = new StringBuilder(data.length());
+
+            char[] bfile = new char[8192];
+            int x;
+            while ((x = in.read(bfile, 0, 8192)) > -1)
+            {
+                ret.append(new String(bfile, 0, x));
+            }
+            in.close();
+            return ret.toString();
+        }
     
     static public String replaceStrTags(String txt)
     {
@@ -280,7 +337,7 @@ public class WBXMLParser {
                     str.replace(x,x+6,"\"");
                 }else
                 {
-                    System.out.println("Codificación no validada:"+str.substring(x));
+                    System.out.println("Codificaci—n no validada:"+str.substring(x));
                 }
             }
         }
