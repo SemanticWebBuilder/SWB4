@@ -64,6 +64,7 @@ import org.semanticwb.servlet.internal.TreeSelectFormElement;
 import org.semanticwb.servlet.internal.Upload;
 import org.semanticwb.servlet.internal.UploadFormElement;
 import net.fckeditor.connector.SWBConnectorServlet;
+import org.semanticwb.servlet.internal.Work;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -473,6 +474,13 @@ public class SWBVirtualHostFilter implements Filter
             intServlets.put("Upload", UploadFormElement);
             UploadFormElement.init(filterConfig.getServletContext());
 
+            if(SWBPortal.getWorkPathType().equals(SWBPortal.WORKPATH_ABSOLUTE))
+            {
+                InternalServlet work = new Work();
+                intServlets.put("work", work);
+                work.init(filterConfig.getServletContext());
+            }
+            
             InternalServlet FCKEditorConnector = new SWBConnectorServlet();
             intServlets.put("FCKEditorConnector", FCKEditorConnector);
             FCKEditorConnector.init(filterConfig.getServletContext());
