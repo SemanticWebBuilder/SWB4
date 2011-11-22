@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Iterator;
 import javax.servlet.ServletInputStream;
@@ -144,7 +145,7 @@ public class Modeler extends GenericResource {
                     process = (org.semanticwb.process.model.Process) go;
                     String json = getProcessJSON(process).toString();
                     //out.print(json);
-                    outs.write(json.getBytes());
+                    outs.write(json.getBytes("UTF-8"));
                     //System.out.println(json);
                     //out.print(SWBUtils.TEXT.decode(json, "UTF8"));
                     //System.out.println("json:"+json);
@@ -167,8 +168,7 @@ public class Modeler extends GenericResource {
                 ret = SWBUtils.XML.domToXml(res, true);
             }
             //out.print(new String(ret.getBytes()));
-            String utf8ret = new String(ret.getBytes("UTF-8"), "ISO-8859-1");
-            outs.write(utf8ret.getBytes());
+            outs.write(ret.getBytes());
             //System.out.println("out:"+new String(ret.getBytes()));
         }
     }
