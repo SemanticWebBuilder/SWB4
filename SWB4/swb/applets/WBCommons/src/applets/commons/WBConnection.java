@@ -36,10 +36,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 
 /**
  *
@@ -70,11 +72,11 @@ public class WBConnection
         try
         {
             URL cb=new URL(codeBase);
-            System.out.println("codeBase:"+codeBase+" cgipath:"+cgipath+" cb:"+cb);
+            //System.out.println("codeBase:"+codeBase+" cgipath:"+cgipath+" cb:"+cb);
             if(cgiPath!=null)
             {
                 url=new URL(cb,cgiPath);
-                System.out.println("url:"+url);
+                //System.out.println("url:"+url);
             }
         }catch(Exception e){e.printStackTrace();}
     }
@@ -135,7 +137,36 @@ public class WBConnection
             in.close();
         }catch(Exception e){System.out.println("Error to open service..."+e);}
         return ret.toString();
-    }       
+    }
+
+    public String getEncData(String xml)
+    {
+        StringBuilder ret=new StringBuilder();
+        try
+        {
+            //URL gurl=new URL(this.url,cgi);
+            URLConnection urlconn=url.openConnection();
+            urlconn.setUseCaches(false);
+            if(jsess!=null)urlconn.setRequestProperty("Cookie", "JSESSIONID="+jsess);
+            //System.out.println("JSESSIONID="+jsess);
+            urlconn.setDoOutput(true);
+            OutputStream out=urlconn.getOutputStream();
+            out.write(xml.getBytes("UTF-8"));
+            out.flush();
+            out.close();
+
+            InputStreamReader in = new InputStreamReader(urlconn.getInputStream(), "UTF-8");
+            char[] bfile = new char[8192];
+            int x;
+            while ((x = in.read(bfile, 0, 8192)) > -1)
+            {
+                ret.append(new String(bfile, 0, x));
+            }
+            in.close();
+            return ret.toString();
+        }catch(Exception e){System.out.println("Error to open service..."+e);}
+        return ret.toString();
+    }
 
     public String getUrl()
     {
@@ -172,7 +203,7 @@ public class WBConnection
             {
                 throw new IOException("Input Stream null");
             }
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             byte[] bfile = new byte[8192];
             int x;
             while ((x = in.read(bfile, 0, 8192)) > -1)
@@ -183,5 +214,25 @@ public class WBConnection
             in.close();
             return buf.toString();
         }
+        
+        public static String readEncInputStream(InputStream input,String enc) throws IOException
+        {
+            if (input == null)
+            {
+                throw new IOException("Input Stream null");
+            }
+            StringBuilder ret = new StringBuilder();
+            InputStreamReader in = new InputStreamReader(input,enc);
+            char[] bfile = new char[8192];
+            int x;
+            while ((x = in.read(bfile, 0, 8192)) > -1)
+            {
+                ret.append(new String(bfile, 0, x));
+            }
+            in.close();
+            return ret.toString();
+        }
+
+
 
 }
