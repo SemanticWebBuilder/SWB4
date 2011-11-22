@@ -1551,6 +1551,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return true, if successful
      * @throws Exception the exception
      */
+    @Override
     public boolean allVersionsArePublished(String repositoryName, String contentId) throws Exception
     {
         for (VersionInfo version : getVersions(repositoryName, contentId))
@@ -2121,6 +2122,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param title the title
      * @throws Exception the exception
      */
+    @Override
     public void setTitle(String repositoryName, String contentID, String title) throws Exception
     {
         Session session = null;
@@ -2326,6 +2328,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return the resource info[]
      * @throws Exception the exception
      */
+    @Override
     public ResourceInfo[] listResources(String repositoryName, String contentid) throws Exception
     {
         ArrayList<ResourceInfo> listResources = new ArrayList<ResourceInfo>();
@@ -2617,6 +2620,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return true, if successful
      * @throws Exception the exception
      */
+    @Override
     public boolean canPublishToResourceContent(String type,WebPageInfo info) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.siteID);
@@ -2722,6 +2726,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param value the value
      * @throws Exception the exception
      */
+    @Override
     public void setViewPropertyValue(ResourceInfo resourceInfo, PropertyInfo propertyInfo, String value) throws Exception
     {
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
@@ -2831,6 +2836,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return the view property value
      * @throws Exception the exception
      */
+    @Override
     public String getViewPropertyValue(ResourceInfo resourceInfo, PropertyInfo propertyInfo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
@@ -2848,6 +2854,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param values the values
      * @throws Exception the exception
      */
+    @Override
     public void validateViewValues(String repositoryName, String contentID, PropertyInfo[] properties, Object[] values) throws Exception
     {
         String contentType = getContentType(repositoryName, contentID);
@@ -3297,6 +3304,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param active the active
      * @throws Exception the exception
      */
+    @Override
     public void activateResource(ResourceInfo info, boolean active) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
@@ -3474,6 +3482,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param dir the dir
      * @throws Exception the exception
      */
+    @Override
     public void deletePreview(String dir) throws Exception
     {
         if (!dir.startsWith("/"))
@@ -3537,6 +3546,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param calendarInfo the calendar info
      * @throws Exception the exception
      */
+    @Override
     public void deleteCalendar(ResourceInfo resourceInfo, CalendarInfo calendarInfo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
