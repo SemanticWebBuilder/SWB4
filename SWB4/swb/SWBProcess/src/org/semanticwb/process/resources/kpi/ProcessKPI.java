@@ -49,7 +49,6 @@ import org.semanticwb.process.model.FlowNode;
 import org.semanticwb.process.model.FlowNodeInstance;
 import org.semanticwb.process.model.GraphicalElement;
 import org.semanticwb.process.model.Instance;
-import org.semanticwb.process.model.ProcessWebPage;
 import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.Task;
