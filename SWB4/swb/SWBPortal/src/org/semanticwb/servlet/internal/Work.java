@@ -108,8 +108,9 @@ public class Work implements InternalServlet
         }
         String path=uri.substring(lcont);
         path=SWBUtils.IO.normalizePath(path);
+        path=path.substring(5);
         
-        System.out.println("path:"+path);
+        //System.out.println("path:"+path);
         
 //        if(path == null || path.toUpperCase().startsWith("/WEB-INF") || path.toUpperCase().startsWith("/META-INF"))
 //        {
@@ -118,7 +119,7 @@ public class Work implements InternalServlet
 //        }
         
         File file=new File(SWBPortal.getWorkPath()+path);
-        System.out.println("file:"+file);
+        //System.out.println("file:"+file);
         if(!file.exists())
         {
             response.sendError(404, path);
