@@ -40,6 +40,8 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.WebPage;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormButton;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
@@ -48,7 +50,6 @@ import org.semanticwb.process.model.FlowNodeInstance;
 import org.semanticwb.process.model.GraphicalElement;
 import org.semanticwb.process.model.Instance;
 import org.semanticwb.process.model.ProcessWebPage;
-import org.semanticwb.process.model.SWBProcessMgr;
 import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.Task;
@@ -100,7 +101,12 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
             } catch (FormValidateException e) {
                 log.error(e);
             }
-            response.setRenderParameter("pid", request.getParameter("pid"));
+            if (request.getParameter("pid") != null) {
+                response.setRenderParameter("pid", request.getParameter("pid"));
+            }
+            if (request.getParameter("suri") != null) {
+                response.setRenderParameter("suri", request.getParameter("suri"));
+            }
             response.setMode(SWBParamRequest.Mode_VIEW);
         } else {
             super.processAction(request, response);
@@ -116,11 +122,18 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
             lang = paramRequest.getUser().getLanguage();
         }
         
+        String pid = request.getParameter("pid");
+        String suri = request.getParameter("suri");
+        
         Iterator<ProcessInstance> pi = process.listProcessInstances();
         if (pi.hasNext()) {
             SWBResourceURL adminUrl = paramRequest.getRenderUrl().setMode("adminCase");
-
-            adminUrl.setParameter("pid", request.getParameter("pid"));
+            
+            if (pid != null && !pid.trim().equals("")) {
+                adminUrl.setParameter("pid", pid);
+            } else if (suri != null && !suri.trim().equals("")) {
+                adminUrl.setParameter("suri", suri);
+            }
             String timeTitle = paramRequest.getLocaleString("timeTitle") + " (" + getTimeUnit(paramRequest) + ")";
             ArrayList<DataSerie> logSeries = null;
             ArrayList<DataSerie> taskSeries = null;
@@ -151,20 +164,20 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
             //Establecer el tema de las gráficas
             setTheme();
 
-            if (!(paramRequest.getWebPage() instanceof ProcessWebPage)) {
-                out.println("<div class=\"swbform\">");
-                out.println("  <form action=\"#\">");
-                out.println("    <label for=\"pid\">Proceso:</label>");
-                out.println("    <select name=\"pid\" onchange=\"this.form.submit();\">");
-                Iterator<Process> processes = Process.ClassMgr.listProcesses(paramRequest.getWebPage().getWebSite());
-                while (processes.hasNext()) {
-                    Process process1 = processes.next();
-                    out.println("      <option value=\"" + process1.getId() + "\">" + process1.getDisplayTitle(lang) + "</option>");
-                }
-                out.println("    </select>");
-                out.println("  </form>");
-                out.println("</div>");
-            }
+//            if (!(paramRequest.getWebPage() instanceof ProcessWebPage)) {
+//                out.println("<div class=\"swbform\">");
+//                out.println("  <form action=\"#\">");
+//                out.println("    <label for=\"pid\">Proceso:</label>");
+//                out.println("    <select name=\"pid\" onchange=\"this.form.submit();\">");
+//                Iterator<Process> processes = Process.ClassMgr.listProcesses(paramRequest.getWebPage().getWebSite());
+//                while (processes.hasNext()) {
+//                    Process process1 = processes.next();
+//                    out.println("      <option value=\"" + process1.getId() + "\">" + process1.getDisplayTitle(lang) + "</option>");
+//                }
+//                out.println("    </select>");
+//                out.println("  </form>");
+//                out.println("</div>");
+//            }
             
             out.println("<div id=\"properties\" class=\"swbform\">");
             out.println("  <fieldset>");
@@ -502,7 +515,11 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
         Process process = getProcess(request, paramRequest);
         if (process != null) {
             SWBFormMgr mgr = new SWBFormMgr(getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
-            mgr.addHiddenParameter("pid", request.getParameter("pid"));
+            if (request.getParameter("pid") != null) {
+                mgr.addHiddenParameter("pid", request.getParameter("pid"));
+            } else if (request.getParameter("suri") != null) {
+                mgr.addHiddenParameter("suri", request.getParameter("suri"));
+            }
             mgr.addButton(SWBFormButton.newSaveButton());
             mgr.addButton(SWBFormButton.newBackButton());
             mgr.setType(SWBFormMgr.TYPE_DOJO);
@@ -858,17 +875,19 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
      * ID pasado por parámetro o null si el proceso no existe.
      */
     private Process getProcess(HttpServletRequest request, SWBParamRequest paramRequest) {
-        ProcessWebPage wp = null;
+        //ProcessWebPage wp = null;
         Process process = null;
+        WebPage wp = paramRequest.getWebPage();
         String pid = request.getParameter("pid");
+        String suri = request.getParameter("suri");
         
-        if (paramRequest.getWebPage() instanceof ProcessWebPage) {
-            wp = (ProcessWebPage) paramRequest.getWebPage();
-            process = SWBProcessMgr.getProcess(wp);
-        }
-        
-        if (wp == null && pid != null && !pid.trim().equals("")) {
+        if (pid != null && !pid.trim().equals("")) {
             process = Process.ClassMgr.getProcess(pid, wp.getWebSite());
+        } else if (suri != null && !suri.trim().equals("")) {
+            SemanticObject sobj = SemanticObject.getSemanticObject(suri);
+            if (sobj != null) {
+                process = (Process) sobj.createGenericInstance();
+            }
         }
         return process;
     }
