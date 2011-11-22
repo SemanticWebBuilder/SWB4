@@ -62,6 +62,7 @@ import org.semanticwb.process.modeler.SignalEndEvent;
 import org.semanticwb.process.modeler.CompensationEndEvent;
 import org.semanticwb.process.modeler.MultipleEndEvent;
 import org.semanticwb.process.modeler.TerminationEndEvent;
+import java.nio.charset.Charset;
 
 public var counter: Integer;
 public var conn:WBConnection = new WBConnection(FX.getArgument(WBConnection.PRM_JSESS).toString(),FX.getArgument(WBConnection.PRM_CGIPATH).toString(),FX.getProperty("javafx.application.codebase"));
@@ -123,7 +124,7 @@ public class ToolBar extends CustomNode
             try
             {
                 var in=new FileInputStream(file);
-                var proc=WBConnection.readInputStream(in);
+                var proc=WBConnection.readEncInputStream(in,"UTF-8");
                 //println(proc);
                 delete modeler.contents;
                 modeler.containerElement=null;
@@ -177,7 +178,7 @@ public class ToolBar extends CustomNode
             try
             {
                 var out=new FileOutputStream(file);
-                out.write(proc.getBytes());
+                out.write(proc.getBytes("UTF-8"));
                 out.close();
                 //var o= new ObjectOutputStream(out);
                 //o.writeObject(modeler);
@@ -189,15 +190,14 @@ public class ToolBar extends CustomNode
     public function storeProcess(): Void
     {
         var process=getProcess();
-        var processString = WBXMLParser.encode("JSONSTART{process}JSONEND","UTF8");
-        //var processString = "JSONSTART{process}JSONEND";
+        //var processString = WBXMLParser.encode("JSONSTART{process}JSONEND","UTF8");
+        var processString = "JSONSTART{process}JSONEND";
         
         //var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>updateModel</cmd><json>{WBXMLParser.encode(processString,"UTF8")}</json></req>";
         var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>updateModel</cmd><json>{processString}</json></req>";
         //println("applet updateModel - JSON ENVIADO:");
         //println(processString);
-        var _comando = new String(comando.getBytes("UTF-8"), "ISO-8859-1");
-        var data=conn.getData(_comando);
+        var data=conn.getEncData(comando);
         AppletStageExtension.eval("parent.reloadTreeNodeByURI('{conn.getUri()}')");
         if(data.indexOf("OK")>0)
         {
@@ -214,7 +214,7 @@ public class ToolBar extends CustomNode
         try
         {
             var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getProcessJSON</cmd></req>";
-            var json=conn.getData(comando);
+            var json=conn.getEncData(comando);
             //println("applet getProcessJSON - JSON RECIBIDO:");
             //println(json);
             //println("json:{json}");
@@ -543,6 +543,9 @@ public class ToolBar extends CustomNode
 
     public override function create(): Node
     {
+        //println("charset:{Charset.defaultCharset()}");
+        //println("áéíóú");
+
         var filter = FileFilter{};
         var imgFilter = ImageFileFilter{};
         var xpdlFilter = XPDLFileFilter{};
