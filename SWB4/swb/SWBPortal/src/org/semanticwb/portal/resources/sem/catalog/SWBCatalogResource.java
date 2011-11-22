@@ -175,6 +175,22 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             if (hmConfcol.size() > 0) {
 
                 String idform = "" + System.currentTimeMillis();
+                
+                out.println("    <script type=\"text/javascript\">");
+                out.println("      dojo.require(\"dojo.parser\");");
+                out.println("      dojo.require(\"dijit.TitlePane\");");
+                out.println("      dojo.require(\"dijit.form.Form\");");
+                out.println("      dojo.require(\"dijit.form.CheckBox\");");
+                out.println("      dojo.require(\"dijit.form.Textarea\");");
+                out.println("      dojo.require(\"dijit.form.FilteringSelect\");");
+                out.println("      dojo.require(\"dijit.form.TextBox\");");
+                out.println("      dojo.require(\"dijit.form.DateTextBox\");");
+                out.println("      dojo.require(\"dijit.form.Button\");");
+                out.println("      dojo.require(\"dijit.form.NumberSpinner\");");
+                out.println("      dojo.require(\"dijit.form.Slider\");");
+                out.println("      dojo.require(\"dojox.form.BusyButton\");");
+                out.println("      dojo.require(\"dojox.form.TimeSpinner\");");
+                out.println("    </script>");
 
                 //Armado de tabla
                 out.println("<div >");
