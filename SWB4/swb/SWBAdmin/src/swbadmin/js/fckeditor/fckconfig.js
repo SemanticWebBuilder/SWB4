@@ -273,56 +273,63 @@ FCKConfig.JustifyClasses = [] ;
 // inline when creating the editor instance. In that cases you must set the
 // values of LinkBrowserURL, ImageBrowserURL and so on.
 // Custom implementations should just ignore it.
-var _FileBrowserLanguage	= 'php' ;	// asp | aspx | cfm | lasso | perl | php | py
-var _QuickUploadLanguage	= 'php' ;	// asp | aspx | cfm | lasso | perl | php | py
+var _FileBrowserLanguage = 'php' ;	// asp | aspx | cfm | lasso | perl | php | py
+var _QuickUploadLanguage = 'php' ;	// asp | aspx | cfm | lasso | perl | php | py
 var contextInAdmin = parent.actualContext;
-if (contextInAdmin != "")
+if (contextInAdmin != "") {
     contextInAdmin = contextInAdmin + "/";
+}
 //alert("contextInAdmin:"+contextInAdmin);
-var domainAndContext = document.location.protocol+'//'+document.location.host+'/'+contextInAdmin;
+var domainAndContext = document.location.protocol+'//'+document.location.host;
+if (contextInAdmin.indexOf('/') == 0) {
+    domainAndContext = domainAndContext+contextInAdmin;
+} else {
+    domainAndContext = domainAndContext+'/';
+}
+
 // Don't care about the following two lines. It just calculates the correct connector
 // extension to use for the default File Browser (Perl uses "cgi").
 var _FileBrowserExtension = _FileBrowserLanguage == 'perl' ? 'cgi' : _FileBrowserLanguage ;
 var _QuickUploadExtension = _QuickUploadLanguage == 'perl' ? 'cgi' : _QuickUploadLanguage ;
 
 FCKConfig.LinkBrowser = true ;
-FCKConfig.LinkBrowserURL = FCKConfig.BasePath + 'filemanager/browser/default/browser.html?Connector=' + encodeURIComponent( domainAndContext+'/FCKEditorConnector.do' ) ;
-FCKConfig.LinkBrowserWindowWidth	= FCKConfig.ScreenWidth * 0.7 ;		// 70%
-FCKConfig.LinkBrowserWindowHeight	= FCKConfig.ScreenHeight * 0.7 ;	// 70%
+FCKConfig.LinkBrowserURL = FCKConfig.BasePath + 'filemanager/browser/default/browser.html?Connector=' + encodeURIComponent( domainAndContext+'FCKEditorConnector' ) ;
+FCKConfig.LinkBrowserWindowWidth = FCKConfig.ScreenWidth * 0.7 ;		// 70%
+FCKConfig.LinkBrowserWindowHeight = FCKConfig.ScreenHeight * 0.7 ;	// 70%
 
 FCKConfig.ImageBrowser = true ;
-FCKConfig.ImageBrowserURL = FCKConfig.BasePath + 'filemanager/browser/default/browser.html?Type=Image&Connector=' + encodeURIComponent( domainAndContext+'/FCKEditorConnector.do' ) ;
-FCKConfig.ImageBrowserWindowWidth  = FCKConfig.ScreenWidth * 0.7 ;	// 70% ;
+FCKConfig.ImageBrowserURL = FCKConfig.BasePath + 'filemanager/browser/default/browser.html?Type=Image&Connector=' + encodeURIComponent( domainAndContext+'FCKEditorConnector' ) ;
+FCKConfig.ImageBrowserWindowWidth = FCKConfig.ScreenWidth * 0.7 ;	// 70% ;
 FCKConfig.ImageBrowserWindowHeight = FCKConfig.ScreenHeight * 0.7 ;	// 70% ;
 
 FCKConfig.FlashBrowser = true ;
-FCKConfig.FlashBrowserURL = FCKConfig.BasePath + 'filemanager/browser/default/browser.html?Type=Flash&Connector=' + encodeURIComponent( domainAndContext+'/FCKEditorConnector.do' ) ;
-FCKConfig.FlashBrowserWindowWidth  = FCKConfig.ScreenWidth * 0.7 ;	//70% ;
+FCKConfig.FlashBrowserURL = FCKConfig.BasePath + 'filemanager/browser/default/browser.html?Type=Flash&Connector=' + encodeURIComponent( domainAndContext+'FCKEditorConnector' ) ;
+FCKConfig.FlashBrowserWindowWidth = FCKConfig.ScreenWidth * 0.7 ;	//70% ;
 FCKConfig.FlashBrowserWindowHeight = FCKConfig.ScreenHeight * 0.7 ;	//70% ;
 
 FCKConfig.LinkUpload = true ;
-FCKConfig.LinkUploadURL = domainAndContext+'/FCKEditorConnector.do' ;
+FCKConfig.LinkUploadURL = domainAndContext+'FCKEditorConnector' ;
 //FCKConfig.ImageUploadURL = FCKConfig.BasePath + 'filemanager/connectors/' + _QuickUploadLanguage + '/upload.' + _QuickUploadExtension ;
-FCKConfig.LinkUploadAllowedExtensions	= ".(7z|aiff|asf|avi|bmp|csv|doc|docx|fla|flv|gif|gz|gzip|htm|html|jpeg|jpg|mid|mov|mp3|mp4|mpc|mpeg|mpg|odg|odp|ods|odt|pdf|png|ppt|pptx|pxd|qt|ram|rar|rm|rmi|rmvb|rtf|sdc|sitd|swf|sxc|sxw|tar|tgz|tif|tiff|txt|vsd|wav|wma|wmv|xls|xlsx|xml|zip)$" ;			// empty for all
-FCKConfig.LinkUploadDeniedExtensions	= "" ;	// empty for no one
+FCKConfig.LinkUploadAllowedExtensions = ".(7z|aiff|asf|avi|bmp|csv|doc|docx|fla|flv|gif|gz|gzip|htm|html|jpeg|jpg|mid|mov|mp3|mp4|mpc|mpeg|mpg|odg|odp|ods|odt|pdf|png|ppt|pptx|pxd|qt|ram|rar|rm|rmi|rmvb|rtf|sdc|sitd|swf|sxc|sxw|tar|tgz|tif|tiff|txt|vsd|wav|wma|wmv|xls|xlsx|xml|zip)$" ;			// empty for all
+FCKConfig.LinkUploadDeniedExtensions = "" ;	// empty for no one
 
 FCKConfig.ImageUpload = true ;
-FCKConfig.ImageUploadURL = domainAndContext+'/FCKEditorConnector.do?Type=Image' ;
+FCKConfig.ImageUploadURL = domainAndContext+'FCKEditorConnector?Type=Image' ;
 //FCKConfig.ImageUploadURL = FCKConfig.BasePath + 'filemanager/connectors/' + _QuickUploadLanguage + '/upload.' + _QuickUploadExtension + '?Type=Image' ;
-FCKConfig.ImageUploadAllowedExtensions	= ".(jpg|gif|jpeg|png|bmp)$" ;		// empty for all
+FCKConfig.ImageUploadAllowedExtensions = ".(jpg|gif|jpeg|png|bmp)$" ;		// empty for all
 FCKConfig.ImageUploadDeniedExtensions	= "" ;							// empty for no one
 
 FCKConfig.FlashUpload = true ;
-FCKConfig.FlashUploadURL = domainAndContext+'/FCKEditorConnector.do?Type=Flash' ;
+FCKConfig.FlashUploadURL = domainAndContext+'FCKEditorConnector?Type=Flash' ;
 //FCKConfig.ImageUploadURL = FCKConfig.BasePath + 'filemanager/connectors/' + _QuickUploadLanguage + '/upload.' + _QuickUploadExtension + '?Type=Flash' ;
-FCKConfig.FlashUploadAllowedExtensions	= ".(swf|flv)$" ;		// empty for all
-FCKConfig.FlashUploadDeniedExtensions	= "" ;					// empty for no one
+FCKConfig.FlashUploadAllowedExtensions = ".(swf|flv)$" ;		// empty for all
+FCKConfig.FlashUploadDeniedExtensions = "" ;					// empty for no one
 
 FCKConfig.SmileyPath	= FCKConfig.BasePath + 'images/smiley/msn/' ;
 FCKConfig.SmileyImages	= ['regular_smile.gif','sad_smile.gif','wink_smile.gif','teeth_smile.gif','confused_smile.gif','tounge_smile.gif','embaressed_smile.gif','omg_smile.gif','whatchutalkingabout_smile.gif','angry_smile.gif','angel_smile.gif','shades_smile.gif','devil_smile.gif','cry_smile.gif','lightbulb.gif','thumbs_down.gif','thumbs_up.gif','heart.gif','broken_heart.gif','kiss.gif','envelope.gif'] ;
 FCKConfig.SmileyColumns = 8 ;
-FCKConfig.SmileyWindowWidth		= 320 ;
-FCKConfig.SmileyWindowHeight	= 210 ;
+FCKConfig.SmileyWindowWidth = 320 ;
+FCKConfig.SmileyWindowHeight = 210 ;
 
 FCKConfig.BackgroundBlockerColor = '#ffffff' ;
 FCKConfig.BackgroundBlockerOpacity = 0.50 ;
