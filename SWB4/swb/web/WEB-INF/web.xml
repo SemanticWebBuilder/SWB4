@@ -32,11 +32,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>Connector</servlet-name>
-        <servlet-class>net.fckeditor.connector.ConnectorServlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>QuercusServlet</servlet-name>
         <servlet-class>com.caucho.quercus.servlet.QuercusServlet</servlet-class>
         <!-- Specifies the encoding Quercus should use to read in PHP scripts.
@@ -98,11 +93,6 @@
     <servlet-mapping>
         <servlet-name>dwr-invoker</servlet-name>
         <url-pattern>/dwr/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>Connector</servlet-name>
-        <url-pattern>/FCKEditorConnector.do</url-pattern>
     </servlet-mapping>
 
     <session-config>
