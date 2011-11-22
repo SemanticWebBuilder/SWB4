@@ -1986,6 +1986,7 @@ public class SemanticObject
      */
     public void remove()
     {
+        //log.error(new Exception("Se borro el objecto:"+getURI()));
         remove(new ArrayList());
     }
 
@@ -2010,16 +2011,22 @@ public class SemanticObject
             
             if(this.getSemanticClass()==null)printStatements();
             
-            //TODO:revisar esto de vic
-            Iterator<SemanticProperty> properties = this.getSemanticClass().listProperties();
-            while (properties.hasNext())
+            try
             {
-                SemanticProperty prop = properties.next();
-                if (prop.isBinary())
+                //TODO:revisar esto de vic
+                Iterator<SemanticProperty> properties = this.getSemanticClass().listProperties();
+                while (properties.hasNext())
                 {
-                    // removida manualmente por ser binaria
-                    removeProperty(prop);
+                    SemanticProperty prop = properties.next();
+                    if (prop.isBinary())
+                    {
+                        // removida manualmente por ser binaria
+                        removeProperty(prop);
+                    }
                 }
+            }catch(Exception e)
+            {
+                log.error(e);
             }
 
             //Eliminar dependencias
