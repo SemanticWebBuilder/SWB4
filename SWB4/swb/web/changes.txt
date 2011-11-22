@@ -3,7 +3,8 @@
     - Mejoras en el Soporte a Balanceo de Instancias (Jei)
     - Soporte a FullCache de triples En ambientes de Balanceo (Jei)
     - Mejoras de desempeño en Triple Store Nativo de SWB (Jei)
-    - Mejoras de desempeño en Trople Store Remoto de SWB (Jei)
+    - Mejoras de desempeño en Triple Store Remoto de SWB (Jei)
+    - Cambios en el FCKEditor, para que el Servlet que utiliza funcione como un InternalServlet de SWB (Jose R)
   4.1.0.0
     - CONVERSIÓN A JAVA 1.6 (Jei)
     - Se creó el Triple Store propio de SemanticWebBuilder, para mayor compatibilidad con las diversas BD (Jei)
