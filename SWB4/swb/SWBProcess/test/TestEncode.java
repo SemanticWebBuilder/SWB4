@@ -18,8 +18,6 @@ public class TestEncode
         try
         {
             String txt="Solís";
-            String xml="<>"
-            SWBUtils.XML.xmlToDom(txt)
             System.out.print("iso8859-1:");System.out.write(txt.getBytes("iso8859-1"));
             System.out.println();
             System.out.print("utf8:");System.out.write(txt.getBytes("utf8"));
