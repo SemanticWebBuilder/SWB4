@@ -52,6 +52,7 @@ import org.semanticwb.process.model.Instance;
 import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.Task;
+import org.semanticwb.process.model.WrapperProcessWebPage;
 
 public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.ProcessKPIBase 
 {

@@ -55,11 +55,12 @@ import org.semanticwb.process.resources.controlpanel.ControlPanelResource;
  */
 public class UserTaskInboxResource extends org.semanticwb.process.resources.taskinbox.base.UserTaskInboxResourceBase 
 {
-    private static Logger log = SWBUtils.getLogger(ControlPanelResource.class);
+    private static Logger log = SWBUtils.getLogger(UserTaskInboxResource.class);
     public static final int SORT_DATE = 1;
     public static final int SORT_NAME = 2;
     public static final int STATUS_ALL = -1;
     private static final String paramCatalog = "idCol|nameCol|pnameCol|sdateCol|edateCol|actionsCol";
+    
     private Comparator taskNameComparator = new Comparator() {
         String lang = "es";
         public void Comparator (String lng) {
@@ -156,20 +157,31 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/taskInbox/userTaskInbox.jsp";
-        RequestDispatcher rd = request.getRequestDispatcher(jsp);
+        //String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/taskInbox/userTaskInbox.jsp";
+        String jsp = "/swbadmin/jsp/process/userTaskInbox.jsp";
+        System.out.println(jsp);
 
         if (getDisplayCols() == null || getDisplayCols().trim().equals("")) {
             setDisplayCols("idCol|pnameCol|nameCol|sdateCol|edateCol|actionsCol");
         }
+        System.out.println("1");
 
         try {
+            RequestDispatcher rd = request.getRequestDispatcher(jsp);
+            System.out.println("2");
+            
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("instances", getUserTaskInstances(request, paramRequest));
             request.setAttribute("displayCols", getDisplayCols());
             request.setAttribute("statusWp", getDisplayMapWp());
             request.setAttribute("itemsPerPage", getItemsPerPage());
+            
+            System.out.println("3");
+            
             rd.include(request, response);
+            
+            System.out.println("4");
+            
         } catch (Exception e) {
             log.error("Error including jsp in view mode", e);
         }
