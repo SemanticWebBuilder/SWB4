@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
@@ -76,7 +77,8 @@ public class SemanticObject
     /** The m_virtual. */
     private boolean m_virtual = false;
         
-    private List<Statement> m_props=Collections.synchronizedList(new ArrayList());
+    //private List<Statement> m_props=Collections.synchronizedList(new ArrayList());
+    private List<Statement> m_props=new CopyOnWriteArrayList<Statement>();
     private List<Statement> m_propsInv=null;
     
     /** The lastaccess. */
