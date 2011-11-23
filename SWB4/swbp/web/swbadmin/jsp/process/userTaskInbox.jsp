@@ -27,7 +27,7 @@
 <%@page import="java.util.Map"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-hola
+
 <%!
     public String getStatusInstances(ProcessInstance pi, int status) {
         String ret = "";
