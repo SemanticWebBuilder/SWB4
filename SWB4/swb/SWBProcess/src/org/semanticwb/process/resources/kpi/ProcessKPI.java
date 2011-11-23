@@ -52,7 +52,6 @@ import org.semanticwb.process.model.Instance;
 import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.Task;
-import org.semanticwb.process.model.WrapperProcessWebPage;
 
 public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.ProcessKPIBase 
 {
@@ -95,19 +94,20 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
         if (action.equals("adminCase")) {
+            String suri = request.getParameter("suri");
+            String pid = request.getParameter("pid");
+            
             SWBFormMgr mgr = new SWBFormMgr(getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
             try {
                 mgr.processForm(request);
             } catch (FormValidateException e) {
                 log.error(e);
             }
-            if (request.getParameter("pid") != null) {
-                response.setRenderParameter("pid", request.getParameter("pid"));
+            if (suri != null) {
+                response.setRenderParameter("suri", suri);
+            } else  {
+                response.setRenderParameter("pid", pid);
             }
-            if (request.getParameter("suri") != null) {
-                response.setRenderParameter("suri", request.getParameter("suri"));
-            }
-            response.setMode(SWBParamRequest.Mode_VIEW);
         } else {
             super.processAction(request, response);
         }
@@ -218,9 +218,23 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
             out.println("    </table>");
             out.println("  </fieldset>");
             //out.println("  <fieldset>\n");
-            out.println("    <a href=\"" + adminUrl + "\">" + paramRequest.getLocaleString("configGraphs") + "</a>");
+            if (suri != null) {
+                out.print("    <button  dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + adminUrl.toString() + "',this.domNode);return false;\">" + paramRequest.getLocaleString("configGraphs") + "</button>");
+            } else { 
+                out.println("    <a href=\"" + adminUrl + "\">" + paramRequest.getLocaleString("configGraphs") + "</a>");
+            }
             //out.println("  </fieldset>");
             out.println("</div>");
+        } else {
+            out.println("<div id=\"properties\" class=\"swbform\">\n"
+                    + "  <fieldset>\n"
+                    + "    <table>\n"
+                    + "      <tbody>\n"
+                    + "        <tr><td>No existen instancias del proceso</td></tr>"
+                    + "      </tbody>\n"
+                    + "    </table>\n"
+                    + "  </fieldset>\n"
+                    + "</div>\n");
         }
     }
     
