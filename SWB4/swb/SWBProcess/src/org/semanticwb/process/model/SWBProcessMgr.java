@@ -98,10 +98,11 @@ public class SWBProcessMgr
         Process ret=null;
         if(page!=null)
         {
-            if(page instanceof ProcessWebPage)
+            if(page instanceof WrapperProcessWebPage)
             {
-                ret=((ProcessWebPage)page).getProcess();
-            }else
+                ret=((WrapperProcessWebPage)page).getProcess();
+            }
+            else
             {
                 ret=getProcess(page.getParent());
             }

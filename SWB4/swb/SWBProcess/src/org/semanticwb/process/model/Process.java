@@ -33,13 +33,40 @@ import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticObserver;
 import org.semanticwb.platform.SemanticProperty;
 
 public class Process extends org.semanticwb.process.model.base.ProcessBase 
 {
+    static 
+    {
+        swp_parentWebPage.registerObserver(new SemanticObserver() 
+        {
+            public void notify(SemanticObject obj, Object prop, String lang, String action)
+            {
+                System.out.println("obj:"+obj+" prop:"+prop+" action:"+action);
+                if(obj.instanceOf(Process.sclass))
+                {
+                    Process process=(Process)obj.createGenericInstance();                    
+                    process.getProcessWebPage().removeAllVirtualParent();
+                    if(action!=null && action.equals("SET"))
+                    {
+                        if(process.getParentWebPage()!=null)
+                        {
+                            process.getProcessWebPage().addVirtualParent(process.getParentWebPage());
+                        }
+                    }
+                }
+                        
+            }
+        });
+    }
+    
+    
     public Process(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+        getProcessWebPage();  //Crea pagina web de proceso
     }
 
     /**
@@ -156,5 +183,23 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
         }
         return arr.iterator();
     }
+
+    @Override
+    public WrapperProcessWebPage getProcessWebPage() 
+    {
+        WrapperProcessWebPage wp=super.getProcessWebPage();
+        if(wp==null)
+        {
+            wp=WrapperProcessWebPage.ClassMgr.createWrapperProcessWebPage(getId()+"_swp", getProcessSite());
+            setProcessWebPage(wp);
+            wp.setActive(true);
+            //eliminar cache
+            //getSemanticObject().removeCache(wp.getURI());
+            //wp=super.getProcessWebPage();
+        }
+        return wp;
+    }    
+    
+    
 
 }

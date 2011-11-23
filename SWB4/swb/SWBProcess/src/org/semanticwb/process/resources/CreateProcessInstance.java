@@ -38,7 +38,6 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.process.model.ProcessWebPage;
 import org.semanticwb.process.model.SWBProcessMgr;
 
 /**
@@ -61,9 +60,9 @@ public class CreateProcessInstance extends GenericResource{
 
         WebPage wp = response.getWebPage();
         User user=response.getUser();
-        if(wp!=null&&wp instanceof ProcessWebPage)
+        org.semanticwb.process.model.Process process=SWBProcessMgr.getProcess(wp);
+        if(process!=null)
         {
-            org.semanticwb.process.model.Process process=SWBProcessMgr.getProcess(wp);
             String act=request.getParameter("act");
             if(act!=null)
             {

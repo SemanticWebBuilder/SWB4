@@ -36,6 +36,7 @@ import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.model.base.GenericObjectBase;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
@@ -421,7 +422,7 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
      * Regresa Pagina Web asociada al proceso
      * @return ProcessWebPage
      */
-    public ProcessWebPage getProcessWebPage()
+    public WebPage getProcessWebPage()
     {
         return getProcessInstance().getProcessType().getProcessWebPage();
     }

@@ -4104,21 +4104,20 @@ public class PreConfiguredControlPanel extends GenericAdmResource{
             Resource base = paramRequest.getResourceBase();
             WebPage webPage = (WebPage)paramRequest.getWebPage();
             ProcessSite site = (ProcessSite) webPage.getWebSite();
-            Iterator <ProcessWebPage> itProcessWebPages =
-                    site.listProcessWebPages();
-
+            
             String strControlPanelProcessDefinitions =
                 base.getAttribute(PROCESS_SELECTION_CTRL)==null
                     ?""
                     :base.getAttribute(PROCESS_SELECTION_CTRL);
             Vector vSelected =
                     BPMSProcessInstance.ClassMgr.stringToVector(strControlPanelProcessDefinitions);
-            while(itProcessWebPages.hasNext())
-            {
-                ProcessWebPage pwp =
-                        (ProcessWebPage) itProcessWebPages.next();
-                if(pwp.isActive()){
-                    org.semanticwb.process.model.Process process = pwp.getProcess();
+            
+            Iterator<org.semanticwb.process.model.Process> it2=org.semanticwb.process.model.Process.ClassMgr.listProcesses(site);
+            while(it2.hasNext())
+            {                    
+                org.semanticwb.process.model.Process process = it2.next();
+                if(process.isActive())
+                {
                     if(vSelected.contains(process.getURI()))
                     {
                         lstDefinitions.add(index, process);
@@ -4152,8 +4151,6 @@ public class PreConfiguredControlPanel extends GenericAdmResource{
             Resource base = paramRequest.getResourceBase();
             WebPage webPage = (WebPage)paramRequest.getWebPage();
             ProcessSite site = (ProcessSite) webPage.getWebSite();
-            Iterator <ProcessWebPage> itProcessWebPages =
-                    site.listProcessWebPages();
 
             String strControlPanelProcessDefinitions =
                 base.getAttribute(PROCESS_SELECTION_CTRL)==null
@@ -4161,12 +4158,13 @@ public class PreConfiguredControlPanel extends GenericAdmResource{
                     :base.getAttribute(PROCESS_SELECTION_CTRL);
             Vector vSelected =
                     BPMSProcessInstance.ClassMgr.stringToVector(strControlPanelProcessDefinitions);
-            while(itProcessWebPages.hasNext())
-            {
-                ProcessWebPage pwp =
-                        (ProcessWebPage) itProcessWebPages.next();
-                if(pwp.isActive()){
-                    org.semanticwb.process.model.Process process = pwp.getProcess();
+            
+            Iterator<org.semanticwb.process.model.Process> it2=org.semanticwb.process.model.Process.ClassMgr.listProcesses(site);
+            while(it2.hasNext())
+            {                    
+                org.semanticwb.process.model.Process process = it2.next();
+                if(process.isActive())
+                {
                     if(vSelected.contains(process.getURI()))
                     {
                         vProcessDefinitions.add(index, process);
