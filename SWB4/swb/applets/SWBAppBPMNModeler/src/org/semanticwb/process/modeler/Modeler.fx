@@ -531,6 +531,20 @@ public class Modeler extends CustomNode
                     (ele as GraphicalElement).y += 10;
                 }
             }
+        } else if (e.code == e.code.VK_BACK_SPACE) {
+//            if (focusedNode != null and focusedNode instanceof GraphicalElement) {
+//                (focusedNode as GraphicalElement).remove(true);
+//                focusedNode = null;
+//            }
+            var ts = Sequences.shuffle(selectedNodes);
+            for (ele in ts) {
+                if (ele instanceof GraphicalElement) {
+                    (ele as GraphicalElement).remove(true);
+                } else if (ele instanceof ConnectionObject) {
+                    (ele as ConnectionObject).remove();
+                }
+            }
+            delete selectedNodes;
         }
     }
 
