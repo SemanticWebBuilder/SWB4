@@ -282,6 +282,38 @@ public class WrapperProcessWebPage extends org.semanticwb.process.model.base.Wra
             return ut.getDisplayTitle(lang);
         }
         return super.getDisplayName(lang);
-    }    
+    }
+
+    @Override
+    public String getDisplayTitle(String lang)
+    {
+        Process ut=getProcess();
+        if(ut!=null)
+        {
+            return ut.getDisplayTitle(lang);
+        }        
+        return super.getDisplayTitle(lang);
+    }
     
+    @Override
+    public String getTitle(String lang)
+    {
+        Process ut=getProcess();
+        if(ut!=null)
+        {
+            return ut.getTitle(lang);
+        }        
+        return super.getTitle(lang);
+    }
+    
+    @Override
+    public String getTitle()
+    {
+        Process ut=getProcess();
+        if(ut!=null)
+        {
+            return ut.getTitle();
+        }        
+        return super.getTitle();
+    }    
 }
