@@ -629,7 +629,14 @@
                                     idName = "HTMLContent";
                                 }
 
+                                
+                                
                                 ResourceType rtype = ws.getResourceType(idName);
+                                
+                                if(idName.equals("com.infotec.wb.resources.Banner")){
+                                    System.out.print("resType: "+idName);
+                                    if(rtype!=null) System.out.println(" --- "+rtype.getId());
+                                }
 
                                 if(rtype==null)
                                 {
@@ -1232,16 +1239,16 @@
                                 WBResource rres = (WBResource) itres.next();
                                 com.infotec.wb.core.db.RecResource rresb = null;
                                 numRes++;
-                                if((numRes%10)==0)System.out.println("========>"+numRes);
+                                if((numRes%100)==0)System.out.println("========>"+numRes);
                                 try{
                                     if(rres.getResourceBase()!=null)
                                     {
                                         rresb = rres.getResourceBase().getRecResource();
 
-
                                         if(rresb.getResourceType()!=null)
                                         {
                                             String classtype = rresb.getResourceType().getObjclass();
+
                                             if(null!=classtype&&"com.infotec.wb.resources.repository.Repository".equals(classtype))
                                             {
                                                 com.infotec.topicmaps.Topic tp = tm.getTopic("CNFWB_Rep"+rresb.getId()); //CNFWB_Rep152
@@ -1296,6 +1303,10 @@
                                                     }
                                                     org.semanticwb.model.ResourceType restype = ws.getResourceType(idName);
 
+                                                    if(idName.equals("com.infotec.wb.resources.Banner")){
+                                                        //System.out.print("restype "+idName);
+                                                        //if(restype!=null) System.out.println(" --- "+restype.getId());
+                                                    }
                                                     //if(restype!=null)out.println("restype: "+restype.getTitle()+" "+restype.getResourceClassName());
                                                     if (restype == null)
                                                     {
@@ -1396,6 +1407,9 @@
 
                                                     if (path2 != null && path2.trim().length() > 0) {
                                                         // copiando version actual
+                                                        
+                                                        //System.out.println("work Path:"+WBUtils.getInstance().getWorkPath() );
+                                                        
                                                         File sourcePath = new File(WBUtils.getInstance().getWorkPath() + sourceDirectory);
                                                         if (sourcePath.exists() && sourcePath.isDirectory()) //revisar si existe la fuente, si no hace nada y regresa false
                                                         {
@@ -1781,13 +1795,13 @@
                                     if(userid!=null&&userid.trim().length()>1&&userid.indexOf("_")>0)
                                     {
                                         userid=userid.substring(0,userid.lastIndexOf("_"));
-                                        System.out.println("userid:"+userid);
+                                        //System.out.println("userid:"+userid);
                                         swbusr = ws.getUserRepository().getUser(userid);
                                     }
                                     //validando webpage
                                     if(topicid!=null&&topicid.trim().length()>1)
                                     {
-                                        System.out.println("wpid:"+topicid);
+                                        //System.out.println("wpid:"+topicid);
                                         swbwp=ws.getWebPage(topicid);
                                     }
                                     //obteniendo recurso en swb
@@ -2127,7 +2141,10 @@
 
                             if(resource!=null)
                             {
-                                if(!reviewActUnact) wp.addResource(resource);
+                                if(!reviewActUnact){
+                                    if(!wp.hasResource(resource))
+                                        wp.addResource(resource);
+                                }
                                 try {
                                     if(occ.isActive())
                                     {
