@@ -1,8 +1,9 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class UserTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.model.Traceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Undeleteable,org.semanticwb.process.model.Callable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.model.Resourceable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.RuleRefable
+public abstract class UserTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.model.RoleRefable,org.semanticwb.model.Referensable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Callable,org.semanticwb.model.Traceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Resourceable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Trashable
 {
+    public static final org.semanticwb.platform.SemanticProperty swp_notificationTime=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#notificationTime");
     public static final org.semanticwb.platform.SemanticClass swp_WrapperTaskWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#WrapperTaskWebPage");
     public static final org.semanticwb.platform.SemanticProperty swp_taskWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#taskWebPage");
     public static final org.semanticwb.platform.SemanticClass swp_UserTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#UserTask");
@@ -457,6 +458,24 @@ public abstract class UserTaskBase extends org.semanticwb.process.model.Task imp
     public UserTaskBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the NotificationTime property
+* @return int with the NotificationTime
+*/
+    public int getNotificationTime()
+    {
+        return getSemanticObject().getIntProperty(swp_notificationTime);
+    }
+
+/**
+* Sets the NotificationTime property
+* @param value long with the NotificationTime
+*/
+    public void setNotificationTime(int value)
+    {
+        getSemanticObject().setIntProperty(swp_notificationTime, value);
     }
    /**
    * Sets the value for the property TaskWebPage
