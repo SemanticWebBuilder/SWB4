@@ -43,6 +43,8 @@ import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.process.model.FlowNodeInstance;
+import org.semanticwb.process.model.GraphicalElement;
+import org.semanticwb.process.model.Lane;
 import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.SWBProcessMgr;
@@ -257,22 +259,25 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                             if (flowNodeInstance.getFlowNodeType() instanceof UserTask) {
                                 UserTask utask = (UserTask) flowNodeInstance.getFlowNodeType();
                                 if (user.haveAccess(utask)) {
-                                    if (statusFilter > 0) {
-                                        if (p != null) {
-                                            if (flowNodeInstance.getStatus() == statusFilter && utask.getProcess().getURI().equals(p.getURI())) {
+                                    GraphicalElement parent = utask.getParent();
+                                    if (parent == null || (parent != null && parent instanceof Lane && user.haveAccess(parent))) {
+                                        if (statusFilter > 0) {
+                                            if (p != null) {
+                                                if (flowNodeInstance.getStatus() == statusFilter && utask.getProcess().getURI().equals(p.getURI())) {
+                                                    t_instances.add(flowNodeInstance);
+                                                }
+                                            } else {
+                                                if (flowNodeInstance.getStatus() == statusFilter) {
+                                                    t_instances.add(flowNodeInstance);
+                                                }
+                                            }
+                                        } else if (p != null) {
+                                            if (utask.getProcess().getURI().equals(p.getURI())) {
                                                 t_instances.add(flowNodeInstance);
                                             }
                                         } else {
-                                            if (flowNodeInstance.getStatus() == statusFilter) {
-                                                t_instances.add(flowNodeInstance);
-                                            }
-                                        }
-                                    } else if (p != null) {
-                                        if (utask.getProcess().getURI().equals(p.getURI())) {
                                             t_instances.add(flowNodeInstance);
                                         }
-                                    } else {
-                                        t_instances.add(flowNodeInstance);
                                     }
                                 }
                             }
