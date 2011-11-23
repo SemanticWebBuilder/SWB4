@@ -354,7 +354,7 @@
 
 .connObject {
     -fx-stroke:-normal-stroke;
-    -fx-stroke-width: 1.5;
+    -fx-stroke-width: 2;
     -fx-cursor: hand;
 }
 
@@ -368,13 +368,13 @@
 
 .connObjectHover {
     -fx-stroke:-hover-stroke;
-    -fx-stroke-width: 2;
+    -fx-stroke-width: 2.5;
     -fx-cursor: hand;
 }
 
 .connObjectFocused {
     -fx-stroke:-focus-stroke;
-    -fx-stroke-width: 2;
+    -fx-stroke-width: 2.5;
     -fx-cursor: hand;
 }
 
