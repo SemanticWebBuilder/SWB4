@@ -36,7 +36,6 @@
 <%@page import="org.semanticwb.model.WebSite"%>
 <%@page import="org.semanticwb.model.WebPage"%>
 <%@page import="org.semanticwb.process.model.ProcessInstance"%>
-<%@page import="org.semanticwb.process.model.ProcessWebPage"%>
 <%@page import="org.semanticwb.process.model.SubProcessInstance"%>
 <%@page import="org.semanticwb.process.model.Activity"%>
 <%@page import="org.semanticwb.process.model.Instance"%>
@@ -370,7 +369,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                 }
 
                                 if (instance.getStatus() == ProcessInstance.STATUS_PROCESSING) {
-                                    ProcessWebPage pwp = instance.getProcessType().getProcessWebPage();
+                                    WebPage pwp = instance.getProcessType().getProcessWebPage();
                                     if (pwp != null) {
                                         %><a class="acc-detalle" target="_new" href="<%=pwp.getUrl()%>">Detalle</a><%
                                     }
