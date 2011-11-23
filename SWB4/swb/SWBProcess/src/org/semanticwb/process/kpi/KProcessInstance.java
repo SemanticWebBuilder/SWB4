@@ -36,7 +36,6 @@ import org.semanticwb.platform.SemanticProperty;
 
 import org.semanticwb.process.utils.Restriction;
 import org.semanticwb.process.model.ProcessSite;
-import org.semanticwb.process.model.ProcessWebPage;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.FlowNodeInstance;
 import org.semanticwb.process.model.ItemAwareReference;
@@ -62,10 +61,11 @@ public class KProcessInstance {
             Iterator isites = ProcessSite.ClassMgr.listProcessSites();
             while (isites.hasNext()) {
                 ProcessSite site = (ProcessSite)isites.next();
-                Iterator <org.semanticwb.process.model.ProcessWebPage>itProcessWebPages = ProcessWebPage.ClassMgr.listProcessWebPages(site);
-                while (itProcessWebPages.hasNext()) {
-                    ProcessWebPage pwp = (ProcessWebPage)itProcessWebPages.next();
-                    org.semanticwb.process.model.Process process = pwp.getProcess();
+                
+                Iterator<org.semanticwb.process.model.Process> it2=org.semanticwb.process.model.Process.ClassMgr.listProcesses(site);
+                while(it2.hasNext())
+                {                    
+                    org.semanticwb.process.model.Process process = it2.next();
                     Iterator it = process.listProcessInstances();
                     while (it.hasNext()) {
                         ProcessInstance pinst = (ProcessInstance)it.next();
