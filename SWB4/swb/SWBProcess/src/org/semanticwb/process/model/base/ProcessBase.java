@@ -1,8 +1,15 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Traceable,org.semanticwb.process.model.Containerable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Expirable,org.semanticwb.model.TemplateRefable,org.semanticwb.process.model.Callable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Referensable
+public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.RoleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Callable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.process.model.Containerable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Expirable,org.semanticwb.model.FilterableClass,org.semanticwb.model.TemplateRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Resourceable,org.semanticwb.model.Trashable
 {
+   /**
+   * Objeto que define un Role dentro de un repositorio de usuarios aplicable a un Usuario para filtrar componente, seccion, plantillas, etc.
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_Role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Role");
+    public static final org.semanticwb.platform.SemanticProperty swp_administrationRole=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#administrationRole");
+    public static final org.semanticwb.platform.SemanticClass swp_WrapperProcessWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#WrapperProcessWebPage");
+    public static final org.semanticwb.platform.SemanticProperty swp_processWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processWebPage");
    /**
    * Grupo de Procesos
    */
@@ -10,8 +17,13 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
     public static final org.semanticwb.platform.SemanticProperty swp_processGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processGroup");
     public static final org.semanticwb.platform.SemanticClass swp_ProcessInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessInstance");
     public static final org.semanticwb.platform.SemanticProperty swp_hasProcessInstanceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasProcessInstanceInv");
-    public static final org.semanticwb.platform.SemanticClass swp_ProcessWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessWebPage");
-    public static final org.semanticwb.platform.SemanticProperty swp_processWebPageInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#processWebPageInv");
+   /**
+   * Una Página Web es el elemento de SemanticWebBuilder a través del cual se estructura la información del portal.
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
+    public static final org.semanticwb.platform.SemanticProperty swp_parentWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#parentWebPage");
+    public static final org.semanticwb.platform.SemanticProperty swp_notificationRole=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#notificationRole");
+    public static final org.semanticwb.platform.SemanticProperty swp_notificationUserGroupFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#notificationUserGroupFilter");
     public static final org.semanticwb.platform.SemanticClass swp_Process=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Process");
    /**
    * The semantic class that represents the currentObject
@@ -40,12 +52,6 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process>(it, true);
-        }
-
-        public static org.semanticwb.process.model.Process createProcess(org.semanticwb.model.SWBModel model)
-        {
-            long id=model.getSemanticObject().getModel().getCounter(sclass);
-            return org.semanticwb.process.model.Process.ClassMgr.createProcess(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.process.model.Process
@@ -88,6 +94,29 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
             return (getProcess(id, model)!=null);
         }
        /**
+       * Gets all org.semanticwb.process.model.Process with a determined AdministrationRole
+       * @param value AdministrationRole of the type org.semanticwb.model.Role
+       * @param model Model of the org.semanticwb.process.model.Process
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByAdministrationRole(org.semanticwb.model.Role value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_administrationRole, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Process with a determined AdministrationRole
+       * @param value AdministrationRole of the type org.semanticwb.model.Role
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByAdministrationRole(org.semanticwb.model.Role value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_administrationRole,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.Process with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.process.model.Process
@@ -108,6 +137,29 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
         public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Process with a determined ProcessWebPage
+       * @param value ProcessWebPage of the type org.semanticwb.process.model.WrapperProcessWebPage
+       * @param model Model of the org.semanticwb.process.model.Process
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByProcessWebPage(org.semanticwb.process.model.WrapperProcessWebPage value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_processWebPage, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Process with a determined ProcessWebPage
+       * @param value ProcessWebPage of the type org.semanticwb.process.model.WrapperProcessWebPage
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByProcessWebPage(org.semanticwb.process.model.WrapperProcessWebPage value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_processWebPage,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -157,26 +209,49 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.Process with a determined ProcessWebPage
-       * @param value ProcessWebPage of the type org.semanticwb.process.model.ProcessWebPage
+       * Gets all org.semanticwb.process.model.Process with a determined ParentWebPage
+       * @param value ParentWebPage of the type org.semanticwb.model.WebPage
        * @param model Model of the org.semanticwb.process.model.Process
        * @return Iterator with all the org.semanticwb.process.model.Process
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByProcessWebPage(org.semanticwb.process.model.ProcessWebPage value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByParentWebPage(org.semanticwb.model.WebPage value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_processWebPageInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_parentWebPage, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.process.model.Process with a determined ProcessWebPage
-       * @param value ProcessWebPage of the type org.semanticwb.process.model.ProcessWebPage
+       * Gets all org.semanticwb.process.model.Process with a determined ParentWebPage
+       * @param value ParentWebPage of the type org.semanticwb.model.WebPage
        * @return Iterator with all the org.semanticwb.process.model.Process
        */
 
-        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByProcessWebPage(org.semanticwb.process.model.ProcessWebPage value)
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByParentWebPage(org.semanticwb.model.WebPage value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_processWebPageInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_parentWebPage,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Process with a determined NotificationRole
+       * @param value NotificationRole of the type org.semanticwb.model.Role
+       * @param model Model of the org.semanticwb.process.model.Process
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByNotificationRole(org.semanticwb.model.Role value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_notificationRole, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Process with a determined NotificationRole
+       * @param value NotificationRole of the type org.semanticwb.model.Role
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByNotificationRole(org.semanticwb.model.Role value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_notificationRole,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -226,6 +301,52 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.Process with a determined RuleRef
+       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * @param model Model of the org.semanticwb.process.model.Process
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByRuleRef(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Process with a determined RuleRef
+       * @param value RuleRef of the type org.semanticwb.model.RuleRef
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByRuleRef(org.semanticwb.model.RuleRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Process with a determined Resource
+       * @param value Resource of the type org.semanticwb.model.Resource
+       * @param model Model of the org.semanticwb.process.model.Process
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByResource(org.semanticwb.model.Resource value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasResource, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Process with a determined Resource
+       * @param value Resource of the type org.semanticwb.model.Resource
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByResource(org.semanticwb.model.Resource value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasResource,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.Process with a determined Contained
        * @param value Contained of the type org.semanticwb.process.model.GraphicalElement
        * @param model Model of the org.semanticwb.process.model.Process
@@ -246,6 +367,52 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
         public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByContained(org.semanticwb.process.model.GraphicalElement value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasContainedInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Process with a determined UserGroupRef
+       * @param value UserGroupRef of the type org.semanticwb.model.UserGroupRef
+       * @param model Model of the org.semanticwb.process.model.Process
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByUserGroupRef(org.semanticwb.model.UserGroupRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Process with a determined UserGroupRef
+       * @param value UserGroupRef of the type org.semanticwb.model.UserGroupRef
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByUserGroupRef(org.semanticwb.model.UserGroupRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Process with a determined RoleRef
+       * @param value RoleRef of the type org.semanticwb.model.RoleRef
+       * @param model Model of the org.semanticwb.process.model.Process
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByRoleRef(org.semanticwb.model.RoleRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Process with a determined RoleRef
+       * @param value RoleRef of the type org.semanticwb.model.RoleRef
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByRoleRef(org.semanticwb.model.RoleRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -280,6 +447,82 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
     public ProcessBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+   /**
+   * Sets the value for the property AdministrationRole
+   * @param value AdministrationRole to set
+   */
+
+    public void setAdministrationRole(org.semanticwb.model.Role value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_administrationRole, value.getSemanticObject());
+        }else
+        {
+            removeAdministrationRole();
+        }
+    }
+   /**
+   * Remove the value for AdministrationRole property
+   */
+
+    public void removeAdministrationRole()
+    {
+        getSemanticObject().removeProperty(swp_administrationRole);
+    }
+
+   /**
+   * Gets the AdministrationRole
+   * @return a org.semanticwb.model.Role
+   */
+    public org.semanticwb.model.Role getAdministrationRole()
+    {
+         org.semanticwb.model.Role ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_administrationRole);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Role)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property ProcessWebPage
+   * @param value ProcessWebPage to set
+   */
+
+    public void setProcessWebPage(org.semanticwb.process.model.WrapperProcessWebPage value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_processWebPage, value.getSemanticObject());
+        }else
+        {
+            removeProcessWebPage();
+        }
+    }
+   /**
+   * Remove the value for ProcessWebPage property
+   */
+
+    public void removeProcessWebPage()
+    {
+        getSemanticObject().removeProperty(swp_processWebPage);
+    }
+
+   /**
+   * Gets the ProcessWebPage
+   * @return a org.semanticwb.process.model.WrapperProcessWebPage
+   */
+    public org.semanticwb.process.model.WrapperProcessWebPage getProcessWebPage()
+    {
+         org.semanticwb.process.model.WrapperProcessWebPage ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_processWebPage);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.WrapperProcessWebPage)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Sets the value for the property ProcessGroup
@@ -358,6 +601,82 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
          }
          return ret;
     }
+   /**
+   * Sets the value for the property ParentWebPage
+   * @param value ParentWebPage to set
+   */
+
+    public void setParentWebPage(org.semanticwb.model.WebPage value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_parentWebPage, value.getSemanticObject());
+        }else
+        {
+            removeParentWebPage();
+        }
+    }
+   /**
+   * Remove the value for ParentWebPage property
+   */
+
+    public void removeParentWebPage()
+    {
+        getSemanticObject().removeProperty(swp_parentWebPage);
+    }
+
+   /**
+   * Gets the ParentWebPage
+   * @return a org.semanticwb.model.WebPage
+   */
+    public org.semanticwb.model.WebPage getParentWebPage()
+    {
+         org.semanticwb.model.WebPage ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_parentWebPage);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property NotificationRole
+   * @param value NotificationRole to set
+   */
+
+    public void setNotificationRole(org.semanticwb.model.Role value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_notificationRole, value.getSemanticObject());
+        }else
+        {
+            removeNotificationRole();
+        }
+    }
+   /**
+   * Remove the value for NotificationRole property
+   */
+
+    public void removeNotificationRole()
+    {
+        getSemanticObject().removeProperty(swp_notificationRole);
+    }
+
+   /**
+   * Gets the NotificationRole
+   * @return a org.semanticwb.model.Role
+   */
+    public org.semanticwb.model.Role getNotificationRole()
+    {
+         org.semanticwb.model.Role ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_notificationRole);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Role)obj.createGenericInstance();
+         }
+         return ret;
+    }
 
 /**
 * Gets the Expiration property
@@ -375,44 +694,6 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
     public void setExpiration(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_expiration, value);
-    }
-   /**
-   * Sets the value for the property ProcessWebPage
-   * @param value ProcessWebPage to set
-   */
-
-    public void setProcessWebPage(org.semanticwb.process.model.ProcessWebPage value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swp_processWebPageInv, value.getSemanticObject());
-        }else
-        {
-            removeProcessWebPage();
-        }
-    }
-   /**
-   * Remove the value for ProcessWebPage property
-   */
-
-    public void removeProcessWebPage()
-    {
-        getSemanticObject().removeProperty(swp_processWebPageInv);
-    }
-
-   /**
-   * Gets the ProcessWebPage
-   * @return a org.semanticwb.process.model.ProcessWebPage
-   */
-    public org.semanticwb.process.model.ProcessWebPage getProcessWebPage()
-    {
-         org.semanticwb.process.model.ProcessWebPage ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_processWebPageInv);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.process.model.ProcessWebPage)obj.createGenericInstance();
-         }
-         return ret;
     }
    /**
    * Gets all the org.semanticwb.model.TemplateRef
@@ -490,6 +771,24 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
     }
 
 /**
+* Gets the Deleted property
+* @return boolean with the Deleted
+*/
+    public boolean isDeleted()
+    {
+        return getSemanticObject().getBooleanProperty(swb_deleted);
+    }
+
+/**
+* Sets the Deleted property
+* @param value long with the Deleted
+*/
+    public void setDeleted(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_deleted, value);
+    }
+
+/**
 * Gets the Active property
 * @return boolean with the Active
 */
@@ -508,6 +807,98 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
     }
 
 /**
+* Gets the NotificationUserGroupFilter property
+* @return boolean with the NotificationUserGroupFilter
+*/
+    public boolean isNotificationUserGroupFilter()
+    {
+        return getSemanticObject().getBooleanProperty(swp_notificationUserGroupFilter);
+    }
+
+/**
+* Sets the NotificationUserGroupFilter property
+* @param value long with the NotificationUserGroupFilter
+*/
+    public void setNotificationUserGroupFilter(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swp_notificationUserGroupFilter, value);
+    }
+   /**
+   * Gets all the org.semanticwb.model.RuleRef
+   * @return A GenericIterator with all the org.semanticwb.model.RuleRef
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> listRuleRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(getSemanticObject().listObjectProperties(swb_hasRuleRef));
+    }
+
+   /**
+   * Gets true if has a RuleRef
+   * @param value org.semanticwb.model.RuleRef to verify
+   * @return true if the org.semanticwb.model.RuleRef exists, false otherwise
+   */
+    public boolean hasRuleRef(org.semanticwb.model.RuleRef value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasRuleRef,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets all the RuleRefs inherits
+   * @return A GenericIterator with all the org.semanticwb.model.RuleRef
+   */
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> listInheritRuleRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(getSemanticObject().listInheritProperties(swb_hasRuleRef));
+    }
+   /**
+   * Adds a RuleRef
+   * @param value org.semanticwb.model.RuleRef to add
+   */
+
+    public void addRuleRef(org.semanticwb.model.RuleRef value)
+    {
+        getSemanticObject().addObjectProperty(swb_hasRuleRef, value.getSemanticObject());
+    }
+   /**
+   * Removes all the RuleRef
+   */
+
+    public void removeAllRuleRef()
+    {
+        getSemanticObject().removeProperty(swb_hasRuleRef);
+    }
+   /**
+   * Removes a RuleRef
+   * @param value org.semanticwb.model.RuleRef to remove
+   */
+
+    public void removeRuleRef(org.semanticwb.model.RuleRef value)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasRuleRef,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the RuleRef
+   * @return a org.semanticwb.model.RuleRef
+   */
+    public org.semanticwb.model.RuleRef getRuleRef()
+    {
+         org.semanticwb.model.RuleRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRuleRef);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.RuleRef)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
 * Gets the Callable property
 * @return boolean with the Callable
 */
@@ -523,6 +914,71 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
     public void setCallable(boolean value)
     {
         getSemanticObject().setBooleanProperty(swp_callable, value);
+    }
+   /**
+   * Gets all the org.semanticwb.model.Resource
+   * @return A GenericIterator with all the org.semanticwb.model.Resource
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource> listResources()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource>(getSemanticObject().listObjectProperties(swb_hasResource));
+    }
+
+   /**
+   * Gets true if has a Resource
+   * @param value org.semanticwb.model.Resource to verify
+   * @return true if the org.semanticwb.model.Resource exists, false otherwise
+   */
+    public boolean hasResource(org.semanticwb.model.Resource value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasResource,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a Resource
+   * @param value org.semanticwb.model.Resource to add
+   */
+
+    public void addResource(org.semanticwb.model.Resource value)
+    {
+        getSemanticObject().addObjectProperty(swb_hasResource, value.getSemanticObject());
+    }
+   /**
+   * Removes all the Resource
+   */
+
+    public void removeAllResource()
+    {
+        getSemanticObject().removeProperty(swb_hasResource);
+    }
+   /**
+   * Removes a Resource
+   * @param value org.semanticwb.model.Resource to remove
+   */
+
+    public void removeResource(org.semanticwb.model.Resource value)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasResource,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the Resource
+   * @return a org.semanticwb.model.Resource
+   */
+    public org.semanticwb.model.Resource getResource()
+    {
+         org.semanticwb.model.Resource ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasResource);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Resource)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Gets all the org.semanticwb.process.model.GraphicalElement
@@ -560,6 +1016,154 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
          if(obj!=null)
          {
              ret=(org.semanticwb.process.model.GraphicalElement)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Gets all the org.semanticwb.model.UserGroupRef
+   * @return A GenericIterator with all the org.semanticwb.model.UserGroupRef
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> listUserGroupRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef>(getSemanticObject().listObjectProperties(swb_hasUserGroupRef));
+    }
+
+   /**
+   * Gets true if has a UserGroupRef
+   * @param value org.semanticwb.model.UserGroupRef to verify
+   * @return true if the org.semanticwb.model.UserGroupRef exists, false otherwise
+   */
+    public boolean hasUserGroupRef(org.semanticwb.model.UserGroupRef value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasUserGroupRef,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets all the UserGroupRefs inherits
+   * @return A GenericIterator with all the org.semanticwb.model.UserGroupRef
+   */
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> listInheritUserGroupRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef>(getSemanticObject().listInheritProperties(swb_hasUserGroupRef));
+    }
+   /**
+   * Adds a UserGroupRef
+   * @param value org.semanticwb.model.UserGroupRef to add
+   */
+
+    public void addUserGroupRef(org.semanticwb.model.UserGroupRef value)
+    {
+        getSemanticObject().addObjectProperty(swb_hasUserGroupRef, value.getSemanticObject());
+    }
+   /**
+   * Removes all the UserGroupRef
+   */
+
+    public void removeAllUserGroupRef()
+    {
+        getSemanticObject().removeProperty(swb_hasUserGroupRef);
+    }
+   /**
+   * Removes a UserGroupRef
+   * @param value org.semanticwb.model.UserGroupRef to remove
+   */
+
+    public void removeUserGroupRef(org.semanticwb.model.UserGroupRef value)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasUserGroupRef,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the UserGroupRef
+   * @return a org.semanticwb.model.UserGroupRef
+   */
+    public org.semanticwb.model.UserGroupRef getUserGroupRef()
+    {
+         org.semanticwb.model.UserGroupRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasUserGroupRef);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.UserGroupRef)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Gets all the org.semanticwb.model.RoleRef
+   * @return A GenericIterator with all the org.semanticwb.model.RoleRef
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listRoleRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(getSemanticObject().listObjectProperties(swb_hasRoleRef));
+    }
+
+   /**
+   * Gets true if has a RoleRef
+   * @param value org.semanticwb.model.RoleRef to verify
+   * @return true if the org.semanticwb.model.RoleRef exists, false otherwise
+   */
+    public boolean hasRoleRef(org.semanticwb.model.RoleRef value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasRoleRef,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets all the RoleRefs inherits
+   * @return A GenericIterator with all the org.semanticwb.model.RoleRef
+   */
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listInheritRoleRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(getSemanticObject().listInheritProperties(swb_hasRoleRef));
+    }
+   /**
+   * Adds a RoleRef
+   * @param value org.semanticwb.model.RoleRef to add
+   */
+
+    public void addRoleRef(org.semanticwb.model.RoleRef value)
+    {
+        getSemanticObject().addObjectProperty(swb_hasRoleRef, value.getSemanticObject());
+    }
+   /**
+   * Removes all the RoleRef
+   */
+
+    public void removeAllRoleRef()
+    {
+        getSemanticObject().removeProperty(swb_hasRoleRef);
+    }
+   /**
+   * Removes a RoleRef
+   * @param value org.semanticwb.model.RoleRef to remove
+   */
+
+    public void removeRoleRef(org.semanticwb.model.RoleRef value)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasRoleRef,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the RoleRef
+   * @return a org.semanticwb.model.RoleRef
+   */
+    public org.semanticwb.model.RoleRef getRoleRef()
+    {
+         org.semanticwb.model.RoleRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasRoleRef);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.RoleRef)obj.createGenericInstance();
          }
          return ret;
     }
