@@ -28,7 +28,7 @@
 <%@page import="java.util.Map"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
+hola
 <%!
     public String getStatusInstances(ProcessInstance pi, int status) {
         String ret = "";
@@ -137,7 +137,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
     %>
     <h2>Bandeja de tareas</h2>
     <%
-    if (tinstances != null && tinstances.iterator().hasNext()) {
+    if (tinstances != null && tinstances.size() > 0) {
         SWBResourceURL optsUrl = paramRequest.getRenderUrl();
         optsUrl.setParameter("pFilter", pFilter);
         optsUrl.setParameter("sFilter", sFilter);
@@ -395,7 +395,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
             </div>
             <%
     } else {
-        %>No hay procesos actualmente en ejecuci&oacute;n<%     
+        %>No hay procesos actualmente en ejecuci&oacute;n<%
     }
 }
 %>
