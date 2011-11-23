@@ -91,7 +91,7 @@ public class SWBProcessMgr
                         boolean add=true;                    
                         GraphicalElement parent=type.getParent();
                         //System.out.println("parent:"+type);
-                        if(parent instanceof Lane)
+                        if(parent !=null && parent instanceof Lane)
                         {
                             Lane lane=(Lane)parent;
                             if(!user.haveAccess(lane))
