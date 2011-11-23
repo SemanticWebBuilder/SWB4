@@ -110,19 +110,17 @@ public class BPMSProcessInstance {
             {
                 WebPage webPage = (WebPage)paramRequest.getWebPage();
                 ProcessSite site = (ProcessSite) webPage.getWebSite();
-                Iterator <ProcessWebPage> itProcessWebPages =
-                        site.listProcessWebPages();
-               while(itProcessWebPages.hasNext())
-               {
-                    ProcessWebPage pwp =
-                            (ProcessWebPage) itProcessWebPages.next();
-                    if(pwp.isActive()){
-                        org.semanticwb.process.model.Process process = pwp.getProcess();
+               
+                Iterator<org.semanticwb.process.model.Process> it=org.semanticwb.process.model.Process.ClassMgr.listProcesses(site);
+                while(it.hasNext())
+                {                    
+                    org.semanticwb.process.model.Process process = it.next();
+                    if(process.isActive()){
                         //org.semanticwb.process.Process process = org.semanticwb.process.SWBProcessMgr.getProcess(pwp);
                         vAllProcessDefinitions.add(index, process);
                         index++;
                     }
-               }
+                }
 
             } catch(Exception e){
               log.error("Error en BPMSProcessInstance.getAllProcessDefinitions", e);
@@ -769,16 +767,14 @@ public class BPMSProcessInstance {
             {
                 WebPage webPage = (WebPage)paramRequest.getWebPage();
                 ProcessSite site = (ProcessSite)webPage.getWebSite();
-                Iterator <ProcessWebPage> itProcessWebPages =
-                        site.listProcessWebPages();
-                while(itProcessWebPages.hasNext())
-                {
-                    Vector vSelectedProcesses =
-                            getAllProcessDefinitions(paramRequest);
-                    ProcessWebPage pwp =
-                            (ProcessWebPage) itProcessWebPages.next();
-                    if(pwp.isActive()){
-                        org.semanticwb.process.model.Process process = pwp.getProcess();
+                
+                Iterator<org.semanticwb.process.model.Process> it2=org.semanticwb.process.model.Process.ClassMgr.listProcesses(site);
+                while(it2.hasNext())
+                {                    
+                    org.semanticwb.process.model.Process process = it2.next();
+                    if(process.isActive())
+                    {                        
+                        Vector vSelectedProcesses = getAllProcessDefinitions(paramRequest);
                         if(vSelectedProcesses.contains(process))
                         {
                             Iterator it = process.listContaineds();
