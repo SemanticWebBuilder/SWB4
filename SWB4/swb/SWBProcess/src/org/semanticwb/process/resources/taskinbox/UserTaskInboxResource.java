@@ -47,7 +47,6 @@ import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.SWBProcessMgr;
 import org.semanticwb.process.model.UserTask;
-import org.semanticwb.process.resources.controlpanel.ControlPanelResource;
 
 /***
  * Recurso Bandeja de Tareas de Usuario.
@@ -159,29 +158,20 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         //String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/taskInbox/userTaskInbox.jsp";
         String jsp = "/swbadmin/jsp/process/userTaskInbox.jsp";
-        System.out.println(jsp);
 
         if (getDisplayCols() == null || getDisplayCols().trim().equals("")) {
             setDisplayCols("idCol|pnameCol|nameCol|sdateCol|edateCol|actionsCol");
         }
-        System.out.println("1");
 
         try {
             RequestDispatcher rd = request.getRequestDispatcher(jsp);
-            System.out.println("2");
-            
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("instances", getUserTaskInstances(request, paramRequest));
             request.setAttribute("displayCols", getDisplayCols());
             request.setAttribute("statusWp", getDisplayMapWp());
             request.setAttribute("itemsPerPage", getItemsPerPage());
             
-            System.out.println("3");
-            
             rd.include(request, response);
-            
-            System.out.println("4");
-            
         } catch (Exception e) {
             log.error("Error including jsp in view mode", e);
         }
