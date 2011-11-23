@@ -32,6 +32,18 @@ public class SWBScriptParser
         return parse(values, text);
     }
 
+    public static Object getValue(Instance instance, User user, String text) throws Exception
+    {
+        HashMap<String, Object> values = new HashMap<String, Object>();
+        values.put("instance", instance);
+        values.put("user", user);
+        if(!text.startsWith("{"))
+        {
+            text="{"+text+"}";
+        }
+        return getValue(values, text);
+    }
+
     public static String evaluate(Map<String, Object> values, String tag) throws Exception
     {
         if (tag.startsWith("{"))
@@ -172,5 +184,30 @@ public class SWBScriptParser
         }
         sb.append(text);
         return sb.toString();
+    }
+
+    public static Object getValue(Map<String, Object> values, String text) throws Exception
+    {
+        
+        String exp = "\\{\\w+(\\.\\w+)+\\}";
+        Pattern p = Pattern.compile(exp);
+        Matcher matcher = p.matcher(text);
+        while (matcher.find())
+        {
+            int start = matcher.start();
+            int end = matcher.end();
+            
+            String tag = text.substring(start, end);
+            try
+            {
+                return getValue(values, tag);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+       
+        return null;
     }
 }
