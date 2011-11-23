@@ -215,4 +215,32 @@ public class Instance extends org.semanticwb.process.model.base.InstanceBase
         }
         return ret;
     }
+    
+    public void setStatus(int status)
+    {
+        if(this instanceof FlowNodeInstance)
+        {
+            FlowNodeInstance flow=(FlowNodeInstance)this;
+            flow.setStatus(status);
+        }else if(this instanceof ProcessInstance)
+        {
+            ProcessInstance process=(ProcessInstance)this;
+            process.setStatus(status);
+        }
+    }
+    
+    public int getStatus()
+    {
+        if(this instanceof FlowNodeInstance)
+        {
+            FlowNodeInstance flow=(FlowNodeInstance)this;
+            return flow.getStatus();
+        }else if(this instanceof ProcessInstance)
+        {
+            ProcessInstance process=(ProcessInstance)this;
+            return process.getStatus();
+        }
+        return 0;
+    }
+    
 }

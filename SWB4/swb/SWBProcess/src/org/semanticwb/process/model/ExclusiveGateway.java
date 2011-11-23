@@ -67,7 +67,7 @@ public class ExclusiveGateway extends org.semanticwb.process.model.base.Exclusiv
                 def=(DefaultFlow)connectionObject;
             }
         }
-        if(!execute)def.execute(instance, user);
+        if(!execute && def!=null)def.execute(instance, user);
 
         //SI LA COMPUERTA ES CONVERGENTE, PASAR EL CONTROL CON EL PRIMER FLUJO DE LLEGADA
     }

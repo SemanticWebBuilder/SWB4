@@ -86,7 +86,22 @@ public class SWBProcessMgr
                 if(actins.getStatus()==Instance.STATUS_PROCESSING || actins.getStatus()==Instance.STATUS_OPEN)
                 {
                     if(user.haveAccess(type))
-                        ret.add(actins);
+                    {
+                        //System.out.println("User:"+user+" TYPE:"+type);
+                        boolean add=true;                    
+                        GraphicalElement parent=type.getParent();
+                        //System.out.println("parent:"+type);
+                        if(parent instanceof Lane)
+                        {
+                            Lane lane=(Lane)parent;
+                            if(!user.haveAccess(lane))
+                            {
+                                add=false;
+                            }
+                        }
+                        //System.out.println("access:"+add);
+                        if(add)ret.add(actins);
+                    }                    
                 }
             }
         }
