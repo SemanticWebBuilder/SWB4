@@ -155,44 +155,47 @@ if (sFilter == null || sFilter.trim().equals("")) {
 ArrayList<ProcessInstance> pinstances = (ArrayList<ProcessInstance>) request.getAttribute("instances");
 SWBResourceURL configUrl = paramRequest.getRenderUrl().setMode("config");
 if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
-    SWBResourceURL optsUrl = paramRequest.getRenderUrl();
-    optsUrl.setParameter("gFilter", gFilter);
-    optsUrl.setParameter("sFilter", sFilter);
     %>
     <h2>Monitor de procesos</h2>
-    <div class="bandeja-combo">
-        <ul>
-            <li>Ordenamiento:
+    <%
+    if (pinstances != null && pinstances.size() > 0) {
+        SWBResourceURL optsUrl = paramRequest.getRenderUrl();
+        optsUrl.setParameter("gFilter", gFilter);
+        optsUrl.setParameter("sFilter", sFilter);
+        %>
+        <div class="bandeja-combo">
+            <ul>
+                <li>Ordenamiento:
                     <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'sort', this.options[this.selectedIndex].value)">
                         <option value="date" <%=sortType.equals("date")?"selected":""%>>Por fecha</option>
                         <option value="name" <%=sortType.equals("name")?"selected":""%>>Por proceso</option>
                         <option value="priority" <%=sortType.equals("priority")?"selected":""%>>Por prioridad</option>
                     <!--option value="priority" <%=sortType.equals("priority")?"selected":""%>>Por prioridad</option-->
                     </select>
-            </li>
-            <li>
-                <%
-                optsUrl = paramRequest.getRenderUrl();
-                optsUrl.setParameter("sort", sortType);
-                optsUrl.setParameter("sFilter", sFilter);
-                %>
-                Grupo:
-                <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'gFilter', this.options[this.selectedIndex].value)">
-                    <option value="" <%=gFilter.equals("")?"selected":""%>>Todos</option>
+                </li>
+                <li>
                     <%
-                    Iterator<ProcessGroup> groups = ProcessGroup.ClassMgr.listProcessGroups(ws);
-                    groups = SWBComparator.sortByDisplayName(groups, lang);
-                    while (groups.hasNext()) {
-                        ProcessGroup group = groups.next();
-                        String selected = "";
-                        if (gFilter.equals(group.getId())) selected = "selected";
-                        %>
-                        <option value="<%=group.getId()%>" <%=selected%>><%=group.getDisplayTitle(lang)%></option>
-                        <%
-                    }
+                    optsUrl = paramRequest.getRenderUrl();
+                    optsUrl.setParameter("sort", sortType);
+                    optsUrl.setParameter("sFilter", sFilter);
                     %>
-                </select>
-            </li>
+                    Grupo:
+                    <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'gFilter', this.options[this.selectedIndex].value)">
+                        <option value="" <%=gFilter.equals("")?"selected":""%>>Todos</option>
+                        <%
+                        Iterator<ProcessGroup> groups = ProcessGroup.ClassMgr.listProcessGroups(ws);
+                        groups = SWBComparator.sortByDisplayName(groups, lang);
+                        while (groups.hasNext()) {
+                            ProcessGroup group = groups.next();
+                            String selected = "";
+                            if (gFilter.equals(group.getId())) selected = "selected";
+                            %>
+                            <option value="<%=group.getId()%>" <%=selected%>><%=group.getDisplayTitle(lang)%></option>
+                            <%
+                        }
+                        %>
+                    </select>
+                </li>
             <li>
                 <%
                 optsUrl = paramRequest.getRenderUrl();
@@ -212,10 +215,6 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
             </li-->
         </ul>
     </div>
-    <%
-        
-    if (pinstances != null && pinstances.size() > 0) {
-        %>        
         <br>
         <table class="tabla-bandeja">
             <thead>
@@ -410,6 +409,8 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
         %>
         </div>
         <%
-    }
+} else {
+        %>No hay procesos actualmente en ejecuci&oacute;n<%
+}
 }
 %>
