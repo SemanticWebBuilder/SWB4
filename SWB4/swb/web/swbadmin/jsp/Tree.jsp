@@ -830,6 +830,16 @@
                             //System.out.println("ch:"+ch+" p:"+p+"="+obj);
                             if(obj!=p)vp=obj;
                         }
+                        //System.out.println("vp:"+vp+" ch:"+ch+" class:"+ch.getSemanticClass().getClassId());
+                        if(vp!=null && ch.getSemanticClass().getClassId().equals("swp:WrapperProcessWebPage"))
+                        {
+                            SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById("swp:processWebPage");
+                            Iterator<SemanticObject> it3=ch.getModel().listSubjects(prop, ch);
+                            if(it3.hasNext())ch=it3.next();
+                            //System.out.println("prop:"+prop+" ch:"+ch);
+
+                        }
+                        
                         //System.out.println("isVirtChild:"+isVirtChild);
                         addSemanticObject(childs, ch, false, false, vp,user);
                     }
