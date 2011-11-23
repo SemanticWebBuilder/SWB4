@@ -250,6 +250,9 @@ html, body, #main {
 .swbIconDataStore,
 .swbIconPool,
 .swbIconLane,
+.swbIconLaneU,
+.swbIconLaneW,
+.swbIconLaneF,
 .swbIconArtifact {
     background-repeat: no-repeat;
     width:20px;
@@ -464,6 +467,9 @@ html, body, #main {
 .swbIconDataStore { background-position: -80px -342px; }
 .swbIconPool   { background-position: -0px -360px; }
 .swbIconLane   { background-position: -20px -360px; }
+.swbIconLaneU   { background-position: -20px -360px; }
+.swbIconLaneW   { background-position: -20px -360px; }
+.swbIconLaneF   { background-position: -20px -360px; }
 
 
 .admViewProperties table{ padding:0px; margin:-10px; width:100%; }
