@@ -109,4 +109,48 @@ public class Activity extends FlowNode
             }
         }
     }
+
+    override public function inBounds(node: GraphicalElement) : Boolean {
+        var ret = false;
+        var b1 = node.getBounds();
+        var b2 = getBounds();
+
+        var b1topLeftX = b1.topLeft.x;
+        var b1topLeftY = b1.topLeft.y;
+        var b1bottomRightX = b1.bottomRight.x;
+        var b1bottomRightY = b1.bottomRight.y;
+
+        var b2topLeftX = b2.topLeft.x;
+        var b2topLeftY = b2.topLeft.y;
+        var b2bottomRightX = b2.bottomRight.x;
+        var b2bottomRightY = b2.bottomRight.y;
+
+        if (b1topLeftX > b2topLeftX and b1topLeftX < b2bottomRightX) {
+            if (b1topLeftY > b2topLeftY and b1topLeftY < b2bottomRightY) {
+                ret = true;
+            }
+        } else if ((b1topLeftX + node.w) > b2topLeftX and (b1topLeftX + node.w) < b2bottomRightX) {
+            if (b1topLeftY > b2topLeftY and b1topLeftY < b2bottomRightY) {
+                ret = true;
+            }
+        } else if (b1topLeftX > b2topLeftX and b1topLeftX < b2bottomRightX) {
+            if ((b1topLeftY + h) > b2topLeftY and (b1topLeftY + h) < b2bottomRightY) {
+                ret = true;
+            }
+        } else if ((b1topLeftX + node.w) > b2topLeftX and (b1topLeftX + node.w) < b2bottomRightX) {
+            if ((b1topLeftY + h) > b2topLeftY and (b1topLeftY + h) < b2bottomRightY) {
+                ret = true;
+            }
+        }
+
+        //println("  Revisando si {node.title} [{nx1}, {ny1}][{nx2}, {ny2}] está dentro del lane {lane.title} [{ex1}, {ey1}][{ex2}, {ey2}]");
+//        if (b1topLeftX > b2topLeftX and b1bottomRightX < b2bottomRightX) {
+//            //println("  {node.title} dentro de {title} en X");
+//            if (ny1 > ey1 and ny2 < ey2) {
+//                //println("  {node.title} dentro de lane {title} en Y");
+//                ret = true;
+//            }
+//        }
+        return ret;
+    }
 }
