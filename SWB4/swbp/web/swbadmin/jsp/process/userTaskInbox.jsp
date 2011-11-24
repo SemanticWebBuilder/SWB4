@@ -249,6 +249,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
         <div class="bandeja-combo">
             <ul>
                 <li>
+                    Iniciar proceso: 
                     <select id="processId">
                         <%
                         while(keys.hasNext()) {
@@ -271,7 +272,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                     </select>
                 </li>
                 <li>
-                    <input type="button" value="Iniciar" onclick="window.location='<%=createUrl%>?pid='+document.getElementById('processId').value;"/>
+                    <input type="button" value=">>" onclick="window.location='<%=createUrl%>?pid='+document.getElementById('processId').value;"/>
                 </li>
             </ul>
         </div>
