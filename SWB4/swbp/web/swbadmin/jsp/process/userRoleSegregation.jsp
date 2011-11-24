@@ -7,7 +7,7 @@
 
 <%@page import="org.semanticwb.portal.api.SWBResourceURL" %>
 <%@page import="org.semanticwb.portal.api.SWBParamRequest" %>
-<%@page import="org.semanticwb.process.cfe.resources.reports.UserRolesSegregationBean" %>
+<%@page import="org.semanticwb.process.resources.reports.UserRolesSegregationBean" %>
 <%@page import="java.util.ArrayList" %>
 <%@page import="java.util.Iterator" %>
 <%
