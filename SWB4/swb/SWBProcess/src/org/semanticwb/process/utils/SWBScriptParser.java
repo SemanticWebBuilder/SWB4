@@ -52,14 +52,14 @@ public class SWBScriptParser
                     {
                         if (prop.isObjectProperty())
                         {
-                            if(value instanceof SemanticObject)
+                            if (value instanceof SemanticObject)
                             {
-                                semObject.setObjectProperty(prop, (SemanticObject)value);
+                                semObject.setObjectProperty(prop, (SemanticObject) value);
                             }
                         }
                         else
                         {
-                            semObject.setProperty(prop,value.toString());
+                            semObject.setProperty(prop, value.toString());
                         }
                     }
                 }
@@ -70,9 +70,9 @@ public class SWBScriptParser
                 if (m != null)
                 {
                     Object[] args = new Object[0];
-                    args[0]=value;
+                    args[0] = value;
                     m.invoke(context, args);
-                    
+
                 }
             }
         }
@@ -93,11 +93,11 @@ public class SWBScriptParser
                             if (newcontext != null)
                             {
                                 setValue(context, keys, value);
-                            }                            
+                            }
                         }
                         else
                         {
-                             throw new Exception("La propiedad "+key+" es una literal, por lo cual no puede asignarse un valor");
+                            throw new Exception("La propiedad " + key + " es una literal, por lo cual no puede asignarse un valor");
                         }
                     }
                 }
@@ -113,7 +113,7 @@ public class SWBScriptParser
                     {
                         setValue(context, keys, value);
                     }
-                    
+
                 }
             }
         }
