@@ -126,116 +126,130 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
         String pid = request.getParameter("pid");
         String suri = request.getParameter("suri");
         
-        Iterator<ProcessInstance> pi = process.listProcessInstances();
-        if (pi.hasNext()) {
-            SWBResourceURL adminUrl = paramRequest.getRenderUrl().setMode("adminCase");
-            
-            if (pid != null && !pid.trim().equals("")) {
-                adminUrl.setParameter("pid", pid);
-            } else if (suri != null && !suri.trim().equals("")) {
-                adminUrl.setParameter("suri", suri);
-            }
-            String timeTitle = paramRequest.getLocaleString("timeTitle") + " (" + getTimeUnit(paramRequest) + ")";
-            ArrayList<DataSerie> logSeries = null;
-            ArrayList<DataSerie> taskSeries = null;
-            ArrayList<DataSerie> overviewSeries = null;
-            int timeType = getResponseGraphType();
-            int insType = getInstancesGraphType();
-            int period = getResponsePeriodicity();
+        if (process != null) {
+            Iterator<ProcessInstance> pi = process.listProcessInstances();
+            if (pi.hasNext()) {
+                SWBResourceURL adminUrl = paramRequest.getRenderUrl().setMode("adminCase");
 
-            //Obtener datos para gráficas de desempeño general
-            overviewSeries = getOverviewTimeData(process, paramRequest);
-
-            //Obtener datos para histórico de tiempos de respuesta
-            if (isResponseShowLog()) {
-                if (period == PERIOD_LASTWEEK) {
-                    logSeries = getLogDaylyData(process, 7, paramRequest);
-                } else if (period == PERIOD_LASTMONTH) {
-                    logSeries = getLogDaylyData(process, 30, paramRequest);
-                } else if (period == PERIOD_LASTYEAR) {
-                    logSeries = getLogMonthlyData(process, 12, paramRequest);
+                if (pid != null && !pid.trim().equals("")) {
+                    adminUrl.setParameter("pid", pid);
+                } else if (suri != null && !suri.trim().equals("")) {
+                    adminUrl.setParameter("suri", suri);
+                } else {
+                    adminUrl.setParameter("pid", process.getId());
                 }
-            }
+                String timeTitle = paramRequest.getLocaleString("timeTitle") + " (" + getTimeUnit(paramRequest) + ")";
+                ArrayList<DataSerie> logSeries = null;
+                ArrayList<DataSerie> taskSeries = null;
+                ArrayList<DataSerie> overviewSeries = null;
+                int timeType = getResponseGraphType();
+                int insType = getInstancesGraphType();
+                int period = getResponsePeriodicity();
 
-            //Obtener datos para gráficas de desempeño por tarea
-            if (isPerformanceShowTaskData()) {
-                taskSeries = getLogTaskData(process, paramRequest);
-            }
+                //Obtener datos para gráficas de desempeño general
+                overviewSeries = getOverviewTimeData(process, paramRequest);
 
-            //Establecer el tema de las gráficas
-            setTheme();
+                //Obtener datos para histórico de tiempos de respuesta
+                if (isResponseShowLog()) {
+                    if (period == PERIOD_LASTWEEK) {
+                        logSeries = getLogDaylyData(process, 7, paramRequest);
+                    } else if (period == PERIOD_LASTMONTH) {
+                        logSeries = getLogDaylyData(process, 30, paramRequest);
+                    } else if (period == PERIOD_LASTYEAR) {
+                        logSeries = getLogMonthlyData(process, 12, paramRequest);
+                    }
+                }
 
-//            if (!(paramRequest.getWebPage() instanceof ProcessWebPage)) {
-//                out.println("<div class=\"swbform\">");
-//                out.println("  <form action=\"#\">");
-//                out.println("    <label for=\"pid\">Proceso:</label>");
-//                out.println("    <select name=\"pid\" onchange=\"this.form.submit();\">");
-//                Iterator<Process> processes = Process.ClassMgr.listProcesses(paramRequest.getWebPage().getWebSite());
-//                while (processes.hasNext()) {
-//                    Process process1 = processes.next();
-//                    out.println("      <option value=\"" + process1.getId() + "\">" + process1.getDisplayTitle(lang) + "</option>");
-//                }
-//                out.println("    </select>");
-//                out.println("  </form>");
-//                out.println("</div>");
-//            }
-            
-            out.println("<div id=\"properties\" class=\"swbform\">");
-            out.println("  <fieldset>");
-            out.println("    <table>");
-            out.println("      <tbody>");
-            if (process != null && isResponseShowLog()) {
-                out.println("        <tr>");
-                out.println("          <td>");
-                out.println(plotLog(logSeries, "timeLog", timeTitle));
-                out.println("          </td>");
-                out.println("        </tr>");
-            }
+                //Obtener datos para gráficas de desempeño por tarea
+                if (isPerformanceShowTaskData()) {
+                    taskSeries = getLogTaskData(process, paramRequest);
+                }
 
-            if (process != null && isPerformanceShowTaskData()) {
-                out.println("        <tr>");
-                out.println("          <td>");
-                out.println(plotTaskGraph(taskSeries, "taskTime", paramRequest.getLocaleString("taskTimeTitle")));
-                out.println("          </td>");
-                out.println("        </tr>");
-            }
+                //Establecer el tema de las gráficas
+                setTheme();
 
-            if (process != null) {
-                out.println("        <tr>");
-                out.println("          <td>");
-                out.println(plotGraph(overviewSeries.get(0), "oTime", timeTitle, timeType));
-                out.println("          </td>");
-                out.println("        </tr>");
-            }
+    //            if (!(paramRequest.getWebPage() instanceof ProcessWebPage)) {
+    //                out.println("<div class=\"swbform\">");
+    //                out.println("  <form action=\"#\">");
+    //                out.println("    <label for=\"pid\">Proceso:</label>");
+    //                out.println("    <select name=\"pid\" onchange=\"this.form.submit();\">");
+    //                Iterator<Process> processes = Process.ClassMgr.listProcesses(paramRequest.getWebPage().getWebSite());
+    //                while (processes.hasNext()) {
+    //                    Process process1 = processes.next();
+    //                    out.println("      <option value=\"" + process1.getId() + "\">" + process1.getDisplayTitle(lang) + "</option>");
+    //                }
+    //                out.println("    </select>");
+    //                out.println("  </form>");
+    //                out.println("</div>");
+    //            }
 
-            if (process != null) {
-                out.println("        <tr>");
-                out.println("          <td>");
-                out.println(plotGraph(overviewSeries.get(1), "oInstances", paramRequest.getLocaleString("instanceTitle"), insType));
-                out.println("          </td>");
-                out.println("        </tr>");
+                out.println("<div id=\"properties\" class=\"swbform\">");
+                out.println("  <fieldset>");
+                out.println("    <table>");
+                out.println("      <tbody>");
+                if (process != null && isResponseShowLog()) {
+                    out.println("        <tr>");
+                    out.println("          <td>");
+                    out.println(plotLog(logSeries, "timeLog", timeTitle));
+                    out.println("          </td>");
+                    out.println("        </tr>");
+                }
+
+                if (process != null && isPerformanceShowTaskData()) {
+                    out.println("        <tr>");
+                    out.println("          <td>");
+                    out.println(plotTaskGraph(taskSeries, "taskTime", paramRequest.getLocaleString("taskTimeTitle")));
+                    out.println("          </td>");
+                    out.println("        </tr>");
+                }
+
+                if (process != null) {
+                    out.println("        <tr>");
+                    out.println("          <td>");
+                    out.println(plotGraph(overviewSeries.get(0), "oTime", timeTitle, timeType));
+                    out.println("          </td>");
+                    out.println("        </tr>");
+                }
+
+                if (process != null) {
+                    out.println("        <tr>");
+                    out.println("          <td>");
+                    out.println(plotGraph(overviewSeries.get(1), "oInstances", paramRequest.getLocaleString("instanceTitle"), insType));
+                    out.println("          </td>");
+                    out.println("        </tr>");
+                }
+                out.println("      </tbody>");
+                out.println("    </table>");
+                out.println("  </fieldset>");
+                //out.println("  <fieldset>\n");
+                if (suri != null) {
+                    out.print("    <button  dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + adminUrl.toString() + "',this.domNode);return false;\">" + paramRequest.getLocaleString("configGraphs") + "</button>");
+                } else { 
+                    out.println("    <a href=\"" + adminUrl + "\">" + paramRequest.getLocaleString("configGraphs") + "</a>");
+                }
+                //out.println("  </fieldset>");
+                out.println("</div>");
+            } else {
+                out.println("<div id=\"properties\" class=\"swbform\">\n"
+                        + "  <fieldset>\n"
+                        + "    <table>\n"
+                        + "      <tbody>\n"
+                        + "        <tr><td>"+ paramRequest.getLocaleString("MsgError1")+ "</td></tr>"
+                        + "      </tbody>\n"
+                        + "    </table>\n"
+                        + "  </fieldset>\n"
+                        + "</div>\n");
             }
-            out.println("      </tbody>");
-            out.println("    </table>");
-            out.println("  </fieldset>");
-            //out.println("  <fieldset>\n");
-            if (suri != null) {
-                out.print("    <button  dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + adminUrl.toString() + "',this.domNode);return false;\">" + paramRequest.getLocaleString("configGraphs") + "</button>");
-            } else { 
-                out.println("    <a href=\"" + adminUrl + "\">" + paramRequest.getLocaleString("configGraphs") + "</a>");
-            }
-            //out.println("  </fieldset>");
-            out.println("</div>");
         } else {
             out.println("<div id=\"properties\" class=\"swbform\">\n"
-                    + "  <fieldset>\n"
-                    + "    <table>\n"
-                    + "      <tbody>\n"
-                    + "        <tr><td>No existen instancias del proceso</td></tr>"
-                    + "      </tbody>\n"
-                    + "    </table>\n"
-                    + "  </fieldset>\n"
-                    + "</div>\n");
+                        + "  <fieldset>\n"
+                        + "    <table>\n"
+                        + "      <tbody>\n"
+                        + "        <tr><td>" + paramRequest.getLocaleString("MsgError2") + "</td></tr>"
+                        + "      </tbody>\n"
+                        + "    </table>\n"
+                        + "  </fieldset>\n"
+                        + "</div>\n");
         }
     }
     
