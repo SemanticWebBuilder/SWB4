@@ -184,6 +184,7 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
     //            }
 
                 //out.println("<div id=\"properties\" class=\"swbform\">");
+                out.println("<h2>Desempe&ntilde;o del proceso " + process.getDisplayDescription(lang)+"</h2>");
                 out.println("  <fieldset>");
                 out.println("    <table>");
                 out.println("      <tbody>");
