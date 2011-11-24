@@ -121,8 +121,41 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
             type.nextObject(this, user);
         }
         this.getFlowNodeType().close(this, user);
+        
+        if(status==Instance.STATUS_CLOSED)
+        {
+            runActionCode(user, UserTask.CLOSE_ACTIONCODE);
+        }else if(status==Instance.STATUS_ABORTED)
+        {
+            runActionCode(user, UserTask.ABORT_ACTIONCODE);
+        }
 
         removeTemporallyDataobjects();
+    }
+    
+    private void runActionCode(User user, int type)
+    {
+        //Correr accion de cierre
+        if(this.getFlowNodeType() instanceof UserTask)
+        {
+            UserTask ut=(UserTask)this.getFlowNodeType();
+            Iterator<TaskAction> it=ut.listTaskActions();
+            while (it.hasNext())
+            {
+                TaskAction taskAction = it.next();
+                if(taskAction.getActionType()==type && taskAction.getCode()!=null)
+                {
+                    try
+                    {
+                        Interpreter i = SWBPClassMgr.getInterpreter(this, user);
+                        Object ret=i.eval(taskAction.getCode());
+                    }catch(Exception e)
+                    {
+                        log.error(e);
+                    }
+                }
+            }
+        }        
     }
 
     /**
@@ -133,6 +166,9 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
     public void execute(User user)
     {
         super.execute(user);
+        
+        runActionCode(user, UserTask.START_ACTIONCODE);
+        
         //System.out.println("execute("+user+")");
         FlowNode type=getFlowNodeType();
         type.execute(this, user);

@@ -28,6 +28,10 @@ package org.semanticwb.process.model;
 
 public class UserTask extends org.semanticwb.process.model.base.UserTaskBase 
 {
+    public static final int START_ACTIONCODE=1;
+    public static final int CLOSE_ACTIONCODE=2;
+    public static final int ABORT_ACTIONCODE=3;
+    
     public UserTask(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
