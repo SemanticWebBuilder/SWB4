@@ -95,7 +95,7 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
         if (action.equals("adminCase")) {
-            String suri = request.getParameter("suri");
+            //String suri = request.getParameter("suri");
             String pid = request.getParameter("pid");
             
             SWBFormMgr mgr = new SWBFormMgr(getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
@@ -104,11 +104,11 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
             } catch (FormValidateException e) {
                 log.error(e);
             }
-            if (suri != null) {
-                response.setRenderParameter("suri", suri);
-            } else  {
+            //if (suri != null) {
+            //    response.setRenderParameter("suri", suri);
+            //} else  {
                 response.setRenderParameter("pid", pid);
-            }
+            //}
         } else {
             super.processAction(request, response);
         }
