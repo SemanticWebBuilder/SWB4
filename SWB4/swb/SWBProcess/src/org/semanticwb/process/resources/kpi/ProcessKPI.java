@@ -52,6 +52,7 @@ import org.semanticwb.process.model.Instance;
 import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.Task;
+import org.semanticwb.process.model.WrapperProcessWebPage;
 
 public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.ProcessKPIBase 
 {
@@ -894,8 +895,9 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
         WebPage wp = paramRequest.getWebPage();
         String pid = request.getParameter("pid");
         String suri = request.getParameter("suri");
-        
-        if (pid != null && !pid.trim().equals("")) {
+        if(wp instanceof WrapperProcessWebPage) {
+            process = ((WrapperProcessWebPage)wp).getProcess();
+        } else if (pid != null && !pid.trim().equals("")) {
             process = Process.ClassMgr.getProcess(pid, wp.getWebSite());
         } else if (suri != null && !suri.trim().equals("")) {
             SemanticObject sobj = SemanticObject.getSemanticObject(suri);
