@@ -184,8 +184,8 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
     //            }
 
                 //out.println("<div id=\"properties\" class=\"swbform\">");
-                out.println("<h2>Desempe&ntilde;o del proceso " + process.getDisplayDescription(lang)+"</h2>");
-                out.println("  <fieldset>");
+                out.println("<h2>Desempe&ntilde;o del proceso " + process.getDisplayTitle(lang)+"</h2>");
+                //out.println("  <fieldset>");
                 out.println("    <table>");
                 out.println("      <tbody>");
                 if (process != null && isResponseShowLog()) {
@@ -221,7 +221,7 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
                 }
                 out.println("      </tbody>");
                 out.println("    </table>");
-                out.println("  </fieldset>");
+                //out.println("  </fieldset>");
                 //out.println("  <fieldset>\n");
                 if (suri != null) {
                     out.print("    <button  dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + adminUrl.toString() + "',this.domNode);return false;\">" + paramRequest.getLocaleString("configGraphs") + "</button>");
