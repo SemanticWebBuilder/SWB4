@@ -95,7 +95,6 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
         if (action.equals("adminCase")) {
-            //String suri = request.getParameter("suri");
             String pid = request.getParameter("pid");
             
             SWBFormMgr mgr = new SWBFormMgr(getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
@@ -104,11 +103,8 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
             } catch (FormValidateException e) {
                 log.error(e);
             }
-            //if (suri != null) {
-            //    response.setRenderParameter("suri", suri);
-            //} else  {
-                response.setRenderParameter("pid", pid);
-            //}
+            response.setRenderParameter("pid", pid);
+            response.setMode(response.Mode_VIEW);
         } else {
             super.processAction(request, response);
         }
@@ -124,8 +120,6 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
         }
         
         String pid = request.getParameter("pid");
-        String suri = request.getParameter("suri");
-        
         if (process != null) {
             Iterator<ProcessInstance> pi = process.listProcessInstances();
             if (pi.hasNext()) {
@@ -133,8 +127,6 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
 
                 if (pid != null && !pid.trim().equals("")) {
                     adminUrl.setParameter("pid", pid);
-                } else if (suri != null && !suri.trim().equals("")) {
-                    adminUrl.setParameter("suri", suri);
                 } else {
                     adminUrl.setParameter("pid", process.getId());
                 }
@@ -223,11 +215,7 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
                 out.println("    </table>");
                 //out.println("  </fieldset>");
                 //out.println("  <fieldset>\n");
-                if (suri != null) {
-                    out.print("    <button  dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + adminUrl.toString() + "',this.domNode);return false;\">" + paramRequest.getLocaleString("configGraphs") + "</button>");
-                } else { 
-                    out.println("    <a href=\"" + adminUrl + "\">" + paramRequest.getLocaleString("configGraphs") + "</a>");
-                }
+                out.println("    <a href=\"" + adminUrl + "\">" + paramRequest.getLocaleString("configGraphs") + "</a>");
                 //out.println("  </fieldset>");
                 //out.println("</div>");
             } else {
@@ -286,9 +274,12 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
             + "   };\n"
             + "   dojo.addOnLoad(makeObjects);\n"
             + "</script>\n"
+            + "<div class=\"mgraf\">\n"
+            + "<h3 class=\"mgraf-tit\">" + title + "</h3>\n"
             + "<div id=\"" + id + "_taskTime\" style=\"width: 700px; height: 300px;\"></div>\n"
             + "<div id=\"" + id + "_taskTimeSeries\"></div>\n"
-            + "<div id=\"stageLog\" style=\"width:700px; height:50px; text-align:center;\"><label>" + title + "</label></div>\n";
+            + "</div>\n";
+            //+ "<div id=\"stageLog\" style=\"width:700px; height:50px; text-align:center;\"><label>" + title + "</label></div>\n";
         }
         return ret;
     }
@@ -334,9 +325,12 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
             + "   };\n"
             + "   dojo.addOnLoad(makeObjects);\n"
             + "</script>\n"
+            + "<div class=\"mgraf\">\n"
+            + "<h3 class=\"mgraf-tit\">" + title + "</h3>\n"
             + "<div id=\"" + id + "_timelog\" style=\"width: 700px; height: 300px;\"></div>\n"
             + "<div id=\"" + id + "_timelogSeries\"></div>\n"
-            + "<div id=\"stageLog\" style=\"width:700px; height:50px; text-align:center;\"><label>" + title + "</label></div>\n";
+            //+ "<div id=\"stageLog\" style=\"width:700px; height:50px; text-align:center;\"><label>" + title + "</label></div>\n";
+            + "</div>\n";
         }
         //System.out.println(ret);
         return ret;
@@ -449,8 +443,11 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
         + "   };"
         + "   dojo.addOnLoad(makeObjects);"
         + "</script>"
+        + "<div class=\"mgraf\">\n"
+        + "<h3 class=\"mgraf-tit\">" + title + "</h3>\n"
         + "<div id=\"" + id + "_instances\" style=\"width: 400px; height: 300px;\"></div>"
-        + "<div id=\"title\" style=\"width:400px; height:50px; text-align:center;\"><label>" + title + "</label></div>\n";
+        //+ "<div id=\"title\" style=\"width:400px; height:50px; text-align:center;\"><label>" + title + "</label></div>\n";
+        + "</div>\n";
         return ret;
     }
     
@@ -490,8 +487,11 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
             + "   };\n"
             + "   dojo.addOnLoad(makeObjects);\n"
             + "</script>\n"
+            + "<div class=\"mgraf\">\n"
+            + "<h3 class=\"mgraf-tit\">" + title + "</h3>\n"
             + "<div id=\"" + id + "_instances\" style=\"width: 400px; height: 300px;\"></div>\n"
-            + "<div id=\"stage\" style=\"width:400px; height:50px; text-align:center;\"><label>" + title + "</label></div>\n";
+            //+ "<div id=\"stage\" style=\"width:400px; height:50px; text-align:center;\"><label>" + title + "</label></div>\n";
+            + "</div>\n";
         }
         return ret;
     }
@@ -534,8 +534,11 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
             + "   };"
             + "   dojo.addOnLoad(makeObjects);"
             + "</script>"
+            + "<div class=\"mgraf\">\n"
+            + "<h3 class=\"mgraf-tit\">" + title + "</h3>\n"
             + "<div id=\"" + id + "_instances\" style=\"width: 400px; height: 300px;\"></div>"
-            + "<div id=\"stage\" style=\"width:700px; height:50px; text-align:center;\"><label>" + title + "</label></div>\n";
+            //+ "<div id=\"stage\" style=\"width:700px; height:50px; text-align:center;\"><label>" + title + "</label></div>\n";
+            + "</div>\n";
         }
         return ret;
     }
@@ -545,11 +548,7 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
         Process process = getProcess(request, paramRequest);
         if (process != null) {
             SWBFormMgr mgr = new SWBFormMgr(getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
-            if (request.getParameter("pid") != null) {
-                mgr.addHiddenParameter("pid", request.getParameter("pid"));
-            } else if (request.getParameter("suri") != null) {
-                mgr.addHiddenParameter("suri", request.getParameter("suri"));
-            }
+            mgr.addHiddenParameter("pid", request.getParameter("pid"));
             mgr.addButton(SWBFormButton.newSaveButton());
             mgr.addButton(SWBFormButton.newBackButton());
             mgr.setType(SWBFormMgr.TYPE_DOJO);
@@ -909,16 +908,10 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
         Process process = null;
         WebPage wp = paramRequest.getWebPage();
         String pid = request.getParameter("pid");
-        String suri = request.getParameter("suri");
         if(wp instanceof WrapperProcessWebPage) {
             process = ((WrapperProcessWebPage)wp).getProcess();
         } else if (pid != null && !pid.trim().equals("")) {
             process = Process.ClassMgr.getProcess(pid, wp.getWebSite());
-        } else if (suri != null && !suri.trim().equals("")) {
-            SemanticObject sobj = SemanticObject.getSemanticObject(suri);
-            if (sobj != null) {
-                process = (Process) sobj.createGenericInstance();
-            }
         }
         return process;
     }
