@@ -7,6 +7,8 @@ package org.semanticwb.model.base;
 public abstract class DateElementBase extends org.semanticwb.model.base.FormElementBase 
 {
     public static final org.semanticwb.platform.SemanticProperty swb_dateConstraints=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#dateConstraints");
+    public static final org.semanticwb.platform.SemanticProperty swb_dateOnChange=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#dateOnChange");
+    public static final org.semanticwb.platform.SemanticProperty swb_dateId=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#dateId");
    /**
    * Elemento que muestra un componente grafico para seleccionar una fecha
    */
@@ -106,6 +108,42 @@ public abstract class DateElementBase extends org.semanticwb.model.base.FormElem
     public void setConstraints(String value)
     {
         getSemanticObject().setProperty(swb_dateConstraints, value);
+    }
+
+/**
+* Gets the DateOnChange property
+* @return String with the DateOnChange
+*/
+    public String getDateOnChange()
+    {
+        return getSemanticObject().getProperty(swb_dateOnChange);
+    }
+
+/**
+* Sets the DateOnChange property
+* @param value long with the DateOnChange
+*/
+    public void setDateOnChange(String value)
+    {
+        getSemanticObject().setProperty(swb_dateOnChange, value);
+    }
+
+/**
+* Gets the DateId property
+* @return String with the DateId
+*/
+    public String getDateId()
+    {
+        return getSemanticObject().getProperty(swb_dateId);
+    }
+
+/**
+* Sets the DateId property
+* @param value long with the DateId
+*/
+    public void setDateId(String value)
+    {
+        getSemanticObject().setProperty(swb_dateId, value);
     }
 
     public void remove()
