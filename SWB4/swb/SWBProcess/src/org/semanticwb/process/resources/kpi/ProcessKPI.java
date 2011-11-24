@@ -41,7 +41,6 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.WebPage;
-import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormButton;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
