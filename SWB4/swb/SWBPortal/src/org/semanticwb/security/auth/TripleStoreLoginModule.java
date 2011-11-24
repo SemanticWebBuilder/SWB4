@@ -164,7 +164,7 @@ public class TripleStoreLoginModule implements LoginModule
                     //NoSuchAlgorithmException & UnsupportedEncodingException,
                     //Wrapped up, it doesn't matter which one, we just can't do anything else
             {
-                log.error("User: Can't compare Passwords", ex);
+                log.error("User: Can't compare Passwords:"+login);
                 throw new LoginException("Digest Failed");
             }
         }
