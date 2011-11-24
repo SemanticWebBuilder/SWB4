@@ -92,7 +92,7 @@ public class CaseObject extends GenericResource {
         Enumeration enuparam = request.getParameterNames();
         while (enuparam.hasMoreElements()) {
             String sparam = (String)enuparam.nextElement();
-            System.out.println("param: "+sparam+" ("+request.getParameter(sparam)+")");
+            //System.out.println("param: "+sparam+" ("+request.getParameter(sparam)+")");
         }
         
         SWBResourceURL edit = paramRequest.getRenderUrl();
@@ -469,7 +469,7 @@ public class CaseObject extends GenericResource {
     private void selectObjectProperty(ProcessInstance pinst, PrintWriter out, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         ArrayList pobjs = new ArrayList();
 
-        System.out.println("selectObjectProperty");
+        //System.out.println("selectObjectProperty");
 
         getObjectsFromInstance(pinst, pobjs);
         Iterator<SWBClass> objit = pobjs.iterator();

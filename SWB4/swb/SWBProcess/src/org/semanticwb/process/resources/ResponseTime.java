@@ -94,7 +94,7 @@ public class ResponseTime extends GenericResource {
         Enumeration enuparam = request.getParameterNames();
         while (enuparam.hasMoreElements()) {
             String sparam = (String) enuparam.nextElement();
-            System.out.println("param: " + sparam + " (" + request.getParameter(sparam) + ")");
+            //System.out.println("param: " + sparam + " (" + request.getParameter(sparam) + ")");
         }
 
         out.print("<div class=\"swbform\">\n");

@@ -1277,7 +1277,7 @@ public class ProcessForm extends GenericResource {
         
         //Property prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_ANNOT_FORMELEMENTRANGE).getRDFProperty();
         SemanticProperty pro=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_ANNOT_FORMELEMENTRANGE);
-        System.out.println("prop:" + pro.getName());
+        //System.out.println("prop:" + pro.getName());
         
         
         Iterator<SemanticClass> itsub = sv.getSemanticClass(sv.SWB_SWBFORMELEMENT).listSubClasses();

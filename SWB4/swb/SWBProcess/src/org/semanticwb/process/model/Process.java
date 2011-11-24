@@ -44,7 +44,7 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
         {
             public void notify(SemanticObject obj, Object prop, String lang, String action)
             {
-                System.out.println("obj:"+obj+" prop:"+prop+" action:"+action);
+                //System.out.println("obj:"+obj+" prop:"+prop+" action:"+action);
                 if(obj.instanceOf(Process.sclass))
                 {
                     Process process=(Process)obj.createGenericInstance();                    
