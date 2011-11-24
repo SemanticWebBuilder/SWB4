@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.regex.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
@@ -29,7 +30,8 @@ import org.semanticwb.process.model.SWBPClassMgr;
  */
 public class SWBScriptParser
 {
-    private static Logger log=SWBUtils.getLogger(SWBScriptParser.class);
+
+    private static Logger log = SWBUtils.getLogger(SWBScriptParser.class);
 
     public static void setValue(Instance instance, User user, String variable, Object value) throws Exception
     {
@@ -40,7 +42,7 @@ public class SWBScriptParser
         HashMap<String, Object> values = new HashMap<String, Object>();
         values.put("instance", instance);
         values.put("user", user);
-        addInstanceObjects(instance,values);
+        addInstanceObjects(instance, values);
         setValue(values, variable, value);
     }
 
@@ -49,7 +51,30 @@ public class SWBScriptParser
         String key = keys.removeFirst();
         if (key.isEmpty())
         {
-            if (context instanceof SemanticObject)
+            if (context instanceof GenericObject)
+            {
+                SemanticObject semObject = ((GenericObject) context).getSemanticObject();
+                Iterator<SemanticProperty> props = semObject.listProperties();
+                while (props.hasNext())
+                {
+                    SemanticProperty prop = props.next();
+                    if (prop.getName().equalsIgnoreCase(key))
+                    {
+                        if (prop.isObjectProperty())
+                        {
+                            if (value instanceof SemanticObject)
+                            {
+                                semObject.setObjectProperty(prop, (SemanticObject) value);
+                            }
+                        }
+                        else
+                        {
+                            semObject.setProperty(prop, value.toString());
+                        }
+                    }
+                }
+            }
+            else if (context instanceof SemanticObject)
             {
                 SemanticObject semObject = (SemanticObject) context;
                 Iterator<SemanticProperty> props = semObject.listProperties();
@@ -86,7 +111,31 @@ public class SWBScriptParser
         }
         else
         {
-            if (context instanceof SemanticObject)
+            if (context instanceof GenericObject)
+            {
+                SemanticObject semObject = ((GenericObject) context).getSemanticObject();
+                Iterator<SemanticProperty> props = semObject.listProperties();
+                while (props.hasNext())
+                {
+                    SemanticProperty prop = props.next();
+                    if (prop.getName().equalsIgnoreCase(key))
+                    {
+                        if (prop.isObjectProperty())
+                        {
+                            SemanticObject newcontext = semObject.getObjectProperty(prop);
+                            if (newcontext != null)
+                            {
+                                setValue(context, keys, value);
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("La propiedad " + key + " es una literal, por lo cual no puede asignarse un valor");
+                        }
+                    }
+                }
+            }
+            else if (context instanceof SemanticObject)
             {
                 SemanticObject semObject = (SemanticObject) context;
                 Iterator<SemanticProperty> props = semObject.listProperties();
@@ -171,35 +220,34 @@ public class SWBScriptParser
         HashMap<String, Object> values = new HashMap<String, Object>();
         values.put("instance", instance);
         values.put("user", user);
-        addInstanceObjects(instance,values);
+        addInstanceObjects(instance, values);
         return parse(values, script);
     }
-    
-    
+
     private static void addInstanceObjects(Instance instance, HashMap values)
     {
-        List<ItemAwareReference> list=instance.listHeraquicalItemAwareReference();
-        for(ItemAwareReference item : list)
+        List<ItemAwareReference> list = instance.listHeraquicalItemAwareReference();
+        for (ItemAwareReference item : list)
         {
-            String varname=item.getItemAware().getName();
-            SemanticObject object=item.getProcessObject().getSemanticObject();
+            String varname = item.getItemAware().getName();
+            SemanticObject object = item.getProcessObject().getSemanticObject();
             try
             {
                 //System.out.println("Cargando clase "+className+" ...");
-                Class clazz=SWBPClassMgr.getClassDefinition(object.getSemanticClass());
+                Class clazz = SWBPClassMgr.getClassDefinition(object.getSemanticClass());
                 //System.out.println("Obteniendo constructor...");
-                Constructor c=clazz.getConstructor(SemanticObject.class);
+                Constructor c = clazz.getConstructor(SemanticObject.class);
                 //System.out.println("Instanciando objeto...");
-                Object instanceObject=c.newInstance(object);
+                Object instanceObject = c.newInstance(object);
                 //System.out.println("Agregando variable "+varname+"="+instanceObject+" de tipo "+instanceObject.getClass());
                 values.put(varname, instanceObject);
                 //System.out.println("Variable "+ varname +" agregada");
             }
-            catch(Exception cnfe)
+            catch (Exception cnfe)
             {
-                log.error("No se agrego variable "+varname+" a script relacionada con el objeto "+object.getURI()+" en la instancia de proceso "+instance.getURI(),cnfe);
+                log.error("No se agrego variable " + varname + " a script relacionada con el objeto " + object.getURI() + " en la instancia de proceso " + instance.getURI(), cnfe);
             }
-        }          
+        }
     }
 
     public static Object getValue(Instance instance, User user, String variable) throws Exception
@@ -278,8 +326,42 @@ public class SWBScriptParser
     public static Object evaluate(Object context, LinkedList<String> keys) throws Exception
     {
         String key = keys.removeFirst();
-        if (context instanceof SemanticObject)
+        if (context instanceof GenericObject)
         {
+            GenericObject go = (GenericObject) context;
+            SemanticObject semObject = go.getSemanticObject();
+            Iterator<SemanticProperty> props = semObject.listProperties();
+            while (props.hasNext())
+            {
+                SemanticProperty prop = props.next();
+                if (prop.getName().equalsIgnoreCase(key))
+                {
+                    if (prop.isObjectProperty())
+                    {
+                        SemanticObject newcontext = semObject.getObjectProperty(prop);
+                        if (newcontext == null)
+                        {
+                            return newcontext;
+                        }
+                        if (keys.isEmpty())
+                        {
+                            return newcontext;
+                        }
+                        else
+                        {
+                            return evaluate(newcontext, keys);
+                        }
+                    }
+                    else
+                    {
+                        return semObject.getProperty(prop);
+                    }
+                }
+            }
+        }
+        else if (context instanceof SemanticObject)
+        {
+
             SemanticObject semObject = (SemanticObject) context;
             Iterator<SemanticProperty> props = semObject.listProperties();
             while (props.hasNext())
@@ -373,7 +455,39 @@ public class SWBScriptParser
     public static Object evaluateGetValue(Object context, LinkedList<String> keys) throws Exception
     {
         String key = keys.removeFirst();
-        if (context instanceof SemanticObject)
+        if (context instanceof GenericObject)
+        {
+            SemanticObject semObject = ((GenericObject) context).getSemanticObject();
+            Iterator<SemanticProperty> props = semObject.listProperties();
+            while (props.hasNext())
+            {
+                SemanticProperty prop = props.next();
+                if (prop.getName().equalsIgnoreCase(key))
+                {
+                    if (prop.isObjectProperty())
+                    {
+                        SemanticObject newcontext = semObject.getObjectProperty(prop);
+                        if (newcontext == null)
+                        {
+                            return newcontext;
+                        }
+                        if (keys.isEmpty())
+                        {
+                            return newcontext;
+                        }
+                        else
+                        {
+                            return evaluateGetValue(newcontext, keys);
+                        }
+                    }
+                    else
+                    {
+                        return semObject.getProperty(prop);
+                    }
+                }
+            }
+        }
+        else if (context instanceof SemanticObject)
         {
             SemanticObject semObject = (SemanticObject) context;
             Iterator<SemanticProperty> props = semObject.listProperties();
