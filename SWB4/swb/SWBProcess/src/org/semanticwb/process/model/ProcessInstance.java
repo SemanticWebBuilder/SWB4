@@ -111,9 +111,9 @@ public class ProcessInstance extends org.semanticwb.process.model.base.ProcessIn
         while (it.hasNext())
         {
             FlowNodeInstance flowNodeInstance = it.next();
-            if(flowNodeInstance.getStatus()!=Instance.STATUS_CLOSED || flowNodeInstance.getStatus()!=Instance.STATUS_ABORTED)
+            if(flowNodeInstance.getStatus()!=Instance.STATUS_CLOSED && flowNodeInstance.getStatus()!=Instance.STATUS_ABORTED)
             {
-                flowNodeInstance.abort(user);
+                flowNodeInstance.setStatus(Instance.STATUS_ABORTED);
             }
         }
 
