@@ -183,7 +183,7 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
     //                out.println("</div>");
     //            }
 
-                out.println("<div id=\"properties\" class=\"swbform\">");
+                //out.println("<div id=\"properties\" class=\"swbform\">");
                 out.println("  <fieldset>");
                 out.println("    <table>");
                 out.println("      <tbody>");
@@ -228,28 +228,28 @@ public class ProcessKPI extends org.semanticwb.process.resources.kpi.base.Proces
                     out.println("    <a href=\"" + adminUrl + "\">" + paramRequest.getLocaleString("configGraphs") + "</a>");
                 }
                 //out.println("  </fieldset>");
-                out.println("</div>");
+                //out.println("</div>");
             } else {
-                out.println("<div id=\"properties\" class=\"swbform\">\n"
-                        + "  <fieldset>\n"
+               //out.println("<div id=\"properties\" class=\"swbform\">\n"
+                        out.println("  <fieldset>\n"
                         + "    <table>\n"
                         + "      <tbody>\n"
-                        + "        <tr><td>"+ paramRequest.getLocaleString("MsgError1")+ "</td></tr>"
+                        + "        <tr><td>" + paramRequest.getLocaleString("MsgError1") + "</td></tr>"
                         + "      </tbody>\n"
                         + "    </table>\n"
-                        + "  </fieldset>\n"
-                        + "</div>\n");
+                        + "  </fieldset>\n");
+              //          + "</div>\n");
             }
         } else {
-            out.println("<div id=\"properties\" class=\"swbform\">\n"
-                        + "  <fieldset>\n"
+            //out.println("<div id=\"properties\" class=\"swbform\">\n"
+                        out.println("  <fieldset>\n"
                         + "    <table>\n"
                         + "      <tbody>\n"
                         + "        <tr><td>" + paramRequest.getLocaleString("MsgError2") + "</td></tr>"
                         + "      </tbody>\n"
                         + "    </table>\n"
-                        + "  </fieldset>\n"
-                        + "</div>\n");
+                        + "  </fieldset>\n");
+              //          + "</div>\n");
         }
     }
     
