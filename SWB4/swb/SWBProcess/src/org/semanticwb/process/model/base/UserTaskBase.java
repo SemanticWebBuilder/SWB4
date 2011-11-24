@@ -1,11 +1,13 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class UserTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.model.Undeleteable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.process.model.Callable,org.semanticwb.model.Referensable,org.semanticwb.model.Resourceable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.CalendarRefable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.process.model.ResourceAssignmentable
+public abstract class UserTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.model.Referensable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.process.model.ActivityConfable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Traceable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Trashable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Resourceable,org.semanticwb.process.model.Callable
 {
     public static final org.semanticwb.platform.SemanticProperty swp_notificationTime=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#notificationTime");
     public static final org.semanticwb.platform.SemanticClass swp_WrapperTaskWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#WrapperTaskWebPage");
     public static final org.semanticwb.platform.SemanticProperty swp_taskWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#taskWebPage");
+    public static final org.semanticwb.platform.SemanticClass swp_TaskAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#TaskAction");
+    public static final org.semanticwb.platform.SemanticProperty swp_hasTaskAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasTaskAction");
     public static final org.semanticwb.platform.SemanticClass swp_UserTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#UserTask");
    /**
    * The semantic class that represents the currentObject
@@ -171,6 +173,29 @@ public abstract class UserTaskBase extends org.semanticwb.process.model.Task imp
         public static java.util.Iterator<org.semanticwb.process.model.UserTask> listUserTaskByChild(org.semanticwb.process.model.GraphicalElement value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.UserTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasChildInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.UserTask with a determined TaskAction
+       * @param value TaskAction of the type org.semanticwb.process.model.TaskAction
+       * @param model Model of the org.semanticwb.process.model.UserTask
+       * @return Iterator with all the org.semanticwb.process.model.UserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.UserTask> listUserTaskByTaskAction(org.semanticwb.process.model.TaskAction value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.UserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasTaskAction, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.UserTask with a determined TaskAction
+       * @param value TaskAction of the type org.semanticwb.process.model.TaskAction
+       * @return Iterator with all the org.semanticwb.process.model.UserTask
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.UserTask> listUserTaskByTaskAction(org.semanticwb.process.model.TaskAction value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.UserTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasTaskAction,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -512,6 +537,71 @@ public abstract class UserTaskBase extends org.semanticwb.process.model.Task imp
          if(obj!=null)
          {
              ret=(org.semanticwb.process.model.WrapperTaskWebPage)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Gets all the org.semanticwb.process.model.TaskAction
+   * @return A GenericIterator with all the org.semanticwb.process.model.TaskAction
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TaskAction> listTaskActions()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TaskAction>(getSemanticObject().listObjectProperties(swp_hasTaskAction));
+    }
+
+   /**
+   * Gets true if has a TaskAction
+   * @param value org.semanticwb.process.model.TaskAction to verify
+   * @return true if the org.semanticwb.process.model.TaskAction exists, false otherwise
+   */
+    public boolean hasTaskAction(org.semanticwb.process.model.TaskAction value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swp_hasTaskAction,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a TaskAction
+   * @param value org.semanticwb.process.model.TaskAction to add
+   */
+
+    public void addTaskAction(org.semanticwb.process.model.TaskAction value)
+    {
+        getSemanticObject().addObjectProperty(swp_hasTaskAction, value.getSemanticObject());
+    }
+   /**
+   * Removes all the TaskAction
+   */
+
+    public void removeAllTaskAction()
+    {
+        getSemanticObject().removeProperty(swp_hasTaskAction);
+    }
+   /**
+   * Removes a TaskAction
+   * @param value org.semanticwb.process.model.TaskAction to remove
+   */
+
+    public void removeTaskAction(org.semanticwb.process.model.TaskAction value)
+    {
+        getSemanticObject().removeObjectProperty(swp_hasTaskAction,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the TaskAction
+   * @return a org.semanticwb.process.model.TaskAction
+   */
+    public org.semanticwb.process.model.TaskAction getTaskAction()
+    {
+         org.semanticwb.process.model.TaskAction ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasTaskAction);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.TaskAction)obj.createGenericInstance();
          }
          return ret;
     }
