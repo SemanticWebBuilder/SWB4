@@ -4,18 +4,24 @@
  */
 package org.semanticwb.process.utils;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.*;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.process.model.Instance;
+import org.semanticwb.process.model.ItemAwareReference;
+import org.semanticwb.process.model.SWBPClassMgr;
 
 /**
  *
@@ -23,6 +29,7 @@ import org.semanticwb.process.model.Instance;
  */
 public class SWBScriptParser
 {
+    private static Logger log=SWBUtils.getLogger(SWBScriptParser.class);
 
     public static void setValue(Instance instance, User user, String variable, Object value) throws Exception
     {
@@ -33,6 +40,7 @@ public class SWBScriptParser
         HashMap<String, Object> values = new HashMap<String, Object>();
         values.put("instance", instance);
         values.put("user", user);
+        addInstanceObjects(instance,values);
         setValue(values, variable, value);
     }
 
@@ -163,7 +171,35 @@ public class SWBScriptParser
         HashMap<String, Object> values = new HashMap<String, Object>();
         values.put("instance", instance);
         values.put("user", user);
+        addInstanceObjects(instance,values);
         return parse(values, script);
+    }
+    
+    
+    private static void addInstanceObjects(Instance instance, HashMap values)
+    {
+        List<ItemAwareReference> list=instance.listHeraquicalItemAwareReference();
+        for(ItemAwareReference item : list)
+        {
+            String varname=item.getItemAware().getName();
+            SemanticObject object=item.getProcessObject().getSemanticObject();
+            try
+            {
+                //System.out.println("Cargando clase "+className+" ...");
+                Class clazz=SWBPClassMgr.getClassDefinition(object.getSemanticClass());
+                //System.out.println("Obteniendo constructor...");
+                Constructor c=clazz.getConstructor(SemanticObject.class);
+                //System.out.println("Instanciando objeto...");
+                Object instanceObject=c.newInstance(object);
+                //System.out.println("Agregando variable "+varname+"="+instanceObject+" de tipo "+instanceObject.getClass());
+                values.put(varname, instanceObject);
+                //System.out.println("Variable "+ varname +" agregada");
+            }
+            catch(Exception cnfe)
+            {
+                log.error("No se agrego variable "+varname+" a script relacionada con el objeto "+object.getURI()+" en la instancia de proceso "+instance.getURI(),cnfe);
+            }
+        }          
     }
 
     public static Object getValue(Instance instance, User user, String variable) throws Exception
