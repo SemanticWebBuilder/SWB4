@@ -165,6 +165,9 @@ public class DateElement extends org.semanticwb.model.base.DateElementBase {
                 if (getConstraints() != null) {
                     ret.append(" constraints=\"" + getConstraints() + "\"");
                 }
+                
+                if(getDateId()!=null) ret.append(" id=\"" + getDateId() + "\"");
+                if(getDateOnChange()!=null) ret.append(" onchange=\"" + getDateOnChange() + "\"");
             }
 
             ret.append(" " + getAttributes());
