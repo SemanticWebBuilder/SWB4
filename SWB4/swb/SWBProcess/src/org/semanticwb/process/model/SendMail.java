@@ -56,7 +56,7 @@ public class SendMail extends org.semanticwb.process.model.base.SendMailBase
         }catch(Exception e)
         {
             log.error(e);
-            throw new RuntimeException(e);
+            //throw new RuntimeException(e);
         }
     }
 }
