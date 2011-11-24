@@ -7,7 +7,9 @@ package org.semanticwb.process.utils;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -125,12 +127,27 @@ public class SWBScriptParser
                             SemanticObject newcontext = semObject.getObjectProperty(prop);
                             if (newcontext != null)
                             {
-                                setValue(context, keys, value);
+                                setValue(newcontext, keys, value);
                             }
                         }
                         else
                         {
-                            throw new Exception("La propiedad " + key + " es una literal, por lo cual no puede asignarse un valor");
+                            if (prop.isBoolean())
+                            {
+                                semObject.setBooleanProperty(prop, Boolean.parseBoolean(value.toString()));
+                            }
+                            else if (prop.isDate() && value instanceof Date)
+                            {
+                                semObject.setDateProperty(prop, (Date) value);
+                            }
+                            else if (prop.isDateTime() && value instanceof Timestamp)
+                            {
+                                semObject.setDateTimeProperty(prop, (Timestamp) value);
+                            }
+                            else
+                            {
+                                semObject.setProperty(prop, value.toString());
+                            }
                         }
                     }
                 }
@@ -149,12 +166,47 @@ public class SWBScriptParser
                             SemanticObject newcontext = semObject.getObjectProperty(prop);
                             if (newcontext != null)
                             {
-                                setValue(context, keys, value);
+                                setValue(newcontext, keys, value);
                             }
                         }
                         else
                         {
-                            throw new Exception("La propiedad " + key + " es una literal, por lo cual no puede asignarse un valor");
+                            if (value == null)
+                            {
+                                semObject.setProperty(prop, null);
+                            }
+                            else
+                            {
+                                if (value == null)
+                                {
+                                    semObject.setProperty(prop, null);
+                                }
+                                else
+                                {
+                                    if (prop.isBoolean())
+                                    {
+                                        semObject.setBooleanProperty(prop, Boolean.parseBoolean(value.toString()));
+                                    }
+                                    else if (prop.isDate() && value instanceof Date)
+                                    {
+                                        semObject.setDateProperty(prop, (Date) value);
+                                    }
+                                    else if (prop.isDateTime() && value instanceof Timestamp)
+                                    {
+                                        semObject.setDateTimeProperty(prop, (Timestamp) value);
+                                    }
+                                    else if (prop.isDateTime() && value instanceof Date)
+                                    {
+                                        Timestamp ovalue = new Timestamp(((Date) value).getTime());
+                                        semObject.setDateTimeProperty(prop, ovalue);
+                                    }
+                                    else
+                                    {
+                                        semObject.setProperty(prop, value.toString());
+                                    }
+                                }
+                            }
+
                         }
                     }
                 }
@@ -168,7 +220,7 @@ public class SWBScriptParser
                     Object newcontext = m.invoke(context, args);
                     if (newcontext != null)
                     {
-                        setValue(context, keys, value);
+                        setValue(newcontext, keys, value);
                     }
 
                 }
@@ -200,7 +252,14 @@ public class SWBScriptParser
             int end = matcher.end();
 
             String tag = variable.substring(start, end);
-
+            if (tag.startsWith("{"))
+            {
+                tag = tag.substring(1);
+            }
+            if (tag.endsWith("}"))
+            {
+                tag = tag.substring(0, tag.length() - 1);
+            }
             try
             {
                 String[] path = tag.split("\\.");
