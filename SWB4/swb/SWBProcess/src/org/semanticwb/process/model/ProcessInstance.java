@@ -104,8 +104,18 @@ public class ProcessInstance extends org.semanticwb.process.model.base.ProcessIn
     public void close(User user, int status, String action)
     {
         super.close(user, status, action);
-
+        
         connectItemsAware();
+        
+        Iterator<FlowNodeInstance> it=listAllFlowNodeInstance();
+        while (it.hasNext())
+        {
+            FlowNodeInstance flowNodeInstance = it.next();
+            if(flowNodeInstance.getStatus()!=Instance.STATUS_CLOSED || flowNodeInstance.getStatus()!=Instance.STATUS_ABORTED)
+            {
+                flowNodeInstance.abort(user);
+            }
+        }
 
         removeTemporallyDataobjects();
     }

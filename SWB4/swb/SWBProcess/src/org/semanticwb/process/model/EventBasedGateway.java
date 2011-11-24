@@ -58,7 +58,7 @@ public class EventBasedGateway extends org.semanticwb.process.model.base.EventBa
     @Override
     public void close(FlowNodeInstance instance, User user)
     {
-        System.out.println("Cerrando EventBasedGateway");
+        //System.out.println("Cerrando EventBasedGateway");
 /*
         Iterator<ConnectionObject> it=listOutputConnectionObjects();
         while (it.hasNext())

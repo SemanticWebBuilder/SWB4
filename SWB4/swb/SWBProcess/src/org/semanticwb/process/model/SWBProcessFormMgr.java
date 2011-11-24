@@ -144,7 +144,7 @@ public class SWBProcessFormMgr implements SWBForms
      */
     public String renderForm(HttpServletRequest request)
     {
-        System.out.println("renderForm");
+        //System.out.println("renderForm");
         boolean DOJO=false;
         boolean IPHONE=false;
         boolean XHTML=false;
@@ -185,7 +185,7 @@ public class SWBProcessFormMgr implements SWBForms
             while (mgrit.hasNext())
             {
                 SWBFormMgr mgr = mgrit.next();
-                System.out.println("  mgr:"+mgr);
+                //System.out.println("  mgr:"+mgr);
 
                 Iterator<PropertyGroup> grpit=mgr.getGroups().keySet().iterator();
                 while (grpit.hasNext())
