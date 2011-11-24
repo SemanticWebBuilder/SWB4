@@ -1,3 +1,4 @@
+<%@page import="java.util.Iterator"%>
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.model.*"%>
@@ -28,6 +29,16 @@
     String url=null;
     if(gen instanceof WebPage)url=((WebPage)gen).getUrl();
     if(gen instanceof WebSite)url=SWBPortal.getDistributorPath()+"/"+gen.getId();
+    if(cls.getClassId().equals("swp:Process"))
+    {
+        SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById("swp:processWebPage");
+        SemanticObject swp=obj.getObjectProperty(prop);
+        if(swp!=null)
+        {
+            WebPage wp=(WebPage)swp.createGenericInstance();
+            url=wp.getUrl();
+        }
+    }
 
     String description=obj.getProperty(Descriptiveable.swb_description);
     if(description!=null && description.length()>25)description=description.substring(0,25);
