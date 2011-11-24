@@ -195,10 +195,11 @@ public class IntermediateCatchEvent extends CatchEvent
                 //var act = overNode as Activity;
                 //attachedTo = act;
                 (graphParent as Activity).updateAttachedEventsPosition();
-            } //else if (overNode == null) {
+            } else { //else if (overNode == null) {
             //    attachedTo = null;
             //}
-            snapToGrid();
+                snapToGrid();
+            }
         }
     }
 
