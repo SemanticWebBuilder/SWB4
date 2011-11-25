@@ -371,14 +371,18 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                 if (instance.getStatus() == ProcessInstance.STATUS_PROCESSING) {
                                     WebPage pwp = instance.getProcessType().getProcessWebPage();
                                     if (pwp != null) {
-                                    %><a class="acc-detalle" target="_new" href="<%=pwp.getUrl()%>">Desempe&ntilde;o</a><%
+                                    %><a class="acc-detalle" href="<%=pwp.getUrl()%>">Desempe&ntilde;o</a><%
                                     }
                                 }
                                 
                                 if (statusWp != null) {
                                 %>
-                                    <a class="acc-mapa" target="_new" href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessType().getEncodedURI()%>&mode=view<%=acts%>">Ver mapa</a>
-                                <%}%>
+                                    <a class="acc-mapa" href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessType().getEncodedURI()%>&mode=view<%=acts%>">Ver mapa</a>
+                                <%
+                                } else {
+                                    
+                                }
+                                %>
                                 <!--a class="acc-eliminar" href="#">Eliminar</a-->
                             </td>
                             <%
