@@ -56,7 +56,30 @@ public class SendMail extends org.semanticwb.process.model.base.SendMailBase
         }catch(Exception e)
         {
             log.error(e);
-            //throw new RuntimeException(e);
+            FlowNode node=instance.getFlowNodeType();
+
+            Iterator<GraphicalElement> it=node.listChilds();
+            while (it.hasNext())
+            {
+                GraphicalElement graphicalElement = it.next();
+                if(graphicalElement instanceof ErrorIntermediateCatchEvent)
+                {
+                    ErrorIntermediateCatchEvent event=(ErrorIntermediateCatchEvent)graphicalElement;
+                    //TODO:Validar excepciones
+                    //String c1=event.getActionCode();
+                    //String c2=((Event)instance.getFlowNodeType()).getActionCode();
+                    //if((c1!=null && c1.equals(c2)) || c1==null && c2==null)
+                    {
+                        FlowNodeInstance source=(FlowNodeInstance)instance;
+                        source.close(user, Instance.STATUS_ABORTED, Instance.ACTION_EVENT, false);
+
+                        FlowNodeInstance fn=((FlowNodeInstance)instance).getRelatedFlowNodeInstance(event);
+                        fn.setSourceInstance(instance);
+                        event.notifyEvent(fn, instance);
+                        return;
+                    }
+                }
+            }
         }
     }
 }
