@@ -353,7 +353,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                 <td class="tban-accion">
                                     <%
                                     if (instance.getStatus() == ProcessInstance.STATUS_PROCESSING) {
-                                        %><a class="acc-atender" target="_new" href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>">Atender</a><%
+                                        %><a class="acc-atender" href="<%=utask.getTaskWebPage().getUrl()%>?suri=<%=instance.getEncodedURI()%>">Atender</a><%
                                     }
                                     if (statusWp != null) {
                                         String acts = getStatusInstances(instance.getProcessInstance(), ProcessInstance.STATUS_PROCESSING);
@@ -362,7 +362,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                         }
                                         %>
                                         <!--a class="acc-mapa" target="_new" href="<%=statusWp.getUrl()%>?suri=<%=instance.getFlowNodeType().getProcess().getEncodedURI()%>&mode=view<%=acts%>&tp=<%=URLEncoder.encode(baseUrl+"/Bandeja")%>&rp=<%=URLEncoder.encode(baseUrl+"/Activos_de_Pocesos")%>">Ver mapa</a-->
-                                        <a class="acc-mapa" target="_new" href="<%=statusWp.getUrl()%>?suri=<%=instance.getFlowNodeType().getProcess().getEncodedURI()%>&mode=view<%=acts%>">Ver mapa</a>
+                                        <a class="acc-mapa" href="<%=statusWp.getUrl()%>?suri=<%=instance.getFlowNodeType().getProcess().getEncodedURI()%>&mode=view<%=acts%>">Ver mapa</a>
                                         <%
                                     }
                                     %>
