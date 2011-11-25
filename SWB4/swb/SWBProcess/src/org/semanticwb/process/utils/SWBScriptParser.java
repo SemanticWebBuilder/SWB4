@@ -35,7 +35,7 @@ public class SWBScriptParser
 
     private static Logger log = SWBUtils.getLogger(SWBScriptParser.class);
 
-    public static void setValue(Instance instance, User user, String variable, Object value) throws Exception
+    public static void setValue(Instance instance, User user, String variable, Object value)
     {
         if (!variable.startsWith("{"))
         {
@@ -48,126 +48,148 @@ public class SWBScriptParser
         setValue(values, variable, value);
     }
 
-    public static void setValue(Object context, LinkedList<String> keys, Object value) throws Exception
+    public static void setValue(Object context, LinkedList<String> keys, Object value)
     {
+        if (context == null)
+        {
+            return;
+        }
         String key = keys.removeFirst();
         if (key.isEmpty())
         {
-            if (context instanceof GenericObject)
-            {
-                SemanticObject semObject = ((GenericObject) context).getSemanticObject();
-                Iterator<SemanticProperty> props = semObject.listProperties();
-                while (props.hasNext())
-                {
-                    SemanticProperty prop = props.next();
-                    if (prop.getName().equalsIgnoreCase(key))
-                    {
-                        if (prop.isObjectProperty())
-                        {
-                            if (value instanceof SemanticObject)
-                            {
-                                semObject.setObjectProperty(prop, (SemanticObject) value);
-                            }
-                        }
-                        else
-                        {
-                            semObject.setProperty(prop, value.toString());
-                        }
-                    }
-                }
-            }
-            else if (context instanceof SemanticObject)
-            {
-                SemanticObject semObject = (SemanticObject) context;
-                Iterator<SemanticProperty> props = semObject.listProperties();
-                while (props.hasNext())
-                {
-                    SemanticProperty prop = props.next();
-                    if (prop.getName().equalsIgnoreCase(key))
-                    {
-                        if (prop.isObjectProperty())
-                        {
-                            if (value instanceof SemanticObject)
-                            {
-                                semObject.setObjectProperty(prop, (SemanticObject) value);
-                            }
-                        }
-                        else
-                        {
-                            semObject.setProperty(prop, value.toString());
-                        }
-                    }
-                }
-            }
-            else
+            SemanticProperty prop = getProperty(context, key);
+            if (prop == null)
             {
                 Method m = setMethod(context, key);
                 if (m != null)
                 {
                     Object[] args = new Object[0];
                     args[0] = value;
-                    m.invoke(context, args);
+                    try
+                    {
+                        m.invoke(context, args);
+                    }
+                    catch (Exception e)
+                    {
+                        log.error(e);
+                    }
+
+                }
+            }
+            else
+            {
+                if (context instanceof GenericObject)
+                {
+                    SemanticObject semObject = ((GenericObject) context).getSemanticObject();
+
+                    if (prop.isObjectProperty())
+                    {
+                        if (value instanceof SemanticObject)
+                        {
+                            semObject.setObjectProperty(prop, (SemanticObject) value);
+                        }
+                    }
+                    else
+                    {
+                        semObject.setProperty(prop, value.toString());
+                    }
+
+                }
+                else if (context instanceof SemanticObject)
+                {
+                    SemanticObject semObject = (SemanticObject) context;
+
+                    if (prop.isObjectProperty())
+                    {
+                        if (value instanceof SemanticObject)
+                        {
+                            semObject.setObjectProperty(prop, (SemanticObject) value);
+                        }
+                    }
+                    else
+                    {
+                        semObject.setProperty(prop, value.toString());
+                    }
 
                 }
             }
         }
         else
         {
-            if (context instanceof GenericObject)
+            SemanticProperty prop = getProperty(context, key);
+            if (prop == null)
             {
-                SemanticObject semObject = ((GenericObject) context).getSemanticObject();
-                Iterator<SemanticProperty> props = semObject.listProperties();
-                while (props.hasNext())
+                Method m = setMethod(context, key);
+                if (m != null)
                 {
-                    SemanticProperty prop = props.next();
-                    if (prop.getName().equalsIgnoreCase(key))
+                    Object[] args = new Object[0];
+                    try
                     {
-                        if (prop.isObjectProperty())
+                        Object newcontext = m.invoke(context, args);
+                        if (newcontext != null)
                         {
-                            SemanticObject newcontext = semObject.getObjectProperty(prop);
-                            if (newcontext != null)
-                            {
-                                setValue(newcontext, keys, value);
-                            }
+                            setValue(newcontext, keys, value);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        log.error(e);
+
+                    }
+
+                }
+            }
+            else
+            {
+                if (context instanceof GenericObject)
+                {
+                    SemanticObject semObject = ((GenericObject) context).getSemanticObject();
+
+                    if (prop.isObjectProperty())
+                    {
+                        SemanticObject newcontext = semObject.getObjectProperty(prop);
+                        if (newcontext != null)
+                        {
+                            setValue(newcontext, keys, value);
+                        }
+                    }
+                    else
+                    {
+                        if (prop.isBoolean())
+                        {
+                            semObject.setBooleanProperty(prop, Boolean.parseBoolean(value.toString()));
+                        }
+                        else if (prop.isDate() && value instanceof Date)
+                        {
+                            semObject.setDateProperty(prop, (Date) value);
+                        }
+                        else if (prop.isDateTime() && value instanceof Timestamp)
+                        {
+                            semObject.setDateTimeProperty(prop, (Timestamp) value);
                         }
                         else
                         {
-                            if (prop.isBoolean())
-                            {
-                                semObject.setBooleanProperty(prop, Boolean.parseBoolean(value.toString()));
-                            }
-                            else if (prop.isDate() && value instanceof Date)
-                            {
-                                semObject.setDateProperty(prop, (Date) value);
-                            }
-                            else if (prop.isDateTime() && value instanceof Timestamp)
-                            {
-                                semObject.setDateTimeProperty(prop, (Timestamp) value);
-                            }
-                            else
-                            {
-                                semObject.setProperty(prop, value.toString());
-                            }
+                            semObject.setProperty(prop, value.toString());
                         }
                     }
                 }
-            }
-            else if (context instanceof SemanticObject)
-            {
-                SemanticObject semObject = (SemanticObject) context;
-                Iterator<SemanticProperty> props = semObject.listProperties();
-                while (props.hasNext())
+                else if (context instanceof SemanticObject)
                 {
-                    SemanticProperty prop = props.next();
-                    if (prop.getName().equalsIgnoreCase(key))
+                    SemanticObject semObject = (SemanticObject) context;
+
+                    if (prop.isObjectProperty())
                     {
-                        if (prop.isObjectProperty())
+                        SemanticObject newcontext = semObject.getObjectProperty(prop);
+                        if (newcontext != null)
                         {
-                            SemanticObject newcontext = semObject.getObjectProperty(prop);
-                            if (newcontext != null)
-                            {
-                                setValue(newcontext, keys, value);
-                            }
+                            setValue(newcontext, keys, value);
+                        }
+                    }
+                    else
+                    {
+                        if (value == null)
+                        {
+                            semObject.setProperty(prop, null);
                         }
                         else
                         {
@@ -177,61 +199,37 @@ public class SWBScriptParser
                             }
                             else
                             {
-                                if (value == null)
+                                if (prop.isBoolean())
                                 {
-                                    semObject.setProperty(prop, null);
+                                    semObject.setBooleanProperty(prop, Boolean.parseBoolean(value.toString()));
+                                }
+                                else if (prop.isDate() && value instanceof Date)
+                                {
+                                    semObject.setDateProperty(prop, (Date) value);
+                                }
+                                else if (prop.isDateTime() && value instanceof Timestamp)
+                                {
+                                    semObject.setDateTimeProperty(prop, (Timestamp) value);
+                                }
+                                else if (prop.isDateTime() && value instanceof Date)
+                                {
+                                    Timestamp ovalue = new Timestamp(((Date) value).getTime());
+                                    semObject.setDateTimeProperty(prop, ovalue);
                                 }
                                 else
                                 {
-                                    if (prop.isBoolean())
-                                    {
-                                        semObject.setBooleanProperty(prop, Boolean.parseBoolean(value.toString()));
-                                    }
-                                    else if (prop.isDate() && value instanceof Date)
-                                    {
-                                        semObject.setDateProperty(prop, (Date) value);
-                                    }
-                                    else if (prop.isDateTime() && value instanceof Timestamp)
-                                    {
-                                        semObject.setDateTimeProperty(prop, (Timestamp) value);
-                                    }
-                                    else if (prop.isDateTime() && value instanceof Date)
-                                    {
-                                        Timestamp ovalue = new Timestamp(((Date) value).getTime());
-                                        semObject.setDateTimeProperty(prop, ovalue);
-                                    }
-                                    else
-                                    {
-                                        semObject.setProperty(prop, value.toString());
-                                    }
+                                    semObject.setProperty(prop, value.toString());
                                 }
                             }
-
                         }
                     }
                 }
             }
-            else
-            {
-                Method m = setMethod(context, key);
-                if (m != null)
-                {
-                    Object[] args = new Object[0];
-                    Object newcontext = m.invoke(context, args);
-                    if (newcontext != null)
-                    {
-                        setValue(newcontext, keys, value);
-                    }
 
-                }
-            }
         }
-
-
-
     }
 
-    public static void setValue(Map<String, Object> values, LinkedList<String> keys, Object value) throws Exception
+    public static void setValue(Map<String, Object> values, LinkedList<String> keys, Object value)
     {
         String key = keys.removeFirst();
         Object context = values.get(key);
@@ -241,7 +239,7 @@ public class SWBScriptParser
         }
     }
 
-    public static void setValue(Map<String, Object> values, String variable, Object value) throws Exception
+    public static void setValue(Map<String, Object> values, String variable, Object value)
     {
         String exp = "\\{\\w+(\\.\\w+)+\\}";
         Pattern p = Pattern.compile(exp);
@@ -269,12 +267,12 @@ public class SWBScriptParser
             }
             catch (Exception e)
             {
-                throw e;
+                log.error(e);
             }
         }
     }
 
-    public static String parser(Instance instance, User user, String script) throws Exception
+    public static String parser(Instance instance, User user, String script)
     {
         HashMap<String, Object> values = new HashMap<String, Object>();
         values.put("instance", instance);
@@ -309,7 +307,7 @@ public class SWBScriptParser
         }
     }
 
-    public static Object getValue(Instance instance, User user, String variable) throws Exception
+    public static Object getValue(Instance instance, User user, String variable)
     {
         HashMap<String, Object> values = new HashMap<String, Object>();
         values.put("instance", instance);
@@ -321,7 +319,7 @@ public class SWBScriptParser
         return getValue(values, variable);
     }
 
-    public static String evaluate(Map<String, Object> values, String tag) throws Exception
+    public static String evaluate(Map<String, Object> values, String tag)
     {
         if (tag.startsWith("{"))
         {
@@ -338,19 +336,19 @@ public class SWBScriptParser
         Object context = values.get(key);
         if (context != null)
         {
-            Object obj = evaluate(context, keys);
+            Object obj = evaluate(context, keys, "{" + tag + "}");
             if (obj != null)
             {
                 return obj.toString();
             }
             else
             {
-                throw new Exception("The path " + tag + " was not evaluated");
+                return "";
             }
         }
         else
         {
-            throw new Exception("The object " + key + " was not found");
+            return "{" + tag + "}";
         }
     }
 
@@ -382,9 +380,8 @@ public class SWBScriptParser
 
     }
 
-    public static Object evaluate(Object context, LinkedList<String> keys) throws Exception
+    public static SemanticProperty getProperty(Object context, String name)
     {
-        String key = keys.removeFirst();
         if (context instanceof GenericObject)
         {
             GenericObject go = (GenericObject) context;
@@ -393,89 +390,114 @@ public class SWBScriptParser
             while (props.hasNext())
             {
                 SemanticProperty prop = props.next();
-                if (prop.getName().equalsIgnoreCase(key))
+                if (prop.getName().equalsIgnoreCase(name))
                 {
-                    if (prop.isObjectProperty())
-                    {
-                        SemanticObject newcontext = semObject.getObjectProperty(prop);
-                        if (newcontext == null)
-                        {
-                            return newcontext;
-                        }
-                        if (keys.isEmpty())
-                        {
-                            return newcontext;
-                        }
-                        else
-                        {
-                            return evaluate(newcontext, keys);
-                        }
-                    }
-                    else
-                    {
-                        return semObject.getProperty(prop);
-                    }
+                    return prop;
                 }
             }
         }
         else if (context instanceof SemanticObject)
         {
-
             SemanticObject semObject = (SemanticObject) context;
             Iterator<SemanticProperty> props = semObject.listProperties();
             while (props.hasNext())
             {
                 SemanticProperty prop = props.next();
-                if (prop.getName().equalsIgnoreCase(key))
+                if (prop.getName().equalsIgnoreCase(name))
                 {
-                    if (prop.isObjectProperty())
-                    {
-                        SemanticObject newcontext = semObject.getObjectProperty(prop);
-                        if (newcontext == null)
-                        {
-                            return newcontext;
-                        }
-                        if (keys.isEmpty())
-                        {
-                            return newcontext;
-                        }
-                        else
-                        {
-                            return evaluate(newcontext, keys);
-                        }
-                    }
-                    else
-                    {
-                        return semObject.getProperty(prop);
-                    }
-                }
-            }
-        }
-        else
-        {
-            Method m = getMethod(context, key);
-            if (m != null)
-            {
-                Object[] args = new Object[0];
-                Object newcontext = m.invoke(context, args);
-                if (newcontext == null)
-                {
-                    return null;
-                }
-                if (keys.isEmpty())
-                {
-                    return newcontext;
-                }
-                else
-                {
-                    return evaluate(newcontext, keys);
+                    return prop;
                 }
             }
         }
         return null;
     }
 
-    public static String parse(Map<String, Object> values, String text) throws Exception
+    public static Object evaluate(Object context, LinkedList<String> keys, String tag)
+    {
+        if (context == null)
+        {
+            return "";
+        }
+        String key = keys.removeFirst();
+        SemanticProperty prop = getProperty(context, key);
+        if (prop == null)
+        {
+            Method m = getMethod(context, key);
+            if (m != null)
+            {
+                Object[] args = new Object[0];
+                try
+                {
+                    Object newcontext = m.invoke(context, args);
+                    if (keys.isEmpty())
+                    {
+                        return newcontext;
+                    }
+                    else
+                    {
+                        return evaluate(newcontext, keys, tag);
+                    }
+                }
+                catch (Exception e)
+                {
+                    return "";
+                }
+            }
+        }
+        else
+        {
+            if (context instanceof GenericObject)
+            {
+                GenericObject go = (GenericObject) context;
+                SemanticObject semObject = go.getSemanticObject();
+
+                if (prop.isObjectProperty())
+                {
+                    SemanticObject newcontext = semObject.getObjectProperty(prop);
+                    if (keys.isEmpty())
+                    {
+                        return newcontext;
+                    }
+                    else
+                    {
+                        return evaluate(newcontext, keys, tag);
+                    }
+                }
+                else
+                {
+                    return semObject.getProperty(prop);
+                }
+            }
+            else if (context instanceof SemanticObject)
+            {
+
+                SemanticObject semObject = (SemanticObject) context;
+
+                if (prop.isObjectProperty())
+                {
+                    SemanticObject newcontext = semObject.getObjectProperty(prop);
+                    if (keys.isEmpty())
+                    {
+                        return newcontext;
+                    }
+                    else
+                    {
+                        return evaluate(newcontext, keys, tag);
+                    }
+                }
+                else
+                {
+                    return semObject.getProperty(prop);
+                }
+
+            }
+        }
+
+
+        return tag;
+    }
+
+    public static String parse(Map<String, Object> values, String text)
     {
         StringBuilder sb = new StringBuilder();
         String exp = "\\{\\w+(\\.\\w+)+\\}";
@@ -487,31 +509,25 @@ public class SWBScriptParser
             int end = matcher.end();
             sb.append(text.substring(0, start));
             String tag = text.substring(start, end);
-            try
+            tag = evaluate(values, tag);
+            sb.append(tag);
+            if (end < text.length())
             {
-                tag = evaluate(values, tag);
-                sb.append(tag);
-                if (end < text.length())
-                {
-                    text = text.substring(end);
-                    matcher = p.matcher(text);
+                text = text.substring(end);
+                matcher = p.matcher(text);
 
-                }
-                else
-                {
-                    text = "";
-                }
             }
-            catch (Exception e)
+            else
             {
-                throw e;
+                text = "";
             }
+
         }
         sb.append(text);
         return sb.toString();
     }
 
-    public static Object evaluateGetValue(Object context, LinkedList<String> keys) throws Exception
+    public static Object evaluateGetValue(Object context, LinkedList<String> keys)
     {
         String key = keys.removeFirst();
         if (context instanceof GenericObject)
@@ -584,25 +600,34 @@ public class SWBScriptParser
             if (m != null)
             {
                 Object[] args = new Object[0];
-                Object newcontext = m.invoke(context, args);
-                if (newcontext == null)
+                try
                 {
+                    Object newcontext = m.invoke(context, args);
+                    if (newcontext == null)
+                    {
+                        return null;
+                    }
+                    if (keys.isEmpty())
+                    {
+                        return newcontext;
+                    }
+                    else
+                    {
+                        return evaluateGetValue(newcontext, keys);
+                    }
+                }
+                catch (Exception e)
+                {
+                    log.error(e);
                     return null;
                 }
-                if (keys.isEmpty())
-                {
-                    return newcontext;
-                }
-                else
-                {
-                    return evaluateGetValue(newcontext, keys);
-                }
+
             }
         }
         return null;
     }
 
-    public static Object evaluateGetValue(Map<String, Object> values, String variable) throws Exception
+    public static Object evaluateGetValue(Map<String, Object> values, String variable)
     {
         String[] path = variable.split("\\.");
         LinkedList<String> keys = new LinkedList<String>();
@@ -621,7 +646,7 @@ public class SWBScriptParser
 
     }
 
-    public static Object getValue(Map<String, Object> values, String variable) throws Exception
+    public static Object getValue(Map<String, Object> values, String variable)
     {
 
         String exp = "\\{\\w+(\\.\\w+)+\\}";
@@ -639,7 +664,8 @@ public class SWBScriptParser
             }
             catch (Exception e)
             {
-                throw e;
+                log.error(e);
+                return null;
             }
         }
 
