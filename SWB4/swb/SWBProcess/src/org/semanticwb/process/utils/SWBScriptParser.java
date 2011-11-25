@@ -386,7 +386,7 @@ public class SWBScriptParser
         {
             GenericObject go = (GenericObject) context;
             SemanticObject semObject = go.getSemanticObject();
-            Iterator<SemanticProperty> props = semObject.listProperties();
+            Iterator<SemanticProperty> props = semObject.getSemanticClass().listProperties();
             while (props.hasNext())
             {
                 SemanticProperty prop = props.next();
@@ -399,7 +399,7 @@ public class SWBScriptParser
         else if (context instanceof SemanticObject)
         {
             SemanticObject semObject = (SemanticObject) context;
-            Iterator<SemanticProperty> props = semObject.listProperties();
+            Iterator<SemanticProperty> props = semObject.getSemanticClass().listProperties();
             while (props.hasNext())
             {
                 SemanticProperty prop = props.next();
@@ -545,7 +545,7 @@ public class SWBScriptParser
         if (context instanceof GenericObject)
         {
             SemanticObject semObject = ((GenericObject) context).getSemanticObject();
-            Iterator<SemanticProperty> props = semObject.listProperties();
+            Iterator<SemanticProperty> props = semObject.getSemanticClass().listProperties();
             while (props.hasNext())
             {
                 SemanticProperty prop = props.next();
@@ -577,7 +577,7 @@ public class SWBScriptParser
         else if (context instanceof SemanticObject)
         {
             SemanticObject semObject = (SemanticObject) context;
-            Iterator<SemanticProperty> props = semObject.listProperties();
+            Iterator<SemanticProperty> props = semObject.getSemanticClass().listProperties();
             while (props.hasNext())
             {
                 SemanticProperty prop = props.next();
