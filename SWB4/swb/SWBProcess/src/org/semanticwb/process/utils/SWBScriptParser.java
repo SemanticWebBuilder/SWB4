@@ -355,6 +355,8 @@ public class SWBScriptParser
     private static Method getMethod(Object obj, String name)
     {
         name = "get" + name;
+        System.out.println("Buscando método "+ name +" en la clase "+obj.getClass().getCanonicalName());
+
         for (Method m : obj.getClass().getMethods())
         {
             if (m.getName().equalsIgnoreCase(name) && Modifier.isPublic(m.getModifiers()) && m.getParameterTypes().length == 0)
