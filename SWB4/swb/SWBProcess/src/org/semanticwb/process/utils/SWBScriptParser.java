@@ -419,11 +419,11 @@ public class SWBScriptParser
             return "";
         }
         String key = keys.removeFirst();
-        System.out.println("Buscando propiedad "+key);
+        
         SemanticProperty prop = getProperty(context, key);
         if (prop == null)
         {
-            System.out.println("Buscando metodo "+key);
+            
             Method m = getMethod(context, key);
             if (m != null)
             {
@@ -444,11 +444,7 @@ public class SWBScriptParser
                 {
                     return "";
                 }
-            }
-            else
-            {
-                System.out.println("metodo no encontrado "+key);
-            }
+            }            
         }
         else
         {
@@ -460,20 +456,20 @@ public class SWBScriptParser
                 if (prop.isObjectProperty())
                 {
                     SemanticObject newcontext = semObject.getObjectProperty(prop);
-                    System.out.println("propiedad encontrada "+key);
+                    
                     if (keys.isEmpty())
                     {
                         return newcontext;
                     }
                     else
                     {
-                        System.out.println("Buscando más propieddades");
+                        
                         return evaluate(newcontext, keys, tag);
                     }
                 }
                 else
                 {
-                    System.out.println("propiedad encontrada "+key);
+                    
                     return semObject.getProperty(prop);
                 }
             }
@@ -485,20 +481,20 @@ public class SWBScriptParser
                 if (prop.isObjectProperty())
                 {
                     SemanticObject newcontext = semObject.getObjectProperty(prop);
-                    System.out.println("propiedad encontrada "+key);
+                    
                     if (keys.isEmpty())
                     {
                         return newcontext;
                     }
                     else
                     {
-                        System.out.println("Buscando más propieddades");
+                        
                         return evaluate(newcontext, keys, tag);
                     }
                 }
                 else
                 {
-                    System.out.println("propiedad encontrada "+key);
+                    
                     return semObject.getProperty(prop);
                 }
 
