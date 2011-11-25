@@ -432,7 +432,10 @@ public class SWBScriptParser
         SemanticProperty prop = getProperty(context, key);
         if (prop == null)
         {
-
+            if(context instanceof SemanticObject)
+            {
+                context=((SemanticObject)context).getGenericInstance();
+            }
             Method m = getMethod(context, key);
             if (m != null)
             {
@@ -613,6 +616,10 @@ public class SWBScriptParser
         }
         else
         {
+            if(context instanceof SemanticObject)
+            {
+                context=((SemanticObject)context).getGenericInstance();
+            }
             Method m = getMethod(context, key);
             if (m != null)
             {
