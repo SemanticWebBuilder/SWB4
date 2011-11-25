@@ -360,7 +360,7 @@ public class SWBScriptParser
             context = ((SemanticObject) context).createGenericInstance();
         }
 
-        System.out.println("Buscando método " + name + " en la clase " + context.getClass().getCanonicalName());
+        
 
         for (Method m : context.getClass().getMethods())
         {
