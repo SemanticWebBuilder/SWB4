@@ -352,18 +352,25 @@ public class SWBScriptParser
         }
     }
 
-    private static Method getMethod(Object obj, String name)
+    private static Method getMethod(Object context, String name)
     {
         name = "get" + name;
-        System.out.println("Buscando método "+ name +" en la clase "+obj.getClass().getCanonicalName());
+        if (context instanceof SemanticObject)
+        {
+            context = ((SemanticObject) context).createGenericInstance();
+        }
 
-        for (Method m : obj.getClass().getMethods())
+        System.out.println("Buscando método " + name + " en la clase " + context.getClass().getCanonicalName());
+
+        for (Method m : context.getClass().getMethods())
         {
             if (m.getName().equalsIgnoreCase(name) && Modifier.isPublic(m.getModifiers()) && m.getParameterTypes().length == 0)
             {
                 return m;
             }
         }
+
+
         return null;
 
     }
@@ -421,11 +428,11 @@ public class SWBScriptParser
             return "";
         }
         String key = keys.removeFirst();
-        
+
         SemanticProperty prop = getProperty(context, key);
         if (prop == null)
         {
-            
+
             Method m = getMethod(context, key);
             if (m != null)
             {
@@ -446,7 +453,7 @@ public class SWBScriptParser
                 {
                     return "";
                 }
-            }            
+            }
         }
         else
         {
@@ -458,20 +465,20 @@ public class SWBScriptParser
                 if (prop.isObjectProperty())
                 {
                     SemanticObject newcontext = semObject.getObjectProperty(prop);
-                    
+
                     if (keys.isEmpty())
                     {
                         return newcontext;
                     }
                     else
                     {
-                        
+
                         return evaluate(newcontext, keys, tag);
                     }
                 }
                 else
                 {
-                    
+
                     return semObject.getProperty(prop);
                 }
             }
@@ -483,20 +490,20 @@ public class SWBScriptParser
                 if (prop.isObjectProperty())
                 {
                     SemanticObject newcontext = semObject.getObjectProperty(prop);
-                    
+
                     if (keys.isEmpty())
                     {
                         return newcontext;
                     }
                     else
                     {
-                        
+
                         return evaluate(newcontext, keys, tag);
                     }
                 }
                 else
                 {
-                    
+
                     return semObject.getProperty(prop);
                 }
 
