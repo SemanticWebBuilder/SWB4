@@ -697,17 +697,17 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             ArrayList list = new ArrayList(hmDetailOrder.keySet());
             Collections.sort(list);
 
-            Iterator<SemanticProperty> itprop = hmProps.values().iterator();
-            while (itprop.hasNext()) {
-                SemanticProperty semProp = itprop.next();
-                fmgr.addProperty(semProp);
-            }
-
-            Iterator<String> itdis = list.iterator();
-            while (itdis.hasNext()) {
-                String key = itdis.next();
-                fmgr.addProperty(hmDetailOrder.get(key));
-            }
+//            Iterator<SemanticProperty> itprop = hmProps.values().iterator();
+//            while (itprop.hasNext()) {
+//                SemanticProperty semProp = itprop.next();
+//                fmgr.addProperty(semProp);
+//            }
+//
+//            Iterator<String> itdis = list.iterator();
+//            while (itdis.hasNext()) {
+//                String key = itdis.next();
+//                fmgr.addProperty(hmDetailOrder.get(key));
+//            }
             urlPA.setAction("new");
         } else if (act != null && act.equals("edit")) {
             fmgr = new SWBFormMgr(obj, null, SWBFormMgr.MODE_EDIT);
@@ -769,7 +769,76 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
 
         out.println(SWBForms.DOJO_REQUIRED);
         if (act != null && act.equals("new")) {
-            out.println(fmgr.renderForm(request));
+            StringBuffer sbForm = new StringBuffer("");
+            sbForm.append("\n<form dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"" + urlPA + "\"  method=\"post\"> ");
+            sbForm.append("\n<input type=\"hidden\" name=\"suri\" value=\"" + id + "\"/>");
+            sbForm.append("\n<input type=\"hidden\" name=\"scls\" value=\"" + cid + "\"/>");
+            sbForm.append("\n<input type=\"hidden\" name=\"smode\" value=\"edit\"/>");
+            //sbForm.append("\n<input type=\"hidden\" name=\"suri\" value=\"User\"/>");
+            sbForm.append("\n<input type=\"hidden\" name=\"sval\" value=\"" + sval + "\"/>");
+            sbForm.append("\n<input type=\"hidden\" name=\"act\" value=\"update\"/>");
+            sbForm.append("\n<input type=\"hidden\" name=\"ract\" value=\"" + act + "\"/>");
+            sbForm.append("\n<input type=\"hidden\" name=\"clsuri\" value=\"" + cid + "\"/>");
+            sbForm.append("\n<fieldset><legend>Agregar " + getCatalogClass().transformToSemanticClass().getName() + "</legend><table>");
+
+            // Propiedades requeridas con su formelement de defecto y modo de creación
+            Iterator<SemanticProperty> itprop = hmProps.values().iterator();
+            while (itprop.hasNext()) {
+                SemanticProperty semProp = itprop.next();
+                FormElement fe = fmgr.getFormElement(semProp);
+                fmgr.renderProp(request, sbForm, semProp, fe, SWBFormMgr.MODE_CREATE);
+                fmgr.addProperty(semProp);
+            }
+            
+            ArrayList list = new ArrayList(hmDetailOrder.keySet());
+            Collections.sort(list);
+            
+            //Agregando propiedades configuradas para mostrar en creación
+            Iterator<String> itdis = list.iterator();
+            while (itdis.hasNext()) {
+                String key = itdis.next();
+                SemanticProperty sPro = hmDetailOrder.get(key);
+                String feMode = hmDetailFEMode.get(sPro);
+                String feuri = null;
+                String modo = null;
+                //System.out.println("feMode: " + feMode);
+                if (feMode != null) {
+                    StringTokenizer stoken = new StringTokenizer(feMode, "|");
+                    feuri = stoken.nextToken();
+                    modo = stoken.nextToken();
+
+                    GenericObject sofe = ont.getGenericObject(feuri);
+
+                    FormElement fe = (FormElement) sofe;
+                    if (null != fe && sPro != null) {
+                        try {
+                            fe.setModel(getCatalogModel().getSemanticModel());
+                            ((FormElementBase) fe).setFilterHTMLTags(fmgr.isFilterHTMLTags());
+
+                            fmgr.renderProp(request, sbForm, sPro, fe, modo);
+                        } catch (Exception e) {
+                            log.error("Error al procesat lapropiedad con el formelement seleccionado. ---- " + sPro.getName() + " ----- " + feuri);
+                        }
+
+                    } else if (sPro != null) {
+                        fe = fmgr.getFormElement(sPro);
+                        fmgr.renderProp(request, sbForm, sPro, fe, modo);
+                    }
+                }
+
+            }
+
+
+            sbForm.append("\n</table>");
+            sbForm.append("\n</fieldset>");
+            sbForm.append("\n<fieldset><span align=\"center\">");
+            sbForm.append("\n<button dojoType=\"dijit.form.Button\" type=\"submit\">Guardar</button>");
+            sbForm.append("\n<button dojoType=\"dijit.form.Button\" onclick=\"window.location = '" + urlback + "';return false;\">Cancelar</button>");
+            sbForm.append("\n</span></fieldset>");
+            sbForm.append("\n</form>");
+
+            out.println(sbForm.toString());
+            //out.println(fmgr.renderForm(request));
         } else if (act != null && act.equals("edit")) {
 
             StringBuffer sbForm = new StringBuffer("");
