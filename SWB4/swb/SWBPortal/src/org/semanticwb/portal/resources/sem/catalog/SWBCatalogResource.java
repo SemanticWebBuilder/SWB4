@@ -370,7 +370,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                 } else {
                     itso = cplist.iterator();
                 }
-                int ps = 20;
+                int ps = 10;
                 int l = cplist.size();
                 int p = 0;
                 if (page != null) {
@@ -697,17 +697,17 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             ArrayList list = new ArrayList(hmDetailOrder.keySet());
             Collections.sort(list);
 
-//            Iterator<SemanticProperty> itprop = hmProps.values().iterator();
-//            while (itprop.hasNext()) {
-//                SemanticProperty semProp = itprop.next();
-//                fmgr.addProperty(semProp);
-//            }
-//
-//            Iterator<String> itdis = list.iterator();
-//            while (itdis.hasNext()) {
-//                String key = itdis.next();
-//                fmgr.addProperty(hmDetailOrder.get(key));
-//            }
+            Iterator<SemanticProperty> itprop = hmProps.values().iterator();
+            while (itprop.hasNext()) {
+                SemanticProperty semProp = itprop.next();
+                fmgr.addProperty(semProp);
+            }
+
+            Iterator<String> itdis = list.iterator();
+            while (itdis.hasNext()) {
+                String key = itdis.next();
+                fmgr.addProperty(hmDetailOrder.get(key));
+            }
             urlPA.setAction("new");
         } else if (act != null && act.equals("edit")) {
             fmgr = new SWBFormMgr(obj, null, SWBFormMgr.MODE_EDIT);
@@ -785,9 +785,9 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             Iterator<SemanticProperty> itprop = hmProps.values().iterator();
             while (itprop.hasNext()) {
                 SemanticProperty semProp = itprop.next();
+                fmgr.addProperty(semProp);
                 FormElement fe = fmgr.getFormElement(semProp);
                 fmgr.renderProp(request, sbForm, semProp, fe, SWBFormMgr.MODE_CREATE);
-                fmgr.addProperty(semProp);
             }
             
             ArrayList list = new ArrayList(hmDetailOrder.keySet());
@@ -837,8 +837,8 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             sbForm.append("\n</span></fieldset>");
             sbForm.append("\n</form>");
 
-            out.println(sbForm.toString());
-            //out.println(fmgr.renderForm(request));
+            //out.println(sbForm.toString());
+            out.println(fmgr.renderForm(request));
         } else if (act != null && act.equals("edit")) {
 
             StringBuffer sbForm = new StringBuffer("");
@@ -2943,7 +2943,9 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
 
             } else if (semanticProperty != null) {
                 fe = fmgr.getFormElement(semanticProperty);
+                System.out.println("fe: "+(null==fe?"null":fe.getId()));
                 fmgr.renderProp(null, ret, semanticProperty, fe, feMode);
+
             }
         }
         return ret.toString();
