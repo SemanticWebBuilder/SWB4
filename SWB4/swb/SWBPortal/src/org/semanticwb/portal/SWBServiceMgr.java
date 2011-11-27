@@ -349,22 +349,28 @@ public class SWBServiceMgr implements SemanticObserver, SemanticTSObserver, SWBO
 //            }else 
             if(key.equals("rdf"))
             {
-                String uri=st.nextToken();
-                String puri=st.nextToken();
-                if(puri.equals("_"))puri=null;
-                String node=st.nextToken();
-                if(node.equals("_"))
+                try
                 {
-                    node=null;
-                }else
+                    String uri=st.nextToken();
+                    String puri=st.nextToken();
+                    if(puri.equals("_"))puri=null;
+                    String node=st.nextToken();
+                    if(node.equals("_"))
+                    {
+                        node=null;
+                    }else
+                    {
+                        node=node.replace("!", "|");
+                    }
+                    String action=st.nextToken();
+                    Node n=SWBTSUtil.string2Node(node,null);
+                    if(!sid.equals(instanceid))
+                    {
+                        SWBPlatform.getSemanticMgr().processExternalChange(uri, puri, n, action);
+                    }
+                }catch(Exception e)
                 {
-                    node=node.replace("!", "|");
-                }
-                String action=st.nextToken();
-                Node n=SWBTSUtil.string2Node(node,null);
-                if(!sid.equals(instanceid))
-                {
-                    SWBPlatform.getSemanticMgr().processExternalChange(uri, puri, n, action);
+                    log.error("Error processing:"+obj,e);
                 }
             }
         }               
