@@ -57,6 +57,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
     static final String FE_MODE_VIEW = "view";
     static final String FE_MODE_EDIT = "edit";
     static final String FE_DEFAULT = "generico";
+    
 
     public SWBCatalogResource() {
     }
