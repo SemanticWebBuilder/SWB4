@@ -10,6 +10,7 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBRuntimeException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.ImageResizer;
@@ -214,4 +215,19 @@ public class DojoImageUpload extends org.semanticwb.model.base.DojoImageUploadBa
         }
         return new UploadFileRequest(filtros, multiple, getFileMaxSize());
     }
+
+    @Override
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type, String mode, String lang)
+    {
+        String ret=super.renderElement(request, obj, prop, propName, type, mode, lang);
+        String img=obj.getProperty(prop);
+        if(img!=null)
+        {
+            ret=ret+"<br/><image src=\""+SWBPlatform.getContextPath()+"/work"+obj.getWorkPath()+"/thmb_iconoNombreArchivo_"+obj.getId()+"_"+img+"\">";
+        }
+        return ret;
+    }
+    
+    
+    
 }

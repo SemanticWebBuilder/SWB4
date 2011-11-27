@@ -333,9 +333,24 @@ public static Iterator sortSermanticObjects(Iterator it) {
                         d1 = ((Traceable)o1).getCreated();
                         d2 = ((Traceable)o2).getCreated();
                     }
-
-                    int ret = d1.getTime()>d2.getTime()? 1 : -1;
-                    return ret;
+                    
+                    if(d1==null && d2!=null)
+                    {
+                        return -1;
+                    }
+                    if(d1!=null && d2==null)
+                    {
+                        return 1;
+                    }
+                    if(d1==null && d2==null)
+                    {
+                        return -1;
+                    }
+                    else
+                    {                    
+                        int ret = d1.getTime()>d2.getTime()? 1 : -1;
+                        return ret;
+                    }
                 }
             });
         } else {
