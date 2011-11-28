@@ -871,7 +871,13 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                     feuri = stoken.nextToken();
                     modo = stoken.nextToken();
 
-                    GenericObject sofe = ont.getGenericObject(feuri);
+                    GenericObject sofe = null;
+                    
+                    //Juan esto esta mal llega generico o " "
+                    if(!FE_DEFAULT.equals(feuri) && !" ".equals(feuri))
+                    {
+                        sofe=ont.getGenericObject(feuri);
+                    }
 
                     FormElement fe = (FormElement) sofe;
                     if (null != fe && sPro != null) {
