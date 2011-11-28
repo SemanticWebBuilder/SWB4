@@ -379,11 +379,18 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                 %>
                                     <a class="acc-mapa" href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessType().getEncodedURI()%>&mode=view<%=acts%>">Ver mapa</a>
                                 <%
-                                } else {
-                                    
+                                }
+                                Role processAdmRole = instance.getProcessType().getAdministrationRole();
+                                if (processAdmRole != null) {
+                                    if (user.hasRole(processAdmRole)) {
+                                        SWBResourceURL delUrl = paramRequest.getActionUrl().setAction(paramRequest.Action_REMOVE);
+                                        delUrl.setParameter("pid", instance.getId());
+                                        %>
+                                        <a class="acc-eliminar" href="<%=delUrl%>" onclick ="if (!confirm('¿Seguro que desea eliminar la instancia del proceso con ID <%=instance.getId()%>?')) return false;">Eliminar</a>
+                                        <%
+                                    }
                                 }
                                 %>
-                                <!--a class="acc-eliminar" href="#">Eliminar</a-->
                             </td>
                             <%
                         }
