@@ -143,6 +143,12 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
                 log.error("UserTaskInboxResource",e);
             }
             setItemsPerPage(itemsPerPage);
+        } else if (action.equals(response.Action_REMOVE)) {
+            String pid = request.getParameter("pid");
+            if (pid != null && !pid.trim().equals("")) {
+                ProcessInstance instance = ProcessInstance.ClassMgr.getProcessInstance(pid, response.getWebPage().getWebSite());
+                instance.remove();
+            }
         } else {
             super.processAction(request, response);
         }
