@@ -68,7 +68,14 @@ public class BigdataGraph extends GraphBase implements RGraph
     protected ExtendedIterator<Triple> graphBaseFind(TripleMatch tm)
     {
         if(debug)System.out.println("graphBaseFind:"+tm);
-        return new BigdataIterator(this, sail.getDatabase().getStatements((Resource)SesameUtil.node2Value(tm.getMatchSubject()), (URI)SesameUtil.node2Value(tm.getMatchPredicate()), SesameUtil.node2Value(tm.getMatchObject())));
+        try
+        {
+            return new BigdataIterator(this, sail.getDatabase().getStatements((Resource)SesameUtil.node2Value(tm.getMatchSubject()), (URI)SesameUtil.node2Value(tm.getMatchPredicate()), SesameUtil.node2Value(tm.getMatchObject())));
+        }catch(RuntimeException e)
+        {
+            System.out.println(tm);
+            throw e;
+        }
 //        trans.begin();
 //        SailConnection con=trans.getConnection();
 //        try
