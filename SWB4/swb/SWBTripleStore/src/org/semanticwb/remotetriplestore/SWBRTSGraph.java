@@ -36,7 +36,12 @@ class SWBRTSGraph extends GraphBase{
     @Override
     protected ExtendedIterator<Triple> graphBaseFind(TripleMatch tm)
     {
-        //System.out.println("graphBaseFind:"+tm);
+//        if(tm.getMatchSubject()!=null && (tm.getMatchSubject().toString().equals(" ") ||
+//            tm.getMatchSubject().toString().equals("generico")))
+//        {
+//            System.out.println("graphBaseFind:"+tm);
+//            new Exception().printStackTrace();
+//        }
         return new SWBRTSIterator(this, tm);
         //throw new UnsupportedOperationException("Not supported yet.");
     }
