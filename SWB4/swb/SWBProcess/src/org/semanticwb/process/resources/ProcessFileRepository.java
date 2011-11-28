@@ -380,7 +380,7 @@ public class ProcessFileRepository extends GenericResource {
             out.println("</tbody>");
             out.println("<tfoot>");
             out.println("<tr>");
-            out.println("<td colspan=\"8\">");
+            out.println("<td colspan=\"9\">");
 
             if (luser >= 2) {
                 SWBResourceURL urlnew = paramRequest.getRenderUrl();
