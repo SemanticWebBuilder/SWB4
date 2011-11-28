@@ -7,6 +7,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.User;
+import org.semanticwb.process.utils.SWBScriptParser;
 
 
 public class StoreRepositoryFile extends org.semanticwb.process.model.base.StoreRepositoryFileBase 
@@ -69,7 +70,7 @@ public class StoreRepositoryFile extends org.semanticwb.process.model.base.Store
                 }
                 f.setRepositoryFile(file);
                 file.setRepositoryDirectory(this.getNodeDirectory());
-                file.setTitle(this.getNodeName());
+                file.setTitle(SWBScriptParser.parser(instance, user, this.getNodeName()));
                 file.setOwnerUserGroup(user.getUserGroup());
             }
             
@@ -106,7 +107,7 @@ public class StoreRepositoryFile extends org.semanticwb.process.model.base.Store
                 }
                 f.setRepositoryURL(rurl);
                 rurl.setRepositoryDirectory(this.getNodeDirectory());
-                rurl.setTitle(this.getNodeName());
+                rurl.setTitle(SWBScriptParser.parser(instance, user, this.getNodeName()));
                 rurl.setOwnerUserGroup(user.getUserGroup());
             }
             
