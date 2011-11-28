@@ -367,7 +367,8 @@ public class ProcessFileRepository extends GenericResource {
                     urlremove.setAction("removefile");
                     urlremove.setParameter("act", "remove");
                     urlremove.setParameter("fid", repositoryFile.getURI());
-                    out.println("<a href=\"" + urlremove + "\">");
+                    
+                    out.println("<a href=\"" + urlremove + "\" onclick=\"if (!confirm('" + paramRequest.getLocaleString("msgAlertConfirmRemoveFile") + " " + repositoryFile.getTitle() + "?')) return false;\">");
                     out.println("<img src=\"" + path + "delete.gif\" border=\"0\" alt=\"eliminar\"/>");
                     out.println("</a>");
                 }
