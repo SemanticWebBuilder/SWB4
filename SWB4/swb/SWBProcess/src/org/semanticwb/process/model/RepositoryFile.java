@@ -39,9 +39,9 @@ import org.semanticwb.process.utils.RepositoryFileParser;
 
 public class RepositoryFile extends org.semanticwb.process.model.base.RepositoryFileBase 
 {
-//    static {
-//        SWBPortal.getIndexMgr().getDefaultIndexer().registerParser(RepositoryFile.class, new RepositoryFileParser());
-//    }
+    static {
+        SWBPortal.getIndexMgr().getDefaultIndexer().registerParser(RepositoryFile.class, new RepositoryFileParser());
+    }
 
     private static Logger log=SWBUtils.getLogger(RepositoryFile.class);
 
