@@ -109,14 +109,14 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
                 workpath=workpath.substring(0,applicationpath.length());
                 workpath=SWBPortal.getContextPath()+workpath;
             }            
-            html.append("<div id=\""+ ExcelResource.class.getName() +"\">");
+            html.append("<div id=\"").append(ExcelResource.class.getName()).append("\">");
             try
             {
-                html.append("<iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"" + workpath + "\"></iframe>");
+                html.append("<iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"").append(workpath).append("\"></iframe>");
             }
             catch (Exception e)
             {
-                html.append("<iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"" + workpath + "\">This navigator does not support iframe</iframe>");
+                html.append("<iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"").append(workpath).append("\">This navigator does not support iframe</iframe>");
             }
             html.append("</div>");
         }
