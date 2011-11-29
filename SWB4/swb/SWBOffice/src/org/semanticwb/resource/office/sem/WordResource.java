@@ -128,6 +128,10 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
         {
             name = java.net.URLDecoder.decode(name, "utf-8");
             file=new File(file.getParent()+"/"+name);
+
+           
+            
+
             FileInputStream in = new FileInputStream(file);
             byte[] buffer = new byte[2048];
             int read = in.read(buffer);
