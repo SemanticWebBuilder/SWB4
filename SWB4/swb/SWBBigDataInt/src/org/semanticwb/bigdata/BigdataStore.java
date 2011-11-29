@@ -13,8 +13,10 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.rdf.AbstractStore;
 import com.hp.hpl.jena.query.Dataset;
+import com.hp.hpl.jena.rdf.model.impl.ModelCom;
 import java.util.ArrayList;
 import java.util.HashMap;
+import org.semanticwb.rdf.GraphCached;
 
 /**
  *
@@ -45,9 +47,18 @@ public class BigdataStore implements AbstractStore
 
     public Model loadModel(String name)
     {
-        //System.out.println("loadModel:"+name);        
-        Model model=maker.createModel(name, false);
-        models.put(name, model);
+        //System.out.println("loadModel:"+name);    
+        Model model=models.get(name);
+        if(model==null)
+        {        
+            model=maker.createModel(name, false);
+            if(SWBPlatform.getSemanticMgr().isTripleFullCache())
+            {
+                log.event("Loading cache of model:"+name);
+                model=new ModelCom(new GraphCached((model.getGraph())));
+            }
+            models.put(name, model);
+        }
         return model;
     }
 
@@ -70,12 +81,7 @@ public class BigdataStore implements AbstractStore
     public Model getModel(String name) 
     {
         //System.out.println("getModel:"+name);
-        Model model=models.get(name);
-        if(model==null)
-        {
-            model=maker.getModel(name, false);
-            models.put(name, model);
-        }        
+        Model model=models.get(name);     
         return model;
     }    
 }
