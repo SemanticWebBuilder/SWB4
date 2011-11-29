@@ -14,6 +14,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.rdf.AbstractStore;
+import org.semanticwb.rdf.GraphCached;
 import org.semanticwb.remotetriplestore.protocol.Command;
 import org.semanticwb.triplestore.SWBTSUtil;
 
@@ -31,6 +32,13 @@ public class SWBRTSConn implements Runnable
 
     SWBRTSConn(Socket socket)
     {
+        try
+        {
+            socket.setTcpNoDelay(true);
+        }catch(Exception e)
+        {
+            log.error(e);
+        }
         System.out.println("Handler...");
         this.socket = socket;
     }
@@ -103,8 +111,10 @@ public class SWBRTSConn implements Runnable
     
     public void processCommand(List<String> list) throws IOException
     {
+        //long time=System.currentTimeMillis();
         List<String> ret=action(list);        
         writeCommands(ret);
+        //System.out.println("process:"+(System.currentTimeMillis()-time));
     }        
     
     private List<String> action(List<String> params)
@@ -154,7 +164,7 @@ public class SWBRTSConn implements Runnable
                 subj = params.get(2);
                 prop = params.get(3);
                 obj = params.get(4);                    
-                arr.addAll(getFind(name, subj, prop, obj));
+                arr=getFind(name, subj, prop, obj);
             }else if(cmd.equals(Command.GET_NS_PREFIX_MAP))
             {
                 name = params.get(1);
@@ -243,14 +253,17 @@ public class SWBRTSConn implements Runnable
         Model model=store.getModel(name);
 
         //System.out.println("getFind:"+subj+":"+prop+":"+obj);
+        //long time=System.currentTimeMillis();
         
         Iterator<Triple> it=model.getGraph().find(SWBTSUtil.string2Node(subj,null), SWBTSUtil.string2Node(prop,null), SWBTSUtil.string2Node(obj,null));
+        //System.out.println("time1:"+(System.currentTimeMillis()-time));
         while (it.hasNext()) {
             Triple triple = it.next();
             list.add(SWBTSUtil.node2String(triple.getSubject()));
             list.add(SWBTSUtil.node2String(triple.getPredicate()));
             list.add(SWBTSUtil.node2String(triple.getObject()));
         }
+        //System.out.println("time2:"+(System.currentTimeMillis()-time));
         return list;
     }
     
@@ -292,7 +305,15 @@ public class SWBRTSConn implements Runnable
         if(sid!=null)id=Long.parseLong(sid);
         AbstractStore store = SWBPlatform.getSemanticMgr().getSWBStore();
         Model model=store.getModel(name);
-        ((RGraph)model.getGraph()).performAdd(new Triple(SWBTSUtil.string2Node(subj,null), SWBTSUtil.string2Node(prop,null), SWBTSUtil.string2Node(obj,null)),id);
+        RGraph g;
+        if(model.getGraph() instanceof GraphCached)
+        {
+            g=(RGraph)((GraphCached)model.getGraph()).getGraphBase();
+        }else
+        {
+            g=((RGraph)model.getGraph());
+        }
+        g.performAdd(new Triple(SWBTSUtil.string2Node(subj,null), SWBTSUtil.string2Node(prop,null), SWBTSUtil.string2Node(obj,null)),id);
     }
 
     private void doRemove(String name, String subj, String prop, String obj, String sid)
@@ -301,6 +322,14 @@ public class SWBRTSConn implements Runnable
         if(sid!=null)id=Long.parseLong(sid);
         AbstractStore store = SWBPlatform.getSemanticMgr().getSWBStore();
         Model model=store.getModel(name);
-        ((RGraph)model.getGraph()).performDelete(new Triple(SWBTSUtil.string2Node(subj,null), SWBTSUtil.string2Node(prop,null), SWBTSUtil.string2Node(obj,null)),id);
+        RGraph g;
+        if(model.getGraph() instanceof GraphCached)
+        {
+            g=(RGraph)((GraphCached)model.getGraph()).getGraphBase();
+        }else
+        {
+            g=((RGraph)model.getGraph());
+        }
+        g.performDelete(new Triple(SWBTSUtil.string2Node(subj,null), SWBTSUtil.string2Node(prop,null), SWBTSUtil.string2Node(obj,null)),id);
     }
 }

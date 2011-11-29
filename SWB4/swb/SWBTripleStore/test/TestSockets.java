@@ -1,9 +1,13 @@
-
+ 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -38,12 +42,15 @@ public class TestSockets
 class SWBSocketServer
 {
 
-    private final ServerSocket serverSocket;
+    //private final ServerSocket serverSocket;
+    private final ServerSocketChannel serverSocket;
     private final ExecutorService pool;
 
     public SWBSocketServer(int port, int poolSize) throws IOException
     {
-        serverSocket = new ServerSocket(port);
+        //serverSocket = new ServerSocket(port);        
+        serverSocket = ServerSocketChannel.open();
+        serverSocket.socket().bind(new InetSocketAddress("localhost", port));
         pool = Executors.newCachedThreadPool();
         //pool = Executors.newFixedThreadPool(poolSize);
     }
@@ -65,13 +72,19 @@ class SWBSocketServer
 
 class SWBHandler implements Runnable
 {
+    private final static int BLOCK=4096;
 
-    private final Socket socket;
-    private DataInputStream in;
-    private DataOutputStream out;
+    private final SocketChannel socket;
+    private ByteBuffer bb = ByteBuffer.allocateDirect(BLOCK);
+    //private DataInputStream in;
+    //private DataOutputStream out;
 
-    SWBHandler(Socket socket)
+    SWBHandler(SocketChannel socket)
     {
+        try
+        {
+            socket.socket().setTcpNoDelay(true);
+        }catch(Exception e){e.printStackTrace();}
         System.out.println("Handler...");
         this.socket = socket;
     }
@@ -79,14 +92,14 @@ class SWBHandler implements Runnable
     public void run()
     {
         System.out.println("Connection inited...");
-        try
-        {
-            this.in=new DataInputStream(socket.getInputStream());
-            this.out=new DataOutputStream(socket.getOutputStream());
-        }catch(Exception e)
-        {
-            e.printStackTrace();
-        }        
+//        try
+//        {
+//            this.in=new DataInputStream(socket.getInputStream());
+//            this.out=new DataOutputStream(socket.getOutputStream());
+//        }catch(Exception e)
+//        {
+//            e.printStackTrace();
+//        }        
         
         try
         {
@@ -105,7 +118,7 @@ class SWBHandler implements Runnable
         //Close Connection
         try
         {
-            out.close();
+//            out.close();
             socket.close();
         }catch(Exception e)
         {
@@ -117,22 +130,22 @@ class SWBHandler implements Runnable
     public List<String> readCommands() throws IOException
     {
         ArrayList arr=new ArrayList();
-        int n=Integer.parseInt(in.readUTF());
+        int n=Integer.parseInt(readUTF());
         for(int x=0;x<n;x++)
         {
-            arr.add(in.readUTF());
+            arr.add(readUTF());
         }
         return arr;           
     }
     
     public void writeCommands(List<String> list) throws IOException
     {
-        out.writeUTF(String.valueOf(list.size()));
+        writeUTF(String.valueOf(list.size()));
         Iterator<String> it=list.iterator();
         while (it.hasNext())
         {
             String string = it.next();
-            out.writeUTF(string);
+            writeUTF(string);
         }
     }   
  
@@ -142,5 +155,41 @@ class SWBHandler implements Runnable
         list.set(0, list.get(0)+"2");
         writeCommands(list);
     }    
+    
+    private String readUTF() throws IOException
+    {
+        String ret="";
+        bb.clear();
+        boolean re=false;
+        while(!re)
+        {
+            int r=r=socket.read(bb);
+            if(r>-1)
+            {
+                System.out.println("r:"+r+" "+bb);
+                bb.flip();
+                byte arr[]=new byte[r];
+                for(int x=0;x<r;x++)
+                {
+                    arr[x]=bb.get();
+                }
+                ret=new String(arr);
+                System.out.println("read:"+ret);
+                re=true;
+            }
+        }
+        return ret;
+    }
+    
+    private void writeUTF(String txt) throws IOException
+    {
+        System.out.println("write:"+txt);
+        bb.position(0);
+        byte b[]=txt.getBytes();
+        bb.put(b);
+        //bb.limit(b.length);
+        bb.flip();
+        socket.write(bb);
+    } 
         
 }

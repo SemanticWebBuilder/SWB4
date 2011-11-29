@@ -31,17 +31,23 @@ class SWBRTSUtil
     
     public List<String> call() throws Exception
     {
+        //long time=System.currentTimeMillis();
+        //System.out.println("Call");
         ArrayList<String> arr=new ArrayList();
         for(int x=0;x<params.length;x++)
         {
             arr.add(params[x]);
+            //System.out.println("  param:"+params[x]);
         }        
         SWBSocketClient client=(SWBSocketClient)pool.borrowObject();                
+        //System.out.println(" client:"+client);
         client.writeCommands(arr);
+        //System.out.println("  write:"+(System.currentTimeMillis()-time));
+        //time=System.currentTimeMillis();
         //if(arr.size()>2 && arr.get(1).equals("demo"))new Exception().printStackTrace();
         List ret=client.readCommands();
         pool.returnObject(client);
-                
+        //System.out.println("  read:"+(System.currentTimeMillis()-time));
         return ret;
     }
 
@@ -61,6 +67,7 @@ class SWBSocketClient
     public SWBSocketClient(InetAddress net,int port) throws IOException
     {
         socket=new Socket(net, port);
+        socket.setTcpNoDelay(true);
         this.in=new DataInputStream(socket.getInputStream());
         this.out=new DataOutputStream(socket.getOutputStream());
     }
