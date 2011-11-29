@@ -35,10 +35,14 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.VersionInfo;
-
+import org.semanticwb.process.utils.RepositoryFileParser;
 
 public class RepositoryFile extends org.semanticwb.process.model.base.RepositoryFileBase 
 {
+//    static {
+//        SWBPortal.getIndexMgr().getDefaultIndexer().registerParser(RepositoryFile.class, new RepositoryFileParser());
+//    }
+
     private static Logger log=SWBUtils.getLogger(RepositoryFile.class);
 
     public RepositoryFile(org.semanticwb.platform.SemanticObject base)
