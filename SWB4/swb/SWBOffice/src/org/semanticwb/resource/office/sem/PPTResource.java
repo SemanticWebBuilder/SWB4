@@ -100,12 +100,12 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
         }
         try
         {
-            html.append("<div id=\""+  PPTResource.class.getName() +"\"><iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"" + workpath + "\"></iframe><br>");
+            html.append("<div id=\"").append(PPTResource.class.getName()).append("\"><iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"").append(workpath).append("\"></iframe><br>");
             
         }
         catch (Exception e)
         {
-            html.append("<iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"" + workpath + "\">This navigator does not support iframe</iframe></div>");
+            html.append("<iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"").append(workpath).append("\">This navigator does not support iframe</iframe></div>");
         }
         return html.toString();
     }
