@@ -134,7 +134,7 @@ public class RepositoryFileParser extends GenericParser {
         RepositoryFile rf = (RepositoryFile)gen;
         RepositoryDirectory rd = rf.getRepositoryDirectory();
         if (rd != null) {
-            ret = rd.getUrl();
+            ret = rd.getUrl() + "?act=detail&fid=" + rf.getEncodedURI();
         }
         return ret;
     }
@@ -166,18 +166,18 @@ public class RepositoryFileParser extends GenericParser {
         return ret;
     }
 
-    @Override
-    public String getIndexData(Searchable gen) {
-        String ret = "";
-        RepositoryFile rf = (RepositoryFile) gen;
-        User creator = rf.getCreator();
-        if (creator != null) {
-            ret = creator.getFullName();
-        }
-        creator = rf.getActualVersion().getCreator();
-        if (creator != null) {
-            ret += " " + creator.getFullName();
-        }
-        return ret;
-    }
+//    @Override
+//    public String getIndexData(Searchable gen) {
+//        String ret = "";
+//        RepositoryFile rf = (RepositoryFile) gen;
+//        User creator = rf.getCreator();
+//        if (creator != null) {
+//            ret = creator.getFullName();
+//        }
+//        creator = rf.getActualVersion().getCreator();
+//        if (creator != null) {
+//            ret += " " + creator.getFullName();
+//        }
+//        return ret;
+//    }
 }
