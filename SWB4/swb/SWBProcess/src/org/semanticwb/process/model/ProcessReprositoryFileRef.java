@@ -90,7 +90,6 @@ public class ProcessReprositoryFileRef extends org.semanticwb.process.model.base
                                         
                     //http://localhost:8080/es/process/GP-Direccion/_rid/162/_mto/3/_mod/getFile?fid=22&verNum=2
                     
-                    
                     ret.append("<span>");
 
                     if (value != null) {
