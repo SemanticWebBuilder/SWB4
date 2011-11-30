@@ -630,6 +630,7 @@ public class SemanticMgr implements SWBInstanceObject
         Model model = loadRDFDBModel(name);
         
         if (cached) {
+            log.info("Loading Model Cache:"+name);
             //System.out.println("Cache:"+name);
             model = new ModelCom(new GraphCached((model.getGraph())));
         }
@@ -1101,6 +1102,11 @@ public class SemanticMgr implements SWBInstanceObject
 
     public AbstractStore getSWBStore(){
         return store;
+    }
+    
+    public boolean isTripleFullCache()
+    {
+        return tripleCache;
     }
 
 }

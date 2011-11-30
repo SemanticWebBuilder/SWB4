@@ -169,6 +169,11 @@ public class GraphCached extends GraphMemFaster implements GraphListener
     public PrefixMapping getPrefixMapping() {
         return base.getPrefixMapping();
     }
+    
+    public Graph getGraphBase()
+    {
+        return base;
+    }
 
 
 //    static long c=0;
