@@ -85,6 +85,7 @@ public class ProcessReprositoryFileRef extends org.semanticwb.process.model.base
                     RepositoryFile file=(RepositoryFile)value.createGenericInstance();
                     
                     String pageurl=file.getRepositoryDirectory().getUrl();
+                    //System.out.println("file:"+file+" "+file.getRepositoryDirectory()+" "+file.getRepositoryDirectory().getResource());
                     String fileurl=file.getRepositoryDirectory().getUrl()+"/_rid/"+file.getRepositoryDirectory().getResource().getId()+"/_mto/3/_mod/getFile?fid="+file.getId()+"&verNum="+file.getLastVersion().getVersionNumber();
                                         
                     //http://localhost:8080/es/process/GP-Direccion/_rid/162/_mto/3/_mod/getFile?fid=22&verNum=2
