@@ -154,15 +154,12 @@ if (sFilter == null || sFilter.trim().equals("")) {
 ArrayList<ProcessInstance> pinstances = (ArrayList<ProcessInstance>) request.getAttribute("instances");
 SWBResourceURL configUrl = paramRequest.getRenderUrl().setMode("config");
 if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
+    SWBResourceURL optsUrl = paramRequest.getRenderUrl();
+    optsUrl.setParameter("gFilter", gFilter);
+    optsUrl.setParameter("sFilter", sFilter);
     %>
     <h2>Monitor de procesos</h2>
-    <%
-    if (pinstances != null && pinstances.size() > 0) {
-        SWBResourceURL optsUrl = paramRequest.getRenderUrl();
-        optsUrl.setParameter("gFilter", gFilter);
-        optsUrl.setParameter("sFilter", sFilter);
-        %>
-        <div class="bandeja-combo">
+    <div class="bandeja-combo">
             <ul>
                 <li>Ordenamiento:
                     <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'sort', this.options[this.selectedIndex].value)">
@@ -214,7 +211,9 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
             </li-->
         </ul>
     </div>
-        <br>
+    <%
+    if (pinstances != null && !pinstances.isEmpty()) {
+        %>
         <table class="tabla-bandeja">
             <thead>
                 <tr>
@@ -390,7 +389,13 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                         <%
                                     }
                                 }
+                                SWBResourceURL docsUrl = paramRequest.getRenderUrl().setMode("showFiles");
+                                docsUrl.setParameter("pid", instance.getId());
+                                docsUrl.setParameter("gFilter", request.getParameter("gFilter"));
+                                docsUrl.setParameter("sFilter", request.getParameter("sFilter"));
+                                docsUrl.setParameter("sort", request.getParameter("sort"));
                                 %>
+                                <a class="acc-opcional" href="<%=docsUrl%>">Documentos</a>
                             </td>
                             <%
                         }
@@ -420,7 +425,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
         </div>
         <%
 } else {
-        %>No hay procesos actualmente en ejecuci&oacute;n<%
+        %><p>No hay procesos actualmente en ejecuci&oacute;n</p><%
 }
 }
 %>
