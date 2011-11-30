@@ -125,13 +125,13 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
 
             buffer.append("<input dojoType=\"dojox.form.FileInputAuto\" blurDelay=\"0\" "
                     + "id=\"" + pname + "_defaultAuto\" name=\"" + pname + "_inputFileAuto\" url=\"" + url
-                    + "\" onComplete=\"fileUpload_Callback\" fileMask=\"" + filts.toString() + "\"/>\n");
+                    + "\" onComplete=\"fileUpload_Callback\" fileMask=\"" + filts.toString() + "\"/><br/>\n");
             if (!"create".equals(mode) && obj.getProperty(prop) != null) {
                 String name = obj.getProperty(prop);
                 if (name.startsWith(pname)) {
                     name = name.substring(pname.length() + 1);
                 }
-                buffer.append("<br>Eliminar: <input dojoType=\"dijit.form.CheckBox\" id=\""
+                buffer.append("Eliminar: <input dojoType=\"dijit.form.CheckBox\" id=\""
                         + pname + "_delFile\" name=\""
                         + pname + "_delFile\" value=\"" + name + "\" /><label for=\""
                         + pname + "_delFile\">" + name + "</label>\n");
@@ -152,18 +152,21 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
 //                + "scrolling=\"no\" name=\"ifrupd" + cad + "\" id=\"ifrupd" + cad + "\" height=\"170\" ></iframe>\n");
 //        buffer.append("<input type=\"hidden\" name=\"" + pname + "\" value=\"" + cad + "\" /></td>\n");
         if (!"create".equals(mode) && prop.getCardinality() != 1) {
-            buffer.append("<br>" + eliminar + ":<br><select dojoType=\"dijit.form.MultiSelect\" name=\""
-                    + pname + "_delFile\" multiple=\"multiple\" size=\"4\">\n");
             Iterator<SemanticLiteral> lista = obj.listLiteralProperties(prop);
-            while (lista.hasNext()) {
-                SemanticLiteral lit = lista.next();
-                String fname = lit.getString();
-                if (fname.startsWith(pname)) {
-                    fname = fname.substring(pname.length() + 1);
+            if(lista.hasNext())
+            {
+                buffer.append(eliminar + ":<br><select dojoType=\"dijit.form.MultiSelect\" name=\""
+                        + pname + "_delFile\" multiple=\"multiple\" size=\"4\">\n");
+                while (lista.hasNext()) {
+                    SemanticLiteral lit = lista.next();
+                    String fname = lit.getString();
+                    if (fname.startsWith(pname)) {
+                        fname = fname.substring(pname.length() + 1);
+                    }
+                    buffer.append("<option value=\""+fname+"\">" + fname + "</option>");
                 }
-                buffer.append("<option value=\""+fname+"\">" + fname + "</option>");
+                buffer.append("</select>");
             }
-            buffer.append("</select>");
         }
         //System.out.println(buffer.toString());
         return buffer.toString();
