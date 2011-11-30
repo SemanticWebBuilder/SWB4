@@ -35,18 +35,24 @@ import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.*;
+import org.semanticwb.process.model.ItemAware;
+import org.semanticwb.process.model.ItemAwareReference;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.ProcessGroup;
 import org.semanticwb.process.model.ProcessSite;
+import org.semanticwb.process.model.RepositoryElement;
 import org.semanticwb.process.model.SWBProcessMgr;
+import org.semanticwb.process.schema.File;
 
 /***
  * Recurso Panel de Control para monitoreo de instancias de procesos.
@@ -101,6 +107,8 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
         String mode = paramRequest.getMode();
         if (mode.equals("config")) {
             doConfig(request, response, paramRequest);
+        } else if (mode.equals("showFiles")) {
+            doShowFiles(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
@@ -184,6 +192,62 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
             rd.include(request, response);
         } catch (Exception e) {
             log.error("ControlPanelResource: Error including config JSP", e);
+        }
+    }
+    
+    public void doShowObjects(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/controlPanel/businessControlPanelObjects.jsp";
+        RequestDispatcher rd = request.getRequestDispatcher(jsp);
+        String pid = request.getParameter("pid");
+        ArrayList<ItemAware> iaw = null;
+        
+        if (pid != null && !pid.trim().equals("")) {
+            ProcessInstance pi = ProcessInstance.ClassMgr.getProcessInstance(pid, paramRequest.getWebPage().getWebSite());
+            if (pi != null) {
+                iaw = getProcessItemawareList(pi);
+            }
+        }
+        
+        try {
+            request.setAttribute("paramRequest", paramRequest);
+            request.setAttribute("itemawareList", iaw);
+            request.setAttribute("itemsPerPage", getItemsPerPage());
+            rd.include(request, response);
+        } catch (Exception e) {
+            log.error("ControlPanelResource: Error including view JSP", e);
+        }
+    }
+    
+    public void doShowFiles(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/controlPanel/businessControlPanelFiles.jsp";
+        RequestDispatcher rd = request.getRequestDispatcher(jsp);
+        String pid = request.getParameter("pid");
+        User user = paramRequest.getUser();
+        
+        String lang = "es";
+        if (user != null && user.getLanguage() != null) {
+            lang = user.getLanguage();
+        }
+        
+        ArrayList<File> docs = null;
+        ProcessInstance pi = null;
+        
+        if (pid != null && !pid.trim().equals("")) {
+            pi = ProcessInstance.ClassMgr.getProcessInstance(pid, paramRequest.getWebPage().getWebSite());
+            if (pi != null) {
+                docs = getProcessRepositoryFiles(pi);
+            }
+        }
+        
+        try {
+            request.setAttribute("paramRequest", paramRequest);
+            request.setAttribute("docs", docs);
+            if (pi != null) {
+                request.setAttribute("pName", pi.getProcessElementType().getTitle(lang));
+            }
+            rd.include(request, response);
+        } catch (Exception e) {
+            log.error("ControlPanelResource: Error including show docs JSP", e);
         }
     }
 
@@ -320,5 +384,41 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
             }
         }
         return instances;
+    }
+    
+    /**
+     * Obtiene la lista de objetos {@link ItemAware} relacionados con la instancia
+     * del proceso.
+     * @param pi Instancia del proceso.
+     * @return Lista de objetos {@link ItemAware} relacionados con la instancia
+     */
+    public ArrayList<ItemAware> getProcessItemawareList(ProcessInstance pi) {
+        ArrayList<ItemAware> ret = new ArrayList<ItemAware>();
+        
+        Iterator<ItemAwareReference> objit = pi.listAllItemAwareReferences();
+        while (objit.hasNext()) {
+            ItemAwareReference item=objit.next();
+            ret.add(item.getItemAware());
+        }
+        return ret;
+    }
+    
+    /**
+     * Obtiene la lista de Archivos relacionados con la instancia del proceso.
+     * @param pi Instancia del proceso
+     * @return Lista de archivos relacionados con la instancia del proceso.
+     */
+    public ArrayList<File> getProcessRepositoryFiles(ProcessInstance pi) {
+        ArrayList<File> ret = new ArrayList<File>();
+        Iterator<ItemAwareReference> objit = pi.listAllItemAwareReferences();
+        while (objit.hasNext()) {
+            ItemAwareReference item=objit.next();
+            SWBClass obj = item.getProcessObject();
+            //TODO: Verificar los FileCollection
+            if (obj instanceof File) {
+                ret.add((File)obj);
+            }
+        }
+        return ret;
     }
 }
