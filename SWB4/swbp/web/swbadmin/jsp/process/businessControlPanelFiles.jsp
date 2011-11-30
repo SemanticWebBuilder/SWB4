@@ -54,7 +54,7 @@ if (docs != null && !docs.isEmpty()) {
                     String pModifiedBy = rf.getLastVersion().getCreator().getFullName();
                     String url = null;
                     if (rf.getRepositoryDirectory() != null) {
-                        url = rf.getRepositoryDirectory().getUrl() + "?act=detail&fid=" + rf.getEncodedURI();
+                        url = rf.getRepositoryDirectory().getUrl() + "?act=detail&back=history&fid=" + rf.getEncodedURI();
                     }
                     %>
                     <tr>
