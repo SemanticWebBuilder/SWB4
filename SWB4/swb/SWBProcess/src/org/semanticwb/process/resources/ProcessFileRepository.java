@@ -455,7 +455,24 @@ public class ProcessFileRepository extends GenericResource {
             out.println("</td>");
             out.println("<td>");
             VersionInfo vl = repoFile.getLastVersion();
-            out.println(vl.getVersionFile());
+            if (luser > 0) {
+                if (repoFile instanceof RepositoryFile) {
+                    SWBResourceURL urlview = paramRequest.getRenderUrl();
+                    urlview.setCallMethod(SWBResourceURL.Call_DIRECT);
+                    urlview.setParameter("fid", repoFile.getId());
+                    urlview.setMode(MODE_GETFILE);
+                    urlview.setParameter("verNum", "" + vl.getVersionNumber());
+
+                    out.println("<a href=\"" + urlview + "\">");
+                    out.println(vl.getVersionFile());
+                    out.println("</a>");
+                } else if (repoFile instanceof RepositoryURL) {
+                    out.println("<a target=\"_blank\" href=\"" + vl.getVersionFile() + "\">");
+                    out.println("</a>");
+                }
+            } else {
+                out.println(vl.getVersionFile());
+            }
             out.println("</td>");
             out.println("</tr>");
             out.println("<tr>");
@@ -1026,10 +1043,6 @@ public class ProcessFileRepository extends GenericResource {
         } catch (Exception e) {
             log.error("Error al obtener el archivo del Repositorio de documentos.", e);
         }
-
-
-
-
     }
 
     @Override
