@@ -395,7 +395,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                 docsUrl.setParameter("sFilter", request.getParameter("sFilter"));
                                 docsUrl.setParameter("sort", request.getParameter("sort"));
                                 %>
-                                <a class="acc-opcional" href="<%=docsUrl%>">Documentos</a>
+                                <a class="acc-docs" href="<%=docsUrl%>">Documentos</a>
                             </td>
                             <%
                         }
