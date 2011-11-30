@@ -66,6 +66,12 @@ public class Instance extends org.semanticwb.process.model.base.InstanceBase
     {
         super(base);
     }
+    
+    public ProcessInstance getProcessInstance()
+    {
+        if(this instanceof FlowNodeInstance)return ((FlowNodeInstance)this).getProcessInstance();
+        else return (ProcessInstance)this;
+    }
 
     /**
      * Devuelve el tipo del nodo de flujo en el modelo asociado a la instancia
