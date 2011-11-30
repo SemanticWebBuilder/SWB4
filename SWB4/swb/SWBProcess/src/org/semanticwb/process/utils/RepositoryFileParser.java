@@ -153,14 +153,17 @@ public class RepositoryFileParser extends GenericParser {
     public boolean canUserView(Searchable gen, User user) {
         boolean ret = false;
         //Si el creador del archivo tiene el mismo grupo de usuarios que el usuario en sesión
+        //El usuario puede ver la sección
         RepositoryFile rf = (RepositoryFile) gen;
-        
-        User creator = rf.getCreator();
-        Iterator<Role> roles = creator.listRoles();
-        while (roles.hasNext()) {
-            Role role = roles.next();
-            if (user.hasRole(role)) {
-                ret = true;
+        if (user.haveAccess(rf.getRepositoryDirectory())) {
+            User creator = rf.getCreator();
+            Iterator<Role> roles = creator.listRoles();
+            while (roles.hasNext()) {
+                Role role = roles.next();
+                if (user.hasRole(role)) {
+                    ret = true;
+                    break;
+                }
             }
         }
         return ret;
