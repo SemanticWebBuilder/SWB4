@@ -424,8 +424,8 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
         %>
         </div>
         <%
-} else {
+    } else {
         %><p>No hay procesos actualmente en ejecuci&oacute;n</p><%
-}
+    }
 }
 %>
