@@ -1,8 +1,9 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.RoleRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Expirable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.model.Filterable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.Resourceable,org.semanticwb.model.Activeable,org.semanticwb.process.model.Callable,org.semanticwb.process.model.Containerable
+public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.RuleRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Resourceable,org.semanticwb.process.model.Callable,org.semanticwb.model.Referensable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Expirable,org.semanticwb.model.RoleRefable,org.semanticwb.process.model.Containerable,org.semanticwb.model.TemplateRefable
 {
+    public static final org.semanticwb.platform.SemanticProperty swp_sendAssigmentNotifications=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#sendAssigmentNotifications");
    /**
    * Objeto que define un Role dentro de un repositorio de usuarios aplicable a un Usuario para filtrar componente, seccion, plantillas, etc.
    */
@@ -22,7 +23,10 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
    */
     public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
     public static final org.semanticwb.platform.SemanticProperty swp_parentWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#parentWebPage");
+    public static final org.semanticwb.platform.SemanticClass swp_NotificationTemplate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#NotificationTemplate");
+    public static final org.semanticwb.platform.SemanticProperty swp_delayNotificationTemplate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#delayNotificationTemplate");
     public static final org.semanticwb.platform.SemanticProperty swp_notificationRole=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#notificationRole");
+    public static final org.semanticwb.platform.SemanticProperty swp_assigmentNotificationTemplate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#assigmentNotificationTemplate");
     public static final org.semanticwb.platform.SemanticProperty swp_filterByOwnerUserGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#filterByOwnerUserGroup");
     public static final org.semanticwb.platform.SemanticClass swp_Process=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Process");
    /**
@@ -232,6 +236,29 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
             return it;
         }
        /**
+       * Gets all org.semanticwb.process.model.Process with a determined DelayNotificationTemplate
+       * @param value DelayNotificationTemplate of the type org.semanticwb.process.model.NotificationTemplate
+       * @param model Model of the org.semanticwb.process.model.Process
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByDelayNotificationTemplate(org.semanticwb.process.model.NotificationTemplate value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_delayNotificationTemplate, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Process with a determined DelayNotificationTemplate
+       * @param value DelayNotificationTemplate of the type org.semanticwb.process.model.NotificationTemplate
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByDelayNotificationTemplate(org.semanticwb.process.model.NotificationTemplate value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_delayNotificationTemplate,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.process.model.Process with a determined NotificationRole
        * @param value NotificationRole of the type org.semanticwb.model.Role
        * @param model Model of the org.semanticwb.process.model.Process
@@ -252,6 +279,29 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
         public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByNotificationRole(org.semanticwb.model.Role value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_notificationRole,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Process with a determined AssigmentNotificationTemplate
+       * @param value AssigmentNotificationTemplate of the type org.semanticwb.process.model.NotificationTemplate
+       * @param model Model of the org.semanticwb.process.model.Process
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByAssigmentNotificationTemplate(org.semanticwb.process.model.NotificationTemplate value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_assigmentNotificationTemplate, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.process.model.Process with a determined AssigmentNotificationTemplate
+       * @param value AssigmentNotificationTemplate of the type org.semanticwb.process.model.NotificationTemplate
+       * @return Iterator with all the org.semanticwb.process.model.Process
+       */
+
+        public static java.util.Iterator<org.semanticwb.process.model.Process> listProcessByAssigmentNotificationTemplate(org.semanticwb.process.model.NotificationTemplate value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_assigmentNotificationTemplate,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -448,6 +498,24 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
     {
         super(base);
     }
+
+/**
+* Gets the SendAssigmentNotifications property
+* @return boolean with the SendAssigmentNotifications
+*/
+    public boolean isSendAssigmentNotifications()
+    {
+        return getSemanticObject().getBooleanProperty(swp_sendAssigmentNotifications);
+    }
+
+/**
+* Sets the SendAssigmentNotifications property
+* @param value long with the SendAssigmentNotifications
+*/
+    public void setSendAssigmentNotifications(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swp_sendAssigmentNotifications, value);
+    }
    /**
    * Sets the value for the property AdministrationRole
    * @param value AdministrationRole to set
@@ -640,6 +708,44 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
          return ret;
     }
    /**
+   * Sets the value for the property DelayNotificationTemplate
+   * @param value DelayNotificationTemplate to set
+   */
+
+    public void setDelayNotificationTemplate(org.semanticwb.process.model.NotificationTemplate value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_delayNotificationTemplate, value.getSemanticObject());
+        }else
+        {
+            removeDelayNotificationTemplate();
+        }
+    }
+   /**
+   * Remove the value for DelayNotificationTemplate property
+   */
+
+    public void removeDelayNotificationTemplate()
+    {
+        getSemanticObject().removeProperty(swp_delayNotificationTemplate);
+    }
+
+   /**
+   * Gets the DelayNotificationTemplate
+   * @return a org.semanticwb.process.model.NotificationTemplate
+   */
+    public org.semanticwb.process.model.NotificationTemplate getDelayNotificationTemplate()
+    {
+         org.semanticwb.process.model.NotificationTemplate ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_delayNotificationTemplate);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.NotificationTemplate)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
    * Sets the value for the property NotificationRole
    * @param value NotificationRole to set
    */
@@ -674,6 +780,44 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
          if(obj!=null)
          {
              ret=(org.semanticwb.model.Role)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property AssigmentNotificationTemplate
+   * @param value AssigmentNotificationTemplate to set
+   */
+
+    public void setAssigmentNotificationTemplate(org.semanticwb.process.model.NotificationTemplate value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_assigmentNotificationTemplate, value.getSemanticObject());
+        }else
+        {
+            removeAssigmentNotificationTemplate();
+        }
+    }
+   /**
+   * Remove the value for AssigmentNotificationTemplate property
+   */
+
+    public void removeAssigmentNotificationTemplate()
+    {
+        getSemanticObject().removeProperty(swp_assigmentNotificationTemplate);
+    }
+
+   /**
+   * Gets the AssigmentNotificationTemplate
+   * @return a org.semanticwb.process.model.NotificationTemplate
+   */
+    public org.semanticwb.process.model.NotificationTemplate getAssigmentNotificationTemplate()
+    {
+         org.semanticwb.process.model.NotificationTemplate ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_assigmentNotificationTemplate);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.NotificationTemplate)obj.createGenericInstance();
          }
          return ret;
     }
