@@ -28,4 +28,8 @@ package org.semanticwb.process.model;
 
 public interface ResourceAssignmentable extends org.semanticwb.process.model.base.ResourceAssignmentableBase
 {
+    public static final int ASSIGNMENT_RULE_MANUAL=0;
+    public static final int ASSIGNMENT_RULE_RANDOM=1;
+    public static final int ASSIGNMENT_RULE_LESSWORK=2;
+    public static final int ASSIGNMENT_RULE_DISTRIBUTED=3;
 }

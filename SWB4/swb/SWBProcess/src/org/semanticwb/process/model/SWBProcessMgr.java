@@ -124,6 +124,57 @@ public class SWBProcessMgr
         }
         return ret;
     }
+    
+    
+    
+    private static boolean haveAccess(FlowNode node, User user)
+    {
+        boolean add=false;                    
+        if(user.haveAccess(node))
+        {
+            add=true;                    
+            GraphicalElement parent=node.getParent();
+            //System.out.println("parent:"+type);
+            if(parent !=null && parent instanceof Lane)
+            {
+                Lane lane=(Lane)parent;
+                if(!user.haveAccess(lane))
+                {
+                    add=false;
+                }
+            }
+        }
+        return add;
+    }
+    
+    public static List<User> getUsers(FlowNodeInstance instance)
+    {
+        ArrayList<User> arr=new ArrayList();
+        FlowNode node=instance.getFlowNodeType();
+        boolean groupFilter=node.getProcess().isFilterByOwnerUserGroup();
+        if(groupFilter)
+        {
+            UserGroup ug=instance.getProcessInstance().getOwnerUserGroup();
+            if(ug!=null)
+            {
+                Iterator<User> it=ug.listUsers();
+                while (it.hasNext())
+                {
+                    User user = it.next();
+                    if(haveAccess(node, user))arr.add(user);
+                }
+            }
+        }else
+        {
+            Iterator<User> it=instance.getProcessSite().getUserRepository().listUsers();            
+            while (it.hasNext())
+            {
+                User user = it.next();
+                if(haveAccess(node, user))arr.add(user);
+            }
+        }
+        return arr;
+    }    
 
 
 }

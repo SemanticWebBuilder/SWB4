@@ -26,6 +26,14 @@
 
 package org.semanticwb.process.model;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+import org.semanticwb.model.User;
+import org.semanticwb.model.UserGroup;
+
 public class UserTask extends org.semanticwb.process.model.base.UserTaskBase 
 {
     public static final int START_ACTIONCODE=1;
@@ -37,6 +45,29 @@ public class UserTask extends org.semanticwb.process.model.base.UserTaskBase
         super(base);
         getTaskWebPage();
     }
+    
+
+
+
+    @Override
+    public void execute(FlowNodeInstance instance, User user)
+    {
+        super.execute(instance, user);
+        System.out.println("execute:"+instance+" "+user);
+        if(getResourceAssignationRule()>0)
+        {
+            boolean groupFilter=getProcess().isFilterByOwnerUserGroup();
+            if(getResourceAssignationRule()>0) // De momento todos son aleatorios
+            {
+                List<User> users=SWBProcessMgr.getUsers(instance);
+                int s=users.size();
+                instance.setAssigned(new Date());
+                instance.setAssignedto(users.get(new Random().nextInt(s)));
+            }
+        }
+    }
+    
+    
 
     @Override
     public WrapperTaskWebPage getTaskWebPage() 
