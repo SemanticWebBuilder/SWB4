@@ -1,9 +1,8 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.RuleRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Resourceable,org.semanticwb.process.model.Callable,org.semanticwb.model.Referensable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Expirable,org.semanticwb.model.RoleRefable,org.semanticwb.process.model.Containerable,org.semanticwb.model.TemplateRefable
+public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Activeable,org.semanticwb.process.model.Containerable,org.semanticwb.process.model.Callable,org.semanticwb.model.Expirable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Resourceable,org.semanticwb.model.FilterableNode,org.semanticwb.model.RoleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Filterable
 {
-    public static final org.semanticwb.platform.SemanticProperty swp_sendAssigmentNotifications=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#sendAssigmentNotifications");
    /**
    * Objeto que define un Role dentro de un repositorio de usuarios aplicable a un Usuario para filtrar componente, seccion, plantillas, etc.
    */
@@ -497,24 +496,6 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
     public ProcessBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-/**
-* Gets the SendAssigmentNotifications property
-* @return boolean with the SendAssigmentNotifications
-*/
-    public boolean isSendAssigmentNotifications()
-    {
-        return getSemanticObject().getBooleanProperty(swp_sendAssigmentNotifications);
-    }
-
-/**
-* Sets the SendAssigmentNotifications property
-* @param value long with the SendAssigmentNotifications
-*/
-    public void setSendAssigmentNotifications(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swp_sendAssigmentNotifications, value);
     }
    /**
    * Sets the value for the property AdministrationRole
