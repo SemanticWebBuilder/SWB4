@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
 
@@ -54,15 +55,20 @@ public class UserTask extends org.semanticwb.process.model.base.UserTaskBase
     {
         super.execute(instance, user);
         System.out.println("execute:"+instance+" "+user);
-        if(getResourceAssignationRule()>0)
+        if(getResourceAssignationRule()>0 && instance.getAssignedto()==null)
         {
             boolean groupFilter=getProcess().isFilterByOwnerUserGroup();
             if(getResourceAssignationRule()>0) // De momento todos son aleatorios
             {
                 List<User> users=SWBProcessMgr.getUsers(instance);
                 int s=users.size();
+                User assigned=users.get(new Random().nextInt(s));                
                 instance.setAssigned(new Date());
-                instance.setAssignedto(users.get(new Random().nextInt(s)));
+                instance.setAssignedto(assigned);
+                if(getProcess().isSendAssigmentNotifications())
+                {
+                    //SWBUtils.EMAIL.sendBGEmail(user.getEmail(), "Notificacion de Asignacion ", null);
+                }
             }
         }
     }
