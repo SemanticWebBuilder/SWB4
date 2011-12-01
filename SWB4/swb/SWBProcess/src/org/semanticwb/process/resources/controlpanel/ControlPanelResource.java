@@ -35,7 +35,6 @@ import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBClass;
@@ -50,9 +49,10 @@ import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.ProcessGroup;
 import org.semanticwb.process.model.ProcessSite;
-import org.semanticwb.process.model.RepositoryElement;
+import org.semanticwb.process.model.RepositoryFile;
 import org.semanticwb.process.model.SWBProcessMgr;
 import org.semanticwb.process.schema.File;
+import org.semanticwb.process.schema.FileCollection;
 
 /***
  * Recurso Panel de Control para monitoreo de instancias de procesos.
@@ -229,7 +229,7 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
             lang = user.getLanguage();
         }
         
-        ArrayList<File> docs = null;
+        ArrayList<RepositoryFile> docs = null;
         ProcessInstance pi = null;
         
         if (pid != null && !pid.trim().equals("")) {
@@ -408,15 +408,28 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
      * @param pi Instancia del proceso
      * @return Lista de archivos relacionados con la instancia del proceso.
      */
-    public ArrayList<File> getProcessRepositoryFiles(ProcessInstance pi) {
-        ArrayList<File> ret = new ArrayList<File>();
+    public ArrayList<RepositoryFile> getProcessRepositoryFiles(ProcessInstance pi) {
+        ArrayList<RepositoryFile> ret = new ArrayList<RepositoryFile>();
         Iterator<ItemAwareReference> objit = pi.listAllItemAwareReferences();
         while (objit.hasNext()) {
             ItemAwareReference item=objit.next();
             SWBClass obj = item.getProcessObject();
-            //TODO: Verificar los FileCollection
-            if (obj instanceof File) {
-                ret.add((File)obj);
+
+            if (obj != null) {
+                if (obj instanceof File) {
+                    File f = (File)obj;
+                    if (f.getRepositoryFile() != null) {
+                        ret.add(f.getRepositoryFile());
+                    }
+                }
+                if (obj instanceof FileCollection) {
+                    FileCollection f = (FileCollection)obj;
+                    Iterator<RepositoryFile> rfs = f.listRepositoryFiles();
+                    while (rfs.hasNext()) {
+                        RepositoryFile repositoryFile = rfs.next();
+                        ret.add(repositoryFile);
+                    }
+                }
             }
         }
         return ret;
