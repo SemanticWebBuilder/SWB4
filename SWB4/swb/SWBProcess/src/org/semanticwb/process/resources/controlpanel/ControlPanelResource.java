@@ -164,7 +164,12 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/controlPanel/businessControlPanel.jsp";
+        String jsp = "/swbadmin/jsp/process/businessControlPanel.jsp";
+        if (getViewJSP() != null && !getViewJSP().trim().equals("")) {
+            jsp = getViewJSP();
+        }
+        
+        //String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/controlPanel/businessControlPanel.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(jsp);
 
         if (getDisplayCols() == null || getDisplayCols().trim().equals("")) {
@@ -184,7 +189,12 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
     }
     
     public void doConfig(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/controlPanel/businessControlPanelConfig.jsp";
+        String jsp = "/swbadmin/jsp/process/businessControlPanelConfig.jsp";
+        if (getViewJSP() != null && !getViewJSP().trim().equals("")) {
+            jsp = getViewJSP();
+        }
+        
+        //String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/controlPanel/businessControlPanelConfig.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(jsp);
         try {
             request.setAttribute("paramRequest", paramRequest);
@@ -196,7 +206,12 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
     }
     
     public void doShowObjects(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/controlPanel/businessControlPanelObjects.jsp";
+        String jsp = "/swbadmin/jsp/process/businessControlPanelObjects.jsp";
+        if (getViewJSP() != null && !getViewJSP().trim().equals("")) {
+            jsp = getViewJSP();
+        }
+        
+        //String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/controlPanel/businessControlPanelObjects.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(jsp);
         String pid = request.getParameter("pid");
         ArrayList<ItemAware> iaw = null;
