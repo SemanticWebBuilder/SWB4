@@ -3,18 +3,17 @@
     Created on : 30/11/2011, 11:04:29 AM
     Author     : hasdai
 --%>
+<%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
+<%@page import="org.semanticwb.process.model.RepositoryFile"%>
 <%@page import="org.semanticwb.model.User"%>
 <%@page import="org.semanticwb.SWBUtils"%>
-<%@page import="java.util.Iterator"%>
-<%@page import="org.semanticwb.process.schema.File"%>
-<%@page import="org.semanticwb.process.model.RepositoryFile"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
+<%@page import="java.util.Iterator"%>
 
 <%
 SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramRequest");
-ArrayList<File> docs = (ArrayList<File>)request.getAttribute("docs");
+ArrayList<RepositoryFile> docs = (ArrayList<RepositoryFile>)request.getAttribute("docs");
 String pName = (String) request.getAttribute("pName");
 String lang = "es";
 User user = paramRequest.getUser();
@@ -43,18 +42,17 @@ if (docs != null && !docs.isEmpty()) {
             </thead>
             <tbody>
                 <%
-                Iterator<File> files = docs.iterator();
+                Iterator<RepositoryFile> files = docs.iterator();
                 
                 while(files.hasNext()) {
-                    File file = files.next();
-                    RepositoryFile rf = file.getRepositoryFile();
-                    String Id = rf.getId();
-                    String name = rf.getTitle();
-                    String pCreated = SWBUtils.TEXT.getStrDate(rf.getLastVersion().getCreated(), lang, "dd/mm/yy - hh:mm");
-                    String pModifiedBy = rf.getLastVersion().getCreator().getFullName();
+                    RepositoryFile file = files.next();
+                    String Id = file.getId();
+                    String name = file.getTitle();
+                    String pCreated = SWBUtils.TEXT.getStrDate(file.getLastVersion().getCreated(), lang, "dd/mm/yy - hh:mm");
+                    String pModifiedBy = file.getLastVersion().getCreator().getFullName();
                     String url = null;
-                    if (rf.getRepositoryDirectory() != null) {
-                        url = rf.getRepositoryDirectory().getUrl() + "?act=detail&back=history&fid=" + rf.getEncodedURI();
+                    if (file.getRepositoryDirectory() != null) {
+                        url = file.getRepositoryDirectory().getUrl() + "?act=detail&back=history&fid=" + file.getEncodedURI();
                     }
                     %>
                     <tr>
