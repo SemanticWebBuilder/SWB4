@@ -4,9 +4,11 @@ package org.semanticwb.process.resources.taskinbox.base;
 public abstract class UserTaskInboxResourceBase extends org.semanticwb.portal.api.GenericSemResource 
 {
     public static final org.semanticwb.platform.SemanticProperty utinbox_filterByGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/UserTaskInbox#filterByGroup");
-    public static final org.semanticwb.platform.SemanticProperty utinbox_itemsPerPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/UserTaskInbox#itemsPerPage");
+    public static final org.semanticwb.platform.SemanticProperty utinbox_configJSP=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/UserTaskInbox#configJSP");
+    public static final org.semanticwb.platform.SemanticProperty utinbox_viewJSP=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/UserTaskInbox#viewJSP");
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_semanticResourceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#semanticResourceInv");
+    public static final org.semanticwb.platform.SemanticProperty utinbox_itemsPerPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/UserTaskInbox#itemsPerPage");
     public static final org.semanticwb.platform.SemanticProperty utinbox_displayCols=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/UserTaskInbox#displayCols");
     public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
     public static final org.semanticwb.platform.SemanticProperty utinbox_displayMapWp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/UserTaskInbox#displayMapWp");
@@ -64,21 +66,39 @@ public abstract class UserTaskInboxResourceBase extends org.semanticwb.portal.ap
     }
 
 /**
-* Gets the ItemsPerPage property
-* @return int with the ItemsPerPage
+* Gets the ConfigJSP property
+* @return String with the ConfigJSP
 */
-    public int getItemsPerPage()
+    public String getConfigJSP()
     {
-        return getSemanticObject().getIntProperty(utinbox_itemsPerPage);
+        return getSemanticObject().getProperty(utinbox_configJSP);
     }
 
 /**
-* Sets the ItemsPerPage property
-* @param value long with the ItemsPerPage
+* Sets the ConfigJSP property
+* @param value long with the ConfigJSP
 */
-    public void setItemsPerPage(int value)
+    public void setConfigJSP(String value)
     {
-        getSemanticObject().setIntProperty(utinbox_itemsPerPage, value);
+        getSemanticObject().setProperty(utinbox_configJSP, value);
+    }
+
+/**
+* Gets the ViewJSP property
+* @return String with the ViewJSP
+*/
+    public String getViewJSP()
+    {
+        return getSemanticObject().getProperty(utinbox_viewJSP);
+    }
+
+/**
+* Sets the ViewJSP property
+* @param value long with the ViewJSP
+*/
+    public void setViewJSP(String value)
+    {
+        getSemanticObject().setProperty(utinbox_viewJSP, value);
     }
    /**
    * Sets the value for the property Resource
@@ -117,6 +137,24 @@ public abstract class UserTaskInboxResourceBase extends org.semanticwb.portal.ap
              ret=(org.semanticwb.model.Resource)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the ItemsPerPage property
+* @return int with the ItemsPerPage
+*/
+    public int getItemsPerPage()
+    {
+        return getSemanticObject().getIntProperty(utinbox_itemsPerPage);
+    }
+
+/**
+* Sets the ItemsPerPage property
+* @param value long with the ItemsPerPage
+*/
+    public void setItemsPerPage(int value)
+    {
+        getSemanticObject().setIntProperty(utinbox_itemsPerPage, value);
     }
 
 /**
