@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.Trashable,org.semanticwb.model.Expirable,org.semanticwb.process.model.Containerable,org.semanticwb.model.FilterableClass,org.semanticwb.model.RuleRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.process.model.Callable,org.semanticwb.model.Traceable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Referensable,org.semanticwb.model.Resourceable,org.semanticwb.model.RoleRefable
+public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.RoleRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Expirable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.model.Filterable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.Resourceable,org.semanticwb.model.Activeable,org.semanticwb.process.model.Callable,org.semanticwb.process.model.Containerable
 {
    /**
    * Objeto que define un Role dentro de un repositorio de usuarios aplicable a un Usuario para filtrar componente, seccion, plantillas, etc.
@@ -23,7 +23,7 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
     public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
     public static final org.semanticwb.platform.SemanticProperty swp_parentWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#parentWebPage");
     public static final org.semanticwb.platform.SemanticProperty swp_notificationRole=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#notificationRole");
-    public static final org.semanticwb.platform.SemanticProperty swp_notificationUserGroupFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#notificationUserGroupFilter");
+    public static final org.semanticwb.platform.SemanticProperty swp_filterByOwnerUserGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#filterByOwnerUserGroup");
     public static final org.semanticwb.platform.SemanticClass swp_Process=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Process");
    /**
    * The semantic class that represents the currentObject
@@ -805,24 +805,6 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
     {
         getSemanticObject().setBooleanProperty(swb_active, value);
     }
-
-/**
-* Gets the NotificationUserGroupFilter property
-* @return boolean with the NotificationUserGroupFilter
-*/
-    public boolean isNotificationUserGroupFilter()
-    {
-        return getSemanticObject().getBooleanProperty(swp_notificationUserGroupFilter);
-    }
-
-/**
-* Sets the NotificationUserGroupFilter property
-* @param value long with the NotificationUserGroupFilter
-*/
-    public void setNotificationUserGroupFilter(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swp_notificationUserGroupFilter, value);
-    }
    /**
    * Gets all the org.semanticwb.model.RuleRef
    * @return A GenericIterator with all the org.semanticwb.model.RuleRef
@@ -979,6 +961,24 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
              ret=(org.semanticwb.model.Resource)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the FilterByOwnerUserGroup property
+* @return boolean with the FilterByOwnerUserGroup
+*/
+    public boolean isFilterByOwnerUserGroup()
+    {
+        return getSemanticObject().getBooleanProperty(swp_filterByOwnerUserGroup);
+    }
+
+/**
+* Sets the FilterByOwnerUserGroup property
+* @param value long with the FilterByOwnerUserGroup
+*/
+    public void setFilterByOwnerUserGroup(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swp_filterByOwnerUserGroup, value);
     }
    /**
    * Gets all the org.semanticwb.process.model.GraphicalElement

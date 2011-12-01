@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -113,9 +114,23 @@ public class ProcessForm extends GenericResource {
             out.println("Parámetro no difinido...");
             return;
         }
-
+        
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         FlowNodeInstance foi = (FlowNodeInstance) ont.getGenericObject(suri);
+        
+        
+        User asigned=foi.getAssignedto();        
+        if(asigned!=null && !asigned.equals(user))
+        {
+            out.println("Tarea asignada previamente a otro usuario...");
+            return;
+        }
+        
+        if(asigned==null)
+        {
+            foi.setAssigned(new Date());
+            foi.setAssignedto(user);
+        } 
 
         SWBProcessFormMgr mgr = new SWBProcessFormMgr(foi);
         mgr.setAction(paramRequest.getActionUrl().setAction("process").toString());
