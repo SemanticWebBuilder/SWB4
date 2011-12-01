@@ -158,8 +158,11 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        //String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/taskInbox/userTaskInbox.jsp";
         String jsp = "/swbadmin/jsp/process/userTaskInbox.jsp";
+        if (getViewJSP() != null && !getViewJSP().trim().equals("")) {
+            jsp = getViewJSP();
+        }
+        //String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/taskInbox/userTaskInbox.jsp";
 
         if (getDisplayCols() == null || getDisplayCols().trim().equals("")) {
             setDisplayCols("idCol|pnameCol|nameCol|sdateCol|edateCol|actionsCol");
@@ -180,7 +183,11 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
     }
 
     public void doConfig(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/taskInbox/userTaskInboxConfig.jsp";
+        String jsp = "/swbadmin/jsp/process/userTaskInboxConfig.jsp";
+        if (getViewJSP() != null && !getViewJSP().trim().equals("")) {
+            jsp = getViewJSP();
+        }
+        //String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/taskInbox/userTaskInboxConfig.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(jsp);
         try {
             request.setAttribute("paramRequest", paramRequest);
