@@ -266,29 +266,29 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                                         canAccess = true;
                                     }
                                 } else if (user.haveAccess(utask)) { //No tiene propietario
-                                    canAccess = true;
+                                    GraphicalElement parent = utask.getParent();
+                                    if (parent == null || (parent != null && parent instanceof Lane && user.haveAccess(parent))) {
+                                        canAccess = true;
+                                    }
                                 }
                                 
                                 if (canAccess) {
-                                    GraphicalElement parent = utask.getParent();
-                                    if (parent == null || (parent != null && parent instanceof Lane && user.haveAccess(parent))) {
-                                        if (statusFilter > 0) {
-                                            if (p != null) {
-                                                if (flowNodeInstance.getStatus() == statusFilter && utask.getProcess().getURI().equals(p.getURI())) {
-                                                    t_instances.add(flowNodeInstance);
-                                                }
-                                            } else {
-                                                if (flowNodeInstance.getStatus() == statusFilter) {
-                                                    t_instances.add(flowNodeInstance);
-                                                }
-                                            }
-                                        } else if (p != null) {
-                                            if (utask.getProcess().getURI().equals(p.getURI())) {
+                                    if (statusFilter > 0) {
+                                        if (p != null) {
+                                            if (flowNodeInstance.getStatus() == statusFilter && utask.getProcess().getURI().equals(p.getURI())) {
                                                 t_instances.add(flowNodeInstance);
                                             }
                                         } else {
+                                            if (flowNodeInstance.getStatus() == statusFilter) {
+                                                t_instances.add(flowNodeInstance);
+                                            }
+                                        }
+                                    } else if (p != null) {
+                                        if (utask.getProcess().getURI().equals(p.getURI())) {
                                             t_instances.add(flowNodeInstance);
                                         }
+                                    } else {
+                                        t_instances.add(flowNodeInstance);
                                     }
                                 }
                             }
