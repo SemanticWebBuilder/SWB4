@@ -258,7 +258,18 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                             FlowNodeInstance flowNodeInstance = nodeInstances.next();
                             if (flowNodeInstance.getFlowNodeType() instanceof UserTask) {
                                 UserTask utask = (UserTask) flowNodeInstance.getFlowNodeType();
-                                if (user.haveAccess(utask)) {
+                                boolean canAccess = false;
+                                User owner = flowNodeInstance.getAssignedto();
+                                
+                                if (owner != null) { //Tiene propieario
+                                    if (owner.getURI().equals(user.getURI())) {
+                                        canAccess = true;
+                                    }
+                                } else if (user.haveAccess(utask)) { //No tiene propietario
+                                    canAccess = true;
+                                }
+                                
+                                if (canAccess) {
                                     GraphicalElement parent = utask.getParent();
                                     if (parent == null || (parent != null && parent instanceof Lane && user.haveAccess(parent))) {
                                         if (statusFilter > 0) {
