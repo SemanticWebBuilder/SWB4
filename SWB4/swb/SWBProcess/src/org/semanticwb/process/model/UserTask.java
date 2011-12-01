@@ -58,7 +58,6 @@ public class UserTask extends org.semanticwb.process.model.base.UserTaskBase
         //System.out.println("execute:"+instance+" "+user);
         if(getResourceAssignationRule()>0 && instance.getAssignedto()==null)
         {
-            boolean groupFilter=getProcess().isFilterByOwnerUserGroup();
             if(getResourceAssignationRule()>0) // De momento todos son aleatorios
             {
                 List<User> users=SWBProcessMgr.getUsers(instance);
@@ -67,19 +66,16 @@ public class UserTask extends org.semanticwb.process.model.base.UserTaskBase
                 instance.setAssigned(new Date());
                 instance.setAssignedto(assigned);
                 System.out.println("assigned:"+assigned);
-                if(getProcess().isSendAssigmentNotifications())
+                NotificationTemplate tpl=getProcess().getAssigmentNotificationTemplate();
+                if(tpl!=null)
                 {
-                    NotificationTemplate tpl=getProcess().getAssigmentNotificationTemplate();
-                    if(tpl!=null)
+                    try
                     {
-                        try
-                        {
-                            System.out.println("send mail:"+assigned);
-                            SWBUtils.EMAIL.sendBGEmail(assigned.getEmail(), SWBScriptParser.parser(instance, assigned, tpl.getSubject()), SWBScriptParser.parser(instance, assigned, tpl.getBody()));
-                        }catch(Exception e)
-                        {
-                            log.error(e);
-                        }
+                        System.out.println("send mail:"+assigned);
+                        SWBUtils.EMAIL.sendBGEmail(assigned.getEmail(), SWBScriptParser.parser(instance, assigned, tpl.getSubject()), SWBScriptParser.parser(instance, assigned, tpl.getBody()));
+                    }catch(Exception e)
+                    {
+                        log.error(e);
                     }
                 }
             }
