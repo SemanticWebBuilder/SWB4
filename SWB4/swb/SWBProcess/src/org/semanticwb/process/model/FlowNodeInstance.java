@@ -109,6 +109,9 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
      */
     public void close(User user, int status, String action, boolean nextObjects)
     {
+        //long time=System.currentTimeMillis();
+        //System.out.println("Init close");        
+        
         super.close(user,status,action);
         //System.out.println("close("+user+","+status+","+action+","+nextObjects+")");
         
@@ -116,36 +119,52 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
         final int _status=status;
         final boolean _nextObjects=nextObjects;
         final FlowNodeInstance _this=this;
+        final Thread _thread=Thread.currentThread();        
         
-        Thread thread=new Thread()
+        synchronized(this)
         {
-            @Override
-            public void run()
+            Thread thread=new Thread()
             {
-                abortDependencies(_user);
-
-                connectItemsAware(_user);
-
-                if(_nextObjects)
+                @Override
+                public void run()
                 {
-                    FlowNode type=getFlowNodeType();
-                    type.nextObject(_this, _user);
+                    //long time=System.currentTimeMillis();
+                    //System.out.println("Init Thread");                    
+                    
+                    abortDependencies(_user);
+
+                    connectItemsAware(_user);
+
+                    if(_nextObjects)
+                    {
+                        FlowNode type=getFlowNodeType();
+                        type.nextObject(_this, _user);
+                    }
+                    getFlowNodeType().close(_this, _user);
+
+                    if(_status==Instance.STATUS_CLOSED)
+                    {
+                        runActionCode(_user, UserTask.CLOSE_ACTIONCODE);
+                    }else if(_status==Instance.STATUS_ABORTED)
+                    {
+                        runActionCode(_user, UserTask.ABORT_ACTIONCODE);
+                    }
+
+                    removeTemporallyDataobjects();
+                    
+                    //System.out.println("End Thread:"+(System.currentTimeMillis()-time));
+                    _thread.interrupt();                    
                 }
-                getFlowNodeType().close(_this, _user);
+            };
+            thread.start();
 
-                if(_status==Instance.STATUS_CLOSED)
-                {
-                    runActionCode(_user, UserTask.CLOSE_ACTIONCODE);
-                }else if(_status==Instance.STATUS_ABORTED)
-                {
-                    runActionCode(_user, UserTask.ABORT_ACTIONCODE);
-                }
+            try
+            {
+                wait(500);
+            }catch(InterruptedException e){}                
+        }
 
-                removeTemporallyDataobjects();
-            }
-        };
-        //thread.start();
-        thread.run();           //Cambiar esto cuando la bandeja se recarge automaticamente
+        //System.out.println("end close:"+(System.currentTimeMillis()-time));    
     }
     
     private void runActionCode(User user, int type)
