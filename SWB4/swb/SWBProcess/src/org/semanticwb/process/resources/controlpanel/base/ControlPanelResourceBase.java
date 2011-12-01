@@ -4,6 +4,9 @@ package org.semanticwb.process.resources.controlpanel.base;
 public abstract class ControlPanelResourceBase extends org.semanticwb.portal.api.GenericSemResource 
 {
     public static final org.semanticwb.platform.SemanticProperty cpanel_filterByGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/ControlPanel#filterByGroup");
+    public static final org.semanticwb.platform.SemanticProperty cpanel_configJSP=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/ControlPanel#configJSP");
+    public static final org.semanticwb.platform.SemanticProperty cpanel_docsJSP=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/ControlPanel#docsJSP");
+    public static final org.semanticwb.platform.SemanticProperty cpanel_viewJSP=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/ControlPanel#viewJSP");
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_semanticResourceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#semanticResourceInv");
     public static final org.semanticwb.platform.SemanticProperty cpanel_itemsPerPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/ControlPanel#itemsPerPage");
@@ -61,6 +64,60 @@ public abstract class ControlPanelResourceBase extends org.semanticwb.portal.api
     public void setFilterByGroup(boolean value)
     {
         getSemanticObject().setBooleanProperty(cpanel_filterByGroup, value);
+    }
+
+/**
+* Gets the ConfigJSP property
+* @return String with the ConfigJSP
+*/
+    public String getConfigJSP()
+    {
+        return getSemanticObject().getProperty(cpanel_configJSP);
+    }
+
+/**
+* Sets the ConfigJSP property
+* @param value long with the ConfigJSP
+*/
+    public void setConfigJSP(String value)
+    {
+        getSemanticObject().setProperty(cpanel_configJSP, value);
+    }
+
+/**
+* Gets the DocsJSP property
+* @return String with the DocsJSP
+*/
+    public String getDocsJSP()
+    {
+        return getSemanticObject().getProperty(cpanel_docsJSP);
+    }
+
+/**
+* Sets the DocsJSP property
+* @param value long with the DocsJSP
+*/
+    public void setDocsJSP(String value)
+    {
+        getSemanticObject().setProperty(cpanel_docsJSP, value);
+    }
+
+/**
+* Gets the ViewJSP property
+* @return String with the ViewJSP
+*/
+    public String getViewJSP()
+    {
+        return getSemanticObject().getProperty(cpanel_viewJSP);
+    }
+
+/**
+* Sets the ViewJSP property
+* @param value long with the ViewJSP
+*/
+    public void setViewJSP(String value)
+    {
+        getSemanticObject().setProperty(cpanel_viewJSP, value);
     }
    /**
    * Sets the value for the property Resource
