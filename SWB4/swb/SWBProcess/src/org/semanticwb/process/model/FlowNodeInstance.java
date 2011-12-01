@@ -111,26 +111,41 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
     {
         super.close(user,status,action);
         //System.out.println("close("+user+","+status+","+action+","+nextObjects+")");
-        abortDependencies(user);
-
-        connectItemsAware(user);
-
-        if(nextObjects)
-        {
-            FlowNode type=getFlowNodeType();
-            type.nextObject(this, user);
-        }
-        this.getFlowNodeType().close(this, user);
         
-        if(status==Instance.STATUS_CLOSED)
+        final User _user=user;
+        final int _status=status;
+        final boolean _nextObjects=nextObjects;
+        final FlowNodeInstance _this=this;
+        
+        Thread thread=new Thread()
         {
-            runActionCode(user, UserTask.CLOSE_ACTIONCODE);
-        }else if(status==Instance.STATUS_ABORTED)
-        {
-            runActionCode(user, UserTask.ABORT_ACTIONCODE);
-        }
+            @Override
+            public void run()
+            {
+                abortDependencies(_user);
 
-        removeTemporallyDataobjects();
+                connectItemsAware(_user);
+
+                if(_nextObjects)
+                {
+                    FlowNode type=getFlowNodeType();
+                    type.nextObject(_this, _user);
+                }
+                getFlowNodeType().close(_this, _user);
+
+                if(_status==Instance.STATUS_CLOSED)
+                {
+                    runActionCode(_user, UserTask.CLOSE_ACTIONCODE);
+                }else if(_status==Instance.STATUS_ABORTED)
+                {
+                    runActionCode(_user, UserTask.ABORT_ACTIONCODE);
+                }
+
+                removeTemporallyDataobjects();
+            }
+        };
+        //thread.start();
+        thread.run();           //Cambiar esto cuando la bandeja se recarge automaticamente
     }
     
     private void runActionCode(User user, int type)

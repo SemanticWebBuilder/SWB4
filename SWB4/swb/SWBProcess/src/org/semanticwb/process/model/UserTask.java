@@ -31,12 +31,16 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
+import org.semanticwb.process.utils.SWBScriptParser;
 
 public class UserTask extends org.semanticwb.process.model.base.UserTaskBase 
 {
+    private static Logger log=SWBUtils.getLogger(UserTask.class);
+    
     public static final int START_ACTIONCODE=1;
     public static final int CLOSE_ACTIONCODE=2;
     public static final int ABORT_ACTIONCODE=3;
@@ -46,15 +50,12 @@ public class UserTask extends org.semanticwb.process.model.base.UserTaskBase
         super(base);
         getTaskWebPage();
     }
-    
-
-
 
     @Override
     public void execute(FlowNodeInstance instance, User user)
     {
         super.execute(instance, user);
-        System.out.println("execute:"+instance+" "+user);
+        //System.out.println("execute:"+instance+" "+user);
         if(getResourceAssignationRule()>0 && instance.getAssignedto()==null)
         {
             boolean groupFilter=getProcess().isFilterByOwnerUserGroup();
@@ -65,9 +66,21 @@ public class UserTask extends org.semanticwb.process.model.base.UserTaskBase
                 User assigned=users.get(new Random().nextInt(s));                
                 instance.setAssigned(new Date());
                 instance.setAssignedto(assigned);
+                System.out.println("assigned:"+assigned);
                 if(getProcess().isSendAssigmentNotifications())
                 {
-                    //SWBUtils.EMAIL.sendBGEmail(user.getEmail(), "Notificacion de Asignacion ", null);
+                    NotificationTemplate tpl=getProcess().getAssigmentNotificationTemplate();
+                    if(tpl!=null)
+                    {
+                        try
+                        {
+                            System.out.println("send mail:"+assigned);
+                            SWBUtils.EMAIL.sendBGEmail(assigned.getEmail(), SWBScriptParser.parser(instance, assigned, tpl.getSubject()), SWBScriptParser.parser(instance, assigned, tpl.getBody()));
+                        }catch(Exception e)
+                        {
+                            log.error(e);
+                        }
+                    }
                 }
             }
         }
