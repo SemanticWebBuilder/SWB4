@@ -1471,6 +1471,31 @@ function replaceChars4Id(value, lowercase)
             endstr = document.cookie.length;
         return unescape(document.cookie.substring(offset, endstr));
     }
+    
+    
+    
+    if (!Array.prototype.indexOf)
+    {
+      Array.prototype.indexOf = function(elt /*, from*/)
+      {
+        var len = this.length;
+
+        var from = Number(arguments[1]) || 0;
+        from = (from < 0)
+             ? Math.ceil(from)
+             : Math.floor(from);
+        if (from < 0)
+          from += len;
+
+        for (; from < len; from++)
+        {
+          if (from in this &&
+              this[from] === elt)
+            return from;
+        }
+        return -1;
+      };
+    }
 
 
     /*
@@ -1571,6 +1596,13 @@ function replaceChars4Id(value, lowercase)
         var re = new RegExp(strRe, "g");
         return re.test(strValue);
     }
+    
+    function isUrl(url) {
+	//var regex = /^(https?|ftp):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?.*)?$/;
+	var regex = /^(https?|ftp):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/?(\?(\w=\S*)+(&\w=\S*)*))?$/;
+        return regex.test(url);
+    }
+    
 
 function MoveItems(lstbxFrom,lstbxTo)
 {
