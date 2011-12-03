@@ -35,7 +35,6 @@ import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.User;
@@ -45,6 +44,7 @@ import org.semanticwb.portal.api.*;
 import org.semanticwb.process.model.FlowNodeInstance;
 import org.semanticwb.process.model.GraphicalElement;
 import org.semanticwb.process.model.Lane;
+import org.semanticwb.process.model.Pool;
 import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.SWBProcessMgr;
@@ -243,6 +243,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                 Iterator<ProcessInstance> processInstances = process.listProcessInstances();
                 while (processInstances.hasNext()) {
                     ProcessInstance processInstance = processInstances.next();
+                    System.out.println("Revisando instancia " + processInstance.getId());
                     Iterator<FlowNodeInstance> nodeInstances = null;
 
                     if (isFilterByGroup()) { //Si hay que filtrar por grupo de usuarios
@@ -269,13 +270,24 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                                 User owner = flowNodeInstance.getAssignedto();
                                 
                                 if (owner != null) { //Tiene propieario
+                                    System.out.println("  La tarea " + utask.getTitle() + " del proceso " + processInstance.getId() + " ya ha sido asignada a un usuario");
                                     if (owner.getURI().equals(user.getURI())) {
                                         canAccess = true;
                                     }
                                 } else if (user.haveAccess(utask)) { //No tiene propietario
+                                    System.out.println("  La tarea " + utask.getTitle() + " del proceso " + processInstance.getId() + " no ha sido asignada a un usuario");
                                     GraphicalElement parent = utask.getParent();
-                                    if (parent == null || (parent != null && parent instanceof Lane && user.haveAccess(parent))) {
+                                    if (parent != null) System.out.println("    El padre de la tarea no es nulo");
+                                    if (parent instanceof Lane) {
+                                        System.out.println("    El padre es un lane");
+                                    }
+                                    if (user.haveAccess(parent)) System.out.println("   El usuario tiene acceso al padre");
+                                    
+                                    if (parent == null || parent instanceof Pool || (parent != null && parent instanceof Lane && user.haveAccess(parent))) {
                                         canAccess = true;
+                                    }
+                                    if (canAccess) {
+                                        System.out.println("  La tarea " + utask.getTitle() + " del proceso " + processInstance.getId() + " debe aparecer en la bandeja");
                                     }
                                 }
                                 
