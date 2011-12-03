@@ -133,85 +133,81 @@ String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + r
 ArrayList<FlowNodeInstance> tinstances = (ArrayList<FlowNodeInstance>) request.getAttribute("instances");
 SWBResourceURL configUrl = paramRequest.getRenderUrl().setMode("config");
 if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
+    SWBResourceURL optsUrl = paramRequest.getRenderUrl();
+    optsUrl.setParameter("pFilter", pFilter);
+    optsUrl.setParameter("sFilter", sFilter);
     %>
     <h2>Bandeja de tareas</h2>
-    <%
-    if (tinstances != null && tinstances.size() > 0) {
-        SWBResourceURL optsUrl = paramRequest.getRenderUrl();
-        optsUrl.setParameter("pFilter", pFilter);
-        optsUrl.setParameter("sFilter", sFilter);
-        %>
-        <div class="bandeja-combo">
-            <ul>
-                <li>Ordenar:
-                    <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'sort', this.options[this.selectedIndex].value)">
-                        <option value="date" <%=sortType.equals("date")?"selected":""%>>Por fecha</option>
-                        <option value="name" <%=sortType.equals("name")?"selected":""%>>Por proceso</option>
-                    </select>
-                </li>
-                <li>
+    <div class="bandeja-combo">
+        <ul>
+            <li>Ordenar:
+                <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'sort', this.options[this.selectedIndex].value)">
+                    <option value="date" <%=sortType.equals("date")?"selected":""%>>Por fecha</option>
+                    <option value="name" <%=sortType.equals("name")?"selected":""%>>Por proceso</option>
+                </select>
+            </li>
+            <li>
+                <%
+                optsUrl = paramRequest.getRenderUrl();
+                optsUrl.setParameter("sort", sortType);
+                optsUrl.setParameter("sFilter", sFilter);
+                %>
+                Proceso:
+                <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'pFilter', this.options[this.selectedIndex].value)">
+                    <option value="" <%=pFilter.equals("")?"selected":""%>>Todos</option>
                     <%
-                    optsUrl = paramRequest.getRenderUrl();
-                    optsUrl.setParameter("sort", sortType);
-                    optsUrl.setParameter("sFilter", sFilter);
-                    %>
-                    Proceso:
-                    <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'pFilter', this.options[this.selectedIndex].value)">
-                        <option value="" <%=pFilter.equals("")?"selected":""%>>Todos</option>
-                        <%
-                        Iterator<ProcessGroup> itgroups = SWBComparator.sortByDisplayName(ProcessGroup.ClassMgr.listProcessGroups(paramRequest.getWebPage().getWebSite()), lang);
-                        while (itgroups.hasNext()) {
-                            ProcessGroup pgroup = itgroups.next();
-                            Iterator<Process> processes = SWBComparator.sortByDisplayName(pgroup.listProcesses(), lang);
-                            ArrayList<Process> alProcesses = new ArrayList<Process>();
-                        
-                            while (processes.hasNext()) {
-                                Process process = processes.next();
-                                if (process.isValid()) {
-                                    alProcesses.add(process);
-                                }
-                            }
-                        
-                            if (!alProcesses.isEmpty()) {
-                                processes = alProcesses.iterator();
-                                %>
-                                <optgroup label="<%=pgroup.getDisplayTitle(lang)%>">
-                                    <%
-                                    while (processes.hasNext()) {
-                                        Process process = processes.next();
-                                        String selected = "";
-                                        if (pFilter.equals(process.getId())) selected = "selected";
-                                        %>
-                                        <option value="<%=process.getId()%>" <%=selected%>><%=process.getDisplayTitle(lang)%></option>
-                                        <%
-                                    }
-                                    %>
-                                </optgroup>
-                                <%
+                    Iterator<ProcessGroup> itgroups = SWBComparator.sortByDisplayName(ProcessGroup.ClassMgr.listProcessGroups(paramRequest.getWebPage().getWebSite()), lang);
+                    while (itgroups.hasNext()) {
+                        ProcessGroup pgroup = itgroups.next();
+                        Iterator<Process> processes = SWBComparator.sortByDisplayName(pgroup.listProcesses(), lang);
+                        ArrayList<Process> alProcesses = new ArrayList<Process>();
+
+                        while (processes.hasNext()) {
+                            Process process = processes.next();
+                            if (process.isValid()) {
+                                alProcesses.add(process);
                             }
                         }
-                        %>
-                    </select>
-                </li>
-                <li>
-                    <%
-                    optsUrl = paramRequest.getRenderUrl();
-                    optsUrl.setParameter("sort", sortType);
-                    optsUrl.setParameter("pFilter", pFilter);
+
+                        if (!alProcesses.isEmpty()) {
+                            processes = alProcesses.iterator();
+                            %>
+                            <optgroup label="<%=pgroup.getDisplayTitle(lang)%>">
+                                <%
+                                while (processes.hasNext()) {
+                                    Process process = processes.next();
+                                    String selected = "";
+                                    if (pFilter.equals(process.getId())) selected = "selected";
+                                    %>
+                                    <option value="<%=process.getId()%>" <%=selected%>><%=process.getDisplayTitle(lang)%></option>
+                                    <%
+                                }
+                                %>
+                            </optgroup>
+                            <%
+                        }
+                    }
                     %>
-                    Estado:
-                    <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'sFilter', this.options[this.selectedIndex].value)">
-                        <option value="-1" <%=sFilter.equals("-1")?"selected":""%>>Todos</option>
-                        <option value="<%=ProcessInstance.STATUS_PROCESSING%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_PROCESSING))?"selected":""%>>Pendientes</option>
-                        <option value="<%=ProcessInstance.STATUS_CLOSED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_CLOSED))?"selected":""%>>Terminadas</option>
-                        <option value="<%=ProcessInstance.STATUS_ABORTED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_ABORTED))?"selected":""%>>Abortadas</option>
-                    </select>
-                </li>
-            </ul>
-        </div>
+                </select>
+            </li>
+            <li>
+                <%
+                optsUrl = paramRequest.getRenderUrl();
+                optsUrl.setParameter("sort", sortType);
+                optsUrl.setParameter("pFilter", pFilter);
+                %>
+                Estado:
+                <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'sFilter', this.options[this.selectedIndex].value)">
+                    <option value="-1" <%=sFilter.equals("-1")?"selected":""%>>Todos</option>
+                    <option value="<%=ProcessInstance.STATUS_PROCESSING%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_PROCESSING))?"selected":""%>>Pendientes</option>
+                    <option value="<%=ProcessInstance.STATUS_CLOSED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_CLOSED))?"selected":""%>>Terminadas</option>
+                    <option value="<%=ProcessInstance.STATUS_ABORTED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_ABORTED))?"selected":""%>>Abortadas</option>
+                </select>
+            </li>
+        </ul>
+    </div>
     <%
-    }
-    
+        
     Map<String, ArrayList<Process>> groups = new TreeMap<String, ArrayList<Process>>();
     ArrayList<Process> pccs = null;
     //Obtener los eventos de inicio
