@@ -243,7 +243,6 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                 Iterator<ProcessInstance> processInstances = process.listProcessInstances();
                 while (processInstances.hasNext()) {
                     ProcessInstance processInstance = processInstances.next();
-                    System.out.println("Revisando instancia " + processInstance.getId());
                     Iterator<FlowNodeInstance> nodeInstances = null;
 
                     if (isFilterByGroup()) { //Si hay que filtrar por grupo de usuarios
@@ -270,24 +269,13 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
                                 User owner = flowNodeInstance.getAssignedto();
                                 
                                 if (owner != null) { //Tiene propieario
-                                    System.out.println("  La tarea " + utask.getTitle() + " del proceso " + processInstance.getId() + " ya ha sido asignada a un usuario");
                                     if (owner.getURI().equals(user.getURI())) {
                                         canAccess = true;
                                     }
                                 } else if (user.haveAccess(utask)) { //No tiene propietario
-                                    System.out.println("  La tarea " + utask.getTitle() + " del proceso " + processInstance.getId() + " no ha sido asignada a un usuario");
                                     GraphicalElement parent = utask.getParent();
-                                    if (parent != null) System.out.println("    El padre de la tarea no es nulo");
-                                    if (parent instanceof Lane) {
-                                        System.out.println("    El padre es un lane");
-                                    }
-                                    if (user.haveAccess(parent)) System.out.println("   El usuario tiene acceso al padre");
-                                    
                                     if (parent == null || parent instanceof Pool || (parent != null && parent instanceof Lane && user.haveAccess(parent))) {
                                         canAccess = true;
-                                    }
-                                    if (canAccess) {
-                                        System.out.println("  La tarea " + utask.getTitle() + " del proceso " + processInstance.getId() + " debe aparecer en la bandeja");
                                     }
                                 }
                                 
