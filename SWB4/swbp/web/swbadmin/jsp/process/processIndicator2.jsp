@@ -14,7 +14,6 @@
 <%@page import="org.semanticwb.process.model.UserTask"%>
 <%@page import="org.semanticwb.process.model.ProcessGroup"%>
 <%@page import="org.semanticwb.process.model.ProcessInstance"%>
-<%@page import="org.semanticwb.process.model.ProcessWebPage"%>
 <%@page import="org.semanticwb.model.User"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Iterator"%>
