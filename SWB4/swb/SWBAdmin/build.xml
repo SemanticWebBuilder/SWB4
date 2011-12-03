@@ -94,10 +94,12 @@
         <copy file="../applets/WBGraph/dist/SWBAplGraph.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/WorkFlowAdmin/dist/SWBAplWorkFlowAdmin.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/TMWBAdmin/dist/SWBAplTMAdmin.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+        <copy file="../applets/SWBAplXSLEditor/dist/SWBAplXSLEditor.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/SWBAppBPMNModeler/dist/SWBAppBPMNModeler.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/SWBAppBPMNModeler/install/Modeler.jnlp" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/SWBAppBPMNModeler/install/SWBAppBPMNModeler_browser.jnlp" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../lib/json.jar" todir="${build.classes.dir}//swbadmin/lib"/>
+      
         <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplHtmlEditor.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplDragDrop.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplFtp.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
@@ -109,5 +111,7 @@
         <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAppBPMNModeler.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         <signjar jar="${build.classes.dir}//swbadmin/lib/json.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplCommons.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplXSLEditor.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
+     
         </target>
 </project>
