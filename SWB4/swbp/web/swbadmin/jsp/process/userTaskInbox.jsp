@@ -297,7 +297,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                             %><th class="tban-cerrada">Cerrada</th><%
                         }
                         if (displayCols.contains("actionsCol")) {
-                            %><th class="tban-accion">Acciones</th><%
+                            %><th class="tban-id">Acciones</th><%
                         }
                         %>
                     </tr>
