@@ -234,7 +234,11 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
     }
     
     public void doShowFiles(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/controlPanel/businessControlPanelFiles.jsp";
+        String jsp = "/swbadmin/jsp/process/businessControlPanelFiles.jsp";
+        if (getDocsJSP() != null && !getDocsJSP().trim().equals("")) {
+            jsp = getDocsJSP();
+        }
+        //String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/controlPanel/businessControlPanelFiles.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(jsp);
         String pid = request.getParameter("pid");
         User user = paramRequest.getUser();
