@@ -161,8 +161,6 @@ public class SWBContext extends SWBContextBase {
             if (obj != null) {
                 view = (FormView) obj.createGenericInstance();
             }
-
-            // System.out.println("id:"+id+" obj:"+obj);
         }
 
         return view;
@@ -196,18 +194,22 @@ public class SWBContext extends SWBContextBase {
 
             if ((model != null) && (model.getModelObject() != null))
             {
-                GenericObject gen = model.getModelObject().createGenericInstance();
-
-                // System.out.println("gen:"+gen+" "+adminShow);
-                if (gen instanceof WebSite)
-                {
-                    if (adminShow)
+                try {
+                    GenericObject gen = model.getModelObject().createGenericInstance();
+                    if(gen instanceof WebSite)
                     {
-                        arr.add((WebSite) gen);
-                    } else if ((admin && gen.getId().equals(SWBContext.WEBSITE_ADMIN)) || !filtered.contains(gen.getId()))
-                    {
-                        arr.add((WebSite) gen);
+                        if (adminShow)
+                        {
+                            arr.add((WebSite) gen);
+                        } else if ((admin && gen.getId().equals(SWBContext.WEBSITE_ADMIN)) || !filtered.contains(gen.getId()))
+                        {
+                            arr.add((WebSite) gen);
+                        }
                     }
+                }catch(Exception e) {
+                    log.error(e);
+                    e.printStackTrace(System.out);
+                    e.getCause().printStackTrace(System.out);
                 }
             }
         }
@@ -371,8 +373,6 @@ public class SWBContext extends SWBContextBase {
          * @return the icon class
          */
         public static String getIconClass(SemanticObject obj) {
-
-            // System.out.println("getIconClass:"+obj);
             String ret = null;
             SemanticClass cls = obj.getSemanticClass();
 
@@ -391,8 +391,7 @@ public class SWBContext extends SWBContextBase {
             if (ret == null) {
                 ret = "swbIcon" + cls.getName();
             }
-
-            // System.out.println("getIconClass:1");
+            
             if (cls.hasProperty(Activeable.swb_active.getName())
                   && !obj.getBooleanProperty(Activeable.swb_active))
             {
