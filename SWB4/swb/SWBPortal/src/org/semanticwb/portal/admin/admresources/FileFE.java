@@ -108,6 +108,9 @@ public class FileFE extends WBJsInputFEAbs
     /** The msgbydefault. */
     private String msgbydefault=null;
     
+    private String showMsg="Ver...";
+    private String editMsg="Editar...";
+    
     /** The adm res utils. */
     WBAdmResourceUtils admResUtils=new WBAdmResourceUtils();
     
@@ -411,8 +414,7 @@ public class FileFE extends WBJsInputFEAbs
      * 
      * @return the file
      */
-    private Node getFile()
-    {
+    private Node getFile() {
         if(dbconnmgr!=null && dbconnmgr.getAttribute(name)!=null && !dbconnmgr.getAttribute(name).trim().equals(""))
         {
             try
@@ -424,18 +426,18 @@ public class FileFE extends WBJsInputFEAbs
                 Document dom=SWBUtils.XML.getNewDocument(); 
                 String xml="";
                 String filename=dbconnmgr.getAttribute(name);
-                if(filename.endsWith(".gif") || filename.endsWith(".jpg") || filename.endsWith(".jpeg") || filename.endsWith(".swf") || filename.endsWith(".png"))
-                {
+                if(filename.endsWith(".gif") || filename.endsWith(".jpg") || filename.endsWith(".jpeg") || filename.endsWith(".swf") || filename.endsWith(".png")) {
                     xml=admResUtils.displayImage(base, filename, width, height);
                     dom=SWBUtils.XML.xmlToDom(xml); 
-                }
-                else 
-                {
-                    if(msgfile!=null) xml+=msgfile;
-                    else xml+="Archivo: ";
-                    if(filename.endsWith(".html") || filename.endsWith(".htm") || filename.endsWith(".xml") || filename.endsWith(".xsl") || filename.endsWith(".xslt") || filename.endsWith(".jsp")){
-                        xml+="<A href=\""+ SWBPlatform.getContextPath()+"/editfile?file="+ base.getWorkPath() + "/" + filename + "&pathType=res&resUri="+base.getEncodedURI()+"\">"+filename+"</A>";
-                    }else xml+="<A href=\""+ SWBPortal.getWebWorkPath() + base.getWorkPath() +"/"+ filename +"\">"+filename+"</A>";
+                }else {
+                    if(msgfile!=null)
+                        xml+=msgfile;
+                    else
+                        xml+="Archivo: ";
+                    if(filename.endsWith(".html") || filename.endsWith(".htm") || filename.endsWith(".xml") || filename.endsWith(".xsl") || filename.endsWith(".xslt") || filename.endsWith(".jsp"))
+                        xml+="<a title=\""+editMsg+"\" href=\""+ SWBPlatform.getContextPath()+"/editfile?file="+SWBPortal.getWorkPath()+ base.getWorkPath() + "/" + filename + "&pathType=res&resUri="+base.getEncodedURI()+"\">"+filename+"</a>";
+                    else
+                        xml+="<a title=\""+editMsg+"\" href=\""+ SWBPortal.getWebWorkPath() + base.getWorkPath() +"/"+ filename +"\">"+filename+"</A>";
                     Element root = dom.createElement("wbmsg");
                     root.appendChild(dom.createTextNode(xml));
                     dom.appendChild(root);
@@ -475,6 +477,7 @@ public class FileFE extends WBJsInputFEAbs
      * 
      * @return the html
      */ 
+    @Override
     public String getHtml(){
         String xml="";
         try 
@@ -490,7 +493,8 @@ public class FileFE extends WBJsInputFEAbs
                     input=dom.createElement("label");
                     input.appendChild(dom.createTextNode(label.trim()));
                 }
-                if(input!=null) root.appendChild(input);
+                if(input!=null)
+                    root.appendChild(input);
                 Element child=dom.createElement("input");
                 child.setAttribute("type", "file");
                 if(id!=null) child.setAttribute("id",id);
@@ -524,14 +528,16 @@ public class FileFE extends WBJsInputFEAbs
                 }
                 if(bydefault!=null && node==null)
                 {
-                    if(msgbydefault!=null) xml+=msgbydefault;
-                    else msgbydefault+="Default: ";
-                    if(bydefault.endsWith(".html") || bydefault.endsWith(".htm") || bydefault.endsWith(".xml") || bydefault.endsWith(".xsl") || bydefault.endsWith(".xslt") || bydefault.endsWith(".jsp")){
+                    if(msgbydefault!=null)
+                        xml+=msgbydefault;
+                    else
+                        msgbydefault+="Default: ";
+                    if(bydefault.endsWith(".html") || bydefault.endsWith(".htm") || bydefault.endsWith(".xml") || bydefault.endsWith(".xsl") || bydefault.endsWith(".xslt") || bydefault.endsWith(".jsp")) {
                         String defFileName=bydefault.substring(bydefault.lastIndexOf("/")+1);
                         Resource base=dbconnmgr.getBase();
-                        xml+="<A href=\""+ SWBPlatform.getContextPath()+"/editfile?file="+ bydefault +"&pathType=def&resUri="+base.getEncodedURI()+"&attr="+getName()+"\">"+defFileName+"</A>";
-                    }else{
-                        xml+="<A href=\""+bydefault+"\">"+bydefault.substring(bydefault.lastIndexOf("/")+1)+"</A>";
+                        xml+="<a title=\""+showMsg+"\" href=\""+ SWBPlatform.getContextPath()+"/showfile?file="+bydefault+"&pathType=def&resUri="+base.getEncodedURI()+"&attr="+getName()+"\">"+defFileName+"</a>";
+                    }else {
+                        xml+="<a title=\""+showMsg+"\" href=\""+bydefault+"\">"+bydefault.substring(bydefault.lastIndexOf("/")+1)+"</a>";
                     }
                     child=dom.createElement("wbmsg");
                     child.appendChild(dom.createTextNode(xml));
@@ -545,11 +551,12 @@ public class FileFE extends WBJsInputFEAbs
                        child.setAttribute("name", "wbfile_"+name);
                        child.setAttribute("value", dbconnmgr.getAttribute(name));
                        root.appendChild(child);
-                       if(isremovefile) 
-                       {
+                       if(isremovefile) {
                            input=dom.createElement("label");
-                           if(removeMsg!=null) input.appendChild(dom.createTextNode(removeMsg+" "));
-                           else input.appendChild(dom.createTextNode("remove file "));
+                           if(removeMsg!=null)
+                               input.appendChild(dom.createTextNode(removeMsg+" "));
+                           else
+                               input.appendChild(dom.createTextNode("Remove file "));
                            child=dom.createElement("input");
                            child.setAttribute("type", "checkbox");
                            child.setAttribute("name", "wbNoFile_"+name);
@@ -558,8 +565,7 @@ public class FileFE extends WBJsInputFEAbs
                            input.appendChild(child);
                            root.appendChild(input);
                        }
-                       if(replace) 
-                       {
+                       if(replace) {
                            child=dom.createElement("input");
                            child.setAttribute("type", "hidden");
                            child.setAttribute("id", "wbReplacefile_"+name);
@@ -586,9 +592,10 @@ public class FileFE extends WBJsInputFEAbs
     /**
      * Set attributes to class according with the xml tag element.
      */
+    @Override
     public void setAttributes(){
         boolean required=false;
-        int minsize=0;
+//        int minsize=0;
         String svaltype=null;
         String sjsvalchars=null;
         boolean isvalchars=true;
@@ -628,6 +635,10 @@ public class FileFE extends WBJsInputFEAbs
                             continue;                            
                         }                        
                         else if(attrName.equalsIgnoreCase("msgbydefault")) msgbydefault=attrValue;
+                                
+                        else if(attrName.equalsIgnoreCase("showmsg")) showMsg=attrValue;
+                        else if(attrName.equalsIgnoreCase("editmsg")) editMsg=attrValue;
+                                
                         else if(attrName.equalsIgnoreCase("width")) width=Integer.parseInt(attrValue);
                         else if(attrName.equalsIgnoreCase("height")) height=Integer.parseInt(attrValue);
                         else if(attrName.equalsIgnoreCase("label")) label=attrValue;
