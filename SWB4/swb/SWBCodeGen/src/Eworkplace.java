@@ -20,7 +20,7 @@ public class Eworkplace {
         SWBPlatform.createInstance();
         //SWBPlatform.getSemanticMgr().initializeDB();
         SWBPlatform.getSemanticMgr().addBaseOntology("C:/Users/carlos.ramos/desarrollo/SWB4/swb/build/web/WEB-INF/owl/swb.owl");
-        SWBPlatform.getSemanticMgr().addBaseOntology("C:/Users/carlos.ramos/desarrollo/swbproys/Eworkplace/src/eworkplace.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology("C:/Users/carlos.ramos/desarrollo/swbproys/Eworkplace/src/intranet.owl");
         SWBPlatform.getSemanticMgr().loadBaseVocabulary();
         //SWBPlatform.getSemanticMgr().loadDBModels();
         SWBPlatform.getSemanticMgr().getOntology().rebind();
@@ -30,7 +30,7 @@ public class Eworkplace {
             String path = getClass().getResource("/").getPath().replaceAll("%20", " ");
             File dir = new File("C:/Users/carlos.ramos/desarrollo/swbproys/Eworkplace/src");
             CodeGenerator codeGeneration = new CodeGenerator();
-            codeGeneration.generateCode("ewp", false, dir);
+            codeGeneration.generateCode("intranet", false, dir);
             System.out.println("Generación de clases completa: "+dir);
         }
         catch (CodeGeneratorException cge)
