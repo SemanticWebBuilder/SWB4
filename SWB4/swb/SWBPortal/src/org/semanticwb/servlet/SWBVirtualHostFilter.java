@@ -51,6 +51,9 @@ import org.semanticwb.servlet.internal.Admin;
 import org.semanticwb.servlet.internal.Distributor;
 import org.semanticwb.servlet.internal.DistributorParams;
 import org.semanticwb.servlet.internal.EditFile;
+
+import org.semanticwb.servlet.internal.ShowFile;
+
 import org.semanticwb.servlet.internal.FrmProcess;
 import org.semanticwb.servlet.internal.GoogleSiteMap;
 import org.semanticwb.servlet.internal.InternalProxy;
@@ -469,6 +472,10 @@ public class SWBVirtualHostFilter implements Filter
             InternalServlet editFile = new EditFile();
             intServlets.put("editfile", editFile);
             editFile.init(filterConfig.getServletContext());
+            
+            InternalServlet showFile = new ShowFile();
+            intServlets.put("showfile", showFile);
+            showFile.init(filterConfig.getServletContext());            
 
             InternalServlet UploadFormElement = new UploadFormElement();
             intServlets.put("Upload", UploadFormElement);
