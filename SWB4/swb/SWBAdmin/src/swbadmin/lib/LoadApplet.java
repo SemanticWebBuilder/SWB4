@@ -15,6 +15,7 @@ public class LoadApplet extends Applet {
      * Initialization method that will be called after the applet is loaded
      * into the browser.
      */
+    @Override
     public void init() {
         // TODO start asynchronous download of heavy resources
     }
