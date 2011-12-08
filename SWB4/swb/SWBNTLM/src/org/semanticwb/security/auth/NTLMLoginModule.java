@@ -105,7 +105,7 @@ public class NTLMLoginModule implements LoginModule{
         log.trace("WebSite id: "+website);
         WebSite ws = SWBContext.getWebSite(website);
         String login = NTLMServlet.secContx.get(connectionid).getIdentity().getFqn();
-        login = login.substring(login.indexOf('\\')+1); System.out.println("Login:"+login);
+        login = login.substring(login.indexOf('\\')+1); //System.out.println("Login:"+login);
         UserRepository ur = ws.getUserRepository();
         principal = ur.getUserByLogin(login);
         log.debug("principal:"+principal);
