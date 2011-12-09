@@ -22,6 +22,7 @@ public class Command
     public static final String TRANS_ABORT="TRANS_ABORT";
     
     public static final String OOK="OOK";
+    public static final String ERROR="ERROR";
     public static final String NULL="[_NULL_]";    
     public static final String CLOSE="[_CLOSE_]";
     
