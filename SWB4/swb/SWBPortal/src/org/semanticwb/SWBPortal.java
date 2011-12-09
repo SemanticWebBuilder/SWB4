@@ -428,6 +428,7 @@ public class SWBPortal
 
         //Insercion de parametros a Platform
         SWBPlatform platform = SWBPlatform.createInstance();
+        platform.setPortalLoaded(true);
         platform.setPlatformWorkPath(workPath);
         platform.setStatementsCache(getEnv("swb/ts_statementsCache", "false").equals("false"));
         String persistType = getEnv("swb/triplepersist", SWBPlatform.PRESIST_TYPE_DEFAULT);
