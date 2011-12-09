@@ -1574,6 +1574,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param versionName the version name
      * @throws Exception the exception
      */
+    @Override
     public void deleteVersionOfContent(String repositoryName, String contentId, String versionName) throws Exception
     {
         Session session = null;
@@ -1869,6 +1870,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param contentID the content id
      * @throws Exception the exception
      */
+    @Override
     public void delete(String repositoryName, String contentID) throws Exception
     {
         Session session = null;
@@ -2036,6 +2038,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return the versions
      * @throws Exception the exception
      */
+    @Override
     public VersionInfo[] getVersions(String repositoryName, String contentId) throws Exception
     {
         Session session = null;
@@ -2228,6 +2231,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param description the description
      * @throws Exception the exception
      */
+    @Override
     public void setDescription(String repositoryName, String contentID, String description) throws Exception
     {
         Session session = null;
@@ -2665,6 +2669,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return the resource info
      * @throws Exception the exception
      */
+    @Override
     public ResourceInfo publishToResourceContent(String repositoryName, String contentId, String version, String title, String description, WebPageInfo webpage, PropertyInfo[] properties, String[] values) throws Exception
     {
         String id = UUID.randomUUID().toString();
@@ -2679,6 +2684,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param value the value
      * @throws Exception the exception
      */
+    @Override
     public void setResourceProperties(ResourceInfo resourceInfo, PropertyInfo propertyInfo, String value) throws Exception
     {
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
@@ -2815,6 +2821,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return the catalog calendars
      * @throws Exception the exception
      */
+    @Override
     public CalendarInfo[] getCatalogCalendars(SiteInfo siteInfo) throws Exception
     {
         HashSet<CalendarInfo> getCalendarInfo = new HashSet<CalendarInfo>();
@@ -2954,6 +2961,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return the content properties
      * @throws Exception the exception
      */
+    @Override
     public PropertyInfo[] getContentProperties(String repositoryName, String type) throws Exception
     {
         return loader.getOfficeManager(repositoryName).getContentProperties(type);
@@ -2967,6 +2975,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return the resource properties
      * @throws Exception the exception
      */
+    @Override
     public PropertyInfo[] getResourceProperties(String repositoryName, String contentID) throws Exception
     {
         ArrayList<PropertyInfo> properties = new ArrayList<PropertyInfo>();
@@ -3264,6 +3273,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return the string
      * @throws Exception the exception
      */
+    @Override
     public String createPreview(String repositoryName, String contentId, String version, String type) throws Exception
     {
         String name = UUID.randomUUID().toString();
@@ -3329,6 +3339,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return the category
      * @throws Exception the exception
      */
+    @Override
     public String getCategory(String repositoryName, String contentID) throws Exception
     {
         Session session = null;
@@ -3415,6 +3426,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return the category info
      * @throws Exception the exception
      */
+    @Override
     public CategoryInfo getCategoryInfo(String repositoryName, String contentid) throws Exception
     {
         Session session = null;
@@ -3451,6 +3463,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param info the info
      * @throws Exception the exception
      */
+    @Override
     public void deleteResource(ResourceInfo info) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
@@ -3478,6 +3491,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return the version to show
      * @throws Exception the exception
      */
+    @Override
     public String getVersionToShow(ResourceInfo info) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
@@ -3583,6 +3597,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param active the active
      * @throws Exception the exception
      */
+    @Override
     public void activeCalendar(ResourceInfo resourceInfo, CalendarInfo calendarInfo, boolean active) throws Exception
     {
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
@@ -3604,6 +3619,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param resourceInfo the resource info
      * @throws Exception the exception
      */
+    @Override
     public void updatePorlet(ResourceInfo resourceInfo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
@@ -3689,6 +3705,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param values the values
      * @throws Exception the exception
      */
+    @Override
     public void setContentProperties(String repositoryName, String contentID, PropertyInfo[] properties, String[] values) throws Exception
     {
         Session session = null;
@@ -3728,6 +3745,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return the name of content
      * @throws Exception the exception
      */
+    @Override
     public String getNameOfContent(String repositoryName, String contentID) throws Exception
     {
         Session session = null;
@@ -3812,6 +3830,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param info the info
      * @return the flows
      */
+    @Override
     public PFlow[] getFlows(ResourceInfo info)
     {
         HashSet<PFlow> flows = new HashSet<PFlow>();
@@ -3876,6 +3895,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param info the info
      * @return true, if is authorized
      */
+    @Override
     public boolean isAuthorized(ResourceInfo info)
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
@@ -3890,6 +3910,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param date the date
      * @throws Exception the exception
      */
+    @Override
     public void setEndDate(ResourceInfo info, Date date) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
@@ -3903,6 +3924,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param info the info
      * @throws Exception the exception
      */
+    @Override
     public void deleteEndDate(ResourceInfo info) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
@@ -3917,6 +3939,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return the end date
      * @throws Exception the exception
      */
+    @Override
     public Date getEndDate(ResourceInfo info) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
@@ -3931,6 +3954,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param calendarIndo the calendar indo
      * @throws Exception the exception
      */
+    @Override
     public void deleteCalendarFromCatalog(SiteInfo siteInfo, CalendarInfo calendarIndo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(siteInfo.id);
@@ -3945,6 +3969,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return the elements of resource
      * @throws Exception the exception
      */
+    @Override
     public ElementInfo[] getElementsOfResource(ResourceInfo info) throws Exception
     {
         HashSet<ElementInfo> rules = new HashSet<ElementInfo>();
@@ -4086,6 +4111,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param ruleInfo the rule info
      * @throws Exception the exception
      */
+    @Override
     public void deleteElementToResource(ResourceInfo info, ElementInfo ruleInfo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
@@ -4184,6 +4210,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return the title of web page
      * @throws Exception the exception
      */
+    @Override
     public String getTitleOfWebPage(PageInfo webPageInfo, LanguageInfo laguage) throws Exception
     {
         WebSite osite = WebSite.ClassMgr.getWebSite(webPageInfo.site.id);
@@ -4199,6 +4226,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @param values the values
      * @throws Exception the exception
      */
+    @Override
     public void setTitlesOfWebPage(PageInfo webPageInfo, LanguageInfo[] languages, String[] values) throws Exception
     {
         WebSite osite = WebSite.ClassMgr.getWebSite(webPageInfo.site.id);
@@ -4225,6 +4253,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return the content info
      * @throws Exception the exception
      */
+    @Override
     public ContentInfo existContentOldVersion(String contentid, String topicmap, String topicid) throws Exception
     {
         WebSite site = WebSite.ClassMgr.getWebSite(topicmap);
@@ -4262,6 +4291,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      * @return true, if successful
      * @throws Exception the exception
      */
+    @Override
     public boolean canModify(String repositoryName, String contentID) throws Exception
     {
         Session session = null;
