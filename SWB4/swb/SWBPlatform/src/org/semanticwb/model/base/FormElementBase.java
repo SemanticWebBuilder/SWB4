@@ -195,7 +195,7 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
         boolean required=prop.isRequired();
 
         String reqtxt=" &nbsp;";
-        if(required)reqtxt=" <em>*</em>";
+        if(!mode.equals("filter") && required)reqtxt=" <em>*</em>";
 
         ret="<label for=\""+name+"\">"+label + reqtxt + "</label>";
         return ret;
