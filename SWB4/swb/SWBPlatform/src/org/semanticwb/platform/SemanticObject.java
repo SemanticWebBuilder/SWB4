@@ -311,7 +311,6 @@ public class SemanticObject
             ret=m_objs.get(uri);
             //System.out.println("getSemanticObject:"+uri+" "+ret);
             //if(ret!=null)System.out.println(" -->:"+ret.getProps().size());
-            
         }
         return ret;
     }    
@@ -366,6 +365,8 @@ public class SemanticObject
         }          
     }
     
+    private synchronized loadSemanticObject()
+    
     
     /**
      * Regrea una instancia del SemanticObject en base al URI dado en el modelo definido.
@@ -388,6 +389,7 @@ public class SemanticObject
                 ret=getSemanticObject(uri);
                 if(ret==null)
                 {
+                    System.out.println("createSemanticObject:"+uri);
                     if(smodel!=null)
                     {
                         Resource res=smodel.getRDFModel().getResource(uri);
