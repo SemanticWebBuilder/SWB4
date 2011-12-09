@@ -164,6 +164,9 @@ public class Text extends TextBase {
 
             ret.append(" " + getAttributes());
 
+            if(getMaxLength()>0)
+                ret.append(" maxlength=\""+getMaxLength()+"\"");
+            
             if (DOJO) {
                 ret.append(" trim=\"true\"");
             }

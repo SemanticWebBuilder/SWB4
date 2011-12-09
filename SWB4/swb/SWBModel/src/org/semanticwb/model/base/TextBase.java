@@ -7,6 +7,7 @@ package org.semanticwb.model.base;
 public abstract class TextBase extends org.semanticwb.model.base.FormElementBase 
 {
     public static final org.semanticwb.platform.SemanticProperty swbxf_textRegExp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#textRegExp");
+    public static final org.semanticwb.platform.SemanticProperty swb_maxLength=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#maxLength");
    /**
    * Elemento que muestra un componente grafico para capturar texto (input type text)
    */
@@ -106,6 +107,24 @@ public abstract class TextBase extends org.semanticwb.model.base.FormElementBase
     public void setRegExp(String value)
     {
         getSemanticObject().setProperty(swbxf_textRegExp, value);
+    }
+
+/**
+* Gets the MaxLength property
+* @return int with the MaxLength
+*/
+    public int getMaxLength()
+    {
+        return getSemanticObject().getIntProperty(swb_maxLength);
+    }
+
+/**
+* Sets the MaxLength property
+* @param value long with the MaxLength
+*/
+    public void setMaxLength(int value)
+    {
+        getSemanticObject().setIntProperty(swb_maxLength, value);
     }
 
     public void remove()

@@ -237,7 +237,7 @@ public class GenericFormElement extends FormElementBase {
                     value = "";
                 }
 
-                if (mode.equals("edit") || mode.equals("create")) {
+                if (mode.equals("edit") || mode.equals("create") || mode.equals("filter")) {
                     ret.append("<input _id=\"" + name + "\" name=\"" + name + "\" value=\"" + value + "\"");
 
                     if (DOJO) {
@@ -248,7 +248,7 @@ public class GenericFormElement extends FormElementBase {
                         ret.append(" regExp=\"\\d+\"");
                     }
 
-                    if (DOJO) {
+                    if (!mode.equals("filter") && DOJO) {
                         ret.append(" required=\"" + required + "\"");
                     }
 
@@ -292,14 +292,14 @@ public class GenericFormElement extends FormElementBase {
                 value=value.replace("\"", "&quot;");
                 //System.out.println(" "+value);
 
-                if (mode.equals("edit") || mode.equals("create")) {
+                if (mode.equals("edit") || mode.equals("create") || mode.equals("filter")) {
                     ret.append("<input _id=\"" + name + "\" name=\"" + name + "\" value=\"" + value + "\"");
 
                     if (DOJO) {
                         ret.append(" dojoType=\"dijit.form.ValidationTextBox\"");
                     }
 
-                    if (DOJO) {
+                    if (!mode.equals("filter") || DOJO) {
                         ret.append(" required=\"" + required + "\"");
                     }
 
