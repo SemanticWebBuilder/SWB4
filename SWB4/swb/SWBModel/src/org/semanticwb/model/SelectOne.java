@@ -162,7 +162,7 @@ public class SelectOne extends SelectOneBase {
                 value = obj.getDisplayName(lang);
             }
 
-            if (mode.equals("edit") || mode.equals("create")) {
+            if (mode.equals("edit") || mode.equals("create") || mode.equals("filter")) {
                 ret.append("<select name=\"" + name + "\"");
 
                 if (DOJO) {
@@ -170,16 +170,19 @@ public class SelectOne extends SelectOneBase {
                                + imsg + "\"");
                 }
 
-                ret.append(" required=\"" + required + "\"");
+                if(!mode.equals("filter"))
+                {
+                    ret.append(" required=\"" + required + "\"");
+                }
 
-                if (isBlankSuport() && ((uri == null) || (uri.length() == 0))) {
+                if ((mode.equals("filter") || isBlankSuport()) && ((uri == null) || (uri.length() == 0))) {
                     ret.append(" displayedvalue=\"\"");
                 }
 
                 ret.append(" " + ext + ">");
 
                 // onChange="dojo.byId('oc1').value=arguments[0]"
-                if (isBlankSuport()) {
+                if ((mode.equals("filter") || isBlankSuport())) {
                     ret.append("<option");
 
                     // if(uri==null || uri.length()==0)ret.append(" selected");
