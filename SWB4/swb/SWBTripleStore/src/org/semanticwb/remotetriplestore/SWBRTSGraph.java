@@ -56,7 +56,7 @@ class SWBRTSGraph extends GraphBase{
             String obj=SWBTSUtil.node2String(t.getObject());
 
             try {
-                String params[]={Command.GRAPH_ADD,getName(),subj,prop,obj,""+Thread.currentThread().getId()};
+                String params[]={Command.GRAPH_ADD,getName(),subj,prop,obj,""+(Thread.currentThread().getId()+SWBRTSTransactionHandler.base)};
                 SWBRTSUtil util = new SWBRTSUtil(params);
                 util.call();
             } catch (Exception e)
@@ -77,7 +77,7 @@ class SWBRTSGraph extends GraphBase{
         String obj=SWBTSUtil.node2String(t.getObject());
 
         try {
-            String[] params = {Command.GRAPH_REMOVE,getName(),subj,prop,obj,""+Thread.currentThread().getId()};
+            String[] params = {Command.GRAPH_REMOVE,getName(),subj,prop,obj,""+(Thread.currentThread().getId()+SWBRTSTransactionHandler.base)};
             SWBRTSUtil util = new SWBRTSUtil(params);
             util.call();
         } catch (Exception e)

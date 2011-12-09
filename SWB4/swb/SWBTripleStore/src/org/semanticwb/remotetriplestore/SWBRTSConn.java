@@ -215,29 +215,30 @@ public class SWBRTSConn implements Runnable
                 arr.add(Command.OOK);
             }else if(cmd.equals(Command.TRANS_BEGIN))
             {
-                System.out.println("Begin");
+                System.out.println("Begin:"+params.get(2));
                 name = params.get(1);
                 id = params.get(2);                    
                 begin(name, id);
                 arr.add(Command.OOK);
             }else if(cmd.equals(Command.TRANS_ABORT))
             {
-                System.out.println("Abort");
+                System.out.println("Abort:"+params.get(2));
                 name = params.get(1);
                 id = params.get(2);                    
                 abort(name, id);
                 arr.add(Command.OOK);
             }else if(cmd.equals(Command.TRANS_COMMINT))
             {
-                System.out.println("Commit");
+                System.out.println("Commit:"+params.get(2));
                 name = params.get(1);
                 id = params.get(2);                    
-                commint(name, id);
+                commit(name, id);
                 arr.add(Command.OOK);
             }            
-        } catch (Exception e)
+        } catch (Throwable e)
         {
             log.error(e);
+            arr.add(Command.CLOSE);
         }
         
         return arr;
@@ -274,18 +275,34 @@ public class SWBRTSConn implements Runnable
         if(sid!=null)id=Long.parseLong(sid);
         AbstractStore store = SWBPlatform.getSemanticMgr().getSWBStore();
         Model model=store.getModel(name);
-        RTransactionHandler trans=(RTransactionHandler)model.getGraph().getTransactionHandler();
+        RGraph g;
+        if(model.getGraph() instanceof GraphCached)
+        {
+            g=(RGraph)((GraphCached)model.getGraph()).getGraphBase();
+        }else
+        {
+            g=((RGraph)model.getGraph());
+        }        
+        RTransactionHandler trans=(RTransactionHandler)(g.getTransactionHandler());
         trans.begin(id);
     }
     
-    private void commint(String name, String sid)
+    private void commit(String name, String sid)
     {
         //System.out.println("commint:"+name+" "+sid);
         Long id=null;
         if(sid!=null)id=Long.parseLong(sid);
         AbstractStore store = SWBPlatform.getSemanticMgr().getSWBStore();
         Model model=store.getModel(name);
-        RTransactionHandler trans=(RTransactionHandler)model.getGraph().getTransactionHandler();
+        RGraph g;
+        if(model.getGraph() instanceof GraphCached)
+        {
+            g=(RGraph)((GraphCached)model.getGraph()).getGraphBase();
+        }else
+        {
+            g=((RGraph)model.getGraph());
+        }        
+        RTransactionHandler trans=(RTransactionHandler)(g.getTransactionHandler());
         trans.commit(id);
     }
     
@@ -295,7 +312,15 @@ public class SWBRTSConn implements Runnable
         if(sid!=null)id=Long.parseLong(sid);
         AbstractStore store = SWBPlatform.getSemanticMgr().getSWBStore();
         Model model=store.getModel(name);
-        RTransactionHandler trans=(RTransactionHandler)model.getGraph().getTransactionHandler();
+        RGraph g;
+        if(model.getGraph() instanceof GraphCached)
+        {
+            g=(RGraph)((GraphCached)model.getGraph()).getGraphBase();
+        }else
+        {
+            g=((RGraph)model.getGraph());
+        }        
+        RTransactionHandler trans=(RTransactionHandler)(g.getTransactionHandler());
         trans.abort(id);
     }
 
