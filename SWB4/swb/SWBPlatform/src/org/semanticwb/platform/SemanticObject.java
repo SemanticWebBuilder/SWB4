@@ -365,8 +365,7 @@ public class SemanticObject
         }          
     }
     
-    private synchronized loadSemanticObject()
-    
+   
     
     /**
      * Regrea una instancia del SemanticObject en base al URI dado en el modelo definido.
