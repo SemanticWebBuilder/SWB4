@@ -227,7 +227,10 @@ public class SWBUserMgr
             Country c=null;
             if(scountry!=null)
             {
-                c=site.getCountry(scountry.toLowerCase());
+                if(!scountry.equals("--"))
+                {
+                    c=site.getCountry(scountry.toLowerCase());
+                }
                 if(c==null)c=site.getCountry();
 
                 if(c==null)
