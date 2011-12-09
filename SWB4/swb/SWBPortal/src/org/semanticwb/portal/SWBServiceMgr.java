@@ -181,7 +181,7 @@ public class SWBServiceMgr implements SemanticObserver, SemanticTSObserver, SWBO
                 } else if (prop instanceof SemanticProperty)
                 {
                     //System.out.println("obj2:"+obj+" "+Resource.sclass+"="+Resource.sclass+" prop:"+prop+"="+Resource.swb_resourceSubType);
-                    if(obj.instanceOf(ResourceType.sclass) && prop.equals(ResourceType.swb_resourceClassName))
+                    if(prop.equals(ResourceType.swb_resourceClassName) && obj.instanceOf(ResourceType.sclass))
                     {
                         try
                         {
@@ -201,7 +201,7 @@ public class SWBServiceMgr implements SemanticObserver, SemanticTSObserver, SWBO
                         }catch(Exception e){log.error(e);}
                     }
 
-                    if(obj.instanceOf(Resource.sclass) && prop.equals(Resource.swb_resourceSubType))
+                    if(prop.equals(Resource.swb_resourceSubType) && obj.instanceOf(Resource.sclass))
                     {
                         Resource res=(Resource)obj.createGenericInstance();
                         if(res.getResourceType()==null)
@@ -360,7 +360,7 @@ public class SWBServiceMgr implements SemanticObserver, SemanticTSObserver, SWBO
                         node=null;
                     }else
                     {
-                        node=node.replace("!", "|");
+                        node=node.replace("{!}", "|");
                     }
                     String action=st.nextToken();
                     Node n=SWBTSUtil.string2Node(node,null);
@@ -395,7 +395,7 @@ public class SWBServiceMgr implements SemanticObserver, SemanticTSObserver, SWBO
                 else msg.append("_");
                 msg.append("|");
                 RDFNode n=stmt.getObject();
-                if(n!=null)msg.append(SWBTSUtil.node2String(n.asNode()).replace("|", "!"));
+                if(n!=null)msg.append(SWBTSUtil.node2String(n.asNode()).replace("|", "{!}"));
                 else msg.append("_");
             }
             else msg.append("_|_");
