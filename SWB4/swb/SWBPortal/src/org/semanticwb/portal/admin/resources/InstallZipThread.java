@@ -133,25 +133,29 @@ public class InstallZipThread extends java.lang.Thread {
                 String newNs = "http://www." + newId + ".swb#";
                 File fileModel = new File(modelspath + newId + "/" + oldIDModel + ".nt");
                 FileInputStream frdfio = new FileInputStream(fileModel);
-                String rdfcontent = SWBUtils.IO.readInputStream(frdfio);
-                fileModel.delete();
+                InputStream io=frdfio;
+                if(!oldNamespace.equals(newNs))
+                {
+                    String rdfcontent = SWBUtils.IO.readInputStream(frdfio);
+                    fileModel.delete();
 
-                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, oldNamespace, newNs); //Reemplazar namespace anterior x nuevo
-                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, newNs + oldIDModel, newNs + newId); //Reempplazar namespace y id anterior x nuevos
+                    rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, oldNamespace, newNs); //Reemplazar namespace anterior x nuevo
+                    rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, newNs + oldIDModel, newNs + newId); //Reempplazar namespace y id anterior x nuevos
 
-                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, "<topicmap id=\\\"" + oldIDModel + "\\\">", "<topicmap id=\\\"" + newId + "\\\">"); // Rempalzar el tag: <topicmap id=\"[oldIDModel]\"> del xml de filtros de recursos
-                //Reemplaza ids de repositorios de usuarios y documentos x nuevos
-                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, oldIDModel + "_usr", newId + "_usr");
-                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, "http://user." + oldIDModel + ".swb#", "http://user." + newId + ".swb#");
-                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, oldIDModel + "_rep", newId + "_rep");
-                rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, "http://repository." + oldIDModel + ".swb#", "http://repository." + newId + ".swb#");
+                    rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, "<topicmap id=\\\"" + oldIDModel + "\\\">", "<topicmap id=\\\"" + newId + "\\\">"); // Rempalzar el tag: <topicmap id=\"[oldIDModel]\"> del xml de filtros de recursos
+                    //Reemplaza ids de repositorios de usuarios y documentos x nuevos
+                    rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, oldIDModel + "_usr", newId + "_usr");
+                    rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, "http://user." + oldIDModel + ".swb#", "http://user." + newId + ".swb#");
+                    rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, oldIDModel + "_rep", newId + "_rep");
+                    rdfcontent = SWBUtils.TEXT.replaceAll(rdfcontent, "http://repository." + oldIDModel + ".swb#", "http://repository." + newId + ".swb#");
 
-                //rdfcontent = SWBUtils.TEXT.replaceAllIgnoreCase(rdfcontent, oldName, newName); //Reemplazar nombre anterior x nuevo nombre
-                //rdfcontent = parseRdfContent(rdfcontent, oldTitle, newTitle, oldIDModel, newId, newNs);
-                
-                //Mediante inputStream creado generar sitio
+                    //rdfcontent = SWBUtils.TEXT.replaceAllIgnoreCase(rdfcontent, oldName, newName); //Reemplazar nombre anterior x nuevo nombre
+                    //rdfcontent = parseRdfContent(rdfcontent, oldTitle, newTitle, oldIDModel, newId, newNs);
+
+                    //Mediante inputStream creado generar sitio
+                    io = SWBUtils.IO.getStreamFromString(rdfcontent);
+                }
                 istatus = 30;
-                InputStream io = SWBUtils.IO.getStreamFromString(rdfcontent);
                 SemanticModel model = SWBPlatform.getSemanticMgr().createDBModelByRDF(newId, newNs, io, "N-TRIPLE");
                 WebSite website = SWBContext.getWebSite(model.getName());
                 wsiteUri = website.getURI();
