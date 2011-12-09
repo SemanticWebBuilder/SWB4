@@ -128,6 +128,8 @@ public class SWBPlatform
     private ArrayList<ThreadObserver> m_observers = null;
 
     private static String threadName=null;
+    
+    private static boolean portalLoaded=false;
 
     
     /**
@@ -184,6 +186,16 @@ public class SWBPlatform
         return threadName;
     }
 
+    public static void setPortalLoaded(boolean portalLoaded)
+    {
+        SWBPlatform.portalLoaded = portalLoaded;
+    }
+
+    public static boolean isPortalLoaded()
+    {
+        return portalLoaded;
+    }
+    
     /**
      * Sets the properties.
      * 

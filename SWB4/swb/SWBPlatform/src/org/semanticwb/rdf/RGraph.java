@@ -4,6 +4,7 @@
  */
 package org.semanticwb.remotetriplestore;
 
+import com.hp.hpl.jena.graph.TransactionHandler;
 import com.hp.hpl.jena.graph.Triple;
 
 /**
@@ -15,5 +16,7 @@ public interface RGraph
     public void performAdd(Triple t, Long id);
 
     public void performDelete(Triple t, Long id); 
+    
+    public TransactionHandler getTransactionHandler();
     
 }

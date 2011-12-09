@@ -751,6 +751,7 @@ public class SemanticMgr implements SWBInstanceObject
 
     public void addModel(SemanticModel model, boolean add2Ontology)
     {
+        //System.out.println("addModel:"+model.getName());
         m_models.put(model.getName(), model);
         m_nsmodels.put(model.getNameSpace(), model);
         log.debug("Add NS:" + model.getNameSpace() + " " + model.getName());
@@ -946,6 +947,7 @@ public class SemanticMgr implements SWBInstanceObject
      */
     public void notifyChange(SemanticObject obj, Object prop, String lang, String action) {
         log.trace("notifyChange: obj:" + obj + " prop:" + prop + " " + action);
+        //System.out.println("notifyChange: obj:" + obj + " prop:" + prop + " " + action);
         if (obj.getURI() != null) {
             if (prop != null && prop instanceof SemanticProperty) {
                 if (((SemanticProperty) prop).isNotObservable()) {
