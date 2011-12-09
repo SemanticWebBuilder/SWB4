@@ -29,6 +29,9 @@ function fileUpload_addNewUpload(pname,filters,url)
             fileMask: ""+filters
     },node);
     widget.startup();
+    
+    node = document.createElement('br');
+    dojo.byId(pname+'_dynamic').appendChild(node);
 }
 
 
