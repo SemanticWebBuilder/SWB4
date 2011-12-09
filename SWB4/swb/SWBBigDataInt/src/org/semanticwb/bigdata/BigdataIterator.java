@@ -12,10 +12,7 @@ import com.hp.hpl.jena.util.iterator.Map1;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
 import org.openrdf.model.Statement;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.repository.RepositoryResult;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 

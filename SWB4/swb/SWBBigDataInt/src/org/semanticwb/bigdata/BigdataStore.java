@@ -14,7 +14,6 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.rdf.AbstractStore;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.rdf.model.impl.ModelCom;
-import java.util.ArrayList;
 import java.util.HashMap;
 import org.semanticwb.rdf.GraphCached;
 
@@ -48,11 +47,12 @@ public class BigdataStore implements AbstractStore
     public Model loadModel(String name)
     {
         //System.out.println("loadModel:"+name);    
-        Model model=models.get(name);
-        if(model==null)
+        //Model model=models.get(name);
+        //if(model==null)
+        Model model=null;
         {        
             model=maker.createModel(name, false);
-            if(SWBPlatform.getSemanticMgr().isTripleFullCache())
+            if(!SWBPlatform.isPortalLoaded() && SWBPlatform.getSemanticMgr().isTripleFullCache())
             {
                 log.event("Loading cache of model:"+name);
                 model=new ModelCom(new GraphCached((model.getGraph())));

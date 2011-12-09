@@ -50,27 +50,45 @@ public class BigdataModelMaker
         Properties properties = new Properties();
         File journal = new File(path+"/"+name+".jnl");
         properties.setProperty(BigdataSail.Options.FILE, journal.getAbsolutePath());
-        properties.setProperty(BigdataSail.Options.BUFFER_MODE, "DiskRW"); //RWStore
+        
+        //The persistence engine.  Use 'Disk' for the WORM or 'DiskRW' for the RWStore.
+        properties.setProperty("com.bigdata.journal.AbstractJournal.bufferMode","DiskRW");
+        properties.setProperty("com.bigdata.btree.writeRetentionQueue.capacity", "4000");
+        properties.setProperty("com.bigdata.btree.BTree.branchingFactor", "128");
+
+        //# 200M initial extent.
+        properties.setProperty("com.bigdata.journal.AbstractJournal.initialExtent", "100715200");
+        properties.setProperty("com.bigdata.journal.AbstractJournal.maximumExtent", "100715200");
+
+        //##
+        //## Setup for QUADS mode without the full text index.
+        //##
+        properties.setProperty("com.bigdata.rdf.sail.truthMaintenance", "false");
+        properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.quads", "true");
+        properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.statementIdentifiers", "false");
+        properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.textIndex", "false");
+        properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.axiomsClass", "com.bigdata.rdf.axioms.NoAxioms");
+        
         // turn off the statement identifiers feature for provenance
-        properties.setProperty(BigdataSail.Options.STATEMENT_IDENTIFIERS,"false");
+        //properties.setProperty(BigdataSail.Options.STATEMENT_IDENTIFIERS,"false");
         //properties.setProperty(BigdataSail.Options.STATEMENT_IDENTIFIERS, "true");
-        properties.setProperty(BigdataSail.Options.NATIVE_JOINS,"true");
+        //properties.setProperty(BigdataSail.Options.NATIVE_JOINS,"true");
 
         //not inference
-        if(!inference)properties.setProperty(BigdataSail.Options.AXIOMS_CLASS,"com.bigdata.rdf.axioms.NoAxioms");
+        //if(!inference)properties.setProperty(BigdataSail.Options.AXIOMS_CLASS,"com.bigdata.rdf.axioms.NoAxioms");
 
         //fast load
 
-        // set the initial and maximum extent of the journal
+        //set the initial and maximum extent of the journal
         //properties.setProperty(BigdataSail.Options.INITIAL_EXTENT,"209715200");
         //properties.setProperty(BigdataSail.Options.MAXIMUM_EXTENT,"209715200");
-        // turn off automatic inference in the SAIL
+        //turn off automatic inference in the SAIL
         //properties.setProperty(BigdataSail.Options.TRUTH_MAINTENANCE,"false");
-        // don't store justification chains, meaning retraction requires full manual
-        // re-closure of the database
+        //don't store justification chains, meaning retraction requires full manual
+        //re-closure of the database
         //properties.setProperty(BigdataSail.Options.JUSTIFY,"false");
-        // turn off the free text index
-        properties.setProperty(BigdataSail.Options.TEXT_INDEX,"false");
+        //turn off the free text index
+        //properties.setProperty(BigdataSail.Options.TEXT_INDEX,"false");
 
         return properties;
     }
