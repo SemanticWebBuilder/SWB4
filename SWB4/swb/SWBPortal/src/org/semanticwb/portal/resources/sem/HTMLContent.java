@@ -433,8 +433,9 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         fileName = vio.getVersionFile();
 
         pathToRead.append(resource.getWorkPath() + "/");
-        //comentar siguiente linea
-        pathToWrite.append("/work" + resource.getWorkPath() + "/");
+        //siguiente linea tenía "work/" en lugar de "SWBPortal.getWebWorkPath()"
+        String webWorkpath = SWBPortal.getWebWorkPath();
+        pathToWrite.append(webWorkpath + resource.getWorkPath() + "/");
 
         if (action.equalsIgnoreCase(SWBParamRequest.Action_EDIT)
                 && versionNumber == 0 && tmpPath == null) {
@@ -916,7 +917,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         url.setCallMethod(url.Call_DIRECT);
         url.setMode("uploadNewVersion");
         String actualcontext = (!"".equals(SWBPlatform.getContextPath())
-                               ? "/" + SWBPlatform.getContextPath()
+                               ? SWBPlatform.getContextPath()
                                : "");
         int numversion = 0;
         try {
