@@ -41,17 +41,31 @@ public class BigdataPrefixMapping implements PrefixMapping
     public PrefixMapping setNsPrefix(String prefix, String uri)
     {
         //System.out.println("setNsPrefix:"+prefix+" "+uri);
-        sail.getDatabase().addNamespace(uri, prefix);
-        sail.getDatabase().addStatement(new ValueFactoryImpl().createURI("http://prefix.swb.org#"+prefix), new ValueFactoryImpl().createURI("http://www.swb.org#prefix"), new ValueFactoryImpl().createLiteral(uri));
-        sail.getDatabase().commit();
+        try
+        {
+            sail.getDatabase().addNamespace(uri, prefix);
+            //sail.getDatabase().addStatement(new ValueFactoryImpl().createURI("http://prefix.swb.org#"+prefix), new ValueFactoryImpl().createURI("http://www.swb.org#prefix"), new ValueFactoryImpl().createLiteral(uri));
+            //sail.getDatabase().commit();
+            BigdataSail.BigdataSailConnection con=sail.getConnection();
+            con.addStatement(new ValueFactoryImpl().createURI("http://prefix.swb.org#"+prefix), new ValueFactoryImpl().createURI("http://www.swb.org#prefix"), new ValueFactoryImpl().createLiteral(uri));
+            con.commit();
+            con.close();
+        }catch(Exception e){e.printStackTrace();}
         return this;
     }
 
     public PrefixMapping removeNsPrefix(String prefix)
     {
-        sail.getDatabase().removeNamespace(prefix);
-        sail.getDatabase().removeStatements(new ValueFactoryImpl().createURI("http://prefix.swb.org#"+prefix), new ValueFactoryImpl().createURI("http://www.swb.org#prefix"), null);
-        sail.getDatabase().commit();
+        try
+        {
+            sail.getDatabase().removeNamespace(prefix);
+            //sail.getDatabase().removeStatements(new ValueFactoryImpl().createURI("http://prefix.swb.org#"+prefix), new ValueFactoryImpl().createURI("http://www.swb.org#prefix"), null);
+            //sail.getDatabase().commit();
+            BigdataSail.BigdataSailConnection con=sail.getConnection();
+            con.removeStatements(new ValueFactoryImpl().createURI("http://prefix.swb.org#"+prefix), new ValueFactoryImpl().createURI("http://www.swb.org#prefix"), null);
+            con.commit();
+            con.close();
+        }catch(Exception e){e.printStackTrace();}
         return this;
     }
 

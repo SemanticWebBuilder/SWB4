@@ -163,6 +163,7 @@ public class BigdataTransactionHandler extends TransactionHandlerBase implements
         {
             id=Thread.currentThread().getId();
         }
+        //System.out.println("getConnection("+id+")");
         return conmap.get(id);
     }
 
