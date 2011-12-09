@@ -388,7 +388,7 @@ public class SemanticObject
                 ret=getSemanticObject(uri);
                 if(ret==null)
                 {
-                    System.out.println("createSemanticObject:"+uri);
+                    //System.out.println("createSemanticObject:"+uri);
                     if(smodel!=null)
                     {
                         Resource res=smodel.getRDFModel().getResource(uri);
