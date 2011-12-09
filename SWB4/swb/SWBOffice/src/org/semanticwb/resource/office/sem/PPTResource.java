@@ -139,31 +139,7 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
         }
     }
 
-    @Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
-
-        super.doAdmin(request, response, paramRequest);
-//        String repositoryName = this.getRepositoryName();
-//        String contentId = this.getContent();
-//        String version = this.getVersionToShow();
-//        User user = paramRequest.getUser();
-//        OfficeDocument doc = new OfficeDocument(user.getLogin(), user.getPassword());
-//        try
-//        {
-//            InputStream in = doc.getContent(repositoryName, contentId, version);
-//            final org.semanticwb.model.User wbuser = SWBContext.getAdminRepository().getUserByLogin(user.getLogin());
-//            this.loadContent(in, wbuser);
-//            log.error("Actualizando contenido: "+this.getId());
-//
-//        }
-//        catch (Exception e)
-//        {
-//            log.error(e);
-//
-//        }
-
-    }
+    
 
     /* (non-Javadoc)
      * @see org.semanticwb.resource.office.sem.OfficeResource#doView(HttpServletRequest, HttpServletResponse, SWBParamRequest)
