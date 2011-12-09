@@ -51,7 +51,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBRuntimeException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.rdf.RemoteGraph;
@@ -305,8 +307,11 @@ public class SemanticModel
     {
         Resource res=m_model.createResource(uri);
         res.addProperty(RDF.type, cls.getOntClass());
-        //System.out.println("createSemanticObject:"+res+" "+this+" "+cls);
-        SemanticObject ret=cls.newInstance(res);
+        //SemanticObject ret=cls.newInstance(res);        
+        SemanticObject ret=new SemanticObject(this,res,cls);
+        SemanticObject.cacheSemanticObject(ret);
+        
+        //System.out.println("createSemanticObject:"+res+" "+this+" "+cls+" "+ret);
         //SemanticObject ret=SemanticObject.createSemanticObject(res, this, cls, true);     //cls.newInstance(res);
         SWBPlatform.getSemanticMgr().notifyChange(ret, null,null, SemanticObject.ACT_CREATE);
         //Default Values

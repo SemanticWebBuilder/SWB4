@@ -121,6 +121,13 @@ public class SemanticObject
         m_res=smodel.getRDFModel().createResource();
     }
     
+    public SemanticObject(SemanticModel smodel, Resource res, SemanticClass scls) 
+    {
+        m_model=smodel;
+        m_res=res;        
+        m_cls=scls;
+    }    
+    
     public SemanticObject(SemanticModel smodel, Resource res, StmtIterator stit) 
     {
         m_model=smodel;
@@ -350,6 +357,15 @@ public class SemanticObject
         }
     }    
     
+    protected static void cacheSemanticObject(SemanticObject obj)
+    {
+        //TODO:Validar si puede agregarse a cache
+        if(hasCache && obj!=null && obj.getURI()!=null)
+        {
+            m_objs.put(obj.getURI(), obj);
+        }          
+    }
+    
     
     /**
      * Regrea una instancia del SemanticObject en base al URI dado en el modelo definido.
@@ -366,6 +382,7 @@ public class SemanticObject
         SemanticObject ret=getSemanticObject(uri);
         if(ret==null)
         {
+            //System.out.println("model0:"+uri+" uri:"+uri+" base:"+smodel);        
             synchronized(SemanticObject.class)
             {
                 ret=getSemanticObject(uri);
@@ -391,10 +408,12 @@ public class SemanticObject
                             String base=uri.substring(0,i+1);
                             log.trace("getResource in Model(1):"+uri+" "+base);
                             SemanticModel model=SWBPlatform.getSemanticMgr().getModelByNS(base);
+                            //System.out.println("model1:"+model+" uri:"+uri+" base:"+base);
                             if(model!=null)
                             {
                                 Resource res=model.getRDFModel().getResource(uri);
                                 StmtIterator stit=res.listProperties();
+                                //System.out.println("model2:"+model+" uri:"+uri+" ret:"+res+" stit:"+stit.hasNext());
                                 if(stit.hasNext())
                                 {
                                     ret=new SemanticObject(model,res,stit);
@@ -441,13 +460,7 @@ public class SemanticObject
 
                     }
                     
-                    //System.out.println("createSemanticObject:"+uri+" "+smodel+" "+ret);
-                    
-                    //TODO:Validar si puede agregarse a cache
-                    if(hasCache && ret!=null)
-                    {
-                        m_objs.put(uri, ret);
-                    }                    
+                    cacheSemanticObject(ret);
                     
                 }
             }
