@@ -2928,10 +2928,10 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
 
             StringTokenizer stoken = new StringTokenizer(uriFE,"|");
             String feURI = stoken.nextToken();
-            String feMode = stoken.nextToken();
+            String feMode = "filter"; //stoken.nextToken();
 
 
-            SWBFormMgr fmgr = new SWBFormMgr(getCatalogClass().transformToSemanticClass(), getCatalogModel().getSemanticObject(), SWBFormMgr.MODE_CREATE);
+            SWBFormMgr fmgr = new SWBFormMgr(getCatalogClass().transformToSemanticClass(), getCatalogModel().getSemanticObject(), "filter");
             fmgr.clearProperties();
             fmgr.addProperty(semanticProperty);
 
