@@ -58,6 +58,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
     static final String FE_MODE_EDIT = "edit";
     static final String FE_DEFAULT = "generico";
     
+    private static int counter=0;    
 
     public SWBCatalogResource() {
     }
@@ -767,11 +768,12 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
         } else {
             fmgr.addHiddenParameter("act", "new");
         }
+        counter++;
 
         out.println(SWBForms.DOJO_REQUIRED);
         if (act != null && act.equals("new")) {
             StringBuffer sbForm = new StringBuffer("");
-            sbForm.append("\n<form dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"" + urlPA + "\"  method=\"post\"> ");
+            sbForm.append("\n<form id=\"Cat"+counter+"\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"" + urlPA + "\"  method=\"post\"> ");
             sbForm.append("\n<input type=\"hidden\" name=\"suri\" value=\"" + id + "\"/>");
             sbForm.append("\n<input type=\"hidden\" name=\"scls\" value=\"" + cid + "\"/>");
             sbForm.append("\n<input type=\"hidden\" name=\"smode\" value=\"edit\"/>");
@@ -833,7 +835,16 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             sbForm.append("\n</table>");
             sbForm.append("\n</fieldset>");
             sbForm.append("\n<fieldset><span align=\"center\">");
-            sbForm.append("\n<button dojoType=\"dijit.form.Button\" type=\"submit\">Guardar</button>");
+            sbForm.append("\n<button dojoType=\"dijit.form.Button\" type=\"submit\">Guardar");
+            sbForm.append("\n                <script type=\"dojo/method\" event=\"startup\">");
+            sbForm.append("\n                    var form = dijit.byId(\"Cat"+counter+"\");");
+            sbForm.append("\n                    this.attr(\"disabled\", !form.isValid());");
+            sbForm.append("\n                    this.connect(form, \"onValidStateChange\", function(state)");
+            sbForm.append("\n                    {");
+            sbForm.append("\n                    this.attr(\"disabled\", !state);");
+            sbForm.append("\n                    });");
+            sbForm.append("\n                </script>");
+            sbForm.append("\n</button>");
             sbForm.append("\n<button dojoType=\"dijit.form.Button\" onclick=\"window.location = '" + urlback + "';return false;\">Cancelar</button>");
             sbForm.append("\n</span></fieldset>");
             sbForm.append("\n</form>");
@@ -843,7 +854,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
         } else if (act != null && act.equals("edit")) {
 
             StringBuffer sbForm = new StringBuffer("");
-            sbForm.append("\n<form dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"" + urlPA + "\"  method=\"post\"> ");
+            sbForm.append("\n<form id=\"Cat"+counter+"\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"" + urlPA + "\"  method=\"post\"> ");
             sbForm.append("\n<input type=\"hidden\" name=\"suri\" value=\"" + id + "\"/>");
             sbForm.append("\n<input type=\"hidden\" name=\"scls\" value=\"" + cid + "\"/>");
             sbForm.append("\n<input type=\"hidden\" name=\"smode\" value=\"edit\"/>");
@@ -902,7 +913,16 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             sbForm.append("\n</table>");
             sbForm.append("\n</fieldset>");
             sbForm.append("\n<fieldset><span align=\"center\">");
-            sbForm.append("\n<button dojoType=\"dijit.form.Button\" type=\"submit\">Guardar</button>");
+            sbForm.append("\n<button dojoType=\"dijit.form.Button\" type=\"submit\">Guardar");
+            sbForm.append("\n                <script type=\"dojo/method\" event=\"startup\">");
+            sbForm.append("\n                    var form = dijit.byId(\"Cat"+counter+"\");");
+            sbForm.append("\n                    this.attr(\"disabled\", !form.isValid());");
+            sbForm.append("\n                    this.connect(form, \"onValidStateChange\", function(state)");
+            sbForm.append("\n                    {");
+            sbForm.append("\n                    this.attr(\"disabled\", !state);");
+            sbForm.append("\n                    });");
+            sbForm.append("\n                </script>");
+            sbForm.append("\n</button>");
             sbForm.append("\n<button dojoType=\"dijit.form.Button\" onclick=\"window.location = '" + urlback + "';return false;\">Cancelar</button>");
             sbForm.append("\n</span></fieldset>");
             sbForm.append("\n</form>");
