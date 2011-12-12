@@ -127,8 +127,11 @@
    
    if(dijit.byId(suri+"/periodicidad").checked && dijit.byId(suri+"/period2").checked && dijit.byId(suri+"/smonth1").checked)
      {
+         //alert('periodicidad..1');
+         
         dijit.byId(suri+"/smonth1").setDisabled(false); 
         dijit.byId(suri+"/mmday").setDisabled(false); 
+        dijit.byId(suri+"/mmday2").setDisabled(false); 
         dijit.byId(suri+"/mmonths1").setDisabled(false); 
         
         dijit.byId(suri+"/smonth2").setDisabled(false);
@@ -146,8 +149,11 @@
      }
    else if(dijit.byId(suri+"/periodicidad").checked && dijit.byId(suri+"/period2").checked && dijit.byId(suri+"/smonth2").checked)
      {
+         //alert('periodicidad..2');
+         
         dijit.byId(suri+"/smonth1").setDisabled(false);
         dijit.byId(suri+"/mmday").setDisabled(true); 
+        dijit.byId(suri+"/mmday2").setDisabled(true); 
         dijit.byId(suri+"/mmonths1").setDisabled(true); 
         
         dijit.byId(suri+"/smonth2").setDisabled(false);
@@ -164,8 +170,11 @@
      }
      else if(!dijit.byId(suri+"/periodicidad").checked || !dijit.byId(suri+"/period2").checked)
      {
+         //alert('periodicidad..3');
+         
         dijit.byId(suri+"/smonth1").setDisabled(true);
         dijit.byId(suri+"/mmday").setDisabled(true); 
+        dijit.byId(suri+"/mmday2").setDisabled(true); 
         dijit.byId(suri+"/mmonths1").setDisabled(true); 
         
         dijit.byId(suri+"/smonth2").setDisabled(true);
@@ -206,6 +215,7 @@
      {
         dijit.byId(suri+"/radio1").setDisabled(false); 
         dijit.byId(suri+"/text1").setDisabled(false); 
+        dijit.byId(suri+"/text12").setDisabled(false); 
         dijit.byId(suri+"/selectm1").setDisabled(false); 
         dijit.byId(suri+"/text2").setDisabled(false); 
         
@@ -227,6 +237,7 @@
      {
         dijit.byId(suri+"/radio1").setDisabled(false);
         dijit.byId(suri+"/text1").setDisabled(true); 
+        dijit.byId(suri+"/text12").setDisabled(true); 
         dijit.byId(suri+"/selectm1").setDisabled(true); 
         dijit.byId(suri+"/text2").setDisabled(true); 
         
@@ -248,6 +259,7 @@
      {
         dijit.byId(suri+"/radio1").setDisabled(true);
         dijit.byId(suri+"/text1").setDisabled(true);
+        dijit.byId(suri+"/text12").setDisabled(true);
         dijit.byId(suri+"/selectm1").setDisabled(true);
         dijit.byId(suri+"/text2").setDisabled(true);
         
