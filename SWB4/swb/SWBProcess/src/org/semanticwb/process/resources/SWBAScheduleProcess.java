@@ -173,15 +173,18 @@ public class SWBAScheduleProcess extends GenericResource {
         String mweek = "";
         String mmonths2 = "";
         String mmday = "";
+        String mmdayTo = "";
         String mmonths1 = "";
         String ssyear = "";
         String yyday = "";
+        String yydayTo = "";
         String ymonth1 = "";
         String yyears1 = "";
         String ymonth2 = "";
         String yyears2 = "";
         String yweek = "";
         String day = "";
+        String dayTo = "";
         String wdays = "";
         String week = "";
         String months = "";
@@ -295,6 +298,8 @@ public class SWBAScheduleProcess extends GenericResource {
                                             week = valChild;
                                         } else if (strChildName.equals("day")) {
                                             day = valChild;
+                                        } else if (strChildName.equals("today")) {
+                                            dayTo = valChild;
                                         }
                                     } else if (speriod.equals("yearly")) {
                                         pchk = "checked";
@@ -302,6 +307,8 @@ public class SWBAScheduleProcess extends GenericResource {
                                         yearlyd = "";
                                         if (strChildName.equals("day")) {
                                             day = valChild;
+                                        } else if (strChildName.equals("today")) {
+                                            dayTo = valChild;
                                         } else if (strChildName.equals("month")) {
                                             months = valChild;
                                         } else if (strChildName.equals("years")) {
@@ -310,7 +317,7 @@ public class SWBAScheduleProcess extends GenericResource {
                                             week = valChild;
                                         } else if (strChildName.equals("wdays")) {
                                             wdays = valChild;
-                                        }
+                                        } 
                                     }
                                 }
                             }
@@ -418,6 +425,7 @@ public class SWBAScheduleProcess extends GenericResource {
                     if (day != null && !day.equals("")) {
                         ssmonth = "day";
                         mmday = day;
+                        mmdayTo = dayTo;
                         mmonths1 = months;
                         smonth1c = "checked";
                         smonth1cd = "";
@@ -433,6 +441,7 @@ public class SWBAScheduleProcess extends GenericResource {
                     if (day != null && !day.equals("")) {
                         ssyear = "day";
                         yyday = day;
+                        yydayTo = dayTo;
                         ymonth1 = months;
                         yyears1 = years;
                         radio1c = "checked";
@@ -642,7 +651,8 @@ public class SWBAScheduleProcess extends GenericResource {
         out.println("           <input id=\"" + id + "/period2\" type=\"radio\" dojoType=\"dijit.form.RadioButton\" value=\"monthly\"  name=\"" + id + "/period\" onClick=\"disablePeriodicity('" + id + "');\" " + period2c + " " + periodd + ">" + paramRequest.getLocaleString("frmMonthly"));
         out.println("            </td>");
         out.println("          <td ><input type=\"radio\" dojoType=\"dijit.form.RadioButton\" id=\"" + id + "/smonth1\" name=\"" + id + "/smonth\"  value=\"day\" onClick=\"enableMonthly('" + id + "');\" " + smonth1c + " " + period2cd + "></td>");
-        out.println("          <td colSpan=\"3\" >" + paramRequest.getLocaleString("frmTheDay") + " <input  type=\"text\" dojoType=\"dijit.form.TextBox\" maxLength=\"2\" size=\"2\" id=\"" + id + "/mmday\" name=\"" + id + "/mmday\" value=\"" + mmday + "\"  style=\"width:30px;\" " + smonth1cd + ">&nbsp;" + paramRequest.getLocaleString("frmOfEvery") + " <input maxLength=\"2\"  size=\"2\" id=\"" + id + "/mmonths1\" type=\"text\" dojoType=\"dijit.form.TextBox\" name=\"" + id + "/mmonths1\" value=\"" + mmonths1 + "\"  style=\"width:30px;\" " + smonth1cd + ">&nbsp;" + paramRequest.getLocaleString("frmMonths") + "</td>");
+        //out.println("          <td colSpan=\"3\" >" + paramRequest.getLocaleString("frmTheDay") + " <input  type=\"text\" dojoType=\"dijit.form.TextBox\" maxLength=\"2\" size=\"2\" id=\"" + id + "/mmday\" name=\"" + id + "/mmday\" value=\"" + mmday + "\"  style=\"width:30px;\" " + smonth1cd + ">&nbsp;" + paramRequest.getLocaleString("frmOfEvery") + " <input maxLength=\"2\"  size=\"2\" id=\"" + id + "/mmonths1\" type=\"text\" dojoType=\"dijit.form.TextBox\" name=\"" + id + "/mmonths1\" value=\"" + mmonths1 + "\"  style=\"width:30px;\" " + smonth1cd + ">&nbsp;" + paramRequest.getLocaleString("frmMonths") + "</td>");
+        out.println("          <td colSpan=\"3\" >" + paramRequest.getLocaleString("frmTheDay") + " <input  type=\"text\" dojoType=\"dijit.form.TextBox\" maxLength=\"2\" size=\"2\" id=\"" + id + "/mmday\" name=\"" + id + "/mmday\" value=\"" + ((mmday!=null&&!mmday.equals(""))?mmday:"1") + "\"  style=\"width:30px;\" " + smonth1cd + ">&nbsp;" + paramRequest.getLocaleString("frmTheDayTo") + " <input  type=\"text\" dojoType=\"dijit.form.TextBox\" maxLength=\"2\" size=\"2\" id=\"" + id + "/mmday2\" name=\"" + id + "/mmday2\" value=\"" + ((mmdayTo!=null&&!mmdayTo.equals(""))?mmdayTo:"1") + "\"  style=\"width:30px;\" " + smonth1cd + ">&nbsp;" + paramRequest.getLocaleString("frmOfEvery") + " <input maxLength=\"2\"  size=\"2\" id=\"" + id + "/mmonths1\" type=\"text\" dojoType=\"dijit.form.TextBox\" name=\"" + id + "/mmonths1\" value=\"" + ((mmonths1!=null&&!mmonths1.equals(""))?mmonths1:"1") + "\"  style=\"width:30px;\" " + smonth1cd + ">&nbsp;" + paramRequest.getLocaleString("frmMonths") + "</td>");
         out.println("        </tr>");
         out.println("        <tr >");
         out.println("          <td colSpan=\"4\">");
@@ -728,7 +738,10 @@ public class SWBAScheduleProcess extends GenericResource {
 
         out.println("          <td ><input id=\"" + id + "/radio1\" type=\"radio\"  dojoType=\"dijit.form.RadioButton\" name=\"" + id + "/syear\" value=\"day\" onClick=\"enableYearly('" + id + "');\" " + radio1c + " " + yearlyd + "></td>");
         out.println("          <td colSpan=3 >" + paramRequest.getLocaleString("frmTheDay"));
-        out.println("            <input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"" + id + "/text1\" maxLength=\"2\" size=\"2\" name=\"" + id + "/yyday\" style=\"width:30px;\" value=\"" + yyday + "\" " + radio1cd + ">&nbsp;" + paramRequest.getLocaleString("frmOf"));
+        //out.println("            <input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"" + id + "/text1\" maxLength=\"2\" size=\"2\" name=\"" + id + "/yyday\" style=\"width:30px;\" value=\"" + yyday + "\" " + radio1cd + ">&nbsp;" + paramRequest.getLocaleString("frmOf"));
+        out.println("            <input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"" + id + "/text1\" maxLength=\"2\" size=\"2\" name=\"" + id + "/yyday\" style=\"width:30px;\" value=\"" +((yyday != null && !yyday.equals(""))?yyday:"1") + "\" " + radio1cd + ">&nbsp;" + paramRequest.getLocaleString("frmTheDayTo") + " ");
+        out.println("            <input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"" + id + "/text12\" maxLength=\"2\" size=\"2\" name=\"" + id + "/yydayTo\" style=\"width:30px;\" value=\"" +((yydayTo != null && !yydayTo.equals(""))?yydayTo:"1") + "\" " + radio1cd + ">");
+        out.println("&nbsp;" + paramRequest.getLocaleString("frmOf"));
         op1 = "";
         op2 = "";
         op3 = "";
@@ -1151,6 +1164,9 @@ public class SWBAScheduleProcess extends GenericResource {
                                 if (request.getParameter(id + "/mmday") != null) {
                                     addElem(doc, eleperiod, "day", request.getParameter(id + "/mmday"));
                                 }
+                                if (request.getParameter(id + "/mmday2") != null) {
+                                    addElem(doc, eleperiod, "today", request.getParameter(id + "/mmday2"));
+                                }
                                 if (request.getParameter(id + "/mmonths1") != null) {
                                     addElem(doc, eleperiod, "months", request.getParameter(id + "/mmonths1"));
                                 }
@@ -1193,6 +1209,10 @@ public class SWBAScheduleProcess extends GenericResource {
                                 if (request.getParameter(id + "/yyday") != null) {
                                     log.debug("YYDAY:" + request.getParameter(id + "/yyday"));
                                     addElem(doc, eleperiod, "day", request.getParameter(id + "/yyday"));
+                                }
+                                if (request.getParameter(id + "/yydayTo") != null) {
+                                    log.debug("YYDAYTO:" + request.getParameter(id + "/yydayTo"));
+                                    addElem(doc, eleperiod, "today", request.getParameter(id + "/yydayTo"));
                                 }
                                 if (request.getParameter(id + "/ymonth1") != null) {
                                     addElem(doc, eleperiod, "month", request.getParameter(id + "/ymonth1"));
