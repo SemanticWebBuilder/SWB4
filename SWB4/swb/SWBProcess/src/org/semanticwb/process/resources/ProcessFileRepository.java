@@ -889,8 +889,8 @@ public class ProcessFileRepository extends GenericResource {
             out.println("Descripción:");
             out.println("</td>");
             out.println("<td>");
-            out.println("<input name=\"fdescription\" id=\"fdescription\" size=\"30\" value=\"" + sdescription + "\" dojoType=\"dijit.form.ValidationTextBox\" editor=\"dijit.form.Textarea\"  required=\"true\" promptMessage=\"Captura la descripción.\"  trim=\"true\"  style=\"width:300px;\" />");
-            //out.println("<textarea name=\"fdescription\" id=\"fdescription\" dojoType=\"dijit.form.SimpleTextarea\" required=\"true\" promptMessage=\"Captura la descripción.\" trim=\"true\" style=\"width:300px;\">" + sdescription + "</textarea>");
+            //out.println("<textarea name=\"fdescription\" id=\"fdescription\" size=\"30\" value=\"" + sdescription + "\" dojoType=\"dijit.form.ValidationTextBox\" editor=\"dijit.form.Textarea\"  required=\"true\" promptMessage=\"Captura la descripción.\"  trim=\"true\"  style=\"width:300px;\" />");
+            out.println("<textarea name=\"fdescription\" id=\"fdescription\" dojoType=\"dijit.form.Textarea\" required=\"true\" promptMessage=\"Captura la descripción.\" trim=\"true\" style=\"width:300px;\">" + sdescription + "</textarea>");
             out.println("</td>");
             out.println("</tr>");
             out.println("<tr>");
@@ -898,8 +898,8 @@ public class ProcessFileRepository extends GenericResource {
             out.println("Comentario:");
             out.println("</td>");
             out.println("<td>");
-            out.println("<input name=\"fcomment\" id=\"fcomment\" size=\"30\" value=\"\" dojoType=\"dijit.form.ValidationTextBox\" editor=\"dijit.form.Textarea\" promptMessage=\"Captura el comentario.\"  style=\"width:300px;\" />");
-            //out.println("<textarea name=\"fcomment\" dojoType=\"dijit.form.Textarea\" style=\"width:300px;\" promptMessage=\"Captura el comentario.\"></textarea>");
+            //out.println("<input name=\"fcomment\" id=\"fcomment\" size=\"30\" value=\"\" dojoType=\"dijit.form.ValidationTextBox\" editor=\"dijit.form.Textarea\" promptMessage=\"Captura el comentario.\"  style=\"width:300px;\" />");
+            out.println("<textarea name=\"fcomment\" dojoType=\"dijit.form.Textarea\" style=\"width:300px;\" promptMessage=\"Captura el comentario.\"></textarea>");
             out.println("</td>");
             out.println("</tr>");
 
