@@ -167,7 +167,7 @@ public class SelectOne extends SelectOneBase {
 
                 if (DOJO) {
                     ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""
-                               + imsg + "\"");
+                               + imsg + "\"" + " value=\""+uri+"\"");
                 }
 
                 if(!mode.equals("filter"))
