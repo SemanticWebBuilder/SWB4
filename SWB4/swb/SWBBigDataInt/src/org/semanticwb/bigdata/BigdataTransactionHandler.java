@@ -7,6 +7,7 @@ package org.semanticwb.bigdata;
 
 import com.bigdata.rdf.sail.BigdataSail;
 import com.hp.hpl.jena.graph.impl.TransactionHandlerBase;
+import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import org.openrdf.sail.SailConnection;
@@ -23,7 +24,7 @@ public class BigdataTransactionHandler extends TransactionHandlerBase implements
 {
     public static Logger log=SWBUtils.getLogger(BigdataTransactionHandler.class);
     private BigdataSail sail;
-    private ConcurrentHashMap<Long,SailConnection> conmap;
+    private ConcurrentHashMap<Long,BigdataSail.BigdataSailConnection> conmap;
 
     public BigdataTransactionHandler(BigdataSail sail)
     {
@@ -45,7 +46,7 @@ public class BigdataTransactionHandler extends TransactionHandlerBase implements
     public void begin(Long id)
     {
         //System.out.println("begin:"+id);
-        SailConnection con=null;
+        BigdataSail.BigdataSailConnection con=null;
         if(id==null)
         {
             id=Thread.currentThread().getId();
@@ -64,9 +65,9 @@ public class BigdataTransactionHandler extends TransactionHandlerBase implements
         }
         try
         {
-            con = sail.getConnection();
+            con = sail.getReadWriteConnection();
             conmap.put(id, con);
-        } catch (SailException ex)
+        } catch (IOException ex)
         {
             throw new RuntimeException("Error initializing transaction", ex);
         }
