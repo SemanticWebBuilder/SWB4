@@ -745,18 +745,6 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             sbForm.append("\n<input type=\"hidden\" name=\"ract\" value=\"" + act + "\"/>");
             sbForm.append("\n<input type=\"hidden\" name=\"clsuri\" value=\"" + cid + "\"/>");
             sbForm.append("\n<fieldset><legend>Agregar " + getCatalogClass().transformToSemanticClass().getName() + "</legend><table>");
-
-//            Iterator<SemanticProperty> itsempro = fmgr.getProperties().iterator();
-//            while (itsempro.hasNext()) {
-//                SemanticProperty semanticProperty = itsempro.next();
-//                if(semanticProperty.isRequired()){
-//                    FormElement fe = fmgr.getFormElement(semanticProperty);
-//                    fmgr.renderProp(request, sbForm, semanticProperty, fe, SWBFormMgr.MODE_CREATE);
-//                    hmProps.put(semanticProperty.getURI(), semanticProperty);
-//                }
-//            }
-            
-            
             
             //Agregando las propiedades seleccionadas para la creación
             Iterator<String> itdis = list.iterator();
@@ -901,7 +889,6 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
 
         out.println(sbForm.toString());
 
-        //out.println(fmgr.renderForm(request));
     }
 
     /**
@@ -1102,7 +1089,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
 
         if (request.getParameter("statmsg") != null && request.getParameter("statmsg").trim().length() > 0) {
             log.debug("showStatus");
-            System.out.println("showstatus...." + request.getParameter("statmsg"));
+            //System.out.println("showstatus...." + request.getParameter("statmsg"));
             out.println("   showStatus('" + request.getParameter("statmsg") + "');");
         }
 
@@ -2391,7 +2378,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             try {
                 StringTokenizer stoken = new StringTokenizer(proptype, "|");
 
-                System.out.println("propiedad a modificar: " + proptype);
+                //System.out.println("propiedad a modificar: " + proptype);
 
                 semprop = stoken.nextToken();
                 sempropFE = stoken.nextToken();
@@ -2406,19 +2393,19 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                 log.error("Error in processAction.", e);
             }
 
-            System.out.println("Remover propiedad: " + proptype);
+            //System.out.println("Remover propiedad: " + proptype);
 
             removeDetailProperties(proptype);
 
             if ("mode".equals(prop)) {
                 addDetailProperties(semprop + "|" + sempropFE + "|" + sorder + "|" + newMode + "|" + itemShow);
                 response.setRenderParameter("statmsg", "Modo de la propiedad actualizada a " + newMode);
-                System.out.println("Nueva propiedad: " + semprop + "|" + sempropFE + "|" + sorder + "|" + newMode + "|" + itemShow);
+                //System.out.println("Nueva propiedad: " + semprop + "|" + sempropFE + "|" + sorder + "|" + newMode + "|" + itemShow);
             }
             if ("show".equals(prop)) {
                 addDetailProperties(semprop + "|" + sempropFE + "|" + sorder + "|" + modo + "|" + newShow);
                 response.setRenderParameter("statmsg", "Propiedad para creacion actualizada.");
-                System.out.println("Nueva propiedad: " + semprop + "|" + sempropFE + "|" + sorder + "|" + modo + "|" + newShow);
+                //System.out.println("Nueva propiedad: " + semprop + "|" + sempropFE + "|" + sorder + "|" + modo + "|" + newShow);
             }
         } else if (action.equals("swap")) {
 
