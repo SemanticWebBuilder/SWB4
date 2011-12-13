@@ -57,8 +57,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
     static final String FE_MODE_VIEW = "view";
     static final String FE_MODE_EDIT = "edit";
     static final String FE_DEFAULT = "generico";
-    
-    private static int counter=0;    
+    private static int counter = 0;
 
     public SWBCatalogResource() {
     }
@@ -177,7 +176,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             if (hmConfcol.size() > 0) {
 
                 String idform = "" + System.currentTimeMillis();
-                
+
                 out.println("    <script type=\"text/javascript\">");
                 out.println("      dojo.require(\"dojo.parser\");");
                 out.println("      dojo.require(\"dijit.TitlePane\");");
@@ -379,52 +378,57 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                     p = Integer.parseInt(page);
                 }
                 int x = 0;
+                if (l == 0) {
+                    out.println("<tr><td colspan=\"" + list.size() + "\">");
+                    out.println("No se encontraron registros.");
+                    out.println("</td></tr>");
+                } else {
+                    while (itso.hasNext()) {
 
-                while (itso.hasNext()) {
+                        semO = itso.next();
 
-                    semO = itso.next();
-
-                    //PAGINACION ////////////////////
-                    if (x < p * ps) {
-                        x++;
-                        continue;
-                    }
-                    if (x == (p * ps + ps) || x == l) {
-                        break;
-                    }
-                    x++;
-                    /////////////////////////////////
-
-                    out.println("<tr>");
-                    out.println("<td>");
-
-                    SWBResourceURL urlr = paramsRequest.getActionUrl();
-                    urlr.setParameter("suri", id);
-                    urlr.setParameter("sval", semO.getURI());
-                    urlr.setParameter("ract", action);
-                    //urlr.setParameter("page", ""+p);
-                    urlr.setAction("removeso");
-                    out.println("<a href=\"#\" title=\"" + paramsRequest.getLocaleString("remove") + "\" onclick=\"if(confirm('" + paramsRequest.getLocaleString("confirm_remove") + " " + SWBUtils.TEXT.scape4Script(semO.getDisplayName(user.getLanguage())) + "?')){ window.location='" + urlr + "'; } else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"" + paramsRequest.getLocaleString("remove") + "\"></a>");
-                    SWBResourceURL urlform = paramsRequest.getRenderUrl();
-                    urlform.setMode(MODE_FORM);
-                    urlform.setParameter("suri", id);
-                    urlform.setParameter("clsuri", getCatalogClass().transformToSemanticClass().getURI());
-                    urlform.setParameter("sval", semO.getURI());
-                    urlform.setParameter("ract", action);
-                    urlform.setParameter("act", "edit");
-                    out.println("<a href=\"#\"  title=\"" + paramsRequest.getLocaleString("documentAdmin") + "\" onclick=\"window.location='" + urlform + "';\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + paramsRequest.getLocaleString("documentAdmin") + "\"></a>");
-                    out.println("</td>");
-                    itcol = list.iterator();
-                    while (itcol.hasNext()) {
-                        String scol = itcol.next();
-                        if (hmConfcol.get(scol) != null) {
-                            out.println("<td>");
-                            out.println(reviewSemProp(hmConfcol.get(scol), semO, paramsRequest));
-                            out.println("</td>");
+                        //PAGINACION ////////////////////
+                        if (x < p * ps) {
+                            x++;
+                            continue;
                         }
-                    }
-                    out.println("</tr>");
+                        if (x == (p * ps + ps) || x == l) {
+                            break;
+                        }
+                        x++;
+                        /////////////////////////////////
 
+                        out.println("<tr>");
+                        out.println("<td>");
+
+                        SWBResourceURL urlr = paramsRequest.getActionUrl();
+                        urlr.setParameter("suri", id);
+                        urlr.setParameter("sval", semO.getURI());
+                        urlr.setParameter("ract", action);
+                        //urlr.setParameter("page", ""+p);
+                        urlr.setAction("removeso");
+                        out.println("<a href=\"#\" title=\"" + paramsRequest.getLocaleString("remove") + "\" onclick=\"if(confirm('" + paramsRequest.getLocaleString("confirm_remove") + " " + SWBUtils.TEXT.scape4Script(semO.getDisplayName(user.getLanguage())) + "?')){ window.location='" + urlr + "'; } else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"" + paramsRequest.getLocaleString("remove") + "\"></a>");
+                        SWBResourceURL urlform = paramsRequest.getRenderUrl();
+                        urlform.setMode(MODE_FORM);
+                        urlform.setParameter("suri", id);
+                        urlform.setParameter("clsuri", getCatalogClass().transformToSemanticClass().getURI());
+                        urlform.setParameter("sval", semO.getURI());
+                        urlform.setParameter("ract", action);
+                        urlform.setParameter("act", "edit");
+                        out.println("<a href=\"#\"  title=\"" + paramsRequest.getLocaleString("documentAdmin") + "\" onclick=\"window.location='" + urlform + "';\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + paramsRequest.getLocaleString("documentAdmin") + "\"></a>");
+                        out.println("</td>");
+                        itcol = list.iterator();
+                        while (itcol.hasNext()) {
+                            String scol = itcol.next();
+                            if (hmConfcol.get(scol) != null) {
+                                out.println("<td>");
+                                out.println(reviewSemProp(hmConfcol.get(scol), semO, paramsRequest));
+                                out.println("</td>");
+                            }
+                        }
+                        out.println("</tr>");
+
+                    }
                 }
                 out.println("</tbody>");
 
@@ -442,7 +446,39 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                         pages++;
                     }
 
-                    for (int z = 0; z < pages; z++) {
+                    int inicia = 0;
+                    int finaliza = pages;
+
+
+                    int rangoinicial = p - 5;
+                    int rangofinal = p + 5;
+                    if (pages <= 10) {
+                        inicia = 0;
+                        finaliza = pages;
+                    } else {
+                        if (rangoinicial < 0) {
+                            inicia = 0;
+                            finaliza = Math.abs(rangoinicial) + rangofinal;
+                        } else if (rangofinal > pages) {
+                            inicia = pages - 10;
+                            finaliza = pages;
+                        } else {
+                            inicia = rangoinicial;
+                            finaliza = rangofinal;
+                        }
+                    }
+
+                    if (pages > 10) {
+                        SWBResourceURL urlIni = paramsRequest.getRenderUrl();
+                        urlIni.setParameter("suri", id);
+                        urlIni.setParameter("page", "" + 0);
+                        urlIni.setParameter("act", "stpBusqueda");
+                        urlIni.setParameter("search", busqueda);
+                        urlIni.setParameter("clsuri", sccol.getURI());
+                        out.println("<a href=\"#\" onclick=\"window.location='" + urlIni + "';\">Ir al inicio</a> ");
+                    }
+
+                    for (int z = inicia; z < finaliza; z++) {
                         SWBResourceURL urlNew = paramsRequest.getRenderUrl();
                         urlNew.setParameter("suri", id);
                         urlNew.setParameter("page", "" + z);
@@ -455,6 +491,15 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                         } else {
                             out.println((z + 1) + " ");
                         }
+                    }
+                    if (pages > 10) {
+                        SWBResourceURL urlIni = paramsRequest.getRenderUrl();
+                        urlIni.setParameter("suri", id);
+                        urlIni.setParameter("page", "" + (pages - 1));
+                        urlIni.setParameter("act", "stpBusqueda");
+                        urlIni.setParameter("search", busqueda);
+                        urlIni.setParameter("clsuri", sccol.getURI());
+                        out.println("<a href=\"#\" onclick=\"window.location='" + urlIni + "';\">Ir al final</a> ");
                     }
                     out.println("</center>");
                     out.println("</fieldset>");
@@ -625,8 +670,6 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
-
-
         PrintWriter out = response.getWriter();
         User user = paramRequest.getUser();
         String id = request.getParameter("suri");
@@ -643,12 +686,9 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             obj = getCatalogClass();
         }
 
-        //System.out.println("doForm --- " + act);
-
         SemanticClass sclass = obj.transformToSemanticClass();
 
         SWBResourceURL urlPA = paramRequest.getActionUrl();
-        //urlPA.setAction("new");
 
         SWBFormMgr fmgr = null;
         String modeform = null;
@@ -656,93 +696,30 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
         HashMap<String, String> hmDetail = new HashMap<String, String>();
         HashMap<String, SemanticProperty> hmDetailOrder = new HashMap<String, SemanticProperty>();
         HashMap<SemanticProperty, String> hmDetailFEMode = new HashMap<SemanticProperty, String>();
-        if (act != null && act.equals("new")) {
 
-            fmgr = new SWBFormMgr(sclass, getCatalogModel().getSemanticObject(), SWBFormMgr.MODE_CREATE);
+        //Agregando las propiedades seleccionadas para la edición
+        Iterator<String> itdetProp = listDetailPropertieses();
+        while (itdetProp.hasNext()) {
+            String spropname = itdetProp.next();
 
-            //Agregando las propiedades requeridas para la creación del elemento
-            Iterator<SemanticProperty> itsempro = fmgr.getProperties().iterator();
-            while (itsempro.hasNext()) {
-                SemanticProperty sPro = itsempro.next();
-                if (sPro.isRequired()) {
-                    hmProps.put(sPro.getURI(), sPro);
-                }
+            StringTokenizer stoken = new StringTokenizer(spropname, "|");
+            if (stoken != null) {
+                String suri = stoken.nextToken();
+                String surife = stoken.nextToken();
+                String suriorder = stoken.nextToken();
+                String modo = stoken.nextToken();
+                String propCreate = stoken.nextToken();
+
+                SemanticProperty semProphm = ont.getSemanticProperty(suri);
+                hmDetail.put(suri, spropname);
+                hmDetailOrder.put(suriorder, semProphm);
+                hmDetailFEMode.put(semProphm, surife + "|" + modo + "|" + propCreate);
             }
-
-            fmgr.clearProperties();
-
-            //Agregando las propiedades seleccionadas para la creación
-            Iterator<String> itdetProp = listDetailPropertieses();
-            while (itdetProp.hasNext()) {
-                String spropname = itdetProp.next();
-
-                StringTokenizer stoken = new StringTokenizer(spropname, "|");
-                if (stoken != null) {
-                    String suri = stoken.nextToken();
-                    String surife = stoken.nextToken();
-                    String suriorder = stoken.nextToken();
-                    String modo = stoken.nextToken();
-                    String propCreate = stoken.nextToken();
-
-                    SemanticProperty semProphm = ont.getSemanticProperty(suri);
-
-                    if (hmProps.get(suri) != null) {
-                        hmDetail.put(suri, spropname);
-                        hmProps.remove(suri);
-                        hmDetailOrder.put(suriorder, semProphm);
-                    } else if (propCreate != null && propCreate.trim().equals("true")) {
-                        hmDetail.put(suri, spropname);
-                        hmDetailOrder.put(suriorder, semProphm);
-                    }
-                }
-            }
-            ArrayList list = new ArrayList(hmDetailOrder.keySet());
-            Collections.sort(list);
-
-            Iterator<SemanticProperty> itprop = hmProps.values().iterator();
-            while (itprop.hasNext()) {
-                SemanticProperty semProp = itprop.next();
-                fmgr.addProperty(semProp);
-            }
-
-            Iterator<String> itdis = list.iterator();
-            while (itdis.hasNext()) {
-                String key = itdis.next();
-                fmgr.addProperty(hmDetailOrder.get(key));
-            }
-            urlPA.setAction("new");
-        } else if (act != null && act.equals("edit")) {
-            fmgr = new SWBFormMgr(obj, null, SWBFormMgr.MODE_EDIT);
-            fmgr.clearProperties();
-
-            //Agregando las propiedades seleccionadas para la edición
-            Iterator<String> itdetProp = listDetailPropertieses();
-            while (itdetProp.hasNext()) {
-                String spropname = itdetProp.next();
-
-                StringTokenizer stoken = new StringTokenizer(spropname, "|");
-                if (stoken != null) {
-                    String suri = stoken.nextToken();
-                    String surife = stoken.nextToken();
-                    String suriorder = stoken.nextToken();
-                    String modo = stoken.nextToken();
-                    String propCreate = stoken.nextToken();
-
-                    SemanticProperty semProphm = ont.getSemanticProperty(suri);
-                    fmgr.addProperty(semProphm);
-                    hmDetail.put(suri, spropname);
-                    hmDetailOrder.put(suriorder, semProphm);
-                    hmDetailFEMode.put(semProphm, surife + "|" + modo);
-                }
-            }
-
-            urlPA.setAction("updateform");
         }
 
-        fmgr.setLang(user.getLanguage());
-        fmgr.setAction(urlPA.toString());
-        fmgr.setSubmitByAjax(false);
-        fmgr.addButton(SWBFormButton.newSaveButton());
+        ArrayList list = new ArrayList(hmDetailOrder.keySet());
+        Collections.sort(list);
+
         SWBResourceURL urlback = paramRequest.getRenderUrl();
         urlback.setMode(SWBResourceURL.Mode_VIEW);
         urlback.setParameter("suri", id);
@@ -752,92 +729,85 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
         if (null != act) {
             urlback.setParameter("act", act);
         }
-        fmgr.addButton(SWBFormButton.newCancelButton().setAttribute("onclick", "window.location = '" + urlback + "';return false;"));
-        fmgr.setType(SWBFormMgr.TYPE_DOJO);
-
-        log.debug("new: suri: " + id);
-        log.debug("new: clsuri: " + cid);
-        log.debug("new: act: " + act);
-
-        fmgr.addHiddenParameter("suri", id);
-        fmgr.addHiddenParameter("clsuri", cid);
-        fmgr.addHiddenParameter("ract", act);
-        if (sval != null) {
-            fmgr.addHiddenParameter("sval", sval);
-            fmgr.addHiddenParameter("act", "update");
-        } else {
-            fmgr.addHiddenParameter("act", "new");
-        }
         counter++;
-
-        out.println(SWBForms.DOJO_REQUIRED);
+        out.println(SWBFormMgr.DOJO_REQUIRED);
+        StringBuffer sbForm = new StringBuffer("");
         if (act != null && act.equals("new")) {
-            StringBuffer sbForm = new StringBuffer("");
-            sbForm.append("\n<form id=\"Cat"+counter+"\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"" + urlPA + "\"  method=\"post\"> ");
+
+            fmgr = new SWBFormMgr(sclass, getCatalogModel().getSemanticObject(), SWBFormMgr.MODE_CREATE);
+            fmgr.setType(SWBFormMgr.TYPE_DOJO);
+            urlPA.setAction("new");
+            sbForm.append("\n<form id=\"Cat" + counter + "\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"" + urlPA + "\"  method=\"post\"> ");
             sbForm.append("\n<input type=\"hidden\" name=\"suri\" value=\"" + id + "\"/>");
             sbForm.append("\n<input type=\"hidden\" name=\"scls\" value=\"" + cid + "\"/>");
-            sbForm.append("\n<input type=\"hidden\" name=\"smode\" value=\"edit\"/>");
-            //sbForm.append("\n<input type=\"hidden\" name=\"suri\" value=\"User\"/>");
-            sbForm.append("\n<input type=\"hidden\" name=\"sval\" value=\"" + sval + "\"/>");
-            sbForm.append("\n<input type=\"hidden\" name=\"act\" value=\"update\"/>");
+            sbForm.append("\n<input type=\"hidden\" name=\"smode\" value=\"create\"/>");
+            sbForm.append("\n<input type=\"hidden\" name=\"act\" value=\"new\"/>");
             sbForm.append("\n<input type=\"hidden\" name=\"ract\" value=\"" + act + "\"/>");
             sbForm.append("\n<input type=\"hidden\" name=\"clsuri\" value=\"" + cid + "\"/>");
             sbForm.append("\n<fieldset><legend>Agregar " + getCatalogClass().transformToSemanticClass().getName() + "</legend><table>");
 
-            // Propiedades requeridas con su formelement de defecto y modo de creación
-            Iterator<SemanticProperty> itprop = hmProps.values().iterator();
-            while (itprop.hasNext()) {
-                SemanticProperty semProp = itprop.next();
-                fmgr.addProperty(semProp);
-                FormElement fe = fmgr.getFormElement(semProp);
-                fmgr.renderProp(request, sbForm, semProp, fe, SWBFormMgr.MODE_CREATE);
-            }
+//            Iterator<SemanticProperty> itsempro = fmgr.getProperties().iterator();
+//            while (itsempro.hasNext()) {
+//                SemanticProperty semanticProperty = itsempro.next();
+//                if(semanticProperty.isRequired()){
+//                    FormElement fe = fmgr.getFormElement(semanticProperty);
+//                    fmgr.renderProp(request, sbForm, semanticProperty, fe, SWBFormMgr.MODE_CREATE);
+//                    hmProps.put(semanticProperty.getURI(), semanticProperty);
+//                }
+//            }
             
-            ArrayList list = new ArrayList(hmDetailOrder.keySet());
-            Collections.sort(list);
             
-            //Agregando propiedades configuradas para mostrar en creación
+            
+            //Agregando las propiedades seleccionadas para la creación
             Iterator<String> itdis = list.iterator();
             while (itdis.hasNext()) {
-                String key = itdis.next();
-                SemanticProperty sPro = hmDetailOrder.get(key);
-                String feMode = hmDetailFEMode.get(sPro);
+                String key = itdis.next();//order
+                SemanticProperty sPro = hmDetailOrder.get(key); //propiedad
+                String feMode = hmDetailFEMode.get(sPro); //combinacion fe|modo|usarCreacion
                 String feuri = null;
                 String modo = null;
-                //System.out.println("feMode: " + feMode);
+                String useCreate = null;
                 if (feMode != null) {
                     StringTokenizer stoken = new StringTokenizer(feMode, "|");
                     feuri = stoken.nextToken();
                     modo = stoken.nextToken();
+                    useCreate = stoken.nextToken();
 
-                    GenericObject sofe = ont.getGenericObject(feuri);
+                    if (useCreate != null && useCreate.equals("true") ) { //&& hmProps.get(sPro.getURI())!=null
+                        
+                        GenericObject sofe = null;
 
-                    FormElement fe = (FormElement) sofe;
-                    if (null != fe && sPro != null) {
-                        try {
-                            fe.setModel(getCatalogModel().getSemanticModel());
-                            ((FormElementBase) fe).setFilterHTMLTags(fmgr.isFilterHTMLTags());
-
-                            fmgr.renderProp(request, sbForm, sPro, fe, modo);
-                        } catch (Exception e) {
-                            log.error("Error al procesat lapropiedad con el formelement seleccionado. ---- " + sPro.getName() + " ----- " + feuri);
+                        //Juan esto esta mal llega generico o " "
+                        if (!FE_DEFAULT.equals(feuri) && !" ".equals(feuri)) {
+                            sofe = ont.getGenericObject(feuri);
                         }
 
-                    } else if (sPro != null) {
-                        fe = fmgr.getFormElement(sPro);
-                        fmgr.renderProp(request, sbForm, sPro, fe, modo);
+                        FormElement fe = (FormElement) sofe;
+                        if (null != fe && sPro != null) {
+                            try {
+                                fe.setModel(getCatalogModel().getSemanticModel());
+                                ((FormElementBase) fe).setFilterHTMLTags(fmgr.isFilterHTMLTags());
+
+                                fmgr.renderProp(request, sbForm, sPro, fe, SWBFormMgr.MODE_CREATE);
+                            } catch (Exception e) {
+                                log.error("Error al procesat lapropiedad con el formelement seleccionado. ---- " + sPro.getName() + " ----- " + feuri);
+                            }
+
+                        } else if (sPro != null) {
+                            fe = fmgr.getFormElement(sPro);
+                            fmgr.renderProp(request, sbForm, sPro, fe, SWBFormMgr.MODE_CREATE);
+                        }
                     }
                 }
 
             }
-
 
             sbForm.append("\n</table>");
             sbForm.append("\n</fieldset>");
             sbForm.append("\n<fieldset><span align=\"center\">");
             sbForm.append("\n<button dojoType=\"dijit.form.Button\" type=\"submit\">Guardar");
             sbForm.append("\n                <script type=\"dojo/method\" event=\"startup\">");
-            sbForm.append("\n                    var form = dijit.byId(\"Cat"+counter+"\");");
+            sbForm.append("\n                    var form = dijit.byId(\"Cat" + counter + "\");");
             sbForm.append("\n                    this.attr(\"disabled\", !form.isValid());");
             sbForm.append("\n                    this.connect(form, \"onValidStateChange\", function(state)");
             sbForm.append("\n                    {");
@@ -848,13 +818,15 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             sbForm.append("\n<button dojoType=\"dijit.form.Button\" onclick=\"window.location = '" + urlback + "';return false;\">Cancelar</button>");
             sbForm.append("\n</span></fieldset>");
             sbForm.append("\n</form>");
+            sbForm.append("\n<fieldset>");
+            sbForm.append("\n<div> * Datos requeridos. </div>");
+            sbForm.append("\n</fieldset>");
 
-            //out.println(sbForm.toString());
-            out.println(fmgr.renderForm(request));
         } else if (act != null && act.equals("edit")) {
-
-            StringBuffer sbForm = new StringBuffer("");
-            sbForm.append("\n<form id=\"Cat"+counter+"\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"" + urlPA + "\"  method=\"post\"> ");
+            fmgr = new SWBFormMgr(obj, null, SWBFormMgr.MODE_EDIT);
+            fmgr.setType(SWBFormMgr.TYPE_DOJO);
+            urlPA.setAction("updateform");
+            sbForm.append("\n<form id=\"Cat" + counter + "\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"" + urlPA + "\"  method=\"post\"> ");
             sbForm.append("\n<input type=\"hidden\" name=\"suri\" value=\"" + id + "\"/>");
             sbForm.append("\n<input type=\"hidden\" name=\"scls\" value=\"" + cid + "\"/>");
             sbForm.append("\n<input type=\"hidden\" name=\"smode\" value=\"edit\"/>");
@@ -865,10 +837,6 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             sbForm.append("\n<input type=\"hidden\" name=\"clsuri\" value=\"" + cid + "\"/>");
             sbForm.append("\n<fieldset><legend>Detalle " + getCatalogClass().transformToSemanticClass().getName() + "</legend><table>");
 
-            ArrayList list = new ArrayList(hmDetailOrder.keySet());
-            Collections.sort(list);
-
-            //Iterator<SemanticProperty> itsempro = fmgr.getProperties().iterator();
             Iterator<String> itdis = list.iterator();
             while (itdis.hasNext()) {
                 String key = itdis.next();
@@ -876,18 +844,18 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                 String feMode = hmDetailFEMode.get(sPro);
                 String feuri = null;
                 String modo = null;
-                //System.out.println("feMode: " + feMode);
+                String useCreate = null;
                 if (feMode != null) {
                     StringTokenizer stoken = new StringTokenizer(feMode, "|");
                     feuri = stoken.nextToken();
                     modo = stoken.nextToken();
+                    useCreate = stoken.nextToken();
 
                     GenericObject sofe = null;
-                    
+
                     //Juan esto esta mal llega generico o " "
-                    if(!FE_DEFAULT.equals(feuri) && !" ".equals(feuri))
-                    {
-                        sofe=ont.getGenericObject(feuri);
+                    if (!FE_DEFAULT.equals(feuri) && !" ".equals(feuri)) {
+                        sofe = ont.getGenericObject(feuri);
                     }
 
                     FormElement fe = (FormElement) sofe;
@@ -909,13 +877,12 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
 
             }
 
-
             sbForm.append("\n</table>");
             sbForm.append("\n</fieldset>");
             sbForm.append("\n<fieldset><span align=\"center\">");
             sbForm.append("\n<button dojoType=\"dijit.form.Button\" type=\"submit\">Guardar");
             sbForm.append("\n                <script type=\"dojo/method\" event=\"startup\">");
-            sbForm.append("\n                    var form = dijit.byId(\"Cat"+counter+"\");");
+            sbForm.append("\n                    var form = dijit.byId(\"Cat" + counter + "\");");
             sbForm.append("\n                    this.attr(\"disabled\", !form.isValid());");
             sbForm.append("\n                    this.connect(form, \"onValidStateChange\", function(state)");
             sbForm.append("\n                    {");
@@ -926,11 +893,15 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             sbForm.append("\n<button dojoType=\"dijit.form.Button\" onclick=\"window.location = '" + urlback + "';return false;\">Cancelar</button>");
             sbForm.append("\n</span></fieldset>");
             sbForm.append("\n</form>");
+            sbForm.append("\n<fieldset>");
+            sbForm.append("\n<div> * Datos requeridos. </div>");
+            sbForm.append("\n</fieldset>");
 
-            out.println(sbForm.toString());
-
-            //out.println(fmgr.renderForm(request));
         }
+
+        out.println(sbForm.toString());
+
+        //out.println(fmgr.renderForm(request));
     }
 
     /**
@@ -1131,6 +1102,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
 
         if (request.getParameter("statmsg") != null && request.getParameter("statmsg").trim().length() > 0) {
             log.debug("showStatus");
+            System.out.println("showstatus...." + request.getParameter("statmsg"));
             out.println("   showStatus('" + request.getParameter("statmsg") + "');");
         }
 
@@ -2220,6 +2192,11 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                 SemanticObject so = ont.getSemanticObject(collclass);
 
                 if (null != so) {
+                    if (!so.equals(getCatalogClass())) {
+                        removeAllDetailProperties();
+                        removeAllListProperties();
+                        removeAllSearchProperties();
+                    }
                     setCatalogClass(so);
                 }
 
@@ -2398,10 +2375,13 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                 log.error(e);
             }
         } else if (action.equals("updPropMode")) {
-            String proptype = request.getParameter("sval");
-            String prop = request.getParameter("prop");
-            String newMode = request.getParameter("elementMode");
-            String newShow = request.getParameter("showItemCreate");
+            String proptype = request.getParameter("sval");  // propiedad a modificar
+            String prop = request.getParameter("prop");  // mode ó show
+            String newMode = request.getParameter("elementMode");  // edit ó view
+            String newShow = request.getParameter("showItemCreate");  // true
+            if (newShow == null) {
+                newShow = "false";
+            }
             String semprop = null;
             String sempropFE = null;
             String sorder = null;
@@ -2410,6 +2390,9 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
 
             try {
                 StringTokenizer stoken = new StringTokenizer(proptype, "|");
+
+                System.out.println("propiedad a modificar: " + proptype);
+
                 semprop = stoken.nextToken();
                 sempropFE = stoken.nextToken();
                 sorder = stoken.nextToken();
@@ -2423,15 +2406,19 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                 log.error("Error in processAction.", e);
             }
 
-            removeDetailProperties(sval);
+            System.out.println("Remover propiedad: " + proptype);
+
+            removeDetailProperties(proptype);
 
             if ("mode".equals(prop)) {
                 addDetailProperties(semprop + "|" + sempropFE + "|" + sorder + "|" + newMode + "|" + itemShow);
                 response.setRenderParameter("statmsg", "Modo de la propiedad actualizada a " + newMode);
+                System.out.println("Nueva propiedad: " + semprop + "|" + sempropFE + "|" + sorder + "|" + newMode + "|" + itemShow);
             }
             if ("show".equals(prop)) {
                 addDetailProperties(semprop + "|" + sempropFE + "|" + sorder + "|" + modo + "|" + newShow);
                 response.setRenderParameter("statmsg", "Propiedad para creacion actualizada.");
+                System.out.println("Nueva propiedad: " + semprop + "|" + sempropFE + "|" + sorder + "|" + modo + "|" + newShow);
             }
         } else if (action.equals("swap")) {
 
@@ -2916,7 +2903,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                 String propCreate = stoken.nextToken();
 
                 SemanticProperty semProphm = ont.getSemanticProperty(suri);
-                hmDetailFEMode.put(semProphm, surife+"|"+modo);
+                hmDetailFEMode.put(semProphm, surife + "|" + modo);
             }
         }
 
@@ -2946,7 +2933,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             ret.append("\n</td><tr>");
         } else {
 
-            StringTokenizer stoken = new StringTokenizer(uriFE,"|");
+            StringTokenizer stoken = new StringTokenizer(uriFE, "|");
             String feURI = stoken.nextToken();
             String feMode = "filter"; //stoken.nextToken();
 
@@ -2970,8 +2957,8 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
 
             } else if (semanticProperty != null) {
                 fe = fmgr.getFormElement(semanticProperty);
-                System.out.println("fe: "+(null==fe?"null":fe.getId()));
-                fmgr.renderProp(null, ret, semanticProperty, fe, feMode);
+                System.out.println("fe: " + (null == fe ? "null" : fe.getId()));
+                fmgr.renderProp(request, ret, semanticProperty, fe, feMode);
 
             }
         }
