@@ -623,8 +623,11 @@ public class Poll extends GenericResource {
         response.setContentType("text/html; charset=iso-8859-1");
         response.setHeader("Cache-Control","no-cache"); //HTTP 1.1
         response.setHeader("Pragma","no-cache"); //HTTP 1.0
-
+        
+        //synchronized(request){
+            //System.out.println("vote");
         vote(request, response, paramRequest);
+        //}
         Document dom = SWBUtils.XML.xmlToDom( getResourceBase().getData() );
         response.getWriter().println( getPollResults(request, paramRequest, dom) );
     }
@@ -701,9 +704,11 @@ public class Poll extends GenericResource {
 
         if(request.getParameter("radiobutton")==null)
             return;
-
+        
         base = getResourceBase();
-        data = base.getData();
+        synchronized(this) {
+            data = base.getData();
+        }
         dom = SWBUtils.XML.xmlToDom(data);
 
         boolean cliVoted = false;
@@ -714,11 +719,12 @@ public class Poll extends GenericResource {
             cliVoted = validateCookie(request);
             //Pone cookie
             MngCookie = new SWBCookieMgr();
-            String value = (String) MngCookie.SearchCookie("VotosEncuesta"+ base.getId(), request);
+            //String value = (String) MngCookie.SearchCookie("VotosEncuesta"+ base.getId(), request);
             MngCookie.AddCookie("VotosEncuesta"+ base.getId(), "SI",  true, true, request, response);
         }
 
         boolean voteOnce = Boolean.parseBoolean(base.getAttribute("oncevote", "true"));
+        
         if( !voteOnce || !cliVoted) { // Es un usuario que paso la prueba de las IPs
             int valor = 0;
             try {
@@ -726,8 +732,7 @@ public class Poll extends GenericResource {
             }catch(Exception e) {
                 valor=0;
                 log.error("Respuesta de encuesta en cero. ", e);
-            }
-
+            }            
             if(valor > 0) {
                 String varia = "enc_votos";
                 if (data == null) {
@@ -738,7 +743,9 @@ public class Poll extends GenericResource {
                         Element option = dom.createElement(varia + valor);
                         option.appendChild(dom.createTextNode("1"));
                         root.appendChild(option);
-                        base.setData(SWBUtils.XML.domToXml(dom));
+                        synchronized(this) {
+                            base.setData(SWBUtils.XML.domToXml(dom));
+                        }
                     }catch (Exception e) {
                         log.error(paramRequest.getLocaleString("msgView_setData") +" "+ restype +" " + paramRequest.getLocaleString("msgView_id") +" "+ base.getId() +" - "+ base.getTitle(), e);
                     }
@@ -756,17 +763,20 @@ public class Poll extends GenericResource {
                                 log.error("La opción está guardando un valor no numérico.\n" + nfe);
                             }
                         }
-                        if (!exist) {
+                        if(!exist) {
                             Node nres = dom.getFirstChild();
                             Element option = dom.createElement(varia + valor);
                             option.appendChild(dom.createTextNode("1"));
                             nres.appendChild(option);
                         }
-                        base.setData(SWBUtils.XML.domToXml(dom));
-                        base.addHit(request, paramRequest.getUser(), paramRequest.getWebPage());
+                        synchronized(this) {
+                            base.setData(SWBUtils.XML.domToXml(dom));
+                        }
                     }
                     catch (Exception e) {
                         log.error(paramRequest.getLocaleString("msgView_setData") +" "+ restype +" " + paramRequest.getLocaleString("msgView_id") +" "+ base.getId() +" - "+ base.getTitle(), e);
+                    }finally {
+                        base.addHit(request, paramRequest.getUser(), paramRequest.getWebPage());
                     }
                 }
             }
@@ -1144,6 +1154,7 @@ public class Poll extends GenericResource {
                     base.updateAttributesToDB();
                     Document dom=SWBUtils.XML.xmlToDom(base.getXml());
                     if(dom!=null) {
+System.out.println("1. removeAllNodes");                        
                         removeAllNodes(dom, Node.ELEMENT_NODE, "option");
                     }else {
                         dom = SWBUtils.XML.getNewDocument();
@@ -1162,6 +1173,7 @@ public class Poll extends GenericResource {
                             dom.getFirstChild().appendChild(emn);
                         }
                     }
+System.out.println("2. removeAllNodes");                    
                     removeAllNodes(dom, Node.ELEMENT_NODE, "link");
                     value = null != fup.getValue("link") && !"".equals(fup.getValue("link").trim()) ? fup.getValue("link").trim() : null;
                     if(value!=null)
