@@ -35,7 +35,6 @@ import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.SWBComparator;
@@ -181,6 +180,7 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
             request.setAttribute("instances", getProcessInstances(request, paramRequest));
             request.setAttribute("displayCols", getDisplayCols());
             request.setAttribute("statusWp", getDisplayMapWp());
+            request.setAttribute("trackWp", getTrackWp());
             request.setAttribute("itemsPerPage", getItemsPerPage());
             rd.include(request, response);
         } catch (Exception e) {
