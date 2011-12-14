@@ -98,6 +98,7 @@ public class ProcessFileRepository extends GenericResource {
         String suri = request.getParameter("suri");
         User usr = paramRequest.getUser();
         String lang = usr.getLanguage();
+        String back=request.getParameter("back");
 
         int luser = getLevelUser(usr);
 
@@ -552,7 +553,12 @@ public class ProcessFileRepository extends GenericResource {
             out.println("<td colspan=\"2\" align=\"right\">");
             SWBResourceURL urlbck = paramRequest.getRenderUrl();
             urlbck.setParameter("act", "");
-            out.println("<button onclick=\"window.location='" + urlbck + "';\">Regresar</button>");
+            
+            if (back != null && back.equals("history")) {
+                out.println("<input type=\"button\" value=\"Regresar\" onclick=\"history.go(-1)\"/>");
+            } else {
+                out.println("<button onclick=\"window.location='" + urlbck + "';\">Regresar</button>");
+            }
             out.println("</td>");
             out.println("</tr>");
             out.println("</tbody>");
@@ -663,7 +669,7 @@ public class ProcessFileRepository extends GenericResource {
                         if (repoFile instanceof RepositoryFile) {
                             SWBResourceURL urlview = paramRequest.getRenderUrl();
                             urlview.setCallMethod(SWBResourceURL.Call_DIRECT);
-                            urlview.setParameter("fid", fid);
+                            urlview.setParameter("fid", repoFile.getId());
                             urlview.setMode(MODE_GETFILE);
                             urlview.setParameter("verNum", "" + ver.getVersionNumber());
 
@@ -1010,7 +1016,6 @@ public class ProcessFileRepository extends GenericResource {
     }
 
     public void doGetFile(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
