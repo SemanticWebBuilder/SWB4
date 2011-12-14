@@ -49,7 +49,10 @@ if (docs != null && !docs.isEmpty()) {
                     String Id = file.getId();
                     String name = file.getTitle();
                     String pCreated = SWBUtils.TEXT.getStrDate(file.getLastVersion().getCreated(), lang, "dd/mm/yy - hh:mm");
-                    String pModifiedBy = file.getLastVersion().getCreator().getFullName();
+                    String pModifiedBy = "--";
+                    if (file.getLastVersion().getCreator() != null) {
+                        pModifiedBy = file.getLastVersion().getCreator().getFullName();
+                    }
                     String url = null;
                     if (file.getRepositoryDirectory() != null) {
                         url = file.getRepositoryDirectory().getUrl() + "?act=detail&back=history&fid=" + file.getEncodedURI();
