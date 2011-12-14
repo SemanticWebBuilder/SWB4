@@ -121,6 +121,7 @@
 <%
 SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramRequest");
 WebPage statusWp = (WebPage)request.getAttribute("statusWp");
+WebPage detailWp = (WebPage)request.getAttribute("trackWp");
 User user = paramRequest.getUser();
 WebSite ws = paramRequest.getWebPage().getWebSite();
 String baseimg = SWBPortal.getWebWorkPath() + "/models/" + ws.getId() + "/css/images/";
@@ -131,6 +132,8 @@ String displayCols = (String) request.getAttribute("displayCols");
 String lang = "es";
 int pageNum = 1;
 int maxPages = (Integer) request.getAttribute("maxPages");
+
+//WebPage detailWp = paramRequest.getWebPage().getWebSite().getWebPage("Seguimiento");
 
 if (user.getLanguage() != null) {
     lang = user.getLanguage();
@@ -370,13 +373,18 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                 if (instance.getStatus() == ProcessInstance.STATUS_PROCESSING) {
                                     WebPage pwp = instance.getProcessType().getProcessWebPage();
                                     if (pwp != null) {
-                                    %><a class="acc-detalle" href="<%=pwp.getUrl()%>">Desempe&ntilde;o</a><%
+                                    %><a class="acc-desempeno" href="<%=pwp.getUrl()%>">Desempe&ntilde;o</a><%
                                     }
                                 }
                                 
                                 if (statusWp != null) {
                                 %>
                                     <a class="acc-mapa" href="<%=statusWp.getUrl()%>?suri=<%=instance.getProcessType().getEncodedURI()%>&mode=view<%=acts%>">Ver mapa</a>
+                                <%
+                                }
+                                if (detailWp != null) {
+                                %>
+                                    <a class="acc-detalle" href="<%=detailWp.getUrl()%>?piid=<%=instance.getId()%>">Seguimiento</a>
                                 <%
                                 }
                                 Role processAdmRole = instance.getProcessType().getAdministrationRole();
