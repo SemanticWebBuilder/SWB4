@@ -9,9 +9,10 @@ public abstract class ControlPanelResourceBase extends org.semanticwb.portal.api
     public static final org.semanticwb.platform.SemanticProperty cpanel_viewJSP=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/ControlPanel#viewJSP");
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_semanticResourceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#semanticResourceInv");
+    public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
+    public static final org.semanticwb.platform.SemanticProperty cpanel_trackWp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/ControlPanel#trackWp");
     public static final org.semanticwb.platform.SemanticProperty cpanel_itemsPerPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/ControlPanel#itemsPerPage");
     public static final org.semanticwb.platform.SemanticProperty cpanel_displayCols=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/ControlPanel#displayCols");
-    public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
     public static final org.semanticwb.platform.SemanticProperty cpanel_displayMapWp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/process/resources/ControlPanel#displayMapWp");
     public static final org.semanticwb.platform.SemanticClass cpanel_ControlPanelResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/process/resources/ControlPanel#ControlPanelResource");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/process/resources/ControlPanel#ControlPanelResource");
@@ -154,6 +155,44 @@ public abstract class ControlPanelResourceBase extends org.semanticwb.portal.api
          if(obj!=null)
          {
              ret=(org.semanticwb.model.Resource)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property TrackWp
+   * @param value TrackWp to set
+   */
+
+    public void setTrackWp(org.semanticwb.model.WebPage value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(cpanel_trackWp, value.getSemanticObject());
+        }else
+        {
+            removeTrackWp();
+        }
+    }
+   /**
+   * Remove the value for TrackWp property
+   */
+
+    public void removeTrackWp()
+    {
+        getSemanticObject().removeProperty(cpanel_trackWp);
+    }
+
+   /**
+   * Gets the TrackWp
+   * @return a org.semanticwb.model.WebPage
+   */
+    public org.semanticwb.model.WebPage getTrackWp()
+    {
+         org.semanticwb.model.WebPage ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(cpanel_trackWp);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
          }
          return ret;
     }
