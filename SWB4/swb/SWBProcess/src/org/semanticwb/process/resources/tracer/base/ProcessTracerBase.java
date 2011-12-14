@@ -5,6 +5,7 @@ public abstract class ProcessTracerBase extends org.semanticwb.portal.api.Generi
 {
     public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
     public static final org.semanticwb.platform.SemanticProperty ptrace_displayMapPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.process.resources/ProcessTracer#displayMapPage");
+    public static final org.semanticwb.platform.SemanticProperty ptrace_viewJSP=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://org.semanticwb.process.resources/ProcessTracer#viewJSP");
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_semanticResourceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#semanticResourceInv");
     public static final org.semanticwb.platform.SemanticClass ptrace_ProcessTracer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://org.semanticwb.process.resources/ProcessTracer#ProcessTracer");
@@ -78,6 +79,24 @@ public abstract class ProcessTracerBase extends org.semanticwb.portal.api.Generi
              ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the ViewJSP property
+* @return String with the ViewJSP
+*/
+    public String getViewJSP()
+    {
+        return getSemanticObject().getProperty(ptrace_viewJSP);
+    }
+
+/**
+* Sets the ViewJSP property
+* @param value long with the ViewJSP
+*/
+    public void setViewJSP(String value)
+    {
+        getSemanticObject().setProperty(ptrace_viewJSP, value);
     }
    /**
    * Sets the value for the property Resource

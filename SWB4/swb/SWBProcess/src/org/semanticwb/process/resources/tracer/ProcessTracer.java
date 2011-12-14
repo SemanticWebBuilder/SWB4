@@ -30,7 +30,6 @@ import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.api.*;
 
@@ -52,15 +51,18 @@ public class ProcessTracer extends org.semanticwb.process.resources.tracer.base.
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        String jsp = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/process/tracer/listProcessInstances.jsp";
-        RequestDispatcher rd = request.getRequestDispatcher(jsp);
+        String jsp = "/swbadmin/jsp/process/listProcessInstances.jsp";
+        if (getViewJSP() != null && !getViewJSP().trim().equals("")) {
+            jsp = getViewJSP();
+        }
         
+        RequestDispatcher rd = request.getRequestDispatcher(jsp);
         try {
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("statusWP", getDisplayMapPage());
             rd.include(request, response);
         } catch (Exception e) {
-            log.error("ProcessTracer: Error including view JSP " + jsp, e);
+            log.error("ProcessTracer: Error including view JSP", e);
         }
     }
 }
