@@ -55,6 +55,7 @@ public class StoreRepositoryFile extends org.semanticwb.process.model.base.Store
             //System.out.println("filePath:"+filePath);
 
             
+            String filename=f.getValue().substring(16+f.getId().length());
             RepositoryFile file=f.getRepositoryFile();
             if(file==null)
             {
@@ -70,13 +71,14 @@ public class StoreRepositoryFile extends org.semanticwb.process.model.base.Store
                 }
                 f.setRepositoryFile(file);
                 file.setRepositoryDirectory(this.getNodeDirectory());
-                file.setTitle(SWBScriptParser.parser(instance, user, this.getNodeName()));
+                String name=this.getNodeName();
+                if(name!=null)name=name.replace("{filename}", filename);
+                file.setTitle(SWBScriptParser.parser(instance, user, name==null?filename:name));
                 file.setOwnerUserGroup(user.getUserGroup());
             }
             
             try
             {
-                String filename=f.getValue().substring(16+f.getId().length());
                 file.storeFile(filename, new FileInputStream(filePath), "Created by process:"+instance.getProcessInstance().getProcessType().getId()+", processInstance:"+instance.getProcessInstance().getId(), false,getNodeStatus()!=null?getNodeStatus().getId():null);
             }catch(Exception e)
             {
@@ -106,6 +108,8 @@ public class StoreRepositoryFile extends org.semanticwb.process.model.base.Store
                     }
                 }
                 
+                filename=filename.substring(20+f.getId().length());
+                
                 if(file==null)
                 {
                     String id=this.getNodeId();
@@ -120,13 +124,14 @@ public class StoreRepositoryFile extends org.semanticwb.process.model.base.Store
                     }
                     f.addRepositoryFile(file);
                     file.setRepositoryDirectory(this.getNodeDirectory());
-                    file.setTitle(SWBScriptParser.parser(instance, user, this.getNodeName()));
+                    String name=this.getNodeName();
+                    if(name!=null)name=name.replace("{filename}", filename);
+                    file.setTitle(SWBScriptParser.parser(instance, user, name==null?filename:name));
                     file.setOwnerUserGroup(user.getUserGroup());
                 }
-
+                
                 try
                 {
-                    filename=filename.substring(20+f.getId().length());
                     file.storeFile(filename, new FileInputStream(filePath), "Created by process:"+instance.getProcessInstance().getProcessType().getId()+", processInstance:"+instance.getProcessInstance().getId(), false,getNodeStatus()!=null?getNodeStatus().getId():null);
                 }catch(Exception e)
                 {
