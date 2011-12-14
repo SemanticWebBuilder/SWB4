@@ -344,16 +344,19 @@ public abstract class SWBIndexer
     public GenericParser getParser(Searchable obj)
     {
         GenericParser ret=null;
-        ret=m_parsers.get(obj.getClass());
-        if(ret==null)
+        if(m_parsers!=null)
         {
-            Iterator<Class> it=m_parsers.keySet().iterator();
-            while (it.hasNext())
+            ret=m_parsers.get(obj.getClass());
+            if(ret==null)
             {
-                Class cls = it.next();
-                if(cls.isInstance(obj))
+                Iterator<Class> it=m_parsers.keySet().iterator();
+                while (it.hasNext())
                 {
-                    ret=m_parsers.get(cls);
+                    Class cls = it.next();
+                    if(cls.isInstance(obj))
+                    {
+                        ret=m_parsers.get(cls);
+                    }
                 }
             }
         }
@@ -364,16 +367,19 @@ public abstract class SWBIndexer
     /**Task for removing {@link Searchable} objets from the index.*/
     protected void removeRun()
     {
-        while(m_remove.size()>0)
+        if(m_remove!=null)
         {
-            String obj=m_remove.remove(0);
-            //System.out.println("SWBIndexObj:"+obj);
-            try
+            while(m_remove.size()>0)
             {
-                removeSearchableObj(obj);
-            }catch(Throwable t)
-            {
-                log.error(t);
+                String obj=m_remove.remove(0);
+                //System.out.println("SWBIndexObj:"+obj);
+                try
+                {
+                    removeSearchableObj(obj);
+                }catch(Throwable t)
+                {
+                    log.error(t);
+                }
             }
         }
     }
@@ -381,19 +387,22 @@ public abstract class SWBIndexer
     /**Task for adding {@link Searchable} objets from the index.*/
     protected void writeRun()
     {
-        int z=m_add.size();  //Para solo indexar los que ya traia en la pila
-        while(m_add.size()>0 && z>0)
+        if(m_add!=null)
         {
-            Searchable obj=m_add.remove(0);
-            //System.out.println("SWBIndexObj:"+obj);
-            try
+            int z=m_add.size();  //Para solo indexar los que ya traia en la pila
+            while(m_add.size()>0 && z>0)
             {
-                writeSearchableObj(obj);
-            }catch(Throwable t)
-            {
-                log.error(t);
+                Searchable obj=m_add.remove(0);
+                //System.out.println("SWBIndexObj:"+obj);
+                try
+                {
+                    writeSearchableObj(obj);
+                }catch(Throwable t)
+                {
+                    log.error(t);
+                }
+                z--;
             }
-            z--;
         }
     }
 
@@ -457,7 +466,7 @@ public abstract class SWBIndexer
      */
     public void removeSearchable(String uri)
     {
-        m_remove.add(uri);
+        if(m_remove!=null)m_remove.add(uri);
     }
 
     /**
@@ -468,7 +477,7 @@ public abstract class SWBIndexer
      */
     public void indexSerchable(Searchable serchable)
     {
-        if(!m_add.contains(serchable) && getParser(serchable).canIndex(serchable))
+        if(m_add!=null && !m_add.contains(serchable) && getParser(serchable).canIndex(serchable))
         {            
             //m_remove.add(serchable.getURI());
             m_add.add(serchable);
@@ -482,7 +491,13 @@ public abstract class SWBIndexer
      */
     public int getIndexSize()
     {
-        return m_add.size()+m_remove.size();
+        if(m_add!=null)
+        {
+            return m_add.size()+m_remove.size();
+        }else
+        {
+            return 0;
+        }
     }
 
 }

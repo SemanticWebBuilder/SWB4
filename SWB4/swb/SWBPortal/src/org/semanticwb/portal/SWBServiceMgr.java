@@ -264,7 +264,7 @@ public class SWBServiceMgr implements SemanticObserver, SemanticTSObserver, SWBO
                 lasttime=System.currentTimeMillis();
                 updateTraceable(obj,usr);
 
-                if(obj.instanceOf(Searchable.swb_Searchable))
+                if(!SWBPortal.isClient() && obj.instanceOf(Searchable.swb_Searchable))
                 {
                     Searchable searchable=(Searchable)obj.createGenericInstance();
                     SWBIndexer indexer=SWBPortal.getIndexMgr().getDefaultIndexer();
