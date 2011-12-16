@@ -42,12 +42,81 @@ public class TreeSelectFormElement implements InternalServlet {
         String li = request.getParameter("li") != null ? (request.getParameter("li").equals("null") ? "" : request.getParameter("li")) : "";
         String lang = request.getParameter("lang") != null ? request.getParameter("lang") : "es";
 
-        if(request.getParameter("site") != null) {
+
+        if(request.getParameter("edit") != null && request.getParameter("edit").equals("true") && request.getParameter("site") != null && li.length() > 1){
+            /** Muestra la página web que esta almacenada dentro del árbol **/
+            ret.append("<ul class=\"treeres\">");
+            WebSite site = WebSite.ClassMgr.getWebSite(request.getParameter("site"));
+            WebPage home = site.getHomePage();
+            WebPage lip = null;
+            String url = SWBPlatform.getContextPath() + "/treeSelect/" + home.getSemanticObject().getModel().getModelObject().getId();
+            if(li != null && li.length() > 0) {
+                lip = site.getWebPage(li);
+                WebPage parent = lip;
+                if(lip != null) {
+                    boolean isparent = true;
+                    do {
+                        parent = parent.getParent();
+                        if(parent == null){
+                            isparent = false;
+                        } else {
+                            listData.add(parent);
+                        }
+                    } while(isparent) ;
+                }
+            }
+            if(lip != null && lip.equals(home)) {
+                ret.append("<li >");//style=\"border-color:#6699FF; max-width:400px; min-width:200px;border-style:solid;border-width:2px;margin: 3px;\"
+                params.append("&" + home.getId() + "=0");
+                style = " style=\"font-weight:bold; background-color:#BBD4D9; color:#3368B4\";";
+                ret.append("<img src=\"" + pathImages + "/plus.gif\" alt=\"abrir nodo\"  onclick=\"getHtml('" + url + "?site=" + home.getWebSiteId() + "&reptp=" + home.getId() + params + "&dataProp=" + dataProp + "&li=" + li + "&lang=" + lang + "','tree_'+'" + site.getId() + "_" + dataProp + "')\" />");
+                ret.append("<a class=\"treeres\" onclick=\"getHtml('" + url + "?site=" + home.getWebSiteId() + "&reptp=" + home.getId() + params + "&dataProp=" + dataProp + "&li=" + li + "&lang=" + lang + "','tree_'+'" + site.getId() + "_" + dataProp + "')\" " + style + ">");
+                if(home.isActive()) { 
+                    ret.append("<img src=\"" + pathImages + "/icon_homeac.png\" alt=\"seleccionar inicio\" />");
+                } else {
+                    ret.append("<img src=\"" + pathImages + "/icon_homein.png\" alt=\"seleccionar inicio\" />");
+                }
+
+                try { 
+                    ret.append("<span style=\"padding-left:5px\">" + SWBUtils.TEXT.encode(home.getDisplayTitle(lang), SWBUtils.TEXT.CHARSET_UTF8) + "</span>");
+                } catch(Exception e) {
+                    log.error("Can't save the value's property in TreeSelect, " + e);
+                }
+                ret.append("</a>");
+                ret.append("</li>");
+
+            } else if (!listData.isEmpty()) {
+                ret.append("<li>");
+                params.append("&" + home.getId() + "=1");
+                ret.append("<img src=\"" + pathImages + "/minus.gif\" alt=\"cerrar nodo\"  onclick=\"getHtml('" + url + "?site=" + home.getWebSiteId() + "&reptp=" + home.getId() + params + "&dataProp=" + dataProp + "&li=" + li + "&lang=" + lang + "','tree_'+'" + site.getId() + "_" + dataProp + "')\" />");
+                ret.append("<a class=\"treeres\" onclick=\"getHtml('" + url + "?site=" + home.getWebSiteId() + "&reptp=" + home.getId() + params + "&dataProp=" + dataProp + "&li=" + li + "&lang=" + lang + "','tree_'+'" + site.getId() + "_" + dataProp + "')\" " + style + ">");
+                if(home.isActive()) { 
+                    ret.append("<img src=\"" + pathImages + "/icon_homeac.png\" alt=\"seleccionar inicio\" />");
+                } else {
+                    ret.append("<img src=\"" + pathImages + "/icon_homein.png\" alt=\"seleccionar inicio\" />");
+                }
+
+                try { 
+                    ret.append("<span style=\"padding-left:5px\">" + SWBUtils.TEXT.encode(home.getDisplayTitle(lang), SWBUtils.TEXT.CHARSET_UTF8) + "</span>");
+                } catch(Exception e) {
+                    log.error("Can't save the value's property in TreeSelect, " + e);
+                }
+                ret.append("</a>");
+
+                ret.append(addChild(listData, request, site, home,tpid, url , params, lang, li, dataProp));
+                /*Este debe ser cambiado para ver si utilizas solo un solo metodo ret.append(addChild(listData, request, site, home, url , params, lang, li, dataProp));*/
+                ret.append("</li>");
+            }
+            ret.append("</ul>");
+
+        } else if(request.getParameter("site") != null) {
+            ret.append("<ul class=\"treeres\">");
+            
             WebSite site = WebSite.ClassMgr.getWebSite(request.getParameter("site"));
             WebPage home = site.getHomePage();
             String url = SWBPlatform.getContextPath() + "/treeSelect/" + home.getSemanticObject().getModel().getModelObject().getId();
 
-            if(li != null && li.length() > 0 && tpid == null) { //Si la propiedad tiene un valor almacenado, obtener los padres para abrir las carpetas
+            if(li != null && li.length() > 0 && tpid == null) { 
                 tpid = site.getWebPage(li);
                 WebPage lip = site.getWebPage(li);
                 WebPage parent = lip;
@@ -63,35 +132,24 @@ public class TreeSelectFormElement implements InternalServlet {
                     } while(isparent) ;
                 }
                 tpid = null;
-             }
+            }
 
-            if(request.getParameter("reptp") != null) { //Obteniendo página web seleccionada
+            if((li != null && li.length() > 0) && li.equalsIgnoreCase(home.getId())) {
+                ret.append("<li>");
+            } else {
+                ret.append("<li>");
+            }
+            if(request.getParameter("reptp") != null) { 
                 tpid = site.getWebPage((String)request.getParameter("reptp"));
                 ret.append("<input type=\"hidden\" name=\"section" + "_" + dataProp + "\" id=\"section" + "_" + dataProp + "\" value=\"" + tpid.getId() + "\" />");
             }
-
             boolean toggleopen = Boolean.parseBoolean(request.getParameter(home.getId()) == null ? "false" : ((String)request.getParameter(home.getId())).equals("1") ? "true" : "false");
             if(tpid != null){
                 listData = new ArrayList();
             }
-            ret.append("<li>");
 
-            if(site.isActive()) { //Icono del sitio Activo/Inactivo
-                ret.append("<img src=\"" + pathImages + "/icon_siteb.gif\" alt=\"seleccionar sitio\" />");
-            } else {
-                ret.append("<img src=\"" + pathImages + "/icon_sitein.png\" alt=\"seleccionar sitio\" />");
-            }
-
-            try {  //Titulo del Sitio
-                ret.append("<span style=\"padding-left:5px\">" + SWBUtils.TEXT.encode(site.getDisplayTitle(lang), SWBUtils.TEXT.CHARSET_UTF8) + "</span>");
-            } catch(Exception e) {
-                log.error("Can´t convert text to code UTF8" + e);
-            }
-            ret.append("<ul class=\"treeres\">");
-            ret.append("<li>");
-
-            if(tpid != null && tpid.getId().equalsIgnoreCase(home.getId())) { //Si es la página actual, obteniendo las imagenes
-                style = " style=\"color:#FF6600; font-weight:bold; background-color:#000\"";
+            if(tpid != null && tpid.getId().equalsIgnoreCase(home.getId())) { //Selecciono la página web home
+                style = " style=\"color:#336699; font-weight:bold; background-color:#b3b3b3\"";
                 if(toggleopen) { //Si esta abierta
                     params.append("&" + home.getId() + "=0");
                     ret.append("<img src=\"" + pathImages + "/plus.gif\" alt=\"abrir nodo\" onclick=\"getHtml('" + url + "?site=" + home.getWebSiteId() + "&reptp=" + home.getId() + params + "&dataProp=" + dataProp + "&li=" + li + "&lang=" + lang + "','tree_'+'" + site.getId() + "_" + dataProp + "')\" />");
@@ -101,13 +159,13 @@ public class TreeSelectFormElement implements InternalServlet {
                     ret.append("<img src=\"" + pathImages + "/minus.gif\" alt=\"cerrar nodo\" onclick=\"getHtml('" + url + "?site=" + home.getWebSiteId() + "&reptp=" + home.getId() + params + "&dataProp=" + dataProp + "&li=" + li + "&lang=" + lang + "','tree_'+'" + site.getId() + "_" + dataProp + "')\" />");
                     toggleopen = true;
                 }
-            } else { //Si la página no es la actual
-                if(listData.isEmpty()) {
+            } else { //Se selecciono cualquier hijo de home
+                if(listData.isEmpty()) { //Si el elemento tiene un valor almacenado
                     style = "";
-                    if(toggleopen) { //Si la página esta abierta
+                    if(toggleopen) {
                         params.append("&" + home.getId() + "=1");
                         ret.append("<img src=\"" + pathImages + "/minus.gif\" alt=\"cerrar nodo\"  onclick=\"getHtml('" + url + "?site=" + home.getWebSiteId() + "&reptp=" + home.getId() + params + "&dataProp=" + dataProp + "&li=" + li + "&lang=" + lang + "','tree_'+'" + site.getId() + "_" + dataProp + "')\" />");
-                    } else { //Si la página no esta abierta
+                    } else { 
                         params.append("&" + home.getId() + "=0");
                         ret.append("<img src=\"" + pathImages + "/plus.gif\" alt=\"abrir nodo\"  onclick=\"getHtml('" + url + "?site=" + home.getWebSiteId() + "&reptp=" + home.getId() + params + "&dataProp=" + dataProp + "&li=" + li + "&lang=" + lang + "','tree_'+'" + site.getId() + "_" + dataProp + "')\" />");
                     }
@@ -117,9 +175,9 @@ public class TreeSelectFormElement implements InternalServlet {
                 }
             }
             if((li != null && li.length() > 0) && li.equalsIgnoreCase(home.getId())) {
-                style = " style=\"font-weight:bold; background-color:#6699FF\"";
+                style = " style=\"font-weight:bold; background-color:#BBD4D9; color:#3368B4\";";
             }
-            //Obteniendo las ligas
+
             ret.append("<a class=\"treeres\" onclick=\"getHtml('" + url + "?site=" + home.getWebSiteId() + "&reptp=" + home.getId() + params + "&dataProp=" + dataProp + "&li=" + li + "&lang=" + lang + "','tree_'+'" + site.getId() + "_" + dataProp + "')\" " + style + ">");
             if(home.isActive()) {
                 ret.append("<img src=\"" + pathImages + "/icon_homeac.png\" alt=\"seleccionar inicio\" />");
@@ -127,22 +185,21 @@ public class TreeSelectFormElement implements InternalServlet {
                 ret.append("<img src=\"" + pathImages + "/icon_homein.png\" alt=\"seleccionar inicio\" />");
             }
 
-            try { //Agregar el título del nodo actual
+            try { 
                 ret.append("<span style=\"padding-left:5px\">" + SWBUtils.TEXT.encode(home.getDisplayTitle(lang), SWBUtils.TEXT.CHARSET_UTF8) + "</span>");
             } catch(Exception e) {
                 log.error("Can't save the value's property in TreeSelect, " + e);
             }
             ret.append("</a>");
 
-            if(home != null && toggleopen) { //Pintando los hijos si esta abierta la carpeta
+            if(home != null && toggleopen) { 
                 ret.append(addChild(listData, request, site, home, tpid, url, params, lang, li, dataProp));
             }
 
             if(!listData.isEmpty() && tpid == null) {
                 ret.append(addChild(listData, request, site, home, tpid, url, params, lang, li, dataProp));
             }
-            ret.append("</li>");
-            ret.append("</ul>");
+
             ret.append("</li>");
             ret.append("</ul>");
         }
@@ -172,9 +229,15 @@ public class TreeSelectFormElement implements InternalServlet {
                     toggleopen = Boolean.parseBoolean(request.getParameter(webpage.getId()) == null ? "false" : ((String)request.getParameter(webpage.getId())).equals("1") ? "true" : "false");
                 }
                 if(webpage.listChilds().hasNext()) {
-                    html.append("<li>");
+                    
                     if(tpid != null && tpid.getId().equalsIgnoreCase(webpage.getId())) {
-                        style = " style=\"color:#FF6600; font-weight:bold; background-color:#000\"";
+                        if((dataCurrent != null && dataCurrent.length() > 0) && dataCurrent.equalsIgnoreCase(webpage.getId())) {
+                            html.append("<li>");
+                            style = " style=\"font-weight:bold; background-color:#BBD4D9; color:#3368B4\";";
+                        } else {
+                            html.append("<li>");
+                            style = " style=\"color:#336699; font-weight:bold; background-color:#b3b3b3\"";
+                        }
                         if(toggleopen) {
                             params.append("&" + webpage.getId() + "=0");
                             html.append("<img src=\"" + pathImages + "/plus.gif\" alt=\"abrir nodo\" onclick=\"getHtml('" + url + "?site=" + webpage.getWebSiteId() + "&reptp=" + webpage.getId() + params + "&dataProp=" + dataProp + "&li=" + dataCurrent + "&lang=" + lang + "','tree_'+'" + tmit.getId()+ "_" + dataProp + "')\" />");
@@ -185,7 +248,15 @@ public class TreeSelectFormElement implements InternalServlet {
                             toggleopen = true;
                         }
                     } else {
-                        style = "";
+                        if((dataCurrent != null && dataCurrent.length() > 0) && dataCurrent.equalsIgnoreCase(webpage.getId())) {
+                            html.append("<li>");
+                            style = " style=\"font-weight:bold; background-color:#BBD4D9; color:#3368B4\";";
+                        } else {                        
+                            html.append("<li>");
+                            style = "";//style = " style=\"color:#336699; font-weight:bold; background-color:#b3b3b3\"";
+                        }
+                        /*html.append("<li>");
+                        style = "";*/
                         if(toggleopen) {
                             params.append("&" + webpage.getId() + "=1");
                             html.append("<img src=\"" + pathImages + "/minus.gif\" alt=\"cerrar nodo\" onclick=\"getHtml('" + url + "?site=" + webpage.getWebSiteId() + "&reptp=" + webpage.getId() + params + "&dataProp=" + dataProp + "&li=" + dataCurrent + "&lang=" + lang + "','tree_'+'" + tmit.getId() + "_" + dataProp + "')\" />");
@@ -193,9 +264,6 @@ public class TreeSelectFormElement implements InternalServlet {
                             params.append("&" + webpage.getId() + "=0");
                             html.append("<img src=\"" + pathImages + "/plus.gif\" alt=\"abrir nodo\" onclick=\"getHtml('" + url + "?site=" + webpage.getWebSiteId() + "&reptp=" + webpage.getId() + params + "&dataProp=" + dataProp + "&li=" + dataCurrent + "&lang=" + lang + "','tree_'+'" + tmit.getId() + "_" + dataProp + "')\" />");
                         }
-                    }
-                    if((dataCurrent != null && dataCurrent.length() > 0) && dataCurrent.equalsIgnoreCase(webpage.getId())) {
-                        style = " style=\"font-weight:bold; background-color:#6699FF\"";
                     }
                     html.append("<a class=\"treeres\" onclick=\"getHtml('" + url + "?site=" + webpage.getWebSiteId() + "&reptp=" + webpage.getId() + params + "&dataProp=" + dataProp + "&li=" + dataCurrent + "&lang=" + lang + "','tree_'+'" + tmit.getId() + "_" + dataProp + "')\" " + style + ">");
                     if(webpage.isActive()) {
@@ -209,14 +277,14 @@ public class TreeSelectFormElement implements InternalServlet {
                         html.append(addChild(list, request, tmit, webpage, tpid, url, params, lang, dataCurrent, dataProp));
                     }
                     html.append("</li>");
-                }else {
+                } else {
                     if(tpid != null && tpid.getId().equalsIgnoreCase(webpage.getId())) {
-                        style = " style=\"color:#FF6600; font-weight:bold; background-color:#000\"";
+                        style = " style=\"color:#336699; font-weight:bold; background-color:#b3b3b3\"";
                     } else {
                         style = "";
                     }
                     if((dataCurrent != null && dataCurrent.length() > 0) && dataCurrent.equalsIgnoreCase(webpage.getId())) {
-                        style = " style=\"font-weight:bold; background-color:#6699FF\"";
+                        style = " style=\"font-weight:bold; background-color:#BBD4D9; color:#3368B4\";";
                     }
                     html.append("<li>");
                     html.append("<img src=\"" + pathImages + "/trans.gif\" />");
@@ -236,5 +304,70 @@ public class TreeSelectFormElement implements InternalServlet {
         return html.toString();
     }
 
+  /*  protected String addChild(ArrayList list, HttpServletRequest request, WebSite tmit, WebPage pageroot, String url, StringBuilder params, String lang, String dataCurrent, String dataProp) { //boolean isAjax,SemanticObject obj, String propName
+        String style;
+        boolean toggleopen;
+        StringBuilder html = new StringBuilder("<ul class=\"treeres ch\">");
+        Iterator<WebPage> childs=pageroot.listChilds();
+        while(childs.hasNext()) {
+            WebPage webpage = childs.next();
+            if(webpage.getId() != null && !webpage.isDeleted()) {
+                if(!list.isEmpty()) {
+                    if(list.contains(webpage)) {
+                        toggleopen = true;
+                    } else {
+                        toggleopen = false;
+                    }
+                } else {
+                    toggleopen = Boolean.parseBoolean(request.getParameter(webpage.getId()) == null ? "false" : ((String)request.getParameter(webpage.getId())).equals("1") ? "true" : "false");
+                }
+                if(webpage.listChilds().hasNext()) {
+                    style = "";
+                    if((dataCurrent != null && dataCurrent.length() > 0) && dataCurrent.equalsIgnoreCase(webpage.getId())) {
+                        style = " style=\"font-weight:bold; background-color:#BBD4D9; color:#3368B4\";";
+                    }
+                    html.append("<li>");
+                    if(toggleopen) {
+                        params.append("&" + webpage.getId() + "=1");
+                        html.append("<img src=\"" + pathImages + "/minus.gif\" alt=\"cerrar nodo\" onclick=\"getHtml('" + url + "?site=" + webpage.getWebSiteId() + "&reptp=" + webpage.getId() + params + "&dataProp=" + dataProp + "&li=" + dataCurrent +"&lang=" + lang + "','tree_'+'" + tmit.getId() + "_" + dataProp + "')\" />");//obj.getShortURI() + "_" + propName
+                    } else {
+                        params.append("&" + webpage.getId() + "=0");
+                        html.append("<img src=\"" + pathImages + "/plus.gif\" alt=\"abrir nodo\" onclick=\"getHtml('" + url + "?site=" + webpage.getWebSiteId() + "&reptp=" + webpage.getId() + params + "&dataProp=" + dataProp + "&li=" + dataCurrent + "&lang=" + lang + "','tree_'+'" + tmit.getId() + "_" + dataProp + "')\" />"); //obj.getShortURI() + "_" + propName
+                    }
 
+
+                    html.append("<a class=\"treeres\" onclick=\"getHtml('" + url + "?site=" + webpage.getWebSiteId() + "&reptp=" + webpage.getId() + params + "&dataProp=" + dataProp + "&li=" + dataCurrent + "&lang=" + lang + "','tree_'+'" + tmit.getId() +"_" + dataProp + "')\" " + style + ">");//obj.getShortURI() + "_" + propName
+                    if(webpage.isActive()) {
+                        html.append("<img src=\"" + pathImages + "/icon_secac.png\" alt=\"seleccionar sección\" />");
+                    } else {
+                        html.append("<img src=\"" + pathImages + "/icon_secin.png\" alt=\"seleccionar sección\" />");
+                    }
+                    html.append("<span style=\"padding-left:5px\">" + webpage.getDisplayTitle(lang) + "</span>");
+                    html.append("</a>");
+                    if(toggleopen) {
+                        html.append(addChild(list, request, tmit, webpage, url, params, lang, dataCurrent, dataProp));//url1...isAjax,obj, propName
+                    }
+                    html.append("</li>");
+                }else {
+                    style = "";
+                    if((dataCurrent != null && dataCurrent.length() > 0) && dataCurrent.equalsIgnoreCase(webpage.getId())) {
+                        style = " style=\"font-weight:bold; background-color:#BBD4D9; color:#3368B4\";";
+                    }
+                    html.append("<li>");
+                    html.append("<img src=\"" + pathImages + "/trans.gif\" />");
+                    html.append("<a class=\"treeres\" onclick=\"getHtml('" + url + "?site=" + webpage.getWebSiteId() + "&reptp=" + webpage.getId() + params + "&dataProp=" + dataProp + "&li=" + dataCurrent + "&lang=" + lang + "','tree_'+'" + tmit.getId() + "_" + dataProp + "')\" " + style + ">");//obj.getShortURI() + "_" + propName
+                    if(webpage.isActive()) {
+                        html.append("<img src=\"" + pathImages + "/icon_secac.png\" alt=\"seleccionar sección\" />");
+                    } else {
+                        html.append("<img src=\"" + pathImages + "/icon_secin.png\" alt=\"seleccionar sección\" />");
+                    }
+                    html.append("<span style=\"padding-left:5px\">" + webpage.getDisplayTitle(lang) + "</span>");
+                    html.append("</a>");
+                    html.append("</li>");
+                }
+            }
+        }
+        html.append("</ul>");
+        return html.toString();
+    }*/
 }
