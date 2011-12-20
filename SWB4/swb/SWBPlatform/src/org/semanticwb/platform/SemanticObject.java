@@ -1703,7 +1703,7 @@ public class SemanticObject
         Iterator<SemanticObject> it=listObjectProperties(prop);
         while (it.hasNext()) {
             SemanticObject so = it.next();
-            if(so.equals(obj))
+            if(so!=null && so.equals(obj))
             {
                 ret=true;
                 break;
