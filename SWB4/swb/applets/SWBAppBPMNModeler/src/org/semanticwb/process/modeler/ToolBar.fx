@@ -63,6 +63,10 @@ import org.semanticwb.process.modeler.CompensationEndEvent;
 import org.semanticwb.process.modeler.MultipleEndEvent;
 import org.semanticwb.process.modeler.TerminationEndEvent;
 import java.nio.charset.Charset;
+import org.semanticwb.process.modeler.FlowNode;
+import org.semanticwb.process.modeler.EventSubProcess;
+import org.semanticwb.process.modeler.Activity;
+import org.semanticwb.process.modeler.AdhocSubProcess;
 
 public var counter: Integer;
 public var conn:WBConnection = new WBConnection(FX.getArgument(WBConnection.PRM_JSESS).toString(),FX.getArgument(WBConnection.PRM_CGIPATH).toString(),FX.getProperty("javafx.application.codebase"));
@@ -164,48 +168,58 @@ public class ToolBar extends CustomNode
 
     public function saveProcess(): Void
     {
-        fileChooser.setDialogTitle(##"saveTitle");
-        if (fileChooser.showSaveDialog(null) == javax.swing.JFileChooser.APPROVE_OPTION)
-        {
-            var file = fileChooser.getSelectedFile();
-            if(not file.getName().toLowerCase().endsWith("swp"))
+        var valCode = validateProcessModel();
+        var confirmError = ##"msgModelErrorConfirm";
+        var invalidMsg = ##"msgModelError";
+        if (valCode.equals("OK") or (not valCode.equals("OK") and Alert.confirm("SemanticWebBuilder Process", "{invalidMsg} {valCode}. {confirmError}"))) {
+            fileChooser.setDialogTitle(##"saveTitle");
+            if (fileChooser.showSaveDialog(null) == javax.swing.JFileChooser.APPROVE_OPTION)
             {
-                file=new File("{file.getPath()}.swp");
-            }
+                var file = fileChooser.getSelectedFile();
+                if(not file.getName().toLowerCase().endsWith("swp"))
+                {
+                    file=new File("{file.getPath()}.swp");
+                }
 
-            //println(file);
-            var proc=getProcess();
-            try
-            {
-                var out=new FileOutputStream(file);
-                out.write(proc.getBytes("UTF-8"));
-                out.close();
-                //var o= new ObjectOutputStream(out);
-                //o.writeObject(modeler);
-                //o.close();
-            }catch(e:Exception){Alert.inform("Error",e.getMessage());}
+                //println(file);
+                var proc=getProcess();
+                try
+                {
+                    var out=new FileOutputStream(file);
+                    out.write(proc.getBytes("UTF-8"));
+                    out.close();
+                    //var o= new ObjectOutputStream(out);
+                    //o.writeObject(modeler);
+                    //o.close();
+                }catch(e:Exception){Alert.inform("Error",e.getMessage());}
+            }
         }
     }
 
     public function storeProcess(): Void
     {
-        var process=getProcess();
-        //var processString = WBXMLParser.encode("JSONSTART{process}JSONEND","UTF8");
-        var processString = "JSONSTART{process}JSONEND";
-        
-        //var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>updateModel</cmd><json>{WBXMLParser.encode(processString,"UTF8")}</json></req>";
-        var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>updateModel</cmd><json>{processString}</json></req>";
-        //println("applet updateModel - JSON ENVIADO:");
-        //println(processString);
-        var data=conn.getEncData(comando);
-        AppletStageExtension.eval("parent.reloadTreeNodeByURI('{conn.getUri()}')");
-        if(data.indexOf("OK")>0)
-        {
-            Alert.inform("SemanticWebBuilder",##"msgSent");
-            loadProcess();
-        }else
-        {
-            Alert.inform("Error",data);
+        var valCode = validateProcessModel();
+        var confirmError = ##"msgModelErrorConfirm";
+        var invalidMsg = ##"msgModelError";
+        if (valCode.equals("OK") or (not valCode.equals("OK") and Alert.confirm("SemanticWebBuilder Process", "{invalidMsg} {valCode}. {confirmError}"))) {
+            var process=getProcess();
+            //var processString = WBXMLParser.encode("JSONSTART{process}JSONEND","UTF8");
+            var processString = "JSONSTART{process}JSONEND";
+
+            //var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>updateModel</cmd><json>{WBXMLParser.encode(processString,"UTF8")}</json></req>";
+            var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>updateModel</cmd><json>{processString}</json></req>";
+            //println("applet updateModel - JSON ENVIADO:");
+            //println(processString);
+            var data=conn.getEncData(comando);
+            AppletStageExtension.eval("parent.reloadTreeNodeByURI('{conn.getUri()}')");
+            if(data.indexOf("OK")>0)
+            {
+                Alert.inform("SemanticWebBuilder Process",##"msgSent");
+                loadProcess();
+            }else
+            {
+                Alert.inform("Error",data);
+            }
         }
     }
 
@@ -223,6 +237,26 @@ public class ToolBar extends CustomNode
             createProcess(json);
         }catch(e:Exception){println(e);}
 
+    }
+
+    public function validateProcessModel() : String {
+        var ret = "OK";
+        for (node in modeler.contents) {
+            if (node instanceof GraphicalElement) {
+                if (node instanceof Activity or node instanceof Event or node instanceof Gateway) {
+                    if (not (node instanceof EventSubProcess)) {
+                        var ge = node as GraphicalElement;
+                        if (not (ge.getContainer() instanceof AdhocSubProcess)) {
+                            //Validate node's connectivity
+                            if (ge.getInputConnectionObjects().isEmpty() and ge.getOutputConnectionObjects().isEmpty()) {
+                                ret = ##"msgModelErrorUlinked";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return ret;
     }
 
     /**
@@ -2364,10 +2398,6 @@ public class ToolBar extends CustomNode
             //modeler.containerElement=null;
             createProcess(aux);
         }
-    }
-
-    function validateProcess() {
-
     }
 }
 
