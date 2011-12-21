@@ -40,11 +40,11 @@ public class FileDownload extends GenericAdmResource {
                 log.error("Error while loading resource template: " + base.getId(), e);
             }
         }
-        System.out.println("template: " + tpl);
+        //System.out.println("template: " + tpl);
         if (tpl == null) {
             try {
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/FileDownload/WBFileDownload.xslt"));
-                System.out.println("template por defecto: " + tpl);
+                //System.out.println("template por defecto: " + tpl);
             }  catch (Exception e) {
                 log.error("Error while loading default resource template: " + base.getId(), e);
             }
@@ -91,7 +91,7 @@ public class FileDownload extends GenericAdmResource {
                     el.setAttribute("tArchitecture", architecture);
                     el.setAttribute("textension", ext);
                     dom.appendChild(el);
-                    System.out.println("El DOM a utilizar: " + SWBUtils.XML.domToXml(dom));
+                    //System.out.println("El DOM a utilizar: " + SWBUtils.XML.domToXml(dom));
                     /** Por ahora **/
                     if (tpl == null) {
 
@@ -102,13 +102,13 @@ public class FileDownload extends GenericAdmResource {
                                 log.error("Error while loading resource template: " + base.getId(), e);
                             }
                         } else {
-                            System.out.println("template: " + tpl);
+                            //System.out.println("template: " + tpl);
                             try {
                                 InputStream input = SWBPortal.getAdminFileStream("/swbadmin/xsl/FileDownload/WBFileDownload.xslt");
                                 if (input != null) {
                                     tpl = SWBUtils.XML.loadTemplateXSLT(input);
-                                } else {
-                                    System.out.println("\nInputStream NULO!, no encuentra: /swbadmin/xsl/FileDownload/WBFileDownload.xslt");
+                                //} else {
+                                //    System.out.println("\nInputStream NULO!, no encuentra: /swbadmin/xsl/FileDownload/WBFileDownload.xslt");
                                 }
                             }  catch (Exception e) {
                                 log.error("Error while loading default resource template: " + base.getId(), e);
