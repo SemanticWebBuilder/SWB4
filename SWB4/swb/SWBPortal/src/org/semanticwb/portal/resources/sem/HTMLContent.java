@@ -912,6 +912,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
             HttpServletResponse response, SWBParamRequest paramRequest)
             throws IOException {
 
+        response.setContentType("text/html;charset=ISO-8859-1");
         StringBuilder output = new StringBuilder(512);
         SWBResourceURL url = paramRequest.getRenderUrl();
         url.setCallMethod(url.Call_DIRECT);
@@ -931,6 +932,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         output.append("\n<head>");
         output.append("\n	<title>Upload Main File</title>");
         output.append("\n	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
+        output.append("\n       <META HTTP-EQUIV=\"X-UA-Compatible\" CONTENT=\"IE=EmulateIE7\" />");
         output.append("\n	<meta name=\"robots\" content=\"noindex, nofollow\" />");
         output.append("\n	<script src=\"" + actualcontext
                 + "/swbadmin/js/fckeditor/editor/dialog/common/fck_dialog_common.js\" type=\"text/javascript\"></script>");

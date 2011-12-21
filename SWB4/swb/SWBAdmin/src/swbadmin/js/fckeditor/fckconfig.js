@@ -310,7 +310,7 @@ FCKConfig.FlashBrowserWindowHeight = FCKConfig.ScreenHeight * 0.7 ;	//70% ;
 FCKConfig.LinkUpload = true ;
 FCKConfig.LinkUploadURL = domainAndContext+'FCKEditorConnector' ;
 //FCKConfig.ImageUploadURL = FCKConfig.BasePath + 'filemanager/connectors/' + _QuickUploadLanguage + '/upload.' + _QuickUploadExtension ;
-FCKConfig.LinkUploadAllowedExtensions = ".(7z|aiff|asf|avi|bmp|csv|doc|docx|fla|flv|gif|gz|gzip|htm|html|jpeg|jpg|mid|mov|mp3|mp4|mpc|mpeg|mpg|odg|odp|ods|odt|pdf|png|ppt|pptx|pxd|qt|ram|rar|rm|rmi|rmvb|rtf|sdc|sitd|swf|sxc|sxw|tar|tgz|tif|tiff|txt|vsd|wav|wma|wmv|xls|xlsx|xml|zip)$" ;			// empty for all
+FCKConfig.LinkUploadAllowedExtensions = ".(7z|aiff|asf|avi|bmp|csv|doc|docx|fla|flv|gif|gz|gzip|htm|html|jar|jpeg|jpg|mid|mov|mp3|mp4|mpc|mpeg|mpg|odg|odp|ods|odt|pdf|png|ppt|pptx|pxd|qt|ram|rar|rm|rmi|rmvb|rtf|sdc|sitd|swf|sxc|sxw|tar|tgz|tif|tiff|txt|vsd|war|wav|wma|wmv|xls|xlsx|xsl|xslt|xml|zip)$" ;			// empty for all
 FCKConfig.LinkUploadDeniedExtensions = "" ;	// empty for no one
 
 FCKConfig.ImageUpload = true ;
