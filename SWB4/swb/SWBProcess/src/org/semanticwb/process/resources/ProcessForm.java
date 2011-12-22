@@ -974,9 +974,11 @@ public class ProcessForm extends GenericResource {
                 }
                 if (hmselected.get(str) == null) {
                     SemanticProperty sp = hmprops.get(str);
-                    out.println("<option value=\"" + str + "\">");
-                    out.println(varName + "." + sp.getPropertyCodeName());
-                    out.println("</option>");
+                    if (!propid.equals("swb:valid")) {
+                        out.println("<option value=\"" + str + "\">");
+                        out.println(varName + "." + sp.getPropertyCodeName());
+                        out.println("</option>");
+                    }
                 }
             }
             out.println("</select>");
