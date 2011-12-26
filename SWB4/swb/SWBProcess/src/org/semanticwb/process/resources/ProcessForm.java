@@ -111,7 +111,7 @@ public class ProcessForm extends GenericResource {
 
         String suri = request.getParameter("suri");
         if (suri == null) {
-            out.println("Parámetro no difinido...");
+            out.println("Parámetro no definido...");
             return;
         }
         
