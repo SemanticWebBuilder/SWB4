@@ -620,9 +620,8 @@ public class ProcessForm extends GenericResource {
             String defaultFE = FE_DEFAULT;
             String defaultMode = FE_MODE_EDIT;
 
-            HashMap<Integer, String> hmclsprop = new HashMap<Integer, String>();
+            HashMap<String, String> hmclsprop = new HashMap<String, String>();
 
-            int nodp = 10000;
             // agregando al hmprops las propiedades nuevas
             Iterator<String> itpar = hmparam.keySet().iterator();
             while (itpar.hasNext()) {
@@ -641,7 +640,6 @@ public class ProcessForm extends GenericResource {
 
                 SemanticProperty sempro = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticPropertyById(propid);
                 //System.out.println("sempro: "+sempro);
-                Integer intKey = null;
                 if (sempro != null) {
                     SemanticObject dp = sempro.getDisplayProperty();
 
@@ -653,21 +651,16 @@ public class ProcessForm extends GenericResource {
                         SemanticObject semobjFE = disprop.getFormElement();
                         if (semobjFE != null) {
                             defaultFE = semobjFE.getURI();
-                            intKey = new Integer(disprop.getIndex());
                         } else {
                             defaultFE = FE_DEFAULT;
-                            intKey = new Integer(nodp);
-                            nodp++;
                         }
                     }
                 } else {
                     defaultFE = FE_DEFAULT;
-                    intKey = new Integer(nodp);
-                    nodp++;
                 }
 
                 String value = strnew + "|" + defaultMode + "|" + defaultFE;
-                hmclsprop.put(intKey, value);
+                hmclsprop.put(strnew, value);
             }
 
             // ordenando las propiedades
@@ -686,13 +679,13 @@ public class ProcessForm extends GenericResource {
 
             // guardando las propiedades de acuerdo al index del display property
 
-            list = new ArrayList(hmclsprop.keySet());
-            //Collections.sort(list);
+            ArrayList list2 = new ArrayList(hmclsprop.keySet());
+            Collections.sort(list2);
 
-            itprop = list.iterator();
-            while (itprop.hasNext()) {
-                Integer integer = itprop.next();
-                String thisprop = hmclsprop.get(integer);
+            Iterator<String> itprop2 = list2.iterator();
+            while (itprop2.hasNext()) {
+                String string = itprop2.next();
+                String thisprop = hmclsprop.get(string);
                 base.setAttribute("prop" + i, thisprop);
                 i++;
             }
