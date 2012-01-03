@@ -1,6 +1,13 @@
 //Constant definitions
 var MARKER_SIGNAL = "images/n_senal_b.png";
 var MARKER_MESSAGE = "images/n_msj_b.png";
+var MARKER_TIMER = "images/n_tmp.png";
+var MARKER_RULE = "images/n_cond.png";
+var MARKER_MULTI = "images/n_multi_b.png";
+var MARKER_PARALLEL = "images/n_paralelo_b.png";
+var MARKER_SCALATION = "images/n_escala_b.png";
+var MARKER_ERROR = "images/n_error_b.png";
+var MARKER_COMPENSATION = "images/n_compensa_b.png";
 
 //------------------------------------------------------------------------------
 
@@ -122,8 +129,8 @@ StartEvent.prototype.getId = function() {return this.Id;}
 StartEvent.prototype.setId = function(id) {this.Id = id;}
 StartEvent.prototype.setCoords = function(p) {this.shape.setCoords(p);}
 StartEvent.prototype.getCoords = function() {return this.shape.getCoords();}
-StartEvent.prototype.setMarker = function(imageMarker, colorAdjust, offset) {
-    this.marker = new Marker(imageMarker, offset, 1.15, colorAdjust);
+StartEvent.prototype.setMarker = function(imageMarker, colorAdjust, offset, scale) {
+    this.marker = new Marker(imageMarker, offset, scale, colorAdjust);
 }
 
 //StartEvent.render
@@ -164,7 +171,8 @@ StartEvent.prototype.mousePressed = function (e) {
     var mouseButton = getMousePressedButton(e);
     
     if (mouseButton == "LEFT") {
-        console.log("Botón izquierdo presionado sobre " + this.Id);
+        modeler.unSelectAll();
+        this.focus();
     } else if (mouseButton == "RIGHT") {
 
     }
@@ -205,8 +213,7 @@ StartEvent.prototype.mouseMoved = function (e) {
 //SigalStartEvent definition
 function SignalStartEvent () {
     StartEvent.call(this);
-    console.log("Signal");
-    this.setMarker(MARKER_SIGNAL, new ColorAdjust(10,10,10), new Point(2.5,2.2));
+    this.setMarker(MARKER_SIGNAL, new ColorAdjust(10,10,10), new Point(2.5,2.2), 1.15);
 }
 SignalStartEvent.prototype = StartEvent.prototype;
 
@@ -215,10 +222,72 @@ SignalStartEvent.prototype = StartEvent.prototype;
 //SigalStartEvent definition
 function MessageStartEvent () {
     StartEvent.call(this);
-    console.log("Message");
-    this.setMarker(MARKER_MESSAGE, new ColorAdjust(10,10,10), new Point(3.5,5.2));
+    this.setMarker(MARKER_MESSAGE, new ColorAdjust(10,10,10), new Point(3.5,5.2), 1.15);
 }
 MessageStartEvent.prototype = StartEvent.prototype;
+
+//------------------------------------------------------------------------------
+
+//TimerStartEvent definition
+function TimerStartEvent () {
+    StartEvent.call(this);
+    this.setMarker(MARKER_TIMER, new ColorAdjust(10,10,10), new Point(3.6,4.1), 0.95);
+}
+TimerStartEvent.prototype = StartEvent.prototype;
+
+//------------------------------------------------------------------------------
+
+//RuleStartEvent definition
+function RuleStartEvent () {
+    StartEvent.call(this);
+    this.setMarker(MARKER_RULE, new ColorAdjust(10,10,10), new Point(4.5,4.7), 1);
+}
+RuleStartEvent.prototype = StartEvent.prototype;
+
+//------------------------------------------------------------------------------
+
+//MultiStartEvent definition
+function MultiStartEvent () {
+    StartEvent.call(this);
+    this.setMarker(MARKER_MULTI, new ColorAdjust(10,10,10), new Point(3.2,2.5), 1);
+}
+MultiStartEvent.prototype = StartEvent.prototype;
+
+//------------------------------------------------------------------------------
+
+//ParallelStartEvent definition
+function ParallelStartEvent () {
+    StartEvent.call(this);
+    this.setMarker(MARKER_PARALLEL, new ColorAdjust(10,10,10), new Point(4.8,5), 1);
+}
+ParallelStartEvent.prototype = StartEvent.prototype;
+
+//------------------------------------------------------------------------------
+
+//ScalationStartEvent definition
+function ScalationStartEvent () {
+    StartEvent.call(this);
+    this.setMarker(MARKER_SCALATION, new ColorAdjust(10,10,10), new Point(4.7,3.3), 1);
+}
+ScalationStartEvent.prototype = StartEvent.prototype;
+
+//------------------------------------------------------------------------------
+
+//ErrorStartEvent definition
+function ErrorStartEvent () {
+    StartEvent.call(this);
+    this.setMarker(MARKER_ERROR, new ColorAdjust(10,10,10), new Point(4.7,5), 1);
+}
+ErrorStartEvent.prototype = StartEvent.prototype;
+
+//------------------------------------------------------------------------------
+
+//CompensationStartEvent definition
+function CompensationStartEvent () {
+    StartEvent.call(this);
+    this.setMarker(MARKER_COMPENSATION, new ColorAdjust(10,10,10), new Point(3,8), 1);
+}
+CompensationStartEvent.prototype = StartEvent.prototype;
 
 //------------------------------------------------------------------------------
 
@@ -239,7 +308,7 @@ function Modeler() {
 Modeler.prototype.getCanvasElement = function() {return this.drawingCanvas;}
 Modeler.prototype.getNewId = function() {return this.count++;}
 Modeler.prototype.getContext = function() {return this.context;}
-Modeler.prototype.setSelectedOption = function(option) {this.selectedItem = option;console.log("sel option="+this.selectedItem);}
+Modeler.prototype.setSelectedTool = function(option) {this.selectedTool = option;}
 
 Modeler.prototype.add = function(ge) {
     this.childs.push(ge);
@@ -250,6 +319,18 @@ Modeler.prototype.add = function(ge) {
 //Agrega un elemento al conjunto de elementos seleccionados
 Modeler.prototype.addSelectedElement = function(ge) {
     this.selectedElements.push(ge);
+}
+
+Modeler.prototype.setSelectedElement = function (ge) {
+    
+}
+
+//Modeler.addSelectedElement
+//Agrega un elemento al conjunto de elementos seleccionados
+Modeler.prototype.unSelectAll = function() {
+    for (var i = this.childs.length - 1; i >= 0; i--) {
+        this.childs[i].normal();
+    }
 }
 
 //Modeler.removeSelectedElement
@@ -363,16 +444,13 @@ Modeler.prototype.getMousePosition = function (e) {
 
 
 Modeler.prototype.mouseClicked = function(e) {
-    this.getMousePosition(e);
-    var clicked = false;
-    for (var i = this.childs.length - 1; i >= 0; i--) {
-        if (this.childs[i].mouseInBounds(this.cx, this.cy) && !clicked) {
-            this.childs[i].focus();
-            clicked = true;
-            console.log(this.childs[i].getId() + " selected= " + this.childs[i].selected);
-        } else {
-            this.childs[i].normal();
-        }
+    var mouseCoords = this.getMousePosition(e);
+    var ele = this.getOverElement(mouseCoords.x, mouseCoords.y);
+    
+    if (ele != null) {
+        ele.mouseClicked(e);
+    } else {
+        this.unSelectAll();
     }
     this.render();
 }
@@ -384,20 +462,19 @@ Modeler.prototype.mousePressed = function(e) {
     var mouseCoords = this.getMousePosition(e);
     var ele = this.getOverElement(mouseCoords.x, mouseCoords.y);
     
-    if (ele != null) {
-        ele.mousePressed(e);
-    }
-    
     if (mouseButton == "LEFT") {
-        if (this.selectedItem != null) {
-            this.selectedItem.setCoords(new Point(this.cx, this.cy));
-            this.add(this.selectedItem);
-            this.selectedItem.render(this.context);
-            this.selectedItem = null;
+        if (this.selectedTool != null) {
+            this.selectedTool.setCoords(new Point(this.cx, this.cy));
+            this.add(this.selectedTool);
+            this.selectedTool.render(this.context);
+            this.selectedTool = null;
+        } else {
+            if (ele != null) {
+                ele.mousePressed(e);
+            }
         }
-    } else if (mouseButton == "RIGHT") {
-
     }
+    this.render();
 }
 
 Modeler.prototype.mouseMoved = function(e) {
@@ -436,7 +513,7 @@ Modeler.prototype.mouseMoved = function(e) {
 //			}
 //		}
 //	}
-//	this.render();
+	this.render();
 }
 
 Modeler.prototype.mouseReleased = function(e) {
@@ -451,6 +528,7 @@ Modeler.prototype.mouseReleased = function(e) {
 	//console.log("End point: "+this.cx+", "+this.cy);
 	//console.log("Diferencia X,Y:"+this.dx+", "+this.dy);
 //	this.isDragging = false;
+    this.render();
 }
 
 function onMouseMoved(e) {
