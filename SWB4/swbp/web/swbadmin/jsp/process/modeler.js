@@ -9,6 +9,32 @@ var MARKER_SCALATION = "images/n_escala_b.png";
 var MARKER_ERROR = "images/n_error_b.png";
 var MARKER_COMPENSATION = "images/n_compensa_b.png";
 
+var ALIGN_CENTER = "center";
+var ALIGN_LEFT = "left";
+var ALIGN_RIGHT = "right";
+var ALIGN_JUSTIFY = "start";
+
+//------------------------------------------------------------------------------
+
+//EditableLabel definition
+function EditableLabel(txt) {
+    this.text = txt;
+    this.multiLine = false;
+    this.maxWidth = 50;
+    this.textAlign = "center";
+}
+
+//EditableLabel basic getters and setters
+EditableLabel.prototype.setText = function (txt) {this.text = txt;}
+EditableLabel.prototype.getText = function() {return this.text;}
+
+EditableLabel.prototype.render = function (context, x, y) {
+    context.save();
+    context.textBaseline = 'middle';
+    context.fillText(this.text, x, y);
+    context.restore();
+}
+
 //------------------------------------------------------------------------------
 
 //Point definition
@@ -39,13 +65,15 @@ function Marker (image, offset, scale, ca) {
     } else {
         this.scale = scale;
     }
-    this.colorAdjust = ca;
+    this.colorAdjust = ca;      //Ajuste de color para la imagen del marcador
 }
 
 //Marker basic geters and setters
 Marker.prototype.setColorAdjust = function (colorAdjust) {this.colorAdjust = colorAdjust;}
 Marker.prototype.getColorAdjust = function () {return this.colorAdjust;}
 
+//Render
+//Dibuja el marcador sobre el canvas
 Marker.prototype.render = function(context, x, y) {
     var imgX = x + this.offsetX;
     var imgY = y + this.offsetY;
@@ -79,7 +107,7 @@ Circle.prototype.getHeight = function()  {return this.radius * 2;}
 Circle.prototype.setStrokeWidth = function(sw) {this.strokeWidth = sw;}
 
 //Circle.render
-//Dibuja un círculo con la información del objeto
+//Dibuja un círculo en el canvas
 Circle.prototype.render = function (context) {
     context.save();
     context.strokeStyle = this.stroke;
@@ -106,68 +134,76 @@ Circle.prototype.mouseInBounds = function (x, y) {
 
 //------------------------------------------------------------------------------
 
-//StartEvent definition
-function StartEvent() {
+//GraphicalElement definition
+function GraphicalElement() {
+    this.Id = 0;                    //Identificador único del evento
+    this.selected = false;          //Indica si el evento está seleccionado
+    this.shape = null;
+    this.parent = null;             //Padre del elemento en el modelo
+    this.container = null;          //Contenedor del elemento en el modelo
+    this.label = null;
     this.STROKE_NORMAL = "#006600"; //Color de línea para el elemento en estado normal
     this.STROKE_OVER = "#FF6060";   //Color de línea para el elemento en estado over
     this.STROKE_FOCUSED = "#98FF00";//Color de línea para el elemento en estado focused
-
-    this.Id = 0;
-    this.shape = new Circle(0,0,15);
-    this.selected = false;
-    this.gr = modeler.getContext().createLinearGradient(0,0,15,0);
-
-    this.gr.addColorStop(0,"#ffffff");
-    this.gr.addColorStop(1,"#9DD49D");
-    this.shape.setFill(this.gr);
-    this.shape.setStroke(this.STROKE_NORMAL);
-    this.shape.setStrokeWidth(3);
+    this.name = "GraphicalElement";
 }
 
-//StartEvent basic getters and setters
-StartEvent.prototype.getId = function() {return this.Id;}
-StartEvent.prototype.setId = function(id) {this.Id = id;}
-StartEvent.prototype.setCoords = function(p) {this.shape.setCoords(p);}
-StartEvent.prototype.getCoords = function() {return this.shape.getCoords();}
-StartEvent.prototype.setMarker = function(imageMarker, colorAdjust, offset, scale) {
+//GraphicalElement basic getters and setters
+GraphicalElement.prototype.getId = function() {return this.Id;}
+GraphicalElement.prototype.setId = function(id) {this.Id = id;}
+GraphicalElement.prototype.getLabel = function() {return this.label;}
+GraphicalElement.prototype.setLabel = function(lbl) {this.label = lbl;}
+GraphicalElement.prototype.setCoords = function(p) {this.shape.setCoords(p);}
+GraphicalElement.prototype.getCoords = function() {return this.shape.getCoords();}
+GraphicalElement.prototype.setMarker = function(imageMarker, colorAdjust, offset, scale) {
     this.marker = new Marker(imageMarker, offset, scale, colorAdjust);
 }
 
-//StartEvent.render
-StartEvent.prototype.render = function(context) {
+//GraphicalElement.render
+//Dibuja el elemento en el canvas
+GraphicalElement.prototype.render = function(context) {
     var coords = this.shape.getCoords();
     this.shape.render(context);
     if (this.marker != null) {
         this.marker.render(context, coords.x-this.shape.radius, coords.y-this.shape.radius);
     }
+    if (this.label != null) {
+        this.label.render(context, coords.x, coords.y);
+    }
 }
 
-//StartEvent.mouseInBounds
-StartEvent.prototype.mouseInBounds = function(x, y) {
+//GraphicalElement.mouseInBounds
+//Determina si el cursor se encuentra sobre este elemento
+GraphicalElement.prototype.mouseInBounds = function(x, y) {
     return this.shape.mouseInBounds(x,y);
 }
 
-//StartEvent.hover
-StartEvent.prototype.hover = function () {
+//GraphicalElement.hover
+//Cambia el estado del elemento a 'hover'
+GraphicalElement.prototype.hover = function () {
     this.shape.setStroke(this.STROKE_OVER);
     if (!this.selected) {
         this.over = true;
     }
 }
 
-//StartEvent.normal
-StartEvent.prototype.normal = function () {
+//GraphicalElement.normal
+//Cambia el estado del elemento a 'normal'
+GraphicalElement.prototype.normal = function () {
     this.shape.setStroke(this.STROKE_NORMAL);
     this.over = this.selected = false;
 }
 
-//StartEvent.focus
-StartEvent.prototype.focus = function () {
+//GraphicalElement.focus
+//Cambia el estado del elemento a 'focus'
+GraphicalElement.prototype.focus = function () {
     this.shape.setStroke(this.STROKE_FOCUSED);
     this.selected = true;
 }
 
-StartEvent.prototype.mousePressed = function (e) {
+//GraphicalElement.mousePressed
+//Manejador del evento 'mousePressed' del elemento
+GraphicalElement.prototype.mousePressed = function (e) {
     var mouseButton = getMousePressedButton(e);
     
     if (mouseButton == "LEFT") {
@@ -178,7 +214,9 @@ StartEvent.prototype.mousePressed = function (e) {
     }
 }
 
-StartEvent.prototype.mouseClicked = function (e) {
+//GraphicalElement.mouseClicked
+//Manejador del evento 'mouseClicked' del elemento
+GraphicalElement.prototype.mouseClicked = function (e) {
     var mouseButton = getMousePressedButton(e);
     
     if (mouseButton == "LEFT") {
@@ -188,7 +226,9 @@ StartEvent.prototype.mouseClicked = function (e) {
     }
 }
 
-StartEvent.prototype.mouseReleased = function (e) {
+//GraphicalElement.mouseReleased
+//Manejador del evento 'mouseReleased' del elemento
+GraphicalElement.prototype.mouseReleased = function (e) {
     var mouseButton = getMousePressedButton(e);
     
     if (mouseButton == "LEFT") {
@@ -198,15 +238,64 @@ StartEvent.prototype.mouseReleased = function (e) {
     }
 }
 
-StartEvent.prototype.mouseMoved = function (e) {
+//GraphicalElement.mouseMoved
+//Manejador del evento 'mouseMoved' del elemento
+GraphicalElement.prototype.mouseMoved = function (e) {
     var mouseButton = getMousePressedButton(e);
     
     if (mouseButton == "LEFT") {
-        console.log("Botón izquierdo movido sobre " + this.Id);
+        if (!this.selected) {
+            modeler.unHoverAll();
+            this.hover();
+        }
     } else if (mouseButton == "RIGHT") {
 
     }
 }
+
+//------------------------------------------------------------------------------
+
+//Event definition
+function Event() {
+    GraphicalElement.call(this);
+    this.shape = new Circle(0,0,15);//Figura principal del evento
+}
+Event.prototype = GraphicalElement.prototype;
+
+//------------------------------------------------------------------------------
+
+//CatchEvent definition
+function CatchEvent() {
+    this.interruptor = false;   //Indica si el evento puede ser interruptor
+    this.interrupts = false;    //Indica si el evento interrumpe su tarea asociada
+}
+CatchEvent.prototype = Event.prototype;
+
+//------------------------------------------------------------------------------
+
+//StartEvent definition
+function StartEvent() {
+    CatchEvent.call(this);
+
+    //Gradiente para el relleno del evento
+    this.gr = modeler.getContext().createLinearGradient(0,0,15,0);
+    this.gr.addColorStop(0,"#ffffff");
+    this.gr.addColorStop(1,"#9DD49D");
+    this.shape.setFill(this.gr);
+    this.shape.setStroke(this.STROKE_NORMAL);
+    this.shape.setStrokeWidth(3);
+}
+StartEvent.prototype = Event.prototype;
+
+//------------------------------------------------------------------------------
+
+//NormalStartEvent definition
+function NormalStartEvent () {
+    StartEvent.call(this);
+    this.name = "Normal Start Event";
+    this.label = new EditableLabel(this.name);
+}
+NormalStartEvent.prototype = StartEvent.prototype;
 
 //------------------------------------------------------------------------------
 
@@ -291,6 +380,22 @@ CompensationStartEvent.prototype = StartEvent.prototype;
 
 //------------------------------------------------------------------------------
 
+//IntermediateCatchEventEvent definition
+function StartEvent() {
+    Event.call(this);
+
+    //Gradiente para el relleno del evento
+    this.gr = modeler.getContext().createLinearGradient(0,0,15,0);
+    this.gr.addColorStop(0,"#ffffff");
+    this.gr.addColorStop(1,"#9DD49D");
+    this.shape.setFill(this.gr);
+    this.shape.setStroke(this.STROKE_NORMAL);
+    this.shape.setStrokeWidth(3);
+}
+StartEvent.prototype = Event.prototype;
+
+//------------------------------------------------------------------------------
+
 //Modeler definition
 function Modeler() {
     this.childs = [];           //Elementos del modelo
@@ -330,6 +435,16 @@ Modeler.prototype.setSelectedElement = function (ge) {
 Modeler.prototype.unSelectAll = function() {
     for (var i = this.childs.length - 1; i >= 0; i--) {
         this.childs[i].normal();
+    }
+}
+
+//Modeler.unHoverAll
+//Regresa todos los elementos del modelo a su estatus normal
+Modeler.prototype.unHoverAll = function() {
+    for (var i = this.childs.length - 1; i >= 0; i--) {
+        if (!this.childs[i].selected) {
+            this.childs[i].normal();
+        }
     }
 }
 
@@ -483,6 +598,8 @@ Modeler.prototype.mouseMoved = function(e) {
     
     if (ele != null) {
         ele.mouseMoved(e);
+    } else {
+        this.unHoverAll();
     }
     
 //	this.getMousePosition(e);
