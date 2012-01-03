@@ -1,7 +1,52 @@
+//Constant definitions
+var MARKER_SIGNAL = "images/n_senal_b.png";
+var MARKER_MESSAGE = "images/n_msj_b.png";
+
+//------------------------------------------------------------------------------
+
 //Point definition
 function Point (x, y) {
     this.x = x; //Posición X del punto
     this.y = y; //Posición Y del punto
+}
+
+//------------------------------------------------------------------------------
+
+//ColorAdjust definition
+function ColorAdjust(red, green, blue) {
+    this.r = red;
+    this.g = green;
+    this.b = blue;
+}
+
+//------------------------------------------------------------------------------
+
+//Marker definition
+function Marker (image, offset, scale, ca) {
+    this.image = new Image();   //Imagen
+    this.image.src = image;     
+    this.offsetX = offset.x;    //Offset respecto al origen de la forma en X
+    this.offsetY = offset.y;    //Offset respecto al origen de la forma en Y
+    if (scale <= 0) {
+        this.scale = 1;         //Valor para escalar el marcador
+    } else {
+        this.scale = scale;
+    }
+    this.colorAdjust = ca;
+}
+
+//Marker basic geters and setters
+Marker.prototype.setColorAdjust = function (colorAdjust) {this.colorAdjust = colorAdjust;}
+Marker.prototype.getColorAdjust = function () {return this.colorAdjust;}
+
+Marker.prototype.render = function(context, x, y) {
+    var imgX = x + this.offsetX;
+    var imgY = y + this.offsetY;
+    var imgW = this.image.width * this.scale;
+    var imgH = this.image.height * this.scale;
+    context.save();
+    context.drawImage(this.image, imgX, imgY, imgW, imgH);
+    context.restore();
 }
 
 //------------------------------------------------------------------------------
@@ -55,12 +100,12 @@ Circle.prototype.mouseInBounds = function (x, y) {
 //------------------------------------------------------------------------------
 
 //StartEvent definition
-function StartEvent(id) {
+function StartEvent() {
     this.STROKE_NORMAL = "#006600"; //Color de línea para el elemento en estado normal
     this.STROKE_OVER = "#FF6060";   //Color de línea para el elemento en estado over
     this.STROKE_FOCUSED = "#98FF00";//Color de línea para el elemento en estado focused
 
-    this.Id = id;
+    this.Id = 0;
     this.shape = new Circle(0,0,15);
     this.selected = false;
     this.gr = modeler.getContext().createLinearGradient(0,0,15,0);
@@ -77,10 +122,17 @@ StartEvent.prototype.getId = function() {return this.Id;}
 StartEvent.prototype.setId = function(id) {this.Id = id;}
 StartEvent.prototype.setCoords = function(p) {this.shape.setCoords(p);}
 StartEvent.prototype.getCoords = function() {return this.shape.getCoords();}
+StartEvent.prototype.setMarker = function(imageMarker, colorAdjust, offset) {
+    this.marker = new Marker(imageMarker, offset, 1.15, colorAdjust);
+}
 
 //StartEvent.render
 StartEvent.prototype.render = function(context) {
-    this.shape.render(context); 
+    var coords = this.shape.getCoords();
+    this.shape.render(context);
+    if (this.marker != null) {
+        this.marker.render(context, coords.x-this.shape.radius, coords.y-this.shape.radius);
+    }
 }
 
 //StartEvent.mouseInBounds
@@ -117,6 +169,56 @@ StartEvent.prototype.mousePressed = function (e) {
 
     }
 }
+
+StartEvent.prototype.mouseClicked = function (e) {
+    var mouseButton = getMousePressedButton(e);
+    
+    if (mouseButton == "LEFT") {
+        console.log("Botón izquierdo clickado sobre " + this.Id);
+    } else if (mouseButton == "RIGHT") {
+
+    }
+}
+
+StartEvent.prototype.mouseReleased = function (e) {
+    var mouseButton = getMousePressedButton(e);
+    
+    if (mouseButton == "LEFT") {
+        console.log("Botón izquierdo liberado sobre " + this.Id);
+    } else if (mouseButton == "RIGHT") {
+
+    }
+}
+
+StartEvent.prototype.mouseMoved = function (e) {
+    var mouseButton = getMousePressedButton(e);
+    
+    if (mouseButton == "LEFT") {
+        console.log("Botón izquierdo movido sobre " + this.Id);
+    } else if (mouseButton == "RIGHT") {
+
+    }
+}
+
+//------------------------------------------------------------------------------
+
+//SigalStartEvent definition
+function SignalStartEvent () {
+    StartEvent.call(this);
+    console.log("Signal");
+    this.setMarker(MARKER_SIGNAL, new ColorAdjust(10,10,10), new Point(2.5,2.2));
+}
+SignalStartEvent.prototype = StartEvent.prototype;
+
+//------------------------------------------------------------------------------
+
+//SigalStartEvent definition
+function MessageStartEvent () {
+    StartEvent.call(this);
+    console.log("Message");
+    this.setMarker(MARKER_MESSAGE, new ColorAdjust(10,10,10), new Point(3.5,5.2));
+}
+MessageStartEvent.prototype = StartEvent.prototype;
 
 //------------------------------------------------------------------------------
 
@@ -299,6 +401,13 @@ Modeler.prototype.mousePressed = function(e) {
 }
 
 Modeler.prototype.mouseMoved = function(e) {
+    var mouseCoords = this.getMousePosition(e);
+    var ele = this.getOverElement(mouseCoords.x, mouseCoords.y);
+    
+    if (ele != null) {
+        ele.mouseMoved(e);
+    }
+    
 //	this.getMousePosition(e);
 //	if (!this.isDragging) {
 //		var hovered = false;
@@ -331,6 +440,12 @@ Modeler.prototype.mouseMoved = function(e) {
 }
 
 Modeler.prototype.mouseReleased = function(e) {
+    var mouseCoords = this.getMousePosition(e);
+    var ele = this.getOverElement(mouseCoords.x, mouseCoords.y);
+    
+    if (ele != null) {
+        ele.mouseReleased(e);
+    }
 	//this.dx = this.cx - this.dx;
 	//this.dy = this.cy - this.dy;
 	//console.log("End point: "+this.cx+", "+this.cy);
