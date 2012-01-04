@@ -119,6 +119,7 @@ public class SemanticObject
         m_cls=scls;
         m_virtual=true;
         m_res=smodel.getRDFModel().createResource();
+        m_props.add(smodel.getRDFModel().createStatement(m_res, RDF.type, scls.getOntClass()));           
     }
     
     public SemanticObject(SemanticModel smodel, Resource res, SemanticClass scls) 
@@ -126,6 +127,7 @@ public class SemanticObject
         m_model=smodel;
         m_res=res;        
         m_cls=scls;
+        m_props.add(smodel.getRDFModel().createStatement(res, RDF.type, scls.getOntClass()));           
     }    
     
     public SemanticObject(SemanticModel smodel, Resource res, StmtIterator stit) 
