@@ -489,7 +489,7 @@ public class SWBFormMgr implements SWBForms
      * 
      * @return the identifier element
      */
-    private String getIdentifierElement()
+    public String getIdentifierElement()
     {
         boolean DOJO=false;
         boolean IPHONE=false;

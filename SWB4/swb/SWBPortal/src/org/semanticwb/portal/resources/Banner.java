@@ -263,22 +263,24 @@ public class Banner extends GenericAdmResource {
     public void processAction(javax.servlet.http.HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         Resource base=getResourceBase();
         base.addHit(request, response.getUser(), response.getWebPage());
-        //Para paso de parametros
-        String params="";
-        int cont=0;
-        Enumeration<String> enParams=request.getParameterNames();
-        while(enParams.hasMoreElements()){
-            String param=enParams.nextElement();
-            cont++;
-            if(cont==1) params+="?"; else params+="&";
-            params+=param+"="+request.getParameter(param);
-        }
-        response.sendRedirect(response.getWebPage().getUrl()+params);
 
-//        String url = base.getAttribute("url");
-//        if( url!=null ) {
-//            url = replaceTags(url, request, response.getUser(), response.getWebPage());
-//            response.sendRedirect(url);
-//        }
+        String url = base.getAttribute("url");
+        if( url!=null ) {
+            url = replaceTags(url, request, response.getUser(), response.getWebPage());
+            response.sendRedirect(url);
+        }else
+        {
+            //Para paso de parametros
+            String params="";
+            int cont=0;
+            Enumeration<String> enParams=request.getParameterNames();
+            while(enParams.hasMoreElements()){
+                String param=enParams.nextElement();
+                cont++;
+                if(cont==1) params+="?"; else params+="&";
+                params+=param+"="+request.getParameter(param);
+            }
+            response.sendRedirect(response.getWebPage().getUrl()+params);
+        }
     }
 }

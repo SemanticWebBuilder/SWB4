@@ -746,6 +746,11 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             sbForm.append("\n<input type=\"hidden\" name=\"clsuri\" value=\"" + cid + "\"/>");
             sbForm.append("\n<fieldset><legend>Agregar " + getCatalogClass().transformToSemanticClass().getName() + "</legend><table>");
             
+            if(!sclass.isAutogenId())
+            {
+                sbForm.append(fmgr.getIdentifierElement());
+            }
+            
             //Agregando las propiedades seleccionadas para la creación
             Iterator<String> itdis = list.iterator();
             while (itdis.hasNext()) {
@@ -947,7 +952,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
     public String getFESelect(String FEsel, SWBParamRequest paramRequest, SemanticProperty sprop) {
 
         User usr = paramRequest.getUser();
-        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getSchema();
         SemanticVocabulary sv = SWBPlatform.getSemanticMgr().getVocabulary();
         StringBuilder ret = new StringBuilder();
         ret.append("\n<optgroup label=\"Genérico\">");
@@ -1003,7 +1008,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             ret.append("\">");
             hmso = new HashMap<String, SemanticObject>();
 
-            Iterator<SemanticObject> itsco = scfe.listInstances(true);
+            Iterator<SemanticObject> itsco = ont.listInstancesOfClass(scfe);
             while (itsco.hasNext()) {
                 SemanticObject semObj = itsco.next();
                 hmso.put(semObj.getDisplayName(usr.getLanguage()), semObj);
@@ -1059,7 +1064,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
             hmFormEle = new HashMap<String, SemanticObject>();
             SemanticOntology sont = SWBPlatform.getSemanticMgr().getSchema();
             SemanticVocabulary sv = SWBPlatform.getSemanticMgr().getVocabulary();
-            Iterator<SemanticObject> itfe = sv.getSemanticClass(sv.SWB_FORMELEMENT).listInstances(false);//sont.listInstancesOfClass(sv.getSemanticClass(sv.SWB_FORMELEMENT));
+            Iterator<SemanticObject> itfe = sont.listInstancesOfClass(sv.getSemanticClass(sv.SWB_FORMELEMENT));
             while (itfe.hasNext()) {
                 SemanticObject sofe = itfe.next();
                 hmFormEle.put(sofe.getURI(), sofe);
@@ -1189,7 +1194,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                 //out.println("<input type=\"text\" name=\"classname\" value=\"" + col.getCollectionClass().getDisplayName(user.getLanguage()) + "\" readonly >");
 
                 Iterator<SemanticObject> itsemcls = null; //col.getSemanticObject().getModel().listModelClasses();
-                itsemcls = SWBPlatform.getSemanticMgr().getOntology().listInstancesOfClass(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(SWBPlatform.getSemanticMgr().getVocabulary().SWB_CLASS));
+                itsemcls = SWBPlatform.getSemanticMgr().getSchema().listInstancesOfClass(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(SWBPlatform.getSemanticMgr().getVocabulary().SWB_CLASS));
                 while (itsemcls.hasNext()) {
                     SemanticObject semobj = itsemcls.next();
                     //System.out.println(semobj+" "+semobj.getURI()+" "+semobj.transformToSemanticClass());
@@ -1199,7 +1204,7 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                         out.println(" selected ");
                     }
                     out.println(">");
-                    out.println(semClass.getDisplayName(user.getLanguage()));
+                    out.println(semClass.getClassId());
                     out.println("</option>");
                 }
                 out.println("</select>");
@@ -1975,14 +1980,14 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                 out.println("<select id=\"" + id + "_collclass\" name=\"collclass\">");
 
                 Iterator<SemanticObject> itsemcls = null; //col.getSemanticObject().getModel().listModelClasses();
-                itsemcls = SWBPlatform.getSemanticMgr().getOntology().listInstancesOfClass(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(SWBPlatform.getSemanticMgr().getVocabulary().SWB_CLASS));
+                itsemcls = SWBPlatform.getSemanticMgr().getSchema().listInstancesOfClass(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(SWBPlatform.getSemanticMgr().getVocabulary().SWB_CLASS));
                 while (itsemcls.hasNext()) {
                     SemanticObject semobj = itsemcls.next();
                     SemanticClass semClass = semobj.transformToSemanticClass();
                     out.println("<option value=\"" + semClass.getURI() + "\" ");
                     //if(sccol!=null&&sccol.getURI().equals(semClass.getURI())) out.println(" selected ");
                     out.println(">");
-                    out.println(semClass.getDisplayName(user.getLanguage()));
+                    out.println(semClass.getClassId());
                     out.println("</option>");
                 }
                 out.println("</select>");
@@ -2177,9 +2182,9 @@ public class SWBCatalogResource extends org.semanticwb.portal.resources.sem.cata
                     }
                 }
                 SemanticObject so = ont.getSemanticObject(collclass);
-
+                System.out.println(so+" "+collclass+" "+usemodel+" "+getCatalogClass());
                 if (null != so) {
-                    if (!so.equals(getCatalogClass())) {
+                    if (getCatalogClass()!=null && !so.equals(getCatalogClass())) {
                         removeAllDetailProperties();
                         removeAllListProperties();
                         removeAllSearchProperties();
