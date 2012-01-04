@@ -311,7 +311,8 @@ public class SemanticModel
         SemanticObject ret=new SemanticObject(this,res,cls);
         SemanticObject.cacheSemanticObject(ret);
         
-        //System.out.println("createSemanticObject:"+res+" "+this+" "+cls+" "+ret);
+        //System.out.println("createSemanticObject:"+res+" "+this+" "+cls+" "+ret+" "+cls.getOntClass());
+        //ret.printStatements();
         //SemanticObject ret=SemanticObject.createSemanticObject(res, this, cls, true);     //cls.newInstance(res);
         SWBPlatform.getSemanticMgr().notifyChange(ret, null,null, SemanticObject.ACT_CREATE);
         //Default Values
