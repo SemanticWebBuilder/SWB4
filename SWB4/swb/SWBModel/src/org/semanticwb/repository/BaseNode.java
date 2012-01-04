@@ -251,9 +251,16 @@ public class BaseNode extends BaseNodeBase
     {
         boolean isVersionNode = false;
         Iterator<SemanticClass> classes = this.getSemanticObject().listSemanticClasses();
+        
+        //System.out.println("1.-URI:"+this.getSemanticObject()+" clazz:"+clazz);
+        //this.getSemanticObject().printStatements();
+        
         while (classes.hasNext())
         {
             SemanticClass clazzNode = classes.next();
+            
+            //System.out.println("  2.-URI:"+this.getSemanticObject()+" clazzNode:"+clazzNode+" clazz:"+clazz+" "+clazzNode.equals(clazz)+" "+clazzNode.isSubClass(clazz));
+            
             if (clazzNode.equals(clazz) || clazzNode.isSubClass(clazz))
             {
                 isVersionNode = true;
