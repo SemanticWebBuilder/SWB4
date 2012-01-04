@@ -1,37 +1,47 @@
 //Constant definitions
-var MARKER_SIGNAL = "images/n_senal_b.png";
-var MARKER_MESSAGE = "images/n_msj_b.png";
+var MARKER_SIGNAL_CATCH = "images/n_senal_b.png";
+var MARKER_MESSAGE_CATCH = "images/n_msj_b.png";
+var MARKER_MESSAGE_THROW = "images/n_msj_n.png";
 var MARKER_TIMER = "images/n_tmp.png";
 var MARKER_RULE = "images/n_cond.png";
-var MARKER_MULTI = "images/n_multi_b.png";
+var MARKER_MULTI_CATCH = "images/n_multi_b.png";
 var MARKER_PARALLEL = "images/n_paralelo_b.png";
-var MARKER_SCALATION = "images/n_escala_b.png";
+var MARKER_SCALATION_CATCH = "images/n_escala_b.png";
 var MARKER_ERROR = "images/n_error_b.png";
-var MARKER_COMPENSATION = "images/n_compensa_b.png";
+var MARKER_COMPENSATION_CATCH = "images/n_compensa_b.png";
+var MARKER_CANCEL = "images/n_cancela_b.png";
+var MARKER_LINK_CATCH = "images/n_enlace_b.png";
 
 var ALIGN_CENTER = "center";
 var ALIGN_LEFT = "left";
 var ALIGN_RIGHT = "right";
 var ALIGN_JUSTIFY = "start";
+var BASELINE_TOP = "top";
+var BASELINE_MIDDLE = "middle";
 
 //------------------------------------------------------------------------------
 
 //EditableLabel definition
 function EditableLabel(txt) {
+    this.labeledElement = null;
     this.text = txt;
     this.multiLine = false;
     this.maxWidth = 50;
-    this.textAlign = "center";
+    this.textAlign = ALIGN_CENTER;
+    this.fill = false;
 }
 
 //EditableLabel basic getters and setters
 EditableLabel.prototype.setText = function (txt) {this.text = txt;}
 EditableLabel.prototype.getText = function() {return this.text;}
+EditableLabel.prototype.getLabeledElement = function () {return this.labeledElement;}
+EditableLabel.prototype.setLabeledElement = function (le) {this.labeledElement = le;}
 
-EditableLabel.prototype.render = function (context, x, y) {
+EditableLabel.prototype.render = function (context) {
     context.save();
-    context.textBaseline = 'middle';
-    context.fillText(this.text, x, y);
+    context.textBaseline = BASELINE_MIDDLE;
+    context.textAlign = ALIGN_CENTER;
+    context.fillText(this.text, this.labeledElement.getCoords().x, this.labeledElement.getCoords().y);
     context.restore();
 }
 
@@ -56,6 +66,7 @@ function ColorAdjust(red, green, blue) {
 
 //Marker definition
 function Marker (image, offset, scale, ca) {
+    this.markedElement = null;
     this.image = new Image();   //Imagen
     this.image.src = image;     
     this.offsetX = offset.x;    //Offset respecto al origen de la forma en X
@@ -71,12 +82,14 @@ function Marker (image, offset, scale, ca) {
 //Marker basic geters and setters
 Marker.prototype.setColorAdjust = function (colorAdjust) {this.colorAdjust = colorAdjust;}
 Marker.prototype.getColorAdjust = function () {return this.colorAdjust;}
+Marker.prototype.setMarkedElement = function (me) {this.markedElement = me;}
+Marker.prototype.getMarkedElement = function () {return this.markedElement;}
 
 //Render
 //Dibuja el marcador sobre el canvas
-Marker.prototype.render = function(context, x, y) {
-    var imgX = x + this.offsetX;
-    var imgY = y + this.offsetY;
+Marker.prototype.render = function(context) {
+    var imgX = this.markedElement.getCoords().x + this.offsetX;
+    var imgY = this.markedElement.getCoords().y + this.offsetY;
     var imgW = this.image.width * this.scale;
     var imgH = this.image.height * this.scale;
     context.save();
@@ -142,9 +155,6 @@ function GraphicalElement() {
     this.parent = null;             //Padre del elemento en el modelo
     this.container = null;          //Contenedor del elemento en el modelo
     this.label = null;
-    this.STROKE_NORMAL = "#006600"; //Color de línea para el elemento en estado normal
-    this.STROKE_OVER = "#FF6060";   //Color de línea para el elemento en estado over
-    this.STROKE_FOCUSED = "#98FF00";//Color de línea para el elemento en estado focused
     this.name = "GraphicalElement";
 }
 
@@ -152,24 +162,24 @@ function GraphicalElement() {
 GraphicalElement.prototype.getId = function() {return this.Id;}
 GraphicalElement.prototype.setId = function(id) {this.Id = id;}
 GraphicalElement.prototype.getLabel = function() {return this.label;}
-GraphicalElement.prototype.setLabel = function(lbl) {this.label = lbl;}
+GraphicalElement.prototype.setLabel = function(lbl) {this.label = lbl;lbl.setLabeledElement(this);}
 GraphicalElement.prototype.setCoords = function(p) {this.shape.setCoords(p);}
 GraphicalElement.prototype.getCoords = function() {return this.shape.getCoords();}
 GraphicalElement.prototype.setMarker = function(imageMarker, colorAdjust, offset, scale) {
     this.marker = new Marker(imageMarker, offset, scale, colorAdjust);
+    this.marker.setMarkedElement(this);
 }
 
 //GraphicalElement.render
 //Dibuja el elemento en el canvas
 GraphicalElement.prototype.render = function(context) {
-    var coords = this.shape.getCoords();
     this.shape.render(context);
     if (this.marker != null) {
-        this.marker.render(context, coords.x-this.shape.radius, coords.y-this.shape.radius);
+        this.marker.render(context);
     }
-    if (this.label != null) {
-        this.label.render(context, coords.x, coords.y);
-    }
+//    if (this.label != null) {
+//        this.label.render(context);
+//    }
 }
 
 //GraphicalElement.mouseInBounds
@@ -266,6 +276,7 @@ Event.prototype = GraphicalElement.prototype;
 
 //CatchEvent definition
 function CatchEvent() {
+    Event.call(this);
     this.interruptor = false;   //Indica si el evento puede ser interruptor
     this.interrupts = false;    //Indica si el evento interrumpe su tarea asociada
 }
@@ -273,9 +284,20 @@ CatchEvent.prototype = Event.prototype;
 
 //------------------------------------------------------------------------------
 
+//ThrowEvent definition
+function ThrowEvent() {
+    Event.call(this);
+}
+ThrowEvent.prototype = Event.prototype;
+
+//------------------------------------------------------------------------------
+
 //StartEvent definition
 function StartEvent() {
     CatchEvent.call(this);
+    this.STROKE_NORMAL = "#006600"; //Color de línea para el elemento en estado normal
+    this.STROKE_OVER = "#FF6060";   //Color de línea para el elemento en estado over
+    this.STROKE_FOCUSED = "#98FF00";//Color de línea para el elemento en estado focused
 
     //Gradiente para el relleno del evento
     this.gr = modeler.getContext().createLinearGradient(0,0,15,0);
@@ -285,15 +307,49 @@ function StartEvent() {
     this.shape.setStroke(this.STROKE_NORMAL);
     this.shape.setStrokeWidth(3);
 }
-StartEvent.prototype = Event.prototype;
+StartEvent.prototype = CatchEvent.prototype;
+
+//------------------------------------------------------------------------------
+
+//EndEvent definition
+function EndEvent() {
+    ThrowEvent.call(this);
+    this.STROKE_NORMAL = "#660000"; //Color de línea para el elemento en estado normal
+    this.STROKE_OVER = "#FF6060";   //Color de línea para el elemento en estado over
+    this.STROKE_FOCUSED = "#98FF00";//Color de línea para el elemento en estado focused
+
+    //Gradiente para el relleno del evento
+    this.gr = modeler.getContext().createLinearGradient(0,0,15,0);
+    this.gr.addColorStop(0,"#ffffff");
+    this.gr.addColorStop(1,"#FAEFEF");
+    this.shape.setFill(this.gr);
+    this.shape.setStroke(this.STROKE_NORMAL);
+    this.shape.setStrokeWidth(6);
+}
+EndEvent.prototype = ThrowEvent.prototype;
+
+//------------------------------------------------------------------------------
+
+//NormalEndEvent definition
+function NormalEndEvent () {
+    EndEvent.call(this);
+}
+NormalEndEvent.prototype = EndEvent.prototype;
+
+//------------------------------------------------------------------------------
+
+//MessageEndEvent definition
+function MessageEndEvent () {
+    EndEvent.call(this);
+    this.setMarker(MARKER_MESSAGE_THROW, new ColorAdjust(10,10,10), new Point(-12,-13), 1.15);
+}
+MessageEndEvent.prototype = EndEvent.prototype;
 
 //------------------------------------------------------------------------------
 
 //NormalStartEvent definition
 function NormalStartEvent () {
     StartEvent.call(this);
-    this.name = "Normal Start Event";
-    this.label = new EditableLabel(this.name);
 }
 NormalStartEvent.prototype = StartEvent.prototype;
 
@@ -302,7 +358,7 @@ NormalStartEvent.prototype = StartEvent.prototype;
 //SigalStartEvent definition
 function SignalStartEvent () {
     StartEvent.call(this);
-    this.setMarker(MARKER_SIGNAL, new ColorAdjust(10,10,10), new Point(2.5,2.2), 1.15);
+    this.setMarker(MARKER_SIGNAL_CATCH, new ColorAdjust(10,10,10), new Point(-12,-13), 1.15);
 }
 SignalStartEvent.prototype = StartEvent.prototype;
 
@@ -311,7 +367,7 @@ SignalStartEvent.prototype = StartEvent.prototype;
 //SigalStartEvent definition
 function MessageStartEvent () {
     StartEvent.call(this);
-    this.setMarker(MARKER_MESSAGE, new ColorAdjust(10,10,10), new Point(3.5,5.2), 1.15);
+    this.setMarker(MARKER_MESSAGE_CATCH, new ColorAdjust(10,10,10), new Point(-11,-10), 1.15);
 }
 MessageStartEvent.prototype = StartEvent.prototype;
 
@@ -320,7 +376,7 @@ MessageStartEvent.prototype = StartEvent.prototype;
 //TimerStartEvent definition
 function TimerStartEvent () {
     StartEvent.call(this);
-    this.setMarker(MARKER_TIMER, new ColorAdjust(10,10,10), new Point(3.6,4.1), 0.95);
+    this.setMarker(MARKER_TIMER, new ColorAdjust(10,10,10), new Point(-11,-11.5), 0.95);
 }
 TimerStartEvent.prototype = StartEvent.prototype;
 
@@ -329,7 +385,7 @@ TimerStartEvent.prototype = StartEvent.prototype;
 //RuleStartEvent definition
 function RuleStartEvent () {
     StartEvent.call(this);
-    this.setMarker(MARKER_RULE, new ColorAdjust(10,10,10), new Point(4.5,4.7), 1);
+    this.setMarker(MARKER_RULE, new ColorAdjust(10,10,10), new Point(-10,-10), 1);
 }
 RuleStartEvent.prototype = StartEvent.prototype;
 
@@ -338,7 +394,7 @@ RuleStartEvent.prototype = StartEvent.prototype;
 //MultiStartEvent definition
 function MultiStartEvent () {
     StartEvent.call(this);
-    this.setMarker(MARKER_MULTI, new ColorAdjust(10,10,10), new Point(3.2,2.5), 1);
+    this.setMarker(MARKER_MULTI_CATCH, new ColorAdjust(10,10,10), new Point(-11.5,-12.5), 1);
 }
 MultiStartEvent.prototype = StartEvent.prototype;
 
@@ -347,7 +403,7 @@ MultiStartEvent.prototype = StartEvent.prototype;
 //ParallelStartEvent definition
 function ParallelStartEvent () {
     StartEvent.call(this);
-    this.setMarker(MARKER_PARALLEL, new ColorAdjust(10,10,10), new Point(4.8,5), 1);
+    this.setMarker(MARKER_PARALLEL, new ColorAdjust(10,10,10), new Point(-10,-10), 1);
 }
 ParallelStartEvent.prototype = StartEvent.prototype;
 
@@ -356,7 +412,7 @@ ParallelStartEvent.prototype = StartEvent.prototype;
 //ScalationStartEvent definition
 function ScalationStartEvent () {
     StartEvent.call(this);
-    this.setMarker(MARKER_SCALATION, new ColorAdjust(10,10,10), new Point(4.7,3.3), 1);
+    this.setMarker(MARKER_SCALATION_CATCH, new ColorAdjust(10,10,10), new Point(-10,-12), 1);
 }
 ScalationStartEvent.prototype = StartEvent.prototype;
 
@@ -365,7 +421,7 @@ ScalationStartEvent.prototype = StartEvent.prototype;
 //ErrorStartEvent definition
 function ErrorStartEvent () {
     StartEvent.call(this);
-    this.setMarker(MARKER_ERROR, new ColorAdjust(10,10,10), new Point(4.7,5), 1);
+    this.setMarker(MARKER_ERROR, new ColorAdjust(10,10,10), new Point(-10,-10), 1);
 }
 ErrorStartEvent.prototype = StartEvent.prototype;
 
@@ -374,25 +430,186 @@ ErrorStartEvent.prototype = StartEvent.prototype;
 //CompensationStartEvent definition
 function CompensationStartEvent () {
     StartEvent.call(this);
-    this.setMarker(MARKER_COMPENSATION, new ColorAdjust(10,10,10), new Point(3,8), 1);
+    this.setMarker(MARKER_COMPENSATION_CATCH, new ColorAdjust(10,10,10), new Point(-12,-7), 1);
 }
 CompensationStartEvent.prototype = StartEvent.prototype;
 
 //------------------------------------------------------------------------------
 
 //IntermediateCatchEventEvent definition
-function StartEvent() {
-    Event.call(this);
+function IntermediateCatchEvent() {
+    CatchEvent.call(this);
+    this.STROKE_NORMAL = "#5e7a9e"; //Color de línea para el elemento en estado normal
+    this.STROKE_OVER = "#FF6060";   //Color de línea para el elemento en estado over
+    this.STROKE_FOCUSED = "#98FF00";//Color de línea para el elemento en estado focused
 
     //Gradiente para el relleno del evento
     this.gr = modeler.getContext().createLinearGradient(0,0,15,0);
     this.gr.addColorStop(0,"#ffffff");
-    this.gr.addColorStop(1,"#9DD49D");
+    this.gr.addColorStop(1,"#dce7f6");
     this.shape.setFill(this.gr);
     this.shape.setStroke(this.STROKE_NORMAL);
     this.shape.setStrokeWidth(3);
+    
+    this.shape2 = new Circle(0, 0 ,12);
+    this.shape2.setFill(this.gr);
+    this.shape2.setStroke(this.STROKE_NORMAL);
+    this.shape2.setStrokeWidth(2);
 }
-StartEvent.prototype = Event.prototype;
+IntermediateCatchEvent.prototype = new CatchEvent();
+
+//IntermediateCatchEvent.render
+//Dibuja el evento intermedio en el canvas
+IntermediateCatchEvent.prototype.render = function (context) {
+    CatchEvent.prototype.render.call(this, context);
+    this.shape2.render(context);
+    
+    if (this.marker != null) {
+        this.marker.render(context);
+    }
+}
+
+IntermediateCatchEvent.prototype.setCoords = function(p) {
+    this.shape.setCoords(p);
+    this.shape2.setCoords(p);
+}
+
+//IntermediateCatchEventEvent definition
+function IntermediateThrowEvent() {
+    ThrowEvent.call(this);
+    this.STROKE_NORMAL = "#5e7a9e"; //Color de línea para el elemento en estado normal
+    this.STROKE_OVER = "#FF6060";   //Color de línea para el elemento en estado over
+    this.STROKE_FOCUSED = "#98FF00";//Color de línea para el elemento en estado focused
+
+    //Gradiente para el relleno del evento
+    this.gr = modeler.getContext().createLinearGradient(0,0,15,0);
+    this.gr.addColorStop(0,"#ffffff");
+    this.gr.addColorStop(1,"#dce7f6");
+    this.shape.setFill(this.gr);
+    this.shape.setStroke(this.STROKE_NORMAL);
+    this.shape.setStrokeWidth(3);
+    
+    this.shape2 = new Circle(0, 0 ,12);
+    this.shape2.setFill(this.gr);
+    this.shape2.setStroke(this.STROKE_NORMAL);
+    this.shape2.setStrokeWidth(2);
+}
+IntermediateThrowEvent.prototype = new ThrowEvent();
+
+//IntermediateCatchEvent.render
+//Dibuja el evento intermedio en el canvas
+IntermediateThrowEvent.prototype.render = function (context) {
+    ThrowEvent.prototype.render.call(this, context);
+    this.shape2.render(context);
+    
+    if (this.marker != null) {
+        this.marker.render(context);
+    }
+}
+
+IntermediateThrowEvent.prototype.setCoords = function(p) {
+    this.shape.setCoords(p);
+    this.shape2.setCoords(p);
+}
+
+//------------------------------------------------------------------------------
+
+//MessageIntermediateCatchEventEvent definition
+function MessageIntermediateCatchEvent() {
+    IntermediateCatchEvent.call(this);
+    this.setMarker(MARKER_MESSAGE_CATCH, new ColorAdjust(10,10,10), new Point(-10,-8), 1);
+}
+MessageIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
+
+//------------------------------------------------------------------------------
+
+//TimerIntermediateCatchEventEvent definition
+function TimerIntermediateCatchEvent() {
+    IntermediateCatchEvent.call(this);
+    this.setMarker(MARKER_TIMER, new ColorAdjust(10,10,10), new Point(-11,-11), .95);
+}
+TimerIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
+
+//------------------------------------------------------------------------------
+
+//ErrorIntermediateCatchEventEvent definition
+function ErrorIntermediateCatchEvent() {
+    IntermediateCatchEvent.call(this);
+    this.setMarker(MARKER_ERROR, new ColorAdjust(10,10,10), new Point(-10,-11), .95);
+}
+ErrorIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
+
+//------------------------------------------------------------------------------
+
+//CancelationIntermediateCatchEventEvent definition
+function CancelationIntermediateCatchEvent() {
+    IntermediateCatchEvent.call(this);
+    this.setMarker(MARKER_CANCEL, new ColorAdjust(10,10,10), new Point(-9,-9), .95);
+}
+CancelationIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
+
+//------------------------------------------------------------------------------
+
+//CompensationIntermediateCatchEventEvent definition
+function CompensationIntermediateCatchEvent() {
+    IntermediateCatchEvent.call(this);
+    this.setMarker(MARKER_COMPENSATION_CATCH, new ColorAdjust(10,10,10), new Point(-11,-6), .95);
+}
+CompensationIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
+
+//------------------------------------------------------------------------------
+
+//RuleIntermediateCatchEventEvent definition
+function RuleIntermediateCatchEvent() {
+    IntermediateCatchEvent.call(this);
+    this.setMarker(MARKER_RULE, new ColorAdjust(10,10,10), new Point(-9,-8), .85);
+}
+RuleIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
+
+//------------------------------------------------------------------------------
+
+//LinkIntermediateCatchEventEvent definition
+function LinkIntermediateCatchEvent() {
+    IntermediateCatchEvent.call(this);
+    this.setMarker(MARKER_LINK_CATCH, new ColorAdjust(10,10,10), new Point(-10,-10), .95);
+}
+LinkIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
+
+//------------------------------------------------------------------------------
+
+//SignalIntermediateCatchEventEvent definition
+function SignalIntermediateCatchEvent() {
+    IntermediateCatchEvent.call(this);
+    this.setMarker(MARKER_SIGNAL_CATCH, new ColorAdjust(10,10,10), new Point(-10,-11), .95);
+}
+SignalIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
+
+//------------------------------------------------------------------------------
+
+//MultipleIntermediateCatchEventEvent definition
+function MultipleIntermediateCatchEvent() {
+    IntermediateCatchEvent.call(this);
+    this.setMarker(MARKER_MULTI_CATCH, new ColorAdjust(10,10,10), new Point(-11,-12), .95);
+}
+MultipleIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
+
+//------------------------------------------------------------------------------
+
+//ScalationIntermediateCatchEventEvent definition
+function ScalationIntermediateCatchEvent() {
+    IntermediateCatchEvent.call(this);
+    this.setMarker(MARKER_SCALATION_CATCH, new ColorAdjust(10,10,10), new Point(-9.5,-12), 1);
+}
+ScalationIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
+
+//------------------------------------------------------------------------------
+
+//ParallelIntermediateCatchEventEvent definition
+function ParallelIntermediateCatchEvent() {
+    IntermediateCatchEvent.call(this);
+    this.setMarker(MARKER_PARALLEL, new ColorAdjust(10,10,10), new Point(-10,-9.5), 1);
+}
+ParallelIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
 
 //------------------------------------------------------------------------------
 
@@ -556,7 +773,6 @@ Modeler.prototype.getMousePosition = function (e) {
 	
 	return new Point(this.cx, this.cy);
 }
-
 
 Modeler.prototype.mouseClicked = function(e) {
     var mouseCoords = this.getMousePosition(e);
