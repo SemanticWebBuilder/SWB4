@@ -112,7 +112,11 @@ public class BigdataGraph extends GraphBase implements RGraph
                 trans.commit();
             } catch (SailException ex)
             {
-                trans.abort();
+                log.error(ex);
+                try
+                {
+                    trans.abort();
+                }catch(Exception noe){}
             }
         }else
         {
@@ -147,7 +151,11 @@ public class BigdataGraph extends GraphBase implements RGraph
                 trans.commit();
             } catch (SailException ex)
             {
-                trans.abort();
+                log.error(ex);
+                try
+                {
+                    trans.abort();
+                }catch(Exception noe){}
             }
         }else
         {

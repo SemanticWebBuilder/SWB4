@@ -32,7 +32,7 @@ public class TestModel {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        SWBUtils.createInstance("E:/programming/SWB4/swb/build/web");
+        SWBUtils.createInstance("/programming/proys/SWB4/swb/build/web");
         String base = SWBUtils.getApplicationPath();
         SWBPlatform.createInstance();
         //SWBPlatform.getSemanticMgr().initializeDB();
@@ -73,13 +73,13 @@ public class TestModel {
         if(init)
         {
             model.begin();
-            for(int x=0;x<1000000;x++)
+            for(int x=0;x<100000;x++)
             {
                 WebPage page=site.createWebPage("page"+x);
                 page.setTitle("Page "+x);
                 page.setViews(x%100);
                 page.setCreated(new Date());
-                if(x>500000 && x<550000)page.setActive(true);
+                if(x>50000 && x<55000)page.setActive(true);
                 else page.setActive(false);
                 if(x%10000==0)System.out.println(x);
             }
@@ -117,7 +117,7 @@ public class TestModel {
             //" filter (?time > 129826447539) . " +
             "} " +
             //"order by desc(?created) " +
-            "limit 20 offset 999980 " +
+            "limit 20 offset 99980 " +
             "";
 
         TupleQueryResult result=((BigdataGraph)model.getGraph()).executeQuery(query, QueryLanguage.SPARQL, false);

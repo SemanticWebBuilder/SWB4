@@ -65,9 +65,9 @@ public class BigdataTransactionHandler extends TransactionHandlerBase implements
         }
         try
         {
-            con = sail.getReadWriteConnection();
+            con = sail.getConnection();
             conmap.put(id, con);
-        } catch (IOException ex)
+        } catch (Exception ex)
         {
             throw new RuntimeException("Error initializing transaction", ex);
         }
@@ -128,7 +128,7 @@ public class BigdataTransactionHandler extends TransactionHandlerBase implements
             try
             {
                 con.commit();
-            } catch (SailException ex)
+            } catch (Exception ex)
             {
                 throw new RuntimeException("Error commiting transaction", ex);
             }finally
@@ -137,7 +137,7 @@ public class BigdataTransactionHandler extends TransactionHandlerBase implements
                 try
                 {
                     con.close();
-                } catch (SailException ex)
+                } catch (Exception ex)
                 {
                     throw new RuntimeException("Error closing transaction", ex);
                 }

@@ -33,16 +33,29 @@ public class TestGraph {
     public static void main(String[] args) 
     {
         Properties properties = new Properties();
-        File journal = new File("e:/data.jnl");
+        File journal = new File("/data.jnl");
         properties.setProperty(BigdataSail.Options.FILE, journal.getAbsolutePath());
-        properties.setProperty(BigdataSail.Options.BUFFER_MODE, "DiskRW"); //RWStore
-        // turn off the statement identifiers feature for provenance
-        properties.setProperty(BigdataSail.Options.STATEMENT_IDENTIFIERS,"false");
-        //properties.setProperty(BigdataSail.Options.STATEMENT_IDENTIFIERS, "true");
-        properties.setProperty(BigdataSail.Options.NATIVE_JOINS,"true");
+        //The persistence engine.  Use 'Disk' for the WORM or 'DiskRW' for the RWStore.
+        properties.setProperty("com.bigdata.journal.AbstractJournal.bufferMode","DiskRW");
+        properties.setProperty("com.bigdata.btree.writeRetentionQueue.capacity", "4000");
+        properties.setProperty("com.bigdata.btree.BTree.branchingFactor", "128");
 
-        //not inference
-        properties.setProperty(BigdataSail.Options.AXIOMS_CLASS,"com.bigdata.rdf.axioms.NoAxioms");
+        //# 200M initial extent.
+        properties.setProperty("com.bigdata.journal.AbstractJournal.initialExtent", "100715200");
+        properties.setProperty("com.bigdata.journal.AbstractJournal.maximumExtent", "100715200");
+
+        //##
+        //## Setup for QUADS mode without the full text index.
+        //##
+        properties.setProperty("com.bigdata.rdf.sail.isolatableIndices", "true");
+        properties.setProperty("com.bigdata.rdf.sail.truthMaintenance", "false");
+        properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.quads", "true");
+        properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.statementIdentifiers", "false");
+        properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.textIndex", "false");
+        properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.axiomsClass", "com.bigdata.rdf.axioms.NoAxioms");
+        properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.vocabularyClass", "com.bigdata.rdf.vocab.NoVocabulary");
+        properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.justify", "false");
+         
 
         //fast load
 
@@ -66,7 +79,7 @@ public class TestGraph {
         int seg=6;
 
         long time=System.currentTimeMillis();
-        Resource res=model.getResource("http://www.softjei.com#Person"+(((seg+1)*1000000)+401799));
+        Resource res=model.getResource("http://www.softjei.com#Person"+(((seg)*1000000)+401799));
         StmtIterator stit=model.listStatements(res, null, (RDFNode)null);
         boolean init=true;
         if(stit.hasNext())init=false;
