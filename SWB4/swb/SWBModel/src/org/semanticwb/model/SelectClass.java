@@ -162,7 +162,7 @@ public class SelectClass extends org.semanticwb.model.base.SelectClassBase
                 };
 
                 if (cls != null) {
-                    it = SWBComparator.sortSermanticObjects(comp, cls.listInstances());
+                    it = SWBComparator.sortSermanticObjects(comp, SWBPlatform.getSemanticMgr().getSchema().listInstancesOfClass(cls));
                 } else {
                     it = SWBComparator.sortSermanticObjects(comp,SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClassesAsSemanticObjects());
                 }
