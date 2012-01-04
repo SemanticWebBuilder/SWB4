@@ -63,11 +63,14 @@ public class BigdataModelMaker
         //##
         //## Setup for QUADS mode without the full text index.
         //##
+        properties.setProperty("com.bigdata.rdf.sail.isolatableIndices", "true");
         properties.setProperty("com.bigdata.rdf.sail.truthMaintenance", "false");
         properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.quads", "true");
         properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.statementIdentifiers", "false");
         properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.textIndex", "false");
         properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.axiomsClass", "com.bigdata.rdf.axioms.NoAxioms");
+        properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.vocabularyClass", "com.bigdata.rdf.vocab.NoVocabulary");
+        properties.setProperty("com.bigdata.rdf.store.AbstractTripleStore.justify", "false");
         
         // turn off the statement identifiers feature for provenance
         //properties.setProperty(BigdataSail.Options.STATEMENT_IDENTIFIERS,"false");
