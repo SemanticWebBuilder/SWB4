@@ -159,7 +159,7 @@ public class SelectOne extends SelectOneBase {
 
             if (val != null) {
                 uri   = val.getURI();
-                value = obj.getDisplayName(lang);
+                value = val.getDisplayName(lang);
             }
 
             if (mode.equals("edit") || mode.equals("create") || mode.equals("filter")) {
@@ -231,6 +231,8 @@ public class SelectOne extends SelectOneBase {
                         {
                             deleted=sob.getBooleanProperty(Trashable.swb_deleted);
                         }
+                        
+                        if(filterObject(request, sobj, sob, prop, propName, type, mode, lang))continue;
 
                         if(!deleted)
                         {
@@ -297,4 +299,12 @@ public class SelectOne extends SelectOneBase {
 
         return ret.toString();
     }
+    
+    
+    public boolean filterObject(HttpServletRequest request, SemanticObject base_obj, SemanticObject filter_obj, SemanticProperty prop, String propName, String type,
+                                String mode, String lang)
+    {
+        return false;
+    }
+    
 }
