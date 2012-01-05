@@ -186,6 +186,30 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
         }
     }
 
+    protected void updateFileCache(User user,SemanticObject obj)
+    {
+        try
+        {
+            document.setUser(user.getLogin());
+            document.setPassword(user.getLogin());
+            String rep=obj.getProperty(swboffice_repositoryName);
+            String content=obj.getProperty(swboffice_content);
+            String version=obj.getProperty(swboffice_versionToShow);
+            System.out.println("uri: "+obj.getURI());
+            System.out.println("rep: "+rep);
+            System.out.println("content: "+content);
+            System.out.println("version: "+version);
+            String fileHTML=document.getContentFile(rep, content,version,user);
+            this.getResourceBase().setAttribute( OfficeDocument.FILE_HTML, fileHTML);
+            this.getResourceBase().updateAttributesToDB();
+            SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(this.getResourceBase());
+        }
+        catch(Exception ex)
+        {
+            log.error(ex);
+        }
+    }
+
 
 
     /**
