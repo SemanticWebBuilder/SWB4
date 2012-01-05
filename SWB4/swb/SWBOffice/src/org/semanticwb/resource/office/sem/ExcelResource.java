@@ -1,29 +1,31 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.resource.office.sem;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -40,15 +42,13 @@ import org.semanticwb.office.comunication.OfficeDocument;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
 
-
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class ExcelResource.
  */
 public class ExcelResource extends org.semanticwb.resource.office.sem.base.ExcelResourceBase
-{    
-    
+{
+
     /**
      * Instantiates a new excel resource.
      */
@@ -56,7 +56,7 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
     {
         super();
     }
-    
+
     /**
      * Instantiates a new excel resource.
      * 
@@ -66,7 +66,6 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
     {
         super(obj);
     }
-    
     /** The log. */
     private static Logger log = SWBUtils.getLogger(ExcelResource.class);
 
@@ -87,7 +86,7 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
     protected void afterPrintDocument(PrintWriter out)
     {
     }
-    
+
     /**
      * Gets the hTML.
      * 
@@ -96,19 +95,19 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
      */
     public static String getHTML(File file)
     {
-        StringBuilder html=new StringBuilder();
+        StringBuilder html = new StringBuilder();
         String name = file.getName().replace(".xls", ".html");
         try
         {
             name = java.net.URLDecoder.decode(name, "utf-8");
-            file=new File(file.getParentFile().getAbsolutePath()+"/"+name);
-            String workpath=file.getAbsolutePath().replace('\\', '/');
-            String applicationpath=SWBUtils.getApplicationPath();
-            if(workpath.toLowerCase().startsWith(applicationpath.toLowerCase()))
+            file = new File(file.getParentFile().getAbsolutePath() + "/" + name);
+            String workpath = file.getAbsolutePath().replace('\\', '/');
+            String applicationpath = SWBUtils.getApplicationPath();
+            if (workpath.toLowerCase().startsWith(applicationpath.toLowerCase()))
             {
-                workpath=workpath.substring(0,applicationpath.length());
-                workpath=SWBPortal.getContextPath()+workpath;
-            }            
+                workpath = workpath.substring(0, applicationpath.length());
+                workpath = SWBPortal.getContextPath() + workpath;
+            }
             html.append("<div id=\"").append(ExcelResource.class.getName()).append("\">");
             try
             {
@@ -120,13 +119,13 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
             }
             html.append("</div>");
         }
-        catch(Exception ue)
+        catch (Exception ue)
         {
             log.error(ue);
         }
         return html.toString();
     }
-    
+
     /**
      * Prints the document.
      * 
@@ -138,7 +137,7 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
      */
     protected void printDocument(PrintWriter out, String path, String workpath, String html, SWBParamRequest paramReq)
     {
-        out.write("<div id=\""+ ExcelResource.class.getName() +"\">");
+        out.write("<div id=\"" + ExcelResource.class.getName() + "\">");
         try
         {
             out.write("<iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"" + path + "\">" + paramReq.getLocaleString("frameNotsupport") + "</iframe>");
@@ -155,7 +154,7 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
      * @see org.semanticwb.resource.office.sem.OfficeResource#loadContent(InputStream, User)
      */
     @Override
-    public void loadContent(InputStream in,User user)
+    public void loadContent(InputStream in, User user)
     {
         clean();
         File zipFile = null;
@@ -174,7 +173,7 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
                     if (!entry.isDirectory())
                     {
                         InputStream inEntry = zip.getInputStream(entry);
-                        String file=entry.getName();                        
+                        String file = entry.getName();
                         SWBPortal.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + file, inEntry, user);
                     }
                 }
@@ -184,8 +183,7 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
         catch (Exception e)
         {
             log.error(e);
-        }
-        finally
+        } finally
         {
             if (zipFile != null && zipFile.exists())
             {
@@ -195,29 +193,30 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
         updateFileCache(user);
     }
 
-    
-
     /* (non-Javadoc)
      * @see org.semanticwb.resource.office.sem.OfficeResource#doView(HttpServletRequest, HttpServletResponse, SWBParamRequest)
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {   try
+    {
+        try
         {
             User user = paramRequest.getUser();
-            String file=null;
-            if(this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML)==null)
+            String file = null;
+
+            if (this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML) == null)
             {
-                updateFileCache(user);
+                updateFileCache(user, this.getSemanticObject());
+
+
             }
             else
             {
-                file=this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML);
+                file = this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML);
             }
             if (file != null)
             {
-                file = file.replace(".xls", ".html");
-                file = java.net.URLDecoder.decode(file, "utf-8");
+
                 String path = SWBPortal.getWebWorkPath();
                 if (path.endsWith("/"))
                 {
@@ -230,6 +229,27 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
                 }
                 PrintWriter out = response.getWriter();
                 beforePrintDocument(out);
+                if (file.endsWith(".htm"))
+                {
+                    file += "l";
+                }
+                File oFile = new File(SWBPortal.getWorkPath() + getResourceBase().getWorkPath() + "/" + file.replace(".xls", ".html"));
+                if (oFile.exists())
+                {
+                    String content = SWBUtils.IO.readInputStream(new FileInputStream(oFile));
+                    int pos = content.indexOf("<![if !supportTabStrip]>");
+                    if (pos != -1)
+                    {
+                        int pos2 = content.indexOf("<![endif]>", pos + 10);
+                        if (pos2 != -1)
+                        {
+                            StringBuilder sb = new StringBuilder(content.substring(0, pos));
+                            sb.append(content.substring(pos2 + "<![endif]>".length()));
+                            SWBPortal.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + file, new ByteArrayInputStream(sb.toString().getBytes()), user);
+
+                        }
+                    }
+                }
                 String workpath = SWBPortal.getWebWorkPath() + getResourceBase().getWorkPath() + "/";
                 printDocument(out, path, workpath, "", paramRequest);
                 afterPrintDocument(out);
@@ -241,7 +261,7 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
             log.error(e);
         }
     }
-    
+
     /**
      * Creates the excel resource.
      * 
@@ -251,6 +271,6 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
      */
     public static org.semanticwb.resource.office.sem.ExcelResource createExcelResource(String id, org.semanticwb.model.SWBModel model)
     {
-        return (org.semanticwb.resource.office.sem.ExcelResource)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+        return (org.semanticwb.resource.office.sem.ExcelResource) model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 }
