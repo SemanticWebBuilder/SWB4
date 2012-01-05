@@ -829,13 +829,13 @@ public class ProcessForm extends GenericResource {
             return;
         }
 
-        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getSchema();
         SemanticVocabulary sv = SWBPlatform.getSemanticMgr().getVocabulary();
 
         if (hmFormEle == null) {
             hmFormEle = new HashMap<String, SemanticObject>();
 
-            Iterator<SemanticObject> itfe = sv.getSemanticClass(sv.SWB_SWBFORMELEMENT).listInstances(false);//sont.listInstancesOfClass(sv.getSemanticClass(sv.SWB_FORMELEMENT));
+            Iterator<SemanticObject> itfe = ont.listInstancesOfClass(sv.getSemanticClass(sv.SWB_FORMELEMENT));
             while (itfe.hasNext()) {
                 SemanticObject sofe = itfe.next();
                 hmFormEle.put(sofe.getURI(), sofe);
@@ -1275,7 +1275,7 @@ public class ProcessForm extends GenericResource {
     public String getFESelect(String FEsel, SWBParamRequest paramRequest, SemanticProperty sprop) {
 
         User usr = paramRequest.getUser();
-        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getSchema();
         SemanticVocabulary sv = SWBPlatform.getSemanticMgr().getVocabulary();
         StringBuilder ret = new StringBuilder();
         ret.append("\n<optgroup label=\"Genérico\">");
@@ -1340,7 +1340,7 @@ public class ProcessForm extends GenericResource {
             ret.append("\">");
             hmso = new HashMap<String, SemanticObject>();
 
-            Iterator<SemanticObject> itsco = scfe.listInstances(true);
+            Iterator<SemanticObject> itsco = ont.listInstancesOfClass(scfe);
             while (itsco.hasNext()) {
                 SemanticObject semObj = itsco.next();
                 hmso.put(semObj.getDisplayName(usr.getLanguage()), semObj);
