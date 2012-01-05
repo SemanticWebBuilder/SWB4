@@ -155,10 +155,10 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
 
 
 
-
+            
             if (this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML) == null)
             {
-                updateFileCache(user);
+                updateFileCache(user,this.getSemanticObject());
             }
             else
             {
