@@ -217,6 +217,11 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
             if (file != null)
             {
 
+                /*if (file.endsWith(".htm"))
+                {
+                    file += "l";
+                }*/
+                file=file.replace(".xls", ".html");
                 String path = SWBPortal.getWebWorkPath();
                 if (path.endsWith("/"))
                 {
@@ -229,11 +234,8 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
                 }
                 PrintWriter out = response.getWriter();
                 beforePrintDocument(out);
-                if (file.endsWith(".htm"))
-                {
-                    file += "l";
-                }
-                File oFile = new File(SWBPortal.getWorkPath() + getResourceBase().getWorkPath() + "/" + file.replace(".xls", ".html"));
+                
+                File oFile = new File(SWBPortal.getWorkPath() + getResourceBase().getWorkPath() + "/" + file);
                 if (oFile.exists())
                 {
                     String content = SWBUtils.IO.readInputStream(new FileInputStream(oFile));
