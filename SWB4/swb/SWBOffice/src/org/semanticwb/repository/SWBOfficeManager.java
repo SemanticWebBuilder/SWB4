@@ -80,7 +80,7 @@ public class SWBOfficeManager implements OfficeManager
      */
     public SWBOfficeManager(SWBRepositoryManager manager)
     {
-        log.event("Initializing SWBOfficeManager ...");
+        //log.event("Initializing SWBOfficeManager ...");
         this.manager = manager;
         HashMap<String, String> types = getContentTypes();
 //        for (String type : types.keySet())
