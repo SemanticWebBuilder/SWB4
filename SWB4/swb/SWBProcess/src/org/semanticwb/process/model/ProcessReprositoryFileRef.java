@@ -1,5 +1,6 @@
 package org.semanticwb.process.model;
 
+import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.platform.SemanticObject;
@@ -69,42 +70,84 @@ public class ProcessReprositoryFileRef extends org.semanticwb.process.model.base
         String ext = "";
 
         if (prop.isObjectProperty()) {
-            if (!name.startsWith("has"))
+//            if (!name.startsWith("has"))
+//            {
+//                SemanticObject value = null;
+//                String         aux   = request.getParameter(propName);
+//
+//                if (aux != null) {
+//                    value = SemanticObject.createSemanticObject(aux);
+//                } else {
+//                    value = obj.getObjectProperty(prop);
+//                }
+//                
+//                if(value!=null && value.instanceOf(RepositoryFile.sclass))
+//                {
+//                    RepositoryFile file=(RepositoryFile)value.createGenericInstance();
+//                    
+//                    String pageurl=file.getRepositoryDirectory().getUrl();
+//                    //System.out.println("file:"+file+" "+file.getRepositoryDirectory()+" "+file.getRepositoryDirectory().getResource());
+//                    String fileurl=file.getRepositoryDirectory().getUrl()+"/_rid/"+file.getRepositoryDirectory().getResource().getId()+"/_mto/3/_mod/getFile?fid="+file.getId()+"&verNum="+file.getLastVersion().getVersionNumber();
+//                                        
+//                    //http://localhost:8080/es/process/GP-Direccion/_rid/162/_mto/3/_mod/getFile?fid=22&verNum=2
+//                    
+//                    ret.append("<span>");
+//
+//                    if (value != null) {
+//                        ret.append("<a href=\""+ pageurl + "\" target=\"_new\">"
+//                                   + file.getRepositoryDirectory().getDisplayName(lang) + "</a>");
+//                        ret.append(" / ");
+//                        ret.append("<a href=\"" + fileurl + "\">"
+//                                   + value.getDisplayName(lang) + "</a>");
+//                    }
+//                    ret.append("</span>");
+//                }else
+//                {
+//                    ret.append("<span>");
+//                    ret.append("-");
+//                    ret.append("</span>");                    
+//                }
+//            }else
             {
                 SemanticObject value = null;
                 String         aux   = request.getParameter(propName);
 
                 if (aux != null) {
                     value = SemanticObject.createSemanticObject(aux);
-                } else {
-                    value = obj.getObjectProperty(prop);
                 }
                 
-                if(value!=null && value.instanceOf(RepositoryFile.sclass))
+                Iterator<SemanticObject> it=obj.listObjectProperties(prop);
+                
+                while(it.hasNext())
                 {
-                    RepositoryFile file=(RepositoryFile)value.createGenericInstance();
-                    
-                    String pageurl=file.getRepositoryDirectory().getUrl();
-                    //System.out.println("file:"+file+" "+file.getRepositoryDirectory()+" "+file.getRepositoryDirectory().getResource());
-                    String fileurl=file.getRepositoryDirectory().getUrl()+"/_rid/"+file.getRepositoryDirectory().getResource().getId()+"/_mto/3/_mod/getFile?fid="+file.getId()+"&verNum="+file.getLastVersion().getVersionNumber();
-                                        
-                    //http://localhost:8080/es/process/GP-Direccion/_rid/162/_mto/3/_mod/getFile?fid=22&verNum=2
-                    
-                    ret.append("<span>");
+                    value=it.next();
+                
+                    if(value!=null && value.instanceOf(RepositoryFile.sclass))
+                    {
+                        RepositoryFile file=(RepositoryFile)value.createGenericInstance();
 
-                    if (value != null) {
-                        ret.append("<a href=\""+ pageurl + "\" target=\"_new\">"
-                                   + file.getRepositoryDirectory().getDisplayName(lang) + "</a>");
-                        ret.append(" / ");
-                        ret.append("<a href=\"" + fileurl + "\">"
-                                   + value.getDisplayName(lang) + "</a>");
-                    }
-                    ret.append("</span>");
-                }else
-                {
-                    ret.append("<span>");
-                    ret.append("-");
-                    ret.append("</span>");                    
+                        String pageurl=file.getRepositoryDirectory().getUrl();
+                        //System.out.println("file:"+file+" "+file.getRepositoryDirectory()+" "+file.getRepositoryDirectory().getResource());
+                        String fileurl=file.getRepositoryDirectory().getUrl()+"/_rid/"+file.getRepositoryDirectory().getResource().getId()+"/_mto/3/_mod/getFile?fid="+file.getId()+"&verNum="+file.getLastVersion().getVersionNumber();
+
+                        //http://localhost:8080/es/process/GP-Direccion/_rid/162/_mto/3/_mod/getFile?fid=22&verNum=2
+
+                        ret.append("<span>");
+
+                        if (value != null) {
+                            ret.append("<a href=\""+ pageurl + "\" target=\"_new\">"
+                                       + file.getRepositoryDirectory().getDisplayName(lang) + "</a>");
+                            ret.append(" / ");
+                            ret.append("<a href=\"" + fileurl + "\">"
+                                       + value.getDisplayName(lang) + "</a>");
+                        }
+                        ret.append("</span><br/>");
+                    }else
+                    {
+                        ret.append("<span>");
+                        ret.append("-");
+                        ret.append("</span>");                    
+                    }                
                 }
             }
         }
