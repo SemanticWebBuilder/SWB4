@@ -25,18 +25,22 @@ package org.semanticwb.portal.resources.sem;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 import javax.servlet.http.*;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
 
-// TODO: Auto-generated Javadoc
 /**
  * Agrupa un conjunto de comentarios asociados al uri recibido como parametro de un
  * HttpServletRequest y muestra el listado de los mismos correspondientes al uri recibido.
@@ -70,25 +74,38 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
-System.out.println("processAction....");
         if(action.equals(response.Action_ADD)) {
-System.out.println("adding...");
+            String uri = request.getParameter("uri");
+            String semObjURI = URLDecoder.decode(uri, "UTF-8");
+            
             String securCodeSent = request.getParameter("cmnt_seccode");
             String securCodeCreated = (String)request.getSession(true).getAttribute("cs");
             if( securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent) ) {
-                String uri = request.getParameter("uri");
-System.out.println("uri="+uri);
-                SWBClass element = (SWBClass)SemanticObject.createSemanticObject(uri).createGenericInstance();
+                SWBClass element = (SWBClass)SemanticObject.createSemanticObject(semObjURI).createGenericInstance();
                 if(element!=null) {
-                    CommentToElement comment = CommentToElement.ClassMgr.createCommentToElement(response.getWebPage().getWebSite());
-                    comment.setCommentToElement(SWBUtils.XML.replaceXMLChars(request.getParameter("cmnt_comment")));
-                    comment.setElement(element);
-                    addComment(comment);
-System.out.println("comentario="+request.getParameter("cmnt_comment"));
+                    String txt = SWBUtils.XML.replaceXMLChars(request.getParameter("cmnt_comment"));
+                    if(!txt.isEmpty()) {
+                        WebSite model = response.getWebPage().getWebSite();
+                        User user = response.getUser();
+                        if(user.isSigned()) {
+                            CommentToElement comment = CommentToElement.ClassMgr.createCommentToElement(model);
+                            comment.setCommentToElement(txt);
+                            comment.setElement(element);
+                        }else {
+                            String email = SWBUtils.XML.replaceXMLChars(request.getParameter("email"));
+                            String name = SWBUtils.XML.replaceXMLChars(request.getParameter("name"));
+                            if(!name.isEmpty() && SWBUtils.EMAIL.isValidEmailAddress(email)) {
+                                CommentToElement comment = CommentToElement.ClassMgr.createCommentToElement(model);
+                                comment.setCommentToElement(txt);
+                                comment.setElement(element);
+                                comment.setName(name);
+                                comment.setEmail(email);
+                            }
+                        }
+                    }
                 }
-                response.setRenderParameter("uri", uri);                
+                response.setRenderParameter("uri", uri);
             }else {
-                System.out.println("no es seguro");
                 Enumeration e = request.getParameterNames();
                 while (e.hasMoreElements()) {
                     String key = (String) e.nextElement();
@@ -96,7 +113,7 @@ System.out.println("comentario="+request.getParameter("cmnt_comment"));
                 }
             }
             request.getSession(true).removeAttribute("cs");
-        } else {
+        }else {
             super.processAction(request, response);
         }
     }
@@ -116,16 +133,14 @@ System.out.println("comentario="+request.getParameter("cmnt_comment"));
         PrintWriter out = response.getWriter();
         
         String uri = request.getParameter("uri");
+        uri = URLDecoder.decode(uri, "UTF-8");
         SWBClass element = (SWBClass)SemanticObject.createSemanticObject(uri).createGenericInstance();
-        if(element!=null) {
-            out.println("no existe un elemento para comentar");
+        if(element==null) {
+            out.println(paramRequest.getLocaleString("noElement"));
             out.flush();
             out.close();
             return;
         }
-
-System.out.println("\n\nSWBCommentToElement   doView.......");
-System.out.println("uri="+uri);
 
         SWBResourceURL rUrl = paramRequest.getActionUrl();
         rUrl.setAction(paramRequest.Action_ADD);
@@ -184,6 +199,18 @@ System.out.println("uri="+uri);
         out.println("<div class=\"swb-comentario-sem\">");
         out.println("<h2>"+paramRequest.getLocaleString("add")+"</h2>");
         out.println("<form name=\"cmnt\" id=\"cmnt\" action=\""+rUrl+"\" method=\"post\">\n");
+        User user = paramRequest.getUser();
+        if(!user.isSigned()) {
+            out.println("<div class=\"swb-comentario-sem-name\">");
+            out.println("  <label for=\"cmnt_seccode\">"+paramRequest.getLocaleString("nameLabel")+"</label>");
+            out.println("  <input type=\"text\" id=\"name\" name=\"name\" />");
+            out.println("</div>");
+            
+            out.println("<div class=\"swb-comentario-sem-email\">");
+            out.println("  <label for=\"cmnt_seccode\">"+paramRequest.getLocaleString("emailLabel")+"</label>");
+            out.println("  <input type=\"text\" id=\"email\" name=\"email\" />");
+            out.println("</div>");
+        }
         out.println("<div class=\"swb-comentario-sem-comenta\">");
         out.println("  <label for=\"comment\">"+paramRequest.getLocaleString("comment")+":</label>");
         out.println("  <textarea id=\"cmnt_comment\" name=\"cmnt_comment\" cols=\"32\" rows=\"3\" >"+comment+"</textarea>");
@@ -218,21 +245,39 @@ System.out.println("uri="+uri);
     private String renderListComments(SWBParamRequest paramRequest, final String uri) {
         StringBuilder html = new StringBuilder();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy | HH:mm");
+        
+        User user = paramRequest.getUser();
+        String name;
 
         SWBClass element = (SWBClass)SemanticObject.createSemanticObject(uri).createGenericInstance();
-        Iterator<CommentToElement> itComments = CommentToElement.ClassMgr.listCommentToElementByElement(element, paramRequest.getWebPage().getWebSite());
-        itComments = SWBComparator.sortByCreated(itComments, false);
-
+        Iterator<CommentToElement> icomments = CommentToElement.ClassMgr.listCommentToElementByElement(element, paramRequest.getWebPage().getWebSite());
+        icomments = SWBComparator.sortByCreated(icomments, false);
+        List comments = SWBUtils.Collections.copyIterator(icomments);
+        long totalCmmts = comments.size();
+        
         html.append("<div class=\"swb-comentario-sem-lista\">");
-        html.append("<h2>Comentarios</h2>");
-        if(itComments.hasNext()) {
+        html.append("<h2>Comentarios ["+totalCmmts+"]</h2>");
+        if(totalCmmts>0) {
+            icomments = comments.iterator();
             html.append("<ol>");
-        }
-        while(itComments.hasNext()) {
-            CommentToElement comment = itComments.next();
-            html.append("<li><span>"+(comment.getCreator()==null?"An&oacute;nimo":comment.getCreator().getFullName())+"</span> "+sdf.format(comment.getCreated())+"<p>"+comment.getCommentToElement()+"</p></li>");
-        }
-        if(itComments.hasNext()) {
+            while(icomments.hasNext()) {
+                CommentToElement comment = icomments.next();
+                html.append("<li>");
+                html.append("<p>"+comment.getCommentToElement()+"</p>");
+                if(comment.getName()!=null)
+                    name = comment.getName();
+                else
+                    name = comment.getCreator().getFullName();
+                try {
+                    html.append("<p><span>"+name+"</span> "+paramRequest.getLocaleString("ago")+" "+sdf.format(comment.getCreated())+"</p>");
+                }catch(SWBResourceException swbe) {
+                    html.append("<p><span>"+name+"</span> Hace "+sdf.format(comment.getCreated())+"</p>");
+                }catch(Exception e) {
+                    e.printStackTrace(System.out);
+                }
+                //html.append("<li><span>"+(comment.getCreator()==null?comment.getName():comment.getCreator().getFullName())+"</span> "+sdf.format(comment.getCreated())+"<p>"+comment.getCommentToElement()+"</p></li>");
+                html.append("</li>");
+            }
             html.append("</ol>");
         }
         html.append("</div>");
