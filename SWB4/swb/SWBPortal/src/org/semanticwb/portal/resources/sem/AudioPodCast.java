@@ -97,10 +97,7 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
                 if(audiofile!=null && audiofile.isValid()) {
                     out.println("<h2 class=\"title\">"+audiofile.getDisplayTitle(lang) +"</h2>");
                     out.println(" <div class=\"swb-comentario-sem-autor\">");
-//                    if(audiofile.getAuthor()!=null && !audiofile.getAuthor().isEmpty()) {
-//                        out.println(" <p>Por: "+audiofile.getAuthor()+"</p>");
-                        out.println(" <p>"+paramRequest.getLocaleString("by")+": "+(audiofile.getAuthor()==null?paramRequest.getLocaleString("anonymous"):audiofile.getAuthor())+"</p>");
-//                    }
+                    out.println(" <p>"+paramRequest.getLocaleString("by")+": "+(audiofile.getAuthor()==null?paramRequest.getLocaleString("anonymous"):audiofile.getAuthor())+"</p>");
                     out.println(" <div id=\"player\">");
                     String clsid, codebase;
                     String resourceURL = SWBPortal.getWebWorkPath()+audiofile.getWorkPath()+"/"+audiofile.getFilename();

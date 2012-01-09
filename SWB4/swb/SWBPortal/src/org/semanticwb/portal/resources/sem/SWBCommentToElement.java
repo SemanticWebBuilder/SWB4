@@ -26,6 +26,7 @@ package org.semanticwb.portal.resources.sem;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -76,8 +77,8 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
+        String uri = request.getParameter("uri");
         if(action.equals(response.Action_ADD)) {
-            String uri = request.getParameter("uri");
             String semObjURI = URLDecoder.decode(uri, "UTF-8");
             
             String securCodeSent = request.getParameter("cmnt_seccode");
@@ -118,6 +119,9 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         }else {
             super.processAction(request, response);
         }
+        
+        String lang = response.getUser().getLanguage();
+        response.sendRedirect(response.getWebPage().getUrl(lang)+"?uri="+URLEncoder.encode(uri,"UTF-8"));
     }
 
     /**
@@ -295,14 +299,12 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         response.setHeader("Cache-Control","no-cache");
         response.setHeader("Pragma","no-cache");
         PrintWriter out = response.getWriter();
-System.out.println("doIndex");        
         StringBuilder html = new StringBuilder();
         User user = paramRequest.getUser();
         String name;
         
         String uri = request.getParameter("uri");
         if(uri!=null && !uri.isEmpty()) {
-System.out.println("uri="+uri);
             SWBClass element = (SWBClass)SemanticObject.createSemanticObject(uri).createGenericInstance();
             Iterator<CommentToElement> comments = CommentToElement.ClassMgr.listCommentToElementByElement(element, paramRequest.getWebPage().getWebSite());
             comments = SWBComparator.sortByCreated(comments, false);
