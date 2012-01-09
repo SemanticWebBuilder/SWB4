@@ -47,6 +47,8 @@ import org.semanticwb.portal.api.*;
  * @author jose.jimenez
  */
 public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.base.SWBCommentToElementBase {
+    public static final int MIN_LIST = 5;
+    
     /**
      * Instantiates a new sWB comment to element.
      */
@@ -131,8 +133,14 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        
         String uri = request.getParameter("uri");
+        if(uri==null) {
+            out.println(paramRequest.getLocaleString("noElement"));
+            out.flush();
+            out.close();
+            return;
+        }
+        
         uri = URLDecoder.decode(uri, "UTF-8");
         SWBClass element = (SWBClass)SemanticObject.createSemanticObject(uri).createGenericInstance();
         if(element==null) {
@@ -242,10 +250,8 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
      * @param uri the uri
      * @return the string
      */
-    private String renderListComments(SWBParamRequest paramRequest, final String uri) {
+    private String renderListComments(SWBParamRequest paramRequest, final String uri) throws SWBResourceException {
         StringBuilder html = new StringBuilder();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy | HH:mm");
-        
         User user = paramRequest.getUser();
         String name;
 
@@ -256,31 +262,67 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         long totalCmmts = comments.size();
         
         html.append("<div class=\"swb-comentario-sem-lista\">");
-        html.append("<h2>Comentarios ["+totalCmmts+"]</h2>");
-        if(totalCmmts>0) {
+        if(comments.size()>0) {
+            html.append(" <h2>Comentarios ["+totalCmmts+"]</h2>");
             icomments = comments.iterator();
-            html.append("<ol>");
-            while(icomments.hasNext()) {
+            html.append("<div id=\"cmnts-lst\">");
+            html.append(" <ol>");
+            int min = MIN_LIST;
+            while(min>0 && icomments.hasNext()) {
                 CommentToElement comment = icomments.next();
-                html.append("<li>");
-                html.append("<p>"+comment.getCommentToElement()+"</p>");
-                if(comment.getName()!=null)
-                    name = comment.getName();
-                else
+                html.append("  <li>");
+                if(user.isSigned())
                     name = comment.getCreator().getFullName();
-                try {
-                    html.append("<p><span>"+name+"</span> "+paramRequest.getLocaleString("ago")+" "+sdf.format(comment.getCreated())+"</p>");
-                }catch(SWBResourceException swbe) {
-                    html.append("<p><span>"+name+"</span> Hace "+sdf.format(comment.getCreated())+"</p>");
-                }catch(Exception e) {
-                    e.printStackTrace(System.out);
-                }
-                //html.append("<li><span>"+(comment.getCreator()==null?comment.getName():comment.getCreator().getFullName())+"</span> "+sdf.format(comment.getCreated())+"<p>"+comment.getCommentToElement()+"</p></li>");
-                html.append("</li>");
+                else
+                    name = comment.getName();
+                html.append("<p><span>"+name+"</span> "+paramRequest.getLocaleString("ago")+" "+SWBUtils.TEXT.getTimeAgo(comment.getCreated(), user.getLanguage())+"</p>");
+                html.append("<p>"+comment.getCommentToElement()+"</p>");
+                html.append("  </li>");
+                min--;
             }
-            html.append("</ol>");
-        }
+            html.append(" </ol>");
+            html.append(" <p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("uri",element.getEncodedURI())+"','cmnts-lst')\">"+paramRequest.getLocaleString("viewAllComments") +"&nbsp;&raquo;</a></p>");
+            html.append("</div>");
+        }else
+            html.append("<h2>"+paramRequest.getLocaleString("noComment")+"</h2>");
         html.append("</div>");
         return html.toString();
+    }
+
+    @Override
+    public void doIndex(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/xml; charset=UTF-8");
+        response.setHeader("Cache-Control","no-cache");
+        response.setHeader("Pragma","no-cache");
+        PrintWriter out = response.getWriter();
+System.out.println("doIndex");        
+        StringBuilder html = new StringBuilder();
+        User user = paramRequest.getUser();
+        String name;
+        
+        String uri = request.getParameter("uri");
+        if(uri!=null && !uri.isEmpty()) {
+System.out.println("uri="+uri);
+            SWBClass element = (SWBClass)SemanticObject.createSemanticObject(uri).createGenericInstance();
+            Iterator<CommentToElement> comments = CommentToElement.ClassMgr.listCommentToElementByElement(element, paramRequest.getWebPage().getWebSite());
+            comments = SWBComparator.sortByCreated(comments, false);
+            html.append(" <ol id=\"cmnts-lst\">");
+            while(comments.hasNext()) {
+                CommentToElement comment = comments.next();
+                html.append("  <li>");
+                if(user.isSigned())
+                    name = comment.getCreator().getFullName();
+                else
+                    name = comment.getName();
+                html.append("<p><span>"+name+"</span> "+paramRequest.getLocaleString("ago")+" "+SWBUtils.TEXT.getTimeAgo(comment.getCreated(), user.getLanguage())+"</p>");
+                html.append("<p>"+comment.getCommentToElement()+"</p>");
+                html.append("  </li>");
+            }
+            html.append(" </ol>");
+            html.append(" <p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("uri",element.getEncodedURI())+"','cmnts-lst')\">"+paramRequest.getLocaleString("viewAllComments") +"&nbsp;&raquo;</a></p>");
+            out.println(html.toString());
+        }
+        out.flush();
+        out.close();
     }
 }
