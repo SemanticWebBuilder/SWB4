@@ -13,6 +13,7 @@ import javax.servlet.http.*;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.Resourceable;
+import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
@@ -69,6 +70,7 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
             final String contentURL = surl;
             
             Iterator<AudioFile> resources = AudioFile.ClassMgr.listAudioFiles(base.getWebSite());
+            resources = SWBComparator.sortByCreated(resources, false);
             if(resources.hasNext()) {
                 out.println("<div id=\"contenido\">");
                 out.println("<ul>");
@@ -202,7 +204,7 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
     out.println("  <p><img src=\"img/descargar.png\" width=\"21\" height=\"17\" align=\"left\" /></p>");
     out.println(" </div>");
     out.println(" <div class=\"swb-comentario-sem-boton\">");
-    out.println("  <input type=\"button\" value=\"Descargar a tu PC\" onclick=\"location.href='"+directURL+"'\" />");
+    out.println("  <input type=\"button\" value=\"Descargar a tu PC\" onclick=\"location.href='"+directURL.setParameter("uri", audiofile.getURI())+"'\" />");
     out.println(" </div>");
     out.println("</div>");
                 }
@@ -276,7 +278,7 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
             response.setHeader("Content-Disposition", "attachment; filename=" + filename);
 
             //String fileURL = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+SWBPortal.getContextPath()+"/work"+docto.getWorkPath()+"/"+filename;
-            String resourceURL =  request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+SWBPortal.getContextPath()+SWBPortal.getWebWorkPath()+audiofile.getWorkPath()+"/"+audiofile.getFilename();
+            String resourceURL =  request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+SWBPortal.getContextPath()+SWBPortal.getWebWorkPath()+audiofile.getWorkPath()+"/"+URLDecoder.decode(audiofile.getFilename(), "UTF-8");
             URL url = new URL(resourceURL);
             BufferedInputStream  bis = new BufferedInputStream(url.openStream());
             BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
