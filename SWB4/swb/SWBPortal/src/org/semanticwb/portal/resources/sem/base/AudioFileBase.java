@@ -1,18 +1,22 @@
 package org.semanticwb.portal.resources.sem.base;
 
 
-public abstract class AudioFileBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Expirable,org.semanticwb.model.Rankable,org.semanticwb.model.Traceable,org.semanticwb.model.Iconable
+public abstract class AudioFileBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Iconable,org.semanticwb.model.Rankable,org.semanticwb.model.Expirable,org.semanticwb.model.Descriptiveable
 {
    /**
-   * El audio reproduce automáticamente
+   * The audio plays automatically
    */
     public static final org.semanticwb.platform.SemanticProperty audiof_autoplay=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#autoplay");
    /**
-   * Mostrar consola
+   * Participante del contenido
+   */
+    public static final org.semanticwb.platform.SemanticProperty audiof_author=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#author");
+   /**
+   * Show console
    */
     public static final org.semanticwb.platform.SemanticProperty audiof_showcontroller=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#showcontroller");
    /**
-   * Nombre del recurso
+   * Resource name
    */
     public static final org.semanticwb.platform.SemanticProperty audiof_filename=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#filename");
     public static final org.semanticwb.platform.SemanticClass audiof_AudioFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#AudioFile");
@@ -380,6 +384,24 @@ public abstract class AudioFileBase extends org.semanticwb.model.SWBClass implem
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Author property
+* @return String with the Author
+*/
+    public String getAuthor()
+    {
+        return getSemanticObject().getProperty(audiof_author);
+    }
+
+/**
+* Sets the Author property
+* @param value long with the Author
+*/
+    public void setAuthor(String value)
+    {
+        getSemanticObject().setProperty(audiof_author, value);
     }
 
 /**
