@@ -650,7 +650,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             else
             {
                 officeResource = WordResource.createWordResource(id, site);
-
+                
                 resourceType = site.getResourceType(WORD_RESOURCE_TYPE);
                 if (resourceType == null)
                 {
@@ -664,10 +664,10 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     resourceType.setUpdated(new Date(System.currentTimeMillis()));
                 }
             }
+            resource.setResourceData(officeResource.getSemanticObject());
             officeResource.setResourceBase(resource);
             resource.setResourceType(resourceType);
-            officeResource.setContent(contentId);
-            resource.setResourceType(resourceType);
+            officeResource.setContent(contentId);            
             org.semanticwb.model.User creator = SWBContext.getAdminRepository().getUserByLogin(user);
             if (creator != null)
             {
@@ -1715,6 +1715,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
                         {
                             OfficeResource officeResource=new OfficeResource(obj);
+                            officeResource=OfficeResource.getOfficeResource(obj.getId(), site);
                             
                             
                             if (officeResource.getVersionToShow().equals("*") && officeResource.getResourceBase() != null && officeResource.getResourceBase().getPflowInstance() != null)
@@ -1736,7 +1737,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         SemanticObject obj = it.next();
                         if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
                         {
-                            OfficeResource officeResource = new OfficeResource(obj);
+                            OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
                             ResourceInfo resInfo = getResourceInfo(officeResource);
                             if (officeResource.getVersionToShow().equals("*") && this.isInFlow(resInfo))
                             {
@@ -2519,6 +2520,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                     resourceType.setUpdated(new Date(System.currentTimeMillis()));
                 }
             }
+            resource.setResourceData(officeResource.getSemanticObject());
             officeResource.setResourceBase(resource);
             resource.setResourceType(resourceType);
             officeResource.setContent(contentId);
