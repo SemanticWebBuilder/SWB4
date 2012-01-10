@@ -336,7 +336,9 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
      */
     public static org.semanticwb.resource.office.sem.OfficeResource getOfficeResource(String id, org.semanticwb.model.SWBModel model)
     {
-        GenericObject obj = model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+        return (org.semanticwb.resource.office.sem.OfficeResource)SWBPortal.getResourceMgr().getResource(model.getId(),id);
+
+        /*GenericObject obj = model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
         if (obj == null)
         {
             obj = model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id, WordResource.sclass), WordResource.sclass);
@@ -349,6 +351,6 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
                 }
             }
         }
-        return (org.semanticwb.resource.office.sem.OfficeResource) obj;
+        return (org.semanticwb.resource.office.sem.OfficeResource) obj;*/
     }
 }
