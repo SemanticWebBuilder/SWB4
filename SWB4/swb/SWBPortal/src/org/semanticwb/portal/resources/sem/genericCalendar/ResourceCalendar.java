@@ -243,7 +243,7 @@ public class ResourceCalendar extends org.semanticwb.portal.resources.sem.generi
             if(paramRequest.getUser().haveAccess(event))
             {
                 try {
-                    objJSONEvents.put(SWBUtils.TEXT.encode(event.getTitle(paramRequest.getUser().getLanguage())==null?event.getTitle():event.getTitle(paramRequest.getUser().getLanguage()), SWBUtils.TEXT.CHARSET_UTF8), getData(event, paramRequest, cal)); //SWBUtils.TEXT.encode(event.getTitle(),SWBUtils.TEXT.CHARSET_UTF8)
+                    objJSONEvents.put(event.getTitle(paramRequest.getUser().getLanguage())==null?event.getTitle():event.getTitle(paramRequest.getUser().getLanguage()), getData(event, paramRequest, cal)); //SWBUtils.TEXT.encode(event.getTitle(),SWBUtils.TEXT.CHARSET_UTF8)
                 }catch(Exception e) {
                     log.error("Error while build properties in Events: "+e);
                 }
@@ -347,13 +347,13 @@ public class ResourceCalendar extends org.semanticwb.portal.resources.sem.generi
         try {
             objJSONData.put("target", target);
             objJSONData.put("url", url);
-            objJSONData.put("title", SWBUtils.TEXT.encode(event.getTitle(paramRequest.getUser().getLanguage())==null?event.getTitle():event.getTitle(paramRequest.getUser().getLanguage()), SWBUtils.TEXT.CHARSET_UTF8));
+            objJSONData.put("title", event.getTitle(paramRequest.getUser().getLanguage())==null?event.getTitle():event.getTitle(paramRequest.getUser().getLanguage()));
             objJSONData.put("image", photo);
             String descr = "";
             if(event.getDescription(paramRequest.getUser().getLanguage()) != null) {
-                descr = SWBUtils.TEXT.encode(event.getDescription(paramRequest.getUser().getLanguage()),SWBUtils.TEXT.CHARSET_UTF8);
+                descr = event.getDescription(paramRequest.getUser().getLanguage());
             } else if(event.getDescription() != null) {
-                descr = SWBUtils.TEXT.encode(event.getDescription(),SWBUtils.TEXT.CHARSET_UTF8);
+                descr = event.getDescription();
             }
             objJSONData.put("description", descr);
             objJSONData.put("rdates", dates);
