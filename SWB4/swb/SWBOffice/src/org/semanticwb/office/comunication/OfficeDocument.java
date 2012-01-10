@@ -1601,7 +1601,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         SemanticObject obj = it.next();
                         if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
                         {
-                            OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
+                            
+                            OfficeResource officeResource = new OfficeResource(obj);
                             if (officeResource.getRepositoryName() != null && officeResource.getRepositoryName().equals(repositoryName) && officeResource.getVersionToShow().equals("*"))
                             {                                                                
                                 InputStream in = getContent(repositoryName, contentId, officeResource.getVersionToShow());
@@ -1713,7 +1714,9 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         SemanticObject obj = it.next();
                         if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
                         {
-                            OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
+                            OfficeResource officeResource=new OfficeResource(obj);
+                            
+                            
                             if (officeResource.getVersionToShow().equals("*") && officeResource.getResourceBase() != null && officeResource.getResourceBase().getPflowInstance() != null)
                             {
                                 // remueve flujos para los que se quieren sólo la última version
@@ -1733,7 +1736,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         SemanticObject obj = it.next();
                         if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
                         {
-                            OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
+                            OfficeResource officeResource = new OfficeResource(obj);
                             ResourceInfo resInfo = getResourceInfo(officeResource);
                             if (officeResource.getVersionToShow().equals("*") && this.isInFlow(resInfo))
                             {
@@ -1894,7 +1897,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         SemanticObject obj = it.next();
                         if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
                         {
-                            OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
+                            
+                            OfficeResource officeResource = new OfficeResource(obj);
                             site.removeResource(officeResource.getId());
                         }
                     }
@@ -2074,8 +2078,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         {
                             SemanticObject obj = itSubjects.next();
                             if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
-                            {
-                                OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
+                            {                                
+                                OfficeResource officeResource = new OfficeResource(obj);
                                 if (officeResource.getRepositoryName() != null && officeResource.getRepositoryName().equals(repositoryName) && officeResource.getVersionToShow() != null)
                                 {
                                     if (officeResource.getVersionToShow().equals("*"))
@@ -2352,8 +2356,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             {
                 SemanticObject obj = it.next();
                 if (obj.getSemanticClass().isSubClass(OfficeResource.sclass) || obj.getSemanticClass().equals(OfficeResource.sclass))
-                {
-                    OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
+                {                    
+                    OfficeResource officeResource = new OfficeResource(obj);
                     if (officeResource.getRepositoryName() != null && officeResource.getRepositoryName().equals(repositoryName))
                     {
                         Resource base = site.getResource(obj.getId());
