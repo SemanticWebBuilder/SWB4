@@ -50,7 +50,7 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         response.setContentType("text/html; charset=UTF-8");
-        Resource base = this.getResourceBase();
+        Resource base = getResourceBase();
         String lang = paramRequest.getUser().getLanguage();
         
         PrintWriter out =  response.getWriter();
@@ -95,6 +95,9 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
                 uri = URLDecoder.decode(uri, "UTF-8");
                 AudioFile audiofile = (AudioFile)SemanticObject.createSemanticObject(uri).createGenericInstance();
                 if(audiofile!=null && audiofile.isValid()) {
+                    synchronized(this) {
+                        audiofile.setReviews(audiofile.getReviews()+1);
+                    }
                     out.println("<h2 class=\"title\">"+audiofile.getDisplayTitle(lang) +"</h2>");
                     out.println(" <div class=\"swb-comentario-sem-autor\">");
                     out.println(" <p>"+paramRequest.getLocaleString("by")+": "+(audiofile.getAuthor()==null?paramRequest.getLocaleString("anonymous"):audiofile.getAuthor())+"</p>");
