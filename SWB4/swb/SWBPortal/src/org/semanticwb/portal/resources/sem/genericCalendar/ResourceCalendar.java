@@ -141,8 +141,8 @@ public class ResourceCalendar extends org.semanticwb.portal.resources.sem.generi
 
                         boolean isYearly = (mont == valueMonth && ev.getPeriodicity().equals("yearly")) ? true : false;
                         int monthCurrent = java.util.Calendar.getInstance().MONTH + 1;
-                        boolean isMonthly = ev.getPeriodicity().equals("monthly") && valueDay <= lastDayOfMonth(monthCurrent, year) ? true : false;//java.util.Calendar.getInstance().DAY_OF_MONTH == valueMonth ? true : false;
-                        boolean isWeekly = ev.getPeriodicity().equals("weekly") ? true : false;
+                        boolean isMonthly = (ev.getPeriodicity() != null && ev.getPeriodicity().equals("monthly")) && valueDay <= lastDayOfMonth(monthCurrent, year) ? true : false;//java.util.Calendar.getInstance().DAY_OF_MONTH == valueMonth ? true : false;
+                        boolean isWeekly = (ev.getPeriodicity() != null && ev.getPeriodicity().equals("weekly")) ? true : false;
                         int valMonthEndEvt, valYearEndEvt, year2;
                         valMonthEndEvt = valYearEndEvt = year2 = 0;
                         if(ev.getEventEndDate() != null ) {
@@ -183,7 +183,7 @@ public class ResourceCalendar extends org.semanticwb.portal.resources.sem.generi
                         }
                     }
                 } catch(Exception e) {
-                    log.error("Error while process events in ScheduledEvents" + e);
+                    log.error("Error while process events in Calendar" + e);
                 }
             }
         }
