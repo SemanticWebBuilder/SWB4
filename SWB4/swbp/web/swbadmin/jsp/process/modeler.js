@@ -1,4 +1,5 @@
 //Constant definitions
+//Event markers
 var MARKER_SIGNAL_CATCH = "images/n_senal_b.png";
 var MARKER_SIGNAL_THROW = "images/n_senal_n.png";
 var MARKER_MESSAGE_CATCH = "images/n_msj_b.png";
@@ -20,12 +21,120 @@ var MARKER_LINK_CATCH = "images/n_enlace_b.png";
 var MARKER_LINK_THROW = "images/n_enlace_n.png";
 var MARKER_TERMINATION = "images/n_termina.png";
 
+//Activity markers
+var MARKER_USER = "images/n_usr.png";
+var MARKER_SERVICE = "images/n_servicio.png";
+var MARKER_SCRIPT = "images/n_script.png";
+var MARKER_MANUAL = "images/n_manual.png";
+
+//Activity Modifiers
+var MODIFIER_LOOP = "images/n_ciclo.png";
+var MODIFIER_PMULTIINSTANCE = "images/n_objeto.png";
+var MODIFIER_SMULTIINSTANCE = "images/n_multi_seq.png";
+var MODIFIER_COMPENSATION = MARKER_COMPENSATION_THROW;
+var MODIFIER_ADHOC = "images/n_adhoc.png";
+var MODIFIER_SUBPROCESS = "images/n_collapsed.png";
+
+//Text align values
 var ALIGN_CENTER = "center";
 var ALIGN_LEFT = "left";
 var ALIGN_RIGHT = "right";
 var ALIGN_JUSTIFY = "start";
 var BASELINE_TOP = "top";
 var BASELINE_MIDDLE = "middle";
+
+//------------------------------------------------------------------------------
+
+//Modifiers definition
+function Modifiers () {
+    this.isForCompensation = false;
+    this.isSequentialMultiInstance = false;
+    this.isParallelMultiInstance = false;
+    this.isLoop = false;
+    this.isSubProcess = false;
+    this.isAdhoc = false;
+    this.spacing = 3;
+}
+
+Modifiers.prototype.setForCompensation = function (val) {this.isForCompensation = val;}
+Modifiers.prototype.setModifiedElement = function (ele) {this.modifiedElement = ele;}
+Modifiers.prototype.setSequentialMultiInstance = function (val) {
+    this.isSequentialMultiInstance = val;
+    if (val) {
+        this.isParallelMultiInstance = false;
+        this.isLoop = false;
+    }
+}
+Modifiers.prototype.setParallelMultiInstance = function (val) {
+    this.isForCompensation = val;
+    if (val) {
+        this.isSequentialMultiInstance = false;
+        this.isLoop = false;
+    }
+}
+Modifiers.prototype.setLoop = function (val) {
+    this.isLoop = val;
+    if (val) {
+        this.isSequentialMultiInstance = false;
+        this.isParallelMultiInstance = false;
+    }
+}
+Modifiers.prototype.setAdhoc = function (val) {this.isAdhoc = val;}
+Modifiers.prototype.setSubProcess = function (val) {this.isSubProcess = val;}
+
+Modifiers.prototype.render = function (context) {
+    var modifiers = [];
+    
+    if (this.isAdhoc) {
+        var adhocModifier = new Image();
+        adhocModifier.src = MODIFIER_ADHOC;
+        modifiers.push(adhocModifier);
+    }
+    if (this.isLoop) {
+        var loopModifier = new Image();
+        loopModifier.src = MODIFIER_LOOP;
+        modifiers.push(loopModifier);
+    }
+    if (this.isParallelMultiInstance) {
+        var paralelModifier = new Image();
+        paralelModifier.src = MODIFIER_PMULTIINSTANCE;
+        modifiers.push(paralelModifier);
+    }
+    if (this.isSequentialMultiInstance) {
+        var sequentialModifier = new Image();
+        sequentialModifier.src = MODIFIER_SMULTIINSTANCE;
+        modifiers.push(sequentialModifier);
+    }
+    if (this.isForCompensation) {
+        var compensaModifier = new Image();
+        compensaModifier.src = MODIFIER_COMPENSATION;
+        modifiers.push(compensaModifier);
+    }
+    if (this.isSubProcess) {
+        var subprocessModifier = new Image();
+        subprocessModifier.src = MODIFIER_SUBPROCESS;
+        modifiers.push(subprocessModifier);
+    }
+    
+    var totWidth = 0;
+    var maxHeight = 0;
+    for (var i = 0; i < modifiers.length; i++) {
+        totWidth = totWidth + modifiers[i].width + this.spacing;
+        if (modifiers[i].height > maxHeight) {
+            maxHeight = modifiers[i].height;
+        }
+    }
+    var startX = this.modifiedElement.getCoords().x - this.modifiedElement.getWidth() / 2 + (this.modifiedElement.getWidth() - totWidth) / 2;
+    var startY = this.modifiedElement.getCoords().y + (this.modifiedElement.getHeight()/2) - (maxHeight + 2);
+    
+    context.save();
+    for (var i = 0; i < modifiers.length; i++) {
+        context.drawImage(modifiers[i], startX, startY);
+        startX = startX + modifiers[i].width + this.spacing;
+    }
+    context.restore();
+}
+
 
 //------------------------------------------------------------------------------
 
@@ -74,8 +183,8 @@ function ColorAdjust(red, green, blue) {
 
 //Marker definition
 function Marker (image, offset, scale, ca) {
-    this.markedElement = null;
-    this.image = new Image();   //Imagen
+    this.markedElement = null;    
+    this.image = new Image();   //Imagen    
     this.image.src = image;     
     this.offsetX = offset.x;    //Offset respecto al origen de la forma en X
     this.offsetY = offset.y;    //Offset respecto al origen de la forma en Y
@@ -85,6 +194,7 @@ function Marker (image, offset, scale, ca) {
         this.scale = scale;
     }
     this.colorAdjust = ca;      //Ajuste de color para la imagen del marcador
+    this.adjusted = false;
 }
 
 //Marker basic geters and setters
@@ -92,6 +202,24 @@ Marker.prototype.setColorAdjust = function (colorAdjust) {this.colorAdjust = col
 Marker.prototype.getColorAdjust = function () {return this.colorAdjust;}
 Marker.prototype.setMarkedElement = function (me) {this.markedElement = me;}
 Marker.prototype.getMarkedElement = function () {return this.markedElement;}
+Marker.prototype.AdjustColor = function () {
+    var c = document.createElement("canvas");
+    c.width = this.image.width;
+    c.height = this.image.height;
+    var ctx = c.getContext('2d');
+    ctx.drawImage(this.image, 0, 0);
+    var imgData = ctx.getImageData(0, 0, c.width, c.height);
+    var data = imgData.data;
+    for (var i = 0, n = data.length; i < n; i += 4) {
+        console.log("pixel " + i + " - r: "+data[i]+", g:"+data[i+1]+", b:"+data[i+2]+", a:"+data[i+3]);
+        if(data[i+3] != 0){
+            data[i]   = data[i]/3; // red
+            data[i+1] = data[i+1]/3; // green
+            data[i+2] = data[i+2]*5; // blue
+        }
+    }
+    return imgData;
+}
 
 //Render
 //Dibuja el marcador sobre el canvas
@@ -101,6 +229,12 @@ Marker.prototype.render = function(context) {
     var imgW = this.image.width * this.scale;
     var imgH = this.image.height * this.scale;
     context.save();
+//    if (!this.adjusted) {
+//        this.imgD = this.AdjustColor();
+//        this.adjusted = true;
+//    }
+//    context.putImageData(this.imgD, imgX, imgY);
+    //context.putImageData(this.imgD, imgX, imgY, imgW, imgH);
     context.drawImage(this.image, imgX, imgY, imgW, imgH);
     context.restore();
 }
@@ -153,17 +287,74 @@ Circle.prototype.mouseInBounds = function (x, y) {
     }
 }
 
+//Rectangle definition
+function Rectangle (x, y, width, height, cornerradius) {
+    this.x = x;
+    this.y = y;
+    this.w = width;
+    this.h = height;
+    this.cr = cornerradius;
+}
+
+Rectangle.prototype.getCoords = function()  {return new Point(this.x, this.y);}
+Rectangle.prototype.setCoords = function(p) {this.x = p.x;this.y = p.y;}
+Rectangle.prototype.getSroke  = function()  {return this.stroke;}
+Rectangle.prototype.setStroke = function(s) {this.stroke = s;}
+Rectangle.prototype.getFill   = function()  {return this.fill;}
+Rectangle.prototype.setFill   = function(f) {this.fill = f;}
+Rectangle.prototype.getWidth  = function()  {return this.w;}
+Rectangle.prototype.getHeight = function()  {return this.h;}
+Rectangle.prototype.setStrokeWidth = function(sw) {this.strokeWidth = sw;}
+
+Rectangle.prototype.render = function (context) {
+    var startX = this.x - this.w/2;
+    var startY = this.y - this.h/2;
+    context.save();
+    context.strokeStyle = this.stroke;
+    context.lineWidth = this.strokeWidth;
+    context.fillStyle = this.fill;//"#9DD49D";    
+    context.beginPath();
+    context.moveTo(startX + this.cr, startY);
+    context.lineTo(startX+this.w-this.cr, startY);
+    context.quadraticCurveTo(startX + this.w, startY, startX + this.w, startY + this.cr);
+    context.lineTo(startX + this.w, startY + this.h - this.cr);
+    context.quadraticCurveTo(startX + this.w, startY + this.h, startX + this.w - this.cr, startY + this.h);
+    context.lineTo(startX + this.cr, startY + this.h);
+    context.quadraticCurveTo(startX, startY + this.h, startX, startY + this.h - this.cr);
+    context.lineTo(startX, startY + this.cr);
+    context.quadraticCurveTo(startX, startY, startX + this.cr, startY);
+    context.closePath();
+    context.stroke();
+    context.translate(startX-this.w/2, startY-this.h/2);
+    context.fill();
+    context.restore();
+}
+
+Rectangle.prototype.mouseInBounds = function (x, y) {
+    var startX = this.x - this.w / 2;
+    var startY = this.y - this.h / 2;
+    if (x > startX && y > startY) {
+        if (x < (startX + this.w) && (y < startY + this.h)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 //------------------------------------------------------------------------------
 
 //GraphicalElement definition
 function GraphicalElement() {
     this.Id = 0;                    //Identificador único del evento
+    this.isDragging = false;
     this.selected = false;          //Indica si el evento está seleccionado
     this.shape = null;
     this.parent = null;             //Padre del elemento en el modelo
     this.container = null;          //Contenedor del elemento en el modelo
     this.label = null;
     this.name = "GraphicalElement";
+    this.modifiers = new Modifiers();
+    this.modifiers.setModifiedElement(this);
 }
 
 //GraphicalElement basic getters and setters
@@ -173,6 +364,8 @@ GraphicalElement.prototype.getLabel = function() {return this.label;}
 GraphicalElement.prototype.setLabel = function(lbl) {this.label = lbl;lbl.setLabeledElement(this);}
 GraphicalElement.prototype.setCoords = function(p) {this.shape.setCoords(p);}
 GraphicalElement.prototype.getCoords = function() {return this.shape.getCoords();}
+GraphicalElement.prototype.getWidth = function() {return this.shape.getWidth();}
+GraphicalElement.prototype.getHeight = function() {return this.shape.getHeight();}
 GraphicalElement.prototype.setMarker = function(imageMarker, colorAdjust, offset, scale) {
     this.marker = new Marker(imageMarker, offset, scale, colorAdjust);
     this.marker.setMarkedElement(this);
@@ -184,6 +377,10 @@ GraphicalElement.prototype.render = function(context) {
     this.shape.render(context);
     if (this.marker != null) {
         this.marker.render(context);
+    }
+    
+    if (this.modifiers != null) {
+        this.modifiers.render(context);
     }
 //    if (this.label != null) {
 //        this.label.render(context);
@@ -227,6 +424,7 @@ GraphicalElement.prototype.mousePressed = function (e) {
     if (mouseButton == "LEFT") {
         modeler.unSelectAll();
         this.focus();
+        this.isDragging = true;        
     } else if (mouseButton == "RIGHT") {
 
     }
@@ -238,7 +436,7 @@ GraphicalElement.prototype.mouseClicked = function (e) {
     var mouseButton = getMousePressedButton(e);
     
     if (mouseButton == "LEFT") {
-        console.log("Botón izquierdo clickado sobre " + this.Id);
+        
     } else if (mouseButton == "RIGHT") {
 
     }
@@ -250,9 +448,11 @@ GraphicalElement.prototype.mouseReleased = function (e) {
     var mouseButton = getMousePressedButton(e);
     
     if (mouseButton == "LEFT") {
-        console.log("Botón izquierdo liberado sobre " + this.Id);
+        if (this.selected == true) {
+            this.isDragging = false;
+        }
     } else if (mouseButton == "RIGHT") {
-
+        
     }
 }
 
@@ -313,7 +513,7 @@ function StartEvent() {
     this.STROKE_FOCUSED = "#98FF00";//Color de línea para el elemento en estado focused
 
     //Gradiente para el relleno del evento
-    this.gr = modeler.getContext().createLinearGradient(0,0,15,0);
+    this.gr = modeler.getContext().createLinearGradient(0,0,this.shape.getRadius(),0);
     this.gr.addColorStop(0,"#ffffff");
     this.gr.addColorStop(1,"#9DD49D");
     this.shape.setFill(this.gr);
@@ -333,7 +533,7 @@ function EndEvent() {
     this.STROKE_FOCUSED = "#98FF00";//Color de línea para el elemento en estado focused
 
     //Gradiente para el relleno del evento
-    this.gr = modeler.getContext().createLinearGradient(0,0,15,0);
+    this.gr = modeler.getContext().createLinearGradient(0,0,this.shape.getRadius(),0);
     this.gr.addColorStop(0,"#ffffff");
     this.gr.addColorStop(1,"#FAEFEF");
     this.shape.setFill(this.gr);
@@ -540,14 +740,14 @@ function IntermediateCatchEvent() {
     this.STROKE_FOCUSED = "#98FF00";//Color de línea para el elemento en estado focused
 
     //Gradiente para el relleno del evento
-    this.gr = modeler.getContext().createLinearGradient(0,0,15,0);
+    this.gr = modeler.getContext().createLinearGradient(0,0,this.shape.getRadius(),0);
     this.gr.addColorStop(0,"#ffffff");
     this.gr.addColorStop(1,"#dce7f6");
     this.shape.setFill(this.gr);
     this.shape.setStroke(this.STROKE_NORMAL);
     this.shape.setStrokeWidth(3);
     
-    this.shape2 = new Circle(0, 0 ,12);
+    this.shape2 = new Circle(0, 0, this.shape.getRadius() - 3);
     this.shape2.setFill(this.gr);
     this.shape2.setStroke(this.STROKE_NORMAL);
     this.shape2.setStrokeWidth(2);
@@ -565,7 +765,7 @@ IntermediateCatchEvent.prototype.render = function (context) {
 }
 
 IntermediateCatchEvent.prototype.setCoords = function(p) {
-    this.shape.setCoords(p);
+    CatchEvent.prototype.setCoords.call(this, p);
     this.shape2.setCoords(p);
 }
 
@@ -581,14 +781,14 @@ function IntermediateThrowEvent() {
     this.STROKE_FOCUSED = "#98FF00";//Color de línea para el elemento en estado focused
 
     //Gradiente para el relleno del evento
-    this.gr = modeler.getContext().createLinearGradient(0,0,15,0);
+    this.gr = modeler.getContext().createLinearGradient(0,0,this.shape.getRadius(),0);
     this.gr.addColorStop(0,"#ffffff");
     this.gr.addColorStop(1,"#dce7f6");
     this.shape.setFill(this.gr);
     this.shape.setStroke(this.STROKE_NORMAL);
     this.shape.setStrokeWidth(3);
     
-    this.shape2 = new Circle(0, 0 ,12);
+    this.shape2 = new Circle(0, 0, this.shape.getRadius() - 3);
     this.shape2.setFill(this.gr);
     this.shape2.setStroke(this.STROKE_NORMAL);
     this.shape2.setStrokeWidth(2);
@@ -606,7 +806,7 @@ IntermediateThrowEvent.prototype.render = function (context) {
 }
 
 IntermediateThrowEvent.prototype.setCoords = function(p) {
-    this.shape.setCoords(p);
+    ThrowEvent.prototype.setCoords.call(this, p);
     this.shape2.setCoords(p);
 }
 
@@ -767,6 +967,298 @@ ParallelIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
 
 //------------------------------------------------------------------------------
 
+//Activity definition
+Activity.prototype = new GraphicalElement();
+Activity.prototype.constructor = Activity;
+function Activity() {
+    GraphicalElement.call(this);
+    this.STROKE_NORMAL = "#03689a"; //Color de línea para el elemento en estado normal
+    this.STROKE_OVER = "#FF6060";   //Color de línea para el elemento en estado over
+    this.STROKE_FOCUSED = "#98FF00";//Color de línea para el elemento en estado focused
+
+    this.shape = new Rectangle(0, 0, 100, 60, 5) ;//Figura principal del evento
+    //Gradiente para el relleno del evento
+    this.gr = modeler.getContext().createLinearGradient(0,0,this.shape.getWidth(),0);
+    this.gr.addColorStop(0,"#ffffff");
+    this.gr.addColorStop(1,"#BFD2E0");
+    
+    this.shape.setFill(this.gr);
+    this.shape.setStroke(this.STROKE_NORMAL);
+    this.shape.setStrokeWidth(3.5);
+}
+
+//------------------------------------------------------------------------------
+
+//Gateway definition
+Gateway.prototype = new GraphicalElement();
+Gateway.prototype.constructor = Gateway;
+function Gateway() {
+    GraphicalElement.call(this);
+    this.STROKE_NORMAL = "#03689a"; //Color de línea para el elemento en estado normal
+    this.STROKE_OVER = "#FF6060";   //Color de línea para el elemento en estado over
+    this.STROKE_FOCUSED = "#98FF00";//Color de línea para el elemento en estado focused
+
+    this.shape = new Rectangle(0, 0, 100, 60, 5) ;//Figura principal del evento
+    //Gradiente para el relleno del evento
+    this.gr = modeler.getContext().createLinearGradient(0,0,this.shape.getWidth(),0);
+    this.gr.addColorStop(0,"#ffffff");
+    this.gr.addColorStop(1,"#BFD2E0");
+    
+    this.shape.setFill(this.gr);
+    this.shape.setStroke(this.STROKE_NORMAL);
+    this.shape.setStrokeWidth(3.5);
+}
+
+//------------------------------------------------------------------------------
+
+//Task definition
+Task.prototype = Activity.prototype;
+Task.prototype.constructor = Task;
+function Task () {
+    Activity.call(this);
+}
+
+//------------------------------------------------------------------------------
+
+//AbstractTask definition
+AbstractTask.prototype = Task.prototype;
+AbstractTask.prototype.constructor = AbstractTask;
+function AbstractTask() {
+    Task.call(this);
+}
+
+//------------------------------------------------------------------------------
+
+//UserTask definition
+UserTask.prototype = Task.prototype;
+UserTask.prototype.constructor = UserTask;
+function UserTask() {
+    Task.call(this);
+    var mx = (-1*(this.shape.getWidth()/2))+5;
+    var my = (-1*(this.shape.getHeight()/2)+5);
+    this.setMarker(MARKER_USER, new ColorAdjust(10,10,10), new Point(mx, my), 0.9);    
+}
+
+//------------------------------------------------------------------------------
+
+//ServiceTask definition
+ServiceTask.prototype = Task.prototype;
+ServiceTask.prototype.constructor = ServiceTask;
+function ServiceTask() {
+    Task.call(this);
+    var mx = (-1*(this.shape.getWidth()/2))+5;
+    var my = (-1*(this.shape.getHeight()/2)+5);
+    this.setMarker(MARKER_SERVICE, new ColorAdjust(10,10,10), new Point(mx, my), 0.7);    
+}
+
+//------------------------------------------------------------------------------
+
+//ScriptTask definition
+ScriptTask.prototype = Task.prototype;
+ScriptTask.prototype.constructor = ScriptTask;
+function ScriptTask() {
+    Task.call(this);
+    var mx = (-1*(this.shape.getWidth()/2))+5;
+    var my = (-1*(this.shape.getHeight()/2)+5);
+    this.setMarker(MARKER_SCRIPT, new ColorAdjust(10,10,10), new Point(mx, my), 0.7);    
+}
+
+//------------------------------------------------------------------------------
+
+//RuleTask definition
+BusinessRuleTask.prototype = Task.prototype;
+BusinessRuleTask.prototype.constructor = BusinessRuleTask;
+function BusinessRuleTask() {
+    Task.call(this);
+    var mx = (-1*(this.shape.getWidth()/2))+5;
+    var my = (-1*(this.shape.getHeight()/2)+5);
+    this.setMarker(MARKER_RULE, new ColorAdjust(10,10,10), new Point(mx, my), 0.8);    
+}
+
+//------------------------------------------------------------------------------
+
+//ManualTask definition
+ManualTask.prototype = Task.prototype;
+ManualTask.prototype.constructor = ManualTask;
+function ManualTask() {
+    Task.call(this);
+    var mx = (-1*(this.shape.getWidth()/2))+5;
+    var my = (-1*(this.shape.getHeight()/2)+5);
+    this.setMarker(MARKER_MANUAL, new ColorAdjust(10,10,10), new Point(mx, my), 0.8);
+}
+
+//------------------------------------------------------------------------------
+
+//SendTask definition
+SendTask.prototype = Task.prototype;
+SendTask.prototype.constructor = SendTask;
+function SendTask() {
+    Task.call(this);
+    var mx = (-1*(this.shape.getWidth()/2))+5;
+    var my = (-1*(this.shape.getHeight()/2)+5);
+    this.setMarker(MARKER_MESSAGE_THROW, new ColorAdjust(10,10,10), new Point(mx, my), 0.9);    
+}
+
+//------------------------------------------------------------------------------
+
+//ReceiveTask definition
+ReceiveTask.prototype = Task.prototype;
+ReceiveTask.prototype.constructor = ReceiveTask;
+function ReceiveTask() {
+    Task.call(this);
+    var mx = (-1*(this.shape.getWidth()/2))+5;
+    var my = (-1*(this.shape.getHeight()/2)+5);
+    this.setMarker(MARKER_MESSAGE_CATCH, new ColorAdjust(10,10,10), new Point(mx, my), 0.9);    
+}
+
+//------------------------------------------------------------------------------
+
+//SubProcess definition
+SubProcess.prototype = Activity.prototype;
+SubProcess.prototype.constructor = SubProcess;
+function SubProcess() {
+    Activity.call(this);
+    var mx = (-1*(this.shape.getWidth()/2))+5;
+    var my = (-1*(this.shape.getHeight()/2)+5);
+    this.modifiers.setSubProcess(true);
+}
+
+//------------------------------------------------------------------------------
+
+//AdhocSubProcess definition
+AdhocSubProcess.prototype = SubProcess.prototype;
+AdhocSubProcess.prototype.constructor = AdhocSubProcess;
+function AdhocSubProcess() {
+    SubProcess.call(this);
+    var mx = (-1*(this.shape.getWidth()/2))+5;
+    var my = (-1*(this.shape.getHeight()/2)+5);
+    this.modifiers.setAdhoc(true);
+}
+
+//------------------------------------------------------------------------------
+
+//EventSubProcess definition
+EventSubProcess.prototype = SubProcess.prototype;
+EventSubProcess.prototype.constructor = EventSubProcess;
+function EventSubProcess() {
+    SubProcess.call(this);
+    var mx = (-1*(this.shape.getWidth()/2))+5;
+    var my = (-1*(this.shape.getHeight()/2)+5);
+}
+
+//------------------------------------------------------------------------------
+
+//Transaction definition
+Transaction.prototype = SubProcess.prototype;
+Transaction.prototype.constructor = Transaction;
+function Transaction() {
+    SubProcess.call(this);
+    
+    this.shape2 = new Rectangle(0, 0, this.shape.getWidth() - 5, this.shape.getHeight() - 5, 5);
+    this.shape2.setFill(this.gr);
+    this.shape2.setStroke(this.STROKE_NORMAL);
+    this.shape2.setStrokeWidth(2);
+}
+
+Transaction.prototype.render = function (context) {
+    this.shape.render(context);
+    if (this.shape2 != null) {
+        this.shape2.render(context);
+    }
+    
+    if (this.marker != null) {
+        this.marker.render(context);
+    }
+    
+    if (this.modifiers != null) {
+        this.modifiers.render(context);
+    }
+}
+
+Transaction.prototype.setCoords = function(p) {
+    this.shape.setCoords(p);
+    if (this.shape2 != null) {
+        this.shape2.setCoords(p);
+    }
+}
+
+//------------------------------------------------------------------------------
+
+//CallActivity definition
+CallActivity.prototype = Activity.prototype;
+CallActivity.prototype.constructor = CallActivity;
+function CallActivity() {
+    Activity.call(this);
+    this.shape.setStrokeWidth(6);
+}
+
+//------------------------------------------------------------------------------
+
+//ManualCallActivity definition
+ManualCallActivity.prototype = Activity.prototype;
+ManualCallActivity.prototype.constructor = ManualCallActivity;
+function ManualCallActivity() {
+    Activity.call(this);
+    this.shape.setStrokeWidth(6);
+    var mx = (-1*(this.shape.getWidth()/2))+5;
+    var my = (-1*(this.shape.getHeight()/2)+5);
+    this.setMarker(MARKER_MANUAL, new ColorAdjust(10,10,10), new Point(mx, my), 0.8);
+}
+
+//------------------------------------------------------------------------------
+
+//BusinessRuleCallActivity definition
+BusinessRuleCallActivity.prototype = Activity.prototype;
+BusinessRuleCallActivity.prototype.constructor = BusinessRuleCallActivity;
+function BusinessRuleCallActivity() {
+    Activity.call(this);
+    this.shape.setStrokeWidth(6);
+    var mx = (-1*(this.shape.getWidth()/2))+5;
+    var my = (-1*(this.shape.getHeight()/2)+5);
+    this.setMarker(MARKER_RULE, new ColorAdjust(10,10,10), new Point(mx, my), 0.8);
+}
+
+//------------------------------------------------------------------------------
+
+//ScriptCallActivity definition
+ScriptCallActivity.prototype = Activity.prototype;
+ScriptCallActivity.prototype.constructor = ScriptCallActivity;
+function ScriptCallActivity() {
+    Activity.call(this);
+    this.shape.setStrokeWidth(6);
+    var mx = (-1*(this.shape.getWidth()/2))+5;
+    var my = (-1*(this.shape.getHeight()/2)+5);
+    this.setMarker(MARKER_SCRIPT, new ColorAdjust(10,10,10), new Point(mx, my), 0.7);
+}
+
+//------------------------------------------------------------------------------
+
+//UserCallActivity definition
+UserCallActivity.prototype = Activity.prototype;
+UserCallActivity.prototype.constructor = UserCallActivity;
+function UserCallActivity() {
+    Activity.call(this);
+    this.shape.setStrokeWidth(6);
+    var mx = (-1*(this.shape.getWidth()/2))+5;
+    var my = (-1*(this.shape.getHeight()/2)+5);
+    this.setMarker(MARKER_USER, new ColorAdjust(10,10,10), new Point(mx, my), 0.9);
+}
+
+//------------------------------------------------------------------------------
+
+//CallProcess definition
+CallProcess.prototype = Activity.prototype;
+CallProcess.prototype.constructor = CallProcess;
+function CallProcess() {
+    Activity.call(this);
+    this.shape.setStrokeWidth(6);
+    var mx = (-1*(this.shape.getWidth()/2))+5;
+    var my = (-1*(this.shape.getHeight()/2)+5);
+    this.modifiers.setSubProcess(true);
+}
+
+//------------------------------------------------------------------------------
+
 //Modeler definition
 function Modeler() {
     this.childs = [];           //Elementos del modelo
@@ -774,6 +1266,8 @@ function Modeler() {
     this.count = 0;             //Contador de elementos para IDs
     this.cx = 0;                //Posición X actual del mouse en el canvas
     this.cy = 0;                //Posición Y actual del mouse en el canvas
+    this.dx = 0;                //Incremento en X del movimiento del mouse en el canvas
+    this.dy = 0;                //Incremento en Y del movimiento del mouse en el canvas
     this.context = null;        //Cotexto de dibujo del canvas
     this.stylePaddingLeft = 0;
     this.stylePaddingTop = 0;
@@ -841,34 +1335,6 @@ Modeler.prototype.getOverElement = function(x, y) {
     return null;
 }
 
-//Modeler.getMousePosition
-//Obtiene las coordenadas X,Y del puntero del ratón sobre el canvas
-Modeler.prototype.getMousePosition = function (e) { 
-    var element = this.drawingCanvas;
-    var offsetX = 0, offsetY = 0;
-
-    if (element.offsetParent) {
-        do {
-            offsetX += element.offsetLeft;
-            offsetY += element.offsetTop;
-        } while ((element = element.offsetParent));
-    }
-
-    offsetX += this.stylePaddingLeft;
-    offsetY += this.stylePaddingTop;
-
-    offsetX += this.styleBorderLeft;
-    offsetY += this.styleBorderTop;
-
-    this.cx = e.pageX - offsetX;
-    this.cy = e.pageY - offsetY
-
-    if (this.cx < 0) this.cx = 0;
-    if (this.cy < 0) this.cy = 0;
-
-    return new Point(this.cx, this.cy);
-}
-
 //Modeler.init
 //Inicializa el modelador de procesos de negocio
 Modeler.prototype.init = function(canvasElement) {
@@ -902,30 +1368,40 @@ Modeler.prototype.render = function () {
     }
 }
 
+//Modeler.getMousePosition
+//Obtiene las coordenadas X,Y del puntero del ratón sobre el canvas
 Modeler.prototype.getMousePosition = function (e) { 
-	var element = this.drawingCanvas;
-	var offsetX = 0, offsetY = 0;
-	
-	if (element.offsetParent) {
-		do {
-		  offsetX += element.offsetLeft;
-		  offsetY += element.offsetTop;
-		} while ((element = element.offsetParent));
-	}
+    var element = this.drawingCanvas;
+    var offsetX = 0, offsetY = 0;
+        
+    //Calcular offset del elemento
+    if (element.offsetParent) {
+        do {
+            offsetX += element.offsetLeft;
+            offsetY += element.offsetTop;
+        } while ((element = element.offsetParent));
+    }
+      
+    //Calcular offset de las barras
+    element = this.drawingCanvas;
+    do {
+        offsetX -= element.scrollLeft || 0;
+        offsetY -= element.scrollTop || 0;
+    } while ((element = element.parentNode));
 
-	offsetX += this.stylePaddingLeft;
-	offsetY += this.stylePaddingTop;
+    offsetX += this.stylePaddingLeft;
+    offsetY += this.stylePaddingTop;
+    
+    offsetX += this.styleBorderLeft;
+    offsetY += this.styleBorderTop;
 
-	offsetX += this.styleBorderLeft;
-	offsetY += this.styleBorderTop;
+    this.cx = e.clientX - offsetX;
+    this.cy = e.clientY - offsetY;
 
-	this.cx = e.pageX - offsetX;
-	this.cy = e.pageY - offsetY
+    if (this.cx < 0) this.cx = 0;
+    if (this.cy < 0) this.cy = 0;
 	
-	if (this.cx < 0) this.cx = 0;
-	if (this.cy < 0) this.cy = 0;
-	
-	return new Point(this.cx, this.cy);
+    return new Point(this.cx, this.cy);
 }
 
 Modeler.prototype.mouseClicked = function(e) {
@@ -956,6 +1432,8 @@ Modeler.prototype.mousePressed = function(e) {
         } else {
             if (ele != null) {
                 ele.mousePressed(e);
+                this.dx = this.cx - ele.getCoords().x;
+                this.dy = this.cy - ele.getCoords().y;
             }
         }
     }
@@ -967,54 +1445,28 @@ Modeler.prototype.mouseMoved = function(e) {
     var ele = this.getOverElement(mouseCoords.x, mouseCoords.y);
     
     if (ele != null) {
-        ele.mouseMoved(e);
+        ele.mouseMoved(e);        
     } else {
         this.unHoverAll();
     }
     
-//	this.getMousePosition(e);
-//	if (!this.isDragging) {
-//		var hovered = false;
-//		for (var i = this.childs.length - 1; i >= 0; i--) {
-//			if (this.childs[i].mouseInBounds(this.cx, this.cy) && !hovered) {
-//				//console.log(this.childs[i].getId() + " selected= " + this.childs[i].selected);
-//				if (!this.childs[i].selected) {
-//					this.childs[i].hover();
-//					hovered = true;
-//				}
-//			} else {
-//				if (!this.childs[i].selected) {
-//					this.childs[i].normal();
-//				}
-//			}
-//		}
-//	} else {
-//		console.log("Modeler está en modo drag");
-//		for (var i = this.childs.length - 1; i >= 0; i--) {
-//			if (this.childs[i].mouseInBounds(this.dx, this.dy)) {
-//				var deltaX = this.cx - this.dx;
-//				var deltaY = this.cy - this.dy;
-//				var cc = this.childs[i].getCoords();
-//				this.childs[i].setCoords(new Point(cc.x + deltaX, cc.y + deltaY));
-//				console.log("Hay que actualizar posicion de "+this.childs[i].getId());
-//			}
-//		}
-//	}
-	this.render();
+    for (var i = this.childs.length - 1; i >= 0; i--) {
+        if (this.childs[i].isDragging) {
+            this.childs[i].setCoords(new Point(this.cx + this.dx, this.cy + this.dy));
+        }
+    }
+    this.render();
 }
 
 Modeler.prototype.mouseReleased = function(e) {
     var mouseCoords = this.getMousePosition(e);
     var ele = this.getOverElement(mouseCoords.x, mouseCoords.y);
+    this.dx = 0;
+    this.dy = 0;
     
     if (ele != null) {
         ele.mouseReleased(e);
     }
-	//this.dx = this.cx - this.dx;
-	//this.dy = this.cy - this.dy;
-	//console.log("End point: "+this.cx+", "+this.cy);
-	//console.log("Diferencia X,Y:"+this.dx+", "+this.dy);
-//	this.isDragging = false;
     this.render();
 }
 
