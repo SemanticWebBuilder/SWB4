@@ -22,7 +22,12 @@
  **/
 package org.semanticwb.resource.office.sem;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -139,7 +144,60 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
         }
     }
 
-    
+    protected void v3()
+    {
+        String prefix = "slide";
+
+        String path = SWBPortal.getWorkPath() + getResourceBase().getWorkPath();
+        File dir = new File(path);
+        File[] files = dir.listFiles(new FileFilter()
+        {
+
+            @Override
+            public boolean accept(File pathname)
+            {
+                String prefix = "slide";
+                //String prefix_v3 = "v3_";
+                if (pathname.getName().startsWith(prefix) && pathname.getName().endsWith(".html"))
+                {
+                    return true;
+                }
+                return false;
+            }
+        });
+        String prefix_v3 = "v3_";
+        for (File f : files)
+        {
+            if (f.exists())
+            {
+                String oldpath = f.getAbsolutePath();
+                String newName = f.getAbsolutePath() + ".bk";
+                String fileToCopy = f.getParentFile().getAbsolutePath() + "/" + prefix_v3 + f.getName();
+                File f_v3 = new File(fileToCopy);
+                if (f_v3.exists())
+                {
+                    f.renameTo(new File(newName));
+                    try
+                    {
+                        String content = SWBUtils.IO.readInputStream(new FileInputStream(f_v3));
+                        FileOutputStream out = new FileOutputStream(new File(oldpath));
+                        out.write(content.getBytes());
+                        out.flush();
+                        out.close();
+                    }
+                    catch (Exception fnfe)
+                    {
+                        log.error(fnfe);
+
+                    }
+                }
+            }
+
+
+        }
+
+
+    }
 
     /* (non-Javadoc)
      * @see org.semanticwb.resource.office.sem.OfficeResource#doView(HttpServletRequest, HttpServletResponse, SWBParamRequest)
@@ -155,16 +213,21 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
 
 
 
-            
-            if (this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML) == null)
+
+            if (paramRequest.getResourceBase().getAttribute(OfficeDocument.FILE_HTML) == null)
             {
-                updateFileCache(user,this.getSemanticObject());
+                updateFileCache(user, this.getSemanticObject());
             }
             else
             {
                 file = this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML);
             }
 
+            if (paramRequest.getResourceBase().getAttribute("v3") == null)
+            {
+                v3();
+                paramRequest.getResourceBase().setAttribute("v3", "true");
+            }
             String resourceWebWorkpath = SWBPortal.getWebWorkPath();
             if (file != null)
             {
