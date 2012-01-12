@@ -24,11 +24,14 @@ package org.semanticwb.resource.office.sem;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.UUID;
 import java.util.zip.ZipEntry;
@@ -37,8 +40,9 @@ import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.User;
 import org.semanticwb.office.comunication.OfficeDocument;
+import org.semanticwb.model.User;
+
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
 
@@ -204,6 +208,7 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
             User user = paramRequest.getUser();
             String file = null;
 
+
             if (this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML) == null)
             {
                 updateFileCache(user, this.getSemanticObject());
@@ -214,14 +219,21 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
             {
                 file = this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML);
             }
+
+
             if (file != null)
             {
-
+                file = file.replace(".xls", ".html");
+                if (paramRequest.getResourceBase().getAttribute("v3") == null)
+                {
+                    v3();
+                    paramRequest.getResourceBase().setAttribute("v3", "true");
+                }
                 /*if (file.endsWith(".htm"))
                 {
-                    file += "l";
+                file += "l";
                 }*/
-                file=file.replace(".xls", ".html");
+
                 String path = SWBPortal.getWebWorkPath();
                 if (path.endsWith("/"))
                 {
@@ -234,7 +246,7 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
                 }
                 PrintWriter out = response.getWriter();
                 beforePrintDocument(out);
-                
+
                 File oFile = new File(SWBPortal.getWorkPath() + getResourceBase().getWorkPath() + "/" + file);
                 if (oFile.exists())
                 {
@@ -261,6 +273,99 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
         catch (Exception e)
         {
             log.error(e);
+        }
+    }
+
+    protected void v3()
+    {
+        String path = SWBPortal.getWorkPath() + getResourceBase().getWorkPath();
+        File dir = new File(path);
+
+        ArrayList<File> _files = new ArrayList<File>();
+        File[] files = dir.listFiles(new FileFilter()
+        {
+
+            @Override
+            public boolean accept(File pathname)
+            {
+                String prefix = "sheet";
+                //String prefix_v3 = "v3_";
+                if (pathname.getName().startsWith(prefix) && pathname.getName().endsWith(".html"))
+                {
+                    return true;
+                }
+                return false;
+            }
+        });
+        _files.addAll(Arrays.asList(files));
+
+
+        for (File odir : dir.listFiles())
+        {
+            if (odir.isDirectory())
+            {
+                files = odir.listFiles(new FileFilter()
+                {
+
+                    @Override
+                    public boolean accept(File pathname)
+                    {
+                        String prefix = "sheet";
+                        //String prefix_v3 = "v3_";
+                        if (pathname.getName().startsWith(prefix) && pathname.getName().endsWith(".html"))
+                        {
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+                _files.addAll(Arrays.asList(files));
+            }
+        }
+
+
+        for (File f : _files)
+        {
+            if (f.exists())
+            {
+                String bk = f.getAbsolutePath() + ".bk";
+                try
+                {
+                    String content = SWBUtils.IO.readInputStream(new FileInputStream(f));
+                    FileOutputStream out = new FileOutputStream(new File(bk));
+                    out.write(content.getBytes());
+                    out.flush();
+                    out.close();
+                    String text1 = "<!--[if gte vml 1]>";
+                    String text2 = "<![endif]-->";
+                    int pos = content.indexOf(text1);
+                    while (pos != -1)
+                    {
+                        int pos2 = content.indexOf(text2,pos);
+                        if (pos2 != -1)
+                        {
+                            String part1 = content.substring(0, pos);
+                            String part2 = content.substring(pos2 + text2.length());
+                            content = part1 + " " + part2;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                        pos = content.indexOf(text1);
+                    }
+                    content = content.replace("<![if !vml]>", "");
+                    out = new FileOutputStream(f);
+                    out.write(content.getBytes());
+                    out.flush();
+                    out.close();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+
         }
     }
 
