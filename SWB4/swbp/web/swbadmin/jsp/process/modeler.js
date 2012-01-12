@@ -9,6 +9,7 @@ var MARKER_RULE = "images/n_cond.png";
 var MARKER_MULTI_CATCH = "images/n_multi_b.png";
 var MARKER_MULTI_THROW = "images/n_multi_n.png";
 var MARKER_PARALLEL = "images/n_paralelo_b.png";
+var MARKER_PARALLEL_THROW = "images/n_paralela_n.png";
 var MARKER_SCALATION_CATCH = "images/n_escala_b.png";
 var MARKER_SCALATION_THROW = "images/n_escala_n.png";
 var MARKER_ERROR_CATCH = "images/n_error_b.png";
@@ -26,6 +27,13 @@ var MARKER_USER = "images/n_usr.png";
 var MARKER_SERVICE = "images/n_servicio.png";
 var MARKER_SCRIPT = "images/n_script.png";
 var MARKER_MANUAL = "images/n_manual.png";
+
+//Gateway markers
+var MARKER_INCLUSIVE = "images/n_incl_eventos_str.png";
+var MARKER_EXCLUSIVESTART = "images/n_excl_eventos_str.png";
+var MARKER_PARALLELSTART = "images/n_paralela_eventos_str.png";
+var MARKER_EVENT = "images/n_excl_eventos_int.png";
+var MARKER_COMPLEX = "images/n_compleja.png";
 
 //Activity Modifiers
 var MODIFIER_LOOP = "images/n_ciclo.png";
@@ -135,7 +143,6 @@ Modifiers.prototype.render = function (context) {
     context.restore();
 }
 
-
 //------------------------------------------------------------------------------
 
 //EditableLabel definition
@@ -182,7 +189,7 @@ function ColorAdjust(red, green, blue) {
 //------------------------------------------------------------------------------
 
 //Marker definition
-function Marker (image, offset, scale, ca) {
+function Marker (image, offset, scale, ca, rotate) {
     this.markedElement = null;    
     this.image = new Image();   //Imagen    
     this.image.src = image;     
@@ -203,22 +210,9 @@ Marker.prototype.getColorAdjust = function () {return this.colorAdjust;}
 Marker.prototype.setMarkedElement = function (me) {this.markedElement = me;}
 Marker.prototype.getMarkedElement = function () {return this.markedElement;}
 Marker.prototype.AdjustColor = function () {
-    var c = document.createElement("canvas");
-    c.width = this.image.width;
-    c.height = this.image.height;
-    var ctx = c.getContext('2d');
-    ctx.drawImage(this.image, 0, 0);
-    var imgData = ctx.getImageData(0, 0, c.width, c.height);
-    var data = imgData.data;
-    for (var i = 0, n = data.length; i < n; i += 4) {
-        console.log("pixel " + i + " - r: "+data[i]+", g:"+data[i+1]+", b:"+data[i+2]+", a:"+data[i+3]);
-        if(data[i+3] != 0){
-            data[i]   = data[i]/3; // red
-            data[i+1] = data[i+1]/3; // green
-            data[i+2] = data[i+2]*5; // blue
-        }
-    }
-    return imgData;
+    var rgbks = generateRGBKs(this.image);
+    var tintImg = generateTintImage(this.image, rgbks, this.colorAdjust.r, this.colorAdjust.g, this.colorAdjust.b);
+    this.image.src = tintImg;
 }
 
 //Render
@@ -228,13 +222,13 @@ Marker.prototype.render = function(context) {
     var imgY = this.markedElement.getCoords().y + this.offsetY;
     var imgW = this.image.width * this.scale;
     var imgH = this.image.height * this.scale;
+    if (!this.adjusted) {
+        this.AdjustColor();
+        this.adjusted = true;
+    }
     context.save();
-//    if (!this.adjusted) {
-//        this.imgD = this.AdjustColor();
-//        this.adjusted = true;
-//    }
-//    context.putImageData(this.imgD, imgX, imgY);
-    //context.putImageData(this.imgD, imgX, imgY, imgW, imgH);
+    //context.fillStyle = "black";
+    //context.fillRect(0, 0, 100, 100);
     context.drawImage(this.image, imgX, imgY, imgW, imgH);
     context.restore();
 }
@@ -288,12 +282,13 @@ Circle.prototype.mouseInBounds = function (x, y) {
 }
 
 //Rectangle definition
-function Rectangle (x, y, width, height, cornerradius) {
+function Rectangle (x, y, width, height, cornerradius, rotation) {
     this.x = x;
     this.y = y;
     this.w = width;
     this.h = height;
     this.cr = cornerradius;
+    this.dg = rotation;
 }
 
 Rectangle.prototype.getCoords = function()  {return new Point(this.x, this.y);}
@@ -312,7 +307,13 @@ Rectangle.prototype.render = function (context) {
     context.save();
     context.strokeStyle = this.stroke;
     context.lineWidth = this.strokeWidth;
-    context.fillStyle = this.fill;//"#9DD49D";    
+    context.fillStyle = this.fill;//"#9DD49D";
+    if (this.dg != 0) {
+        startX = 0 - this.w/2;;
+        startY = 0 - this.h/2;;
+        context.translate(this.x, this.y);
+        context.rotate(degreesToRadians(this.dg));
+    }
     context.beginPath();
     context.moveTo(startX + this.cr, startY);
     context.lineTo(startX+this.w-this.cr, startY);
@@ -471,6 +472,61 @@ GraphicalElement.prototype.mouseMoved = function (e) {
     }
 }
 
+GraphicalElement.prototype.snapToGrid = function () {
+    if (modeler.useGrid) {
+        this.x = (Math.round(this.x/25))*25;
+        this.y = (Math.round(this.y/25))*25;
+    }
+}
+
+//------------------------------------------------------------------------------
+
+//ConnectionObject definition
+function ConnectionObject() {
+    this.ini = null;
+    this.end = null;
+    this.Id = 0;
+    this.points = [];
+    this.dashArray = [];
+}
+
+ConnectionObject.prototype.addPoint = function (point) {this.points.push(point);}
+ConnectionObject.prototype.setPoints = function (points) {this.points = points;}
+ConnectionObject.prototype.setId = function (id) {this.Id = id;}
+ConnectionObject.prototype.getId = function () {return this.Id;}
+ConnectionObject.prototype.getSroke  = function() {return this.stroke;}
+ConnectionObject.prototype.setStroke = function(s) {this.stroke = s;}
+ConnectionObject.prototype.setStrokeWidth = function(sw) {this.strokeWidth = sw;}
+
+ConnectionObject.prototype.render = function (context) {
+    if (this.points != null && this.points.length > 2) {
+        var startX = this.points[0].x;
+        var startY = this.points[0].y;
+        context.save();
+        context.strokeStyle = "#000000";
+        context.lineWidth = 3;
+        context.moveTo(startX, startY);
+        for (var i = 1; i< this.points[i].length; i++) {
+            context.LineTo(this.points[i].x, this.points[i].x);
+        }
+        context.stroke();
+        context.restore();
+    }
+}
+
+//------------------------------------------------------------------------------
+
+//SequenceFlow definition
+SequenceFlow.prototype = new ConnectionObject();
+SequenceFlow.prototype.constructor = SequenceFlow;
+function SequenceFlow() {
+    ConnectionObject.call(this);
+    
+    this.STROKE_NORMAL = "#000000"; //Color de línea para el elemento en estado normal
+    this.STROKE_OVER = "#FF6060";   //Color de línea para el elemento en estado over
+    this.STROKE_FOCUSED = "#98FF00";//Color de línea para el elemento en estado focused
+}
+
 //------------------------------------------------------------------------------
 
 //Event definition
@@ -555,7 +611,7 @@ NormalEndEvent.prototype.constructor = NormalEndEvent;
 //ErrorEndEvent definition
 function ErrorEndEvent () {
     EndEvent.call(this);
-    this.setMarker(MARKER_ERROR_THROW, new ColorAdjust(10,10,10), new Point(-11,-10), 1);
+    this.setMarker(MARKER_ERROR_THROW, new ColorAdjust(200,10,60), new Point(-11,-10), 1, 0);
 }
 ErrorEndEvent.prototype = EndEvent.prototype;
 ErrorEndEvent.prototype.constructor = ErrorEndEvent;
@@ -565,7 +621,7 @@ ErrorEndEvent.prototype.constructor = ErrorEndEvent;
 //MessageEndEvent definition
 function MessageEndEvent () {
     EndEvent.call(this);
-    this.setMarker(MARKER_MESSAGE_THROW, new ColorAdjust(10,10,10), new Point(-11,-9), 1.15);
+    this.setMarker(MARKER_MESSAGE_THROW, new ColorAdjust(10,10,10), new Point(-11,-9), 1.15, 0);
 }
 MessageEndEvent.prototype = EndEvent.prototype;
 MessageEndEvent.prototype.constructor = MessageEndEvent;
@@ -575,7 +631,7 @@ MessageEndEvent.prototype.constructor = MessageEndEvent;
 //CancelationEndEvent definition
 function CancelationEndEvent () {
     EndEvent.call(this);
-    this.setMarker(MARKER_CANCEL_THROW, new ColorAdjust(10,10,10), new Point(-9,-9), 1);
+    this.setMarker(MARKER_CANCEL_THROW, new ColorAdjust(10,10,10), new Point(-9,-9), 1, 0);
 }
 CancelationEndEvent.prototype = EndEvent.prototype;
 CancelationEndEvent.prototype.constructor = CancelationEndEvent;
@@ -585,7 +641,7 @@ CancelationEndEvent.prototype.constructor = CancelationEndEvent;
 //CompensationEndEvent definition
 function CompensationEndEvent () {
     EndEvent.call(this);
-    this.setMarker(MARKER_COMPENSATION_THROW, new ColorAdjust(10,10,10), new Point(-12,-7), 1);
+    this.setMarker(MARKER_COMPENSATION_THROW, new ColorAdjust(10,10,10), new Point(-12,-7), 1, 0);
 }
 CompensationEndEvent.prototype = EndEvent.prototype;
 CompensationEndEvent.prototype.constructor = CompensationEndEvent;
@@ -594,7 +650,7 @@ CompensationEndEvent.prototype.constructor = CompensationEndEvent;
 //SignalEndEvent definition
 function SignalEndEvent () {
     EndEvent.call(this);
-    this.setMarker(MARKER_SIGNAL_THROW, new ColorAdjust(10,10,10), new Point(-11,-11), 1);
+    this.setMarker(MARKER_SIGNAL_THROW, new ColorAdjust(10,10,10), new Point(-11,-11), 1, 0);
 }
 SignalEndEvent.prototype = EndEvent.prototype;
 SignalEndEvent.prototype.constructor = SignalEndEvent;
@@ -604,7 +660,7 @@ SignalEndEvent.prototype.constructor = SignalEndEvent;
 //MultipleEndEvent definition
 function MultipleEndEvent () {
     EndEvent.call(this);
-    this.setMarker(MARKER_MULTI_THROW, new ColorAdjust(10,10,10), new Point(-11.5,-12), 1);
+    this.setMarker(MARKER_MULTI_THROW, new ColorAdjust(10,10,10), new Point(-11.5,-12), 1, 0);
 }
 MultipleEndEvent.prototype = EndEvent.prototype;
 MultipleEndEvent.prototype.constructor = MultipleEndEvent;
@@ -614,7 +670,7 @@ MultipleEndEvent.prototype.constructor = MultipleEndEvent;
 //ScalationEndEvent definition
 function ScalationEndEvent () {
     EndEvent.call(this);
-    this.setMarker(MARKER_SCALATION_THROW, new ColorAdjust(10,10,10), new Point(-10,-12), 1);
+    this.setMarker(MARKER_SCALATION_THROW, new ColorAdjust(10,10,10), new Point(-10,-12), 1, 0);
 }
 ScalationEndEvent.prototype = EndEvent.prototype;
 ScalationEndEvent.prototype.constructor = ScalationEndEvent;
@@ -624,7 +680,7 @@ ScalationEndEvent.prototype.constructor = ScalationEndEvent;
 //TerminationEndEvent definition
 function TerminationEndEvent () {
     EndEvent.call(this);
-    this.setMarker(MARKER_TERMINATION, new ColorAdjust(10,10,10), new Point(-10.5,-10), 1.2);
+    this.setMarker(MARKER_TERMINATION, new ColorAdjust(10,10,10), new Point(-10.5,-10), 1.2, 0);
 }
 TerminationEndEvent.prototype = EndEvent.prototype;
 TerminationEndEvent.prototype.constructor = TerminationEndEvent;
@@ -643,7 +699,7 @@ NormalStartEvent.prototype.constructor = NormalStartEvent;
 //SigalStartEvent definition
 function SignalStartEvent () {
     StartEvent.call(this);
-    this.setMarker(MARKER_SIGNAL_CATCH, new ColorAdjust(10,10,10), new Point(-12,-13), 1.15);
+    this.setMarker(MARKER_SIGNAL_CATCH, new ColorAdjust(10,10,10), new Point(-12,-13), 1.15, 0);
 }
 SignalStartEvent.prototype = StartEvent.prototype;
 SignalStartEvent.prototype.constructor = SignalStartEvent;
@@ -653,7 +709,7 @@ SignalStartEvent.prototype.constructor = SignalStartEvent;
 //SigalStartEvent definition
 function MessageStartEvent () {
     StartEvent.call(this);
-    this.setMarker(MARKER_MESSAGE_CATCH, new ColorAdjust(10,10,10), new Point(-11,-10), 1.15);
+    this.setMarker(MARKER_MESSAGE_CATCH, new ColorAdjust(10,10,10), new Point(-11,-10), 1.15, 0);
 }
 MessageStartEvent.prototype = StartEvent.prototype;
 MessageStartEvent.prototype.constructor = MessageStartEvent;
@@ -663,7 +719,7 @@ MessageStartEvent.prototype.constructor = MessageStartEvent;
 //TimerStartEvent definition
 function TimerStartEvent () {
     StartEvent.call(this);
-    this.setMarker(MARKER_TIMER, new ColorAdjust(10,10,10), new Point(-11,-11.5), 0.95);
+    this.setMarker(MARKER_TIMER, new ColorAdjust(10,10,10), new Point(-11,-11.5), 0.95, 0);
 }
 TimerStartEvent.prototype = StartEvent.prototype;
 TimerStartEvent.prototype.constructor = TimerStartEvent;
@@ -673,7 +729,7 @@ TimerStartEvent.prototype.constructor = TimerStartEvent;
 //RuleStartEvent definition
 function RuleStartEvent () {
     StartEvent.call(this);
-    this.setMarker(MARKER_RULE, new ColorAdjust(10,10,10), new Point(-10,-10), 1);
+    this.setMarker(MARKER_RULE, new ColorAdjust(10,10,10), new Point(-10,-10), 1, 0);
 }
 RuleStartEvent.prototype = StartEvent.prototype;
 RuleStartEvent.prototype.constructor = RuleStartEvent;
@@ -683,7 +739,7 @@ RuleStartEvent.prototype.constructor = RuleStartEvent;
 //MultiStartEvent definition
 function MultiStartEvent () {
     StartEvent.call(this);
-    this.setMarker(MARKER_MULTI_CATCH, new ColorAdjust(10,10,10), new Point(-11.5,-12.5), 1);
+    this.setMarker(MARKER_MULTI_CATCH, new ColorAdjust(10,10,10), new Point(-11.5,-12.5), 1, 0);
 }
 MultiStartEvent.prototype = StartEvent.prototype;
 MultiStartEvent.prototype.constructor = MultiStartEvent;
@@ -693,7 +749,7 @@ MultiStartEvent.prototype.constructor = MultiStartEvent;
 //ParallelStartEvent definition
 function ParallelStartEvent () {
     StartEvent.call(this);
-    this.setMarker(MARKER_PARALLEL, new ColorAdjust(10,10,10), new Point(-10,-10), 1);
+    this.setMarker(MARKER_PARALLEL, new ColorAdjust(10,10,10), new Point(-10,-10), 1, 0);
 }
 ParallelStartEvent.prototype = StartEvent.prototype;
 ParallelStartEvent.prototype.constructor = ParallelStartEvent;
@@ -703,7 +759,7 @@ ParallelStartEvent.prototype.constructor = ParallelStartEvent;
 //ScalationStartEvent definition
 function ScalationStartEvent () {
     StartEvent.call(this);
-    this.setMarker(MARKER_SCALATION_CATCH, new ColorAdjust(10,10,10), new Point(-10,-12), 1);
+    this.setMarker(MARKER_SCALATION_CATCH, new ColorAdjust(10,10,10), new Point(-10,-12), 1, 0);
 }
 ScalationStartEvent.prototype = StartEvent.prototype;
 ScalationStartEvent.prototype.constructor = ScalationEndEvent;
@@ -713,7 +769,7 @@ ScalationStartEvent.prototype.constructor = ScalationEndEvent;
 //ErrorStartEvent definition
 function ErrorStartEvent () {
     StartEvent.call(this);
-    this.setMarker(MARKER_ERROR_CATCH, new ColorAdjust(10,10,10), new Point(-10,-10), 1);
+    this.setMarker(MARKER_ERROR_CATCH, new ColorAdjust(10,10,10), new Point(-10,-10), 1, 0);
 }
 ErrorStartEvent.prototype = StartEvent.prototype;
 ErrorStartEvent.prototype.constructor = ErrorStartEvent;
@@ -723,7 +779,7 @@ ErrorStartEvent.prototype.constructor = ErrorStartEvent;
 //CompensationStartEvent definition
 function CompensationStartEvent () {
     StartEvent.call(this);
-    this.setMarker(MARKER_COMPENSATION_CATCH, new ColorAdjust(10,10,10), new Point(-12,-7), 1);
+    this.setMarker(MARKER_COMPENSATION_CATCH, new ColorAdjust(10,10,10), new Point(-12,-7), 1, 0);
 }
 CompensationStartEvent.prototype = StartEvent.prototype;
 CompensationStartEvent.prototype.constructor = CompensationStartEvent;
@@ -815,7 +871,7 @@ IntermediateThrowEvent.prototype.setCoords = function(p) {
 //MessageIntermediateCatchEventEvent definition
 function MessageIntermediateCatchEvent() {
     IntermediateCatchEvent.call(this);
-    this.setMarker(MARKER_MESSAGE_CATCH, new ColorAdjust(10,10,10), new Point(-10,-8), 1);
+    this.setMarker(MARKER_MESSAGE_CATCH, new ColorAdjust(10,10,10), new Point(-10,-8), 1, 0);
 }
 MessageIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
 MessageIntermediateCatchEvent.prototype.constructor = MessageIntermediateCatchEvent;
@@ -825,7 +881,7 @@ MessageIntermediateCatchEvent.prototype.constructor = MessageIntermediateCatchEv
 //MessageIntermediateThrowEvent definition
 function MessageIntermediateThrowEvent() {
     IntermediateThrowEvent.call(this);
-    this.setMarker(MARKER_MESSAGE_THROW, new ColorAdjust(10,10,10), new Point(-10,-8), 1);
+    this.setMarker(MARKER_MESSAGE_THROW, new ColorAdjust(10,10,10), new Point(-10,-8), 1, 0);
 }
 MessageIntermediateThrowEvent.prototype = IntermediateThrowEvent.prototype;
 MessageIntermediateThrowEvent.prototype.constructor = MessageIntermediateThrowEvent;
@@ -835,7 +891,7 @@ MessageIntermediateThrowEvent.prototype.constructor = MessageIntermediateThrowEv
 //TimerIntermediateCatchEventEvent definition
 function TimerIntermediateCatchEvent() {
     IntermediateCatchEvent.call(this);
-    this.setMarker(MARKER_TIMER, new ColorAdjust(10,10,10), new Point(-11,-11), .95);
+    this.setMarker(MARKER_TIMER, new ColorAdjust(10,10,10), new Point(-11,-11), .95, 0);
 }
 TimerIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
 
@@ -844,7 +900,7 @@ TimerIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
 //ErrorIntermediateCatchEventEvent definition
 function ErrorIntermediateCatchEvent() {
     IntermediateCatchEvent.call(this);
-    this.setMarker(MARKER_ERROR_CATCH, new ColorAdjust(10,10,10), new Point(-10,-11), .95);
+    this.setMarker(MARKER_ERROR_CATCH, new ColorAdjust(10,10,10), new Point(-10,-11), .95, 0);
 }
 ErrorIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
 
@@ -853,7 +909,7 @@ ErrorIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
 //CancelationIntermediateCatchEventEvent definition
 function CancelationIntermediateCatchEvent() {
     IntermediateCatchEvent.call(this);
-    this.setMarker(MARKER_CANCEL_CATCH, new ColorAdjust(10,10,10), new Point(-9,-9), .95);
+    this.setMarker(MARKER_CANCEL_CATCH, new ColorAdjust(10,10,10), new Point(-9,-9), .95, 0);
 }
 CancelationIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
 
@@ -862,14 +918,14 @@ CancelationIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
 //CompensationIntermediateCatchEventEvent definition
 function CompensationIntermediateCatchEvent() {
     IntermediateCatchEvent.call(this);
-    this.setMarker(MARKER_COMPENSATION_CATCH, new ColorAdjust(10,10,10), new Point(-11,-6), .95);
+    this.setMarker(MARKER_COMPENSATION_CATCH, new ColorAdjust(10,10,10), new Point(-11,-6), .95, 0);
 }
 CompensationIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
 
 //CompensationIntermediateThrowEvent definition
 function CompensationIntermediateThrowEvent() {
     IntermediateThrowEvent.call(this);
-    this.setMarker(MARKER_COMPENSATION_THROW, new ColorAdjust(10,10,10), new Point(-11,-6), .95);
+    this.setMarker(MARKER_COMPENSATION_THROW, new ColorAdjust(10,10,10), new Point(-11,-6), .95, 0);
 }
 CompensationIntermediateThrowEvent.prototype = IntermediateThrowEvent.prototype;
 CompensationIntermediateThrowEvent.prototype.constructor = CompensationIntermediateThrowEvent;
@@ -879,7 +935,7 @@ CompensationIntermediateThrowEvent.prototype.constructor = CompensationIntermedi
 //RuleIntermediateCatchEventEvent definition
 function RuleIntermediateCatchEvent() {
     IntermediateCatchEvent.call(this);
-    this.setMarker(MARKER_RULE, new ColorAdjust(10,10,10), new Point(-9,-8), .85);
+    this.setMarker(MARKER_RULE, new ColorAdjust(10,10,10), new Point(-9,-8), .85, 0);
 }
 RuleIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
 
@@ -888,7 +944,7 @@ RuleIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
 //LinkIntermediateCatchEvent definition
 function LinkIntermediateCatchEvent() {
     IntermediateCatchEvent.call(this);
-    this.setMarker(MARKER_LINK_CATCH, new ColorAdjust(10,10,10), new Point(-10,-10), .95);
+    this.setMarker(MARKER_LINK_CATCH, new ColorAdjust(10,10,10), new Point(-10,-10), .95, 0);
 }
 LinkIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
 
@@ -897,7 +953,7 @@ LinkIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
 //LinkIntermediateThrowEvent definition
 function LinkIntermediateThrowEvent() {
     IntermediateThrowEvent.call(this);
-    this.setMarker(MARKER_LINK_THROW, new ColorAdjust(10,10,10), new Point(-10,-10), .95);
+    this.setMarker(MARKER_LINK_THROW, new ColorAdjust(10,10,10), new Point(-10,-10), .95, 0);
 }
 LinkIntermediateThrowEvent.prototype = IntermediateThrowEvent.prototype;
 
@@ -906,7 +962,7 @@ LinkIntermediateThrowEvent.prototype = IntermediateThrowEvent.prototype;
 //SignalIntermediateCatchEventEvent definition
 function SignalIntermediateCatchEvent() {
     IntermediateCatchEvent.call(this);
-    this.setMarker(MARKER_SIGNAL_CATCH, new ColorAdjust(10,10,10), new Point(-10,-11), .95);
+    this.setMarker(MARKER_SIGNAL_CATCH, new ColorAdjust(10,10,10), new Point(-10,-11), .95, 0);
 }
 SignalIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
 
@@ -915,7 +971,7 @@ SignalIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
 //SignalIntermediateThrowEvent definition
 function SignalIntermediateThrowEvent() {
     IntermediateThrowEvent.call(this);
-    this.setMarker(MARKER_SIGNAL_THROW, new ColorAdjust(10,10,10), new Point(-10,-11), .95);
+    this.setMarker(MARKER_SIGNAL_THROW, new ColorAdjust(10,10,10), new Point(-10,-11), .95, 0);
 }
 SignalIntermediateThrowEvent.prototype = IntermediateCatchEvent.prototype;
 SignalIntermediateThrowEvent.prototype.prototype = SignalIntermediateThrowEvent;
@@ -924,7 +980,7 @@ SignalIntermediateThrowEvent.prototype.prototype = SignalIntermediateThrowEvent;
 //MultipleIntermediateCatchEventEvent definition
 function MultipleIntermediateCatchEvent() {
     IntermediateCatchEvent.call(this);
-    this.setMarker(MARKER_MULTI_CATCH, new ColorAdjust(10,10,10), new Point(-11,-12), .95);
+    this.setMarker(MARKER_MULTI_CATCH, new ColorAdjust(10,10,10), new Point(-11,-12), .95, 0);
 }
 MultipleIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
 
@@ -933,7 +989,7 @@ MultipleIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
 //MultipleIntermediateThrowEvent definition
 function MultipleIntermediateThrowEvent() {
     IntermediateThrowEvent.call(this);
-    this.setMarker(MARKER_MULTI_THROW, new ColorAdjust(10,10,10), new Point(-11,-12), .95);
+    this.setMarker(MARKER_MULTI_THROW, new ColorAdjust(10,10,10), new Point(-11,-12), .95, 0);
 }
 MultipleIntermediateThrowEvent.prototype = IntermediateCatchEvent.prototype;
 
@@ -942,7 +998,7 @@ MultipleIntermediateThrowEvent.prototype = IntermediateCatchEvent.prototype;
 //ScalationIntermediateCatchEventEvent definition
 function ScalationIntermediateCatchEvent() {
     IntermediateCatchEvent.call(this);
-    this.setMarker(MARKER_SCALATION_CATCH, new ColorAdjust(10,10,10), new Point(-9.5,-12), 1);
+    this.setMarker(MARKER_SCALATION_CATCH, new ColorAdjust(10,10,10), new Point(-9.5,-12), 1, 0);
 }
 ScalationIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
 
@@ -951,7 +1007,7 @@ ScalationIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
 //ScalationIntermediateThrowEvent definition
 function ScalationIntermediateThrowEvent() {
     IntermediateThrowEvent.call(this);
-    this.setMarker(MARKER_SCALATION_THROW, new ColorAdjust(10,10,10), new Point(-9.5,-12), 1);
+    this.setMarker(MARKER_SCALATION_THROW, new ColorAdjust(10,10,10), new Point(-9.5,-12), 1, 0);
 }
 ScalationIntermediateThrowEvent.prototype = IntermediateCatchEvent.prototype;
 ScalationIntermediateThrowEvent.prototype.constructor = ScalationIntermediateThrowEvent;
@@ -961,7 +1017,7 @@ ScalationIntermediateThrowEvent.prototype.constructor = ScalationIntermediateThr
 //ParallelIntermediateCatchEventEvent definition
 function ParallelIntermediateCatchEvent() {
     IntermediateCatchEvent.call(this);
-    this.setMarker(MARKER_PARALLEL, new ColorAdjust(10,10,10), new Point(-10,-9.5), 1);
+    this.setMarker(MARKER_PARALLEL, new ColorAdjust(10,10,10), new Point(-10,-9.5), 1, 0);
 }
 ParallelIntermediateCatchEvent.prototype = IntermediateCatchEvent.prototype;
 
@@ -976,7 +1032,7 @@ function Activity() {
     this.STROKE_OVER = "#FF6060";   //Color de línea para el elemento en estado over
     this.STROKE_FOCUSED = "#98FF00";//Color de línea para el elemento en estado focused
 
-    this.shape = new Rectangle(0, 0, 100, 60, 5) ;//Figura principal del evento
+    this.shape = new Rectangle(0, 0, 100, 60, 5, 0) ;//Figura principal del evento
     //Gradiente para el relleno del evento
     this.gr = modeler.getContext().createLinearGradient(0,0,this.shape.getWidth(),0);
     this.gr.addColorStop(0,"#ffffff");
@@ -994,19 +1050,89 @@ Gateway.prototype = new GraphicalElement();
 Gateway.prototype.constructor = Gateway;
 function Gateway() {
     GraphicalElement.call(this);
-    this.STROKE_NORMAL = "#03689a"; //Color de línea para el elemento en estado normal
+    this.STROKE_NORMAL = "#cc9900"; //Color de línea para el elemento en estado normal
     this.STROKE_OVER = "#FF6060";   //Color de línea para el elemento en estado over
     this.STROKE_FOCUSED = "#98FF00";//Color de línea para el elemento en estado focused
 
-    this.shape = new Rectangle(0, 0, 100, 60, 5) ;//Figura principal del evento
+    this.shape = new Rectangle(0, 0, 40, 40, 0, 45); //Figura principal del evento
     //Gradiente para el relleno del evento
     this.gr = modeler.getContext().createLinearGradient(0,0,this.shape.getWidth(),0);
-    this.gr.addColorStop(0,"#ffffff");
-    this.gr.addColorStop(1,"#BFD2E0");
+    this.gr.addColorStop(0,"#FFFDE2");
+    this.gr.addColorStop(1,"#FFFAA6");
     
     this.shape.setFill(this.gr);
     this.shape.setStroke(this.STROKE_NORMAL);
     this.shape.setStrokeWidth(3.5);
+}
+
+//------------------------------------------------------------------------------
+
+//ExclusiveGateway definition
+ExclusiveGateway.prototype = Gateway.prototype;
+ExclusiveGateway.prototype.constructor = ExclusiveGateway;
+function ExclusiveGateway() {
+    Gateway.call(this);
+    this.setMarker(MARKER_CANCEL_THROW, new ColorAdjust(10,10,10), new Point(-16,-17), 2, 45);
+}
+
+//------------------------------------------------------------------------------
+
+//InclusiveGateway definition
+InclusiveGateway.prototype = Gateway.prototype;
+InclusiveGateway.prototype.constructor = InclusiveGateway;
+function InclusiveGateway() {
+    Gateway.call(this);
+    this.setMarker(MARKER_INCLUSIVE, new ColorAdjust(10,10,10), new Point(-19,-19), 2, 45);
+}
+
+//------------------------------------------------------------------------------
+
+//ExclusiveStartGateway definition
+ExclusiveStartGateway.prototype = Gateway.prototype;
+ExclusiveStartGateway.prototype.constructor = ExclusiveStartGateway;
+function ExclusiveStartGateway() {
+    Gateway.call(this);
+    this.setMarker(MARKER_EXCLUSIVESTART, new ColorAdjust(10,10,10), new Point(-19,-19), 2, 45);
+}
+
+//------------------------------------------------------------------------------
+
+//EventGateway definition
+EventGateway.prototype = Gateway.prototype;
+EventGateway.prototype.constructor = EventGateway;
+function EventGateway() {
+    Gateway.call(this);
+    this.setMarker(MARKER_EVENT, new ColorAdjust(10,10,10), new Point(-19,-19), 2, 45);
+}
+
+//------------------------------------------------------------------------------
+
+//ParallelGateway definition
+ParallelGateway.prototype = Gateway.prototype;
+ParallelGateway.prototype.constructor = ParallelGateway;
+function ParallelGateway() {
+    Gateway.call(this);
+    this.setMarker(MARKER_PARALLEL_THROW, new ColorAdjust(10,10,10), new Point(-18,-18), 2, 45);
+}
+
+//------------------------------------------------------------------------------
+
+//ParallelStartGateway definition
+ParallelStartGateway.prototype = Gateway.prototype;
+ParallelStartGateway.prototype.constructor = ParallelStartGateway;
+function ParallelStartGateway() {
+    Gateway.call(this);
+    this.setMarker(MARKER_PARALLELSTART, new ColorAdjust(10,10,10), new Point(-19,-19), 2, 45);
+}
+
+//------------------------------------------------------------------------------
+
+//ComplexGateway definition
+ComplexGateway.prototype = Gateway.prototype;
+ComplexGateway.prototype.constructor = ComplexGateway;
+function ComplexGateway() {
+    Gateway.call(this);
+    this.setMarker(MARKER_COMPLEX, new ColorAdjust(10,10,10), new Point(-16,-18), 1.7, 45);
 }
 
 //------------------------------------------------------------------------------
@@ -1036,7 +1162,7 @@ function UserTask() {
     Task.call(this);
     var mx = (-1*(this.shape.getWidth()/2))+5;
     var my = (-1*(this.shape.getHeight()/2)+5);
-    this.setMarker(MARKER_USER, new ColorAdjust(10,10,10), new Point(mx, my), 0.9);    
+    this.setMarker(MARKER_USER, new ColorAdjust(10,10,10), new Point(mx, my), 0.9, 0);    
 }
 
 //------------------------------------------------------------------------------
@@ -1048,7 +1174,7 @@ function ServiceTask() {
     Task.call(this);
     var mx = (-1*(this.shape.getWidth()/2))+5;
     var my = (-1*(this.shape.getHeight()/2)+5);
-    this.setMarker(MARKER_SERVICE, new ColorAdjust(10,10,10), new Point(mx, my), 0.7);    
+    this.setMarker(MARKER_SERVICE, new ColorAdjust(10,10,10), new Point(mx, my), 0.7, 0);    
 }
 
 //------------------------------------------------------------------------------
@@ -1060,7 +1186,7 @@ function ScriptTask() {
     Task.call(this);
     var mx = (-1*(this.shape.getWidth()/2))+5;
     var my = (-1*(this.shape.getHeight()/2)+5);
-    this.setMarker(MARKER_SCRIPT, new ColorAdjust(10,10,10), new Point(mx, my), 0.7);    
+    this.setMarker(MARKER_SCRIPT, new ColorAdjust(10,10,10), new Point(mx, my), 0.7, 0);
 }
 
 //------------------------------------------------------------------------------
@@ -1072,7 +1198,7 @@ function BusinessRuleTask() {
     Task.call(this);
     var mx = (-1*(this.shape.getWidth()/2))+5;
     var my = (-1*(this.shape.getHeight()/2)+5);
-    this.setMarker(MARKER_RULE, new ColorAdjust(10,10,10), new Point(mx, my), 0.8);    
+    this.setMarker(MARKER_RULE, new ColorAdjust(10,10,10), new Point(mx, my), 0.8, 0);
 }
 
 //------------------------------------------------------------------------------
@@ -1084,7 +1210,7 @@ function ManualTask() {
     Task.call(this);
     var mx = (-1*(this.shape.getWidth()/2))+5;
     var my = (-1*(this.shape.getHeight()/2)+5);
-    this.setMarker(MARKER_MANUAL, new ColorAdjust(10,10,10), new Point(mx, my), 0.8);
+    this.setMarker(MARKER_MANUAL, new ColorAdjust(10,10,10), new Point(mx, my), 0.8, 0);
 }
 
 //------------------------------------------------------------------------------
@@ -1096,7 +1222,7 @@ function SendTask() {
     Task.call(this);
     var mx = (-1*(this.shape.getWidth()/2))+5;
     var my = (-1*(this.shape.getHeight()/2)+5);
-    this.setMarker(MARKER_MESSAGE_THROW, new ColorAdjust(10,10,10), new Point(mx, my), 0.9);    
+    this.setMarker(MARKER_MESSAGE_THROW, new ColorAdjust(10,10,10), new Point(mx, my), 0.9, 0);
 }
 
 //------------------------------------------------------------------------------
@@ -1108,7 +1234,7 @@ function ReceiveTask() {
     Task.call(this);
     var mx = (-1*(this.shape.getWidth()/2))+5;
     var my = (-1*(this.shape.getHeight()/2)+5);
-    this.setMarker(MARKER_MESSAGE_CATCH, new ColorAdjust(10,10,10), new Point(mx, my), 0.9);    
+    this.setMarker(MARKER_MESSAGE_CATCH, new ColorAdjust(10,10,10), new Point(mx, my), 0.9, 0);
 }
 
 //------------------------------------------------------------------------------
@@ -1154,7 +1280,7 @@ Transaction.prototype.constructor = Transaction;
 function Transaction() {
     SubProcess.call(this);
     
-    this.shape2 = new Rectangle(0, 0, this.shape.getWidth() - 5, this.shape.getHeight() - 5, 5);
+    this.shape2 = new Rectangle(0, 0, this.shape.getWidth() - 5, this.shape.getHeight() - 5, 5, 0);
     this.shape2.setFill(this.gr);
     this.shape2.setStroke(this.STROKE_NORMAL);
     this.shape2.setStrokeWidth(2);
@@ -1202,7 +1328,7 @@ function ManualCallActivity() {
     this.shape.setStrokeWidth(6);
     var mx = (-1*(this.shape.getWidth()/2))+5;
     var my = (-1*(this.shape.getHeight()/2)+5);
-    this.setMarker(MARKER_MANUAL, new ColorAdjust(10,10,10), new Point(mx, my), 0.8);
+    this.setMarker(MARKER_MANUAL, new ColorAdjust(10,10,10), new Point(mx, my), 0.8, 0);
 }
 
 //------------------------------------------------------------------------------
@@ -1215,7 +1341,7 @@ function BusinessRuleCallActivity() {
     this.shape.setStrokeWidth(6);
     var mx = (-1*(this.shape.getWidth()/2))+5;
     var my = (-1*(this.shape.getHeight()/2)+5);
-    this.setMarker(MARKER_RULE, new ColorAdjust(10,10,10), new Point(mx, my), 0.8);
+    this.setMarker(MARKER_RULE, new ColorAdjust(10,10,10), new Point(mx, my), 0.8, 0);
 }
 
 //------------------------------------------------------------------------------
@@ -1228,7 +1354,7 @@ function ScriptCallActivity() {
     this.shape.setStrokeWidth(6);
     var mx = (-1*(this.shape.getWidth()/2))+5;
     var my = (-1*(this.shape.getHeight()/2)+5);
-    this.setMarker(MARKER_SCRIPT, new ColorAdjust(10,10,10), new Point(mx, my), 0.7);
+    this.setMarker(MARKER_SCRIPT, new ColorAdjust(10,10,10), new Point(mx, my), 0.7, 0);
 }
 
 //------------------------------------------------------------------------------
@@ -1241,7 +1367,7 @@ function UserCallActivity() {
     this.shape.setStrokeWidth(6);
     var mx = (-1*(this.shape.getWidth()/2))+5;
     var my = (-1*(this.shape.getHeight()/2)+5);
-    this.setMarker(MARKER_USER, new ColorAdjust(10,10,10), new Point(mx, my), 0.9);
+    this.setMarker(MARKER_USER, new ColorAdjust(10,10,10), new Point(mx, my), 0.9, 0);
 }
 
 //------------------------------------------------------------------------------
@@ -1273,6 +1399,7 @@ function Modeler() {
     this.stylePaddingTop = 0;
     this.styleBorderLeft = 0;
     this.styleBorderTop = 0;
+    this.useGrid = false;
 }
 
 Modeler.prototype.getCanvasElement = function() {return this.drawingCanvas;}
@@ -1299,7 +1426,9 @@ Modeler.prototype.setSelectedElement = function (ge) {
 //Agrega un elemento al conjunto de elementos seleccionados
 Modeler.prototype.unSelectAll = function() {
     for (var i = this.childs.length - 1; i >= 0; i--) {
-        this.childs[i].normal();
+        if (this.childs[i] instanceof GraphicalElement) {
+            this.childs[i].normal();
+        }
     }
 }
 
@@ -1307,8 +1436,10 @@ Modeler.prototype.unSelectAll = function() {
 //Regresa todos los elementos del modelo a su estatus normal
 Modeler.prototype.unHoverAll = function() {
     for (var i = this.childs.length - 1; i >= 0; i--) {
-        if (!this.childs[i].selected) {
-            this.childs[i].normal();
+        if (this.childs[i] instanceof GraphicalElement) {
+            if (!this.childs[i].selected) {
+                this.childs[i].normal();
+            }
         }
     }
 }
@@ -1328,8 +1459,10 @@ Modeler.prototype.removeSelectedElement = function (ge) {
 //Obtiene el elemento del diagrama que se encuentra bajo el puntero del ratón
 Modeler.prototype.getOverElement = function(x, y) {
     for (var i = this.childs.length - 1; i >= 0; i--) {
-        if (this.childs[i].mouseInBounds(x, y)) {
-            return this.childs[i];
+        if (this.childs[i] instanceof GraphicalElement) {
+            if (this.childs[i].mouseInBounds(x, y)) {
+                return this.childs[i];
+            }
         }
     }
     return null;
@@ -1339,6 +1472,7 @@ Modeler.prototype.getOverElement = function(x, y) {
 //Inicializa el modelador de procesos de negocio
 Modeler.prototype.init = function(canvasElement) {
     this.drawingCanvas = document.getElementById(canvasElement);
+    this.useGrid = true;
 
     if(this.drawingCanvas.getContext) {
         this.context = this.drawingCanvas.getContext('2d');
@@ -1425,15 +1559,19 @@ Modeler.prototype.mousePressed = function(e) {
     
     if (mouseButton == "LEFT") {
         if (this.selectedTool != null) {
-            this.selectedTool.setCoords(new Point(this.cx, this.cy));
+            if (this.selectedTool instanceof GraphicalElement) {
+                this.selectedTool.setCoords(new Point(this.cx, this.cy));
+            }
             this.add(this.selectedTool);
             this.selectedTool.render(this.context);
             this.selectedTool = null;
         } else {
             if (ele != null) {
                 ele.mousePressed(e);
-                this.dx = this.cx - ele.getCoords().x;
-                this.dy = this.cy - ele.getCoords().y;
+                if (ele instanceof GraphicalElement) {
+                    this.dx = this.cx - ele.getCoords().x;
+                    this.dy = this.cy - ele.getCoords().y;
+                }
             }
         }
     }
@@ -1445,14 +1583,23 @@ Modeler.prototype.mouseMoved = function(e) {
     var ele = this.getOverElement(mouseCoords.x, mouseCoords.y);
     
     if (ele != null) {
-        ele.mouseMoved(e);        
+        ele.mouseMoved(e);
     } else {
         this.unHoverAll();
     }
     
     for (var i = this.childs.length - 1; i >= 0; i--) {
         if (this.childs[i].isDragging) {
-            this.childs[i].setCoords(new Point(this.cx + this.dx, this.cy + this.dy));
+            var ax = this.dx + this.cx;
+            var ay = this.dy + this.cy;
+
+            if ((ax-this.childs[i].getWidth()/2)<=0) {
+                ax = this.childs[i].getWidth()/2;
+            }
+            if ((ay-this.childs[i].getHeight()/2)<=0) {
+                ay = this.childs[i].getHeight()/2;
+            }
+            this.childs[i].setCoords(new Point(ax, ay));
         }
     }
     this.render();
@@ -1494,4 +1641,84 @@ function getMousePressedButton(e) {
         return (e.which == 1) ? "LEFT" :
                 ((e.which == 2) ? "MIDDLE" : "RIGHT");
     }
+}
+
+function degreesToRadians (degs) {
+    return degs * (Math.PI / 180);
+}
+
+function generateRGBKs(img) {
+    var w = img.width;
+    var h = img.height;
+    var rgbks = [];
+
+    var canvas = document.createElement("canvas");
+    canvas.width = w;
+    canvas.height = h;
+
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage( img, 0, 0 );
+
+    var pixels = ctx.getImageData( 0, 0, w, h ).data;
+
+    // 4 is used to ask for 3 images: red, green, blue and
+    // black in that order.
+    for ( var rgbI = 0; rgbI < 4; rgbI++ ) {
+        var canvas = document.createElement("canvas");
+        canvas.width  = w;
+        canvas.height = h;
+
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage( img, 0, 0 );
+        var to = ctx.getImageData( 0, 0, w, h );
+        var toData = to.data;
+
+        for (
+                var i = 0, len = pixels.length;
+                i < len;
+                i += 4
+        ) {
+            toData[i  ] = (rgbI === 0) ? pixels[i  ] : 0;
+            toData[i+1] = (rgbI === 1) ? pixels[i+1] : 0;
+            toData[i+2] = (rgbI === 2) ? pixels[i+2] : 0;
+            toData[i+3] =                pixels[i+3]    ;
+        }
+
+        ctx.putImageData( to, 0, 0 );
+
+        // image is _slightly_ faster then canvas for this, so convert
+        var imgComp = new Image();
+        imgComp.src = canvas.toDataURL();
+
+        rgbks.push( imgComp );
+    }
+    return rgbks;
+}
+
+function generateTintImage(img, rgbks, red, green, blue) {
+    var buff = document.createElement( "canvas" );
+    buff.width  = img.width;
+    buff.height = img.height;
+
+    var ctx  = buff.getContext("2d");
+
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'copy';
+    ctx.drawImage( rgbks[3], 0, 0 );
+
+    ctx.globalCompositeOperation = 'lighter';
+    if ( red > 0 ) {
+        ctx.globalAlpha = red   / 255.0;
+        ctx.drawImage( rgbks[0], 0, 0 );
+    }
+    if ( green > 0 ) {
+        ctx.globalAlpha = green / 255.0;
+        ctx.drawImage( rgbks[1], 0, 0 );
+    }
+    if ( blue > 0 ) {
+        ctx.globalAlpha = blue  / 255.0;
+        ctx.drawImage( rgbks[2], 0, 0 );
+    }
+
+    return buff;
 }
