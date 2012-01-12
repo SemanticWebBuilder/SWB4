@@ -22,21 +22,16 @@
  **/
 package org.semanticwb.resource.office.sem;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import javax.servlet.http.*;
-import jena.version;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.office.comunication.OfficeDocument;
 import org.semanticwb.platform.SemanticObject;
@@ -166,6 +161,8 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
             }
         });
         String prefix_v3 = "v3_";
+        if(files!=null && files.length>0)
+        {
         for (File f : files)
         {
             if (f.exists())
@@ -194,6 +191,7 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
             }
 
 
+        }
         }
 
 
