@@ -355,6 +355,8 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
                         pos = content.indexOf(text1);
                     }
                     content = content.replace("<![if !vml]>", "");
+                    content = content.replace("<![endif]>", "");
+
                     out = new FileOutputStream(f);
                     out.write(content.getBytes());
                     out.flush();
