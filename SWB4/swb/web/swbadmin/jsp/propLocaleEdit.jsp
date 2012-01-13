@@ -19,6 +19,21 @@
     SemanticObject sobj=ont.getSemanticObject(suri);
     SemanticProperty sprop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(prop);
     SemanticModel model=sobj.getModel();
+    
+    if(!model.getModelObject().instanceOf(WebSite.sclass))
+    {
+        SWBModel rep=(SWBModel)model.getModelObject().getGenericInstance();
+        Iterator<WebSite> wsit=SWBContext.listWebSites();
+        while(wsit.hasNext())
+        {
+            WebSite site =  wsit.next();
+            if(site.hasSubModel(rep))
+            {
+                model=site.getSemanticObject().getModel();
+            }
+        }
+        //out.println(rep.getParentWebSite());
+    }    
 
     //System.out.println("suri:"+suri);
     //System.out.println("prop:"+prop);
@@ -35,20 +50,7 @@
   
         ret.append(" <fieldset>");
         ret.append("    <table>");
-        if(!model.getModelObject().instanceOf(WebSite.sclass))
-        {
-            SWBModel rep=(SWBModel)model.getModelObject().getGenericInstance();
-            Iterator<WebSite> wsit=SWBContext.listWebSites();
-            while(wsit.hasNext())
-            {
-                WebSite site =  wsit.next();
-                if(site.hasSubModel(rep))
-                {
-                    model=site.getSemanticObject().getModel();
-                }
-            }
-            //out.println(rep.getParentWebSite());
-        }
+
         Iterator<SemanticObject> it=model.listInstancesOfClass(Language.sclass);
         while(it.hasNext())
         {
