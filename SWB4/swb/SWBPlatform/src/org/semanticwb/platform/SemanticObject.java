@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.semanticwb.base.util.HashMapCache;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
@@ -58,6 +59,10 @@ public class SemanticObject
 
     /** The m_objs. */
     private static Map<String, SemanticObject>m_objs=new ConcurrentHashMap<String, SemanticObject>();
+    
+    /** The m_no_objs. */
+    private static Map<String, Object>m_no_objs=new HashMapCache<String, Object>(1000);
+    
     
     /** The has cache. */
     private static boolean hasCache=true;        
@@ -107,12 +112,20 @@ public class SemanticObject
             wrapperToPrimitive.put( Float.class, Float.TYPE );
             wrapperToPrimitive.put( Double.class, Double.TYPE );
     }    
-    
+
+    /**
+     * Creacion de un SemanticObject Virtual
+     */
     public SemanticObject()             
     {
         m_virtual=true;
     }
 
+    /**
+     * Creacion de un SemanticObject Virtual
+     * @param smodel
+     * @param scls 
+     */
     public SemanticObject(SemanticModel smodel, SemanticClass scls)             
     {
         m_model=smodel;
@@ -122,14 +135,27 @@ public class SemanticObject
         m_props.add(smodel.getRDFModel().createStatement(m_res, RDF.type, scls.getOntClass()));           
     }
     
+    /**
+     * Creacion de un nuevo SemanticObject
+     * @param smodel
+     * @param res
+     * @param scls 
+     */
     public SemanticObject(SemanticModel smodel, Resource res, SemanticClass scls) 
     {
         m_model=smodel;
         m_res=res;        
         m_cls=scls;
-        m_props.add(smodel.getRDFModel().createStatement(res, RDF.type, scls.getOntClass()));           
+        m_props.add(smodel.getRDFModel().createStatement(res, RDF.type, scls.getOntClass())); 
+        if(res!=null)m_no_objs.remove(res.getURI());
     }    
     
+    /**
+     * Carega de un semanticObject de DB
+     * @param smodel
+     * @param res
+     * @param stit 
+     */
     public SemanticObject(SemanticModel smodel, Resource res, StmtIterator stit) 
     {
         m_model=smodel;
@@ -212,6 +238,11 @@ public class SemanticObject
     
     /*********************************************** statics ****************************************************************/    
     
+    public static void clearNotFoundURI(String uri)
+    {
+        m_no_objs.remove(uri);
+    }
+    
     /**
      * Carga todos los datos de la ba
      */
@@ -290,7 +321,7 @@ public class SemanticObject
             
             if(semanticObject.m_props.size()>0)
             {
-                m_objs.put(semanticObject.getURI(), semanticObject);
+               cacheSemanticObject(semanticObject);
             }
         }
     }
@@ -382,7 +413,7 @@ public class SemanticObject
         if(null==uri)return null;
         //if(null==uri || uri.length()>0)return null;
         SemanticObject ret=getSemanticObject(uri);
-        if(ret==null)
+        if(ret==null && !m_no_objs.containsKey(uri))
         {
             //System.out.println("model0:"+uri+" uri:"+uri+" base:"+smodel);        
             synchronized(SemanticObject.class)
@@ -461,11 +492,10 @@ public class SemanticObject
                         }
 
 
-                    }
-                    
-                    cacheSemanticObject(ret);
-                    
+                    }                    
+                    cacheSemanticObject(ret);                    
                 }
+                if(ret==null)m_no_objs.put(uri, uri);
             }
         }
         return ret;
@@ -491,6 +521,7 @@ public class SemanticObject
     {
         //System.out.println("clearCache");
         m_objs.clear();
+        m_no_objs.clear();
     }
 
     /**
