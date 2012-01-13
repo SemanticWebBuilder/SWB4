@@ -30,6 +30,7 @@
 package org.semanticwb.portal.api;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
@@ -50,7 +51,7 @@ public class SWBResourceCachedMgr
     private static Logger log = SWBUtils.getLogger(SWBResourceCachedMgr.class);
 
     /** The cache. */
-    private Hashtable cache;
+    private ConcurrentHashMap cache;
     
     /** The mrulist. */
     private LinkedList mrulist;
@@ -75,7 +76,7 @@ public class SWBResourceCachedMgr
     public SWBResourceCachedMgr(int max)
     {
         log.event("Initializing SWBResourceCachedMgr: " + max);
-        cache = new Hashtable();
+        cache = new ConcurrentHashMap();
         mrulist = new LinkedList();
         cachesize = max;
     }
