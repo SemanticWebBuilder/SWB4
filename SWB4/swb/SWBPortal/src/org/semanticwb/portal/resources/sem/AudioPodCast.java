@@ -298,15 +298,28 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
         response.setHeader("Cache-Control","no-cache");
         response.setHeader("Pragma","no-cache");
         
-        String uri = request.getParameter("uri");
-        AudioFile audiofile = (AudioFile)SemanticObject.createSemanticObject(uri).createGenericInstance();
-        if(audiofile!=null) {
-            double rank = audiofile.getRank() + 1;
-            audiofile.setRank(rank);
+        PrintWriter out = response.getWriter();
+        
+        HttpSession session = request.getSession(true);
+        final String uri = request.getParameter("uri");
+        final String rid = getResourceBase().getId();
+        try {
             DecimalFormat decf = new DecimalFormat("###");
-            response.getWriter().println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(paramRequest.Call_DIRECT).setParameter("uri", audiofile.getEncodedURI())+"','rank')\" title=\""+paramRequest.getLocaleString("like")+"\">"+paramRequest.getLocaleString("like")+"</a></p>");
-            //out.println();
-            
+            AudioFile audiofile = (AudioFile)SemanticObject.createSemanticObject(uri).createGenericInstance();
+            if(session.getAttribute(rid)!=null)
+               out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(paramRequest.Call_DIRECT).setParameter("uri", audiofile.getEncodedURI())+"','rank')\" title=\""+paramRequest.getLocaleString("like")+"\">"+paramRequest.getLocaleString("like")+"</a></p>");
+            else {
+                synchronized(this) {
+                    audiofile.setRank(audiofile.getRank()+1);
+                }
+                session.setAttribute(rid,rid);
+                try {
+                    out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(paramRequest.Call_DIRECT).setParameter("uri", audiofile.getEncodedURI())+"','rank')\" title=\""+paramRequest.getLocaleString("like")+"\">"+paramRequest.getLocaleString("like")+"</a></p>");
+                }catch(SWBResourceException swbe) {
+                    out.println("  <p>"+decf.format(audiofile.getRank())+" Me gusta <a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(paramRequest.Call_DIRECT).setParameter("uri", audiofile.getEncodedURI())+"','rank')\" title=\"Me gusta\">Me gusta</a></p>");
+                }
+            }
+        }catch(Exception e) {
         }
     }
 
