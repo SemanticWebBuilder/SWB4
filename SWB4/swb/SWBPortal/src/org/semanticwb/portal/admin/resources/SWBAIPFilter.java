@@ -263,7 +263,7 @@ public class SWBAIPFilter extends GenericResource
         StringBuffer ret = new StringBuffer();
         
         ret.append("<script type=\"text/javascript\">\n\ndojo.require(\"dojo.parser\");\ndijit.byId('swbDialog').hide();\nshowStatus('"+paramRequest.getLocaleString("ipMsgadd")+"');\n");
-        ret.append("addNewTab('"+request.getParameter("suri")+"','/"+SWBPlatform.getContextPath()+"swbadmin/jsp/objectTab.jsp','"+request.getParameter("label")+"');\n");
+        ret.append("addNewTab('"+request.getParameter("suri")+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp','"+request.getParameter("label")+"');\n");
         ret.append("</script>");
         response.getWriter().write(ret.toString());
     }
