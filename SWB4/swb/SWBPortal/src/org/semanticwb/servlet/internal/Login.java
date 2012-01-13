@@ -309,22 +309,22 @@ public class Login implements InternalServlet
 
             } catch (Exception ex)
             {
-                try { 
-                    if (SWBPlatform.getSecValues().isForceChage() || SWBPlatform.getSecValues().getExpires()>0)
+                try {
+                    User tmpuser = dparams.getWebPage().getWebSite().getUserRepository().getUserByLogin(request.getParameter("wb_username"));
+
+                    if (null!=tmpuser && (tmpuser.isRequestChangePassword() || 
+                            SWBPlatform.getSecValues().isForceChage() || SWBPlatform.getSecValues().getExpires()>0))
                     {
-                        User tmpuser = dparams.getWebPage().getWebSite().getUserRepository().getUserByLogin(request.getParameter("wb_username"));
-                        if (null!=tmpuser){
-                            String alg = tmpuser.getPassword().substring(1,tmpuser.getPassword().indexOf("}"));
-                            String tmpPass = request.getParameter("wb_password");
-                            if (SWBPlatform.getSecValues().isEncrypt()) tmpPass = SWBUtils.CryptoWrapper.decryptPassword(tmpPass,
-                                    SWBPortal.getUserMgr().getSessionKey(request));
-                            if (tmpuser.getPassword().equals(
-                                    SWBUtils.CryptoWrapper.comparablePassword(
-                                    tmpPass, alg)) && tmpuser.isRequestChangePassword())
-                            {
-                                formChangePwd(request, response, dparams, tmpuser, "Debe actualizar su contraseña.");
-                                return;
-                            }
+                        String alg = tmpuser.getPassword().substring(1,tmpuser.getPassword().indexOf("}"));
+                        String tmpPass = request.getParameter("wb_password");
+                        if (SWBPlatform.getSecValues().isEncrypt()) tmpPass = SWBUtils.CryptoWrapper.decryptPassword(tmpPass,
+                                SWBPortal.getUserMgr().getSessionKey(request));
+                        if (tmpuser.getPassword().equals(
+                                SWBUtils.CryptoWrapper.comparablePassword(
+                                tmpPass, alg)) && tmpuser.isRequestChangePassword())
+                        {
+                            formChangePwd(request, response, dparams, tmpuser, "Debe actualizar su contraseña.");
+                            return;
                         }
                     }
                 } catch (Exception ne)
