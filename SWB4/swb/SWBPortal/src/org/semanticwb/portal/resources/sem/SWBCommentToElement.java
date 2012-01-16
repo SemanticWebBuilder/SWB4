@@ -205,9 +205,6 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         out.println("</script> ");
         
         String comment = request.getParameter("cmnt_comment")==null?"":request.getParameter("cmnt_comment");
-        String name = request.getParameter("name")==null?"":request.getParameter("name");
-        String email = request.getParameter("email")==null?"":request.getParameter("email");
-        
         out.println("<div class=\"swb-comentario-sem\">");
         out.println("<h2>"+paramRequest.getLocaleString("add")+"</h2>");
         out.println("<form name=\"cmnt\" id=\"cmnt\" action=\""+rUrl+"\" method=\"post\">\n");
