@@ -328,7 +328,7 @@ public class WebPage extends WebPageBase
         }
 
         WebPage tphome = null;
-        if (home != null)
+        if (home != null && home.trim().length()>0)
         {
             tphome = getWebSite().getWebPage(home);
             if (tphome == null)
