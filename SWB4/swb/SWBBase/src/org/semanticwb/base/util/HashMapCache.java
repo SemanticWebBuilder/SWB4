@@ -58,6 +58,7 @@ public class HashMapCache<K extends Object, V extends Object> implements Map<K,V
     @Override
     public boolean containsKey(Object obj)
     {
+        //System.out.println("containsKey:"+obj+" "+map.containsKey(obj));
         return map.containsKey(obj);
     }
 
@@ -76,6 +77,7 @@ public class HashMapCache<K extends Object, V extends Object> implements Map<K,V
     @Override
     public V put(K k, V v)
     {
+        //System.out.println("put:"+k+" "+v);        
         V r=map.put(k, v);
         linked.add(k);
         if(map.size()>maxSize)
