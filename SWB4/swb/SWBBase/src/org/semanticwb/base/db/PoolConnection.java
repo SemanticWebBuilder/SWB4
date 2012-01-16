@@ -179,9 +179,9 @@ public class PoolConnection implements java.sql.Connection {
         if(description==null || description.length()==0)
         {
             String ret="";
-            for(int x=stack.length-5;x<stack.length;x++)
+            for(int x=0;x<stack.length;x++)
             {
-                if(x>=0)ret+=stack[x].toString();
+                if(x>=0)ret+=stack[x].toString()+"/n";
             }
             return ret;
         }
