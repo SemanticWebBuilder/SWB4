@@ -3,14 +3,20 @@ package org.semanticwb.portal.resources.sem;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Iterator;
+import java.util.Locale;
 import javax.servlet.http.*;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.SWBComparator;
@@ -20,6 +26,7 @@ import org.semanticwb.portal.api.*;
 
 public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.AudioPodCastBase 
 {
+    private static final Logger log = SWBUtils.getLogger(AudioPodCast.class);
     private static final int DEFAULT_BUFFER_SIZE = 2048; // 2KB.
     public static final String Mode_VOTE = "vote";
 
@@ -69,24 +76,70 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
             }
             final String contentURL = surl;
             
+            SimpleDateFormat pd = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", new Locale(lang));
+            
             Iterator<AudioFile> resources = AudioFile.ClassMgr.listAudioFiles(base.getWebSite());
             resources = SWBComparator.sortByCreated(resources, false);
             if(resources.hasNext()) {
-                out.println("<div id=\"contenido\">");
+                out.println("<div id=\"contenido_podcast\">");
+                out.println("<h2>"+base.getDisplayTitle(lang)+"</h2>");
+                out.println("<h3>"+paramRequest.getLocaleString("latest") +"</h3>");
                 out.println("<ul>");
-                while(resources.hasNext()) {
+                for(int i=0; i<3&&resources.hasNext(); i++) {
                     AudioFile audiofile = resources.next();
-                    String resourceURL = SWBPortal.getWebWorkPath()+audiofile.getWorkPath()+"/"+audiofile.getFilename();
+
+                    
+String resourceURL = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+SWBPortal.getContextPath()+SWBPortal.getWebWorkPath()+audiofile.getWorkPath()+"/"+URLDecoder.decode(audiofile.getFilename(), "UTF-8");
+URL url = new URL(resourceURL);
+File f=new File(url.getFile());
+System.out.println("file="+f+", espacio total="+f.getTotalSpace()+", espacio usado="+f.getUsableSpace());
+
+
                     out.println("<li>");
                     out.println(" <div class=\"caja\">");
                     out.println("  <h4>"+audiofile.getDisplayTitle(lang)+"</h4>");
-                    out.println("  <div class=\"caja_texto\">"+audiofile.getDisplayDescription(lang)+"</div>");
-                    out.println("  <p class=\"escuchar_mp3\"><a href=\""+contentURL+"?uri="+audiofile.getEncodedURI()+"\" title=\""+audiofile.getDisplayTitle(lang)+"\">"+paramRequest.getLocaleString("listen")+"</a></p>");
-                    out.println("  <p class=\"descargar_mp3\"><a href=\""+directURL.setParameter("uri", audiofile.getURI())+"\" title=\""+audiofile.getDisplayTitle(lang)+"\">"+paramRequest.getLocaleString("download")+"</a></p>");
+                    out.println("  <div class=\"caja_texto\"><p>"+audiofile.getDisplayDescription(lang)+"</p></div>");
+                    out.println("  <div class=\"caja_texto\">");
+                    out.print("    <p class=\"escuchar_mp3\">");
+                    out.print("      <a href=\""+contentURL+"?uri="+audiofile.getEncodedURI()+"\" title=\""+audiofile.getDisplayTitle(lang)+"\">"+paramRequest.getLocaleString("listen")+"</a>");
+                    try {
+                        out.print("  &nbsp;<span>"+paramRequest.getLocaleString("duration")+":&nbsp;"+sdf.format(pd.parse(audiofile.getDuration()))+"</span>");
+                    }catch(ParseException pe) {
+                        log.error(pe);
+                    }
+                    out.println("  </p>");
+                    out.println("  <p class=\"descargar_mp3\"><a href=\""+directURL.setParameter("uri", audiofile.getURI())+"\" title=\""+audiofile.getDisplayTitle(lang)+"\">"+paramRequest.getLocaleString("download")+"</a>&nbsp;<span>"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getFilename().substring(audiofile.getFilename().lastIndexOf(".")+1)+"</span></p>");
+                    out.println("  </div>");
                     out.println(" </div>");
                     out.println("</li>");
                 }
                 out.println("</ul>");
+                if(resources.hasNext()) {
+                    out.println("<h3>"+paramRequest.getLocaleString("previous") +"</h3>");
+                    out.println("<ul>");
+                    while(resources.hasNext()) {
+                        AudioFile audiofile = resources.next();          
+                        out.println("<li>");
+                        out.println(" <div class=\"caja\">");
+                        out.println("  <h4>"+audiofile.getDisplayTitle(lang)+"</h4>");
+                        out.println("  <div class=\"caja_texto\"><p>"+audiofile.getDisplayDescription(lang)+"</p></div>");
+                        out.println("  <div class=\"caja_texto\">");
+                        out.print("    <p class=\"escuchar_mp3\">");
+                        out.print("      <a href=\""+contentURL+"?uri="+audiofile.getEncodedURI()+"\" title=\""+audiofile.getDisplayTitle(lang)+"\">"+paramRequest.getLocaleString("listen")+"</a>");
+                        try {
+                            out.print("  &nbsp;<span>"+paramRequest.getLocaleString("duration")+":&nbsp;"+sdf.format(pd.parse(audiofile.getDuration()))+"</span>");
+                        }catch(ParseException pe) {
+                            log.error(pe);
+                        }
+                        out.println("  </p>");
+                        out.println("  <p class=\"descargar_mp3\"><a href=\""+directURL.setParameter("uri", audiofile.getURI())+"\" title=\""+audiofile.getDisplayTitle(lang)+"\">"+paramRequest.getLocaleString("download")+"</a><span>"+paramRequest.getLocaleString("format")+"&nbsp;"+audiofile.getFilename().substring(audiofile.getFilename().lastIndexOf(".")+1)+"</span></p>");
+                        out.println("  </div>");
+                        out.println(" </div>");
+                        out.println("</li>");
+                    }
+                    out.println("</ul>");
+                }
                 out.println("</div>");
             }
         }else {
@@ -195,10 +248,21 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
     
     
     out.println(" <div id=\"rank\">");
-    DecimalFormat decf = new DecimalFormat("###");
-    out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(paramRequest.Call_DIRECT).setParameter("uri", audiofile.getEncodedURI())+"','rank')\" title=\""+paramRequest.getLocaleString("like")+"\">"+paramRequest.getLocaleString("like")+"</a></p>");
-    out.println(" </div>");
     
+    HttpSession session = request.getSession(true);
+    final String rid = base.getId();
+    DecimalFormat decf = new DecimalFormat("###");
+    if(session.getAttribute(rid)!=null)
+        out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"</p>");
+    else {
+        session.setAttribute(rid,rid);
+        try {
+            out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(paramRequest.Call_DIRECT).setParameter("uri", audiofile.getEncodedURI())+"','rank')\" title=\""+paramRequest.getLocaleString("like")+"\">"+paramRequest.getLocaleString("like")+"</a></p>");
+        }catch(SWBResourceException swbe) {
+            out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;Me gusta&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(paramRequest.Call_DIRECT).setParameter("uri", audiofile.getEncodedURI())+"','rank')\" title=\"Me gusta\">Me gusta</a></p>");
+        }
+    }
+    out.println(" </div>");
     
     out.println(" <div id=\"descargar\">");
     out.println("  <p><img src=\"img/descargar.png\" width=\"21\" height=\"17\" align=\"left\" /></p>");
@@ -276,10 +340,8 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
     //            response.setContentType("application/octet-stream");
 
             response.setHeader("Content-Disposition", "attachment; filename=" + filename);
-
-            //String fileURL = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+SWBPortal.getContextPath()+"/work"+docto.getWorkPath()+"/"+filename;
-            String resourceURL =  request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+SWBPortal.getContextPath()+SWBPortal.getWebWorkPath()+audiofile.getWorkPath()+"/"+URLDecoder.decode(audiofile.getFilename(), "UTF-8");
-            URL url = new URL(resourceURL);
+            String resourceURL = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+SWBPortal.getContextPath()+SWBPortal.getWebWorkPath()+audiofile.getWorkPath()+"/"+URLDecoder.decode(audiofile.getFilename(), "UTF-8");
+            URL url = new URL(resourceURL);File f=new File(url.getFile());
             BufferedInputStream  bis = new BufferedInputStream(url.openStream());
             BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
             byte[] buff = new byte[DEFAULT_BUFFER_SIZE];
@@ -307,30 +369,30 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
             DecimalFormat decf = new DecimalFormat("###");
             AudioFile audiofile = (AudioFile)SemanticObject.createSemanticObject(uri).createGenericInstance();
             if(session.getAttribute(rid)!=null)
-               out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(paramRequest.Call_DIRECT).setParameter("uri", audiofile.getEncodedURI())+"','rank')\" title=\""+paramRequest.getLocaleString("like")+"\">"+paramRequest.getLocaleString("like")+"</a></p>");
+               out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"</p>");
             else {
                 synchronized(this) {
                     audiofile.setRank(audiofile.getRank()+1);
                 }
                 session.setAttribute(rid,rid);
                 try {
-                    out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(paramRequest.Call_DIRECT).setParameter("uri", audiofile.getEncodedURI())+"','rank')\" title=\""+paramRequest.getLocaleString("like")+"\">"+paramRequest.getLocaleString("like")+"</a></p>");
+                    out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"</p>");
                 }catch(SWBResourceException swbe) {
-                    out.println("  <p>"+decf.format(audiofile.getRank())+" Me gusta <a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(paramRequest.Call_DIRECT).setParameter("uri", audiofile.getEncodedURI())+"','rank')\" title=\"Me gusta\">Me gusta</a></p>");
+                    out.println("  <p>"+decf.format(audiofile.getRank())+" Me gusta</p>");
                 }
             }
         }catch(Exception e) {
         }
     }
 
-    @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        String uri = request.getParameter("uri");
-        AudioFile audiofile = (AudioFile)SemanticObject.createSemanticObject(uri).createGenericInstance();
-        if(audiofile!=null) {
-            response.setRenderParameter("uri", uri);
-            double rank = audiofile.getRank() + 1;
-            audiofile.setRank(rank);
-        }
-    }
+//    @Override
+//    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+//        String uri = request.getParameter("uri");
+//        AudioFile audiofile = (AudioFile)SemanticObject.createSemanticObject(uri).createGenericInstance();
+//        if(audiofile!=null) {
+//            response.setRenderParameter("uri", uri);
+//            double rank = audiofile.getRank() + 1;
+//            audiofile.setRank(rank);
+//        }
+//    }
 }
