@@ -88,14 +88,10 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
                 out.println("<ul>");
                 for(int i=0; i<3&&resources.hasNext(); i++) {
                     AudioFile audiofile = resources.next();
-
-                    
 //String resourceURL = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+SWBPortal.getContextPath()+SWBPortal.getWebWorkPath()+audiofile.getWorkPath()+"/"+URLDecoder.decode(audiofile.getFilename(), "UTF-8");
 //URL url = new URL(resourceURL);
 //File f=new File(url.getFile());
 //System.out.println("file="+f+", espacio total="+f.getTotalSpace()+", espacio usado="+f.getUsableSpace());
-
-
                     out.println("<li>");
                     out.println(" <div class=\"caja\">");
                     out.println("  <h4>"+audiofile.getDisplayTitle(lang)+"</h4>");
