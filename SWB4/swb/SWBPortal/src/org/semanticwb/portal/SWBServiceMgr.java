@@ -421,13 +421,21 @@ public class SWBServiceMgr implements SemanticObserver, SemanticTSObserver, SWBO
     public void processCacheService(SemanticObject obj, Statement stmt, String action)            
     {
         log.trace("processCacheService: obj:" + obj + " stmt:" + stmt +" "+action);  
-        //System.out.println("processCacheService:"+uri+" puri:" + puri + " node:;" + node+" "+action);  
+        //System.out.println("processCacheService:"+obj+" stmt:" + stmt + " action:" + action);  
         
         if(obj!=null)
         {            
             Property prop=null;
             if(stmt!=null)prop=stmt.getPredicate();
-
+            
+            if(prop==null && obj.instanceOf(IPFilter.sclass))
+            {
+                WebSite site=SWBContext.getWebSite(obj.getModel().getName());
+                if(site!=null)
+                {
+                    site.clearCache();
+                }
+            }             
             
             if(obj.instanceOf(IPFilter.sclass) && prop!=null && prop.equals(IPFilter.swb_ipFilterNumber.getRDFProperty()))
             {
@@ -436,8 +444,7 @@ public class SWBServiceMgr implements SemanticObserver, SemanticTSObserver, SWBO
                 {
                     site.clearCache();
                 }
-            }                
-            
+            }                            
             
             if(action.equals(SemanticObject.ACT_ADD))
             {
@@ -478,8 +485,7 @@ public class SWBServiceMgr implements SemanticObserver, SemanticTSObserver, SWBO
                 if(prop==null && obj.instanceOf(Resource.sclass))
                 {
                     SWBPortal.getResourceMgr().removeResource(obj.getURI());
-                }
-                
+                }                               
             }
         }
     }    

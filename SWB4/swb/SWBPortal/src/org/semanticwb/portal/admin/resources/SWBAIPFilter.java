@@ -76,7 +76,9 @@ public class SWBAIPFilter extends GenericResource
             ArrayList<IPFilter> l1 = new ArrayList<IPFilter>();
             while (itip.hasNext())
             {
-                l1.add(itip.next());
+                IPFilter ipf=itip.next();
+                //System.out.println(ipf);
+                l1.add(ipf);
             }
             lista = l1.toArray(new IPFilter[0]);
         }
