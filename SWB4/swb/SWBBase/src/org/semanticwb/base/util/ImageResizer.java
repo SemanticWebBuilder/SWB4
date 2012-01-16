@@ -94,7 +94,7 @@ public class ImageResizer
         }
         return ret;
     }
-
+    
     /**
      * Resize.
      * 
@@ -107,6 +107,22 @@ public class ImageResizer
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public static void resize(File origFile, int maxWidth, int maxHeight, boolean centered, File destfile, String type) throws IOException
+    {
+        resize(origFile, maxWidth, maxHeight, centered, destfile, type, Color.WHITE);
+    }    
+
+    /**
+     * Resize.
+     * 
+     * @param origFile the orig file
+     * @param maxWidth the max width
+     * @param maxHeight the max height
+     * @param centered the centered
+     * @param destfile the destfile
+     * @param type the type
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public static void resize(File origFile, int maxWidth, int maxHeight, boolean centered, File destfile, String type, Color color) throws IOException
     {
         BufferedImage bi = ImageIO.read(origFile);
         int calcHeight = -1;
@@ -127,9 +143,10 @@ public class ImageResizer
             calcHeight = maxHeight;
             calcWidth = maxWidth;
         }
-        ImageIO.write(createResizedCopy(bi, maxWidth, maxHeight, centered, calcWidth, calcHeight), type, destfile);
+        ImageIO.write(createResizedCopy(bi, maxWidth, maxHeight, centered, calcWidth, calcHeight, color), type, destfile);
     }
-
+    
+    
     /**
      * Creates the resized copy.
      * 
@@ -142,6 +159,22 @@ public class ImageResizer
      * @return the buffered image
      */
     private static BufferedImage createResizedCopy(Image originalImage, int scaledWidth, int scaledHeight, boolean centered, int topWidth, int topHeight)
+    {
+        return createResizedCopy(originalImage, scaledWidth, scaledHeight, centered, topWidth, topHeight, Color.WHITE);
+    }    
+
+    /**
+     * Creates the resized copy.
+     * 
+     * @param originalImage the original image
+     * @param scaledWidth the scaled width
+     * @param scaledHeight the scaled height
+     * @param centered the centered
+     * @param topWidth the top width
+     * @param topHeight the top height
+     * @return the buffered image
+     */
+    private static BufferedImage createResizedCopy(Image originalImage, int scaledWidth, int scaledHeight, boolean centered, int topWidth, int topHeight, Color color)
     {
 
         BufferedImage scaledBI = null;
@@ -159,7 +192,7 @@ public class ImageResizer
         }
         Graphics2D g = scaledBI.createGraphics();
         g.setComposite(AlphaComposite.Src);
-        g.setColor(Color.WHITE);
+        g.setColor(color);
         g.fillRect(0, 0, scaledWidth, scaledHeight);
         g.drawImage(originalImage, 0 + offW, 0 + offH, topWidth, topHeight, null);
         g.dispose();
