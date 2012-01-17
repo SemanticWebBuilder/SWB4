@@ -1,10 +1,10 @@
 package org.semanticwb.portal.resources.sem.base;
 
 
-public abstract class AudioFileBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Iconable,org.semanticwb.model.Rankable,org.semanticwb.model.Expirable,org.semanticwb.model.Descriptiveable
+public abstract class AudioFileBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Rankable,org.semanticwb.model.Traceable,org.semanticwb.model.Expirable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Iconable
 {
    /**
-   * The audio plays automatically
+   * El audio reproduce automáticamente
    */
     public static final org.semanticwb.platform.SemanticProperty audiof_autoplay=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#autoplay");
    /**
@@ -12,11 +12,15 @@ public abstract class AudioFileBase extends org.semanticwb.model.SWBClass implem
    */
     public static final org.semanticwb.platform.SemanticProperty audiof_author=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#author");
    /**
-   * Show console
+   * Mostrar consola
    */
     public static final org.semanticwb.platform.SemanticProperty audiof_showcontroller=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#showcontroller");
    /**
-   * Resource name
+   * Length of podcast
+   */
+    public static final org.semanticwb.platform.SemanticProperty audiof_duration=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#duration");
+   /**
+   * Nombre del recurso
    */
     public static final org.semanticwb.platform.SemanticProperty audiof_filename=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#filename");
     public static final org.semanticwb.platform.SemanticClass audiof_AudioFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBAudioFile#AudioFile");
@@ -453,6 +457,24 @@ public abstract class AudioFileBase extends org.semanticwb.model.SWBClass implem
     public void setShowcontroller(boolean value)
     {
         getSemanticObject().setBooleanProperty(audiof_showcontroller, value);
+    }
+
+/**
+* Gets the Duration property
+* @return String with the Duration
+*/
+    public String getDuration()
+    {
+        return getSemanticObject().getProperty(audiof_duration);
+    }
+
+/**
+* Sets the Duration property
+* @param value long with the Duration
+*/
+    public void setDuration(String value)
+    {
+        getSemanticObject().setProperty(audiof_duration, value);
     }
 
 /**
