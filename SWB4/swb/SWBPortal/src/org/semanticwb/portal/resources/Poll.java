@@ -167,21 +167,21 @@ public class Poll extends GenericResource {
         }catch(Exception e) {
             log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
         }
-//        if(!"".equals(base.getAttribute("template","").trim())) {
-//            try {
-//                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
-//                path = webWorkPath;
-//            }catch(Exception e) {
-//                log.error("Error while loading resource template: "+base.getId(), e);
-//            }
-//        }
-//        if( tpl==null ) {
+        if(!"".equals(base.getAttribute("template","").trim())) {
+            try {
+                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
+                path = webWorkPath;
+            }catch(Exception e) {
+                log.error("Error while loading resource template: "+base.getId(), e);
+            }
+        }
+        if( tpl==null ) {
             try {
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/Poll/Poll.xsl"));
             }catch(Exception e) {
                 log.error("Error while loading default resource template: "+base.getId(), e);
             }
-//        }
+        }
     }
 
     /**
