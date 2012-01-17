@@ -51,9 +51,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBRuntimeException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.rdf.RemoteGraph;
@@ -669,6 +667,7 @@ public class SemanticModel
      */
     public synchronized long getCounterValue(String name)
     {
+        long ret=0;
         String uri=getNameSpace()+"counter";
         Resource res=getRDFModel().createResource(uri+":"+name);
         Property prop=getRDFModel().createProperty(uri);
@@ -676,10 +675,10 @@ public class SemanticModel
         if(it.hasNext())
         {
             Statement stmt=it.nextStatement();
-            return stmt.getLong();
+            ret=stmt.getLong();
         }
         it.close();
-        return 0;
+        return ret;
     }
 
     /**
@@ -715,14 +714,16 @@ public class SemanticModel
     public synchronized long getCounter(SemanticClass cls)
     {
         //System.out.println("cls:"+cls+" "+cls.getRootClass());
-        long id=0;
         String uri=null;
+        long id=getCounter(cls.getClassGroupId());
+        long tid=id-1;
         do
         {
-            id=getCounter(cls.getClassGroupId());
-            uri=getObjectUri(""+id, cls);
-        }while(SemanticObject.createSemanticObject(uri) != null);
-        return id;
+            tid++;            
+            uri=getObjectUri(""+tid, cls);
+        }while(SemanticObject.createSemanticObject(uri,this) != null);
+        if(id!=tid)setCounterValue(cls.getClassGroupId(), tid);
+        return tid;
     }
 
     /**
