@@ -80,6 +80,7 @@ public class PoolConnection implements java.sql.Connection {
     
     /** The stack. */
     private StackTraceElement stack[] = null;
+    private String threadName = null;
 
     /**
      * Instantiates a new pool connection.
@@ -123,6 +124,7 @@ public class PoolConnection implements java.sql.Connection {
      */
     public void setId(long id)
     {
+        threadName = Thread.currentThread().getName();
         stack = Thread.currentThread().getStackTrace();
         this.id = id;
     }
@@ -178,10 +180,10 @@ public class PoolConnection implements java.sql.Connection {
     {
         if(description==null || description.length()==0)
         {
-            String ret="";
+            String ret=threadName;
             for(int x=0;x<stack.length;x++)
             {
-                if(x>=0)ret+=stack[x].toString()+"/n";
+                if(x>=0)ret+=stack[x].toString()+"\n";
             }
             return ret;
         }
