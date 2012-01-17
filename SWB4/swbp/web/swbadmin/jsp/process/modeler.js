@@ -222,13 +222,11 @@ Marker.prototype.render = function(context) {
     var imgY = this.markedElement.getCoords().y + this.offsetY;
     var imgW = this.image.width * this.scale;
     var imgH = this.image.height * this.scale;
-    if (!this.adjusted) {
-        this.AdjustColor();
-        this.adjusted = true;
-    }
+//    if (!this.adjusted) {
+//        this.AdjustColor();
+//        this.adjusted = true;
+//    }
     context.save();
-    //context.fillStyle = "black";
-    //context.fillRect(0, 0, 100, 100);
     context.drawImage(this.image, imgX, imgY, imgW, imgH);
     context.restore();
 }
@@ -280,6 +278,8 @@ Circle.prototype.mouseInBounds = function (x, y) {
         return false;
     }
 }
+
+//------------------------------------------------------------------------------
 
 //Rectangle definition
 function Rectangle (x, y, width, height, cornerradius, rotation) {
@@ -461,12 +461,13 @@ GraphicalElement.prototype.mouseReleased = function (e) {
 //Manejador del evento 'mouseMoved' del elemento
 GraphicalElement.prototype.mouseMoved = function (e) {
     var mouseButton = getMousePressedButton(e);
+    if (!this.selected) {
+        modeler.unHoverAll();
+        this.hover();
+    }
     
     if (mouseButton == "LEFT") {
-        if (!this.selected) {
-            modeler.unHoverAll();
-            this.hover();
-        }
+        
     } else if (mouseButton == "RIGHT") {
 
     }
