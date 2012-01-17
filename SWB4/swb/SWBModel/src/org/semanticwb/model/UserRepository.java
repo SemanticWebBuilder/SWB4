@@ -300,7 +300,7 @@ public class UserRepository extends UserRepositoryBase {
         log.debug("Login a buscar: " + login + " External:" + EXTERNAL);
         if (null != login) {
             Iterator aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_usrLogin.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(login));
-            Iterator it = new GenericIterator(aux, true);
+            Iterator it = new GenericIterator(SWBUtils.Collections.copyIterator(aux).iterator(), true);
             if (it.hasNext()) {
                 ret = (User) it.next();
             }
@@ -309,7 +309,7 @@ public class UserRepository extends UserRepositoryBase {
                 boolean sync=bridge.syncUser(login, ret);
                 if (sync && null == ret) {
                     aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_usrLogin.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(login));
-                    it = new GenericIterator(aux, true);
+                    it = new GenericIterator(SWBUtils.Collections.copyIterator(aux).iterator(), true);
                     if (it.hasNext()) {
                         ret = (User) it.next();
                     }
@@ -330,7 +330,7 @@ public class UserRepository extends UserRepositoryBase {
         log.debug("Email a buscar: " + email + " External:" + EXTERNAL);
         if (null != email) {
             Iterator aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_usrEmail.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(email));
-            Iterator it = new GenericIterator(aux, true);
+            Iterator it = new GenericIterator(SWBUtils.Collections.copyIterator(aux).iterator(), true);
             if (it.hasNext()) {
                 ret = (User) it.next();
             }
@@ -338,7 +338,7 @@ public class UserRepository extends UserRepositoryBase {
                 boolean sync=bridge.syncUser(email, ret);
                 if (sync && null == ret) {
                     aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_usrEmail.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(email));
-                    it = new GenericIterator(aux, true);
+                    it = new GenericIterator(SWBUtils.Collections.copyIterator(aux).iterator(), true);
                     if (it.hasNext()) {
                         ret = (User) it.next();
                     }
@@ -826,7 +826,7 @@ public class UserRepository extends UserRepositoryBase {
         User ret = null;
         if (null != externalID) {
             Iterator aux = getSemanticObject().getRDFResource().getModel().listStatements(null, User.swb_externalID.getRDFProperty(), getSemanticObject().getModel().getRDFModel().createLiteral(externalID));
-            Iterator it = new GenericIterator(aux, true);
+            Iterator it = new GenericIterator(SWBUtils.Collections.copyIterator(aux).iterator(), true);
             if (it.hasNext()) {
                 ret = (User) it.next();
             }
