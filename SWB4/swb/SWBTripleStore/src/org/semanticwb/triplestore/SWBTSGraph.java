@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBRuntimeException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.remotetriplestore.RGraph;
 
@@ -112,6 +113,7 @@ public class SWBTSGraph extends GraphBase implements RGraph
         } catch (Exception e2)
         {
             log.error(e2);
+            throw new SWBRuntimeException(e2.getMessage(), e2);
         }
     }
 
@@ -160,6 +162,7 @@ public class SWBTSGraph extends GraphBase implements RGraph
         } catch (Exception e2)
         {
             log.error(e2);
+            throw new SWBRuntimeException(e2.getMessage(), e2);            
         }
     }
 

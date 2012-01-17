@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBRuntimeException;
 import org.semanticwb.SWBUtils;
 
 /**
@@ -102,6 +103,7 @@ public class SWBTSIterator implements ExtendedIterator<Triple>
         }catch(SQLException e)
         {
             log.error(e);
+            throw new SWBRuntimeException(e.getMessage(), e);
         }
 
         //Thread.currentThread().dumpStack();
