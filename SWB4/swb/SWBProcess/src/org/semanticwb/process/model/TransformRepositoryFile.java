@@ -1,5 +1,6 @@
 package org.semanticwb.process.model;
 
+import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.util.List;
 import org.semanticwb.Logger;
@@ -72,9 +73,12 @@ public class TransformRepositoryFile extends org.semanticwb.process.model.base.T
 
         try
         {
-            rep.generateReport(file.storeFile(this.getNodeName(), null, false,getNodeStatus().getId()));
+            String nodeName = this.getNodeName();
+            ItemAwareStatus _status = getNodeStatus();
+            String status = null;
+            if (_status != null) status = _status.getId();
+            OutputStream ous = file.storeFile(nodeName+".docx", null, false, status);
+            rep.generateReport(ous);
         }catch(Exception e){log.error(e);}
-
     }    
-    
 }
