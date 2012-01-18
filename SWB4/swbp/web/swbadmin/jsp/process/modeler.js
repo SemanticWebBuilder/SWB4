@@ -421,9 +421,16 @@ GraphicalElement.prototype.focus = function () {
 //Manejador del evento 'mousePressed' del elemento
 GraphicalElement.prototype.mousePressed = function (e) {
     var mouseButton = getMousePressedButton(e);
+    var mouseCoords = modeler.getMousePosition(e);
+    
+    this.mouseOffsetX = mouseCoords.x - this.getCoords().x;
+    this.mouseOffsetY = mouseCoords.y - this.getCoords().y;
+    
+    console.log("Offset X: "+this.mouseOffsetX+", Y: "+this.mouseOffsetY);
     
     if (mouseButton == "LEFT") {
         modeler.unSelectAll();
+        modeler.setCursorStyle('pointer');
         this.focus();
         this.isDragging = true;        
     } else if (mouseButton == "RIGHT") {
@@ -448,6 +455,9 @@ GraphicalElement.prototype.mouseClicked = function (e) {
 GraphicalElement.prototype.mouseReleased = function (e) {
     var mouseButton = getMousePressedButton(e);
     
+    this.mouseOffsetX = 0;
+    this.mouseOffsetY = 0;
+    
     if (mouseButton == "LEFT") {
         if (this.selected == true) {
             this.isDragging = false;
@@ -461,6 +471,7 @@ GraphicalElement.prototype.mouseReleased = function (e) {
 //Manejador del evento 'mouseMoved' del elemento
 GraphicalElement.prototype.mouseMoved = function (e) {
     var mouseButton = getMousePressedButton(e);
+    modeler.setCursorStyle('pointer');
     if (!this.selected) {
         modeler.unHoverAll();
         this.hover();
@@ -1393,8 +1404,8 @@ function Modeler() {
     this.count = 0;             //Contador de elementos para IDs
     this.cx = 0;                //Posición X actual del mouse en el canvas
     this.cy = 0;                //Posición Y actual del mouse en el canvas
-    this.dx = 0;                //Incremento en X del movimiento del mouse en el canvas
-    this.dy = 0;                //Incremento en Y del movimiento del mouse en el canvas
+    this.sx = 0;                //Incremento en X del movimiento del mouse en el canvas
+    this.sy = 0;                //Incremento en Y del movimiento del mouse en el canvas
     this.context = null;        //Cotexto de dibujo del canvas
     this.stylePaddingLeft = 0;
     this.stylePaddingTop = 0;
@@ -1436,6 +1447,7 @@ Modeler.prototype.unSelectAll = function() {
 //Modeler.unHoverAll
 //Regresa todos los elementos del modelo a su estatus normal
 Modeler.prototype.unHoverAll = function() {
+    //this.setCursorStyle('default');
     for (var i = this.childs.length - 1; i >= 0; i--) {
         if (this.childs[i] instanceof GraphicalElement) {
             if (!this.childs[i].selected) {
@@ -1570,8 +1582,9 @@ Modeler.prototype.mousePressed = function(e) {
             if (ele != null) {
                 ele.mousePressed(e);
                 if (ele instanceof GraphicalElement) {
-                    this.dx = this.cx - ele.getCoords().x;
-                    this.dy = this.cy - ele.getCoords().y;
+                    this.sx = this.cx;// - ele.getCoords().x;
+                    this.sy = this.cy;// - ele.getCoords().y;
+                    console.log("MOUSEPRESSED -> x: "+this.sx+", y: "+ this.sy);
                 }
             }
         }
@@ -1582,25 +1595,33 @@ Modeler.prototype.mousePressed = function(e) {
 Modeler.prototype.mouseMoved = function(e) {
     var mouseCoords = this.getMousePosition(e);
     var ele = this.getOverElement(mouseCoords.x, mouseCoords.y);
+    var _dx = this.cx - this.sx;
+    var _dy = this.cy - this.sy;
     
     if (ele != null) {
         ele.mouseMoved(e);
     } else {
+        this.setCursorStyle('default');
         this.unHoverAll();
     }
     
     for (var i = this.childs.length - 1; i >= 0; i--) {
         if (this.childs[i].isDragging) {
-            var ax = this.dx + this.cx;
-            var ay = this.dy + this.cy;
+            var ax = this.childs[i].getCoords().x + _dx;
+            var ay = this.childs[i].getCoords().y + _dy;
 
-            if ((ax-this.childs[i].getWidth()/2)<=0) {
+            if ((ax-this.childs[i].getWidth()/2) <= 0) {
                 ax = this.childs[i].getWidth()/2;
             }
-            if ((ay-this.childs[i].getHeight()/2)<=0) {
+            if ((ay-this.childs[i].getHeight()/2) <= 0) {
                 ay = this.childs[i].getHeight()/2;
             }
+            //ax = ax - this.childs[i].mouseOffsetX;
+            //ay = ay - this.childs[i].mouseOffsetY;
             this.childs[i].setCoords(new Point(ax, ay));
+            console.log("MOUSEMOVED - moving from : "+this.sx + ", "+this.sy+" to "+ax+", "+ay);
+            this.sx = ax;
+            this.sy = ay;
         }
     }
     this.render();
@@ -1609,13 +1630,18 @@ Modeler.prototype.mouseMoved = function(e) {
 Modeler.prototype.mouseReleased = function(e) {
     var mouseCoords = this.getMousePosition(e);
     var ele = this.getOverElement(mouseCoords.x, mouseCoords.y);
-    this.dx = 0;
-    this.dy = 0;
+    this.sx = 0;
+    this.sy = 0;
     
     if (ele != null) {
         ele.mouseReleased(e);
     }
     this.render();
+}
+
+Modeler.prototype.setCursorStyle = function (style) {
+    console.log("Cambiando estilo a "+style);
+    if (this.getCanvasElement().style) this.getCanvasElement().style.cursor = style;
 }
 
 function onMouseMoved(e) {
