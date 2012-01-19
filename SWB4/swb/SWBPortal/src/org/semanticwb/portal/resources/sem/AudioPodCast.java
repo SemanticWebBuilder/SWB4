@@ -240,34 +240,33 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
                     }else {
                         out.print("<p>Formato no soportado.</p>");
                     }
-    out.println(" </div>");
-    
-    
-    out.println(" <div id=\"rank\">");
-    
-    HttpSession session = request.getSession(true);
-    final String rid = base.getId();
-    DecimalFormat decf = new DecimalFormat("###");
-    if(session.getAttribute(rid)!=null)
-        out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"</p>");
-    else {
-        session.setAttribute(rid,rid);
-        try {
-            out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(paramRequest.Call_DIRECT).setParameter("uri", audiofile.getEncodedURI())+"','rank')\" title=\""+paramRequest.getLocaleString("like")+"\">"+paramRequest.getLocaleString("like")+"</a></p>");
-        }catch(SWBResourceException swbe) {
-            out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;Me gusta&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(paramRequest.Call_DIRECT).setParameter("uri", audiofile.getEncodedURI())+"','rank')\" title=\"Me gusta\">Me gusta</a></p>");
-        }
-    }
-    out.println(" </div>");
-    
-    out.println(" <div id=\"descargar\">");
-    out.println("  <p><img src=\"img/descargar.png\" width=\"21\" height=\"17\" align=\"left\" /></p>");
-    out.println(" </div>");
-    out.println(" <div class=\"swb-comentario-sem-boton\">");
-    out.println("  <input type=\"button\" value=\"Descargar a tu PC\" onclick=\"location.href='"+directURL.setParameter("uri", audiofile.getURI())+"'\" />");
-    out.println(" </div>");
-    out.println("</div>");
-                }/////////////////////////////////////////
+                    out.println(" </div>");
+
+
+                    out.println(" <div id=\"rank\">");
+
+                    HttpSession session = request.getSession(true);
+                    final String rid = base.getWebSiteId()+"_"+base.getId()+"_"+audiofile.getId();
+                    DecimalFormat decf = new DecimalFormat("###");
+                    if(session.getAttribute(rid)!=null)
+                        out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"</p>");
+                    else {
+                        try {
+                            out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(paramRequest.Call_DIRECT).setParameter("uri", audiofile.getEncodedURI())+"','rank')\" title=\""+paramRequest.getLocaleString("like")+"\">"+paramRequest.getLocaleString("like")+"</a></p>");
+                        }catch(SWBResourceException swbe) {
+                            out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;Me gusta&nbsp;<a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setMode(Mode_VOTE).setCallMethod(paramRequest.Call_DIRECT).setParameter("uri", audiofile.getEncodedURI())+"','rank')\" title=\"Me gusta\">Me gusta</a></p>");
+                        }
+                    }
+                    out.println(" </div>");
+
+                    out.println(" <div id=\"descargar\">");
+                    out.println("  <p><img src=\"img/descargar.png\" width=\"21\" height=\"17\" align=\"left\" /></p>");
+                    out.println(" </div>");
+                    out.println(" <div class=\"swb-comentario-sem-boton\">");
+                    out.println("  <input type=\"button\" value=\"Descargar a tu PC\" onclick=\"location.href='"+directURL.setParameter("uri", audiofile.getURI())+"'\" />");
+                    out.println(" </div>");
+                    out.println("</div>");
+                }
             }
         }
     }
@@ -357,13 +356,14 @@ public class AudioPodCast extends org.semanticwb.portal.resources.sem.base.Audio
         response.setHeader("Pragma","no-cache");
         
         PrintWriter out = response.getWriter();
+        Resource base = getResourceBase();
         
         HttpSession session = request.getSession(true);
         final String uri = request.getParameter("uri");
-        final String rid = getResourceBase().getId();
         try {
             DecimalFormat decf = new DecimalFormat("###");
             AudioFile audiofile = (AudioFile)SemanticObject.createSemanticObject(uri).createGenericInstance();
+            final String rid = base.getWebSiteId()+"_"+base.getId()+"_"+audiofile.getId();
             if(session.getAttribute(rid)!=null)
                out.println("  <p>"+decf.format(audiofile.getRank())+"&nbsp;"+paramRequest.getLocaleString("like")+"</p>");
             else {
