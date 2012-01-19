@@ -163,7 +163,7 @@ public class MultipleFileUploader implements InternalServlet
                                 fileName = fileName.substring(fileName.lastIndexOf("\\")+1);
                             }
                             //100112 MAPS Cleaning of filename
-                            fileName = SWBUtils.TEXT.replaceSpecialCharacters(fileName, true);
+                            fileName = SWBUtils.TEXT.replaceSpecialCharacters(fileName, '.', true);
                             //--End
                             String contentType = item.getContentType();
                             boolean isInMemory = item.isInMemory();
