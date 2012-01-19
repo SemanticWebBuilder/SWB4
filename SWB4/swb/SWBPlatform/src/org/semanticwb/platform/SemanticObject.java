@@ -971,7 +971,6 @@ public class SemanticObject
                 remove(statement);
             }
         }
-        m_cachepropsrel.remove(prop.getURI());
     }
     
     private boolean remove(Statement stmt)
@@ -1026,6 +1025,8 @@ public class SemanticObject
                     }                 
                 }
             }
+            
+            m_cachepropsrel.remove(stmt.getPredicate().getURI());
         }
         return ret;
     }
