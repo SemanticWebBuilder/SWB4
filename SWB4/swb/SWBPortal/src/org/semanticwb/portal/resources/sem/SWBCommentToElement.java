@@ -27,14 +27,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.*;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.User;
@@ -48,6 +47,7 @@ import org.semanticwb.portal.api.*;
  * @author jose.jimenez
  */
 public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.base.SWBCommentToElementBase {
+    private static Logger log = SWBUtils.getLogger(SWBCommentToElement.class);
     public static final int MIN_LIST = 5;
     
     /**
@@ -79,13 +79,22 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         String action = response.getAction();
         String uri = request.getParameter("uri");
         if(action.equals(response.Action_ADD)) {
-            String semObjURI = URLDecoder.decode(uri, "UTF-8");
-            
             String securCodeSent = request.getParameter("cmnt_seccode");
             String securCodeCreated = (String)request.getSession(true).getAttribute("cs");
             if( securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent) ) {
-                SWBClass element = (SWBClass)SemanticObject.createSemanticObject(semObjURI).createGenericInstance();
-                if(element!=null) {
+                String semObjURI = URLDecoder.decode(uri, "UTF-8");
+                SWBClass element = null;
+                try {
+                    element = (SWBClass)SemanticObject.createSemanticObject(semObjURI).createGenericInstance();
+                }catch(Exception exc) {
+                    log.error(exc);
+                    Enumeration e = request.getParameterNames();
+                    while(e.hasMoreElements()) {
+                        String key = (String) e.nextElement();
+                        response.setRenderParameter(key, request.getParameter(key));
+                    }
+                }
+                if(element!=null && element.isValid()) {
                     String txt = SWBUtils.XML.replaceXMLChars(request.getParameter("cmnt_comment"));
                     if(!txt.isEmpty()) {
                         WebSite model = response.getWebPage().getWebSite();
@@ -107,7 +116,6 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
                         }
                     }
                 }
-                response.setRenderParameter("uri", uri);
             }else {
                 Enumeration e = request.getParameterNames();
                 while (e.hasMoreElements()) {
@@ -146,8 +154,18 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         }
         
         uri = URLDecoder.decode(uri, "UTF-8");
-        SWBClass element = (SWBClass)SemanticObject.createSemanticObject(uri).createGenericInstance();
-        if(element==null) {
+        SWBClass element = null;
+        try {
+            element = (SWBClass)SemanticObject.createSemanticObject(uri).createGenericInstance();
+        }catch(Exception e) {
+            log.error(e);
+            out.println(paramRequest.getLocaleString("noElement"));
+            out.flush();
+            out.close();
+            return;
+        }
+        
+        if(element==null || !element.isValid()) {
             out.println(paramRequest.getLocaleString("noElement"));
             out.flush();
             out.close();
@@ -256,7 +274,14 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         User user = paramRequest.getUser();
         String name;
 
-        SWBClass element = (SWBClass)SemanticObject.createSemanticObject(uri).createGenericInstance();
+        SWBClass element = null;
+        try {
+            element = (SWBClass)SemanticObject.createSemanticObject(uri).createGenericInstance();
+        }catch(Exception e) {
+            log.error(e);
+            return html.toString();
+        }
+        
         Iterator<CommentToElement> icomments = CommentToElement.ClassMgr.listCommentToElementByElement(element, paramRequest.getWebPage().getWebSite());
         icomments = SWBComparator.sortByCreated(icomments, false);
         List comments = SWBUtils.Collections.copyIterator(icomments);
@@ -264,14 +289,14 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         
         html.append("<div class=\"swb-comentario-sem-lista\">");
         if(comments.size()>0) {
-            html.append(" <h2>Comentarios ["+totalCmmts+"]</h2>");
+            html.append(" <h2>"+totalCmmts+"&nbsp;"+paramRequest.getLocaleString("lblComments")+"</h2>");
             icomments = comments.iterator();
-            html.append("<div id=\"cmnts-lst\">");
+            html.append("<div id=\"swb-cmnt-sem-lst\">");
             html.append(" <ol>");
             int min = MIN_LIST;
             while(min>0 && icomments.hasNext()) {
                 CommentToElement comment = icomments.next();
-                html.append("  <li>");
+                html.append("  <li class=\"swb-comentario-sem-item\">");
                 if(user.isSigned())
                     name = comment.getCreator().getFullName();
                 else
@@ -282,7 +307,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
                 min--;
             }
             html.append(" </ol>");
-            html.append(" <p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("uri",element.getEncodedURI())+"','cmnts-lst')\">"+paramRequest.getLocaleString("viewAllComments") +"&nbsp;&raquo;</a></p>");
+            html.append(" <p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("uri",element.getEncodedURI())+"','swb-cmnt-sem-lst')\">"+paramRequest.getLocaleString("viewAllComments") +"&nbsp;&raquo;</a></p>");
             html.append("</div>");
         }else
             html.append("<h2>"+paramRequest.getLocaleString("noComment")+"</h2>");
@@ -301,11 +326,16 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         String name;
         
         String uri = request.getParameter("uri");
-        if(uri!=null && !uri.isEmpty()) {
-            SWBClass element = (SWBClass)SemanticObject.createSemanticObject(uri).createGenericInstance();
+        SWBClass element = null;
+        try {
+            element = (SWBClass)SemanticObject.createSemanticObject(uri).createGenericInstance();
+        }catch(Exception e) {
+            log.error(e);
+        }
+        if(element!=null && element.isValid()) {
             Iterator<CommentToElement> comments = CommentToElement.ClassMgr.listCommentToElementByElement(element, paramRequest.getWebPage().getWebSite());
             comments = SWBComparator.sortByCreated(comments, false);
-            html.append(" <ol id=\"cmnts-lst\">");
+            html.append(" <ol>");
             while(comments.hasNext()) {
                 CommentToElement comment = comments.next();
                 html.append("  <li>");
@@ -318,10 +348,8 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
                 html.append("  </li>");
             }
             html.append(" </ol>");
-            html.append(" <p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("uri",element.getEncodedURI())+"','cmnts-lst')\">"+paramRequest.getLocaleString("viewAllComments") +"&nbsp;&raquo;</a></p>");
+            html.append(" <p><a href=\"javascript:postHtml('"+paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(SWBResourceURL.Mode_INDEX).setParameter("uri",element.getEncodedURI())+"','swb-cmnt-sem-lst')\">"+paramRequest.getLocaleString("viewAllComments") +"&nbsp;&raquo;</a></p>");
             out.println(html.toString());
         }
-        out.flush();
-        out.close();
     }
 }
