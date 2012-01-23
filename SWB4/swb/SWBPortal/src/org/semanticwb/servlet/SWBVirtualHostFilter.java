@@ -465,9 +465,9 @@ public class SWBVirtualHostFilter implements Filter
             treeSelectFormElement.init(filterConfig.getServletContext());
 
 
-            InternalServlet upload = new Upload();
-            intServlets.put("wbupload", upload);
-            upload.init(filterConfig.getServletContext());
+            //InternalServlet upload = new Upload();
+            //intServlets.put("wbupload", upload);
+            //upload.init(filterConfig.getServletContext());
 
             InternalServlet editFile = new EditFile();
             intServlets.put("editfile", editFile);
@@ -477,9 +477,9 @@ public class SWBVirtualHostFilter implements Filter
             intServlets.put("showfile", showFile);
             showFile.init(filterConfig.getServletContext());            
 
-            InternalServlet UploadFormElement = new UploadFormElement();
-            intServlets.put("Upload", UploadFormElement);
-            UploadFormElement.init(filterConfig.getServletContext());
+//            InternalServlet UploadFormElement = new UploadFormElement();
+//            intServlets.put("Upload", UploadFormElement);
+//            UploadFormElement.init(filterConfig.getServletContext());
 
             if(SWBPortal.getWorkPathType().equals(SWBPortal.WORKPATH_ABSOLUTE))
             {
