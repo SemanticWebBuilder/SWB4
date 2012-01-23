@@ -136,9 +136,12 @@ public class Banner extends GenericAdmResource {
                     if( url!=null ) {                        
                         out.print("<a class=\"swb-banner\"");
                         out.print(" href=\""+url+"\"");
-                        out.print(" onclick=\"window.location.href='"+paramRequest.getActionUrl()+QueryStream+  "';return true;\"");
                         if( Boolean.parseBoolean(base.getAttribute("target")) )
-                            out.print(" target=\"_blank\"");
+                        { 
+                            out.print(" onclick=\"window.open('"+paramRequest.getActionUrl()+QueryStream+"');return false;\" target=\"_blank\"");
+                        }else{
+                            out.print(" onclick=\"window.location.href='"+paramRequest.getActionUrl()+QueryStream+"';return false;\"");
+                        }
                         //out.println(" title=\""+base.getAttribute("title","")+"\">");
                         out.println(" title=\""+base.getDisplayTitle(paramRequest.getUser().getLanguage())+"\">");
                         
