@@ -47,7 +47,7 @@ public class DojoImageUpload extends org.semanticwb.model.base.DojoImageUploadBa
                 request.getParameter(pname ) != null)
             {
             //System.out.println("********************** FlashImageUploader.process **********************");
-    //        System.out.println("Prop:"+prop.getURI()+" - "+pname);
+            //System.out.println("Prop:"+prop.getURI()+" - "+pname);
             //System.out.println(request.getParameter(pname + "_delFile"));
             if (request.getParameter(pname + "_delFile") != null)
             {
@@ -77,18 +77,18 @@ public class DojoImageUpload extends org.semanticwb.model.base.DojoImageUploadBa
             {
                 throw new SWBRuntimeException("Can't create work directory " + dir);
             }
-    //        System.out.println("pname: "+pname);
+            //System.out.println("pname: "+pname);
             String cad = request.getParameter(propName+"_new");
             if (cad==null) cad = request.getParameter(pname);
-    //        System.out.println("Cad: "+cad);
+            //System.out.println("Cad: "+cad);
             List<UploadedFile> lista = UploaderFileCacheUtils.get(cad);
-    //        System.out.println("Lista:"+lista.size());
+            //System.out.println("Lista:"+lista.size());
             for (UploadedFile arch : lista)
             {
                 File orig = new File(arch.getTmpuploadedCanonicalFileName());
                 String webpath = obj.getWorkPath() + arch.getOriginalName();
                 File dest = new File(dir, pname+"_"+arch.getOriginalName());
-    //            System.out.println("Dest:"+dest);
+                //System.out.println("Dest:"+dest);
                 if (!orig.renameTo(dest))
                 {
                     try
@@ -131,6 +131,10 @@ public class DojoImageUpload extends org.semanticwb.model.base.DojoImageUploadBa
         File path = dest.getParentFile();
         File file = new File(path, name);
         File tmpFile = new File(path, "tmping_" + name);
+        //System.out.println("name:"+name);
+        //System.out.println("path:"+path);
+        //System.out.println("file:"+file);
+        //System.out.println("tmpFile:"+tmpFile);
         if(getImgMaxWidth()>0 && getImgMaxHeight()>0)
         {
             dest.renameTo(tmpFile);

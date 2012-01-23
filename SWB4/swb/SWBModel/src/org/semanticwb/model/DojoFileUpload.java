@@ -125,7 +125,9 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
 
             buffer.append("<input dojoType=\"dojox.form.FileInputAuto\" blurDelay=\"0\" "
                     + "id=\"" + pname + "_defaultAuto\" name=\"" + pname + "_inputFileAuto\" url=\"" + url
-                    + "\" onComplete=\"fileUpload_Callback\" fileMask=\"" + filts.toString() + "\"/><br/>\n");
+                    + "\" onComplete=\"fileUpload_Callback"+((obj.getProperty(prop) != null)?"":"2")+"\"  startup=\"dijit.byId(document.getElementById('"+pname+"').form.id).extValid="+(obj.getProperty(prop) != null)+";\" "
+                    + "fileMask=\"" + filts.toString() + "\"/><br/>\n");
+            
             if (!"create".equals(mode) && obj.getProperty(prop) != null) {
                 String name = obj.getProperty(prop);
                 if (name.startsWith(pname)) {
@@ -135,6 +137,20 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
                         + pname + "_delFile\" name=\""
                         + pname + "_delFile\" value=\"" + name + "\" /><label for=\""
                         + pname + "_delFile\">" + name + "</label>\n");
+            }else
+            {
+                buffer.append("<script type=\"text/javascript\">");
+                buffer.append("    var fileUpload_Callback2 = function(data,ioArgs,widgetRef){");
+                buffer.append("        if(data && data.status && data.status == \"success\")");
+                buffer.append("        {");
+                buffer.append("            var ele=document.getElementById(\""+pname+"\");");
+                buffer.append("            var form = dijit.byId(ele.form.id);");
+                buffer.append("            form.extValid=true;");
+                buffer.append("            form.onValidStateChange(form.isValid()&&form.extValid);");
+                buffer.append("        }");
+                buffer.append("        fileUpload_Callback(data,ioArgs,widgetRef);");
+                buffer.append("    };");
+                buffer.append("</script>");
             }
         }
 
