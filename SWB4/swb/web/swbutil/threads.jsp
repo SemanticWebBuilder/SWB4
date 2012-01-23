@@ -19,6 +19,7 @@
     </head>
     <body>
         <%
+/*        
             String stop=request.getParameter("stop");
             if(stop!=null)
             {
@@ -39,18 +40,13 @@
                     }
                 }
             }
+*/            
 
             ThreadMXBean threads=ManagementFactory.getThreadMXBean();
             long t[]=threads.getAllThreadIds();
 
             out.println("<h1>Threads:"+t.length+"</h1>");
-/*
-            for(int x=0;x<t.length;x++)
-            {
-                out.println("Thread:"+t[x]+" "+(threads.getThreadCpuTime(t[x])/(1000*1000*60)));
-                out.println("<br>");
-            }
-*/
+
         %>
         <h1>Threads BLOCKED</h1>
         <pre><%=SWBThreadDumper.dumpBLOCKEDThreadWithStackTrace()%></pre>
