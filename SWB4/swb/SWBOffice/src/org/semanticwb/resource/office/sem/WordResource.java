@@ -208,6 +208,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
             if(this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML)==null)
             {
                 updateFileCache(user);
+                file=this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML);
             }
             else
             {
