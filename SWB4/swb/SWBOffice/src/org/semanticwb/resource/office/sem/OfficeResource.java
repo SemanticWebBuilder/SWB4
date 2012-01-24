@@ -179,7 +179,7 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
             
             this.getResourceBase().setAttribute( "v3", null);
             this.getResourceBase().setAttribute( OfficeDocument.FILE_HTML, fileHTML);
-            this.getResourceBase().setAttribute( OfficeDocument.FILE_HTML, null);
+            //this.getResourceBase().setAttribute( OfficeDocument.FILE_HTML, null);
             this.getResourceBase().updateAttributesToDB();
             
             SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(this.getResourceBase());
