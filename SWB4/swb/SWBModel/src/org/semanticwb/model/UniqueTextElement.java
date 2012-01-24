@@ -61,11 +61,13 @@ public class UniqueTextElement extends org.semanticwb.model.base.UniqueTextEleme
 
         String value = request.getParameter(propName);
 
-        if (value != null && value.indexOf(" ") >= 0)
-        {
-            throw new FormValidateException("No se permiten espacios:" + value);
-        }
+//        if (value != null && value.indexOf(" ") >= 0)
+//        {
+//            throw new FormValidateException("No se permiten espacios:" + value);
+//        }
 
+        System.out.println("obj:"+obj.getURI()+" prop:"+prop+" propName:"+propName+" value:"+value);
+        
         if (value != null)
         {
             int l = value.length();
@@ -113,20 +115,25 @@ public class UniqueTextElement extends org.semanticwb.model.base.UniqueTextEleme
             }
 
             SemanticClass sclass = prop.getDomainClass();
-            Iterator<SemanticObject> itso = getModel().listInstancesOfClass(sclass);
+            Iterator<SemanticObject> itso = obj.getModel().listSubjects(prop, value);
+            
+            System.out.println("sclass:"+sclass.getURI()+" model1:"+obj.getModel().getName()+" model2:"+getModel().getName());
+            
             while (itso.hasNext())
             {
-                SemanticObject sObj = itso.next();
-                if (obj != null && sObj.equals(obj))
+                SemanticObject sObj = itso.next(); 
+                System.out.println("sObj:"+sObj);
+                if(!obj.getSemanticClass().equals(sObj.getSemanticClass()))
                 {
                     continue;
                 }
-                String soval = sObj.getProperty(prop);
-                if (soval != null && value.equals(soval))
+                if (obj != null && sObj.equals(obj))
                 {
-                    //existe texto igual
-                    throw new FormValidateException("Ya existe Texto(URL):" + value);
-                }
+                    continue;
+                }                
+                System.out.println("Ya existe:"+sObj);
+                //existe texto igual
+                throw new FormValidateException("Ya existe Texto(URL):" + value);
             }
         }
 
