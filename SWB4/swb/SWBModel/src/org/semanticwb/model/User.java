@@ -888,7 +888,7 @@ public class User extends UserBase implements Principal
 
     @Override
     public int hashCode() {
-        return getId().hashCode();
+        return getURI().hashCode();
     }
     
     @Override
