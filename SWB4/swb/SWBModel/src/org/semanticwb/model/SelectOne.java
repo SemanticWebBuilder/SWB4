@@ -241,7 +241,7 @@ public class SelectOne extends SelectOneBase {
                                 ret.append("<option value=\"" + sob.getURI() + "\" ");
 
                                 if (sob.getURI().equals(uri)) {
-                                    ret.append("selected");
+                                    ret.append("selected=\"selected\"");
                                 }
 
                                 ret.append(">" + sob.getDisplayName(lang) + "</option>");
