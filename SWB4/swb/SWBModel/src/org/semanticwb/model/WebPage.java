@@ -177,11 +177,6 @@ public class WebPage extends WebPageBase
         String url=getWebPageURL();
         if(url!=null)
         {
-            //TODO:
-//            if(getWebPageURLType()==2)  //Friendly
-//            {
-//                url=SWBPlatform.getContextPath()+url;
-//            }else if(getWebPageURLType()==1) //Redirect
             {
                 //TODO:Mejorar funcion
                 if(url.indexOf('&')>-1)
@@ -189,23 +184,13 @@ public class WebPage extends WebPageBase
                     url=url.replace("&amp;", "&");
                     url=url.replace("&", "&amp;");
                 }
-                if(url.startsWith("//"))
-                {
-                    url=url.substring(1);
-                }else
+                if(url.startsWith("/"))
                 {
                     url=SWBPlatform.getContextPath()+url;
+                }else
+                {
+                    url=url.substring(1);
                 }
-//                Iterator it=paths.keySet().iterator();
-//                while(it.hasNext())
-//                {
-//                    String key=(String)it.next();
-//                    int i=url.indexOf(key);
-//                    if(i>=0)
-//                    {
-//                        url=url.substring(0,i)+paths.get(key)+url.substring(i+key.length());
-//                    }
-//                }
             }
             return url;
         }else if(getFriendlyURL()!=null)
