@@ -717,14 +717,52 @@ public class SemanticModel
         String uri=null;
         long id=getCounter(cls.getClassGroupId());
         long tid=id-1;
-        do
+        
+        //verifica disponibilidad
         {
             tid++;            
             uri=getObjectUri(""+tid, cls);
-        }while(SemanticObject.createSemanticObject(uri,this) != null);
+            //
+            if(SemanticObject.createSemanticObject(uri,this) != null)
+            {
+                Iterator<Statement> it=this.getRDFModel().listStatements(null, RDF.type, cls.getOntClass());
+                while (it.hasNext())
+                {
+                    Statement statement = it.next();
+                    try{id=Long.parseLong(getResourceId(statement.getSubject()));}catch(Exception ne){}
+                    if(id>tid)tid=id;
+                    //System.out.println("id:"+id+" tid="+tid);
+                }
+                tid++;
+            }
+        }
         if(id!=tid)setCounterValue(cls.getClassGroupId(), tid);
         return tid;
     }
+    
+    /**
+     * Gets the id.
+     *
+     * @return the id
+     */
+    private String getResourceId(Resource res)
+    {
+        String id=res.getURI();
+        if(id!=null)
+        {
+            int x = id.indexOf('#');
+            if (x > -1)
+            {
+                id=id.substring(x + 1);
+                x = id.indexOf(':');
+                if (x > -1)
+                {
+                    id=id.substring(x + 1);
+                }
+            }
+        }
+        return id;
+    }     
 
     /**
      * Regresa contador en base a la cadena <i>name</i>, e incrementa el valor en uno.
