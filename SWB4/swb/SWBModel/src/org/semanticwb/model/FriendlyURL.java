@@ -66,6 +66,7 @@ public class FriendlyURL extends org.semanticwb.model.base.FriendlyURLBase
 
     private static void addFriendlyUrl(FriendlyURL url)
     {
+        if(url.getURL()==null)return;
         Object obj=urls.get(url.getURL());
 
         if(obj==null)
@@ -90,13 +91,18 @@ public class FriendlyURL extends org.semanticwb.model.base.FriendlyURLBase
     public static void refresh() 
     {
         if(urls!=null)return;
-        urls = new ConcurrentHashMap();
-        Iterator<FriendlyURL> it = ClassMgr.listFriendlyURLs();
-
-        while (it.hasNext())
+        urls = new ConcurrentHashMap(); 
+        Iterator<WebSite> its=SWBContext.listWebSites();
+        while (its.hasNext())
         {
-            FriendlyURL url = it.next();
-            addFriendlyUrl(url);
+            WebSite webSite = its.next();
+            
+            Iterator<FriendlyURL> it = ClassMgr.listFriendlyURLs(webSite);
+            while (it.hasNext())
+            {
+                FriendlyURL url = it.next();
+                addFriendlyUrl(url);
+            }
         }
     }
 
