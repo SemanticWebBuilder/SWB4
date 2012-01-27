@@ -18,13 +18,15 @@
                             <xsl:when test="@current = '1'">
                                 <tr>
                                     <td>
-                                        <a href="{@path}" class="swb-menu-current"><xsl:value-of select="@name"/></a>
+                                        <a href="{@path}" class="swb-menu-current" target="{@target}" title="{@name}">
+                                            <xsl:value-of select="@name"/>
+                                        </a>
                                     </td>
                                 </tr>
                                 <xsl:for-each select="child">
                                     <tr>
                                         <td class="wmn_data">
-                                            ::<a href="{@path}" class="swb-menu-child"><xsl:value-of select="@name"/></a>
+                                            ::<a href="{@path}" class="swb-menu-child" target="{@target}" title="{@name}"><xsl:value-of select="@name"/></a>
                                         </td>
                                     </tr>
                                 </xsl:for-each>
@@ -32,7 +34,9 @@
                             <xsl:otherwise>
                                 <tr>
                                     <td>
-                                        <a href="{@path}" class="swb-menu-active"><xsl:value-of select="@name"/></a>
+                                        <a href="{@path}" class="swb-menu-active" target="{@target}" title="{@name}">
+                                            <xsl:value-of select="@name"/>
+                                        </a>
                                     </td>
                                 </tr>
                             </xsl:otherwise>

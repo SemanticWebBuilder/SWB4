@@ -7,8 +7,8 @@
             <ul>
                 <xsl:for-each select="parent">
                     <li class="swb-menu-pr">
-                        <a href="{@path}">
-                        <strong><xsl:value-of select="@name"/></strong>
+                        <a href="{@path}" target="{@target}" title="{@name}">
+                            <strong><xsl:value-of select="@name"/></strong>
                         </a>
 
                     </li>
@@ -25,11 +25,15 @@
                     <xsl:choose>
                         <xsl:when test="@current = '1'">
                             <li class="swb-menu-current">
-                                <a href="{@path}" class="swb-menu-current"><xsl:value-of select="@name"/></a>
+                                <a href="{@path}" class="swb-menu-current" target="{@target}" title="{@name}">
+                                    <xsl:value-of select="@name"/>
+                                </a>
                                 <ul>
                                     <xsl:for-each select="child">
                                         <li class="swb-menu-child">
-                                            <a href="{@path}"><xsl:value-of select="@name"/></a>
+                                            <a href="{@path}" target="{@target}" title="{@name}">
+                                                <xsl:value-of select="@name"/>
+                                            </a>
                                         </li>
                                     </xsl:for-each>
                                 </ul>
@@ -37,7 +41,9 @@
                         </xsl:when>
                         <xsl:otherwise>
                             <li class="swb-menu-active">
-                                <a href="{@path}"><xsl:value-of select="@name"/></a>
+                                <a href="{@path}" target="{@target}" title="{@name}">
+                                    <xsl:value-of select="@name"/>
+                                </a>
                             </li>
                         </xsl:otherwise>
                     </xsl:choose>
