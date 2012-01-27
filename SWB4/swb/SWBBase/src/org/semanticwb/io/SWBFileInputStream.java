@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.io;
 
 import java.io.File;
@@ -14,8 +13,8 @@ import java.io.FileNotFoundException;
  *
  * @author jorge.jimenez
  */
-public class SWBFileInputStream extends FileInputStream
-{
+public class SWBFileInputStream extends FileInputStream {
+
     public SWBFileInputStream(String name) throws FileNotFoundException {
         super(name);
     }
@@ -27,5 +26,4 @@ public class SWBFileInputStream extends FileInputStream
     public SWBFileInputStream(File file) throws FileNotFoundException {
         super(file);
     }
-
 }
