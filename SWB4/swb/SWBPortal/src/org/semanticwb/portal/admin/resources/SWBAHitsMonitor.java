@@ -345,8 +345,7 @@ public class SWBAHitsMonitor extends GenericResource {
         out.println("percent=false");
         out.println("BrakeLabels=false");
         out.println("Title=" + paramsRequest.getLocaleString("msgHitsMonitor") + "");
-        out.println("SubTitle=" + paramsRequest.getLocaleString("msgTotalHits")
-                + ": TODO: Obtener Hits");
+        out.println("SubTitle=" + paramsRequest.getLocaleString("msgTotalHits") + ": "+SWBPortal.getAccessLog().getInstanceHits());
                 // TODO: + ":" + WBAccessLog.getInstance().getInstanceHits() + "");
         Enumeration en = data.elements();
         int x = 0;
