@@ -69,6 +69,28 @@
         <servlet-name>Groovy</servlet-name>
         <servlet-class>groovy.servlet.GroovyServlet</servlet-class>
     </servlet>
+    
+    <servlet>
+        <servlet-name>webdav</servlet-name>
+        <servlet-class>org.apache.catalina.servlets.WebdavServlet</servlet-class>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>0</param-value>
+        </init-param>
+        <init-param>
+            <param-name>listings</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>readonly</param-name>
+            <param-value>false</param-value>
+        </init-param>        
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>webdav</servlet-name>
+        <url-pattern>/webdav/*</url-pattern>
+    </servlet-mapping>    
 
     <servlet-mapping>
         <servlet-name>Groovy</servlet-name>
