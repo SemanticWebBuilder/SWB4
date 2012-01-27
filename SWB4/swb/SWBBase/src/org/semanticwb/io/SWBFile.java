@@ -6,6 +6,7 @@
 package org.semanticwb.io;
 
 import java.io.File;
+import java.net.URI;
 
 /**
  *
@@ -17,4 +18,21 @@ public class SWBFile extends java.io.File{
     {
         super(pathName);
     }
+
+    public SWBFile(URI uri)
+    {
+        super(uri);
+    }
+
+    public SWBFile(File parent, String child)
+    {
+        super(parent, child);
+    }
+
+    public SWBFile(String parent, String child)
+    {
+        super(parent, child);
+    }
+
+
 }
