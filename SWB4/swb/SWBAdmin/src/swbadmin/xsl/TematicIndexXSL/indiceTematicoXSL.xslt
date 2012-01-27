@@ -27,7 +27,7 @@
                         <xsl:for-each select="son">
                             <tr>
                                 <td colspan="2">
-                                    <a href="{@sonref}" class="idx_link1">
+                                    <a href="{@sonref}" class="idx_link1" target="{@target}" title="{@sontitle}">
                                         <xsl:value-of select="sontitle" />
                                     </a>
                                 </td>
@@ -50,7 +50,7 @@
                             <xsl:for-each select="grandson">
                                 <tr>
                                     <td colspan="2">
-                                        <a href="{@grandsonref}" class="idx_link2">
+                                        <a href="{@grandsonref}" class="idx_link2" target="{@target}" title="{@grandsontitle}">
                                             <font style="font-size: 10px;">&gt; </font><xsl:value-of select="grandsontitle" />
                                         </a>
                                     </td>

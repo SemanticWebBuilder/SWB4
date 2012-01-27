@@ -15,7 +15,7 @@
         <xsl:for-each select="son">
             <div class="entrada_indiceTematico">
                 <h3>
-                    <a href="{@sonref}">
+                    <a href="{@sonref}" target="{@target}" title="{@sontitle}">
                         <xsl:value-of select="sontitle" />
                     </a>
                 </h3>
@@ -36,7 +36,7 @@
                         </xsl:text>
                     </xsl:if>
                         <li>
-                            <a href="{@grandsonref}">
+                            <a href="{@grandsonref}" target="{@target}" title="{@grandsontitle}">
                                 <xsl:value-of select="grandsontitle" />
                             </a>
                         </li>
