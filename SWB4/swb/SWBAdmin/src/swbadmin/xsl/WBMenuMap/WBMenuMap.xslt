@@ -24,7 +24,7 @@
                     </xsl:text>
                 </xsl:if>
                 <xsl:if test="@current = 'false'">
-                    <a href="{@path}" class="" >
+                    <a href="{@path}" class="" target="{@target}" title="{@name}">
                         <xsl:value-of select="@name"/>
                     </a>
                 </xsl:if>

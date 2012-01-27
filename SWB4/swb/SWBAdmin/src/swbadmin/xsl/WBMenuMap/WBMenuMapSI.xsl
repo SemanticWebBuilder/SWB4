@@ -23,7 +23,7 @@
     <xsl:template name="node">
         <xsl:if test="@current='false'">
             <li>
-            <a href="{@path}" class="swb-menumap-act" >
+            <a href="{@path}" class="swb-menumap-act" target="{@target}" title="{@name}">
                 <xsl:value-of select="@name"/>
             </a>
             <xsl:for-each select="node">
