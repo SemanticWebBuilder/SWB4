@@ -219,7 +219,7 @@ public class UserRegistration extends GenericAdmResource
                             SemanticProperty prop = it.next();
                             FormElement ele = getFormElement(prop);
 //                            System.out.println("Processing..." + prop.getName());
-                            writt.println("                    <tr><td>" + ele.renderLabel(request, paramsRequest.getUser().getSemanticObject(), prop, null, null, lang) + "</td>");
+                            writt.println("                    <tr><td>" + ele.renderLabel(request, paramsRequest.getUser().getSemanticObject(), prop, "web", "create", lang) + "</td>");
                             writt.println("                    <td>" + ele.renderElement(request, paramsRequest.getUser().getSemanticObject(), prop, "web", "create", lang) + "</td></tr>");
                         }
                         writt.println("	    </table>");
@@ -344,7 +344,7 @@ public class UserRegistration extends GenericAdmResource
                 {
                     SemanticProperty prop = datos.get(it.next());
                     FormElement ele = getFormElement(prop);
-                    writt.println("                    <tr><td>" + ele.renderLabel(request, paramsRequest.getUser().getSemanticObject(), prop, null, null, lang) + "</td>");
+                    writt.println("                    <tr><td>" + ele.renderLabel(request, paramsRequest.getUser().getSemanticObject(), prop, "web", "create", lang) + "</td>");
                     writt.println("                    <td>" + ele.renderElement(request, paramsRequest.getUser().getSemanticObject(), prop, "web", "create", lang) + "</td></tr>");
                 }
                 writt.println("	    </table>");
