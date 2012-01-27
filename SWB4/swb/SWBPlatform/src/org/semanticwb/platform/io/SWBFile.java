@@ -13,8 +13,8 @@ import java.io.File;
  */
 public class SWBFile extends java.io.File{
 
-    public SWBFile()
+    public SWBFile(String pathName)
     {
-        super("");
+        super(pathName);
     }
 }
