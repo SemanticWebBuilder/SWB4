@@ -8,7 +8,7 @@
                 <xsl:for-each select="parent">
                     <tr>
                         <td>
-                            <a href="{@path}" class="swb-menu-parent">
+                            <a href="{@path}" class="swb-menu-parent" target="{@target}" title="{@name}">
                                 <xsl:value-of select="@name"/>
                             </a>
                         </td>
@@ -24,12 +24,12 @@
                                     <xsl:attribute name="height">1</xsl:attribute>
                                 </img>
                                 <xsl:if test="@current = '0'">
-                                    <a href="{@path}" class="swb-menu-active" >
+                                    <a href="{@path}" class="swb-menu-active" target="{@target}" title="{@name}">
                                         <xsl:value-of select="@name"/>
                                     </a>
                                 </xsl:if>
                                 <xsl:if test="@current = '1'">
-                                    <a href="#" class="swb-menu-current">
+                                    <a href="#" class="swb-menu-current" target="{@target}" title="{@name}">
                                         <xsl:value-of select="@name"/>
                                     </a>
                                 </xsl:if>
@@ -52,12 +52,12 @@
                     <xsl:attribute name="height">1</xsl:attribute>
                 </img>
                 <xsl:if test="@current='0'">
-                    <a href="{@path}" class="swb-menu-active">
+                    <a href="{@path}" class="swb-menu-active" target="{@target}" title="{@name}">
                         <xsl:value-of select="@name"/>
                     </a>
                 </xsl:if>
                 <xsl:if test="@current='1'">
-                    <a href="#" class="swb-menu-current">
+                    <a href="#" class="swb-menu-current" target="{@target}" title="{@name}">
                         <xsl:value-of select="@name"/>
                     </a>
                 </xsl:if>

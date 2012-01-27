@@ -4,7 +4,9 @@
 
 <xsl:template name="child">
 	<li>
-		<A href="{@path}" class="wmn_link" ><xsl:value-of select="@name"/></A>
+		<a href="{@path}" class="wmn_link" target="{@target}" title="{@name}">
+                    <xsl:value-of select="@name"/>
+                </a>
 		<xsl:if test="child">
    	      <ul>
 		   <xsl:for-each select="child">
@@ -21,7 +23,9 @@
 	<xsl:for-each select="brothers">
 		<xsl:for-each select="brother">
 			<li>
-			  <A href="{@path}" class="MenuBarItemSubmenu" ><xsl:value-of select="@name"/></A>
+			  <a href="{@path}" class="MenuBarItemSubmenu" target="{@target}" title="{@name}">
+                              <xsl:value-of select="@name"/>
+                          </a>
                     <xsl:if test="child">
 			  <ul>
 				<xsl:for-each select="child">
