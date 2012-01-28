@@ -6,11 +6,9 @@ package org.semanticwb.css.parser;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 // TODO: Auto-generated Javadoc
