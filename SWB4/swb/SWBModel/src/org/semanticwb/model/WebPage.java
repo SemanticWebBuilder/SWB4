@@ -178,7 +178,6 @@ public class WebPage extends WebPageBase
         if(url!=null)
         {
             {
-                //TODO:Mejorar funcion
                 if(url.indexOf('&')>-1)
                 {
                     url=url.replace("&amp;", "&");
@@ -189,7 +188,7 @@ public class WebPage extends WebPageBase
                     url=SWBPlatform.getContextPath()+url;
                 }else
                 {
-                    url=url.substring(1);
+                    //url=url.substring(1);
                 }
             }
             return url;
