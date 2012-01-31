@@ -30,6 +30,7 @@ package org.semanticwb.base.db;
 
 import java.sql.*;
 import java.util.Properties;
+import java.util.concurrent.Executor;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
@@ -751,4 +752,37 @@ public class AutoConnection implements Connection
         return con.isWrapperFor(iface);
     }
 
+    /* MAPS74 - JSE 7 Wrapper * /
+    @Override
+    public void setSchema(String schema) throws SQLException
+    {
+        con.setSchema(schema);
+    }
+
+    @Override
+    public String getSchema() throws SQLException
+    {
+        return con.getSchema();
+    }
+
+    @Override
+    public void abort(Executor executor) throws SQLException
+    {
+        con.abort(executor);
+    }
+
+    @Override
+    public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException
+    {
+        con.setNetworkTimeout(executor, milliseconds);
+    }
+
+    @Override
+    public int getNetworkTimeout() throws SQLException
+    {
+        return con.getNetworkTimeout();
+    }
+
+    /*
+     */
 }
