@@ -922,4 +922,19 @@ public boolean execute(String str, String[] str1) throws java.sql.SQLException
     st.setSQLXML(parameterIndex, xmlObject);
     }
 
+    /* MAPS74 - JDK 7 SE Wrapper * /
+    @Override
+    public void closeOnCompletion() throws SQLException
+    {
+        st.closeOnCompletion();
+    }
+
+    @Override
+    public boolean isCloseOnCompletion() throws SQLException
+    {
+        return isCloseOnCompletion();
+    }
+
+    /**/
+
 }
