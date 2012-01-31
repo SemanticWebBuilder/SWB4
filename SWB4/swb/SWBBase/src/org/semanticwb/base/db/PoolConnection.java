@@ -30,6 +30,7 @@ package org.semanticwb.base.db;
 import java.io.PrintStream;
 import java.sql.*;
 import java.util.*;
+import java.util.concurrent.Executor;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
@@ -714,5 +715,36 @@ public java.sql.Savepoint setSavepoint() throws java.sql.SQLException
     return con.isWrapperFor(iface);
     }
     
+/* MAPS74 - Wrapping for Java SE 7
+    @Override
+    public void setSchema(String schema) throws SQLException
+    {
+        con.setSchema(schema);
+    }
+
+    @Override
+    public String getSchema() throws SQLException
+    {
+        return con.getSchema();
+    }
+
+    @Override
+    public void abort(Executor executor) throws SQLException
+    {
+        con.abort(executor);
+    }
+
+    @Override
+    public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException
+    {
+        con.setNetworkTimeout(executor, milliseconds);
+    }
+
+    @Override
+    public int getNetworkTimeout() throws SQLException
+    {
+        return con.getNetworkTimeout();
+    }
+    */
 
 }
