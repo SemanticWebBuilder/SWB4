@@ -26,7 +26,6 @@
 package org.semanticwb.process.resources;
 
 import com.hp.hpl.jena.rdf.model.NodeIterator;
-import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -38,7 +37,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,14 +46,12 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.FormElement;
-import org.semanticwb.model.GenericFormElement;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
-import org.semanticwb.model.base.ResourceTypeBase;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
@@ -70,14 +66,11 @@ import org.semanticwb.portal.api.SWBParameters;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.process.forms.SWBFormMgrLayer;
-import org.semanticwb.process.model.FlowNode;
 import org.semanticwb.process.model.FlowNodeInstance;
 import org.semanticwb.process.model.Instance;
 import org.semanticwb.process.model.ItemAware;
 import org.semanticwb.process.model.ItemAwareReference;
-import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.SWBProcessFormMgr;
-import org.semanticwb.process.model.SWBProcessMgr;
 import org.semanticwb.process.model.UserTask;
 
 /**
@@ -479,13 +472,16 @@ public class ProcessForm extends GenericResource {
                 
                 String url=foi.getProcessWebPage().getUrl();
                 ResourceType rtype=ResourceType.ClassMgr.getResourceType("ProcessTaskInbox", base.getWebSite());
-                Resource res=rtype.getResource();
-                if(res!=null)
-                {
-                    Resourceable resable=res.getResourceable();
-                    if(resable instanceof WebPage)
+                
+                if (rtype != null) {
+                    Resource res=rtype.getResource();
+                    if(res!=null)
                     {
-                        url=((WebPage)resable).getUrl();
+                        Resourceable resable=res.getResourceable();
+                        if(resable instanceof WebPage)
+                        {
+                            url=((WebPage)resable).getUrl();
+                        }
                     }
                 }
                 
