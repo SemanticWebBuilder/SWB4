@@ -453,6 +453,7 @@ public class SemanticObject
                                     ret=new SemanticObject(model,res,stit);
                                 }else
                                 {
+                                    m_no_objs.put(uri, uri);
                                     return null;
                                 }
                             }
