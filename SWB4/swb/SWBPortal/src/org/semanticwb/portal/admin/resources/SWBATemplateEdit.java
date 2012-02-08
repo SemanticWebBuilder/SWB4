@@ -483,8 +483,8 @@ public class SWBATemplateEdit extends GenericResource {
             SemanticObject soactual = ont.getSemanticObject(idval);
             sobase.setObjectProperty(Versionable.swb_actualVersion, soactual);
 
-            Template tmpl = (Template) sobase.getGenericInstance();
-            SWBPortal.getTemplateMgr().reloadTemplate(tmpl);
+            //Template tmpl = (Template) sobase.getGenericInstance();
+            //SWBPortal.getTemplateMgr().reloadTemplate(tmpl);
             response.setRenderParameter(act, "");
             response.setMode(response.Mode_VIEW);
         } else if ("remove".equals(act)) {
