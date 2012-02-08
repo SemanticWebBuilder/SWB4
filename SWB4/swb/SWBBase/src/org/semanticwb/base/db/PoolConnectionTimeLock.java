@@ -53,7 +53,7 @@ public class PoolConnectionTimeLock extends TimerTask {
     private ConcurrentHashMap pools = new ConcurrentHashMap();
     
     /** The last time. */
-    private long lastTime = System.currentTimeMillis();
+    private long lastTime = System.nanoTime();
 
     /**
      * Creates a new instance of PoolConnectionTimeLock.
@@ -74,7 +74,7 @@ public class PoolConnectionTimeLock extends TimerTask {
         {
             try
             {
-                long time = System.currentTimeMillis();
+                long time = System.nanoTime();
                 while (time <= lastTime)
                 {
                     time++;
