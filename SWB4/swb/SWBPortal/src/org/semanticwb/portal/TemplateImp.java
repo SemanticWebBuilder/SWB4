@@ -178,6 +178,7 @@ public class TemplateImp extends Template
      */
     public StringBuffer replaceObjectsValues(String value, StringBuffer auxparts, ArrayList parts, HashMap objects)
     {
+        //System.out.println("value:"+value);
         //ArrayList p = split(value, "\\{(.+?)[^\\}]@(.+?)\\}");
         ArrayList p = SWBUtils.TEXT.regExpSplit(value, "\\{([^\\{]+?)\\}");
         Iterator it = p.iterator();
@@ -185,14 +186,31 @@ public class TemplateImp extends Template
         {
             String sp = (String) it.next();
             Object obj = identifyObject(sp, objects);
+            //System.out.println("sp:"+sp);
+            //System.out.println("obj:"+obj);
             if(obj==null)
             {
-                auxparts.append(sp);
+                if(sp.startsWith("/work/"))
+                {
+                    auxparts.append(SWBPortal.getWebWorkPath());
+                    auxparts.append(sp.substring(5));
+                }else
+                {
+                    auxparts.append(sp);
+                }
             }else
             {
                 if (obj instanceof String)
                 {
-                    auxparts.append((String) obj);
+                    String str=(String)obj;
+                    if(str.startsWith("/work/"))
+                    {
+                        auxparts.append(SWBPortal.getWebWorkPath());
+                        auxparts.append(str.substring(5));
+                    }else
+                    {
+                        auxparts.append(str);
+                    }
                 } else
                 {
                     if (auxparts.length() > 0)
@@ -569,6 +587,12 @@ public class TemplateImp extends Template
                             {
                                 String name = (String) en.nextElement();
                                 String value = tag.getParam(name);
+                                
+                                //System.out.println("name:"+name);
+                                //System.out.println("value:"+name);
+                                //System.out.println("actPath:"+actPath);
+                                //System.out.println("auxpart1:"+auxpart);
+                                
                                 auxpart.append(name);
                                 auxpart.append("=\"");
                                 if ((name.toLowerCase().equals("src")
@@ -599,6 +623,9 @@ public class TemplateImp extends Template
                                     //auxpart.append(value);
                                 }
                                 auxpart.append("\" ");
+                                
+                                //System.out.println("auxpart2:"+auxpart);
+                                
                             }
                             if(tag.isEmpty())auxpart.append("/");
                             auxpart.append(">");
@@ -722,7 +749,14 @@ public class TemplateImp extends Template
                 i++;
                 if (value.startsWith("/", i) || value.startsWith("http://", i))
                 {
-                    aux.append(value.substring(off, f + ext.length()));
+                    if(value.startsWith("/work/"))
+                    {
+                        aux.append(SWBPortal.getWebWorkPath());
+                        aux.append(value.substring(off+5, f + ext.length()));
+                    }else
+                    {
+                        aux.append(value.substring(off, f + ext.length()));
+                    }
                 } else
                 {
                     aux.append(value.substring(off, i) + actPath + value.substring(i, f + ext.length()));
@@ -750,7 +784,13 @@ public class TemplateImp extends Template
             i++;
             if (value.startsWith("/", i) || value.startsWith("http://", i))
             {
-                return value;
+                if(value.startsWith("/work/"))
+                {
+                    return SWBPortal.getWebWorkPath()+value.substring(5);
+                }else               
+                {
+                    return value;
+                }
             } else
             {
                 return value.substring(0, i) + actPath + value.substring(i, value.length());
