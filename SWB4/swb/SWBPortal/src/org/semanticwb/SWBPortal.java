@@ -395,7 +395,7 @@ public class SWBPortal
         SWBUtils.EMAIL.setAdminEmail(getEnv("af/adminEmail"));
 
         standalone=getEnv("swb/clientServer","SASC").equalsIgnoreCase("SASC");
-        client=!getEnv("swb/clientServer","SASC").equalsIgnoreCase("Server") && !standalone;
+        client=!getEnv("swb/clientServer","SASC").equalsIgnoreCase("Server") && !getEnv("swb/clientServer","SASC").equalsIgnoreCase("SAS") && !standalone;
 
         try
         {
@@ -950,14 +950,20 @@ public class SWBPortal
 
         try
         {
-            if (contextPath.endsWith("/"))
+            if(getEnv("swb/webWorkPath","/work").startsWith("/"))
             {
-                webWorkPath = contextPath + getEnv("swb/webWorkPath").substring(1);
-            }
-            else
+                if (contextPath.endsWith("/"))
+                {
+                    webWorkPath = contextPath + getEnv("swb/webWorkPath","/work").substring(1);
+                }
+                else
+                {
+                    webWorkPath = contextPath + getEnv("swb/webWorkPath","/work");
+                }
+            }else
             {
-                webWorkPath = contextPath + getEnv("swb/webWorkPath");
-            }
+                webWorkPath = getEnv("swb/webWorkPath","/work");
+            }            
         }
         catch (Exception e)
         {
