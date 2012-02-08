@@ -47,6 +47,8 @@ import org.semanticwb.portal.api.*;
  */
 public class OfficeResource extends org.semanticwb.resource.office.sem.base.OfficeResourceBase
 {
+
+
     
     /** The Constant document. */
     protected static final OfficeDocument document=new OfficeDocument();
