@@ -460,15 +460,18 @@ public class ProcessForm extends GenericResource {
             while (it.hasNext()) {
                 ItemAwareReference item = it.next();
                 SWBClass obj = item.getProcessObject();
-                String varName = item.getItemAware().getName();
-                SemanticClass cls = obj.getSemanticObject().getSemanticClass();
-                Iterator<SemanticProperty> itp = cls.listProperties();
-                while (itp.hasNext()) {
-                    SemanticProperty prop = itp.next();
-                    if (isViewProperty(response, varName, prop, hmprops)) {
-                        mgr.addProperty(prop, varName, SWBFormMgr.MODE_VIEW);
-                    } else if (isEditProperty(response, varName, prop, hmprops)) {
-                        mgr.addProperty(prop, varName, SWBFormMgr.MODE_EDIT);
+                if(obj!=null)
+                {
+                    String varName = item.getItemAware().getName();
+                    SemanticClass cls = obj.getSemanticObject().getSemanticClass();
+                    Iterator<SemanticProperty> itp = cls.listProperties();
+                    while (itp.hasNext()) {
+                        SemanticProperty prop = itp.next();
+                        if (isViewProperty(response, varName, prop, hmprops)) {
+                            mgr.addProperty(prop, varName, SWBFormMgr.MODE_VIEW);
+                        } else if (isEditProperty(response, varName, prop, hmprops)) {
+                            mgr.addProperty(prop, varName, SWBFormMgr.MODE_EDIT);
+                        }
                     }
                 }
             }
