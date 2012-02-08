@@ -30,13 +30,18 @@
 
 package org.semanticwb.portal;
 
-import java.util.*;
-import java.io.*;
-
+import java.io.IOException;
 import java.net.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.StringTokenizer;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBObserver;
 
@@ -120,94 +125,142 @@ public class SWBMessageCenter
             procesor.init();
 
             //System.out.println("after procesor start...");
-
+            
+            
             if (!sa)
             {
-                String message = "ini|MessageServer Iniciado...";
-                byte[] data = message.getBytes();
-
-                //System.out.println("before server start...");
-
-                server = new SWBMessageServer(this);
-                server.start();
-
-                //System.out.println("after server start...");
+                String localAddr=SWBPlatform.getEnv("swb/localMessageAddress");
+                String serverAddr=SWBPlatform.getEnv("swb/serverMessageAddress");
                 
-                
-                try
+                if(localaddr!=null && serverAddr!=null) //Nueva version
                 {
-                    String ipaddr = SWBPlatform.getEnv("swb/MessageIPAddr");
-                    if (ipaddr.equalsIgnoreCase("localhost"))
-                        addr = InetAddress.getLocalHost();
-                    else
-                        addr = InetAddress.getByName(ipaddr);
-                } catch (Exception e)
-                {
-                    log.error("SWBMessage Server IP Error:",e);
-                }
-
-                //get send address
-                int port=Integer.parseInt(SWBPlatform.getEnv("swb/sendMessagePort"));
-                String sendAddr=SWBPlatform.getEnv("swb/sendMessageIPAddrs");
-                if(sendAddr==null)
-                {
-                    String ip = addr.getHostAddress();
-                    InetAddress saddr = InetAddress.getByName(ip.substring(0, ip.lastIndexOf('.')) + ".255");
-                    log.info("BroadCast Addr:"+saddr+":"+port);
-                    packets.add(new DatagramPacket(data, data.length, saddr, port));
-                }else
-                {
-                    DatagramPacket packet=null;
-                    String ip=null;
-                    int aport;
-                    boolean fp=false;
-                    StringTokenizer st=new StringTokenizer(sendAddr,":,;",true);
-                    while(st.hasMoreTokens())
+                    int i=localAddr.indexOf(":");
+                    String ipaddr=localAddr.substring(0, i);
+                    int port=Integer.parseInt(localAddr.substring(i+1));
+                    
+                    i=serverAddr.indexOf(":");
+                    String sipaddr=serverAddr.substring(0, i);
+                    int sport=Integer.parseInt(serverAddr.substring(i+1));
+                    
+                    InetAddress saddr=null;
+                    try
                     {
-                        String aux=st.nextToken();
-                        try
-                        {
-                            if(aux.equals(":"))
-                            {
-                                fp=true;
-                            }else if(aux.equals(",") || aux.equals(";"))
-                            {
-                                fp=false;
-                            }else if(aux.trim().length()>0)
-                            {
-                                if(fp)
-                                {
-                                    aport=Integer.parseInt(aux.trim());
-                                    packet.setPort(aport);
-                                }else
-                                {
-                                    InetAddress saddr = InetAddress.getByName(aux.trim());
-                                    packet=new DatagramPacket(data, data.length, saddr, port);
-                                    packets.add(packet);
-                                }
-                            }
-                        }catch(Exception e){log.error(e);}
+                        if (ipaddr.equalsIgnoreCase("localhost"))
+                            addr = InetAddress.getLocalHost();
+                        else
+                            addr = InetAddress.getByName(ipaddr);
+                        
+                        if (sipaddr.equalsIgnoreCase("localhost"))
+                            saddr = InetAddress.getLocalHost();
+                        else
+                            saddr = InetAddress.getByName(sipaddr);
+                        
+                    } catch (Exception e)
+                    {
+                        log.error("SWBMessage Server IP Error:",e);
+                    }                   
+                    
+                    //System.out.println("addr:"+addr+" "+port);
+                    //System.out.println("saddr:"+saddr+" "+sport);
+                    
+                    addAddress(addr, port);
+                    addAddress(saddr, sport);                                        
+                    
+                    String message = "ini|hel|"+addr.getHostAddress()+":"+port;
+                    
+                    server = new SWBMessageServer(this,addr,port);
+                    server.start();               
+                                        
+                    sendMessage(message);
+                    
+                }else  //Version Enterior de Registro de Mensajes
+                {
+                    String message = "ini|MessageServer Iniciado...";
+                    byte[] data = message.getBytes();
+
+                    //System.out.println("before server start...");
+
+                    server = new SWBMessageServer(this);
+                    server.start();
+
+                    //System.out.println("after server start...");
+
+
+                    try
+                    {
+                        String ipaddr = SWBPlatform.getEnv("swb/MessageIPAddr");
+                        if (ipaddr.equalsIgnoreCase("localhost"))
+                            addr = InetAddress.getLocalHost();
+                        else
+                            addr = InetAddress.getByName(ipaddr);
+                    } catch (Exception e)
+                    {
+                        log.error("SWBMessage Server IP Error:",e);
                     }
-                    Iterator it=packets.iterator();
-                    while(it.hasNext())
+
+                    //get send address
+                    int port=Integer.parseInt(SWBPlatform.getEnv("swb/sendMessagePort"));
+                    String sendAddr=SWBPlatform.getEnv("swb/sendMessageIPAddrs");
+                    if(sendAddr==null)
                     {
-                        DatagramPacket apacket=(DatagramPacket)it.next();
-                        log.info("Send Address "+apacket.getAddress()+":"+apacket.getPort());
-                    }                    
+                        String ip = addr.getHostAddress();
+                        InetAddress saddr = InetAddress.getByName(ip.substring(0, ip.lastIndexOf('.')) + ".255");
+                        log.info("BroadCast Addr:"+saddr+":"+port);
+                        packets.add(new DatagramPacket(data, data.length, saddr, port));
+                    }else
+                    {
+                        DatagramPacket packet=null;
+                        String ip=null;
+                        int aport;
+                        boolean fp=false;
+                        StringTokenizer st=new StringTokenizer(sendAddr,":,;",true);
+                        while(st.hasMoreTokens())
+                        {
+                            String aux=st.nextToken();
+                            try
+                            {
+                                if(aux.equals(":"))
+                                {
+                                    fp=true;
+                                }else if(aux.equals(",") || aux.equals(";"))
+                                {
+                                    fp=false;
+                                }else if(aux.trim().length()>0)
+                                {
+                                    if(fp)
+                                    {
+                                        aport=Integer.parseInt(aux.trim());
+                                        packet.setPort(aport);
+                                    }else
+                                    {
+                                        InetAddress saddr = InetAddress.getByName(aux.trim());
+                                        packet=new DatagramPacket(data, data.length, saddr, port);
+                                        packets.add(packet);
+                                    }
+                                }
+                            }catch(Exception e){log.error(e);}
+                        }
+                        Iterator it=packets.iterator();
+                        while(it.hasNext())
+                        {
+                            DatagramPacket apacket=(DatagramPacket)it.next();
+                            log.info("Send Address "+apacket.getAddress()+":"+apacket.getPort());
+                        }                    
+                    }
+
+                    /*
+                    if (addr != null)
+                    {
+                        DatagramSocket aux = new DatagramSocket();   //optener una puerto de salida valido...
+                        int x = aux.getLocalPort();
+                        aux.close();
+                        sock = new DatagramSocket(x, addr);
+                    } else
+                        sock = new DatagramSocket();
+                    sock.send(packet);
+                    */
+                    sendMessage(message);
                 }
-                
-                /*
-                if (addr != null)
-                {
-                    DatagramSocket aux = new DatagramSocket();   //optener una puerto de salida valido...
-                    int x = aux.getLocalPort();
-                    aux.close();
-                    sock = new DatagramSocket(x, addr);
-                } else
-                    sock = new DatagramSocket();
-                sock.send(packet);
-                */
-                sendMessage(message);
             }
         } catch (Exception e)
         {
@@ -429,6 +482,46 @@ public class SWBMessageCenter
     public SWBMessageServer getMessageServer()
     {
         return server;
+    }
+    
+    public synchronized boolean addAddress(InetAddress addr, int port)
+    {  
+        //System.out.println("addAddress:"+addr+" "+port);
+        Iterator<DatagramPacket> it=packets.iterator();
+        
+        boolean contains=false;
+        while (it.hasNext())
+        {
+            DatagramPacket datagramPacket = it.next();
+            if(datagramPacket.getAddress().equals(addr) && datagramPacket.getPort()==port)
+            {
+                contains=true;
+            }
+            //System.out.println("--Addr:"+datagramPacket.getAddress().getHostAddress()+" "+datagramPacket.getPort());
+        }
+        
+        if(!contains)
+        {
+            byte[] data = "".getBytes();
+            packets.add(new DatagramPacket(data, data.length, addr, port));
+            //System.out.println("--Addr:"+addr.getHostAddress()+" "+port);
+        }    
+        return !contains;
+    }
+    
+    public String getListAddress()
+    {
+        StringBuffer ret=new StringBuffer();
+        Iterator<DatagramPacket> it=packets.iterator();
+        while (it.hasNext())
+        {
+            DatagramPacket datagramPacket = it.next();
+            ret.append(datagramPacket.getAddress().getHostAddress());
+            ret.append(":");
+            ret.append(datagramPacket.getPort());
+            if(it.hasNext())ret.append("|");
+        }   
+        return ret.toString();
     }
 
 }
