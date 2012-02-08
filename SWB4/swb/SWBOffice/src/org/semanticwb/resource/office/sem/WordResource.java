@@ -54,6 +54,8 @@ import org.semanticwb.portal.util.ContentUtils;
  */
 public class WordResource extends org.semanticwb.resource.office.sem.base.WordResourceBase
 {
+
+
     
     /** The log. */
     private static Logger log = SWBUtils.getLogger(WordResource.class);
