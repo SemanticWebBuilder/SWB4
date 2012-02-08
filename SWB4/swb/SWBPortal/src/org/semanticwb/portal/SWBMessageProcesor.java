@@ -126,7 +126,41 @@ public class SWBMessageProcesor extends TimerTask
                         }
                     } else if(ini.equals("ini"))
                     {
-                        log.info("SWBMessageProcesor init...");
+                        //System.out.println(str);
+                        StringTokenizer st=new StringTokenizer(str, "|");
+                        String init=st.nextToken();
+                        String time=st.nextToken();
+                        String aux=st.nextToken();
+                        if(aux.equals("hel"))
+                        {
+                            String addr=st.nextToken();
+                            log.info("Registering Message Client:"+addr);
+                            
+                            //System.out.println("Registering Message Client:"+addr);
+                            
+                            int j=addr.indexOf(":");
+                            center.addAddress(InetAddress.getByName(addr.substring(0,j)),Integer.parseInt(addr.substring(j+1)));
+                            
+                            if(!SWBPortal.isClient())
+                            {
+                                //System.out.println("Server...");
+                                center.sendMessage("ini|upd|"+center.getListAddress());
+                            }
+                        }else if(aux.equals("upd"))
+                        {
+                            if(SWBPortal.isClient())
+                            {
+                                while(st.hasMoreTokens())
+                                {
+                                    String addr=st.nextToken();
+                                    int j=addr.indexOf(":");
+                                    center.addAddress(InetAddress.getByName(addr.substring(0,j)),Integer.parseInt(addr.substring(j+1)));
+                                }
+                                
+                            }
+                        }
+                        
+                        
                     } else if(center.getObserver(ini) != null)
                     {
                         SWBObserver obs = center.getObserver(ini);
