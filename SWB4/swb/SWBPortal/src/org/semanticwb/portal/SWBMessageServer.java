@@ -53,10 +53,24 @@ public class SWBMessageServer extends java.lang.Thread
     private DatagramSocket s = null;
     
     /** The packet. */
-    private DatagramPacket packet = null;
+//    private DatagramPacket packet = null;
     
     /** The center. */
     private SWBMessageCenter center = null;
+    
+    /**
+     * Instantiates a new sWB message server.
+     * 
+     * @param center the center
+     * @throws SocketException the socket exception
+     */
+    public SWBMessageServer(SWBMessageCenter center, InetAddress addr, int port) throws java.net.SocketException
+    {
+        this.center = center;
+        s = new DatagramSocket(port, addr);
+        log.event("Message Server en:"+"\t"+ s.getLocalAddress().getHostAddress() + ":" + port);
+    }    
+    
 
     /**
      * Instantiates a new sWB message server.
