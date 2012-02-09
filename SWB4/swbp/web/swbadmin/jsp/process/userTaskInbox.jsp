@@ -15,6 +15,7 @@
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.process.model.ProcessGroup"%>
 <%@page import="org.semanticwb.process.model.StartEvent"%>
+<%@page import="org.semanticwb.process.model.Instance"%>
 <%@page import="org.semanticwb.process.model.Process"%>
 <%@page import="org.semanticwb.process.model.Activity"%>
 <%@page import="org.semanticwb.process.model.UserTask"%>
@@ -307,6 +308,13 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                     Iterator<FlowNodeInstance> instances = tinstances.iterator();
                     while(instances.hasNext()) {
                         FlowNodeInstance instance = instances.next();
+                        ProcessInstance pii = instance.getProcessInstance();
+                        if (pii != null) {
+                            System.out.println(instance.getId()+"-PII-"+pii.getId());
+                        } else {
+                            System.out.println(instance.getId()+"-NULL");
+                        }
+                        
                         WebPage pwp = instance.getProcessWebPage();
                         String status = "<img src=\""+baseimg;
                         String Id = instance.getId();
@@ -319,7 +327,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                         String pClosed = "--";
 
                         if (instance.getStatus() == ProcessInstance.STATUS_PROCESSING) status += "icon_pending.png\">";
-                        if (instance.getStatus() == ProcessInstance.STATUS_CLOSED) {
+                        if (instance.getStatus() == ProcessInstance.STATUS_CLOSED || instance.getStatus() == Instance.STATUS_ABORTED) {
                             status += "icon_closed.png\">";
                             pClosed = SWBUtils.TEXT.getStrDate(instance.getEnded(), lang, "dd/mm/yy - hh:mm");
                         }
