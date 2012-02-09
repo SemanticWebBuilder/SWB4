@@ -269,16 +269,18 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
                     file = file.replace(".pptx", ".html");
                     file = file.replace(".ppt", ".html");
                     file = java.net.URLDecoder.decode(file, "utf-8");
-                    path = SWBPortal.getWorkPath();
+                     path = SWBPortal.getWebWorkPath();
                     if (path.endsWith("/"))
                     {
                         path = path.substring(0, path.length() - 1);
                         path += getResourceBase().getWorkPath() + "/" + file;
+                        resourceWebWorkpath += getResourceBase().getWorkPath();
                     }
                     else
                     {
                         path += getResourceBase().getWorkPath() + "/" + file;
-                    }                   
+                        resourceWebWorkpath += getResourceBase().getWorkPath();
+                    }
                 }
 
 
