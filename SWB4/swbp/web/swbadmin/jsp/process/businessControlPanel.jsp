@@ -370,7 +370,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                     acts = "&currentActivities=" + URLEncoder.encode(acts);
                                 }
 
-                                if (instance.getStatus() == ProcessInstance.STATUS_PROCESSING) {
+                                if (instance.getStatus() == ProcessInstance.STATUS_CLOSED) {
                                     WebPage pwp = instance.getProcessType().getProcessWebPage();
                                     if (pwp != null) {
                                     %><a class="acc-desempeno" href="<%=pwp.getUrl()%>">Desempe&ntilde;o</a><%
