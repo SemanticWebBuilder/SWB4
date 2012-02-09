@@ -88,11 +88,17 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
      * @param file the file
      * @return the hTML
      */
-    public static String getHTML(File file)
+    public static String getHTML(File file, String contentFile)
     {
         StringBuilder html = new StringBuilder();
         String workpath = file.getAbsolutePath().replace('\\', '/');
         file = new File(file.getParentFile().getPath() + "/" + "frame.html");
+        if (!file.exists())
+        {
+            contentFile = contentFile.replace(".pptx", ".html");
+            contentFile = contentFile.replace(".ppt", ".html");
+            file = new File(file.getParentFile().getPath() + "/" + contentFile);
+        }
         String applicationpath = SWBUtils.getApplicationPath();
         if (workpath.toLowerCase().startsWith(applicationpath.toLowerCase()))
         {
@@ -161,37 +167,37 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
             }
         });
         String prefix_v3 = "v3_";
-        if(files!=null && files.length>0)
+        if (files != null && files.length > 0)
         {
-        for (File f : files)
-        {
-            if (f.exists())
+            for (File f : files)
             {
-                String oldpath = f.getAbsolutePath();
-                String newName = f.getAbsolutePath() + ".bk";
-                String fileToCopy = f.getParentFile().getAbsolutePath() + "/" + prefix_v3 + f.getName();
-                File f_v3 = new File(fileToCopy);
-                if (f_v3.exists())
+                if (f.exists())
                 {
-                    f.renameTo(new File(newName));
-                    try
+                    String oldpath = f.getAbsolutePath();
+                    String newName = f.getAbsolutePath() + ".bk";
+                    String fileToCopy = f.getParentFile().getAbsolutePath() + "/" + prefix_v3 + f.getName();
+                    File f_v3 = new File(fileToCopy);
+                    if (f_v3.exists())
                     {
-                        String content = SWBUtils.IO.readInputStream(new FileInputStream(f_v3));
-                        FileOutputStream out = new FileOutputStream(new File(oldpath));
-                        out.write(content.getBytes());
-                        out.flush();
-                        out.close();
-                    }
-                    catch (Exception fnfe)
-                    {
-                        log.error(fnfe);
+                        f.renameTo(new File(newName));
+                        try
+                        {
+                            String content = SWBUtils.IO.readInputStream(new FileInputStream(f_v3));
+                            FileOutputStream out = new FileOutputStream(new File(oldpath));
+                            out.write(content.getBytes());
+                            out.flush();
+                            out.close();
+                        }
+                        catch (Exception fnfe)
+                        {
+                            log.error(fnfe);
 
+                        }
                     }
                 }
+
+
             }
-
-
-        }
         }
 
 
@@ -230,19 +236,52 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
             if (file != null)
             {
 
-
-                String path = SWBPortal.getWebWorkPath();
-                if (path.endsWith("/"))
+                String pathFilePPT = SWBPortal.getWorkPath();
+                if (pathFilePPT.endsWith("/"))
                 {
-                    path = path.substring(0, path.length() - 1);
-                    path += getResourceBase().getWorkPath() + "/" + "frame.html";
-                    resourceWebWorkpath += getResourceBase().getWorkPath();
+                    pathFilePPT = pathFilePPT.substring(0, pathFilePPT.length() - 1);
+                    pathFilePPT += getResourceBase().getWorkPath() + "/" + "frame.html";
                 }
                 else
                 {
-                    path += getResourceBase().getWorkPath() + "/" + "frame.html";
-                    resourceWebWorkpath += getResourceBase().getWorkPath();
+                    pathFilePPT += getResourceBase().getWorkPath() + "/" + "frame.html";
                 }
+                String path=null;
+                File filecontent = new File(pathFilePPT);
+                if (filecontent.exists())
+                {
+                    path = SWBPortal.getWebWorkPath();
+                    if (path.endsWith("/"))
+                    {
+                        path = path.substring(0, path.length() - 1);
+                        path += getResourceBase().getWorkPath() + "/" + "frame.html";
+                        resourceWebWorkpath += getResourceBase().getWorkPath();
+                    }
+                    else
+                    {
+                        path += getResourceBase().getWorkPath() + "/" + "frame.html";
+                        resourceWebWorkpath += getResourceBase().getWorkPath();
+                    }
+                }
+                else
+                {
+                    file = this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML);
+                    file = file.replace(".pptx", ".html");
+                    file = file.replace(".ppt", ".html");
+                    file = java.net.URLDecoder.decode(file, "utf-8");
+                    path = SWBPortal.getWorkPath();
+                    if (path.endsWith("/"))
+                    {
+                        path = path.substring(0, path.length() - 1);
+                        path += getResourceBase().getWorkPath() + "/" + file;
+                    }
+                    else
+                    {
+                        path += getResourceBase().getWorkPath() + "/" + file;
+                    }                   
+                }
+
+
                 PrintWriter out = response.getWriter();
                 beforePrintDocument(out);
                 String workpath = SWBPortal.getWebWorkPath() + getResourceBase().getWorkPath() + "/";
