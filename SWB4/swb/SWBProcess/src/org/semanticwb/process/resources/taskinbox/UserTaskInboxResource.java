@@ -307,7 +307,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
 
         Iterator<FlowNodeInstance> it_ins = null;
         if (sortType.equals("date")) {
-            it_ins = SWBComparator.sortByCreated(t_instances.iterator());
+            it_ins = SWBComparator.sortByCreated(t_instances.iterator(), false);
         } else if (sortType.equals("name")) {
             Collections.sort(t_instances, taskNameComparator);
             it_ins = t_instances.iterator();
