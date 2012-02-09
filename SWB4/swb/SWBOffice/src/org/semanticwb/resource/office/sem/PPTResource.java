@@ -82,6 +82,29 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
     {
     }
 
+    public static String getHTML(File file)
+    {
+        StringBuilder html = new StringBuilder();
+        String workpath = file.getAbsolutePath().replace('\\', '/');
+        file = new File(file.getParentFile().getPath() + "/" + "frame.html");
+        
+        String applicationpath = SWBUtils.getApplicationPath();
+        if (workpath.toLowerCase().startsWith(applicationpath.toLowerCase()))
+        {
+            workpath = workpath.substring(0, applicationpath.length());
+            workpath = SWBPortal.getContextPath() + workpath;
+        }
+        try
+        {
+            html.append("<div id=\"").append(PPTResource.class.getName()).append("\"><iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"").append(workpath).append("\"></iframe><br>");
+
+        }
+        catch (Exception e)
+        {
+            html.append("<iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"").append(workpath).append("\">This navigator does not support iframe</iframe></div>");
+        }
+        return html.toString();
+    }
     /**
      * Gets the hTML.
      * 
