@@ -114,27 +114,31 @@ public class FriendlyURL extends org.semanticwb.model.base.FriendlyURLBase
      */
     public static FriendlyURL getFriendlyURL(String path, String host)
     {
+        //System.out.println("path:"+path+" host:"+host);
         if(urls==null)return null;
         Object obj=urls.get(path);
         if(obj==null)return null;
         if(obj instanceof FriendlyURL)return (FriendlyURL)obj;
         if(obj instanceof ArrayList)
         {
+            Dns dns=Dns.getDns(host);
+            FriendlyURL tmp=null;
             Iterator<FriendlyURL> it=((ArrayList)obj).iterator();
             while (it.hasNext())
             {
                 FriendlyURL friendlyURL = it.next();
+                //System.out.println("friendlyURL:"+friendlyURL+" page:"+friendlyURL.getWebPage()+" site:"+friendlyURL.getWebPage().isValid()+" "+friendlyURL.getWebPage().getWebSite().isValid());
                 WebSite site=friendlyURL.getWebPage().getWebSite();
-                Iterator<Dns> it2=site.listDnses();
-                while (it2.hasNext())
+                
+                if((dns==null || !dns.getWebSite().equals(site)) && friendlyURL.getWebPage().isValid() && site.isValid())
                 {
-                    Dns dns = it2.next();
-                    if(dns.getDns().equals(host))
-                    {
-                        return friendlyURL;
-                    }
+                    tmp=friendlyURL;
+                }else if(dns!=null && dns.getWebSite().equals(site))
+                {
+                    return friendlyURL;
                 }
             }
+            return tmp;
         }
         return null;
     }
