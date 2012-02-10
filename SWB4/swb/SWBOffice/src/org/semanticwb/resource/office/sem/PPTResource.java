@@ -263,11 +263,11 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
                 if (pathFilePPT.endsWith("/"))
                 {
                     pathFilePPT = pathFilePPT.substring(0, pathFilePPT.length() - 1);
-                    pathFilePPT += getResourceBase().getWorkPath() + "/" + "frame.html";
+                    pathFilePPT += getResourceBase().getWorkPath() + "frame.html";
                 }
                 else
                 {
-                    pathFilePPT += getResourceBase().getWorkPath() + "/" + "frame.html";
+                    pathFilePPT += getResourceBase().getWorkPath() + "frame.html";
                 }
                 String path=null;
                 File filecontent = new File(pathFilePPT);
