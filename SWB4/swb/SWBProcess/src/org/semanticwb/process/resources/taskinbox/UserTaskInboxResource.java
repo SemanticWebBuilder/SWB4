@@ -129,11 +129,16 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         } else if (action.equals("CREATE")) {
             User user=response.getUser();
             String pid = request.getParameter("pid");
+            ProcessInstance inst = null;
+            
             if (pid != null && !pid.trim().equals("")) {
                 Process process = Process.ClassMgr.getProcess(pid, response.getWebPage().getWebSite());
                 if (process != null) {
-                    SWBProcessMgr.createProcessInstance(process, user);
+                    inst = SWBProcessMgr.createProcessInstance(process, user);
                 }
+            }
+            if (inst != null) {
+                response.setRenderParameter("msg", "OK"+inst.getId());
             }
             response.setMode(response.Mode_VIEW);
         } else if (action.equals("setPageItems")) {
