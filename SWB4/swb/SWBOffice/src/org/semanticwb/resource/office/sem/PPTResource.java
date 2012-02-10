@@ -22,6 +22,7 @@
  **/
 package org.semanticwb.resource.office.sem;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -87,7 +88,7 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
         StringBuilder html = new StringBuilder();
         String workpath = file.getAbsolutePath().replace('\\', '/');
         file = new File(file.getParentFile().getPath() + "/" + "frame.html");
-        
+
         String applicationpath = SWBUtils.getApplicationPath();
         if (workpath.toLowerCase().startsWith(applicationpath.toLowerCase()))
         {
@@ -105,6 +106,7 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
         }
         return html.toString();
     }
+
     /**
      * Gets the hTML.
      * 
@@ -269,7 +271,7 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
                 {
                     pathFilePPT += getResourceBase().getWorkPath() + "frame.html";
                 }
-                String path=null;
+                String path = null;
                 File filecontent = new File(pathFilePPT);
                 if (filecontent.exists())
                 {
@@ -292,7 +294,64 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
                     file = file.replace(".pptx", ".html");
                     file = file.replace(".ppt", ".html");
                     file = java.net.URLDecoder.decode(file, "utf-8");
-                     path = SWBPortal.getWebWorkPath();
+
+                    pathFilePPT = SWBPortal.getWorkPath();
+                    if (pathFilePPT.endsWith("/"))
+                    {
+                        pathFilePPT = pathFilePPT.substring(0, pathFilePPT.length() - 1);
+                        pathFilePPT += getResourceBase().getWorkPath() + "/"+file;
+                    }
+                    else
+                    {
+                        pathFilePPT += getResourceBase().getWorkPath() + "/"+file;
+                    }
+
+                    String content = SWBUtils.IO.readInputStream(new FileInputStream(pathFilePPT));
+                    String frag1 = "window.location.replace( \"";
+                    String frag2 = "\"+document.location.hash";
+                    int pos = content.indexOf(frag1);
+                    if (pos != -1)
+                    {
+                        int pos2 = content.indexOf(frag2, pos + 10);
+                        if (pos2 != -1)
+                        {
+                            String fragment = content.substring(pos + frag1.length(), pos2);
+                            int pos3 = fragment.indexOf("/");
+                            if (pos3 != -1)
+                            {
+                                fragment = fragment.substring(pos3 + 1);
+                            }
+                            StringBuilder sb = new StringBuilder(content.substring(0, pos+frag1.length()));
+                            sb.append(fragment);
+                            sb.append(content.substring(pos2));
+
+                            SWBPortal.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + file, new ByteArrayInputStream(sb.toString().getBytes()), user);
+                        }
+                    }
+                    content = SWBUtils.IO.readInputStream(new FileInputStream(pathFilePPT));
+                    frag1 = "var path = \"";
+                    frag2 = "\"";
+                    pos = content.indexOf(frag1);
+                    if (pos != -1)
+                    {
+                        int pos2 = content.indexOf(frag2, pos + frag1.length() + 1);
+                        if (pos2 != -1)
+                        {
+                            String fragment = content.substring(pos + frag1.length(), pos2);
+                            int pos3 = fragment.indexOf("/");
+                            if (pos3 != -1)
+                            {
+                                fragment = fragment.substring(pos3 + 1);
+                            }
+                            StringBuilder sb = new StringBuilder(content.substring(0, pos+frag1.length()));
+                            sb.append(fragment);
+                            sb.append(content.substring(pos2));
+
+                            SWBPortal.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + file, new ByteArrayInputStream(sb.toString().getBytes()), user);
+                        }
+                    }
+
+                    path = SWBPortal.getWebWorkPath();
                     if (path.endsWith("/"))
                     {
                         path = path.substring(0, path.length() - 1);
