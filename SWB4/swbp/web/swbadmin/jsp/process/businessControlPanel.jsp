@@ -164,7 +164,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
     <h2>Monitor de procesos</h2>
     <div class="bandeja-combo">
             <ul>
-                <li>Ordenamiento:
+                <li>
                     <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'sort', this.options[this.selectedIndex].value)">
                         <option value="date" <%=sortType.equals("date")?"selected":""%>>Por fecha</option>
                         <option value="name" <%=sortType.equals("name")?"selected":""%>>Por proceso</option>
@@ -178,9 +178,8 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                     optsUrl.setParameter("sort", sortType);
                     optsUrl.setParameter("sFilter", sFilter);
                     %>
-                    Grupo:
                     <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'gFilter', this.options[this.selectedIndex].value)">
-                        <option value="" <%=gFilter.equals("")?"selected":""%>>Todos</option>
+                        <option value="" <%=gFilter.equals("")?"selected":""%>>Todos los grupos</option>
                         <%
                         Iterator<ProcessGroup> groups = ProcessGroup.ClassMgr.listProcessGroups(ws);
                         groups = SWBComparator.sortByDisplayName(groups, lang);
@@ -200,10 +199,9 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                 optsUrl = paramRequest.getRenderUrl();
                 optsUrl.setParameter("sort", sortType);
                 optsUrl.setParameter("gFilter", gFilter);
-                %>
-                Estado:
+                %>                
                 <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'sFilter', this.options[this.selectedIndex].value)">
-                    <option value="-1" <%=sFilter.equals("-1")?"selected":""%>>Todos</option>
+                    <option value="-1" <%=sFilter.equals("-1")?"selected":""%>>Todos los procesos</option>
                     <option value="<%=ProcessInstance.STATUS_PROCESSING%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_PROCESSING))?"selected":""%>>Pendientes</option>
                     <option value="<%=ProcessInstance.STATUS_CLOSED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_CLOSED))?"selected":""%>>Terminados</option>
                     <option value="<%=ProcessInstance.STATUS_ABORTED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_ABORTED))?"selected":""%>>Abortados</option>
@@ -217,6 +215,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
     <%
     if (pinstances != null && !pinstances.isEmpty()) {
         %>
+        <div class="bandeja-combo">
         <table class="tabla-bandeja">
             <thead>
                 <tr>
@@ -414,6 +413,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                 %>
             </tbody>
         </table>
+        </div>
         <div class="paginado">
             P&aacute;gina:
         <%
