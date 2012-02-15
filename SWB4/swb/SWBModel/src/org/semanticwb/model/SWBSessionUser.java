@@ -36,4 +36,16 @@ public class SWBSessionUser extends User
         m_obj=user.getSemanticObject();
     }
 
+    @Override
+    public boolean equals(Object obj)
+    {
+        return m_obj.equals(obj);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return m_obj.hashCode();
+    }    
+
 }
