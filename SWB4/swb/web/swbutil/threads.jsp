@@ -4,6 +4,8 @@
     Author     : jei
 --%>
 
+<%@page import="org.semanticwb.model.SWBContext"%>
+<%@page import="org.semanticwb.model.User"%>
 <%@page import="java.lang.management.ThreadInfo"%>
 <%@page import="org.semanticwb.portal.monitor.SWBThreadDumper"%>
 <%@page import="java.lang.management.ManagementFactory"%>
@@ -19,6 +21,13 @@
     </head>
     <body>
         <%
+        User user=SWBContext.getAdminUser();
+        if(user==null)
+        {
+            response.sendError(403);
+            return;
+        }
+               
 /*        
             String stop=request.getParameter("stop");
             if(stop!=null)

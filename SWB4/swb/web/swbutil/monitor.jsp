@@ -1,3 +1,5 @@
+<%@page import="org.semanticwb.model.SWBContext"%>
+<%@page import="org.semanticwb.servlet.internal.Distributor"%>
 <%@page import="org.semanticwb.portal.monitor.SWBLocalMemoryPool"%>
 <%@page import="org.semanticwb.portal.SWBMonitor"%>
 <%@page import="java.util.Enumeration"%>
@@ -5,16 +7,28 @@
 <%@page import="java.util.Vector"%>
 <%@page import="org.semanticwb.portal.monitor.SWBSummary"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE HTML><%!
+<!DOCTYPE HTML>
+<%!
 static private SWBSummary swbSummary = new SWBSummary();
 %><html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>SWB Monitor Info</title>
     </head>
-    <body>
+    <body>        
+<%
+    org.semanticwb.model.User user=SWBContext.getAdminUser();
+    if(user==null)
+    {
+        response.sendError(403);
+        return;
+    }
+    String pc=request.getParameter("pageCache");
+    if(pc!=null)Distributor.setPageCache(Boolean.parseBoolean(pc));
+%>        
         <h1>General</h1>
         <ul>
+            <li>PageCache:<%= Distributor.isPageCache() %></li>
             <li>CPU Time:<%= String.format("%1$3.6f",swbSummary.getSample().instantCPU) %></li>
             <li>Instance Name:<%= swbSummary.getSample().vmInstanceName %></li>
             <li>Commited:<%= String.format("%,d",swbSummary.getSample().currentCommited) %></li>
