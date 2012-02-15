@@ -33,17 +33,14 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.Template;
-import org.semanticwb.model.User;
-import org.semanticwb.model.WebPage;
+import org.semanticwb.base.util.HashMapCache;
+import org.semanticwb.model.*;
 import org.semanticwb.portal.TemplateImp;
 import org.semanticwb.portal.api.SWBActionResponseImp;
 import org.semanticwb.portal.api.SWBParamRequestImp;
@@ -79,6 +76,12 @@ public class Distributor implements InternalServlet
     private String admMap=null;
     
     private static boolean supportSetCharEncoding=true;
+        
+    private static HashMapCache<String,SWBHttpServletResponseWrapper> cache=new HashMapCache(1000);
+    
+    private static boolean pageCache=false;
+    
+    
     
     /* (non-Javadoc)
      * @see org.semanticwb.servlet.internal.InternalServlet#init(javax.servlet.ServletContext)
@@ -107,6 +110,42 @@ public class Distributor implements InternalServlet
         }
     }    
     
+    private String getCacheID(HttpServletRequest request, DistributorParams dparams)
+    {
+        StringBuffer ret=new StringBuffer();
+        WebPage page=dparams.getWebPage();
+        WebSite site=page.getWebSite();
+        if(site.getId().equals(SWBContext.WEBSITE_ADMIN))return null;
+        
+        String lang=dparams.getUser().getLanguage();
+        String country=dparams.getUser().getCountry();
+        Device dev=dparams.getUser().getDevice();
+        String qs=request.getQueryString();
+        
+        ret.append(page.getId());        
+        if(lang!=null)
+        {
+            ret.append(":");
+            ret.append(lang);
+        }
+        if(country!=null)
+        {
+            ret.append(":");
+            ret.append(country);
+        }
+        if(dev!=null)
+        {
+            ret.append(":");
+            ret.append(dev.getId());
+        }
+        if(qs!=null)
+        {
+            ret.append(":");
+            ret.append(qs);
+        }       
+        return ret.toString();
+    }
+    
     /**
      * _do process.
      * 
@@ -120,7 +159,7 @@ public class Distributor implements InternalServlet
     {
         long tini=System.currentTimeMillis();
         boolean ret=true;
-        log.debug("Distributor->doProcess()");
+        if(!pageCache)log.debug("Distributor->doProcess()");
         
         try
         {
@@ -131,6 +170,7 @@ public class Distributor implements InternalServlet
             int ipfilter = dparams.getFiltered();
             boolean onlyContent = dparams.isOnlyContent();
 
+            if(!pageCache)
             {
                 log.trace("*********distributor**************");
                 log.trace("email:" + user.getEmail());
@@ -151,7 +191,7 @@ public class Distributor implements InternalServlet
             {
                 if (!request.isSecure()) 
                 {
-                    log.debug("Distributor: SendError 404");
+                    if(!pageCache)log.debug("Distributor: SendError 404");
                     response.sendError(404, "Not https protocol...");
                     return false;
                 }
@@ -159,7 +199,7 @@ public class Distributor implements InternalServlet
 
             if (ipfilter > 0)  //1:no access: 2:only access
             {
-                log.debug("Distributor: SendError 404");
+                if(!pageCache)log.debug("Distributor: SendError 404");
                 response.sendError(404, "No tiene permiso para accesar a la pagina " + request.getRequestURI() + ", (IP Filter)... ");
                 return false;
             }        
@@ -177,19 +217,19 @@ public class Distributor implements InternalServlet
             if (webpage == null || (!admin && webpage.getWebSite().getId().equals(admMap))) 
             {
                 response.sendError(404, "La pagina " + request.getRequestURI() + " no existe... ");
-                log.debug("Distributor: SendError 404");
+                if(!pageCache)log.debug("Distributor: SendError 404");
                 return false;
             } else if (!webpage.getWebSite().isActive() || webpage.getWebSite().isDeleted() || !webpage.isValid())
             {
                 response.sendError(404, "La pagina " + request.getRequestURI() + " no esta disponible por el momento... ");
-                log.debug("Distributor: SendError 404");
+                if(!pageCache)log.debug("Distributor: SendError 404");
                 return false;
             }
 
-            log.debug("User:"+user+" webpage:"+webpage);
+            if(!pageCache)log.debug("User:"+user+" webpage:"+webpage);
             if (!user.haveAccess(webpage)) 
             {
-                log.debug("Distributor->Don't access");
+                if(!pageCache)log.debug("Distributor->Don't access");
                 //TODO:validar acciones
 //                Iterator it = webpage.getConfigData(TopicMap.CNF_WBSecAction);
 //                if (it.hasNext()) {
@@ -206,7 +246,7 @@ public class Distributor implements InternalServlet
 //                            response.sendError(err);
 //                    }
 //                } else {
-                    log.debug("Distributor->send403");
+                    if(!pageCache)log.debug("Distributor->send403");
                     sendError403(request, response);
 //                }
                 return false;
@@ -234,18 +274,18 @@ public class Distributor implements InternalServlet
                         if(base == null)
                         {
                             response.sendError(404, "No tiene permiso para accesar a la pagina " + request.getRequestURI() + ", (Control de IPs)... ");
-                            log.debug("Distributor: SendError 404");
+                            if(!pageCache)log.debug("Distributor: SendError 404");
                             return false;
                         }else if(!user.haveAccess(base.getResourceBase()))
                         {
                             if(request.getMethod().equalsIgnoreCase("POST"))
                             {
                                 response.sendRedirect(webpage.getUrl());
-                                log.debug("Distributor: Resource "+base.getResourceBase().getId()+" restricted, send redirect to webpage:"+webpage.getUrl());
+                                if(!pageCache)log.debug("Distributor: Resource "+base.getResourceBase().getId()+" restricted, send redirect to webpage:"+webpage.getUrl());
                             }else
                             {
                                 response.sendError(403, "No tiene permiso para accesar a la pagina " + request.getRequestURI() + ", (Control de IPs)... ");
-                                log.debug("Distributor: SendError 403");
+                                if(!pageCache)log.debug("Distributor: SendError 403");
                             }
                             return false;
                         }
@@ -295,8 +335,8 @@ public class Distributor implements InternalServlet
                     }
                 } catch (Throwable e) 
                 {
-                    log.error(e);
-                    log.debug("Distributor: SendError 500");
+                    if(!pageCache)log.error(e);
+                    if(!pageCache)log.debug("Distributor: SendError 500");
                     response.sendError(500, "Error to process request:" + request.getRequestURI());
                     return false;
                 }
@@ -315,7 +355,7 @@ public class Distributor implements InternalServlet
                     SWBResource currResource = SWBPortal.getResourceMgr().getResource(idtm, rid);
                     if(currResource==null)
                     {
-                        log.warn("Error al procesar el URL:"+request.getRequestURL());
+                        if(!pageCache)log.warn("Error al procesar el URL:"+request.getRequestURL());
                         response.sendError(404, "No se encontro:" + request.getRequestURI() + "<br/>");
                         return false;
                     }
@@ -333,15 +373,15 @@ public class Distributor implements InternalServlet
                     resParams.setOnlyContent(onlyContent);
                     resParams.setUser(user);
                     //resParams.setUserLevel();
-                    log.debug("Invoke ProcessAcion");
+                    if(!pageCache)log.debug("Invoke ProcessAcion");
                     currResource.processAction(request, resParams);
-                    log.debug("SendRedirect:"+resParams.toString());
+                    if(!pageCache)log.debug("SendRedirect:"+resParams.toString());
                     response.sendRedirect(resParams.toString());
-                    log.debug("Exit Distributor");
+                    if(!pageCache)log.debug("Exit Distributor");
                     return true;
                 } catch (Throwable e) {
                     log.error(e);
-                    log.debug("Distributor: SendError 500");
+                    if(!pageCache)log.debug("Distributor: SendError 500");
                     response.sendError(500, "No es posible procesar el requerimiento:" + request.getRequestURI() + "<br/>" + e);
                     return false;
                 }
@@ -349,25 +389,12 @@ public class Distributor implements InternalServlet
 
             try//Traer template y comprimir salida..
             {
-                TemplateImp currTemplate = (TemplateImp)SWBPortal.getTemplateMgr().getTemplate(user, webpage);
-                //Trae plantilla por defecto
-                if(currTemplate==null)
+                SWBHttpServletResponseWrapper res = null;
+                if(pageCache)
                 {
-                    Template aux=webpage.getWebSite().getDefaultTemplate();
-                    if(aux!=null)
-                    {
-                        currTemplate=(TemplateImp)SWBPortal.getTemplateMgr().getTemplateImp(aux);
-                    }
-
+                    res=cache.get(getCacheID(request, dparams));
                 }
-                if(currTemplate==null)
-                {
-                    log.warn("No se encontro template para la seccion:" + webpage.getId());
-                    response.sendError(500, "La pagina " + request.getRequestURI() + " no esta disponible por el momento, no se encontro plantilla...");
-                    log.debug("Distributor: SendError 500");
-                    return false;
-                }
-
+                
                 boolean gzip = false;
                 if (agzip) {
                     if (request.getHeader("Via") != null 
@@ -382,32 +409,79 @@ public class Distributor implements InternalServlet
                             gzip = true;
                         }
                     }
-                }
-
-                SWBHttpServletResponseWrapper res = new SWBHttpServletResponseWrapper(response);
-                try {
-                    //System.out.println("DistributorImp->onlyContent:"+onlyContent);
-                    PrintWriter out=res.getWriter();
-                    //out.println("\n<!--Time: " + (System.currentTimeMillis() - tini) + "ms - " + webpage + "--> ");  //TODO encontrar una forma de configurar esto...
-                    //out.println("Muestra Plantilla:"+currTemplate);
-                    if (ipfilter == -1) {
-                        if (onlyContent) {
-                            TemplateImp.buildContents(request, res, out, dparams, true, content);
-                        } else {
-                            currTemplate.build(request, res, out, user, webpage, true, content, dparams);
-                        }
-                    } else {
-                        if (onlyContent) {
-                            TemplateImp.buildContents(request, res, out, dparams, false, content);
-                        } else {
-                            currTemplate.build(request, res, out, user, webpage, false, content, dparams);
-                        }
+                }                
+                
+                String contentType="text/html; charset=ISO-8859-1";
+                
+                if(res==null)
+                {
+                    res=new SWBHttpServletResponseWrapper(response);
+                    if(pageCache)
+                    {
+                        cache.put(getCacheID(request, dparams), res);
                     }
-                } catch (Exception e) {
-                    log.error("Error al procesar template para la seccion:" + webpage.getId(),e);
-                    response.sendError(500, "La pagina " + request.getRequestURI() + " no esta disponible por el momento... ");
-                    //if(gzip)garr.close();
-                    return false;
+                
+                    TemplateImp currTemplate = (TemplateImp)SWBPortal.getTemplateMgr().getTemplate(user, webpage);
+                    //Trae plantilla por defecto
+                    if(currTemplate==null)
+                    {
+                        Template aux=webpage.getWebSite().getDefaultTemplate();
+                        if(aux!=null)
+                        {
+                            currTemplate=(TemplateImp)SWBPortal.getTemplateMgr().getTemplateImp(aux);
+                        }
+
+                    }
+                    if(currTemplate==null)
+                    {
+                        if(!pageCache)log.warn("No se encontro template para la seccion:" + webpage.getId());
+                        response.sendError(500, "La pagina " + request.getRequestURI() + " no esta disponible por el momento, no se encontro plantilla...");
+                        if(!pageCache)log.debug("Distributor: SendError 500");
+                        return false;
+                    }
+
+                    try {
+                        //System.out.println("DistributorImp->onlyContent:"+onlyContent);
+                        PrintWriter out=res.getWriter();
+                        //out.println("\n<!--Time: " + (System.currentTimeMillis() - tini) + "ms - " + webpage + "--> ");  //TODO encontrar una forma de configurar esto...
+                        //out.println("Muestra Plantilla:"+currTemplate);
+                        if (ipfilter == -1) {
+                            if (onlyContent) {
+                                TemplateImp.buildContents(request, res, out, dparams, true, content);
+                            } else {
+                                currTemplate.build(request, res, out, user, webpage, true, content, dparams);
+                            }
+                        } else {
+                            if (onlyContent) {
+                                TemplateImp.buildContents(request, res, out, dparams, false, content);
+                            } else {
+                                currTemplate.build(request, res, out, user, webpage, false, content, dparams);
+                            }
+                        }
+                    } catch (Exception e) {
+                        log.error("Error al procesar template para la seccion:" + webpage.getId(),e);
+                        response.sendError(500, "La pagina " + request.getRequestURI() + " no esta disponible por el momento... ");
+                        //if(gzip)garr.close();
+                        return false;
+                    }
+                    
+                    if(resContentType!=null)resContentType=res.getContentType();
+                    String tplContentType=currTemplate.getContentType();
+                    //System.out.println("resContentType: "+resContentType+" tplContentType"+tplContentType);
+                    if(tplContentType!=null)
+                    {
+                        contentType=tplContentType;
+                    }
+                    else if(resContentType!=null)
+                    {
+                        contentType=resContentType;
+                    }
+                    
+                    if(pageCache)res.setContentType(contentType);
+                    
+                }else
+                {
+                    contentType=res.getContentType();
                 }
                 
                 if(res.isSendRedirect())
@@ -415,26 +489,14 @@ public class Distributor implements InternalServlet
                     return false;
                 }
 
-                if(resContentType!=null)resContentType=res.getContentType();
-                String tplContentType=currTemplate.getContentType();
-                //System.out.println("resContentType: "+resContentType+" tplContentType"+tplContentType);
-                String contentType="text/html; charset=ISO-8859-1";
-                if(tplContentType!=null)
-                {
-                    contentType=tplContentType;
-                }
-                else if(resContentType!=null)
-                {
-                    contentType=resContentType;
-                }
                 response.setContentType(contentType);
                 //System.out.println("setContentType:"+contentType);
 
-                log.debug("dist: contentType:"+contentType);
+                if(!pageCache)log.debug("dist: contentType:"+contentType);
 
                 String rescharset=SWBUtils.TEXT.getHomCharSet(response.getCharacterEncoding());
                 String defcharset=SWBUtils.TEXT.getHomCharSet(SWBUtils.TEXT.getDafaultEncoding());
-                log.debug("rescharset:"+rescharset+" default:"+defcharset);
+                if(!pageCache)log.debug("rescharset:"+rescharset+" default:"+defcharset);
                 //System.out.println("rescharset:"+rescharset+" default:"+defcharset);
 
                 if(!gzip && supportSetCharEncoding)
@@ -474,7 +536,8 @@ public class Distributor implements InternalServlet
                     out.print(resp);
                 }
                 
-                user.addVisitedWebPage(webpage);
+                if(!pageCache)user.addVisitedWebPage(webpage);
+                
                 long tfin=System.currentTimeMillis() - tini;
                 out.println("\n<!--Time: " + tfin + "ms - SemanticWebBuilder: " + webpage + "--> ");  //TODO: encontrar una forma de configurar esto...
 
@@ -507,8 +570,17 @@ public class Distributor implements InternalServlet
             log.error(e);
         }
     }
+
+    public static void setPageCache(boolean pageCache)
+    {
+        Distributor.pageCache = pageCache;
+    }
+
+    public static boolean isPageCache()
+    {
+        return pageCache;
+    }
  
-
-
+    
 
 }
