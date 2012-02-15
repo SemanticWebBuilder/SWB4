@@ -202,7 +202,8 @@ public class User extends UserBase implements Principal
      * @throws UnsupportedEncodingException the unsupported encoding exception
      */
     public void checkCredential(Object credential) throws NoSuchAlgorithmException, LoginException
-    {
+    { //System.out.println("userURI:"+getURI()+" userPassword:"+getPassword()+" userRep:"+getUserRepository());
+      if (null==getURI()){ return;}
         if (getUserRepository().isExternal())
         {
             this.login = getUserRepository().getBridge().validateCredential(getLogin(), credential);
