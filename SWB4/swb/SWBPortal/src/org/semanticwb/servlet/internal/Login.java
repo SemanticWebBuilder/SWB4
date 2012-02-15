@@ -225,10 +225,10 @@ public class Login implements InternalServlet
             LoginContext lc;
             try
             {
+                if (null!=user) user.checkCredential("{123}456".getBytes()); //Invalidate user even in cluster
                 lc = new LoginContext(context, subject);
                 lc.logout();
                 request.getSession(false).invalidate();
-                if (null!=user) user.checkCredential("{123}456".getBytes()); //Invalidate user even in cluster
                 String url = request.getParameter("wb_goto");
                 if ((url == null))
                 {
