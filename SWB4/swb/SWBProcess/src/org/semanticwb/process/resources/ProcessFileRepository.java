@@ -378,6 +378,7 @@ public class ProcessFileRepository extends GenericResource {
 
                 out.println("</tr>");
             }
+            
             out.println("</tbody>");
             out.println("<tfoot>");
             out.println("<tr>");
@@ -408,53 +409,47 @@ public class ProcessFileRepository extends GenericResource {
             }
 
             out.println("<div id=\"ProcessFileRepository\">");
-            out.println("<table>");
-            out.println("<tbody>");
-            out.println("<tr>");
-            out.println("<td align=\"right\">");
-            out.println("Título:");
-            out.println("</td>");
-            out.println("<td>");
-            out.println(repoFile.getDisplayTitle(usr.getLanguage()));
-            out.println("</td>");
-            out.println("</tr>");
-            out.println("<tr>");
-            out.println("<td align=\"right\">");
-            out.println("Descripción:");
-            out.println("</td>");
-            out.println("<td>");
-            out.println(repoFile.getDisplayDescription(usr.getLanguage()));
-            out.println("</td>");
-            out.println("</tr>");
-            out.println("<tr>");
-            out.println("<td align=\"right\">");
-            out.println("Área:");
-            out.println("</td>");
-            out.println("<td>");
+            out.println("<div class=\"bandeja-combo\">");
+            out.println("<h2>" + repoFile.getDisplayTitle(usr.getLanguage()) + "</h2>");
+            out.println("  <table class=\"tabla-bandeja\">");
+            out.println("    <tbody>");
+            out.println("      <tr>");
+            out.println("        <td width=\"200\" align=\"right\">");
+            out.println("          Descripción:");
+            out.println("        </td>");
+            out.println("        <td>");
+            out.println(           repoFile.getDisplayDescription(usr.getLanguage()));
+            out.println("        </td>");
+            out.println("      </tr>");
+            out.println("      <tr>");
+            out.println("        <td align=\"right\">");
+            out.println("          Área:");
+            out.println("        </td>");
+            out.println("        <td>");
             if (repoFile.getOwnerUserGroup() != null) {
                 out.println(repoFile.getOwnerUserGroup().getDisplayTitle(usr.getLanguage()));
             } else {
                 out.println("--");
             }
-            out.println("</td>");
-            out.println("</tr>");
-            out.println("<tr>");
-            out.println("<td align=\"right\">");
-            out.println("Estatus:");
-            out.println("</td>");
-            out.println("<td>");
+            out.println("        </td>");
+            out.println("      </tr>");
+            out.println("      <tr>");
+            out.println("        <td align=\"right\">");
+            out.println("          Estatus:");
+            out.println("        </td>");
+            out.println("        <td>");
             if (repoFile.getStatus() != null) {
                 out.println(repoFile.getStatus().getDisplayTitle(usr.getLanguage()));
             } else {
                 out.println("--");
             }
-            out.println("</td>");
-            out.println("</tr>");
-            out.println("<tr>");
-            out.println("<td align=\"right\">");
-            out.println("Archivo:");
-            out.println("</td>");
-            out.println("<td>");
+            out.println("        </td>");
+            out.println("      </tr>");
+            out.println("      <tr>");
+            out.println("        <td align=\"right\">");
+            out.println("          Archivo:");
+            out.println("        </td>");
+            out.println("        <td>");
             VersionInfo vl = repoFile.getLastVersion();
             if (luser > 0) {
                 if (repoFile instanceof RepositoryFile) {
@@ -474,13 +469,13 @@ public class ProcessFileRepository extends GenericResource {
             } else {
                 out.println(vl.getVersionFile());
             }
-            out.println("</td>");
-            out.println("</tr>");
-            out.println("<tr>");
-            out.println("<td align=\"right\">");
-            out.println("Versión:");
-            out.println("</td>");
-            out.println("<td>");
+            out.println("        </td>");
+            out.println("      </tr>");
+            out.println("      <tr>");
+            out.println("        <td align=\"right\">");
+            out.println("          Versión:");
+            out.println("        </td>");
+            out.println("        <td>");
             out.println(vl.getVersionValue());
 
             SWBResourceURL urlverhistoy = paramRequest.getRenderUrl();
@@ -488,14 +483,14 @@ public class ProcessFileRepository extends GenericResource {
             urlverhistoy.setParameter("fid", repoFile.getURI());
 
             out.println("(<a href=\"" + urlverhistoy + "\">versiones</a>)");
-            out.println("</td>");
-            out.println("</tr>");
+            out.println("        </td>");
+            out.println("      </tr>");
 
             if (luser == 3 || (vl.getCreator() != null && vl.getCreator().equals(usr) && luser > 1)) {
-                out.println("<tr>");
-                out.println("<td align=\"right\">");
-                out.println("Agregar nueva Versión:");
-                out.println("</td>");
+                out.println("      <tr>");
+                out.println("        <td align=\"right\">");
+                out.println("          Agregar nueva Versión:");
+                out.println("        </td>");
 
                 SWBResourceURL urlnewVer = paramRequest.getRenderUrl();
 
@@ -548,21 +543,27 @@ public class ProcessFileRepository extends GenericResource {
             out.println("</td>");
             out.println("</tr>");
             out.println("</tbody>");
-            out.println("<tfoot>");
-            out.println("<tr>");
-            out.println("<td colspan=\"2\" align=\"right\">");
+            //out.println("<tfoot>");
+            //out.println("<tr>");
+            //out.println("<td colspan=\"2\" align=\"right\">");
             SWBResourceURL urlbck = paramRequest.getRenderUrl();
             urlbck.setParameter("act", "");
             
-            if (back != null && back.equals("history")) {
-                out.println("<input type=\"button\" value=\"Regresar\" onclick=\"history.go(-1)\"/>");
-            } else {
-                out.println("<button onclick=\"window.location='" + urlbck + "';\">Regresar</button>");
-            }
-            out.println("</td>");
-            out.println("</tr>");
+//            if (back != null && back.equals("history")) {
+//                out.println("<input type=\"button\" value=\"Regresar\" onclick=\"history.go(-1)\"/>");
+//            } else {
+//                out.println("<button onclick=\"window.location='" + urlbck + "';\">Regresar</button>");
+//            }
+            //out.println("</td>");
+            //out.println("</tr>");
             out.println("</tbody>");
             out.println("</table>");
+            if (back != null && back.equals("history")) {
+                out.println("<br><input type=\"button\" value=\"Regresar\" onclick=\"history.go(-1)\"/>");
+            } else {
+                out.println("<br><button onclick=\"window.location='" + urlbck + "';\">Regresar</button>");
+            }
+            out.println("</div>");
             out.println("</div>");
         } else if ("history".equals(action)) {
             String fid = request.getParameter("fid");
@@ -584,87 +585,65 @@ public class ProcessFileRepository extends GenericResource {
                 }
             }
             if (ver != null) {
-                out.println("<div id=\"ProcessFileRepository\">");
-                out.println("<table width=\"100%\">");
-                out.println("<thead>");
-                out.println("<tr>");
-                out.println("<td align=\"right\">");
-                out.println("Título:");
-                out.println("</td>");
-                out.println("<td>");
-                out.println(repoFile.getDisplayTitle(usr.getLanguage()));
-                out.println("</td>");
-                out.println("</tr>");
-                out.println("<tr>");
-                out.println("<td align=\"right\">");
-                out.println("Descripción:");
-                out.println("</td>");
-                out.println("<td>");
-                out.println(repoFile.getDisplayDescription(usr.getLanguage()));
-                out.println("</td>");
-                out.println("</tr>");
-                out.println("<tr>");
-                out.println("<td align=\"right\">");
-                out.println("Área:");
-                out.println("</td>");
-                out.println("<td>");
+                out.println("  <div id=\"ProcessFileRepository\">");
+                out.println("    <div class=\"bandeja-combo\">");
+                out.println("      <h2>" + repoFile.getDisplayTitle(usr.getLanguage()) + "</h2>");
+                out.println("      <table width=\"100%\" class=\"tabla-bandeja\">");
+                out.println("        <tbody>");
+                out.println("          <tr>");
+                out.println("            <td width=\"200\" align=\"right\">Descripción:</td>");
+                out.println("            <td>" + repoFile.getDisplayDescription(usr.getLanguage()) + "</td>");
+                out.println("          </tr>");
+                out.println("          <tr>");
+                out.println("            <td align=\"right\">Área:</td>");
+                out.println("            <td>");
                 if (repoFile.getOwnerUserGroup() != null) {
                     out.println(repoFile.getOwnerUserGroup().getDisplayTitle(usr.getLanguage()));
                 } else {
                     out.println("--");
                 }
-                out.println("</td>");
-                out.println("</tr>");
-                out.println("<tr>");
-                out.println("<td align=\"right\">");
-                out.println("Estatus:");
-                out.println("</td>");
-                out.println("<td>");
+                out.println("            </td>");
+                out.println("          </tr>");
+                out.println("          <tr>");
+                out.println("            <td align=\"right\">Estatus:</td>");
+                out.println("            <td>");
                 if (repoFile.getStatus() != null) {
                     out.println(repoFile.getStatus().getDisplayTitle(usr.getLanguage()));
                 } else {
                     out.println("--");
                 }
-                out.println("</td>");
-                out.println("</tr>");
-                out.println("<tr>");
-                out.println("<td align=\"right\">");
-                out.println("Archivo:");
-                out.println("</td>");
-                out.println("<td>");
+                out.println("            </td>");
+                out.println("          </tr>");
+                out.println("          <tr>");
+                out.println("            <td align=\"right\">Archivo:</td>");
+                out.println("            <td>");
                 out.println(ver.getVersionFile());
-                out.println("</td>");
-                out.println("</tr>");
+                out.println("            </td>");
+                out.println("          </tr>");
+                out.println("        </tbody>");
+                out.println("      </table>");
+                out.println("      <br/>");
 
-                out.println("<tr>");
-                out.println("<th>");
-                out.println("&nbsp;");// espacio para liga ver archivo
-                out.println("</th>");
-                out.println("<th>");
-                out.println("Versión");
-                out.println("</th>");
-                out.println("<th>");
-                out.println("Fecha versión");
-                out.println("</th>");
-                out.println("<th>");
-                out.println("Creado por");
-                out.println("</th>");
-                out.println("<th>");
-                out.println("Comentario");
-                out.println("</th>");
-                out.println("<th>");
-                out.println("Estatus");
-                out.println("</th>");
-                out.println("</tr>");
+                out.println("      <table class=\"tabla-bandeja\">");
+                out.println("        <thead>");
+                out.println("          <tr>");
+                out.println("            <th>Versión</th>");
+                out.println("            <th>Fecha versión</th>");
+                out.println("            <th>Creado por</th>");
+                out.println("            <th>Comentario</th>");
+                out.println("            <th>Estatus</th>");
+                out.println("          </tr>");
+                out.println("        </thead>");
+                out.println("        <tbody>");
 
-                out.println("</thead>");
-                out.println("<tbody>");
+                //out.println("</thead>");
+                //out.println("<tbody>");
                 while (ver != null) {
                     //lista de las versiones del archivo
 
-                    out.println("<tr>");
-                    out.println("<td align=\"center\" >");
-
+                    out.println("          <tr>");
+                    //out.println("            <td align=\"center\" >");
+                    String viewLink = "";
                     if (luser > 0) {
                         if (repoFile instanceof RepositoryFile) {
                             SWBResourceURL urlview = paramRequest.getRenderUrl();
@@ -673,52 +652,49 @@ public class ProcessFileRepository extends GenericResource {
                             urlview.setMode(MODE_GETFILE);
                             urlview.setParameter("verNum", "" + ver.getVersionNumber());
 
-                            out.println("<a href=\"" + urlview + "\">ver</a>");
+                            viewLink = "<a href=\"" + urlview + "\">" + ver.getVersionValue() + "</a>";
                         } else if (repoFile instanceof RepositoryURL) {
-                            out.println("<a target=\"_blank\" href=\"" + ver.getVersionFile() + "\">ver</a>");
+                            viewLink = "<a target=\"_blank\" href=\"" + ver.getVersionFile() + "\">" + ver.getVersionValue() + "</a>";
                         }
                     } else {
                         out.println("---");
                     }
-                    out.println("</td>");
-                    out.println("<td align=\"center\">");
-                    out.println(ver.getVersionValue());
-                    out.println("</td>");
-                    out.println("<td>");
+                    //out.println("</td>");
+                    out.println("            <td align=\"center\">" + viewLink +"</td>");
+                    out.println("            <td align=\"center\">");
                     out.println(ver.getCreated() != null ? format.format(ver.getCreated()) : "--");
-                    out.println("</td>");
-                    out.println("<td>");
+                    out.println("            </td>");
+                    out.println("            <td align=\"center\">");
                     out.println(ver.getCreator() != null ? ver.getCreator().getFullName() : "--");
-
-                    out.println("</td>");
-                    out.println("<td>");
-
+                    out.println("            </td>");
+                    out.println("            <td align=\"center\">");
                     out.println(ver.getVersionComment() != null ? ver.getVersionComment() : "--");
-
-                    out.println("</td>");
-                    out.println("<td>");
+                    out.println("            </td>");
+                    out.println("            <td align=\"center\">");
                     String propStatus = ver.getProperty("status", "--");
                     ItemAwareStatus itemStat = ItemAwareStatus.ClassMgr.getItemAwareStatus(propStatus, wsite);
                     out.println(itemStat!=null?itemStat.getDisplayTitle(lang):"--");
-                    out.println("</td>");
-                    out.println("</tr>");
+                    out.println("            </td>");
+                    out.println("          </tr>");
 
                     ver = ver.getNextVersion();
 
                 }
-                out.println("</tbody>");
-                out.println("<tfoot>");
-                out.println("<tr>");
-                out.println("<td colspan=\"2\" align=\"right\">");
+                out.println("        </tbody>");
+                //out.println("<tfoot>");
+                //out.println("<tr>");
+                //out.println("<td colspan=\"2\" align=\"right\">");
                 SWBResourceURL urlbck = paramRequest.getRenderUrl();
                 urlbck.setParameter("act", "detail");
                 urlbck.setParameter("fid", fid);
-                out.println("<button onclick=\"window.location='" + urlbck + "';\">Regresar</button>");
-                out.println("</td>");
-                out.println("</tr>");
-                out.println("</tfoot>");
-                out.println("</table>");
-                out.println("</div>");
+                //out.println("<button onclick=\"window.location='" + urlbck + "';\">Regresar</button>");
+                //out.println("</td>");
+                //out.println("</tr>");
+                //out.println("</tfoot>");
+                out.println("      </table>");
+                out.println("      <br><button onclick=\"window.location='" + urlbck + "';\">Regresar</button>");
+                out.println("    </div>");
+                out.println("  </div>");
             }
 
         } else if ("new".equals(action)) {
@@ -870,6 +846,8 @@ public class ProcessFileRepository extends GenericResource {
             out.println("</script>"); //        
 
             out.println("<div id=\"ProcessFileRepository\">");
+            out.println("<div class=\"bandeja-combo\">");
+            out.println("<h2>Agregar archivo al repositorio</h2>");
             out.println("<form dojoType=\"dijit.form.Form\" method=\"post\" action=\"" + urlnew + "\"  enctype=\"multipart/form-data\" >");
 
             if (null != fid && null != newVersion) {
@@ -877,10 +855,10 @@ public class ProcessFileRepository extends GenericResource {
                 out.println("<input type=\"hidden\" name=\"fid\" value=\"" + fid + "\">");
             }
 
-            out.println("<table>");
+            out.println("<table class=\"tabla-bandeja\">");
             out.println("<tbody>");
             out.println("<tr>");
-            out.println("<td align=\"right\">");
+            out.println("<td width=\"200\" align=\"right\">");
             out.println("Título:");
             out.println("</td>");
             out.println("<td>");
@@ -1000,17 +978,22 @@ public class ProcessFileRepository extends GenericResource {
             }
             out.println("</tbody>");
             out.println("<tfoot>");
-            out.println("<tr>");
-            out.println("<td colspan=\"2\" align=\"right\">");
-            out.println("<button  type=\"button\" onclick=\"if(Checkfiles('" + validFiles + "')){this.form.submit();}else {return false;};\">Agregar</button>");
-            SWBResourceURL urlbck = paramRequest.getRenderUrl();
-            urlbck.setParameter("act", "");
-            out.println("<button type=\"button\" onclick=\"window.location='" + urlbck + "';\">Regresar</button>");
-            out.println("</td>");
-            out.println("</tr>");
+            //out.println("<tr>");
+            //out.println("<td colspan=\"2\" align=\"right\">");
+//            out.println("<button  type=\"button\" onclick=\"if(Checkfiles('" + validFiles + "')){this.form.submit();}else {return false;};\">Agregar</button>");
+//            SWBResourceURL urlbck = paramRequest.getRenderUrl();
+//            urlbck.setParameter("act", "");
+//            out.println("<button type=\"button\" onclick=\"window.location='" + urlbck + "';\">Regresar</button>");
+            //out.println("</td>");
+            //out.println("</tr>");
             out.println("</tbody>");
             out.println("</table>");
             out.println("</form>");
+            out.println("<br/><button  type=\"button\" onclick=\"if(Checkfiles('" + validFiles + "')){this.form.submit();}else {return false;};\">Agregar</button>");
+            SWBResourceURL urlbck = paramRequest.getRenderUrl();
+            urlbck.setParameter("act", "");
+            out.println("<button type=\"button\" onclick=\"window.location='" + urlbck + "';\">Regresar</button>");
+            out.println("</div>");
             out.println("</div>");
         }
     }
