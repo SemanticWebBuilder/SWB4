@@ -71,12 +71,14 @@ public class HashMapCache<K extends Object, V extends Object> implements Map<K,V
     @Override
     public V get(Object o)
     {
+        if(o==null)return null;
         return map.get(o);
     }
 
     @Override
     public V put(K k, V v)
     {
+        if(k==null)return null;
         //System.out.println("put:"+k+" "+v);        
         V r=map.put(k, v);
         linked.add(k);
