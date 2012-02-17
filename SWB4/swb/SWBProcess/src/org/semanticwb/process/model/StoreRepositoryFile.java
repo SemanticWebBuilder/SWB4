@@ -132,7 +132,7 @@ public class StoreRepositoryFile extends org.semanticwb.process.model.base.Store
                 
                 try
                 {
-                    file.storeFile(filename, new FileInputStream(filePath), "Created by process:"+instance.getProcessInstance().getProcessType().getId()+", processInstance:"+instance.getProcessInstance().getId(), false,getNodeStatus()!=null?getNodeStatus().getId():null);
+                    file.storeFile(filename, new FileInputStream(filePath), "Created by process:"+instance.getProcessInstance().getProcessType().getId()+", processInstance:"+instance.getProcessInstance().getId(), false,getNodeStatus()!=null?getNodeStatus().getId():"Indefinido");
                 }catch(Exception e)
                 {
                     log.error(e);
