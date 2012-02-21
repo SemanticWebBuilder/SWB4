@@ -1080,6 +1080,7 @@ public class SWBBlog extends GenericResource
                     }
                     catch (Exception e)
                     {
+                        log.error(e);
                         post.remove();
                     }
 
@@ -1138,6 +1139,7 @@ public class SWBBlog extends GenericResource
                 }
                 catch (Exception e)
                 {
+                    log.error(e);
                     post.remove();
                 }
 
