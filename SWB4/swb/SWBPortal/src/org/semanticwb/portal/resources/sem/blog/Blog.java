@@ -143,6 +143,20 @@ public class Blog extends org.semanticwb.portal.resources.sem.blog.base.BlogBase
      */
     public Document toXML(int nummax,User user,String format,String deleteimage,String editimage,String addimage)
     {
+        if(deleteimage==null || deleteimage.equals(""))
+        {
+            deleteimage=".gif";
+        }
+        if(editimage==null || editimage.equals(""))
+        {
+            editimage=".gif";
+        }
+        if(addimage==null || addimage.equals(""))
+        {
+            addimage=".gif";
+        }
+
+
         iso8601dateFormat = new SimpleDateFormat(format);
         Document doc = new Document();
         Element blog = new Element("blog");        
