@@ -4,7 +4,6 @@
  */
 package org.semanticwb.portal.resources.sem.blog;
 
-import com.arthurdo.parser.HtmlStreamTokenizer;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -2149,7 +2148,7 @@ public class SWBBlog extends GenericResource
 
                         //System.out.println("getComments: recuser: "+recuser);
 
-                        StringBuffer name = new StringBuffer("");
+                        StringBuilder name = new StringBuilder("");
                         if (recuser == null)
                         {
                             name.append(paramRequest.getLocaleString("userAnonimous"));
@@ -2177,7 +2176,7 @@ public class SWBBlog extends GenericResource
                         {
                             Element comment = new Element("comment");
                             comment.setAttribute("date", new SimpleDateFormat(this.getResourceBase().getAttribute("format_comments", defaultFormat)).format(ocomment.getFec_altaComment()));
-                            StringBuffer name = new StringBuffer("");
+                            StringBuilder name = new StringBuilder("");
                             if (ocomment.getUserComment() == null)
                             {
                                 name.append(paramRequest.getLocaleString("userAnonimous"));
@@ -2410,7 +2409,7 @@ public class SWBBlog extends GenericResource
      */
     private String getScript(SWBParamRequest paramRequest)
     {
-        StringBuffer ret = new StringBuffer("");
+        StringBuilder ret = new StringBuilder("");
         WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
         try
         {
