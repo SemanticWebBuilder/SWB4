@@ -47,7 +47,7 @@ public class SWBMessageServer extends java.lang.Thread
     public static Logger log = SWBUtils.getLogger(SWBMessageServer.class);
 
     /** The Constant PKSIZE. */
-    private static final int PKSIZE = 1024;
+    private static final int PKSIZE = 65535;
 
     /** The s. */
     private DatagramSocket s = null;
