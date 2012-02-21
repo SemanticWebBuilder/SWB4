@@ -1080,7 +1080,7 @@ public class SWBBlog extends GenericResource
                     catch (Exception e)
                     {
                         log.error(e);
-                        post.remove();
+                        post.setDescription("Favor de editar este post, ya que tiene caracteres inválidos, por lo cuál no fue almacenado");
                     }
 
                     break;
