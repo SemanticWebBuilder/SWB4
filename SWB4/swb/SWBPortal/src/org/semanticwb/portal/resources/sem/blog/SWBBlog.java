@@ -2355,6 +2355,7 @@ public class SWBBlog extends GenericResource
         SWBResourceURL urlback = paramRequest.getRenderUrl();
         urlback.setMode(urlback.Mode_ADMIN);
         out.println("</td></tr><tr><td colspan='2' ><a href='" + urlback + "'>" + paramRequest.getLocaleString("back") + "</a></td></tr></table>");
+
         out.println("</fieldset></form></div>");
     }
 
