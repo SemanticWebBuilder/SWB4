@@ -2355,7 +2355,10 @@ public class SWBBlog extends GenericResource
             try
             {
                 Blog blog = Blog.ClassMgr.getBlog(sBlogId, paramRequest.getWebPage().getWebSite()); //new Blog(Integer.parseInt(sBlogId), paramRequest.getUser(), this.getResourceBase().getAttribute("format", defaultFormat), pathDeleteBlog, pathEditBlog,pathAddBlog);
-                out.println("<tr><td >" + paramRequest.getLocaleString("blogAsigned") + ": <b>" + blog.getTitle() + "</td></tr>");
+                if(blog!=null)
+                {
+                    out.println("<tr><td >" + paramRequest.getLocaleString("blogAsigned") + ": <b>" + blog.getTitle() + "</td></tr>");
+                }
             }
             catch (IllegalArgumentException iae)
             {
