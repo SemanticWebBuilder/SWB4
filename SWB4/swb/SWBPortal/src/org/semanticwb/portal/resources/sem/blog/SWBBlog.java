@@ -1725,8 +1725,7 @@ public class SWBBlog extends GenericResource
             if (format != null && !format.equals(""))
             {
                 try
-                {
-                    SimpleDateFormat dateformat = new SimpleDateFormat(format);
+                {                    
                     getResourceBase().setAttribute("format", format);
                     try
                     {
