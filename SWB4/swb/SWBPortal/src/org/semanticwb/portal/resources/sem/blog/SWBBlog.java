@@ -4,6 +4,7 @@
  */
 package org.semanticwb.portal.resources.sem.blog;
 
+import com.arthurdo.parser.HtmlStreamTokenizer;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -236,16 +237,52 @@ public class SWBBlog extends GenericResource
     private void getContentPost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String postid) throws IOException
     {
         PrintWriter out = response.getWriter();
-        UserRepository userRep = paramRequest.getUser().getUserRepository();
         WebSite site = paramRequest.getWebPage().getWebSite();
         Post post = Post.ClassMgr.getPost(postid, site);
+        String sytylePath = this.getResourceBase().getAttribute("templateblog");
+
         Document doc = new Document();
         Element content = new Element("content");
-        doc.addContent(content);
-        content.setText(SWBUtils.TEXT.encode(post.getDescription(), "utf-8"));
-        response.setContentType("text/xml");
-        XMLOutputter xMLOutputter = new XMLOutputter();
-        xMLOutputter.output(doc, out);
+        String pathDeleteBlog = getDeleteImagePath(paramRequest);
+        String pathEditBlog = getEditImagePath(paramRequest);
+        String pathAddBlog = getAddImagePath(paramRequest);
+        try
+        {
+            Iterator<Blog> blogs = Blog.ClassMgr.listBlogByPost(post);
+            while (blogs.hasNext())
+            {
+                Blog blog = blogs.next();
+                if (blog != null)
+                {
+                    Document _doc = blog.toXML(getNumMaxOfBlogs(), paramRequest.getUser(), this.getResourceBase().getAttribute("format", defaultFormat), pathDeleteBlog, pathEditBlog, pathAddBlog);
+                    String _text = SWBUtils.TEXT.encode(post.getDescription(), "utf-8");
+                    InputStream styleStream = null;
+                    if (sytylePath == null)
+                    {
+                        styleStream = SWBBlog.class.getResourceAsStream("blog.xsl");
+                    }
+                    else
+                    {
+                        styleStream = SWBPortal.getFileFromWorkPath(this.getResourceBase().getWorkPath() + "/" + this.getResourceBase().getAttribute("templateblog").trim());
+                    }
+                    Templates templates = SWBUtils.XML.loadTemplateXSLT(styleStream);
+                    DOMOutputter Domout = new DOMOutputter();
+                    SWBUtils.XML.transformDom(templates, Domout.output(_doc));
+                    doc.addContent(content);
+                    content.setText(_text);
+                    response.setContentType("text/xml");
+                    XMLOutputter xMLOutputter = new XMLOutputter();
+                    xMLOutputter.output(doc, out);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            content.setText("");
+            response.setContentType("text/xml");
+            XMLOutputter xMLOutputter = new XMLOutputter();
+            xMLOutputter.output(doc, out);
+        }
         out.close();
     }
 
@@ -1006,6 +1043,10 @@ public class SWBBlog extends GenericResource
      */
     public void updatePost(HttpServletRequest request, SWBActionResponse response, String blogid, String postid) throws SWBResourceException, IOException
     {
+        String pathDeleteBlog = getDeleteImagePath(null);
+        String pathEditBlog = getEditImagePath(null);
+        String pathAddBlog = getAddImagePath(null);
+
         String title = request.getParameter("title");
         String description = request.getParameter("description");
         if (title != null && description != null)
@@ -1019,6 +1060,29 @@ public class SWBBlog extends GenericResource
                 {
                     post.setTitle(title);
                     post.setDescription(description);
+
+                    Document doc = blog.toXML(getNumMaxOfBlogs(), response.getUser(), this.getResourceBase().getAttribute("format", defaultFormat), pathDeleteBlog, pathEditBlog, pathAddBlog);
+                    String sytylePath = this.getResourceBase().getAttribute("templateblog");
+                    InputStream styleStream = null;
+                    try
+                    {
+                        if (sytylePath == null)
+                        {
+                            styleStream = SWBBlog.class.getResourceAsStream("blog.xsl");
+                        }
+                        else
+                        {
+                            styleStream = SWBPortal.getFileFromWorkPath(this.getResourceBase().getWorkPath() + "/" + this.getResourceBase().getAttribute("templateblog").trim());
+                        }
+                        Templates templates = SWBUtils.XML.loadTemplateXSLT(styleStream);
+                        DOMOutputter Domout = new DOMOutputter();
+                        SWBUtils.XML.transformDom(templates, Domout.output(doc));
+                    }
+                    catch (Exception e)
+                    {
+                        post.remove();
+                    }
+
                     break;
                 }
             }
@@ -1037,6 +1101,9 @@ public class SWBBlog extends GenericResource
      */
     public void addPost(HttpServletRequest request, SWBActionResponse response, String blogid) throws SWBResourceException, IOException
     {
+        String pathDeleteBlog = getDeleteImagePath(null);
+        String pathEditBlog = getEditImagePath(null);
+        String pathAddBlog = getAddImagePath(null);
         String title = request.getParameter("title");
         String description = request.getParameter("description");
 
@@ -1051,6 +1118,29 @@ public class SWBBlog extends GenericResource
                 post.setUserPost(response.getUser());
                 post.setFecha_alta(new Date(System.currentTimeMillis()));
                 blog.addPost(post);
+
+                Document doc = blog.toXML(getNumMaxOfBlogs(), response.getUser(), this.getResourceBase().getAttribute("format", defaultFormat), pathDeleteBlog, pathEditBlog, pathAddBlog);
+                String sytylePath = this.getResourceBase().getAttribute("templateblog");
+                InputStream styleStream = null;
+                try
+                {
+                    if (sytylePath == null)
+                    {
+                        styleStream = SWBBlog.class.getResourceAsStream("blog.xsl");
+                    }
+                    else
+                    {
+                        styleStream = SWBPortal.getFileFromWorkPath(this.getResourceBase().getWorkPath() + "/" + this.getResourceBase().getAttribute("templateblog").trim());
+                    }
+                    Templates templates = SWBUtils.XML.loadTemplateXSLT(styleStream);
+                    DOMOutputter Domout = new DOMOutputter();
+                    SWBUtils.XML.transformDom(templates, Domout.output(doc));
+                }
+                catch (Exception e)
+                {
+                    post.remove();
+                }
+
             }
 
             /*Connection con = SWBUtils.DB.getDefaultConnection();
@@ -1808,6 +1898,10 @@ public class SWBBlog extends GenericResource
      */
     private String getDeleteImagePath(SWBParamRequest paramRequest)
     {
+        if(paramRequest==null)
+        {
+            return null;
+        }
         InputStream indeleteblog = SWBBlog.class.getResourceAsStream(DELETE_FILE);
         String pathDeleteBlog = SWBPortal.getWebWorkPath() + this.getResourceBase().getWorkPath() + "/" + DELETE_FILE;
         try
@@ -1840,6 +1934,10 @@ public class SWBBlog extends GenericResource
      */
     private String getAddImagePath(SWBParamRequest paramRequest)
     {
+        if(paramRequest==null)
+        {
+            return "";
+        }
         InputStream indeleteblog = SWBBlog.class.getResourceAsStream(ADD_FILE);
         String pathDeleteBlog = SWBPortal.getWebWorkPath() + this.getResourceBase().getWorkPath() + "/" + ADD_FILE;
         try
@@ -1872,6 +1970,10 @@ public class SWBBlog extends GenericResource
      */
     private String getEditImagePath(SWBParamRequest paramRequest)
     {
+        if(paramRequest==null)
+        {
+            return "";
+        }
         InputStream indeleteblog = SWBBlog.class.getResourceAsStream(EDIT_FILE);
         String pathDeleteBlog = SWBPortal.getWebWorkPath() + this.getResourceBase().getWorkPath() + "/" + EDIT_FILE;
         try
@@ -2355,7 +2457,7 @@ public class SWBBlog extends GenericResource
             try
             {
                 Blog blog = Blog.ClassMgr.getBlog(sBlogId, paramRequest.getWebPage().getWebSite()); //new Blog(Integer.parseInt(sBlogId), paramRequest.getUser(), this.getResourceBase().getAttribute("format", defaultFormat), pathDeleteBlog, pathEditBlog,pathAddBlog);
-                if(blog!=null)
+                if (blog != null)
                 {
                     out.println("<tr><td >" + paramRequest.getLocaleString("blogAsigned") + ": <b>" + blog.getTitle() + "</td></tr>");
                 }
