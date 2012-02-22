@@ -180,7 +180,7 @@ public class Print extends GenericResource
                 //url.setParameter("page", "0");
             }
             getParams(request, url);
-            String onclick="javascript:window.open('" + url.toString() +"','_newimp','" + getWindowConf() + "'); return false;";
+            String onclick="javascript:window.open('" + url.toString().replace('\'', '-') +"','_newimp','" + getWindowConf() + "'); return false;";
 
             synchronized (ret)
             {
