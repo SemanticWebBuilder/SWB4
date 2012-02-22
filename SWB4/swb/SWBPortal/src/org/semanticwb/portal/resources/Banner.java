@@ -99,7 +99,7 @@ public class Banner extends GenericAdmResource {
 
                 //Para envío de parametros que traiga la página actual(07/09/2011)
                 String QueryStream="";
-                if(request.getQueryString()!=null) QueryStream="?"+request.getQueryString();
+                if(request.getQueryString()!=null) QueryStream="?"+request.getQueryString().replace('\'', '-'); //MAPS74 Patch ' clean up - 22/02/2012
 
                
                 String wburl = null;
