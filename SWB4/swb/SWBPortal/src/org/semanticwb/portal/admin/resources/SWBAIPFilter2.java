@@ -107,7 +107,7 @@ public class SWBAIPFilter2 extends GenericResource {
             if (strConfirm!=null && (strConfirm.equals("removed") || strConfirm.equals("updated") || strConfirm.equals("added"))) 
             {
                 out.println("<script>");
-                out.println("alert('"+ request.getParameter("message")+"');");
+                out.println("alert('"+ request.getParameter("message").replace('\'', '`')+"');");
                 out.println("location='"+strUrl+paramRequest.getWebPage().getId()+"';");
                 out.println("</script>");
             }            

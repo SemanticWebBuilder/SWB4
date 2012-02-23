@@ -186,7 +186,7 @@ public class PHPEditor extends GenericAdmResource {
 
         //Muestra mensaje de almacenamiento de informacion
         if (action != null && action.equalsIgnoreCase(PHPEditor.ACTION_SAVE)) {
-            String show = request.getParameter("_msg");
+            String show = request.getParameter("_msg").replace('\'', '`');
             if (show != null && !"null".equalsIgnoreCase(show)) {
                 show = paramReq.getLocaleString("MsgStoreError");
                 String alert = "\n<script type=\"text/javascript\">"
