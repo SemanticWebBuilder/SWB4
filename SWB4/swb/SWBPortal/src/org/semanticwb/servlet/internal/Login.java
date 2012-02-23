@@ -256,7 +256,9 @@ public class Login implements InternalServlet
                     {
                         pcUser.setPassword(request.getParameter("wb_new_password"));
                         pcUser.setRequestChangePassword(false);
-                        
+
+                        if(null==pcUser.getLanguage()) pcUser.setLanguage("es"); //forzar lenguage si no se dio de alta.
+
                         subject.getPrincipals().clear();
                         subject.getPrincipals().add(pcUser);
                         pcUser.setLastLogin(new java.util.Date());
