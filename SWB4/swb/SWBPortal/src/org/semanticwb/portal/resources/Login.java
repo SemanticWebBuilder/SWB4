@@ -75,7 +75,7 @@ public class Login extends GenericAdmResource
         boolean inPlace = Boolean.parseBoolean(getResourceBase().getAttribute(INPLACE, "false"));
         if ("ok".equals(request.getParameter("ErrorMgs")) && null != request.getSession(true).getAttribute("ErrorMsg"))
         {
-            out.println("\n<script> alert('" + request.getSession(true).getAttribute("ErrorMsg") + "');</script>\n");
+            out.println("\n<script> alert('" + ((String)request.getSession(true).getAttribute("ErrorMsg")).replace('\'', '`') + "');</script>\n");
             request.getSession(true).removeAttribute("ErrorMsg");
         }
         if (null == frmlogin)
