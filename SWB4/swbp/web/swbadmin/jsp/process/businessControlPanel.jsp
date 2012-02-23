@@ -255,13 +255,13 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                     String status = "<img src=\""+baseimg;
                     String Id = instance.getId();
                     String pName = instance.getProcessType().getDisplayTitle(lang);
-                    String pCreated = SWBUtils.TEXT.getStrDate(instance.getCreated(), lang, "dd/mm/yy - hh:mm");
+                    String pCreated = SWBUtils.TEXT.getStrDate(instance.getCreated(), lang, "dd/mm/yy - hh:%m");
                     String pClosed = "--";
                     
                     if (instance.getStatus() == ProcessInstance.STATUS_PROCESSING) status += "icon_pending.png\">";
                     if (instance.getStatus() == ProcessInstance.STATUS_CLOSED) {
                         status += "icon_closed.png\">";
-                        pClosed = SWBUtils.TEXT.getStrDate(instance.getEnded(), lang, "dd/mm/yy - hh:mm");
+                        pClosed = SWBUtils.TEXT.getStrDate(instance.getEnded(), lang, "dd/mm/yy - hh:%m");
                     }
                     if (instance.getStatus() == ProcessInstance.STATUS_ABORTED) status += "icon_aborted.png\">";
                     %>
