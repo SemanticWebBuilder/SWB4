@@ -288,7 +288,15 @@
 %>
 
 <div id="bloque_noticias_recientes<%=div%>" class="navegador noticias">
-    <a class="anterior" href="javascript:changePage('<%=anterior.toString(true)%>','<%=div%>')" >anterior</a>
+    <%
+        if(npage>1)
+            {
+            %>
+            <a class="anterior" href="javascript:changePage('<%=anterior.toString(true)%>','<%=div%>')" >anterior</a>
+            <%
+            }
+    %>
+    
     <ul class="selector">
 
         <%
@@ -336,7 +344,15 @@
 
 
     %>
-    <a class="siguiente" href="javascript:changePage('<%=siguiente.toString(true)%>','<%=div%>')" >siguiente</a>
+    <%
+    if(npage>1)
+        {
+        %>
+        <a class="siguiente" href="javascript:changePage('<%=siguiente.toString(true)%>','<%=div%>')" >siguiente</a>
+        <%
+        }
+    %>
+    
     <div style="clear: both; "></div>
 </div>
 <%
