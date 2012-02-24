@@ -289,7 +289,7 @@
 
 <div id="bloque_noticias_recientes<%=div%>" class="navegador noticias">
     <%
-        if(npage>1)
+        if(npages>1)
             {
             %>
             <a class="anterior" href="javascript:changePage('<%=anterior.toString(true)%>','<%=div%>')" >anterior</a>
@@ -300,6 +300,8 @@
     <ul class="selector">
 
         <%
+        if(npages>1)
+            {
                             int dif = 3 - npages;
                             for (int ipage = 1; ipage <= npages; ipage++)
                             {
@@ -345,12 +347,13 @@
 
     %>
     <%
-    if(npage>1)
+    if(npages>1)
         {
         %>
         <a class="siguiente" href="javascript:changePage('<%=siguiente.toString(true)%>','<%=div%>')" >siguiente</a>
         <%
         }
+                        }
     %>
     
     <div style="clear: both; "></div>
