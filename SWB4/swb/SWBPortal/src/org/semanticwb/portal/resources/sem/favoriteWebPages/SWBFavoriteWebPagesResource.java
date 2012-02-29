@@ -9,148 +9,110 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
+
 import javax.servlet.RequestDispatcher;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.portal.api.*;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.portal.api.SWBActionResponse;
+import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.portal.resources.sem.favoriteWebPages.base.SWBFavoriteWebPagesResourceBase;
 
-public class SWBFavoriteWebPagesResource extends org.semanticwb.portal.resources.sem.favoriteWebPages.base.SWBFavoriteWebPagesResourceBase
+public class SWBFavoriteWebPagesResource extends SWBFavoriteWebPagesResourceBase
 {
-    public static final String Mode_DETAIL = "dtl";
-
+//    public static final String Mode_DETAIL = "dtl";
+//    public static final String Mode_REMOVE = "rem";
     private static final Logger log = SWBUtils.getLogger(SWBFavoriteWebPagesResource.class);
 
     public SWBFavoriteWebPagesResource()
     {
     }
 
-    /**
-     * Constructs a SWBFavoriteWebPagesResource with a SemanticObject
-     * @param base The SemanticObject with the properties for the SWBFavoriteWebPagesResource
-     */
-    public SWBFavoriteWebPagesResource(org.semanticwb.platform.SemanticObject base)
+    public SWBFavoriteWebPagesResource(SemanticObject base)
     {
-        super(base);
+    super(base);
     }
 
     @Override
-    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
-        final String mode = paramRequest.getMode();
-        if(SWBResourceURL.Action_EDIT.equals(mode)) {
-            doEditWebPage(request, response, paramRequest);
-        }else if(SWBResourceURL.Action_ADD.equals(mode)) {
-            doAdd(request, response, paramRequest);
-        }else if(SWBResourceURL.Action_REMOVE.equals(mode)) {
-            doRemove(request, response, paramRequest);
-        }else if(Mode_DETAIL.equals(mode)) {
-            doDetail(request, response, paramRequest);
-        }
-        
-        else
-        {
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+//        final String mode = paramRequest.getMode();
+//        if(Mode_REMOVE.equals(mode))
+//            doRemove(request, response, paramRequest);
+//        else
             super.processRequest(request, response, paramRequest);
-        }
     }
+
 
     public static ArrayList<WebPage> getFavWebPages(User user, WebSite site)
     {
-        HashSet<WebPage> _pages = new HashSet<WebPage>();
-        Iterator<SWBFavoriteWebPage> favs = SWBFavoriteWebPage.ClassMgr.listSWBFavoriteWebPageByUser(user, site);
+        HashSet _pages = new HashSet();
+        Iterator favs = SWBFavoriteWebPage.ClassMgr.listSWBFavoriteWebPageByUser(user, site);
         while (favs.hasNext())
         {
-            SWBFavoriteWebPage swbfav = favs.next();
+            SWBFavoriteWebPage swbfav = (SWBFavoriteWebPage)favs.next();
             _pages.add(swbfav.getFavorite());
-//            GenericIterator<WebPage> pages = swbfav.getFavorite();
-//            while (pages.hasNext())
-//            {
-//                WebPage page = pages.next();
-//                _pages.add(page);
-//            }
         }
-
-        ArrayList<WebPage> favpages = new ArrayList<WebPage>();
+        ArrayList favpages = new ArrayList();
         favpages.addAll(_pages);
         return favpages;
     }
-    
+
     public static List<WebPage> getFavorites(User user, WebSite site) {
-        TreeSet<SWBFavoriteWebPage> favpages = new TreeSet<SWBFavoriteWebPage>();
-        Iterator<SWBFavoriteWebPage> favs = SWBFavoriteWebPage.ClassMgr.listSWBFavoriteWebPageByUser(user, site);
-        while (favs.hasNext()) {
-            favpages.add(favs.next());
-        }
-        
-        ArrayList<WebPage> _pages = new ArrayList<WebPage>();
-        favs = favpages.descendingIterator();
-        while(favs.hasNext()) {
-            _pages.add(favs.next().getFavorite());
+        TreeSet<SWBFavoriteWebPage> favs = new TreeSet();
+        Iterator<SWBFavoriteWebPage> ifavs = SWBFavoriteWebPage.ClassMgr.listSWBFavoriteWebPageByUser(user, site);
+        favs.addAll(SWBUtils.Collections.copyIterator(ifavs));
+
+        ArrayList<WebPage> _pages = new ArrayList();
+        ifavs = favs.descendingIterator();
+        while(ifavs.hasNext()) {
+            _pages.add(((SWBFavoriteWebPage)ifavs.next()).getFavorite());
         }
         return _pages;
     }
 
-    public void doEditWebPage(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    @Override
+    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        String id = request.getParameter("id");
-        String mode=request.getParameter("mode");
-        if(mode==null)
-        {
-            return;
-        }
-        if("remove".equals(mode))
-        {
-            doRemove(request, response, paramRequest);
-            return;
-        }
-        WebPage page = paramRequest.getWebPage().getWebSite().getWebPage(id);
-        if (page != null)
-        {
-            User user = paramRequest.getUser();
-
-            boolean exists = false;
-            ArrayList<WebPage> pages = getFavWebPages(user, paramRequest.getWebPage().getWebSite());
-            if (pages.contains(page))
-            {
-                exists = true;
-            }
-            if (!exists)
-            {
-                Iterator<SWBFavoriteWebPage> favs = SWBFavoriteWebPage.ClassMgr.listSWBFavoriteWebPageByUser(user, paramRequest.getWebPage().getWebSite());
-                boolean add=false;
-                while (favs.hasNext())
-                {
-                    SWBFavoriteWebPage fav = favs.next();
-                    fav.setFavorite(page);
-                    add=true;
-
-                }
-                if(!add)
-                {
-                    SWBFavoriteWebPage fav=SWBFavoriteWebPage.ClassMgr.createSWBFavoriteWebPage(paramRequest.getWebPage().getWebSite());
-                    fav.setUser(user);
-                    fav.setFavorite(page);
-                }
-            }
-
-            String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/jsp/" + this.getClass().getSimpleName() + "/";
-            String path = basePath + "edit.jsp";
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        
+        User user = paramRequest.getUser();
+        if(user.isSigned()) {
+            final String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/jsp/" + getClass().getSimpleName() + "/";
+            String path = basePath + "view.jsp";
             RequestDispatcher dis = request.getRequestDispatcher(path);
-            try
-            {
+            try {
                 request.setAttribute("paramRequest", paramRequest);
-                request.setAttribute("this", this);
                 request.setAttribute("pages", getFavWebPages(user, paramRequest.getWebPage().getWebSite()));
                 dis.include(request, response);
-            }
-            catch (Exception e)
-            {
+            }catch (Exception e) {
                 log.error(e);
             }
+            /*
+            WebPage page = paramRequest.getWebPage();
+//            ArrayList<WebPage> pages = getFavWebPages(user, paramRequest.getWebPage().getWebSite());
+//            if(!pages.contains(page)) {
+//                final WebSite model = paramRequest.getWebPage().getWebSite();
+//                final String favId = model.getId()+"_"+user.getId()+"_"+page.getId();
+//                SWBFavoriteWebPage fav = SWBFavoriteWebPage.ClassMgr.createSWBFavoriteWebPage(favId, model);
+//                fav.setUser(user);
+//                fav.setFavorite(page);
+                
+                PrintWriter out = response.getWriter();
+                SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setCallMethod(SWBResourceURL.Call_DIRECT);
+                out.println("<a href=\"javascript:postHtml('"+url+"','fv_"+page.getId()+"')\" title=\"Quitar de mi lista de favoritos\">Borrar de favoritos<a/>");
+//            }
+                */
         }
     }
 
@@ -158,117 +120,89 @@ public class SWBFavoriteWebPagesResource extends org.semanticwb.portal.resources
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         response.setContentType("text/html; charset=ISO-8859-1");
-        response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache");
-        
-        Resource base = this.getResourceBase();
+
         User user = paramRequest.getUser();
-        
-        String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/jsp/" + this.getClass().getSimpleName() + "/";
-        String path = basePath + "view.jsp";
-        String mode = paramRequest.getArgument("mode");
-        
-        //if(base.getWebSite().getHomePage()!=paramRequest.getWebPage())
-        if(mode != null && SWBResourceURL.Action_EDIT.equalsIgnoreCase(mode))
-        {
+        final String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/jsp/" + getClass().getSimpleName() + "/";
+        String path;
+        if(paramRequest.getCallMethod() == SWBResourceURL.Call_STRATEGY) {
             path = basePath + "edit.jsp";
-        }        
+            String mode = paramRequest.getArgument("mode");
+            if("edit".equalsIgnoreCase(mode)) {
+                path = basePath + "list.jsp";
+            }
+        }
+        else if(paramRequest.getCallMethod() == SWBResourceURL.Call_CONTENT) {
+            path = basePath + "detail.jsp";
+        }
+        else {
+            path = basePath + "view.jsp";
+        }
+        
         RequestDispatcher dis = request.getRequestDispatcher(path);
-        try
-        {
-            request.setAttribute("mode", mode);            
+        try {
             request.setAttribute("paramRequest", paramRequest);
-            request.setAttribute("this", this);
+//            request.setAttribute("this", this);
             request.setAttribute("pages", getFavWebPages(user, paramRequest.getWebPage().getWebSite()));
             dis.include(request, response);
-        }
-        catch (Exception e)
-        {
-            log.error(e);
-        }
-        
-/*User user = paramRequest.getUser();
-Iterator<SWBFavoriteWebPage> it = SWBFavoriteWebPage.ClassMgr.listSWBFavoriteWebPageByUser(user, paramRequest.getWebPage().getWebSite());
-List<SWBFavoriteWebPage> list = SWBUtils.Collections.copyIterator(it);
-Collections.sort(list, new RecentFavorites());
-Collections.reverse(list);*/        
-        
-    }
-    
-    public void doAdd(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/html; charset=ISO-8859-1");
-        response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache");
-        PrintWriter out = response.getWriter();
-        out.println("<input type=\"button\" value=\"agregar\" title=\"Agregar a Favoritos - Se desplegará en la página principal según tu perfil\" onClick=\"postHtml('<%=url%>','bm')\" />");
-        out.close();
-        out.flush();
-    }
-    
-    public void doRemove(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/html; charset=ISO-8859-1");
-        response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache");
-        PrintWriter out = response.getWriter();
-        out.println("<input type=\"button\" value=\"quitar\" title=\"Eliminar de Favoritos\" onClick=\"postHtml('<%=url%>','bm')\" />");
-        out.close();
-        out.flush();
-    }
-    
-    public void doDetail(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/html; charset=ISO-8859-1");
-        response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache");
-        
-        final String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/jsp/" + this.getClass().getSimpleName() + "/";
-        final String path = basePath + "detail.jsp";
-        RequestDispatcher dis = request.getRequestDispatcher(path);
-        try
-        {
-            request.setAttribute("paramRequest", paramRequest);
-            dis.include(request, response);
-        }
-        catch (Exception e)
-        {
+        }catch (Exception e) {
             log.error(e);
         }
     }
     
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        Resource base = getResourceBase();
-        final String act = response.getAction();
-        final User user = response.getUser();
-        final WebPage thisPage = response.getWebPage();
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
+    {
+        User user = response.getUser();
+        if(!user.isSigned())
+            return;
         
-        response.setCallMethod(SWBResourceURL.Call_DIRECT);
-        if(SWBResourceURL.Action_ADD.equals(act) && user.isSigned()) {
-            ArrayList<WebPage> myFavorites = getFavWebPages(user, base.getWebSite());
-            if(!myFavorites.contains(thisPage)) {
-                SWBFavoriteWebPage fav = SWBFavoriteWebPage.ClassMgr.createSWBFavoriteWebPage(response.getWebPage().getId(), base.getWebSite());
-                fav.setFavorite(thisPage);
-                fav.setSubscription(new Date());
+        Resource base = getResourceBase();
+        final String action = response.getAction();
+        if(SWBResourceURL.Action_ADD.equals(action)) {
+            //response.setMode(Mode_REMOVE);
+            response.setMode(SWBResourceURL.Mode_EDIT);
+            final WebPage page = response.getWebPage();
+            final WebSite model = base.getWebSite();
+            final String favId = model.getId()+"_"+user.getId()+"_"+page.getId();
+            if(!SWBFavoriteWebPage.ClassMgr.hasSWBFavoriteWebPage(favId, model)) {
+                SWBFavoriteWebPage fav = SWBFavoriteWebPage.ClassMgr.createSWBFavoriteWebPage(favId, model);
+                fav.setFavorite(page);
                 fav.setUser(user);
-            }else {
+                fav.setSubscription(new Date());
             }
-            response.setMode(SWBResourceURL.Action_REMOVE);
-        }else if(SWBResourceURL.Action_REMOVE.equals(act) && user.isSigned()) {
-            final String id = response.getWebPage().getId();
-            ArrayList myFavorites = getFavWebPages(user, base.getWebSite());
-            if(myFavorites.contains(thisPage)) {
-                SWBFavoriteWebPage.ClassMgr.removeSWBFavoriteWebPage(id, base.getWebSite());
+        }else if(SWBResourceURL.Action_REMOVE.equals(action)) {
+            response.setMode(SWBResourceURL.Mode_EDIT);
+            final WebPage page = response.getWebPage();
+            final WebSite model = base.getWebSite();
+            final String favId = model.getId()+"_"+user.getId()+"_"+page.getId();
+//            ArrayList<WebPage> pages = getFavWebPages(user, model);
+            if(SWBFavoriteWebPage.ClassMgr.hasSWBFavoriteWebPage(favId, model)) {
+//                SWBFavoriteWebPage favp = SWBFavoriteWebPage.ClassMgr.getSWBFavoriteWebPage(favId, model);
+                SWBFavoriteWebPage.ClassMgr.removeSWBFavoriteWebPage(favId, model);
             }
-            response.setMode(SWBResourceURL.Action_ADD);
         }
     }
 
+//    public void doRemove(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+//        response.setContentType("text/html; charset=ISO-8859-1");
+//        response.setHeader("Cache-Control", "no-cache");
+//        response.setHeader("Pragma", "no-cache");
+//        
+//        User user = paramRequest.getUser();
+//        if(user.isSigned()) {
+//            PrintWriter out = response.getWriter();
+//            SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD).setCallMethod(SWBResourceURL.Call_DIRECT);
+//            out.println("<a href=\"javascript:postHtml('"+url+"','fv_"+paramRequest.getWebPage().getId()+"')\" title=\"Agregar a mi lista de favoritos\">Agregar como favoritos<a/>");
+//            
+//        }
+//    }
 
-
-static class RecentFavorites implements Comparator<SWBFavoriteWebPage> {
-    public int compare(SWBFavoriteWebPage fav1, SWBFavoriteWebPage fav2) {
-        return fav1.getSubscription().compareTo( fav2.getSubscription() );
+    static class RecentFavorites implements Comparator<SWBFavoriteWebPage>
+    {
+        @Override
+        public int compare(SWBFavoriteWebPage fav1, SWBFavoriteWebPage fav2)
+        {
+            return fav1.getSubscription().compareTo(fav2.getSubscription());
+        }
     }
-}
-    
-
 }
