@@ -238,7 +238,7 @@ p.day2 {
     height:100%;
 }
 #showPopUpEvts .allPopUpEvts {
-    z-index: 10005;
+    /*z-index: 10005;*/
     background-color:white;
     position: relative;
     bottom:-100%;
