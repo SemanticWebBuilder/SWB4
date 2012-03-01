@@ -537,9 +537,6 @@ public class SWBPortal
 //                objs.add(timer);
 //            }
 //
-            //cargando clases de startup.properties
-            SWBStartup startup = new SWBStartup(new ArrayList()); //objs);
-            startup.load("startup.properties");
 //
 //            Runtime.getRuntime().gc();
 //            util.log(com.infotec.appfw.util.AFUtils.getLocaleString("locale_core", "log_WBLoader_Init_totalMemory") + Runtime.getRuntime().totalMemory(), true);
@@ -769,6 +766,16 @@ public class SWBPortal
 
         //Inicializa el RuleMgr
         Rule.getRuleMgr();
+
+        try
+        {
+            //cargando clases de startup.properties
+            SWBStartup startup = new SWBStartup(new ArrayList()); //objs);
+            startup.load("startup.properties");
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }                    
     }
 
     /**
