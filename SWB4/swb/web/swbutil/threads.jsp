@@ -20,15 +20,13 @@
         <title>Threads List</title>
     </head>
     <body>
-        <%
+        <%        
         User user=SWBContext.getAdminUser();
         if(user==null)
         {
             response.sendError(403);
             return;
-        }
-               
-/*        
+        }            
             String stop=request.getParameter("stop");
             if(stop!=null)
             {
@@ -49,7 +47,7 @@
                     }
                 }
             }
-*/            
+            
 
             ThreadMXBean threads=ManagementFactory.getThreadMXBean();
             long t[]=threads.getAllThreadIds();

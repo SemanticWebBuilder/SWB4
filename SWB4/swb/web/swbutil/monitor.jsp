@@ -23,6 +23,7 @@ static private SWBSummary swbSummary = new SWBSummary();
         response.sendError(403);
         return;
     }
+ 
     String pc=request.getParameter("pageCache");
     if(pc!=null)Distributor.setPageCache(Boolean.parseBoolean(pc));
 %>        
