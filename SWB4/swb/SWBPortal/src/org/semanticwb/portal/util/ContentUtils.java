@@ -162,7 +162,7 @@ public class ContentUtils {
 
             StringBuffer strb1 = new StringBuffer();
 
-            strb1.append("<table width=\"100%\">");
+            strb1.append("<table width=\"100%\" id=\"pagStyle\">");
             strb1.append("<tr>");
             strb1.append("<td align=\"center\">");
             String path = webpage.getUrl() + "?";
@@ -233,7 +233,7 @@ public class ContentUtils {
 
             StringBuilder strb1 = new StringBuilder();
 
-            strb1.append("<table width=\"100%\">");
+            strb1.append("<table width=\"100%\" id=\"pagStyle\">");
             strb1.append("<tr>");
             strb1.append("<td align=\"center\">");
             String path = webpage.getUrl() + "?";
