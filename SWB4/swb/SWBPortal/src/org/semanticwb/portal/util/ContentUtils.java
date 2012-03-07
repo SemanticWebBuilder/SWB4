@@ -37,7 +37,6 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
