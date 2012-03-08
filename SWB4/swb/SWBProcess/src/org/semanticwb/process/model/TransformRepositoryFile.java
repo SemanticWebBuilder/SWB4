@@ -2,10 +2,12 @@ package org.semanticwb.process.model;
 
 import java.io.OutputStream;
 import java.lang.reflect.Constructor;
+import java.util.Iterator;
 import java.util.List;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.process.utils.SWBScriptParser;
@@ -82,6 +84,34 @@ public class TransformRepositoryFile extends org.semanticwb.process.model.base.T
             if (_status != null) status = _status.getId();
             OutputStream ous = file.storeFile(SWBScriptParser.parser(instance, user, name)+".docx", null, false, status);
             rep.generateReport(ous);
+            
+            if (getNodeVarName() != null && !getNodeVarName().trim().equals("")){
+                SWBClass obj=null;
+                Iterator<ItemAwareReference> it=instance.listHeraquicalItemAwareReference().iterator();
+                while (it.hasNext()) {
+                    ItemAwareReference ref = it.next();
+                    String n1=ref.getItemAware().getName();
+                    String n2=getNodeVarName();
+                    if(n1!=null && n2!=null)
+                    {
+                        if(n1.equals(n2))
+                        {
+                            obj=ref.getProcessObject();
+                            break;
+                        }
+                    }
+                    //System.out.println("n1:"+n1);
+                    //System.out.println("n2:"+n2);
+                }
+
+                //System.out.println("obj:"+obj);
+
+                if(obj!=null && obj instanceof org.semanticwb.process.schema.File)
+                {
+                    org.semanticwb.process.schema.File f=(org.semanticwb.process.schema.File)obj;
+                    f.setRepositoryFile(file);
+                }
+            }
         }catch(Exception e){log.error(e);}
     }    
 }
