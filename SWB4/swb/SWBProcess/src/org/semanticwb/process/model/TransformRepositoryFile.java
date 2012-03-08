@@ -80,7 +80,7 @@ public class TransformRepositoryFile extends org.semanticwb.process.model.base.T
             ItemAwareStatus _status = getNodeStatus();
             String status = null;
             if (_status != null) status = _status.getId();
-            OutputStream ous = file.storeFile(SWBScriptParser.parser(instance, user, name), null, false, status);
+            OutputStream ous = file.storeFile(SWBScriptParser.parser(instance, user, name)+".docx", null, false, status);
             rep.generateReport(ous);
         }catch(Exception e){log.error(e);}
     }    
