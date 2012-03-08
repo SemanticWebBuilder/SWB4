@@ -5,6 +5,7 @@ public abstract class TransformRepositoryFileBase extends org.semanticwb.process
 {
     public static final org.semanticwb.platform.SemanticClass swp_ProcessFileTemplate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessFileTemplate");
     public static final org.semanticwb.platform.SemanticProperty swp_transformRepFileTemplate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#transformRepFileTemplate");
+    public static final org.semanticwb.platform.SemanticProperty swp_transformRepNodeVarName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#transformRepNodeVarName");
     public static final org.semanticwb.platform.SemanticClass swp_TransformRepositoryFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#TransformRepositoryFile");
    /**
    * The semantic class that represents the currentObject
@@ -331,5 +332,23 @@ public abstract class TransformRepositoryFileBase extends org.semanticwb.process
              ret=(org.semanticwb.process.model.ProcessFileTemplate)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the NodeVarName property
+* @return String with the NodeVarName
+*/
+    public String getNodeVarName()
+    {
+        return getSemanticObject().getProperty(swp_transformRepNodeVarName);
+    }
+
+/**
+* Sets the NodeVarName property
+* @param value long with the NodeVarName
+*/
+    public void setNodeVarName(String value)
+    {
+        getSemanticObject().setProperty(swp_transformRepNodeVarName, value);
     }
 }
