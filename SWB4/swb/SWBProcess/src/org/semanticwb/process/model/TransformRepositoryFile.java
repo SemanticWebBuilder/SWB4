@@ -8,6 +8,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.process.utils.SWBScriptParser;
 import org.semanticwb.process.utils.XDocReport;
 
 
@@ -67,12 +68,14 @@ public class TransformRepositoryFile extends org.semanticwb.process.model.base.T
         {
             file=RepositoryFile.ClassMgr.createRepositoryFile(this.getProcessSite());
         }
+        String name=this.getNodeName();
+        
         file.setRepositoryDirectory(this.getNodeDirectory());
-        file.setTitle(this.getNodeName());
+        file.setTitle(SWBScriptParser.parser(instance, user, name));
         file.setOwnerUserGroup(user.getUserGroup());
 
         try
-        {
+        {            
             String nodeName = this.getNodeName()+".docx";
             ItemAwareStatus _status = getNodeStatus();
             String status = null;
