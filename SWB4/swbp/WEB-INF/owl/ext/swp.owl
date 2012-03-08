@@ -768,8 +768,6 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#Process">
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >false</swb:autogenId>
     <rdfs:subClassOf rdf:resource="#ProcessElement"/>
     <rdfs:subClassOf rdf:resource="#Containerable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Expirable"/>
@@ -792,6 +790,8 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#TemplateRefable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Trashable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#CalendarRefable"/>
     <rdfs:subClassOf rdf:resource="#Callable"/>
     <rdfs:label xml:lang="es">Proceso</rdfs:label>
@@ -2058,8 +2058,6 @@
   <owl:ObjectProperty rdf:ID="administrationRole">
     <rdfs:domain rdf:resource="#Process"/>
     <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Role"/>
-    <rdfs:label xml:lang="es">Role de administración del proceso</rdfs:label>
-    <rdfs:label xml:lang="en">Administration Role</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_administrationRole">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
@@ -2068,6 +2066,8 @@
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneUserRepWithBlank"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:label xml:lang="en">Administration Role</rdfs:label>
+    <rdfs:label xml:lang="es">Rol de administración del proceso</rdfs:label>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="itemAware">
     <rdfs:domain rdf:resource="#ItemAwareReference"/>
