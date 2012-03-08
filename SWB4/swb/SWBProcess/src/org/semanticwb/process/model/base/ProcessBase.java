@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Activeable,org.semanticwb.process.model.Containerable,org.semanticwb.process.model.Callable,org.semanticwb.model.Expirable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Resourceable,org.semanticwb.model.FilterableNode,org.semanticwb.model.RoleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Filterable
+public abstract class ProcessBase extends org.semanticwb.process.model.ProcessElement implements org.semanticwb.model.Expirable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.process.model.Containerable,org.semanticwb.model.Activeable,org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.process.model.Callable,org.semanticwb.model.Trashable,org.semanticwb.model.Resourceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.FilterableNode
 {
    /**
    * Objeto que define un Role dentro de un repositorio de usuarios aplicable a un Usuario para filtrar componente, seccion, plantillas, etc.
@@ -55,6 +55,12 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Process>(it, true);
+        }
+
+        public static org.semanticwb.process.model.Process createProcess(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.process.model.Process.ClassMgr.createProcess(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.process.model.Process
