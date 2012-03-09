@@ -154,6 +154,7 @@ public class ProcessForm extends GenericResource {
             SWBResourceURL urlact = paramRequest.getActionUrl();
             urlact.setAction("process");
 
+            out.println("<div id=\"processForm\">");
             out.println("<form id=\"" + foi.getId() + "/form\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"" + urlact + "\" method=\"post\">");
             out.println("<input type=\"hidden\" name=\"suri\" value=\"" + suri + "\"/>");
             out.println("<input type=\"hidden\" name=\"smode\" value=\"edit\"/>");
@@ -197,7 +198,7 @@ public class ProcessForm extends GenericResource {
 
                     if (!printHeaders) {
                         out.println("<fieldset>");
-                        out.println("<legend>Datos Generales</legend>");
+//                        out.println("<legend>Datos Generales</legend>");
                         out.println("<table>");
                         printHeaders = true;
                     }
@@ -237,6 +238,7 @@ public class ProcessForm extends GenericResource {
 
             out.println("</span></fieldset>");
             out.println("</form>");
+            out.println("</div>");
 
         } else if (ADMINMODE_ADVANCE.equals(adminMode)) {
             if (action.equals("add") || action.equals("edit")) {
@@ -281,7 +283,8 @@ public class ProcessForm extends GenericResource {
             //TODO: Agregar propiedades del item
         }
 
-        ret.append("<form");
+        ret.append("<div class=\"processForm\">");
+        ret.append("\n<form");
 
         if (request.getParameter("useDojo") != null && request.getParameter("useDojo").equals("dojo")) {
             ret.append(" htmlType=\"dojo\" ");
@@ -289,7 +292,7 @@ public class ProcessForm extends GenericResource {
         ret.append(" class=\"swbform\">");
 
         ret.append("\n    <fieldset>");
-        ret.append("\n      <legend>Datos Generales</legend>");
+//        ret.append("\n      <legend>Datos Generales</legend>");
         ret.append("\n      <table>");
 
         int max = 1;
@@ -355,6 +358,7 @@ public class ProcessForm extends GenericResource {
 
         ret.append("\n      </fieldset>");
         ret.append("\n</form>");
+        ret.append("\n</div>");
 
         return ret.toString();
     }
