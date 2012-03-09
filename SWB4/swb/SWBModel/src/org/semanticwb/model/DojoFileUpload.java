@@ -106,27 +106,27 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
         for (String key : keys) {
             String value = ufq.getFiltros().get(key);
             if (filts.length() > 0) {
-                filts.append("'],");
+                filts.append("\\'],");
             } else if (filts.length() == 0) {
                 filts.append("[");
             }
-            filts.append("['");
+            filts.append("[\\'");
             filts.append(key);
-            filts.append("', '");
+            filts.append("\\', \\'");
             filts.append(value);
         }
-        filts.append("']]");
+        filts.append("\\']]");
 
         if (prop.getCardinality() != 1) {
             buffer.append("        <button onclick=\"fileUpload_addNewUpload('" + pname + "','" + filts.toString() + "','" + url + "');return false;\">" + agregar + "</button>\n");
             buffer.append("	<br><br>\n");
             buffer.append("	<div id=\"" + pname + "_dynamic\"></div>\n");
         } else {
-
+            
             buffer.append("<input dojoType=\"dojox.form.FileInputAuto\" blurDelay=\"0\" "
                     + "id=\"" + pname + "_defaultAuto\" name=\"" + pname + "_inputFileAuto\" url=\"" + url
                     + "\" onComplete=\"fileUpload_Callback"+((obj.getProperty(prop) != null)?"":"2")+"\"  startup=\"dijit.byId(document.getElementById('"+pname+ "_defaultAuto').form.id).extValid="+(obj.getProperty(prop) != null)+";\" "
-                    + "fileMask=\"" + filts.toString() + "\"/><br/>\n");
+                    + "fileMask=\"" + filts.toString().replaceAll("\\\\", "") + "\"/><br/>\n");
             
             if (!"create".equals(mode) && obj.getProperty(prop) != null) {
                 String name = obj.getProperty(prop);
