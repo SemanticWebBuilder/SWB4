@@ -557,6 +557,7 @@ public class SemanticModel
         } else if (SemanticVocabulary.OWL_OBJECTPROPERTY.equals(uriType)){
             ontprop=ont.createObjectProperty(uri);
         }
+        //System.out.println("createSemanticProperty:"+ontprop+" "+m+" "+cls);
         ontprop.setDomain(m.getResource(cls.getURI()));
         ontprop.setRange(m.getResource(uriRang));
         
