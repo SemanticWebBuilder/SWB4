@@ -2127,8 +2127,8 @@
     <rdfs:label xml:lang="es">Asignacion de Recursos</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_resourceAssignationRule">
-        <swbxf:propSelectValues xml:lang="es">0:Manual|1:Aleatorio|2:Menos Carga|3:Distribuido|4:Usuario Creador</swbxf:propSelectValues>
-        <swbxf:propSelectValues xml:lang="en">0:Manual|1:Random|2:Less Work|4:Distributed|4:Creator</swbxf:propSelectValues>
+        <swbxf:propSelectValues xml:lang="en">0:Manual|1:Random|2:Less Work|4:Distributed|4:Process Creator|5:Task Creator</swbxf:propSelectValues>
+        <swbxf:propSelectValues xml:lang="es">0:Manual|1:Aleatorio|2:Menos Carga|3:Distribuido|4:Usuario Creador Proceso|5:Usuario Creador de la Tarea</swbxf:propSelectValues>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >100</swb:index>
