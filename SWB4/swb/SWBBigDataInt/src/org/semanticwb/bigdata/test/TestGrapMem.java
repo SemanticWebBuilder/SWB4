@@ -5,24 +5,11 @@
 
 package org.semanticwb.bigdata.test;
 
-import com.bigdata.rdf.sail.BigdataSail;
 import com.hp.hpl.jena.mem.faster.GraphMemFaster;
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.rdf.model.impl.ModelCom;
-import com.hp.hpl.jena.vocabulary.RDF;
-import java.io.File;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Properties;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.QueryLanguage;
-import org.openrdf.query.TupleQueryResult;
-import org.semanticwb.bigdata.BigdataGraph;
 
 /**
  *
