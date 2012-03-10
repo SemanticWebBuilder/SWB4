@@ -58,7 +58,7 @@ public class UserTask extends org.semanticwb.process.model.base.UserTaskBase
         //System.out.println("execute:"+instance+" "+user);
         if(getResourceAssignationRule()>0 && instance.getAssignedto()==null)
         {
-            if(getResourceAssignationRule()>0) // De momento todos son aleatorios
+            if(getResourceAssignationRule()<4) // De momento todos son aleatorios
             {
                 List<User> users=SWBProcessMgr.getUsers(instance);
                 int s=users.size();
@@ -78,6 +78,12 @@ public class UserTask extends org.semanticwb.process.model.base.UserTaskBase
                         log.error(e);
                     }
                 }
+            }else if(getResourceAssignationRule()==4) // Usuario Creador del Proceso
+            {
+                instance.setAssignedto(instance.getProcessInstance().getCreator());
+            }else if(getResourceAssignationRule()==5) // Usuario Creador de la Tarea
+            {
+                instance.setAssignedto(user);
             }
         }
     }
