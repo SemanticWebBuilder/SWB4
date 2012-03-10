@@ -43,7 +43,7 @@ public class TestModel {
         //SWBPlatform.getSemanticMgr().loadDBModels();
         SWBPlatform.getSemanticMgr().getOntology().rebind();
 
-        String path="f:";
+        String path="/";
         String name="big";
         String ns="http://www." + name + ".swb#";
 
