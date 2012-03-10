@@ -592,9 +592,6 @@ exists or setup the property manually. For example like this:
         <ant antfile="${project.SWBTripleStoreMongo}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
-        <ant antfile="${project.SWBWebdav}/build.xml" inheritall="false" target="jar">
-            <property name="deploy.on.save" value="false"/>
-        </ant>
         <ant antfile="${project.SWBXMLRPCCommon}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
@@ -664,9 +661,6 @@ exists or setup the property manually. For example like this:
             <property name="deploy.on.save" value="false"/>
         </ant>
         <ant antfile="${project.SWBTripleStoreMongo}/build.xml" inheritall="false" target="jar">
-            <property name="deploy.on.save" value="false"/>
-        </ant>
-        <ant antfile="${project.SWBWebdav}/build.xml" inheritall="false" target="jar">
             <property name="deploy.on.save" value="false"/>
         </ant>
         <ant antfile="${project.SWBXMLRPCCommon}/build.xml" inheritall="false" target="jar">
@@ -929,7 +923,6 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${reference.SWBTripleStoreMongo.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.mongo-2.7.0.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${file.reference.commons-pool-1.5.6.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
-        <copyfiles files="${reference.SWBWebdav.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
@@ -1044,7 +1037,6 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${reference.SWBTripleStoreMongo.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.mongo-2.7.0.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copyfiles files="${file.reference.commons-pool-1.5.6.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-        <copyfiles files="${reference.SWBWebdav.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init" if="dist.ear.dir" name="-clean-webinf-lib">
         <delete dir="${build.web.dir}/WEB-INF/lib"/>
@@ -1430,7 +1422,6 @@ exists or setup the property manually. For example like this:
         <ant antfile="${project.SWBTOWB3Compatibility}/nbbuild.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBTripleStore}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBTripleStoreMongo}/build.xml" inheritall="false" target="clean"/>
-        <ant antfile="${project.SWBWebdav}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBXMLRPCCommon}/build.xml" inheritall="false" target="clean"/>
         <ant antfile="${project.SWBXMRPCServer}/build.xml" inheritall="false" target="clean"/>
     </target>
