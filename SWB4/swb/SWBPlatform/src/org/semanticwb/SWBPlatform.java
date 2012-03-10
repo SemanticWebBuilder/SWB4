@@ -111,6 +111,8 @@ public class SWBPlatform
     public final static String PRESIST_TYPE_SWBTRIPLESTORE="swbts";
     
     public final static String PRESIST_TYPE_SWBTSMONGO="swbtsmongo";
+    
+    public final static String PRESIST_TYPE_SWBTSGEMFIRE="swbtsgemfire";
 
     /** The persistence type. */
     private static String persistenceType=PRESIST_TYPE_DEFAULT;
@@ -380,6 +382,9 @@ public class SWBPlatform
         }else if(PRESIST_TYPE_SWBTSMONGO.equalsIgnoreCase(persistenceType))
         {
             SWBPlatform.persistenceType = PRESIST_TYPE_SWBTSMONGO;
+        }else if(PRESIST_TYPE_SWBTSGEMFIRE.equalsIgnoreCase(persistenceType))
+        {
+            SWBPlatform.persistenceType = PRESIST_TYPE_SWBTSGEMFIRE;
         }else
         {
             SWBPlatform.persistenceType=persistenceType;
@@ -894,6 +899,11 @@ public class SWBPlatform
     {
         return persistenceType==PRESIST_TYPE_SWBTSMONGO;
     }    
+    
+    public static boolean isSWBTSGemFire()
+    {
+        return persistenceType==PRESIST_TYPE_SWBTSGEMFIRE;
+    }      
 
     /**
      * Checks if is sDB.
