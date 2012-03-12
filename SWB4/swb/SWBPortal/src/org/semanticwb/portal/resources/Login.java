@@ -39,7 +39,7 @@ public class Login extends GenericAdmResource
   public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest)
     throws SWBResourceException, IOException
   {
-    System.out.println("Entra");
+    //System.out.println("Entra");
     PrintWriter out = response.getWriter();
     String frmlogin = getResourceBase().getAttribute("frmlogin");
     String frmlogout = getResourceBase().getAttribute("frmlogout");
@@ -59,7 +59,7 @@ public class Login extends GenericAdmResource
     }
 
     String url = null;
-    System.out.println(new StringBuilder().append("checa ").append(!paramsRequest.getUser().isSigned()).toString());
+    //System.out.println(new StringBuilder().append("checa ").append(!paramsRequest.getUser().isSigned()).toString());
     if (!paramsRequest.getUser().isSigned())
     {
       if (inPlace)
@@ -79,7 +79,7 @@ public class Login extends GenericAdmResource
       out.println(replaceTags(frmlogout, request, paramsRequest, new StringBuilder().append(url).append("?wb_logout=true").toString()));
     }
 
-    System.out.println("Sale");
+    //System.out.println("Sale");
   }
 
   public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest)
