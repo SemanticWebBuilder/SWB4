@@ -238,7 +238,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     itsemcls = SWBPlatform.getSemanticMgr().getOntology().listInstancesOfClass(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(SWBPlatform.getSemanticMgr().getVocabulary().SWB_CLASS));
                     while (itsemcls.hasNext()) {
                         SemanticObject semobj = itsemcls.next();
-                        System.out.println(semobj+" "+semobj.getURI()+" "+semobj.transformToSemanticClass());
+                        //System.out.println(semobj+" "+semobj.getURI()+" "+semobj.transformToSemanticClass());
                         SemanticClass semClass = semobj.transformToSemanticClass();
                         out.println("<option value=\""+semClass.getURI()+"\" ");
                         if(sccol.getURI().equals(semClass.getURI())) out.println(" selected ");
