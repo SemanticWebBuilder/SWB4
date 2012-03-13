@@ -1687,8 +1687,8 @@ public class SWBPortal
             //termina detección de si es contenido de word
 
             HtmlTag tag = new HtmlTag();
-            int pos = -1;
-            int pos1 = -1;
+            int pos = -1; 
+            //int pos1 = -1;  // no usada
             StringBuilder ret = new StringBuilder();
             try
             {
