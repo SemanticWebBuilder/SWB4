@@ -22,11 +22,9 @@
  **/
 package org.semanticwb;
 
-import org.semanticwb.security.SWBSecurityInstanceValues;
 import com.arthurdo.parser.HtmlStreamTokenizer;
 import com.arthurdo.parser.HtmlTag;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -55,6 +53,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.SWBUtils.IO;
 import org.semanticwb.css.parser.Attribute;
 import org.semanticwb.css.parser.CSSParser;
 import org.semanticwb.css.parser.Selector;
@@ -298,7 +297,8 @@ public class SWBPortal
             String dbfile = SWBUtils.getApplicationPath()+"/swbadmin/geoip/GeoIP.dat";
             try {
                 SWBPortal.geoip = new com.maxmind.geoip.LookupService(dbfile, com.maxmind.geoip.LookupService.GEOIP_MEMORY_CACHE);
-                Runtime.getRuntime().addShutdownHook(new Thread(){ public void run(){SWBPortal.geoip.close();}});
+                Runtime.getRuntime().addShutdownHook(new Thread(){@Override
+                public void run(){SWBPortal.geoip.close();}});
             } catch (IOException ioe) {
                 log.warn("can't find GeoIP.dat file", ioe);
                 SWBPortal.geoip = null;
@@ -428,7 +428,7 @@ public class SWBPortal
 
         //Insercion de parametros a Platform
         SWBPlatform platform = SWBPlatform.createInstance();
-        platform.setPortalLoaded(true);
+        SWBPlatform.setPortalLoaded(true);
         platform.setPlatformWorkPath(workPath);
         platform.setStatementsCache(getEnv("swb/ts_statementsCache", "false").equals("false"));
         String persistType = getEnv("swb/triplepersist", SWBPlatform.PRESIST_TYPE_DEFAULT);
@@ -1326,7 +1326,7 @@ public class SWBPortal
      */
     public static String readFileFromWorkPath(String path, String encode) throws SWBException
     {
-        StringBuffer ret = new StringBuffer(SWBUtils.IO.getBufferSize());
+        StringBuilder ret = new StringBuilder(IO.getBufferSize());
         try
         {
             InputStreamReader file = getFileFromWorkPath(path, encode);
@@ -1689,7 +1689,7 @@ public class SWBPortal
             HtmlTag tag = new HtmlTag();
             int pos = -1;
             int pos1 = -1;
-            StringBuffer ret = new StringBuffer();
+            StringBuilder ret = new StringBuilder();
             try
             {
                 HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(datos.getBytes()));
@@ -1764,7 +1764,7 @@ public class SWBPortal
 
                                 embed.setParam("pluginspage", "http://www.macromedia.com/go/getflashplayer");
                                 embed.setParam("type", "application/x-shockwave-flash");
-                                ret.append("\r\n<script type=\"text/javascript\">\r\n<!--\r\ndocument.write('" + embed.toString() + "</embed>');\r\n-->\r\n</script>");
+                                ret.append("\r\n<script type=\"text/javascript\">\r\n<!--\r\ndocument.write('").append(embed.toString()).append("</embed>');\r\n-->\r\n</script>");
                                 ttype = tok.nextToken();
                                 while (!(ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT))
                                 {
@@ -2128,7 +2128,7 @@ public class SWBPortal
          */
         private static String findImagesInScript(String value, String ext, String ruta)
         {
-            StringBuffer aux = new StringBuffer(value.length());
+            StringBuilder aux = new StringBuilder(value.length());
             int off = 0;
             int f = 0;
             int i = 0;
@@ -2147,11 +2147,11 @@ public class SWBPortal
                     }
                     else if (j > -1)
                     {
-                        aux.append(value.substring(off, i) + ruta + value.substring(j + 1, f + ext.length()));
+                        aux.append(value.substring(off, i)).append(ruta).append(value.substring(j + 1, f + ext.length()));
                     }
                     else
                     {
-                        aux.append(value.substring(off, i) + ruta + value.substring(i, f + ext.length()));
+                        aux.append(value.substring(off, i)).append(ruta).append(value.substring(i, f + ext.length()));
                     }
                     off = f + ext.length();
                 }
@@ -2187,7 +2187,7 @@ public class SWBPortal
             HtmlTag tag = new HtmlTag();
             int pos = -1;
             int pos1 = -1;
-            StringBuffer ret = new StringBuffer();
+            StringBuilder ret = new StringBuilder();
             try
             {
                 HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(datos.getBytes()));
@@ -2365,8 +2365,8 @@ public class SWBPortal
         public static String FindAttaches(String datos)
         {
             HtmlTag tag = new HtmlTag();
-            StringBuffer ret = new StringBuffer();
-            Vector vvector = new Vector();
+            StringBuilder ret = new StringBuilder();
+            ArrayList<String> vvector = new ArrayList<String>();
             try
             {
                 HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(datos.getBytes()));
@@ -2446,14 +2446,14 @@ public class SWBPortal
                                         boolean flag = false;
                                         for (int i = 0; i < vvector.size(); i++)
                                         {
-                                            if (out.equals((String) vvector.elementAt(i)))
+                                            if (out.equals((String) vvector.get(i)))
                                             {
                                                 flag = true;
                                             }
                                         }
                                         if (!flag)
                                         {
-                                            vvector.addElement(out);
+                                            vvector.add(out);
                                         }
                                     }
 
@@ -2479,7 +2479,7 @@ public class SWBPortal
                 }
                 for (int i = 0; i < vvector.size(); i++)
                 {
-                    ret.append((String) vvector.elementAt(i) + ";");
+                    ret.append((String) vvector.get(i)).append(";");
                 }
             }
             catch (NumberFormatException f)
@@ -2951,7 +2951,7 @@ public class SWBPortal
      */
     public static String removeStylesOutDivs(String content, String tmid, HashMap hTMhStyleObjs)
     {
-        StringBuffer ret = new StringBuffer();
+        StringBuilder ret = new StringBuilder();
         try
         {
             boolean title = false;
@@ -3056,7 +3056,7 @@ public class SWBPortal
                             String value = tag.getParam(name);
                             if (name.toLowerCase().equals("style"))
                             {
-                                ret.append(" " + name + "='");
+                                ret.append(" ").append(name).append("='");
                                 StringTokenizer st = new StringTokenizer(value, ";");
                                 while (st.hasMoreTokens())
                                 {
@@ -3064,14 +3064,14 @@ public class SWBPortal
                                     String aux = token.toLowerCase().trim();
                                     if (!(aux.startsWith("font:") || aux.startsWith("font-")))// || aux.startsWith("color")))
                                     {
-                                        ret.append(token + ";");
+                                        ret.append(token).append(";");
                                     }
                                 }
                                 ret.append("\'");
                             }
                             else
                             {
-                                ret.append(" " + name + "=\"" + value + "\"");
+                                ret.append(" ").append(name).append("=\"").append(value).append("\"");
                             }
                         }
                         ret.append(">");
