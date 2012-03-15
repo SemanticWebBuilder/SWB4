@@ -909,8 +909,9 @@ public class ContentUtils {
     private String getHtmlContentByPage(String datos, int page){
         int off = 0;
         int cont = 0;
-        String matchPatron="<div style=\"page-break-after: always\">";
-        if(datos.indexOf(matchPatron)==-1) matchPatron="<div style=\"page-break-after: always;\">";
+        //String matchPatron="<div style=\"page-break-after: always\">";
+        //if(datos.indexOf(matchPatron)==-1) matchPatron="<div style=\"page-break-after: always;\">";
+        String matchPatron="<div style=\"page-break-after: always";
 
         int f = -1;
         String data="";
