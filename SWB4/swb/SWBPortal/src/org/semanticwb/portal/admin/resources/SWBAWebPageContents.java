@@ -452,12 +452,14 @@ public class SWBAWebPageContents extends GenericResource {
 
                 if (isInFlow) {
                     isAuthorized = pfmgr.isAuthorized(res);
-                    if (!isAuthorized) {
+                    PFlowInstance instance = res.getPflowInstance();
+                    if (!isAuthorized || instance.getStatus()==3) { //rechazado
                         activeButton = false;
                     }
                     if (isAuthorized) {
                         activeButton = true;
                     }
+                    
                 }
 
                 // fin validación de botones en relacion a flujos
@@ -1619,7 +1621,8 @@ public class SWBAWebPageContents extends GenericResource {
 
                 if (isInFlow) {
                     isAuthorized = pfmgr.isAuthorized(res);
-                    if (!isAuthorized) {
+                    PFlowInstance instance = res.getPflowInstance();
+                    if (!isAuthorized || instance.getStatus()==3) {  // estatus 3 = rechazado
                         activeButton = false;
                     }
                     if (isAuthorized) {
