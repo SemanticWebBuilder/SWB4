@@ -69,7 +69,7 @@
         <servlet-name>Groovy</servlet-name>
         <servlet-class>groovy.servlet.GroovyServlet</servlet-class>
     </servlet>
-    
+<!--    
     <servlet>
         <servlet-name>webdav</servlet-name>
         <servlet-class>org.apache.catalina.servlets.WebdavServlet</servlet-class>
@@ -91,7 +91,7 @@
         <servlet-name>webdav</servlet-name>
         <url-pattern>/webdav/*</url-pattern>
     </servlet-mapping>    
-
+-->
     <servlet-mapping>
         <servlet-name>Groovy</servlet-name>
         <url-pattern>*.groovy</url-pattern>
