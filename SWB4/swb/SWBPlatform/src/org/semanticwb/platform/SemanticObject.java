@@ -63,9 +63,29 @@ public class SemanticObject
     /** The m_no_objs. */
     private static Map<String, Object>m_no_objs=new HashMapCache<String, Object>(1000);
     
-    
     /** The has cache. */
     private static boolean hasCache=true;        
+    
+    //No cambian
+    /** The ext get methods. */
+    private static HashMap<String, Method> extGetMethods=new HashMap();
+
+    /** The ext set methods. */
+    private static HashMap<String, Method> extSetMethods=new HashMap();    
+    
+    /** The wrapper to primitive. */
+    private static HashMap<Class,Class> wrapperToPrimitive = new HashMap();
+    
+    static {
+            wrapperToPrimitive.put( Boolean.class, Boolean.TYPE );
+            wrapperToPrimitive.put( Byte.class, Byte.TYPE );
+            wrapperToPrimitive.put( Short.class, Short.TYPE );
+            wrapperToPrimitive.put( Character.class, Character.TYPE );
+            wrapperToPrimitive.put( Integer.class, Integer.TYPE );
+            wrapperToPrimitive.put( Long.class, Long.TYPE );
+            wrapperToPrimitive.put( Float.class, Float.TYPE );
+            wrapperToPrimitive.put( Double.class, Double.TYPE );
+    }     
 
     /** The m_genobj. */
     private GenericObject m_genobj=null;
@@ -92,27 +112,7 @@ public class SemanticObject
     /** The m_cachepropsrel. */
     private Map m_cachepropsrel=new ConcurrentHashMap<String, Object>();                    //Cache de objetos relacionados a la propiedad    
     
-    //No cambian
-    /** The ext get methods. */
-    private static HashMap<String, Method> extGetMethods=new HashMap();
-
-    /** The ext set methods. */
-    private static HashMap<String, Method> extSetMethods=new HashMap();    
-    
-    /** The wrapper to primitive. */
-    private static HashMap<Class,Class> wrapperToPrimitive = new HashMap();
-    
-    static {
-            wrapperToPrimitive.put( Boolean.class, Boolean.TYPE );
-            wrapperToPrimitive.put( Byte.class, Byte.TYPE );
-            wrapperToPrimitive.put( Short.class, Short.TYPE );
-            wrapperToPrimitive.put( Character.class, Character.TYPE );
-            wrapperToPrimitive.put( Integer.class, Integer.TYPE );
-            wrapperToPrimitive.put( Long.class, Long.TYPE );
-            wrapperToPrimitive.put( Float.class, Float.TYPE );
-            wrapperToPrimitive.put( Double.class, Double.TYPE );
-    }    
-
+   
     /**
      * Creacion de un SemanticObject Virtual
      */
@@ -244,7 +244,7 @@ public class SemanticObject
     }
     
     /**
-     * Carga todos los datos de la ba
+     * Carga todos los datos de la DB
      */
     public static void loadFullCache(SemanticModel model)
     {
@@ -1150,7 +1150,13 @@ public class SemanticObject
         return null;
     }       
     
-    private boolean removeInv(Statement stmt)
+    /**
+     * Elimina el Statement del cache de inversas
+     * @param stmt
+     * @return 
+     */
+    
+    protected boolean removeInv(Statement stmt)
     {
         if(getPropsInv().remove(stmt))
         {

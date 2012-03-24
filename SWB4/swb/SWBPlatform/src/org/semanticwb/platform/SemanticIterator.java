@@ -123,15 +123,37 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
                 {
                     if(invert)
                     {
-                        return (T)SemanticObject.createSemanticObject(((Statement)obj).getSubject());
+                        T aux=(T)SemanticObject.createSemanticObject(((Statement)obj).getSubject());
+                        if(aux==null)
+                        {
+                            log.warn("Remove bad statement from cache:"+obj);
+                            SemanticObject o=SemanticObject.getSemanticObject(((Statement)obj).getResource().getURI());
+                            if(o!=null)
+                            {
+                                o.removeInv((Statement)obj);
+                            }
+                        }
+                        return aux;
+                    }else
+                    {
+                        T aux=(T)SemanticObject.createSemanticObject(((Statement)obj).getResource());
+                        if(aux==null)
+                        {
+                            log.warn("Remove bad statement from cache:"+obj);
+                            SemanticObject o=SemanticObject.getSemanticObject(((Statement)obj).getSubject().getURI());
+                            if(o!=null)
+                            {
+                                o.remove((Statement)obj,true);
+                            }
+                        }
+                        return aux;
                     }
-                    return (T)SemanticObject.createSemanticObject(((Statement)obj).getResource());
                 }catch(SWBRuntimeException re)
                 {
                     log.error(re);
                     if(re.getMessage().startsWith("Resource not Found"))
                     {
-                        log.error("Removing bad link:"+((Statement)obj).getResource());
+                        log.warn("Removing bad link:"+((Statement)obj).getResource());
                         ((Statement)obj).remove();
                     }
                     return null;
