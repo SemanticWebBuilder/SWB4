@@ -125,7 +125,7 @@ public class GenericIterator<T extends GenericObject> implements Iterator
         }
         else if(obj==null)
         {
-            log.error(new SWBRuntimeException("Item is null"));
+            log.warn(new SWBRuntimeException("Item is null"));
             return null;
         }else
         {
