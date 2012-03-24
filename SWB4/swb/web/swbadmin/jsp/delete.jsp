@@ -5,12 +5,15 @@
 
     public void getAllChilds(List list, SemanticObject obj)
     {
-        list.add(obj.getURI());
-        Iterator<SemanticObject> it=obj.listHerarquicalChilds();
-        while(it.hasNext())
+        if(obj!=null)
         {
-            SemanticObject ch=it.next();
-            getAllChilds(list,ch);
+            list.add(obj.getURI());
+            Iterator<SemanticObject> it=obj.listHerarquicalChilds();
+            while(it.hasNext())
+            {
+                SemanticObject ch=it.next();
+                getAllChilds(list,ch);
+            }
         }
     }
 
