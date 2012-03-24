@@ -53,11 +53,13 @@ public class StoreRepositoryFile extends org.semanticwb.process.model.base.Store
             
             String filePath=SWBPortal.getWorkPath()+f.getWorkPath()+"/"+f.getValue();
             //System.out.println("filePath:"+filePath);
-
             
-            String filename=f.getValue().substring(16+f.getId().length());
+            String filename = null;
+            if (f.getValue() != null) {
+                filename=f.getValue().substring(16+f.getId().length());
+            }
             RepositoryFile file=f.getRepositoryFile();
-            if(file==null)
+            if(file==null && filename != null)
             {
                 String id=this.getNodeId();
                 if(id!=null)
@@ -75,16 +77,15 @@ public class StoreRepositoryFile extends org.semanticwb.process.model.base.Store
                 if(name!=null)name=name.replace("{filename}", filename);
                 file.setTitle(SWBScriptParser.parser(instance, user, name==null?filename:name));
                 file.setOwnerUserGroup(user.getUserGroup());
+                
+                try
+                {
+                    file.storeFile(filename, new FileInputStream(filePath), "Created by process:"+instance.getProcessInstance().getProcessType().getId()+", processInstance:"+instance.getProcessInstance().getId(), false,getNodeStatus()!=null?getNodeStatus().getId():null);
+                }catch(Exception e)
+                {
+                    log.error(e);
+                }
             }
-            
-            try
-            {
-                file.storeFile(filename, new FileInputStream(filePath), "Created by process:"+instance.getProcessInstance().getProcessType().getId()+", processInstance:"+instance.getProcessInstance().getId(), false,getNodeStatus()!=null?getNodeStatus().getId():null);
-            }catch(Exception e)
-            {
-                log.error(e);
-            }
-            
         }if(obj!=null && obj instanceof org.semanticwb.process.schema.FileCollection)
         {
             org.semanticwb.process.schema.FileCollection f=(org.semanticwb.process.schema.FileCollection)obj;
