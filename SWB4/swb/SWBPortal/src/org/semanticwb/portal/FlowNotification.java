@@ -13,9 +13,8 @@ import org.semanticwb.model.Resource;
  * 
  * @author victor.lorenzana
  */
-public interface FlowNotification {
-
-
+public interface FlowNotification 
+{
     /**
      * Autorize.
      * 
