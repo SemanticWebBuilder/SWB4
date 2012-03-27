@@ -421,7 +421,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                         forward.setParameter("page", String.valueOf(pageNum+1));
                                         %><a href="<%=forward%>">Siguiente</a><%
                                     }
-                                    if (maxPages > 1) {
+                                    if (maxPages > 1 && pageNum < maxPages) {
                                         SWBResourceURL last = paramRequest.getRenderUrl();
                                         if (applyFilter) {
                                             last.setParameter("pFilter", pFilter);
