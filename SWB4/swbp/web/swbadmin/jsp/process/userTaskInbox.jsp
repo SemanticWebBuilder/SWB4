@@ -4,11 +4,9 @@
     Author     : Hasdai Pacheco {haxdai@gmail.com}
 --%>
 
-<%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.SWBUtils"%>
 <%@page import="org.semanticwb.model.SWBComparator"%>
-<%@page import="org.semanticwb.model.UserGroup"%>
 <%@page import="org.semanticwb.model.WebPage"%>
 <%@page import="org.semanticwb.model.User"%>
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
@@ -135,7 +133,7 @@ ArrayList<FlowNodeInstance> tinstances = (ArrayList<FlowNodeInstance>) request.g
 SWBResourceURL configUrl = paramRequest.getRenderUrl().setMode("config");
 if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
     if (paramRequest.getAction().equals("createCase")) {
-        %><h2>Iniciar un nuevo caso</h2><%
+        %><h3>Iniciar un proceso</h3><%
         Map<String, ArrayList<Process>> groups = new TreeMap<String, ArrayList<Process>>();
         ArrayList<Process> pccs = null;
         //Obtener los eventos de inicio
@@ -196,7 +194,8 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                         </select>
                     </li>
                     <li>
-                        <input type="button" value="Iniciar caso" onclick="window.location='<%=createUrl%>?pid='+document.getElementById('processId').value;"/>
+                        <input type="button" value="Iniciar proceso" onclick="window.location='<%=createUrl%>?pid='+document.getElementById('processId').value;"/>
+                        <input type="button" value="Regresar" onclick="window.location='<%=paramRequest.getRenderUrl().toString()%>'"/>
                     </li>
                 </ul>
             </div>
@@ -207,7 +206,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
         optsUrl.setParameter("pFilter", pFilter);
         optsUrl.setParameter("sFilter", sFilter);
         %>
-        <h2>Bandeja de tareas</h2>
+        <h2>Mis Tareas</h2>
         <div class="bandeja-combo">
             <ul>
                 <li>
@@ -267,16 +266,16 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                     %>
                     <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'sFilter', this.options[this.selectedIndex].value)">
                         <option value="-1" <%=sFilter.equals("-1")?"selected":""%>>Todas las tareas</option>
-                        <option value="<%=ProcessInstance.STATUS_PROCESSING%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_PROCESSING))?"selected":""%>>Pendientes</option>
-                        <option value="<%=ProcessInstance.STATUS_CLOSED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_CLOSED))?"selected":""%>>Terminadas</option>
-                        <option value="<%=ProcessInstance.STATUS_ABORTED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_ABORTED))?"selected":""%>>Abortadas</option>
+                        <option value="<%=ProcessInstance.STATUS_PROCESSING%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_PROCESSING))?"selected":""%>>Tareas Pendientes</option>
+                        <option value="<%=ProcessInstance.STATUS_CLOSED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_CLOSED))?"selected":""%>>Tareas Terminadas</option>
+                        <option value="<%=ProcessInstance.STATUS_ABORTED%>" <%=sFilter.equals(String.valueOf(ProcessInstance.STATUS_ABORTED))?"selected":""%>>Tareas Abortadas</option>
                     </select>
                 </li>
                 <li>
                     <%
                     SWBResourceURL createUrl = paramRequest.getRenderUrl().setAction("createCase");
                     %>
-                    <input type="button" value="Nuevo caso" onclick="window.location='<%=createUrl%>'"/>
+                    <input type="button" value="Iniciar proceso" onclick="window.location='<%=createUrl%>'"/>
                 </li>
             </ul>
         </div>
@@ -382,6 +381,7 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                 </table>
             </div>
                 <div class="paginado">
+                    <p>
                     P&aacute;gina:
                 <%
                 for (int i = 1; i <= maxPages; i++) {
@@ -397,10 +397,11 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                     }
                 }
                 %>
+                    </p>
                 </div>
                 <%
         } else {
-            %>No hay procesos actualmente en ejecuci&oacute;n<%
+            %>No tiene tareas pendientes<%
         }
     }
 }
