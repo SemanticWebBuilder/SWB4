@@ -381,23 +381,35 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                 </table>
             </div>
                 <div class="paginado">
-                    <p>
-                    P&aacute;gina:
-                <%
-                for (int i = 1; i <= maxPages; i++) {
-                    if (pageNum == i) {
-                        %><strong><%=i%></strong> <%
-                    } else {
-                        SWBResourceURL pUrl = paramRequest.getRenderUrl();
-                        pUrl.setParameter("pFilter", pFilter);
-                        pUrl.setParameter("sFilter", sFilter);
-                        pUrl.setParameter("sort", sortType);
-                        pUrl.setParameter("page", String.valueOf(i));
-                        %><a href="<%=pUrl%>"><%=i%></a> <%
-                    }
-                }
-                %>
-                    </p>
+                    <table class="tabla-bandeja">
+                        <tbody>
+                            <tr>
+                                <td style="width:90%;">
+                                    P&aacute;gina: <%=pageNum%> de <%=maxPages%>
+                                </td>
+                                <td>
+                                    <%
+                                    if (pageNum-1 > 0) {
+                                        SWBResourceURL back = paramRequest.getRenderUrl();
+                                        back.setParameter("pFilter", pFilter);
+                                        back.setParameter("sFilter", sFilter);
+                                        back.setParameter("sort", sortType);
+                                        back.setParameter("page", String.valueOf(pageNum-1));
+                                        %><a href="<%=back%>">Anterior</a><%
+                                    }
+                                    if (pageNum+1 <= maxPages) {
+                                        SWBResourceURL forward = paramRequest.getRenderUrl();
+                                        forward.setParameter("pFilter", pFilter);
+                                        forward.setParameter("sFilter", sFilter);
+                                        forward.setParameter("sort", sortType);
+                                        forward.setParameter("page", String.valueOf(pageNum+1));
+                                        %><a href="<%=forward%>">Siguiente</a><%
+                                    }
+                                    %>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <%
         } else {
