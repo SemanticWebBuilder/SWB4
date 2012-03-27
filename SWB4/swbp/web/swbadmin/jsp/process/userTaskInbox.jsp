@@ -84,7 +84,7 @@
 <script type="text/javascript">
     function loadPageUrl(url, paramName, paramValue) {
         var dest = url;
-        if (paramName != null && paramValue != null) {
+        if (paramName != null && paramValue != null && paramValue != "") {
             dest+="&"+paramName+"="+paramValue;
         }
         window.location = dest;
@@ -100,11 +100,11 @@ String sortType = request.getParameter("sort");
 String pFilter = request.getParameter("pFilter");
 String sFilter = request.getParameter("sFilter");
 String pNum = request.getParameter("page");
-String itemsPerPage = (String) String.valueOf(request.getAttribute("itemsPerPage"));
 String displayCols = (String) request.getAttribute("displayCols");
 String baseimg = SWBPortal.getWebWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/images/";
 int maxPages = (Integer) request.getAttribute("maxPages");
 int pageNum = 1;
+boolean applyFilter = true;
 
 if (user.getLanguage() != null) {
     lang = user.getLanguage();
@@ -119,18 +119,16 @@ if (sortType != null && !sortType.trim().equals("")) {
 }
 if (pFilter == null || pFilter.trim().equals("")) {
     pFilter = "";
+    applyFilter = false;
 }
 if (sFilter == null || sFilter.trim().equals("")) {
     sFilter = String.valueOf(ProcessInstance.STATUS_PROCESSING);
-}
-if (itemsPerPage == null || itemsPerPage.trim().equals("")) {
-    itemsPerPage = "5";
 }
 
 String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/" + SWBPortal.getContextPath() + paramRequest.getWebPage().getWebSiteId();
 
 ArrayList<FlowNodeInstance> tinstances = (ArrayList<FlowNodeInstance>) request.getAttribute("instances");
-SWBResourceURL configUrl = paramRequest.getRenderUrl().setMode("config");
+//SWBResourceURL configUrl = paramRequest.getRenderUrl().setMode("config");
 if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
     if (paramRequest.getAction().equals("createCase")) {
         %><h3>Iniciar un proceso</h3><%
@@ -203,7 +201,9 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
         }
     } else {
         SWBResourceURL optsUrl = paramRequest.getRenderUrl();
-        optsUrl.setParameter("pFilter", pFilter);
+        if (applyFilter) {
+            optsUrl.setParameter("pFilter", pFilter);
+        }
         optsUrl.setParameter("sFilter", sFilter);
         %>
         <h2>Mis Tareas</h2>
@@ -262,7 +262,9 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                     <%
                     optsUrl = paramRequest.getRenderUrl();
                     optsUrl.setParameter("sort", sortType);
-                    optsUrl.setParameter("pFilter", pFilter);
+                    if (applyFilter) {
+                        optsUrl.setParameter("pFilter", pFilter);
+                    }
                     %>
                     <select onchange="loadPageUrl('<%=optsUrl.toString()%>', 'sFilter', this.options[this.selectedIndex].value)">
                         <option value="-1" <%=sFilter.equals("-1")?"selected":""%>>Todas las tareas</option>
@@ -384,14 +386,26 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                     <table class="tabla-bandeja">
                         <tbody>
                             <tr>
-                                <td style="width:90%;">
+                                <td style="width:80%;">
                                     P&aacute;gina: <%=pageNum%> de <%=maxPages%>
                                 </td>
-                                <td>
+                                <td style="text-align:right;">
                                     <%
+                                    if (maxPages > 1) {
+                                        SWBResourceURL first = paramRequest.getRenderUrl();
+                                        if (applyFilter) {
+                                            first.setParameter("pFilter", pFilter);
+                                        }
+                                        first.setParameter("sFilter", sFilter);
+                                        first.setParameter("sort", sortType);
+                                        first.setParameter("page", "1");
+                                        %><a href="<%=first%>">Primer p&aacute;gina</a><%
+                                    }
                                     if (pageNum-1 > 0) {
                                         SWBResourceURL back = paramRequest.getRenderUrl();
-                                        back.setParameter("pFilter", pFilter);
+                                        if (applyFilter) {
+                                            back.setParameter("pFilter", pFilter);
+                                        }
                                         back.setParameter("sFilter", sFilter);
                                         back.setParameter("sort", sortType);
                                         back.setParameter("page", String.valueOf(pageNum-1));
@@ -399,11 +413,23 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
                                     }
                                     if (pageNum+1 <= maxPages) {
                                         SWBResourceURL forward = paramRequest.getRenderUrl();
-                                        forward.setParameter("pFilter", pFilter);
+                                        if (applyFilter) {
+                                            forward.setParameter("pFilter", pFilter);
+                                        }
                                         forward.setParameter("sFilter", sFilter);
                                         forward.setParameter("sort", sortType);
                                         forward.setParameter("page", String.valueOf(pageNum+1));
                                         %><a href="<%=forward%>">Siguiente</a><%
+                                    }
+                                    if (maxPages > 1) {
+                                        SWBResourceURL last = paramRequest.getRenderUrl();
+                                        if (applyFilter) {
+                                            last.setParameter("pFilter", pFilter);
+                                        }
+                                        last.setParameter("sFilter", sFilter);
+                                        last.setParameter("sort", sortType);
+                                        last.setParameter("page", String.valueOf(maxPages));
+                                        %><a href="<%=last%>">&Uacute;ltima p&aacute;gina</a><%
                                     }
                                     %>
                                 </td>
