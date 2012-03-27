@@ -337,7 +337,7 @@ public class UserTaskInboxResource extends org.semanticwb.process.resources.task
         if (page > maxPages) page = maxPages;
 
         int sIndex = (page - 1) * itemsPerPage;
-        if (t_instances.size() > itemsPerPage && sIndex >= t_instances.size() - 1) {
+        if (t_instances.size() > itemsPerPage && sIndex > t_instances.size() - 1) {
             sIndex = t_instances.size() - itemsPerPage;
         }
 
