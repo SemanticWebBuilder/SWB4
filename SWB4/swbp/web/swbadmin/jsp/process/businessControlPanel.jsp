@@ -415,21 +415,47 @@ if (paramRequest.getMode().equals(paramRequest.Mode_VIEW)) {
         </table>
         </div>
         <div class="paginado">
-            P&aacute;gina:
-        <%
-        for (int i = 1; i <= maxPages; i++) {
-            if (pageNum == i) {
-                %><strong><%=i%></strong> <%
-            } else {
-                SWBResourceURL pUrl = paramRequest.getRenderUrl();
-                pUrl.setParameter("gFilter", gFilter);
-                pUrl.setParameter("sFilter", sFilter);
-                pUrl.setParameter("sort", sortType);
-                pUrl.setParameter("page", String.valueOf(i));
-                %><a href="<%=pUrl%>"><%=i%></a> <%
-            }
-        }
-        %>
+        <table class="tabla-bandeja">
+            <tbody>
+                <tr>
+                    <td style="width:80%;">
+                        P&aacute;gina: <%=pageNum%> de <%=maxPages%>
+                    </td>
+                    <td style="text-align:right;">
+                        <%
+                        if (maxPages > 1) {
+                            SWBResourceURL first = paramRequest.getRenderUrl();
+                            first.setParameter("sFilter", sFilter);
+                            first.setParameter("sort", sortType);
+                            first.setParameter("page", "1");
+                            %><a href="<%=first%>">Primer p&aacute;gina</a><%
+                        }
+                        if (pageNum-1 > 0) {
+                            SWBResourceURL back = paramRequest.getRenderUrl();
+                            back.setParameter("sFilter", sFilter);
+                            back.setParameter("sort", sortType);
+                            back.setParameter("page", String.valueOf(pageNum-1));
+                            %><a href="<%=back%>">Anterior</a><%
+                        }
+                        if (pageNum+1 <= maxPages) {
+                            SWBResourceURL forward = paramRequest.getRenderUrl();
+                            forward.setParameter("sFilter", sFilter);
+                            forward.setParameter("sort", sortType);
+                            forward.setParameter("page", String.valueOf(pageNum+1));
+                            %><a href="<%=forward%>">Siguiente</a><%
+                        }
+                        if (maxPages > 1 && pageNum < maxPages) {
+                            SWBResourceURL last = paramRequest.getRenderUrl();
+                            last.setParameter("sFilter", sFilter);
+                            last.setParameter("sort", sortType);
+                            last.setParameter("page", String.valueOf(maxPages));
+                            %><a href="<%=last%>">&Uacute;ltima p&aacute;gina</a><%
+                        }
+                        %>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
         </div>
         <%
     } else {
