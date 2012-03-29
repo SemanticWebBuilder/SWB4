@@ -324,7 +324,7 @@ public class ControlPanelResource extends org.semanticwb.process.resources.contr
 
         Iterator<ProcessInstance> it_ins = null;
         if (sortType.equals("date")) {
-            it_ins = SWBComparator.sortByCreated(t_instances.iterator());
+            it_ins = SWBComparator.sortByCreated(t_instances.iterator(), false);
         } else if (sortType.equals("name")) {
             Collections.sort(t_instances, processNameComparator);
             it_ins = t_instances.iterator();
