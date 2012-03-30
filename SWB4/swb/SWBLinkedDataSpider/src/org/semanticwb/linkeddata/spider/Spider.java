@@ -29,7 +29,7 @@ import org.xml.sax.InputSource;
  *
  * @author victor.lorenzana
  */
-public class Spider implements SpiderEventListener
+public class Spider  extends Thread implements SpiderEventListener
 {
 
     public static final String DOCTYPE_RFDA = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML+RDFa 1.0//EN\" \"http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd\">";
@@ -40,6 +40,7 @@ public class Spider implements SpiderEventListener
     public static final Set<URL> visited = Collections.synchronizedSet(new HashSet<URL>());
     public static HashSet<Spider> spiders = new HashSet<Spider>();
     public static HashSet<Spider> predicados = new HashSet<Spider>();
+
     static
     {
         try
@@ -97,7 +98,8 @@ public class Spider implements SpiderEventListener
         events.remove(event);
     }
 
-    public void start()
+    @Override
+    public void run()
     {
         this.events.add(this);
         if (!visited.contains(url))
@@ -112,7 +114,7 @@ public class Spider implements SpiderEventListener
                     Document doc = getDocument(docInfo);
                     if (doc != null)
                     {
-                        store(doc, url);                      
+                        store(doc, url);
                     }
                 }
                 else if (docInfo.contentType.equalsIgnoreCase("text/html"))
@@ -129,20 +131,20 @@ public class Spider implements SpiderEventListener
                 }
                 else
                 {
-                    System.out.println("docInfo.contentType: " + docInfo.contentType);
+                    System.out.println("docInfo.contentType: " + docInfo.contentType+" url: "+url);
                 }
             }
             fireOnEnd(url);
-            for(Spider spider : predicados)
+            for (Spider spider : predicados)
             {
                 spider.start();
             }
-            for(Spider spider : spiders)
+            for (final Spider spider : spiders)
             {
                 spider.start();
             }
         }
-        
+
 
 
     }
@@ -314,7 +316,7 @@ public class Spider implements SpiderEventListener
         return false;
     }
 
-    public void onTriple(URI suj, URI pred, String obj, URL url)
+    public void onTriple(URI suj, URI pred, String obj)
     {
 
         try
@@ -323,7 +325,7 @@ public class Spider implements SpiderEventListener
             if (!visited.contains(newURL))
             {
                 Spider spider = new Spider(newURL);
-                for(SpiderEventListener listener : events)
+                for (SpiderEventListener listener : events)
                 {
                     spider.addTripleEvent(listener);
                 }
@@ -364,7 +366,14 @@ public class Spider implements SpiderEventListener
 
                 public void run()
                 {
-                    listener.onError(url, code);
+                    try
+                    {
+                        listener.onError(url, code);
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
             };
             Thread t = new Thread(r);
@@ -381,7 +390,14 @@ public class Spider implements SpiderEventListener
 
                 public void run()
                 {
-                    listener.onError(url, e);
+                    try
+                    {
+                        listener.onError(url, e);
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
             };
             Thread t = new Thread(r);
@@ -392,107 +408,104 @@ public class Spider implements SpiderEventListener
 
     public void fireEventnewTriple(final URI suj, final URI pred, final String obj)
     {
-//        for (final TripleEventListener listener : events)
-//        {
-//            Runnable r = new Runnable()
-//            {
-//
-//                public void run()
-//                {
-//                    listener.onTriple(suj, pred, obj, url);
-//                }
-//            };
-//            Thread t = new Thread(r);
-//            t.start();
-//
-//        }
-
         for (final SpiderEventListener listener : events)
         {
-            listener.onTriple(suj, pred, obj, url);
-        }
+            Runnable r = new Runnable()
+            {
+                public void run()
+                {
+                    try
+                    {
+                        listener.onTriple(suj, pred, obj);
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            Thread t = new Thread(r);
+            t.start();
+
+        }        
     }
 
-    public void fireOnStart(URL url)
+    public void fireOnStart(final URL url)
     {
         for (final SpiderEventListener listener : events)
         {
-            listener.onStart(this.url);
+            Runnable r = new Runnable()
+            {
+                public void run()
+                {
+                    try
+                    {
+                        listener.onStart(url);
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            Thread t = new Thread(r);
+            t.start();
+
         }
+       
     }
 
-    public void fireOnEnd(URL url)
+    public void fireOnEnd(final URL url)
     {
         for (final SpiderEventListener listener : events)
         {
-            try
+            Runnable r = new Runnable()
             {
-                listener.onEnd(this.url);
-            }
-            catch(Exception e)
-            {
-                
-            }
+
+                public void run()
+                {
+                    try
+                    {
+                        listener.onEnd(url);
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            Thread t = new Thread(r);
+            t.start();
+
         }
+        
     }
+
     public void fireVisit(final URI suj)
     {
-//        for (final TripleEventListener listener : events)
-//        {
-//            Runnable r = new Runnable()
-//            {
-//
-//                public void run()
-//                {
-//                    listener.onTriple(suj, pred, obj, url);
-//                }
-//            };
-//            Thread t = new Thread(r);
-//            t.start();
-//
-//        }
-
         for (final SpiderEventListener listener : events)
         {
-            try
+            Runnable r = new Runnable()
             {
-                listener.visit(suj);
-            }
-            catch(Exception e)
-            {
-                
-            }
-        }
-    }
 
-    public void fireEventnewTripleAndFollow(final URI suj, final URI pred, final URI obj)
-    {
-//        for (final TripleEventListener listener : events)
-//        {
-//            Runnable r = new Runnable()
-//            {
-//
-//                public void run()
-//                {
-//                    listener.onTriple(suj, pred, obj, url);
-//                }
-//            };
-//            Thread t = new Thread(r);
-//            t.start();
-//
-//        }
+                public void run()
+                {
+                    try
+                    {
+                        listener.visit(suj);
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            Thread t = new Thread(r);
+            t.start();
 
-        for (final SpiderEventListener listener : events)
-        {
-            try
-            {
-                listener.onTripleAndFollow(suj, pred, obj, url);
-            }
-            catch(Exception e)
-            {
-                
-            }
         }
+
+        
     }
 
     public void onError(URL url, int error)
@@ -642,7 +655,6 @@ public class Spider implements SpiderEventListener
         }
     }
 
-    
     public void onTripleAndFollow(URI suj, URI pred, URI obj, URL url)
     {
         try
@@ -651,7 +663,7 @@ public class Spider implements SpiderEventListener
             if (!visited.contains(newURL))
             {
                 Spider spider = new Spider(newURL);
-                for(SpiderEventListener listener : events)
+                for (SpiderEventListener listener : events)
                 {
                     spider.addTripleEvent(listener);
                 }
@@ -671,7 +683,7 @@ public class Spider implements SpiderEventListener
             if (!visited.contains(newURL))
             {
                 Spider spider = new Spider(newURL);
-                for(SpiderEventListener listener : events)
+                for (SpiderEventListener listener : events)
                 {
                     spider.addTripleEvent(listener);
                 }
@@ -695,7 +707,7 @@ public class Spider implements SpiderEventListener
             if (!visited.contains(newURL))
             {
                 Spider spider = new Spider(newURL);
-                for(SpiderEventListener listener : events)
+                for (SpiderEventListener listener : events)
                 {
                     spider.addTripleEvent(listener);
                 }
@@ -712,27 +724,25 @@ public class Spider implements SpiderEventListener
 
     public void onStart(URL url)
     {
-        
     }
 
     public void onEnd(URL url)
     {
-        
     }
 
     @Override
     public boolean equals(Object obj)
     {
-        if(obj instanceof Spider)
+        if (obj instanceof Spider)
         {
-            Spider tmp=(Spider)obj;
+            Spider tmp = (Spider) obj;
             return tmp.url.equals(this.url);
         }
         else
         {
             return false;
         }
-        
+
     }
 
     @Override
@@ -746,10 +756,5 @@ public class Spider implements SpiderEventListener
     {
         return url.toString();
     }
-    /*public void onTriple(URI suj, URI pred, String obj, URL url)
-    {
-    throw new UnsupportedOperationException("Not supported yet.");
-    }*/
-
-
+    
 }

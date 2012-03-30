@@ -7,6 +7,7 @@ package org.semanticwb.linkeddata.spider;
 import com.arthurdo.parser.HtmlStreamTokenizer;
 import com.arthurdo.parser.HtmlTag;
 import java.io.StringReader;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Enumeration;
@@ -298,9 +299,10 @@ public class RDFAAnalizer
                     URI obj = new URI(tag.tag.getParam("href"));
                     String spred = att.value.replace(att.prefix + ":", prefix.get(att.prefix));
                     URI pred = new URI(spred);
-
-                    spider.fireEventnewTripleAndFollow(suj, pred, obj);
-                }
+                    spider.visit(obj);
+                    spider.visit(pred);
+                    spider.fireEventnewTriple(suj, pred, obj.toString());
+                }                
                 catch (URISyntaxException e)
                 {
                     spider.fireError(e);
@@ -349,8 +351,9 @@ public class RDFAAnalizer
                                         URI obj = new URI(resource);
                                         String spred = rel.replace(_prefix + ":", prefix.get(_prefix));
                                         URI pred = new URI(spred);
-
-                                        spider.fireEventnewTripleAndFollow(suj, pred, obj);
+                                        spider.visit(obj);
+                                        spider.visit(pred);
+                                        spider.fireEventnewTriple(suj, pred, obj.toString());
                                     }
                                     catch (URISyntaxException e)
                                     {

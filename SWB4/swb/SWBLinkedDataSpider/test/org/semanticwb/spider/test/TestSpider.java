@@ -78,6 +78,14 @@ public class TestSpider
             Spider spider = new Spider(url);
             spider.addTripleEvent(new TestSaveTriple());
             spider.start();
+            try
+            {
+                Thread.sleep(1400000);
+            }
+            catch(Exception e)
+            {
+                
+            }
         }
         catch (Exception e)
         {
