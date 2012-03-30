@@ -122,8 +122,12 @@ public class RDFAAnalizer
         try
         {
             int tt_type = tok.nextToken();
-            while (tt_type == HtmlStreamTokenizer.TT_TEXT && tok.getStringValue().toString().equals("\n"))
+            while (tt_type != HtmlStreamTokenizer.TT_TAG)
             {
+                if(tt_type==HtmlStreamTokenizer.TT_EOF)
+                {
+                    return;
+                }
                 tt_type = tok.nextToken();
             }
             tok.parseTag(tok.getStringValue(), html);
@@ -299,8 +303,7 @@ public class RDFAAnalizer
                     URI obj = new URI(tag.tag.getParam("href"));
                     String spred = att.value.replace(att.prefix + ":", prefix.get(att.prefix));
                     URI pred = new URI(spred);
-                    spider.visit(obj);
-                    spider.visit(pred);
+                    spider.visit(obj);                    
                     spider.fireEventnewTriple(suj, pred, obj.toString());
                 }                
                 catch (URISyntaxException e)
@@ -340,7 +343,7 @@ public class RDFAAnalizer
                     {
                         String resource = tag.tag.getParam("resource");
                         String rel = tag.tag.getParam("rel");
-                        if (!rel.equals(""))
+                        if (rel!=null && !rel.equals(""))
                         {
                             for (String _prefix : prefix.keySet())
                             {
@@ -351,8 +354,7 @@ public class RDFAAnalizer
                                         URI obj = new URI(resource);
                                         String spred = rel.replace(_prefix + ":", prefix.get(_prefix));
                                         URI pred = new URI(spred);
-                                        spider.visit(obj);
-                                        spider.visit(pred);
+                                        spider.visit(obj);                                        
                                         spider.fireEventnewTriple(suj, pred, obj.toString());
                                     }
                                     catch (URISyntaxException e)
